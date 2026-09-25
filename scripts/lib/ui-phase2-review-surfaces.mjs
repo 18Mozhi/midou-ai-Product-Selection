@@ -44,13 +44,31 @@ export function scanReviewSurfaces(source, file, { includeStructuralContainers =
   return { inputs, containers };
 }
 const key = (v) => `${v.file}#${v.tag}.${v.ordinal}`;
-export function validateReviewSurfaces(review, { sources, packages }) {
-  assert.equal(review.status, "source-reviewed-not-runtime-accepted");
+export function validateReviewSurfaces(review, { sources, sourceHashes = {}, packages }) {
+  assert.ok(
+    [
+      "source-reviewed-not-runtime-accepted",
+      "production-readonly-smoke-verified-not-formally-accepted",
+      "implemented-and-locally-verified-not-production-accepted",
+      "user-approved-visual-direction-not-runtime-accepted",
+      "actual-vue-and-production-static-smoke-verified-not-formally-accepted",
+    ].includes(review.status),
+    "unknown review evidence status",
+  );
   assert.ok(review.files.length > 0);
   assert.equal(new Set(review.files).size, review.files.length);
   assert.ok(
     review.includeStructuralContainers === undefined ||
       typeof review.includeStructuralContainers === "boolean",
+  );
+  assert.ok(
+    review.inputScope === undefined || review.inputScope === "reviewed-subset-of-shared-source",
+    "unknown input review scope",
+  );
+  assert.ok(
+    review.containerScope === undefined ||
+      review.containerScope === "reviewed-subset-of-shared-source",
+    "unknown container review scope",
   );
   const scanned = review.files.map((file) => {
     assert.ok(sources[file], "missing reviewed source");
@@ -59,26 +77,55 @@ export function validateReviewSurfaces(review, { sources, packages }) {
   const hashes = Object.keys(review.dependencyHashes);
   for (const file of review.files) assert.ok(hashes.includes(file), "missing caller hash");
   for (const file of hashes) {
-    assert.ok(sources[file], "missing dependency source");
-    assert.equal(
-      createHash("sha256").update(sources[file].replaceAll("\r\n", "\n")).digest("hex"),
-      review.dependencyHashes[file],
-      "surface dependency drift",
-    );
+    const source = sources[file];
+    if (source !== undefined) {
+      assert.equal(
+        createHash("sha256").update(source.replaceAll("\r\n", "\n")).digest("hex"),
+        review.dependencyHashes[file],
+        "surface dependency drift",
+      );
+    } else {
+      assert.equal(sourceHashes[file], review.dependencyHashes[file], "surface dependency drift");
+    }
   }
   const inputs = scanned.flatMap((s) => s.inputs);
-  assert.deepEqual(
-    review.inputs.map(({ file, binding }) => ({ file, binding })),
-    inputs,
-    "input omissions/order/duplicates",
-  );
+  const inputKey = ({ file, binding }) => `${file}#${binding}`;
+  if (review.inputScope === "reviewed-subset-of-shared-source") {
+    const available = new Map();
+    for (const input of inputs)
+      available.set(inputKey(input), (available.get(inputKey(input)) ?? 0) + 1);
+    for (const input of review.inputs) {
+      const key = inputKey(input), count = available.get(key) ?? 0;
+      assert.ok(count > 0, "unknown reviewed input binding");
+      available.set(key, count - 1);
+    }
+  } else {
+    assert.deepEqual(
+      review.inputs.map(({ file, binding }) => ({ file, binding })),
+      inputs,
+      "input omissions/order/duplicates",
+    );
+  }
   for (const input of review.inputs) assert.ok(input.meaning && input.remaining);
   const expected = scanned.flatMap((s) => s.containers);
-  assert.deepEqual(
-    review.containers.map(({ file, tag, ordinal, shape }) => ({ file, tag, ordinal, shape })),
-    expected,
-    "container omissions/order/shape mismatch",
-  );
+  const reviewedContainers = review.containers.map(({ file, tag, ordinal, shape }) => ({
+    file,
+    tag,
+    ordinal,
+    shape,
+  }));
+  if (review.containerScope === "reviewed-subset-of-shared-source") {
+    const available = new Set(expected.map(key));
+    const seen = new Set();
+    for (const container of review.containers) {
+      const containerKey = key(container);
+      assert.ok(available.has(containerKey), "unknown reviewed caller container");
+      assert.ok(!seen.has(containerKey), "duplicate reviewed caller container");
+      seen.add(containerKey);
+    }
+  } else {
+    assert.deepEqual(reviewedContainers, expected, "container omissions/order/shape mismatch");
+  }
   const variantKeys = new Set();
   for (const container of review.containers) {
     assert.ok(container.sourceBehavior && container.remaining);
@@ -123,7 +170,9 @@ export function validateReviewSurfaces(review, { sources, packages }) {
   return {
     callerFiles: review.files.length,
     localModelBindings: inputs.length,
-    callerContainers: expected.length,
+    reviewedInputBindings: review.inputs.length,
+    sourceCallerContainers: expected.length,
+    callerContainers: review.containers.length,
     consumerVariants: variantKeys.size,
     runtimeAcceptance: "unproven",
   };

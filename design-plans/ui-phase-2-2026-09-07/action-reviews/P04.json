@@ -1043,7 +1043,11 @@
     {
       "actionId": "ID-CONTEXT-ROUTE",
       "label": "继续选择组织",
-      "kind": "navigation",
+      "kind": "excluded",
+      "sourceAbsence": {
+        "scope": "contract-explicit-no-current-candidate",
+        "reason": "identity-onboarding-contract-review.md 明确记录当前 LocalIdentity 源表无一对一候选；不把设计稿导航推定为当前可用动作。"
+      },
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [],
       "condition": "mode=login且requestState=success；与是否拿到落点分开",
@@ -1087,10 +1091,11 @@
     }
   ],
   "surfaceReview": {
+    "inputScope": "reviewed-subset-of-shared-source",
+    "containerScope": "reviewed-subset-of-shared-source",
     "status": "production-readonly-smoke-verified-not-formally-accepted",
     "files": [
-      "apps/web/src/components/LocalIdentity.vue",
-      "apps/web/src/components/local-identity-recovery.css"
+      "apps/web/src/components/LocalIdentity.vue"
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
@@ -1100,7 +1105,7 @@
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
       "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
       "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
-      "apps/web/src/components/local-identity-recovery.css": "1768429748d2500283fd123c9591ec2705cc54685260e2d31dd60789a4125a3f"
+      "apps/web/src/components/local-identity-recovery.css": "4d1a7df356e2e0830f5ced845d0edc6e75ab6df574980855e2611c51a725327e"
     },
     "inputs": [
       {

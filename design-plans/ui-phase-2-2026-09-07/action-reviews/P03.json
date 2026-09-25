@@ -1043,7 +1043,11 @@
     {
       "actionId": "ID-CONTEXT-ROUTE",
       "label": "继续选择组织",
-      "kind": "navigation",
+      "kind": "excluded",
+      "sourceAbsence": {
+        "scope": "contract-explicit-no-current-candidate",
+        "reason": "identity-onboarding-contract-review.md 明确记录当前 LocalIdentity 源表无一对一候选；不把设计稿导航推定为当前可用动作。"
+      },
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [],
       "condition": "mode=login且requestState=success；与是否拿到落点分开",
@@ -1087,10 +1091,11 @@
     }
   ],
   "surfaceReview": {
+    "inputScope": "reviewed-subset-of-shared-source",
+    "containerScope": "reviewed-subset-of-shared-source",
     "status": "production-readonly-smoke-verified-not-formally-accepted",
     "files": [
-      "apps/web/src/components/LocalIdentity.vue",
-      "apps/web/src/components/local-identity-registration.css"
+      "apps/web/src/components/LocalIdentity.vue"
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {

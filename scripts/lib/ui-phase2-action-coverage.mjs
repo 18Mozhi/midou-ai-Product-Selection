@@ -1,6 +1,13 @@
 import assert from "node:assert/strict";
 
 const sourceAbsentState = "not-applicable-source-unrepresented";
+const visualApprovalLabels = new Set([
+  "user-approved-visual-direction",
+  "user-approved-visual-direction; production checks recorded separately",
+  "user-approved-visual-direction; remaining page visuals auto-approved by user",
+  "user-approved-remaining-pages-auto",
+]);
+
 function validateSourceStateApplicability(action, context) {
   const states = Object.keys(action.visualStates).filter(
     (state) => action.visualStates[state] === sourceAbsentState,
@@ -75,7 +82,16 @@ export function validateActionReview(
 ) {
   assert.equal(review.schemaVersion, 1);
   assert.match(review.pageId, /^P\d{2}$/);
-  assert.equal(review.approval, "pending-user-review", "This registry cannot grant approval");
+  const visualApproval =
+    review.visualApproval ??
+    (visualApprovalLabels.has(review.approval) ? review.approval : undefined);
+  assert.ok(
+    review.approval === "pending-user-review" || visualApprovalLabels.has(review.approval),
+    "This registry cannot grant action approval",
+  );
+  assert.equal(review.actionApproval ?? "pending-user-review", "pending-user-review");
+  if (review.visualApproval)
+    assert.ok(visualApprovalLabels.has(review.visualApproval), "unsupported visual approval label");
   assert.ok(review.actions.length > 0);
   const seen = new Set(),
     actionIds = new Set(),
@@ -87,16 +103,23 @@ export function validateActionReview(
     assert.ok(!actionIds.has(action.actionId), "duplicate actionId");
     actionIds.add(action.actionId);
     assert.ok(["navigation", "read", "write", "local", "excluded", "wiring"].includes(action.kind));
-    const contractKeys = action.sourceContractKeys ?? [action.actionId];
-    assert.ok(
-      contractKeys.length && contractKeys.every((key) => typeof key === "string" && key.trim()),
-    );
+    const sourceAbsent = action.sourceCandidateIds.length === 0;
+    const contractKeys = action.sourceContractKeys ?? (sourceAbsent ? [] : [action.actionId]);
+    if (sourceAbsent) {
+      assert.equal(action.kind, "excluded", "source-absent proposal cannot count as an action");
+      assert.equal(action.sourceAbsence?.scope, "contract-explicit-no-current-candidate");
+      assert.ok(action.sourceAbsence.reason?.trim());
+      assert.deepEqual(action.sourceCandidateApplicability, []);
+      assert.equal(action.sourceContractKeys, undefined);
+    } else
+      assert.ok(
+        contractKeys.length && contractKeys.every((key) => typeof key === "string" && key.trim()),
+      );
     assert.equal(new Set(contractKeys).size, contractKeys.length, "duplicate contract key");
     if (action.sourceContractKeys)
       assert.ok(action.contractAliasReason, "explicit alias needs rationale");
     const usedContractKeys = new Set();
     assert.ok(action.condition && action.handler && action.remaining);
-    assert.ok(action.sourceCandidateIds.length);
     assert.ok(action.variants.length);
     for (const id of action.sourceCandidateIds) {
       assert.ok(!seen.has(id), "candidate mapped twice within page");
@@ -202,7 +225,15 @@ export function validateActionReview(
     }
     for (const ref of action.testReferences) {
       assert.ok(files.has(ref.file), "missing verifier");
-      assert.equal(ref.evidenceType, "offline-proposal-check-not-Vue");
+      assert.ok(
+        [
+          "offline-proposal-check-not-Vue",
+          "actual-vue-isolated-browser",
+          "actual-vue-review-fixture",
+          "actual-vue-local-interception",
+        ].includes(ref.evidenceType),
+        "unknown evidence type",
+      );
     }
     if (action.visualStateReferences) {
       for (const [state, ref] of Object.entries(action.visualStateReferences)) {
@@ -332,18 +363,24 @@ export function validateActionReview(
   }
   return {
     pageId: review.pageId,
+    actionApproval: "pending-user-review",
+    ...(visualApproval ? { visualApproval } : {}),
     sourceSites: seen.size,
     semanticGroups: actionIds.size,
     routeActions: review.actions.filter((a) => !["excluded", "wiring"].includes(a.kind)).length,
     wiringGroups: review.actions.filter((a) => a.kind === "wiring").length,
     excludedGroups: review.actions.filter((a) => a.kind === "excluded").length,
     writeActions: review.actions.filter((a) => a.kind === "write").length,
+    sourceAbsentProposals: review.actions.filter((a) => !a.sourceCandidateIds.length).length,
     sourceInapplicableVisualSlots: review.actions.reduce(
       (sum, action) =>
         sum +
         Object.values(action.visualStates).filter((value) => value === sourceAbsentState).length,
       0,
     ),
+    testEvidenceTypes: [
+      ...new Set(review.actions.flatMap((action) => action.testReferences.map((ref) => ref.evidenceType))),
+    ].sort(),
     unmappedVisualSlots: review.actions
       .filter((a) => a.kind !== "excluded")
       .reduce(

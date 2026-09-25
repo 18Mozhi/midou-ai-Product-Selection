@@ -63,6 +63,7 @@ for (const name of readdirSync(base + "/action-reviews")
   const route = coverage.pages.find((p) => p.id === review.pageId);
   assert.equal(route?.path, review.route);
   const files = new Set();
+  for (const file of Object.keys(review.sourceHashes)) read(file);
   for (const a of review.actions)
     for (const ref of a.testReferences) {
       read(ref.file);
@@ -90,13 +91,15 @@ for (const name of readdirSync(base + "/action-reviews")
     }),
   );
   if (review.surfaceReview) {
+    for (const file of Object.keys(review.surfaceReview.dependencyHashes)) read(file);
     assert.deepEqual(
       [...review.surfaceReview.files].sort(),
-      Object.keys(review.sourceHashes).sort(),
+      Object.keys(review.sourceHashes).filter((file) => file.endsWith(".vue")).sort(),
       "surface review must cover the same local callers",
     );
     reviewSummaries.at(-1).surfaces = validateReviewSurfaces(review.surfaceReview, {
       sources,
+      sourceHashes: hashes,
       packages,
     });
   }
@@ -161,6 +164,10 @@ const summary = {
   pagesWithoutExplicitSemanticReview: pages.filter((p) => !p.review).map((p) => p.id),
   globalDenominatorFrozen: coverage.denominatorFrozen,
   userApprovedPages: coverage.userApprovedPages,
+  visualApprovedReviewedPages: reviewSummaries.filter((r) => r.visualApproval).length,
+  actionApprovedReviewedPages: reviewSummaries.filter(
+    (r) => r.actionApproval !== "pending-user-review",
+  ).length,
 };
 const output = {
   schemaVersion: 1,
@@ -175,14 +182,14 @@ const output = {
     "Semantic/route-action groups are summed per reviewed page; shared source repeated across routes is not a unique global business-action denominator.",
     "Exact source identities are not deduplicated semantic actions. Old-only identities are not deletion candidates.",
     "Historical static import route sets are a superset, not dynamic reachability; new source sites are not guessed onto routes.",
-    "Scene/viewport presence and verifier references are not user approval, full button states, mounted Vue, SQL or production proof.",
+    "Visual approval remains distinct from semantic action approval, full button states, mounted Vue, SQL or production proof.",
     "No existing actions/dialogs/coverage, images, historical evidence or approval fields are rewritten.",
   ],
 };
 let md = `# 全站动作与弹窗覆盖对账\n\n基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。\n\n- 当前源候选${summary.currentSourceCandidates}；旧登记${summary.historicalCandidates}；新身份${summary.newSourceIdentities}，旧表独有身份${summary.oldOnlyIdentities}。签名变化不等于增删业务能力。\n- 已具体语义对应${summary.reviewedPages}页/${summary.explicitlyGroupedSourceSites}源位置/${summary.semanticGroups}组；其中路由动作${summary.routeActions}组，转发/容器关联${summary.wiringGroups}组，其余明确排除。其余${summary.pagesWithoutExplicitSemanticReview.length}页未完成此级映射，不称没有图或没有测试。\n- 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。\n\n## 逐页缺口\n\n| 页 | 旧静态关联候选（非运行分母） | 语义审阅 | 下一步 |\n| --- | --- | --- | --- |\n`;
 md = md.replace(
   "## 逐页缺口",
-  "组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。\n\n## 逐页缺口",
+  `已有视觉授权标记${summary.visualApprovedReviewedPages}页；语义动作授权${summary.actionApprovedReviewedPages}页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。\n\n组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。\n\n## 逐页缺口`,
 );
 for (const p of pages)
   md += `| [${p.id} ${p.title}](page-specs/${p.id}.md) | ${p.oldStaticAssociatedCandidates} | ${p.review ? `[${p.review.semanticGroups}组](action-reviews/${p.id}.json)` : "未逐项映射"} | ${p.review ? `${p.review.unmappedVisualSlots}个视觉状态槽待判断/映射；完整组合/真实Vue待验` : p.compositionGaps.length ? "优先核对分段组合及每个动作/弹窗" : "对齐合同动作、动态变体、场景与测试"} |\n`;
@@ -219,7 +226,7 @@ const sceneLink = (ref) =>
 for (const review of reviews.filter((r) => r.surfaceReview)) {
   const surface = review.surfaceReview,
     summary = reviewSummaries.find((r) => r.pageId === review.pageId);
-  md += `\n## ${review.pageId} 局部动作与共享消费者\n\n[逐项机器清单](action-reviews/${review.pageId}.json)：${summary.sourceSites}个局部源位置 → ${summary.semanticGroups}组；${summary.writeActions}类写入，${summary.routeActions}组路由动作，${summary.wiringGroups}组转发/容器关联不重复计动作。${summary.surfaces.localModelBindings}个本地v-model，${summary.surfaces.callerContainers}处调用/内嵌容器，${summary.surfaces.consumerVariants}个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。\n\n`;
+  md += `\n## ${review.pageId} 局部动作与共享消费者\n\n[逐项机器清单](action-reviews/${review.pageId}.json)：${summary.sourceSites}个局部源位置 → ${summary.semanticGroups}组；${summary.writeActions}类写入，${summary.routeActions}组路由动作，${summary.wiringGroups}组转发/容器关联不重复计动作。已映射${summary.surfaces.reviewedInputBindings}/${summary.surfaces.localModelBindings}个源码字段位置，${summary.surfaces.callerContainers}/${summary.surfaces.sourceCallerContainers}处调用/内嵌容器，${summary.surfaces.consumerVariants}个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。\n\n`;
   md += `尚有${summary.unmappedVisualSlots}个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。\n\n`;
   if (summary.sourceInapplicableVisualSlots)
     md += `另有${summary.sourceInapplicableVisualSlots}个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。\n\n`;

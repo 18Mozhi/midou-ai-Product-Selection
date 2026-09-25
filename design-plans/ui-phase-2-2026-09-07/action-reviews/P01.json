@@ -18,10 +18,18 @@
   "actions": [
     {
       "actionId": "ID-LANDING-CHECK",
+      "sourceContractKeys": [
+        "ID-LANDING-RETRY-PARENT / 子事件转发至现有入口解析与重读处理函数",
+        "ID-LANDING-RETRY-SURFACE / 将通用状态主操作转发为retry事件"
+      ],
+      "contractAliasReason": "保留图稿中的既有动作标识；合同第6节将同一重试读取拆为Surface事件与父级处理两个当前源绑定，二者共同实现既有入口解析/重读，不增加第二次读取或新动作。",
       "label": "重新确定登录落点",
       "kind": "read",
       "routeApplicability": "P01-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1",
+        "apps/web/src/components/LandingRedirectSurface.vue#bb7cd7dbbdfa84a2.1"
+      ],
       "condition": "挂载自动读取；blocked才显示primary，loading无按钮；错误时只提供一次有效重新检查",
       "handler": "LandingRedirectSurface发出retry -> resolveLanding -> GET /me/landing -> /home恢复最近成员路径，否则replace；expired回/login",
       "variants": ["mounted", "blocked-retry"],
@@ -63,6 +71,14 @@
         }
       ],
       "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "visualStateNotes": {
         "default": "蓝色主重试按钮，44px最小高度",
         "hover": "深蓝色背景",
         "focus": "3px蓝色键盘焦点框",
@@ -93,7 +109,29 @@
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },
     "inputs": [],
-    "containers": [],
+  "containers": [
+    {
+      "file": "apps/web/src/components/LandingRedirectSurface.vue",
+      "tag": "aside",
+      "ordinal": 1,
+      "shape": "inline-aside",
+      "sourceBehavior": "会话入口说明只提供当前入口解析的静态上下文，不是业务动作或弹窗。",
+      "remaining": "设计方向已获授权；当前状态、真实会话/角色与完整页面运行验收仍独立未证。",
+      "variants": [
+        {
+          "name": "session-entry-explanation",
+          "evidenceScope": "related-scene-only",
+          "scenes": [
+            {
+              "package": "identity-direction-c",
+              "scene": "p01-blocked"
+            }
+          ],
+          "remaining": "该场景只登记说明区域的设计关联；不证明真实会话、权限或成功落点。"
+        }
+      ]
+    }
+  ],
     "sharedRemaining": [
       "App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。",
       "所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。"

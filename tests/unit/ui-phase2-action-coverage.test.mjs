@@ -173,6 +173,51 @@ test("explicit mapping accepted but runtime/approval not promoted", () => {
   assert.equal(result.routeActions, 1);
   assert.equal(result.unmappedVisualSlots, 6);
   assert.equal(result.writeActions, 1);
+  assert.equal(result.actionApproval, "pending-user-review");
+});
+test("visual approval remains separate from semantic action approval", () => {
+  const { review, context } = fixture();
+  review.approval = "user-approved-visual-direction; remaining page visuals auto-approved by user";
+  const result = validateActionReview(review, context);
+  assert.equal(result.visualApproval, review.approval);
+  assert.equal(result.actionApproval, "pending-user-review");
+  assert.equal(result.writeActions, 1);
+});
+test("actual Vue evidence is retained without implying semantic approval", () => {
+  const { review, context } = fixture();
+  review.actions[0].testReferences[0].evidenceType = "actual-vue-isolated-browser";
+  const result = validateActionReview(review, context);
+  assert.deepEqual(result.testEvidenceTypes, ["actual-vue-isolated-browser"]);
+  assert.equal(result.actionApproval, "pending-user-review");
+});
+test("contract-explicit source-absent navigation is excluded from current actions", () => {
+  const { review, context } = fixture();
+  review.actions.push({
+    actionId: "PROPOSED-NAVIGATION-NOT-IN-SOURCE",
+    kind: "excluded",
+    condition: "proposal only",
+    handler: "No current source handler",
+    remaining: "Do not add this navigation without an authoritative behavior contract.",
+    sourceCandidateIds: [],
+    sourceCandidateApplicability: [],
+    sourceAbsence: {
+      scope: "contract-explicit-no-current-candidate",
+      reason: "The current explicit source contract confirms no one-to-one rendered control.",
+    },
+    variants: ["proposal-only-not-current-control"],
+    scenes: [],
+    testReferences: [],
+    visualStates: Object.fromEntries(
+      ["default", "hover", "focus", "pressed", "disabled", "busy"].map((state) => [
+        state,
+        "not-mapped",
+      ]),
+    ),
+  });
+  const result = validateActionReview(review, context);
+  assert.equal(result.routeActions, 1);
+  assert.equal(result.excludedGroups, 1);
+  assert.equal(result.sourceAbsentProposals, 1);
 });
 test("local presentation is not counted as a server write", () => {
   const { review, context } = fixture();

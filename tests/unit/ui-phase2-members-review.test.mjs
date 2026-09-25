@@ -127,6 +127,39 @@ test("P30 distinguishes nine local models from six controlled values and shared 
   assert.match(sources[childFile], /v-model="form.reason" required maxlength="500"/);
   await assertOrganizationReasonContract(sources[dependencies[2]], sources[parentFile]);
 });
+test("production-smoke metadata does not promote caller-surface runtime acceptance", () => {
+  const surface = plain(review().surfaceReview);
+  surface.status = "production-readonly-smoke-verified-not-formally-accepted";
+  const result = validateReviewSurfaces(surface, { sources, packages });
+  assert.equal(result.runtimeAcceptance, "unproven");
+});
+test("shared-source page slices stay source-bound and explicitly non-exhaustive", () => {
+  const surface = plain(review().surfaceReview);
+  surface.dependencyHashes = Object.fromEntries(
+    Object.entries(sources).map(([file, source]) => [
+      file,
+      createHash("sha256").update(source.replaceAll("\r\n", "\n")).digest("hex"),
+    ]),
+  );
+  surface.inputScope = "reviewed-subset-of-shared-source";
+  surface.containerScope = "reviewed-subset-of-shared-source";
+  surface.inputs.pop();
+  surface.containers.pop();
+  const result = validateReviewSurfaces(surface, { sources, packages });
+  assert.equal(result.localModelBindings, 9);
+  assert.equal(result.reviewedInputBindings, 8);
+  assert.equal(result.sourceCallerContainers, 3);
+  assert.equal(result.callerContainers, 2);
+  const invented = plain(surface);
+  invented.inputs.push({
+    ...invented.inputs[0],
+    binding: "not-in-source",
+  });
+  assert.throws(
+    () => validateReviewSurfaces(invented, { sources, packages }),
+    /unknown reviewed input binding/,
+  );
+});
 test("P30 four shared reason variants do not imply a dialog for invitation creation or other routes", () => {
   const r = review(),
     containers = r.surfaceReview.containers;

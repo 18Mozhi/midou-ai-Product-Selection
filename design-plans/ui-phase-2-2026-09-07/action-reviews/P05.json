@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/LocalIdentity.vue": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a",
-    "apps/web/src/components/local-identity-verification.css": "10bbd822340ce45966c70af0c336ece7083977175a7a72674aa0563570d59f89"
+    "apps/web/src/components/local-identity-verification.css": "cdc4f5237eb512b91e114417936438334bcddc68cb38fd7d868ec97b7e61375a"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -1044,7 +1044,11 @@
     {
       "actionId": "ID-CONTEXT-ROUTE",
       "label": "继续选择组织",
-      "kind": "navigation",
+      "kind": "excluded",
+      "sourceAbsence": {
+        "scope": "contract-explicit-no-current-candidate",
+        "reason": "identity-onboarding-contract-review.md 明确记录当前 LocalIdentity 源表无一对一候选；不把设计稿导航推定为当前可用动作。"
+      },
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [],
       "condition": "mode=login且requestState=success；与是否拿到落点分开",
@@ -1088,15 +1092,16 @@
     }
   ],
   "surfaceReview": {
+    "inputScope": "reviewed-subset-of-shared-source",
+    "containerScope": "reviewed-subset-of-shared-source",
     "status": "implemented-and-locally-verified-not-production-accepted",
     "files": [
-      "apps/web/src/components/LocalIdentity.vue",
-      "apps/web/src/components/local-identity-verification.css"
+      "apps/web/src/components/LocalIdentity.vue"
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
       "apps/web/src/components/LocalIdentity.vue": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a",
-      "apps/web/src/components/local-identity-verification.css": "10bbd822340ce45966c70af0c336ece7083977175a7a72674aa0563570d59f89",
+      "apps/web/src/components/local-identity-verification.css": "cdc4f5237eb512b91e114417936438334bcddc68cb38fd7d868ec97b7e61375a",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
