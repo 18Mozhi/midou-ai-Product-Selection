@@ -20,7 +20,7 @@ M07-01 把 P00–P06 的现有自动化组织为可执行发布矩阵，覆盖�
 
 验证输出必须包含 `run_id` 与 `trace_id`。失败立即返回非零；测试数据由各 live 脚本按组织隔离创建并在结束时清理。浏览器矩阵固定 4 worker，避免 47 个页面场景同时争抢本地渲染资源造成时钟与动画噪声；这不是生产并发配置。配置只复用 `VERIFY_COMMAND_TIMEOUT_MS` 和 `VERIFY_REPORT_DIR`，后者在 Windows 与 Linux 上都拒绝使用任一风格的父目录分隔符逃逸工作区；没有新增环境变量。
 
-正式模块验收 `f12a7160-90ba-437c-9e6f-fc23149b9077` 已通过；报告位于 `.artifacts/verification/module-M07-01.json`。其中浏览器矩阵为 216/216，通过后另行执行的性能探针为 2/2。
+正式模块验收 `f12a7160-90ba-437c-9e6f-fc23149b9077` 已通过；报告位于 `.artifacts/verification/module-M07-01.json`，记录当时冻结范围的浏览器矩阵为 216/216、另行执行的性能探针为 2/2。其后新增的 P37 组织审计 URL/历史/KeepAlive 恢复回归已登记到 `verification/release-matrix.json` 的 p06 与 roleScope 组，桌面与 390px 定向 E2E 各 1/1 通过；这项增量尚未重跑并签发完整 M07-01 矩阵，历史报告不包含该新增场景。
 
 ## 生产授权路由验收
 

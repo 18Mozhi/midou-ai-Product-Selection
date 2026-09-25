@@ -2541,6 +2541,7 @@
         "../scripts/verify-release-matrix.mjs",
         "../scripts/verify-e2e-realism.mjs",
         "../tests/e2e/m00-09-real-api-acceptance.spec.ts",
+        "../tests/e2e/m06-01-organization-audit-history.spec.ts",
         "../scripts/verify-production-core-e2e.mjs",
         "../tests/e2e/helpers/mobile-occlusion.ts",
         "../scripts/lib/typescript-test-loader.mjs"
@@ -2564,7 +2565,7 @@
       ],
       "verificationRunId": "f12a7160-90ba-437c-9e6f-fc23149b9077",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "module_verified_at_recorded_baseline; later P37 organization audit history regression is registered in the p06 matrix and passes desktop/mobile targeted E2E 1/1 each, but the full M07-01 matrix has not been rerun for this addition"
     },
     "productionAcceptance": {
       "module": "M07-01",
