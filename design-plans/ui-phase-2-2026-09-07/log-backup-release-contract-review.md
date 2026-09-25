@@ -341,3 +341,9 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 `action-reviews/P64.json`将 `BackupRecoveryCenter.vue` 与 `BackupRecoveryDirectory.vue` 当前10个页面专属候选映射为只读刷新、失败重读、登录导航、技术披露和页内导航。refresh/retry两种状态入口分开记数，三处技术详情与三项页内导航按同一页面动作归组。
 
 `ResponsiveDataView`只读资产详情、`TableViewControls`列设置与`TechnicalDetails`编号复制属于已映射共享源候选，本页仅交叉引用消费者，不重复归属。P64没有备份/恢复/演练/删除/密文下载执行按钮。映射不批准动作，不代表真实platform:operate、MySQL审计、加密或隔离恢复验收。
+
+## 14. P65 发布管理当前页面动作归组（2026-09-26）
+
+`action-reviews/P65.json`将 `ReleaseRolloutCenter.vue` 的12个当前候选映射为读取、失败重读、重新登录、超管API覆盖导航、页内导航、配置指纹披露与门指标/阻断详情。合同旧表中的简化身份行保留；对应新映射选择后续 `RL65-CURRENT-*` 精确绑定，不扩大其语义。
+
+门详情、移动只读记录详情、历史表格控件和请求编号复制沿既有共享组件动作映射交叉引用。页面无发布/回滚/停止/批准/迁移控件；`write-probe`为独立签名API，不从本页触发。动作映射不证明宝塔对象、SQL审计、真实探针或M07-05签收。

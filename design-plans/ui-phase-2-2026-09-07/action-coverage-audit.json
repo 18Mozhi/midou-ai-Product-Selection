@@ -249,7 +249,7 @@
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "80ed5a269d46f2b5098652248fca6f98db3d56893ff4ea9e9d291458038db8ea",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "f4c2ca930b5818ac0b71c231f77f4ee991488ae98db27f1773b1b9d5c320f530",
-    "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "4670b990a67135a8ab2bc2bfbcae4dc71adcdd07d9fa06d9aafda36417feffc9",
+    "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "80c4a5afc4d0f5cf92434eac97fa0e30a83e36bf249691703bd9bbbde9c586f5",
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "9e90766df41be0e25e1c97a7aa88f6d31d8d73bcf57f86b1ea1b6ce3b9c70092",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "73ccec3c884d7f0f2037640bf851a734ba81d9dff1ab02f7ecfffd193902b0e5",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "663f7750ce15423be375fb5c0ec820386f4a265f73f812579d24c1a40b2e49ab",
@@ -542,6 +542,8 @@
     "tests/unit/ui-phase2-p63-action-review.test.mjs": "d960ed40575847ab67a05da9a14cc49f099be50a89fa2fd174e2bfe523376aa1",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P64.json": "4ee9656e3fd1d81de5d25be1ec4462e7d882f66cf3aa30d5c105afb397526cc1",
     "tests/unit/ui-phase2-p64-action-review.test.mjs": "1b9b95a91b5bccb6effd745c9b93138af017661cf923c7d8599acbec9da5acfd",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P65.json": "94033b47bad5362f16be4390220fbd09da012e42525e661526eddfba921f5b6a",
+    "tests/unit/ui-phase2-p65-action-review.test.mjs": "7f02bf53e9a207961682fb575679af0832611507597b4bf3bf8d46f5e8412494",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -606,7 +608,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "afbb50b6d388d79c09e8321c9456718b6b9f62cd990e0b78126c976fdb503047",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "638bc66ddda804f5022476e6fe5bb8dab6668ec434aadfb36af6022134ffac36",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "97bfa7b985c4245c83f2bb86c2719766431d075601a3dc57219dafcf6787ed01",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "65b44de90a0dfb850a5511f7cbfa75c14a2ef0fce5a3279aefeada46560ba2e8",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "6484a40709152db9e56130c2311cb0966fa4871c770c0e80ed64794e8e1ff033",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "c5d78f0e761d077a150ff8dadd20fcf64cc7259cf6d23f23934900e443a260cd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "b8179a19edc86714bd88b31e38eb499d9614a5b8fb2eaf1a888592d325a3f7e3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "b8cee964d50e40f6f87c2f2e867476f12cd022cb6442e0ab4cf07fd1dd551553",
@@ -628,13 +630,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 64,
-    "explicitlyGroupedSourceSites": 1469,
-    "semanticGroups": 1223,
-    "routeActions": 1001,
+    "reviewedPages": 65,
+    "explicitlyGroupedSourceSites": 1481,
+    "semanticGroups": 1230,
+    "routeActions": 1008,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P65",
       "P66",
       "P67",
       "P68",
@@ -646,7 +647,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 64,
+    "visualApprovedReviewedPages": 65,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3431,13 +3432,42 @@
       "path": "/platform-admin/releases",
       "title": "发布管理",
       "oldStaticAssociatedCandidates": 45,
-      "review": null,
+      "review": {
+        "pageId": "P65",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 12,
+        "semanticGroups": 7,
+        "routeActions": 7,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 42,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 2,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "release-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "12个当前ReleaseRolloutCenter候选归入7组页面动作，区分刷新/重试、登录、超管导航、页内目录、配置指纹及发布门详情。",
+        "write-probe为独立签名API，不是页面控件；本映射不生成签名、不调用、不部署、不迁移或回滚。",
+        "页面展示历史部署捕获事实，不把历史门状态改写为当前构建证明或发布资格。"
+      ]
     },
     {
       "id": "P66",
@@ -5202,6 +5232,32 @@
       "unmappedVisualSlots": 30,
       "surfaces": {
         "callerFiles": 2,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 2,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P65",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 12,
+      "semanticGroups": 7,
+      "routeActions": 7,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 42,
+      "surfaces": {
+        "callerFiles": 1,
         "localModelBindings": 0,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 2,
@@ -55201,7 +55257,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#7e7fceb8ddc95b63.1",
@@ -55232,7 +55294,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-COVERAGE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#a93553a3ba9aa8a6.1",
@@ -55256,7 +55324,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#5587941412d5210f.1",
@@ -55291,7 +55365,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-LOGIN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#0227b741c3d451ee.1",
@@ -55319,7 +55399,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#9d42d660b274b4e7.1",
@@ -55347,7 +55433,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#e6f6630b9e002351.1",
@@ -55375,7 +55467,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#0745c7ca1efdbdf9.1",
@@ -55403,7 +55501,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#cc981fe4f655ae81.1",
@@ -55427,7 +55531,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-CONFIG-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.1",
@@ -55462,7 +55572,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-GATE-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.2",
@@ -55493,7 +55609,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-GATE-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.3",
@@ -55532,7 +55654,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P65",
+          "actionId": "RL65-GATE-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReportCenter.vue#97351e6d4fd4cc45.1",

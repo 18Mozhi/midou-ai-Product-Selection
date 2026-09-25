@@ -1,0 +1,304 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P65",
+  "route": "/platform-admin/releases",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/ReleaseRolloutCenter.vue": "f362e65bea501d183d809d458497e5b3775377d12e83b8e4f52496d00b62107d"
+  },
+  "inputs": {},
+  "actions": [
+    {
+      "actionId": "RL65-LOAD",
+      "kind": "read",
+      "label": "读取或刷新当前发布事实",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReleaseRolloutCenter.vue#2e6f5b1858278d74.1"
+      ],
+      "sourceContractKeys": [
+        "RL65-CURRENT-LOAD / 刷新当前发布事实，复用单飞只读load"
+      ],
+      "contractAliasReason": "依据P65发布管理合同当前源身份归组；不将页面浏览控件解释为发布操作。",
+      "condition": "用户请求刷新当前发布/部署捕获事实时。",
+      "handler": "沿用既有单飞只读load与当前构建身份，不发起发布、迁移、回滚或探针写入。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p65-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地读取不证明当前页面与生产构建一致，也不证明整套发布门已验收。"
+    },
+    {
+      "actionId": "RL65-COVERAGE",
+      "kind": "navigation",
+      "label": "由超管打开接口覆盖证据页",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReleaseRolloutCenter.vue#7e7fceb8ddc95b63.1"
+      ],
+      "sourceContractKeys": [
+        "RL65-CURRENT-COVERAGE / 超管查看接口覆盖证据"
+      ],
+      "contractAliasReason": "依据P65发布管理合同当前源身份归组；不将页面浏览控件解释为发布操作。",
+      "condition": "当前能力列表包含platform:superadmin且用户打开接口覆盖证据入口时。",
+      "handler": "导航至既有 /platform-admin/api-coverage 路由，由目标路由再次执行权限检查；不触发发布或API探测。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p65-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "入口可见不证明目标路由授权、报告真实或接口覆盖验收通过。"
+    },
+    {
+      "actionId": "RL65-RETRY",
+      "kind": "read",
+      "label": "在发布事实读取失败后重新核验",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReleaseRolloutCenter.vue#0227b741c3d451ee.1",
+        "apps/web/src/components/ReleaseRolloutCenter.vue#a93553a3ba9aa8a6.1"
+      ],
+      "sourceContractKeys": [
+        "RL65-CURRENT-RETRY / 保留成功快照时重试失败读取",
+        "RL65-CURRENT-RETRY / 非forbidden且未显示登录链接的错误态重读"
+      ],
+      "contractAliasReason": "依据P65发布管理合同当前源身份归组；不将页面浏览控件解释为发布操作。",
+      "condition": "已有成功快照刷新失败，或首次错误属于可重读且非登录/forbidden分支时。",
+      "handler": "复用父级既有GET与读取归属；失败重读不切换release、不执行探针。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p65-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "重新核验不等于重新部署、重放迁移或自动回滚。"
+    },
+    {
+      "actionId": "RL65-LOGIN",
+      "kind": "navigation",
+      "label": "会话过期时重新登录",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReleaseRolloutCenter.vue#5587941412d5210f.1"
+      ],
+      "sourceContractKeys": [
+        "RL65-CURRENT-LOGIN / expired状态重新登录"
+      ],
+      "contractAliasReason": "依据P65发布管理合同当前源身份归组；不将页面浏览控件解释为发布操作。",
+      "condition": "页面明确进入expired会话状态时。",
+      "handler": "导航至既有登录入口；forbidden状态不伪装为过期或可重试。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p65-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "导航不证明重新认证、platform:operate或超管权限已取得。"
+    },
+    {
+      "actionId": "RL65-NAV",
+      "kind": "navigation",
+      "label": "跳转运行身份、历史观察及动作历史分区",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReleaseRolloutCenter.vue#0745c7ca1efdbdf9.1",
+        "apps/web/src/components/ReleaseRolloutCenter.vue#9d42d660b274b4e7.1",
+        "apps/web/src/components/ReleaseRolloutCenter.vue#e6f6630b9e002351.1"
+      ],
+      "sourceContractKeys": [
+        "RL65-CURRENT-NAV / 跳转到运行身份页内锚点",
+        "RL65-CURRENT-NAV / 跳转到历史观察页内锚点",
+        "RL65-CURRENT-NAV / 跳转到动作与历史页内锚点"
+      ],
+      "contractAliasReason": "依据P65发布管理合同当前源身份归组；不将页面浏览控件解释为发布操作。",
+      "condition": "用户从页内目录选择当前发布管理分区时。",
+      "handler": "滚动定位运行身份、历史观察、动作与历史锚点；不调用任何发布或回滚命令。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p65-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "页内导航仅浏览已加载事实，不证明历史动作可执行。"
+    },
+    {
+      "actionId": "RL65-CONFIG-DETAIL",
+      "kind": "local",
+      "label": "展开部署配置指纹详情",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReleaseRolloutCenter.vue#cc981fe4f655ae81.1"
+      ],
+      "sourceContractKeys": [
+        "RL65-CURRENT-TECH / 展开生产配置指纹"
+      ],
+      "contractAliasReason": "依据P65发布管理合同当前源身份归组；不将页面浏览控件解释为发布操作。",
+      "condition": "当前页面已读取并提供部署配置指纹披露入口时。",
+      "handler": "仅展开已有字段，不读取环境文件、密钥、Cookie或服务器本地路径。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p65-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "指纹披露不等于配置来源独立核验或部署成功。"
+    },
+    {
+      "actionId": "RL65-GATE-DETAIL",
+      "kind": "local",
+      "label": "展开桌面/移动发布门指标及阻断原因技术详情",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.1",
+        "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.2",
+        "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.3"
+      ],
+      "sourceContractKeys": [
+        "RL65-CURRENT-TECH / 展开桌面发布门指标",
+        "RL65-CURRENT-TECH / 展开移动发布门指标",
+        "RL65-CURRENT-TECH / 展开阻断原因技术详情"
+      ],
+      "contractAliasReason": "依据P65发布管理合同当前源身份归组；不将页面浏览控件解释为发布操作。",
+      "condition": "当前发布事实提供门指标或阻断原因披露入口时。",
+      "handler": "只展开当前release关联的已返回指标与代码；编号复制沿共享TechnicalDetails处理，不触发写入。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p65-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "展示门结果不证明真实生产运行、审计事务或正式发布签收。"
+    }
+  ],
+  "pageScopeExclusions": {
+    "sharedFiles": [
+      {
+        "file": "apps/web/src/components/PlatformManagementCenter.vue",
+        "rationale": "平台父级持有共享读取/登录归属，P65局部动作仅映射发布域现有组件。"
+      },
+      {
+        "file": "apps/web/src/components/ResponsiveDataView.vue",
+        "rationale": "发布门移动只读指标详情由共享组件实现，并已有共享动作映射；P65仅展示消费者语义。"
+      },
+      {
+        "file": "apps/web/src/components/TableViewControls.vue",
+        "rationale": "发布历史的列设置由多页共享表格控件承载，沿既有共享源映射，不重复登记。"
+      },
+      {
+        "file": "apps/web/src/components/TechnicalDetails.vue",
+        "rationale": "请求编号复制及技术披露为共享组件动作，P65的局部详情调用已单独映射。"
+      }
+    ],
+    "remaining": "父级请求、移动详情、列控制和编号复制沿共享合同引用；当前页面没有部署执行、探针、发布或回滚按钮。"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "P65只复用ResponsiveDataView的发布门指标只读详情；不含发布、回滚、迁移、批准或探针执行确认窗。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/ReleaseRolloutCenter.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/ReleaseRolloutCenter.vue": "f362e65bea501d183d809d458497e5b3775377d12e83b8e4f52496d00b62107d"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "P65本页只读指标详情、表格控件及技术编号复制由既有共享组件动作映射负责；本地门状态/详情披露不发业务写请求。"
+    ],
+    "remaining": "静态映射不证明真实platform:operate、宝塔发布对象、数据库审计、签名探针、回滚或M07-05验收。"
+  },
+  "compositionGaps": [
+    "12个当前ReleaseRolloutCenter候选归入7组页面动作，区分刷新/重试、登录、超管导航、页内目录、配置指纹及发布门详情。",
+    "write-probe为独立签名API，不是页面控件；本映射不生成签名、不调用、不部署、不迁移或回滚。",
+    "页面展示历史部署捕获事实，不把历史门状态改写为当前构建证明或发布资格。"
+  ]
+}
