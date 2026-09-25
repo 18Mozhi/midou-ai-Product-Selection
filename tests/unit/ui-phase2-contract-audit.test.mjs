@@ -1311,6 +1311,75 @@ test("current P62 log center maps remaining controls and isolates the superseded
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("P62/P64/P65 superseded controls are historical while current replacements remain mapped", () => {
+  const report = runContractAudit();
+  const document = "log-backup-release-contract-review.md";
+  const historicalIds = [
+    "apps/web/src/components/PlatformLogCenter.vue#a4a224d771806ee7.1",
+    "apps/web/src/components/PlatformLogCenter.vue#a73ee10987ddca35.1",
+    "apps/web/src/components/PlatformLogCenter.vue#fc60d9191880683a.1",
+    "apps/web/src/components/PlatformLogCenter.vue#1f77079e4af40f1a.1",
+    "apps/web/src/components/PlatformLogCenter.vue#30a784886ed82e8b.1",
+    "apps/web/src/components/PlatformLogCenter.vue#1bfd5d9fa0fdcd5e.1",
+    "apps/web/src/components/BackupRecoveryCenter.vue#de2ebca33ff1e487.1",
+    "apps/web/src/components/BackupRecoveryCenter.vue#21c66441891be768.1",
+    "apps/web/src/components/BackupRecoveryCenter.vue#227b66d9ec4e0216.1",
+    "apps/web/src/components/ReleaseRolloutCenter.vue#f801437d922c379b.1",
+    "apps/web/src/components/ReleaseRolloutCenter.vue#21c66441891be768.1",
+    "apps/web/src/components/ReleaseRolloutCenter.vue#227b66d9ec4e0216.1",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue#beb5f8d5846aa028.1",
+    "apps/web/src/components/ResponsiveDataView.vue#4fa7deb3456a41ae.1",
+    "apps/web/src/components/ResponsiveDataView.vue#53d89072117d7eda.1",
+    "apps/web/src/components/ResponsiveDataView.vue#e23893d134b1daa1.1",
+  ];
+  for (const candidateId of historicalIds) {
+    const row = report.records.find(
+      (record) => record.document.endsWith(document) && record.candidateId === candidateId,
+    );
+    assert.equal(row?.temporalScope, "historical", candidateId);
+  }
+
+  const currentIds = [
+    "apps/web/src/components/PlatformLogCenter.vue#f457c74d5cac0e80.1",
+    "apps/web/src/components/PlatformLogCenter.vue#d37ca26c235aab7a.1",
+    "apps/web/src/components/PlatformLogCenter.vue#fa83b88a7082fbd5.1",
+    "apps/web/src/components/PlatformLogCenter.vue#13b398e8ab4b93d3.1",
+    "apps/web/src/components/PlatformLogCenter.vue#2c239372ff0167e8.1",
+    "apps/web/src/components/BackupRecoveryCenter.vue#32472f95c82e1a43.1",
+    "apps/web/src/components/BackupRecoveryCenter.vue#a93553a3ba9aa8a6.1",
+    "apps/web/src/components/BackupRecoveryCenter.vue#0227b741c3d451ee.1",
+    "apps/web/src/components/ReleaseRolloutCenter.vue#2e6f5b1858278d74.1",
+    "apps/web/src/components/ReleaseRolloutCenter.vue#a93553a3ba9aa8a6.1",
+    "apps/web/src/components/ReleaseRolloutCenter.vue#0227b741c3d451ee.1",
+  ];
+  for (const candidateId of currentIds) {
+    const row = report.records.find(
+      (record) => record.document.endsWith(document) && record.candidateId === candidateId,
+    );
+    assert.ok(["identity-current", "line-moved"].includes(row?.status), candidateId);
+    assert.notEqual(row?.temporalScope, "historical", candidateId);
+  }
+
+  const filterTrigger = report.records.find(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.candidateId === "apps/web/src/components/ResponsiveFilterDrawer.vue#7e0fa28eaeb1cc09.1",
+  );
+  assert.equal(filterTrigger?.status, "identity-current");
+  for (const candidateId of [
+    "apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1",
+    "apps/web/src/components/ResponsiveDataView.vue#988131834dc4bd6f.1",
+    "apps/web/src/components/ResponsiveDataView.vue#a3c9be2acacfd788.1",
+  ]) {
+    const row = report.records.find(
+      (record) =>
+        record.document.endsWith("responsive-detail-focus-contract-review.md") &&
+        record.candidateId === candidateId,
+    );
+    assert.ok(["identity-current", "line-moved"].includes(row?.status), candidateId);
+  }
+});
+
 test("current P42 organization detail dialog reconciles every candidate and current hash", () => {
   const file = "apps/web/src/components/PlatformOrganizationDetailDialog.vue";
   const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(

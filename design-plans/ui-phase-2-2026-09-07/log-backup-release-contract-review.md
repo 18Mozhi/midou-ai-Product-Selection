@@ -68,13 +68,10 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号          | 行  | 类型                  | 语义/消费者                      |
 | ------------------ | --- | --------------------- | -------------------------------- |
-| a4a224d771806ee7.1 | 265 | control               | LG62-EXPORT 导出原因入口         |
-| a73ee10987ddca35.1 | 268 | control               | LG62-LOAD 刷新                   |
 | e4314256fea2aeac.1 | 380 | dialog-component-call | LG62-FILTER 移动筛选消费者       |
 | ef169b3c5b08be4e.1 | 381 | form-event            | LG62-APPLY 查询form              |
 | d2bd484790411f68.1 | 400 | control               | LG62-RESET 重置                  |
 | 280c88beee4f3de8.1 | 403 | control               | LG62-APPLY 同form提交            |
-| fc60d9191880683a.1 | 317 | control               | LG62-LOAD 重新加载               |
 | d7ff6351cbc06807.1 | 528 | control               | LG62-TRACE 展开完整链编号        |
 | af1fa7b422aa7bcd.1 | 577 | control               | LG62-TASK 桌面异常任务跳转       |
 | c4b53a994d00ca34.1 | 580 | control               | LG62-PROVIDER 桌面异常来源跳转   |
@@ -82,9 +79,6 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | 1b10ffebcf6798fe.1 | 637 | control               | LG62-TASK 移动异常任务跳转       |
 | ec46ae5cddba062a.1 | 638 | control               | LG62-PROVIDER 移动异常来源跳转   |
 | 1c008f867673db60.1 | 644 | control               | LG62-IDS 移动技术展开            |
-| 1f77079e4af40f1a.1 | 476 | control               | LG62-REQUEST 查询编号            |
-| 30a784886ed82e8b.1 | 481 | event-binding         | LG62-REASON 提交/取消转发        |
-| 1bfd5d9fa0fdcd5e.1 | 481 | dialog-component-call | LG62-REASON 原因组件调用         |
 | 5d23ad02d6538b9c.1 | 276 | dialog-script-call    | LG62-EXPORT 同一原因窗的脚本请求 |
 
 | v-model | 属性行 | 元素   |
@@ -96,10 +90,7 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号          | 行  | 类型    | 语义/消费者         |
 | ------------------ | --- | ------- | ------------------- |
-| de2ebca33ff1e487.1 | 150 | control | BR64-LOAD 刷新      |
-| 21c66441891be768.1 | 165 | control | BR64-RETRY 快照告警 |
 | 5587941412d5210f.1 | 241 | control | BR64-LOGIN 过期登录 |
-| 227b66d9ec4e0216.1 | 179 | control | BR64-RETRY 首次错误 |
 | 1c008f867673db60.1 | 428 | control | BR64-TECH 桌面资产  |
 | 1c008f867673db60.2 | 484 | control | BR64-TECH 移动资产  |
 | 1c008f867673db60.3 | 506 | control | BR64-TECH 阻断代码  |
@@ -108,11 +99,8 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号          | 行  | 类型    | 语义/消费者                    |
 | ------------------ | --- | ------- | ------------------------------ |
-| f801437d922c379b.1 | 154 | control | RL65-LOAD 刷新                 |
 | 7e7fceb8ddc95b63.1 | 199 | control | RL65-COVERAGE 超管查看接口证据 |
-| 21c66441891be768.1 | 175 | control | RL65-RETRY 快照告警            |
 | 5587941412d5210f.1 | 252 | control | RL65-LOGIN 过期登录            |
-| 227b66d9ec4e0216.1 | 188 | control | RL65-RETRY 首次错误            |
 | 1c008f867673db60.1 | 530 | control | RL65-TECH 桌面门指标           |
 | 1c008f867673db60.2 | 588 | control | RL65-TECH 移动门指标           |
 | 1c008f867673db60.3 | 714 | control | RL65-TECH 阻断代码             |
@@ -137,7 +125,6 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | 签名.序号          | 行  | 类型          | 语义/消费者                  |
 | ------------------ | --- | ------------- | ---------------------------- |
 | 28fb788b88500472.1 | 99 | event-binding | LG62-FILTER 外层键盘         |
-| beb5f8d5846aa028.1 | 76  | control       | LG62-FILTER 打开筛选         |
 | e03968eb8d9e92a8.1 | 118 | event-binding | LG62-FILTER portal键盘       |
 | 483082db5a776bf3.1 | 133 | control       | LG62-FILTER 遮罩取消         |
 | df1390feb7424a07.1 | 152 | control       | LG62-FILTER 顶部关闭         |
@@ -148,9 +135,6 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | 签名.序号          | 行  | 类型              | 语义/消费者                          |
 | ------------------ | --- | ----------------- | ------------------------------------ |
 | 6da4dad42cb34c8d.1 | 165 | control           | 三页移动记录打开（日志每链一个实例） |
-| 4fa7deb3456a41ae.1 | 53  | event-binding     | 三页移动详情Escape                   |
-| 53d89072117d7eda.1 | 54  | control           | 三页移动详情遮罩关闭                 |
-| e23893d134b1daa1.1 | 60  | dialog-definition | 三页移动详情dialog定义               |
 | 847801b2ac6e7a17.1 | 203 | control           | 三页移动详情顶部关闭                 |
 
 ### apps/web/src/components/TableViewControls.vue
@@ -252,6 +236,14 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 此节只补当前源位置及哈希；CSV真实下载/审计落库、读取RBAC、移动记录细节和生产行为仍以原合同/独立运行证据为准。
 
+### 7.2 P62共享筛选抽屉当前入口归属（2026-09-25）
+
+第5节其余四个共享抽屉身份仍按当前行匹配；已替代的旧“打开筛选”签名转入第11节。本节补记现行 P62 触发器身份，与平台账号合同的共享控件映射一致。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/ResponsiveFilterDrawer.vue#7e0fa28eaeb1cc09.1 | 104 | control | LG62-CURRENT-FILTER / 打开移动筛选抽屉 |
+
 ## 8. P65 ReleaseRolloutCenter 当前源码归属（2026-09-24）
 
 当前组件共12个静态候选：新增映射此前未引用的7项，原表中其余5项仍匹配但行号已有变化；原刷新和两处重试签名均已失效，继续作为旧身份保留。刷新和重试复用只读GET；三个原生页内锚点仅导航；配置指纹、门指标及阻断详情均为按需披露。超管接口覆盖链接仍受 `platform:superadmin` 条件约束。当前LF哈希与6.2节旧指纹分开登记。
@@ -308,3 +300,26 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/BackupRecoveryDirectory.vue | 0539b4adcbf1793d337dbefff0ccfa36d45295f1d35d8ac0c4f3e8bac1e237b7 |
 
 静态归属不验证真实备份、恢复、审计、权限、焦点/滚动表现或生产状态。
+
+## 11. P62/P64/P65 已替代源码身份
+
+以下早期签名来自第5节初始候选表，已被第7–9节现行刷新/重试/导出映射或共享移动详情合同中的现行候选替代。它们仅保留为可追溯历史，不计入当前源码覆盖；替代关系仅依据静态候选身份和语义描述，不表示交互、服务、权限或生产验收。
+
+| 旧身份 | 旧语义 | 当前映射位置 |
+| --- | --- | --- |
+| apps/web/src/components/PlatformLogCenter.vue#a4a224d771806ee7.1 | LG62-EXPORT 导出原因入口 | 第7节 LG62-CURRENT-EXPORT 与 LG62-CURRENT-EXPORT-REASON |
+| apps/web/src/components/PlatformLogCenter.vue#a73ee10987ddca35.1 | LG62-LOAD 刷新 | 第7节 LG62-CURRENT-LOAD |
+| apps/web/src/components/PlatformLogCenter.vue#fc60d9191880683a.1 | LG62-LOAD 重新加载 | 第7节 LG62-CURRENT-RETRY |
+| apps/web/src/components/PlatformLogCenter.vue#1f77079e4af40f1a.1 | LG62-REQUEST 查询编号 | 第7节三个 LG62-CURRENT-TRACE 披露 |
+| apps/web/src/components/PlatformLogCenter.vue#30a784886ed82e8b.1 | LG62-REASON 提交/取消转发 | 第7节 LG62-CURRENT-EXPORT-REASON |
+| apps/web/src/components/PlatformLogCenter.vue#1bfd5d9fa0fdcd5e.1 | LG62-REASON 原因组件调用 | 第7节 LG62-CURRENT-EXPORT-REASON |
+| apps/web/src/components/BackupRecoveryCenter.vue#de2ebca33ff1e487.1 | BR64-LOAD 刷新 | 第9节 BR64-CURRENT-LOAD |
+| apps/web/src/components/BackupRecoveryCenter.vue#21c66441891be768.1 | BR64-RETRY 快照告警 | 第9节 BR64-CURRENT-RETRY（保留快照） |
+| apps/web/src/components/BackupRecoveryCenter.vue#227b66d9ec4e0216.1 | BR64-RETRY 首次错误 | 第9节 BR64-CURRENT-RETRY（首次错误） |
+| apps/web/src/components/ReleaseRolloutCenter.vue#f801437d922c379b.1 | RL65-LOAD 刷新 | 第8节 RL65-CURRENT-LOAD |
+| apps/web/src/components/ReleaseRolloutCenter.vue#21c66441891be768.1 | RL65-RETRY 快照告警 | 第8节 RL65-CURRENT-RETRY（保留快照） |
+| apps/web/src/components/ReleaseRolloutCenter.vue#227b66d9ec4e0216.1 | RL65-RETRY 首次错误 | 第8节 RL65-CURRENT-RETRY（首次错误） |
+| apps/web/src/components/ResponsiveFilterDrawer.vue#beb5f8d5846aa028.1 | LG62-FILTER 打开筛选 | `platform-account-contract-review.md` PA-Q-OPEN 当前共享筛选入口 |
+| apps/web/src/components/ResponsiveDataView.vue#4fa7deb3456a41ae.1 | 三页移动详情Escape | `responsive-detail-focus-contract-review.md` shared.detail.keyboard |
+| apps/web/src/components/ResponsiveDataView.vue#53d89072117d7eda.1 | 三页移动详情遮罩关闭 | `responsive-detail-focus-contract-review.md` shared.detail.scrim.close |
+| apps/web/src/components/ResponsiveDataView.vue#e23893d134b1daa1.1 | 三页移动详情dialog定义 | `responsive-detail-focus-contract-review.md` shared.detail.dialog |

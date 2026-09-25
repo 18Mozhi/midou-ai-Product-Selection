@@ -170,6 +170,7 @@ const history = {
       "BackupRecoveryCenter.vue 旧源码指纹（历史）",
       "6.1 P62 旧版日志中心指纹（2026-09-09）",
       "6.2 P65 旧版发布证据中心指纹（2026-09-09）",
+      "11. P62/P64/P65 已替代源码身份",
     ],
   },
   "organization-governance-contract-review.md": {
