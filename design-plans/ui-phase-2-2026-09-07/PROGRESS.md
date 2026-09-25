@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-25 · P60 当前部署与资源预算事实复核
+
+线上只读核验 `/platform-admin/open-platform` 深链、`OpenPlatformCenter` JS/CSS 均 HTTP 200，资源 SHA-256 与本地当前构建一致；live/ready/available/version 正常，build SHA 为 `bf65285830819b7d1989094e4437726fb5a07765`。`npm run verify:frontend-budget` 当前通过，202 个资源；Feature Map 旧的 129451/122880 与 52297/51200 预算数值已按当前实测纠正。仅更新交付事实文档，没有 P60 运行时代码/API/RBAC/数据库或外部投递变更；无需重新部署。正式 M07-03 证据、真实 MySQL/RBAC/加密及回调投递仍需独立验收。
+
 ## 2026-09-25 · P37 审计筛选历史与缓存恢复
 
 修复 `/org-admin/audit` 同实例路由查询变化、浏览器后退/前进及 KeepAlive 缓存返回时的筛选恢复；恢复后的条件仍由现有父层只读审计 GET 加载，保留无关 URL 参数和原有服务端筛选契约。新增真实 Vue 路由 E2E 覆盖后退/前进与离开后返回；相关 7 条审计 E2E 桌面 7/7 通过，390px 移动 6/6 通过，1 项桌面专属超时场景按既有规则跳过。无 API/OpenAPI/数据库/环境/依赖/RBAC 变更；此次尚待提交、部署和线上验证。旧 P37 生命周期记录作为修复前历史保留。详见 `P37-QUERY-RESTORATION-REVIEW.md`。
