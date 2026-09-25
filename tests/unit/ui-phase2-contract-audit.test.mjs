@@ -1440,6 +1440,7 @@ test("current P42 organization detail dialog reconciles every candidate and curr
       (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
     );
     assert.equal(record?.status, "identity-not-found", signature);
+    assert.equal(record?.temporalScope, "historical", signature);
   }
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,

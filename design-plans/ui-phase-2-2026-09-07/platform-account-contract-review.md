@@ -88,17 +88,10 @@
 | W | 8f34ceeac7432a4a.1 | PA41-CREATE 最终submit按钮 |
 | G:31 | f1666fd06fb5d95e.1 | dialog-definition | PA42-DIALOG 原生组织详情定义 |
 | G:31 | 452d85f008176563.1 | event-binding | PA42-CLOSE Escape→父关闭/回列表 |
-| G | 6fbf23d3aefd32ed.1 | PA42-RETRY missing重新读取概览 |
 | G:58 | e86ba35d079de0d3.1 | control | PA42-CLOSE missing返回列表 |
-| G | 806c920618d07330.1 | PA42-SAVE form→原因确认 |
 | G:94 | 305725c44ab6a8ed.1 | control | PA42-CLOSE 页首关闭 |
-| G | c86975c19b2b8d14.1 | PA42-INPUT name清反馈 |
-| G | 68c23982ea6f10d3.1 | PA42-INPUT timezone清反馈 |
-| G | 1ddc3f63c9d2ad7d.1 | PA42-INPUT retention清反馈 |
 | G:165 | 1c008f867673db60.1 | control | PA42-TECH slug/UUID展开 |
-| G | 758ab89691c1c72b.1 | PA42-STATUS 停用/恢复进入原因窗 |
 | G:193 | 02668382bdda9d3b.1 | control | PA42-CLOSE 页尾关闭 |
-| G | b8fc8632d25866fd.1 | PA42-SAVE submit按钮，与form归并 |
 | R | e4a2fbf8875f3488.1 | PA45-RESET 比较重置，P44共享但不写URL |
 
 ### 1.2 共享16候选及调用差异
@@ -147,6 +140,20 @@ S/T本族四类消费者为D来源健康、O组织记录、U用户记录、M管�
 | 文件 | SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformOrganizationDetailDialog.vue | 99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e |
+
+#### 1.5 P42旧组织详情身份（历史）
+
+下列七个 G 组件签名只保留早期身份供追溯；替代身份见上方当前源码表，不计入当前候选覆盖。此静态归档不等于弹窗交互、接口、RBAC或生产验收。
+
+| 旧candidateId | 原始语义 | 当前替代身份 |
+| --- | --- | --- |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue#6fbf23d3aefd32ed.1 | PA42-RETRY missing重新读取概览 | G#106fea94b943db73.1 PA42-RETRY |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue#806c920618d07330.1 | PA42-SAVE form→原因确认 | G#ed675af42a95eee6.1 PA42-SAVE |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue#c86975c19b2b8d14.1 | PA42-INPUT name清反馈 | G#e9b3a32bc524be8e.1 PA42-INPUT |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue#68c23982ea6f10d3.1 | PA42-INPUT timezone清反馈 | G#e2d410a205d6addc.1 PA42-INPUT |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue#1ddc3f63c9d2ad7d.1 | PA42-INPUT retention清反馈 | G#f5028ff7b6963e7c.1 PA42-INPUT |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue#758ab89691c1c72b.1 | PA42-STATUS 停用/恢复进入原因窗 | G#c912786107f1a3c8.1 PA42-STATUS |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue#b8fc8632d25866fd.1 | PA42-SAVE submit按钮，与form归并 | G#1c447b2a32d2d030.1 PA42-SAVE |
 
 Q动态`:role="overlay ? 'dialog' : 'group'"`未被当前扫描器识别为dialog-definition；已人工补记移动筛选模态，不能据零定义漏验。Q以760px matchMedia切换，离开移动关闭；submit捕获立即收起，不等待查询结果，重置type=button不触发这条关闭路径；取消保留父字段。S初始聚焦关闭按钮，close返焦点，但源码没有显式Tab循环、背景inert或KeepAlive离开清理；selectedKey所指记录临时消失后又回来也需复验，不直接推断安全。
 

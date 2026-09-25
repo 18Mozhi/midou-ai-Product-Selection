@@ -156,7 +156,10 @@ const history = {
     historicalSections: ["历史候选（不计入当前覆盖）"],
   },
   "platform-account-contract-review.md": {
-    historicalSections: ["7. 源码指纹（LF SHA-256）"],
+    historicalSections: [
+      "7. 源码指纹（LF SHA-256）",
+      "1.5 P42旧组织详情身份（历史）",
+    ],
   },
   "provider-definition-contract-review.md": {
     historicalSections: ["7. 历史源指纹（LF SHA-256）", "PR46/PR47及共享详情旧身份归档"],
