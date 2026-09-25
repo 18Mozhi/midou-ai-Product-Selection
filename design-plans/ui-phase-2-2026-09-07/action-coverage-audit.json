@@ -246,7 +246,7 @@
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "70cd0a70d6b43205c11a04357617fa531afd072ff23a008c152872f8ffb0d697",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
-    "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b5463da0234f707cbbd40804c227b7ffc02959bc399a8e22bdeeba7092640ea1",
+    "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "80ed5a269d46f2b5098652248fca6f98db3d56893ff4ea9e9d291458038db8ea",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "f4c2ca930b5818ac0b71c231f77f4ee991488ae98db27f1773b1b9d5c320f530",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "e3f9ca12116d968a504a90a56ae49c75e6c4b5cbe7888063f0f83e05ee647a12",
@@ -538,6 +538,8 @@
     "tests/unit/ui-phase2-p61-action-review.test.mjs": "13917fe4ac69e2b6dd497f1268267ea01908a7cca5eda7ca6c1a10814c7ba58e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P62.json": "49bb056829eaebd80fb30e76e5c90b3ff8eb9fc298cafc9c49ed4e706095b91c",
     "tests/unit/ui-phase2-p62-action-review.test.mjs": "4a271af55652c368b8d631d2726ff0dbe203d08bcac7837c20c19c4e153c2e18",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P63.json": "21cae9497f299253fe26447b32186387a7952b27e371cf6ea036c5bd5bd555a5",
+    "tests/unit/ui-phase2-p63-action-review.test.mjs": "d960ed40575847ab67a05da9a14cc49f099be50a89fa2fd174e2bfe523376aa1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -600,7 +602,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "5eda7a24e776cdd72336d1ef23433570dc6f856aa07c6b9c639dc74b0c285123",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "64a12e0759f7c35565dc469d2b4293324dcf547784d6e535d9cd52eac5755eb0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "afbb50b6d388d79c09e8321c9456718b6b9f62cd990e0b78126c976fdb503047",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "b08d0fff83950f31e15d60520f785f282fe948b9753c3de41e2692cb990cc81d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "638bc66ddda804f5022476e6fe5bb8dab6668ec434aadfb36af6022134ffac36",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "4869f2a7553d65cb5355570511b38e73af1a34075a028e1d07f7564c89d71ee3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "65b44de90a0dfb850a5511f7cbfa75c14a2ef0fce5a3279aefeada46560ba2e8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "c5d78f0e761d077a150ff8dadd20fcf64cc7259cf6d23f23934900e443a260cd",
@@ -624,13 +626,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 62,
-    "explicitlyGroupedSourceSites": 1457,
-    "semanticGroups": 1216,
-    "routeActions": 994,
+    "reviewedPages": 63,
+    "explicitlyGroupedSourceSites": 1459,
+    "semanticGroups": 1218,
+    "routeActions": 996,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P63",
       "P64",
       "P65",
       "P66",
@@ -644,7 +645,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 62,
+    "visualApprovedReviewedPages": 63,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3345,13 +3346,42 @@
       "path": "/platform-admin/api-coverage",
       "title": "接口覆盖证据",
       "oldStaticAssociatedCandidates": 75,
-      "review": null,
+      "review": {
+        "pageId": "P63",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 2,
+        "semanticGroups": 2,
+        "routeActions": 2,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 12,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 0,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "api-coverage-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "2个当前操作卡片候选分别映射五维证据和技术追踪原生披露；不计父级共享读取/筛选、报告摘要及数据展示为按钮。",
+        "current仅表示method/path目录指纹可关联，不代表build SHA相同、每项验证通过、报告完整或生产权限已验收。",
+        "父级查询/结果筛选不重新运行生产接口；不新增下载、探测、批准或报告写入入口。"
+      ]
     },
     {
       "id": "P64",
@@ -5097,6 +5127,32 @@
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
       }
+    },
+    {
+      "pageId": "P63",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 2,
+      "semanticGroups": 2,
+      "routeActions": 2,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 12,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 0,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
     }
   ],
   "candidates": [
@@ -5579,7 +5635,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P63",
+          "actionId": "P63-OP-CURRENT-EVIDENCE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ApiCoverageOperationCard.vue#57d520c8f4d3aa77.1",
@@ -5598,7 +5660,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P63",
+          "actionId": "P63-OP-CURRENT-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ApiFoundation.vue#04355969b9542e61.1",

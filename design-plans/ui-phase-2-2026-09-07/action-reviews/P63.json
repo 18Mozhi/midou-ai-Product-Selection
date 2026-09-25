@@ -1,0 +1,125 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P63",
+  "route": "/platform-admin/api-coverage",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/ApiCoverageOperationCard.vue": "1bbda614ea0bf0aa4f59ebaf69275cead59c8ee6b876de2e18b008278015d11a"
+  },
+  "inputs": {},
+  "actions": [
+    {
+      "actionId": "P63-OP-CURRENT-EVIDENCE",
+      "kind": "local",
+      "label": "展开当前 method/path 操作的五维验证证据",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApiCoverageOperationCard.vue#0555e1f79d8d4038.1"
+      ],
+      "sourceContractKeys": [
+        "P63-OP-CURRENT-EVIDENCE / 展开当前method/path对应的五维证据结果"
+      ],
+      "contractAliasReason": "沿用P63接口覆盖证据合同的当前候选归属，不扩大到报告读取、接口探测或导出。",
+      "condition": "当前操作卡片提供原生证据披露入口时。",
+      "handler": "仅展开父级已传入 operation 的正常、鉴权、参数、幂等、故障证据与 test_id/latest_result；不发请求、不运行接口验证。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p63-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "报告可关联或证据状态显示通过，不等于当前构建、真实生产报告、SQL/RBAC或正式验收通过。"
+    },
+    {
+      "actionId": "P63-OP-CURRENT-TRACE",
+      "kind": "local",
+      "label": "展开当前 method/path 操作的请求与追踪编号",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ApiCoverageOperationCard.vue#57d520c8f4d3aa77.1"
+      ],
+      "sourceContractKeys": [
+        "P63-OP-CURRENT-TRACE / 展开当前method/path对应的请求与追踪编号"
+      ],
+      "contractAliasReason": "沿用P63接口覆盖证据合同的当前候选归属，不扩大到报告读取、接口探测或导出。",
+      "condition": "当前操作卡片提供原生技术追踪披露入口时。",
+      "handler": "只展示父级传入 operation 的 request_id/trace_id；不重读报告、不发起接口调用或下载。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p63-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "编号存在不证明关联请求成功，也不代表真实运行链路、敏感信息审查或生产权限已验收。"
+    }
+  ],
+  "pageScopeExclusions": {
+    "sharedFiles": [
+      {
+        "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+        "rationale": "当前页面摘要与明细为纯展示，不含扫描器定义的本地交互候选；不把报告状态展示虚构为刷新或验收按钮。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformManagementCenter.vue",
+        "rationale": "P63 父级拥有 superadmin 入口、GET/read、query/status 筛选、重试与共享移动筛选抽屉；由平台管理入口合同交叉引用，不重复占用跨域候选。"
+      },
+      {
+        "file": "apps/web/src/components/ResponsiveFilterDrawer.vue",
+        "rationale": "共享抽屉开关、键盘边界与应用事件已按共享组件源合同归属，不在 P63 重复登记。"
+      }
+    ],
+    "remaining": "父级读取/筛选调用与共享移动抽屉不重复计数；P63 本地仅有两项逐操作原生证据披露控件。"
+  },
+  "dialogs": {
+    "kind": "none-in-current-source",
+    "remaining": "P63 无业务详情弹窗；五维证据和追踪编号由各操作卡片原生 details/summary 展开。移动筛选抽屉属于共享父入口，不冒充本页独立弹窗。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/ApiCoverageOperationCard.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/ApiCoverageOperationCard.vue": "1bbda614ea0bf0aa4f59ebaf69275cead59c8ee6b876de2e18b008278015d11a"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "ApiCoverageDashboard.vue 当前无本地交互候选；父级 API 读取、筛选及 ResponsiveFilterDrawer 为共享管理中心消费者，需沿其合同验证。"
+    ],
+    "remaining": "静态动作映射不证明真实受限报告、全258项API、六角色RBAC、SQL、五维生产探测或正式M07-03验收。"
+  },
+  "compositionGaps": [
+    "2个当前操作卡片候选分别映射五维证据和技术追踪原生披露；不计父级共享读取/筛选、报告摘要及数据展示为按钮。",
+    "current仅表示method/path目录指纹可关联，不代表build SHA相同、每项验证通过、报告完整或生产权限已验收。",
+    "父级查询/结果筛选不重新运行生产接口；不新增下载、探测、批准或报告写入入口。"
+  ]
+}
