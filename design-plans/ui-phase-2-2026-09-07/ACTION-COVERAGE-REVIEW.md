@@ -2,9 +2,11 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1484；旧登记1477；新身份32，旧表独有身份25。签名变化不等于增删业务能力。
-- 已具体语义对应39页/797源位置/774组；其中路由动作640组，转发/容器关联69组，其余明确排除。其余34页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1701；旧登记1477；新身份603，旧表独有身份379。签名变化不等于增删业务能力。
+- 已具体语义对应42页/938源位置/839组；其中路由动作675组，转发/容器关联84组，其余明确排除。其余31页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
+
+已有视觉授权标记42页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -12,78 +14,78 @@
 
 | 页 | 旧静态关联候选（非运行分母） | 语义审阅 | 下一步 |
 | --- | --- | --- | --- |
-| [P01 正在进入](page-specs/P01.md) | 3 | [1组](action-reviews/P01.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P02 登录](page-specs/P02.md) | 18 | [13组](action-reviews/P02.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P03 注册](page-specs/P03.md) | 18 | [13组](action-reviews/P03.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P04 找回密码](page-specs/P04.md) | 18 | [13组](action-reviews/P04.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P05 验证邮箱](page-specs/P05.md) | 18 | [13组](action-reviews/P05.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P06 重置密码](page-specs/P06.md) | 18 | [13组](action-reviews/P06.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P07 安全设置](page-specs/P07.md) | 18 | [13组](action-reviews/P07.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P08 选择组织与工作区](page-specs/P08.md) | 13 | [11组](action-reviews/P08.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P09 快速引导](page-specs/P09.md) | 6 | [6组](action-reviews/P09.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P10 外观偏好](page-specs/P10.md) | 11 | [11组](action-reviews/P10.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P11 个人中心](page-specs/P11.md) | 20 | [15组](action-reviews/P11.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P12 今日行动](page-specs/P12.md) | 56 | [14组](action-reviews/P12.json) | 84个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P13 今日工作](page-specs/P13.md) | 111 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P14 热点趋势](page-specs/P14.md) | 107 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P15 选品机会](page-specs/P15.md) | 157 | [35组](action-reviews/P15.json) | 162个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P16 创建选品](page-specs/P16.md) | 44 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P17 评分规则](page-specs/P17.md) | 64 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P18 机会详情](page-specs/P18.md) | 157 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P19 竞品监控](page-specs/P19.md) | 75 | [22组](action-reviews/P19.json) | 20个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P20 竞品监控规则](page-specs/P20.md) | 75 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P21 供应链与利润](page-specs/P21.md) | 90 | [38组](action-reviews/P21.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P22 费用与利润规则](page-specs/P22.md) | 66 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P23 全部任务](page-specs/P23.md) | 111 | [39组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P24 任务详情](page-specs/P24.md) | 111 | [33组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P25 审批中心](page-specs/P25.md) | 78 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P26 通知中心](page-specs/P26.md) | 59 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P27 自动化规则](page-specs/P27.md) | 55 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P28 报表与导出](page-specs/P28.md) | 50 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 162 | [8组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P30 成员与邀请](page-specs/P30.md) | 162 | [24组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P31 角色与权限](page-specs/P31.md) | 162 | [25组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P32 工作区管理](page-specs/P32.md) | 162 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P33 团队管理](page-specs/P33.md) | 162 | [17组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P34 审批模板](page-specs/P34.md) | 162 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P35 组织数据](page-specs/P35.md) | 162 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P36 组织令牌](page-specs/P36.md) | 162 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P37 组织审计](page-specs/P37.md) | 162 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P38 平台概览](page-specs/P38.md) | 63 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P39 账号与组织](page-specs/P39.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P40 组织管理](page-specs/P40.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P41 创建组织](page-specs/P41.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P42 组织详情](page-specs/P42.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P43 用户管理](page-specs/P43.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P44 管理员管理](page-specs/P44.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P45 角色权限](page-specs/P45.md) | 139 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P46 来源设置](page-specs/P46.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P47 采集程序](page-specs/P47.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P48 热点来源](page-specs/P48.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P49 1688 启用检查](page-specs/P49.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P50 凭证与档案](page-specs/P50.md) | 178 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P51 采集任务](page-specs/P51.md) | 120 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P52 采集总览](page-specs/P52.md) | 120 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P53 网页登录采集](page-specs/P53.md) | 120 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P54 数据中心](page-specs/P54.md) | 100 | [17组](action-reviews/P54.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P55 质量与规则](page-specs/P55.md) | 68 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P56 内容管理](page-specs/P56.md) | 112 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P57 通知管理](page-specs/P57.md) | 112 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P58 配额管理](page-specs/P58.md) | 79 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P59 安全中心](page-specs/P59.md) | 72 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P60 开放平台](page-specs/P60.md) | 84 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P61 系统状态](page-specs/P61.md) | 112 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P62 链路日志](page-specs/P62.md) | 68 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P63 接口覆盖证据](page-specs/P63.md) | 112 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P64 备份与恢复](page-specs/P64.md) | 50 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P65 发布管理](page-specs/P65.md) | 51 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P66 服务拓扑](page-specs/P66.md) | 49 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P67 Redis 运行](page-specs/P67.md) | 42 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P68 MySQL 运行](page-specs/P68.md) | 42 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P69 文件存储](page-specs/P69.md) | 42 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P70 采集调度](page-specs/P70.md) | 59 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P71 容量边界](page-specs/P71.md) | 50 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P72 界面状态](page-specs/P72.md) | 13 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P01 正在进入](page-specs/P01.md) | 2 | [1组](action-reviews/P01.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P02 登录](page-specs/P02.md) | 7 | [15组](action-reviews/P02.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P03 注册](page-specs/P03.md) | 7 | [15组](action-reviews/P03.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P04 找回密码](page-specs/P04.md) | 7 | [15组](action-reviews/P04.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P05 验证邮箱](page-specs/P05.md) | 7 | [15组](action-reviews/P05.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P06 重置密码](page-specs/P06.md) | 7 | [15组](action-reviews/P06.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P07 安全设置](page-specs/P07.md) | 7 | [15组](action-reviews/P07.json) | 78个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P08 选择组织与工作区](page-specs/P08.md) | 9 | [11组](action-reviews/P08.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P09 快速引导](page-specs/P09.md) | 1 | [6组](action-reviews/P09.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P10 外观偏好](page-specs/P10.md) | 4 | [13组](action-reviews/P10.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P11 个人中心](page-specs/P11.md) | 2 | [28组](action-reviews/P11.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P12 今日行动](page-specs/P12.md) | 47 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P13 今日工作](page-specs/P13.md) | 73 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P14 热点趋势](page-specs/P14.md) | 103 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P15 选品机会](page-specs/P15.md) | 153 | [35组](action-reviews/P15.json) | 162个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P16 创建选品](page-specs/P16.md) | 41 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P17 评分规则](page-specs/P17.md) | 61 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P18 机会详情](page-specs/P18.md) | 153 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P19 竞品监控](page-specs/P19.md) | 72 | [22组](action-reviews/P19.json) | 20个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P20 竞品监控规则](page-specs/P20.md) | 72 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P21 供应链与利润](page-specs/P21.md) | 87 | [38组](action-reviews/P21.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P22 费用与利润规则](page-specs/P22.md) | 63 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P23 全部任务](page-specs/P23.md) | 73 | [40组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P24 任务详情](page-specs/P24.md) | 73 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P25 审批中心](page-specs/P25.md) | 75 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P26 通知中心](page-specs/P26.md) | 56 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P27 自动化规则](page-specs/P27.md) | 52 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P28 报表与导出](page-specs/P28.md) | 47 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P29 治理概览](page-specs/P29.md) | 155 | [8组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P30 成员与邀请](page-specs/P30.md) | 155 | [24组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P31 角色与权限](page-specs/P31.md) | 155 | [25组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P32 工作区管理](page-specs/P32.md) | 155 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P33 团队管理](page-specs/P33.md) | 155 | [17组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P34 审批模板](page-specs/P34.md) | 155 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P35 组织数据](page-specs/P35.md) | 155 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P36 组织令牌](page-specs/P36.md) | 155 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P37 组织审计](page-specs/P37.md) | 155 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P38 平台概览](page-specs/P38.md) | 60 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P39 账号与组织](page-specs/P39.md) | 99 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P40 组织管理](page-specs/P40.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P41 创建组织](page-specs/P41.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P42 组织详情](page-specs/P42.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P43 用户管理](page-specs/P43.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P44 管理员管理](page-specs/P44.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P45 角色权限](page-specs/P45.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P46 来源设置](page-specs/P46.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P47 采集程序](page-specs/P47.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P48 热点来源](page-specs/P48.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P49 1688 启用检查](page-specs/P49.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P50 凭证与档案](page-specs/P50.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P51 采集任务](page-specs/P51.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P52 采集总览](page-specs/P52.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P53 网页登录采集](page-specs/P53.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P54 数据中心](page-specs/P54.md) | 58 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P55 质量与规则](page-specs/P55.md) | 59 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P56 内容管理](page-specs/P56.md) | 75 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P57 通知管理](page-specs/P57.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P58 配额管理](page-specs/P58.md) | 76 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P59 安全中心](page-specs/P59.md) | 69 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P60 开放平台](page-specs/P60.md) | 73 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P61 系统状态](page-specs/P61.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P62 链路日志](page-specs/P62.md) | 58 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P63 接口覆盖证据](page-specs/P63.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P64 备份与恢复](page-specs/P64.md) | 44 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P65 发布管理](page-specs/P65.md) | 45 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P66 服务拓扑](page-specs/P66.md) | 43 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P67 Redis 运行](page-specs/P67.md) | 36 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P68 MySQL 运行](page-specs/P68.md) | 39 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P69 文件存储](page-specs/P69.md) | 39 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P70 采集调度](page-specs/P70.md) | 49 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P71 容量边界](page-specs/P71.md) | 41 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P72 界面状态](page-specs/P72.md) | 7 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P73 页面不存在](page-specs/P73.md) | 3 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 
 ## P11具体结论
@@ -102,13 +104,13 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P01 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P01.json)：1个局部源位置 → 1组；0类写入，1组路由动作，0组转发/容器关联不重复计动作。0个本地v-model，0处调用/内嵌容器，0个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P01.json)：2个局部源位置 → 1组；0类写入，1组路由动作，0组转发/容器关联不重复计动作。已映射0/0个源码字段位置，1/1处调用/内嵌容器，1个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有6个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| ID-LANDING-CHECK 重新确定登录落点 / read | 1处；mounted、blocked-retry | [p01-loading · 1440](design/identity-direction-c/1440-p01-loading.png) / [p01-loading · 390](design/identity-direction-c/390-p01-loading.png)、[p01-blocked · 1440](design/identity-direction-c/1440-p01-blocked.png) / [p01-blocked · 390](design/identity-direction-c/390-p01-blocked.png)；其余见JSON | 共享blocked次按钮有emit却无本页监听；不是影响详情。缺失目标/角色/真实会话、导航与重复读取待验。 |
+| ID-LANDING-CHECK 重新确定登录落点 / read | 2处；mounted、blocked-retry | [p01-loading · 1440](design/identity-direction-c/1440-p01-loading.png) / [p01-loading · 390](design/identity-direction-c/390-p01-loading.png)、[p01-blocked · 1440](design/identity-direction-c/1440-p01-blocked.png) / [p01-blocked · 390](design/identity-direction-c/390-p01-blocked.png)；其余见JSON | 真实会话、真实角色权限、全部服务端目标、生产错误边界与正式M07-03仍未验证。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -119,34 +121,37 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
 | --- | --- | --- | --- |
+| LandingRedirectSurface.vue / aside.1 / session-entry-explanation | inline-aside / related-scene-only | [p01-blocked · 1440](design/identity-direction-c/1440-p01-blocked.png) / [p01-blocked · 390](design/identity-direction-c/390-p01-blocked.png) | 该场景只登记说明区域的设计关联；不证明真实会话、权限或成功落点。 |
 
 ### 明确保留的边界
 
-- 仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。
+- 局部Vue覆盖加载、依赖受阻、缺少目标与过期转登录；真实会话/角色、目标页面自身权限及M07-03仍需独立验证。
 - App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。
 - 所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。
 
 ## P02 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P02.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P02.json)：52个局部源位置 → 15组；4类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射13/16个源码字段位置，2/13处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
-| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
-| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
-| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
-| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
-| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
-| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
-| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-ROOT 品牌返回根入口 / navigation | 7处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 9处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 2处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 8处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 2处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 4处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 4处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 2处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
 | ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
-| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
-| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
-| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
-| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 2处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 3处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-RELOAD 重新读取 MFA 状态 / read | 1处；read-failure、retry | ；其余见JSON | 仅为P07页面控制；不在当前身份路由可操作。 |
+| ID-MFA-RETURN-LOGIN 停用后手动返回登录 / navigation | 1处；P07-footer | ；其余见JSON | 仅为P07页面控制；停用后手动导航，不自动跳转。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 6处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / excluded | 0处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -195,25 +200,27 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P03 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P03.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P03.json)：52个局部源位置 → 15组；4类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射13/16个源码字段位置，2/13处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
-| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
-| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
-| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
-| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
-| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
-| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
-| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-ROOT 品牌返回根入口 / navigation | 7处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 9处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 2处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 8处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 2处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 4处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 4处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 2处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
 | ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
-| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
-| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
-| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
-| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 2处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 3处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-RELOAD 重新读取 MFA 状态 / read | 1处；read-failure、retry | ；其余见JSON | 仅为P07页面控制；不在当前身份路由可操作。 |
+| ID-MFA-RETURN-LOGIN 停用后手动返回登录 / navigation | 1处；P07-footer | ；其余见JSON | 仅为P07页面控制；停用后手动导航，不自动跳转。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 6处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / excluded | 0处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -262,25 +269,27 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P04 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P04.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P04.json)：52个局部源位置 → 15组；4类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射13/16个源码字段位置，2/13处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
-| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
-| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
-| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
-| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
-| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
-| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
-| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-ROOT 品牌返回根入口 / navigation | 7处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 9处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 2处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 8处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 2处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 4处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 4处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 2处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
 | ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
-| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
-| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
-| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
-| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 2处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 3处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-RELOAD 重新读取 MFA 状态 / read | 1处；read-failure、retry | ；其余见JSON | 仅为P07页面控制；不在当前身份路由可操作。 |
+| ID-MFA-RETURN-LOGIN 停用后手动返回登录 / navigation | 1处；P07-footer | ；其余见JSON | 仅为P07页面控制；停用后手动导航，不自动跳转。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 6处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / excluded | 0处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -329,25 +338,27 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P05 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P05.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P05.json)：52个局部源位置 → 15组；4类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射13/16个源码字段位置，2/13处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
-| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
-| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
-| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
-| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
-| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
-| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
-| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-ROOT 品牌返回根入口 / navigation | 7处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 9处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 2处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 8处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 2处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 4处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 4处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 2处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
 | ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
-| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
-| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
-| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
-| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 2处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 3处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-RELOAD 重新读取 MFA 状态 / read | 1处；read-failure、retry | ；其余见JSON | 仅为P07页面控制；不在当前身份路由可操作。 |
+| ID-MFA-RETURN-LOGIN 停用后手动返回登录 / navigation | 1处；P07-footer | ；其余见JSON | 仅为P07页面控制；停用后手动导航，不自动跳转。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 6处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / excluded | 0处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -396,25 +407,27 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P06 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P06.json)：18个局部源位置 → 13组；4类写入，11组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P06.json)：52个局部源位置 → 15组；4类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射13/16个源码字段位置，2/13处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
-| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
-| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
-| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
-| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
-| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
-| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
-| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-ROOT 品牌返回根入口 / navigation | 7处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 9处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 2处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 8处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 2处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 4处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 4处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / excluded | 2处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
 | ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
-| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
-| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
-| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
-| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 2处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 3处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-RELOAD 重新读取 MFA 状态 / read | 1处；read-failure、retry | ；其余见JSON | 仅为P07页面控制；不在当前身份路由可操作。 |
+| ID-MFA-RETURN-LOGIN 停用后手动返回登录 / navigation | 1处；P07-footer | ；其余见JSON | 仅为P07页面控制；停用后手动导航，不自动跳转。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 6处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / excluded | 0处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -463,25 +476,27 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P07 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P07.json)：18个局部源位置 → 13组；5类写入，12组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，2处调用/内嵌容器，6个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P07.json)：52个局部源位置 → 15组；5类写入，13组路由动作，0组转发/容器关联不重复计动作。已映射13/16个源码字段位置，2/13处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有78个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| ID-ROOT 品牌返回根入口 / navigation | 1处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
-| ID-FORM-SUBMIT 按模式提交身份表单 / write | 2处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
-| ID-SHOW-FORGOT 切到找回密码 / local | 1处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
-| ID-SHOW-LOGIN 返回局部登录模式 / local | 3处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
-| ID-SEED-PASSWORD 修改种子密码 / write | 1处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
-| ID-MFA-START 开始认证器绑定 / write | 2处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 两处同handler独立消费者。普通mfa仅P07初始可达；其他路径需RouterLink跨页。请求竞态/真实秘密生命周期与权限待验。 |
-| ID-MFA-CONFIRM 确认启用认证器 / write | 2处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 普通管理实例非P02–P06路由本地可达；首次设置可从各身份页局部login结果进入。恢复码真实显示/清理和重复确认未验。 |
-| ID-MFA-DISABLE 停用MFA并撤销会话 / write | 1处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 原secret/recovery/currentPassword/code未清。新稿锁定/重新登录提示不证明服务撤销或秘密清理；非P07只作跨路由消费者参考。 |
+| ID-ROOT 品牌返回根入口 / navigation | 7处；all-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)；其余见JSON | 最终落点由根页解析；本页图不能证明鉴权或最近成员路径。 |
+| ID-FORM-SUBMIT 按模式提交身份表单 / write | 9处；login、register、forgot、reset、mfa-challenge、submit-event、submit-button | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p02-challenge · 1440](design/identity-direction-c/1440-p02-challenge.png) / [p02-challenge · 390](design/identity-direction-c/390-p02-challenge.png)；其余见JSON | 同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。 |
+| ID-SHOW-FORGOT 切到找回密码 / local | 2处；login-to-forgot | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p04-idle · 1440](design/identity-direction-c/1440-p04-idle.png) / [p04-idle · 390](design/identity-direction-c/390-p04-idle.png)；其余见JSON | 原型清输入是提案；离开进行中请求的晚到结果/焦点及浏览器历史未验。 |
+| ID-SHOW-LOGIN 返回局部登录模式 / local | 8处；verify-result、seed-complete、footer | [p05-success · 1440](design/identity-direction-c/1440-p05-success.png) / [p05-success · 390](design/identity-direction-c/390-p05-success.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 三个入口不当一个按钮实例；未清密码/密钥/恢复码，重复返回与晚到请求/返焦待验。 |
+| ID-SEED-PASSWORD 修改种子密码 / write | 2处；security-setup-change、relogin | [p02-seed · 1440](design/identity-direction-c/1440-p02-seed.png) / [p02-seed · 390](design/identity-direction-c/390-p02-seed.png)、[p02-seed-loading · 1440](design/identity-direction-c/1440-p02-seed-loading.png) / [p02-seed-loading · 390](design/identity-direction-c/390-p02-seed-loading.png)；其余见JSON | 真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。 |
+| ID-MFA-START 开始认证器绑定 / write | 4处；security-setup-enrollment、mfa-management-enrollment | [p02-seed-enroll · 1440](design/identity-direction-c/1440-p02-seed-enroll.png) / [p02-seed-enroll · 390](design/identity-direction-c/390-p02-seed-enroll.png)、[p07-enroll · 1440](design/identity-direction-c/1440-p07-enroll.png) / [p07-enroll · 390](design/identity-direction-c/390-p07-enroll.png)；其余见JSON | 首次设置和P07管理仍复用同一处理器；P07原生校验、单飞及本地输入清理已双端验证。真实会话、MFA种子与服务端权限未使用生产账号验证。 |
+| ID-MFA-CONFIRM 确认启用认证器 / write | 4处；security-setup-confirm、mfa-management-confirm | [p02-seed-secret · 1440](design/identity-direction-c/1440-p02-seed-secret.png) / [p02-seed-secret · 390](design/identity-direction-c/390-p02-seed-secret.png)、[p02-seed-recovery · 1440](design/identity-direction-c/1440-p02-seed-recovery.png) / [p02-seed-recovery · 390](design/identity-direction-c/390-p02-seed-recovery.png)；其余见JSON | 恢复码仅在确认响应后显示；本地密钥/密码/验证码随确认清理。双端隔离浏览器流程通过，真实MFA材料与服务端启用记录未用生产账号验证。 |
+| ID-MFA-DISABLE 停用MFA并撤销会话 / write | 2处；enabled、recovery-visible、disable | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disable-loading · 1440](design/identity-direction-c/1440-p07-disable-loading.png) / [p07-disable-loading · 390](design/identity-direction-c/390-p07-disable-loading.png)；其余见JSON | 停用成功后清理本地敏感输入并留在页面，明确提示服务端撤销会话；本地204夹具不证明生产Cookie撤销或账号权限。 |
 | ID-LEGACY-SESSION-REVOKE 旧会话撤销模板 / excluded | 1处；legacy-sessions-not-public | ；其余见JSON | 不能以静态导入称本9页可操作，也不删除旧源码；个人安全入口实际前往P11，那里另审。 |
-| ID-SHOW-REGISTER 切到本地注册 / local | 1处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
-| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 1处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
-| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 1处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
-| ID-CONTEXT-ROUTE 继续选择组织 / navigation | 1处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
+| ID-SHOW-REGISTER 切到本地注册 / local | 2处；all-non-register-modes | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p03-idle · 1440](design/identity-direction-c/1440-p03-idle.png) / [p03-idle · 390](design/identity-direction-c/390-p03-idle.png)；其余见JSON | 首次路径不改变，跨mode的密码/挑战/请求归属和焦点仍待验。 |
+| ID-ACCOUNT-SECURITY 前往个人安全会话 / navigation | 3处；footer-security | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | 不是旧sessions模式；实际session-status守卫、会话加载和跨路由后返回未验。 |
+| ID-MFA-RELOAD 重新读取 MFA 状态 / read | 1处；read-failure、retry-loading、retry-success | [p07-read-error · 1440](design/identity-direction-c/1440-p07-read-error.png) / [p07-read-error · 390](design/identity-direction-c/390-p07-read-error.png)、[p07-loading · 1440](design/identity-direction-c/1440-p07-loading.png) / [p07-loading · 390](design/identity-direction-c/390-p07-loading.png)；其余见JSON | 双端本地 Vue 通过；线上真实认证态与权限拒绝仍未实测。 |
+| ID-MFA-RETURN-LOGIN 停用后手动返回登录 / navigation | 1处；enabled、disabled-success、binding | [p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)、[p07-disabled · 1440](design/identity-direction-c/1440-p07-disabled.png) / [p07-disabled · 390](design/identity-direction-c/390-p07-disabled.png)；其余见JSON | 本地路由和组件清理已验证；真实Cookie撤销后的身份服务响应未在生产账号执行。 |
+| ID-MFA-ROUTE 前往MFA管理路由 / navigation | 6处；footer-mfa | [p02-idle · 1440](design/identity-direction-c/1440-p02-idle.png) / [p02-idle · 390](design/identity-direction-c/390-p02-idle.png)、[p07-enabled · 1440](design/identity-direction-c/1440-p07-enabled.png) / [p07-enabled · 390](design/identity-direction-c/390-p07-enabled.png)；其余见JSON | P07自身同path链接并不必然重新挂载；query-only改变不证明重置mode，实际守卫待验。 |
+| ID-CONTEXT-ROUTE 继续选择组织 / excluded | 0处；login-success-no-route | [p02-success-no-route · 1440](design/identity-direction-c/1440-p02-success-no-route.png) / [p02-success-no-route · 390](design/identity-direction-c/390-p02-success-no-route.png)；其余见JSON | request成功不等于已进工作台；请求landing与mode切换竞态、最终权限未验。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -530,14 +545,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P08 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P08.json)：13个局部源位置 → 11组；2类写入，10组路由动作，0组转发/容器关联不重复计动作。1个本地v-model，1处调用/内嵌容器，1个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P08.json)：12个局部源位置 → 11组；2类写入，10组路由动作，0组转发/容器关联不重复计动作。已映射1/1个源码字段位置，1/1处调用/内嵌容器，1个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有60个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | ID-ROOT 品牌返回根入口 / navigation | 1处；all-states | [p08-organizations · 1440](design/identity-direction-c/1440-p08-organizations.png) / [p08-organizations · 390](design/identity-direction-c/390-p08-organizations.png)；其余见JSON | 仍由根入口决定角色落点，未验真实会话。 |
-| NONACTION-ACCOUNT 当前账号占位 / excluded | 1处；placeholder | [p08-organizations · 1440](design/identity-direction-c/1440-p08-organizations.png) / [p08-organizations · 390](design/identity-direction-c/390-p08-organizations.png)；其余见JSON | 源视觉上可按但没有账号菜单；新稿非交互呈现是待审，不新增用户菜单。 |
+| NONACTION-ACCOUNT 当前账号占位 / excluded | 0处；placeholder | [p08-organizations · 1440](design/identity-direction-c/1440-p08-organizations.png) / [p08-organizations · 390](design/identity-direction-c/390-p08-organizations.png)；其余见JSON | 当前视觉明确为非交互文字；不新增用户菜单或账号业务动作。 |
 | ID-LOGIN-ROUTE 会话失效重新登录 / navigation | 1处；expired | [p08-expired · 1440](design/identity-direction-c/1440-p08-expired.png) / [p08-expired · 390](design/identity-direction-c/390-p08-expired.png)；其余见JSON | 没有保留return_to到登录的源代码，不能宣称重新登录必回原页。 |
 | ID-ORG-RELOAD 返回并重读组织 / read | 3处；error、forbidden、workspace-empty、workspace-back | [p08-error · 1440](design/identity-direction-c/1440-p08-error.png) / [p08-error · 390](design/identity-direction-c/390-p08-error.png)、[p08-forbidden · 1440](design/identity-direction-c/1440-p08-forbidden.png) / [p08-forbidden · 390](design/identity-direction-c/390-p08-forbidden.png)；其余见JSON | 不只是本地返回；未清query，旧工作区/团队ref仍在。选择写入期间返回可打断范围，晚到响应待验。 |
 | ID-PERSONAL-PROVISION 创建本人选品空间 / write | 1处；empty-org、provisioning、direct-return | [p08-empty · 1440](design/identity-direction-c/1440-p08-empty.png) / [p08-empty · 390](design/identity-direction-c/390-p08-empty.png)、[p08-provisioning · 1440](design/identity-direction-c/1440-p08-provisioning.png) / [p08-provisioning · 390](design/identity-direction-c/390-p08-provisioning.png)；其余见JSON | 不是创建任意组织；没有handler单飞早退。后端幂等/会话/失败重试/实际导航需隔离验证。 |
@@ -568,7 +583,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P09 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P09.json)：6个局部源位置 → 6组；0类写入，6组路由动作，0组转发/容器关联不重复计动作。0个本地v-model，0处调用/内嵌容器，0个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P09.json)：7个局部源位置 → 6组；0类写入，6组路由动作，0组转发/容器关联不重复计动作。已映射0/0个源码字段位置，0/0处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有36个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -579,7 +594,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | ID-GUIDE-STEP 直接选择三步骤 / local | 1处；1、2、3 | [p09-step-1 · 1440](design/identity-direction-c/1440-p09-step-1.png) / [p09-step-1 · 390](design/identity-direction-c/390-p09-step-1.png)、[p09-step-2 · 1440](design/identity-direction-c/1440-p09-step-2.png) / [p09-step-2 · 390](design/identity-direction-c/390-p09-step-2.png)；其余见JSON | 没有URL同步/持久化；初始小数query可导致undefined，未修源组件。 |
 | ID-GUIDE-PREVIOUS 上一步 / local | 1处；2-to-1、3-to-2 | [p09-step-2 · 1440](design/identity-direction-c/1440-p09-step-2.png) / [p09-step-2 · 390](design/identity-direction-c/390-p09-step-2.png)、[p09-step-3 · 1440](design/identity-direction-c/1440-p09-step-3.png) / [p09-step-3 · 390](design/identity-direction-c/390-p09-step-3.png)；其余见JSON | 首步是隐藏而非disabled；逐状态/焦点/非法初值未全验。 |
 | ID-GUIDE-NEXT 下一步 / local | 1处；1-to-2、2-to-3 | [p09-step-1 · 1440](design/identity-direction-c/1440-p09-step-1.png) / [p09-step-1 · 390](design/identity-direction-c/390-p09-step-1.png)、[p09-step-2 · 1440](design/identity-direction-c/1440-p09-step-2.png) / [p09-step-2 · 390](design/identity-direction-c/390-p09-step-2.png)；其余见JSON | 末步替换为完成链接，不补造busy请求或保存进度。 |
-| ID-GUIDE-FINISH 结束引导返回根入口 / navigation | 1处；step-3 | [p09-step-3 · 1440](design/identity-direction-c/1440-p09-step-3.png) / [p09-step-3 · 390](design/identity-direction-c/390-p09-step-3.png)；其余见JSON | 只提供跳转，不代表已持久化完成或已验landing。 |
+| ID-GUIDE-FINISH 结束引导返回根入口 / navigation | 2处；step-3 | [p09-step-3 · 1440](design/identity-direction-c/1440-p09-step-3.png) / [p09-step-3 · 390](design/identity-direction-c/390-p09-step-3.png)；其余见JSON | 只提供跳转，不代表已持久化完成或已验landing。 |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -599,7 +614,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P10 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P10.json)：11个局部源位置 → 11组；1类写入，11组路由动作，0组转发/容器关联不重复计动作。0个本地v-model，2处调用/内嵌容器，2个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P10.json)：13个局部源位置 → 13组；1类写入，11组路由动作，2组转发/容器关联不重复计动作。已映射0/0个源码字段位置，0/0处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -612,10 +627,19 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | AC-LOGIN 过期重新登录 / navigation | 1处；expired | [expired · 1440](design/appearance-direction-c/1440-expired.png) / [expired · 390](design/appearance-direction-c/390-expired.png)；其余见JSON | 没有本页自动重放PUT或返回参数保证；真实会话与返回状态另验。 |
 | AC-CONTEXT 选择偏好工作区 / navigation | 1处；scope、rate-limited、service-blocked、other-conflict | [scope · 1440](design/appearance-direction-c/1440-scope.png) / [scope · 390](design/appearance-direction-c/390-scope.png)、[rate-limited · 1440](design/appearance-direction-c/1440-rate-limited.png) / [rate-limited · 390](design/appearance-direction-c/390-rate-limited.png)；其余见JSON | 图稿只在明确scope错误显示此入口；源误合并不是已修复，不能因429推断没有工作区。 |
 | TH-LOAD 读取最新偏好 / read | 1处；mounted、read-error、conflict-refresh、invalid-theme | [loading · 1440](design/appearance-direction-c/1440-loading.png) / [loading · 390](design/appearance-direction-c/390-loading.png)、[read-error · 1440](design/appearance-direction-c/1440-read-error.png) / [read-error · 390](design/appearance-direction-c/390-read-error.png)；其余见JSON | 无scope/代次保护；GET覆盖预览且applyTheme写缓存，不把本次图稿零storage当生产行为。 |
-| TH-PREVIEW 预览三种主题 / local | 1处；deep-ocean、aurora-purple、cloud-white | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[aurora-purple-standard · 1440](design/appearance-direction-c/1440-aurora-purple-standard.png) / [aurora-purple-standard · 390](design/appearance-direction-c/390-aurora-purple-standard.png)；其余见JSON | 旧按钮无roving/方向键，图稿新增键盘与busy锁只是提案；三套全站主题消费者/真实缓存未验。 |
-| TH-DENSITY 切换当前会话密度 / local | 1处；standard、compact | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[deep-ocean-compact · 1440](design/appearance-direction-c/1440-deep-ocean-compact.png) / [deep-ocean-compact · 390](design/appearance-direction-c/390-deep-ocean-compact.png)；其余见JSON | 没有v-model或density持久化字段。行政壳层compact覆盖和会话返回、主题×密度全控件未验。 |
+| TH-TRACE 展开偏好读取关联编号 / local | 1处；request-id-present-collapsed、request-id-present-expanded | [read-error · 1440](design/appearance-direction-c/1440-read-error.png) / [read-error · 390](design/appearance-direction-c/390-read-error.png)、[read-invalid · 1440](design/appearance-direction-c/1440-read-invalid.png) / [read-invalid · 390](design/appearance-direction-c/390-read-invalid.png)；其余见JSON | 本地披露不计弹窗；编号内容归属与真实失败类型、辅助技术组合及全套错误场景仍独立待验。 |
+| TH-PREVIEW 主题选项事件转发至本地预览 / wiring | 1处；deep-ocean、aurora-purple、cloud-white | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[aurora-purple-standard · 1440](design/appearance-direction-c/1440-aurora-purple-standard.png) / [aurora-purple-standard · 390](design/appearance-direction-c/390-aurora-purple-standard.png)；其余见JSON | 只记录ThemeStudio父级事件边；共享radio控件自身的交互和六态由TH-PREFERENCE-OPTION组单独核对。 |
+| TH-DENSITY 密度选项事件转发至会话显示 / wiring | 1处；standard、compact | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[deep-ocean-compact · 1440](design/appearance-direction-c/1440-deep-ocean-compact.png) / [deep-ocean-compact · 390](design/appearance-direction-c/390-deep-ocean-compact.png)；其余见JSON | 只记录ThemeStudio父级事件边；共享radio控件自身的交互和六态由TH-PREFERENCE-OPTION组单独核对。 |
+| TH-PREFERENCE-OPTION 选择主题或密度选项 / local | 1处；theme-options-deep-ocean-aurora-purple-cloud-white、density-options-standard-compact | [theme-blue-focus · 1440](design/appearance-direction-c/1440-theme-blue-focus.png) / [theme-blue-focus · 390](design/appearance-direction-c/390-theme-blue-focus.png)、[theme-blue-pressed · 1440](design/appearance-direction-c/1440-theme-blue-pressed.png) / [theme-blue-pressed · 390](design/appearance-direction-c/390-theme-blue-pressed.png)；其余见JSON | 源具备radio角色、选中tabindex、方向键及禁用样式；此局部核对不证明辅助技术实测、所有主题/密度组合或全站消费者同步。 |
 | TH-RESTORE 撤销主题预览 / local | 1处；dirty、default-fallback、restore-during-save | [dirty · 1440](design/appearance-direction-c/1440-dirty.png) / [dirty · 390](design/appearance-direction-c/390-dirty.png)、[density-only · 1440](design/appearance-direction-c/1440-density-only.png) / [density-only · 390](design/appearance-direction-c/390-density-only.png)；其余见JSON | 保存中撤销竞态源码隔离复现；新稿锁定不同，不以saving图声称源可安全撤销。 |
 | TH-SAVE 保存主题偏好 / write | 1处；dirty-save、no-snapshot-version-zero、saving、saved、response-different、conflict、failed | [dirty · 1440](design/appearance-direction-c/1440-dirty.png) / [dirty · 390](design/appearance-direction-c/390-dirty.png)、[saving · 1440](design/appearance-direction-c/1440-saving.png) / [saving · 390](design/appearance-direction-c/390-saving.png)；其余见JSON | 请求不含density；GET验证theme而PUT结果直接赋saved。saved状态不等于预览已同步；真实版本竞争/幂等/审计/SQL与生命周期未验。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| TH-PREVIEW | @select / chooseTheme($event) | TH-PREFERENCE-OPTION |
+| TH-DENSITY | @select / chooseDensity($event) | TH-PREFERENCE-OPTION |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -626,12 +650,10 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
 | --- | --- | --- | --- |
-| ThemeStudio.vue / aside.1 / appearance-navigation | inline-aside / proposal-shape-differs | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[deep-ocean-compact · 1440](design/appearance-direction-c/1440-deep-ocean-compact.png) / [deep-ocean-compact · 390](design/appearance-direction-c/390-deep-ocean-compact.png) | C提案重新构图，静态样例不证明三套真实壳层已一起换肤 |
-| ThemeStudio.vue / aside.2 / static-three-shell-preview | inline-aside / proposal-shape-differs | [deep-ocean-standard · 1440](design/appearance-direction-c/1440-deep-ocean-standard.png) / [deep-ocean-standard · 390](design/appearance-direction-c/390-deep-ocean-standard.png)、[deep-ocean-compact · 1440](design/appearance-direction-c/1440-deep-ocean-compact.png) / [deep-ocean-compact · 390](design/appearance-direction-c/390-deep-ocean-compact.png) | C提案重新构图，静态样例不证明三套真实壳层已一起换肤 |
 
 ### 明确保留的边界
 
-- 11组/11源位置；3主题+2密度实例不按v-model计数，两个aside不是弹窗。
+- 12个ThemeStudio模板候选及1个共享radio控件候选分别映射；两条父级事件绑定只作接线核对，不重复计用户控件。
 - 既有86PNG中七类控件图未提供通用逐action selector/state证明，66槽保守未映射，不等于缺66图。
 - 源预览缓存/会话密度与服务器版本分域，保存中restore导致saved+dirty已复现未修；新统一busy与错误分类待审。
 - role=radio的3主题/2密度是受控按钮而非v-model；全部实例键盘/六态/主题密度组合与真实缓存未验。
@@ -639,19 +661,19 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P12 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P12.json)：20个局部源位置 → 14组；2类写入，14组路由动作，0组转发/容器关联不重复计动作。7个本地v-model，1处调用/内嵌容器，1个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P12.json)：23个局部源位置 → 16组；2类写入，15组路由动作，1组转发/容器关联不重复计动作。已映射7/7个源码字段位置，1/1处调用/内嵌容器，1个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有84个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有90个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| HD-LOAD 读取首页与规则 / read | 1处；mounted、error、expired、forbidden、blocked、rule-read-failed、missing-selection | [loading · 1440](design/home-direction-c/1440-loading.png) / [loading · 390](design/home-direction-c/390-loading.png)、[error · 1440](design/home-direction-c/1440-error.png) / [error · 390](design/home-direction-c/390-error.png)；其余见JSON | 所有源primary仍重读、secondary无监听。新稿登录/选择范围等恢复链接和独立规则失败是提案，不按图升格实际链。 |
+| HD-LOAD 读取首页与规则 / read | 2处；mounted、error、expired、forbidden、blocked、rule-read-failed、missing-selection | [loading · 1440](design/home-direction-c/1440-loading.png) / [loading · 390](design/home-direction-c/390-loading.png)、[error · 1440](design/home-direction-c/1440-error.png) / [error · 390](design/home-direction-c/390-error.png)；其余见JSON | 所有源primary仍重读、secondary无监听。新稿登录/选择范围等恢复链接和独立规则失败是提案，不按图升格实际链。 |
 | HD-RULES 管理或查看规则 / navigation | 3处；header、no-manage、runtime-count | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[readonly · 1440](design/home-direction-c/1440-readonly.png) / [readonly · 390](design/home-direction-c/390-readonly.png)；其余见JSON | 三入口标签/权限分支分别保留；链接本身不要求trend:manage，不代表实际规则API授权。 |
 | HD-OPPORTUNITIES 查看推荐清单与全部计数 / navigation | 2处；header-list、queue-all-count | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[quiet · 1440](design/home-direction-c/1440-quiet.png) / [quiet · 390](design/home-direction-c/390-quiet.png)；其余见JSON | 不能与子区view=recommended合并目标；recommended_count不由当前返回一条样例反推。 |
 | HD-START 创建选品入口 / navigation | 1处；header-primary | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[not-configured · 1440](design/home-direction-c/1440-not-configured.png) / [not-configured · 390](design/home-direction-c/390-not-configured.png)；其余见JSON | 只导航，不在首页创建机会；后续P16权限/表单/完整壳层首屏另验。 |
-| HD-RESUME 恢复第一条暂停规则 / write | 1处；first-paused、busy、failed、success-reload | [paused · 1440](design/home-direction-c/1440-paused.png) / [paused · 390](design/home-direction-c/390-paused.png)、[resume-busy · 1440](design/home-direction-c/1440-resume-busy.png) / [resume-busy · 390](design/home-direction-c/390-resume-busy.png)；其余见JSON | 仅第一条、不是批量恢复。handler无setupBusy早退；成功文案不证明采集已运行，写成功后读失败/真实调度另验。 |
-| HD-SETUP 展开或收起首次设置 / local | 1处；open、close、reopen | [not-configured · 1440](design/home-direction-c/1440-not-configured.png) / [not-configured · 390](design/home-direction-c/390-not-configured.png)、[setup-closed · 1440](design/home-direction-c/1440-setup-closed.png) / [setup-closed · 390](design/home-direction-c/390-setup-closed.png)；其余见JSON | 原型busy锁是提案。load只在明确not_configured且rules空时自动展开，缺字段仅fallback并不满足该自动展开条件。 |
-| HD-CREATE-RULE 提交七字段规则表单 / write | 2处；form-submit、submit-button、ten-markets、empty-keywords、success-read-failure | [setup-edited · 1440](design/home-direction-c/1440-setup-edited.png) / [setup-edited · 390](design/home-direction-c/390-setup-edited.png)、[setup-invalid · 1440](design/home-direction-c/1440-setup-invalid.png) / [setup-invalid · 390](design/home-direction-c/390-setup-invalid.png)；其余见JSON | 关键词保留重复；语言按现有市场映射，渠道in_app、空分类null、默认名称首关键词。不清七输入；读失败不能抹掉写成功事实，真实权限/SQL/调度待验。 |
+| HD-RESUME 恢复第一条暂停规则 / write | 1处；first-paused、busy、failed、success-reload | [paused · 1440](design/home-direction-c/1440-paused.png) / [paused · 390](design/home-direction-c/390-paused.png)、[resume-busy · 1440](design/home-direction-c/1440-resume-busy.png) / [resume-busy · 390](design/home-direction-c/390-resume-busy.png)；其余见JSON | 仅第一条、不是批量恢复；已有单飞防重复和写入受理/后续读取分离反馈。真实权限、SQL写入和采集调度仍需独立验收。 |
+| HD-SETUP 展开或收起首次设置 / local | 1处；open、close、reopen | [not-configured · 1440](design/home-direction-c/1440-not-configured.png) / [not-configured · 390](design/home-direction-c/390-not-configured.png)、[setup-closed · 1440](design/home-direction-c/1440-setup-closed.png) / [setup-closed · 390](design/home-direction-c/390-setup-closed.png)；其余见JSON | 自动展开要求明确not_configured、规则成功读取且无规则；缺automatic_selection保持未知，规则读取失败不开放创建/恢复。 |
+| HD-CREATE-RULE 提交七字段规则表单 / write | 2处；form-submit、submit-button、ten-markets、empty-keywords、success-read-failure | [setup-edited · 1440](design/home-direction-c/1440-setup-edited.png) / [setup-edited · 390](design/home-direction-c/390-setup-edited.png)、[setup-invalid · 1440](design/home-direction-c/1440-setup-invalid.png) / [setup-invalid · 390](design/home-direction-c/390-setup-invalid.png)；其余见JSON | 关键词保留重复；语言按现有市场映射，渠道in_app、空分类null、默认名称首关键词。七字段写中锁定，重复提交被拦；读失败保留写入已受理事实。真实权限/SQL/调度待验。 |
 | HD-RECOMMENDATION 进入推荐条目 / navigation | 1处；each-recommendation、null-score、long-title-reason | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[no-score · 1440](design/home-direction-c/1440-no-score.png) / [no-score · 390](design/home-direction-c/390-no-score.png)；其余见JSON | 按服务返回顺序，前端不重新排序；动态目标和全记录字段/长值/真实对象可达未穷尽。 |
 | HD-CANDIDATES 查看规则命中候选 / navigation | 2处；empty-queue-priority、runtime-count | [candidates · 1440](design/home-direction-c/1440-candidates.png) / [candidates · 390](design/home-direction-c/390-candidates.png)、[running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)；其余见JSON | 源按truthy分支不是严格>0校验；空推荐提示与采集入口互斥，计数区域链接不互斥。 |
 | HD-EVIDENCE 查看采集中商品 / navigation | 2处；empty-queue-fallback、runtime-count | [collecting · 1440](design/home-direction-c/1440-collecting.png) / [collecting · 390](design/home-direction-c/390-collecting.png)、[running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)；其余见JSON | 不把候选和采集提示同时显示；不把候选总量candidate_count当采集中。真实列表筛选链待验。 |
@@ -659,6 +681,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | HD-TRUTH 展开数据说明 / local | 1处；collapsed、expanded | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[truth-open · 1440](design/home-direction-c/1440-truth-open.png) / [truth-open · 390](design/home-direction-c/390-truth-open.png)；其余见JSON | 不是TechnicalDetails复制；真实可见行与总投影不等同，所有主题/长文本/键盘状态待验。 |
 | HD-RECOMMENDED-VIEW 按推荐view查看机会 / navigation | 1处；recommended-count | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[quiet · 1440](design/home-direction-c/1440-quiet.png) / [quiet · 390](design/home-direction-c/390-quiet.png)；其余见JSON | 与顶部无view入口保留不同语义；计数是运行摘要不代表已采纳或当前返回行数。 |
 | HD-RUNTIME 展开自动运行详情 / local | 1处；collapsed、expanded、null-timestamps | [running · 1440](design/home-direction-c/1440-running.png) / [running · 390](design/home-direction-c/390-running.png)、[runtime-open · 1440](design/home-direction-c/1440-runtime-open.png) / [runtime-open · 390](design/home-direction-c/390-runtime-open.png)；其余见JSON | 四步骤标记依据不同计数>0，不是每个商品已通过流程的证明；candidate_count与rule_candidate_count字段不能互换。 |
+| HD-LOAD-WIRING 首页读取状态事件转交 / wiring | 1处；primary-read | ；其余见JSON | 只记录共享组件事件接线，不单独增加按钮数量。 |
+| HD-RULES-READ 重读规则列表 / read | 1处；rules-read-error | ；其余见JSON | 不推断真实RBAC或规则服务可用性。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| HD-LOAD-WIRING | @primary / load | HD-LOAD |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -681,30 +711,30 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 ### 明确保留的边界
 
 - 20源位置/14组；顶部/全部无view链接、计数view链接、item.route和首条恢复分开，不将同中文字当相同目标。
-- 七字段内联form，无原生弹窗；rules失败不等于无规则。缺automatic_selection显示fallback未配置/0，但load不会因此自动展开；明确not_configured加rules失败才自动展开。
+- 七字段内联form，无原生弹窗；rules失败与无规则明确区分，不开放创建/恢复。缺automatic_selection显示未知，不显示0；只有明确not_configured且规则成功读取为空才自动展开。
 - 既有64图为独立工作面，未组合真实顶/底导航，不能证明实际首条推荐仍在手机首屏；84槽保守未映射。
 - /home声明reset_on_scope，父key结合组织/工作区。返回旧缓存key、写入后重读失败和全生命周期仍未真实验收，不把缺watcher直接定性为跨范围泄露。
 - NavigationShell实际surfaceProps传capabilities，HomeAutomationOverview接selection；没有把共享导航内部全部控件纳入20个局部候选分母。
 - UiStatePanel默认secondary部分状态有标签但本页无监听；过期/无权限新恢复链接为提案，实际调用方未修改。
-- 目录/home为reset_on_scope，父key含组织/工作区且KeepAlive最大12。没有本地scope watcher不等于完全无范围隔离；回到已缓存key是否及时刷新及旧请求结果仍须真实Vue验收。
+- 目录/home为reset_on_scope，父key含组织/工作区且KeepAlive最大12；本页读取代次隔离迟到响应。切换范围、缓存返回与真实权限仍须生产身份场景验收。
 
 ## P13 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P13.json)：48个局部源位置 → 36组；3类写入，29组路由动作，5组转发/容器关联不重复计动作。6个本地v-model，7处调用/内嵌容器，15个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P13.json)：50个局部源位置 → 36组；3类写入，29组路由动作，5组转发/容器关联不重复计动作。已映射6/6个源码字段位置，7/7处调用/内嵌容器，15个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有174个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | task.list.create.open 新建入口 / local | 2处；header、empty、create_only、quick-create | [create · 1440](design/work-direction-c/1440-create.png) / [create · 390](design/work-direction-c/390-create.png)、[empty · 1440](design/work-direction-c/1440-empty.png) / [empty · 390](design/work-direction-c/390-empty.png)；其余见JSON | 仅P13新建；P24编辑不属于当前入口。快捷创建仅mounted读取window.search，缓存重入行为仍待验。 |
-| work.excluded.exports 排除任务中心专属导出分支 / excluded | 4处；business-tab、exports-tab、export-manage、export-open | ；其余见JSON | 不以P23导出图抵扣P13；若父传参改变须重新核对可达性。 |
+| work.excluded.exports 排除任务中心专属导出分支 / excluded | 2处；business-tab、exports-tab、export-manage、export-open | ；其余见JSON | 不以P23导出图抵扣P13；若父传参改变须重新核对可达性。 |
 | task.read.retry 重读当前本人队列 / read | 1处；error、forbidden、expired、rate_limited | [loading · 1440](design/work-direction-c/1440-loading.png) / [loading · 390](design/work-direction-c/390-loading.png)、[error · 1440](design/work-direction-c/1440-error.png) / [error · 390](design/work-direction-c/390-error.png)；其余见JSON | 旧缓存与迟到GET归属已有源码保护，不在此轮宣称真实Vue复验；重读按钮不是登录或权限恢复。 |
 | task.list.page.previous 上一页 / local | 1处；first-disabled、later-page、loading-old-total | [pagination · 1440](design/work-direction-c/1440-pagination.png) / [pagination · 390](design/work-direction-c/390-pagination.png)；其余见JSON | 失败/loading时旧total仍可能显示分页；全分页与中途写入组合未验。 |
 | task.list.page.next 下一页 / local | 1处；next、last-disabled | [pagination · 1440](design/work-direction-c/1440-pagination.png) / [pagination · 390](design/work-direction-c/390-pagination.png)；其余见JSON | 只选择本页不是跨页全选；全动态页码未穷尽。 |
-| task.editor.close 关闭新建表单 / local | 2处；cancel、escape、busy-escape、reopen-draft | [create · 1440](design/work-direction-c/1440-create.png) / [create · 390](design/work-direction-c/390-create.png)、[create_busy · 1440](design/work-direction-c/1440-create_busy.png) / [create_busy · 390](design/work-direction-c/390-create_busy.png)；其余见JSON | 按钮禁用不等于Escape锁定；发出POST后关闭不会撤销请求，源后续成功仍清表单。 |
+| task.editor.close 关闭新建表单 / local | 3处；cancel、escape、busy-escape、reopen-draft | [create · 1440](design/work-direction-c/1440-create.png) / [create · 390](design/work-direction-c/390-create.png)、[create_busy · 1440](design/work-direction-c/1440-create_busy.png) / [create_busy · 390](design/work-direction-c/390-create_busy.png)；其余见JSON | 按钮禁用不等于Escape锁定；发出POST后关闭不会撤销请求，源后续成功仍清表单。 |
 | task.editor.create.submit 提交新建 / write | 2处；create、due-set、due-empty、busy、failure | [create · 1440](design/work-direction-c/1440-create.png) / [create · 390](design/work-direction-c/390-create.png)、[create_busy · 1440](design/work-direction-c/1440-create_busy.png) / [create_busy · 390](design/work-direction-c/390-create_busy.png)；其余见JSON | 不将原型窗内错误/字段锁定当作源实现；源notice在窗外，表单字段无busy disabled。相同函数PATCH只归P24。 |
-| work.excluded.detail 排除任务详情事件中转 / excluded | 1处；detail-actions、edit、comment、action-fields | ；其余见JSON | 不是删除组件；仅按当前实际入口排除P13。P24及异常组合另验。 |
-| task.delete.close 关闭删除表单 / local | 2处；cancel、escape、reopen-cleared | [delete · 1440](design/work-direction-c/1440-delete.png) / [delete · 390](design/work-direction-c/390-delete.png)；其余见JSON | 执行中Escape可清deleting；removeTask在await后仍读取deleting.value.id，完整竞态待验。 |
+| work.excluded.detail 排除任务详情事件中转 / excluded | 2处；detail-actions、edit、comment、action-fields | ；其余见JSON | 不是删除组件；仅按当前实际入口排除P13。P24及异常组合另验。 |
+| task.delete.close 关闭删除表单 / local | 3处；cancel、escape、reopen-cleared | [delete · 1440](design/work-direction-c/1440-delete.png) / [delete · 390](design/work-direction-c/390-delete.png)；其余见JSON | 执行中Escape可清deleting；removeTask在await后仍读取deleting.value.id，完整竞态待验。 |
 | task.delete.submit 提交删除 / write | 2处；valid、blank、failure、busy | [delete · 1440](design/work-direction-c/1440-delete.png) / [delete · 390](design/work-direction-c/390-delete.png)；其余见JSON | 本页不走详情returnPath；已发删除不因关闭取消，真实审计和版本冲突待验。 |
 | task.list.status 切换六种任务状态 / local | 1处；all、todo、in_progress、paused、completed、cancelled | [normal · 1440](design/work-direction-c/1440-normal.png) / [normal · 390](design/work-direction-c/390-normal.png)、[paused · 1440](design/work-direction-c/1440-paused.png) / [paused · 390](design/work-direction-c/390-paused.png)；其余见JSON | all不加overdue避免重复；summary总7与列表2是独立夹具，不是完整数据库快照。 |
 | task.list.search.disclose 展开搜索排序 / local | 1处；closed、open、advanced-applied | [normal · 1440](design/work-direction-c/1440-normal.png) / [normal · 390](design/work-direction-c/390-normal.png)、[search · 1440](design/work-direction-c/1440-search.png) / [search · 390](design/work-direction-c/390-search.png)；其余见JSON | 当前details/移动布局与C稿不完全同形；焦点、缓存草稿和主题待验。 |
@@ -722,7 +752,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | task.batch.delay.open 批量延期 / local | 1处；delay、eligible、ineligible、busy-reopen | [delay · 1440](design/work-direction-c/1440-delay.png) / [delay · 390](design/work-direction-c/390-delay.png)、[no_eligible · 1440](design/work-direction-c/1440-no_eligible.png) / [no_eligible · 390](design/work-direction-c/390-no_eligible.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
 | task.batch.transfer.open 批量调整负责人 / local | 1处；transfer、eligible、ineligible、busy-reopen | [transfer · 1440](design/work-direction-c/1440-transfer.png) / [transfer · 390](design/work-direction-c/390-transfer.png)、[no_eligible · 1440](design/work-direction-c/1440-no_eligible.png) / [no_eligible · 390](design/work-direction-c/390-no_eligible.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
 | task.batch.cancel.open 批量取消 / local | 1处；cancel、eligible、ineligible、busy-reopen | [cancel · 1440](design/work-direction-c/1440-cancel.png) / [cancel · 390](design/work-direction-c/390-cancel.png)、[no_eligible · 1440](design/work-direction-c/1440-no_eligible.png) / [no_eligible · 390](design/work-direction-c/390-no_eligible.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
-| task.batch.close 关闭批量确认 / local | 2处；return、escape、busy-close、reopen | [pause · 1440](design/work-direction-c/1440-pause.png) / [pause · 390](design/work-direction-c/390-pause.png)、[batch_error · 1440](design/work-direction-c/1440-batch_error.png) / [batch_error · 390](design/work-direction-c/390-batch_error.png)；其余见JSON | 关闭不会取消已发请求。新稿字段/忙碌锁为提案，不能称源已修。 |
+| task.batch.close 关闭批量确认 / local | 3处；return、escape、busy-close、reopen | [pause · 1440](design/work-direction-c/1440-pause.png) / [pause · 390](design/work-direction-c/390-pause.png)、[batch_error · 1440](design/work-direction-c/1440-batch_error.png) / [batch_error · 390](design/work-direction-c/390-batch_error.png)；其余见JSON | 关闭不会取消已发请求。新稿字段/忙碌锁为提案，不能称源已修。 |
 | task.batch.submit 逐任务提交批量动作 / write | 2处；pause、resume、delay、transfer、cancel、partial-failure、no-eligible、in-flight-mutation | [pause · 1440](design/work-direction-c/1440-pause.png) / [pause · 390](design/work-direction-c/390-pause.png)、[resume · 1440](design/work-direction-c/1440-resume.png) / [resume · 390](design/work-direction-c/390-resume.png)；其余见JSON | 本轮隔离实测等待首项时修改action/原因，第二项请求随之改变；busy=true再次调用也发请求。非真实DOM双击/服务端重复写证明。 |
 | task.batch.reason.change 修改批量原因 / local | 1处；pause、delay、transfer、cancel、blank、busy-input | [pause · 1440](design/work-direction-c/1440-pause.png) / [pause · 390](design/work-direction-c/390-pause.png)、[delay · 1440](design/work-direction-c/1440-delay.png) / [delay · 390](design/work-direction-c/390-delay.png)；其余见JSON | 原型锁字段不能替代真实输入保护；执行中原因变化可进入下一请求。 |
 | task.batch.delay.due.change 修改批量期限 / local | 1处；valid、empty、busy-input | [delay · 1440](design/work-direction-c/1440-delay.png) / [delay · 390](design/work-direction-c/390-delay.png)；其余见JSON | 时区/无效输入由原生及服务端分别验证；不杜撰最早日期限制。 |
@@ -796,7 +826,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P14 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P14.json)：65个局部源位置 → 51组；8类写入，42组路由动作，9组转发/容器关联不重复计动作。18个本地v-model，10处调用/内嵌容器，15个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P14.json)：65个局部源位置 → 51组；8类写入，42组路由动作，9组转发/容器关联不重复计动作。已映射18/18个源码字段位置，10/10处调用/内嵌容器，15个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有252个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -936,7 +966,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P15 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P15.json)：67个局部源位置 → 35组；4类写入，27组路由动作，6组转发/容器关联不重复计动作。20个本地v-model，17处调用/内嵌容器，35个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P15.json)：67个局部源位置 → 35组；4类写入，27组路由动作，6组转发/容器关联不重复计动作。已映射20/20个源码字段位置，17/17处调用/内嵌容器，35个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有162个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1083,7 +1113,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P16 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P16.json)：11个局部源位置 → 9组；2类写入，9组路由动作，0组转发/容器关联不重复计动作。5个本地v-model，4处调用/内嵌容器，12个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P16.json)：11个局部源位置 → 9组；2类写入，9组路由动作，0组转发/容器关联不重复计动作。已映射5/5个源码字段位置，4/4处调用/内嵌容器，12个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有4个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1146,7 +1176,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P17 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P17.json)：28个局部源位置 → 19组；2类写入，16组路由动作，3组转发/容器关联不重复计动作。9个本地v-model，8处调用/内嵌容器，30个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P17.json)：28个局部源位置 → 19组；2类写入，16组路由动作，3组转发/容器关联不重复计动作。已映射9/9个源码字段位置，8/8处调用/内嵌容器，30个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有96个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1244,7 +1274,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P18 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P18.json)：95个局部源位置 → 52组；12类写入，43组路由动作，8组转发/容器关联不重复计动作。34个本地v-model，23处调用/内嵌容器，38个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P18.json)：95个局部源位置 → 52组；12类写入，43组路由动作，8组转发/容器关联不重复计动作。已映射34/34个源码字段位置，23/23处调用/内嵌容器，38个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有258个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1432,7 +1462,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P19 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P19.json)：39个局部源位置 → 22组；5类写入，18组路由动作，2组转发/容器关联不重复计动作。10个本地v-model，7处调用/内嵌容器，22个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P19.json)：39个局部源位置 → 22组；5类写入，18组路由动作，2组转发/容器关联不重复计动作。已映射10/10个源码字段位置，7/7处调用/内嵌容器，22个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有20个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1531,7 +1561,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P20 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P20.json)：39个局部源位置 → 12组；2类写入，8组路由动作，2组转发/容器关联不重复计动作。10个本地v-model，7处调用/内嵌容器，22个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P20.json)：39个局部源位置 → 12组；2类写入，8组路由动作，2组转发/容器关联不重复计动作。已映射10/10个源码字段位置，7/7处调用/内嵌容器，22个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有8个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1620,7 +1650,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P21 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P21.json)：54个局部源位置 → 38组；9类写入，31组路由动作，7组转发/容器关联不重复计动作。25个本地v-model，12处调用/内嵌容器，33个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P21.json)：54个局部源位置 → 38组；9类写入，31组路由动作，7组转发/容器关联不重复计动作。已映射25/25个源码字段位置，12/12处调用/内嵌容器，33个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1785,7 +1815,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P22 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P22.json)：30个局部源位置 → 20组；2类写入，18组路由动作，2组转发/容器关联不重复计动作。19个本地v-model，7处调用/内嵌容器，32个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P22.json)：30个局部源位置 → 20组；2类写入，18组路由动作，2组转发/容器关联不重复计动作。已映射19/19个源码字段位置，7/7处调用/内嵌容器，32个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有104个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1895,7 +1925,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P23 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P23.json)：48个局部源位置 → 39组；3类写入，33组路由动作，5组转发/容器关联不重复计动作。6个本地v-model，7处调用/内嵌容器，15个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P23.json)：53个局部源位置 → 40组；3类写入，33组路由动作，5组转发/容器关联不重复计动作。已映射6/6个源码字段位置，7/7处调用/内嵌容器，15个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有194个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1905,10 +1935,10 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | task.read.retry 重读当前任务列表或导出视图 / read | 1处；error、forbidden、expired、rate_limited | [error · 1440](design/task-direction-c-forms/1440-error.png) / [error · 390](design/task-direction-c-forms/390-error.png)、[forbidden · 1440](design/task-direction-c-forms/1440-forbidden.png) / [forbidden · 390](design/task-direction-c-forms/390-forbidden.png)；其余见JSON | 旧缓存与迟到GET归属已有源码保护，不在此轮宣称真实Vue复验；重读按钮不是登录或权限恢复。 |
 | task.list.page.previous 上一页 / local | 1处；first-disabled、later-page、loading-old-total | ；其余见JSON | 本页源有真实多页按钮，当前两批C稿只有单条任务，尚无P23分页图，不以P13两条样本或默认目录图抵扣。 |
 | task.list.page.next 下一页 / local | 1处；next、last-disabled | ；其余见JSON | 本页源有真实多页按钮，当前两批C稿只有单条任务，尚无P23分页图，不以P13两条样本或默认目录图抵扣。 |
-| task.editor.close 关闭新建表单 / local | 2处；cancel、escape、busy-escape、reopen-draft | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)；其余见JSON | 按钮禁用不等于Escape锁定；发出POST后关闭不会撤销请求，源后续成功仍清表单。 |
+| task.editor.close 关闭新建表单 / local | 3处；cancel、escape、busy-escape、reopen-draft | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)；其余见JSON | 按钮禁用不等于Escape锁定；发出POST后关闭不会撤销请求，源后续成功仍清表单。 |
 | task.editor.create.submit 提交新建 / write | 2处；create、due-set、due-empty、busy、failure | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)；其余见JSON | 不将原型窗内错误/字段锁定当作源实现；源notice在窗外，表单字段无busy disabled。相同函数PATCH只归P24。 |
 | task.all.excluded.detail 排除任务详情事件中转 / excluded | 1处；detail-actions、edit、comment、action-fields | ；其余见JSON | 不是删除组件；仅按当前实际入口排除P23。P24及异常组合另验。 |
-| task.delete.close 关闭删除表单 / local | 2处；cancel、escape、reopen-cleared | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 执行中Escape可清deleting；removeTask在await后仍读取deleting.value.id，完整竞态待验。 |
+| task.delete.close 关闭删除表单 / local | 3处；cancel、escape、reopen-cleared | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 执行中Escape可清deleting；removeTask在await后仍读取deleting.value.id，完整竞态待验。 |
 | task.delete.submit 提交删除 / write | 2处；valid、blank、failure、busy | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 本页不走详情returnPath；已发删除不因关闭取消，真实审计和版本冲突待验。 |
 | task.list.status 切换六种任务状态 / local | 1处；all、todo、in_progress、paused、completed、cancelled | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | all不加overdue避免重复；summary总7与列表2是独立夹具，不是完整数据库快照。 |
 | task.list.search.disclose 展开搜索排序 / local | 1处；closed、open、advanced-applied | [list · 1440](design/task-direction-c/1440-list.png) / [list · 390](design/task-direction-c/390-list.png)、[empty · 1440](design/task-direction-c/1440-empty.png) / [empty · 390](design/task-direction-c/390-empty.png)；其余见JSON | 当前details/移动布局与C稿不完全同形；焦点、缓存草稿和主题待验。 |
@@ -1926,7 +1956,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | task.batch.delay.open 批量延期 / local | 1处；delay、eligible、ineligible、busy-reopen | [batch-delay · 1440](design/task-direction-c-forms/1440-batch-delay.png) / [batch-delay · 390](design/task-direction-c-forms/390-batch-delay.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
 | task.batch.transfer.open 批量调整负责人 / local | 1处；transfer、eligible、ineligible、busy-reopen | [batch-transfer · 1440](design/task-direction-c-forms/1440-batch-transfer.png) / [batch-transfer · 390](design/task-direction-c-forms/390-batch-transfer.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
 | task.batch.cancel.open 批量取消 / local | 1处；cancel、eligible、ineligible、busy-reopen | [batch-cancel · 1440](design/task-direction-c-forms/1440-batch-cancel.png) / [batch-cancel · 390](design/task-direction-c-forms/390-batch-cancel.png)；其余见JSON | 执行期间返回/重开可以修改action；源迭代每次读当前action/字段，不是全部操作参数快照。 |
-| task.batch.close 关闭批量确认 / local | 2处；return、escape、busy-close、reopen | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 关闭不会取消已发请求。新稿字段/忙碌锁为提案，不能称源已修。 |
+| task.batch.close 关闭批量确认 / local | 3处；return、escape、busy-close、reopen | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 关闭不会取消已发请求。新稿字段/忙碌锁为提案，不能称源已修。 |
 | task.batch.submit 逐任务提交批量动作 / write | 2处；pause、resume、delay、transfer、cancel、partial-failure、no-eligible、in-flight-mutation | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 本轮隔离实测等待首项时修改action/原因，第二项请求随之改变；busy=true再次调用也发请求。非真实DOM双击/服务端重复写证明。 |
 | task.batch.reason.change 修改批量原因 / local | 1处；pause、delay、transfer、cancel、blank、busy-input | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 原型锁字段不能替代真实输入保护；执行中原因变化可进入下一请求。 |
 | task.batch.delay.due.change 修改批量期限 / local | 1处；valid、empty、busy-input | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 时区/无效输入由原生及服务端分别验证；不杜撰最早日期限制。 |
@@ -1938,8 +1968,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | task.all.batch.definition 弹窗定义与业务变体关联 / wiring | 1处；source-container、listed-business-variants | [batch-pause · 1440](design/task-direction-c-forms/1440-batch-pause.png) / [batch-pause · 390](design/task-direction-c-forms/390-batch-pause.png)、[batch-resume · 1440](design/task-direction-c-forms/1440-batch-resume.png) / [batch-resume · 390](design/task-direction-c-forms/390-batch-resume.png)；其余见JSON | 容器存在不证明各变体、键盘焦点、忙碌保护或全部主题已验收。 |
 | task.view.business 业务任务视图 / local | 1处；business-tab | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
 | task.view.exports 导出任务视图 / local | 1处；exports-tab | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
-| task.export.manage 创建或管理导出 / navigation | 1处；export-manage | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
+| task.export.manage 创建或管理导出 / navigation | 2处；export-manage | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
 | task.export.open 查看导出所属报表 / navigation | 1处；export-open | ；其余见JSON | 当前TASK-C两包无导出视图场景，明确缺稿，不能用报表页或业务列表证明本页对应状态。 |
+| task.detail.return P23路由不可达的详情返回入口 / excluded | 1处；not-applicable-on-list-route | ；其余见JSON | 仅记录共享组件中不适用于P23列表路由的详情返回控件。 |
 
 ### 事件转发关系（不增加业务动作）
 
@@ -2006,19 +2037,19 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P24 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P24.json)：48个局部源位置 → 33组；7类写入，28组路由动作，4组转发/容器关联不重复计动作。5个本地v-model，8处调用/内嵌容器，18个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P24.json)：52个局部源位置 → 34组；7类写入，28组路由动作，5组转发/容器关联不重复计动作。已映射5/5个源码字段位置，7/7处调用/内嵌容器，17个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有164个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| detail.hidden-list-shell 详情CSS隐藏的列表/导出外层 / excluded | 9处；隐藏头部新建、隐藏业务/导出Tab、隐藏列表事件、隐藏批量事件、隐藏导出导航、隐藏分页 | ；其余见JSON | 原合同说头部入口可在详情存在，指共享DOM；当前CSS排除实际可见性。?create=1仍可开新建窗；?view=exports仍可触发读取优先分支，此异常不可按按钮可达归属，待获审实施修复。 |
+| detail.hidden-list-shell 详情CSS隐藏的列表/导出外层 / excluded | 7处；隐藏头部新建、隐藏业务/导出Tab、隐藏列表事件、隐藏批量事件、隐藏导出导航、隐藏分页 | ；其余见JSON | 原合同说头部入口可在详情存在，指共享DOM；当前CSS排除实际可见性。?create=1仍可开新建窗；?view=exports仍可触发读取优先分支，此异常不可按按钮可达归属，待获审实施修复。 |
 | read.retry 重新加载 / read | 1处；error、not_found、forbidden、expired、rate_limited | [error · 1440](design/task-direction-c-forms/1440-error.png) / [error · 390](design/task-direction-c-forms/390-error.png)、[not_found · 1440](design/task-direction-c-forms/1440-not_found.png) / [not_found · 390](design/task-direction-c-forms/390-not_found.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
-| editor.close 关闭新建/编辑 / local | 2处；新建、编辑、Escape、取消 | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)、[edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png)；其余见JSON | 在途关闭与成功晚到对新草稿影响待验证；清快捷query不取消已发写入。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| editor.close 关闭新建/编辑 / local | 3处；新建、编辑、Escape、取消 | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)、[edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png)；其余见JSON | 在途关闭与成功晚到对新草稿影响待验证；清快捷query不取消已发写入。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | editor.submit 新建/编辑提交 / write | 2处；快捷query新建、编辑 | [create · 1440](design/task-direction-c-forms/1440-create.png) / [create · 390](design/task-direction-c-forms/390-create.png)、[edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png)；其余见JSON | 普通详情无可见新建按钮，但首次create=1可开窗。四字段无busy禁用，Escape可关闭；成功清form并load当前分支。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
-| delete.close 取消删除 / local | 2处；取消、Escape | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | P23源测试已复现等待关闭→成功空引用，未修；P24正常删除成功返回来源，新脚本覆盖。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| delete.close 取消删除 / local | 3处；取消、Escape | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | P23源测试已复现等待关闭→成功空引用，未修；P24正常删除成功返回来源，新脚本覆盖。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | delete.submit 确认删除 / write | 2处；普通成功、错误保留、在途关闭风险 | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 不硬删历史审计；原生Escape仍存在已知晚到空引用，未实施修复。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
-| detail.return 关闭详情返回 / navigation | 1处；有有效from、回退 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.return 关闭详情返回 / navigation | 2处；有有效from、回退 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | detail.collection.open 查看关联采集任务 / navigation | 1处；有关联、无关联隐藏 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 不为本页推断平台权限；关联有无与真实目标拒绝仍需独立图和运行证明。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | detail.technical.toggle 技术详情 / local | 1处；收起、展开 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 当前无busy/disabled表示，仍待明确适用性，不编造禁用图。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | detail.start 开始 / write | 1处；start、提交中、失败保留 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 不新增原因/确认弹窗。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
@@ -2034,7 +2065,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | delete.open 删除任务 / local | 1处；打开删除、终态删除 | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | comment.submit 添加评论 / write | 2处；可提交、提交中、失败保留 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 评论字段缺显式关联label的可访问性需补；原型活动区不是完整评论六态/版本冲突图。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | comment.change 评论输入 / local | 1处；草稿、空白、长文 | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png)；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
-| detail.action.close 返回或Escape关闭单项表单 / local | 2处；pause、cancel、delay、transfer、progress | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png)、[cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png)；其余见JSON | 源返回/字段仍可操作与原型忙碌表现不能等同；提交中关闭策略待具体获审，焦点/晚到结果须实测。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.action.close 返回或Escape关闭单项表单 / local | 3处；pause、cancel、delay、transfer、progress | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png)、[cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png)；其余见JSON | 源返回/字段仍可操作与原型忙碌表现不能等同；提交中关闭策略待具体获审，焦点/晚到结果须实测。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | detail.action.submit 确认单项操作 / write | 2处；pause、cancel、delay、transfer、progress | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png)、[cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png)；其余见JSON | 原因trim、期限ISO、转交真实成员、进度Number/说明trim；在途字段修改不进入已发送body，成功仍关窗、失败保留当前草稿，待改善提示/锁定策略。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | detail.transfer.assignee.change 接收成员 / local | 1处；成员目录、目录不可用 | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png)；其余见JSON | 当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | detail.delay.due.change 新截止时间 / local | 1处；本地时间、必填校验 | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png)；其余见JSON | 当前字段无busy禁用；原生required不等于非空trim语义或服务验证。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
@@ -2045,6 +2076,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | delete.definition 删除窗定义 / wiring | 1处；P24局部消费者 | ；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | detail.action.definition 五单项表单定义 / wiring | 1处；P24局部消费者 | ；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
 | detail.parent.forward 详情父级事件转发 / wiring | 1处；P24局部消费者 | ；其余见JSON | 具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。 |
+| detail.action-dialog.forward 详情动作弹窗事件转发 / wiring | 2处；close、submit、field-model | ；其余见JSON | 事件所有权连接，不独立提交；父级仍保持TaskWorkspace中的既有请求所有权。 |
 
 ### 事件转发关系（不增加业务动作）
 
@@ -2061,6 +2093,12 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | detail.parent.forward | @add-comment / addComment | comment.submit |
 | detail.parent.forward | @update:comment / comment = $event | comment.change |
 | detail.parent.forward | @update:action-form / taskActionForm = $event | detail.transfer.assignee.change、detail.delay.due.change、detail.progress.percent.change、detail.progress.note.change、detail.action.reason.change |
+| detail.action-dialog.forward | @submit / emit('submitAction') | detail.action.submit |
+| detail.action-dialog.forward | @close / emit('closeAction') | detail.action.close |
+| detail.action-dialog.forward | @update:action-form / emit('update:actionForm', $event) | detail.transfer.assignee.change、detail.delay.due.change、detail.progress.percent.change、detail.progress.note.change、detail.action.reason.change |
+| detail.action-dialog.forward | @submit / emit('submitAction') | detail.action.submit |
+| detail.action-dialog.forward | @close / emit('closeAction') | detail.action.close |
+| detail.action-dialog.forward | @update:action-form / emit('update:actionForm', $event) | detail.transfer.assignee.change、detail.delay.due.change、detail.progress.percent.change、detail.progress.note.change、detail.action.reason.change |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -2082,18 +2120,17 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | TaskWorkspace.vue / form.1 / edit | form-container / related-scene-only | [edit · 1440](design/task-direction-c-forms/1440-edit.png) / [edit · 390](design/task-direction-c-forms/390-edit.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
 | TaskWorkspace.vue / dialog.2 / delete | native-dialog / matching-dialog-scene | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
 | TaskWorkspace.vue / form.2 / delete | form-container / related-scene-only | [delete · 1440](design/task-direction-c-forms/1440-delete.png) / [delete · 390](design/task-direction-c-forms/390-delete.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / aside.1 / detail | inline-aside / related-scene-only | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
 | TaskDetailPanel.vue / form.1 / comment | form-container / related-scene-only | [detail · 1440](design/task-direction-c/1440-detail.png) / [detail · 390](design/task-direction-c/390-detail.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / dialog.1 / pause | native-dialog / matching-dialog-scene | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / dialog.1 / cancel | native-dialog / matching-dialog-scene | [cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / dialog.1 / delay | native-dialog / matching-dialog-scene | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / dialog.1 / transfer | native-dialog / matching-dialog-scene | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / dialog.1 / progress | native-dialog / matching-dialog-scene | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / form.2 / pause | form-container / related-scene-only | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / form.2 / cancel | form-container / related-scene-only | [cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / form.2 / delay | form-container / related-scene-only | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / form.2 / transfer | form-container / related-scene-only | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
-| TaskDetailPanel.vue / form.2 / progress | form-container / related-scene-only | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / dialog.1 / pause | native-dialog / matching-dialog-scene | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / dialog.1 / cancel | native-dialog / matching-dialog-scene | [cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / dialog.1 / delay | native-dialog / matching-dialog-scene | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / dialog.1 / transfer | native-dialog / matching-dialog-scene | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / dialog.1 / progress | native-dialog / matching-dialog-scene | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / form.1 / pause | form-container / related-scene-only | [pause · 1440](design/task-direction-c-forms/1440-pause.png) / [pause · 390](design/task-direction-c-forms/390-pause.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / form.1 / cancel | form-container / related-scene-only | [cancel · 1440](design/task-direction-c-forms/1440-cancel.png) / [cancel · 390](design/task-direction-c-forms/390-cancel.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / form.1 / delay | form-container / related-scene-only | [delay · 1440](design/task-direction-c-forms/1440-delay.png) / [delay · 390](design/task-direction-c-forms/390-delay.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / form.1 / transfer | form-container / related-scene-only | [transfer · 1440](design/task-direction-c-forms/1440-transfer.png) / [transfer · 390](design/task-direction-c-forms/390-transfer.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
+| TaskActionDialog.vue / form.1 / progress | form-container / related-scene-only | [progress · 1440](design/task-direction-c-forms/1440-progress.png) / [progress · 390](design/task-direction-c-forms/390-progress.png) | 与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。 |
 
 ### 明确保留的边界
 
@@ -2109,7 +2146,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P25 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P25.json)：42个局部源位置 → 30组；5类写入，25组路由动作，5组转发/容器关联不重复计动作。11个本地v-model，7处调用/内嵌容器，10个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P25.json)：42个局部源位置 → 30组；5类写入，25组路由动作，5组转发/容器关联不重复计动作。已映射11/11个源码字段位置，7/7处调用/内嵌容器，10个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有21个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2211,7 +2248,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P26 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P26.json)：23个局部源位置 → 19组；6类写入，17组路由动作，2组转发/容器关联不重复计动作。6个本地v-model，3处调用/内嵌容器，16个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P26.json)：23个局部源位置 → 19组；6类写入，17组路由动作，2组转发/容器关联不重复计动作。已映射6/6个源码字段位置，3/3处调用/内嵌容器，16个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有3个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2289,7 +2326,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P27 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P27.json)：19个局部源位置 → 16组；2类写入，14组路由动作，2组转发/容器关联不重复计动作。10个本地v-model，3处调用/内嵌容器，32个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P27.json)：19个局部源位置 → 16组；2类写入，14组路由动作，2组转发/容器关联不重复计动作。已映射10/10个源码字段位置，3/3处调用/内嵌容器，32个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2385,7 +2422,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P28 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P28.json)：14个局部源位置 → 11组；2类写入，10组路由动作，1组转发/容器关联不重复计动作。0个本地v-model，1处调用/内嵌容器，17个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P28.json)：14个局部源位置 → 11组；2类写入，10组路由动作，1组转发/容器关联不重复计动作。已映射0/0个源码字段位置，1/1处调用/内嵌容器，17个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2447,7 +2484,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P29 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P29.json)：13个局部源位置 → 8组；1类写入，4组路由动作，0组转发/容器关联不重复计动作。6个本地v-model，2处调用/内嵌容器，32个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P29.json)：13个局部源位置 → 8组；1类写入，4组路由动作，0组转发/容器关联不重复计动作。已映射6/6个源码字段位置，2/2处调用/内嵌容器，32个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2521,7 +2558,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P30 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P30.json)：30个局部源位置 → 24组；4类写入，19组路由动作，1组转发/容器关联不重复计动作。9个本地v-model，3处调用/内嵌容器，13个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P30.json)：30个局部源位置 → 24组；4类写入，19组路由动作，1组转发/容器关联不重复计动作。已映射9/9个源码字段位置，3/3处调用/内嵌容器，13个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有30个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2613,7 +2650,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P31 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P31.json)：32个局部源位置 → 25组；3类写入，20组路由动作，1组转发/容器关联不重复计动作。20个本地v-model，4处调用/内嵌容器，20个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P31.json)：32个局部源位置 → 25组；3类写入，20组路由动作，1组转发/容器关联不重复计动作。已映射20/20个源码字段位置，4/4处调用/内嵌容器，20个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有44个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2716,7 +2753,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P32 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P32.json)：30个局部源位置 → 23组；2类写入，18组路由动作，0组转发/容器关联不重复计动作。11个本地v-model，3处调用/内嵌容器，18个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P32.json)：30个局部源位置 → 23组；2类写入，18组路由动作，0组转发/容器关联不重复计动作。已映射11/11个源码字段位置，3/3处调用/内嵌容器，18个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有28个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2795,7 +2832,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P33 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P33.json)：31个局部源位置 → 17组；2类写入，12组路由动作，0组转发/容器关联不重复计动作。13个本地v-model，3处调用/内嵌容器，14个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P33.json)：31个局部源位置 → 17组；2类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射13/13个源码字段位置，3/3处调用/内嵌容器，14个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有17个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2866,7 +2903,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P34 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P34.json)：29个局部源位置 → 13组；0类写入，8组路由动作，1组转发/容器关联不重复计动作。16个本地v-model，3处调用/内嵌容器，3个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P34.json)：29个局部源位置 → 13组；0类写入，8组路由动作，1组转发/容器关联不重复计动作。已映射16/16个源码字段位置，3/3处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有15个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2924,16 +2961,16 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ### 明确保留的边界
 
-- 顶部刷新仍待审；权限r2仅措辞批准未实施；限流手机白区组合已局部接入Vue，未部署。
-- 新失败F的其他按钮态、17父状态适用性及手机返回目录/筛选折叠尚未完整实施批准。
+- 当前C整合、加载、登录/网络反馈仍有待审区域；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。
+- 其他按钮态、完整父状态适用性、手机返回目录/筛选折叠与生产整合仍未全部实施批准。
 - 同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。
-- source-reviewed不是整页完成；此前网络白色区域问题仍待用户答复。
+- source-reviewed不是整页完成；待审组合不因当前路由验证通过而自动批准。
 - 三个结构记录不等于三个本页弹窗；本页业务弹窗为0。
 - 模板详情article不被结构扫描当dialog；首版/无变化/差异阅读保持只读。
 
 ## P35 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P35.json)：23个局部源位置 → 14组；0类写入，9组路由动作，0组转发/容器关联不重复计动作。14个本地v-model，4处调用/内嵌容器，4个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P35.json)：23个局部源位置 → 14组；0类写入，9组路由动作，0组转发/容器关联不重复计动作。已映射14/14个源码字段位置，4/4处调用/内嵌容器，4个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有54个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2993,7 +3030,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P36 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P36.json)：25个局部源位置 → 19组；3类写入，12组路由动作，2组转发/容器关联不重复计动作。13个本地v-model，6处调用/内嵌容器，9个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P36.json)：25个局部源位置 → 19组；3类写入，12组路由动作，2组转发/容器关联不重复计动作。已映射13/13个源码字段位置，6/6处调用/内嵌容器，9个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3039,13 +3076,13 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OrganizationAdminCenter.vue / form.data_retention_days | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | OrganizationAdminCenter.vue / form.default_workspace_id | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | OrganizationAdminCenter.vue / form.reason | P29资料分支，本页排除 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
-| OrganizationTokenPanel.vue / createForm.name | 名称required/max120，提交trim；等待仍可编辑 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
-| OrganizationTokenPanel.vue / createForm.ttl_days | number模型，required/min1/max365；默认90，四快捷只改草稿 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
-| OrganizationTokenPanel.vue / createForm.reason | 创建原因required/max500，提交trim；不等于共享原因窗上限 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | OrganizationTokenPanel.vue / tokenQuery | 搜索名称/前缀/中文状态/scope，不搜索ID；本地无maxlength，URL初读200 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | OrganizationTokenPanel.vue / statusFilter | all/active/expiring/never_used/revoked/rotated/expired；按已返回数据计算 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | OrganizationTokenPanel.vue / scopeFilter | 全部及四固定scope，只筛选已有数据不更改授权 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | OrganizationTokenPanel.vue / tokenSort | created_desc/expires_asc/last_used_desc/name_asc/status_asc，完整数组先排序再分页 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / createForm.name | 名称required/max120，提交trim；等待仍可编辑 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / createForm.ttl_days | number模型，required/min1/max365；默认90，四快捷只改草稿 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| OrganizationTokenPanel.vue / createForm.reason | 创建原因required/max500，提交trim；不等于共享原因窗上限 | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 
 ### 弹窗与详情消费者（有图不自动等价）
 
@@ -3072,7 +3109,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P37 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P37.json)：23个局部源位置 → 16组；0类写入，11组路由动作，0组转发/容器关联不重复计动作。14个本地v-model，6处调用/内嵌容器，9个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P37.json)：23个局部源位置 → 16组；0类写入，11组路由动作，0组转发/容器关联不重复计动作。已映射14/14个源码字段位置，6/6处调用/内嵌容器，9个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3140,7 +3177,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P38 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P38.json)：30个局部源位置 → 20组；0类写入，19组路由动作，1组转发/容器关联不重复计动作。2个本地v-model，1处调用/内嵌容器，3个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P38.json)：30个局部源位置 → 20组；0类写入，19组路由动作，1组转发/容器关联不重复计动作。已映射2/2个源码字段位置，1/1处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有114个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3197,30 +3234,93 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 密度是独立模型驱动交互，不因动作扫描器不收集纯v-model而省略。
 - role=dialog定义由候选扫描器登记，不冒充结构容器扫描器的额外结果。
 
-## P54 局部动作与共享消费者
+## P39 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P54.json)：44个局部源位置 → 17组；4类写入，17组路由动作，0组转发/容器关联不重复计动作。7个本地v-model，9处调用/内嵌容器，14个明确变体。此处不是全页共享源的去重分母；原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P39.json)：22个局部源位置 → 18组；0类写入，8组路由动作，2组转发/容器关联不重复计动作。已映射6/6个源码字段位置，3/3处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有21个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有48个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| DG54-VIEW 切换近期记录与证据质量 / navigation | 2处；records、quality | [records:default · 1440](design/data-composed-direction-c/1440-records-default.png) / [records:default · 390](design/data-composed-direction-c/390-records-default.png)、[quality:default · 1440](design/data-composed-direction-c/1440-quality-default.png) / [quality:default · 390](design/data-composed-direction-c/390-quality-default.png)；其余见JSON | 原质量区卸载；常驻提案改变切区状态策略。初始深链、history、KeepAlive未验证。 |
+| PA-NAV-ORG 进入组织管理目录 / navigation | 1处；29448f61eb8ffc80.1 | [normal · 1440](design/account-overview-direction-c/1440-normal.png) / [normal · 390](design/account-overview-direction-c/390-normal.png)；其余见JSON | 共享导航已在用户授权的C方向内；此登记只映射源语义，不代表逐控件六态、完整App壳或生产验收。 |
+| PA-NAV-USER 进入用户管理目录 / navigation | 1处；ffed2dd7f439c4b0.1 | [normal · 1440](design/account-overview-direction-c/1440-normal.png) / [normal · 390](design/account-overview-direction-c/390-normal.png)；其余见JSON | 共享导航已在用户授权的C方向内；此登记只映射源语义，不代表逐控件六态、完整App壳或生产验收。 |
+| PA-NAV-ADMIN 进入管理员管理目录 / navigation | 1处；e400286c7cd59e44.1 | [normal · 1440](design/account-overview-direction-c/1440-normal.png) / [normal · 390](design/account-overview-direction-c/390-normal.png)；其余见JSON | 共享导航已在用户授权的C方向内；此登记只映射源语义，不代表逐控件六态、完整App壳或生产验收。 |
+| PA39-NAV-ORG-ADMIN-BRANCH 管理员列表分支组织导航（P39排除） / excluded | 1处；apps/web/src/components/PlatformAccountGlobalRail.vue#29448f61eb8ffc80.1 | ；其余见JSON | 只排除P44条件分支，不代表P44页面已完成本动作映射。 |
+| PA39-NAV-USER-ADMIN-BRANCH 管理员列表分支用户导航（P39排除） / excluded | 1处；apps/web/src/components/PlatformAccountGlobalRail.vue#ffed2dd7f439c4b0.1 | ；其余见JSON | 只排除P44条件分支，不代表P43页面已完成本动作映射。 |
+| PA39-NAV-ADMIN-ADMIN-BRANCH 管理员列表分支管理员导航（P39排除） / excluded | 1处；apps/web/src/components/PlatformAccountGlobalRail.vue#e400286c7cd59e44.1 | ；其余见JSON | 只排除P44条件分支，不代表P44页面已完成本动作映射。 |
+| PA-FILTER-DRAWER 移动筛选抽屉容器关联 / wiring | 1处；03d32a05b1b3fd19.1 | [filter_open · 1440](design/account-overview-direction-c/1440-filter_open.png) / [filter_open · 390](design/account-overview-direction-c/390-filter_open.png)；其余见JSON | 场景引用不等同弹窗完整组合或真实焦点生命周期验收。 |
+| PA-FILTER 查询与状态筛选 / read | 2处；2d610959fc00fb96.1、e9658d470d4cbeaf.1 | [filter_open · 1440](design/account-overview-direction-c/1440-filter_open.png) / [filter_open · 390](design/account-overview-direction-c/390-filter_open.png)、[filtered_empty · 1440](design/account-overview-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/account-overview-direction-c/390-filtered_empty.png)；其余见JSON | 沿用现有URL、读取与筛选规则；场景图不抵扣各字段逐控件状态或真实会话/RBAC验收。 |
+| PA-RESET 清除当前页组织筛选 / read | 2处；20080e701de7f5cb.1、86ea70e081f1f8e3.1 | [filtered_empty · 1440](design/account-overview-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/account-overview-direction-c/390-filtered_empty.png)；其余见JSON | P44专属空态重置另行排除；本组不改变路由或读取合同。 |
+| PA-REFRESH 首次读取失败后重新加载 / read | 1处；322a4ac62ce3a305.1 | [error · 1440](design/account-overview-direction-c/1440-error.png) / [error · 390](design/account-overview-direction-c/390-error.png)、[refresh_failed · 1440](design/account-overview-direction-c/1440-refresh_failed.png) / [refresh_failed · 390](design/account-overview-direction-c/390-refresh_failed.png)；其余见JSON | 错误状态场景存在不代表生产401/403或读取副作用已验收。 |
+| PA39-ORG-CREATE-EMPTY-EXCLUDED 组织列表空态创建（P39排除） / excluded | 1处；f68d2406f8c1db70.1 | ；其余见JSON | 只排除P39中的P40空态分支，不代表P40动作完成。 |
+| PA-ORG-DETAIL 查看组织详情 / navigation | 2处；6923b73e52535ef3.1、2a07373cb016b4b5.1 | [preview · 1440](design/account-overview-direction-c/1440-preview.png) / [preview · 390](design/account-overview-direction-c/390-preview.png)、[preview_technical · 1440](design/account-overview-direction-c/1440-preview_technical.png) / [preview_technical · 390](design/account-overview-direction-c/390-preview_technical.png)；其余见JSON | 详情页内容/全局缓存往返和目标路由真实授权另属P42及生产验收。 |
+| PA-ORG-DETAIL-WIRING 组织详情事件转发 / wiring | 1处；8871f6d994e9fced.1 | [preview · 1440](design/account-overview-direction-c/1440-preview.png) / [preview · 390](design/account-overview-direction-c/390-preview.png)；其余见JSON | 事件链可静态追到父handler；不替代已挂载真实权限或目标页验收。 |
+| PA-ORG-TECH 展开组织技术详情 / local | 1处；1c008f867673db60.1 | [preview_technical · 1440](design/account-overview-direction-c/1440-preview_technical.png) / [preview_technical · 390](design/account-overview-direction-c/390-preview_technical.png)；其余见JSON | 折叠交互引用既有场景，不证明复制、读屏或全部字段状态。 |
+| PA43-DETAIL-OUT-OF-SCOPE 用户/管理员详情转发（P39排除） / excluded | 2处；44e761922e1da1d0.1、103fa7d7798d62d6.1 | ；其余见JSON | 排除只针对P39路由；P43/P44详情链路未由本记录验收。 |
+| PA44-RESET-OUT-OF-SCOPE 管理员空态清除筛选（P39排除） / excluded | 1处；86ea70e081f1f8e3.2 | ；其余见JSON | 排除只针对P39路由，不代表P44空态完成验收。 |
+| PA44-USER-CREATE-OUT-OF-SCOPE 管理员空态新建（P39排除） / excluded | 1处；38003e3f7b002f71.1 | ；其余见JSON | 排除只针对P39子组件变体；不代表P39页头创建弹窗或P44写入完成验收。 |
+| PA40-REFRESH-OUT-OF-SCOPE 组织列表手动刷新（P39排除） / excluded | 1处；9c9141422bfd2c11.1 | ；其余见JSON | 排除只针对P39概览变体，不代表P40刷新按钮的真实生命周期验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PA-FILTER-DRAWER | 容器定义，无额外事件 | PA-FILTER |
+| PA-ORG-DETAIL-WIRING | @open-organization / emit('open-organization', $event) | PA-ORG-DETAIL |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| PlatformAccountDirectoryWorkspace.vue / query | 搜索关键词v-model，桌面内联/手机筛选抽屉共用 | 字段/主题/读屏的逐控件组合需各自证据。 |
+| PlatformAccountDirectoryWorkspace.vue / query | 同一查询字段在移动抽屉内的v-model实例，不是新业务字段 | 不重复计算为独立查询动作。 |
+| PlatformAccountDirectoryWorkspace.vue / query | 账号概览分支使用的查询v-model，仍绑定同一父级筛选草稿 | 不是额外筛选条件或独立请求。 |
+| PlatformAccountDirectoryWorkspace.vue / status | 账号状态v-model；选项随组织/管理员筛选变体而异 | 保留disabled/archived区分，不由本映射决定服务端权限。 |
+| PlatformAccountDirectoryWorkspace.vue / status | 同一状态字段在移动抽屉内的v-model实例 | 不重复计算为独立字段或动作。 |
+| PlatformAccountDirectoryWorkspace.vue / status | 账号概览分支使用的状态v-model，仍绑定同一父级筛选草稿 | 不是额外筛选条件或独立请求。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| PlatformAccountDirectoryWorkspace.vue / ResponsiveFilterDrawer.1 / mobile-filter-open | responsive-filter / related-scene-only | [filter_open · 1440](design/account-overview-direction-c/1440-filter_open.png) / [filter_open · 390](design/account-overview-direction-c/390-filter_open.png) | 焦点循环与触发器归还仍须独立真实Vue证据。 |
+| PlatformAccountGlobalRail.vue / aside.1 / desktop-account-global-rail | inline-aside / related-scene-only | [normal · 1440](design/account-overview-direction-c/1440-normal.png) / [normal · 390](design/account-overview-direction-c/390-normal.png) | P39 overview不显示该rail；该场景只引用相关布局，非逐组件验收。 |
+| PlatformOrganizationRecords.vue / ResponsiveDataView.1 / mobile-organization-preview | responsive-row-detail / related-scene-only | [preview · 1440](design/account-overview-direction-c/1440-preview.png) / [preview · 390](design/account-overview-direction-c/390-preview.png) | 相关预览场景不替代完整预览/详情往返生命周期。 |
+
+### 明确保留的边界
+
+- 本审阅只覆盖P39目录与组织记录子组件22个源码位置；P39其余父组件按钮、输入、弹窗和壳层动作尚未纳入。
+- P40-P44共享组件条件分支显式排除于P39，不等于对应目的页动作已审阅。
+- 视觉方向已获用户统一授权继续实施；逐控件六态映射、真实App壳/KeepAlive、RBAC、组织读取与生产验收仍分开核验。
+- 本记录仅覆盖P39目录展示组件和组织记录消费者；不声明完整P39全页语义映射。
+- 页头创建/其他详情对话框、NavigationShell、角色比较和完整P40-P44路由变体仍需各自映射。
+- 用户已授权第二阶段剩余视觉方向自动通过；此语义台账不记录逐控件六态批准，也不替代真实权限/生产验收。
+
+## P54 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P54.json)：58个局部源位置 → 18组；4类写入，18组路由动作，0组转发/容器关联不重复计动作。已映射7/7个源码字段位置，9/9处调用/内嵌容器，14个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有26个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| DG54-VIEW 切换近期记录与证据质量 / navigation | 2处；records、quality | [records:default · 1440](design/data-composed-direction-c/1440-records-default.png) / [records:default · 390](design/data-composed-direction-c/390-records-default.png)、[quality:default · 1440](design/data-composed-direction-c/1440-quality-default.png) / [quality:default · 390](design/data-composed-direction-c/390-quality-default.png)；其余见JSON | 同路由history、质量工作态保留与KeepAlive读取中止已有Vue夹具回归；真实权限、真实API和生产生命周期仍未验证。 |
 | DG54-ENTITY 选择四类近期数据 / read | 1处；trends、opportunities、competitors、suppliers | [records:trends · 1440](design/data-composed-direction-c/1440-records-trends.png) / [records:trends · 390](design/data-composed-direction-c/390-records-trends.png)、[records:opportunities · 1440](design/data-composed-direction-c/1440-records-opportunities.png) / [records:opportunities · 390](design/data-composed-direction-c/390-records-opportunities.png)；其余见JSON | 查询草稿保留与状态清空需跨四类逐项验证；旧快照不改变业务范围，导出等待仍可能漂移。 |
 | DG54-FILTER 应用或重置近期筛选 / read | 5处；drawer-open、drawer-close、form-submit、enter、apply、reset | [records:filter · 1440](design/data-composed-direction-c/1440-records-filter.png) / [records:filter · 390](design/data-composed-direction-c/390-records-filter.png)、[records:query-draft · 1440](design/data-composed-direction-c/1440-records-query-draft.png) / [records:query-draft · 390](design/data-composed-direction-c/390-records-query-draft.png)；其余见JSON | 原生提交与Enter、抽屉submit.capture顺序、SQL LIKE和供应商字段范围尚非实际链验收。 |
-| DG54-EXPORT 受控CSV导出 / write | 4处；open、ask、submit、cancel、download | [records:export · 1440](design/data-composed-direction-c/1440-records-export.png) / [records:export · 390](design/data-composed-direction-c/390-records-export.png)、[records:export-empty · 1440](design/data-composed-direction-c/1440-records-export-empty.png) / [records:export-empty · 390](design/data-composed-direction-c/390-records-export-empty.png)；其余见JSON | 真实客户端原因无最大长度；服务器2–300。请求与文件名使用可变entity；新稿固定条件/未知防重只是提案，未证真实CSV/审计/重复幂等。 |
+| DG54-EXPORT 受控CSV导出 / write | 5处；open、ask、submit、cancel、download | [records:export · 1440](design/data-composed-direction-c/1440-records-export.png) / [records:export · 390](design/data-composed-direction-c/390-records-export.png)、[records:export-empty · 1440](design/data-composed-direction-c/1440-records-export-empty.png) / [records:export-empty · 390](design/data-composed-direction-c/390-records-export-empty.png)；其余见JSON | 真实客户端原因无最大长度；服务器2–300。请求与文件名使用可变entity；新稿固定条件/未知防重只是提案，未证真实CSV/审计/重复幂等。 |
 | DG54-LOAD 读取与状态重试 / read | 1处；first、empty、error、expired、forbidden、blocked、retry、timeout | [records:loading · 1440](design/data-composed-direction-c/1440-records-loading.png) / [records:loading · 390](design/data-composed-direction-c/390-records-loading.png)、[records:empty · 1440](design/data-composed-direction-c/1440-records-empty.png) / [records:empty · 390](design/data-composed-direction-c/390-records-empty.png)；其余见JSON | 15秒abort非完整生命周期代次保护；失败保留仅有旧行时，不把空数据旧状态一概称快照保留。 |
-| DG54-TECH 展开记录技术标识 / local | 2处；desktop-row、mobile-detail | [records:detail · 1440](design/data-composed-direction-c/1440-records-detail.png) / [records:detail · 390](design/data-composed-direction-c/390-records-detail.png)、[records:long-detail · 1440](design/data-composed-direction-c/1440-records-long-detail.png) / [records:long-detail · 390](design/data-composed-direction-c/390-records-long-detail.png)；其余见JSON | 这是行ID展开，不是页尾TechnicalDetails复制；所有类型/长ID状态与共享复制消费者另验。 |
+| DG54-TECH 查看记录与展开技术标识 / local | 3处；desktop-row、mobile-detail | [records:detail · 1440](design/data-composed-direction-c/1440-records-detail.png) / [records:detail · 390](design/data-composed-direction-c/390-records-detail.png)、[records:long-detail · 1440](design/data-composed-direction-c/1440-records-long-detail.png) / [records:long-detail · 390](design/data-composed-direction-c/390-records-long-detail.png)；其余见JSON | 这是行ID展开，不是页尾TechnicalDetails复制；所有类型/长ID状态与共享复制消费者另验。 |
 | DG54-PAGE 近期记录本地分页 / read | 2处；previous、next、first、last | [records:page-21 · 1440](design/data-composed-direction-c/1440-records-page-21.png) / [records:page-21 · 390](design/data-composed-direction-c/390-records-page-21.png)、[records:page-two · 1440](design/data-composed-direction-c/1440-records-page-two.png) / [records:page-two · 390](design/data-composed-direction-c/390-records-page-two.png)；其余见JSON | 同一原型场景图不证明真实浏览器history/滚动/每种实体分页。 |
-| Q54-LOAD 质量状态恢复读取 / read | 1处；loading、empty、error、forbidden、expired、blocked、primary | [quality:loading · 1440](design/data-composed-direction-c/1440-quality-loading.png) / [quality:loading · 390](design/data-composed-direction-c/390-quality-loading.png)、[quality:empty · 1440](design/data-composed-direction-c/1440-quality-empty.png) / [quality:empty · 390](design/data-composed-direction-c/390-quality-empty.png)；其余见JSON | 原ready模板没有独立刷新按钮；稿中刷新/清搜索按钮属于待审新增呈现。实际状态组件primary可达性与权限未验。 |
-| Q54-TAB 切换证据问题核对 / read | 3处；evidence、issues、runs | [quality:default · 1440](design/data-composed-direction-c/1440-quality-default.png) / [quality:default · 390](design/data-composed-direction-c/390-quality-default.png)、[quality:issues · 1440](design/data-composed-direction-c/1440-quality-issues.png) / [quality:issues · 390](design/data-composed-direction-c/390-quality-issues.png)；其余见JSON | 真实switchTab不清query/selectedRunId；离线稿会清，需审核差异，不当作同语义实现。 |
-| Q54-EVIDENCE 读取或关闭完整证据溯源 / read | 5处；evidence-desktop、evidence-mobile、issue-desktop、issue-mobile、close | [quality:lineage · 1440](design/data-composed-direction-c/1440-quality-lineage.png) / [quality:lineage · 390](design/data-composed-direction-c/390-quality-lineage.png)、[quality:lineage-loading · 1440](design/data-composed-direction-c/1440-quality-lineage-loading.png) / [quality:lineage-loading · 390](design/data-composed-direction-c/390-quality-lineage-loading.png)；其余见JSON | 真实结果落aside无代次；稿改为模态并展示quality_issues，不证明真实迟到详情隔离/授权。 |
+| Q54-LOAD 质量状态恢复读取 / read | 2处；loading、empty、error、forbidden、expired、blocked、primary | [quality:loading · 1440](design/data-composed-direction-c/1440-quality-loading.png) / [quality:loading · 390](design/data-composed-direction-c/390-quality-loading.png)、[quality:empty · 1440](design/data-composed-direction-c/1440-quality-empty.png) / [quality:empty · 390](design/data-composed-direction-c/390-quality-empty.png)；其余见JSON | ready刷新、读取代次和未知写入解锁已有双端夹具回归；真实权限、数据库和生产恢复仍未验。 |
+| Q54-TAB 切换证据问题核对 / read | 3处；evidence、issues、runs | [quality:default · 1440](design/data-composed-direction-c/1440-quality-default.png) / [quality:default · 390](design/data-composed-direction-c/390-quality-default.png)、[quality:issues · 1440](design/data-composed-direction-c/1440-quality-issues.png) / [quality:issues · 390](design/data-composed-direction-c/390-quality-issues.png)；其余见JSON | Tab、搜索、run与页码状态已进入URL并通过切区保留回归；浏览器前进后退和真实权限仍待生产链验证。 |
+| Q54-SEARCH 检索或清除当前质量页 / local | 2处；change、clear | [quality:default · 1440](design/data-composed-direction-c/1440-quality-default.png) / [quality:default · 390](design/data-composed-direction-c/390-quality-default.png)、[quality:issues · 1440](design/data-composed-direction-c/1440-quality-issues.png) / [quality:issues · 390](design/data-composed-direction-c/390-quality-issues.png)；其余见JSON | 当前页检索与URL恢复已有双端夹具回归；超长输入、输入法组合和完整主题交叉仍待验。 |
+| Q54-EVIDENCE 读取或关闭完整证据溯源 / read | 8处；evidence-desktop、evidence-mobile、issue-desktop、issue-mobile、native-dialog、cancel、close、retry | [quality:lineage · 1440](design/data-composed-direction-c/1440-quality-lineage.png) / [quality:lineage · 390](design/data-composed-direction-c/390-quality-lineage.png)、[quality:lineage-loading · 1440](design/data-composed-direction-c/1440-quality-lineage-loading.png) / [quality:lineage-loading · 390](design/data-composed-direction-c/390-quality-lineage-loading.png)；其余见JSON | 详情代次、中止、原生模态焦点与返焦已有双端夹具回归；真实文件、字段来源完整性和权限仍未验。 |
 | Q54-DOWNLOAD 签发并访问原文下载 / write | 2处；desktop、mobile、grant、access | [quality:download-ready · 1440](design/data-composed-direction-c/1440-quality-download-ready.png) / [quality:download-ready · 390](design/data-composed-direction-c/390-quality-download-ready.png)、[quality:download-busy · 1440](design/data-composed-direction-c/1440-quality-download-busy.png) / [quality:download-busy · 390](design/data-composed-direction-c/390-quality-download-busy.png)；其余见JSON | 原入口无确认窗；稿新增说明/签发窗。签发与实际下载错误不能混为同回执，未验证真实字节、SHA、授权或访问审计。 |
-| Q54-TECH 展开证据或问题技术标识 / local | 2处；evidence-mobile、issue-mobile | [quality:lineage-technical · 1440](design/data-composed-direction-c/1440-quality-lineage-technical.png) / [quality:lineage-technical · 390](design/data-composed-direction-c/390-quality-lineage-technical.png)、[quality:issue-technical · 1440](design/data-composed-direction-c/1440-quality-issue-technical.png) / [quality:issue-technical · 390](design/data-composed-direction-c/390-quality-issue-technical.png)；其余见JSON | 新完整溯源技术区不是两个原移动详情展开消费者的逐项证据；不能以复制按钮替代summary验收。 |
+| Q54-TECH 展开证据或问题技术标识 / local | 3处；evidence-mobile、issue-mobile、lineage-dialog | [quality:lineage-technical · 1440](design/data-composed-direction-c/1440-quality-lineage-technical.png) / [quality:lineage-technical · 390](design/data-composed-direction-c/390-quality-lineage-technical.png)、[quality:issue-technical · 1440](design/data-composed-direction-c/1440-quality-issue-technical.png) / [quality:issue-technical · 390](design/data-composed-direction-c/390-quality-issue-technical.png)；其余见JSON | 新完整溯源技术区不是两个原移动详情展开消费者的逐项证据；不能以复制按钮替代summary验收。 |
 | Q54-RUN 当前加载问题的核对下钻 / local | 2处；drill、clear、matched、empty | [quality:run-match · 1440](design/data-composed-direction-c/1440-quality-run-match.png) / [quality:run-match · 390](design/data-composed-direction-c/390-quality-run-match.png)、[quality:run-empty · 1440](design/data-composed-direction-c/1440-quality-run-empty.png) / [quality:run-empty · 390](design/data-composed-direction-c/390-quality-run-empty.png)；其余见JSON | 不查全库异常，跨页缺问题不能伪称没有异常；切内部tab后原runId仍保留。 |
-| Q54-BATCH 开放问题批处理预检与提交 / write | 3处；attribute、assign、close、preview、cancel、confirm | [quality:batch-attribute · 1440](design/data-composed-direction-c/1440-quality-batch-attribute.png) / [quality:batch-attribute · 390](design/data-composed-direction-c/390-quality-batch-attribute.png)、[quality:batch-assign · 1440](design/data-composed-direction-c/1440-quality-batch-assign.png) / [quality:batch-assign · 390](design/data-composed-direction-c/390-quality-batch-assign.png)；其余见JSON | 源预检没校验50上限；提交读可变选择/动作/成员/原因，无冻结快照。原ConfirmDialog不接busy；整批SQL/版本/幂等和原型锁定不可混同。 |
-| Q54-SELECT 切换开放问题选择 / local | 1处；select、deselect、disabled-closed、hidden-selected | [quality:issues · 1440](design/data-composed-direction-c/1440-quality-issues.png) / [quality:issues · 390](design/data-composed-direction-c/390-quality-issues.png)、[quality:selection-hidden · 1440](design/data-composed-direction-c/1440-quality-selection-hidden.png) / [quality:selection-hidden · 390](design/data-composed-direction-c/390-quality-selection-hidden.png)；其余见JSON | 真实手机无checkbox；原型新增手机选择/清选择。checkbox在源可重复push，同组ID与批量后端去重不是一回事。 |
-| Q54-RESOLVE 单问题原因与解决确认 / write | 6处；desktop-open、mobile-open、aside-close、preview、cancel、confirm | [quality:resolve-empty · 1440](design/data-composed-direction-c/1440-quality-resolve-empty.png) / [quality:resolve-empty · 390](design/data-composed-direction-c/390-quality-resolve-empty.png)、[quality:resolve-short · 1440](design/data-composed-direction-c/1440-quality-resolve-short.png) / [quality:resolve-short · 390](design/data-composed-direction-c/390-quality-resolve-short.png)；其余见JSON | 写成功后load吞错再覆盖notice；原confirm短语trim比较，稿用严格全等。取消返回/重复提交/闭窗归属与真实审计仍待验。 |
+| Q54-BATCH 开放问题批处理预检与提交 / write | 3处；attribute、assign、close、preview、cancel、confirm | [quality:batch-attribute · 1440](design/data-composed-direction-c/1440-quality-batch-attribute.png) / [quality:batch-attribute · 390](design/data-composed-direction-c/390-quality-batch-attribute.png)、[quality:batch-assign · 1440](design/data-composed-direction-c/1440-quality-batch-assign.png) / [quality:batch-assign · 390](design/data-composed-direction-c/390-quality-batch-assign.png)；其余见JSON | 冻结预览、busy、写成功与后续读取失败分离及未知防重已有双端夹具回归；真实事务、成员权限与审计仍未验。 |
+| Q54-SELECT 切换开放问题选择 / local | 3处；select-desktop、select-mobile、deselect、clear、disabled-closed、hidden-selected | [quality:issues · 1440](design/data-composed-direction-c/1440-quality-issues.png) / [quality:issues · 390](design/data-composed-direction-c/390-quality-issues.png)、[quality:selection-hidden · 1440](design/data-composed-direction-c/1440-quality-selection-hidden.png) / [quality:selection-hidden · 390](design/data-composed-direction-c/390-quality-selection-hidden.png)；其余见JSON | 移动等价选择、清除与批量冻结已有双端夹具回归；跨页50项边界和真实并发问题仍待验。 |
+| Q54-RESOLVE 单问题原因与解决确认 / write | 9处；desktop-open、mobile-open、native-dialog、dialog-cancel、dialog-close、preview、confirm-cancel、confirm | [quality:resolve-empty · 1440](design/data-composed-direction-c/1440-quality-resolve-empty.png) / [quality:resolve-empty · 390](design/data-composed-direction-c/390-quality-resolve-empty.png)、[quality:resolve-short · 1440](design/data-composed-direction-c/1440-quality-resolve-short.png) / [quality:resolve-short · 390](design/data-composed-direction-c/390-quality-resolve-short.png)；其余见JSON | 原生原因模态、busy、写成功/重读失败双消息和未知防重已实现；真实幂等、审计、权限与生产并发仍未验。 |
 | Q54-PAGE 证据与问题共享服务端页码 / read | 2处；previous、next、first、last、waiting、failed | [quality:page-first · 1440](design/data-composed-direction-c/1440-quality-page-first.png) / [quality:page-first · 390](design/data-composed-direction-c/390-quality-page-first.png)、[quality:page-last · 1440](design/data-composed-direction-c/1440-quality-page-last.png) / [quality:page-last · 390](design/data-composed-direction-c/390-quality-page-last.png)；其余见JSON | 原翻页失败保留数据但page已变；提案保留已成功页，不能当作源实现已修复。 本补稿busy截图如实保留原型按钮可用与handler防重；源refreshing禁用不同，尚未统一。 |
 
 ### 字段绑定（不重复计算为提交动作）
@@ -3229,39 +3329,122 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | --- | --- | --- |
 | PlatformDataCenter.vue / queryDraft | 近期查询草稿；apply时trim后才成为query | 120字符边界/Enter/提交与SQL LIKE、供应商字段差异需真实链验证。 |
 | PlatformDataCenter.vue / statusDraft | 随entity状态集选择；apply提交，类型切换清空 | 四类型13状态组合与失败旧快照要分开，不按新类型解释旧行。 |
-| DataQualityCenter.vue / query | 质量当前已加载集合本地检索，不trim，不提交GET | 原内部切tab不清query；原型会清，存在行为差异。 |
-| DataQualityCenter.vue / batchAction | attribute/assign/close；不同动作决定成员字段适用性 | 预览后改变动作可漂移；源未冻结，三个操作不以一个确认图全验。 |
-| DataQualityCenter.vue / batchAssignee | 仅assign显示，候选来自所选问题组织活动成员 | 原预览到提交仍可变，不能编造实际组织成员。 |
-| DataQualityCenter.vue / batchReason | 批量原因，maxlength500，预检trim>=2 | 原型模态改版，0/1/2/500/超限和长内容/软键盘仍需完整状态映射。 |
+| DataQualityCenter.vue / query | 质量当前已加载集合本地检索，不trim，不提交GET；change同步quality_q | URL恢复和跨切区保留有双端夹具回归；输入法、超长文本和生产历史仍待验。 |
+| DataQualityCenter.vue / batchAction | attribute/assign/close；不同动作决定成员字段适用性 | 预览后动作冻结并有双端负向回归；三种操作的真实权限/事务仍需分别验收。 |
+| DataQualityCenter.vue / batchAssignee | 仅assign显示，候选来自所选问题组织活动成员 | 预览到提交冻结；fixture不编造为真实组织成员或活动状态证明。 |
+| DataQualityCenter.vue / batchReason | 批量原因，maxlength500，预检trim>=2 | 冻结范围和确认busy已有双端回归；0/1/2/500、长内容与真实软键盘仍需完整交叉。 |
 | DataQualityCenter.vue / reason | 单问题原因，maxlength500；每次beginResolve清空 | 字段与共享AuditedReasonDialog同名但范围不同，不能混用2–300限制。 |
 
 ### 弹窗与详情消费者（有图不自动等价）
 
 | 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
 | --- | --- | --- | --- |
+| PlatformDataCenter.vue / aside.1 / records-entity-rail | inline-aside / related-scene-only | [records:default · 1440](design/data-composed-direction-c/1440-records-default.png) / [records:default · 390](design/data-composed-direction-c/390-records-default.png) | 当前真实Vue已有双端截图；此历史提案场景只用于源消费者登记。 |
 | PlatformDataCenter.vue / ResponsiveFilterDrawer.1 / records-filter | responsive-filter / matching-dialog-scene | [records:filter · 1440](design/data-composed-direction-c/1440-records-filter.png) / [records:filter · 390](design/data-composed-direction-c/390-records-filter.png) | 原生submit/Enter关闭与返焦、所有错误/主题需每消费者验证。 |
 | PlatformDataCenter.vue / ResponsiveDataView.1 / trends | responsive-row-detail / matching-dialog-scene | [records:detail · 1440](design/data-composed-direction-c/1440-records-detail.png) / [records:detail · 390](design/data-composed-direction-c/390-records-detail.png) | 仅原始热点示例详情，不代表所有状态行。 |
 | PlatformDataCenter.vue / ResponsiveDataView.1 / opportunities | responsive-row-detail / matching-dialog-scene | [opportunities:detail · 1440](design/data-record-detail-direction-c/1440-opportunities-detail.png) / [opportunities:detail · 390](design/data-record-detail-direction-c/390-opportunities-detail.png)、[opportunities-long:technical-footer · 1440](design/data-record-detail-direction-c/1440-opportunities-long-technical-footer.png) / [opportunities-long:technical-footer · 390](design/data-record-detail-direction-c/390-opportunities-long-technical-footer.png) | 合成源投影样例六组字段/标题/技术ID及双端长内容已验；不是全部状态行/主题/真实Vue。桌面详情入口为新提案。 |
 | PlatformDataCenter.vue / ResponsiveDataView.1 / competitors | responsive-row-detail / matching-dialog-scene | [competitors:detail · 1440](design/data-record-detail-direction-c/1440-competitors-detail.png) / [competitors:detail · 390](design/data-record-detail-direction-c/390-competitors-detail.png)、[competitors-long:technical-footer · 1440](design/data-record-detail-direction-c/1440-competitors-long-technical-footer.png) / [competitors-long:technical-footer · 390](design/data-record-detail-direction-c/390-competitors-long-technical-footer.png) | 合成源投影样例版本/变更语义及六组字段/技术ID、双端长内容已验；全部状态/主题/真实Vue仍待验。 |
 | PlatformDataCenter.vue / ResponsiveDataView.1 / suppliers | responsive-row-detail / matching-dialog-scene | [suppliers-original:detail · 1440](design/data-record-detail-direction-c/1440-suppliers-original-detail.png) / [suppliers-original:detail · 390](design/data-record-detail-direction-c/390-suppliers-original-detail.png)、[suppliers:detail · 1440](design/data-record-detail-direction-c/1440-suppliers-detail.png) / [suppliers:detail · 390](design/data-record-detail-direction-c/390-suppliers-detail.png)、[suppliers-long:technical-footer · 1440](design/data-record-detail-direction-c/1440-suppliers-long-technical-footer.png) / [suppliers-long:technical-footer · 390](design/data-record-detail-direction-c/390-suppliers-long-technical-footer.png) | 原始隔离与合成供应商/地点、最小起订量/报价详情已分开核对，不引入币种/单位或新的零测量；全部行/主题/真实Vue仍待验。 |
 | PlatformDataCenter.vue / AuditedReasonDialog.1 / export-reason | native-reason-dialog / matching-dialog-scene | [records:export · 1440](design/data-composed-direction-c/1440-records-export.png) / [records:export · 390](design/data-composed-direction-c/390-records-export.png) | 原型是新固定范围表单，真实源请求/文件名竞态未修。 |
+| DataQualityCenter.vue / aside.1 / quality-audit-rail | inline-aside / related-scene-only | [quality:default · 1440](design/data-composed-direction-c/1440-quality-default.png) / [quality:default · 390](design/data-composed-direction-c/390-quality-default.png) | 静态场景仅登记消费者关系；用户对当前Vue视觉的具体审核仍待完成。 |
 | DataQualityCenter.vue / ResponsiveDataView.1 / evidence-row | responsive-row-detail / matching-dialog-scene | [quality:evidence-detail · 1440](design/data-composed-direction-c/1440-quality-evidence-detail.png) / [quality:evidence-detail · 390](design/data-composed-direction-c/390-quality-evidence-detail.png) | 完整记录稿已存在；真实shared.show/close及完整溯源交接待Vue验收。 |
-| DataQualityCenter.vue / ResponsiveDataView.2 / issue-row | responsive-row-detail / matching-dialog-scene | [quality:issue-detail · 1440](design/data-composed-direction-c/1440-quality-issue-detail.png) / [quality:issue-detail · 390](design/data-composed-direction-c/390-quality-issue-detail.png) | 新稿移动选择为新增，原组件及所有已解决/缺证据组合仍待验。 |
-| DataQualityCenter.vue / aside.1 / evidence-lineage | inline-aside / proposal-shape-differs | [quality:lineage · 1440](design/data-composed-direction-c/1440-quality-lineage.png) / [quality:lineage · 390](design/data-composed-direction-c/390-quality-lineage.png) | 提案改为模态且展示关联问题；原aside无代次/初焦点，不能等价接受。 |
-| DataQualityCenter.vue / aside.2 / single-reason | inline-aside / proposal-shape-differs | [quality:resolve-valid · 1440](design/data-composed-direction-c/1440-quality-resolve-valid.png) / [quality:resolve-valid · 390](design/data-composed-direction-c/390-quality-resolve-valid.png) | 提案改为独立原因模态；源aside关闭、原因保留规则与并发需确认。 |
-| DataQualityCenter.vue / ConfirmDialog.1 / single-confirm | confirmation-dialog / matching-dialog-scene | [quality:resolve-confirm · 1440](design/data-composed-direction-c/1440-quality-resolve-confirm.png) / [quality:resolve-confirm · 390](design/data-composed-direction-c/390-quality-resolve-confirm.png) | 源canConfirm会trim，原型严格等于；原组件取消/重复确认与源POST待验。 |
+| DataQualityCenter.vue / ResponsiveDataView.2 / issue-row | responsive-row-detail / matching-dialog-scene | [quality:issue-detail · 1440](design/data-composed-direction-c/1440-quality-issue-detail.png) / [quality:issue-detail · 390](design/data-composed-direction-c/390-quality-issue-detail.png) | 移动选择已进入当前Vue并有夹具回归；所有已解决/缺证据/权限组合仍待验。 |
+| DataQualityCenter.vue / ConfirmDialog.1 / single-confirm | confirmation-dialog / matching-dialog-scene | [quality:resolve-confirm · 1440](design/data-composed-direction-c/1440-quality-resolve-confirm.png) / [quality:resolve-confirm · 390](design/data-composed-direction-c/390-quality-resolve-confirm.png) | 当前Vue取消、busy、成功与重读失败已有夹具回归；真实POST幂等和权限待验。 |
 | DataQualityCenter.vue / ConfirmDialog.2 / attribute-confirm | confirmation-dialog / matching-dialog-scene | [quality:batch-confirm · 1440](design/data-composed-direction-c/1440-quality-batch-confirm.png) / [quality:batch-confirm · 390](design/data-composed-direction-c/390-quality-batch-confirm.png) | 源使用可变选择/原因；后端全有或全无需真实SQL证据。 |
 | DataQualityCenter.vue / ConfirmDialog.2 / assign-confirm | confirmation-dialog / matching-dialog-scene | [quality:batch-assign-confirm · 1440](design/data-composed-direction-c/1440-quality-batch-assign-confirm.png) / [quality:batch-assign-confirm · 390](design/data-composed-direction-c/390-quality-batch-assign-confirm.png) | 成员为合成示例；真实组织/活动状态/版本并发未验。 |
 | DataQualityCenter.vue / ConfirmDialog.2 / close-confirm | confirmation-dialog / matching-dialog-scene | [quality:batch-close-confirm · 1440](design/data-composed-direction-c/1440-quality-batch-close-confirm.png) / [quality:batch-close-confirm · 390](design/data-composed-direction-c/390-quality-batch-close-confirm.png) | 只变问题不删原文；原POST/审计/短语trim与并发未验。 |
 
 ### 明确保留的边界
 
-- 同页常驻组合已交294PNG；实际质量v-if卸载、浏览器history/深链、scope/晚到响应未合并真实Vue。
+- 同页静态组合已交294PNG；实际质量工作区现由父级保持挂载，并补同路由URL恢复、读取代次与迟到响应隔离。真实浏览器长历史和生产scope仍待验。
 - 40个明确控件变体已有364张双端原生状态图；17组主控件81个槽有selector/scene关联，21个槽仍未映射。主控件证据不是全动态行、全部共享消费者或真实Vue验收。
-- 三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54源tab保留query/runId与原型清空、短语trim与原型严格全等的差异须具体审核。
-- 原质量无ready刷新/清搜索/清选择、无手机checkbox；原型额外入口仍是待审行为，不新增现行源合同ID。
+- 三类实体详情已补打开/完整字段/双端长内容证据，全部状态行及逐按钮主题仍未穷尽；Q54当前URL状态与确认短语行为以真实Vue和回归为准。
+- 质量ready刷新、清搜索/清选择、手机checkbox、原生详情/原因窗已进入当前Vue；14张当前实现图仍待用户具体审核。
 - 共享详情窗新增停用清理，释放旧选中与背景隔离；完整壳层验证来自P38缓存返回链，不代替P54三处调用的所有业务流程。P54模板/源、原图与批准不变。
 - 2026-09-11仅同步既有共享修复的当前依赖指纹：e845daca手机预览焦点隔离、fae70505复制拒绝及旧回执保护。P54页面源、原图和批准不变；共享测试不替代P54三个调用/六种内容变体的真实流程验收。
-- PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在44个局部源位置内。
+- PlatformShell及UiStatePanel内部控件、表格列显隐/冻结/密度、TechnicalDetails复制必须按调用方再映射；不在58个局部源位置内。
 - ConfirmDialog共享typedText适用，acknowledged因本页destructive=false不显示；AuditedReasonDialog内部reason与质量reason分域；TableViewControls密度字段未冒充本页7个v-model。
 - ResponsiveDataView的三个调用/六种内容变体不能拿一个shared测试全验；同类动态行、空字段与主题密度交叉场景还未穷尽。
+
+## P55 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P55.json)：23个局部源位置 → 8组；0类写入，8组路由动作，0组转发/容器关联不重复计动作。已映射2/2个源码字段位置，5/5处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有48个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| DG55-SECTION 切换五类治理目录 / read | 1处；score_rules、cost_rules、approval_templates、automation_rules、releases | [default · 1440](design/governance-direction-c/1440-default.png) / [default · 390](design/governance-direction-c/390-default.png)、[automation · 1440](design/governance-direction-c/1440-automation.png) / [automation · 390](design/governance-direction-c/390-automation.png)；其余见JSON | 当前夹具覆盖分类与保留快照；真实跨组织计数和生产缓存返回待验。 |
+| DG55-PROVIDER 进入来源版本管理 / navigation | 2处；desktop、mobile | [provider-route · 1440](design/governance-direction-c/1440-provider-route.png) / [provider-route · 390](design/governance-direction-c/390-provider-route.png)；其余见JSON | 本轮只核对href与双端可达，未执行真实目标页权限或跨组织导航。 |
+| DG55-LOAD 刷新或重新加载治理事实 / read | 2处；refresh、retry、first-error、retained-error、reactivation | [loading · 1440](design/governance-direction-c/1440-loading.png) / [loading · 390](design/governance-direction-c/390-loading.png)、[error · 1440](design/governance-direction-c/1440-error.png) / [error · 390](design/governance-direction-c/390-error.png)；其余见JSON | 当前Vue夹具覆盖双端与KeepAlive；真实网络重试、权限和生产生命周期待验。 |
+| DG55-WORKBENCH 进入所属治理工作台 / navigation | 4处；target-header、desktop-row、mobile-detail、desktop-dialog | [score_rules-route · 1440](design/governance-direction-c/1440-score_rules-route.png) / [score_rules-route · 390](design/governance-direction-c/390-score_rules-route.png)、[automation_rules-route · 1440](design/governance-direction-c/1440-automation_rules-route.png) / [automation_rules-route · 390](design/governance-direction-c/390-automation_rules-route.png)；其余见JSON | 当前测试核对快照归属与精确href；不代表目标页有写入权限或已执行导航。 |
+| DG55-FILTER 筛选与重置当前治理目录 / read | 4处；drawer、submit、apply、reset、query、status | [filter-draft · 1440](design/governance-direction-c/1440-filter-draft.png) / [filter-draft · 390](design/governance-direction-c/390-filter-draft.png)、[filter-applied · 1440](design/governance-direction-c/1440-filter-applied.png) / [filter-applied · 390](design/governance-direction-c/390-filter-applied.png)；其余见JSON | 当前夹具覆盖URL、草稿和空结果；真实SQL LIKE、全状态选项与软键盘待验。 |
+| DG55-DETAIL 打开或关闭桌面治理详情 / local | 5处；open、native-dialog、cancel、top-close、footer-close | [score_rules-detail · 1440](design/governance-direction-c/1440-score_rules-detail.png) / [score_rules-detail · 390](design/governance-direction-c/390-score_rules-detail.png)、[automation_rules-detail · 1440](design/governance-direction-c/1440-automation_rules-detail.png) / [automation_rules-detail · 390](design/governance-direction-c/390-automation_rules-detail.png)；其余见JSON | 当前夹具覆盖双端字段、焦点与取消；真实长数据、全部主题和屏幕阅读器待验。 |
+| DG55-TECH 展开治理技术标识 / local | 3处；desktop-row、mobile-detail、desktop-dialog | [score_rules-technical · 1440](design/governance-direction-c/1440-score_rules-technical.png) / [score_rules-technical · 390](design/governance-direction-c/390-score_rules-technical.png)、[automation_rules-technical · 1440](design/governance-direction-c/1440-automation_rules-technical.png) / [automation_rules-technical · 390](design/governance-direction-c/390-automation_rules-technical.png)；其余见JSON | 未引入复制或写入；真实长ID、读屏播报和所有空字段待验。 |
+| DG55-PAGE 治理目录服务端分页 / read | 2处；previous、next、pending、first、last、failed | [page-first · 1440](design/governance-direction-c/1440-page-first.png) / [page-first · 390](design/governance-direction-c/390-page-first.png)、[page-last · 1440](design/governance-direction-c/1440-page-last.png) / [page-last · 390](design/governance-direction-c/390-page-last.png)；其余见JSON | 当前夹具覆盖0/1/20/21/100边界；真实大表性能和历史返回待验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| PlatformGovernanceCenter.vue / queryDraft | 当前分类的搜索草稿，maxlength 120；提交trim后进入URL与GET | 真实输入法、超长服务错误和跨分类草稿策略待人工验。 |
+| PlatformGovernanceCenter.vue / statusDraft | 当前分类允许的状态草稿；切分类后清空 | 五类全部真实状态组合待生产数据验证。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| PlatformGovernanceCenter.vue / aside.1 / governance-directory | inline-aside / related-scene-only | [default · 1440](design/governance-direction-c/1440-default.png) / [default · 390](design/governance-direction-c/390-default.png) | 静态场景登记目录关系；当前Vue图另行审核。 |
+| PlatformGovernanceCenter.vue / ResponsiveFilterDrawer.1 / governance-filter | responsive-filter / matching-dialog-scene | [filter-draft · 1440](design/governance-direction-c/1440-filter-draft.png) / [filter-draft · 390](design/governance-direction-c/390-filter-draft.png) | 当前Vue夹具覆盖开关/提交；静态图不是运行验收。 |
+| PlatformGovernanceCenter.vue / form.1 / governance-filter-form | form-container / matching-inline-form-scene | [filter-applied · 1440](design/governance-direction-c/1440-filter-applied.png) / [filter-applied · 390](design/governance-direction-c/390-filter-applied.png) | 只对应当前分类筛选，不代表跨分类搜索。 |
+| PlatformGovernanceCenter.vue / ResponsiveDataView.1 / score-rules | responsive-row-detail / matching-dialog-scene | [score_rules-detail · 1440](design/governance-direction-c/1440-score_rules-detail.png) / [score_rules-detail · 390](design/governance-direction-c/390-score_rules-detail.png) | 评分规则代表场景。 |
+| PlatformGovernanceCenter.vue / ResponsiveDataView.1 / automation-rules | responsive-row-detail / matching-dialog-scene | [automation_rules-detail · 1440](design/governance-direction-c/1440-automation_rules-detail.png) / [automation_rules-detail · 390](design/governance-direction-c/390-automation_rules-detail.png) | 自动化完整字段及0频控边界已夹具覆盖；真实数据待验。 |
+| PlatformGovernanceCenter.vue / dialog.1 / governance-desktop-detail | native-dialog / matching-dialog-scene | [automation_rules-detail · 1440](design/governance-direction-c/1440-automation_rules-detail.png) / [automation_rules-detail · 390](design/governance-direction-c/390-automation_rules-detail.png) | 当前Vue已有夹具；静态场景仅为设计关联。 |
+
+### 明确保留的边界
+
+- 12张当前Vue图覆盖目录、默认、自动化详情、筛选无结果、权限拒绝和保留快照失败；不是每个动态行与六态的穷尽。
+- 真实MySQL、RBAC、目标工作台导航、生产KeepAlive历史和全局共享外壳仍待验。
+- ResponsiveDataView与ResponsiveFilterDrawer只新增可选governance外观，默认消费者保持原样；其他页面仍需各自回归。
+- TableViewControls和TechnicalDetails内部控件不纳入本页23个局部源位置，仍按共享消费者单独验收。
+
+## P56 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P56.json)：13个局部源位置 → 7组；1类写入，7组路由动作，0组转发/容器关联不重复计动作。已映射4/4个源码字段位置，3/3处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有42个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| CT56-LOAD 刷新或重新加载内容台账 / read | 2处；refresh、retry、first-error、reactivation | [default · 1440](design/content-direction-c/1440-default.png) / [default · 390](design/content-direction-c/390-default.png)、[first-error · 1440](design/content-direction-c/1440-first-error.png) / [first-error · 390](design/content-direction-c/390-first-error.png)；其余见JSON | 真实网络、生产权限与长时间缓存恢复仍待验。 |
+| CT56-FILTER 应用、重置或清除内容筛选 / read | 2处；dialog、apply、reset、filtered-empty | [filter-draft · 1440](design/content-direction-c/1440-filter-draft.png) / [filter-draft · 390](design/content-direction-c/390-filter-draft.png)、[filter-empty · 1440](design/content-direction-c/1440-filter-empty.png) / [filter-empty · 390](design/content-direction-c/390-filter-empty.png)；其余见JSON | 真实 MySQL LIKE、中文输入法和浏览器长历史仍待验。 |
+| CT56-REVIEW 从内容记录进入展示状态审核 / local | 2处；desktop-row、mobile-detail、active、irrelevant、stale、same-status | [review-active · 1440](design/content-direction-c/1440-review-active.png) / [review-active · 390](design/content-direction-c/390-review-active.png)、[review-irrelevant · 1440](design/content-direction-c/1440-review-irrelevant.png) / [review-irrelevant · 390](design/content-direction-c/390-review-irrelevant.png)；其余见JSON | 真实动态记录、全部主题与辅助技术仍待验。 |
+| CT56-PAGE 内容台账服务端分页 / read | 1处；previous、next、zero、first、last | [page-first · 1440](design/content-direction-c/1440-page-first.png) / [page-first · 390](design/content-direction-c/390-page-first.png)、[page-last · 1440](design/content-direction-c/1440-page-last.png) / [page-last · 390](design/content-direction-c/390-page-last.png)；其余见JSON | 真实大表页码收束、性能与历史返回待验。 |
+| CT56-TRACE 展开内容读取追踪 / local | 1处；collapsed、expanded | [technical · 1440](design/content-direction-c/1440-technical.png) / [technical · 390](design/content-direction-c/390-technical.png)；其余见JSON | 真实请求编号、读屏播报和复制策略仍待验；本批不新增复制。 |
+| CT56-CANCEL 取消或关闭内容审核 / local | 3处；escape、top-close、footer-cancel、pending-close | [cancelled · 1440](design/content-direction-c/1440-cancelled.png) / [cancelled · 390](design/content-direction-c/390-cancelled.png)、[closed-pending · 1440](design/content-direction-c/1440-closed-pending.png) / [closed-pending · 390](design/content-direction-c/390-closed-pending.png)；其余见JSON | 真实慢网、移动软键盘和跨浏览器返焦仍待验。 |
+| CT56-CONFIRM 确认内容状态审核 / write | 2处；valid、invalid、pending、success、error、unknown、refresh-failed | [reason-min · 1440](design/content-direction-c/1440-reason-min.png) / [reason-min · 390](design/content-direction-c/390-reason-min.png)、[review-pending · 1440](design/content-direction-c/1440-review-pending.png) / [review-pending · 390](design/content-direction-c/390-review-pending.png)；其余见JSON | 真实同源、会话、platform:operate、幂等事务、MySQL 审计和未知结果人工核对待验。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| PlatformContentCenter.vue / query | 热点标题、分类或市场的筛选草稿；应用后 trim 并进入 URL/GET。 | 真实输入法、120字服务校验与长历史待验。 |
+| PlatformContentCenter.vue / status | active、irrelevant、stale、archived 四种读取状态筛选草稿。 | 四状态真实数据分布与权限待验。 |
+| PlatformContentReviewDialog.vue / status | active、irrelevant、stale 三种审核目标；不提供 archived 写入。 | 真实冲突、同状态审计与权限待验。 |
+| PlatformContentReviewDialog.vue / reason | 审核依据，前端和服务端合同均为 trim 后 2–300 字。 | 真实输入法、服务错误与审计落库待验。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| PlatformContentCenter.vue / aside.1 / content-governance-rail | inline-aside / related-scene-only | [default · 1440](design/content-direction-c/1440-default.png) / [default · 390](design/content-direction-c/390-default.png) | 当前 Vue 图独立待审，静态场景只登记设计关系。 |
+| PlatformContentReviewDialog.vue / dialog.1 / content-review | native-dialog / matching-dialog-scene | [review-stale · 1440](design/content-direction-c/1440-review-stale.png) / [review-stale · 390](design/content-direction-c/390-review-stale.png)、[review-error · 1440](design/content-direction-c/1440-review-error.png) / [review-error · 390](design/content-direction-c/390-review-error.png) | 当前 Vue 已覆盖代表成功前状态与请求归属，不等于生产写入。 |
+| PlatformContentReviewDialog.vue / form.1 / content-review-form | form-container / matching-dialog-scene | [reason-min · 1440](design/content-direction-c/1440-reason-min.png) / [reason-min · 390](design/content-direction-c/390-reason-min.png)、[review-pending · 1440](design/content-direction-c/1440-review-pending.png) / [review-pending · 390](design/content-direction-c/390-review-pending.png) | 只覆盖三目标审核，不扩展正文编辑或归档写入。 |
+
+### 明确保留的边界
+
+- 当前 Vue 代表图覆盖默认、手机记录、审核、空结果、权限拒绝和写成功/刷新失败；不是每条动态记录与全部六态穷尽。
+- 共享 NavigationShell 仍保留旧外壳视觉，需在后续壳层批次统一重构；本页批准不得外推到全站。
+- 真实 MySQL、platform:operate、幂等、审计、全主题、读屏/软键盘和生产部署仍待验。
+- PlatformManagementFilter、PlatformManagementRecordList、PlatformContentPagination、ResponsiveDataView 与 ResponsiveFilterDrawer 只由当前页面调用并保持既有业务合同；共享内部按钮另按消费者验证。
+- 当前 Vue 路由夹具覆盖桌面和手机代表状态，不等于真实 MySQL、RBAC、审计或生产签收。

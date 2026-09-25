@@ -774,11 +774,13 @@
       "kind": "local",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationApprovalPanel.vue#f376017b5e1818c0.1",
-        "apps/web/src/components/OrganizationApprovalPanel.vue#184674807c82ee93.1",
-        "apps/web/src/components/OrganizationApprovalPanel.vue#3169b6613d3ce948.1"
+      "apps/web/src/components/OrganizationApprovalPanel.vue#95030381fd924d2b.1",
+      "apps/web/src/components/OrganizationApprovalPanel.vue#87f27ee40744d069.1"
       ],
       "sourceContractKeys": [
-        "OG-A-REQUEST-FILTER重置/分页"
+      "OG-A-REQUEST-FILTER重置",
+      "OG-A-CURRENT-PAGINATION / 审批记录上一页及边界焦点交接",
+      "OG-A-CURRENT-PAGINATION / 审批记录下一页及边界焦点交接"
       ],
       "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
       "condition": "筛选字段无busy禁用；分页按边界禁用，8行一页",
@@ -918,7 +920,7 @@
             390
           ],
           "sourceCandidateIds": [
-            "apps/web/src/components/OrganizationApprovalPanel.vue#184674807c82ee93.1"
+            "apps/web/src/components/OrganizationApprovalPanel.vue#95030381fd924d2b.1"
           ],
           "states": {
             "default": "request-previous-default",
@@ -937,7 +939,7 @@
             390
           ],
           "sourceCandidateIds": [
-            "apps/web/src/components/OrganizationApprovalPanel.vue#3169b6613d3ce948.1"
+            "apps/web/src/components/OrganizationApprovalPanel.vue#87f27ee40744d069.1"
           ],
           "states": {
             "default": "request-next-default",
@@ -955,12 +957,14 @@
       "kind": "local",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationApprovalPanel.vue#2a3781fdd41e7df6.1",
-        "apps/web/src/components/OrganizationApprovalPanel.vue#0b242741fe22e1a9.1",
-        "apps/web/src/components/OrganizationApprovalPanel.vue#0ab42724896b9cf9.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#25d2be8fec5c35cd.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#62fcf758cc715685.1",
         "apps/web/src/components/OrganizationApprovalPanel.vue#97e57c58af0dc63f.1"
       ],
       "sourceContractKeys": [
-        "OG-A-TEMPLATE-FILTER重置/分页/已批准手机空结果清除；清除后焦点回搜索，不写业务数据"
+        "OG-A-TEMPLATE-FILTER重置/已批准手机空结果清除；清除后焦点回搜索，不写业务数据",
+        "OG-A-CURRENT-PAGINATION / 模板目录上一页及边界焦点交接",
+        "OG-A-CURRENT-PAGINATION / 模板目录下一页及边界焦点交接"
       ],
       "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
       "condition": "6行一页；新清除仅模板非空且无匹配、手机可见",
@@ -1100,7 +1104,7 @@
             390
           ],
           "sourceCandidateIds": [
-            "apps/web/src/components/OrganizationApprovalPanel.vue#0b242741fe22e1a9.1"
+            "apps/web/src/components/OrganizationApprovalPanel.vue#25d2be8fec5c35cd.1"
           ],
           "states": {
             "default": "template-previous-default",
@@ -1119,7 +1123,7 @@
             390
           ],
           "sourceCandidateIds": [
-            "apps/web/src/components/OrganizationApprovalPanel.vue#0ab42724896b9cf9.1"
+            "apps/web/src/components/OrganizationApprovalPanel.vue#62fcf758cc715685.1"
           ],
           "states": {
             "default": "template-next-default",

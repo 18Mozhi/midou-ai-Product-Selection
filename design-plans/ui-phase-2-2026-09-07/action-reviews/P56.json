@@ -65,7 +65,12 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实网络、生产权限与长时间缓存恢复仍待验。"
+      "remaining": "真实网络、生产权限与长时间缓存恢复仍待验。",
+      "sourceContractKeys": [
+        "CT56-LOAD 刷新当前内容快照",
+        "CT56-LOAD 首次读取失败后重新加载"
+      ],
+      "contractAliasReason": "按content-notification-evidence-contract-review.md当前源记录逐项绑定合同末列；同页动作分组不改变运行契约。"
     },
     {
       "actionId": "CT56-FILTER",
@@ -109,7 +114,12 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实 MySQL LIKE、中文输入法和浏览器长历史仍待验。"
+      "remaining": "真实 MySQL LIKE、中文输入法和浏览器长历史仍待验。",
+      "sourceContractKeys": [
+        "CT56-FILTER 转发筛选应用与重置",
+        "CT56-FILTER 空结果清除筛选"
+      ],
+      "contractAliasReason": "按content-notification-evidence-contract-review.md当前源记录逐项绑定合同末列；同页动作分组不改变运行契约。"
     },
     {
       "actionId": "CT56-REVIEW",
@@ -163,7 +173,12 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实动态记录、全部主题与辅助技术仍待验。"
+      "remaining": "真实动态记录、全部主题与辅助技术仍待验。",
+      "sourceContractKeys": [
+        "CT56-REVIEW 转发当前记录与目标状态",
+        "CT56-REVIEW 审核热点内容原生窗口定义"
+      ],
+      "contractAliasReason": "按content-notification-evidence-contract-review.md当前源记录逐项绑定合同末列；同页动作分组不改变运行契约。"
     },
     {
       "actionId": "CT56-PAGE",
@@ -207,7 +222,11 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实大表页码收束、性能与历史返回待验。"
+      "remaining": "真实大表页码收束、性能与历史返回待验。",
+      "sourceContractKeys": [
+        "CT56-PAGE 转发服务端分页目标"
+      ],
+      "contractAliasReason": "按content-notification-evidence-contract-review.md当前源记录逐项绑定合同末列；同页动作分组不改变运行契约。"
     },
     {
       "actionId": "CT56-TRACE",
@@ -244,7 +263,11 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实请求编号、读屏播报和复制策略仍待验；本批不新增复制。"
+      "remaining": "真实请求编号、读屏播报和复制策略仍待验；本批不新增复制。",
+      "sourceContractKeys": [
+        "CT56-TRACE 展开本次读取追踪编号"
+      ],
+      "contractAliasReason": "按content-notification-evidence-contract-review.md当前源记录逐项绑定合同末列；同页动作分组不改变运行契约。"
     },
     {
       "actionId": "CT56-CANCEL",
@@ -289,7 +312,13 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实慢网、移动软键盘和跨浏览器返焦仍待验。"
+      "remaining": "真实慢网、移动软键盘和跨浏览器返焦仍待验。",
+      "sourceContractKeys": [
+        "CT56-CANCEL Escape取消审核",
+        "CT56-CANCEL 顶部关闭审核",
+        "CT56-CANCEL 底部取消或等待中关闭窗口"
+      ],
+      "contractAliasReason": "按content-notification-evidence-contract-review.md当前源记录逐项绑定合同末列；同页动作分组不改变运行契约。"
     },
     {
       "actionId": "CT56-CONFIRM",
@@ -348,7 +377,12 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "真实同源、会话、platform:operate、幂等事务、MySQL 审计和未知结果人工核对待验。"
+      "remaining": "真实同源、会话、platform:operate、幂等事务、MySQL 审计和未知结果人工核对待验。",
+      "sourceContractKeys": [
+        "CT56-CONFIRM 审核表单提交",
+        "CT56-CONFIRM 确认审核；原因不足或提交中禁用"
+      ],
+      "contractAliasReason": "按content-notification-evidence-contract-review.md当前源记录逐项绑定合同末列；同页动作分组不改变运行契约。"
     }
   ],
   "surfaceReview": {

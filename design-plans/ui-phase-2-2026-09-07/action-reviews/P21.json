@@ -261,7 +261,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+          "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
         }
       },
       "label": "发起找货",
@@ -374,7 +374,7 @@
           "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219",
           "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
         }
       },
@@ -854,7 +854,7 @@
           "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219",
           "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
         }
       },
@@ -1048,7 +1048,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+          "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
         }
       },
       "label": "选择找货记录",
@@ -1418,7 +1418,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+          "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
         }
       },
       "label": "打开删除确认",
@@ -1682,7 +1682,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+          "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
         }
       },
       "label": "选择报价对比",
@@ -1967,7 +1967,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+          "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
         }
       },
       "label": "打开报价确认",
@@ -2071,7 +2071,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
+          "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
         }
       },
       "label": "打开采购任务",

@@ -449,7 +449,7 @@
           "apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f"
+          "apps/web/src/components/SelectionJourney.vue": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
         }
       },
       "remaining": "真实Vue已补原生四态、中心命中与零副作用，见actualVueLayoutEvidence；旧离线槽仍不冒称该真实Vue证据或全站审批。"

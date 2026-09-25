@@ -6,7 +6,8 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/TaskWorkspace.vue": "fbc03ed2a4db1cb349063301730971e53cb889c1ca734f4618fee0de31f2114e",
-    "apps/web/src/components/TaskDetailPanel.vue": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+    "apps/web/src/components/TaskDetailPanel.vue": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48",
+    "apps/web/src/components/TaskActionDialog.vue": "cb2b008db7e06be3a4b998c67fe2f98f087732ef458ed43dfe3647b165cccf7e"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -28,28 +29,24 @@
       "label": "详情CSS隐藏的列表/导出外层",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1",
+        "apps/web/src/components/TaskWorkspace.vue#d0b5cc25f7a3a006.1",
         "apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1",
         "apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1",
-        "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
+        "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
         "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
-        "apps/web/src/components/TaskWorkspace.vue#2f03957c77c45e54.1",
-        "apps/web/src/components/TaskWorkspace.vue#7080532cf7836b46.1",
         "apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1",
         "apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1"
       ],
       "sourceContractKeys": [
-        "list.create.open：canCreate，showCreate=true；同壳头入口可在详情存在",
-        "view.business：setView，清status/page，保留query/sort",
-        "view.exports：mode=all且report:read；GET /report-exports",
-        "batch.{x}.open/submit/close，batch.field.change：子组件事件中转，不是独立控件",
-        "list.select/status/search/reset/create.open/delete.open：子组件事件中转，不是独立控件",
-        "export.manage：跳/reports",
-        "export.open：跳/reports?report=report_type，不是文件下载",
-        "list.page.previous：页>1可用；清选择、URL更新",
-        "list.page.next：页<pageCount可用；清选择、URL更新"
+        "task.editor.create.open：canCreate时打开新建任务表单",
+        "task.view.business：切回业务任务并保留合同规定的搜索/排序状态",
+        "task.view.exports：all模式且具备report:read时读取导出任务",
+        "task.batch.events：转发批量操作、关闭、确认及字段变化，不新增写路径",
+        "task.list.events：转发列表筛选、选择、新建、删除意图",
+        "task.list.page.previous：上一页；按现有分页规则更新路由并清选择",
+        "task.list.page.next：下一页；按现有分页规则更新路由并清选择"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "taskId使.task-detail-route子级除详情/dialog/状态/notice外display:none；源DOM仍存在。",
       "handler": "头部创建、视图切换、列表/批量中转、报表链接和分页在普通详情不可见；不是删除功能。",
       "variants": [
@@ -85,9 +82,9 @@
         "apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1"
       ],
       "sourceContractKeys": [
-        "read.retry：错误区load；列表/详情/导出按当前分支重读"
+        "task.read.retry：按当前列表/详情/导出分支重新读取"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "loading之外五错误状态可见",
       "handler": "load；普通taskId读详情与成员，exports query异常分支另见报告",
       "variants": [
@@ -141,13 +138,15 @@
       "kind": "local",
       "sourceCandidateIds": [
         "apps/web/src/components/TaskWorkspace.vue#4caa7d3977955464.1",
-        "apps/web/src/components/TaskWorkspace.vue#012988ab20dde0d0.1"
+        "apps/web/src/components/TaskWorkspace.vue#012988ab20dde0d0.1",
+        "apps/web/src/components/TaskWorkspace.vue#81afeaed16968ac8.1"
       ],
       "sourceContractKeys": [
-        "editor.close：原生cancel→handleCreateCancel→closeTaskEditor",
-        "editor.close：取消按钮；busy禁用；清快捷创建query"
+        "task.editor.close：原生cancel交由handleCreateCancel关闭",
+        "task.editor.close：取消，不提交；busy时禁用",
+        "task.editor.close：关闭编辑窗；busy时禁用"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "原生cancel不受busy守卫；取消按钮busy禁用",
       "handler": "useModalDialog→closeTaskEditor；清showCreate/editing及快捷query",
       "variants": [
@@ -187,14 +186,14 @@
       "label": "新建/编辑提交",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#e394f71c3c789c95.1",
+        "apps/web/src/components/TaskWorkspace.vue#da64891e5fca6a6a.1",
         "apps/web/src/components/TaskWorkspace.vue#eede115bf64bea46.1"
       ],
       "sourceContractKeys": [
-        "editor.{create,edit}.submit：表单submit→create函数，按editing选择POST/PATCH",
-        "editor.{create,edit}.submit：表单提交按钮；busy禁用，不另算业务动作"
+        "task.editor.create/edit.submit：沿用现有POST/PATCH与字段边界",
+        "task.editor.create/edit.submit：同一表单的确认提交入口"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "create需task:create，edit需task:update；busy守卫；原生标题required",
       "handler": "create：无editing POST /tasks；editing PATCH /tasks/id，保留原assignee/version/reason，due本地时间转ISO/null",
       "variants": [
@@ -232,14 +231,16 @@
       "label": "取消删除",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#184beea2f6fd5456.1",
-        "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1"
+        "apps/web/src/components/TaskWorkspace.vue#8acacf9139ac6dfa.1",
+        "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1",
+        "apps/web/src/components/TaskWorkspace.vue#a51d0235ae15a867.1"
       ],
       "sourceContractKeys": [
-        "delete.close：原生cancel→清目标及原因",
-        "delete.close：取消按钮，busy禁用"
+        "task.delete.close：原生cancel通过handleDeleteCancel清目标/原因",
+        "task.delete.close：取消删除；busy时禁用",
+        "task.delete.close：关闭确认窗，不提交"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "取消按钮busy禁用，原生cancel无busy守卫",
       "handler": "closeDeleteDialog清deleting/deleteReason，不撤回DELETE",
       "variants": [
@@ -273,14 +274,14 @@
       "label": "确认删除",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#a7d1ecc8ced537b9.1",
+        "apps/web/src/components/TaskWorkspace.vue#8761299256f1d051.1",
         "apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1"
       ],
       "sourceContractKeys": [
-        "delete.submit：表单submit→removeTask",
-        "delete.submit：确认按钮，busy禁用"
+        "task.delete.submit：按当前任务版本及既有原因合同调用removeTask",
+        "task.delete.submit：确认删除；busy时禁用"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update、deleting存在、原因trim非空，busy守卫",
       "handler": "DELETE /tasks/id带目标version/reason；若删当前详情则router.replace(returnPath)",
       "variants": [
@@ -315,12 +316,14 @@
       "label": "关闭详情返回",
       "kind": "navigation",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#0513954362e80472.1"
+        "apps/web/src/components/TaskDetailPanel.vue#0513954362e80472.1",
+        "apps/web/src/components/TaskWorkspace.vue#3c7748edf9778e0b.1"
       ],
       "sourceContractKeys": [
-        "detail.return：只接受/work、/tasks及其query，否则/tasks"
+        "task.detail.return：以受校验returnPath关闭/返回详情",
+        "task.detail.return：详情返回已校验的/work或/tasks来源路径"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "详情可见",
       "handler": "RouterLink returnPath只接受/work或/tasks及其query，否则/tasks",
       "variants": [
@@ -354,12 +357,12 @@
       "label": "查看关联采集任务",
       "kind": "navigation",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#a450361745c05a56.1"
+        "apps/web/src/components/TaskDetailPanel.vue#4b6f7881ce07fb6b.1"
       ],
       "sourceContractKeys": [
-        "detail.collection.open：有collection_task_id，跳平台采集页；权限由目标裁决"
+        "task.detail.collection.open：有collection_task_id时跳现有采集详情入口"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task.collection_task_id存在",
       "handler": "RouterLink /platform-admin/collection?task=id，权限由目标路由/服务裁决",
       "variants": [
@@ -393,12 +396,12 @@
       "label": "技术详情",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#1c008f867673db60.1"
+        "apps/web/src/components/TaskDetailPanel.vue#1d663944bdde1289.1"
       ],
       "sourceContractKeys": [
-        "detail.technical.toggle：原生details，账号/任务编号渐进展示"
+        "task.detail.technical.toggle：原生details展开技术事实"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "详情可见",
       "handler": "原生details/summary只展示任务/负责人ID",
       "variants": [
@@ -435,9 +438,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#f293cf86b53f5f82.1"
       ],
       "sourceContractKeys": [
-        "detail.start：canUpdate+todo；直接POST动作，无原因弹窗"
+        "task.detail.start：canUpdate且todo时发送既有开始意图"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update且todo；按钮busy禁用，action函数另守卫busy/capability",
       "handler": "action直接POST /tasks/id/actions，action/expected_version；成功openById原ID并成员刷新",
       "variants": [
@@ -475,9 +478,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#86ef5792f91935ac.1"
       ],
       "sourceContractKeys": [
-        "detail.resume：canUpdate+paused；直接POST动作"
+        "task.detail.resume：canUpdate且paused时发送继续意图"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update且paused；按钮busy禁用，action函数另守卫busy/capability",
       "handler": "action直接POST /tasks/id/actions，action/expected_version；成功openById原ID并成员刷新",
       "variants": [
@@ -515,9 +518,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#41b7ff02cd9481cd.1"
       ],
       "sourceContractKeys": [
-        "detail.complete：canUpdate+todo/in_progress/paused；直接POST动作"
+        "task.detail.complete：允许状态下发送完成意图"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update且todo/in_progress/paused；按钮busy禁用，action函数另守卫busy/capability",
       "handler": "action直接POST /tasks/id/actions，action/expected_version；成功openById原ID并成员刷新",
       "variants": [
@@ -555,9 +558,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#d15fb86b9a1883f9.1"
       ],
       "sourceContractKeys": [
-        "detail.progress.open：canUpdate且未结束；预填进度及说明"
+        "task.detail.progress.open：可更新且未结束时打开进度操作"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update且非终态；按钮busy禁用",
       "handler": "action('progress')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
       "variants": [
@@ -593,9 +596,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#5f5bf5a382300046.1"
       ],
       "sourceContractKeys": [
-        "detail.pause.open：canUpdate+in_progress"
+        "task.detail.pause.open：进行中且可更新时打开暂停操作"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update且in_progress；按钮busy禁用",
       "handler": "action('pause')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
       "variants": [
@@ -631,9 +634,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#8a192d8df4bae23e.1"
       ],
       "sourceContractKeys": [
-        "detail.delay.open：canUpdate且未结束"
+        "task.detail.delay.open：未结束且可更新时打开延期操作"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update且非终态；按钮busy禁用",
       "handler": "action('delay')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
       "variants": [
@@ -669,9 +672,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#b841d884628a5445.1"
       ],
       "sourceContractKeys": [
-        "detail.transfer.open：canAssign，不自行附加终态限制"
+        "task.detail.transfer.open：canAssign时打开转交操作"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:assign独立，源码未加终态限制；按钮busy禁用",
       "handler": "action('transfer')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
       "variants": [
@@ -707,9 +710,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#a6808a15ac396ea9.1"
       ],
       "sourceContractKeys": [
-        "detail.cancel.open：canUpdate且未结束"
+        "task.detail.cancel.open：未结束且可更新时打开取消操作"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update且非终态；按钮busy禁用",
       "handler": "action('cancel')→openActionEditor，预填selected的期限/负责人/进度/说明并清原因",
       "variants": [
@@ -745,9 +748,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#d0b869ee32723b5a.1"
       ],
       "sourceContractKeys": [
-        "detail.more.toggle：canUpdate或canAssign，原生details"
+        "task.detail.more.toggle：原生details展开更多操作"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "canUpdate或canAssign",
       "handler": "原生details，收起隐藏暂停/期限/转交/编辑/取消/删除",
       "variants": [
@@ -784,9 +787,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#be1075cbce90c814.1"
       ],
       "sourceContractKeys": [
-        "editor.edit.open：canUpdate，预填selected事实"
+        "task.editor.edit.open：可更新时带入当前任务事实编辑"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update；busy禁用；不额外排除终态",
       "handler": "editTask预填selected标题/说明/优先级/期限，保留负责人/版本供PATCH",
       "variants": [
@@ -823,9 +826,9 @@
         "apps/web/src/components/TaskDetailPanel.vue#7ac1d2b58faaa7e3.1"
       ],
       "sourceContractKeys": [
-        "delete.open：canUpdate，目标为selected"
+        "task.delete.open：可更新时以当前任务为目标"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update；busy禁用；不额外排除终态",
       "handler": "askRemove(task)设置真实目标并清删除原因",
       "variants": [
@@ -859,14 +862,14 @@
       "label": "添加评论",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#ed8efea9c40be3fa.1",
+        "apps/web/src/components/TaskDetailPanel.vue#cfed52ae67aff818.1",
         "apps/web/src/components/TaskDetailPanel.vue#3b0242c6256a5a86.1"
       ],
       "sourceContractKeys": [
-        "comment.submit：canUpdate；POST comments，非空、最多2000",
-        "comment.submit：与D212同一表单提交，busy禁用"
+        "task.comment.submit：非空且可更新时提交既有评论",
+        "task.comment.submit：评论表单确认按钮，与form提交同一动作"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update；busy、非空trim守卫；原生required/max2000",
       "handler": "addComment POST /tasks/id/comments，body原文不trim；成功清评论并刷新原taskId",
       "variants": [
@@ -901,12 +904,12 @@
       "label": "评论输入",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#164700beea75a50a.1"
+        "apps/web/src/components/TaskDetailPanel.vue#94e1d0868125b246.1"
       ],
       "sourceContractKeys": [
-        "comment.change：本地草稿input，busy禁用；不落浏览器存储"
+        "task.comment.change：评论文本本地受控更新，最多2000字符"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "task:update；textarea busy禁用",
       "handler": "emit update:comment→父comment，本地草稿，不持久化浏览器存储",
       "variants": [
@@ -941,14 +944,16 @@
       "label": "返回或Escape关闭单项表单",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#46e431fb8f9cec9e.1",
-        "apps/web/src/components/TaskDetailPanel.vue#fbcbfc84994eaf3e.1"
+        "apps/web/src/components/TaskActionDialog.vue#1f7b4a3946e7b521.1",
+        "apps/web/src/components/TaskActionDialog.vue#4250ff53e6ced813.1",
+        "apps/web/src/components/TaskActionDialog.vue#165bdfdc450806aa.1"
       ],
       "sourceContractKeys": [
-        "detail.{x}.close：原生cancel→closeAction，五变体共用",
-        "detail.{x}.close：返回按钮，无写入；不同于取消任务动作"
+        "task.action.close：原生cancel事件通过useModalDialog转发close",
+        "task.action.close：标题关闭，发出close意图",
+        "task.action.close：返回并发出close意图，不提交"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "五变体共用；返回无disabled，原生cancel无busy守卫",
       "handler": "closeAction→父taskActionEditor=null，不撤销已发请求",
       "variants": [
@@ -1001,14 +1006,14 @@
       "label": "确认单项操作",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#950c1a9d40721d87.1",
-        "apps/web/src/components/TaskDetailPanel.vue#c74a96fead2d3bc1.1"
+        "apps/web/src/components/TaskActionDialog.vue#49e39fae6c4761e0.1",
+        "apps/web/src/components/TaskActionDialog.vue#b13fdf83b41280a4.1"
       ],
       "sourceContractKeys": [
-        "detail.{x}.submit：submitTaskAction，五变体按action构造字段",
-        "detail.{x}.submit：与D231同一表单提交，busy禁用"
+        "task.action.{x}.submit：阻止原生导航并发出既有submit意图",
+        "task.action.submit：busy时禁用，其他校验沿用既有原生表单规则"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "transfer用canAssign；其他用canUpdate；busy/selected/editor守卫，原生字段校验",
       "handler": "submitTaskAction：POST /tasks/id/actions，五变体按原action/version及字段构造",
       "variants": [
@@ -1061,12 +1066,12 @@
       "label": "接收成员",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#fd868cd01ff93343.1"
+        "apps/web/src/components/TaskActionDialog.vue#b98ee0914d5c9a2b.1"
       ],
       "sourceContractKeys": [
-        "detail.transfer.assignee.change：成员目录select→本地模型"
+        "task.action.transfer.assignee.change：受控更新assignee_id"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "transfer",
       "handler": "select→updateActionForm('assignee_id')，真实member-options",
       "variants": [
@@ -1100,12 +1105,12 @@
       "label": "新截止时间",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#5223264cc91ca9cd.1"
+        "apps/web/src/components/TaskActionDialog.vue#a9adc9267c5c27c8.1"
       ],
       "sourceContractKeys": [
-        "detail.delay.due.change：datetime-local→本地模型"
+        "task.action.delay.due.change：受控更新due_at"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "delay",
       "handler": "datetime-local→due_at；提交时ISO",
       "variants": [
@@ -1139,12 +1144,12 @@
       "label": "完成进度",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#d5c7036343c5823b.1"
+        "apps/web/src/components/TaskActionDialog.vue#df38c979691f23fa.1"
       ],
       "sourceContractKeys": [
-        "detail.progress.percent.change：数字0–100，整数步进"
+        "task.action.progress.percent.change：受控更新整数进度字段"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "progress",
       "handler": "Number(input.value)，min0/max100/step1/required",
       "variants": [
@@ -1183,12 +1188,12 @@
       "label": "进展说明",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#9548ae8bcbbf6e9e.1"
+        "apps/web/src/components/TaskActionDialog.vue#14febafe1696c7dc.1"
       ],
       "sourceContractKeys": [
-        "detail.progress.note.change：必填说明，最多500"
+        "task.action.progress.note.change：受控更新进展说明"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "progress",
       "handler": "updateActionForm('progress_note')，required/max500",
       "variants": [
@@ -1226,12 +1231,12 @@
       "label": "操作原因",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#3d37f15c32bb38a7.1"
+        "apps/web/src/components/TaskActionDialog.vue#9cc07b04486546f0.1"
       ],
       "sourceContractKeys": [
-        "detail.{pause,cancel,delay,transfer}.reason.change：必填原因，最多500"
+        "task.action.reason.change：非progress变体更新原因"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "pause/cancel/delay/transfer",
       "handler": "updateActionForm('reason')，required/max500",
       "variants": [
@@ -1282,9 +1287,9 @@
         "apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1"
       ],
       "sourceContractKeys": [
-        "task.editor.create / task.editor.edit（2变体）"
+        "task.editor.create/edit：新建与编辑共享既有表单"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "共享定义/事件转发，不计新业务动作",
       "handler": "现有emit/父级handler关联",
       "variants": [
@@ -1317,12 +1322,12 @@
       "label": "删除窗定义",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1"
+        "apps/web/src/components/TaskWorkspace.vue#6c7534a24387a114.1"
       ],
       "sourceContractKeys": [
-        "task.delete（1变体）"
+        "task.delete：显示目标、影响、原因及保留审计的事实"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "共享定义/事件转发，不计新业务动作",
       "handler": "现有emit/父级handler关联",
       "variants": [
@@ -1355,12 +1360,12 @@
       "label": "五单项表单定义",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#dfce0d7d3dc167b7.1"
+        "apps/web/src/components/TaskActionDialog.vue#dfe715d92a013343.1"
       ],
       "sourceContractKeys": [
-        "task.action.progress / pause / cancel / delay / transfer（5变体）"
+        "task.action.{progress,pause,cancel,delay,transfer}：详情共享动作表单"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "共享定义/事件转发，不计新业务动作",
       "handler": "现有emit/父级handler关联",
       "variants": [
@@ -1396,9 +1401,9 @@
         "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1"
       ],
       "sourceContractKeys": [
-        "detail.{x}，editor.edit.open，delete.open，comment.submit：详情事件中转，field更新只是本地模型"
+        "task.detail.events：接收详情动作/编辑/删除/评论及表单模型变化"
       ],
-      "contractAliasReason": "沿原任务合同完整末列定位；P24逐页合并同一提交/关闭来源，CSS归属差异以现源码和独立说明为准，不新增业务合同。",
+      "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "共享定义/事件转发，不计新业务动作",
       "handler": "现有emit/父级handler关联",
       "variants": [
@@ -1518,6 +1523,105 @@
           ]
         }
       ]
+    },
+    {
+      "actionId": "detail.action-dialog.forward",
+      "label": "详情动作弹窗事件转发",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskDetailPanel.vue#0579ef0b6730d28e.1",
+        "apps/web/src/components/TaskDetailPanel.vue#8ca0441eaf16df40.1"
+      ],
+      "sourceContractKeys": [
+        "task.action-dialog.events：将关闭/提交/字段更新转发给父级所有者",
+        "task.action.dialog.render：渲染独立TaskActionDialog，不由本组件发请求"
+      ],
+      "contractAliasReason": "对应TaskDetailPanel当前组件事件绑定与独立弹窗渲染调用；两种扫描候选均产生同一组现有事件。",
+      "condition": "详情动作变体挂载TaskActionDialog",
+      "handler": "仅把既有close、submit、update:actionForm意图转发给详情面板所有者，不发请求。",
+      "forwardsTo": [
+        "detail.action.close",
+        "detail.action.submit",
+        "detail.transfer.assignee.change",
+        "detail.delay.due.change",
+        "detail.progress.percent.change",
+        "detail.progress.note.change",
+        "detail.action.reason.change"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#0579ef0b6730d28e.1",
+          "event": "@submit",
+          "handler": "emit('submitAction')",
+          "targets": [
+            "detail.action.submit"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#0579ef0b6730d28e.1",
+          "event": "@close",
+          "handler": "emit('closeAction')",
+          "targets": [
+            "detail.action.close"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#0579ef0b6730d28e.1",
+          "event": "@update:action-form",
+          "handler": "emit('update:actionForm', $event)",
+          "targets": [
+            "detail.transfer.assignee.change",
+            "detail.delay.due.change",
+            "detail.progress.percent.change",
+            "detail.progress.note.change",
+            "detail.action.reason.change"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#8ca0441eaf16df40.1",
+          "event": "@submit",
+          "handler": "emit('submitAction')",
+          "targets": [
+            "detail.action.submit"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#8ca0441eaf16df40.1",
+          "event": "@close",
+          "handler": "emit('closeAction')",
+          "targets": [
+            "detail.action.close"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#8ca0441eaf16df40.1",
+          "event": "@update:action-form",
+          "handler": "emit('update:actionForm', $event)",
+          "targets": [
+            "detail.transfer.assignee.change",
+            "detail.delay.due.change",
+            "detail.progress.percent.change",
+            "detail.progress.note.change",
+            "detail.action.reason.change"
+          ]
+        }
+      ],
+      "variants": [
+        "close",
+        "submit",
+        "field-model"
+      ],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "事件所有权连接，不独立提交；父级仍保持TaskWorkspace中的既有请求所有权。"
     }
   ],
   "surfaceReview": {
@@ -1525,14 +1629,13 @@
     "includeStructuralContainers": true,
     "files": [
       "apps/web/src/components/TaskWorkspace.vue",
-      "apps/web/src/components/TaskDetailPanel.vue"
+      "apps/web/src/components/TaskDetailPanel.vue",
+      "apps/web/src/components/TaskActionDialog.vue"
     ],
     "dependencyHashes": {
       "apps/web/src/components/TaskWorkspace.vue": "fbc03ed2a4db1cb349063301730971e53cb889c1ca734f4618fee0de31f2114e",
       "apps/web/src/components/TaskDetailPanel.vue": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48",
-      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
-      "apps/web/src/components/task-workspace-types.ts": "be914dacd68e7d4c163605082e74b9ee1ac91b07429ab68b6c08139903091b0a",
-      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+      "apps/web/src/components/TaskActionDialog.vue": "cb2b008db7e06be3a4b998c67fe2f98f087732ef458ed43dfe3647b165cccf7e"
     },
     "inputs": [
       {
@@ -1675,27 +1778,6 @@
       },
       {
         "file": "apps/web/src/components/TaskDetailPanel.vue",
-        "tag": "aside",
-        "ordinal": 1,
-        "shape": "inline-aside",
-        "sourceBehavior": "独立页常驻aside，不是抽屉弹窗；事实/活动/评论/主次操作。",
-        "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
-        "variants": [
-          {
-            "name": "detail",
-            "evidenceScope": "related-scene-only",
-            "scenes": [
-              {
-                "package": "task-direction-c",
-                "scene": "detail"
-              }
-            ],
-            "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。"
-          }
-        ]
-      },
-      {
-        "file": "apps/web/src/components/TaskDetailPanel.vue",
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",
@@ -1716,7 +1798,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/TaskDetailPanel.vue",
+        "file": "apps/web/src/components/TaskActionDialog.vue",
         "tag": "dialog",
         "ordinal": 1,
         "shape": "native-dialog",
@@ -1781,9 +1863,9 @@
         ]
       },
       {
-        "file": "apps/web/src/components/TaskDetailPanel.vue",
+        "file": "apps/web/src/components/TaskActionDialog.vue",
         "tag": "form",
-        "ordinal": 2,
+        "ordinal": 1,
         "shape": "form-container",
         "sourceBehavior": "单个原生dialog的五操作变体；表单不是新增独立弹窗。返回与字段在途可操作。",
         "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",

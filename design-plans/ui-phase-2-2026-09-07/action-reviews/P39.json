@@ -50,7 +50,7 @@
       "label": "进入用户管理目录",
       "kind": "navigation",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#ffed2dd7f439c4b0.1"
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#968274c5acaf5a33.1"
       ],
       "condition": "当前P39 overview分支（adminListRoute=false）",
       "handler": "RouterLink进入/platform-admin/users；P43表格交互另页映射",
