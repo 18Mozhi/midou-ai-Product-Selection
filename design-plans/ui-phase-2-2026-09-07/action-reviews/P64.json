@@ -1,0 +1,241 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P64",
+  "route": "/platform-admin/operations",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/BackupRecoveryCenter.vue": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
+    "apps/web/src/components/BackupRecoveryDirectory.vue": "0539b4adcbf1793d337dbefff0ccfa36d45295f1d35d8ac0c4f3e8bac1e237b7"
+  },
+  "inputs": {},
+  "actions": [
+    {
+      "actionId": "BR64-LOAD",
+      "kind": "read",
+      "label": "读取或刷新当前备份与恢复只读事实",
+      "sourceCandidateIds": [
+        "apps/web/src/components/BackupRecoveryCenter.vue#32472f95c82e1a43.1"
+      ],
+      "sourceContractKeys": [
+        "BR64-CURRENT-LOAD / 请求刷新当前备份与恢复只读事实"
+      ],
+      "contractAliasReason": "依照P64备份恢复合同当前源身份归组；保留只读读取和真实事实边界。",
+      "condition": "用户请求读取或刷新当前备份与恢复事实时。",
+      "handler": "沿用当前 platform:operate GET、既有单飞/15秒客户端等待和服务读取范围；页面只展示最近备份、演练、资产与阻断事实。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p64-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "页面刷新不是备份、恢复、演练、下载密文或数据库零写入证明。"
+    },
+    {
+      "actionId": "BR64-RETRY",
+      "kind": "read",
+      "label": "在失败状态下重新核验备份恢复快照",
+      "sourceCandidateIds": [
+        "apps/web/src/components/BackupRecoveryCenter.vue#0227b741c3d451ee.1",
+        "apps/web/src/components/BackupRecoveryCenter.vue#a93553a3ba9aa8a6.1"
+      ],
+      "sourceContractKeys": [
+        "BR64-CURRENT-RETRY / 已有数据且最近刷新失败时重新核验",
+        "BR64-CURRENT-RETRY / 首次错误等非forbidden且未进入登录分支的状态重读"
+      ],
+      "contractAliasReason": "依照P64备份恢复合同当前源身份归组；保留只读读取和真实事实边界。",
+      "condition": "已有快照刷新失败，或首次读取进入可重读且非forbidden/登录跳转分支时。",
+      "handler": "复用同一只读事实请求；已有快照失败重读沿原快照与请求编号边界，不创建备份或演练。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p64-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "重读通过不证明真实授权、资产完整性或恢复可用。"
+    },
+    {
+      "actionId": "BR64-LOGIN",
+      "kind": "navigation",
+      "label": "会话过期时重新登录",
+      "sourceCandidateIds": [
+        "apps/web/src/components/BackupRecoveryCenter.vue#5587941412d5210f.1"
+      ],
+      "sourceContractKeys": [
+        "BR64-LOGIN 过期登录"
+      ],
+      "contractAliasReason": "依照P64备份恢复合同当前源身份归组；保留只读读取和真实事实边界。",
+      "condition": "当前读取明确返回登录过期时。",
+      "handler": "导航至既有登录入口；不把forbidden状态伪装成可重试，也不复制敏感响应。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p64-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "导航不证明重新认证成功或具有platform:operate权限。"
+    },
+    {
+      "actionId": "BR64-TECH",
+      "kind": "local",
+      "label": "展开资产或阻断事实的技术详情",
+      "sourceCandidateIds": [
+        "apps/web/src/components/BackupRecoveryCenter.vue#1c008f867673db60.1",
+        "apps/web/src/components/BackupRecoveryCenter.vue#1c008f867673db60.2",
+        "apps/web/src/components/BackupRecoveryCenter.vue#1c008f867673db60.3"
+      ],
+      "sourceContractKeys": [
+        "BR64-TECH 桌面资产",
+        "BR64-TECH 移动资产",
+        "BR64-TECH 阻断代码"
+      ],
+      "contractAliasReason": "依照P64备份恢复合同当前源身份归组；保留只读读取和真实事实边界。",
+      "condition": "桌面/移动资产或阻断记录提供技术详情披露入口时。",
+      "handler": "只展开响应已返回的追踪/技术字段，不发请求；请求编号复制使用既有共享TechnicalDetails合同。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p64-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本页局部披露不证明真实MySQL审计或复制剪贴板权限/读屏验收。"
+    },
+    {
+      "actionId": "BR64-DIRECTORY-NAV",
+      "kind": "navigation",
+      "label": "跳转到本页目标、恢复证据或备份资产分区",
+      "sourceCandidateIds": [
+        "apps/web/src/components/BackupRecoveryDirectory.vue#6b6da7e2248b5970.1",
+        "apps/web/src/components/BackupRecoveryDirectory.vue#90f85112b27af94e.1",
+        "apps/web/src/components/BackupRecoveryDirectory.vue#cbe3ce9e478ff362.1"
+      ],
+      "sourceContractKeys": [
+        "BR64-DIRECTORY-CURRENT-NAV / 跳转本页目标与实际锚点",
+        "BR64-DIRECTORY-CURRENT-NAV / 跳转本页恢复证据锚点",
+        "BR64-DIRECTORY-CURRENT-NAV / 跳转本页备份资产锚点"
+      ],
+      "contractAliasReason": "依照P64备份恢复合同当前源身份归组；保留只读读取和真实事实边界。",
+      "condition": "用户选择本页目录中的事实分区时。",
+      "handler": "只定位当前页已有锚点，不触发重新读取、创建任务或改变恢复策略。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p64-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "页内导航不表示所选资产具备完整性、可解密性或恢复资格。"
+    }
+  ],
+  "pageScopeExclusions": {
+    "sharedFiles": [
+      {
+        "file": "apps/web/src/components/ResponsiveDataView.vue",
+        "rationale": "移动资产只读详情由共享组件实现并由既有P38/P46/P47映射归属；本页按P64消费者合同交叉引用，不重复占用共享候选。"
+      },
+      {
+        "file": "apps/web/src/components/TableViewControls.vue",
+        "rationale": "列设置、列可见性和冻结为多页共享表格控件，已有共享源动作映射；P64列标签消费者说明由P64组件合同约束。"
+      },
+      {
+        "file": "apps/web/src/components/TechnicalDetails.vue",
+        "rationale": "请求编号详情与复制控件为P64/P65共享组件候选，由既有共享源动作映射归属；P64三处调用点仍分别映射到BR64-TECH。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformManagementCenter.vue",
+        "rationale": "父入口的会话/权限/读取请求所有者为共享平台管理范围，不把其他域路由动作记为P64局部控件。"
+      }
+    ],
+    "remaining": "只读详情、表格列设置、请求编号复制及平台父级调用不重复计数；P64本页没有备份、恢复、演练或密文下载执行入口。"
+  },
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "本页只复用ResponsiveDataView的只读资产详情抽屉；共享复制详情由TechnicalDetails处理。不存在备份/恢复/演练执行确认窗。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/BackupRecoveryCenter.vue",
+      "apps/web/src/components/BackupRecoveryDirectory.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/BackupRecoveryCenter.vue": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
+      "apps/web/src/components/BackupRecoveryDirectory.vue": "0539b4adcbf1793d337dbefff0ccfa36d45295f1d35d8ac0c4f3e8bac1e237b7"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "只读资产详情、表格列控件、技术编号复制由共享组件源动作映射负责；本页三处TechnicalDetails调用位置仍按P64映射归组。"
+    ],
+    "remaining": "静态动作映射不证明真实platform:operate、MySQL审计、加密强度、隔离恢复演练、备份资格或正式M07-04验收。"
+  },
+  "compositionGaps": [
+    "10个当前P64专属组件候选映射至5组页面动作；共享详情/列设置/复制由已有共享组件映射引用。",
+    "页面没有创建备份、执行恢复、启动演练、删除资产或下载密文的动作；不得据UI补入执行流程。",
+    "本页展示目标和实测分开；null、0、未知、过期与阻断保持服务事实语义，不推导真实恢复能力。"
+  ]
+}

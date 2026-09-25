@@ -335,3 +335,9 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | apps/web/src/components/ResponsiveDataView.vue#4fa7deb3456a41ae.1 | 三页移动详情Escape | `responsive-detail-focus-contract-review.md` shared.detail.keyboard |
 | apps/web/src/components/ResponsiveDataView.vue#53d89072117d7eda.1 | 三页移动详情遮罩关闭 | `responsive-detail-focus-contract-review.md` shared.detail.scrim.close |
 | apps/web/src/components/ResponsiveDataView.vue#e23893d134b1daa1.1 | 三页移动详情dialog定义 | `responsive-detail-focus-contract-review.md` shared.detail.dialog |
+
+## 13. P64 备份恢复当前页面动作归组（2026-09-26）
+
+`action-reviews/P64.json`将 `BackupRecoveryCenter.vue` 与 `BackupRecoveryDirectory.vue` 当前10个页面专属候选映射为只读刷新、失败重读、登录导航、技术披露和页内导航。refresh/retry两种状态入口分开记数，三处技术详情与三项页内导航按同一页面动作归组。
+
+`ResponsiveDataView`只读资产详情、`TableViewControls`列设置与`TechnicalDetails`编号复制属于已映射共享源候选，本页仅交叉引用消费者，不重复归属。P64没有备份/恢复/演练/删除/密文下载执行按钮。映射不批准动作，不代表真实platform:operate、MySQL审计、加密或隔离恢复验收。
