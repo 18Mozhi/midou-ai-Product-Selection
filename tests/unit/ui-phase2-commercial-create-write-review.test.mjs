@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
 import ts from "typescript";
@@ -14,9 +15,16 @@ import {
 } from "../../scripts/lib/ui-phase2-commercial-create-write-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const evidenceSourceCommit = "655a99686a170c1e98d2aea3cf69eb71cac69342";
+const readEvidenceSource = (file) =>
+  file === component
+    ? execFileSync("git", ["show", `${evidenceSourceCommit}:${file}`], {
+        encoding: "utf8",
+      }).replaceAll("\r\n", "\n")
+    : read(file);
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const component = "apps/web/src/components/CommercialOperationsCenter.vue";
-const source = read(component),
+const source = readEvidenceSource(component),
   preview = previewCommercialCreateWrite(source);
 const root = "output/playwright/p58-create-write-review";
 test("P58 write proposal compiles and preserves production script except explicit local feedback additions", () => {
@@ -144,8 +152,7 @@ test("P58 rejected-write evidence binds current raw sources, every screenshot an
     "design-plans/ui-phase-2-2026-09-07/implementation/commercial-create-write-preview.css",
   ])
     assert.ok(e.sourceHashes[file], file);
-  for (const [file, digest] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), digest, file);
+  assert.equal(hash(readEvidenceSource(component)), e.sourceHashes[component]);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

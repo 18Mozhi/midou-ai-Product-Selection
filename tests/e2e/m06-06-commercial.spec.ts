@@ -84,6 +84,135 @@ test("M06-06.A07/A08/A15 desktop and 390 quota management", async ({ page }) => 
   await expect(page.locator(".commercial-catalog").getByText("成长配额方案")).toBeVisible();
   await expect(page.getByText(/会员|续期|套餐/)).toHaveCount(0);
 });
+test("M06-06 create dialog C composition, native code constraint and pending/denied feedback", async ({
+  page,
+}) => {
+  let resolveCreate!: (response: {
+    status: number;
+    contentType: string;
+    body: string;
+  }) => Promise<void>;
+  let submittedBody: any;
+  let postCount = 0;
+  await page.route("**/api/v1/platform/commercial/plans", async (route) => {
+    postCount += 1;
+    submittedBody = route.request().postDataJSON();
+    await new Promise<void>((resolve) => {
+      resolveCreate = async (response) => {
+        await route.fulfill(response);
+        resolve();
+      };
+    });
+  });
+
+  await page.goto("/platform-admin/commercial");
+  await page.getByRole("button", { name: "新建配额方案", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "创建配额方案草稿" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("heading", { name: "创建配额方案草稿" })).toBeVisible();
+  await expect(dialog.getByRole("complementary", { name: "表单内容说明" })).toContainText(
+    "额度是配置值，不是使用量，也不是收费价格。",
+  );
+  await expect(dialog.getByRole("region", { name: "方案资料" })).toBeVisible();
+  await expect(dialog.locator("input, textarea")).toHaveCount(7);
+  await expect(dialog).toHaveJSProperty("open", true);
+  expect(
+    await dialog
+      .locator("form")
+      .evaluate((form) => getComputedStyle(form).gridTemplateColumns.split(" ").length),
+  ).toBe((page.viewportSize()?.width ?? 0) > 760 ? 2 : 1);
+  expect(await dialog.evaluate((element) => element.scrollWidth <= element.clientWidth)).toBe(true);
+  expect(
+    await dialog.locator("header").evaluate((element) => getComputedStyle(element).backgroundColor),
+  ).toBe("rgb(16, 42, 99)");
+
+  const code = dialog.getByLabel("内部标识");
+  await code.fill("bad code");
+  expect(await code.evaluate((input: HTMLInputElement) => input.validity.patternMismatch)).toBe(
+    true,
+  );
+  await code.fill("basic_2026");
+  expect(await code.evaluate((input: HTMLInputElement) => input.validity.patternMismatch)).toBe(
+    false,
+  );
+  await dialog.getByLabel("方案名称").fill("基础配额方案");
+  await expect(dialog.getByText("采集任务", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("外部接口请求", { exact: true })).toBeVisible();
+  await expect(dialog.getByText("报表导出", { exact: true })).toBeVisible();
+
+  await dialog.getByRole("button", { name: "创建草稿", exact: true }).click();
+  await expect(dialog.getByRole("status")).toContainText("正在创建草稿");
+  await expect(dialog.locator("input:disabled, textarea:disabled")).toHaveCount(7);
+  await expect(dialog.getByRole("button", { name: "关闭新建配额方案" })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "取消", exact: true })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "创建中…" })).toBeDisabled();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeVisible();
+
+  await expect.poll(() => postCount).toBe(1);
+  expect(submittedBody).toMatchObject({
+    code: "basic_2026",
+    name: "基础配额方案",
+    quotas: { collection_tasks: 100, open_api_requests: 1000, report_exports: 20 },
+  });
+  await resolveCreate({
+    status: 403,
+    contentType: "application/json",
+    body: JSON.stringify({
+      error: {
+        code: "authorization_denied",
+        message: "当前账号不能创建方案。",
+        action_hint: "请联系平台管理员核对当前权限。",
+      },
+      request_id: "m06-06-create-403",
+      trace_id: "m06-06-create-403",
+    }),
+  });
+  const alert = dialog.getByRole("alert", { name: "本次创建反馈" });
+  await expect(alert).toContainText("请联系平台管理员核对当前权限。");
+  await alert.getByText("技术详情").click();
+  await expect(alert).toContainText("m06-06-create-403");
+  await expect(code).toHaveValue("basic_2026");
+  await expect(code).toBeEnabled();
+  await expect(dialog.getByRole("button", { name: "关闭新建配额方案" })).toBeEnabled();
+  expect(postCount).toBe(1);
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(dialog).not.toBeVisible();
+});
+test("M06-06 create dialog preserves the existing successful draft request and completion flow", async ({
+  page,
+}) => {
+  let body: any;
+  let idempotencyKey = "";
+  await page.route("**/api/v1/platform/commercial/plans", async (route) => {
+    body = route.request().postDataJSON();
+    idempotencyKey = route.request().headers()["idempotency-key"] ?? "";
+    await route.fulfill({
+      status: 201,
+      json: env({ id: "p-created", status: "draft", version: 1 }),
+    });
+  });
+  await page.goto("/platform-admin/commercial");
+  await page.getByRole("button", { name: "新建配额方案", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "创建配额方案草稿" });
+  await dialog.getByLabel("内部标识").fill("basic_2026");
+  await dialog.getByLabel("方案名称").fill("基础配额方案");
+  await dialog.getByRole("button", { name: "创建草稿", exact: true }).click();
+  await expect(dialog).not.toBeVisible();
+  await expect(page.locator(".notice")).toContainText("配额方案草稿已创建；启用前不影响任何组织。");
+  await expect.poll(() => new URL(page.url()).searchParams.get("query")).toBe("basic_2026");
+  expect(new URL(page.url()).searchParams.get("status")).toBe("draft");
+  expect(body).toMatchObject({
+    code: "basic_2026",
+    name: "基础配额方案",
+    description: "",
+    quotas: { collection_tasks: 100, open_api_requests: 1000, report_exports: 20 },
+    reason: "商业配置变更",
+  });
+  expect(idempotencyKey).toMatch(/^[0-9a-f-]{36}$/i);
+  await page.getByRole("button", { name: "新建配额方案", exact: true }).click();
+  await expect(dialog.getByLabel("内部标识")).toHaveValue("");
+});
 test("M06-06 edit, renew, status confirmation and dependency recovery", async ({ page }) => {
   let renewal: any = null;
   await page.route("**/api/v1/platform/commercial/assignments", async (route) => {

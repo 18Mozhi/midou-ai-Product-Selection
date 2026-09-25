@@ -37,6 +37,7 @@ const reviewTask = ref<"plans" | "organization">(organizationId.value ? "organiz
 const notice = ref("");
 const noticeKind = ref<"info" | "success" | "error">("info");
 const requestId = ref("");
+const createPlanFeedback = ref("");
 const pending = ref<any>(null);
 const editingPlan = ref<any>(null);
 const creatingPlan = ref(false);
@@ -47,7 +48,7 @@ const { dialogElement: planDialogElement, handleCancel: handlePlanCancel } = use
   () => Boolean(editingPlan.value),
   () => (editingPlan.value = null),
 );
-const { dialogElement: createDialogElement, handleCancel: handleCreateCancel } = useModalDialog(
+const { dialogElement: createDialogElement } = useModalDialog(
   () => creatingPlan.value,
   () => (creatingPlan.value = false),
 );
@@ -300,10 +301,28 @@ async function createPlan() {
     };
     createPlanIdempotencyKey = crypto.randomUUID();
   } catch (error) {
-    setNotice(error instanceof ApiClientError ? error.actionHint : "创建失败", "error");
+    createPlanFeedback.value = error instanceof ApiClientError ? error.actionHint : "创建失败";
+    setNotice(createPlanFeedback.value, "error");
   } finally {
     mutating.value = false;
   }
+}
+function closeCreatePlanDialog() {
+  if (mutating.value) return;
+  createPlanFeedback.value = "";
+  creatingPlan.value = false;
+}
+function cancelCreatePlanDialog(event: Event) {
+  event.preventDefault();
+  closeCreatePlanDialog();
+}
+async function submitCreatePlanDialog(event: SubmitEvent) {
+  if (mutating.value) return;
+  createPlanFeedback.value = "";
+  (event.currentTarget as HTMLFormElement)
+    .querySelector<HTMLElement>("#p58-create-title")
+    ?.focus({ preventScroll: true });
+  await createPlan();
 }
 function beginEditPlan(item: any) {
   editingPlan.value = {
@@ -979,32 +998,84 @@ onBeforeUnmount(() => {
       </section>
     </template>
     <Teleport to="body"
-      ><dialog ref="createDialogElement" aria-label="新建配额方案" @cancel="handleCreateCancel">
-        <form class="commercial-dialog-form" @submit.prevent="createPlan">
+      ><dialog
+        ref="createDialogElement"
+        class="p58-draft-c"
+        aria-labelledby="p58-create-title"
+        aria-describedby="p58-create-intro"
+        @cancel="cancelCreatePlanDialog"
+      >
+        <form class="commercial-dialog-form" @submit.prevent="submitCreatePlanDialog($event)">
           <header>
             <div>
               <p>新建配额方案</p>
-              <h3>创建配额方案草稿</h3>
+              <h3 id="p58-create-title" tabindex="-1">创建配额方案草稿</h3>
+              <p id="p58-create-intro" class="p58-intro">
+                只创建草稿，不启用方案，也不向组织分配额度。
+              </p>
             </div>
-            <button type="button" aria-label="关闭新建配额方案" @click="creatingPlan = false">
+            <button
+              type="button"
+              aria-label="关闭新建配额方案"
+              :disabled="mutating"
+              @click="closeCreatePlanDialog"
+            >
               关闭
             </button>
           </header>
-          <label
-            >内部标识<input
-              v-model="plan.code"
-              placeholder="例如 basic_2026"
-              required
-              maxlength="80"
-              pattern="[a-z0-9][a-z0-9_-]{0,79}" /></label
-          ><label>方案名称<input v-model="plan.name" required maxlength="120" /></label
-          ><label
-            >方案说明<textarea
-              v-model="plan.description"
-              maxlength="500"
-              placeholder="适用对象、包含内容和使用限制"
-            ></textarea>
-          </label>
+          <p v-if="mutating" class="p58-draft-wait" role="status">
+            正在创建草稿，请等待本次结果。暂时不能修改或关闭此窗。
+          </p>
+          <section
+            v-if="createPlanFeedback"
+            class="p58-draft-feedback"
+            role="alert"
+            aria-label="本次创建反馈"
+          >
+            <h4>请求反馈</h4>
+            <p>{{ createPlanFeedback }}</p>
+            <TechnicalDetails :request-id="requestId" />
+          </section>
+          <aside class="p58-draft-guide" aria-label="表单内容说明">
+            <strong>填写与核对</strong>
+            <ol>
+              <li>方案资料</li>
+              <li>三项基础配额</li>
+              <li>创建原因</li>
+            </ol>
+            <p>额度是配置值，不是使用量，也不是收费价格。</p>
+          </aside>
+          <section class="p58-draft-identity" aria-label="方案资料">
+            <h4>方案资料</h4>
+            <label
+              >内部标识<input
+                v-model="plan.code"
+                placeholder="例如 basic_2026"
+                required
+                maxlength="80"
+                pattern="[a-z0-9][a-z0-9_\-]{0,79}"
+                aria-describedby="p58-draft-code-help"
+                :disabled="mutating"
+              />
+            </label>
+            <small id="p58-draft-code-help">
+              1–80 个字符，以小写字母或数字开头，可包含下划线和连字符。
+            </small>
+            <label
+              >方案名称<input
+                v-model="plan.name"
+                required
+                maxlength="120"
+                :disabled="mutating" /></label
+            ><label
+              >方案说明<textarea
+                v-model="plan.description"
+                maxlength="500"
+                placeholder="适用对象、包含内容和使用限制"
+                :disabled="mutating"
+              ></textarea>
+            </label>
+          </section>
           <fieldset>
             <legend>基础配额</legend>
             <label
@@ -1014,6 +1085,7 @@ onBeforeUnmount(() => {
                 min="0"
                 max="1000000000"
                 required
+                :disabled="mutating"
             /></label>
             <label
               >外部接口请求<input
@@ -1022,6 +1094,7 @@ onBeforeUnmount(() => {
                 min="0"
                 max="1000000000"
                 required
+                :disabled="mutating"
             /></label>
             <label
               >报表导出<input
@@ -1030,11 +1103,23 @@ onBeforeUnmount(() => {
                 min="0"
                 max="1000000000"
                 required
+                :disabled="mutating"
             /></label>
           </fieldset>
-          <label>创建原因<input v-model="plan.reason" required maxlength="500" /></label>
+          <section class="p58-draft-reason" aria-label="创建原因说明">
+            <label>
+              创建原因<input
+                v-model="plan.reason"
+                required
+                maxlength="500"
+                aria-describedby="p58-draft-reason-help"
+                :disabled="mutating"
+              />
+            </label>
+            <small id="p58-draft-reason-help">说明本次配置目的，最多 500 个字符。</small>
+          </section>
           <footer>
-            <button type="button" :disabled="mutating" @click="creatingPlan = false">取消</button>
+            <button type="button" :disabled="mutating" @click="closeCreatePlanDialog">取消</button>
             <button class="primary" :disabled="mutating">
               {{ mutating ? "创建中…" : "创建草稿" }}
             </button>
@@ -1387,3 +1472,235 @@ dialog {
 }
 </style>
 <style scoped src="./commercial-operations.css"></style>
+<style scoped>
+.p58-draft-c {
+  box-sizing: border-box;
+  width: min(920px, calc(100% - 32px));
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid #d3ddea;
+  border-radius: 8px;
+  background: #fff;
+  color: #17253c;
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+.p58-draft-c .commercial-dialog-form {
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 0;
+  padding: 0;
+}
+.p58-draft-c header {
+  grid-column: 1 / -1;
+  padding: 24px 28px;
+  background: #102a63;
+  color: #fff;
+}
+.p58-draft-c header p {
+  margin: 0 0 8px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: inherit;
+}
+.p58-draft-c h3 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.4;
+  color: #fff;
+  font-family: inherit;
+}
+.p58-draft-c header .p58-intro {
+  margin: 12px 0 0;
+  font-size: 16px;
+}
+.p58-draft-c .p58-draft-guide {
+  grid-column: 1;
+  grid-row: 2 / 6;
+  padding: 28px 22px;
+  border-right: 1px solid #d3ddea;
+  background: #f3f6fa;
+  color: #17253c;
+  font-size: 16px;
+  line-height: 1.7;
+}
+.p58-draft-c .p58-draft-guide ol {
+  margin: 20px 0;
+  padding-left: 24px;
+}
+.p58-draft-c .p58-draft-guide li {
+  padding: 8px 0;
+}
+.p58-draft-c .p58-draft-guide p {
+  font-size: 13px;
+  color: #52637c;
+}
+.p58-draft-c :is(.p58-draft-identity, .p58-draft-reason, fieldset) {
+  grid-column: 2;
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 24px 28px;
+  border: 0;
+  border-bottom: 1px solid #d3ddea;
+  border-radius: 0;
+  min-width: 0;
+  background: #fff;
+  color: #17253c;
+}
+.p58-draft-c h4 {
+  margin: 0;
+  font-size: 18px;
+  color: #17253c;
+}
+.p58-draft-c header button {
+  min-width: 56px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.p58-draft-c .p58-draft-guide :is(strong, li, ol) {
+  color: #17253c;
+}
+.p58-draft-c fieldset {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  padding-top: 14px;
+}
+.p58-draft-c legend {
+  padding: 18px 0 0;
+  font-size: 18px;
+  color: #17253c;
+}
+.p58-draft-c label {
+  color: #17253c;
+  font-size: 16px;
+  gap: 8px;
+}
+.p58-draft-c small {
+  font-size: 13px;
+  line-height: 1.65;
+  color: #52637c;
+}
+.p58-draft-c :is(input, textarea, button) {
+  box-sizing: border-box;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid #d3ddea;
+  border-radius: 5px;
+  padding: 10px 12px;
+  background: #fff;
+  color: #17253c;
+  font: inherit;
+  font-size: 16px;
+}
+.p58-draft-c :is(input, textarea) {
+  width: 100%;
+}
+.p58-draft-c textarea {
+  min-height: 96px;
+}
+.p58-draft-c button.primary {
+  border-color: #1748b5;
+  background: #1748b5;
+  color: #fff;
+}
+.p58-draft-c :is(input, textarea, button):focus-visible {
+  outline: 3px solid #1748b5;
+  outline-offset: 2px;
+}
+.p58-draft-c header button:focus-visible {
+  outline-color: #fff;
+}
+.p58-draft-c footer {
+  grid-column: 2;
+  margin: 0;
+  padding: 18px 28px;
+  background: #fff;
+}
+.p58-draft-c .p58-draft-wait,
+.p58-draft-c .p58-draft-feedback {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 18px 28px;
+  border: 0;
+  border-bottom: 1px solid #d3ddea;
+  background: #f3f6fa;
+  color: #17253c;
+  font-size: 16px;
+  line-height: 1.65;
+}
+.p58-draft-c .p58-draft-feedback {
+  border-left: 4px solid #a43730;
+  background: #fff8f7;
+}
+.p58-draft-c .p58-draft-feedback p {
+  margin: 8px 0;
+}
+.p58-draft-c .p58-draft-feedback h4 {
+  color: #842f29;
+}
+.p58-draft-c:has(.p58-draft-wait, .p58-draft-feedback) .p58-draft-guide {
+  grid-row: 3 / 7;
+}
+.p58-draft-c h3:focus {
+  outline: 2px solid #fff;
+  outline-offset: 4px;
+}
+.p58-draft-c :is(input, textarea, button):disabled {
+  border-color: #d3ddea;
+  background: #e8edf4;
+  color: #68778d;
+  opacity: 1;
+  cursor: not-allowed;
+}
+@media (max-width: 760px) {
+  .p58-draft-c {
+    width: calc(100% - 16px);
+    max-height: calc(100dvh - 16px);
+  }
+  .p58-draft-c .commercial-dialog-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .p58-draft-c header {
+    padding: 20px 18px;
+  }
+  .p58-draft-c h3 {
+    font-size: 22px;
+  }
+  .p58-draft-c .p58-draft-guide {
+    grid-column: 1;
+    grid-row: auto;
+    padding: 16px 18px;
+    border-right: 0;
+    border-bottom: 1px solid #d3ddea;
+  }
+  .p58-draft-c .p58-draft-guide ol {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    margin: 8px 0;
+    padding-left: 20px;
+    font-size: 13px;
+  }
+  .p58-draft-c .p58-draft-guide li {
+    padding: 0;
+  }
+  .p58-draft-c .p58-draft-guide p {
+    margin: 8px 0 0;
+  }
+  .p58-draft-c :is(.p58-draft-identity, .p58-draft-reason, fieldset, footer) {
+    grid-column: 1;
+    padding: 20px 18px;
+  }
+  .p58-draft-c fieldset {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .p58-draft-c footer button {
+    flex: 1;
+  }
+  .p58-draft-c:has(.p58-draft-wait, .p58-draft-feedback) .p58-draft-guide {
+    grid-row: auto;
+  }
+  .p58-draft-c :is(.p58-draft-wait, .p58-draft-feedback) {
+    padding: 18px;
+  }
+}
+</style>

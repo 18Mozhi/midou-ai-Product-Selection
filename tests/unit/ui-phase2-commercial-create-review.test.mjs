@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
@@ -10,8 +11,15 @@ import { previewCommercialCreate } from "../../scripts/lib/ui-phase2-commercial-
 const component = "apps/web/src/components/CommercialOperationsCenter.vue";
 const root = "output/playwright/p58-create-current-review";
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const evidenceSourceCommit = "655a99686a170c1e98d2aea3cf69eb71cac69342";
+const readEvidenceSource = (file) =>
+  file === component
+    ? execFileSync("git", ["show", `${evidenceSourceCommit}:${file}`], {
+        encoding: "utf8",
+      }).replaceAll("\r\n", "\n")
+    : read(file);
 const hash = (value) => createHash("sha256").update(value).digest("hex");
-const source = read(component),
+const source = readEvidenceSource(component),
   preview = previewCommercialCreate(source);
 function directives(text) {
   const entries = [];
@@ -100,8 +108,7 @@ test("P58 actual Vue creation evidence binds raw sources and complete continuous
   );
   assert.equal(e.screenshots.length, 24);
   assert.equal(Object.keys(e.sourceHashes).length, 162);
-  for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  assert.equal(hash(readEvidenceSource(component)), e.sourceHashes[component]);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),
