@@ -1,0 +1,874 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P52",
+  "route": "/platform-admin/collection/overview",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
+    "apps/web/src/components/CollectionOperationsConsole.vue": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+  },
+  "inputs": {
+    "apps/web/src/components/CollectionOperationsConsole.vue": [
+      "org",
+      "workspace",
+      "provider",
+      "timeWindow",
+      "batchReason"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "CL52-NAV",
+      "label": "在采集总览、任务页和浏览器运行间导航",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionRuntimeSurface.vue#3c465962052e3b24.1",
+        "apps/web/src/components/CollectionRuntimeSurface.vue#404044c1ac23071f.1",
+        "apps/web/src/components/CollectionRuntimeSurface.vue#ebad8fdaf536f0e3.1"
+      ],
+      "sourceContractKeys": [
+        "CL-NAV / 总览",
+        "CL-NAV / 任务页",
+        "CL-NAV / 浏览器运行"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-NAV精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "用户在采集工作区选择三个既有采集页签之一时。",
+      "handler": "仅沿既有路由在采集总览、任务页和浏览器运行页间切换；页签导航不发起总览读取、重放或外部采集。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "目标页签可见不证明目标页面权限、数据范围或服务健康状态。"
+    },
+    {
+      "actionId": "CL52-LOAD",
+      "label": "读取、刷新或重读采集运行总览",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#6d3f7d591719f19f.1",
+        "apps/web/src/components/CollectionOperationsConsole.vue#a397ba517c409773.1",
+        "apps/web/src/components/CollectionOperationsConsole.vue#c7e32d5d2ec42619.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-LOAD / 刷新读取当前固定范围",
+        "CL52-LOAD / refreshNotice中的重试，复用load",
+        "CL52-LOAD / 受状态门控制的重新读取，不显示loading/失权重试"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-LOAD精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "页面挂载或当前读取状态提供可用的刷新/重试入口时。",
+      "handler": "调用既有 GET /platform/collection/console，并固定组织、工作区、来源、时间、根因及独立分页范围；刷新失败保留上次成功快照，不发起任务写入。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "局部源映射不证明真实 platform:operate、401/403快照策略、MySQL数据或生产超时表现。"
+    },
+    {
+      "actionId": "CL52-SCOPE-DRAWER",
+      "label": "提供响应式采集范围筛选抽屉",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#2506d9788c717641.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-SCOPE / 移动筛选抽屉"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-SCOPE-DRAWER精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "当前总览渲染范围与时间筛选器时。",
+      "handler": "调用既有 ResponsiveFilterDrawer 展示组织、工作区、来源、时间字段；容器本身不提交范围或发起读取。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "共享抽屉的触控、焦点和关闭行为由共享组件合同验收，不由本页调用点代验。"
+    },
+    {
+      "actionId": "CL52-SCOPE-FORM",
+      "label": "将范围表单提交意图转给现有范围查询处理器",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#9ba7fa048065cd28.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-SCOPE / applyScope"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-SCOPE-FORM精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "用户在筛选抽屉中提交组织、工作区、来源或时间范围时。",
+      "handler": "阻止浏览器原生表单导航，仅将submit意图转给 applyScope。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "事件映射不验证组织/工作区真实归属和服务端过滤结果。",
+      "forwardsTo": [
+        "CL52-SCOPE-APPLY"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#9ba7fa048065cd28.1",
+          "event": "@submit.prevent",
+          "handler": "applyScope",
+          "targets": [
+            "CL52-SCOPE-APPLY"
+          ]
+        }
+      ]
+    },
+    {
+      "actionId": "CL52-SCOPE-RESET",
+      "label": "将范围重置为现有默认值并读取",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#e0774dcb9c606eef.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-SCOPE / resetScope：清除局部范围筛选"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-SCOPE-RESET精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "筛选存在可重置条件且没有批量重放进行中时。",
+      "handler": "清除组织、工作区、来源及根因，恢复24h窗口和两组第一页，再经既有总览 GET 更新页面；不清除或更改后端事实。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地表单重置不证明服务端默认范围或成员数据隔离。"
+    },
+    {
+      "actionId": "CL52-SCOPE-APPLY",
+      "label": "应用当前范围并读取独立总览事实",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#002b24e1d917d4a4.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-SCOPE / applyScope：提交现有API范围查询"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-SCOPE-APPLY精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "字段通过现有UUID校验且无批量重放占用时。",
+      "handler": "重置尝试/死信分页并使用当前范围读取；范围提交和分页继续通过各自既有handler，保留来源健康、根因、质量、尝试及死信各自服务端口径。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "静态映射不执行接口、SQL或读取审计，也不证明筛选事实完整性。"
+    },
+    {
+      "actionId": "CL52-LINK",
+      "label": "进入总览响应提供的既有管理页面",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#3a14c060674cdbaa.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-LINK / 响应links六类目标"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-LINK精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "总览 GET 返回受支持的管理链接时。",
+      "handler": "使用响应中的六类已有来源、适配器健康、来源目录、任务、浏览器运行和数据质量目标；不根据错误类别自行拼接或扩展目标。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "客户端导航不证明目标页面具备当前角色授权或处理后续问题成功。"
+    },
+    {
+      "actionId": "CL52-SOURCE-DETAIL",
+      "label": "展开来源技术详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#1c008f867673db60.1",
+        "apps/web/src/components/CollectionOperationsConsole.vue#f6229375f6be78df.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-SOURCE / 桌面技术展开",
+        "CL52-SOURCE / 移动技术展开"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-SOURCE-DETAIL精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "来源健康记录提供桌面或移动技术详情 disclosure 时。",
+      "handler": "按需披露已有来源代码，不改变API数据、来源筛选目录或健康状态。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "技术字段显示不验证真实来源健康、条款授权或提供者响应。"
+    },
+    {
+      "actionId": "CL52-SOURCE-LIST",
+      "label": "展开或收起完整来源目录",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#a9b7552ee181c72f.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-SOURCE / 展开全部来源或收回前8条，控制对应结果区"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-SOURCE-LIST精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "来源目录超过前8项显示阈值时。",
+      "handler": "切换来源目录前8项/全部结果并维持对应区域关系，不改变API数据、来源筛选目录或健康状态。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "目录折叠不验证真实来源健康、条款授权或提供者响应。"
+    },
+    {
+      "actionId": "CL52-ROOT-CLEAR",
+      "label": "清除当前精确错误根因并重新读取",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#4509211b46b0337c.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-ROOT / 当前根因存在时清除精确根因筛选"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-ROOT-CLEAR精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "当前URL/页面处于精确根因下钻状态且无批量写入时。",
+      "handler": "清除当前 error_code 并重新读取现有总览，不把根因类别改写成别的错误码。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "不证明服务端根因聚合或清除后的尝试/死信关联事实。"
+    },
+    {
+      "actionId": "CL52-ROOT-DRILL",
+      "label": "按真实错误码选择或再次选择根因并下钻",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#644b6cd23fdb966a.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-ROOT / 选择具体真实错误码进入根因下钻，按pressed显当前选择"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-ROOT-DRILL精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "当前响应含有根因条目且没有批量重放进行中时。",
+      "handler": "将所选真实 error_code 精确写入已有查询范围，重置尝试/死信页并读取；root_causes仍按死信聚合，不与所有失败尝试数量混算。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本映射不推断错误类别、修复状态或真实死信数量。"
+    },
+    {
+      "actionId": "CL52-ROOT-TECH",
+      "label": "展开根因的原始技术错误码",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#1c008f867673db60.2"
+      ],
+      "sourceContractKeys": [
+        "CL52-ROOT / 原始错误码"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-ROOT-TECH精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "根因条目提供技术详情 disclosure 时。",
+      "handler": "切换原生 details 的可见性，仅显示响应中的原始错误码。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地展开不证明访问审计、读屏播报或错误归因正确。"
+    },
+    {
+      "actionId": "CL52-ATTEMPT-DETAIL",
+      "label": "查看最近尝试的移动/桌面记录及技术详情",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#1c008f867673db60.3",
+        "apps/web/src/components/CollectionOperationsConsole.vue#f6229375f6be78df.2"
+      ],
+      "sourceContractKeys": [
+        "CL52-ATTEMPT / 桌面技术展开",
+        "CL52-ATTEMPT / 移动技术展开"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-ATTEMPT-DETAIL精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "尝试结果记录当前响应页存在时。",
+      "handler": "在共享 ResponsiveDataView 中展开同一尝试的记录详情，并按需披露现有任务、trace和错误标识；不执行重试。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "ResponsiveDataView抽屉内焦点及记录返焦由共享控件合同负责。"
+    },
+    {
+      "actionId": "CL52-ATTEMPT-PAGE",
+      "label": "翻阅最近尝试独立分页",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#5c6a30d3ce827bee.1",
+        "apps/web/src/components/CollectionOperationsConsole.vue#e4688d99cdaed726.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-ATTEMPT / 最近尝试前页；依API总页数及busy禁用",
+        "CL52-ATTEMPT / 最近尝试后页；依API总页数及busy禁用"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-ATTEMPT-PAGE精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "尝试记录存在上一页/下一页且页面未刷新或批量写入时。",
+      "handler": "只改变 attempt_page 并读取；不改变死信分页游标或根因身份。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地分页不验证数据库总数、跨范围隔离或尝试归属。"
+    },
+    {
+      "actionId": "CL52-BATCH-FAILURES",
+      "label": "披露批量重放的明确失败与未知结果条目",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#65c7916ab5f0b4d9.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-BATCH / 展开已确认失败与结果未知条目，只披露现有结算事实"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-BATCH-FAILURES精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "最近批次存在逐项失败或结果未知记录时。",
+      "handler": "按需展开现有settlement条目，保留失败与未知结果分类，不再次提交请求。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地披露不核实服务端写入终态，未知结果须到对应任务读取核对。"
+    },
+    {
+      "actionId": "CL52-BATCH-OPEN",
+      "label": "展开批量安全重放选择区域",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#660c7a198b93551d.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-BATCH / 安全重放区展开"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-BATCH-OPEN精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "死信区域提供原生折叠摘要时。",
+      "handler": "切换批量重放表单显示，不勾选目标、不创建预览或写入。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "表单展开不代表选择了死信或依赖已恢复。"
+    },
+    {
+      "actionId": "CL52-BATCH-SELECT",
+      "label": "在当前页选择或取消开放死信",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#3d7519a5ffaadf88.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-BATCH / 死信选择change转toggleDeadLetter；单项状态、busy、unknown及20条上限由既有逻辑裁决"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-BATCH-SELECT精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "当前页死信状态为open、批次空闲且结果未处于unknown锁定时。",
+      "handler": "读取checkbox change并更新当前选择；只允许当前页开放死信，最大20条，切页或新响应会按现有逻辑修剪选择。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地选择不证明服务端当前状态、授权或请求时仍可重放。"
+    },
+    {
+      "actionId": "CL52-BATCH-REASON",
+      "label": "编辑批量重放原因并清除过期字段错误",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#935c6c8171139c6b.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-BATCH / batchReason受控输入；maxlength/错误清理不另算写操作"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-BATCH-REASON精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "未进入批量写入或结果未知锁定状态时。",
+      "handler": "保留现有500字符上限与输入时清理原因错误；输入变化本身不发出POST。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地输入与字段错误不代替服务端原始长度/权限/审计校验。"
+    },
+    {
+      "actionId": "CL52-BATCH-PREVIEW",
+      "label": "校验并冻结批量重放目标、原因与影响预览",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#9233c1fc5a4723d0.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-BATCH / previewBatchReplay：先校验并冻结目标、影响和原因，再打开确认"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-BATCH-PREVIEW精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "选中1–20条开放死信、原因trim至少2字且原始长度不超过500、无结果未知或其他批次在途时。",
+      "handler": "冻结所选死信、原因、组织/工作区影响和batchId，再打开共享破坏性确认；此按钮不执行POST。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地快照预览不证明确认时记录仍开放或服务端授权。"
+    },
+    {
+      "actionId": "CL52-DEAD-OPEN-TASK",
+      "label": "进入原任务详情核验死信并受控重放",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#9ebd065e5010fd46.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-DEAD / 链接单任务详情重放"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-DEAD-OPEN-TASK精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "当前死信记录提供单任务核查入口时。",
+      "handler": "带既有task_id导航到采集任务详情；不从总览直接调用单任务重放，不绕过P51 task读写权限和原因确认。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "路由存在不证明task详情读取或后续人工重放被授权。"
+    },
+    {
+      "actionId": "CL52-DEAD-TECH",
+      "label": "展开当前死信技术关联信息",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#1c008f867673db60.4"
+      ],
+      "sourceContractKeys": [
+        "CL52-DEAD / 技术详情"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-DEAD-TECH精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "死信记录含有技术详情折叠区时。",
+      "handler": "切换原生details披露原有错误码、任务ID及组织/工作区ID，不触发重新读取或重放。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "展开映射不证明真实接口脱敏、角色授权或审计访问范围。"
+    },
+    {
+      "actionId": "CL52-DEAD-PAGE",
+      "label": "翻阅开放与已重放死信独立分页",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#19e60ba8660b9f22.1",
+        "apps/web/src/components/CollectionOperationsConsole.vue#ead51c4255c6e1f0.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-DEAD / 开放与已重放死信前页，清当前页外选择",
+        "CL52-DEAD / 开放与已重放死信后页，清当前页外选择"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-DEAD-PAGE精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "死信记录存在上一页/下一页且页面未刷新或批量写入时。",
+      "handler": "只改变 dead_letter_page 并读取；按既有分页变化清理非当前页勾选，不改变尝试分页。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地分页不证明死信状态在提交前未变化。"
+    },
+    {
+      "actionId": "CL52-BATCH-WRITE",
+      "label": "确认后逐条提交既有受控批量死信重放",
+      "kind": "write",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#9215901b5115628c.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-BATCH / ConfirmDialog cancel与confirm分别走现有取消/确认所有者"
+      ],
+      "contractAliasReason": "该父级事件绑定包含cancel与confirm；只有confirm分支进入逐条重放POST，cancel只撤销当前确认快照、不发写请求。",
+      "condition": "用户通过共享确认短语与影响确认，冻结批次有效且batchBusy=false时。",
+      "handler": "按预览快照顺序逐条POST /platform/collection/tasks/{task_id}/replay；每条body只含reason，幂等键为dead-batch:{batchId}:{task_id}。逐条记录成功/明确失败/未知结果，网络及408/425/429/502/503/504未知时不自动重发，继续处理其余固定目标；结果只表示创建新任务，不代表采集执行成功。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "映射不执行真实重放，不证明逐条collection:replay授权、同源校验、MySQL事务/幂等、Worker运行或外部采集结果。"
+    },
+    {
+      "actionId": "CL52-BATCH-DIALOG",
+      "label": "调用共享破坏性影响确认窗",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CollectionOperationsConsole.vue#4640753c7de49660.1"
+      ],
+      "sourceContractKeys": [
+        "CL52-BATCH / 破坏性影响确认共享调用；要求确认短语与影响勾选"
+      ],
+      "contractAliasReason": "按既有CL52合同对CL52-BATCH-DIALOG精确归属；不增加新的范围、数据或重放行为。",
+      "condition": "已冻结批量重放快照并打开确认步骤时。",
+      "handler": "向共享ConfirmDialog传入影响摘要、确认短语及既有cancel/confirm回调；单纯渲染确认窗不提交。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p52-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "共享ConfirmDialog内部勾选、短语、焦点及关闭行为不由该调用点映射冒领。"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "P52没有局部role=dialog定义；范围使用ResponsiveFilterDrawer，移动来源/尝试详情使用ResponsiveDataView，批量重放调用共享破坏性ConfirmDialog。共享内部字段、选中态与焦点规则不重复并入P52页面局部候选。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/CollectionRuntimeSurface.vue",
+      "apps/web/src/components/CollectionOperationsConsole.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
+      "apps/web/src/components/CollectionOperationsConsole.vue": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "本映射只覆盖采集总览页签宿主与CollectionOperationsConsole；ResponsiveFilterDrawer、ResponsiveDataView、ConfirmDialog、TechnicalDetails和NavigationShell内部交互沿用各自共享合同。"
+    ],
+    "remaining": "静态映射不证明platform:operate/collection:replay真实授权、401/403安全呈现、MySQL聚合、批写入幂等、Worker执行、外部采集、全主题缩放/读屏或M07-03验收。"
+  },
+  "compositionGaps": [
+    "逐项覆盖CollectionRuntimeSurface.vue与CollectionOperationsConsole.vue的32个当前扫描候选；共享抽屉、ResponsiveDataView及ConfirmDialog内部控件不重复计入P52。",
+    "总览读取仅按现有服务端范围/window/error_code及独立分页查询；根因按真实dead-letter error_code筛选，不将平台来源健康误作组织/时间筛选结果。",
+    "批量操作仅登记最多20条当前页开放死信的冻结快照和逐条既有重放POST；用户视觉自动通过与动作审批/真实权限/数据库/Worker验收保持分开。"
+  ]
+}

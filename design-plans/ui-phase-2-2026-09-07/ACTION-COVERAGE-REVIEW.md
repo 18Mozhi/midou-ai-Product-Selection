@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应54页/1231源位置/1090组；其中路由动作875组，转发/容器关联111组，其余明确排除。其余19页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应55页/1260源位置/1114组；其中路由动作898组，转发/容器关联112组，其余明确排除。其余18页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记54页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记55页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -65,7 +65,7 @@
 | [P49 1688 启用检查](page-specs/P49.md) | 78 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P50 凭证与档案](page-specs/P50.md) | 78 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P51 采集任务](page-specs/P51.md) | 81 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P52 采集总览](page-specs/P52.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P52 采集总览](page-specs/P52.md) | 81 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P53 网页登录采集](page-specs/P53.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P54 数据中心](page-specs/P54.md) | 58 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P55 质量与规则](page-specs/P55.md) | 59 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -4178,6 +4178,62 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 手动重放只登记既有dead_letter POST与reason字段；不增加任务创建、状态修改、自动重试或外部采集动作。
 - 用户视觉自动通过与动作映射分开记录；actionApproval、真实collection:replay授权、MySQL、Worker终态、读屏和正式M07-03签收仍未通过。
 - 本映射只覆盖采集页签宿主和任务页组件；ResponsiveDataView、ConfirmDialog、UiStatePanel、NavigationShell和API客户端共享交互继续以各自合同为准。
+
+## P52 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P52.json)：32个局部源位置 → 24组；1类写入，23组路由动作，1组转发/容器关联不重复计动作。已映射0/5个源码字段位置，0/4处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有144个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| CL52-NAV 在采集总览、任务页和浏览器运行间导航 / navigation | 3处；current-route-source-contract | ；其余见JSON | 目标页签可见不证明目标页面权限、数据范围或服务健康状态。 |
+| CL52-LOAD 读取、刷新或重读采集运行总览 / read | 3处；current-route-source-contract | ；其余见JSON | 局部源映射不证明真实 platform:operate、401/403快照策略、MySQL数据或生产超时表现。 |
+| CL52-SCOPE-DRAWER 提供响应式采集范围筛选抽屉 / local | 1处；current-route-source-contract | ；其余见JSON | 共享抽屉的触控、焦点和关闭行为由共享组件合同验收，不由本页调用点代验。 |
+| CL52-SCOPE-FORM 将范围表单提交意图转给现有范围查询处理器 / wiring | 1处；current-route-source-contract | ；其余见JSON | 事件映射不验证组织/工作区真实归属和服务端过滤结果。 |
+| CL52-SCOPE-RESET 将范围重置为现有默认值并读取 / read | 1处；current-route-source-contract | ；其余见JSON | 本地表单重置不证明服务端默认范围或成员数据隔离。 |
+| CL52-SCOPE-APPLY 应用当前范围并读取独立总览事实 / read | 1处；current-route-source-contract | ；其余见JSON | 静态映射不执行接口、SQL或读取审计，也不证明筛选事实完整性。 |
+| CL52-LINK 进入总览响应提供的既有管理页面 / navigation | 1处；current-route-source-contract | ；其余见JSON | 客户端导航不证明目标页面具备当前角色授权或处理后续问题成功。 |
+| CL52-SOURCE-DETAIL 展开来源技术详情 / local | 2处；current-route-source-contract | ；其余见JSON | 技术字段显示不验证真实来源健康、条款授权或提供者响应。 |
+| CL52-SOURCE-LIST 展开或收起完整来源目录 / local | 1处；current-route-source-contract | ；其余见JSON | 目录折叠不验证真实来源健康、条款授权或提供者响应。 |
+| CL52-ROOT-CLEAR 清除当前精确错误根因并重新读取 / read | 1处；current-route-source-contract | ；其余见JSON | 不证明服务端根因聚合或清除后的尝试/死信关联事实。 |
+| CL52-ROOT-DRILL 按真实错误码选择或再次选择根因并下钻 / read | 1处；current-route-source-contract | ；其余见JSON | 本映射不推断错误类别、修复状态或真实死信数量。 |
+| CL52-ROOT-TECH 展开根因的原始技术错误码 / local | 1处；current-route-source-contract | ；其余见JSON | 本地展开不证明访问审计、读屏播报或错误归因正确。 |
+| CL52-ATTEMPT-DETAIL 查看最近尝试的移动/桌面记录及技术详情 / local | 2处；current-route-source-contract | ；其余见JSON | ResponsiveDataView抽屉内焦点及记录返焦由共享控件合同负责。 |
+| CL52-ATTEMPT-PAGE 翻阅最近尝试独立分页 / read | 2处；current-route-source-contract | ；其余见JSON | 本地分页不验证数据库总数、跨范围隔离或尝试归属。 |
+| CL52-BATCH-FAILURES 披露批量重放的明确失败与未知结果条目 / local | 1处；current-route-source-contract | ；其余见JSON | 本地披露不核实服务端写入终态，未知结果须到对应任务读取核对。 |
+| CL52-BATCH-OPEN 展开批量安全重放选择区域 / local | 1处；current-route-source-contract | ；其余见JSON | 表单展开不代表选择了死信或依赖已恢复。 |
+| CL52-BATCH-SELECT 在当前页选择或取消开放死信 / local | 1处；current-route-source-contract | ；其余见JSON | 本地选择不证明服务端当前状态、授权或请求时仍可重放。 |
+| CL52-BATCH-REASON 编辑批量重放原因并清除过期字段错误 / local | 1处；current-route-source-contract | ；其余见JSON | 本地输入与字段错误不代替服务端原始长度/权限/审计校验。 |
+| CL52-BATCH-PREVIEW 校验并冻结批量重放目标、原因与影响预览 / local | 1处；current-route-source-contract | ；其余见JSON | 本地快照预览不证明确认时记录仍开放或服务端授权。 |
+| CL52-DEAD-OPEN-TASK 进入原任务详情核验死信并受控重放 / navigation | 1处；current-route-source-contract | ；其余见JSON | 路由存在不证明task详情读取或后续人工重放被授权。 |
+| CL52-DEAD-TECH 展开当前死信技术关联信息 / local | 1处；current-route-source-contract | ；其余见JSON | 展开映射不证明真实接口脱敏、角色授权或审计访问范围。 |
+| CL52-DEAD-PAGE 翻阅开放与已重放死信独立分页 / read | 2处；current-route-source-contract | ；其余见JSON | 本地分页不证明死信状态在提交前未变化。 |
+| CL52-BATCH-WRITE 确认后逐条提交既有受控批量死信重放 / write | 1处；current-route-source-contract | ；其余见JSON | 映射不执行真实重放，不证明逐条collection:replay授权、同源校验、MySQL事务/幂等、Worker运行或外部采集结果。 |
+| CL52-BATCH-DIALOG 调用共享破坏性影响确认窗 / local | 1处；current-route-source-contract | ；其余见JSON | 共享ConfirmDialog内部勾选、短语、焦点及关闭行为不由该调用点映射冒领。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| CL52-SCOPE-FORM | @submit.prevent / applyScope | CL52-SCOPE-APPLY |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 逐项覆盖CollectionRuntimeSurface.vue与CollectionOperationsConsole.vue的32个当前扫描候选；共享抽屉、ResponsiveDataView及ConfirmDialog内部控件不重复计入P52。
+- 总览读取仅按现有服务端范围/window/error_code及独立分页查询；根因按真实dead-letter error_code筛选，不将平台来源健康误作组织/时间筛选结果。
+- 批量操作仅登记最多20条当前页开放死信的冻结快照和逐条既有重放POST；用户视觉自动通过与动作审批/真实权限/数据库/Worker验收保持分开。
+- 本映射只覆盖采集总览页签宿主与CollectionOperationsConsole；ResponsiveFilterDrawer、ResponsiveDataView、ConfirmDialog、TechnicalDetails和NavigationShell内部交互沿用各自共享合同。
 
 ## P54 局部动作与共享消费者
 

@@ -325,3 +325,9 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 `action-reviews/P51.json` 将 `/platform-admin/collection` 当前 `CollectionRuntimeSurface.vue` 与 `CollectionTaskCenter.vue` 的26个扫描候选逐项映射到既有CL51合同，覆盖采集页签导航、列表读取、筛选分页、空队列恢复、桌面/移动详情、失败重读、详情键盘/关闭、恢复入口、技术披露及人工重放确认。完整任务列表只映射当前API返回页；页面搜索仍只过滤当前页。P51的写操作仅为既有 dead_letter 人工重放：确认事件调用既有 `/platform/collection/tasks/{id}/replay`，请求只提交 `reason` 并沿用共享 Idempotency-Key；服务端创建新任务并保留历史。共享确认窗内部控件、移动记录抽屉内部状态、真实权限/数据库/Worker与外部采集不冒领为本地源映射证据。
 
 `tests/unit/ui-phase2-p51-action-map.test.mjs` 校验26个候选唯一归属、当前源哈希、重放写边界和未验收状态。用户剩余页面视觉自动通过已单独登记；P51动作审批、全状态读屏、真实 collection:replay/RBAC、MySQL、Worker终态与正式M07-03生产验收仍未通过。
+
+## 11. P52 采集总览当前页面动作归组（2026-09-26）
+
+`action-reviews/P52.json` 将 `/platform-admin/collection/overview` 当前 `CollectionRuntimeSurface.vue` 与 `CollectionOperationsConsole.vue` 的32个扫描候选逐项映射到既有CL52合同，覆盖采集页签导航、服务端范围/根因读取、来源/尝试/死信技术披露、独立分页及批量重放预览与共享确认事件。来源目录前8项/全部展开单独登记为本地披露；移动详情及确认窗的内部控件仍归各自共享组件合同。总览写边界仅限当前页面开放死信选择上限20条、至少2字符且最多500字符原因、冻结批次，以及既有逐条 `/platform/collection/tasks/{task_id}/replay` POST；body只含reason并使用既有任务级幂等键。未知结果不自动重发，逐条成功仅表示创建新任务，不代表采集执行成功。
+
+`tests/unit/ui-phase2-p52-action-map.test.mjs` 校验32个候选唯一归属、范围/分页边界、冻结及未知写结果策略和未验收状态。视觉按用户授权对剩余页面自动通过单独记录；P52动作审批、真实platform:operate/collection:replay与RBAC、MySQL聚合/幂等、Worker终态、共享控件内部验收及正式M07-03生产验收仍未通过。该静态映射不执行重放、不改变API或部署。

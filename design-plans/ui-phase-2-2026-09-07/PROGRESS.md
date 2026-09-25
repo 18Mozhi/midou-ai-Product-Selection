@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-26 · P52 采集总览逐动作映射
+
+新增 P52 `/platform-admin/collection/overview` 当前页面动作映射，逐项覆盖 `CollectionRuntimeSurface.vue` 与 `CollectionOperationsConsole.vue` 的32个源码候选；区分范围查询、来源/尝试/死信详情、独立分页及批量写入确认事件。批量重放仅采用现有开放死信选择上限、冻结预览、逐条既有 POST、reason 与任务级幂等键；结果未知不自动重发，也不代表采集执行成功。视觉按用户“剩下的全部通过”授权登记通过，actionApproval 仍 pending；真实 platform:operate/collection:replay、RBAC、MySQL聚合、Worker终态与M07-03仍未验收。只更新静态映射、测试、审计和文档，不改Vue/API/权限/数据库/依赖/运行包，不部署或重启。下一页P53。
+
 ## 2026-09-26 · P51 采集任务页逐动作映射
 
 新增 P51 `/platform-admin/collection` 当前页面动作映射，逐项覆盖 `CollectionRuntimeSurface.vue` 与 `CollectionTaskCenter.vue` 的26个当前源码候选；区分读取/筛选/分页/恢复导航、详情状态和共享确认事件接线。人工重放仍严格限定为既有 dead_letter POST、reason 字段与共享幂等键；网络结果未知时不自动重复，不新增普通任务创建或外部采集动作。视觉按用户“剩下的全部通过”授权记录为通过，actionApproval 仍 pending；真实 collection:replay/RBAC、MySQL任务/死信、Worker终态和M07-03仍未验收。只更新审计映射、测试和文档，不改Vue/API/任务状态机/权限/数据库/依赖/运行包，不部署或重启。全站下一步转P52。

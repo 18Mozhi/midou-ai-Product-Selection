@@ -243,7 +243,7 @@
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "ff6b41e79cb7eba143652e3114c1a979379d22bcdf88a4a1de246d9b969fb378",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
-    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "eca9334488a0ba9ba53dee8c1ca3232717c96a18c48fdbae6ed02cc005f81b78",
+    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "32b2e04b2413099357c81a8e77c40157eb8d405bdae7debdf0ea3675453d4f42",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "52bcc443860a0bb026603c721ab806104450f0780cb4d2a9f9898ca59ee80884",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "6350ced052c4283d850746b8736e64ab76ed2ed7eabe2ecd3feac5dcb630f815",
@@ -513,6 +513,8 @@
     "tests/unit/ui-phase2-p50-action-map.test.mjs": "4c61df3cb0613cd955defb597905e8381e6a55a3d83f5dde31bec168d985aa6d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P51.json": "99bd0218a17d0b7c5eb9a19b5f6a4fcb30903a048ed3acbbbf3f51de0f443d86",
     "tests/unit/ui-phase2-p51-action-map.test.mjs": "795e5958e54feed9ebcb6f06f5c2b66bc8455fff16be43a397248249fac208d0",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P52.json": "a12d6e31b8dc3734dd1b127a02ba810178139a07300e04249b08527100711dfc",
+    "tests/unit/ui-phase2-p52-action-map.test.mjs": "77d94e9e75405de5557e9f2861d447132c43a6aa7224e4f68f630e920f6f4e41",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -608,13 +610,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 54,
-    "explicitlyGroupedSourceSites": 1231,
-    "semanticGroups": 1090,
-    "routeActions": 875,
-    "wiringGroups": 111,
+    "reviewedPages": 55,
+    "explicitlyGroupedSourceSites": 1260,
+    "semanticGroups": 1114,
+    "routeActions": 898,
+    "wiringGroups": 112,
     "pagesWithoutExplicitSemanticReview": [
-      "P52",
       "P53",
       "P57",
       "P58",
@@ -636,7 +637,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 54,
+    "visualApprovedReviewedPages": 55,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2871,13 +2872,42 @@
       "path": "/platform-admin/collection/overview",
       "title": "采集总览",
       "oldStaticAssociatedCandidates": 81,
-      "review": null,
+      "review": {
+        "pageId": "P52",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 32,
+        "semanticGroups": 24,
+        "routeActions": 23,
+        "wiringGroups": 1,
+        "excludedGroups": 0,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 144,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 5,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 4,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "collection-overview-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖CollectionRuntimeSurface.vue与CollectionOperationsConsole.vue的32个当前扫描候选；共享抽屉、ResponsiveDataView及ConfirmDialog内部控件不重复计入P52。",
+        "总览读取仅按现有服务端范围/window/error_code及独立分页查询；根因按真实dead-letter error_code筛选，不将平台来源健康误作组织/时间筛选结果。",
+        "批量操作仅登记最多20条当前页开放死信的冻结快照和逐条既有重放POST；用户视觉自动通过与动作审批/真实权限/数据库/Worker验收保持分开。"
+      ]
     },
     {
       "id": "P53",
@@ -4567,6 +4597,32 @@
         "localModelBindings": 3,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 3,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P52",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 32,
+      "semanticGroups": 24,
+      "routeActions": 23,
+      "wiringGroups": 1,
+      "excludedGroups": 0,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 144,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 5,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 4,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -8344,7 +8400,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#2506d9788c717641.1",
@@ -8367,7 +8429,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-SCOPE-DRAWER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#9ba7fa048065cd28.1",
@@ -8390,7 +8458,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-SCOPE-FORM",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#e0774dcb9c606eef.1",
@@ -8409,7 +8483,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-SCOPE-RESET",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#002b24e1d917d4a4.1",
@@ -8428,7 +8508,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-SCOPE-APPLY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#a397ba517c409773.1",
@@ -8452,7 +8538,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#c7e32d5d2ec42619.1",
@@ -8480,7 +8572,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#3a14c060674cdbaa.1",
@@ -8512,7 +8610,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-LINK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#f6229375f6be78df.1",
@@ -8548,7 +8652,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-SOURCE-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#1c008f867673db60.1",
@@ -8580,7 +8690,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-SOURCE-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#a9b7552ee181c72f.1",
@@ -8608,7 +8724,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-SOURCE-LIST",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#4509211b46b0337c.1",
@@ -8636,7 +8758,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-ROOT-CLEAR",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#644b6cd23fdb966a.1",
@@ -8668,7 +8796,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-ROOT-DRILL",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#1c008f867673db60.2",
@@ -8704,7 +8838,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-ROOT-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#f6229375f6be78df.2",
@@ -8740,7 +8880,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-ATTEMPT-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#1c008f867673db60.3",
@@ -8772,7 +8918,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-ATTEMPT-DETAIL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#e4688d99cdaed726.1",
@@ -8800,7 +8952,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-ATTEMPT-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#5c6a30d3ce827bee.1",
@@ -8828,7 +8986,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-ATTEMPT-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#65c7916ab5f0b4d9.1",
@@ -8856,7 +9020,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-BATCH-FAILURES",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#660c7a198b93551d.1",
@@ -8884,7 +9054,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-BATCH-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#3d7519a5ffaadf88.1",
@@ -8912,7 +9088,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-BATCH-SELECT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#935c6c8171139c6b.1",
@@ -8936,7 +9118,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-BATCH-REASON",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#9233c1fc5a4723d0.1",
@@ -8960,7 +9148,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-BATCH-PREVIEW",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#9ebd065e5010fd46.1",
@@ -8996,7 +9190,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-DEAD-OPEN-TASK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#1c008f867673db60.4",
@@ -9032,7 +9232,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-DEAD-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#ead51c4255c6e1f0.1",
@@ -9060,7 +9266,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-DEAD-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#19e60ba8660b9f22.1",
@@ -9088,7 +9300,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-DEAD-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#9215901b5115628c.1",
@@ -9107,7 +9325,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-BATCH-WRITE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionOperationsConsole.vue#4640753c7de49660.1",
@@ -9126,7 +9350,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P52",
+          "actionId": "CL52-BATCH-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#b3aff7d1ec82177c.1",
@@ -9458,6 +9688,11 @@
           "pageId": "P51",
           "actionId": "CL51-NAV",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P52",
+          "actionId": "CL52-NAV",
+          "kind": "navigation"
         }
       ]
     },
@@ -9487,6 +9722,11 @@
           "pageId": "P51",
           "actionId": "CL51-NAV",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P52",
+          "actionId": "CL52-NAV",
+          "kind": "navigation"
         }
       ]
     },
@@ -9515,6 +9755,11 @@
         {
           "pageId": "P51",
           "actionId": "CL51-NAV",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P52",
+          "actionId": "CL52-NAV",
           "kind": "navigation"
         }
       ]
