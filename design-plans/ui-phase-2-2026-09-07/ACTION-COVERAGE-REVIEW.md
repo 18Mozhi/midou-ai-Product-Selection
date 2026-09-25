@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应59页/1375源位置/1178组；其中路由动作956组，转发/容器关联118组，其余明确排除。其余14页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应60页/1419源位置/1198组；其中路由动作976组，转发/容器关联118组，其余明确排除。其余13页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记59页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记60页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -73,7 +73,7 @@
 | [P57 通知管理](page-specs/P57.md) | 75 | [21组](action-reviews/P57.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P58 配额管理](page-specs/P58.md) | 71 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P59 安全中心](page-specs/P59.md) | 69 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P60 开放平台](page-specs/P60.md) | 72 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P60 开放平台](page-specs/P60.md) | 72 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P61 系统状态](page-specs/P61.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P62 链路日志](page-specs/P62.md) | 58 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P63 接口覆盖证据](page-specs/P63.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -4572,3 +4572,49 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 事件与审计时间窗、四视图主分页、组织令牌独立分页保持不同范围；摘要不替代结果集合。
 - GET可能事务写读取审计；不新增会话撤销、凭证写入、平台令牌管理或零数据库写入声明。
 - 本映射覆盖SecurityOperationsCenter.vue页面局部候选；五处ResponsiveDataView、TechnicalDetails、TableViewControls与NavigationShell内部交互沿各自共享合同验收。
+
+## P60 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P60.json)：44个局部源位置 → 20组；1类写入，20组路由动作，0组转发/容器关联不重复计动作。已映射0/10个源码字段位置，0/5处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有120个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| OP60-LOAD 读取当前组织和开放平台目录快照 / read | 5处；current-route-source-contract | ；其余见JSON | 页面读取/重读不证明真实最小权限、所有集合完整或真实投递成功。 |
+| OP60-SECRET 复制一次性密钥或在确认保存后清除 / local | 2处；current-route-source-contract | ；其余见JSON | 本地复制/清除不证明外部凭证系统已保存或撤销服务器端密钥。 |
+| OP60-TRACE 展开当前读取操作关联编号 / local | 1处；current-route-source-contract | ；其余见JSON | 追踪编号披露不代表其对应操作成功或可用于认证。 |
+| OP60-TECH 披露Client、Webhook与投递记录已有技术详情 / local | 8处；current-route-source-contract | ；其余见JSON | Details展开不证明日志脱敏、密钥不可达的完整生命周期或读屏行为全部验收。 |
+| OP60-VIEW 切换Client、Webhook与投递记录工作区 / local | 3处；current-route-source-contract | ；其余见JSON | 工作区摘要仅按既有组织范围，不等于当前过滤结果总数。 |
+| OP60-OPEN-CREATE 打开Client或Webhook填写与确认流程 / local | 1处；current-route-source-contract | ；其余见JSON | 表单打开不证明组织有效、创建权限或密钥已生成。 |
+| OP60-EVENT 切换Webhook真实事件订阅项 / local | 1处；current-route-source-contract | ；其余见JSON | 本地勾选不证明Worker能投递或外部接收端已订阅。 |
+| OP60-CREATE-PREPARE 校验并准备Client或Webhook创建确认 / local | 1处；current-route-source-contract | ；其余见JSON | 创建确认预览不代表账号、Webhook或一次性密钥已创建。 |
+| OP60-FILTER 应用当前集合搜索、状态、排序与每页数 / read | 2处；current-route-source-contract | ；其余见JSON | 客户端过滤意图不证明服务端计数或同值排序稳定。 |
+| OP60-RESET 重置当前集合过滤条件 / read | 2处；current-route-source-contract | ；其余见JSON | 重置过滤不撤销、删除或重放任何平台资源。 |
+| OP60-CLIENT-ROTATE 准备轮换当前接口访问账号密钥 / local | 2处；current-route-source-contract | ；其余见JSON | 轮换意图不证明旧密钥失效、新密钥生成或权限持久化。 |
+| OP60-CLIENT-REVOKE 准备撤销当前接口访问账号 / local | 2处；current-route-source-contract | ；其余见JSON | 撤销入口不证明服务端访问已终止、审计已提交或账号可恢复。 |
+| OP60-HOOK-STATUS 准备启用或停用当前Webhook / local | 2处；current-route-source-contract | ；其余见JSON | 本页状态切换入口不是完整Webhook编辑表单。 |
+| OP60-HOOK-TEST 准备向当前Webhook提交真实测试事件 / local | 2处；current-route-source-contract | ；其余见JSON | 打开测试确认不代表已访问DNS、Worker或外部收件端。 |
+| OP60-HOOK-ROTATE 准备轮换当前Webhook签名密钥 / local | 2处；current-route-source-contract | ；其余见JSON | 轮换入口不代表密钥已改变或真实外部回调已验证。 |
+| OP60-REPLAY 准备基于成功或死信记录创建新投递 / local | 2处；current-route-source-contract | ；其余见JSON | 重放入口或HTTP 202只代表受理，不代表Worker发送、接收端响应或最终成功。 |
+| OP60-PAGE 翻阅当前集合独立分页 / read | 2处；current-route-source-contract | ；其余见JSON | 本地分页不验证服务端COUNT或稳定排序。 |
+| OP60-ACTION-REASON 校验并收集高风险操作原因 / local | 2处；current-route-source-contract | ；其余见JSON | 原因弹窗不提交目标动作，也不证明后续请求获准。 |
+| OP60-CONFIRM-DIALOG 呈现开放平台资源影响确认窗 / local | 1处；current-route-source-contract | ；其余见JSON | 确认窗本身不证明账号状态变化、外发回调或密钥更新。 |
+| OP60-CONFIRM 确认并发送当前Open Platform操作 / write | 1处；current-route-source-contract | ；其余见JSON | 静态映射不证明platform_token:manage、同源/幂等、真实MySQL审计、密钥隔离或外部Worker/回调最终成功。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 逐项覆盖OpenPlatformCenter.vue的44个当前候选；共享创建、原因、确认与详情子组件内部控件只交叉引用其自身合同。
+- 三个工作区及三个过滤/分页范围保持独立；读取、写后读取、HTTP 202与外部回调终态不得混为一谈。
+- 一次性密钥仅首次响应展示并受组织/view/生命周期归属保护；本映射不新增密钥存储或自动重试行为。
+- 本映射覆盖OpenPlatformCenter.vue页面候选；OpenCreateDialog、OpenActionReasonDialog、ConfirmDialog、ResponsiveDataView、TechnicalDetails与NavigationShell内部交互沿各自共享合同验收。

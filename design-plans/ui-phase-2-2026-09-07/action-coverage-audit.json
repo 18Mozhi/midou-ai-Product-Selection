@@ -244,7 +244,7 @@
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
-    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "42ef5df2d48eda66fcc4ab907bfb4538ca15a235aa230bf0cc46070313f94f91",
+    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "70cd0a70d6b43205c11a04357617fa531afd072ff23a008c152872f8ffb0d697",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b5463da0234f707cbbd40804c227b7ffc02959bc399a8e22bdeeba7092640ea1",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
@@ -532,6 +532,8 @@
     "tests/unit/ui-phase2-p58-action-review.test.mjs": "9d8f8c1c97bec57a3f26ebc6aca25f2d0ffb4a87798cfa7173ff1e8557e059f5",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P59.json": "fe2cc20e36b60d0bf11abb6c32d131d763ecab15377339b6f02b96dec213c228",
     "tests/unit/ui-phase2-p59-action-review.test.mjs": "258002b58d77f27177a5a2efa6a4b2a4adf6f66f977ea656e91e7f018d3f4b91",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P60.json": "a445c9dcecaf13c2db4fd291f608156cff1ee0a27000a7d44f225df8b771a872",
+    "tests/unit/ui-phase2-p60-action-review.test.mjs": "e8f136322989684a16a3a7817c7d191aad657e33f5996a4f106ce22772d65248",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -591,7 +593,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "8b3ecc637cdd7afadc3906676aa6bcd083a0cc5c1bb4bf6608e20c73b8e9dc5b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "f5c8adcf83981edea27b9088e97b7ecba9d7153dc6c61847919a09d36ae8a50b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "171d9e09f0a49a2ef6abf0714256d394870c6f7ad510e7320767a6329276c33f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "e37bda1d2dee311b10ea1a4422f5b2e74e2a9cca8e6c00830619c90094028d4e",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "5eda7a24e776cdd72336d1ef23433570dc6f856aa07c6b9c639dc74b0c285123",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "72af7291f7d1b8d03f95fe02106b7a2a772e348277562ab5377e8847171c4a4a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "90ace44955294c0a8ed4cdd4f27ab7b6ede4d762dd867d76c1e11e6e5ec46efd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "b08d0fff83950f31e15d60520f785f282fe948b9753c3de41e2692cb990cc81d",
@@ -618,13 +620,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 59,
-    "explicitlyGroupedSourceSites": 1375,
-    "semanticGroups": 1178,
-    "routeActions": 956,
+    "reviewedPages": 60,
+    "explicitlyGroupedSourceSites": 1419,
+    "semanticGroups": 1198,
+    "routeActions": 976,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P60",
       "P61",
       "P62",
       "P63",
@@ -641,7 +642,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 59,
+    "visualApprovedReviewedPages": 60,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3216,13 +3217,42 @@
       "path": "/platform-admin/open-platform",
       "title": "开放平台",
       "oldStaticAssociatedCandidates": 72,
-      "review": null,
+      "review": {
+        "pageId": "P60",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 44,
+        "semanticGroups": 20,
+        "routeActions": 20,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 120,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 10,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 5,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "open-platform-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖OpenPlatformCenter.vue的44个当前候选；共享创建、原因、确认与详情子组件内部控件只交叉引用其自身合同。",
+        "三个工作区及三个过滤/分页范围保持独立；读取、写后读取、HTTP 202与外部回调终态不得混为一谈。",
+        "一次性密钥仅首次响应展示并受组织/view/生命周期归属保护；本映射不新增密钥存储或自动重试行为。"
+      ]
     },
     {
       "id": "P61",
@@ -4923,6 +4953,32 @@
       "surfaces": {
         "callerFiles": 1,
         "localModelBindings": 3,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 5,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P60",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 44,
+      "semanticGroups": 20,
+      "routeActions": 20,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 120,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 10,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 5,
         "callerContainers": 0,
@@ -26807,7 +26863,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#88a9882a80ac28a2.1",
@@ -26828,7 +26890,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#32b3ac036c571c07.1",
@@ -26854,7 +26922,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-SECRET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#0b5f3917e5414006.1",
@@ -26878,7 +26952,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-SECRET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#217f0846e7bba1ee.1",
@@ -26906,7 +26986,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#e4c0454be34c0156.1",
@@ -26930,7 +27016,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.1",
@@ -26960,7 +27052,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.2",
@@ -26990,7 +27088,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#5367bd616a3abe62.1",
@@ -27016,7 +27120,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#378899e48c4d8c4e.1",
@@ -27040,7 +27150,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-VIEW",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#e16baed7fd7574cb.1",
@@ -27064,7 +27180,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-VIEW",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#b224f20b7d8e3bc6.1",
@@ -27088,7 +27210,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-VIEW",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#4fe0f29d19fbaf47.1",
@@ -27116,7 +27244,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-OPEN-CREATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#b70e50f696b891f1.1",
@@ -27154,7 +27288,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-EVENT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7a625f6edefd5043.1",
@@ -27184,7 +27324,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-CREATE-PREPARE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#a67ea3327ba9afd7.1",
@@ -27210,7 +27356,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1a48a72d882d501b.1",
@@ -27236,7 +27388,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#cec60f4bd63b9b5e.1",
@@ -27262,7 +27420,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#2f1b49bdefe2e793.1",
@@ -27288,7 +27452,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-RESET",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#2c7db35d039ef2f4.1",
@@ -27318,7 +27488,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-RESET",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#f8b804e268ceefea.1",
@@ -27356,7 +27532,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-CLIENT-ROTATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c4ff4af0e8fd8d3.1",
@@ -27394,7 +27576,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-CLIENT-REVOKE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.3",
@@ -27428,7 +27616,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.4",
@@ -27458,7 +27652,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7510ef03037c8a3a.1",
@@ -27492,7 +27692,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-CLIENT-ROTATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1df8fceeaa98b0b3.1",
@@ -27526,7 +27732,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-CLIENT-REVOKE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#dd00f77d258cbab6.1",
@@ -27560,7 +27772,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-HOOK-STATUS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1f4e699773a73075.1",
@@ -27598,7 +27816,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-HOOK-TEST",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#861b950a0ddc1651.1",
@@ -27632,7 +27856,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-HOOK-ROTATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.5",
@@ -27666,7 +27896,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.6",
@@ -27696,7 +27932,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#3a8f13d630c643d0.1",
@@ -27726,7 +27968,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-HOOK-STATUS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#aafad6da5f70f220.1",
@@ -27760,7 +28008,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-HOOK-TEST",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#861b950a0ddc1651.2",
@@ -27790,7 +28044,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-HOOK-ROTATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#92629450188f4d4f.1",
@@ -27828,7 +28088,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-REPLAY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.7",
@@ -27862,7 +28128,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.8",
@@ -27890,7 +28162,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#92629450188f4d4f.2",
@@ -27924,7 +28202,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-REPLAY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#5535b1d4b215afda.1",
@@ -27950,7 +28234,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#266a3696f502c16e.1",
@@ -27976,7 +28266,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#f371f0b36489e592.1",
@@ -27995,7 +28291,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-ACTION-REASON",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#55ddee7e496796ca.1",
@@ -28014,7 +28316,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-ACTION-REASON",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7dff4b4ffb8ff617.1",
@@ -28035,7 +28343,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-CONFIRM",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#0e765674026efce4.1",
@@ -28056,7 +28370,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P60",
+          "actionId": "OP60-CONFIRM-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OpportunityAiPanel.vue#8ff0dc0eb124658f.1",

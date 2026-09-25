@@ -397,3 +397,11 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | 当前源文件 | 当前LF SHA-256 | 当前候选 | 语义组 |
 | --- | --- | ---: | ---: |
 | apps/web/src/components/SecurityOperationsCenter.vue | 24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4 | 29 | 9 |
+
+## 14. P60 当前动作与共享流程消费者映射（2026-09-26）
+
+新增 `action-reviews/P60.json` 与永久回归，将 `OpenPlatformCenter.vue` 当前44个候选逐一归入既有OP60合同。明确创建/轮换/撤销/启停/测试/重放先准备原因或影响确认，只有显式确认事件调用既有写入者；202受理、写入成功、后续读取与外部回调终态分开。一次性密钥仍只首次显示并服从组织/视图/页面生命周期。共享创建窗、原因窗、确认窗及三种移动详情只交叉引用，不重复登记内部按钮。
+
+| 当前源文件 | 当前LF SHA-256 | 当前候选 | 语义组 |
+| --- | --- | ---: | ---: |
+| apps/web/src/components/OpenPlatformCenter.vue | 888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa | 44 | 20 |
