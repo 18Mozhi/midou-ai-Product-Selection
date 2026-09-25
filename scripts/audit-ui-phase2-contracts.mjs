@@ -127,7 +127,11 @@ const history = {
     historicalSections: ["2. 51 个局部控件候选（历史源码快照）"],
   },
   "collection-runtime-contract-review.md": {
-    historicalSections: ["7. 来源指纹", "9.1 P51详情状态与关闭旧身份归档"],
+    historicalSections: [
+      "7. 来源指纹",
+      "8.1 P52已替代的旧O身份（历史）",
+      "9.1 P51详情状态与关闭旧身份归档",
+    ],
   },
   "content-notification-evidence-contract-review.md": {
     historicalSections: [
@@ -167,10 +171,7 @@ const history = {
     historicalSections: ["历史候选（不计入当前覆盖）"],
   },
   "platform-account-contract-review.md": {
-    historicalSections: [
-      "7. 源码指纹（LF SHA-256）",
-      "1.5 P42旧组织详情身份（历史）",
-    ],
+    historicalSections: ["7. 源码指纹（LF SHA-256）", "1.5 P42旧组织详情身份（历史）"],
   },
   "provider-definition-contract-review.md": {
     historicalSections: ["7. 历史源指纹（LF SHA-256）", "PR46/PR47及共享详情旧身份归档"],

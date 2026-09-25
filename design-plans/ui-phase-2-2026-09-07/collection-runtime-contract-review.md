@@ -67,34 +67,17 @@
 | T:5046ae27ac1c3e07.1 | control / 896 | CL51-REPLAY / 确认预览 |
 | T:acbca874b622fd25.1 | event-binding / 908 | CL51-REPLAY / cancel、replay |
 | T:e9f14f18f727a992.1 | dialog-component-call / 908 | CL51-REPLAY / 共享确认调用 |
-| O:f04d44ed4df285ab.1 | control / 361 | CL52-LOAD / 刷新 |
 | O:2506d9788c717641.1 | dialog-component-call / 586 | CL52-SCOPE / 移动筛选抽屉 |
 | O:9ba7fa048065cd28.1 | form-event / 587 | CL52-SCOPE / applyScope |
-| O:c28b2fc7235cdb49.1 | control / 402 | CL52-SCOPE / resetScope |
-| O:43ad97abb073c16e.1 | control / 405 | CL52-SCOPE / 原生submit |
-| O:5cb1142ec0759d3e.1 | control / 414 | CL52-LOAD / hint重试 |
-| O:ea08550bb35442f9.1 | control / 433 | CL52-LOAD / 失败快照重读 |
 | O:3a14c060674cdbaa.1 | control / 670 | CL52-LINK / 响应links六类目标 |
 | O:f6229375f6be78df.1 | control / 713 | CL52-SOURCE / 桌面技术展开 |
 | O:1c008f867673db60.1 | control / 756 | CL52-SOURCE / 移动技术展开 |
-| O:f596c7474d4b8232.1 | control / 534 | CL52-SOURCE / 全部与前8项 |
-| O:0db0b4127120a05a.1 | control / 575 | CL52-ROOT / 清除精确根因 |
-| O:e1cacfb14abb0a4c.1 | control / 590 | CL52-ROOT / 精确错误码切换 |
 | O:1c008f867673db60.2 | control / 831 | CL52-ROOT / 原始错误码 |
 | O:f6229375f6be78df.2 | control / 869 | CL52-ATTEMPT / 桌面技术展开 |
 | O:1c008f867673db60.3 | control / 916 | CL52-ATTEMPT / 移动技术展开 |
-| O:9a34a1e60386c3be.1 | control / 700 | CL52-ATTEMPT / 前页 |
-| O:a8016a8969f38074.1 | control / 711 | CL52-ATTEMPT / 后页 |
-| O:30995dc421725b22.1 | control / 729 | CL52-BATCH / 失败清单展开 |
 | O:660c7a198b93551d.1 | control / 972 | CL52-BATCH / 安全重放区展开 |
-| O:104c5add10ee67a1.1 | event-binding / 743 | CL52-BATCH / checkbox change与20项上限 |
-| O:713c88750f4f0639.1 | control / 759 | CL52-BATCH / previewBatchReplay |
 | O:9ebd065e5010fd46.1 | control / 1022 | CL52-DEAD / 链接单任务详情重放 |
 | O:1c008f867673db60.4 | control / 1026 | CL52-DEAD / 技术详情 |
-| O:13685210dcee03e5.1 | control / 788 | CL52-DEAD / 前页 |
-| O:7b21c2da3342a42a.1 | control / 799 | CL52-DEAD / 后页 |
-| O:39535e218053c768.1 | event-binding / 816 | CL52-BATCH / cancel、confirmBatchReplay |
-| O:f843252676c8b85b.1 | dialog-component-call / 816 | CL52-BATCH / 影响确认调用 |
 | R:9dee0a9f3983a0d5.1 | control / 278 | CL53-LOAD / 刷新 |
 | R:f2f6bbdea261f58a.1 | control / 281 | CL53-RECOVER / 过期回收确认 |
 | R:25af292333a00121.1 | event-binding / 291 | CL53-LOAD / 状态面primary |
@@ -281,7 +264,33 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/CollectionOperationsConsole.vue#9215901b5115628c.1 | 1072 | event-binding | CL52-BATCH / ConfirmDialog cancel与confirm分别走现有取消/确认所有者 |
 | apps/web/src/components/CollectionOperationsConsole.vue#4640753c7de49660.1 | 1072 | dialog-component-call | CL52-BATCH / 破坏性影响确认共享调用；要求确认短语与影响勾选 |
 
-静态回归应核对当前29个candidateId、行号、类型及console当前hash；其中11个沿用第2节原语义并更新行号，本节补18个原先未归属位置。第2节剩余17个旧O身份因实际源码已无该签名，保持identity-not-found并不覆盖新分母。静态对账、源hash与历史隔离均不代表浏览器交互、服务端权限/审计、真实Worker重放或生产验收；第5/6节所有既有限制和CL-G退出条件仍有效。
+静态回归应核对当前29个candidateId、行号、类型及console当前hash；其中11个沿用第2节原语义并更新行号，本节补18个原先未归属位置。第8.1节将17个已被当前候选替代的旧O身份单独归档，不覆盖新分母。静态对账、源hash与历史隔离均不代表浏览器交互、服务端权限/审计、真实Worker重放或生产验收；第5/6节所有既有限制和CL-G退出条件仍有效。
+
+### 8.1 P52已替代的旧O身份（历史）
+
+以下17个第2节早期O签名已不在当前源码，现行29候选由第8节逐项覆盖。旧身份仅保留历史追溯，不计当前覆盖；语义相近仅作台账交叉索引，不证明运行行为等价。
+
+#### CollectionOperationsConsole.vue
+
+| 旧candidateId | 原始语义 | 当前候选交叉索引 |
+| --- | --- | --- |
+| O:f04d44ed4df285ab.1 | CL52-LOAD / 刷新 | #6d3f7d591719f19f.1 / CL52-LOAD |
+| O:c28b2fc7235cdb49.1 | CL52-SCOPE / resetScope | #e0774dcb9c606eef.1 / CL52-SCOPE |
+| O:43ad97abb073c16e.1 | CL52-SCOPE / 原生submit | #002b24e1d917d4a4.1 / CL52-SCOPE |
+| O:5cb1142ec0759d3e.1 | CL52-LOAD / hint重试 | #a397ba517c409773.1 / CL52-LOAD |
+| O:ea08550bb35442f9.1 | CL52-LOAD / 失败快照重读 | #c7e32d5d2ec42619.1 / CL52-LOAD |
+| O:f596c7474d4b8232.1 | CL52-SOURCE / 全部与前8项 | #a9b7552ee181c72f.1 / CL52-SOURCE |
+| O:0db0b4127120a05a.1 | CL52-ROOT / 清除精确根因 | #4509211b46b0337c.1 / CL52-ROOT |
+| O:e1cacfb14abb0a4c.1 | CL52-ROOT / 精确错误码切换 | #644b6cd23fdb966a.1 / CL52-ROOT |
+| O:9a34a1e60386c3be.1 | CL52-ATTEMPT / 前页 | #e4688d99cdaed726.1 / CL52-ATTEMPT |
+| O:a8016a8969f38074.1 | CL52-ATTEMPT / 后页 | #5c6a30d3ce827bee.1 / CL52-ATTEMPT |
+| O:30995dc421725b22.1 | CL52-BATCH / 失败清单展开 | #65c7916ab5f0b4d9.1 / CL52-BATCH |
+| O:104c5add10ee67a1.1 | CL52-BATCH / checkbox变更与选择上限 | #3d7519a5ffaadf88.1 / CL52-BATCH |
+| O:713c88750f4f0639.1 | CL52-BATCH / previewBatchReplay | #9233c1fc5a4723d0.1 / CL52-BATCH |
+| O:13685210dcee03e5.1 | CL52-DEAD / 前页 | #ead51c4255c6e1f0.1 / CL52-DEAD |
+| O:7b21c2da3342a42a.1 | CL52-DEAD / 后页 | #19e60ba8660b9f22.1 / CL52-DEAD |
+| O:39535e218053c768.1 | CL52-BATCH / cancel与confirmBatchReplay | #9215901b5115628c.1 / CL52-BATCH |
+| O:f843252676c8b85b.1 | CL52-BATCH / 影响确认调用 | #4640753c7de49660.1 / CL52-BATCH |
 
 ## 9. P53 CollectionRuntimeCenter 当前源码增量（2026-09-24）
 

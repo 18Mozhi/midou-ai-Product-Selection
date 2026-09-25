@@ -592,6 +592,34 @@ test("current collection operations map covers all live candidates and isolates 
   );
   assert.equal(oldSnapshot.length, 1);
   assert.equal(oldSnapshot[0].temporalScope, "historical");
+  const supersededP52 = [
+    "f04d44ed4df285ab.1",
+    "c28b2fc7235cdb49.1",
+    "43ad97abb073c16e.1",
+    "5cb1142ec0759d3e.1",
+    "ea08550bb35442f9.1",
+    "f596c7474d4b8232.1",
+    "0db0b4127120a05a.1",
+    "e1cacfb14abb0a4c.1",
+    "9a34a1e60386c3be.1",
+    "a8016a8969f38074.1",
+    "30995dc421725b22.1",
+    "104c5add10ee67a1.1",
+    "713c88750f4f0639.1",
+    "13685210dcee03e5.1",
+    "7b21c2da3342a42a.1",
+    "39535e218053c768.1",
+    "f843252676c8b85b.1",
+  ];
+  const historicalP52Rows = report.records.filter(
+    (record) =>
+      record.document.endsWith("collection-runtime-contract-review.md") &&
+      record.sourceFile === file &&
+      record.candidateId &&
+      supersededP52.some((signature) => record.candidateId.endsWith(`#${signature}`)),
+  );
+  assert.equal(historicalP52Rows.length, supersededP52.length);
+  assert.ok(historicalP52Rows.every((record) => record.temporalScope === "historical"));
   assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
   assert.equal(report.denominatorFrozen, false);
 });
@@ -1389,7 +1417,8 @@ test("P62/P64/P65 superseded controls are historical while current replacements 
   const filterTrigger = report.records.find(
     (record) =>
       record.document.endsWith(document) &&
-      record.candidateId === "apps/web/src/components/ResponsiveFilterDrawer.vue#7e0fa28eaeb1cc09.1",
+      record.candidateId ===
+        "apps/web/src/components/ResponsiveFilterDrawer.vue#7e0fa28eaeb1cc09.1",
   );
   assert.equal(filterTrigger?.status, "identity-current");
   for (const candidateId of [
