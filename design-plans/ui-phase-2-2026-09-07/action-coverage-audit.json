@@ -268,7 +268,7 @@
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "807b562fa1c4ddd4b2fdf58f0fe635ce7a9af2dd7dcd246f89cfc59db508a762",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
-    "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "53418f5884776c80af2aee2d9c253f9c62e6517adbd92997cda678a4806e62eb",
+    "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "af93117972cab0cd3a69985cda8e8b487a7eac7c94f45e6cfd6972e556c04b70",
     "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "34d9faf49a0d92979430bb29a2dea5d28c1ffec5e380d3146a92deff9b11c3cc",
     "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "133ad0f55aab8e3614fc80844ff8ebd331ebd38cde0ea487ba0e8bcc595de1be",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "86bc709d10fd9b28a7cf87ae5b21b73e3ac1ec0ff6c9dc60fd8cec027d66d3a9",
@@ -534,6 +534,8 @@
     "tests/unit/ui-phase2-p59-action-review.test.mjs": "258002b58d77f27177a5a2efa6a4b2a4adf6f66f977ea656e91e7f018d3f4b91",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P60.json": "a445c9dcecaf13c2db4fd291f608156cff1ee0a27000a7d44f225df8b771a872",
     "tests/unit/ui-phase2-p60-action-review.test.mjs": "e8f136322989684a16a3a7817c7d191aad657e33f5996a4f106ce22772d65248",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P61.json": "e8ae2d3928773346902a8cbf3472b0979d5b87b34317da9d4c49c12f81744013",
+    "tests/unit/ui-phase2-p61-action-review.test.mjs": "13917fe4ac69e2b6dd497f1268267ea01908a7cca5eda7ca6c1a10814c7ba58e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -594,7 +596,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "f5c8adcf83981edea27b9088e97b7ecba9d7153dc6c61847919a09d36ae8a50b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "171d9e09f0a49a2ef6abf0714256d394870c6f7ad510e7320767a6329276c33f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "5eda7a24e776cdd72336d1ef23433570dc6f856aa07c6b9c639dc74b0c285123",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "72af7291f7d1b8d03f95fe02106b7a2a772e348277562ab5377e8847171c4a4a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "64a12e0759f7c35565dc469d2b4293324dcf547784d6e535d9cd52eac5755eb0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "90ace44955294c0a8ed4cdd4f27ab7b6ede4d762dd867d76c1e11e6e5ec46efd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "b08d0fff83950f31e15d60520f785f282fe948b9753c3de41e2692cb990cc81d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "4869f2a7553d65cb5355570511b38e73af1a34075a028e1d07f7564c89d71ee3",
@@ -620,13 +622,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 60,
-    "explicitlyGroupedSourceSites": 1419,
-    "semanticGroups": 1198,
-    "routeActions": 976,
+    "reviewedPages": 61,
+    "explicitlyGroupedSourceSites": 1425,
+    "semanticGroups": 1204,
+    "routeActions": 982,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P61",
       "P62",
       "P63",
       "P64",
@@ -642,7 +643,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 60,
+    "visualApprovedReviewedPages": 61,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3259,13 +3260,42 @@
       "path": "/platform-admin/status",
       "title": "系统状态",
       "oldStaticAssociatedCandidates": 75,
-      "review": null,
+      "review": {
+        "pageId": "P61",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 6,
+        "semanticGroups": 6,
+        "routeActions": 6,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 36,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 1,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "status-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖两个P61专属Vue子组件的6个源码候选；父级刷新/重试/追踪位置单独按共享合同交叉引用。",
+        "四分区切换仅为本地状态；拓扑、异常处理、采集与来源入口只导航，不在P61启动/恢复任何服务。",
+        "状态依赖、业务汇总与浏览器标签页会话指标各自按现有事实来源显示，不互相推导为全平台健康率。"
+      ]
     },
     {
       "id": "P62",
@@ -4981,6 +5011,32 @@
         "localModelBindings": 10,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 5,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P61",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 6,
+      "semanticGroups": 6,
+      "routeActions": 6,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 36,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 1,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -48999,7 +49055,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P61",
+          "actionId": "P61-TOPOLOGY",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformStatusCenterView.vue#5ec3f86a53bdd26b.1",
@@ -49027,7 +49089,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P61",
+          "actionId": "P61-TOPOLOGY-NODE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformStatusCenterView.vue#1c29b9e693b1be23.1",
@@ -49051,7 +49119,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P61",
+          "actionId": "P61-PROPAGATION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformStatusCenterView.vue#4c8c3c0ab5222aee.1",
@@ -49070,7 +49144,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P61",
+          "actionId": "P61-COLLECTION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformStatusCenterView.vue#0e70539c0b003023.1",
@@ -49089,7 +49169,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P61",
+          "actionId": "P61-PROVIDER",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformStatusWorkspace.vue#b7ef2bc74a304a7a.1",
@@ -49113,7 +49199,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P61",
+          "actionId": "P61-WORKSPACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#316970a74be81a74.1",

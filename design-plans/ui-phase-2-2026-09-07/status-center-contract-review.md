@@ -39,3 +39,12 @@
 | apps/web/src/components/PlatformStatusWorkspace.vue | 775769a187d18e8440f6e0ccef08a13b305620cf29747eb0aad35766059b01f8 |
 
 该候选是重复渲染的分区模板入口，不将每个分区实例当成独立业务动作，也不代替键盘/读屏的完整工作区验收。
+
+## 4. P61 页面动作映射（2026-09-26）
+
+新增 `action-reviews/P61.json` 与永久回归：两个状态专属子组件的6个当前候选归入5种既有动作（四类导航与本地分区切换）。父级 `PlatformManagementCenter` 的按域刷新、读取错误重试和追踪详情为共享候选，只按既有内容/通知合同交叉引用；其他域候选排除。静态映射不证明实时生产状态、真实RBAC/SQL、服务恢复或M07-03验收。
+
+| 当前源文件 | 当前LF SHA-256 | 当前候选 | 动作组 |
+| --- | --- | ---: | ---: |
+| apps/web/src/components/PlatformStatusCenterView.vue | 6ce3255def9689fd88051da43680d5eb53b50699c4f229901871b267cacab9c7 | 5 | 5 |
+| apps/web/src/components/PlatformStatusWorkspace.vue | 775769a187d18e8440f6e0ccef08a13b305620cf29747eb0aad35766059b01f8 | 1 | 1 |
