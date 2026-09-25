@@ -63,12 +63,10 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 | apps/web/src/components/CrawlerSchedulerCenter.vue#ae52c30c28ab3a05.1 | 436 | control | SC70-LOAD 首次失败重试 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#0767d27629b787d7.1 | 494 | event-binding | SC70-FILTER code包含，本地并回第一页 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#1b581569d5d9e0d4.1 | 503 | event-binding | SC70-FILTER 运行范围，本地并回第一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#6162438a51ad9c44.1 | 554 | control | SC70-HEALTH 本地跳转指定provider_id |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1 | 557 | control | SC70-PROVIDER 打开当前来源确认 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#dac6cbc2991374ba.1 | 566 | control | SC70-DETAIL 原生最近错误披露 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#d868a97237e89c1c.1 | 578 | control | SC70-PAGE 本地上一页 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1 | 582 | control | SC70-PAGE 本地下一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#1d663944bdde1289.1 | 706 | control | SC70-DETAIL 租约技术披露 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1 | 745 | event-binding | SC70-EXPIRED cancel本地/confirm POST |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1 | 745 | dialog-component-call | SC70-EXPIRED 同一确认调用，不重复算动作 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#3c382eda5cb1d9ce.1 | 755 | event-binding | SC70-PROVIDER cancel本地/confirm POST |
@@ -77,14 +75,8 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 | apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1 | 236 | control | SC71-ATTEST 打开确认 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1 | 257 | control | SC71-LOAD 保留快照重试 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#26fe2d5165472bca.1 | 273 | control | SC71-LOAD 首次失败重试 |
-| apps/web/src/components/CapacityBoundaryCenter.vue#1c008f867673db60.1 | 394 | control | SC71-DETAIL finding原生披露 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#bad94329bde0aecb.1 | 413 | event-binding | SC71-ATTEST cancel本地/confirm POST |
 | apps/web/src/components/CapacityBoundaryCenter.vue#0db1bef96a99927a.1 | 413 | dialog-component-call | SC71-ATTEST 同一确认调用，不重复算动作 |
-| apps/web/src/components/ConfirmDialog.vue#0f50ae650a1895b3.1 | 91 | event-binding | 共享遮罩取消 |
-| apps/web/src/components/ConfirmDialog.vue#47b44d75a30b19d9.1 | 92 | dialog-definition | 共享alertdialog定义，非业务写入 |
-| apps/web/src/components/ConfirmDialog.vue#30a3b6ddc206839e.1 | 92 | event-binding | 共享Escape/Tab |
-| apps/web/src/components/ConfirmDialog.vue#d1b7ac74d4f4ffc3.1 | 123 | control | 共享取消并返焦 |
-| apps/web/src/components/ConfirmDialog.vue#3003ba3e33804f38.1 | 124 | control | 共享确认emit，由具体调用方决定副作用 |
 | apps/web/src/components/TechnicalDetails.vue#b3ffca8eb967d682.1 | 36 | control | 共享原生披露 |
 | apps/web/src/components/TechnicalDetails.vue#c19091da9e2471f1.1 | 43 | control | 复制请求编号至剪贴板，非业务POST |
 
@@ -155,3 +147,18 @@ P70活动租约区的原生details只按需展示当前已返回的任务UUID、
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1 | 585 | control | SC70-HEALTH-NAV / 导航至已登记适配器路由，不代表健康检查已执行 |
+
+## 9. 已替代源码身份归档
+
+以下八个早期身份已不匹配当前 Vue 源码；P70/P71 新组件与导航映射见第7/8节，共享确认窗继续由现有共享组件合同覆盖。仅保留追溯，不计当前源码覆盖。
+
+| candidateId | 旧行 | 语义 |
+| --- | ---: | --- |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#6162438a51ad9c44.1 | 554 | SC70-HEALTH 旧来源健康链接 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#1d663944bdde1289.1 | 706 | SC70-DETAIL 旧租约技术披露 |
+| apps/web/src/components/CapacityBoundaryCenter.vue#1c008f867673db60.1 | 394 | SC71-DETAIL 旧发现信息披露 |
+| apps/web/src/components/ConfirmDialog.vue#0f50ae650a1895b3.1 | 91 | 共享旧遮罩取消 |
+| apps/web/src/components/ConfirmDialog.vue#47b44d75a30b19d9.1 | 92 | 共享旧alertdialog定义 |
+| apps/web/src/components/ConfirmDialog.vue#30a3b6ddc206839e.1 | 92 | 共享旧Escape/Tab处理 |
+| apps/web/src/components/ConfirmDialog.vue#d1b7ac74d4f4ffc3.1 | 123 | 共享旧取消按钮 |
+| apps/web/src/components/ConfirmDialog.vue#3003ba3e33804f38.1 | 124 | 共享旧确认按钮 |

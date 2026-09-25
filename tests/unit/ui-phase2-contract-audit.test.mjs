@@ -696,6 +696,44 @@ test("current platform user detail map covers all live sites without trusting st
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("current P70 and P71 evidence maps keep replaced scheduler identities historical", () => {
+  const document = "scheduler-capacity-contract-review.md";
+  const report = runContractAudit();
+  const staleIds = [
+    "apps/web/src/components/CrawlerSchedulerCenter.vue#6162438a51ad9c44.1",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue#1d663944bdde1289.1",
+    "apps/web/src/components/CapacityBoundaryCenter.vue#1c008f867673db60.1",
+    "apps/web/src/components/ConfirmDialog.vue#0f50ae650a1895b3.1",
+    "apps/web/src/components/ConfirmDialog.vue#47b44d75a30b19d9.1",
+    "apps/web/src/components/ConfirmDialog.vue#30a3b6ddc206839e.1",
+    "apps/web/src/components/ConfirmDialog.vue#d1b7ac74d4f4ffc3.1",
+    "apps/web/src/components/ConfirmDialog.vue#3003ba3e33804f38.1",
+  ];
+  for (const candidateId of staleIds) {
+    const record = report.records.find(
+      (item) => item.document.endsWith(document) && item.candidateId === candidateId,
+    );
+    assert.equal(record?.status, "identity-not-found", candidateId);
+    assert.equal(record?.temporalScope, "historical", candidateId);
+  }
+  for (const candidateId of [
+    "apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1",
+    "apps/web/src/components/CrawlerSchedulerEvidence.vue#1d663944bdde1289.1",
+    "apps/web/src/components/CapacityBoundaryEvidence.vue#1c008f867673db60.1",
+  ]) {
+    assert.ok(
+      report.records.some(
+        (item) =>
+          item.document.endsWith(document) &&
+          item.candidateId === candidateId &&
+          item.temporalScope !== "historical" &&
+          item.currentLine !== null,
+      ),
+      candidateId,
+    );
+  }
+});
+
 test("current provider source filter map covers local query, facets, sorting and reset", () => {
   const file = "apps/web/src/components/ProviderSourceFilters.vue";
   const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
