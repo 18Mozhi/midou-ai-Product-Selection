@@ -389,3 +389,11 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | 当前源文件 | 当前LF SHA-256 | 当前候选 | 语义组 |
 | --- | --- | ---: | ---: |
 | apps/web/src/components/CommercialOperationsCenter.vue | 3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257 | 43 | 24 |
+
+## 13. P59 当前动作与共享详情消费者映射（2026-09-26）
+
+新增 `action-reviews/P59.json` 与永久回归，将 `SecurityOperationsCenter.vue` 的29个当前候选归入9组SO59动作。事件/审计时间窗、四视图主分页、组织令牌独立分页分别登记；五个ResponsiveDataView移动详情作为共享消费者引用。P59虽不处置安全对象，成功GET仍可能写入 `security_operations_views` 与平台读取审计；本映射不代表数据库零写、真实最小权限或生产验收。
+
+| 当前源文件 | 当前LF SHA-256 | 当前候选 | 语义组 |
+| --- | --- | ---: | ---: |
+| apps/web/src/components/SecurityOperationsCenter.vue | 24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4 | 29 | 9 |

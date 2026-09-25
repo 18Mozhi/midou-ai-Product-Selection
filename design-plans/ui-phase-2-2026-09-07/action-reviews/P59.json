@@ -1,0 +1,385 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P59",
+  "route": "/platform-admin/security",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+  },
+  "inputs": {
+    "apps/web/src/components/SecurityOperationsCenter.vue": [
+      "windowCode",
+      "queryInput",
+      "status"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "SO59-WINDOW",
+      "kind": "read",
+      "label": "切换安全事件与审计时间范围",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#4e1ce57777a6a035.1"
+      ],
+      "sourceContractKeys": [
+        "SO59-WINDOW 时间窗change"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-WINDOW精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "用户选择24小时、7天或30天时间范围时。",
+      "handler": "沿用当前时间窗并调用既有GET；时间窗只影响事件与审计，生命周期集合的范围不变。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "范围控件不证明数据库事件完整或所有集合都按时间筛选。"
+    },
+    {
+      "actionId": "SO59-LOAD",
+      "kind": "read",
+      "label": "刷新或重试当前安全运营读取",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#282785221153ab14.1",
+        "apps/web/src/components/SecurityOperationsCenter.vue#30a2ab0920048786.1"
+      ],
+      "sourceContractKeys": [
+        "SO59-LOAD 刷新",
+        "SO59-LOAD 错误重试"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-LOAD精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "用户刷新当前视图或在读取错误区域重试时。",
+      "handler": "复用既有refresh/GET、单飞与当前URL范围；不执行安全处置写操作。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "页面读取会由服务写入安全读取审计；静态映射不证明真实权限、HTTP或审计持久化。"
+    },
+    {
+      "actionId": "SO59-TECH",
+      "kind": "local",
+      "label": "展开当前安全记录已有技术详情",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.1",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.10",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.11",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.2",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.3",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.4",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.5",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.6",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.7",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.8",
+        "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.9"
+      ],
+      "sourceContractKeys": [
+        "SO59-TECH 错误请求详情",
+        "SO59-TECH 事件桌面",
+        "SO59-TECH 事件移动",
+        "SO59-TECH 会话桌面",
+        "SO59-TECH 会话移动",
+        "SO59-TECH 凭证桌面",
+        "SO59-TECH 凭证移动",
+        "SO59-TECH 令牌桌面",
+        "SO59-TECH 令牌移动",
+        "SO59-TECH 审计桌面",
+        "SO59-TECH 审计移动"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-TECH精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "当前记录提供原生details/summary或只读移动详情入口时。",
+      "handler": "披露GET快照已经返回的关联字段；移动详情沿用五个ResponsiveDataView消费者，不新增读取或安全处置。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "披露不证明敏感字段服务端脱敏、移动模态完整读屏或焦点生命周期已全部验收。"
+    },
+    {
+      "actionId": "SO59-VIEW",
+      "kind": "navigation",
+      "label": "切换事件、会话、访问凭证或审计调查视图",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#904af42413d62768.1"
+      ],
+      "sourceContractKeys": [
+        "SO59-VIEW 四视图动态路由"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-VIEW精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "用户选择四个安全调查视图之一时。",
+      "handler": "沿用现有RouterLink与路由query状态；只查询当前view，不新增会话撤销、凭证写入或令牌管理。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "视图导航不证明目标数据存在或当前身份获准读取。"
+    },
+    {
+      "actionId": "SO59-FILTER",
+      "kind": "read",
+      "label": "提交当前安全调查视图搜索与状态条件",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#36c7b60823abfadf.1",
+        "apps/web/src/components/SecurityOperationsCenter.vue#75aeba3a14cd8c5d.1"
+      ],
+      "sourceContractKeys": [
+        "SO59-FILTER form",
+        "SO59-FILTER 同form按钮"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-FILTER精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "查询字段及当前view允许的状态值提交时。",
+      "handler": "复用现有字段/状态选项并按URL读取当前view；搜索语义按当前实体，不扩成其他编号或原始UA。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "提交筛选不证明服务端语义、记录总数或跨视图数据授权。"
+    },
+    {
+      "actionId": "SO59-RESET",
+      "kind": "read",
+      "label": "清除当前调查视图筛选",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#19551c617c5e26da.1"
+      ],
+      "sourceContractKeys": [
+        "SO59-RESET 重置"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-RESET精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "用户请求重置当前view查询与状态条件时。",
+      "handler": "沿用resetFilters清除查询状态和分页并重读当前view；时间窗保持既有逻辑。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "重置只改变查询范围，不撤销安全对象或删除记录。"
+    },
+    {
+      "actionId": "SO59-PAGE",
+      "kind": "read",
+      "label": "翻阅事件、会话、凭证或审计当前视图分页",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#530875d018a16137.1",
+        "apps/web/src/components/SecurityOperationsCenter.vue#530875d018a16137.2",
+        "apps/web/src/components/SecurityOperationsCenter.vue#530875d018a16137.3",
+        "apps/web/src/components/SecurityOperationsCenter.vue#530875d018a16137.4",
+        "apps/web/src/components/SecurityOperationsCenter.vue#59622af06082395d.1",
+        "apps/web/src/components/SecurityOperationsCenter.vue#59622af06082395d.2",
+        "apps/web/src/components/SecurityOperationsCenter.vue#59622af06082395d.3",
+        "apps/web/src/components/SecurityOperationsCenter.vue#59622af06082395d.4"
+      ],
+      "sourceContractKeys": [
+        "SO59-PAGE 事件前页",
+        "SO59-PAGE 事件后页",
+        "SO59-PAGE 会话前页",
+        "SO59-PAGE 会话后页",
+        "SO59-PAGE 凭证前页",
+        "SO59-PAGE 凭证后页",
+        "SO59-PAGE 审计前页",
+        "SO59-PAGE 审计后页"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-PAGE精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "当前view分页元数据提供有效上一页或下一页且没有请求在途时。",
+      "handler": "每个view复用main分页游标；凭证view仍与组织令牌游标分开。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "本地翻页不证明服务端COUNT或历史集合完整。"
+    },
+    {
+      "actionId": "SO59-TOKEN-PAGE",
+      "kind": "read",
+      "label": "翻阅组织令牌独立分页",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#56cd5b08b7c47c21.1",
+        "apps/web/src/components/SecurityOperationsCenter.vue#dfefdc60704cd1d6.1"
+      ],
+      "sourceContractKeys": [
+        "SO59-TOKEN-PAGE 前页",
+        "SO59-TOKEN-PAGE 后页"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-TOKEN-PAGE精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "凭证/令牌视图存在可用组织令牌目标页时。",
+      "handler": "只更新token游标并发起当前view GET；不与凭证主列表page合并。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "独立控件不证明report:read授权或令牌集合已完整读取。"
+    },
+    {
+      "actionId": "SO59-MANAGE",
+      "kind": "navigation",
+      "label": "前往独立授权的凭证与档案管理页",
+      "sourceCandidateIds": [
+        "apps/web/src/components/SecurityOperationsCenter.vue#a55873d215f3efac.1"
+      ],
+      "sourceContractKeys": [
+        "SO59-MANAGE 凭证管理跳转"
+      ],
+      "contractAliasReason": "沿用P59现有SO59源合同对SO59-MANAGE精确归属，不扩大安全数据、查询或处置行为。",
+      "condition": "安全运营页展示凭证管理入口时。",
+      "handler": "只导航到既有凭证管理路由，由目标页重新执行既有授权。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p59-action-review.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "入口不授予platform:operate，也不代表凭证已查看、修改或撤销。"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "页面通过5个ResponsiveDataView消费者提供移动详情，不定义局部dialog；共享组件初焦点/Tab/Escape/返焦只按现有消费者证据，不由本映射重复验收。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/SecurityOperationsCenter.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+    },
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "本映射覆盖SecurityOperationsCenter.vue页面局部候选；五处ResponsiveDataView、TechnicalDetails、TableViewControls与NavigationShell内部交互沿各自共享合同验收。"
+    ],
+    "remaining": "静态映射不证明真实platform:secure最小角色、GET事务写入security_operations_views/platform.security.operations.read、MySQL审计、完整读屏或M06-04生产验收。来源指纹SHA-256 24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4。"
+  },
+  "compositionGaps": [
+    "逐项覆盖SecurityOperationsCenter.vue的29个当前扫描候选；ResponsiveDataView五消费者作为共享合同交叉引用，不另计局部源按钮。",
+    "事件与审计时间窗、四视图主分页、组织令牌独立分页保持不同范围；摘要不替代结果集合。",
+    "GET可能事务写读取审计；不新增会话撤销、凭证写入、平台令牌管理或零数据库写入声明。"
+  ]
+}

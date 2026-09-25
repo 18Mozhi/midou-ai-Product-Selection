@@ -244,7 +244,7 @@
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
-    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "f12927837a6e8f002575a87826b1cd3c11d21fcdf7619f7e992a532454d5c0f1",
+    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "42ef5df2d48eda66fcc4ab907bfb4538ca15a235aa230bf0cc46070313f94f91",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b5463da0234f707cbbd40804c227b7ffc02959bc399a8e22bdeeba7092640ea1",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
@@ -530,6 +530,8 @@
     "tests/unit/ui-phase2-p57-action-map.test.mjs": "2ec83f7f90020ee20b53f4f3b75cacffaf1d305b9fa09d4f338d45ebdf91b956",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P58.json": "a797aa69783dd129683e6d3f9839cd2a91242a10fa7b36c02479587f7cbe6536",
     "tests/unit/ui-phase2-p58-action-review.test.mjs": "9d8f8c1c97bec57a3f26ebc6aca25f2d0ffb4a87798cfa7173ff1e8557e059f5",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P59.json": "fe2cc20e36b60d0bf11abb6c32d131d763ecab15377339b6f02b96dec213c228",
+    "tests/unit/ui-phase2-p59-action-review.test.mjs": "258002b58d77f27177a5a2efa6a4b2a4adf6f66f977ea656e91e7f018d3f4b91",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -588,7 +590,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "0e4e2251072e0b24a261d350bd476434aebcb2a1dfc4c329e5d2625a7d667222",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "8b3ecc637cdd7afadc3906676aa6bcd083a0cc5c1bb4bf6608e20c73b8e9dc5b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "f5c8adcf83981edea27b9088e97b7ecba9d7153dc6c61847919a09d36ae8a50b",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "529f3048769ab67e059a66d9f71b7893b25d2a320eacb047f7fac3dcdff374f7",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "171d9e09f0a49a2ef6abf0714256d394870c6f7ad510e7320767a6329276c33f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "e37bda1d2dee311b10ea1a4422f5b2e74e2a9cca8e6c00830619c90094028d4e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "72af7291f7d1b8d03f95fe02106b7a2a772e348277562ab5377e8847171c4a4a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "90ace44955294c0a8ed4cdd4f27ab7b6ede4d762dd867d76c1e11e6e5ec46efd",
@@ -616,13 +618,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 58,
-    "explicitlyGroupedSourceSites": 1346,
-    "semanticGroups": 1169,
-    "routeActions": 947,
+    "reviewedPages": 59,
+    "explicitlyGroupedSourceSites": 1375,
+    "semanticGroups": 1178,
+    "routeActions": 956,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P59",
       "P60",
       "P61",
       "P62",
@@ -640,7 +641,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 58,
+    "visualApprovedReviewedPages": 59,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3173,13 +3174,42 @@
       "path": "/platform-admin/security",
       "title": "安全中心",
       "oldStaticAssociatedCandidates": 69,
-      "review": null,
+      "review": {
+        "pageId": "P59",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 29,
+        "semanticGroups": 9,
+        "routeActions": 9,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 54,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 3,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 5,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "security-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖SecurityOperationsCenter.vue的29个当前扫描候选；ResponsiveDataView五消费者作为共享合同交叉引用，不另计局部源按钮。",
+        "事件与审计时间窗、四视图主分页、组织令牌独立分页保持不同范围；摘要不替代结果集合。",
+        "GET可能事务写读取审计；不新增会话撤销、凭证写入、平台令牌管理或零数据库写入声明。"
+      ]
     },
     {
       "id": "P60",
@@ -4869,6 +4899,32 @@
         "localModelBindings": 26,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 2,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P59",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 29,
+      "semanticGroups": 9,
+      "routeActions": 9,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 54,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 3,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 5,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -57716,7 +57772,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-WINDOW",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#30a2ab0920048786.1",
@@ -57737,7 +57799,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.1",
@@ -57767,7 +57835,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#282785221153ab14.1",
@@ -57797,7 +57871,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#904af42413d62768.1",
@@ -57827,7 +57907,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-VIEW",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#75aeba3a14cd8c5d.1",
@@ -57853,7 +57939,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#36c7b60823abfadf.1",
@@ -57879,7 +57971,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-FILTER",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#19551c617c5e26da.1",
@@ -57905,7 +58003,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-RESET",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.2",
@@ -57943,7 +58047,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.3",
@@ -57977,7 +58087,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#530875d018a16137.1",
@@ -58011,7 +58127,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#59622af06082395d.1",
@@ -58045,7 +58167,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.4",
@@ -58083,7 +58211,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.5",
@@ -58117,7 +58251,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#530875d018a16137.2",
@@ -58151,7 +58291,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#59622af06082395d.2",
@@ -58185,7 +58331,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.6",
@@ -58223,7 +58375,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.7",
@@ -58257,7 +58415,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#530875d018a16137.3",
@@ -58291,7 +58455,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#59622af06082395d.3",
@@ -58325,7 +58495,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#a55873d215f3efac.1",
@@ -58355,7 +58531,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-MANAGE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.8",
@@ -58393,7 +58575,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.9",
@@ -58427,7 +58615,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#dfefdc60704cd1d6.1",
@@ -58461,7 +58655,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TOKEN-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#56cd5b08b7c47c21.1",
@@ -58495,7 +58695,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TOKEN-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.10",
@@ -58533,7 +58739,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#1c008f867673db60.11",
@@ -58567,7 +58779,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#530875d018a16137.4",
@@ -58601,7 +58819,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SecurityOperationsCenter.vue#59622af06082395d.4",
@@ -58635,7 +58859,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P59",
+          "actionId": "SO59-PAGE",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1",
