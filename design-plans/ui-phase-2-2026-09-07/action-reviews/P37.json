@@ -6,8 +6,8 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-    "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
   },
   "actions": [
     {
@@ -2070,8 +2070,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-      "apps/web/src/components/OrganizationAuditPanel.vue": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+      "apps/web/src/components/OrganizationAuditPanel.vue": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
     },
     "inputs": [
       {
@@ -2512,5 +2512,6 @@
   "limits": [
     "来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。",
     "本地仅复制/分页归属修复；无API/env/权限/数据库或审核批准变更，未部署生产。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

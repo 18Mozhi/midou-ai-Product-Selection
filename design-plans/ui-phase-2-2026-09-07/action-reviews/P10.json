@@ -2,10 +2,11 @@
   "schemaVersion": 1,
   "pageId": "P10",
   "route": "/settings/theme",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ThemeStudio.vue": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc"
+    "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
+    "apps/web/src/components/theme-studio/PreferenceRadioGroup.vue": "564207b20e57e29aba47737bc41d70f0327a42a58a3e9fafdc9c6356bb9944ad"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -20,10 +21,18 @@
       "label": "品牌返回应用入口",
       "kind": "navigation",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#9b4b982bf643379f.1"],
+      "sourceContractKeys": [
+        "TH-CURRENT-HOME 品牌链接到首页"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将当前品牌链接绑定到首页；保留既有应用入口语义组并改绑当前源码。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#77c47b63bed1a205.1"
+      ],
       "condition": "所有状态固定导航",
       "handler": "RouterLink /",
-      "variants": ["all-states"],
+      "variants": [
+        "all-states"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -54,13 +63,21 @@
     },
     {
       "actionId": "AC-PROFILE",
+      "sourceContractKeys": [
+        "TH-CURRENT-PROFILE 导航至本人资料"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将当前本人资料入口映射到既有个人资料导航组。",
       "label": "个人资料入口",
       "kind": "navigation",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#4a092ea79d6c2f5a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#4a092ea79d6c2f5a.1"
+      ],
       "condition": "固定导航，不随保存状态禁用",
       "handler": "RouterLink /me",
-      "variants": ["all-states"],
+      "variants": [
+        "all-states"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -91,13 +108,21 @@
     },
     {
       "actionId": "AC-MFA",
+      "sourceContractKeys": [
+        "TH-CURRENT-MFA 导航至安全设置/MFA"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将当前安全设置入口映射到既有MFA导航组。",
       "label": "安全设置入口",
       "kind": "navigation",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#ad505ab637ba2e57.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#ad505ab637ba2e57.1"
+      ],
       "condition": "固定导航",
       "handler": "RouterLink /security/mfa",
-      "variants": ["all-states"],
+      "variants": [
+        "all-states"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -131,10 +156,18 @@
       "label": "当前外观页链接",
       "kind": "navigation",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#826731794907a876.1"],
+      "sourceContractKeys": [
+        "TH-CURRENT-ROUTE 当前外观偏好入口及aria-current"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将当前外观链接与aria-current明确映射；保留既有页面链接语义。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#9c6219bf774c7860.1"
+      ],
       "condition": "源固定active类、链接自身路径",
       "handler": "RouterLink /settings/theme",
-      "variants": ["self-link"],
+      "variants": [
+        "self-link"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -165,13 +198,21 @@
     },
     {
       "actionId": "AC-LOGIN",
+      "sourceContractKeys": [
+        "TH-CURRENT-LOGIN 仅expired状态导航登录"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节限定仅expired状态的登录导航候选。",
       "label": "过期重新登录",
       "kind": "navigation",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#5587941412d5210f.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#5587941412d5210f.1"
+      ],
       "condition": "state=expired；读取或保存失败共用状态区",
       "handler": "RouterLink /login",
-      "variants": ["expired"],
+      "variants": [
+        "expired"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -202,13 +243,24 @@
     },
     {
       "actionId": "AC-CONTEXT",
+      "sourceContractKeys": [
+        "TH-CURRENT-CONTEXT blocked状态选择工作区"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将blocked状态工作区入口映射到既有范围选择导航组。",
       "label": "选择偏好工作区",
       "kind": "navigation",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#78d551a8e1f6be17.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#78d551a8e1f6be17.1"
+      ],
       "condition": "源state=blocked，含scope/网络/限流/其他冲突的合并映射",
       "handler": "RouterLink /select-context",
-      "variants": ["scope", "rate-limited", "service-blocked", "other-conflict"],
+      "variants": [
+        "scope",
+        "rate-limited",
+        "service-blocked",
+        "other-conflict"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -250,10 +302,21 @@
       "label": "读取最新偏好",
       "kind": "read",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#615525e93bd0aa8d.1"],
+      "sourceContractKeys": [
+        "TH-CURRENT-READ 其它可重读错误状态请求刷新偏好"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将当前其它可重读错误态入口映射到既有读取操作；不扩大状态范围。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#abd6f3613ef299ad.1"
+      ],
       "condition": "挂载自动GET；error/forbidden/conflict显示按钮，loading无按钮",
       "handler": "load -> GET /me/ui-preferences；校验theme后替换saved/selected并applyTheme",
-      "variants": ["mounted", "read-error", "conflict-refresh", "invalid-theme"],
+      "variants": [
+        "mounted",
+        "read-error",
+        "conflict-refresh",
+        "invalid-theme"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -295,14 +358,82 @@
       "remaining": "无scope/代次保护；GET覆盖预览且applyTheme写缓存，不把本次图稿零storage当生产行为。"
     },
     {
-      "actionId": "TH-PREVIEW",
-      "label": "预览三种主题",
+      "actionId": "TH-TRACE",
+      "sourceContractKeys": [
+        "TH-CURRENT-TRACE 展开当前主题偏好关联编号"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将当前details/summary披露映射为请求关联编号展开；它不是业务请求或模态弹窗。",
+      "label": "展开偏好读取关联编号",
       "kind": "local",
+      "routeApplicability": "P10-local-caller-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#6bb5f6a1584a9db0.1"
+      ],
+      "condition": "仅当前requestId存在时渲染原生details/summary",
+      "handler": "浏览器原生details切换关联编号可见性；不发网络请求、不改变偏好数据",
+      "variants": [
+        "request-id-present-collapsed",
+        "request-id-present-expanded"
+      ],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "read-error"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "read-invalid"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-appearance-source.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "源码检查引用关联编号渐进披露；不证明完整浏览器原生details/读屏行为。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "本地披露不计弹窗；编号内容归属与真实失败类型、辅助技术组合及全套错误场景仍独立待验。"
+    },
+    {
+      "actionId": "TH-PREVIEW",
+      "sourceContractKeys": [
+        "TH-CURRENT-PREVIEW 主题radio选择转给即时预览handler"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将主题组事件精确映射到chooseTheme；本行记录父子事件边，不把它另计成用户控件。",
+      "label": "主题选项事件转发至本地预览",
+      "kind": "wiring",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#b5fc72dd64e3a6e6.1"],
-      "condition": "工作区可见时3个role=radio；saving仅handler早退，DOM未disabled",
-      "handler": "choose -> selected/theme DOM及缓存；saved状态转ready",
-      "variants": ["deep-ocean", "aurora-purple", "cloud-white"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#e08941698ff33588.1"
+      ],
+      "condition": "主题组的共享单选控件发出选项ID；保存中由父级disabled属性锁定",
+      "handler": "@select chooseTheme($event)；后续本地预览归属共享TH-PREFERENCE-OPTION语义组",
+      "forwardsTo": [
+        "TH-PREFERENCE-OPTION"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/ThemeStudio.vue#e08941698ff33588.1",
+          "event": "@select",
+          "handler": "chooseTheme($event)",
+          "targets": [
+            "TH-PREFERENCE-OPTION"
+          ]
+        }
+      ],
+      "variants": [
+        "deep-ocean",
+        "aurora-purple",
+        "cloud-white"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -334,24 +465,46 @@
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
       },
-      "remaining": "旧按钮无roving/方向键，图稿新增键盘与busy锁只是提案；三套全站主题消费者/真实缓存未验。"
+      "remaining": "只记录ThemeStudio父级事件边；共享radio控件自身的交互和六态由TH-PREFERENCE-OPTION组单独核对。"
     },
     {
       "actionId": "TH-DENSITY",
-      "label": "切换当前会话密度",
-      "kind": "local",
+      "sourceContractKeys": [
+        "TH-CURRENT-DENSITY 密度radio选择只更新当前会话"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将密度组事件映射到chooseDensity，明确不触发服务端保存。",
+      "label": "密度选项事件转发至会话显示",
+      "kind": "wiring",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#e717723479d58780.1"],
-      "condition": "2个role=radio；saving仅handler早退",
-      "handler": "chooseDensity -> selectedDensity/applyDensity；不改变themeDirty、不PUT",
-      "variants": ["standard", "compact"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#0ddae1cee09564f0.1"
+      ],
+      "condition": "密度组的共享单选控件发出选项ID；保存中由父级disabled属性锁定",
+      "handler": "@select chooseDensity($event)；后续会话密度更新归属共享TH-PREFERENCE-OPTION语义组",
+      "forwardsTo": [
+        "TH-PREFERENCE-OPTION"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/ThemeStudio.vue#0ddae1cee09564f0.1",
+          "event": "@select",
+          "handler": "chooseDensity($event)",
+          "targets": [
+            "TH-PREFERENCE-OPTION"
+          ]
+        }
+      ],
+      "variants": [
+        "standard",
+        "compact"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -379,6 +532,59 @@
         }
       ],
       "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "只记录ThemeStudio父级事件边；共享radio控件自身的交互和六态由TH-PREFERENCE-OPTION组单独核对。"
+    },
+    {
+      "actionId": "TH-PREFERENCE-OPTION",
+      "sourceContractKeys": [
+        "TH-PREFERENCE-OPTION / 发送当前radio选项ID，不直接请求服务器"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节及PreferenceRadioGroup当前源码映射确认一个循环按钮源点服务主题与密度两组；服务器写入仍由独立保存动作负责。",
+      "label": "选择主题或密度选项",
+      "kind": "local",
+      "routeApplicability": "P10-local-shared-radio-source-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/theme-studio/PreferenceRadioGroup.vue#991f0e9b895c8269.1"
+      ],
+      "condition": "按键激活/点击发送当前option.id；未禁用时选中项tabIndex=0，方向键/Home/End循环定位；保存中父级禁用两组按钮",
+      "handler": "emit('select', option.id)；主题组由chooseTheme本地预览，密度组由chooseDensity仅更新当前会话，不由此控件写服务器",
+      "variants": [
+        "theme-options-deep-ocean-aurora-purple-cloud-white",
+        "density-options-standard-compact"
+      ],
+      "scenes": [
+        {
+          "package": "appearance-direction-c",
+          "scene": "theme-blue-focus"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "theme-blue-pressed"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "density-standard-focus"
+        },
+        {
+          "package": "appearance-direction-c",
+          "scene": "density-standard-pressed"
+        }
+      ],
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-final-source-mapping-closures.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "回归检查共享radio源身份及option ID发射；不等同于键盘/读屏实际Vue或生产偏好验收。"
+        }
+      ],
+      "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
         "focus": "not-mapped",
@@ -386,17 +592,27 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "没有v-model或density持久化字段。行政壳层compact覆盖和会话返回、主题×密度全控件未验。"
+      "remaining": "源具备radio角色、选中tabindex、方向键及禁用样式；此局部核对不证明辅助技术实测、所有主题/密度组合或全站消费者同步。"
     },
     {
       "actionId": "TH-RESTORE",
       "label": "撤销主题预览",
       "kind": "local",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#b13c528391353263.1"],
+      "sourceContractKeys": [
+        "TH-CURRENT-RESTORE 仅恢复已保存主题预览，不恢复密度"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将当前撤销按钮绑定到只恢复已保存主题预览的动作；密度仍保持会话值。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#1aa1d23b0fd6f31f.1"
+      ],
       "condition": "仅!dirty禁用；saving仍可操作，handler无保护",
       "handler": "restore -> selected=saved.theme或deep-ocean -> applyTheme -> ready；密度不变",
-      "variants": ["dirty", "default-fallback", "restore-during-save"],
+      "variants": [
+        "dirty",
+        "default-fallback",
+        "restore-during-save"
+      ],
       "scenes": [
         {
           "package": "appearance-direction-c",
@@ -442,7 +658,13 @@
       "label": "保存主题偏好",
       "kind": "write",
       "routeApplicability": "P10-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/ThemeStudio.vue#38740096ebfd6c5f.1"],
+      "sourceContractKeys": [
+        "TH-CURRENT-SAVE 主题dirty时保存偏好；密度不在PUT字段中"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.9节将当前显式保存动作绑定到主题偏好PUT，密度不进入请求体。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ThemeStudio.vue#b77160ecd730473a.1"
+      ],
       "condition": "!dirty或saving禁用且handler早退；themeDirty只比较theme",
       "handler": "PUT /me/ui-preferences {theme,expected_version:saved.version或0}；返回仅更新saved，selected不跟随",
       "variants": [
@@ -505,10 +727,14 @@
   ],
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
-    "files": ["apps/web/src/components/ThemeStudio.vue"],
+    "files": [
+      "apps/web/src/components/ThemeStudio.vue",
+      "apps/web/src/components/theme-studio/PreferenceRadioGroup.vue"
+    ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/ThemeStudio.vue": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+      "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
+      "apps/web/src/components/theme-studio/PreferenceRadioGroup.vue": "564207b20e57e29aba47737bc41d70f0327a42a58a3e9fafdc9c6356bb9944ad",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
@@ -516,65 +742,14 @@
       "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285"
     },
     "inputs": [],
-    "containers": [
-      {
-        "file": "apps/web/src/components/ThemeStudio.vue",
-        "tag": "aside",
-        "ordinal": 1,
-        "shape": "inline-aside",
-        "sourceBehavior": "页面aside导航，不是抽屉或模态",
-        "remaining": "结构容器不是业务弹窗数量；当前无原生模态，所有内容和主题/字段状态未穷尽",
-        "variants": [
-          {
-            "name": "appearance-navigation",
-            "evidenceScope": "proposal-shape-differs",
-            "scenes": [
-              {
-                "package": "appearance-direction-c",
-                "scene": "deep-ocean-standard"
-              },
-              {
-                "package": "appearance-direction-c",
-                "scene": "deep-ocean-compact"
-              }
-            ],
-            "remaining": "C提案重新构图，静态样例不证明三套真实壳层已一起换肤"
-          }
-        ]
-      },
-      {
-        "file": "apps/web/src/components/ThemeStudio.vue",
-        "tag": "aside",
-        "ordinal": 2,
-        "shape": "inline-aside",
-        "sourceBehavior": "本地静态预览aside，含三壳层小样、固定87/18.4/96等样例，不是实际业务数据",
-        "remaining": "结构容器不是业务弹窗数量；当前无原生模态，所有内容和主题/字段状态未穷尽",
-        "variants": [
-          {
-            "name": "static-three-shell-preview",
-            "evidenceScope": "proposal-shape-differs",
-            "scenes": [
-              {
-                "package": "appearance-direction-c",
-                "scene": "deep-ocean-standard"
-              },
-              {
-                "package": "appearance-direction-c",
-                "scene": "deep-ocean-compact"
-              }
-            ],
-            "remaining": "C提案重新构图，静态样例不证明三套真实壳层已一起换肤"
-          }
-        ]
-      }
-    ],
+    "containers": [],
     "sharedRemaining": [
       "role=radio的3主题/2密度是受控按钮而非v-model；全部实例键盘/六态/主题密度组合与真实缓存未验。",
       "本页独立ThemeStudio，不拿共享主题浮层的回滚行为、签收或壳层图抵扣整页；无新持久化字段。"
     ]
   },
   "compositionGaps": [
-    "11组/11源位置；3主题+2密度实例不按v-model计数，两个aside不是弹窗。",
+    "12个ThemeStudio模板候选及1个共享radio控件候选分别映射；两条父级事件绑定只作接线核对，不重复计用户控件。",
     "既有86PNG中七类控件图未提供通用逐action selector/state证明，66槽保守未映射，不等于缺66图。",
     "源预览缓存/会话密度与服务器版本分域，保存中restore导致saved+dirty已复现未修；新统一busy与错误分类待审。"
   ],
@@ -582,5 +757,6 @@
   "limits": [
     "source/scene/testReferences只是源审阅与离线提案关联，不授予用户批准或真实运行验收。",
     "不修改现有生产UI、API/OpenAPI、主题ID、密度持久化、权限、数据库或部署。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

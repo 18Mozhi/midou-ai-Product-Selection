@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba"
+    "apps/web/src/components/CostRuleConsole.vue": "e758b90453bda8b028798b627c53bbe4c46587c1c1b9b3ccfad1c8ec1c63ef9b"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -44,11 +44,17 @@
         "apps/web/src/components/CostRuleConsole.vue#ae99ecef74f5d4d3.1",
         "apps/web/src/components/CostRuleConsole.vue#6a49826ecb55d1fd.1"
       ],
-      "sourceContractKeys": ["SC-R-BACK 安全from", "SC-R-BACK 准备度返回"],
+      "sourceContractKeys": [
+        "SC-R-BACK 安全from",
+        "SC-R-BACK 准备度返回"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "；无自身disabled属性 / state === 'ready'；无自身disabled属性",
       "handler": "returnPath只允许/sourcing边界内部from，否则回/sourcing；两个入口同一返回合同",
-      "variants": ["directory", "no-active"],
+      "variants": [
+        "directory",
+        "no-active"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -88,11 +94,18 @@
         "apps/web/src/components/CostRuleConsole.vue#5e3909def7e4baa9.1",
         "apps/web/src/components/CostRuleConsole.vue#ed4cdadd71405209.1"
       ],
-      "sourceContractKeys": ["SC-R-CREATE 管理者非ready或active", "SC-R-CREATE ready且无active"],
+      "sourceContractKeys": [
+        "SC-R-CREATE 管理者非ready或active",
+        "SC-R-CREATE ready且无active"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "canManage && (state !== 'ready' || activeCostRule)；无自身disabled属性 / state === 'ready' && canManage && !activeCostRule；无自身disabled属性",
       "handler": "openCreate按canManage重置initialForm与createError；顶部非ready或有active/准备度ready无active互补，不POST",
-      "variants": ["create-blank", "create-zero", "create-automatic"],
+      "variants": [
+        "create-blank",
+        "create-zero",
+        "create-automatic"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -132,8 +145,12 @@
       "label": "空目录创建、读取恢复和返回",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#b2df3db97280e7e2.1"],
-      "sourceContractKeys": ["SC-R-STATE 首条创建/刷新/返回"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#b2df3db97280e7e2.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-STATE 首条创建/刷新/返回"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state !== 'ready'；无自身disabled属性",
       "handler": "primary:empty且canManage打开草稿，否则load；secondary router.push(returnPath)。loading子组件无按钮；rate_limited映射blocked，不伪造自动登录/权限申请",
@@ -206,12 +223,20 @@
       "label": "本地搜索和状态筛选",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#e4a92ae55317039d.1"],
-      "sourceContractKeys": ["SC-R-SEARCH 表单只阻止提交导航"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#e4a92ae55317039d.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-SEARCH 表单只阻止提交导航"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready'；无自身disabled属性",
       "handler": "form仅prevent默认导航，v-model search/statusFilter实际触发computed和watch；搜索name/market/platform/version_code，页码回1，无HTTP",
-      "variants": ["directory", "filter-empty", "page-two"],
+      "variants": [
+        "directory",
+        "filter-empty",
+        "page-two"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -251,12 +276,19 @@
       "label": "清除筛选",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#0aca31814d8e2a23.1"],
-      "sourceContractKeys": ["SC-R-RESET 清筛选"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#0aca31814d8e2a23.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-RESET 清筛选"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready'；disabled=!search && statusFilter === 'all'",
       "handler": "resetFilters清search/statusFilter，无HTTP；不是清规则或回滚",
-      "variants": ["filter-empty", "directory"],
+      "variants": [
+        "filter-empty",
+        "directory"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -292,12 +324,20 @@
       "label": "选择规则版本",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#c4344a6ce7acbca8.1"],
-      "sourceContractKeys": ["SC-R-SELECT 本地选择与URL"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#c4344a6ce7acbca8.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-SELECT 本地选择与URL"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && rule in pagedRules；无自身disabled属性",
       "handler": "selectRule更新selected并replace合并query.rule，不请求；筛选/分页watch自动选首项不调用selectRule，URL可能保留旧ID",
-      "variants": ["directory", "page-two", "status-active"],
+      "variants": [
+        "directory",
+        "page-two",
+        "status-active"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -337,12 +377,19 @@
       "label": "上一页",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#83d11b8719b1c99d.1"],
-      "sourceContractKeys": ["SC-R-PAGE-PREV 页码边界"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#83d11b8719b1c99d.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-PAGE-PREV 页码边界"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && pageCount > 1；disabled=page <= 1",
       "handler": "page--；每页10条，pageCount>1显示，page<=1禁用",
-      "variants": ["page-two", "directory"],
+      "variants": [
+        "page-two",
+        "directory"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -378,12 +425,19 @@
       "label": "下一页",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#bd43d7b540116c32.1"],
-      "sourceContractKeys": ["SC-R-PAGE-NEXT 页码边界"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#bd43d7b540116c32.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-PAGE-NEXT 页码边界"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && pageCount > 1；disabled=page >= pageCount",
       "handler": "page++；page>=pageCount禁用；可能由watch切换selected，无HTTP",
-      "variants": ["directory", "page-two"],
+      "variants": [
+        "directory",
+        "page-two"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -419,12 +473,18 @@
       "label": "查看汇率来源",
       "kind": "navigation",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#9e33896b68e8e4fe.1"],
-      "sourceContractKeys": ["SC-R-SOURCE 已保存来源新窗口"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#9e33896b68e8e4fe.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-SOURCE 已保存来源新窗口"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && selected && selected.conversion_rates.length && rate in selected.conversion_rates；无自身disabled属性",
       "handler": "现有rate.source_url新窗口，rel=noopener noreferrer；仅已有汇率时显示，不获取实时汇率",
-      "variants": ["exchange-basis"],
+      "variants": [
+        "exchange-basis"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -456,12 +516,19 @@
       "label": "打开提交审批确认",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#55f48a15788735d1.1"],
-      "sourceContractKeys": ["SC-R-SUBMIT draft"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#55f48a15788735d1.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-SUBMIT draft"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && selected && canManage && selected.status === 'draft'；disabled=busy",
       "handler": "beginAction('submit')仅准备原因窗，实际POST由SC-R-ACTION-SUBMIT执行",
-      "variants": ["submit-confirm", "submit-conflict"],
+      "variants": [
+        "submit-confirm",
+        "submit-conflict"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -501,7 +568,10 @@
         "apps/web/src/components/CostRuleConsole.vue#ea3ec6b286c61f0c.1",
         "apps/web/src/components/CostRuleConsole.vue#6ac633aba6b533bd.1"
       ],
-      "sourceContractKeys": ["SC-R-APPROVE selection_manager", "SC-R-APPROVE organization_admin"],
+      "sourceContractKeys": [
+        "SC-R-APPROVE selection_manager",
+        "SC-R-APPROVE organization_admin"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && selected && selected.status === 'pending_approval' && canSelection && !hasApproval('selection_manager')；disabled=busy / state === 'ready' && selected && selected.status === 'pending_approval' && canAdmin && !hasApproval('organization_admin')；disabled=busy",
       "handler": "pending_approval加真实角色且本人角色未处理；beginAction保存action/approvalRole，未保存规则ID/revision快照",
@@ -558,11 +628,17 @@
         "apps/web/src/components/CostRuleConsole.vue#eac5ef200003454a.1",
         "apps/web/src/components/CostRuleConsole.vue#5d293fdba6594665.1"
       ],
-      "sourceContractKeys": ["SC-R-REJECT selection_manager", "SC-R-REJECT organization_admin"],
+      "sourceContractKeys": [
+        "SC-R-REJECT selection_manager",
+        "SC-R-REJECT organization_admin"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && selected && selected.status === 'pending_approval' && canSelection && !hasApproval('selection_manager')；disabled=busy / state === 'ready' && selected && selected.status === 'pending_approval' && canAdmin && !hasApproval('organization_admin')；disabled=busy",
       "handler": "同批准的角色/未处理条件；开启reject原因窗，不在入口发POST",
-      "variants": ["selection-reject-confirm", "admin-reject-confirm"],
+      "variants": [
+        "selection-reject-confirm",
+        "admin-reject-confirm"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -598,12 +674,19 @@
       "label": "打开发布确认",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#513ba8c3e39973c0.1"],
-      "sourceContractKeys": ["SC-R-PUBLISH approved"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#513ba8c3e39973c0.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-PUBLISH approved"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && selected && canManage && selected.status === 'approved'；disabled=busy",
       "handler": "canManage+approved；确认仍须后端双角色/revision校验，不改旧利润快照",
-      "variants": ["publish-confirm", "publish-conflict"],
+      "variants": [
+        "publish-confirm",
+        "publish-conflict"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -639,12 +722,20 @@
       "label": "打开回滚确认",
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#fab085a093adfa3a.1"],
-      "sourceContractKeys": ["SC-R-ROLLBACK active且有有效目标"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#fab085a093adfa3a.1"
+      ],
+      "sourceContractKeys": [
+        "SC-R-ROLLBACK active且有有效目标"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "state === 'ready' && selected && canManage && selected.status === 'active' && rollbackTargets.length；disabled=busy",
       "handler": "active且同市场/平台approved或retired目标非空；默认首目标，不跨范围",
-      "variants": ["rollback-confirm", "no-rollback", "rollback-conflict"],
+      "variants": [
+        "rollback-confirm",
+        "no-rollback",
+        "rollback-conflict"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -684,12 +775,19 @@
       "label": "草稿原生窗口定义",
       "kind": "wiring",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1"],
-      "sourceContractKeys": ["新建草稿、人工/自动成本可选字段"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1"
+      ],
+      "sourceContractKeys": [
+        "新建草稿、人工/自动成本可选字段"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showCreate；无自身disabled属性",
       "handler": "showCreate挂载原生dialog；useModalDialog管理showModal/关闭/回焦，不是额外保存动作",
-      "variants": ["create-blank", "create-automatic"],
+      "variants": [
+        "create-blank",
+        "create-automatic"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -719,7 +817,9 @@
         }
       ],
       "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
-      "forwardsTo": ["SC-R-CREATE-SUBMIT"],
+      "forwardsTo": [
+        "SC-R-CREATE-SUBMIT"
+      ],
       "forwardBindings": []
     },
     {
@@ -740,7 +840,11 @@
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showCreate；无自身disabled属性 / showCreate；无自身disabled属性 / showCreate；disabled=busy",
       "handler": "cancelCreate经useModalDialog preventDefault后closeCreate；busy处理器拒绝关闭，底部取消disabled而右上X无disabled。重开重置",
-      "variants": ["create-blank", "create-busy", "create-conflict"],
+      "variants": [
+        "create-blank",
+        "create-busy",
+        "create-conflict"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -784,7 +888,10 @@
         "apps/web/src/components/CostRuleConsole.vue#1fcf5a2247b2ad3e.1",
         "apps/web/src/components/CostRuleConsole.vue#bdb318fcff422d4c.1"
       ],
-      "sourceContractKeys": ["SC-R-CREATE-SUBMIT 表单", "SC-R-CREATE-SUBMIT 按钮"],
+      "sourceContractKeys": [
+        "SC-R-CREATE-SUBMIT 表单",
+        "SC-R-CREATE-SUBMIT 按钮"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showCreate；无自身disabled属性 / showCreate；disabled=busy || Boolean(createValidation)",
       "handler": "form和submit按钮同一次create；POST /cost-rules保留显式0/可选省略；成功选新draft重读，失败保留输入；不自动审批发布",
@@ -847,8 +954,12 @@
       "label": "七种版本操作窗口定义",
       "kind": "wiring",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
-      "sourceCandidateIds": ["apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1"],
-      "sourceContractKeys": ["submit、两角色approve/reject、publish、rollback共七操作变体"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1"
+      ],
+      "sourceContractKeys": [
+        "submit、两角色approve/reject、publish、rollback共七操作变体"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showAction && selected && pendingAction；无自身disabled属性",
       "handler": "showAction&&selected&&pendingAction一原生dialog展开七变体；form/aside不重复计窗",
@@ -910,7 +1021,9 @@
         }
       ],
       "remaining": "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。",
-      "forwardsTo": ["SC-R-ACTION-SUBMIT"],
+      "forwardsTo": [
+        "SC-R-ACTION-SUBMIT"
+      ],
       "forwardBindings": []
     },
     {
@@ -931,7 +1044,11 @@
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showAction && selected && pendingAction；无自身disabled属性 / showAction && selected && pendingAction；无自身disabled属性 / showAction && selected && pendingAction；disabled=busy",
       "handler": "原生cancel先preventDefault，再closeAction；busy禁止实际关闭但右上X未disabled；不撤回请求，不自动重放",
-      "variants": ["submit-confirm", "rollback-confirm", "publish-busy"],
+      "variants": [
+        "submit-confirm",
+        "rollback-confirm",
+        "publish-busy"
+      ],
       "scenes": [
         {
           "package": "cost-rules-direction-c",
@@ -975,7 +1092,10 @@
         "apps/web/src/components/CostRuleConsole.vue#a8b2803881a9f5ba.1",
         "apps/web/src/components/CostRuleConsole.vue#1b870bc1240e4ab6.1"
       ],
-      "sourceContractKeys": ["SC-R-ACTION-SUBMIT 表单", "SC-R-ACTION-SUBMIT 按钮"],
+      "sourceContractKeys": [
+        "SC-R-ACTION-SUBMIT 表单",
+        "SC-R-ACTION-SUBMIT 按钮"
+      ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showAction && selected && pendingAction；无自身disabled属性 / showAction && selected && pendingAction；disabled=busy || actionReason.trim().length < 2",
       "handler": "POST /cost-rules/{当前selected.id}/actions；reason trim、当前revision，按action附role/target。post单飞只到请求结束，后续load不在busy内；打开窗不锁目标",
@@ -1052,14 +1172,16 @@
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "includeStructuralContainers": true,
-    "files": ["apps/web/src/components/CostRuleConsole.vue"],
+    "files": [
+      "apps/web/src/components/CostRuleConsole.vue"
+    ],
     "dependencyHashes": {
-      "apps/web/src/components/CostRuleConsole.vue": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+      "apps/web/src/components/CostRuleConsole.vue": "e758b90453bda8b028798b627c53bbe4c46587c1c1b9b3ccfad1c8ec1c63ef9b",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
-      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
       "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
-      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
     },
     "inputs": [
       {
@@ -1620,5 +1742,6 @@
   "limits": [
     "使用既有C方向166PNG，仅建立可追溯映射；不新增批准、业务规则、权限、API/SQL或生产修改。",
     "source-isolated检查不是实际Vue DOM/端到端、服务审批、发布或回滚证明。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

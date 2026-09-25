@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "pageId": "P14",
   "route": "/trends",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+    "apps/web/src/components/TrendDashboard.vue": "7e894cc321871b09052f72daeaf8113edbb80956f4244e734d89ebddf73fc9a4",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -59,7 +59,13 @@
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "四入口均需canManageTrends/canManage；无busy禁用",
       "handler": "showRule=true；不根据当前主题预填；v-if新建TrendRuleDialog默认US/en-US/60/1",
-      "variants": ["top-first", "top-add", "rules-header", "rules-empty", "detail"],
+      "variants": [
+        "top-first",
+        "top-add",
+        "rules-header",
+        "rules-empty",
+        "detail"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -101,12 +107,21 @@
       "label": "立即刷新来源",
       "kind": "write",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#5abb2c07be024e83.1"],
-      "sourceContractKeys": ["TR-REFRESH-SOURCES"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#5abb2c07be024e83.1"
+      ],
+      "sourceContractKeys": [
+        "TR-REFRESH-SOURCES"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "页面允许trend:read；按钮Boolean(busy)禁用，函数无同级busy早退",
       "handler": "POST /provider-sources/refresh，props.organizationId/workspaceId；服务比对会话范围和Origin；仅显示source_count已开始，无load/轮询",
-      "variants": ["read-only", "busy", "started", "failed"],
+      "variants": [
+        "read-only",
+        "busy",
+        "started",
+        "failed"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -156,11 +171,19 @@
         "apps/web/src/components/TrendDashboard.vue#2bfafa5dccf5b5ae.1",
         "apps/web/src/components/TrendDashboard.vue#aef07f12388401cc.1"
       ],
-      "sourceContractKeys": ["TR-TAB-RULES：顶部入口", "TR-TAB-RULES：导航入口"],
+      "sourceContractKeys": [
+        "TR-TAB-RULES：顶部入口",
+        "TR-TAB-RULES：导航入口"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "read角色也可查看；顶部与模式导航两个位置",
       "handler": "setTab('rules')保留其他query，只写section=rules",
-      "variants": ["top", "mode", "readonly", "legacy-tab"],
+      "variants": [
+        "top",
+        "mode",
+        "readonly",
+        "legacy-tab"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -198,12 +221,19 @@
       "label": "进入趋势主题",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#c0646bdf3263a017.1"],
-      "sourceContractKeys": ["TR-TAB-TOPICS"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#c0646bdf3263a017.1"
+      ],
+      "sourceContractKeys": [
+        "TR-TAB-TOPICS"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "模式导航常驻，无busy限制",
       "handler": "setTab('topics')删除section但保留tab；syncFromRoute先识别section=rules或tab=rules",
-      "variants": ["normal", "legacy-tab"],
+      "variants": [
+        "normal",
+        "legacy-tab"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -241,12 +271,20 @@
       "label": "进入合并拆分",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#83125cc8b9f30181.1"],
-      "sourceContractKeys": ["TR-TAB-GOVERNANCE"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#83125cc8b9f30181.1"
+      ],
+      "sourceContractKeys": [
+        "TR-TAB-GOVERNANCE"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "canManageTrends才显示且handler再次校验",
       "handler": "setTab('governance')只写section；legacy tab=rules仍可能抢先；子组件离开v-if销毁草稿",
-      "variants": ["manager", "readonly-hidden", "pending-count"],
+      "variants": [
+        "manager",
+        "readonly-hidden",
+        "pending-count"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -288,12 +326,22 @@
       "label": "恢复主题工作面",
       "kind": "read",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1"],
-      "sourceContractKeys": ["TR-RECOVER：empty清除，否则load"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1"
+      ],
+      "sourceContractKeys": [
+        "TR-RECOVER：empty清除，否则load"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "topics且state!=ready；UiStatePanel内部可用动作取决于kind",
       "handler": "recoverTopics在empty调用clearFilters，其余load；primary统一恢复，secondary未监听",
-      "variants": ["empty-clear", "error-load", "expired-load", "forbidden-load", "blocked-load"],
+      "variants": [
+        "empty-clear",
+        "error-load",
+        "expired-load",
+        "forbidden-load",
+        "blocked-load"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -347,12 +395,21 @@
       "label": "选择主题",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1"],
-      "sourceContractKeys": ["TR-TOPIC-SELECT：每个主题实例"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1"
+      ],
+      "sourceContractKeys": [
+        "TR-TOPIC-SELECT：每个主题实例"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "topics且ready；每条sortedTopics项，无busy禁用",
       "handler": "mobileDetailOpen=true，push保留其他query并写topic/清section；topic watcher GET详情",
-      "variants": ["first", "other", "followed", "detail-loading"],
+      "variants": [
+        "first",
+        "other",
+        "followed",
+        "detail-loading"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -398,12 +455,19 @@
       "label": "上一页",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1"],
-      "sourceContractKeys": ["TR-PAGE-PREV"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1"
+      ],
+      "sourceContractKeys": [
+        "TR-PAGE-PREV"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "ready列表内；page<=1禁用",
       "handler": "goPage检查1..pageCount；保留其他query，page=1省略，清topic",
-      "variants": ["first-disabled", "later-page"],
+      "variants": [
+        "first-disabled",
+        "later-page"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -441,12 +505,19 @@
       "label": "下一页",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1"],
-      "sourceContractKeys": ["TR-PAGE-NEXT"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1"
+      ],
+      "sourceContractKeys": [
+        "TR-PAGE-NEXT"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "ready列表内；page>=pageCount禁用",
       "handler": "goPage检查范围并push，清topic；查询watch重读",
-      "variants": ["next", "last-disabled"],
+      "variants": [
+        "next",
+        "last-disabled"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -480,12 +551,19 @@
       "label": "展开解释",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1"],
-      "sourceContractKeys": ["TR-HELP：原生details展开"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1"
+      ],
+      "sourceContractKeys": [
+        "TR-HELP：原生details展开"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "topics内原生details，独立于ready状态",
       "handler": "summary展开帮助；不请求/不计算置信度",
-      "variants": ["closed", "open"],
+      "variants": [
+        "closed",
+        "open"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -519,12 +597,21 @@
       "label": "重新读取规则状态",
       "kind": "read",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1"],
-      "sourceContractKeys": ["TR-RELOAD：规则状态恢复"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1"
+      ],
+      "sourceContractKeys": [
+        "TR-RELOAD：规则状态恢复"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "rules且state不为ready/empty时UiStatePanel primary",
       "handler": "load并行GET列表/规则/管理者治理，再GET选中详情；不限于规则GET",
-      "variants": ["error", "expired", "blocked", "loading"],
+      "variants": [
+        "error",
+        "expired",
+        "blocked",
+        "loading"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -562,12 +649,21 @@
       "label": "暂停或启用规则",
       "kind": "write",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1"],
-      "sourceContractKeys": ["TR-RULE-STATUS：暂停/启用"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1"
+      ],
+      "sourceContractKeys": [
+        "TR-RULE-STATUS：暂停/启用"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "仅canManage，按钮无busy禁用；requireTrendManage复核能力",
       "handler": "PATCH现有id：status按enabled反转、expected_version、原collection_interval_minutes及recommendation_min_source_count；Object.assign返回结果",
-      "variants": ["enabled-to-paused", "paused-to-enabled", "failure", "repeat"],
+      "variants": [
+        "enabled-to-paused",
+        "paused-to-enabled",
+        "failure",
+        "repeat"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -609,12 +705,21 @@
       "label": "查看规则趋势结果",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1"],
-      "sourceContractKeys": ["TR-RULE-RESULTS：首关键词筛选"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1"
+      ],
+      "sourceContractKeys": [
+        "TR-RULE-RESULTS：首关键词筛选"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "规则每行read角色可用",
       "handler": "只设filters.q=include_keywords[0]或空，再applyFilters；保留现有market/category/status，清page/topic/section",
-      "variants": ["first-keyword", "missing-keyword", "existing-filter", "legacy-tab"],
+      "variants": [
+        "first-keyword",
+        "missing-keyword",
+        "existing-filter",
+        "legacy-tab"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -656,11 +761,21 @@
         "apps/web/src/components/TrendDashboard.vue#470531a4d9d0cddb.1",
         "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1"
       ],
-      "sourceContractKeys": ["TR-ANOMALY-SUBMIT表单", "TR-ANOMALY-SUBMIT按钮"],
+      "sourceContractKeys": [
+        "TR-ANOMALY-SUBMIT表单",
+        "TR-ANOMALY-SUBMIT按钮"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "有selected/anomalyEvidence/管理权限；按钮trim原因>=2且非busy；HTML2..500",
       "handler": "POST /trends/{selected.id}/evidence/{evidenceId}/quality-issues，severity和trim reason；成功记qualityIssueIds，关窗；失败保留",
-      "variants": ["warning", "critical", "busy", "failed", "created", "existing"],
+      "variants": [
+        "warning",
+        "critical",
+        "busy",
+        "failed",
+        "created",
+        "existing"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -714,11 +829,18 @@
         "apps/web/src/components/TrendDashboard.vue#7d73f8399a9950b5.1",
         "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1"
       ],
-      "sourceContractKeys": ["TR-ANOMALY-CLOSE：叉号", "TR-ANOMALY-CLOSE：取消"],
+      "sourceContractKeys": [
+        "TR-ANOMALY-CLOSE：叉号",
+        "TR-ANOMALY-CLOSE：取消"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "叉号/取消无busy禁用；role div无原生Escape合同",
       "handler": "anomalyEvidence=null，原因值不在此清空；下次openAnomaly重置warning及空原因",
-      "variants": ["cross", "cancel", "busy-close"],
+      "variants": [
+        "cross",
+        "cancel",
+        "busy-close"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -760,11 +882,20 @@
         "apps/web/src/components/TrendDashboard.vue#eefb1c65886b1a81.1",
         "apps/web/src/components/TrendDashboard.vue#5ddc6be7e1b242d6.1"
       ],
-      "sourceContractKeys": ["TR-RELEVANCE-SUBMIT表单", "TR-RELEVANCE-SUBMIT按钮"],
+      "sourceContractKeys": [
+        "TR-RELEVANCE-SUBMIT表单",
+        "TR-RELEVANCE-SUBMIT按钮"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "有selected/relevanceDialog/管理权限；按钮trim原因>=2且非busy，HTML2..500",
       "handler": "POST /trends/id/relevance：status、trim reason、expected_version；await后不论成功都清dialog/reason，成功load",
-      "variants": ["irrelevant", "restore", "busy", "failed", "saved"],
+      "variants": [
+        "irrelevant",
+        "restore",
+        "busy",
+        "failed",
+        "saved"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -826,11 +957,18 @@
         "apps/web/src/components/TrendDashboard.vue#690d51553ff51b5d.1",
         "apps/web/src/components/TrendDashboard.vue#51e4bb1af788a0bf.1"
       ],
-      "sourceContractKeys": ["TR-RELEVANCE-CLOSE：叉号", "TR-RELEVANCE-CLOSE：取消"],
+      "sourceContractKeys": [
+        "TR-RELEVANCE-CLOSE：叉号",
+        "TR-RELEVANCE-CLOSE：取消"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "两变体叉号/取消无busy禁用",
       "handler": "relevanceDialog=null；此处不清原因，下次openRelevance清空",
-      "variants": ["cross", "cancel", "busy-close"],
+      "variants": [
+        "cross",
+        "cancel",
+        "busy-close"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -872,11 +1010,19 @@
         "apps/web/src/components/TrendFilterPanel.vue#5dfd077f141d48f4.1",
         "apps/web/src/components/TrendFilterPanel.vue#3cacb9b51913365b.1"
       ],
-      "sourceContractKeys": ["TR-FILTER-APPLY表单", "TR-FILTER-APPLY按钮"],
+      "sourceContractKeys": [
+        "TR-FILTER-APPLY表单",
+        "TR-FILTER-APPLY按钮"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "五输入当前草稿，submit进入applyFilters；不trim q/category",
       "handler": "push q/market/category/status/sort，清page/topic/section，保留其他query；若fullPath未变则load",
-      "variants": ["normal", "same-url", "all-status", "dirty"],
+      "variants": [
+        "normal",
+        "same-url",
+        "all-status",
+        "dirty"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -918,12 +1064,19 @@
       "label": "修改市场草稿",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#be2b881b65e1cc00.1"],
-      "sourceContractKeys": ["TR-FILTER-EDIT.market"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#be2b881b65e1cc00.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FILTER-EDIT.market"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "全部/US；原生受控输入",
       "handler": "updateFilter emit完整filters拷贝，父Object.assign立即改reactive；尚未同步URL",
-      "variants": ["draft", "applied"],
+      "variants": [
+        "draft",
+        "applied"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -957,12 +1110,19 @@
       "label": "修改分类草稿",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#49faf4c9e9529254.1"],
-      "sourceContractKeys": ["TR-FILTER-EDIT.category"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#49faf4c9e9529254.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FILTER-EDIT.category"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "maxlength80；原生受控输入",
       "handler": "updateFilter emit完整filters拷贝，父Object.assign立即改reactive；尚未同步URL",
-      "variants": ["draft", "applied"],
+      "variants": [
+        "draft",
+        "applied"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -996,12 +1156,19 @@
       "label": "修改状态草稿",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#d6fc8f0fd1a6197f.1"],
-      "sourceContractKeys": ["TR-FILTER-EDIT.status"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#d6fc8f0fd1a6197f.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FILTER-EDIT.status"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "active/irrelevant/stale/空；原生受控输入",
       "handler": "updateFilter emit完整filters拷贝，父Object.assign立即改reactive；尚未同步URL",
-      "variants": ["draft", "applied"],
+      "variants": [
+        "draft",
+        "applied"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1035,12 +1202,19 @@
       "label": "修改关键词草稿",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#0fb74fcff8527527.1"],
-      "sourceContractKeys": ["TR-FILTER-EDIT.q"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#0fb74fcff8527527.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FILTER-EDIT.q"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "maxlength200；原生受控输入",
       "handler": "updateFilter emit完整filters拷贝，父Object.assign立即改reactive；尚未同步URL",
-      "variants": ["draft", "applied"],
+      "variants": [
+        "draft",
+        "applied"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1074,12 +1248,21 @@
       "label": "切换本页排序草稿",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#65cf69becacd32e0.1"],
-      "sourceContractKeys": ["TR-FILTER-SORT"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#65cf69becacd32e0.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FILTER-SORT"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "impact/latest/momentum/followed四选项",
       "handler": "emit updateSort→父sort立即变化，sortedTopics重排当前20项；应用后才写URL，GET不传sort",
-      "variants": ["impact", "latest", "momentum", "followed"],
+      "variants": [
+        "impact",
+        "latest",
+        "momentum",
+        "followed"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1117,12 +1300,19 @@
       "label": "清除筛选",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#45fe0a56771e7ccc.1"],
-      "sourceContractKeys": ["TR-FILTER-CLEAR"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#45fe0a56771e7ccc.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FILTER-CLEAR"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "筛选表单type=button，不触发shared submit.capture",
       "handler": "清q/market/category，status=active，sort=impact，然后applyFilters",
-      "variants": ["clear", "already-default"],
+      "variants": [
+        "clear",
+        "already-default"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1160,12 +1350,20 @@
       "label": "复制已应用视图网址",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#1ad5cc0a1ffb53d8.1"],
-      "sourceContractKeys": ["TR-FILTER-COPY"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#1ad5cc0a1ffb53d8.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FILTER-COPY"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "type=button，无服务端保存动作",
       "handler": "navigator.clipboard.writeText(window.location.href)，失败提示复制地址；不应用当前草稿",
-      "variants": ["success", "clipboard-failed", "unapplied-draft"],
+      "variants": [
+        "success",
+        "clipboard-failed",
+        "unapplied-draft"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1203,12 +1401,19 @@
       "label": "返回趋势列表焦点",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#e7201768235a6ce7.1"],
-      "sourceContractKeys": ["TR-BACK：只切移动焦点"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDetailPanel.vue#e7201768235a6ce7.1"
+      ],
+      "sourceContractKeys": [
+        "TR-BACK：只切移动焦点"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "详情具名返回；源CSS决定移动可见范围",
       "handler": "returnToTopicList仅mobileDetailOpen=false，不删除topic/query，也不重读",
-      "variants": ["mobile-return", "deep-link-reload"],
+      "variants": [
+        "mobile-return",
+        "deep-link-reload"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1246,12 +1451,22 @@
       "label": "关注或取消关注",
       "kind": "write",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#2e0bfe1a9646767e.1"],
-      "sourceContractKeys": ["TR-FOLLOW：关注/取消"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDetailPanel.vue#2e0bfe1a9646767e.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FOLLOW：关注/取消"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "canManage；按钮与函数均无busy防重入",
       "handler": "PUT或DELETE /trends/{selected.id}/follow，无body；成功使用当时selected和其id同步followed",
-      "variants": ["follow", "unfollow", "busy", "failure", "switched-selection"],
+      "variants": [
+        "follow",
+        "unfollow",
+        "busy",
+        "failure",
+        "switched-selection"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1293,12 +1508,19 @@
       "label": "转为机会预填导航",
       "kind": "navigation",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#983f4f1540678cfc.1"],
-      "sourceContractKeys": ["TR-OPPORTUNITY-NAV"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDetailPanel.vue#983f4f1540678cfc.1"
+      ],
+      "sourceContractKeys": [
+        "TR-OPPORTUNITY-NAV"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "详情链接不以canManage隐藏；目标权限独立裁决",
       "handler": "/opportunities?source_topic_id=...&name=...&market=...&category=...，各值编码",
-      "variants": ["selected", "readonly"],
+      "variants": [
+        "selected",
+        "readonly"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1336,12 +1558,20 @@
       "label": "打开标记无关",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#0c3b34e3fa894dd6.1"],
-      "sourceContractKeys": ["TR-RELEVANCE-OPEN.irrelevant"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDetailPanel.vue#0c3b34e3fa894dd6.1"
+      ],
+      "sourceContractKeys": [
+        "TR-RELEVANCE-OPEN.irrelevant"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "canManage且detail.status!=irrelevant，无busy禁用",
       "handler": "openRelevance('irrelevant')检查manage、清原因、打开相应变体",
-      "variants": ["active", "stale", "busy"],
+      "variants": [
+        "active",
+        "stale",
+        "busy"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1375,12 +1605,19 @@
       "label": "打开恢复相关",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#8449f6b045562349.1"],
-      "sourceContractKeys": ["TR-RELEVANCE-OPEN.active"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDetailPanel.vue#8449f6b045562349.1"
+      ],
+      "sourceContractKeys": [
+        "TR-RELEVANCE-OPEN.active"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "v-else-if canManage，即irrelevant主题，无busy禁用",
       "handler": "openRelevance('active')检查manage并清原因",
-      "variants": ["irrelevant", "busy"],
+      "variants": [
+        "irrelevant",
+        "busy"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1417,11 +1654,16 @@
       "sourceCandidateIds": [
         "apps/web/src/components/TrendEvidenceTimeline.vue#dab48a89a829b124.1"
       ],
-      "sourceContractKeys": ["TR-EVIDENCE-ORIGINAL：新窗口noopener/noreferrer"],
+      "sourceContractKeys": [
+        "TR-EVIDENCE-ORIGINAL：新窗口noopener/noreferrer"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "每条detail.evidence的canonical_url",
       "handler": "a target=_blank rel=noopener noreferrer，原样href",
-      "variants": ["each-evidence", "long-title"],
+      "variants": [
+        "each-evidence",
+        "long-title"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1462,11 +1704,17 @@
       "sourceCandidateIds": [
         "apps/web/src/components/TrendEvidenceTimeline.vue#436d7eb2bb10817d.1"
       ],
-      "sourceContractKeys": ["TR-ANOMALY-OPEN：busy/已有工单禁用"],
+      "sourceContractKeys": [
+        "TR-ANOMALY-OPEN：busy/已有工单禁用"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "canManage；busy或qualityIssueIds[item.id]时禁用",
       "handler": "向上转发原item；openAnomaly设证据、warning、空原因",
-      "variants": ["new", "busy-disabled", "existing-disabled"],
+      "variants": [
+        "new",
+        "busy-disabled",
+        "existing-disabled"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1511,11 +1759,17 @@
       "sourceCandidateIds": [
         "apps/web/src/components/TrendEvidenceTimeline.vue#1c008f867673db60.1"
       ],
-      "sourceContractKeys": ["TR-HISTORY-TECHNICAL：原生details"],
+      "sourceContractKeys": [
+        "TR-HISTORY-TECHNICAL：原生details"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "每条relevance_history内部原生details",
       "handler": "summary展开actor_id，不写数据",
-      "variants": ["none", "history", "expanded"],
+      "variants": [
+        "none",
+        "history",
+        "expanded"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1553,11 +1807,21 @@
         "apps/web/src/components/TrendRuleDialog.vue#b2c35007732f84af.1",
         "apps/web/src/components/TrendRuleDialog.vue#d47ebd79f8eb69dd.1"
       ],
-      "sourceContractKeys": ["TR-RULE-SUBMIT表单", "TR-RULE-SUBMIT按钮"],
+      "sourceContractKeys": [
+        "TR-RULE-SUBMIT表单",
+        "TR-RULE-SUBMIT按钮"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "HTML名称/包含词/市场/语言required，提交按钮busy禁用；submit函数不检查busy",
       "handler": "emit draft：逗号/中文逗号/换行拆词trim去空但不去重；原name/market/language，category空为null，数字周期/门槛，in_app；父POST",
-      "variants": ["default", "edited", "duplicate", "busy", "failed", "saved"],
+      "variants": [
+        "default",
+        "edited",
+        "duplicate",
+        "busy",
+        "failed",
+        "saved"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1615,11 +1879,19 @@
         "apps/web/src/components/TrendRuleDialog.vue#3886e9e1d2205bab.1",
         "apps/web/src/components/TrendRuleDialog.vue#1c6857e568a31cf2.1"
       ],
-      "sourceContractKeys": ["TR-RULE-CLOSE：叉号", "TR-RULE-CLOSE：取消"],
+      "sourceContractKeys": [
+        "TR-RULE-CLOSE：叉号",
+        "TR-RULE-CLOSE：取消"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "叉号/取消无busy禁用",
       "handler": "emit close→showRule=false，v-if销毁子form；重开默认值，不保留失败关闭前草稿",
-      "variants": ["cross", "cancel", "busy-close", "reopen-default"],
+      "variants": [
+        "cross",
+        "cancel",
+        "busy-close",
+        "reopen-default"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1665,11 +1937,20 @@
         "apps/web/src/components/TrendChangeQueue.vue#bcbaae66b685ebbe.1",
         "apps/web/src/components/TrendChangeQueue.vue#6af3244e4e31bef4.1"
       ],
-      "sourceContractKeys": ["TR-PROPOSE表单", "TR-PROPOSE按钮"],
+      "sourceContractKeys": [
+        "TR-PROPOSE表单",
+        "TR-PROPOSE按钮"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "selected、原因trim>=2；按钮还检查busy、sourceIds或signalIds/新标题；函数只有selected/原因早退",
       "handler": "submitProposal发operation、target、按模式source_topic_ids/signal_ids/new_title/new_category、expected_versions、reason；父POST队列不执行",
-      "variants": ["merge", "split", "busy", "failed", "queued"],
+      "variants": [
+        "merge",
+        "split",
+        "busy",
+        "failed",
+        "queued"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1719,12 +2000,19 @@
       "label": "切换合并提议",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#f8b877ec4618bce3.1"],
-      "sourceContractKeys": ["TR-PROPOSAL-MODE.merge"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendChangeQueue.vue#f8b877ec4618bce3.1"
+      ],
+      "sourceContractKeys": [
+        "TR-PROPOSAL-MODE.merge"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "治理内联表单，按钮无busy限制",
       "handler": "operation='merge'，不清sourceIds/signalIds/newTitle/newCategory/reason",
-      "variants": ["merge", "from-split"],
+      "variants": [
+        "merge",
+        "from-split"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1762,12 +2050,19 @@
       "label": "切换拆分提议",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#c375aa8bfaab646c.1"],
-      "sourceContractKeys": ["TR-PROPOSAL-MODE.split"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendChangeQueue.vue#c375aa8bfaab646c.1"
+      ],
+      "sourceContractKeys": [
+        "TR-PROPOSAL-MODE.split"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "治理内联表单，按钮无busy限制",
       "handler": "operation='split'，保留此前所有草稿；证据checkbox按selected.evidence展开",
-      "variants": ["split", "from-merge"],
+      "variants": [
+        "split",
+        "from-merge"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1801,12 +2096,19 @@
       "label": "展开驳回说明",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#dea3207939a5a086.1"],
-      "sourceContractKeys": ["TR-DECISION-OPEN.reject"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendChangeQueue.vue#dea3207939a5a086.1"
+      ],
+      "sourceContractKeys": [
+        "TR-DECISION-OPEN.reject"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "队列item.status=pending，无前端同人限制或busy禁用",
       "handler": "beginDecision保存item.id/action=reject并清原因，同一decision状态一次对应一条",
-      "variants": ["pending", "switch-row"],
+      "variants": [
+        "pending",
+        "switch-row"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1844,12 +2146,19 @@
       "label": "展开确认说明",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#3b88c0e433b7a2c1.1"],
-      "sourceContractKeys": ["TR-DECISION-OPEN.confirm"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendChangeQueue.vue#3b88c0e433b7a2c1.1"
+      ],
+      "sourceContractKeys": [
+        "TR-DECISION-OPEN.confirm"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "pending队列行，无busy禁用",
       "handler": "beginDecision保存id/action=confirm并清原因",
-      "variants": ["pending", "switch-row"],
+      "variants": [
+        "pending",
+        "switch-row"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1887,11 +2196,20 @@
         "apps/web/src/components/TrendChangeQueue.vue#00ba2050cb620a7e.1",
         "apps/web/src/components/TrendChangeQueue.vue#4bd2e2d1bd990e41.1"
       ],
-      "sourceContractKeys": ["TR-DECIDE表单", "TR-DECIDE按钮"],
+      "sourceContractKeys": [
+        "TR-DECIDE表单",
+        "TR-DECIDE按钮"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "decision.requestId=item.id；原因2..1000；按钮busy/trim<2禁用，函数只检查trim原因",
       "handler": "子emit requestId/decision/reason/expectedVersion；父POST /trends/change-requests/id/decisions映射expected_version，成功load",
-      "variants": ["confirm", "reject", "failed", "self-forbidden", "completed"],
+      "variants": [
+        "confirm",
+        "reject",
+        "failed",
+        "self-forbidden",
+        "completed"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1941,12 +2259,20 @@
       "label": "收起决定表单",
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendChangeQueue.vue#b722bb8cd6a19824.1"],
-      "sourceContractKeys": ["TR-DECISION-CANCEL"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendChangeQueue.vue#b722bb8cd6a19824.1"
+      ],
+      "sourceContractKeys": [
+        "TR-DECISION-CANCEL"
+      ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "内联取消无busy禁用",
       "handler": "decision.requestId=''，不清reason/action；下次beginDecision才清原因",
-      "variants": ["cancel", "busy-cancel", "reopen"],
+      "variants": [
+        "cancel",
+        "busy-cancel",
+        "reopen"
+      ],
       "scenes": [
         {
           "package": "trend-direction-c",
@@ -1984,12 +2310,22 @@
       "label": "父子事件完整转发",
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#377da84835906aec.1"],
-      "sourceContractKeys": ["TR-FILTER-APPLY/CLEAR/COPY/EDIT/SORT转发"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1"
+      ],
+      "sourceContractKeys": [
+        "TR-FILTER-APPLY/CLEAR/COPY/EDIT/SORT转发"
+      ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "topics内筛选消费者，移动760px及以下覆盖层",
       "handler": "原样事件参数转给父处理器；模型更新不是额外API",
-      "variants": ["@apply", "@clear", "@save-view", "@update-filters", "@update-sort"],
+      "variants": [
+        "@apply",
+        "@clear",
+        "@save-view",
+        "@update-filters",
+        "@update-sort"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2016,19 +2352,25 @@
           "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
           "event": "@apply",
           "handler": "applyFilters",
-          "targets": ["TR-FILTER-APPLY"]
+          "targets": [
+            "TR-FILTER-APPLY"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
           "event": "@clear",
           "handler": "clearFilters",
-          "targets": ["TR-FILTER-CLEAR"]
+          "targets": [
+            "TR-FILTER-CLEAR"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
           "event": "@save-view",
           "handler": "saveViewLink",
-          "targets": ["TR-FILTER-COPY"]
+          "targets": [
+            "TR-FILTER-COPY"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
@@ -2045,7 +2387,9 @@
           "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
           "event": "@update-sort",
           "handler": "sort = $event",
-          "targets": ["TR-FILTER-SORT"]
+          "targets": [
+            "TR-FILTER-SORT"
+          ]
         }
       ]
     },
@@ -2054,12 +2398,22 @@
       "label": "父子事件完整转发",
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1"],
-      "sourceContractKeys": ["TR-BACK/FOLLOW/RULE-OPEN/RELEVANCE-OPEN/ANOMALY-OPEN转发"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1"
+      ],
+      "sourceContractKeys": [
+        "TR-BACK/FOLLOW/RULE-OPEN/RELEVANCE-OPEN/ANOMALY-OPEN转发"
+      ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
       "handler": "原样事件参数转给父处理器；模型更新不是额外API",
-      "variants": ["@back", "@follow", "@create-rule", "@change-relevance", "@report-anomaly"],
+      "variants": [
+        "@back",
+        "@follow",
+        "@create-rule",
+        "@change-relevance",
+        "@report-anomaly"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2084,31 +2438,42 @@
           "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
           "event": "@back",
           "handler": "returnToTopicList",
-          "targets": ["TR-BACK"]
+          "targets": [
+            "TR-BACK"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
           "event": "@follow",
           "handler": "follow",
-          "targets": ["TR-FOLLOW"]
+          "targets": [
+            "TR-FOLLOW"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
           "event": "@create-rule",
           "handler": "showRule = true",
-          "targets": ["TR-RULE-OPEN"]
+          "targets": [
+            "TR-RULE-OPEN"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
           "event": "@change-relevance",
           "handler": "openRelevance",
-          "targets": ["TR-RELEVANCE-OPEN.irrelevant", "TR-RELEVANCE-OPEN.active"]
+          "targets": [
+            "TR-RELEVANCE-OPEN.irrelevant",
+            "TR-RELEVANCE-OPEN.active"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
           "event": "@report-anomaly",
           "handler": "openAnomaly",
-          "targets": ["TR-ANOMALY-OPEN"]
+          "targets": [
+            "TR-ANOMALY-OPEN"
+          ]
         }
       ]
     },
@@ -2117,12 +2482,19 @@
       "label": "父子事件完整转发",
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1"],
-      "sourceContractKeys": ["TR-PROPOSE/TR-DECIDE转发"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1"
+      ],
+      "sourceContractKeys": [
+        "TR-PROPOSE/TR-DECIDE转发"
+      ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
       "handler": "原样事件参数转给父处理器；模型更新不是额外API",
-      "variants": ["@propose", "@decide"],
+      "variants": [
+        "@propose",
+        "@decide"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2134,19 +2506,26 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
-      "forwardsTo": ["TR-PROPOSE", "TR-DECIDE"],
+      "forwardsTo": [
+        "TR-PROPOSE",
+        "TR-DECIDE"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
           "event": "@propose",
           "handler": "proposeTopicChange",
-          "targets": ["TR-PROPOSE"]
+          "targets": [
+            "TR-PROPOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
           "event": "@decide",
           "handler": "decideTopicChange",
-          "targets": ["TR-DECIDE"]
+          "targets": [
+            "TR-DECIDE"
+          ]
         }
       ]
     },
@@ -2166,7 +2545,10 @@
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
       "handler": "原样事件参数转给父处理器；模型更新不是额外API",
-      "variants": ["@close", "@submit"],
+      "variants": [
+        "@close",
+        "@submit"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2178,31 +2560,42 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
-      "forwardsTo": ["TR-RULE-CLOSE", "TR-RULE-SUBMIT"],
+      "forwardsTo": [
+        "TR-RULE-CLOSE",
+        "TR-RULE-SUBMIT"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
           "event": "@close",
           "handler": "showRule = false",
-          "targets": ["TR-RULE-CLOSE"]
+          "targets": [
+            "TR-RULE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
           "event": "@submit",
           "handler": "createRule",
-          "targets": ["TR-RULE-SUBMIT"]
+          "targets": [
+            "TR-RULE-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
           "event": "@close",
           "handler": "showRule = false",
-          "targets": ["TR-RULE-CLOSE"]
+          "targets": [
+            "TR-RULE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
           "event": "@submit",
           "handler": "createRule",
-          "targets": ["TR-RULE-SUBMIT"]
+          "targets": [
+            "TR-RULE-SUBMIT"
+          ]
         }
       ]
     },
@@ -2211,14 +2604,18 @@
       "label": "模态定义或共享消费者关联",
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1"
+      ],
       "sourceContractKeys": [
         "warning/critical、原因2–500；提交severity/reason，证据/来源身份由URL和服务端关联；失败保留；created=false显示已有工单，当前实例按钮禁用"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
       "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
-      "variants": ["listed-consumer-variants"],
+      "variants": [
+        "listed-consumer-variants"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2230,7 +2627,11 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
-      "forwardsTo": ["TR-ANOMALY-OPEN", "TR-ANOMALY-SUBMIT", "TR-ANOMALY-CLOSE"],
+      "forwardsTo": [
+        "TR-ANOMALY-OPEN",
+        "TR-ANOMALY-SUBMIT",
+        "TR-ANOMALY-CLOSE"
+      ],
       "forwardBindings": []
     },
     {
@@ -2238,14 +2639,18 @@
       "label": "模态定义或共享消费者关联",
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1"
+      ],
       "sourceContractKeys": [
         "同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；当前失败也关闭清空，需修复验证，不认可为最终体验"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
       "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
-      "variants": ["listed-consumer-variants"],
+      "variants": [
+        "listed-consumer-variants"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2270,14 +2675,18 @@
       "label": "模态定义或共享消费者关联",
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendFilterPanel.vue#574e84bbfac61d8b.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendFilterPanel.vue#574e84bbfac61d8b.1"
+      ],
       "sourceContractKeys": [
         "760px及以下role=dialog，桌面group；打开焦点关闭键、Tab首尾/Escape/遮罩/叉号、关闭归还；submit.capture关闭，清除/复制不触发表单提交"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "topics内筛选消费者，移动760px及以下覆盖层",
       "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
-      "variants": ["listed-consumer-variants"],
+      "variants": [
+        "listed-consumer-variants"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2306,12 +2715,18 @@
       "label": "父子事件完整转发",
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendDetailPanel.vue#ebdc4bab362bae22.1"],
-      "sourceContractKeys": ["TR-ANOMALY-OPEN转发"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDetailPanel.vue#ebdc4bab362bae22.1"
+      ],
+      "sourceContractKeys": [
+        "TR-ANOMALY-OPEN转发"
+      ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
       "handler": "原样事件参数转给父处理器；模型更新不是额外API",
-      "variants": ["@report-anomaly"],
+      "variants": [
+        "@report-anomaly"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2323,13 +2738,17 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
-      "forwardsTo": ["TR-ANOMALY-OPEN"],
+      "forwardsTo": [
+        "TR-ANOMALY-OPEN"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/TrendDetailPanel.vue#ebdc4bab362bae22.1",
           "event": "@report-anomaly",
           "handler": "emit('reportAnomaly', $event)",
-          "targets": ["TR-ANOMALY-OPEN"]
+          "targets": [
+            "TR-ANOMALY-OPEN"
+          ]
         }
       ]
     },
@@ -2338,14 +2757,18 @@
       "label": "模态定义或共享消费者关联",
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1"
+      ],
       "sourceContractKeys": [
         "一个调用/一个role定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消销毁后重开默认US/en-US/60/1"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
       "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
-      "variants": ["listed-consumer-variants"],
+      "variants": [
+        "listed-consumer-variants"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -2357,7 +2780,11 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
-      "forwardsTo": ["TR-RULE-OPEN", "TR-RULE-SUBMIT", "TR-RULE-CLOSE"],
+      "forwardsTo": [
+        "TR-RULE-OPEN",
+        "TR-RULE-SUBMIT",
+        "TR-RULE-CLOSE"
+      ],
       "forwardBindings": []
     }
   ],
@@ -2373,16 +2800,16 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+      "apps/web/src/components/TrendDashboard.vue": "7e894cc321871b09052f72daeaf8113edbb80956f4244e734d89ebddf73fc9a4",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
       "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
       "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
-      "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+      "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
-      "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "apps/web/src/components/NavigationShell.vue": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9",
+      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
       "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
       "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
@@ -2782,5 +3209,6 @@
   "limits": [
     "65局部源位置/51组=42页面动作+9转发/定义组，不是全站独立业务分母。18v-model与5受控筛选字段分别核对；原生details也不是弹窗。",
     "所有source/scene引用与隔离函数输出不授予具体批准，不证明实际Vue/API/MySQL/治理执行/采集完成或部署。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

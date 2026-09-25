@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d"
+    "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -26,12 +26,19 @@
       "actionId": "AN-N-PREF-OPEN",
       "label": "通知偏好入口",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#9b4302ca61b627ec.1"],
-      "sourceContractKeys": ["AN-N-PREF-OPEN；busy禁用"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#9b4302ca61b627ec.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-PREF-OPEN；busy禁用"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "busy时禁用",
       "handler": "showPreferences=true，保留当前偏好ref",
-      "variants": ["normal", "preferences"],
+      "variants": [
+        "normal",
+        "preferences"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -123,12 +130,20 @@
       "actionId": "AN-N-ALL-READ",
       "label": "全部标记已读",
       "kind": "write",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#fd5620d41b8a74b5.1"],
-      "sourceContractKeys": ["AN-N-ALL-READ；当前接收范围全部"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#fd5620d41b8a74b5.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-ALL-READ；当前接收范围全部"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "busy时禁用，不限当前筛选",
       "handler": "POST /notifications/actions，无筛选或请求体；随后load",
-      "variants": ["all_read_intent", "all_read_busy", "all_read_error"],
+      "variants": [
+        "all_read_intent",
+        "all_read_busy",
+        "all_read_error"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -223,12 +238,18 @@
       "actionId": "AN-N-TECH-PAGE",
       "label": "页级技术详情",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"],
-      "sourceContractKeys": ["AN-TECH；页级requestId"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": [
+        "AN-TECH；页级requestId"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "notice且requestId",
       "handler": "原生details展开requestId",
-      "variants": ["error"],
+      "variants": [
+        "error"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -312,11 +333,18 @@
       "remaining": "五类页级错误样本经真实api-client/api隔离处理后生成；仅合成编号，真实共享requestId后到覆盖风险未修。代表四态有图，disabled/busy按当前源码无呈现单列；无编号/真实请求/用户批准仍待。",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
         "handlerBoundary": "原生details展开requestId",
-        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"],
-        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d"
         }
@@ -348,8 +376,12 @@
       "actionId": "AN-N-FILTER-CATEGORY",
       "label": "通知分类",
       "kind": "read",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"],
-      "sourceContractKeys": ["AN-N-FILTER-CATEGORY；五项"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-FILTER-CATEGORY；五项"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "全部/任务/审批/竞品/系统；无busy禁用",
       "handler": "setFilters更新URL category并重置页码，watch触发load",
@@ -579,11 +611,18 @@
       ],
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
         "handlerBoundary": "setFilters更新URL category并重置页码，watch触发load",
-        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"],
-        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d"
         }
@@ -593,12 +632,18 @@
       "actionId": "AN-N-UNREAD",
       "label": "只看未读",
       "kind": "read",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"],
-      "sourceContractKeys": ["AN-N-UNREAD；URL unread=1/API true"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-UNREAD；URL unread=1/API true"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "checkbox无busy禁用",
       "handler": "setFilters将URL unread=1转换API unread=true",
-      "variants": ["unread"],
+      "variants": [
+        "unread"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -706,11 +751,18 @@
       ],
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
         "handlerBoundary": "setFilters将URL unread=1转换API unread=true",
-        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"],
-        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d"
         }
@@ -720,12 +772,21 @@
       "actionId": "AN-N-FILTER-STATUS",
       "label": "通知处理状态筛选",
       "kind": "read",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"],
-      "sourceContractKeys": ["AN-N-FILTER-STATUS；四项"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-FILTER-STATUS；四项"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "全部/open/in_progress/closed；无busy禁用",
       "handler": "setFilters更新URL status，API workflow_status；不修改来源任务状态",
-      "variants": ["normal", "workflow_open", "workflow_progress", "workflow_closed"],
+      "variants": [
+        "normal",
+        "workflow_open",
+        "workflow_progress",
+        "workflow_closed"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -909,11 +970,18 @@
       ],
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
         "handlerBoundary": "setFilters更新URL status，API workflow_status；不修改来源任务状态",
-        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"],
-        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d"
         }
@@ -923,12 +991,23 @@
       "actionId": "AN-N-LOAD",
       "label": "重新加载",
       "kind": "read",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"],
-      "sourceContractKeys": ["AN-N-LOAD；重读列表/summary/preferences"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-LOAD；重读列表/summary/preferences"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "五类错误状态；无busy禁用",
       "handler": "并行重读列表、summary、preferences，同批有效期保护meta、诊断和最终赋值；首个失败与销毁使批次失效",
-      "variants": ["loading", "error", "forbidden", "expired", "rate_limited", "version_conflict"],
+      "variants": [
+        "loading",
+        "error",
+        "forbidden",
+        "expired",
+        "rate_limited",
+        "version_conflict"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1132,11 +1211,18 @@
       ],
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
         "handlerBoundary": "并行重读列表、summary、preferences，同批有效期保护meta、诊断和最终赋值；首个失败与销毁使批次失效",
-        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"],
-        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d"
         }
@@ -1146,12 +1232,22 @@
       "actionId": "AN-N-DETAIL",
       "label": "打开消息并自动已读",
       "kind": "write",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#d953dfdf4cb40b85.1"],
-      "sourceContractKeys": ["AN-N-DETAIL；打开，未读时自动read"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#d953dfdf4cb40b85.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-DETAIL；打开，未读时自动read"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "列表行busy禁用；URL watcher直接openById不受busy约束",
       "handler": "GET详情；未读时POST action=read和expected_version；详情代次保护读取与回执，不能视为纯读取",
-      "variants": ["detail", "detail_unread", "read_busy", "read_error", "read_ack"],
+      "variants": [
+        "detail",
+        "detail_unread",
+        "read_busy",
+        "read_error",
+        "read_ack"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1288,11 +1384,16 @@
         "apps/web/src/components/NotificationCenter.vue#01c7bba15fa9f7ce.1",
         "apps/web/src/components/NotificationCenter.vue#bd5dbf08f126da53.1"
       ],
-      "sourceContractKeys": ["AN-N-PAGE；上一页", "AN-N-PAGE；下一页"],
+      "sourceContractKeys": [
+        "AN-N-PAGE；上一页",
+        "AN-N-PAGE；下一页"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "total>20；首页禁上一页/末页禁下一页；无busy禁用",
       "handler": "setFilters页码限制1..pageCount，保留筛选并清消息深链",
-      "variants": ["pagination"],
+      "variants": [
+        "pagination"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1409,12 +1510,18 @@
       "actionId": "AN-N-DETAIL-WIRING",
       "label": "详情窗口定义",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1"],
-      "sourceContractKeys": ["D-AN-NOTIFICATION；消息详情"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1"
+      ],
+      "sourceContractKeys": [
+        "D-AN-NOTIFICATION；消息详情"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "selected非空",
       "handler": "useModalDialog管理原生dialog；cancel另归关闭动作",
-      "variants": ["detail"],
+      "variants": [
+        "detail"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1441,7 +1548,10 @@
       ],
       "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
       "forwardBindings": [],
-      "forwardsTo": ["AN-N-DETAIL", "AN-N-CLOSE-DETAIL"]
+      "forwardsTo": [
+        "AN-N-DETAIL",
+        "AN-N-CLOSE-DETAIL"
+      ]
     },
     {
       "actionId": "AN-N-CLOSE-DETAIL",
@@ -1458,7 +1568,10 @@
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "busy拒绝关闭，包括Escape",
       "handler": "closeDetail清selected及URL notification/notification_id；原生cancel先preventDefault",
-      "variants": ["detail", "read_busy"],
+      "variants": [
+        "detail",
+        "read_busy"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1550,12 +1663,19 @@
       "actionId": "AN-N-SOURCE",
       "label": "返回消息来源",
       "kind": "navigation",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#9c8237833082965f.1"],
-      "sourceContractKeys": ["AN-N-SOURCE；站内来源+from"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#9c8237833082965f.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-SOURCE；站内来源+from"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "action_route以/开头但非//",
       "handler": "RouterLink拼接from=当前fullPath；无允许地址不展示",
-      "variants": ["detail", "detail_missing"],
+      "variants": [
+        "detail",
+        "detail_missing"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1633,12 +1753,20 @@
       "actionId": "AN-N-START",
       "label": "开始处理通知",
       "kind": "write",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#d0ef81cb0803db4e.1"],
-      "sourceContractKeys": ["AN-N-START；仅open"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#d0ef81cb0803db4e.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-START；仅open"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "仅open，busy禁用",
       "handler": "updateWorkflow('start') POST action+expected_version；只改变通知状态",
-      "variants": ["detail", "start_busy", "start_error"],
+      "variants": [
+        "detail",
+        "start_busy",
+        "start_error"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1733,12 +1861,19 @@
       "actionId": "AN-N-CLOSE",
       "label": "关闭通知",
       "kind": "write",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#7490571390181453.1"],
-      "sourceContractKeys": ["AN-N-CLOSE；非closed"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#7490571390181453.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-CLOSE；非closed"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "非closed，busy禁用",
       "handler": "updateWorkflow('close') POST action+expected_version；不关闭来源任务",
-      "variants": ["detail_progress", "close_error"],
+      "variants": [
+        "detail_progress",
+        "close_error"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1829,12 +1964,19 @@
       "actionId": "AN-N-REOPEN",
       "label": "重新打开通知",
       "kind": "write",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#696dcabbd8c2d73e.1"],
-      "sourceContractKeys": ["AN-N-REOPEN；closed"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#696dcabbd8c2d73e.1"
+      ],
+      "sourceContractKeys": [
+        "AN-N-REOPEN；closed"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "closed，busy禁用",
       "handler": "updateWorkflow('reopen') POST action+expected_version；不重开来源任务",
-      "variants": ["detail_closed", "reopen_error"],
+      "variants": [
+        "detail_closed",
+        "reopen_error"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -1925,12 +2067,18 @@
       "actionId": "AN-N-TECH-RESOURCE",
       "label": "资源技术详情",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"],
-      "sourceContractKeys": ["AN-TECH；资源/根因键"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"
+      ],
+      "sourceContractKeys": [
+        "AN-TECH；资源/根因键"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "resource_id/resource_type/root_cause_key任一存在",
       "handler": "原生details展示资源/根因键，不执行操作",
-      "variants": ["detail_technical"],
+      "variants": [
+        "detail_technical"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -2001,11 +2149,18 @@
       "additionalControlVariants": [],
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
         "handlerBoundary": "原生details展示资源/根因键，不执行操作",
-        "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"],
-        "renderedControlIds": ["apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"
+        ],
         "sourceHashes": {
           "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d"
         }
@@ -2015,12 +2170,18 @@
       "actionId": "AN-N-PREF-WIRING",
       "label": "偏好窗口定义",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/NotificationCenter.vue#b332799077351299.1"],
-      "sourceContractKeys": ["D-AN-PREFERENCES；偏好"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/NotificationCenter.vue#b332799077351299.1"
+      ],
+      "sourceContractKeys": [
+        "D-AN-PREFERENCES；偏好"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "showPreferences控制原生dialog",
       "handler": "useModalDialog管理窗口；内嵌form不计第三窗口",
-      "variants": ["preferences"],
+      "variants": [
+        "preferences"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -2047,7 +2208,11 @@
       ],
       "remaining": "源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。",
       "forwardBindings": [],
-      "forwardsTo": ["AN-N-PREF-OPEN", "AN-N-PREF-CLOSE", "AN-N-PREF-SAVE"]
+      "forwardsTo": [
+        "AN-N-PREF-OPEN",
+        "AN-N-PREF-CLOSE",
+        "AN-N-PREF-SAVE"
+      ]
     },
     {
       "actionId": "AN-N-PREF-CLOSE",
@@ -2057,11 +2222,17 @@
         "apps/web/src/components/NotificationCenter.vue#bcb7add4c71c18a6.1",
         "apps/web/src/components/NotificationCenter.vue#25755513ca77e550.1"
       ],
-      "sourceContractKeys": ["AN-N-PREF-CLOSE；Escape", "AN-N-PREF-CLOSE；取消保留当前ref"],
+      "sourceContractKeys": [
+        "AN-N-PREF-CLOSE；Escape",
+        "AN-N-PREF-CLOSE；取消保留当前ref"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "提交中也可取消/Escape",
       "handler": "showPreferences=false，不清当前ref也不取消在途PUT",
-      "variants": ["preferences", "preferences_busy"],
+      "variants": [
+        "preferences",
+        "preferences_busy"
+      ],
       "scenes": [
         {
           "package": "notification-direction-c",
@@ -2159,7 +2330,10 @@
         "apps/web/src/components/NotificationCenter.vue#72947e74a11b9abc.1",
         "apps/web/src/components/NotificationCenter.vue#0285caea2e8607bf.1"
       ],
-      "sourceContractKeys": ["AN-N-PREF-SAVE；PUT expected_version", "AN-N-PREF-SAVE；原生submit"],
+      "sourceContractKeys": [
+        "AN-N-PREF-SAVE；PUT expected_version",
+        "AN-N-PREF-SAVE；原生submit"
+      ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
       "condition": "原生form submit；保存按钮busy禁用",
       "handler": "PUT /me/notification-preferences，提交快照/email_enabled=false/expected_version；同窗无后续编辑则成功关闭再load，有后续编辑仅接收确认版本并保持草稿，旧窗回执不回填",
@@ -2266,10 +2440,12 @@
   ],
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
-    "files": ["apps/web/src/components/NotificationCenter.vue"],
+    "files": [
+      "apps/web/src/components/NotificationCenter.vue"
+    ],
     "dependencyHashes": {
-      "apps/web/src/components/NotificationCenter.vue": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
+      "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc"
     },
     "includeStructuralContainers": true,
     "inputs": [
@@ -2565,5 +2741,6 @@
   "limits": [
     "本地真实Vue已修读取批次、详情回执和偏好草稿/保存归属；偏好窗口仅增加视口高度与滚动约束，不改变API/数据库/部署或C批准范围。",
     "85代表槽与14额外源控件变体不等于全部组合验收；12源码无状态槽不是补图，偏好图标仍仅提案。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

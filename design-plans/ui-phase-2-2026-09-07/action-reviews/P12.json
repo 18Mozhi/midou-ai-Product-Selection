@@ -13,23 +13,23 @@
     "reason": "无原生dialog或确认组件。P10两个aside、P12一个内联form不计弹窗；details只是渐进披露。"
   },
   "inputs": {
-    "local": [
-      "setupForm.include_keywords",
-      "setupForm.market",
-      "setupForm.collection_interval_minutes",
-      "setupForm.recommendation_min_source_count",
-      "setupForm.negative_keywords",
-      "setupForm.category",
-      "setupForm.name"
-    ]
+    "local": []
   },
   "actions": [
     {
       "actionId": "HD-LOAD",
+      "sourceContractKeys": [
+        "HD-CURRENT-READ / 已有快照读取失败时由用户显式重读",
+        "HD-CURRENT-READ / 首页/规则状态不完整时显式重新读取"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.1节登记首页快照错误重试与状态不完整重读两个当前入口；均进入既有load。",
       "label": "读取首页与规则",
       "kind": "read",
       "routeApplicability": "P12-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#68febff0d855d919.1",
+        "apps/web/src/components/HomeDashboard.vue#68febff0d855d919.2"
+      ],
       "condition": "挂载自动；非ready/empty的UiStatePanel primary统一load，loading内无按钮",
       "handler": "GET /me/home-dashboard后GET /trends/monitoring-rules；后者失败置rules=[]；前者失败映射state",
       "variants": [
@@ -91,6 +91,12 @@
     },
     {
       "actionId": "HD-RULES",
+      "sourceContractKeys": [
+        "HD-CURRENT-RULES / 打开既有规则页",
+        "HD-CURRENT-RULES / 无管理能力时只提供规则页查看入口",
+        "HD-AUTO-CURRENT-RULES / 进入既有趋势规则页"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.1节分别登记首页规则入口、无管理能力时的只读入口和自动化概览规则入口，均到既有规则路由。",
       "label": "管理或查看规则",
       "kind": "navigation",
       "routeApplicability": "P12-local-callers-only",
@@ -101,7 +107,11 @@
       ],
       "condition": "ready/empty顶部固定；未配置无manage分支；运行计数区固定",
       "handler": "RouterLink /trends?section=rules",
-      "variants": ["header", "no-manage", "runtime-count"],
+      "variants": [
+        "header",
+        "no-manage",
+        "runtime-count"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -140,16 +150,24 @@
     },
     {
       "actionId": "HD-OPPORTUNITIES",
+      "sourceContractKeys": [
+        "HD-CURRENT-OPPORTUNITIES / 查看完整推荐清单",
+        "HD-CURRENT-OPPORTUNITIES / 查看全部推荐数量对应的列表"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.1节将首页推荐总览两个入口都绑定到现有机会列表路由。",
       "label": "查看推荐清单与全部计数",
       "kind": "navigation",
       "routeApplicability": "P12-local-callers-only",
       "sourceCandidateIds": [
         "apps/web/src/components/HomeDashboard.vue#2fdb8b56f02fb5d4.1",
-        "apps/web/src/components/HomeDashboard.vue#76f38bef42464794.1"
+        "apps/web/src/components/HomeDashboard.vue#8386b9138fc27b68.1"
       ],
       "condition": "ready/empty顶部与队列标题两入口",
       "handler": "RouterLink /opportunities，无view",
-      "variants": ["header-list", "queue-all-count"],
+      "variants": [
+        "header-list",
+        "queue-all-count"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -184,13 +202,19 @@
     },
     {
       "actionId": "HD-START",
+      "sourceContractKeys": ["HD-CURRENT-START / 导航至独立创建选品流程"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节确认导航到独立创建选品流程。",
       "label": "创建选品入口",
       "kind": "navigation",
       "routeApplicability": "P12-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#169dd3f4eac94585.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#169dd3f4eac94585.1"
+      ],
       "condition": "ready/empty顶部固定，无本地能力v-if",
       "handler": "RouterLink /opportunities/start",
-      "variants": ["header-primary"],
+      "variants": [
+        "header-primary"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -225,13 +249,22 @@
     },
     {
       "actionId": "HD-RESUME",
+      "sourceContractKeys": ["HD-CURRENT-RESUME / 仅恢复第一条已暂停规则；提交中禁用"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节限定只恢复第一条已暂停规则。",
       "label": "恢复第一条暂停规则",
       "kind": "write",
       "routeApplicability": "P12-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#6baee2bd21cfaaf6.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#cb01c1a61d2872cd.1"
+      ],
       "condition": "selection.state=not_configured、pausedRules有值且canManage；DOM setupBusy禁用",
       "handler": "resumeRule(pausedRules[0]) -> PATCH含status=enabled、expected_version、原周期/门槛 -> load",
-      "variants": ["first-paused", "busy", "failed", "success-reload"],
+      "variants": [
+        "first-paused",
+        "busy",
+        "failed",
+        "success-reload"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -274,13 +307,21 @@
     },
     {
       "actionId": "HD-SETUP",
+      "sourceContractKeys": ["HD-CURRENT-SETUP / 在符合状态及能力条件时展开或收起本地首次设置表单"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节确认该入口只展开/收起本地首次设置表单。",
       "label": "展开或收起首次设置",
       "kind": "local",
       "routeApplicability": "P12-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#d396a13adfe5024b.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#094ecf5aedd69025.1"
+      ],
       "condition": "not_configured且无暂停优先分支、可manage；没有setupBusy禁用",
       "handler": "setupOpen=!setupOpen，输入不清",
-      "variants": ["open", "close", "reopen"],
+      "variants": [
+        "open",
+        "close",
+        "reopen"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -323,11 +364,16 @@
     },
     {
       "actionId": "HD-CREATE-RULE",
+      "sourceContractKeys": [
+        "HD-CURRENT-CREATE / 受控首次规则表单阻止原生提交并调用既有createRule",
+        "HD-CURRENT-CREATE / 表单提交按钮；提交中禁用"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.1节将首次规则表单submit事件和按钮合并为同一个既有创建意图。",
       "label": "提交七字段规则表单",
       "kind": "write",
       "routeApplicability": "P12-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/HomeDashboard.vue#10318724b151ee94.1",
+        "apps/web/src/components/HomeDashboard.vue#26550e015743f49c.1",
         "apps/web/src/components/HomeDashboard.vue#a3f78d5afc916240.1"
       ],
       "condition": "setupOpen&&canManageRules；按钮setupBusy禁用；handler检查关键词与manage但无busy早退",
@@ -389,13 +435,21 @@
     },
     {
       "actionId": "HD-RECOMMENDATION",
+      "sourceContractKeys": ["HD-CURRENT-RECOMMENDATION / 按服务端返回的item.route打开单条推荐"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节要求使用服务端提供的item.route打开单条推荐。",
       "label": "进入推荐条目",
       "kind": "navigation",
       "routeApplicability": "P12-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#9a0707498a265485.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#9a0707498a265485.1"
+      ],
       "condition": "decisionActions=selection.recommended_items，循环每项",
       "handler": "RouterLink item.route原样；null评分不显示，其余整数/一位小数",
-      "variants": ["each-recommendation", "null-score", "long-title-reason"],
+      "variants": [
+        "each-recommendation",
+        "null-score",
+        "long-title-reason"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -434,16 +488,24 @@
     },
     {
       "actionId": "HD-CANDIDATES",
+      "sourceContractKeys": [
+        "HD-CURRENT-CANDIDATES / 仅存在规则候选时进入候选进度视图",
+        "HD-AUTO-CURRENT-CANDIDATES / 进入既有规则候选队列"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.1节区分首页状态入口与自动化概览队列入口，共同进入既有候选视图。",
       "label": "查看规则命中候选",
       "kind": "navigation",
       "routeApplicability": "P12-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/HomeDashboard.vue#8ff687f70195e1ba.1",
+        "apps/web/src/components/HomeDashboard.vue#673c9efc952a0fcb.1",
         "apps/web/src/components/HomeAutomationOverview.vue#94e724cc55ab8a3c.1"
       ],
       "condition": "空推荐且rule_candidate_count真时显示提示入口；运行计数链接固定",
       "handler": "RouterLink /opportunities?view=rule_candidates",
-      "variants": ["empty-queue-priority", "runtime-count"],
+      "variants": [
+        "empty-queue-priority",
+        "runtime-count"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -478,16 +540,24 @@
     },
     {
       "actionId": "HD-EVIDENCE",
+      "sourceContractKeys": [
+        "HD-CURRENT-EVIDENCE / 无推荐/规则候选且有待采集证据时进入采集进度视图",
+        "HD-AUTO-CURRENT-EVIDENCE / 进入既有待采集队列"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.1节区分首页待采集状态入口与自动化概览队列入口。",
       "label": "查看采集中商品",
       "kind": "navigation",
       "routeApplicability": "P12-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/HomeDashboard.vue#ebc903bac2284608.1",
+        "apps/web/src/components/HomeDashboard.vue#e7ad539389d8518c.1",
         "apps/web/src/components/HomeAutomationOverview.vue#490c957ac97ec485.1"
       ],
       "condition": "空推荐、rule_candidate_count假且awaiting_evidence_count真；另计数区固定入口",
       "handler": "RouterLink /opportunities?view=evidence_pending",
-      "variants": ["empty-queue-fallback", "runtime-count"],
+      "variants": [
+        "empty-queue-fallback",
+        "runtime-count"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -522,13 +592,22 @@
     },
     {
       "actionId": "HD-WORK-HEALTH",
+      "sourceContractKeys": ["HD-CURRENT-WORK / 使用本人事项或健康记录提供的原始路由"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节规定使用当前事项/健康记录各自的原始路由。",
       "label": "打开本人其他待办和异常",
       "kind": "navigation",
       "routeApplicability": "P12-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#7a7b103459397eaa.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#7a7b103459397eaa.1"
+      ],
       "condition": "actions排除source_module=opportunity后顺序接health；任一区非空显示",
       "handler": "RouterLink item.route；key=kind-id，标签按priority/severity",
-      "variants": ["task", "approval", "health", "dynamic-row"],
+      "variants": [
+        "task",
+        "approval",
+        "health",
+        "dynamic-row"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -563,13 +642,20 @@
     },
     {
       "actionId": "HD-TRUTH",
+      "sourceContractKeys": ["HD-CURRENT-TRUTH / 原生details披露来源计数/时间和非自动采纳说明，不发请求"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节确认原生details仅披露来源时间/数量和非自动采纳说明。",
       "label": "展开数据说明",
       "kind": "local",
       "routeApplicability": "P12-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#d033e930df518c8e.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#d033e930df518c8e.1"
+      ],
       "condition": "ready/empty原生details/summary",
       "handler": "原生展开，显示四数组total及generated_at，无HTTP",
-      "variants": ["collapsed", "expanded"],
+      "variants": [
+        "collapsed",
+        "expanded"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -604,6 +690,8 @@
     },
     {
       "actionId": "HD-RECOMMENDED-VIEW",
+      "sourceContractKeys": ["HD-AUTO-CURRENT-RECOMMENDED / 进入既有推荐队列"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节的自动化概览推荐入口到既有推荐队列。",
       "label": "按推荐view查看机会",
       "kind": "navigation",
       "routeApplicability": "P12-local-callers-only",
@@ -612,7 +700,9 @@
       ],
       "condition": "HomeAutomationOverview在父ready/empty内固定链接",
       "handler": "RouterLink /opportunities?view=recommended",
-      "variants": ["recommended-count"],
+      "variants": [
+        "recommended-count"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -647,6 +737,8 @@
     },
     {
       "actionId": "HD-RUNTIME",
+      "sourceContractKeys": ["HD-AUTO-CURRENT-RUNTIME / 原生 details 展开运行进度与时间，无请求"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节限定运行详情为原生details披露且不请求服务。",
       "label": "展开自动运行详情",
       "kind": "local",
       "routeApplicability": "P12-local-callers-only",
@@ -655,7 +747,11 @@
       ],
       "condition": "父ready/empty传入selection，子原生details",
       "handler": "展示规则、候选、质量门、人工采纳与两个时间；无请求",
-      "variants": ["collapsed", "expanded", "null-timestamps"],
+      "variants": [
+        "collapsed",
+        "expanded",
+        "null-timestamps"
+      ],
       "scenes": [
         {
           "package": "home-direction-c",
@@ -691,6 +787,28 @@
         "busy": "not-mapped"
       },
       "remaining": "四步骤标记依据不同计数>0，不是每个商品已通过流程的证明；candidate_count与rule_candidate_count字段不能互换。"
+    },
+    {
+      "actionId": "HD-LOAD-WIRING", "label": "首页读取状态事件转交", "kind": "wiring", "routeApplicability": "P12-home-read-status",
+      "sourceContractKeys": ["HD-CURRENT-READ / UiStatePanel主操作事件转给首页load"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节确认共享读取状态的主操作通过load事件交回首页，不另增按钮动作。",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1"],
+      "condition": "UiStatePanel呈现读取状态", "handler": "@primary -> load",
+      "forwardsTo": ["HD-LOAD"],
+      "forwardBindings": [{"candidateId":"apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1","event":"@primary","handler":"load","targets":["HD-LOAD"]}],
+      "variants": ["primary-read"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "只记录共享组件事件接线，不单独增加按钮数量。"
+    },
+    {
+      "actionId": "HD-RULES-READ", "label": "重读规则列表", "kind": "read", "routeApplicability": "P12-rules-section",
+      "sourceContractKeys": ["HD-CURRENT-RULES-READ / 规则读取错误时由有管理能力者重读"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节限定规则错误态重读入口需具备既有管理能力。",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#473fa4f4d2c5e48b.1"],
+      "condition": "规则读取失败且具备管理能力", "handler": "调用既有规则列表重读处理器",
+      "variants": ["rules-read-error"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-mapped","hover":"not-mapped","focus":"not-mapped","pressed":"not-mapped","disabled":"not-mapped","busy":"not-mapped"},
+      "remaining": "不推断真实RBAC或规则服务可用性。"
     }
   ],
   "surfaceReview": {
@@ -707,7 +825,7 @@
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
       "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
-      "apps/web/src/components/NavigationShell.vue": "a4802ba4c400d15410cdf7093809f2c22b6ed63fabcd71597d7c02969378b955",
+      "apps/web/src/components/NavigationShell.vue": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"

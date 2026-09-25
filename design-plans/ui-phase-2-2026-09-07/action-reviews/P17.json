@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "pageId": "P17",
   "route": "/opportunities/scoring-rules",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28"
+    "apps/web/src/components/ScoreRuleConsole.vue": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -43,7 +43,12 @@
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "canDecide；非ready顶部、empty首条和ready摘要slot三位置；不要求缺项",
       "handler": "openCreate只清createError并showCreate=true；不resetForm，无busy守卫",
-      "variants": ["top-loading-or-error", "empty", "ready-complete", "ready-incomplete"],
+      "variants": [
+        "top-loading-or-error",
+        "empty",
+        "ready-complete",
+        "ready-incomplete"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -80,12 +85,22 @@
       "label": "重读版本目录",
       "kind": "read",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1"],
-      "sourceContractKeys": ["list.retry：UiStatePanel primary→load；读取目录，无业务写入"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1"
+      ],
+      "sourceContractKeys": [
+        "list.retry：UiStatePanel primary→load；读取目录，无业务写入"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "state非ready/empty；共享loading无操作，其他错误primary可触发",
       "handler": "load GET /opportunity-score-rules；primary统一load，secondary未监听；成功不主动清message，失败不清旧rules",
-      "variants": ["loading", "error", "expired", "forbidden", "blocked"],
+      "variants": [
+        "loading",
+        "error",
+        "expired",
+        "forbidden",
+        "blocked"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -118,12 +133,21 @@
       "label": "打开发布影响预览",
       "kind": "read",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1"],
-      "sourceContractKeys": ["preview.open：canApprove，draft/pending_approval/approved；GET第1页"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1"
+      ],
+      "sourceContractKeys": [
+        "preview.open：canApprove，draft/pending_approval/approved；GET第1页"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "canApprove且draft/pending_approval/approved；函数canApprove且!previewing",
       "handler": "loadPreview(rule,1)先设置目标/open/busy并清preview/error；GET /opportunity-score-rules/{id}/preview?page=1&page_size=20",
-      "variants": ["draft", "pending_approval", "approved", "busy-ignored"],
+      "variants": [
+        "draft",
+        "pending_approval",
+        "approved",
+        "busy-ignored"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -160,12 +184,21 @@
       "label": "打开提交审批原因",
       "kind": "local",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1"],
-      "sourceContractKeys": ["action.submit.open：canDecide且draft，begin清原因/目标/错误"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1"
+      ],
+      "sourceContractKeys": [
+        "action.submit.open：canDecide且draft，begin清原因/目标/错误"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "canDecide且draft；button无busy禁用，begin再校验能力但不验证rule.status",
       "handler": "begin(rule,'submit')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
-      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "variants": [
+        "allowed-state",
+        "denied-hidden",
+        "reopen",
+        "while-other-write"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -198,12 +231,21 @@
       "label": "打开批准原因",
       "kind": "local",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1"],
-      "sourceContractKeys": ["action.approve.open：canApprove且pending_approval"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1"
+      ],
+      "sourceContractKeys": [
+        "action.approve.open：canApprove且pending_approval"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "canApprove且pending_approval；button无busy禁用，begin再校验能力但不验证rule.status",
       "handler": "begin(rule,'approve')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
-      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "variants": [
+        "allowed-state",
+        "denied-hidden",
+        "reopen",
+        "while-other-write"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -236,12 +278,21 @@
       "label": "打开拒绝原因",
       "kind": "local",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1"],
-      "sourceContractKeys": ["action.reject.open：canApprove且pending_approval"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1"
+      ],
+      "sourceContractKeys": [
+        "action.reject.open：canApprove且pending_approval"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "canApprove且pending_approval；button无busy禁用，begin再校验能力但不验证rule.status",
       "handler": "begin(rule,'reject')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
-      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "variants": [
+        "allowed-state",
+        "denied-hidden",
+        "reopen",
+        "while-other-write"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -274,12 +325,21 @@
       "label": "打开启用原因",
       "kind": "local",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1"],
-      "sourceContractKeys": ["action.activate.open：canApprove且approved"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1"
+      ],
+      "sourceContractKeys": [
+        "action.activate.open：canApprove且approved"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "canApprove且approved；button无busy禁用，begin再校验能力但不验证rule.status",
       "handler": "begin(rule,'activate')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
-      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "variants": [
+        "allowed-state",
+        "denied-hidden",
+        "reopen",
+        "while-other-write"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -312,12 +372,21 @@
       "label": "打开回滚原因",
       "kind": "local",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1"],
-      "sourceContractKeys": ["action.rollback.open：canApprove且active"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1"
+      ],
+      "sourceContractKeys": [
+        "action.rollback.open：canApprove且active"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "canApprove且active；button无busy禁用，begin再校验能力但不验证rule.status",
       "handler": "begin(rule,'rollback')设置selected/action，清reason/targetRuleId/actionError并showAction=true",
-      "variants": ["allowed-state", "denied-hidden", "reopen", "while-other-write"],
+      "variants": [
+        "allowed-state",
+        "denied-hidden",
+        "reopen",
+        "while-other-write"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -363,7 +432,12 @@
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "标题/取消/Escape；busy时未锁",
       "handler": "closeCreate关闭并清createError，保留全部form",
-      "variants": ["close", "cancel", "escape", "busy-close"],
+      "variants": [
+        "close",
+        "cancel",
+        "escape",
+        "busy-close"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -467,7 +541,11 @@
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "标题/Escape无previewing锁",
       "handler": "closePreview设置showPreview=false并清previewError；不取消GET，不清previewRule/preview",
-      "variants": ["close", "escape", "inflight"],
+      "variants": [
+        "close",
+        "escape",
+        "inflight"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -504,12 +582,19 @@
       "label": "重新试算第1页",
       "kind": "read",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1"],
-      "sourceContractKeys": ["preview.retry：loadPreview(previewRule)，明确重试第1页而非失败页"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1"
+      ],
+      "sourceContractKeys": [
+        "preview.retry：loadPreview(previewRule)，明确重试第1页而非失败页"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "previewError分支按钮；loadPreview要求canApprove&&!previewing",
       "handler": "loadPreview(previewRule)默认page=1，清旧内容再GET；不重试失败页码",
-      "variants": ["after-error", "failed-page-two"],
+      "variants": [
+        "after-error",
+        "failed-page-two"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -542,12 +627,19 @@
       "label": "预览上一页",
       "kind": "read",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1"],
-      "sourceContractKeys": ["preview.previous：page≤1或previewing禁用；GET上一页"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1"
+      ],
+      "sourceContractKeys": [
+        "preview.previous：page≤1或previewing禁用；GET上一页"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "page<=1或previewing禁用",
       "handler": "changePreviewPage(page-1)使用previewRule；loadPreview以page_size20重新试算；函数本身无页码边界校验",
-      "variants": ["first-disabled", "later-page"],
+      "variants": [
+        "first-disabled",
+        "later-page"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -576,12 +668,19 @@
       "label": "预览下一页",
       "kind": "read",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1"],
-      "sourceContractKeys": ["preview.next：page×page_size≥total或previewing禁用；GET下一页"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1"
+      ],
+      "sourceContractKeys": [
+        "preview.next：page×page_size≥total或previewing禁用；GET下一页"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "page*page_size>=total或previewing禁用",
       "handler": "changePreviewPage(page+1)；total与当前items长度分开，不保存试算",
-      "variants": ["last-disabled", "has-next"],
+      "variants": [
+        "last-disabled",
+        "has-next"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -623,7 +722,14 @@
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "五变体标题/取消/Escape；busy期间可关闭",
       "handler": "closeAction只关showAction并清actionError，reason/target/selected保留到下次begin清理；不取消POST",
-      "variants": ["submit", "approve", "reject", "activate", "rollback", "busy-close"],
+      "variants": [
+        "submit",
+        "approve",
+        "reject",
+        "activate",
+        "rollback",
+        "busy-close"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -745,12 +851,18 @@
       "label": "原生弹窗定义关联",
       "kind": "wiring",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1"],
-      "sourceContractKeys": ["scoring.create（1变体）"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1"
+      ],
+      "sourceContractKeys": [
+        "scoring.create（1变体）"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "useModalDialog与本地show/目标条件",
       "handler": "一个定义不重复算form/aside/cancel；五生命周期共用定义但业务变体分开",
-      "variants": ["create-basics"],
+      "variants": [
+        "create-basics"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -773,7 +885,10 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "原生焦点/取消不自动认证长窗、全部主题和进行中重开。",
-      "forwardsTo": ["scoring.create.close", "scoring.create.submit"],
+      "forwardsTo": [
+        "scoring.create.close",
+        "scoring.create.submit"
+      ],
       "forwardBindings": []
     },
     {
@@ -781,12 +896,18 @@
       "label": "原生弹窗定义关联",
       "kind": "wiring",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#23f0c5ed2b2a7243.1"],
-      "sourceContractKeys": ["scoring.preview（1变体）"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#23f0c5ed2b2a7243.1"
+      ],
+      "sourceContractKeys": [
+        "scoring.preview（1变体）"
+      ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "useModalDialog与本地show/目标条件",
       "handler": "一个定义不重复算form/aside/cancel；五生命周期共用定义但业务变体分开",
-      "variants": ["preview"],
+      "variants": [
+        "preview"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -823,14 +944,22 @@
       "label": "原生弹窗定义关联",
       "kind": "wiring",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1"
+      ],
       "sourceContractKeys": [
         "scoring.action.submit / approve / reject / activate / rollback（5变体）"
       ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "useModalDialog与本地show/目标条件",
       "handler": "一个定义不重复算form/aside/cancel；五生命周期共用定义但业务变体分开",
-      "variants": ["submit", "approve", "reject", "activate", "rollback"],
+      "variants": [
+        "submit",
+        "approve",
+        "reject",
+        "activate",
+        "rollback"
+      ],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -869,21 +998,26 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "原生焦点/取消不自动认证长窗、全部主题和进行中重开。",
-      "forwardsTo": ["scoring.action.close", "scoring.action.submit"],
+      "forwardsTo": [
+        "scoring.action.close",
+        "scoring.action.submit"
+      ],
       "forwardBindings": []
     }
   ],
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "includeStructuralContainers": true,
-    "files": ["apps/web/src/components/ScoreRuleConsole.vue"],
+    "files": [
+      "apps/web/src/components/ScoreRuleConsole.vue"
+    ],
     "dependencyHashes": {
-      "apps/web/src/components/ScoreRuleConsole.vue": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+      "apps/web/src/components/ScoreRuleConsole.vue": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
-      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
       "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
-      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
     },
     "inputs": [
       {
@@ -1372,5 +1506,6 @@
   "limits": [
     "28源位置/19组（16页面动作、3原生定义关联）、9模型/8结构，7业务弹窗单列。",
     "图引用与源函数/清单校验不授予具体批准，不证明实际Vue/API/数据库/生产；全站目标与G0–G5保持未完成。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

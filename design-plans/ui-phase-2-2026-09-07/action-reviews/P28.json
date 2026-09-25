@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ReportCenter.vue": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092"
+    "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
   },
   "readOwnershipEvidence": {
     "scope": "source-and-mounted-Vue-isolated-reads-not-service-or-full-page-acceptance",
@@ -1614,7 +1614,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/ReportCenter.vue": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092"
+      "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
     },
     "inputs": [],
     "containers": [
@@ -1831,5 +1831,6 @@
   "limits": [
     "只有C总体方向已选择，P28未获得整页或按钮批准。",
     "实际下载字节、Worker/数据库与宝塔部署另验，不将原型请求意图当成功。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

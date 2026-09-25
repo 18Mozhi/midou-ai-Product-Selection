@@ -6,8 +6,8 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "c235dc33a12c4fbca2a17492b4ad8f61d338575daffbd6185fb46f3833bc04b9",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36"
   },
   "actions": [
@@ -2031,8 +2031,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
-      "apps/web/src/components/OrganizationApprovalPanel.vue": "c235dc33a12c4fbca2a17492b4ad8f61d338575daffbd6185fb46f3833bc04b9",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+      "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
       "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36"
     },
     "inputs": [
@@ -2395,5 +2395,6 @@
     "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
     "四份旧视觉提案的源基线固定为7398aa8a6c38d498f888c64451c4345d4c726706；当前sourceHashes与路由证据单独核对，不把历史图重标为当前实现。",
     "不修改API/OpenAPI/环境/依赖/数据库或部署；不以图册数量代替完整状态分母。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

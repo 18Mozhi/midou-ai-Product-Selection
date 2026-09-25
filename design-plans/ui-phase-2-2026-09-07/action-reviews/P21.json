@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+    "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219",
     "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
     "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
@@ -43,7 +43,9 @@
     ]
   },
   "inputs": {
-    "SourcingWorkspace": ["query"],
+    "SourcingWorkspace": [
+      "query"
+    ],
     "SourcingWorkspaceDialogs": [
       "searchForm.input_type",
       "searchForm.input_ref",
@@ -73,7 +75,9 @@
       "costForm.observed_at",
       "costForm.reviewer_id"
     ],
-    "OpportunityCostReviewQueue": ["review.reason"]
+    "OpportunityCostReviewQueue": [
+      "review.reason"
+    ]
   },
   "actions": [
     {
@@ -81,12 +85,18 @@
       "label": "供应商找货页签",
       "kind": "navigation",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#4c5b0e4130d85030.1"],
-      "sourceContractKeys": ["SC-NAV sourcing"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#4c5b0e4130d85030.1"
+      ],
+      "sourceContractKeys": [
+        "SC-NAV sourcing"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "本地无条件；适用父层条件见routeApplicability",
       "handler": "RouterLink /sourcing，不强制保留q/record",
-      "variants": ["SC-NAV sourcing"],
+      "variants": [
+        "SC-NAV sourcing"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -157,12 +167,18 @@
       "label": "费用规则页签",
       "kind": "navigation",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#4862df3dce4b0f1c.1"],
-      "sourceContractKeys": ["SC-NAV cost-rules"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#4862df3dce4b0f1c.1"
+      ],
+      "sourceContractKeys": [
+        "SC-NAV cost-rules"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "本地无条件；适用父层条件见routeApplicability",
       "handler": "RouterLink /sourcing/cost-rules；不带from",
-      "variants": ["SC-NAV cost-rules"],
+      "variants": [
+        "SC-NAV cost-rules"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -232,11 +248,18 @@
       "actionId": "SC-S-OPEN",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "入口按canManage显示，不绑定disabled/aria-busy；openSearch只有权限检查与局部展开。",
         "handlerBoundary": "openSearch只检查canManage并showSearch=true/replace create=1；不重置form",
-        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"],
-        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
         }
@@ -244,12 +267,18 @@
       "label": "发起找货",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"],
-      "sourceContractKeys": ["SC-S-OPEN 管理者创建"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"
+      ],
+      "sourceContractKeys": [
+        "SC-S-OPEN 管理者创建"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:canManage",
       "handler": "openSearch只检查canManage并showSearch=true/replace create=1；不重置form",
-      "variants": ["SC-S-OPEN 管理者创建"],
+      "variants": [
+        "SC-S-OPEN 管理者创建"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -331,10 +360,15 @@
       "actionId": "SC-STATE",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "UiStatePanel主次按钮无禁用/忙碌绑定；loading时整个footer不渲染，父section忙碌不是按钮忙碌。空目录按管理者/只读选择展开、清空或load。",
         "handlerBoundary": "primary empty+manager打开搜索，其余load；secondary empty清query，其余load；expired/forbidden不跳登录或home",
-        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1"
+        ],
         "renderedControlIds": [
           "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
           "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1"
@@ -347,12 +381,18 @@
       "label": "整页状态主次操作",
       "kind": "read",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1"],
-      "sourceContractKeys": ["SC-STATE 主/次恢复或创建"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1"
+      ],
+      "sourceContractKeys": [
+        "SC-STATE 主/次恢复或创建"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:state !== 'ready'",
       "handler": "primary empty+manager打开搜索，其余load；secondary empty清query，其余load；expired/forbidden不跳登录或home",
-      "variants": ["SC-STATE 主/次恢复或创建"],
+      "variants": [
+        "SC-STATE 主/次恢复或创建"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -800,10 +840,15 @@
       "actionId": "SC-SEARCH-RECOVERY",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "空筛选UiStatePanel主次按钮无禁用/忙碌绑定；主操作清query，次操作按角色展开或load，重读后进入无footer的loading。",
         "handlerBoundary": "primary resetQuery；secondary manager openSearch否则load",
-        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1"
+        ],
         "renderedControlIds": [
           "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
           "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1"
@@ -816,12 +861,18 @@
       "label": "空筛选恢复",
       "kind": "read",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1"],
-      "sourceContractKeys": ["SC-SEARCH-CLEAR / 空筛选次动作"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1"
+      ],
+      "sourceContractKeys": [
+        "SC-SEARCH-CLEAR / 空筛选次动作"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else-if:!filteredItems.length",
       "handler": "primary resetQuery；secondary manager openSearch否则load",
-      "variants": ["SC-SEARCH-CLEAR / 空筛选次动作"],
+      "variants": [
+        "SC-SEARCH-CLEAR / 空筛选次动作"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -984,11 +1035,18 @@
       "actionId": "SC-DETAIL",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "记录按钮有选中class但无disabled/aria-busy；detail发GET，不设置按钮busy。请求未结束的视觉缺口不能伪称已实现忙碌。",
         "handlerBoundary": "切对象先清selectedQuotes；GET /sourcing/searches/:id，成功replace record并清create",
-        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"],
-        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
         }
@@ -996,12 +1054,18 @@
       "label": "选择找货记录",
       "kind": "read",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"],
-      "sourceContractKeys": ["SC-DETAIL 读对象并同步record"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"
+      ],
+      "sourceContractKeys": [
+        "SC-DETAIL 读对象并同步record"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-for:item in filteredItems",
       "handler": "切对象先清selectedQuotes；GET /sourcing/searches/:id，成功replace record并清create",
-      "variants": ["SC-DETAIL 读对象并同步record"],
+      "variants": [
+        "SC-DETAIL 读对象并同步record"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1111,12 +1175,18 @@
       "label": "重新采集",
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#100e00b6d8cb9e4a.1"],
-      "sourceContractKeys": ["SC-REFRESH 管理者POST当前对象"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#100e00b6d8cb9e4a.1"
+      ],
+      "sourceContractKeys": [
+        "SC-REFRESH 管理者POST当前对象"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected && v-if:canManage",
       "handler": "POST /sourcing/searches/:id/refresh {}，成功只排队；notice后load会清空",
-      "variants": ["SC-REFRESH 管理者POST当前对象"],
+      "variants": [
+        "SC-REFRESH 管理者POST当前对象"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1219,12 +1289,18 @@
       "label": "当前找货费用规则",
       "kind": "navigation",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#dd2297ed2ff6c2a5.1"],
-      "sourceContractKeys": ["SC-NAV cost-rules含from"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#dd2297ed2ff6c2a5.1"
+      ],
+      "sourceContractKeys": [
+        "SC-NAV cost-rules含from"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected",
       "handler": "RouterLink /sourcing/cost-rules?from=route.fullPath",
-      "variants": ["SC-NAV cost-rules含from"],
+      "variants": [
+        "SC-NAV cost-rules含from"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1329,11 +1405,18 @@
       "actionId": "SC-DELETE-OPEN",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "入口按selected/canManage显示，只赋deleting=selected；实际删除提交另有六态，不能把提交busy套到打开入口。",
         "handlerBoundary": "deleting=selected；此入口不重置旧deleteReason，不发DELETE",
-        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"],
-        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
         }
@@ -1341,12 +1424,18 @@
       "label": "打开删除确认",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"],
-      "sourceContractKeys": ["SC-DELETE-OPEN 管理者选中目标"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"
+      ],
+      "sourceContractKeys": [
+        "SC-DELETE-OPEN 管理者选中目标"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected && v-if:canManage",
       "handler": "deleting=selected；此入口不重置旧deleteReason，不发DELETE",
-      "variants": ["SC-DELETE-OPEN 管理者选中目标"],
+      "variants": [
+        "SC-DELETE-OPEN 管理者选中目标"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1417,12 +1506,18 @@
       "label": "受权采集明细",
       "kind": "navigation",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#a9d2be84fdbc9665.1"],
-      "sourceContractKeys": ["SC-NAV 受权采集明细"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#a9d2be84fdbc9665.1"
+      ],
+      "sourceContractKeys": [
+        "SC-NAV 受权采集明细"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected && v-if:selected.collection_progress && v-if:canInspectCollection",
       "handler": "仅collection_progress且canInspectCollection；/platform-admin/collection?task=collection_task_id",
-      "variants": ["SC-NAV 受权采集明细"],
+      "variants": [
+        "SC-NAV 受权采集明细"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1493,12 +1588,18 @@
       "label": "ERP原页面",
       "kind": "navigation",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#46efe1c7f3d39475.1"],
-      "sourceContractKeys": ["SC-ERP 原始ERP新窗口"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#46efe1c7f3d39475.1"
+      ],
+      "sourceContractKeys": [
+        "SC-ERP 原始ERP新窗口"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected && v-if:selected.erp_reference",
       "handler": "selected.erp_reference.source_url新窗口noopener noreferrer，不当作确认报价",
-      "variants": ["SC-ERP 原始ERP新窗口"],
+      "variants": [
+        "SC-ERP 原始ERP新窗口"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1568,11 +1669,18 @@
       "actionId": "SC-SELECT",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "checkbox有checked无disabled/aria-busy；choose最多保留5个ID并回写checked，第六次拒绝选择不是按钮禁用。",
         "handlerBoundary": "只接受有quote的候选；最多五个quote.id，取消选择；原生checked同步实际集合",
-        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"],
-        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
         }
@@ -1580,12 +1688,18 @@
       "label": "选择报价对比",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"],
-      "sourceContractKeys": ["SC-SELECT 勾选与实际最多五项同步"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"
+      ],
+      "sourceContractKeys": [
+        "SC-SELECT 勾选与实际最多五项同步"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected && v-for:item in candidates && v-if:canManage && item.quote",
       "handler": "只接受有quote的候选；最多五个quote.id，取消选择；原生checked同步实际集合",
-      "variants": ["SC-SELECT 勾选与实际最多五项同步"],
+      "variants": [
+        "SC-SELECT 勾选与实际最多五项同步"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1695,12 +1809,18 @@
       "label": "原始商品页",
       "kind": "navigation",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#792656883236da58.1"],
-      "sourceContractKeys": ["SC-SOURCE 原始商品新窗口"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#792656883236da58.1"
+      ],
+      "sourceContractKeys": [
+        "SC-SOURCE 原始商品新窗口"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected && v-for:item in candidates",
       "handler": "item.original_url新窗口noopener noreferrer；来源事实不是报价提交",
-      "variants": ["SC-SOURCE 原始商品新窗口"],
+      "variants": [
+        "SC-SOURCE 原始商品新窗口"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1834,11 +1954,18 @@
       "actionId": "SC-QUOTE-OPEN",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "按canManage且无quote显示，只预填并打开；确认报价提交是另一个动作，其busy不等于此入口禁用。",
         "handlerBoundary": "openQuote依候选预填，缺MOQ/交期/可信度用1/7/80；时间按本地时区转换；无quote才显示",
-        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"],
-        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
         }
@@ -1846,12 +1973,18 @@
       "label": "打开报价确认",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"],
-      "sourceContractKeys": ["SC-QUOTE-OPEN 管理者无quote"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"
+      ],
+      "sourceContractKeys": [
+        "SC-QUOTE-OPEN 管理者无quote"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected && v-for:item in candidates && v-if:canManage && !item.quote",
       "handler": "openQuote依候选预填，缺MOQ/交期/可信度用1/7/80；时间按本地时区转换；无quote才显示",
-      "variants": ["SC-QUOTE-OPEN 管理者无quote"],
+      "variants": [
+        "SC-QUOTE-OPEN 管理者无quote"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -1925,11 +2058,18 @@
       "actionId": "SC-PURCHASE-OPEN",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "按canManage且有quote显示；openPurchase的quote守卫及MOQ预填不是按钮禁用，采购提交另行审核。",
         "handlerBoundary": "已有quote才可打开；锁定candidate.quote，重置MOQ数量和默认原因",
-        "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"],
-        "renderedControlIds": ["apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81"
         }
@@ -1937,12 +2077,18 @@
       "label": "打开采购任务",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"],
-      "sourceContractKeys": ["SC-PURCHASE-OPEN 管理者已有quote"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"
+      ],
+      "sourceContractKeys": [
+        "SC-PURCHASE-OPEN 管理者已有quote"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-else: && v-if:selected && v-for:item in candidates && v-else-if:canManage",
       "handler": "已有quote才可打开；锁定candidate.quote，重置MOQ数量和默认原因",
-      "variants": ["SC-PURCHASE-OPEN 管理者已有quote"],
+      "variants": [
+        "SC-PURCHASE-OPEN 管理者已有quote"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2044,12 +2190,18 @@
       "label": "保存报价对比",
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
-      "sourceCandidateIds": ["apps/web/src/components/SourcingWorkspace.vue#658745acd55fced2.1"],
-      "sourceContractKeys": ["SC-COMPARE 至少2项且非busy"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SourcingWorkspace.vue#658745acd55fced2.1"
+      ],
+      "sourceContractKeys": [
+        "SC-COMPARE 至少2项且非busy"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:canManage && selectedQuotes.length",
       "handler": "POST /sourcing/comparisons {name,quote_ids}；按钮>=2且非busy；成功清选择并load",
-      "variants": ["SC-COMPARE 至少2项且非busy"],
+      "variants": [
+        "SC-COMPARE 至少2项且非busy"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2163,7 +2315,10 @@
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:canManage；v-if:canManage",
       "handler": "SW传递四窗props；八动作事件转发，update-delete-reason仅编辑本地输入，不触发删除提交",
-      "variants": ["SD九个事件转发、删除原因更新", "四窗共享调用，不另外计为第五个业务窗"],
+      "variants": [
+        "SD九个事件转发、删除原因更新",
+        "四窗共享调用，不另外计为第五个业务窗"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2213,110 +2368,146 @@
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@close-search",
           "handler": "closeSearch",
-          "targets": ["SC-S-CLOSE"]
+          "targets": [
+            "SC-S-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@create",
           "handler": "create",
-          "targets": ["SC-S-SUBMIT"]
+          "targets": [
+            "SC-S-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@close-quote",
           "handler": "quoteCandidate = null",
-          "targets": ["SC-QUOTE-CLOSE"]
+          "targets": [
+            "SC-QUOTE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@confirm-quote",
           "handler": "confirm",
-          "targets": ["SC-QUOTE-SUBMIT"]
+          "targets": [
+            "SC-QUOTE-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@close-purchase",
           "handler": "purchaseCandidate = null",
-          "targets": ["SC-PURCHASE-CLOSE"]
+          "targets": [
+            "SC-PURCHASE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@purchase",
           "handler": "purchase",
-          "targets": ["SC-PURCHASE-SUBMIT"]
+          "targets": [
+            "SC-PURCHASE-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@close-delete",
           "handler": "deleting = null",
-          "targets": ["SC-DELETE-CLOSE"]
+          "targets": [
+            "SC-DELETE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@remove-search",
           "handler": "removeSearch",
-          "targets": ["SC-DELETE-SUBMIT"]
+          "targets": [
+            "SC-DELETE-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
           "event": "@update-delete-reason",
           "handler": "deleteReason = $event",
-          "targets": ["SC-DELETE-SUBMIT"],
+          "targets": [
+            "SC-DELETE-SUBMIT"
+          ],
           "association": "input-owner-only-not-submit-call"
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@close-search",
           "handler": "closeSearch",
-          "targets": ["SC-S-CLOSE"]
+          "targets": [
+            "SC-S-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@create",
           "handler": "create",
-          "targets": ["SC-S-SUBMIT"]
+          "targets": [
+            "SC-S-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@close-quote",
           "handler": "quoteCandidate = null",
-          "targets": ["SC-QUOTE-CLOSE"]
+          "targets": [
+            "SC-QUOTE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@confirm-quote",
           "handler": "confirm",
-          "targets": ["SC-QUOTE-SUBMIT"]
+          "targets": [
+            "SC-QUOTE-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@close-purchase",
           "handler": "purchaseCandidate = null",
-          "targets": ["SC-PURCHASE-CLOSE"]
+          "targets": [
+            "SC-PURCHASE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@purchase",
           "handler": "purchase",
-          "targets": ["SC-PURCHASE-SUBMIT"]
+          "targets": [
+            "SC-PURCHASE-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@close-delete",
           "handler": "deleting = null",
-          "targets": ["SC-DELETE-CLOSE"]
+          "targets": [
+            "SC-DELETE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@remove-search",
           "handler": "removeSearch",
-          "targets": ["SC-DELETE-SUBMIT"]
+          "targets": [
+            "SC-DELETE-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
           "event": "@update-delete-reason",
           "handler": "deleteReason = $event",
-          "targets": ["SC-DELETE-SUBMIT"],
+          "targets": [
+            "SC-DELETE-SUBMIT"
+          ],
           "association": "input-owner-only-not-submit-call"
         }
       ]
@@ -2329,11 +2520,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1"
       ],
-      "sourceContractKeys": ["搜索四类输入，字段标签随类型变"],
+      "sourceContractKeys": [
+        "搜索四类输入，字段标签随类型变"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:showSearch",
       "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
-      "variants": ["搜索四类输入，字段标签随类型变"],
+      "variants": [
+        "搜索四类输入，字段标签随类型变"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2376,7 +2571,10 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
-      "forwardsTo": ["SC-S-CLOSE", "SC-S-SUBMIT"],
+      "forwardsTo": [
+        "SC-S-CLOSE",
+        "SC-S-SUBMIT"
+      ],
       "forwardBindings": []
     },
     {
@@ -2389,11 +2587,19 @@
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#e3badf15ec2af147.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#62730beed005a395.1"
       ],
-      "sourceContractKeys": ["SC-S-CLOSE Escape", "SC-S-CLOSE X", "SC-S-CLOSE 取消"],
+      "sourceContractKeys": [
+        "SC-S-CLOSE Escape",
+        "SC-S-CLOSE X",
+        "SC-S-CLOSE 取消"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:showSearch；v-if:showSearch；v-if:showSearch",
       "handler": "closeSearch隐藏并清create；草稿保留；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
-      "variants": ["SC-S-CLOSE Escape", "SC-S-CLOSE X", "SC-S-CLOSE 取消"],
+      "variants": [
+        "SC-S-CLOSE Escape",
+        "SC-S-CLOSE X",
+        "SC-S-CLOSE 取消"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2548,11 +2754,17 @@
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#d3c4c7748af92501.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#7a0fba6035dcdf87.1"
       ],
-      "sourceContractKeys": ["SC-S-SUBMIT 表单", "SC-S-SUBMIT 按钮"],
+      "sourceContractKeys": [
+        "SC-S-SUBMIT 表单",
+        "SC-S-SUBMIT 按钮"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:showSearch；v-if:showSearch",
       "handler": "form/create与submit同一提交；POST /sourcing/searches仅input_type/input_ref原值；源shared post无函数级busy守卫，真实幂等/异步归属待验",
-      "variants": ["SC-S-SUBMIT 表单", "SC-S-SUBMIT 按钮"],
+      "variants": [
+        "SC-S-SUBMIT 表单",
+        "SC-S-SUBMIT 按钮"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2666,11 +2878,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1"
       ],
-      "sourceContractKeys": ["报价证据确认"],
+      "sourceContractKeys": [
+        "报价证据确认"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:quoteCandidate",
       "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
-      "variants": ["报价证据确认"],
+      "variants": [
+        "报价证据确认"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2705,7 +2921,10 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
-      "forwardsTo": ["SC-QUOTE-CLOSE", "SC-QUOTE-SUBMIT"],
+      "forwardsTo": [
+        "SC-QUOTE-CLOSE",
+        "SC-QUOTE-SUBMIT"
+      ],
       "forwardBindings": []
     },
     {
@@ -2718,11 +2937,19 @@
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#bbe2d6bcbbb332dc.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#830881852f5cf052.1"
       ],
-      "sourceContractKeys": ["SC-QUOTE-CLOSE Escape", "SC-QUOTE-CLOSE X", "SC-QUOTE-CLOSE 取消"],
+      "sourceContractKeys": [
+        "SC-QUOTE-CLOSE Escape",
+        "SC-QUOTE-CLOSE X",
+        "SC-QUOTE-CLOSE 取消"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:quoteCandidate；v-if:quoteCandidate；v-if:quoteCandidate",
       "handler": "quoteCandidate=null；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
-      "variants": ["SC-QUOTE-CLOSE Escape", "SC-QUOTE-CLOSE X", "SC-QUOTE-CLOSE 取消"],
+      "variants": [
+        "SC-QUOTE-CLOSE Escape",
+        "SC-QUOTE-CLOSE X",
+        "SC-QUOTE-CLOSE 取消"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2869,11 +3096,17 @@
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#eaa2e41b5101f1f5.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#6d422d5b42df032c.1"
       ],
-      "sourceContractKeys": ["SC-QUOTE-SUBMIT 表单", "SC-QUOTE-SUBMIT 按钮"],
+      "sourceContractKeys": [
+        "SC-QUOTE-SUBMIT 表单",
+        "SC-QUOTE-SUBMIT 按钮"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:quoteCandidate；v-if:quoteCandidate",
       "handler": "candidate_id及九个quote字段，observed_at转UTC；不发送原始price/currency修改；源shared post无函数级busy守卫，真实幂等/异步归属待验",
-      "variants": ["SC-QUOTE-SUBMIT 表单", "SC-QUOTE-SUBMIT 按钮"],
+      "variants": [
+        "SC-QUOTE-SUBMIT 表单",
+        "SC-QUOTE-SUBMIT 按钮"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -2979,11 +3212,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1"
       ],
-      "sourceContractKeys": ["采购MOQ/原因"],
+      "sourceContractKeys": [
+        "采购MOQ/原因"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:purchaseCandidate",
       "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
-      "variants": ["采购MOQ/原因"],
+      "variants": [
+        "采购MOQ/原因"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3014,7 +3251,10 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
-      "forwardsTo": ["SC-PURCHASE-CLOSE", "SC-PURCHASE-SUBMIT"],
+      "forwardsTo": [
+        "SC-PURCHASE-CLOSE",
+        "SC-PURCHASE-SUBMIT"
+      ],
       "forwardBindings": []
     },
     {
@@ -3035,7 +3275,11 @@
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:purchaseCandidate；v-if:purchaseCandidate；v-if:purchaseCandidate",
       "handler": "purchaseCandidate=null；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
-      "variants": ["SC-PURCHASE-CLOSE Escape", "SC-PURCHASE-CLOSE X", "SC-PURCHASE-CLOSE 取消"],
+      "variants": [
+        "SC-PURCHASE-CLOSE Escape",
+        "SC-PURCHASE-CLOSE X",
+        "SC-PURCHASE-CLOSE 取消"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3178,11 +3422,17 @@
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#986c3be67ec5d768.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#bead229bf1acdb7a.1"
       ],
-      "sourceContractKeys": ["SC-PURCHASE-SUBMIT 表单", "SC-PURCHASE-SUBMIT 按钮"],
+      "sourceContractKeys": [
+        "SC-PURCHASE-SUBMIT 表单",
+        "SC-PURCHASE-SUBMIT 按钮"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:purchaseCandidate；v-if:purchaseCandidate",
       "handler": "POST /sourcing/purchase-tasks {quote_id,quantity:Number,reason:trim}；数量>=MOQ且trim原因至少2字按钮才可提交；源shared post无函数级busy守卫，真实幂等/异步归属待验",
-      "variants": ["SC-PURCHASE-SUBMIT 表单", "SC-PURCHASE-SUBMIT 按钮"],
+      "variants": [
+        "SC-PURCHASE-SUBMIT 表单",
+        "SC-PURCHASE-SUBMIT 按钮"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3284,11 +3534,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1"
       ],
-      "sourceContractKeys": ["记录原因软删"],
+      "sourceContractKeys": [
+        "记录原因软删"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:deleting",
       "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
-      "variants": ["记录原因软删"],
+      "variants": [
+        "记录原因软删"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3319,7 +3573,10 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
-      "forwardsTo": ["SC-DELETE-CLOSE", "SC-DELETE-SUBMIT"],
+      "forwardsTo": [
+        "SC-DELETE-CLOSE",
+        "SC-DELETE-SUBMIT"
+      ],
       "forwardBindings": []
     },
     {
@@ -3332,11 +3589,19 @@
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#c748a332b4a8b069.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#0a71f3799436c08c.1"
       ],
-      "sourceContractKeys": ["SC-DELETE-CLOSE Escape", "SC-DELETE-CLOSE X", "SC-DELETE-CLOSE 取消"],
+      "sourceContractKeys": [
+        "SC-DELETE-CLOSE Escape",
+        "SC-DELETE-CLOSE X",
+        "SC-DELETE-CLOSE 取消"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:deleting；v-if:deleting；v-if:deleting",
       "handler": "deleting=null，原因未清空；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
-      "variants": ["SC-DELETE-CLOSE Escape", "SC-DELETE-CLOSE X", "SC-DELETE-CLOSE 取消"],
+      "variants": [
+        "SC-DELETE-CLOSE Escape",
+        "SC-DELETE-CLOSE X",
+        "SC-DELETE-CLOSE 取消"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3479,11 +3744,17 @@
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#c5ce1f450e932172.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#9d23c498e72940a2.1"
       ],
-      "sourceContractKeys": ["SC-DELETE-SUBMIT 表单", "SC-DELETE-SUBMIT 按钮"],
+      "sourceContractKeys": [
+        "SC-DELETE-SUBMIT 表单",
+        "SC-DELETE-SUBMIT 按钮"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:deleting；v-if:deleting",
       "handler": "DELETE /sourcing/searches/:id仅trim原因；不编revision，trim为空handler早退；源shared post无函数级busy守卫，真实幂等/异步归属待验",
-      "variants": ["SC-DELETE-SUBMIT 表单", "SC-DELETE-SUBMIT 按钮"],
+      "variants": [
+        "SC-DELETE-SUBMIT 表单",
+        "SC-DELETE-SUBMIT 按钮"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3585,11 +3856,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/SourcingCostConfirmationPanel.vue#bb5d5e072948baa9.1"
       ],
-      "sourceContractKeys": ["SC-NAV 机会利润详情"],
+      "sourceContractKeys": [
+        "SC-NAV 机会利润详情"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "本地无条件；适用父层条件见routeApplicability",
       "handler": "/opportunities/:id?tab=profit&from=/sourcing；不保留record",
-      "variants": ["SC-NAV 机会利润详情"],
+      "variants": [
+        "SC-NAV 机会利润详情"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3667,11 +3942,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1"
       ],
-      "sourceContractKeys": ["成本提交/复核/重算三个事件转发"],
+      "sourceContractKeys": [
+        "成本提交/复核/重算三个事件转发"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "本地无条件；适用父层条件见routeApplicability",
       "handler": "SC负责cost-inputs/profit-runs及cost-input-reviews/actions真实URL，机会与review版本分别使用",
-      "variants": ["成本提交/复核/重算三个事件转发"],
+      "variants": [
+        "成本提交/复核/重算三个事件转发"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3698,25 +3977,35 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
-      "forwardsTo": ["SC-COST-SUBMIT", "SC-COST-REVIEW-SUBMIT", "SC-COST-RECALCULATE"],
+      "forwardsTo": [
+        "SC-COST-SUBMIT",
+        "SC-COST-REVIEW-SUBMIT",
+        "SC-COST-RECALCULATE"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1",
           "event": "@confirm-cost",
           "handler": "submitCost",
-          "targets": ["SC-COST-SUBMIT"]
+          "targets": [
+            "SC-COST-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1",
           "event": "@review-cost",
           "handler": "reviewCost",
-          "targets": ["SC-COST-REVIEW-SUBMIT"]
+          "targets": [
+            "SC-COST-REVIEW-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#e31dcd8852e4566d.1",
           "event": "@queue-profit",
           "handler": "queueProfit",
-          "targets": ["SC-COST-RECALCULATE"]
+          "targets": [
+            "SC-COST-RECALCULATE"
+          ]
         }
       ]
     },
@@ -3728,11 +4017,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityProfitPanel.vue#2bab3ff056a52675.1"
       ],
-      "sourceContractKeys": ["SC-NAV 管理费用规则"],
+      "sourceContractKeys": [
+        "SC-NAV 管理费用规则"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "本地无条件；适用父层条件见routeApplicability",
       "handler": "固定/sourcing/cost-rules，不带from；只在机会成本面板装配时出现",
-      "variants": ["SC-NAV 管理费用规则"],
+      "variants": [
+        "SC-NAV 管理费用规则"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3806,11 +4099,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1"
       ],
-      "sourceContractKeys": ["SC-COST-REVIEW 转发"],
+      "sourceContractKeys": [
+        "SC-COST-REVIEW 转发"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "本地无条件；适用父层条件见routeApplicability",
       "handler": "PP仅透传RQ的reviewCost payload，P21由SC.reviewCost处理，不套用P18父层",
-      "variants": ["SC-COST-REVIEW 转发"],
+      "variants": [
+        "SC-COST-REVIEW 转发"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3837,13 +4134,17 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": " 仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。",
-      "forwardsTo": ["SC-COST-REVIEW-SUBMIT"],
+      "forwardsTo": [
+        "SC-COST-REVIEW-SUBMIT"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
           "event": "@review-cost",
           "handler": "$emit('reviewCost', $event)",
-          "targets": ["SC-COST-REVIEW-SUBMIT"]
+          "targets": [
+            "SC-COST-REVIEW-SUBMIT"
+          ]
         }
       ]
     },
@@ -3856,11 +4157,17 @@
         "apps/web/src/components/OpportunityProfitPanel.vue#fcdcabfef1ea3474.1",
         "apps/web/src/components/OpportunityProfitPanel.vue#b2258379fb999070.1"
       ],
-      "sourceContractKeys": ["SC-COST-SUBMIT 表单", "SC-COST-SUBMIT 指定复核人且非busy"],
+      "sourceContractKeys": [
+        "SC-COST-SUBMIT 表单",
+        "SC-COST-SUBMIT 指定复核人且非busy"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:canConfirmCost；v-if:canConfirmCost",
       "handler": "canConfirmCost控制form，busy或reviewer空禁用；costForm九字段+expected_version=机会version；提交后未立即成为当前成本",
-      "variants": ["SC-COST-SUBMIT 表单", "SC-COST-SUBMIT 指定复核人且非busy"],
+      "variants": [
+        "SC-COST-SUBMIT 表单",
+        "SC-COST-SUBMIT 指定复核人且非busy"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -3962,11 +4269,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityProfitPanel.vue#aff5d679009764bc.1"
       ],
-      "sourceContractKeys": ["SC-COST-RECALCULATE 排队"],
+      "sourceContractKeys": [
+        "SC-COST-RECALCULATE 排队"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:canConfirmCost",
       "handler": "canConfirmCost且非busy按钮；SC只POST {platform,expected_version:机会version}到profit-runs",
-      "variants": ["SC-COST-RECALCULATE 排队"],
+      "variants": [
+        "SC-COST-RECALCULATE 排队"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -4060,7 +4371,10 @@
       "actionId": "SC-COST-REVIEW-OPEN",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "两个入口由item.can_review控制可见，均无disabled/aria-busy；beginReview清原因并切换结论，不立即审批。",
         "handlerBoundary": "item.can_review控制两个入口；beginReview写id/decision并清reason，不立即审批",
         "sourceCandidateIds": [
@@ -4082,11 +4396,17 @@
         "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1",
         "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
       ],
-      "sourceContractKeys": ["SC-COST-REVIEW rejected打开", "SC-COST-REVIEW approved打开"],
+      "sourceContractKeys": [
+        "SC-COST-REVIEW rejected打开",
+        "SC-COST-REVIEW approved打开"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-for:item in reviews && v-if:item.can_review；v-for:item in reviews && v-if:item.can_review",
       "handler": "item.can_review控制两个入口；beginReview写id/decision并清reason，不立即审批",
-      "variants": ["SC-COST-REVIEW rejected打开", "SC-COST-REVIEW approved打开"],
+      "variants": [
+        "SC-COST-REVIEW rejected打开",
+        "SC-COST-REVIEW approved打开"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -4200,11 +4520,17 @@
         "apps/web/src/components/OpportunityCostReviewQueue.vue#dcb42c2584efb46b.1",
         "apps/web/src/components/OpportunityCostReviewQueue.vue#8c06fd5c1d000db0.1"
       ],
-      "sourceContractKeys": ["SC-COST-REVIEW 表单提交", "SC-COST-REVIEW 提交按钮"],
+      "sourceContractKeys": [
+        "SC-COST-REVIEW 表单提交",
+        "SC-COST-REVIEW 提交按钮"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-for:item in reviews && v-if:review.id === item.id；v-for:item in reviews && v-if:review.id === item.id",
       "handler": "reason.trim长度>=2；payload reviewId/decision/trim reason/expectedVersion=item.version；SC映射expected_version到review动作API",
-      "variants": ["SC-COST-REVIEW 表单提交", "SC-COST-REVIEW 提交按钮"],
+      "variants": [
+        "SC-COST-REVIEW 表单提交",
+        "SC-COST-REVIEW 提交按钮"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -4339,7 +4665,10 @@
       "actionId": "SC-COST-REVIEW-CANCEL",
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "只按review.id显示并清空该ID，无disabled/aria-busy；取消不撤销在途请求。",
         "handlerBoundary": "只清review.id，不发请求，不保证旧在途响应不会影响新表单",
         "sourceCandidateIds": [
@@ -4358,11 +4687,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
       ],
-      "sourceContractKeys": ["SC-COST-REVIEW-CANCEL"],
+      "sourceContractKeys": [
+        "SC-COST-REVIEW-CANCEL"
+      ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-for:item in reviews && v-if:review.id === item.id",
       "handler": "只清review.id，不发请求，不保证旧在途响应不会影响新表单",
-      "variants": ["SC-COST-REVIEW-CANCEL"],
+      "variants": [
+        "SC-COST-REVIEW-CANCEL"
+      ],
       "scenes": [
         {
           "package": "sourcing-direction-c",
@@ -4476,7 +4809,7 @@
       "apps/web/src/components/OpportunityCostReviewQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/SourcingWorkspace.vue": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+      "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219",
       "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
       "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
       "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
@@ -5178,5 +5511,6 @@
     "25模型、12结构容器与4自定义弹窗分开；字段和事件转发不是额外业务写入。",
     "输入同步到删除提交组仅为payload所有者关联，不表示updateDeleteReason会发DELETE。",
     "本批只核对无源呈现状态及审核校验器，不修改P21原型/图稿或生产Vue/接口/配置/数据库；既有父请求在途关闭锁仍为待审提案，不视为源规则或撤回请求。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

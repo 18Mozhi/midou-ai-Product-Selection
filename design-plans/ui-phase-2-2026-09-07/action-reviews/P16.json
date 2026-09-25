@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "pageId": "P16",
   "route": "/opportunities/start",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f"
+    "apps/web/src/components/SelectionJourney.vue": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -26,12 +26,21 @@
       "label": "返回机会列表",
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1"],
-      "sourceContractKeys": ["J-NAV-LIST"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1"
+      ],
+      "sourceContractKeys": [
+        "J-NAV-LIST"
+      ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "页面常驻；不受busy/reading禁用",
       "handler": "RouterLink /opportunities，不传from；导航不取消后台任务",
-      "variants": ["input", "running", "terminal", "busy"],
+      "variants": [
+        "input",
+        "running",
+        "terminal",
+        "busy"
+      ],
       "scenes": [
         {
           "package": "journey-direction-c",
@@ -106,8 +115,12 @@
       "label": "状态面板主次恢复",
       "kind": "local",
       "routeApplicability": "P16-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1"],
-      "sourceContractKeys": ["J-STATE-RECOVERY"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1"
+      ],
+      "sourceContractKeys": [
+        "J-STATE-RECOVERY"
+      ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "仅state非ready且非loading；journey或resumeId时主文案重试读取进度",
       "handler": "primary有journey走load，否则resumeId走resume，均无则reset；secondary blocked仅解释、forbidden提示能力、其余history.back",
@@ -262,7 +275,9 @@
         "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
         "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1"
       ],
-      "sourceContractKeys": ["J-CREATE"],
+      "sourceContractKeys": [
+        "J-CREATE"
+      ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "!journey内联form；按钮busy||reading禁用；函数!active/busy/reading早退",
       "handler": "POST /selection-journeys {input_kind,input_value}原值；stopRead/resumeId清空→busy/loading→202 applyJourney/ready/schedule；只创建旅程，不等于机会",
@@ -391,12 +406,19 @@
       "label": "展开或收起处理时间轴",
       "kind": "local",
       "routeApplicability": "P16-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"],
-      "sourceContractKeys": ["J-TIMELINE"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"
+      ],
+      "sourceContractKeys": [
+        "J-TIMELINE"
+      ],
       "contractAliasReason": "第10节新增原生summary，仅本地展开",
       "condition": "journey已返回时显示，默认收起；不受busy/reading禁用",
       "handler": "原生details/summary切换open，无Vue事件、无HTTP、无持久化；键盘Enter/Space可用",
-      "variants": ["collapsed", "expanded"],
+      "variants": [
+        "collapsed",
+        "expanded"
+      ],
       "scenes": [
         {
           "package": "journey-direction-c",
@@ -414,11 +436,18 @@
       },
       "sourceStateApplicability": {
         "scope": "current-source-presentation-only-not-runtime-or-approval",
-        "states": ["disabled", "busy"],
+        "states": [
+          "disabled",
+          "busy"
+        ],
         "reason": "summary无禁用或忙碌属性；父aria-busy不禁用本地展开。",
         "handlerBoundary": "切换open不调用业务函数或接口，不保证其他任务读取没有服务端副作用。",
-        "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"],
-        "renderedControlIds": ["apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"],
+        "sourceCandidateIds": [
+          "apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"
+        ],
+        "renderedControlIds": [
+          "apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"
+        ],
         "sourceHashes": {
           "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f"
         }
@@ -430,12 +459,22 @@
       "label": "查看候选原文",
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1"],
-      "sourceContractKeys": ["J-SOURCE"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1"
+      ],
+      "sourceContractKeys": [
+        "J-SOURCE"
+      ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "每条candidates；原生a嵌在radio label",
       "handler": "canonical_url原值，target=_blank rel=noopener noreferrer @click.stop；不发业务POST",
-      "variants": ["selected", "unselected", "no-topic", "missing-fields", "long-result"],
+      "variants": [
+        "selected",
+        "unselected",
+        "no-topic",
+        "missing-fields",
+        "long-result"
+      ],
       "scenes": [
         {
           "package": "journey-direction-c",
@@ -518,7 +557,9 @@
         "apps/web/src/components/SelectionJourney.vue#5d5700a54ddffff7.1",
         "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1"
       ],
-      "sourceContractKeys": ["J-DECIDE"],
+      "sourceContractKeys": [
+        "J-DECIDE"
+      ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "terminal且未decided；canAdopt要求topic/既有机会ID/recommended及五门和all_passed严格true，adopt radio与submit禁用，函数同级保护；active/旅程/非busy/非reading要求保持",
       "handler": "原POST三字段不变：adopt所选ID，observe/reject恒null，无expected_version；后端同范围既有机会锁内复核P18五门和规则；成功applyJourney、清reason、state=ready、stop",
@@ -691,12 +732,19 @@
       "label": "查看返回机会",
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1"],
-      "sourceContractKeys": ["J-NAV-OPPORTUNITY"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1"
+      ],
+      "sourceContractKeys": [
+        "J-NAV-OPPORTUNITY"
+      ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "journey.decision存在且返回opportunity_id非空",
       "handler": "/opportunities/{opportunity_id}，无自动跳转或from；不是无条件创建机会",
-      "variants": ["returned-id", "missing-id"],
+      "variants": [
+        "returned-id",
+        "missing-id"
+      ],
       "scenes": [
         {
           "package": "journey-direction-c",
@@ -767,12 +815,20 @@
       "label": "打开返回验证任务",
       "kind": "navigation",
       "routeApplicability": "P16-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1"],
-      "sourceContractKeys": ["J-NAV-TASK"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1"
+      ],
+      "sourceContractKeys": [
+        "J-NAV-TASK"
+      ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "journey.decision存在且verification_task_id非空",
       "handler": "/tasks/{verification_task_id}，按实际返回ID；观察/驳回可能产生验证任务",
-      "variants": ["observe", "reject", "no-task"],
+      "variants": [
+        "observe",
+        "reject",
+        "no-task"
+      ],
       "scenes": [
         {
           "package": "journey-direction-c",
@@ -851,12 +907,22 @@
       "label": "开始下一次",
       "kind": "local",
       "routeApplicability": "P16-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1"],
-      "sourceContractKeys": ["J-RESET"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1"
+      ],
+      "sourceContractKeys": [
+        "J-RESET"
+      ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
       "condition": "有journey时footer，busy禁用且函数早退；reading期间可用",
       "handler": "stopRead失效旧GET并清resumeId/journey/state/message/input_value/selectedResultId/活动ID；保留input_kind、decision.action/reason、requestId；不取消后台采集",
-      "variants": ["running", "read-busy", "terminal", "decided", "busy-disabled"],
+      "variants": [
+        "running",
+        "read-busy",
+        "terminal",
+        "decided",
+        "busy-disabled"
+      ],
       "scenes": [
         {
           "package": "journey-direction-c",
@@ -952,12 +1018,14 @@
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "includeStructuralContainers": true,
-    "files": ["apps/web/src/components/SelectionJourney.vue"],
+    "files": [
+      "apps/web/src/components/SelectionJourney.vue"
+    ],
     "dependencyHashes": {
-      "apps/web/src/components/SelectionJourney.vue": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
+      "apps/web/src/components/SelectionJourney.vue": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
-      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974"
+      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
     },
     "inputs": [
       {
@@ -1334,85 +1402,171 @@
         "key": "create",
         "actionId": "J-CREATE",
         "selector": ".selection-start button[type=\"submit\"]",
-        "states": ["default", "hover", "focus", "pressed", "disabled", "busy"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed",
+          "disabled",
+          "busy"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "list",
         "actionId": "J-NAV-LIST",
         "selector": ".selection-workspace > header a",
-        "states": ["default", "hover", "focus", "pressed"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "source",
         "actionId": "J-SOURCE",
         "selector": ".selection-candidate-grid > label:first-child a",
-        "states": ["default", "hover", "focus", "pressed"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "save",
         "actionId": "J-DECIDE",
         "selector": ".selection-decision button[type=\"submit\"]",
-        "states": ["default", "hover", "focus", "pressed", "disabled", "busy"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed",
+          "disabled",
+          "busy"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "reset",
         "actionId": "J-RESET",
         "selector": ".selection-footer button",
-        "states": ["default", "hover", "focus", "pressed", "disabled"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed",
+          "disabled"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "timeline",
         "actionId": "J-TIMELINE",
         "selector": ".selection-timeline-disclosure > summary",
-        "states": ["default", "hover", "focus", "pressed"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "opportunity",
         "actionId": "J-NAV-OPPORTUNITY",
         "selector": ".selection-complete a[href^=\"/opportunities/\"]",
-        "states": ["default", "hover", "focus", "pressed"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "task",
         "actionId": "J-NAV-TASK",
         "selector": ".selection-complete a[href^=\"/tasks/\"]",
-        "states": ["default", "hover", "focus", "pressed"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "retry",
         "actionId": "J-STATE-RECOVERY",
         "selector": ".selection-workspace > .ui-state-panel .primary",
-        "states": ["default", "hover", "focus", "pressed"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       },
       {
         "key": "secondary",
         "actionId": "J-STATE-RECOVERY",
         "selector": ".selection-workspace > .ui-state-panel footer button:nth-child(2)",
-        "states": ["default", "hover", "focus", "pressed"],
-        "viewports": [1440, 390],
+        "states": [
+          "default",
+          "hover",
+          "focus",
+          "pressed"
+        ],
+        "viewports": [
+          1440,
+          390
+        ],
         "evidenceScope": "real-Vue-representative-control-with-intercepted-HTTP-not-production"
       }
     ],
     "checks": 170,
     "screenshots": 114,
     "remaining": "10代表控件45状态双端90实例。未覆盖所有候选行、输入字段、恢复文案/原因、主题密度和完整路由生命周期。不能用本册改旧离线视觉槽或授予批准。"
-  }
+  },
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

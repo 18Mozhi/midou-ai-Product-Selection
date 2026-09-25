@@ -2748,5 +2748,6 @@
     "approval": "mobile-proposal-composition-approved-real-Vue-and-desktop-review-pending",
     "review": "P32-VUE-RESTORE-REVIEW.md",
     "evidence": "output/playwright/p32-approved-restore-review/evidence.json"
-  }
+  },
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

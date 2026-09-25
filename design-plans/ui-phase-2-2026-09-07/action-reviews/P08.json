@@ -5,25 +5,35 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TenancyChooser.vue": "eefdaee04457ad3ee1391b4a0474129ab2bf8a707831a84c4eb852410abd6273"
+    "apps/web/src/components/TenancyChooser.vue": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
   },
   "dialogs": {
     "kind": "none-in-current-source",
     "reason": "源无原生dialog或确认调用；aside/form是内联结构，MFA/首次设置/验证结果不冒充弹窗。共享UiStatePanel内部另审。"
   },
   "inputs": {
-    "local": ["organizationQuery"]
+    "local": [
+      "organizationQuery"
+    ]
   },
   "actions": [
     {
       "actionId": "ID-ROOT",
+      "sourceContractKeys": [
+        "P08-CURRENT-ROOT / 品牌链接返回根路径"
+      ],
+      "contractAliasReason": "合同第2.3节把历史ID-ROOT明确交叉索引到当前品牌链接候选；保留原语义组，只绑定当前源码与合同键。",
       "label": "品牌返回根入口",
       "kind": "navigation",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#9b4b982bf643379f.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#d545c6b53ab2b2a8.1"
+      ],
       "condition": "所有state固定入口",
       "handler": "RouterLink /",
-      "variants": ["all-states"],
+      "variants": [
+        "all-states"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -61,11 +71,18 @@
       "actionId": "NONACTION-ACCOUNT",
       "label": "当前账号占位",
       "kind": "excluded",
+      "sourceAbsence": {
+        "scope": "contract-explicit-no-current-candidate",
+        "reason": "identity-onboarding-contract-review.md第2.4节明确该当前账号文字没有当前操作候选，且不得推定为账号菜单入口；此项仅归档旧语义，不计当前控件。"
+      },
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#fbfed57848d7366f.1"],
+      "sourceCandidateIds": [],
+      "sourceCandidateApplicability": [],
       "condition": "当前账号以无handler/href的文字占位呈现",
       "handler": "无业务处理",
-      "variants": ["placeholder"],
+      "variants": [
+        "placeholder"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -104,10 +121,14 @@
       "label": "会话失效重新登录",
       "kind": "navigation",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#5587941412d5210f.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#5587941412d5210f.1"
+      ],
       "condition": "state=expired",
       "handler": "RouterLink /login",
-      "variants": ["expired"],
+      "variants": [
+        "expired"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -153,7 +174,12 @@
       ],
       "condition": "错误/403、组织下空工作区、已选组织三个入口",
       "handler": "loadOrganizations 清selectedOrganization/Workspace/Context后GET /org/memberships",
-      "variants": ["error", "forbidden", "workspace-empty", "workspace-back"],
+      "variants": [
+        "error",
+        "forbidden",
+        "workspace-empty",
+        "workspace-back"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -204,10 +230,16 @@
       "label": "创建本人选品空间",
       "kind": "write",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#ecd9e9dbd8b34d05.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#ecd9e9dbd8b34d05.1"
+      ],
       "condition": "state=empty且未选组织；loading/provisioning时入口被替换",
       "handler": "createPersonalWorkspace -> POST /me/personal-workspace无body；默认/onboarding改/home，否则safeReturnTo",
-      "variants": ["empty-org", "provisioning", "direct-return"],
+      "variants": [
+        "empty-org",
+        "provisioning",
+        "direct-return"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -250,10 +282,14 @@
       "label": "进入个人中心",
       "kind": "navigation",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#d29e9f25fe7a5452.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#d29e9f25fe7a5452.1"
+      ],
       "condition": "无组织empty分支",
       "handler": "RouterLink /me",
-      "variants": ["empty-org"],
+      "variants": [
+        "empty-org"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -292,10 +328,14 @@
       "label": "进入MFA管理",
       "kind": "navigation",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#df188704ef470c64.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#df188704ef470c64.1"
+      ],
       "condition": "无组织empty分支",
       "handler": "RouterLink /security/mfa",
-      "variants": ["empty-org"],
+      "variants": [
+        "empty-org"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -334,10 +374,15 @@
       "label": "继续引导或返回原页",
       "kind": "navigation",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#72a9593314273d39.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#72a9593314273d39.1"
+      ],
       "condition": "state=selected且selectedContext",
       "handler": "RouterLink safeReturnTo；/开头非//，默认/onboarding",
-      "variants": ["onboarding", "return-to"],
+      "variants": [
+        "onboarding",
+        "return-to"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -377,13 +422,23 @@
     },
     {
       "actionId": "ID-ORG-CHOOSE",
+      "sourceContractKeys": [
+        "P08-CURRENT-ORG-CHOOSE / 选择组织并读取工作区、团队；不写会话范围"
+      ],
+      "contractAliasReason": "合同第2.3节将历史组织选择标识交叉索引到当前候选；选择仍是读取/本地状态，不提升为会话写入。",
       "label": "选择组织并读工作区和团队",
       "kind": "read",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#6f0aae6f4f0ea461.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#51f99d2206301d80.1"
+      ],
       "condition": "未选组织目录按过滤/最近顺序循环",
       "handler": "chooseOrganization -> rememberOrganization -> Promise.all两个组织GET",
-      "variants": ["organization-row", "recent-order", "loading"],
+      "variants": [
+        "organization-row",
+        "recent-order",
+        "loading"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -430,10 +485,14 @@
       "label": "清除组织搜索",
       "kind": "local",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#087b197306ae2192.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#087b197306ae2192.1"
+      ],
       "condition": "无已选组织且filteredOrganizations为空",
       "handler": "organizationQuery=''；本地过滤name/slug，trim+zh-CN小写",
-      "variants": ["no-match"],
+      "variants": [
+        "no-match"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -473,13 +532,24 @@
     },
     {
       "actionId": "ID-WORKSPACE-CHOOSE",
+      "sourceContractKeys": [
+        "P08-CURRENT-WORKSPACE-CHOOSE / 仅活动工作区可用；调用既有 /auth/context 更新会话范围"
+      ],
+      "contractAliasReason": "合同第2.3节将历史工作区选择标识交叉索引到当前候选；只保留活动工作区的既有范围提交行为。",
       "label": "设置会话组织工作区",
       "kind": "write",
       "routeApplicability": "P08-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/TenancyChooser.vue#a556210b61698de6.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TenancyChooser.vue#9d6c9b22e4716bb9.1"
+      ],
       "condition": "selectedOrganization；非active或selecting禁用；handler只保护active",
       "handler": "chooseWorkspace -> POST /auth/context使用workspace.organization_id/id -> selected，需显式继续",
-      "variants": ["active", "archived", "selecting", "selected"],
+      "variants": [
+        "active",
+        "archived",
+        "selecting",
+        "selected"
+      ],
       "scenes": [
         {
           "package": "identity-direction-c",
@@ -524,10 +594,12 @@
   ],
   "surfaceReview": {
     "status": "user-approved-visual-direction-not-runtime-accepted",
-    "files": ["apps/web/src/components/TenancyChooser.vue"],
+    "files": [
+      "apps/web/src/components/TenancyChooser.vue"
+    ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/TenancyChooser.vue": "eefdaee04457ad3ee1391b4a0474129ab2bf8a707831a84c4eb852410abd6273",
+      "apps/web/src/components/TenancyChooser.vue": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",

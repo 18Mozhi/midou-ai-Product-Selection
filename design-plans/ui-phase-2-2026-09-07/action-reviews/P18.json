@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "pageId": "P18",
   "route": "/opportunities/:opportunityId",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
     "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
@@ -13,7 +13,7 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+    "apps/web/src/components/OpportunityWorkspace.vue": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617"
   },
   "dialogs": {
@@ -28,7 +28,9 @@
     ]
   },
   "inputs": {
-    "OpportunityCostReviewQueue.vue": ["review.reason"],
+    "OpportunityCostReviewQueue.vue": [
+      "review.reason"
+    ],
     "OpportunityFeedbackPanel.vue": [
       "form.period_start",
       "form.period_end",
@@ -79,7 +81,12 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide且非busy",
       "handler": "queueAi POST /opportunities/:id/ai-analyses expected_version；成功load并setTab(ai)",
-      "variants": ["can-write", "readonly", "busy", "failed"],
+      "variants": [
+        "can-write",
+        "readonly",
+        "busy",
+        "failed"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -95,7 +102,9 @@
         }
       ],
       "remaining": "排队不代表模型成功；跨ID晚到结果、真实权限与完整生命周期未验。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#8ff0dc0eb124658f.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityAiPanel.vue#8ff0dc0eb124658f.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -124,7 +133,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "AI区error，busy禁用",
       "handler": "loadAi独立GET；失败保留旧数组，非数组响应置空并ready",
-      "variants": ["error", "stale-error", "malformed"],
+      "variants": [
+        "error",
+        "stale-error",
+        "malformed"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -140,7 +153,9 @@
         }
       ],
       "remaining": "失败后旧articles仍渲染；具体恢复策略待审。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#3fc618c0a253e761.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityAiPanel.vue#3fc618c0a253e761.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -164,7 +179,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide且result.review_status=pending；按钮没有busy禁用",
       "handler": "reviewAi(result.id,approved) await共享原因；POST /ai-analyses/:resultId/reviews outcome/notes",
-      "variants": ["pending", "already-reviewed", "replaced-ask"],
+      "variants": [
+        "pending",
+        "already-reviewed",
+        "replaced-ask"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -180,7 +199,9 @@
         }
       ],
       "remaining": "源先关原因窗后POST，原型失败保留是改动；不保证重复ask/迟到响应归属。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -209,7 +230,12 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide且pending；非busy禁用缺失",
       "handler": "reviewAi(result.id,rejected)；原始输出不改写，成功load/setTab(ai)",
-      "variants": ["pending", "rejected", "cancel", "failure"],
+      "variants": [
+        "pending",
+        "rejected",
+        "cancel",
+        "failure"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -225,7 +251,9 @@
         }
       ],
       "remaining": "未知不等于未写入；真实结果ID/审计及失败恢复未验。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -254,7 +282,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "item.can_review；打开按钮不禁busy",
       "handler": "beginReview(id,rejected)清原因，内联而非弹窗",
-      "variants": ["own", "other", "overdue"],
+      "variants": [
+        "own",
+        "other",
+        "overdue"
+      ],
       "scenes": [
         {
           "package": "profit-direction-c",
@@ -309,7 +341,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "item.can_review；不按opportunity:decide控制",
       "handler": "beginReview(id,approved)清原因",
-      "variants": ["own", "other", "overdue"],
+      "variants": [
+        "own",
+        "other",
+        "overdue"
+      ],
       "scenes": [
         {
           "package": "profit-direction-c",
@@ -360,7 +396,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "review.id匹配行；required/minlength2/maxlength1000，按钮busy或trim不足禁用",
       "handler": "submitReview trim原因；父POST cost-input-reviews/:reviewId/actions decision/reason/expected_version",
-      "variants": ["approved", "rejected"],
+      "variants": [
+        "approved",
+        "rejected"
+      ],
       "scenes": [
         {
           "package": "profit-direction-c",
@@ -420,7 +459,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "review.id匹配行；取消无busy禁用",
       "handler": "review.id置空，不写入，原因保留到下次beginReview清空",
-      "variants": ["approved", "rejected"],
+      "variants": [
+        "approved",
+        "rejected"
+      ],
       "scenes": [
         {
           "package": "profit-direction-c",
@@ -467,7 +509,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "detail.redecision_ready",
       "handler": "href #opportunity-decision-actions；目标只在canDecide且canAdopt时存在",
-      "variants": ["writable", "readonly", "not-adoptable"],
+      "variants": [
+        "writable",
+        "readonly",
+        "not-adoptable"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -510,7 +556,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "详情summary常驻",
       "handler": "details展示五门真实布尔值，缺省全false",
-      "variants": ["all", "partial", "missing"],
+      "variants": [
+        "all",
+        "partial",
+        "missing"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -548,7 +598,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide && recommended && all_passed；busy禁用",
       "handler": "startDecision(adopt)清原因并打开",
-      "variants": ["allowed", "hidden", "busy"],
+      "variants": [
+        "allowed",
+        "hidden",
+        "busy"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -586,7 +640,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide；推荐和提前处理两入口均无busy禁用",
       "handler": "startDecision(observe)重置原因",
-      "variants": ["recommended", "early"],
+      "variants": [
+        "recommended",
+        "early"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -630,7 +687,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide；推荐和提前处理两入口均无busy禁用",
       "handler": "startDecision(reject)清原因",
-      "variants": ["recommended", "early"],
+      "variants": [
+        "recommended",
+        "early"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -674,7 +734,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide && !canAdopt",
       "handler": "details展开观察/驳回，不提供采纳",
-      "variants": ["candidate", "not-eligible"],
+      "variants": [
+        "candidate",
+        "not-eligible"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -712,7 +775,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "第一未解除阻断task_id；或展开任一带task_id阻断",
       "handler": "RouterLink /tasks?task=id，不是/tasks/:id",
-      "variants": ["primary", "all-blockers", "cleared"],
+      "variants": [
+        "primary",
+        "all-blockers",
+        "cleared"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -751,7 +818,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "第一未解除阻断无task_id且canDecide；busy禁用",
       "handler": "POST evidence-completion-tasks expected_version；load后/tasks/:task_id?from=route.fullPath",
-      "variants": ["new", "reused", "failed"],
+      "variants": [
+        "new",
+        "reused",
+        "failed"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -789,7 +860,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "adoption_blockers有项，包括已解除",
       "handler": "details列表真实code/status/next_action/progress/score_job_status",
-      "variants": ["blocked", "in-progress", "cleared"],
+      "variants": [
+        "blocked",
+        "in-progress",
+        "cleared"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -827,7 +902,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "概览或竞争区error，busy禁用",
       "handler": "loadDownstream Promise.all按能力GET；任一失败使共同状态error，旧数组保留",
-      "variants": ["overview", "competition", "one-side-failure"],
+      "variants": [
+        "overview",
+        "competition",
+        "one-side-failure"
+      ],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -866,7 +945,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "competitor:manage；三个入口busy禁用",
       "handler": "POST competitor-discovery {}，只反馈返回task_id",
-      "variants": ["manual", "overview", "competition"],
+      "variants": [
+        "manual",
+        "overview",
+        "competition"
+      ],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -910,7 +993,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "supplier_quote:manage；手工区/概览，busy禁用",
       "handler": "POST /sourcing/searches input_type=opportunity,input_ref=detail.id",
-      "variants": ["manual", "overview"],
+      "variants": [
+        "manual",
+        "overview"
+      ],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -949,7 +1035,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "实际概览与竞争区RouterLink均无v-if能力限制",
       "handler": "to=/competitors，无本机会参数",
-      "variants": ["overview", "competition", "no-access"],
+      "variants": [
+        "overview",
+        "competition",
+        "no-access"
+      ],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -988,7 +1078,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "实际概览RouterLink无v-if能力限制",
       "handler": "to=/sourcing，无本机会参数",
-      "variants": ["overview", "no-access"],
+      "variants": [
+        "overview",
+        "no-access"
+      ],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -1026,7 +1119,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "手工补证区或概览评分卡；链接不限定canDecide",
       "handler": "/opportunities/scoring-rules，配置不是评分运行",
-      "variants": ["manual", "overview"],
+      "variants": [
+        "manual",
+        "overview"
+      ],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -1065,7 +1161,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide && !busy",
       "handler": "POST score-runs expected_version；load后显示排队",
-      "variants": ["allowed", "readonly", "failure"],
+      "variants": [
+        "allowed",
+        "readonly",
+        "failure"
+      ],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -1103,7 +1203,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "visibleEvidence按API顺序slice20",
       "handler": "canonical_url；_blank+noopener noreferrer",
-      "variants": ["original", "long-url"],
+      "variants": [
+        "original",
+        "long-url"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1141,7 +1244,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "visibleEvidence.length>20",
       "handler": "collapse置20；ID或数组引用变化也重置",
-      "variants": ["40", "41"],
+      "variants": [
+        "40",
+        "41"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1179,7 +1285,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "hiddenCount>0",
       "handler": "每次+20并clamp；不发GET",
-      "variants": ["20", "40", "41"],
+      "variants": [
+        "20",
+        "40",
+        "41"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1217,7 +1327,12 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide；表单原生约束，submit按钮busy禁用",
       "handler": "POST operating-feedback {...feedbackForm,currency:upper,observed_at:now,expected_version}；仅换operating_feedback、清source_ref/notes",
-      "variants": ["valid", "period-invalid", "returns-invalid", "unknown"],
+      "variants": [
+        "valid",
+        "period-invalid",
+        "returns-invalid",
+        "unknown"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -1265,7 +1380,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "feedback.facts每项",
       "handler": "details request_id/trace_id；不重新请求",
-      "variants": ["record", "long"],
+      "variants": [
+        "record",
+        "long"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -1303,7 +1421,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "lineage.nodes每项",
       "handler": "显示request_id/trace_id/resource_id，缺失明确未记录",
-      "variants": ["present", "no-correlation"],
+      "variants": [
+        "present",
+        "no-correlation"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -1341,7 +1462,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "每个持久化node",
       "handler": "RouterLink node.route；源未自行过滤节点路由",
-      "variants": ["present", "empty"],
+      "variants": [
+        "present",
+        "empty"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -1379,7 +1503,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "failure_impact.codes非空",
       "handler": "details仅列真实code",
-      "variants": ["blocked", "degraded", "none"],
+      "variants": [
+        "blocked",
+        "degraded",
+        "none"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -1417,7 +1545,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "利润区始终显示",
       "handler": "to=/sourcing/cost-rules",
-      "variants": ["allowed", "readonly"],
+      "variants": [
+        "allowed",
+        "readonly"
+      ],
       "scenes": [
         {
           "package": "profit-direction-c",
@@ -1455,7 +1586,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "cost:confirm；busy或无reviewer禁用提交",
       "handler": "九字段+expected_version；amount Number、observed_at转ISO；成功load",
-      "variants": ["sale", "purchase", "logistics"],
+      "variants": [
+        "sale",
+        "purchase",
+        "logistics"
+      ],
       "scenes": [
         {
           "package": "profit-direction-c",
@@ -1523,7 +1658,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "cost:confirm && !busy；type=button绕过成本表单required",
       "handler": "POST profit-runs platform/expected_version；成功load",
-      "variants": ["valid", "no-rule", "failure"],
+      "variants": [
+        "valid",
+        "no-rule",
+        "failure"
+      ],
       "scenes": [
         {
           "package": "profit-direction-c",
@@ -1578,7 +1717,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "有opportunityId",
       "handler": "safeOpportunityReturnPath仅单斜杠本地字符串，否则/opportunities",
-      "variants": ["from", "fallback"],
+      "variants": [
+        "from",
+        "fallback"
+      ],
       "scenes": [
         {
           "package": "detail-adaptive-direction-c",
@@ -1590,7 +1732,9 @@
         }
       ],
       "remaining": "不是完整路由白名单/鉴权证明，history与跨ID范围仍需验证。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -1614,7 +1758,13 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "UiStatePanel state!=ready或detail为空；非loading显示按钮",
       "handler": "所有@primary都load；没有@secondary处理器",
-      "variants": ["empty", "error", "forbidden", "expired", "blocked"],
+      "variants": [
+        "empty",
+        "error",
+        "forbidden",
+        "expired",
+        "blocked"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1630,7 +1780,9 @@
         }
       ],
       "remaining": "源文案开始创建/返回工作台/重新登录但实际均重读；次按钮可能可见却无处理器。不得宣称导航已实现。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#7219811dcc02cc91.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#7219811dcc02cc91.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -1654,7 +1806,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "详情ready",
       "handler": "details版本/阶段停留/评分规则版本",
-      "variants": ["known", "unknown"],
+      "variants": [
+        "known",
+        "unknown"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1666,7 +1821,9 @@
         }
       ],
       "remaining": "源格式化与原型展开形态不同；无新读请求。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -1695,7 +1852,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "detail.selection_stage != recommended",
       "handler": "details展开能力受限采集及规则链接",
-      "variants": ["candidate", "readonly"],
+      "variants": [
+        "candidate",
+        "readonly"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1707,7 +1867,9 @@
         }
       ],
       "remaining": "部分内容在核心图和分析稿分开，完整连续有数据链未证明。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -1767,7 +1929,10 @@
         "apps/web/src/components/OpportunityWorkspace.vue#8dfb1ee903d0b053.1",
         "apps/web/src/components/OpportunityWorkspace.vue#1aef42d09991a143.1"
       ],
-      "sourceContractKeys": ["OP-TAB：四主分区", "OP-TAB：六辅助分区"],
+      "sourceContractKeys": [
+        "OP-TAB：四主分区",
+        "OP-TAB：六辅助分区"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-mapped",
@@ -1792,7 +1957,10 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "详情ready",
       "handler": "details :open由当前secondary tab推导",
-      "variants": ["primary", "secondary"],
+      "variants": [
+        "primary",
+        "secondary"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1804,7 +1972,9 @@
         }
       ],
       "remaining": "新目录形态取代源更多折叠属提案；六态和实际焦点未全验。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#badd0afd80b50ce6.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#badd0afd80b50ce6.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -1833,7 +2003,14 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "decisionOpen && hasDetail；按钮/Escape不禁busy",
       "handler": "更新decisionOpen=false；未取消POST或清原因",
-      "variants": ["adopt", "observe", "reject", "Escape", "header", "footer"],
+      "variants": [
+        "adopt",
+        "observe",
+        "reject",
+        "Escape",
+        "header",
+        "footer"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1850,7 +2027,10 @@
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1"
       ],
-      "sourceContractKeys": ["OP-DECISION-CLOSE：Escape", "OP-DECISION-CLOSE"],
+      "sourceContractKeys": [
+        "OP-DECISION-CLOSE：Escape",
+        "OP-DECISION-CLOSE"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-mapped",
@@ -1880,7 +2060,11 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "required textarea≤1000；按钮busy禁用，表单handler无单飞守卫",
       "handler": "POST decisions action/reason原输入/expected_version；成功关闭再load，失败保留",
-      "variants": ["adopt", "observe", "reject"],
+      "variants": [
+        "adopt",
+        "observe",
+        "reject"
+      ],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -2022,32 +2206,48 @@
       "routeApplicability": "not-an-additional-business-action",
       "condition": "相应父组件v-if和子组件事件条件均保留，不能按模板候选重复计业务动作",
       "handler": "逐事件/handler见forwardBindings；容器定义或helper调用指向既有操作链，不直接增加一次POST",
-      "variants": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE"],
-      "forwardsTo": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE"],
+      "variants": [
+        "OP-COST-REVIEW-SUBMIT",
+        "OP-COST-SUBMIT",
+        "OP-PROFIT-QUEUE"
+      ],
+      "forwardsTo": [
+        "OP-COST-REVIEW-SUBMIT",
+        "OP-COST-SUBMIT",
+        "OP-PROFIT-QUEUE"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
           "event": "@review-cost",
           "handler": "$emit('reviewCost', $event)",
-          "targets": ["OP-COST-REVIEW-SUBMIT"]
+          "targets": [
+            "OP-COST-REVIEW-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
           "event": "@confirm-cost",
           "handler": "confirmCost",
-          "targets": ["OP-COST-SUBMIT"]
+          "targets": [
+            "OP-COST-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
           "event": "@review-cost",
           "handler": "reviewCost",
-          "targets": ["OP-COST-REVIEW-SUBMIT"]
+          "targets": [
+            "OP-COST-REVIEW-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
           "event": "@queue-profit",
           "handler": "queueProfit",
-          "targets": ["OP-PROFIT-QUEUE"]
+          "targets": [
+            "OP-PROFIT-QUEUE"
+          ]
         }
       ],
       "scenes": [
@@ -2065,7 +2265,10 @@
         "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
         "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1"
       ],
-      "sourceContractKeys": ["OP-COST-REVIEW-SUBMIT转发", "成本提交/复核/利润重算转发"],
+      "sourceContractKeys": [
+        "OP-COST-REVIEW-SUBMIT转发",
+        "成本提交/复核/利润重算转发"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2117,7 +2320,9 @@
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
           "event": "@create-evidence-task",
           "handler": "createEvidenceTask",
-          "targets": ["OP-EVIDENCE-TASK"]
+          "targets": [
+            "OP-EVIDENCE-TASK"
+          ]
         }
       ],
       "scenes": [
@@ -2131,8 +2336,12 @@
         }
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1"],
-      "sourceContractKeys": ["OP-DECISION-OPEN/OP-EVIDENCE-TASK转发"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1"
+      ],
+      "sourceContractKeys": [
+        "OP-DECISION-OPEN/OP-EVIDENCE-TASK转发"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2179,25 +2388,33 @@
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1",
           "event": "@discover-competitors",
           "handler": "discoverCompetitors",
-          "targets": ["OP-COMPETITOR-DISCOVER"]
+          "targets": [
+            "OP-COMPETITOR-DISCOVER"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1",
           "event": "@discover-suppliers",
           "handler": "discoverSuppliers",
-          "targets": ["OP-SUPPLIER-DISCOVER"]
+          "targets": [
+            "OP-SUPPLIER-DISCOVER"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1",
           "event": "@queue-score",
           "handler": "queueScore",
-          "targets": ["OP-SCORE-QUEUE"]
+          "targets": [
+            "OP-SCORE-QUEUE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1",
           "event": "@retry-downstream",
           "handler": "loadDownstream",
-          "targets": ["OP-DOWNSTREAM-RETRY"]
+          "targets": [
+            "OP-DOWNSTREAM-RETRY"
+          ]
         }
       ],
       "scenes": [
@@ -2211,8 +2428,12 @@
         }
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1"],
-      "sourceContractKeys": ["竞品/供应采集、评分、下游重读转发"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1"
+      ],
+      "sourceContractKeys": [
+        "竞品/供应采集、评分、下游重读转发"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2242,14 +2463,20 @@
       "routeApplicability": "not-an-additional-business-action",
       "condition": "相应父组件v-if和子组件事件条件均保留，不能按模板候选重复计业务动作",
       "handler": "逐事件/handler见forwardBindings；容器定义或helper调用指向既有操作链，不直接增加一次POST",
-      "variants": ["OP-FEEDBACK-SUBMIT"],
-      "forwardsTo": ["OP-FEEDBACK-SUBMIT"],
+      "variants": [
+        "OP-FEEDBACK-SUBMIT"
+      ],
+      "forwardsTo": [
+        "OP-FEEDBACK-SUBMIT"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3e5dca6610ac19d8.1",
           "event": "@submit",
           "handler": "submitOperatingFeedback",
-          "targets": ["OP-FEEDBACK-SUBMIT"]
+          "targets": [
+            "OP-FEEDBACK-SUBMIT"
+          ]
         }
       ],
       "scenes": [
@@ -2263,8 +2490,12 @@
         }
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#3e5dca6610ac19d8.1"],
-      "sourceContractKeys": ["OP-FEEDBACK-SUBMIT转发"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#3e5dca6610ac19d8.1"
+      ],
+      "sourceContractKeys": [
+        "OP-FEEDBACK-SUBMIT转发"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2294,7 +2525,12 @@
       "routeApplicability": "not-an-additional-business-action",
       "condition": "相应父组件v-if和子组件事件条件均保留，不能按模板候选重复计业务动作",
       "handler": "逐事件/handler见forwardBindings；容器定义或helper调用指向既有操作链，不直接增加一次POST",
-      "variants": ["OP-AI-QUEUE", "OP-AI-RETRY", "OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"],
+      "variants": [
+        "OP-AI-QUEUE",
+        "OP-AI-RETRY",
+        "OP-AI-REVIEW.approved",
+        "OP-AI-REVIEW.rejected"
+      ],
       "forwardsTo": [
         "OP-AI-QUEUE",
         "OP-AI-RETRY",
@@ -2306,19 +2542,26 @@
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1",
           "event": "@queue",
           "handler": "queueAi",
-          "targets": ["OP-AI-QUEUE"]
+          "targets": [
+            "OP-AI-QUEUE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1",
           "event": "@retry",
           "handler": "loadAi",
-          "targets": ["OP-AI-RETRY"]
+          "targets": [
+            "OP-AI-RETRY"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1",
           "event": "@review",
           "handler": "reviewAi",
-          "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
+          "targets": [
+            "OP-AI-REVIEW.approved",
+            "OP-AI-REVIEW.rejected"
+          ]
         }
       ],
       "scenes": [
@@ -2332,8 +2575,12 @@
         }
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1"],
-      "sourceContractKeys": ["AI排队/重读/复核转发"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1"
+      ],
+      "sourceContractKeys": [
+        "AI排队/重读/复核转发"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2358,56 +2605,78 @@
       "routeApplicability": "not-an-additional-business-action",
       "condition": "相应父组件v-if和子组件事件条件均保留，不能按模板候选重复计业务动作",
       "handler": "逐事件/handler见forwardBindings；容器定义或helper调用指向既有操作链，不直接增加一次POST",
-      "variants": ["OP-P15-EXCLUDED", "OP-DECISION-SUBMIT"],
-      "forwardsTo": ["OP-P15-EXCLUDED", "OP-DECISION-SUBMIT"],
+      "variants": [
+        "OP-P15-EXCLUDED",
+        "OP-DECISION-SUBMIT"
+      ],
+      "forwardsTo": [
+        "OP-P15-EXCLUDED",
+        "OP-DECISION-SUBMIT"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
           "event": "@create",
           "handler": "create",
-          "targets": ["OP-P15-EXCLUDED"]
+          "targets": [
+            "OP-P15-EXCLUDED"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
           "event": "@decide",
           "handler": "decide",
-          "targets": ["OP-DECISION-SUBMIT"]
+          "targets": [
+            "OP-DECISION-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
-          "targets": ["OP-P15-EXCLUDED"]
+          "targets": [
+            "OP-P15-EXCLUDED"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
           "event": "@import-file",
           "handler": "importErpFile",
-          "targets": ["OP-P15-EXCLUDED"]
+          "targets": [
+            "OP-P15-EXCLUDED"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
           "event": "@create",
           "handler": "create",
-          "targets": ["OP-P15-EXCLUDED"]
+          "targets": [
+            "OP-P15-EXCLUDED"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
           "event": "@decide",
           "handler": "decide",
-          "targets": ["OP-DECISION-SUBMIT"]
+          "targets": [
+            "OP-DECISION-SUBMIT"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
-          "targets": ["OP-P15-EXCLUDED"]
+          "targets": [
+            "OP-P15-EXCLUDED"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
           "event": "@import-file",
           "handler": "importErpFile",
-          "targets": ["OP-P15-EXCLUDED"]
+          "targets": [
+            "OP-P15-EXCLUDED"
+          ]
         }
       ],
       "scenes": [
@@ -2425,7 +2694,10 @@
         "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
         "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1"
       ],
-      "sourceContractKeys": ["创建/决定/ERP浏览器/文件导入转发", "三类业务弹窗集合调用"],
+      "sourceContractKeys": [
+        "创建/决定/ERP浏览器/文件导入转发",
+        "三类业务弹窗集合调用"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2455,32 +2727,50 @@
       "routeApplicability": "not-an-additional-business-action",
       "condition": "相应父组件v-if和子组件事件条件均保留，不能按模板候选重复计业务动作",
       "handler": "逐事件/handler见forwardBindings；容器定义或helper调用指向既有操作链，不直接增加一次POST",
-      "variants": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"],
-      "forwardsTo": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"],
+      "variants": [
+        "OP-AI-REVIEW.approved",
+        "OP-AI-REVIEW.rejected"
+      ],
+      "forwardsTo": [
+        "OP-AI-REVIEW.approved",
+        "OP-AI-REVIEW.rejected"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
           "event": "@submit",
           "handler": "submitAiReviewReason",
-          "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
+          "targets": [
+            "OP-AI-REVIEW.approved",
+            "OP-AI-REVIEW.rejected"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
           "event": "@cancel",
           "handler": "cancelAiReviewReason",
-          "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
+          "targets": [
+            "OP-AI-REVIEW.approved",
+            "OP-AI-REVIEW.rejected"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
           "event": "@submit",
           "handler": "submitAiReviewReason",
-          "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
+          "targets": [
+            "OP-AI-REVIEW.approved",
+            "OP-AI-REVIEW.rejected"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
           "event": "@cancel",
           "handler": "cancelAiReviewReason",
-          "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
+          "targets": [
+            "OP-AI-REVIEW.approved",
+            "OP-AI-REVIEW.rejected"
+          ]
         }
       ],
       "scenes": [
@@ -2557,7 +2847,9 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#8b4dc3f5856d3c5a.1"
       ],
-      "sourceContractKeys": ["人工决策原生dialog；三变体"],
+      "sourceContractKeys": [
+        "人工决策原生dialog；三变体"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2600,10 +2892,10 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
       "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-      "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+      "apps/web/src/components/OpportunityWorkspace.vue": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
-      "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
-      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+      "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
       "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
       "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
@@ -3500,5 +3792,6 @@
   "limits": [
     "OP-WIRING和OP-P15-EXCLUDED仅审阅关系/排除键，保留原候选表完整单元格为精确别名，不创造竞争业务编号。",
     "此为10组件源审阅与图引用，不是全共享源分母冻结、用户批准、Vue/API/SQL/生产验收。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

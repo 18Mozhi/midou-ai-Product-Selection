@@ -5,9 +5,9 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TaskWorkspace.vue": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+    "apps/web/src/components/TaskWorkspace.vue": "fbc03ed2a4db1cb349063301730971e53cb889c1ca734f4618fee0de31f2114e",
     "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
-    "apps/web/src/components/TaskBatchActions.vue": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d"
+    "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -40,7 +40,12 @@
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "页头仅canCreate；空列表且无query/status时的第二入口亦需canCreate",
       "handler": "showCreate=true；不清已有草稿；挂载create=1可预填title/description",
-      "variants": ["header", "empty", "create_only", "quick-create"],
+      "variants": [
+        "header",
+        "empty",
+        "create_only",
+        "quick-create"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -68,12 +73,21 @@
       "label": "重读当前任务列表或导出视图",
       "kind": "read",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1"],
-      "sourceContractKeys": ["read.retry：错误区load；列表/详情/导出按当前分支重读"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1"
+      ],
+      "sourceContractKeys": [
+        "read.retry：错误区load；列表/详情/导出按当前分支重读"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "state为error/forbidden/expired/rate_limited；not_found仅详情404分支",
       "handler": "load校验active/route/owner；business并行读不带mine的工作区列表与本人summary，再读成员；exports且report:read仅GET /report-exports，无权限回business。",
-      "variants": ["error", "forbidden", "expired", "rate_limited"],
+      "variants": [
+        "error",
+        "forbidden",
+        "expired",
+        "rate_limited"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -113,12 +127,20 @@
       "label": "上一页",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1"],
-      "sourceContractKeys": ["list.page.previous：页>1可用；清选择、URL更新"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1"
+      ],
+      "sourceContractKeys": [
+        "list.page.previous：页>1可用；清选择、URL更新"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "activeView=business且total>10；page<=1禁用，不按busy/state禁用",
       "handler": "setPage(page-1)清选择并replace保留其他query",
-      "variants": ["first-disabled", "later-page", "loading-old-total"],
+      "variants": [
+        "first-disabled",
+        "later-page",
+        "loading-old-total"
+      ],
       "scenes": [],
       "testReferences": [
         {
@@ -141,12 +163,19 @@
       "label": "下一页",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1"],
-      "sourceContractKeys": ["list.page.next：页<pageCount可用；清选择、URL更新"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1"
+      ],
+      "sourceContractKeys": [
+        "list.page.next：页<pageCount可用；清选择、URL更新"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "activeView=business且total>10；page>=pageCount禁用",
       "handler": "setPage(page+1)按pageCount上限限制，清选择并replace",
-      "variants": ["next", "last-disabled"],
+      "variants": [
+        "next",
+        "last-disabled"
+      ],
       "scenes": [],
       "testReferences": [
         {
@@ -180,7 +209,12 @@
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "取消按钮busy禁用；原生cancel调用handleCreateCancel没有busy检查",
       "handler": "closeTaskEditor关闭并清editing，只删除create/title/description query，保留form草稿",
-      "variants": ["cancel", "escape", "busy-escape", "reopen-draft"],
+      "variants": [
+        "cancel",
+        "escape",
+        "busy-escape",
+        "reopen-draft"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -219,7 +253,13 @@
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "busy或无task:create早退；本页editing为空，HTML标题required/200、说明5000",
       "handler": "POST /tasks body=form字段；空due_at为null否则ISO；无assignee_id，由服务端分配actor；成功关闭清表单并load",
-      "variants": ["create", "due-set", "due-empty", "busy", "failure"],
+      "variants": [
+        "create",
+        "due-set",
+        "due-empty",
+        "busy",
+        "failure"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -247,14 +287,21 @@
       "label": "排除任务详情事件中转",
       "kind": "excluded",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1"
+      ],
       "sourceContractKeys": [
         "detail.{x}，editor.edit.open，delete.open，comment.submit：详情事件中转，field更新只是本地模型"
       ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "P23无taskId，watch清selected，列表通过RouterLink进入P24；没有正常列表编辑入口",
       "handler": "P23普通列表不挂载详情事件，不把P24编辑/评论和单项动作计入本页。",
-      "variants": ["detail-actions", "edit", "comment", "action-fields"],
+      "variants": [
+        "detail-actions",
+        "edit",
+        "comment",
+        "action-fields"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -283,7 +330,11 @@
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "取消按钮busy禁用，原生Escape不检查busy",
       "handler": "closeDeleteDialog清deleting/deleteReason",
-      "variants": ["cancel", "escape", "reopen-cleared"],
+      "variants": [
+        "cancel",
+        "escape",
+        "reopen-cleared"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -322,7 +373,12 @@
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "busy/无canUpdate/无目标/空trim原因早退；原因required/500",
       "handler": "DELETE /tasks/{id}，当前目标expected_version和trim原因；P23成功清目标后load",
-      "variants": ["valid", "blank", "failure", "busy"],
+      "variants": [
+        "valid",
+        "blank",
+        "failure",
+        "busy"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -350,14 +406,23 @@
       "label": "切换六种任务状态",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#2a0d4451e2faa34a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#2a0d4451e2faa34a.1"
+      ],
       "sourceContractKeys": [
         "list.status：全部/todo/in_progress/paused/completed/cancelled六个显式变体"
       ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "列表ready/empty可见，六状态计数来自本人summary而非筛选列表",
       "handler": "emit status→setStatus，清page/selectedIds并保留其他query",
-      "variants": ["all", "todo", "in_progress", "paused", "completed", "cancelled"],
+      "variants": [
+        "all",
+        "todo",
+        "in_progress",
+        "paused",
+        "completed",
+        "cancelled"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -389,12 +454,20 @@
       "label": "展开搜索排序",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#ac860f86ea23bb4c.1"],
-      "sourceContractKeys": ["list.search.disclose：原生details展开/关闭，无API写入"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#ac860f86ea23bb4c.1"
+      ],
+      "sourceContractKeys": [
+        "list.search.disclose：原生details展开/关闭，无API写入"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "原生details；hasAdvancedFilter只判断query或非默认sort，不含status",
       "handler": "展开不自动应用搜索；draftQuery只在本地并watch props.query同步",
-      "variants": ["closed", "open", "advanced-applied"],
+      "variants": [
+        "closed",
+        "open",
+        "advanced-applied"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -437,7 +510,13 @@
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "输入maxlength200；表单submit带draftQuery.trim和当前sort",
       "handler": "applyFilters清page/selectedIds，空query删除该query字段，保留其他字段",
-      "variants": ["button", "enter", "trimmed", "empty", "no-results"],
+      "variants": [
+        "button",
+        "enter",
+        "trimmed",
+        "empty",
+        "no-results"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -469,12 +548,21 @@
       "label": "切换排序并应用搜索草稿",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#faf2a52b6a6f528b.1"],
-      "sourceContractKeys": ["list.sort：四个sort白名单，选择即应用当前搜索草稿"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#faf2a52b6a6f528b.1"
+      ],
+      "sourceContractKeys": [
+        "list.sort：四个sort白名单，选择即应用当前搜索草稿"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "四个select选项；不以按钮应用为前置",
       "handler": "change即emit applyFilters，使用当时trim搜索草稿与选中sort",
-      "variants": ["priority_due", "due_asc", "updated_desc", "created_desc"],
+      "variants": [
+        "priority_due",
+        "due_asc",
+        "updated_desc",
+        "created_desc"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -517,7 +605,11 @@
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "搜索表单入口常有；空列表且query/status另有入口",
       "handler": "resetFilters清status/query/sort/page与选择，保留其他query",
-      "variants": ["search-reset", "empty-reset", "default-sort"],
+      "variants": [
+        "search-reset",
+        "empty-reset",
+        "default-sort"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -549,12 +641,21 @@
       "label": "选择或清空本页",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#9960c69204257423.1"],
-      "sourceContractKeys": ["list.select.page：canUpdate且有任务，选中/清空本页"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#9960c69204257423.1"
+      ],
+      "sourceContractKeys": [
+        "list.select.page：canUpdate且有任务，选中/清空本页"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "canUpdate且tasks.length；checkbox根据每个任务id是否选中计算",
       "handler": "选中写tasks.map(id)，取消写[]；只影响当前页",
-      "variants": ["select-page", "clear-page", "mixed", "readonly-hidden"],
+      "variants": [
+        "select-page",
+        "clear-page",
+        "mixed",
+        "readonly-hidden"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -586,12 +687,19 @@
       "label": "清除选择",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#2cb28f705efccf29.1"],
-      "sourceContractKeys": ["list.select.clear：有选中时清空"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#2cb28f705efccf29.1"
+      ],
+      "sourceContractKeys": [
+        "list.select.clear：有选中时清空"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "canUpdate且任务存在、selectedIds.length>0",
       "handler": "emit update:selectedIds []",
-      "variants": ["clear", "none-hidden"],
+      "variants": [
+        "clear",
+        "none-hidden"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -623,12 +731,20 @@
       "label": "选择单行",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#fe99684a58d4750c.1"],
-      "sourceContractKeys": ["list.select.row：canUpdate，单行checkbox不等于详情跳转"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#fe99684a58d4750c.1"
+      ],
+      "sourceContractKeys": [
+        "list.select.row：canUpdate，单行checkbox不等于详情跳转"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "仅canUpdate；与RouterLink查看入口分开",
       "handler": "toggle(id,checked,selectedIds)，选中追加id、取消filter移除",
-      "variants": ["select", "deselect", "readonly-hidden"],
+      "variants": [
+        "select",
+        "deselect",
+        "readonly-hidden"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -660,12 +776,21 @@
       "label": "进入独立任务详情",
       "kind": "navigation",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#a32f374b623fc146.1"],
-      "sourceContractKeys": ["list.detail.open：/tasks/id?from=route.fullPath"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#a32f374b623fc146.1"
+      ],
+      "sourceContractKeys": [
+        "list.detail.open：/tasks/id?from=route.fullPath"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "每条真实列表任务，read角色也可导航",
       "handler": "RouterLink /tasks/{task.id}，query.from=route.fullPath",
-      "variants": ["first", "other", "long-title", "filtered-return"],
+      "variants": [
+        "first",
+        "other",
+        "long-title",
+        "filtered-return"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -697,12 +822,21 @@
       "label": "展开单行操作",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#a52d2fd8d2453f5a.1"],
-      "sourceContractKeys": ["list.row-menu：canUpdate，原生details，局部删除入口"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#a52d2fd8d2453f5a.1"
+      ],
+      "sourceContractKeys": [
+        "list.row-menu：canUpdate，原生details，局部删除入口"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "canUpdate原生details；不受任务终态前端隐藏",
       "handler": "summary aria-label含task.title，展开局部删除按钮",
-      "variants": ["closed", "open", "terminal", "readonly-hidden"],
+      "variants": [
+        "closed",
+        "open",
+        "terminal",
+        "readonly-hidden"
+      ],
       "scenes": [
         {
           "package": "task-direction-c",
@@ -734,12 +868,21 @@
       "label": "打开单行删除",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskListPanel.vue#b4c8f55424911113.1"],
-      "sourceContractKeys": ["delete.open：askRemove(row)，清删除原因"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskListPanel.vue#b4c8f55424911113.1"
+      ],
+      "sourceContractKeys": [
+        "delete.open：askRemove(row)，清删除原因"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "canUpdate，askRemove仅检查该能力，不检查busy/终态",
       "handler": "保存所选task引用，deleteReason清空",
-      "variants": ["active", "completed", "cancelled", "reopen"],
+      "variants": [
+        "active",
+        "completed",
+        "cancelled",
+        "reopen"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -767,12 +910,21 @@
       "label": "批量暂停",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#dcc3dd67cea16d16.1"],
-      "sourceContractKeys": ["batch.pause.open：有选中且canUpdate，预览in_progress可执行项"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#dcc3dd67cea16d16.1"
+      ],
+      "sourceContractKeys": [
+        "batch.pause.open：有选中且canUpdate，预览in_progress可执行项"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
       "handler": "previewBatch设action并清原因/期限/负责人，打开确认；资格pause=in_progress，resume=paused，其他非completed/cancelled",
-      "variants": ["pause", "eligible", "ineligible", "busy-reopen"],
+      "variants": [
+        "pause",
+        "eligible",
+        "ineligible",
+        "busy-reopen"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -800,12 +952,21 @@
       "label": "批量继续",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#8c9d3d93d6a0168a.1"],
-      "sourceContractKeys": ["batch.resume.open：有选中且canUpdate，预览paused可执行项"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#8c9d3d93d6a0168a.1"
+      ],
+      "sourceContractKeys": [
+        "batch.resume.open：有选中且canUpdate，预览paused可执行项"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
       "handler": "previewBatch设action并清原因/期限/负责人，打开确认；资格pause=in_progress，resume=paused，其他非completed/cancelled",
-      "variants": ["resume", "eligible", "ineligible", "busy-reopen"],
+      "variants": [
+        "resume",
+        "eligible",
+        "ineligible",
+        "busy-reopen"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -833,12 +994,21 @@
       "label": "批量延期",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#238f1a6251ae9783.1"],
-      "sourceContractKeys": ["batch.delay.open：有选中且canUpdate，未结束项可执行"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#238f1a6251ae9783.1"
+      ],
+      "sourceContractKeys": [
+        "batch.delay.open：有选中且canUpdate，未结束项可执行"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
       "handler": "previewBatch设action并清原因/期限/负责人，打开确认；资格pause=in_progress，resume=paused，其他非completed/cancelled",
-      "variants": ["delay", "eligible", "ineligible", "busy-reopen"],
+      "variants": [
+        "delay",
+        "eligible",
+        "ineligible",
+        "busy-reopen"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -866,12 +1036,21 @@
       "label": "批量调整负责人",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#5694b69e2e543c38.1"],
-      "sourceContractKeys": ["batch.transfer.open：另需canAssign，未结束项可执行"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#5694b69e2e543c38.1"
+      ],
+      "sourceContractKeys": [
+        "batch.transfer.open：另需canAssign，未结束项可执行"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
       "handler": "previewBatch设action并清原因/期限/负责人，打开确认；资格pause=in_progress，resume=paused，其他非completed/cancelled",
-      "variants": ["transfer", "eligible", "ineligible", "busy-reopen"],
+      "variants": [
+        "transfer",
+        "eligible",
+        "ineligible",
+        "busy-reopen"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -899,12 +1078,21 @@
       "label": "批量取消",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#70c47404dd2cc51e.1"],
-      "sourceContractKeys": ["batch.cancel.open：canUpdate，未结束项可执行"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#70c47404dd2cc51e.1"
+      ],
+      "sourceContractKeys": [
+        "batch.cancel.open：canUpdate，未结束项可执行"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
       "handler": "previewBatch设action并清原因/期限/负责人，打开确认；资格pause=in_progress，resume=paused，其他非completed/cancelled",
-      "variants": ["cancel", "eligible", "ineligible", "busy-reopen"],
+      "variants": [
+        "cancel",
+        "eligible",
+        "ineligible",
+        "busy-reopen"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -943,7 +1131,12 @@
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "返回与原生Escape均没有busy保护",
       "handler": "emit close→showBatchImpact=false；保留选择和当前字段；下一previewBatch清字段",
-      "variants": ["return", "escape", "busy-close", "reopen"],
+      "variants": [
+        "return",
+        "escape",
+        "busy-close",
+        "reopen"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -1051,12 +1244,23 @@
       "label": "修改批量原因",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#d4003ff11f44d9cc.1"],
-      "sourceContractKeys": ["batch.reason.change：resume之外必填原因，最多500"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#d4003ff11f44d9cc.1"
+      ],
+      "sourceContractKeys": [
+        "batch.reason.change：resume之外必填原因，最多500"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "除resume外required maxlength500；无busy disabled",
       "handler": "input事件写batchReason；提交时逐项trim",
-      "variants": ["pause", "delay", "transfer", "cancel", "blank", "busy-input"],
+      "variants": [
+        "pause",
+        "delay",
+        "transfer",
+        "cancel",
+        "blank",
+        "busy-input"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -1100,12 +1304,20 @@
       "label": "修改批量期限",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#0fc52b5608263ef6.1"],
-      "sourceContractKeys": ["batch.delay.due.change：延期必填日期"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#0fc52b5608263ef6.1"
+      ],
+      "sourceContractKeys": [
+        "batch.delay.due.change：延期必填日期"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "仅delay，datetime-local required，无busy disabled",
       "handler": "input写batchDueAt，逐项new Date(...).toISOString()",
-      "variants": ["valid", "empty", "busy-input"],
+      "variants": [
+        "valid",
+        "empty",
+        "busy-input"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -1149,12 +1361,20 @@
       "label": "选择批量负责人",
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#f7f3da8b759864b6.1"],
-      "sourceContractKeys": ["batch.transfer.assignee.change：转交必选现有成员"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#f7f3da8b759864b6.1"
+      ],
+      "sourceContractKeys": [
+        "batch.transfer.assignee.change：转交必选现有成员"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "仅transfer，required select，选项来自memberOptions，无busy disabled",
       "handler": "change写batchAssigneeId；空目录不能选有效成员；提交字段assignee_id",
-      "variants": ["selected", "empty", "directory-failed"],
+      "variants": [
+        "selected",
+        "empty",
+        "directory-failed"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -1198,7 +1418,9 @@
       "label": "父子事件转发",
       "kind": "wiring",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1"
+      ],
       "sourceContractKeys": [
         "batch.{x}.open/submit/close，batch.field.change：子组件事件中转，不是独立控件"
       ],
@@ -1279,31 +1501,41 @@
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
           "event": "@close",
           "handler": "showBatchImpact = false",
-          "targets": ["task.batch.close"]
+          "targets": [
+            "task.batch.close"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
           "event": "@confirm",
           "handler": "confirmBatch",
-          "targets": ["task.batch.submit"]
+          "targets": [
+            "task.batch.submit"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
           "event": "@update:reason",
           "handler": "batchReason = $event",
-          "targets": ["task.batch.reason.change"]
+          "targets": [
+            "task.batch.reason.change"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
           "event": "@update:due-at",
           "handler": "batchDueAt = $event",
-          "targets": ["task.batch.delay.due.change"]
+          "targets": [
+            "task.batch.delay.due.change"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
           "event": "@update:assignee-id",
           "handler": "batchAssigneeId = $event",
-          "targets": ["task.batch.transfer.assignee.change"]
+          "targets": [
+            "task.batch.transfer.assignee.change"
+          ]
         }
       ]
     },
@@ -1312,7 +1544,9 @@
       "label": "父子事件转发",
       "kind": "wiring",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1"
+      ],
       "sourceContractKeys": [
         "list.select/status/search/reset/create.open/delete.open：子组件事件中转，不是独立控件"
       ],
@@ -1368,37 +1602,52 @@
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
           "event": "@update:selected-ids",
           "handler": "selectedIds = $event",
-          "targets": ["task.list.select.page", "task.list.select.row", "task.list.select.clear"]
+          "targets": [
+            "task.list.select.page",
+            "task.list.select.row",
+            "task.list.select.clear"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
           "event": "@status",
           "handler": "setStatus",
-          "targets": ["task.list.status"]
+          "targets": [
+            "task.list.status"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
           "event": "@apply-filters",
           "handler": "applyFilters",
-          "targets": ["task.list.search.apply", "task.list.sort"]
+          "targets": [
+            "task.list.search.apply",
+            "task.list.sort"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
           "event": "@reset-filters",
           "handler": "resetFilters",
-          "targets": ["task.list.reset"]
+          "targets": [
+            "task.list.reset"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
           "event": "@create",
           "handler": "showCreate = true",
-          "targets": ["task.list.create.open"]
+          "targets": [
+            "task.list.create.open"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
           "event": "@remove",
           "handler": "askRemove",
-          "targets": ["task.delete.open"]
+          "targets": [
+            "task.delete.open"
+          ]
         }
       ]
     },
@@ -1407,12 +1656,19 @@
       "label": "弹窗定义与业务变体关联",
       "kind": "wiring",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1"],
-      "sourceContractKeys": ["task.editor.create / task.editor.edit（2变体）"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1"
+      ],
+      "sourceContractKeys": [
+        "task.editor.create / task.editor.edit（2变体）"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "相应isOpen通过useModalDialog控制showModal",
       "handler": "同一定义的打开、提交和关闭分别列出；内部form不是另一个弹窗",
-      "variants": ["source-container", "listed-business-variants"],
+      "variants": [
+        "source-container",
+        "listed-business-variants"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -1434,7 +1690,11 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "容器存在不证明各变体、键盘焦点、忙碌保护或全部主题已验收。",
-      "forwardsTo": ["task.list.create.open", "task.editor.close", "task.editor.create.submit"],
+      "forwardsTo": [
+        "task.list.create.open",
+        "task.editor.close",
+        "task.editor.create.submit"
+      ],
       "forwardBindings": []
     },
     {
@@ -1442,12 +1702,19 @@
       "label": "弹窗定义与业务变体关联",
       "kind": "wiring",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1"],
-      "sourceContractKeys": ["task.delete（1变体）"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1"
+      ],
+      "sourceContractKeys": [
+        "task.delete（1变体）"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "相应isOpen通过useModalDialog控制showModal",
       "handler": "同一定义的打开、提交和关闭分别列出；内部form不是另一个弹窗",
-      "variants": ["source-container", "listed-business-variants"],
+      "variants": [
+        "source-container",
+        "listed-business-variants"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -1469,7 +1736,11 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "容器存在不证明各变体、键盘焦点、忙碌保护或全部主题已验收。",
-      "forwardsTo": ["task.delete.open", "task.delete.close", "task.delete.submit"],
+      "forwardsTo": [
+        "task.delete.open",
+        "task.delete.close",
+        "task.delete.submit"
+      ],
       "forwardBindings": []
     },
     {
@@ -1477,12 +1748,19 @@
       "label": "弹窗定义与业务变体关联",
       "kind": "wiring",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
-      "sourceCandidateIds": ["apps/web/src/components/TaskBatchActions.vue#6b0b774adfa59ad6.1"],
-      "sourceContractKeys": ["task.batch.pause / resume / delay / transfer / cancel（5变体）"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskBatchActions.vue#6b0b774adfa59ad6.1"
+      ],
+      "sourceContractKeys": [
+        "task.batch.pause / resume / delay / transfer / cancel（5变体）"
+      ],
       "contractAliasReason": "共享源已逐项复核P23调用条件，保留合同最后一列精确文本；不自动继承P13审批或图状态。",
       "condition": "相应isOpen通过useModalDialog控制showModal",
       "handler": "同一定义的打开、提交和关闭分别列出；内部form不是另一个弹窗",
-      "variants": ["source-container", "listed-business-variants"],
+      "variants": [
+        "source-container",
+        "listed-business-variants"
+      ],
       "scenes": [
         {
           "package": "task-direction-c-forms",
@@ -1536,12 +1814,18 @@
       "label": "业务任务视图",
       "kind": "local",
       "routeApplicability": "P23 mode=all时business/exports视图均有此返回入口，非P13",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1"],
-      "sourceContractKeys": ["view.business：setView，清status/page，保留query/sort"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1"
+      ],
+      "sourceContractKeys": [
+        "view.business：setView，清status/page，保留query/sort"
+      ],
       "contractAliasReason": "原P13排除的来源在P23按真实mode/capability恢复，不新增接口或改权限",
       "condition": "mode=all，按钮无自身disabled",
       "handler": "setView('business')清view/status/page，保留query/sort；route watcher编排读取",
-      "variants": ["business-tab"],
+      "variants": [
+        "business-tab"
+      ],
       "scenes": [],
       "testReferences": [
         {
@@ -1564,12 +1848,18 @@
       "label": "导出任务视图",
       "kind": "local",
       "routeApplicability": "P23 all-mode view=exports可达，非P13",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1"],
-      "sourceContractKeys": ["view.exports：mode=all且report:read；GET /report-exports"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1"
+      ],
+      "sourceContractKeys": [
+        "view.exports：mode=all且report:read；GET /report-exports"
+      ],
       "contractAliasReason": "原P13排除的来源在P23按真实mode/capability恢复，不新增接口或改权限",
       "condition": "mode=all且report:read，按钮无自身disabled",
       "handler": "setView('exports')清status/page保留query/sort；load只读/report-exports",
-      "variants": ["exports-tab"],
+      "variants": [
+        "exports-tab"
+      ],
       "scenes": [],
       "testReferences": [
         {
@@ -1592,12 +1882,18 @@
       "label": "创建或管理导出",
       "kind": "navigation",
       "routeApplicability": "P23 all-mode view=exports可达，非P13",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#2f03957c77c45e54.1"],
-      "sourceContractKeys": ["export.manage：跳/reports"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#2f03957c77c45e54.1"
+      ],
+      "sourceContractKeys": [
+        "export.manage：跳/reports"
+      ],
       "contractAliasReason": "原P13排除的来源在P23按真实mode/capability恢复，不新增接口或改权限",
       "condition": "导出视图内，服务读取依赖report:read",
       "handler": "RouterLink /reports；不在本页创建导出任务",
-      "variants": ["export-manage"],
+      "variants": [
+        "export-manage"
+      ],
       "scenes": [],
       "testReferences": [
         {
@@ -1620,12 +1916,18 @@
       "label": "查看导出所属报表",
       "kind": "navigation",
       "routeApplicability": "P23 all-mode view=exports可达，非P13",
-      "sourceCandidateIds": ["apps/web/src/components/TaskWorkspace.vue#7080532cf7836b46.1"],
-      "sourceContractKeys": ["export.open：跳/reports?report=report_type，不是文件下载"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#7080532cf7836b46.1"
+      ],
+      "sourceContractKeys": [
+        "export.open：跳/reports?report=report_type，不是文件下载"
+      ],
       "contractAliasReason": "原P13排除的来源在P23按真实mode/capability恢复，不新增接口或改权限",
       "condition": "导出视图内每条item",
       "handler": "RouterLink /reports?report=item.report_type，不是下载链接，也不按导出记录id直达",
-      "variants": ["export-open"],
+      "variants": [
+        "export-open"
+      ],
       "scenes": [],
       "testReferences": [
         {
@@ -1653,15 +1955,15 @@
       "apps/web/src/components/TaskBatchActions.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TaskWorkspace.vue": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+      "apps/web/src/components/TaskWorkspace.vue": "fbc03ed2a4db1cb349063301730971e53cb889c1ca734f4618fee0de31f2114e",
       "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
-      "apps/web/src/components/TaskBatchActions.vue": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
-      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
-      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
-      "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
+      "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b",
+      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
+      "apps/web/src/components/NavigationShell.vue": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
-      "apps/web/src/components/task-workspace-types.ts": "72d4c541f6a09e9c4c05643f88fe7a8fdfc467ae1a07b605244fdff46e1e2b2e"
+      "apps/web/src/components/task-workspace-types.ts": "be914dacd68e7d4c163605082e74b9ee1ac91b07429ab68b6c08139903091b0a"
     },
     "inputs": [
       {
@@ -1956,5 +2258,6 @@
   "limits": [
     "P23单页局部语义审阅，不代表P13/P24或共享组件全局验收。",
     "具体图稿批准待定，保留源业务语义；未改API/配置/数据库/权限或生产。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

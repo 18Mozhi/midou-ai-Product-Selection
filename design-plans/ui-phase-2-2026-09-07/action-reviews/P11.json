@@ -5,49 +5,45 @@
   "status": "implemented-user-auto-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/AccountShell.vue": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
-    "apps/web/src/components/PersonalCenter.vue": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043"
+    "apps/web/src/components/AccountShell.vue": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+    "apps/web/src/components/PersonalCenter.vue": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+    "apps/web/src/components/personal-center/PersonalProfilePanel.vue": "5342047bd8fe79d5756cf13b86d2481bc329f279d0900da69a067845bd2cccf5",
+    "apps/web/src/components/personal-center/PersonalSecurityPanel.vue": "24ca6d5a80e5edb05a98ffdf8dcc8ededc32b14eb43b41dff07bec6cf409d43b",
+    "apps/web/src/components/personal-center/PersonalNotificationsPanel.vue": "1cfaa3f20d85c1d895e48ce7f535318662a8dbf375417ba55cb55b891b5f8e86",
+    "apps/web/src/components/personal-center/PersonalAssetsPanel.vue": "0da62518600762a5906b8e326800ea1a9d1a3f856bbf98178a3cb68a9198c7ef",
+    "apps/web/src/components/personal-center/PersonalPermissionsPanel.vue": "8502b930452a500af44b0e3762732f2d00a879886ae075294d107dd80996a2bb",
+    "apps/web/src/components/personal-center/PersonalSectionReadStatus.vue": "3153e47f83bbbb463b408fe28309871dd924ad19eb7ad2a99c1b5eea850ade31"
   },
   "dialogs": {
     "kind": "none-in-current-source",
     "reason": "AccountShell与PersonalCenter无模态定义/调用；资料、密码、通知均内联，撤销会话直接DELETE。"
   },
   "inputs": {
-    "profile": [
-      "form.username",
-      "form.display_name",
-      "form.avatar_url",
-      "form.phone",
-      "form.locale",
-      "form.timezone",
-      "form.reason"
-    ],
-    "security": [
-      "passwordForm.current_password",
-      "passwordForm.new_password",
-      "passwordForm.confirm_password"
-    ],
-    "notifications": [
-      "preferences.in_app_enabled",
-      "preferences.email_enabled",
-      "preferences.task_enabled",
-      "preferences.approval_enabled",
-      "preferences.competitor_enabled"
-    ]
+    "profile": [],
+    "security": [],
+    "notifications": []
   },
   "actions": [
     {
       "actionId": "AC-ROOT",
+      "sourceContractKeys": [
+        "AC-CURRENT-BRAND / ScoutOps品牌入口导航至应用首页",
+        "AC-CURRENT-BREADCRUMB / 面包屑导航至应用首页"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.10节确认品牌与面包屑两个当前入口均导航至应用首页，合并为同一落点语义组。",
       "label": "品牌与应用入口",
       "sourceCandidateIds": [
-        "apps/web/src/components/AccountShell.vue#dfb70bc4ca0070a5.1",
+        "apps/web/src/components/AccountShell.vue#b832de42f3091adf.1",
         "apps/web/src/components/AccountShell.vue#aa62e5d933afce98.1"
       ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "账号壳层可见",
       "handler": "RouterLink to /",
-      "variants": ["brand", "breadcrumb"],
+      "variants": [
+        "brand",
+        "breadcrumb"
+      ],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -116,13 +112,21 @@
     },
     {
       "actionId": "AC-CONTEXT",
+      "sourceContractKeys": [
+        "AC-CURRENT-CONTEXT / 导航至现有组织与工作区选择页"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.10节确认当前组织/工作区范围选择入口。",
       "label": "组织与工作区",
-      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#0f58e919e43acff5.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/AccountShell.vue#0f58e919e43acff5.1"
+      ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "账号壳层可见",
       "handler": "RouterLink to /select-context",
-      "variants": ["link"],
+      "variants": [
+        "link"
+      ],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -191,13 +195,25 @@
     },
     {
       "actionId": "AC-SECTION",
+      "sourceContractKeys": [
+        "AC-CURRENT-SECTIONS / 按个人中心分区数据生成/me?section=…导航并标记当前分区"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.10节确认五个个人中心分区共享同一循环导航源位置。",
       "label": "个人中心五分区",
-      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#1f54ecd0f870df67.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/AccountShell.vue#257559b0b0a3692f.1"
+      ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "五个固定 section；非法 query 回 profile",
       "handler": "RouterLink /me?section=item.key -> activeSection",
-      "variants": ["profile", "permissions", "security", "notifications", "assets"],
+      "variants": [
+        "profile",
+        "permissions",
+        "security",
+        "notifications",
+        "assets"
+      ],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -286,13 +302,21 @@
     },
     {
       "actionId": "TH-ROUTE",
+      "sourceContractKeys": [
+        "AC-CURRENT-THEME / 导航至外观偏好页"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.10节确认个人中心外观偏好入口。",
       "label": "外观偏好",
-      "sourceCandidateIds": ["apps/web/src/components/AccountShell.vue#508ee18711ffdef2.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/AccountShell.vue#2ea362a7d2584a88.1"
+      ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "账号壳层可见",
       "handler": "RouterLink to /settings/theme",
-      "variants": ["link"],
+      "variants": [
+        "link"
+      ],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -361,16 +385,24 @@
     },
     {
       "actionId": "PC-LOAD",
+      "sourceContractKeys": [
+        "PC-CENTER-CURRENT-LOAD / 顶部重读资料；读取中或任一写操作忙碌时禁用",
+        "PC-CENTER-CURRENT-PROFILE-RETRY / profile读取失败时调用独立重试"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.3节把顶部重读与profile失败重试标为两个当前入口；此组只合并到同一资料读取操作。",
       "label": "刷新与重新加载",
       "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#50ca10b185d1647b.1",
-        "apps/web/src/components/PersonalCenter.vue#835072c0eb99454f.1"
+        "apps/web/src/components/PersonalCenter.vue#71a3428b56c7ab21.1",
+        "apps/web/src/components/PersonalCenter.vue#c68e6bb8fa382242.1"
       ],
       "kind": "read",
       "routeApplicability": "P11",
       "condition": "顶部刷新；profile error 时另有重试",
       "handler": "load -> GET /me/profile then loadSections",
-      "variants": ["refresh", "profile-error-retry"],
+      "variants": [
+        "refresh",
+        "profile-error-retry"
+      ],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -466,12 +498,16 @@
     {
       "actionId": "PC-LEGACY-TAB",
       "label": "旧内嵌标签",
-      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#1076771cfdefa098.1"],
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#bdd76d306d559c2e.1"],
+      "sourceContractKeys": ["PC-CENTER-CURRENT-SECTION / 五个query分区之一的本地切换按钮实例"],
+      "contractAliasReason": "P11实际由AccountShell提供分区导航；PersonalCenter内嵌按钮只在accountShell=false时渲染，因此映射为当前源码存在但本路由不可达的排除项。",
       "kind": "excluded",
       "routeApplicability": "excluded-source-site",
       "condition": "!accountShell；P11由AccountShell传true",
       "handler": "tab = item.key",
-      "variants": ["five-inline-tabs-outside-P11"],
+      "variants": [
+        "five-inline-tabs-outside-P11"
+      ],
       "scenes": [],
       "testReferences": [],
       "visualStates": {
@@ -486,16 +522,24 @@
     },
     {
       "actionId": "PC-SAVE-PROFILE",
+      "sourceContractKeys": [
+        "PC-CURRENT-SAVE / 阻止原生表单提交并向父级发出submit意图",
+        "PC-CURRENT-SAVE / 提交资料；保存中禁用并显示处理中状态"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.2节将受控资料表单提交与提交按钮归为同一资料保存意图。",
       "label": "保存基本资料",
       "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#955fa769b3cd8fe0.1",
-        "apps/web/src/components/PersonalCenter.vue#a0c7836a08f38875.1"
+        "apps/web/src/components/personal-center/PersonalProfilePanel.vue#eb06bfc56733f195.1",
+        "apps/web/src/components/personal-center/PersonalProfilePanel.vue#9f646e1e9f714001.1"
       ],
       "kind": "write",
       "routeApplicability": "P11",
       "condition": "ready && tab=profile；原生required校验；无源码busy锁",
       "handler": "saveProfile -> PATCH /me/profile",
-      "variants": ["form-submit", "submit-button"],
+      "variants": [
+        "form-submit",
+        "submit-button"
+      ],
       "scenes": [
         {
           "package": "personal-direction-c",
@@ -590,13 +634,22 @@
     },
     {
       "actionId": "PC-ORG-TOKENS",
+      "sourceContractKeys": [
+        "PC-PERM-CURRENT-TOKENS / 父级具备组织令牌管理能力时进入令牌管理路由"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.7节只登记满足既有能力条件的令牌管理导航。",
       "label": "组织令牌入口",
-      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#f395dfc785eeb3e5.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/personal-center/PersonalPermissionsPanel.vue#5ceda36eb74de709.1"
+      ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "permissions且capabilities含organization_token:manage",
       "handler": "RouterLink /org-admin/tokens",
-      "variants": ["capability-present", "capability-absent"],
+      "variants": [
+        "capability-present",
+        "capability-absent"
+      ],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -669,13 +722,21 @@
     },
     {
       "actionId": "AC-MFA",
+      "sourceContractKeys": [
+        "PC-SEC-CURRENT-MFA / 前往独立MFA管理页面"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.4节确认安全子面板导航到独立MFA管理页。",
       "label": "管理MFA",
-      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#df188704ef470c64.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/personal-center/PersonalSecurityPanel.vue#df188704ef470c64.1"
+      ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "ready && tab=security",
       "handler": "RouterLink /security/mfa",
-      "variants": ["link"],
+      "variants": [
+        "link"
+      ],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -744,16 +805,24 @@
     },
     {
       "actionId": "PC-PASSWORD",
+      "sourceContractKeys": [
+        "PC-SEC-CURRENT-PASSWORD / 阻止原生提交并向父级发出改密意图",
+        "PC-SEC-CURRENT-PASSWORD / 向父级提交改密意图；所有写入忙碌时禁用"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.4节把密码表单提交和按钮合并为一项改密意图。",
       "label": "修改密码",
       "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#d11c87e9c1045850.1",
-        "apps/web/src/components/PersonalCenter.vue#7872fbd4ec279ff5.1"
+        "apps/web/src/components/personal-center/PersonalSecurityPanel.vue#dc5d22c3a87ae385.1",
+        "apps/web/src/components/personal-center/PersonalSecurityPanel.vue#bc7ca7fd3084258d.1"
       ],
       "kind": "write",
       "routeApplicability": "P11",
       "condition": "security；三输入required/minlength12；确认相等；源码无busy锁",
       "handler": "changePassword -> POST /me/password -> replace /login",
-      "variants": ["form-submit", "submit-button"],
+      "variants": [
+        "form-submit",
+        "submit-button"
+      ],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -852,13 +921,23 @@
     },
     {
       "actionId": "PC-REVOKE",
+      "sourceContractKeys": [
+        "PC-SEC-CURRENT-SESSION-REVOKE / 转发指定会话ID撤销意图；读取未就绪或写入忙碌时禁用"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.4节登记的当前会话撤销按钮转发指定会话ID。",
       "label": "撤销设备会话",
-      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#065748ba997faf11.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/personal-center/PersonalSecurityPanel.vue#7b6cd9865a93baa7.1"
+      ],
       "kind": "write",
       "routeApplicability": "P11",
       "condition": "security；源对返回的每条会话均显示按钮",
       "handler": "revokeSession(id) -> DELETE /me/sessions/{id}",
-      "variants": ["active", "revoked", "expired"],
+      "variants": [
+        "active",
+        "revoked",
+        "expired"
+      ],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -961,16 +1040,25 @@
     },
     {
       "actionId": "PC-PREFERENCES",
+      "sourceContractKeys": [
+        "PC-NOTIFY-CURRENT-SAVE / 有已读偏好和草稿时阻止原生提交并转发保存意图",
+        "PC-NOTIFY-CURRENT-SAVE / 提交既有偏好草稿；非ready或保存中禁用"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.5节将通知表单提交和按钮合并为同一偏好保存意图。",
       "label": "保存通知偏好",
       "sourceCandidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#a5a06b2da05ee49b.1",
-        "apps/web/src/components/PersonalCenter.vue#6dacbeb2eac421c9.1"
+        "apps/web/src/components/personal-center/PersonalNotificationsPanel.vue#1f4978a7de74c364.1",
+        "apps/web/src/components/personal-center/PersonalNotificationsPanel.vue#76ed759dc2d23330.1"
       ],
       "kind": "write",
       "routeApplicability": "P11",
       "condition": "ready && tab=notifications；源码无busy锁",
       "handler": "savePreferences -> PUT /me/notification-preferences",
-      "variants": ["form-submit", "submit-button", "mail-provider-pending"],
+      "variants": [
+        "form-submit",
+        "submit-button",
+        "mail-provider-pending"
+      ],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1077,13 +1165,21 @@
     },
     {
       "actionId": "PC-TREND",
+      "sourceContractKeys": [
+        "PC-ASSET-CURRENT-FOLLOW / 依据关注记录ID进入对应热点视图"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.6节确认本人关注记录通过ID进入对应热点视图。",
       "label": "查看关注热点",
-      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#d31010912340ba44.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/personal-center/PersonalAssetsPanel.vue#add62a6dcbcd3e91.1"
+      ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "assets.followed_trends各返回项",
       "handler": "RouterLink /trends?topic={id}",
-      "variants": ["each-trend"],
+      "variants": [
+        "each-trend"
+      ],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1160,13 +1256,21 @@
     },
     {
       "actionId": "PC-DECISION",
+      "sourceContractKeys": [
+        "PC-ASSET-CURRENT-DECISION / 依据决策关联的机会ID进入机会详情"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.6节确认本人决策记录通过关联机会ID进入详情。",
       "label": "查看本人决策机会",
-      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#fe2ef7002fcbab8c.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/personal-center/PersonalAssetsPanel.vue#fb93a6197d1c0346.1"
+      ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "assets.decisions各返回项",
       "handler": "RouterLink /opportunities/{opportunity_id}",
-      "variants": ["each-decision"],
+      "variants": [
+        "each-decision"
+      ],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1235,13 +1339,21 @@
     },
     {
       "actionId": "PC-TASK",
+      "sourceContractKeys": [
+        "PC-ASSET-CURRENT-TASK / 进入通用任务列表，不附加详情或本人筛选"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.6节确认本人任务入口只进入通用任务列表。",
       "label": "查看本人任务",
-      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#ee2568a050e8c314.1"],
+      "sourceCandidateIds": [
+      "apps/web/src/components/personal-center/PersonalAssetsPanel.vue#ee2568a050e8c314.1"
+      ],
       "kind": "navigation",
       "routeApplicability": "P11",
       "condition": "assets.tasks各返回项",
       "handler": "RouterLink /tasks",
-      "variants": ["each-task-to-list"],
+      "variants": [
+        "each-task-to-list"
+      ],
       "scenes": [
         {
           "package": "personal-sections-direction-c",
@@ -1307,6 +1419,184 @@
           "selector": "[href=\"/tasks\"]"
         }
       }
+    },
+    {
+      "actionId": "PC-PROFILE-WIRING",
+      "label": "资料子面板事件转交",
+      "kind": "wiring",
+      "routeApplicability": "P11-current-composition",
+      "sourceContractKeys": ["PC-CENTER-CURRENT-PROFILE / 传递资料快照/草稿/忙碌反馈并转发更新与保存意图"],
+      "contractAliasReason": "当前PersonalCenter只向资料子面板传递状态并接回草稿更新/保存事件，不新增请求。",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#39f57fafe8eea828.1"],
+      "condition": "个人资料分区且存在资料快照",
+      "handler": "@update-field -> center.updateProfileField；@submit -> center.saveProfile",
+      "forwardsTo": ["PC-PROFILE-DRAFT", "PC-SAVE-PROFILE"],
+      "forwardBindings": [
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#39f57fafe8eea828.1","event":"@update-field","handler":"center.updateProfileField","targets":["PC-PROFILE-DRAFT"]},
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#39f57fafe8eea828.1","event":"@submit","handler":"center.saveProfile","targets":["PC-SAVE-PROFILE"]}
+      ],
+      "variants": ["field-update", "submit"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "仅父子状态/事件接线；资料字段与保存动作独立核对。"
+    },
+    {
+      "actionId": "PC-PERMISSIONS-WIRING",
+      "label": "授权分区事件转交",
+      "kind": "wiring", "routeApplicability": "P11-current-composition",
+      "sourceContractKeys": ["PC-CENTER-CURRENT-PERMISSIONS / 传递授权分区状态与token管理能力，转发重读"],
+      "contractAliasReason": "PersonalCenter向授权面板传递读取状态和能力并接回重试事件。",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#97130ec443ea7f94.1"],
+      "condition": "授权分区激活", "handler": "@retry -> center.retrySection('authorization')",
+      "forwardsTo": ["PC-READ-RETRY"],
+      "forwardBindings": [{"candidateId":"apps/web/src/components/PersonalCenter.vue#97130ec443ea7f94.1","event":"@retry","handler":"center.retrySection('authorization')","targets":["PC-READ-RETRY"]}],
+      "variants": ["retry"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "父级接线不代替真实授权读取或权限验收。"
+    },
+    {
+      "actionId": "PC-SECURITY-WIRING",
+      "label": "安全分区事件转交",
+      "kind": "wiring", "routeApplicability": "P11-current-composition",
+      "sourceContractKeys": ["PC-CENTER-CURRENT-SECURITY / 传递会话/密码及忙碌状态，转发读取和写入意图"],
+      "contractAliasReason": "PersonalCenter将安全面板事件转给既有会话读取、草稿、改密和撤销处理器。",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#9de3424951fed3cd.1"],
+      "condition": "安全分区激活", "handler": "retry/update-password/change-password/revoke-session转给center既有处理器",
+      "forwardsTo": ["PC-READ-RETRY", "PC-PASSWORD-DRAFT", "PC-PASSWORD", "PC-REVOKE"],
+      "forwardBindings": [
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#9de3424951fed3cd.1","event":"@retry","handler":"center.retrySection('sessions')","targets":["PC-READ-RETRY"]},
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#9de3424951fed3cd.1","event":"@update-password","handler":"center.updatePasswordField","targets":["PC-PASSWORD-DRAFT"]},
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#9de3424951fed3cd.1","event":"@change-password","handler":"center.changePassword","targets":["PC-PASSWORD"]},
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#9de3424951fed3cd.1","event":"@revoke-session","handler":"center.revokeSession","targets":["PC-REVOKE"]}
+      ],
+      "variants": ["retry", "draft-update", "change-password", "revoke-session"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "父级接线只沿用既有handler；不证明服务端会话/密码写入结果。"
+    },
+    {
+      "actionId": "PC-NOTIFICATIONS-WIRING",
+      "label": "通知分区事件转交",
+      "kind": "wiring", "routeApplicability": "P11-current-composition",
+      "sourceContractKeys": ["PC-CENTER-CURRENT-NOTIFICATIONS / 传递偏好状态/草稿并转发重读、字段更新及保存意图"],
+      "contractAliasReason": "PersonalCenter将通知读取重试、偏好草稿更新与保存事件交回既有处理器。",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#c0f9f5a7f78f133b.1"],
+      "condition": "通知分区激活", "handler": "retry/update-preference/submit转给center既有处理器",
+      "forwardsTo": ["PC-READ-RETRY", "PC-NOTIFY-TOGGLE", "PC-PREFERENCES"],
+      "forwardBindings": [
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#c0f9f5a7f78f133b.1","event":"@retry","handler":"center.retrySection('preferences')","targets":["PC-READ-RETRY"]},
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#c0f9f5a7f78f133b.1","event":"@update-preference","handler":"center.updatePreference","targets":["PC-NOTIFY-TOGGLE"]},
+        {"candidateId":"apps/web/src/components/PersonalCenter.vue#c0f9f5a7f78f133b.1","event":"@submit","handler":"center.savePreferences","targets":["PC-PREFERENCES"]}
+      ],
+      "variants": ["retry", "toggle", "submit"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "接线不证明通知服务或邮件投递。"
+    },
+    {
+      "actionId": "PC-ASSETS-WIRING",
+      "label": "本人资产分区事件转交",
+      "kind": "wiring", "routeApplicability": "P11-current-composition",
+      "sourceContractKeys": ["PC-CENTER-CURRENT-ASSETS / 传递本人资产分区状态并转发重读"],
+      "contractAliasReason": "PersonalCenter将资产分区重试交回父级既有读取处理器。",
+      "sourceCandidateIds": ["apps/web/src/components/PersonalCenter.vue#efda8df42e4c8c1a.1"],
+      "condition": "本人资产分区激活", "handler": "@retry -> center.retrySection('assets')",
+      "forwardsTo": ["PC-READ-RETRY"],
+      "forwardBindings": [{"candidateId":"apps/web/src/components/PersonalCenter.vue#efda8df42e4c8c1a.1","event":"@retry","handler":"center.retrySection('assets')","targets":["PC-READ-RETRY"]}],
+      "variants": ["retry"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "父子重试接线不证明真实资产读取可用。"
+    },
+    {
+      "actionId": "PC-PROFILE-DRAFT", "label": "更新资料草稿字段", "kind": "local", "routeApplicability": "P11-profile-fields",
+      "sourceContractKeys": [
+        "PC-CURRENT-USERNAME / 更新登录用户名草稿；保存中禁用", "PC-CURRENT-DISPLAY-NAME / 更新必填显示名称草稿；保存中禁用",
+        "PC-CURRENT-AVATAR / 更新头像HTTPS地址草稿；保存中禁用", "PC-CURRENT-PHONE / 更新手机号草稿；验证状态单独显示且不由输入伪造",
+        "PC-CURRENT-LOCALE / 更新当前语言选项草稿；保存中禁用", "PC-CURRENT-TIMEZONE / 更新必填时区草稿；保存中禁用",
+        "PC-CURRENT-REASON / 更新必填修改原因草稿，输入上限300字符"
+      ],
+      "contractAliasReason": "account-home-contract-review.md第2.2节登记七个独立字段事件；同一局部草稿更新语义组，不触发服务端写入。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/personal-center/PersonalProfilePanel.vue#a009961494d9e9f6.1", "apps/web/src/components/personal-center/PersonalProfilePanel.vue#85e98ee3a227ab53.1",
+        "apps/web/src/components/personal-center/PersonalProfilePanel.vue#c3282a4a6e5e0694.1", "apps/web/src/components/personal-center/PersonalProfilePanel.vue#606f704e56cefdda.1",
+        "apps/web/src/components/personal-center/PersonalProfilePanel.vue#710e66a207790a9d.1", "apps/web/src/components/personal-center/PersonalProfilePanel.vue#dabba198cd2f2993.1",
+        "apps/web/src/components/personal-center/PersonalProfilePanel.vue#927fb4495afb35c9.1"
+      ],
+      "condition": "资料字段可编辑且未保存中", "handler": "字段事件调用子组件update并更新本地草稿",
+      "variants": ["username", "display-name", "avatar-url", "phone", "locale", "timezone", "reason"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-mapped","hover":"not-mapped","focus":"not-mapped","pressed":"not-mapped","disabled":"not-mapped","busy":"not-mapped"},
+      "remaining": "字段来源与草稿事件已归组；无浏览器输入全状态或服务端字段验收主张。"
+    },
+    {
+      "actionId": "PC-PASSWORD-DRAFT", "label": "更新密码草稿字段", "kind": "local", "routeApplicability": "P11-password-fields",
+      "sourceContractKeys": ["PC-SEC-CURRENT-CURRENT-PASSWORD / 更新当前密码草稿；写入忙碌时禁用", "PC-SEC-CURRENT-NEW-PASSWORD / 更新新密码草稿；写入忙碌时禁用", "PC-SEC-CURRENT-CONFIRM-PASSWORD / 更新本地确认草稿；写入忙碌时禁用"],
+      "contractAliasReason": "account-home-contract-review.md第2.4节登记三个密码字段事件；只更新本地密码草稿。",
+      "sourceCandidateIds": ["apps/web/src/components/personal-center/PersonalSecurityPanel.vue#5c2165d671fbd739.1", "apps/web/src/components/personal-center/PersonalSecurityPanel.vue#25ca5cb1035e2e53.1", "apps/web/src/components/personal-center/PersonalSecurityPanel.vue#d4f7ed296afcee0c.1"],
+      "condition": "所有写入未忙碌", "handler": "update field event emits to PersonalCenter local password draft",
+      "variants": ["current-password", "new-password", "confirm-password"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-mapped","hover":"not-mapped","focus":"not-mapped","pressed":"not-mapped","disabled":"not-mapped","busy":"not-mapped"},
+      "remaining": "草稿状态归组，不代表密码修改成功或凭证规则验收。"
+    },
+    {
+      "actionId": "PC-NOTIFY-TOGGLE", "label": "更新通知偏好草稿", "kind": "local", "routeApplicability": "P11-notification-options",
+      "sourceContractKeys": ["PC-NOTIFY-CURRENT-OPTIONS / 循环呈现五项布尔偏好并向父级转发更新值"],
+      "contractAliasReason": "account-home-contract-review.md第2.5节确认一个循环checkbox候选呈现五项草稿开关。",
+      "sourceCandidateIds": ["apps/web/src/components/personal-center/PersonalNotificationsPanel.vue#0309f99060d6927c.1"],
+      "condition": "通知偏好快照可编辑且未保存中", "handler": "change emits selected field and boolean into parent draft",
+      "variants": ["in-app", "email", "task", "approval", "competitor"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-mapped","hover":"not-mapped","focus":"not-mapped","pressed":"not-mapped","disabled":"not-mapped","busy":"not-mapped"},
+      "remaining": "只更新本地草稿；不代表邮件投递或外部通知可用。"
+    },
+    {
+      "actionId": "PC-READ-RETRY", "label": "重读当前分区", "kind": "read", "routeApplicability": "P11-current-sections",
+      "sourceContractKeys": ["PC-READ-STATUS-CURRENT-RETRY / 仅读取错误时显示并转发所属分区的重试意图"],
+      "contractAliasReason": "account-home-contract-review.md第2.8节登记共享读取状态组件的错误态重试控件；具体分区由父级事件绑定确定。",
+      "sourceCandidateIds": ["apps/web/src/components/personal-center/PersonalSectionReadStatus.vue#768dbb71b85f4591.1"],
+      "condition": "所属分区读取错误", "handler": "emit retry给父级，由当前分区调用既有读取处理器",
+      "variants": ["authorization", "sessions", "notifications", "assets"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-mapped","hover":"not-mapped","focus":"not-mapped","pressed":"not-mapped","disabled":"not-mapped","busy":"not-mapped"},
+      "remaining": "共享按钮的键盘/读屏和真实读取结果未由静态映射验收。"
+    },
+    {
+      "actionId": "PC-SESSION-READ-WIRING", "label": "会话读取重试事件转交", "kind": "wiring", "routeApplicability": "P11-security-section",
+      "sourceContractKeys": ["PC-SEC-CURRENT-SESSION-READ / 呈现会话分区读取状态并转发重试"],
+      "contractAliasReason": "PersonalSecurityPanel将共享读取状态的重试意图交给父级。",
+      "sourceCandidateIds": ["apps/web/src/components/personal-center/PersonalSecurityPanel.vue#a5059536719adc96.1"],
+      "condition": "会话区域可重试", "handler": "@retry -> emit('retry')", "forwardsTo": ["PC-READ-RETRY"],
+      "forwardBindings": [{"candidateId":"apps/web/src/components/personal-center/PersonalSecurityPanel.vue#a5059536719adc96.1","event":"@retry","handler":"emit('retry')","targets":["PC-READ-RETRY"]}],
+      "variants": ["retry"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "子组件接线不代替真实会话读取与撤销验收。"
+    },
+    {
+      "actionId": "PC-NOTIFY-READ-WIRING", "label": "通知读取重试事件转交", "kind": "wiring", "routeApplicability": "P11-notifications-section",
+      "sourceContractKeys": ["PC-NOTIFY-CURRENT-READ / 呈现读取状态并将重试交给父级"],
+      "contractAliasReason": "PersonalNotificationsPanel将共享读取状态的重试意图交给父级。",
+      "sourceCandidateIds": ["apps/web/src/components/personal-center/PersonalNotificationsPanel.vue#b393d51f01c0a4b5.1"],
+      "condition": "通知区域可重试", "handler": "@retry -> emit('retry')", "forwardsTo": ["PC-READ-RETRY"],
+      "forwardBindings": [{"candidateId":"apps/web/src/components/personal-center/PersonalNotificationsPanel.vue#b393d51f01c0a4b5.1","event":"@retry","handler":"emit('retry')","targets":["PC-READ-RETRY"]}],
+      "variants": ["retry"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "子组件接线不代替真实通知读取或邮件验收。"
+    },
+    {
+      "actionId": "PC-ASSET-READ-WIRING", "label": "本人资产读取重试事件转交", "kind": "wiring", "routeApplicability": "P11-assets-section",
+      "sourceContractKeys": ["PC-ASSET-CURRENT-READ / 呈现本人资产读取状态并转发重试"],
+      "contractAliasReason": "PersonalAssetsPanel将共享读取状态的重试意图交给父级。",
+      "sourceCandidateIds": ["apps/web/src/components/personal-center/PersonalAssetsPanel.vue#84b53a278d412127.1"],
+      "condition": "本人资产区域可重试", "handler": "@retry -> emit('retry')", "forwardsTo": ["PC-READ-RETRY"],
+      "forwardBindings": [{"candidateId":"apps/web/src/components/personal-center/PersonalAssetsPanel.vue#84b53a278d412127.1","event":"@retry","handler":"emit('retry')","targets":["PC-READ-RETRY"]}],
+      "variants": ["retry"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "子组件接线不代替真实资产读取验收。"
+    },
+    {
+      "actionId": "PC-PERM-READ-WIRING", "label": "授权读取重试事件转交", "kind": "wiring", "routeApplicability": "P11-permissions-section",
+      "sourceContractKeys": ["PC-PERM-CURRENT-READ / 呈现授权读取状态并转发重试"],
+      "contractAliasReason": "PersonalPermissionsPanel将共享读取状态的重试意图交给父级。",
+      "sourceCandidateIds": ["apps/web/src/components/personal-center/PersonalPermissionsPanel.vue#87a51b8aad06546c.1"],
+      "condition": "授权区域可重试", "handler": "@retry -> emit('retry')", "forwardsTo": ["PC-READ-RETRY"],
+      "forwardBindings": [{"candidateId":"apps/web/src/components/personal-center/PersonalPermissionsPanel.vue#87a51b8aad06546c.1","event":"@retry","handler":"emit('retry')","targets":["PC-READ-RETRY"]}],
+      "variants": ["retry"], "scenes": [], "testReferences": [],
+      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "remaining": "子组件接线不代替真实RBAC或授权读取验收。"
     }
   ],
   "compositionGaps": [

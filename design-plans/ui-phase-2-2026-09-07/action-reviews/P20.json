@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "pageId": "P20",
   "route": "/competitors/monitoring-rules",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657"
+    "apps/web/src/components/CompetitorMonitor.vue": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -55,11 +55,18 @@
         "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1",
         "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1"
       ],
-      "sourceContractKeys": ["管理者页首新建/首条规则", "真空规则列表的新建入口"],
+      "sourceContractKeys": [
+        "管理者页首新建/首条规则",
+        "真空规则列表的新建入口"
+      ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "P20 manager；页首按enabled切标签，规则空列表另有入口",
       "handler": "openRule重置目标空/price/decrease/1，showRule并聚焦select",
-      "variants": ["页首新增", "没有启用规则", "规则数组为空"],
+      "variants": [
+        "页首新增",
+        "没有启用规则",
+        "规则数组为空"
+      ],
       "scenes": [
         {
           "package": "competitor-direction-c",
@@ -168,12 +175,19 @@
       "label": "返回竞品列表",
       "kind": "navigation",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
-      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1"],
-      "sourceContractKeys": ["RouterLink /competitors"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1"
+      ],
+      "sourceContractKeys": [
+        "RouterLink /competitors"
+      ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "P20所有可读身份",
       "handler": "RouterLink /competitors，不自带q或competitor",
-      "variants": ["管理者", "只读者"],
+      "variants": [
+        "管理者",
+        "只读者"
+      ],
       "scenes": [
         {
           "package": "competitor-direction-c",
@@ -244,8 +258,12 @@
       "label": "规则页异常主次恢复",
       "kind": "read",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
-      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1"],
-      "sourceContractKeys": ["按状态恢复或导航，两个事件分别验"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1"
+      ],
+      "sourceContractKeys": [
+        "按状态恢复或导航，两个事件分别验"
+      ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "P20 state!=ready；loading无footer；空规则实际ready",
       "handler": "primary expired登录/forbidden home/其余load；secondary error back/其余home；state empty管理者分支为源潜在分支",
@@ -616,14 +634,22 @@
       "label": "创建竞品弹窗定义",
       "kind": "wiring",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
-      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1"
+      ],
       "sourceContractKeys": [
         "三步；无/有机会ID；字段非法、busy、失败/重试；取消归step1但实例字段保留"
       ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "showCreate && canManage；无mode条件",
       "handler": "role=dialog自定义div，包含三步form，不新增一次业务动作",
-      "variants": ["步骤1链接", "步骤2市场/机会/名称", "步骤3确认", "失败保留", "busy"],
+      "variants": [
+        "步骤1链接",
+        "步骤2市场/机会/名称",
+        "步骤3确认",
+        "失败保留",
+        "busy"
+      ],
       "scenes": [
         {
           "package": "competitor-direction-c",
@@ -662,7 +688,11 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "P20仅初挂create=1可达；图的P19背景不能当P20异常双弹窗图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。",
-      "forwardsTo": ["CP-CREATE-SUBMIT", "CP-CREATE-CLOSE", "CP-CREATE-PREVIOUS"],
+      "forwardsTo": [
+        "CP-CREATE-SUBMIT",
+        "CP-CREATE-CLOSE",
+        "CP-CREATE-PREVIOUS"
+      ],
       "forwardBindings": []
     },
     {
@@ -674,7 +704,10 @@
         "apps/web/src/components/CompetitorMonitor.vue#e6be6aad71e6c32f.1",
         "apps/web/src/components/CompetitorMonitor.vue#d32ececd9e3b4c22.1"
       ],
-      "sourceContractKeys": ["前两步本地，第三步POST", "submit按钮，表单handler驱动"],
+      "sourceContractKeys": [
+        "前两步本地，第三步POST",
+        "submit按钮，表单handler驱动"
+      ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "manager且创建窗；submit按钮disabled=busy；原生约束先于submit事件",
       "handler": "submitCreateStep：step<3仅本地+1，否则create→POST /competitors；form与submit合一",
@@ -854,11 +887,19 @@
         "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
         "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1"
       ],
-      "sourceContractKeys": ["关闭、step归1、去create query", "第一步取消"],
+      "sourceContractKeys": [
+        "关闭、step归1、去create query",
+        "第一步取消"
+      ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "创建窗可见；取消只在第1步，右上关闭各步可见，原源不禁busy",
       "handler": "closeCreate→step=1/showCreate=false/清create query；保留实例字段",
-      "variants": ["右上关闭", "第1步取消", "第2/3步关闭", "busy关闭风险"],
+      "variants": [
+        "右上关闭",
+        "第1步取消",
+        "第2/3步关闭",
+        "busy关闭风险"
+      ],
       "scenes": [
         {
           "package": "competitor-direction-c",
@@ -991,12 +1032,20 @@
       "label": "创建上一步",
       "kind": "local",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
-      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#4ae114e438c807d5.1"],
-      "sourceContractKeys": ["第2/3步本地回退"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#4ae114e438c807d5.1"
+      ],
+      "sourceContractKeys": [
+        "第2/3步本地回退"
+      ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "创建第2/3步；v-else按钮，原源不禁busy",
       "handler": "createStep -= 1，无请求",
-      "variants": ["市场回链接", "确认回市场", "busy仍可回退的源差异"],
+      "variants": [
+        "市场回链接",
+        "确认回市场",
+        "busy仍可回退的源差异"
+      ],
       "scenes": [
         {
           "package": "competitor-direction-c",
@@ -1095,14 +1144,23 @@
       "label": "新规则弹窗定义",
       "kind": "wiring",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
-      "sourceCandidateIds": ["apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1"
+      ],
       "sourceContractKeys": [
         "全局/指定对象×数值/库存；方向约束、数值0/小数、错误/busy；取消清query，新打开重置默认"
       ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "showRule&&canManage；P20入口或首次competitor字符串query",
       "handler": "role=dialog自定义div，包含规则form，不另增写入",
-      "variants": ["工作区数值", "对象数值", "库存", "错误保留", "busy", "双query异常"],
+      "variants": [
+        "工作区数值",
+        "对象数值",
+        "库存",
+        "错误保留",
+        "busy",
+        "双query异常"
+      ],
       "scenes": [
         {
           "package": "competitor-direction-c",
@@ -1141,7 +1199,10 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "双query并存尚无专用图/优先级决定；Tab/归还真实Vue未闭环；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。",
-      "forwardsTo": ["CP-RULE-SUBMIT", "CP-RULE-CLOSE"],
+      "forwardsTo": [
+        "CP-RULE-SUBMIT",
+        "CP-RULE-CLOSE"
+      ],
       "forwardBindings": []
     },
     {
@@ -1153,7 +1214,10 @@
         "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
         "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1"
       ],
-      "sourceContractKeys": ["POST明确阈值", "busy禁用的submit"],
+      "sourceContractKeys": [
+        "POST明确阈值",
+        "busy禁用的submit"
+      ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "manager/showRule；数值约束必填/min0/step0.000001，DOM disabled=busy",
       "handler": "createRule→POST competitor_id/null、metric、direction；仅非库存附Number(threshold_value)",
@@ -1269,11 +1333,19 @@
         "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
         "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1"
       ],
-      "sourceContractKeys": ["关闭且去competitor query", "取消同合同"],
+      "sourceContractKeys": [
+        "关闭且去competitor query",
+        "取消同合同"
+      ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "规则窗可见；原源busy仍可关闭",
       "handler": "closeRule隐藏并去competitor query；下次openRule才重置默认",
-      "variants": ["右上关闭", "取消", "Escape", "busy关闭"],
+      "variants": [
+        "右上关闭",
+        "取消",
+        "Escape",
+        "busy关闭"
+      ],
       "scenes": [
         {
           "package": "competitor-direction-c",
@@ -1423,7 +1495,11 @@
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "P20没有openDelete可达UI，query不设deleting",
       "handler": "角色div和删除form仍在共享源，但本页无启用路径",
-      "variants": ["删除定义", "提交与submit", "取消与关闭"],
+      "variants": [
+        "删除定义",
+        "提交与submit",
+        "取消与关闭"
+      ],
       "scenes": [
         {
           "package": "competitor-direction-c",
@@ -1454,14 +1530,16 @@
   ],
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
-    "files": ["apps/web/src/components/CompetitorMonitor.vue"],
+    "files": [
+      "apps/web/src/components/CompetitorMonitor.vue"
+    ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/CompetitorMonitor.vue": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+      "apps/web/src/components/CompetitorMonitor.vue": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
       "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
-      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },
     "inputs": [
@@ -1863,7 +1941,10 @@
       "rule-global/target-numeric/availability",
       "create-step-1/2/3-via-query"
     ],
-    "excludedModes": ["list-page-region", "delete-dialog-in-rules"],
+    "excludedModes": [
+      "list-page-region",
+      "delete-dialog-in-rules"
+    ],
     "automaticActions": [
       {
         "actionId": "CP-MOUNT-READ",
@@ -1898,5 +1979,6 @@
     "按固定路由从同一39源位置核对；跨两页重复引用不增加全站唯一源位置。",
     "三个role定义与七结构容器、十模型分开；表单状态图不是产品验收。",
     "代码修复/已有隔离测试与设计全状态、辅助技术和生产签收分开。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

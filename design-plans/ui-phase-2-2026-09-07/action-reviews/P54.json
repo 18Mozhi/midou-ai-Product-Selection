@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "pageId": "P54",
   "route": "/platform-admin/data",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformDataCenter.vue": "73f961e34f708defa5ab73cf2e03c349e8b58e8369a399ca80cbb98ad15d8b5f",
+    "apps/web/src/components/PlatformDataCenter.vue": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
     "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120"
   },
   "implementationSourceHashes": {
@@ -18,8 +18,17 @@
     "reason": "9处调用/aside、14个明确消费者变体；其中aside不是modal。三类近期记录已补DATA-RECORD-DETAIL-C-r1打开详情/字段/技术与返回区证据，仍非全部行状态/主题或真实Vue验收。共享导航/组件内部所有动作未据此冻结。"
   },
   "inputs": {
-    "records": ["queryDraft", "statusDraft"],
-    "quality": ["query", "batchAction", "batchAssignee", "batchReason", "reason"]
+    "records": [
+      "queryDraft",
+      "statusDraft"
+    ],
+    "quality": [
+      "query",
+      "batchAction",
+      "batchAssignee",
+      "batchReason",
+      "reason"
+    ]
   },
   "actions": [
     {
@@ -33,7 +42,10 @@
       ],
       "condition": "父页两个固定入口；导出原因等待与导出提交期间锁定切换；quality首次访问后保持挂载并以v-show切换",
       "handler": "selectTab -> router.replace；records无行或上次失败时load；quality工作态跨切区保留",
-      "variants": ["records", "quality"],
+      "variants": [
+        "records",
+        "quality"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -118,10 +130,17 @@
       "label": "选择四类近期数据",
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/PlatformDataCenter.vue#318d604dd4996018.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDataCenter.vue#318d604dd4996018.1"
+      ],
       "condition": "records且循环entities；读取、原因等待或导出提交时可见禁用，同类型早退",
       "handler": "selectEntity -> 清status/page -> load",
-      "variants": ["trends", "opportunities", "competitors", "suppliers"],
+      "variants": [
+        "trends",
+        "opportunities",
+        "competitors",
+        "suppliers"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -236,7 +255,14 @@
       ],
       "condition": "records；读取、原因等待或导出提交时锁定；reset在无草稿且无已应用筛选时禁用",
       "handler": "ResponsiveFilterDrawer；applyFilters/resetFilters -> load",
-      "variants": ["drawer-open", "drawer-close", "form-submit", "enter", "apply", "reset"],
+      "variants": [
+        "drawer-open",
+        "drawer-close",
+        "form-submit",
+        "enter",
+        "apply",
+        "reset"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -338,7 +364,13 @@
       ],
       "condition": "exporting/exportReasonOpen/refreshing/scopeMismatch/unknown阻止入口；打开原因窗前冻结entity/query/status快照",
       "handler": "exportCsv -> askExportReason -> frozen snapshot POST -> blob/link.download；无HTTP结果进入未知态并阻止重复提交",
-      "variants": ["open", "ask", "submit", "cancel", "download"],
+      "variants": [
+        "open",
+        "ask",
+        "submit",
+        "cancel",
+        "download"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -465,7 +497,9 @@
       "label": "读取与状态重试",
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
-      "sourceCandidateIds": ["apps/web/src/components/PlatformDataCenter.vue#fa3fbd7bf13eae52.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformDataCenter.vue#fa3fbd7bf13eae52.1"
+      ],
       "condition": "records且state非ready/loading；onMounted及过滤/类型切换也读但不另数按钮",
       "handler": "load GET /platform/management?domain=data&entity=...",
       "variants": [
@@ -589,7 +623,10 @@
       ],
       "condition": "records ready；desktop行与mobile详情两个summary",
       "handler": "native details/summary；只呈现记录id",
-      "variants": ["desktop-row", "mobile-detail"],
+      "variants": [
+        "desktop-row",
+        "mobile-detail"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -676,7 +713,12 @@
       ],
       "condition": "ready且total_pages>1；刷新或边界禁用",
       "handler": "goToPage -> 切20行本地slice + syncRecordsUrl；不发GET",
-      "variants": ["previous", "next", "first", "last"],
+      "variants": [
+        "previous",
+        "next",
+        "first",
+        "last"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -780,7 +822,15 @@
       ],
       "condition": "首次状态页由UiStatePanel恢复；ready工作区提供独立刷新，写入中禁用",
       "handler": "refreshQuality -> load GET /platform/data-quality?page=&page_size=20&status=all",
-      "variants": ["loading", "empty", "error", "forbidden", "expired", "blocked", "primary"],
+      "variants": [
+        "loading",
+        "empty",
+        "error",
+        "forbidden",
+        "expired",
+        "blocked",
+        "primary"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -884,7 +934,11 @@
       ],
       "condition": "ready；读取或写入时禁用，同tab早退",
       "handler": "switchTab -> page1/清selected；三个tab均同步quality_tab URL",
-      "variants": ["evidence", "issues", "runs"],
+      "variants": [
+        "evidence",
+        "issues",
+        "runs"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -975,7 +1029,10 @@
       ],
       "condition": "ready；仅检索当前已加载页，清除按钮在输入为空时禁用",
       "handler": "query change/clear -> syncUrl；不提交新的质量GET",
-      "variants": ["change", "clear"],
+      "variants": [
+        "change",
+        "clear"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1133,7 +1190,12 @@
       ],
       "condition": "证据表格/移动详情；原函数无saving或单飞锁",
       "handler": "grantDownload -> POST download-grant {} -> window.location.assign download?grant",
-      "variants": ["desktop", "mobile", "grant", "access"],
+      "variants": [
+        "desktop",
+        "mobile",
+        "grant",
+        "access"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1267,7 +1329,11 @@
       ],
       "condition": "证据或问题mobile detail slot内summary",
       "handler": "native details/summary；只读ID与trace",
-      "variants": ["evidence-mobile", "issue-mobile", "lineage-dialog"],
+      "variants": [
+        "evidence-mobile",
+        "issue-mobile",
+        "lineage-dialog"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1354,7 +1420,12 @@
       ],
       "condition": "runs每条下钻；issues且selectedRunId时返回",
       "handler": "drillIntoRun清query设runId/tab；clearRunDrilldown清runId；均无GET",
-      "variants": ["drill", "clear", "matched", "empty"],
+      "variants": [
+        "drill",
+        "clear",
+        "matched",
+        "empty"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1446,7 +1517,14 @@
       ],
       "condition": "issues；已选open、原因trim>=2，assign需成员；未知结果时锁定预览",
       "handler": "previewBatch冻结action/items/version/reason/assignee/impact；executeBatch只提交该预览；成功读取后解除未知锁",
-      "variants": ["attribute", "assign", "close", "preview", "cancel", "confirm"],
+      "variants": [
+        "attribute",
+        "assign",
+        "close",
+        "preview",
+        "cancel",
+        "confirm"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1860,7 +1938,14 @@
       ],
       "condition": "ready且tab非runs并pageTotal非0；刷新/页界禁用",
       "handler": "goToPage先改page再load；两集合用同page，runs固定最近20",
-      "variants": ["previous", "next", "first", "last", "waiting", "failed"],
+      "variants": [
+        "previous",
+        "next",
+        "first",
+        "last",
+        "waiting",
+        "failed"
+      ],
       "scenes": [
         {
           "package": "data-composed-direction-c",
@@ -1974,11 +2059,11 @@
       "apps/web/src/components/DataQualityCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/PlatformDataCenter.vue": "73f961e34f708defa5ab73cf2e03c349e8b58e8369a399ca80cbb98ad15d8b5f",
+      "apps/web/src/components/PlatformDataCenter.vue": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
       "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
-      "apps/web/src/components/ResponsiveDataView.vue": "52738f13651a70aab3601928e163fe32fb88cc992d0b09dfe67297754e44b39c",
-      "apps/web/src/components/ResponsiveFilterDrawer.vue": "a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011",
-      "apps/web/src/components/TableViewControls.vue": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+      "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
+      "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+      "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
       "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
       "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
@@ -2311,5 +2396,6 @@
   "limits": [
     "58位置/18组为两个局部Vue明示作用域，不替代旧静态关联候选或全站语义分母。",
     "所有source/scene引用是审阅依据，不授予审批，不宣称真实API/SQL/审计/下载/部署完成。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }

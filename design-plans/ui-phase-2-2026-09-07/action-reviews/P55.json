@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "pageId": "P55",
   "route": "/platform-admin/governance",
-  "status": "source-reviewed-not-user-approved",
+  "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformGovernanceCenter.vue": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048"
+    "apps/web/src/components/PlatformGovernanceCenter.vue": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
   },
   "implementationSourceHashes": {
     "apps/web/src/components/ResponsiveDataView.vue": "739ac85b109ec7c2557909d1f267d1b67a8384aa385afb80f2fd512502d17f7a",
@@ -18,7 +18,10 @@
     "reason": "一处共享手机详情、一处原生桌面详情和一处响应式筛选；共享组件内部按钮不重复计为P55局部候选。"
   },
   "inputs": {
-    "governance": ["queryDraft", "statusDraft"]
+    "governance": [
+      "queryDraft",
+      "statusDraft"
+    ]
   },
   "actions": [
     {
@@ -76,7 +79,10 @@
       ],
       "condition": "桌面目录底部或手机记录区后显示",
       "handler": "RouterLink固定到/platform-admin/providers",
-      "variants": ["desktop", "mobile"],
+      "variants": [
+        "desktop",
+        "mobile"
+      ],
       "scenes": [
         {
           "package": "governance-direction-c",
@@ -111,7 +117,13 @@
       ],
       "condition": "头部刷新在读取中禁用；首次失败非loading时显示重试",
       "handler": "load GET /platform/management?domain=governance；代次隔离并保留成功快照",
-      "variants": ["refresh", "retry", "first-error", "retained-error", "reactivation"],
+      "variants": [
+        "refresh",
+        "retry",
+        "first-error",
+        "retained-error",
+        "reactivation"
+      ],
       "scenes": [
         {
           "package": "governance-direction-c",
@@ -156,7 +168,12 @@
       ],
       "condition": "顶部入口按目标分类；行、手机详情和桌面详情按成功快照recordSection",
       "handler": "RouterLink；自动化行附rule与action=edit，其余使用分类固定href",
-      "variants": ["target-header", "desktop-row", "mobile-detail", "desktop-dialog"],
+      "variants": [
+        "target-header",
+        "desktop-row",
+        "mobile-detail",
+        "desktop-dialog"
+      ],
       "scenes": [
         {
           "package": "governance-direction-c",
@@ -197,7 +214,14 @@
       ],
       "condition": "筛选依当前分类；读取中锁定，重置仅在存在草稿或已应用条件时可用",
       "handler": "ResponsiveFilterDrawer；applyFilters/resetFilters规范化草稿、回到第一页并读取",
-      "variants": ["drawer", "submit", "apply", "reset", "query", "status"],
+      "variants": [
+        "drawer",
+        "submit",
+        "apply",
+        "reset",
+        "query",
+        "status"
+      ],
       "scenes": [
         {
           "package": "governance-direction-c",
@@ -239,7 +263,13 @@
       ],
       "condition": "桌面行打开；selected存在时原生dialog显示",
       "handler": "selected赋值触发useModalDialog；顶部/底部按钮和cancel/Escape清除selected并返焦",
-      "variants": ["open", "native-dialog", "cancel", "top-close", "footer-close"],
+      "variants": [
+        "open",
+        "native-dialog",
+        "cancel",
+        "top-close",
+        "footer-close"
+      ],
       "scenes": [
         {
           "package": "governance-direction-c",
@@ -283,7 +313,11 @@
       ],
       "condition": "桌面行、手机详情和桌面原生详情中按记录显示",
       "handler": "原生details/summary；仅展开现有ID、版本等只读事实",
-      "variants": ["desktop-row", "mobile-detail", "desktop-dialog"],
+      "variants": [
+        "desktop-row",
+        "mobile-detail",
+        "desktop-dialog"
+      ],
       "scenes": [
         {
           "package": "governance-direction-c",
@@ -322,7 +356,14 @@
       ],
       "condition": "上一页在第1页禁用，下一页在末页禁用；读取中均锁定",
       "handler": "goToPage校验目标页后GET，服务端收束页码并更新URL",
-      "variants": ["previous", "next", "pending", "first", "last", "failed"],
+      "variants": [
+        "previous",
+        "next",
+        "pending",
+        "first",
+        "last",
+        "failed"
+      ],
       "scenes": [
         {
           "package": "governance-direction-c",
@@ -357,10 +398,12 @@
   ],
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
-    "files": ["apps/web/src/components/PlatformGovernanceCenter.vue"],
+    "files": [
+      "apps/web/src/components/PlatformGovernanceCenter.vue"
+    ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/PlatformGovernanceCenter.vue": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048"
+      "apps/web/src/components/PlatformGovernanceCenter.vue": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
     },
     "inputs": [
       {
@@ -507,5 +550,6 @@
   "limits": [
     "23个局部源位置归并8组，不把共享组件内部控件重复计入本页业务动作。",
     "本页没有写入动作；所有工作台链接仍由目标页权限独立约束。"
-  ]
+  ],
+  "visualApproval": "user-approved-remaining-pages-auto"
 }
