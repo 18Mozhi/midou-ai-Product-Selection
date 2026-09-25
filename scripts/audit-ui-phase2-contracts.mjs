@@ -172,7 +172,7 @@ const history = {
     ],
   },
   "runtime-resilience-contract-review.md": {
-    historicalSections: ["6. 历史源码指纹（LF SHA-256）"],
+    historicalSections: ["6. 历史源码指纹（LF SHA-256）", "P66旧身份归档", "P67旧身份归档"],
   },
 };
 

@@ -1478,6 +1478,7 @@ test("current P66 topology center maps all controls and isolates the old source 
       (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
     );
     assert.equal(record?.status, "identity-not-found", signature);
+    assert.equal(record?.temporalScope, "historical", signature);
   }
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
@@ -2506,6 +2507,13 @@ test("current P67 Redis center maps refresh and retry controls without promoting
   assert.equal(previousHash?.status, "hash-drift");
   assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
   assert.equal(report.denominatorFrozen, false);
+  for (const signature of ["99e387027e98dda9.1", "21c66441891be768.1", "6a87ca890e2cd293.1"]) {
+    const record = report.records.find(
+      (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
+    );
+    assert.equal(record?.status, "identity-not-found", signature);
+    assert.equal(record?.temporalScope, "historical", signature);
+  }
 });
 
 test("current P23 export jobs panel maps its three report-center navigation paths", () => {

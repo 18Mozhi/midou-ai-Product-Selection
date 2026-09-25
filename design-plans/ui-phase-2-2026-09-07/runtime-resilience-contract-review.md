@@ -92,16 +92,13 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 
 ## 5. 精确源码候选及实际语义
 
-候选由现有scanSource读取最终LF源码；四局部23项（11+4+4+4），共享2项，共25项，均为control。签名+序号不等于业务动作ID；循环实例、同义重试与共享调用方另按语义记录。五文件没有v-model、业务表单或模态定义/调用；progress为阅读指标，不在控件候选中，P69三种kind及名称/值由永久回归覆盖。
+本节早期候选清单供语义追溯；P66/P67刷新、重试与错误恢复以第7/8节当前映射为准，已替换的六个旧身份在文末显式归档。签名+序号不等于业务动作ID；循环实例、同义重试与共享调用方另按语义记录。五文件没有v-model、业务表单或模态定义/调用；progress为阅读指标，不在控件候选中，P69三种kind及名称/值由永久回归覆盖。
 
 ### apps/web/src/components/RuntimeTopologyCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/RuntimeTopologyCenter.vue#99e387027e98dda9.1 | 373 | control | RT66-LOAD：初读/顶部刷新，单飞GET |
-| apps/web/src/components/RuntimeTopologyCenter.vue#21c66441891be768.1 | 389 | control | RT66-RETRY：已有快照刷新失败重试 |
 | apps/web/src/components/RuntimeTopologyCenter.vue#5587941412d5210f.1 | 410 | control | RT66-LOGIN：expired才显示，/login跳转 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#6a87ca890e2cd293.1 | 411 | control | RT66-RETRY：首次错误重试，含forbidden |
 | apps/web/src/components/RuntimeTopologyCenter.vue#dac6cbc2991374ba.1 | 520 | control | RT66-PROCESS：last_failure原生披露 |
 | apps/web/src/components/RuntimeTopologyCenter.vue#1c45c779df2fcc7f.1 | 630 | control | RT66-QUEUES：只改本地showAllQueues |
 | apps/web/src/components/RuntimeTopologyCenter.vue#e41c915a9e93bf55.1 | 727 | control | RT66-POLICY：每个已显示队列原生披露 |
@@ -114,10 +111,7 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/RedisResilienceCenter.vue#99e387027e98dda9.1 | 192 | control | RD67-LOAD：顶部单飞GET |
-| apps/web/src/components/RedisResilienceCenter.vue#21c66441891be768.1 | 207 | control | RD67-RETRY：刷新失败重试 |
 | apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1 | 233 | control | RD67-LOGIN：expired登录 |
-| apps/web/src/components/RedisResilienceCenter.vue#6a87ca890e2cd293.1 | 234 | control | RD67-RETRY：首次错误重试 |
 
 ### apps/web/src/components/MySqlResilienceCenter.vue
 
@@ -224,3 +218,23 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 | apps/web/src/components/RedisResilienceCenter.vue | dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081 |
 
 第6节旧指纹仍标记历史；当前映射不代替真实 Redis、MySQL、权限、采样、宝塔进程或生产恢复验收。
+
+### P66旧身份归档
+
+以下三个早期页面动作尾键已被第7节当前映射替代，仅留档追溯。
+
+| candidateId | 旧行 | 语义 |
+| --- | ---: | --- |
+| apps/web/src/components/RuntimeTopologyCenter.vue#99e387027e98dda9.1 | 373 | RT66-LOAD 旧页头读取身份 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#21c66441891be768.1 | 389 | RT66-RETRY 旧快照失败重试身份 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#6a87ca890e2cd293.1 | 411 | RT66-RETRY 旧首次错误重试身份 |
+
+### P67旧身份归档
+
+以下三个早期页面动作尾键已被第8节当前映射替代，仅留档追溯。
+
+| candidateId | 旧行 | 语义 |
+| --- | ---: | --- |
+| apps/web/src/components/RedisResilienceCenter.vue#99e387027e98dda9.1 | 192 | RD67-LOAD 旧页头读取身份 |
+| apps/web/src/components/RedisResilienceCenter.vue#21c66441891be768.1 | 207 | RD67-RETRY 旧刷新失败重试身份 |
+| apps/web/src/components/RedisResilienceCenter.vue#6a87ca890e2cd293.1 | 234 | RD67-RETRY 旧首次错误重试身份 |
