@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "pageId": "P45",
+  "route": "/platform-admin/permissions",
+  "status": "source-reviewed-not-runtime-accepted",
+  "approval": "pending-user-review",
+  "actionApproval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
+  "contract": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+  "sourceHashes": {
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+    "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+  },
+  "inputs": {
+    "apps/web/src/components/PlatformAccountCenter.vue": ["query", "status"],
+    "apps/web/src/components/PlatformRoleComparison.vue": [
+      "compareLeft",
+      "compareRight",
+      "differencesOnly",
+      "capabilityQuery",
+      "capabilityGroup"
+    ]
+  },
+  "actions": [
+    {
+      "actionId": "PA45-ADMINS",
+      "label": "进入管理员管理",
+      "kind": "navigation",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#adcd96ea7cc90712.1"
+      ],
+      "sourceContractKeys": ["PA45-ADMINS 跳管理员管理"],
+      "contractAliasReason": "使用平台角色页面已有入口合同，不把导航升级为账号或角色授权动作。",
+      "condition": "平台角色权限页头部操作区可见",
+      "handler": "RouterLink导航到/platform-admin/admins，沿用既有路由守卫，不提交请求。",
+      "variants": ["header-link"],
+      "scenes": [{ "package": "permission-comparison-direction-c", "scene": "default" }],
+      "visualStates": {
+        "default": "not-applicable-navigation-only",
+        "hover": "not-applicable-navigation-only",
+        "focus": "not-applicable-navigation-only",
+        "pressed": "not-applicable-navigation-only",
+        "disabled": "not-applicable-navigation-only",
+        "busy": "not-applicable-navigation-only"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" },
+        { "file": "tests/unit/ui-phase2-p45-action-map.test.mjs", "evidenceType": "actual-vue-review-fixture" }
+      ],
+      "remaining": "本地路由回归不证明真实服务端RBAC或目标页访问授权。"
+    },
+    {
+      "actionId": "PA45-REFRESH",
+      "label": "读取、刷新或重试平台角色目录",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#bcd4023ebe5d9ca9.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#c4cfef52bcc169fb.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#c526b71b2b59e702.1"
+      ],
+      "sourceContractKeys": [
+        "PA45-REFRESH 刷新角色目录",
+        "PA45-REFRESH 角色首读错误重试",
+        "PA45-REFRESH 空角色目录重新检查"
+      ],
+      "contractAliasReason": "页头刷新、首读错误重试和成功空目录重试调用同一角色目录读取处理器，按一项读取意图归并。",
+      "condition": "角色页头始终可见；error/empty状态分别显示重新加载/重新检查；读取中按钮禁用。",
+      "handler": "调用既有load读取当前平台角色目录；保持原有角色API、超时、single-flight、快照与错误处理，不创建或修改角色。",
+      "variants": ["initial", "manual-refresh", "error-retry", "empty-retry", "busy", "refresh-error", "refresh-forbidden"],
+      "scenes": [
+        { "package": "permission-comparison-direction-c", "scene": "default" },
+        { "package": "permission-comparison-direction-c", "scene": "loading" },
+        { "package": "permission-comparison-direction-c", "scene": "empty" },
+        { "package": "permission-comparison-direction-c", "scene": "error" },
+        { "package": "permission-comparison-direction-c", "scene": "refreshing" },
+        { "package": "permission-comparison-direction-c", "scene": "refresh-error" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" },
+        { "file": "tests/m06-01/platform-accounts.test.mjs", "evidenceType": "actual-vue-local-interception" },
+        { "file": "tests/unit/ui-phase2-p45-action-map.test.mjs", "evidenceType": "actual-vue-review-fixture" }
+      ],
+      "remaining": "离线稿与本地拦截只证明前端处理路径，不证明真实角色数据、RBAC、MySQL或生产权限。"
+    },
+    {
+      "actionId": "PA45-RESET",
+      "label": "重置角色比较条件",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformRoleComparison.vue#e4a2fbf8875f3488.1"
+      ],
+      "sourceContractKeys": ["PA45-RESET 比较重置：P45清除查询参数并恢复固定默认角色；P44共享实例不写URL"],
+      "contractAliasReason": "角色比较组件被P44/P45复用；P45 persistSelection=true，P44为false，分别按各自路由合同核对。",
+      "condition": "角色比较已挂载；当前实现只在能力名称查询或分组条件非空时启用按钮。",
+      "handler": "清除能力搜索和分组、恢复运营/安全默认角色及只看差异；P45通过既有watch/router.replace同步URL，不调用角色写入API。",
+      "variants": ["default-disabled", "query-active", "group-active", "role-changed", "show-all", "reset"],
+      "scenes": [
+        { "package": "permission-comparison-direction-c", "scene": "default" },
+        { "package": "permission-comparison-direction-c", "scene": "reset-disabled" },
+        { "package": "permission-comparison-direction-c", "scene": "combined" },
+        { "package": "permission-comparison-direction-c", "scene": "url-restored" }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" },
+        { "file": "tests/unit/ui-phase2-p45-action-map.test.mjs", "evidenceType": "actual-vue-review-fixture" }
+      ],
+      "remaining": "静态映射不覆盖全部浏览器历史/KeepAlive生命周期、焦点/读屏状态；重置仅按现有搜索/分组规则启用。"
+    },
+    {
+      "actionId": "PA45-OUT-ACCOUNT-ENTRY",
+      "label": "非权限页组织/账号写入与列表刷新入口",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#1516ea5a6c3b1540.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1"
+      ],
+      "sourceContractKeys": [
+        "PA45-OUT-ACCOUNT-ENTRY P45不显示组织创建入口",
+        "PA45-OUT-ACCOUNT-ENTRY P45不显示用户/管理员创建入口",
+        "PA45-OUT-ACCOUNT-ENTRY P45不显示账号目录刷新入口"
+      ],
+      "contractAliasReason": "逐项依据平台中心条件分支区分组织创建、账号创建和用户目录刷新；P45页头只渲染权限专属操作。",
+      "condition": "permissionsRoute成立时由专属页头分支取代，以上入口均不渲染。",
+      "handler": "P45不触发组织/用户创建或用户列表读取；业务归属保留给P41/P43/P44。",
+      "variants": ["route-specific-excluded"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" },
+        { "file": "tests/unit/ui-phase2-p45-action-map.test.mjs", "evidenceType": "actual-vue-review-fixture" }
+      ],
+      "remaining": "排除只界定P45分支，不表示对应组织/账号页面动作或权限验收已完成。"
+    },
+    {
+      "actionId": "PA45-OUT-OTHER-ROUTES",
+      "label": "非权限页目录、组织向导、详情与账号弹窗接线",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#6f151cbab1f5518e.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#39ba950db197263c.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1"
+      ],
+      "sourceContractKeys": [
+        "PA45-OUT-OTHER-ROUTES 目录事件绑定仅用于非权限路由",
+        "PA45-OUT-OTHER-ROUTES 组织创建向导事件绑定仅归P41",
+        "PA45-OUT-OTHER-ROUTES 创建/改密/原因弹窗事件仅用于账号动作",
+        "PA45-OUT-OTHER-ROUTES 账号弹窗组件调用在权限路由不产生可达动作",
+        "PA45-OUT-OTHER-ROUTES 组织详情事件绑定仅归P42",
+        "PA45-OUT-OTHER-ROUTES 组织详情组件调用仅归P42",
+        "PA45-OUT-OTHER-ROUTES 用户详情事件绑定仅用于账号目录",
+        "PA45-OUT-OTHER-ROUTES 用户详情组件调用在权限路由不产生可达动作"
+      ],
+      "contractAliasReason": "账号目录、向导、用户/组织详情事件与弹窗只由非P45路由实际渲染；逐项列为路由适用性排除，不当作P45读写动作。",
+      "condition": "permissionsRoute分支替代目录模板；账号/组织弹窗均未打开且没有P45可达触发器。",
+      "handler": "P45不发送组织或账号写入，不打开这些弹窗；归属分别留给P41–P44共享源映射。",
+      "variants": ["route-specific-excluded"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" },
+        { "file": "tests/unit/ui-phase2-p45-action-map.test.mjs", "evidenceType": "actual-vue-review-fixture" }
+      ],
+      "remaining": "排除仅表示P45当前路由无这些入口；共享容器及其其他页面动作仍需各自审阅。"
+    }
+  ],
+  "dialogs": {
+    "kind": "local-callers-and-listed-shared-only",
+    "remaining": "P45没有可达的创建、编辑、原因或权限修改弹窗；共享账号弹窗由父组件定义但当前页面未触发，原生select与checkbox是浏览器控件。"
+  },
+  "surfaceReview": {
+    "status": "source-reviewed-not-runtime-accepted",
+    "files": [
+      "apps/web/src/components/PlatformAccountCenter.vue",
+      "apps/web/src/components/PlatformRoleComparison.vue"
+    ],
+    "dependencyHashes": {
+      "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+      "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+    },
+    "includeStructuralContainers": true,
+    "inputScope": "reviewed-subset-of-shared-source",
+    "inputs": [
+      { "file": "apps/web/src/components/PlatformRoleComparison.vue", "binding": "compareLeft", "meaning": "URL同步的左侧角色选择", "remaining": "保持当前角色目录选项与默认回退行为；浏览器历史/KeepAlive反向恢复仍待独立验收。" },
+      { "file": "apps/web/src/components/PlatformRoleComparison.vue", "binding": "compareRight", "meaning": "URL同步的右侧角色选择", "remaining": "允许同角色比较；不代表对账号实际角色进行授权或修改。" },
+      { "file": "apps/web/src/components/PlatformRoleComparison.vue", "binding": "differencesOnly", "meaning": "URL同步的只看差异开关", "remaining": "沿用show_all查询参数和本地比较计算。" },
+      { "file": "apps/web/src/components/PlatformRoleComparison.vue", "binding": "capabilityQuery", "meaning": "URL同步的能力名称/编码搜索", "remaining": "沿用最多80字符和既有匹配规则。" },
+      { "file": "apps/web/src/components/PlatformRoleComparison.vue", "binding": "capabilityGroup", "meaning": "URL同步的能力分组", "remaining": "沿用现有目录分组；不扩增权限数据。" }
+    ],
+    "containerScope": "reviewed-subset-of-shared-source",
+    "containers": [],
+    "sharedRemaining": [
+      "PlatformAccountCenter仍被P39-P44共享；其账号/组织模板、父级筛选字段和共享对话框消费者由对应页面合同覆盖，本映射不重复算作P45入口。",
+      "NavigationShell、P44 PlatformAccountGlobalRail、浏览器历史/KeepAlive与真实权限链不由此局部页面合同验收。"
+    ],
+    "remaining": "局部字段映射与候选排除不等于完整App生命周期、读屏或生产RBAC验收。"
+  },
+  "compositionGaps": [
+    "P45只读平台角色能力比较；选择角色、筛选和重置按现有五个query键恢复，不代表账号实际授权清单，也没有角色编辑或授权写操作。",
+    "全站视觉自动批准不提升actionApproval、完整控件状态、浏览器历史/KeepAlive、真实RBAC、MySQL或审计验收。",
+    "P45当前映射覆盖本页父组件和角色比较组件的16个扫描候选；NavigationShell与P44复用全局侧栏按共享壳层/其他路由范围单独核对。"
+  ]
+}

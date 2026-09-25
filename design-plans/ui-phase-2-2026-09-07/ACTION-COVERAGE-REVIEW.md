@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份605，旧表独有身份381。签名变化不等于增删业务能力。
-- 已具体语义对应47页/1017源位置/961组；其中路由动作758组，转发/容器关联103组，其余明确排除。其余26页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应48页/1017源位置/966组；其中路由动作761组，转发/容器关联103组，其余明确排除。其余25页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记47页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记48页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -58,7 +58,7 @@
 | [P42 组织详情](page-specs/P42.md) | 97 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P43 用户管理](page-specs/P43.md) | 97 | [39组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P44 管理员管理](page-specs/P44.md) | 97 | [44组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P45 角色权限](page-specs/P45.md) | 97 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P45 角色权限](page-specs/P45.md) | 97 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P46 来源设置](page-specs/P46.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P47 采集程序](page-specs/P47.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P48 热点来源](page-specs/P48.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -3770,6 +3770,43 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - P44复用P43已映射的用户详情、组织关系表单、新建/改密/原因窗；当前父级来源、P44管理员列表、全局侧栏和角色比较另行映射。
 - ResponsiveFilterDrawer、ResponsiveDataView与TechnicalDetails的完整消费者及容器状态仍需全局/浏览器层验收。
 - 自动视觉批准不提升动作审核、全状态、读屏、真实RBAC、MySQL或审计验收。
+
+## P45 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P45.json)：16个局部源位置 → 5组；0类写入，3组路由动作，0组转发/容器关联不重复计动作。已映射5/7个源码字段位置，0/0处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有12个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PA45-ADMINS 进入管理员管理 / navigation | 1处；header-link | [default · 1440](design/permission-comparison-direction-c/1440-default.png) / [default · 390](design/permission-comparison-direction-c/390-default.png)；其余见JSON | 本地路由回归不证明真实服务端RBAC或目标页访问授权。 |
+| PA45-REFRESH 读取、刷新或重试平台角色目录 / read | 3处；initial、manual-refresh、error-retry、empty-retry、busy、refresh-error、refresh-forbidden | [default · 1440](design/permission-comparison-direction-c/1440-default.png) / [default · 390](design/permission-comparison-direction-c/390-default.png)、[loading · 1440](design/permission-comparison-direction-c/1440-loading.png) / [loading · 390](design/permission-comparison-direction-c/390-loading.png)；其余见JSON | 离线稿与本地拦截只证明前端处理路径，不证明真实角色数据、RBAC、MySQL或生产权限。 |
+| PA45-RESET 重置角色比较条件 / local | 1处；default-disabled、query-active、group-active、role-changed、show-all、reset | [default · 1440](design/permission-comparison-direction-c/1440-default.png) / [default · 390](design/permission-comparison-direction-c/390-default.png)、[reset-disabled · 1440](design/permission-comparison-direction-c/1440-reset-disabled.png) / [reset-disabled · 390](design/permission-comparison-direction-c/390-reset-disabled.png)；其余见JSON | 静态映射不覆盖全部浏览器历史/KeepAlive生命周期、焦点/读屏状态；重置仅按现有搜索/分组规则启用。 |
+| PA45-OUT-ACCOUNT-ENTRY 非权限页组织/账号写入与列表刷新入口 / excluded | 3处；route-specific-excluded | ；其余见JSON | 排除只界定P45分支，不表示对应组织/账号页面动作或权限验收已完成。 |
+| PA45-OUT-OTHER-ROUTES 非权限页目录、组织向导、详情与账号弹窗接线 / excluded | 8处；route-specific-excluded | ；其余见JSON | 排除仅表示P45当前路由无这些入口；共享容器及其其他页面动作仍需各自审阅。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| PlatformRoleComparison.vue / compareLeft | URL同步的左侧角色选择 | 保持当前角色目录选项与默认回退行为；浏览器历史/KeepAlive反向恢复仍待独立验收。 |
+| PlatformRoleComparison.vue / compareRight | URL同步的右侧角色选择 | 允许同角色比较；不代表对账号实际角色进行授权或修改。 |
+| PlatformRoleComparison.vue / differencesOnly | URL同步的只看差异开关 | 沿用show_all查询参数和本地比较计算。 |
+| PlatformRoleComparison.vue / capabilityQuery | URL同步的能力名称/编码搜索 | 沿用最多80字符和既有匹配规则。 |
+| PlatformRoleComparison.vue / capabilityGroup | URL同步的能力分组 | 沿用现有目录分组；不扩增权限数据。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- P45只读平台角色能力比较；选择角色、筛选和重置按现有五个query键恢复，不代表账号实际授权清单，也没有角色编辑或授权写操作。
+- 全站视觉自动批准不提升actionApproval、完整控件状态、浏览器历史/KeepAlive、真实RBAC、MySQL或审计验收。
+- P45当前映射覆盖本页父组件和角色比较组件的16个扫描候选；NavigationShell与P44复用全局侧栏按共享壳层/其他路由范围单独核对。
+- PlatformAccountCenter仍被P39-P44共享；其账号/组织模板、父级筛选字段和共享对话框消费者由对应页面合同覆盖，本映射不重复算作P45入口。
+- NavigationShell、P44 PlatformAccountGlobalRail、浏览器历史/KeepAlive与真实权限链不由此局部页面合同验收。
 
 ## P54 局部动作与共享消费者
 

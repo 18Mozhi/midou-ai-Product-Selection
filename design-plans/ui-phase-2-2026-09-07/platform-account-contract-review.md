@@ -67,7 +67,7 @@
 | G:94 | 305725c44ab6a8ed.1 | control | PA42-CLOSE 页首关闭 |
 | G:165 | 1c008f867673db60.1 | control | PA42-TECH slug/UUID展开 |
 | G:193 | 02668382bdda9d3b.1 | control | PA42-CLOSE 页尾关闭 |
-| R | e4a2fbf8875f3488.1 | PA45-RESET 比较重置，P44共享但不写URL |
+| R | e4a2fbf8875f3488.1 | PA45-RESET 比较重置：P45清除查询参数并恢复固定默认角色；P44共享实例不写URL |
 
 ### 1.2 共享16候选及调用差异
 
@@ -425,3 +425,28 @@ P42 的当前逐候选动作映射见 `action-reviews/P42.json`。该页使用 `
 | apps/web/src/components/PlatformAccountDialogs.vue | 9ad3d7837ab53f7c.1 | PA43-PASSWORD 按钮进入原因窗 |
 
 该映射将native cancel、显式关闭、缺失列表重读、写后资料重读、三项字段输入、单次资料提交意图、技术详情、状态目标选择及共享原因处理分别归属；父子事件逐边连接且不重复计数。C方向视觉属于用户授权自动通过范围，但动作审查仍待单独签收；实际MySQL、RBAC、审计和M07-03验收不由源码映射证明。
+
+## 12. P45 平台角色权限逐页动作映射（2026-09-25）
+
+P45 的完整当前动作映射见 `action-reviews/P45.json`。权限路由复用 `PlatformAccountCenter.vue` 的父级加载与页面分支，并挂载 `PlatformRoleComparison.vue`；本节把角色目录读取、管理员导航、URL持久化的本页重置，以及同父组件中不可达的账号/组织动作逐项区分。共享目录侧栏不在P45权限分支挂载；用户、管理员详情与账号弹窗虽可能由共享父组件定义，也不会由本页触发。
+
+| 源别名 | 当前签名 | P45语义合同 |
+| --- | --- | --- |
+| C | adcd96ea7cc90712.1 | PA45-ADMINS 跳管理员管理 |
+| C | bcd4023ebe5d9ca9.1 | PA45-REFRESH 刷新角色目录 |
+| C | 280136c1a545dff9.1 | PA45-OUT-ACCOUNT-ENTRY P45不显示组织创建入口 |
+| C | 1516ea5a6c3b1540.1 | PA45-OUT-ACCOUNT-ENTRY P45不显示用户/管理员创建入口 |
+| C | 8f18fbff9e2c1c99.1 | PA45-OUT-ACCOUNT-ENTRY P45不显示账号目录刷新入口 |
+| C | c4cfef52bcc169fb.1 | PA45-REFRESH 角色首读错误重试 |
+| C | c526b71b2b59e702.1 | PA45-REFRESH 空角色目录重新检查 |
+| C | 8458edc51af426a6.1 | PA45-OUT-OTHER-ROUTES 目录事件绑定仅用于非权限路由 |
+| C | 5db731eeed33ba4f.1 | PA45-OUT-OTHER-ROUTES 组织创建向导事件绑定仅归P41 |
+| C | 2dcca5d38d8e9ea8.1 | PA45-OUT-OTHER-ROUTES 创建/改密/原因弹窗事件仅用于账号动作 |
+| C | 316b73a793573a29.1 | PA45-OUT-OTHER-ROUTES 账号弹窗组件调用在权限路由不产生可达动作 |
+| C | 6f151cbab1f5518e.1 | PA45-OUT-OTHER-ROUTES 组织详情事件绑定仅归P42 |
+| C | 39ba950db197263c.1 | PA45-OUT-OTHER-ROUTES 组织详情组件调用仅归P42 |
+| C | 39878a11789ae9ce.1 | PA45-OUT-OTHER-ROUTES 用户详情事件绑定仅用于账号目录 |
+| C | cab997ead119619a.1 | PA45-OUT-OTHER-ROUTES 用户详情组件调用在权限路由不产生可达动作 |
+| R | e4a2fbf8875f3488.1 | PA45-RESET 比较重置：P45清除查询参数并恢复固定默认角色；P44共享实例不写URL |
+
+映射仅核对当前路由源码和本地测试/图册；角色数据的真实授权、MySQL语义、跨页历史/KeepAlive、辅助技术和正式M07-03仍须独立验收。`visualApproval` 自动通过不改变 `actionApproval=pending-user-review`。

@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-25 · P45 权限页逐动作映射与双端回归
+
+新增 P45 `/platform-admin/permissions` 动作映射，核对 `PlatformAccountCenter.vue` 与 `PlatformRoleComparison.vue` 共16个当前扫描候选：3个页面动作组（管理员导航、角色目录读/重试、本地比较重置）与2个非权限路由排除组。显式记录五个比较字段的URL同步；重置保留P45 `router.replace` 行为并纠正合同中与P44共享实例混淆的表述。新增永久合同单测2/2通过，权限页桌面Chromium及390px手机相关E2E共10/10通过；全站动作审计为48/73页已逐项映射、25页未映射、action-approved 0/73；源码合同审计34文档/231源文件/1,701候选全引用、73页规格无问题，另有33条既有行号漂移。仅文档、映射与测试，不改P45运行时代码/API/RBAC/数据库/配置，不部署或重启；本地夹具不证明真实角色授权、MySQL或M07-03验收。
+
 ## 2026-09-25 · P60 当前部署与资源预算事实复核
 
 线上只读核验 `/platform-admin/open-platform` 深链、`OpenPlatformCenter` JS/CSS 均 HTTP 200，资源 SHA-256 与本地当前构建一致；live/ready/available/version 正常，build SHA 为 `bf65285830819b7d1989094e4437726fb5a07765`。`npm run verify:frontend-budget` 当前通过，202 个资源；Feature Map 旧的 129451/122880 与 52297/51200 预算数值已按当前实测纠正。仅更新交付事实文档，没有 P60 运行时代码/API/RBAC/数据库或外部投递变更；无需重新部署。正式 M07-03 证据、真实 MySQL/RBAC/加密及回调投递仍需独立验收。
