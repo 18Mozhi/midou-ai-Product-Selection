@@ -151,7 +151,7 @@ const history = {
     historicalSections: ["7. 历史源指纹（LF SHA-256）"],
   },
   "commercial-security-open-platform-contract-review.md": {
-    historicalSections: ["6. 来源指纹与证据边界"],
+    historicalSections: ["6. 来源指纹与证据边界", "OpenPlatformCenter"],
   },
   "log-backup-release-contract-review.md": {
     historicalSections: [

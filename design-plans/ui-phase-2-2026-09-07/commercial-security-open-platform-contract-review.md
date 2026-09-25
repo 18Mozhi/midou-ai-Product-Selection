@@ -196,9 +196,6 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | e70a65ac56ee311f.1 | 497 | control | OP60-SECRET 安全保存后清除 |
 | 1c008f867673db60.1 | 503 | control | OP60-TECH 请求详情 |
 | 5367bd616a3abe62.1 | 529 | control | OP60-LOAD 首读错误重试 |
-| c66242089e076803.1 | 534 | control | OP60-VIEW Client |
-| 0c7b10d8381ec4f6.1 | 546 | control | OP60-VIEW Webhook |
-| c3276c76b4b63985.1 | 555 | control | OP60-VIEW 投递 |
 | b70e50f696b891f1.1 | 620 | event-binding | OP60-EVENT 四事件checkbox转发 |
 | 7a625f6edefd5043.1 | 637 | control | OP60-NEW 两类创建转确认 |
 | a67ea3327ba9afd7.1 | 659 | control | OP60-LOAD 刷新 |
@@ -228,6 +225,16 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | 266a3696f502c16e.1 | 1060 | control | OP60-PAGE 下一页 |
 | 7dff4b4ffb8ff617.1 | 1072 | event-binding | OP60-CONFIRM 确认/取消事件转发 |
 | 0e765674026efce4.1 | 1072 | dialog-component-call | OP60-CONFIRM 共享组件调用候选 |
+
+### OpenPlatformCenter
+
+以下三个早期视图控件身份已由第7节当前源码表中的 `OP60-CURRENT-VIEW` 记录取代；保留其语义线索，但不计入当前身份覆盖。
+
+| 签名.序号 | 行 | 类型 | 历史语义 |
+| --- | ---: | --- | --- |
+| c66242089e076803.1 | 534 | control | OP60-VIEW Client |
+| 0c7b10d8381ec4f6.1 | 546 | control | OP60-VIEW Webhook |
+| c3276c76b4b63985.1 | 555 | control | OP60-VIEW 投递 |
 
 | v-model字段 | 行 | 元素 |
 | --- | --- | --- |

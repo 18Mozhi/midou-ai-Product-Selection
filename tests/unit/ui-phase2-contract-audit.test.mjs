@@ -1102,14 +1102,23 @@ test("current open platform map binds live operations and keeps old hash history
     assert.equal(record.recordedLine, record.currentLine, record.candidateId);
     assert.ok(record.recordedKind, record.candidateId);
   }
-  const staleRows = report.records.filter(
+  const historicalRows = report.records.filter(
     (record) =>
       record.document.endsWith(document) &&
       record.sourceFile === file &&
-      record.temporalScope !== "historical" &&
-      record.currentLine === null,
+      record.temporalScope === "historical" &&
+      ["c66242089e076803.1", "0c7b10d8381ec4f6.1", "c3276c76b4b63985.1"].includes(record.signature),
   );
-  assert.equal(staleRows.length, 3);
+  assert.equal(historicalRows.length, 3);
+  assert.ok(historicalRows.every((record) => record.currentLine === null));
+  assert.ok(
+    currentRecords.some(
+      (record) =>
+        record.claim.includes("OP60-CURRENT-VIEW") &&
+        record.currentLine !== null &&
+        record.status === "identity-current",
+    ),
+  );
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
