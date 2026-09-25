@@ -15,14 +15,7 @@
 | U | 1c008f867673db60.1 | PA43-TECH 移动技术信息展开 |
 | V | 316970a74be81a74.1 | 用户详情原生dialog定义 |
 | V | c396c48b2557ec90.1 | PA43-DETAIL Escape取消 |
-| V | 1070c07ce059b6fa.1 | PA43-DETAIL 页首关闭 |
 | V | 2964730aa12dbf82.1 | PA43-MEMBERSHIP 子表单提交转发 |
-| V | 16892f77d1719620.1 | PA43-SESSION 单会话撤销 |
-| V | 3d1d03659c4b6766.1 | PA43-ROLE 三角色各授予/撤销，共六变体 |
-| V | 5477852d3db05f5c.1 | PA43-STATUS 停用/恢复登录 |
-| V | eca5d0ed53a62ef0.1 | PA43-PASSWORD 打开改密 |
-| V | f3c55863d4631fd4.1 | PA43-SESSION 全部撤销 |
-| V | d7deda0f60ef7bb1.1 | PA43-DETAIL 页尾关闭 |
 | V | 2a92366d39ac198e.1 | PA43-DETAIL 错误重试 |
 | V | 02668382bdda9d3b.1 | PA43-DETAIL 错误关闭 |
 | A | 96a5d8f14ce43590.1 | 新建用户原生dialog定义 |
@@ -73,6 +66,20 @@
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformUserDetailDialog.vue | 87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a |
+
+### PA43旧用户详情身份归档
+
+以下七条旧用户详情按钮身份已由1.1节当前源码映射替代，仅保留追溯，不计当前覆盖。
+
+| source | signature | 旧语义 |
+| --- | --- | --- |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 1070c07ce059b6fa.1 | PA43-DETAIL 旧页首关闭 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 16892f77d1719620.1 | PA43-SESSION 旧单会话撤销 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 3d1d03659c4b6766.1 | PA43-ROLE 旧角色授予/撤销 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 5477852d3db05f5c.1 | PA43-STATUS 旧停用/恢复登录 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | eca5d0ed53a62ef0.1 | PA43-PASSWORD 旧打开改密 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | f3c55863d4631fd4.1 | PA43-SESSION 旧全部会话撤销 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | d7deda0f60ef7bb1.1 | PA43-DETAIL 旧页尾关闭 |
 
 ## 2. 父级动作与真实写入
 

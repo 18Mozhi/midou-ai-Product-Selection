@@ -117,6 +117,9 @@ const defaults = {
 };
 // Explicit pre-fix snapshots or superseded location tables retained by the source documents.
 const history = {
+  "platform-user-design-contract.md": {
+    historicalSections: ["PA43旧用户详情身份归档"],
+  },
   "account-home-contract-review.md": {
     historicalSections: ["2. 51 个局部控件候选（历史源码快照）"],
   },

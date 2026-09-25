@@ -686,6 +686,7 @@ test("current platform user detail map covers all live sites without trusting st
       record.status === "identity-not-found",
   );
   assert.equal(staleRows.length, 7);
+  assert.ok(staleRows.every((record) => record.temporalScope === "historical"));
   const claims = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
