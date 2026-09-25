@@ -400,3 +400,28 @@ P41 的完整页面级逐候选映射见 `action-reviews/P41.json`。当前范�
 | P41下一步、上一步、取消和原生 cancel | `PA41-NEXT`、`PA41-BACK`、`PA41-CANCEL` | 原生有效性下一步、返回清错、按钮/Escape返回P40 |
 
 映射只说明当前源码动作边界。用户已授权的视觉自动通过独立记录在 `DESIGN-REVIEW-INDEX.md`；`P41.json` 保持 `actionApproval=pending-user-review`，不声称真实事务、MySQL、RBAC、审计或 M07-03 通过。
+
+## 11. P42 组织详情逐页动作映射（2026-09-25）
+
+P42 的当前逐候选动作映射见 `action-reviews/P42.json`。该页使用 `PlatformOrganizationDetailDialog.vue` 与父级 `PlatformAccountCenter.vue`；保存、停用和恢复沿用当前父级原因窗口及请求所有者。共享 `PlatformAccountDialogs.vue` 中的用户创建和密码重置明确排除，不能因为同一实例挂载就计入P42。
+
+| 当前源文件 | 当前签名 | 合同语义 |
+| --- | --- | --- |
+| apps/web/src/components/PlatformAccountDialogs.vue | 8cb5dc651024abe9.1 | PA42-REASON 共享原生原因窗定义 |
+| apps/web/src/components/PlatformAccountDialogs.vue | bd4ff44ef0d1442c.1 | PA42-REASON Escape取消 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 4a0496f0cb3d6338.1 | PA42-REASON form提交父级确认 |
+| apps/web/src/components/PlatformAccountDialogs.vue | b313681d9ad25f0e.1 | PA42-REASON 原因文本向父级更新事件 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 07d6870e96868709.1 | PA42-REASON 按钮取消 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 7819d63c0a94ede2.1 | PA42-REASON 确认按钮 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 96a5d8f14ce43590.1 | PA43-CREATE 原生dialog定义 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 9e8b9d6531d0203d.1 | PA43-CREATE Escape取消 |
+| apps/web/src/components/PlatformAccountDialogs.vue | f76649b0950ec968.1 | PA43-CREATE form提交 |
+| apps/web/src/components/PlatformAccountDialogs.vue | c3a13fcf7d0fc151.1 | PA43-CREATE 按钮取消 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 472f3632b99eae63.1 | PA43-CREATE 按钮提交 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 0a0c76ebc577d650.1 | PA43-PASSWORD 原生dialog定义 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 04769fc3148b559f.1 | PA43-PASSWORD Escape取消 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 22727b212f0b7505.1 | PA43-PASSWORD form提交到原因窗 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 0fbdc8b9a1396e9c.1 | PA43-PASSWORD 按钮取消 |
+| apps/web/src/components/PlatformAccountDialogs.vue | 9ad3d7837ab53f7c.1 | PA43-PASSWORD 按钮进入原因窗 |
+
+该映射将native cancel、显式关闭、缺失列表重读、写后资料重读、三项字段输入、单次资料提交意图、技术详情、状态目标选择及共享原因处理分别归属；父子事件逐边连接且不重复计数。C方向视觉属于用户授权自动通过范围，但动作审查仍待单独签收；实际MySQL、RBAC、审计和M07-03验收不由源码映射证明。
