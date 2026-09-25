@@ -339,7 +339,7 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/OrganizationCreationWizard.vue | 06f42856f4bd044703b7859d8218f2adf52ac3ae6d6ed66e30139f58067ae8b3 |
+| apps/web/src/components/OrganizationCreationWizard.vue | 6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53 |
 
 ## 9. P39 PlatformAccountCenter 当前刷新与目录接线（2026-09-24）
 
@@ -347,9 +347,9 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1 | 688 | control | P39-ACCOUNT-CURRENT-REFRESH / PA-REFRESH；页头账号目录读取，刷新中或写入繁忙时禁用 |
-| apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1 | 731 | event-binding | P39-ACCOUNT-CURRENT-WIRING / PA-REFRESH-WIRING；将目录子组件的 load 意图连接到父级既有读取处理，不另计读取动作 |
+| apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1 | 689 | control | P39-ACCOUNT-CURRENT-REFRESH / PA-REFRESH；页头账号目录读取，刷新中或写入繁忙时禁用 |
+| apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1 | 732 | event-binding | P39-ACCOUNT-CURRENT-WIRING / PA-REFRESH-WIRING；将目录子组件的 load 意图连接到父级既有读取处理，不另计读取动作 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformAccountCenter.vue | 8a7e30587dbf1118b3b655e529a59b2a610f126e188410127dd301fbe4008204 |
+| apps/web/src/components/PlatformAccountCenter.vue | eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213 |

@@ -491,7 +491,7 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
   assert.ok(oldMappingRows.every((record) => record.temporalScope === "historical"));
   assert.equal(
     oldMappingRows.filter((record) => record.status === "identity-not-found").length,
-    75,
+    81,
   );
   for (const [name, firstCurrentLine] of [
     ["CredentialAssetCenter.vue", 255],
