@@ -78,18 +78,10 @@
 | O:660c7a198b93551d.1 | control / 972 | CL52-BATCH / 安全重放区展开 |
 | O:9ebd065e5010fd46.1 | control / 1022 | CL52-DEAD / 链接单任务详情重放 |
 | O:1c008f867673db60.4 | control / 1026 | CL52-DEAD / 技术详情 |
-| R:9dee0a9f3983a0d5.1 | control / 278 | CL53-LOAD / 刷新 |
-| R:f2f6bbdea261f58a.1 | control / 281 | CL53-RECOVER / 过期回收确认 |
 | R:25af292333a00121.1 | event-binding / 291 | CL53-LOAD / 状态面primary |
 | R:a9a0bd7b83bfaa17.1 | control / 374 | CL53-RENEW / blocked_login任务链接 |
 | R:cbea42c5b9e6a6b3.1 | form-event / 388 | CL53-FILTER / applyFilters |
-| R:36c7b60823abfadf.1 | control / 410 | CL53-FILTER / 原生submit |
-| R:2f1b49bdefe2e793.1 | control / 411 | CL53-FILTER / resetFilters |
 | R:1c008f867673db60.1 | control / 500 | CL53-DETAIL / 移动技术展开 |
-| R:053cd828dd3324d8.1 | control / 532 | CL53-PAGE / 前页 |
-| R:b7a08810a69e9930.1 | control / 540 | CL53-PAGE / 后页 |
-| R:44209f4edee14e6e.1 | event-binding / 552 | CL53-RECOVER / cancel、recover |
-| R:4806dd12035653ce.1 | dialog-component-call / 552 | CL53-RECOVER / 全局过期集合确认 |
 
 ## 3. 输入绑定和弹窗变体
 
@@ -294,7 +286,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 ## 9. P53 CollectionRuntimeCenter 当前源码增量（2026-09-24）
 
-第2节R表中的4个仍存在身份继续沿用既有语义并由审计器标为line-moved；8个已不存在的旧签名保留追溯且不抵扣当前覆盖。本节补齐 `CollectionRuntimeCenter.vue` 当前另外8个位置。回收入口打开确认窗而非直接POST；筛选重置、分页及原生技术披露分别按当前实现登记。旧合同中的全局过期租约回收范围、结果未知后禁止重提、服务端授权及幂等语义保持不变。
+第2节R表中的4个仍存在身份继续沿用既有语义并由审计器标为line-moved；第9.2节归档8个已不存在的旧签名且不抵扣当前覆盖。本节补齐 `CollectionRuntimeCenter.vue` 当前另外8个位置。回收入口打开确认窗而非直接POST；筛选重置、分页及原生技术披露分别按当前实现登记。旧合同中的全局过期租约回收范围、结果未知后禁止重提、服务端授权及幂等语义保持不变。
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
@@ -310,3 +302,20 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 同一ConfirmDialog位置分别形成事件绑定和弹窗调用两个候选；因此本节8个候选落在7个不同源码位置。当前LF指纹仍以第8节对应文件行绑定，不重复制造哈希声明。
 
 以上仅为源位置和既有合同的静态对账，不是确认回收的真实端到端测试，也不改变生产爬虫运行态或部署状态。
+
+### 9.2 P53已替代的旧R身份（历史）
+
+以下第2节早期R签名已不在当前源码，现行12个候选由第9节当前表逐项覆盖。交叉索引只表示相关入口/处理边界；源码改为先开确认窗，不能将旧直接操作身份解释为等价运行证据。
+
+#### CollectionRuntimeCenter.vue
+
+| 旧candidateId | 旧源码位置 / 类型 | 原始语义 | 当前候选交叉索引 |
+| --- | --- | --- | --- |
+| R:9dee0a9f3983a0d5.1 | control / 278 | CL53-LOAD / 刷新 | #b3aff7d1ec82177c.1 / CL53-CURRENT-LOAD |
+| R:f2f6bbdea261f58a.1 | control / 281 | CL53-RECOVER / 过期回收确认 | #7287ecd28dcaceb5.1 / CL53-CURRENT-RECOVER，现为打开确认窗 |
+| R:36c7b60823abfadf.1 | control / 410 | CL53-FILTER / 原生submit | #764f755fb3d8ba7c.1 / CL53-CURRENT-FILTER |
+| R:2f1b49bdefe2e793.1 | control / 411 | CL53-FILTER / resetFilters | #06482162d2eef909.1 / CL53-CURRENT-FILTER |
+| R:053cd828dd3324d8.1 | control / 532 | CL53-PAGE / 前页 | #7219dcd9d87bc4b0.1 / CL53-CURRENT-PAGE |
+| R:b7a08810a69e9930.1 | control / 540 | CL53-PAGE / 后页 | #28a360589b0e3c7f.1 / CL53-CURRENT-PAGE |
+| R:44209f4edee14e6e.1 | event-binding / 552 | CL53-RECOVER / cancel、recover事件 | #b917496c3d588d7b.1 / CL53-CURRENT-RECOVER |
+| R:4806dd12035653ce.1 | dialog-component-call / 552 | CL53-RECOVER / 全局过期集合确认窗 | #bc8824b8df3a0c77.1 / CL53-CURRENT-RECOVER |

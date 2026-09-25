@@ -131,6 +131,7 @@ const history = {
       "7. 来源指纹",
       "8.1 P52已替代的旧O身份（历史）",
       "9.1 P51详情状态与关闭旧身份归档",
+      "9.2 P53已替代的旧R身份（历史）",
     ],
   },
   "content-notification-evidence-contract-review.md": {

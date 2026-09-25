@@ -1263,11 +1263,12 @@ test("current P53 runtime center reconciles all candidates and retains stale ide
     (record) =>
       record.document.endsWith(document) &&
       record.sourceFile === file &&
-      record.temporalScope !== "historical" &&
+      record.temporalScope === "historical" &&
       record.currentLine === null,
   );
   assert.equal(staleRows.length, 8);
   assert.ok(staleRows.every((record) => record.status === "identity-not-found"));
+  assert.ok(staleRows.every((record) => record.recordedLine !== null));
   const claims = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
