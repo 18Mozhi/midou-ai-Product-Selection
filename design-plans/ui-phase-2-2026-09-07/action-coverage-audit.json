@@ -260,7 +260,7 @@
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "e92899302297a5b0ac4c41aa58abe8e51a353f0c8edf42bc2bcb5dec05da857e",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
-    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "f1bec1a82b90a86e0606bffb9dbca8e711eaee83c3146c5e4e705e1720a2a857",
+    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "7afb7bb803124d45dfd69908575a221aa57b7eb62ccda019c96bf54389c4bc55",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "e15b64fe4d46d8d63f06f47c86b5ab9e504c840a4ecfd994c2f58b88233a86c6",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "458a1816ede8758e1c5579c7e86d08ed0e2a6677625eb513662fc48f0c1e6bb1",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
@@ -546,6 +546,8 @@
     "tests/unit/ui-phase2-p65-action-review.test.mjs": "7f02bf53e9a207961682fb575679af0832611507597b4bf3bf8d46f5e8412494",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P66.json": "61e1ee33e2bd3eefd68ccbc0281eb176e99873de38e5646e81b3684ca3837483",
     "tests/unit/ui-phase2-p66-action-review.test.mjs": "1a65f98a1262a4991353979572dd6cecf847e9a4b76674532d5dab927eef6202",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P67.json": "9ec178eae6cc6c643868e1a0c7cddeacab1a43c7520a80ab96c2e02b0d106af4",
+    "tests/unit/ui-phase2-p67-action-review.test.mjs": "1f5a0f81ee4ed4f015007de6b0f5a6a378b90e6b3fa03a5b90430227b19ba09b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -612,7 +614,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "97bfa7b985c4245c83f2bb86c2719766431d075601a3dc57219dafcf6787ed01",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "6484a40709152db9e56130c2311cb0966fa4871c770c0e80ed64794e8e1ff033",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "44625ac8f1344573a748a094e242d3c55c09e6f473f7a9c2af3d00442161ccf3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "b8179a19edc86714bd88b31e38eb499d9614a5b8fb2eaf1a888592d325a3f7e3",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "ca3ee2177c96cb2f8da0e3e8e18263f4f389187c62e26f35f064ae1f48529ba8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "b8cee964d50e40f6f87c2f2e867476f12cd022cb6442e0ab4cf07fd1dd551553",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "e1d459e00227acafabe8c8605fad1b0b84e15c154d074c77984f0dcbe4ddedd9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "3ebf9ddfc3f3f904fd1b49292af6f5fd1d5acf5c8714202051275f02e6fd0640",
@@ -632,13 +634,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 66,
-    "explicitlyGroupedSourceSites": 1497,
-    "semanticGroups": 1242,
-    "routeActions": 1020,
+    "reviewedPages": 67,
+    "explicitlyGroupedSourceSites": 1501,
+    "semanticGroups": 1245,
+    "routeActions": 1023,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P67",
       "P68",
       "P69",
       "P70",
@@ -648,7 +649,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 66,
+    "visualApprovedReviewedPages": 67,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3517,13 +3518,42 @@
       "path": "/platform-admin/redis",
       "title": "Redis 运行",
       "oldStaticAssociatedCandidates": 36,
-      "review": null,
+      "review": {
+        "pageId": "P67",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 4,
+        "semanticGroups": 3,
+        "routeActions": 3,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 0,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 18,
+        "surfaces": {
+          "callerFiles": 1,
+          "localModelBindings": 0,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 1,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "redis-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P67当前仅4个页面本地候选：读取/两类重读/登录；共享TechnicalDetails的三个追踪消费者按相应快照或失败ID区分。",
+        "无重启、恢复、清键、连接信息复制或配置变更按钮；告警提示仅文本，不自动执行。",
+        "探针失败的零值是未知/占位，不是实测健康；采样、持久化与整体韧性结果互不替代。"
+      ]
     },
     {
       "id": "P68",
@@ -5312,6 +5342,32 @@
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 72,
+      "surfaces": {
+        "callerFiles": 1,
+        "localModelBindings": 0,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P67",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 4,
+      "semanticGroups": 3,
+      "routeActions": 3,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 0,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 18,
       "surfaces": {
         "callerFiles": 1,
         "localModelBindings": 0,
@@ -55212,7 +55268,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P67",
+          "actionId": "RD67-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RedisResilienceCenter.vue#a93553a3ba9aa8a6.1",
@@ -55236,7 +55298,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P67",
+          "actionId": "RD67-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1",
@@ -55266,7 +55334,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P67",
+          "actionId": "RD67-LOGIN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RedisResilienceCenter.vue#d45ddc5db7a2701f.1",
@@ -55294,7 +55368,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P67",
+          "actionId": "RD67-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#2e6f5b1858278d74.1",

@@ -244,3 +244,9 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 `action-reviews/P66.json`将 `RuntimeTopologyCenter.vue` 当前16个候选归入刷新、四个页内区段、失败重读/登录、最近失败与重启观测、队列本地视图、策略/状态文件/告警/阻断披露及关联对象导航。重复出现的 `RT66-CURRENT-*`合同尾键仍按当前路径和实际源控件分别归组；旧身份表继续保留供历史追溯。
 
 页面只读、披露及导航动作不扩大到进程重启、任务调度、告警清除或状态文件修复。`queue.showAllQueues`仅本地切换。记录此归组不证明真实平台权限、MySQL审计、OS进程/探测或M08-01正式生产验收。
+
+## 10. P67 Redis运行当前页面动作映射（2026-09-26）
+
+`action-reviews/P67.json`将 `RedisResilienceCenter.vue` 当前4个局部候选映射为读取、两类错误重读和expired登录。三个 `TechnicalDetails` 调用点继续使用共享技术详情/复制合同，并分别归属快照读取或当前失败读取编号；旧源身份保留在上方历史表，不参与当前映射。
+
+页面无Redis启停、恢复、清键、连接复制或配置写入；告警提示不自动执行。该归组不证明真实Redis探针、MySQL观测/审计、权限或M07-03正式验收。
