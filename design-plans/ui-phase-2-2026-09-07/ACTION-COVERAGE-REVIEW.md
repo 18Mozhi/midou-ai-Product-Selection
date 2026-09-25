@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份603，旧表独有身份379。签名变化不等于增删业务能力。
-- 已具体语义对应42页/938源位置/839组；其中路由动作675组，转发/容器关联84组，其余明确排除。其余31页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应45页/993源位置/878组；其中路由动作701组，转发/容器关联93组，其余明确排除。其余28页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记42页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记45页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -53,9 +53,9 @@
 | [P37 组织审计](page-specs/P37.md) | 155 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P38 平台概览](page-specs/P38.md) | 60 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P39 账号与组织](page-specs/P39.md) | 99 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P40 组织管理](page-specs/P40.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P41 创建组织](page-specs/P41.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P42 组织详情](page-specs/P42.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P40 组织管理](page-specs/P40.md) | 99 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P41 创建组织](page-specs/P41.md) | 99 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P42 组织详情](page-specs/P42.md) | 99 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P43 用户管理](page-specs/P43.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P44 管理员管理](page-specs/P44.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P45 角色权限](page-specs/P45.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -3295,6 +3295,225 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 本记录仅覆盖P39目录展示组件和组织记录消费者；不声明完整P39全页语义映射。
 - 页头创建/其他详情对话框、NavigationShell、角色比较和完整P40-P44路由变体仍需各自映射。
 - 用户已授权第二阶段剩余视觉方向自动通过；此语义台账不记录逐控件六态批准，也不替代真实权限/生产验收。
+
+## P40 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P40.json)：53个局部源位置 → 16组；1类写入，11组路由动作，4组转发/容器关联不重复计动作。已映射7/14个源码字段位置，6/10处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PA-ORG-CREATE 从组织目录进入创建组织 / navigation | 2处；page-header、unfiltered-empty-state | [list · 1440](design/platform-organizations-direction-c/1440-list.png) / [list · 390](design/platform-organizations-direction-c/390-list.png)、[empty · 1440](design/platform-organizations-direction-c/1440-empty.png) / [empty · 390](design/platform-organizations-direction-c/390-empty.png)；其余见JSON | 浏览器路由夹具证明入口目标；不代表P41创建表单、服务端写入或权限验收。 |
+| PA-USER-CREATE 从组织目录创建用户 / write | 3处；page-header-and-native-dialog | [create_user · 1440](design/account-overview-direction-c/1440-create_user.png) / [create_user · 390](design/account-overview-direction-c/390-create_user.png)、[create_busy · 1440](design/account-overview-direction-c/1440-create_busy.png) / [create_busy · 390](design/account-overview-direction-c/390-create_busy.png)；其余见JSON | 当前E2E覆盖P40弹窗打开；不能由本映射推定真实POST、RBAC、审计或生产创建已验收。 |
+| PA40-USER-CREATE-CANCEL 取消新建用户 / local | 1处；native-dialog-footer-cancel | [create_user · 1440](design/account-overview-direction-c/1440-create_user.png) / [create_user · 390](design/account-overview-direction-c/390-create_user.png)；其余见JSON | 本次源映射未声称所有输入草稿清除、真实辅助技术或生产会话行为通过。 |
+| PA40-USER-DIALOG-WIRING P40用户弹窗的父子事件接线 / wiring | 4处；create-user-dialog、shared-inactive-dialog-branches | [create_user · 1440](design/account-overview-direction-c/1440-create_user.png) / [create_user · 390](design/account-overview-direction-c/390-create_user.png)；其余见JSON | 接线登记不等于每个共享弹窗分支的字段/焦点/写入验收；P40只验当前可达用户创建分支。 |
+| PA-FILTER 查询并应用组织筛选 / read | 2处；desktop-inline-filter、mobile-filter-drawer | [filter · 1440](design/platform-organizations-direction-c/1440-filter.png) / [filter · 390](design/platform-organizations-direction-c/390-filter.png)、[filtered_empty · 1440](design/platform-organizations-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/platform-organizations-direction-c/390-filtered_empty.png)；其余见JSON | 现有夹具验证浏览器URL与读取参数，不证明真实MySQL过滤、权限或排序。 |
+| PA-RESET 清除组织筛选 / read | 2处；filter-bar-reset、filtered-empty-clear | [filtered_empty · 1440](design/platform-organizations-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/platform-organizations-direction-c/390-filtered_empty.png)；其余见JSON | 不外推浏览器完整历史栈、跨KeepAlive返回或真实服务端查询验收。 |
+| PA-REFRESH 刷新组织记录或重试首次读取 / read | 2处；manual-refresh、first-read-error-retry | [refreshing · 1440](design/platform-organizations-direction-c/1440-refreshing.png) / [refreshing · 390](design/platform-organizations-direction-c/390-refreshing.png)、[error · 1440](design/platform-organizations-direction-c/1440-error.png) / [error · 390](design/platform-organizations-direction-c/390-error.png)；其余见JSON | 读取错误/保留快照/过期/拒绝策略与真实网络、RBAC仍待独立验收。 |
+| PA40-WORKSPACE-WIRING 父级连接组织目录工作区 / wiring | 1处；organization-list-route | [list · 1440](design/platform-organizations-direction-c/1440-list.png) / [list · 390](design/platform-organizations-direction-c/390-list.png)；其余见JSON | 本组核对事件连接，不代表父级请求、角色权限和缓存/迟到结果已生产验收。 |
+| PA40-FILTER-DRAWER 移动筛选抽屉容器接线 / wiring | 1处；mobile-filter-drawer | [filter · 1440](design/platform-organizations-direction-c/1440-filter.png) / [filter · 390](design/platform-organizations-direction-c/390-filter.png)；其余见JSON | 焦点循环、触发器返焦、软键盘及共享抽屉其它消费者单独验收。 |
+| PA-ORG-DETAIL 从桌面记录或手机预览打开组织详情 / navigation | 2处；desktop-row、mobile-preview | [preview · 1440](design/platform-organizations-direction-c/1440-preview.png) / [preview · 390](design/platform-organizations-direction-c/390-preview.png)、[detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)；其余见JSON | 当前浏览器路由夹具不是P42编辑/状态操作、真实组织授权或KeepAlive历史验收。 |
+| PA40-ORG-DETAIL-WIRING 组织记录详情事件转发 / wiring | 1处；organization-records-component | [preview · 1440](design/platform-organizations-direction-c/1440-preview.png) / [preview · 390](design/platform-organizations-direction-c/390-preview.png)；其余见JSON | 事件接线可追到父处理器；不代表目标组织真实存在或P42写入获准。 |
+| PA-ORG-TECH 展开或收起组织技术标识 / local | 1处；mobile-preview-technical-details | [preview_technical · 1440](design/platform-organizations-direction-c/1440-preview_technical.png) / [preview_technical · 390](design/platform-organizations-direction-c/390-preview_technical.png)；其余见JSON | 图示和当前本地展开不证明读屏播报或真实长标识完整性。 |
+| PA-NAV-ORG 侧栏进入组织管理 / navigation | 1处；platform-directory-rail | [list · 1440](design/platform-organizations-direction-c/1440-list.png) / [list · 390](design/platform-organizations-direction-c/390-list.png)；其余见JSON | 只核对当前局部路由入口，不外推NavigationShell或全站角色可见性。 |
+| PA-NAV-USER 侧栏进入用户管理 / navigation | 1处；platform-directory-rail | [list · 1440](design/platform-organizations-direction-c/1440-list.png) / [list · 390](design/platform-organizations-direction-c/390-list.png)；其余见JSON | P43目标页数据、动作与权限另行映射。 |
+| PA-NAV-ADMIN 侧栏进入管理员管理 / navigation | 1处；platform-directory-rail | [list · 1440](design/platform-organizations-direction-c/1440-list.png) / [list · 390](design/platform-organizations-direction-c/390-list.png)；其余见JSON | P44目标页数据、动作与权限另行映射。 |
+| PA40-EXCLUDED-CONDITIONAL-BRANCHES 明确排除的其他路由和共享弹窗分支 / excluded | 28处；permissions、overview-refresh、P41、P42、P43、P44、password-dialog、reason-dialog | ；其余见JSON | 显式排除只界定P40；P41-P45页面及其写入/焦点状态仍待各自动作映射。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PA40-USER-DIALOG-WIRING | @close-create-user / closeCreateUser | PA40-USER-CREATE-CANCEL |
+| PA40-USER-DIALOG-WIRING | @create-user / createUser | PA-USER-CREATE |
+| PA40-USER-DIALOG-WIRING | @close-password / passwordOpen = false | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @reset-password / resetPassword | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @close-reason / cancelReason | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @submit-reason / submitReason | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @update:reason-text / reasonText = $event | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @close-create-user / closeCreateUser | PA40-USER-CREATE-CANCEL |
+| PA40-USER-DIALOG-WIRING | @create-user / createUser | PA-USER-CREATE |
+| PA40-USER-DIALOG-WIRING | @close-password / passwordOpen = false | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @reset-password / resetPassword | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @close-reason / cancelReason | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @submit-reason / submitReason | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @update:reason-text / reasonText = $event | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @cancel / handleCreateUserCancel | PA40-USER-CREATE-CANCEL |
+| PA40-WORKSPACE-WIRING | @apply-filters / applyFilters | PA-FILTER |
+| PA40-WORKSPACE-WIRING | @reset-filters / resetFilters | PA-RESET |
+| PA40-WORKSPACE-WIRING | @load / load | PA-REFRESH |
+| PA40-WORKSPACE-WIRING | @create-organization / openOrganizationWizard | PA-ORG-CREATE |
+| PA40-WORKSPACE-WIRING | @create-admin / openCreateUser(true) | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-WORKSPACE-WIRING | @open-organization / openOrganization | PA-ORG-DETAIL |
+| PA40-WORKSPACE-WIRING | @open-user / openUserDetail | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-FILTER-DRAWER | 容器定义，无额外事件 | PA-FILTER |
+| PA40-ORG-DETAIL-WIRING | @open-organization / emit('open-organization', $event) | PA-ORG-DETAIL |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| PlatformAccountCenter.vue / query | 父级组织查询草稿，参与原URL/GET合同 | 浏览器回退、KeepAlive与真实查询另验。 |
+| PlatformAccountCenter.vue / status | 父级组织状态草稿，空/active/archived沿用现有筛选 | 真实状态数据/RBAC另验。 |
+| PlatformAccountDialogs.vue / userForm.email | P40新建用户弹窗邮箱字段 | 服务端账户规则与真实创建另验。 |
+| PlatformAccountDialogs.vue / userForm.temporary_password | P40新建用户临时密码字段 | 真实凭证策略、显示与安全验收另行处理。 |
+| PlatformAccountDialogs.vue / userForm.platform_role_code | P40新建用户的平台角色选择 | 本地显示不证明服务端角色授权。 |
+| PlatformAccountDialogs.vue / userForm.organization_id | P40新建用户的组织归属选择 | 真实组织范围及后端归属另验。 |
+| PlatformAccountDialogs.vue / userForm.organization_role_code | P40新建用户的组织角色选择 | 写入和权限验收仍未完成。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| PlatformAccountDirectoryWorkspace.vue / ResponsiveFilterDrawer.1 / p40-mobile-filter | responsive-filter / related-scene-only | [filter · 1440](design/platform-organizations-direction-c/1440-filter.png) / [filter · 390](design/platform-organizations-direction-c/390-filter.png) | 真实软键盘、完整焦点循环和用户取消草稿仍待验。 |
+| PlatformAccountDirectoryWorkspace.vue / form.1 / p40-organization-filter-form | form-container / matching-inline-form-scene | [filter · 1440](design/platform-organizations-direction-c/1440-filter.png) / [filter · 390](design/platform-organizations-direction-c/390-filter.png) | 真实输入法、服务端边界与读屏逐字段验收仍待办。 |
+| PlatformAccountGlobalRail.vue / aside.1 / p40-platform-directory-rail | inline-aside / related-scene-only | [list · 1440](design/platform-organizations-direction-c/1440-list.png) / [list · 390](design/platform-organizations-direction-c/390-list.png) | 真实platform:superadmin授权与跨路由返回另验。 |
+| PlatformOrganizationRecords.vue / ResponsiveDataView.1 / p40-mobile-organization-preview | responsive-row-detail / matching-dialog-scene | [preview · 1440](design/platform-organizations-direction-c/1440-preview.png) / [preview · 390](design/platform-organizations-direction-c/390-preview.png) | 这里只核对P40记录和预览入口，不代替完整返回/KeepAlive。 |
+| PlatformAccountDialogs.vue / dialog.1 / p40-create-user-dialog | native-dialog / matching-dialog-scene | [create_user · 1440](design/account-overview-direction-c/1440-create_user.png) / [create_user · 390](design/account-overview-direction-c/390-create_user.png) | 完整表单验证、真实POST、失败恢复和生产授权仍待验。 |
+| PlatformAccountDialogs.vue / form.1 / p40-create-user-form | form-container / matching-inline-form-scene | [create_user · 1440](design/account-overview-direction-c/1440-create_user.png) / [create_user · 390](design/account-overview-direction-c/390-create_user.png) | 字段边界、原生校验与真实权限结果另验。 |
+
+### 明确保留的边界
+
+- 此文件对P40五个真实Vue源码作逐候选登记；过滤和记录六态尚未逐控件绑定到实际截图。
+- 新建用户弹窗证据是本地fixture/入口交互，不等于真实账户POST、角色授权或生产数据验收。
+- P41/P42/P43/P44与共享组件剩余消费者独立审阅，不由P40的条件排除或局部页面覆盖。
+- 共享ResponsiveFilterDrawer与ResponsiveDataView在P40只作消费者形态登记；焦点返回、软键盘、读屏及所有其他调用方未由此关闭。
+- PlatformAccountDialogs中的密码重置和共享原因窗按P43/P42条件排除；本页只纳入新建用户分支。
+- 全局壳、真实RBAC/MySQL、写入审计、服务端错误与生产验收均与本地候选映射分开。
+
+## P41 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P41.json)：25个局部源位置 → 9组；1类写入，6组路由动作，2组转发/容器关联不重复计动作。已映射3/5个源码字段位置，3/3处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有36个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PA41-OPEN 从组织目录页头进入新建组织向导 / navigation | 1处；organization-header-entry | [create · 1440](design/platform-organizations-direction-c/1440-create.png) / [create · 390](design/platform-organizations-direction-c/390-create.png)；其余见JSON | 路由入口验证不代表P41真实组织创建、角色授权或数据库事务通过。 |
+| PA41-NEXT 校验组织资料并进入管理员确认 / local | 1处；valid-inputs、invalid-inputs | [create_filled · 1440](design/platform-organizations-direction-c/1440-create_filled.png) / [create_filled · 390](design/platform-organizations-direction-c/390-create_filled.png)、[create_invalid · 1440](design/platform-organizations-direction-c/1440-create_invalid.png) / [create_invalid · 390](design/platform-organizations-direction-c/390-create_invalid.png)；其余见JSON | 原生校验和本地夹具不代表所有浏览器/输入法与读屏实测。 |
+| PA41-BACK 返回组织资料步骤 / local | 1处；back-from-confirmation | [create_confirm · 1440](design/platform-organizations-direction-c/1440-create_confirm.png) / [create_confirm · 390](design/platform-organizations-direction-c/390-create_confirm.png)、[create_filled · 1440](design/platform-organizations-direction-c/1440-create_filled.png) / [create_filled · 390](design/platform-organizations-direction-c/390-create_filled.png)；其余见JSON | 父表单保留草稿是当前既有行为；导航重入与真实写入事务另验。 |
+| PA41-CANCEL 取消向导并返回组织目录 / local | 2处；explicit-cancel、native-escape | [create · 1440](design/platform-organizations-direction-c/1440-create.png) / [create · 390](design/platform-organizations-direction-c/390-create.png)、[create_admin · 1440](design/platform-organizations-direction-c/1440-create_admin.png) / [create_admin · 390](design/platform-organizations-direction-c/390-create_admin.png)；其余见JSON | 取消不会撤销已发请求；真实离页与浏览器历史语义按写入归属测试核验。 |
+| PA41-CURRENT-INPUT 编辑组织资料/首位管理员并清除旧错误 / local | 3处；name、slug、initial-admin-user | [create_filled · 1440](design/platform-organizations-direction-c/1440-create_filled.png) / [create_filled · 390](design/platform-organizations-direction-c/390-create_filled.png)、[create_admin · 1440](design/platform-organizations-direction-c/1440-create_admin.png) / [create_admin · 390](design/platform-organizations-direction-c/390-create_admin.png)；其余见JSON | 管理员候选只来自当前账号概览返回的数据，不扩大为全库查询或授权确认。 |
+| PA41-CREATE 确认并创建组织及默认工作区 / write | 2处；default-superadmin、selected-active-admin、busy、failure-retry、success-route-to-detail | [create_confirm · 1440](design/platform-organizations-direction-c/1440-create_confirm.png) / [create_confirm · 390](design/platform-organizations-direction-c/390-create_confirm.png)、[create_busy · 1440](design/platform-organizations-direction-c/1440-create_busy.png) / [create_busy · 390](design/platform-organizations-direction-c/390-create_busy.png)；其余见JSON | 测试使用隔离拦截；不证明真实MySQL原子性、真实RBAC、审计或M07-03生产签收。 |
+| PA41-DIALOG-CONTAINER P41 原生向导容器与本地动作归属 / wiring | 1处；two-step-native-dialog | [create · 1440](design/platform-organizations-direction-c/1440-create.png) / [create · 390](design/platform-organizations-direction-c/390-create.png)；其余见JSON | 容器与实际App的一般读屏/全部浏览器原生dialog行为另验。 |
+| PA41-WIZARD-WIRING 父级接管向导字段错误、关闭与提交事件 / wiring | 1处；clear-error、close、submit | [create_confirm · 1440](design/platform-organizations-direction-c/1440-create_confirm.png) / [create_confirm · 390](design/platform-organizations-direction-c/390-create_confirm.png)；其余见JSON | 父级事务是否成功仍由隔离测试之外的服务端合同验收。 |
+| PA41-EXCLUDED-OTHER-CENTER-ACTIONS 同一父组件中的非P41目录、详情和共享动作 / excluded | 13处；P39-account-overview、P40-organization-list、P42-organization-detail、P43-user-detail、P44-admin-detail、P45-role-center | ；其余见JSON | 显式排除仅界定P41，不代表这些其他页面的动作或权限/生命周期完成验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PA41-DIALOG-CONTAINER | 容器定义，无额外事件 | PA41-BACK、PA41-CANCEL、PA41-CREATE、PA41-CURRENT-INPUT、PA41-NEXT |
+| PA41-WIZARD-WIRING | @clear-error / createError = '' | PA41-CURRENT-INPUT |
+| PA41-WIZARD-WIRING | @close / closeOrganizationWizard | PA41-CANCEL |
+| PA41-WIZARD-WIRING | @submit / createOrganization | PA41-CREATE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| OrganizationCreationWizard.vue / form.name | 组织名称，父级表单模型保留创建草稿 | 原生长度/必填约束保留；真实写入由既有父级服务合同另验。 |
+| OrganizationCreationWizard.vue / form.slug | 组织标识，沿用当前小写字母/数字/连字符原生模式 | 保持当前允许尾部连字符的真实规则，不推断为严格slug校验或完整服务端IANA/字符策略。 |
+| OrganizationCreationWizard.vue / form.initial_admin_user_id | 可选首位管理员，空值继续由当前操作者作为默认管理员 | 选项来自当前概览用户集合且禁用非active项，不等于全库查询或后端授权结果。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| OrganizationCreationWizard.vue / dialog.1 / p41-two-step-wizard | native-dialog / matching-dialog-scene | [create · 1440](design/platform-organizations-direction-c/1440-create.png) / [create · 390](design/platform-organizations-direction-c/390-create.png) | 直接URL初始焦点、Escape/返回焦点与真实App缓存导航单独核验。 |
+| OrganizationCreationWizard.vue / form.1 / p41-profile-and-final-confirmation | form-container / matching-inline-form-scene | [create_confirm · 1440](design/platform-organizations-direction-c/1440-create_confirm.png) / [create_confirm · 390](design/platform-organizations-direction-c/390-create_confirm.png) | 浏览器约束验证和真实MySQL原子性分开验收。 |
+| OrganizationCreationWizard.vue / aside.1 / p41-identity-and-step-context | inline-aside / related-scene-only | [create · 1440](design/platform-organizations-direction-c/1440-create.png) / [create · 390](design/platform-organizations-direction-c/390-create.png) | 视觉授权不代替主题、密度、200%缩放与实际读屏验收。 |
+
+### 明确保留的边界
+
+- P41源动作已逐候选分类；全部可见按钮hover/focus/pressed/disabled/busy仍未逐控件绑定到具体状态图。
+- 桌面/手机C稿按用户统一授权自动通过，不代表直接深链、完整浏览器历史或真实管理员授权通过。
+- 生产隔离夹具没有创建真实组织、默认工作区或管理员关系。
+- 父级PlatformAccountCenter共享其他路由控制已逐候选排除；不代表P39/P40/P42/P43/P44/P45全页审阅完成。
+- P41组织创建事务继续由原createOrganization与现有API拥有；本映射不授权真实生产业务写入。
+- 全局壳、真实RBAC/MySQL、事务审计与正式M07-03保持独立验收。
+
+## P42 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P42.json)：45个局部源位置 → 14组；2类写入，9组路由动作，3组转发/容器关联不重复计动作。已映射3/11个源码字段位置，5/10处调用/内嵌容器，5个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有54个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PA42-CLOSE 关闭组织详情并返回组织目录 / local | 4处；native-escape、missing-return、header-close、footer-close | [detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)、[detail_missing · 1440](design/platform-organizations-direction-c/1440-detail_missing.png) / [detail_missing · 390](design/platform-organizations-direction-c/390-detail_missing.png)；其余见JSON | 路由回退/焦点返回的真实浏览器行为不由静态动作归属证明。 |
+| PA42-RETRY 重新读取组织概览以恢复缺失或过期快照 / local | 2处；missing-reload、post-write-refresh-retry | [detail_missing · 1440](design/platform-organizations-direction-c/1440-detail_missing.png) / [detail_missing · 390](design/platform-organizations-direction-c/390-detail_missing.png)、[refresh_error · 1440](design/platform-organizations-direction-c/1440-refresh_error.png) / [refresh_error · 390](design/platform-organizations-direction-c/390-refresh_error.png)；其余见JSON | 本地拦截验证不证明服务端权限、真实概览完整性或数据库状态。 |
+| PA42-INPUT 编辑组织名称、时区和数据保留天数并清除旧反馈 / local | 3处；name、timezone、data-retention-days | [detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)、[detail_invalid · 1440](design/platform-organizations-direction-c/1440-detail_invalid.png) / [detail_invalid · 390](design/platform-organizations-direction-c/390-detail_invalid.png)；其余见JSON | 字段原生约束沿用当前合同；本映射不扩大服务端校验规则。 |
+| PA42-SAVE 提交组织资料更新 / write | 2处；valid-submit、invalid-submit、busy、failure、write-success-refresh-warning、success-refresh | [detail_invalid · 1440](design/platform-organizations-direction-c/1440-detail_invalid.png) / [detail_invalid · 390](design/platform-organizations-direction-c/390-detail_invalid.png)、[save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png)；其余见JSON | 既有隔离请求测试不等于真实MySQL原子性、RBAC、审计或M07-03验收。 |
+| PA42-TECH 展开组织slug和UUID技术详情 / local | 1处；collapsed、expanded | [detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)、[detail_technical · 1440](design/platform-organizations-direction-c/1440-detail_technical.png) / [detail_technical · 390](design/platform-organizations-direction-c/390-detail_technical.png)；其余见JSON | 原生details跨浏览器与读屏体验尚未做完整设备验收。 |
+| PA42-STATUS 选择停用或恢复组织并打开原因确认 / local | 1处；active-to-disable、inactive-to-restore、busy | [disable_reason · 1440](design/platform-organizations-direction-c/1440-disable_reason.png) / [disable_reason · 390](design/platform-organizations-direction-c/390-disable_reason.png)、[restore_reason · 1440](design/platform-organizations-direction-c/1440-restore_reason.png) / [restore_reason · 390](design/platform-organizations-direction-c/390-restore_reason.png)；其余见JSON | 选择目标本身不写状态；实际RBAC及服务端状态转换另验。 |
+| PA42-REASON-INPUT 编辑组织操作审计原因 / local | 1处；edit-reason、required-minlength、maxlength-300 | [save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png)、[disable_reason · 1440](design/platform-organizations-direction-c/1440-disable_reason.png) / [disable_reason · 390](design/platform-organizations-direction-c/390-disable_reason.png)；其余见JSON | 本项仅记录共享原因窗在P42链路上的输入，不扩大原有原因长度或审计策略。 |
+| PA42-REASON-CANCEL 取消组织操作原因确认 / local | 1处；native-escape、cancel-button | [save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png)、[disable_reason · 1440](design/platform-organizations-direction-c/1440-disable_reason.png) / [disable_reason · 390](design/platform-organizations-direction-c/390-disable_reason.png)；其余见JSON | 取消行为不代表写入请求已经提交或回滚。 |
+| PA42-REASON-SUBMIT 确认原因并继续组织资料或状态操作 / write | 2处；valid-confirm、invalid-reason、busy、write-failure、write-success | [save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png)、[disable_reason · 1440](design/platform-organizations-direction-c/1440-disable_reason.png) / [disable_reason · 390](design/platform-organizations-direction-c/390-disable_reason.png)；其余见JSON | 隔离验证不等于真实API、MySQL事务、生产权限、审计持久化或正式验收。 |
+| PA42-DETAIL-WIRING 组织详情子组件事件由父级接管 / wiring | 2处；close、retry、clear-feedback、save、toggle-status | [detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)；其余见JSON | 事件映射不代替各处理器的服务端/权限验收。 |
+| PA42-DIALOG-CONTAINERS P42详情与共享原因原生窗口容器 / wiring | 2处；organization-detail-dialog、shared-reason-dialog | [detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)、[save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png)；其余见JSON | 容器结构映射不代替所有浏览器原生dialog、焦点和读屏验收。 |
+| PA42-REASON-WIRING 父级为共享原因窗接入P42原因草稿与操作处理 / wiring | 3处；reason-cancel、reason-submit、reason-input、shared-user-and-password-excluded | [save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png)、[disable_reason · 1440](design/platform-organizations-direction-c/1440-disable_reason.png) / [disable_reason · 390](design/platform-organizations-direction-c/390-disable_reason.png)；其余见JSON | 共享弹窗复用不将P43用户创建/密码重置并入P42，也不证明真实审计写入。 |
+| PA42-EXCLUDED-CENTER 父组件内与P42详情无关的目录、角色、用户及其他页面事件 / excluded | 11处；P39、P40、P41、P43、P45 | ；其余见JSON | 排除只界定P42，不替代对应页面动作验收。 |
+| PA42-EXCLUDED-DIALOGS 共享账号新建和密码重置弹窗不属于P42 / excluded | 10处；create-user-dialog、reset-password-dialog | ；其余见JSON | P43操作的独立页面映射/权限/审计验收不由本项完成。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PA42-DETAIL-WIRING | @close / closeOrganizationDetail | PA42-CLOSE |
+| PA42-DETAIL-WIRING | @retry / retryOrganizationRead | PA42-RETRY |
+| PA42-DETAIL-WIRING | @clear-feedback / clearOrganizationFeedback | PA42-INPUT |
+| PA42-DETAIL-WIRING | @save / updateOrganization | PA42-SAVE |
+| PA42-DETAIL-WIRING | @toggle-status / toggleOrganization | PA42-STATUS |
+| PA42-DETAIL-WIRING | @close / closeOrganizationDetail | PA42-CLOSE |
+| PA42-DETAIL-WIRING | @retry / retryOrganizationRead | PA42-RETRY |
+| PA42-DETAIL-WIRING | @clear-feedback / clearOrganizationFeedback | PA42-INPUT |
+| PA42-DETAIL-WIRING | @save / updateOrganization | PA42-SAVE |
+| PA42-DETAIL-WIRING | @toggle-status / toggleOrganization | PA42-STATUS |
+| PA42-DIALOG-CONTAINERS | 容器定义，无额外事件 | PA42-CLOSE、PA42-RETRY、PA42-INPUT、PA42-SAVE、PA42-TECH、PA42-STATUS、PA42-REASON-INPUT、PA42-REASON-CANCEL、PA42-REASON-SUBMIT |
+| PA42-REASON-WIRING | @close-create-user / closeCreateUser | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @create-user / createUser | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @close-password / passwordOpen = false | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @reset-password / resetPassword | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @close-reason / cancelReason | PA42-REASON-CANCEL |
+| PA42-REASON-WIRING | @submit-reason / submitReason | PA42-REASON-SUBMIT |
+| PA42-REASON-WIRING | @update:reason-text / reasonText = $event | PA42-REASON-INPUT |
+| PA42-REASON-WIRING | @close-create-user / closeCreateUser | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @create-user / createUser | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @close-password / passwordOpen = false | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @reset-password / resetPassword | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @close-reason / cancelReason | PA42-REASON-CANCEL |
+| PA42-REASON-WIRING | @submit-reason / submitReason | PA42-REASON-SUBMIT |
+| PA42-REASON-WIRING | @update:reason-text / reasonText = $event | PA42-REASON-INPUT |
+| PA42-REASON-WIRING | @cancel / handleReasonCancel | PA42-REASON-CANCEL |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| PlatformOrganizationDetailDialog.vue / form.name | 组织显示名称草稿 | 沿用已有必填和长度约束；不推断额外服务端规则。 |
+| PlatformOrganizationDetailDialog.vue / form.timezone | 组织时区草稿 | 沿用必填与长度约束；服务端合同仍是最终校验依据。 |
+| PlatformOrganizationDetailDialog.vue / form.data_retention_days | 组织数据保留天数草稿 | 控件显示30–3650整数范围；不扩大持久化规则。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| PlatformOrganizationDetailDialog.vue / dialog.1 / p42-detail-dialog | native-dialog / matching-dialog-scene | [detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)、[detail_missing · 1440](design/platform-organizations-direction-c/1440-detail_missing.png) / [detail_missing · 390](design/platform-organizations-direction-c/390-detail_missing.png) | 完整App缓存导航和真实组织权限未由局部图证明。 |
+| PlatformOrganizationDetailDialog.vue / aside.1 / p42-identity-facts | inline-aside / related-scene-only | [detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)、[detail_unknown · 1440](design/platform-organizations-direction-c/1440-detail_unknown.png) / [detail_unknown · 390](design/platform-organizations-direction-c/390-detail_unknown.png) | 示例状态不证明生产组织数据完整性。 |
+| PlatformOrganizationDetailDialog.vue / form.1 / p42-profile-and-save | form-container / matching-inline-form-scene | [detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)、[detail_invalid · 1440](design/platform-organizations-direction-c/1440-detail_invalid.png) / [detail_invalid · 390](design/platform-organizations-direction-c/390-detail_invalid.png)、[save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png) | 拦截请求与真实MySQL提交保持不同验收层。 |
+| PlatformAccountDialogs.vue / dialog.3 / p42-audited-reason-dialog | native-dialog / matching-dialog-scene | [save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png)、[disable_reason · 1440](design/platform-organizations-direction-c/1440-disable_reason.png) / [disable_reason · 390](design/platform-organizations-direction-c/390-disable_reason.png)、[restore_reason · 1440](design/platform-organizations-direction-c/1440-restore_reason.png) / [restore_reason · 390](design/platform-organizations-direction-c/390-restore_reason.png) | 本地构图不证明生产审计日志已持久化。 |
+| PlatformAccountDialogs.vue / form.3 / p42-reason-form | form-container / matching-inline-form-scene | [save_reason · 1440](design/platform-organizations-direction-c/1440-save_reason.png) / [save_reason · 390](design/platform-organizations-direction-c/390-save_reason.png)、[disable_reason · 1440](design/platform-organizations-direction-c/1440-disable_reason.png) / [disable_reason · 390](design/platform-organizations-direction-c/390-disable_reason.png)、[restore_reason · 1440](design/platform-organizations-direction-c/1440-restore_reason.png) / [restore_reason · 390](design/platform-organizations-direction-c/390-restore_reason.png)、[reason_invalid · 1440](design/platform-organizations-direction-c/1440-reason_invalid.png) / [reason_invalid · 390](design/platform-organizations-direction-c/390-reason_invalid.png) | 模拟确认不代表生产端审计持久化。 |
+
+### 明确保留的边界
+
+- 动作映射只登记当前源码候选及语义归属，不证明所有按钮状态、弹窗变体或完整浏览器交互均已验收。
+- 用户视觉自动通过与actionApproval分开；本页动作审核仍待用户确认。
+- 本地隔离回归不证明真实RBAC、MySQL写入、审计持久化或正式M07-03生产验收。
+- 父级PlatformAccountCenter仍承载P39/P40/P41/P42/P43/P45；本动作映射只接收P42组织详情及其原因链路。
+- 共享用户创建/密码重置窗口明确作为P43排除；其可视DOM复用不代表P42可达。
+- 视觉自动通过、动作映射与真实生产RBAC/MySQL/审计/M07-03验收是独立结论。
 
 ## P54 局部动作与共享消费者
 

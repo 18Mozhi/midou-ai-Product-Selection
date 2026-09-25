@@ -57,4 +57,5 @@ test("P42 action map accounts for the organization detail and shared reason flow
   assert.equal(summary.visualApproval, "user-approved-remaining-pages-auto");
   assert.equal(surfaces.runtimeAcceptance, "unproven");
   assert.ok(surfaces.callerContainers >= 4);
+  assert.ok(Array.isArray(review.compositionGaps) && review.compositionGaps.length > 0);
 });

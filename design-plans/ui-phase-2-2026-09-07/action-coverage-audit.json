@@ -189,7 +189,7 @@
     "apps/web/src/components/TaskDetailPanel.vue": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48",
     "apps/web/src/components/TaskExportJobsPanel.vue": "40175f5b0cf7f7d1d9b24a7c5ca1746b0327654bb01996ffec8bf5f8bfd561c4",
     "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
-    "apps/web/src/components/TaskWorkspace.vue": "fbc03ed2a4db1cb349063301730971e53cb889c1ca734f4618fee0de31f2114e",
+    "apps/web/src/components/TaskWorkspace.vue": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d",
     "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
     "apps/web/src/components/TenancyChooser.vue": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8",
     "apps/web/src/components/theme-studio/PreferenceRadioGroup.vue": "564207b20e57e29aba47737bc41d70f0327a42a58a3e9fafdc9c6356bb9944ad",
@@ -239,6 +239,7 @@
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
+    "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "4a922922fb714f0a8be0853c2114139af7dad65a8ff89fd30884359cc4b1f77f",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "ff6b41e79cb7eba143652e3114c1a979379d22bcdf88a4a1de246d9b969fb378",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
@@ -252,7 +253,7 @@
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "9e90766df41be0e25e1c97a7aa88f6d31d8d73bcf57f86b1ea1b6ce3b9c70092",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "73ccec3c884d7f0f2037640bf851a734ba81d9dff1ab02f7ecfffd193902b0e5",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "663f7750ce15423be375fb5c0ec820386f4a265f73f812579d24c1a40b2e49ab",
-    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f60562413cd747613851146eb18f92e1998ae519d42243a1ab93dda5cc5e7ebb",
+    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "df5e92bbb28ece186d3bf667fef3bb4bcb5704637e8987676df2c7d547fd8248",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "bb96f5d6c067255f9e22f4051e117c6352f18dea2184eaf7639a6b305cd8f9cd",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "9a2a82e07d85ee7815264d9dfb5c632f6117e653da51ebb1c0faf49b8bf28f41",
@@ -268,7 +269,7 @@
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "53418f5884776c80af2aee2d9c253f9c62e6517adbd92997cda678a4806e62eb",
-    "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "0ecd134678c592ad75a4f7a7ca6dc3bf6588cd7bb8c0875ba81b491763445547",
+    "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "00887da6021733c1580f816077c47924d9946fbce06ef4df2d5433272dbd7941",
     "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "133ad0f55aab8e3614fc80844ff8ebd331ebd38cde0ea487ba0e8bcc595de1be",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "86bc709d10fd9b28a7cf87ae5b21b73e3ac1ec0ff6c9dc60fd8cec027d66d3a9",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
@@ -404,7 +405,7 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "2e21b6acaebdd342038a257bcd665a3c68962a2c25062ae5115bf27c52def19f",
     "scripts/lib/ui-phase2-home-design-data.mjs": "bb65ad359313f8e5351351195bf809a6ba49e3c8d52d7ceaa2ef24e89d7980c7",
     "scripts/verify-ui-phase2-home-c.mjs": "e7800a15baf9ac7ca02291e31cbd75466fa9f7eb50a0b722b09730a9c8f2af4e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "ab3217f3dc77e26f0d8ed8ce8fc82d7672bdcbf8eb19772708cc06b90eb525ee",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "e8dca5101872cc85e3ed62f6e06897c71de8a2e8f20337884843ea0b882d4b84",
     "scripts/lib/ui-phase2-work-design-data.mjs": "5a15eb532e64f186f5be90c2a036cbb55e37a2be897489ec971ce981040ece34",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "32573aaa2f9de11c8f4e8bb4ea66d43c280fac9c306d73e0f739e887b08655f6",
@@ -432,9 +433,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "f1d659e9966c463786b1dad1376912745f35f7629ed085e4f441cc4c7117172e",
     "scripts/verify-ui-phase2-cost-rules-review.mjs": "e48de4ae479273b97cc901647426c810e233b6ed23614f2957741e83d5f148e1",
     "scripts/verify-ui-phase2-cost-rules-c.mjs": "d96873a753a246b28fc4eb3442e80f95756da1aef4eab8bf4ee8b5a5ccd3f94b",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "eec8926612ab74f520ff1598e782cc5fe6ae0214c14b6647d5409be7d19c171d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "8f3b9d1adb6c6d8700e5735a55f3064cf61abbea3400acde2a51e072a0ab35fc",
     "scripts/verify-ui-phase2-task-list-review.mjs": "b49bfb8bf6e4f72bf9b684b41f872f3387e93f9dadac9e5172e8b758cd211151",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "70f214f5062cb5f7fda10598e73021632590371ff51f10c3ea39b3d0984c995d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "331d0817401c3e1d93fb044bc0b71f0eb395d46482495a395fc4316c4d374ef4",
     "scripts/verify-ui-phase2-task-detail-review.mjs": "2246b8b70f2d7c1d2e34aab6290da4adb85ff55fde6985befbb860c39249c6b0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "6f4037cb4fc448430e5b3ae7c7e21c9accb458a10ea373f26f0c2e3cf29b33ae",
     "scripts/verify-ui-phase2-approval-review.mjs": "3943d8f26a3de728e8fea5d2925f3d803e4360dcdd2244310814de341984b486",
@@ -484,6 +485,13 @@
     "scripts/verify-ui-phase2-platform-overview-c.mjs": "b7049fb563871534d11742ebf0a42e51d0ecb9505eaa4cb2472ff26c631ee37b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P39.json": "2f8a3d33dcd0940fe7d48217fb50707eed3b9559d3c5dfa5693693d30c32bab4",
     "scripts/verify-ui-phase2-account-overview-c.mjs": "311828bc0e24463f905f0020d001177a648f29b3822df4d708f33fd28ac9dbca",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "f845f70352ed7a077b087afb96b5f5df6915ed83b8dd2d6150d9653407ba9216",
+    "scripts/verify-ui-phase2-organization-list-preview.mjs": "c18b5b76788f00e85512f763a31decdf86b01043146e5de1a0bfd2c4ece6c057",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "721b2fc8606c53a1b660acc4822cab2fb19c051d569cbf1720f5e0f7a5579f9b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P41.json": "112e0fc04c9a8d2f3adb4659c7acb773275f3281efd9f81150489298d125e1ce",
+    "tests/unit/ui-phase2-organization-create-preview.test.mjs": "2c967cb27c5ce0e088131c7dfacc6d8ecdddb83e200c6ac228b676f2b38b18eb",
+    "tests/unit/ui-phase2-organization-create-production-composition.test.mjs": "d7c255007b0ec09cccb67e87450abd47ec3e6e972c411f005948127619b78820",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P42.json": "6743aaeb6058a3e886a90999d1aad5232ad678d82815524c0b3418c868323a55",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -533,8 +541,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P38.md": "a94063447c9da3fbcfd0fad7c362ce558ed958e42820c4e261e70c4c6ce67f3d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P39.md": "4bc2c357dbb9eb942baf7a2402a4b3f9e6c8492bf46c2b191bb03fba149d1f04",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P40.md": "b14be62156584d73ff6c60addccdf74ae180b5361b74f77d95311d3163f690ef",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "6219290f4c3403823da4f9bde40535d0e9bf6781f4460da5d47cd35af3d49b7e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "8f1ffd9af2eaec3dda24b7a4630b0d52127a9805d94595d92c252fbd0caa28e6",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "bc0c619fbce430464f86835046d52f5e41650d71bdbdaccd082db892cd45ed1b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "9150e5fe051df95622f6fb398b5488ce1b45ec6f68fce79c3cf37ca972293e60",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "8266f393cd17ac6d1be339d6f657152e2e37adcadaddd26558fb541e3654d182",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "2ede4acf8d40faa102438a32461abd7783e3d251e48c4df2be851618a3b3c011",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "88cf61feef9df714003bdb8eb4a5cc6d5d7ce31594ac6e39efbfe187a9243687",
@@ -570,7 +578,7 @@
     "scripts/lib/ui-phase2-action-coverage.mjs": "f5cdfea52a1dae23099b9fad6d77fd8d72c7fa8124f1ff940afb53525975d27e",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "22f0710e70d77f4335a86a3ed6ef6d14c54fc23ec98d50aa2e22c50809e4e523",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
-    "scripts/audit-ui-phase2-contracts.mjs": "74cf74f77a6f482583ff5d2e4e8e06748f203f1481a55a415681a14e69e96935",
+    "scripts/audit-ui-phase2-contracts.mjs": "a90a8e4447480c1be6d4822467eea18bbae6fe962750ecdea16b6008728fde4f",
     "scripts/lib/ui-phase2-contract-audit.mjs": "b7b12201094c94705ce2e0e0f5145830b4a2468632f1a33b09fe96a54e7039da"
   },
   "summary": {
@@ -579,15 +587,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 603,
     "oldOnlyIdentities": 379,
-    "reviewedPages": 42,
-    "explicitlyGroupedSourceSites": 938,
-    "semanticGroups": 839,
-    "routeActions": 675,
-    "wiringGroups": 84,
+    "reviewedPages": 45,
+    "explicitlyGroupedSourceSites": 993,
+    "semanticGroups": 878,
+    "routeActions": 701,
+    "wiringGroups": 93,
     "pagesWithoutExplicitSemanticReview": [
-      "P40",
-      "P41",
-      "P42",
       "P43",
       "P44",
       "P45",
@@ -619,7 +624,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 42,
+    "visualApprovedReviewedPages": 45,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2340,39 +2345,129 @@
       "path": "/platform-admin/organizations",
       "title": "组织管理",
       "oldStaticAssociatedCandidates": 99,
-      "review": null,
+      "review": {
+        "pageId": "P40",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 53,
+        "semanticGroups": 16,
+        "routeActions": 11,
+        "wiringGroups": 4,
+        "excludedGroups": 1,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "actual-vue-isolated-browser",
+          "actual-vue-local-interception"
+        ],
+        "unmappedVisualSlots": 66,
+        "surfaces": {
+          "callerFiles": 5,
+          "localModelBindings": 14,
+          "reviewedInputBindings": 7,
+          "sourceCallerContainers": 10,
+          "callerContainers": 6,
+          "consumerVariants": 6,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "platform-organizations-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "此文件对P40五个真实Vue源码作逐候选登记；过滤和记录六态尚未逐控件绑定到实际截图。",
+        "新建用户弹窗证据是本地fixture/入口交互，不等于真实账户POST、角色授权或生产数据验收。",
+        "P41/P42/P43/P44与共享组件剩余消费者独立审阅，不由P40的条件排除或局部页面覆盖。"
+      ]
     },
     {
       "id": "P41",
       "path": "/platform-admin/organizations/new",
       "title": "创建组织",
       "oldStaticAssociatedCandidates": 99,
-      "review": null,
+      "review": {
+        "pageId": "P41",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 25,
+        "semanticGroups": 9,
+        "routeActions": 6,
+        "wiringGroups": 2,
+        "excludedGroups": 1,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "actual-vue-local-interception",
+          "actual-vue-review-fixture",
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 36,
+        "surfaces": {
+          "callerFiles": 2,
+          "localModelBindings": 5,
+          "reviewedInputBindings": 3,
+          "sourceCallerContainers": 3,
+          "callerContainers": 3,
+          "consumerVariants": 3,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "platform-organizations-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P41源动作已逐候选分类；全部可见按钮hover/focus/pressed/disabled/busy仍未逐控件绑定到具体状态图。",
+        "桌面/手机C稿按用户统一授权自动通过，不代表直接深链、完整浏览器历史或真实管理员授权通过。",
+        "生产隔离夹具没有创建真实组织、默认工作区或管理员关系。"
+      ]
     },
     {
       "id": "P42",
       "path": "/platform-admin/organizations/:organizationId",
       "title": "组织详情",
       "oldStaticAssociatedCandidates": 99,
-      "review": null,
+      "review": {
+        "pageId": "P42",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 45,
+        "semanticGroups": 14,
+        "routeActions": 9,
+        "wiringGroups": 3,
+        "excludedGroups": 2,
+        "writeActions": 2,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "actual-vue-local-interception"
+        ],
+        "unmappedVisualSlots": 54,
+        "surfaces": {
+          "callerFiles": 3,
+          "localModelBindings": 11,
+          "reviewedInputBindings": 3,
+          "sourceCallerContainers": 10,
+          "callerContainers": 5,
+          "consumerVariants": 5,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "platform-organizations-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "动作映射只登记当前源码候选及语义归属，不证明所有按钮状态、弹窗变体或完整浏览器交互均已验收。",
+        "用户视觉自动通过与actionApproval分开；本页动作审核仍待用户确认。",
+        "本地隔离回归不证明真实RBAC、MySQL写入、审计持久化或正式M07-03生产验收。"
+      ]
     },
     {
       "id": "P43",
@@ -3876,6 +3971,87 @@
         "sourceCallerContainers": 3,
         "callerContainers": 3,
         "consumerVariants": 3,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P40",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 53,
+      "semanticGroups": 16,
+      "routeActions": 11,
+      "wiringGroups": 4,
+      "excludedGroups": 1,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "actual-vue-isolated-browser",
+        "actual-vue-local-interception"
+      ],
+      "unmappedVisualSlots": 66,
+      "surfaces": {
+        "callerFiles": 5,
+        "localModelBindings": 14,
+        "reviewedInputBindings": 7,
+        "sourceCallerContainers": 10,
+        "callerContainers": 6,
+        "consumerVariants": 6,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P41",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 25,
+      "semanticGroups": 9,
+      "routeActions": 6,
+      "wiringGroups": 2,
+      "excludedGroups": 1,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "actual-vue-local-interception",
+        "actual-vue-review-fixture",
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 36,
+      "surfaces": {
+        "callerFiles": 2,
+        "localModelBindings": 5,
+        "reviewedInputBindings": 3,
+        "sourceCallerContainers": 3,
+        "callerContainers": 3,
+        "consumerVariants": 3,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P42",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 45,
+      "semanticGroups": 14,
+      "routeActions": 9,
+      "wiringGroups": 3,
+      "excludedGroups": 2,
+      "writeActions": 2,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "actual-vue-local-interception"
+      ],
+      "unmappedVisualSlots": 54,
+      "surfaces": {
+        "callerFiles": 3,
+        "localModelBindings": 11,
+        "reviewedInputBindings": 3,
+        "sourceCallerContainers": 10,
+        "callerContainers": 5,
+        "consumerVariants": 5,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -32420,7 +32596,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-DIALOG-CONTAINER",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#faacd7ed42835c46.1",
@@ -32447,7 +32629,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-CANCEL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#ffa5038e256f600a.1",
@@ -32466,7 +32654,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#bc0893035430063c.1",
@@ -32490,7 +32684,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-CURRENT-INPUT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#73dff0e93770c698.1",
@@ -32514,7 +32714,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-CURRENT-INPUT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#dd8a952068bb7d3e.1",
@@ -32538,7 +32744,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-CURRENT-INPUT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#dbb9c697adbd2614.1",
@@ -32565,7 +32777,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-CANCEL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#d4a2da9643d6151e.1",
@@ -32597,7 +32815,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-BACK",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#10583294b61e5704.1",
@@ -32629,7 +32853,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-NEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationCreationWizard.vue#8f34ceeac7432a4a.1",
@@ -32661,7 +32891,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P41",
+          "actionId": "PA41-CREATE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/OrganizationDataPanel.vue#cd1df6927d5a68fd.1",
@@ -37587,12 +37823,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 11,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 39,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#bcd4023ebe5d9ca9.1",
@@ -37619,12 +37876,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 12,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 40,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1",
@@ -37651,12 +37929,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 13,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 41,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA-ORG-CREATE",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-OPEN",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1516ea5a6c3b1540.1",
@@ -37683,12 +37982,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 14,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 42,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA-USER-CREATE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1",
@@ -37711,12 +38031,33 @@
       "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 15,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 382,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#c4cfef52bcc169fb.1",
@@ -37747,12 +38088,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 16,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 43,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#c526b71b2b59e702.1",
@@ -37783,12 +38145,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 17,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 44,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
@@ -37807,12 +38190,33 @@
       "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 18,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 383,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-WORKSPACE-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1",
@@ -37834,12 +38238,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 19,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 45,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-WIZARD-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1",
@@ -37861,12 +38286,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 20,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 46,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-USER-DIALOG-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-REASON-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1",
@@ -37888,12 +38334,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 21,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 47,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-USER-DIALOG-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-REASON-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#6f151cbab1f5518e.1",
@@ -37907,12 +38374,33 @@
       "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 22,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 50,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-DETAIL-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39ba950db197263c.1",
@@ -37926,12 +38414,33 @@
       "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 23,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 51,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-DETAIL-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
@@ -37953,12 +38462,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 24,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 48,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
@@ -37980,12 +38510,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 25,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 49,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P41",
+          "actionId": "PA41-EXCLUDED-OTHER-CENTER-ACTIONS",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-CENTER",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#96a5d8f14ce43590.1",
@@ -38007,12 +38558,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 48,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 416,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 21,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-USER-DIALOG-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#9e8b9d6531d0203d.1",
@@ -38034,12 +38606,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 49,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 417,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 22,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-USER-DIALOG-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#f76649b0950ec968.1",
@@ -38061,12 +38654,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 50,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 418,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 23,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA-USER-CREATE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#c3a13fcf7d0fc151.1",
@@ -38088,12 +38702,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 51,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 419,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 24,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-USER-CREATE-CANCEL",
+          "kind": "local"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#472f3632b99eae63.1",
@@ -38115,12 +38750,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 52,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 420,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 25,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA-USER-CREATE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#0a0c76ebc577d650.1",
@@ -38142,12 +38798,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 53,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 421,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 26,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#04769fc3148b559f.1",
@@ -38169,12 +38846,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 54,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 422,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 27,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#22727b212f0b7505.1",
@@ -38196,12 +38894,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 55,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 423,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 28,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#0fbdc8b9a1396e9c.1",
@@ -38223,12 +38942,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 56,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 424,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 29,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#9ad3d7837ab53f7c.1",
@@ -38250,12 +38990,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 57,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 425,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 30,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-EXCLUDED-DIALOGS",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#8cb5dc651024abe9.1",
@@ -38277,12 +39038,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 58,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 410,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 31,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-DIALOG-CONTAINERS",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#bd4ff44ef0d1442c.1",
@@ -38304,12 +39086,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 59,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 411,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 32,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-REASON-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#4a0496f0cb3d6338.1",
@@ -38331,12 +39134,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 60,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 412,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 33,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-REASON-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#b313681d9ad25f0e.1",
@@ -38358,12 +39182,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 61,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 413,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 34,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-REASON-INPUT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#07d6870e96868709.1",
@@ -38385,12 +39230,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 62,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 414,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 35,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-REASON-CANCEL",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#7819d63c0a94ede2.1",
@@ -38412,12 +39278,33 @@
       "registration": "same-source-site-identity",
       "contractReferences": [
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 63,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
+          "line": 415,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
           "line": 36,
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P42",
+          "actionId": "PA42-REASON-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#29448f61eb8ffc80.1",
@@ -38439,6 +39326,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 10,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 26,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38446,6 +39338,11 @@
           "pageId": "P39",
           "actionId": "PA-NAV-ORG",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
         }
       ]
     },
@@ -38469,6 +39366,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 11,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 27,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38476,6 +39378,11 @@
           "pageId": "P39",
           "actionId": "PA-NAV-USER",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
         }
       ]
     },
@@ -38499,6 +39406,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 12,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 28,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38506,6 +39418,11 @@
           "pageId": "P39",
           "actionId": "PA-NAV-ADMIN",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
         }
       ]
     },
@@ -38529,6 +39446,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 16,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 29,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38536,6 +39458,11 @@
           "pageId": "P39",
           "actionId": "PA40-REFRESH-OUT-OF-SCOPE",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA-REFRESH",
+          "kind": "read"
         }
       ]
     },
@@ -38554,12 +39481,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 17,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 30,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
           "actionId": "PA-FILTER-DRAWER",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-FILTER-DRAWER",
           "kind": "wiring"
         }
       ]
@@ -38579,11 +39516,21 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 18,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 31,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
+          "actionId": "PA-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P40",
           "actionId": "PA-FILTER",
           "kind": "read"
         }
@@ -38604,11 +39551,21 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 13,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 32,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
+          "actionId": "PA-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P40",
           "actionId": "PA-FILTER",
           "kind": "read"
         }
@@ -38629,11 +39586,21 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 14,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 33,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
+          "actionId": "PA-RESET",
+          "kind": "read"
+        },
+        {
+          "pageId": "P40",
           "actionId": "PA-RESET",
           "kind": "read"
         }
@@ -38659,11 +39626,21 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 15,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 34,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
+          "actionId": "PA-REFRESH",
+          "kind": "read"
+        },
+        {
+          "pageId": "P40",
           "actionId": "PA-REFRESH",
           "kind": "read"
         }
@@ -38697,11 +39674,21 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 19,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 35,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
+          "actionId": "PA-RESET",
+          "kind": "read"
+        },
+        {
+          "pageId": "P40",
           "actionId": "PA-RESET",
           "kind": "read"
         }
@@ -38735,6 +39722,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 20,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 36,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38742,6 +39734,11 @@
           "pageId": "P39",
           "actionId": "PA39-ORG-CREATE-EMPTY-EXCLUDED",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA-ORG-CREATE",
+          "kind": "navigation"
         }
       ]
     },
@@ -38769,12 +39766,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 21,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 37,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
           "actionId": "PA-ORG-DETAIL-WIRING",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-ORG-DETAIL-WIRING",
           "kind": "wiring"
         }
       ]
@@ -38803,12 +39810,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 22,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 38,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
           "actionId": "PA43-DETAIL-OUT-OF-SCOPE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
           "kind": "excluded"
         }
       ]
@@ -38841,12 +39858,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 23,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 39,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
           "actionId": "PA44-RESET-OUT-OF-SCOPE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
           "kind": "excluded"
         }
       ]
@@ -38879,12 +39906,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 24,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 40,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
           "actionId": "PA44-USER-CREATE-OUT-OF-SCOPE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
           "kind": "excluded"
         }
       ]
@@ -38913,12 +39950,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 25,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 41,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
           "actionId": "PA43-DETAIL-OUT-OF-SCOPE",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
           "kind": "excluded"
         }
       ]
@@ -38938,6 +39985,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 7,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 42,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38945,6 +39997,11 @@
           "pageId": "P39",
           "actionId": "PA39-NAV-ORG-ADMIN-BRANCH",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA-NAV-ORG",
+          "kind": "navigation"
         }
       ]
     },
@@ -38963,6 +40020,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 8,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 43,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38970,6 +40032,11 @@
           "pageId": "P39",
           "actionId": "PA39-NAV-USER-ADMIN-BRANCH",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA-NAV-USER",
+          "kind": "navigation"
         }
       ]
     },
@@ -38988,6 +40055,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
           "line": 9,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 44,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38995,6 +40067,11 @@
           "pageId": "P39",
           "actionId": "PA39-NAV-ADMIN-ADMIN-BRANCH",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA-NAV-ADMIN",
+          "kind": "navigation"
         }
       ]
     },
@@ -43999,7 +45076,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-DIALOG-CONTAINERS",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#452d85f008176563.1",
@@ -44026,7 +45109,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#106fea94b943db73.1",
@@ -44050,7 +45139,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-RETRY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#e86ba35d079de0d3.1",
@@ -44082,7 +45177,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#ed675af42a95eee6.1",
@@ -44106,7 +45207,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#305725c44ab6a8ed.1",
@@ -44138,7 +45245,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#e9b3a32bc524be8e.1",
@@ -44162,7 +45275,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-INPUT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#e2d410a205d6addc.1",
@@ -44186,7 +45305,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-INPUT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#f5028ff7b6963e7c.1",
@@ -44210,7 +45335,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-INPUT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#9135d46a904a737d.1",
@@ -44238,7 +45369,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-RETRY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#1c008f867673db60.1",
@@ -44270,7 +45407,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#c912786107f1a3c8.1",
@@ -44294,7 +45437,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-STATUS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#02668382bdda9d3b.1",
@@ -44326,7 +45475,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationDetailDialog.vue#1c447b2a32d2d030.1",
@@ -44350,7 +45505,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P42",
+          "actionId": "PA42-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformOrganizationRecords.vue#6923b73e52535ef3.1",
@@ -44382,6 +45543,11 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 45,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 52,
           "jsonPointer": null
@@ -44390,6 +45556,11 @@
       "semanticReviews": [
         {
           "pageId": "P39",
+          "actionId": "PA-ORG-DETAIL",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P40",
           "actionId": "PA-ORG-DETAIL",
           "kind": "navigation"
         }
@@ -44420,6 +45591,11 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 46,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 53,
           "jsonPointer": null
@@ -44428,6 +45604,11 @@
       "semanticReviews": [
         {
           "pageId": "P39",
+          "actionId": "PA-ORG-DETAIL",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P40",
           "actionId": "PA-ORG-DETAIL",
           "kind": "navigation"
         }
@@ -44458,6 +45639,11 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 47,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 54,
           "jsonPointer": null
@@ -44466,6 +45652,11 @@
       "semanticReviews": [
         {
           "pageId": "P39",
+          "actionId": "PA-ORG-TECH",
+          "kind": "local"
+        },
+        {
+          "pageId": "P40",
           "actionId": "PA-ORG-TECH",
           "kind": "local"
         }
@@ -57381,7 +58572,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#3c7748edf9778e0b.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 784,
+      "line": 788,
       "kind": "control",
       "label": "返回目录",
       "conditions": [
@@ -57421,7 +58612,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#d0b5cc25f7a3a006.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 785,
+      "line": 789,
       "kind": "control",
       "label": "＋ 新建任务",
       "conditions": [
@@ -57461,7 +58652,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 791,
+      "line": 795,
       "kind": "control",
       "label": "业务任务",
       "conditions": [
@@ -57505,7 +58696,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 794,
+      "line": 798,
       "kind": "control",
       "label": "导出任务",
       "conditions": [
@@ -57553,7 +58744,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 829,
+      "line": 833,
       "kind": "control",
       "label": "重新加载",
       "conditions": [
@@ -57597,7 +58788,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 857,
+      "line": 861,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -57641,7 +58832,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 876,
+      "line": 880,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -57685,7 +58876,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 902,
+      "line": 906,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -57729,7 +58920,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 904,
+      "line": 908,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -57773,7 +58964,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 906,
+      "line": 910,
       "kind": "dialog-definition",
       "label": "editing ? '编辑任务' : '新建任务'",
       "conditions": [],
@@ -57812,7 +59003,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#4caa7d3977955464.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 906,
+      "line": 910,
       "kind": "event-binding",
       "label": "editing ? '编辑任务' : '新建任务'",
       "conditions": [],
@@ -57851,7 +59042,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#da64891e5fca6a6a.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 912,
+      "line": 916,
       "kind": "form-event",
       "label": "任务内容 {{ editing ? \"编辑任务\" : \"新建任务\" }} × 填写任务内容，明确优先级与期限。 这是什么任务？ 可以创建“复核热点”“分析亚马逊竞品”“查找货源”“确认利润”等具体工作。创建后点击任务详情，再点击开始运行。 ",
       "conditions": [],
@@ -57886,7 +59077,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#81afeaed16968ac8.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 918,
+      "line": 922,
       "kind": "control",
       "label": "关闭任务编辑窗口",
       "conditions": [],
@@ -57921,7 +59112,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#012988ab20dde0d0.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 968,
+      "line": 972,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -57960,7 +59151,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#eede115bf64bea46.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 969,
+      "line": 973,
       "kind": "control",
       "label": "{{ busy ? \"正在提交…\" : editing ? \"保存修改\" : \"创建任务\" }}",
       "conditions": [],
@@ -57999,7 +59190,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 976,
+      "line": 980,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -58043,7 +59234,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#6c7534a24387a114.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 1003,
+      "line": 1007,
       "kind": "dialog-definition",
       "label": "TASK ACTION 删除任务 × 任务列表将不再显示此任务，历史审计记录仍会保留。 将删除“ {{ deleting?.title }} ”。任务列表不再显示，但审计记录会保留。 {{ deleting.title }} 删除原因 必填",
       "conditions": [],
@@ -58078,7 +59269,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#8acacf9139ac6dfa.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 1003,
+      "line": 1007,
       "kind": "event-binding",
       "label": "TASK ACTION 删除任务 × 任务列表将不再显示此任务，历史审计记录仍会保留。 将删除“ {{ deleting?.title }} ”。任务列表不再显示，但审计记录会保留。 {{ deleting.title }} 删除原因 必填",
       "conditions": [],
@@ -58113,7 +59304,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#8761299256f1d051.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 1009,
+      "line": 1013,
       "kind": "form-event",
       "label": "TASK ACTION 删除任务 × 任务列表将不再显示此任务，历史审计记录仍会保留。 将删除“ {{ deleting?.title }} ”。任务列表不再显示，但审计记录会保留。 {{ deleting.title }} 删除原因 必填",
       "conditions": [],
@@ -58148,7 +59339,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#a51d0235ae15a867.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 1015,
+      "line": 1019,
       "kind": "control",
       "label": "关闭删除任务窗口",
       "conditions": [
@@ -58188,7 +59379,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 1051,
+      "line": 1055,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -58227,7 +59418,7 @@
     {
       "candidateId": "apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1",
       "file": "apps/web/src/components/TaskWorkspace.vue",
-      "line": 1052,
+      "line": 1056,
       "kind": "control",
       "label": "{{ busy ? \"正在删除…\" : \"确认删除\" }}",
       "conditions": [],
