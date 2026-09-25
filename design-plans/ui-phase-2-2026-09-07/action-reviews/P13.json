@@ -30,14 +30,14 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1",
+        "apps/web/src/components/TaskWorkspace.vue#d0b5cc25f7a3a006.1",
         "apps/web/src/components/TaskListPanel.vue#c92b78a436786dc5.1"
       ],
       "sourceContractKeys": [
-        "list.create.open：canCreate，showCreate=true；同壳头入口可在详情存在",
-        "list.create.open：无任务且无筛选且canCreate，新建入口"
+        "task.editor.create.open：canCreate时打开新建任务表单",
+        "task.editor.create.open：空态新建入口，仍受canCreate控制"
       ],
-      "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
+      "contractAliasReason": "task-contract-review.md第8节当前源表将页头和空态按钮都归入新建表单打开动作；P13仅保留当前可达实例。",
       "condition": "页头仅canCreate；空列表且无query/status时的第二入口亦需canCreate",
       "handler": "showCreate=true；不清已有草稿；挂载create=1可预填title/description",
       "variants": [
@@ -89,17 +89,13 @@
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
         "apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1",
-        "apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1",
-        "apps/web/src/components/TaskWorkspace.vue#2f03957c77c45e54.1",
-        "apps/web/src/components/TaskWorkspace.vue#7080532cf7836b46.1"
+        "apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1"
       ],
       "sourceContractKeys": [
-        "view.business：setView，清status/page，保留query/sort",
-        "view.exports：mode=all且report:read；GET /report-exports",
-        "export.manage：跳/reports",
-        "export.open：跳/reports?report=report_type，不是文件下载"
+        "task.view.business：切回业务任务并保留合同规定的搜索/排序状态",
+        "task.view.exports：all模式且具备report:read时读取导出任务"
       ],
-      "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
+      "contractAliasReason": "task-contract-review.md第8节记录的业务/导出分支仅适用于mode=all；P13父级固定传today，因此两候选在本页均不可达。",
       "condition": "P13父props.mode=today；activeView初始化与watch均强制business，mode=all导航不渲染",
       "handler": "本页不调用setView或/report-exports；导出链接归P23/相关页面",
       "variants": [
@@ -129,7 +125,7 @@
         "apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1"
       ],
       "sourceContractKeys": [
-        "read.retry：错误区load；列表/详情/导出按当前分支重读"
+        "task.read.retry：按当前列表/详情/导出分支重新读取"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "state为error/forbidden/expired/rate_limited；not_found仅详情404分支",
@@ -197,7 +193,7 @@
         "apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1"
       ],
       "sourceContractKeys": [
-        "list.page.previous：页>1可用；清选择、URL更新"
+        "task.list.page.previous：上一页；按现有分页规则更新路由并清选择"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "activeView=business且total>10；page<=1禁用，不按busy/state禁用",
@@ -244,7 +240,7 @@
         "apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1"
       ],
       "sourceContractKeys": [
-        "list.page.next：页<pageCount可用；清选择、URL更新"
+        "task.list.page.next：下一页；按现有分页规则更新路由并清选择"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "activeView=business且total>10；page>=pageCount禁用",
@@ -288,11 +284,13 @@
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
         "apps/web/src/components/TaskWorkspace.vue#4caa7d3977955464.1",
+        "apps/web/src/components/TaskWorkspace.vue#81afeaed16968ac8.1",
         "apps/web/src/components/TaskWorkspace.vue#012988ab20dde0d0.1"
       ],
       "sourceContractKeys": [
-        "editor.close：原生cancel→handleCreateCancel→closeTaskEditor",
-        "editor.close：取消按钮；busy禁用；清快捷创建query"
+        "task.editor.close：原生cancel交由handleCreateCancel关闭",
+        "task.editor.close：关闭编辑窗；busy时禁用",
+        "task.editor.close：取消，不提交；busy时禁用"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "取消按钮busy禁用；原生cancel调用handleCreateCancel没有busy检查",
@@ -345,12 +343,12 @@
       "kind": "write",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#e394f71c3c789c95.1",
+        "apps/web/src/components/TaskWorkspace.vue#da64891e5fca6a6a.1",
         "apps/web/src/components/TaskWorkspace.vue#eede115bf64bea46.1"
       ],
       "sourceContractKeys": [
-        "editor.{create,edit}.submit：表单submit→create函数，按editing选择POST/PATCH",
-        "editor.{create,edit}.submit：表单提交按钮；busy禁用，不另算业务动作"
+        "task.editor.create/edit.submit：沿用现有POST/PATCH与字段边界",
+        "task.editor.create/edit.submit：同一表单的确认提交入口"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "busy或无task:create早退；本页editing为空，HTML标题required/200、说明5000",
@@ -404,10 +402,12 @@
       "kind": "excluded",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
+        "apps/web/src/components/TaskWorkspace.vue#3c7748edf9778e0b.1",
         "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1"
       ],
       "sourceContractKeys": [
-        "detail.{x}，editor.edit.open，delete.open，comment.submit：详情事件中转，field更新只是本地模型"
+        "task.detail.return：详情返回已校验的/work或/tasks来源路径",
+        "task.detail.events：接收详情动作/编辑/删除/评论及表单模型变化"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "P13无taskId；watch清selected；列表RouterLink导航P24，没有调用本地open",
@@ -436,12 +436,14 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#184beea2f6fd5456.1",
+        "apps/web/src/components/TaskWorkspace.vue#8acacf9139ac6dfa.1",
+        "apps/web/src/components/TaskWorkspace.vue#a51d0235ae15a867.1",
         "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1"
       ],
       "sourceContractKeys": [
-        "delete.close：原生cancel→清目标及原因",
-        "delete.close：取消按钮，busy禁用"
+        "task.delete.close：原生cancel通过handleDeleteCancel清目标/原因",
+        "task.delete.close：关闭确认窗，不提交",
+        "task.delete.close：取消删除；busy时禁用"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "取消按钮busy禁用，原生Escape不检查busy",
@@ -485,12 +487,12 @@
       "kind": "write",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#a7d1ecc8ced537b9.1",
+        "apps/web/src/components/TaskWorkspace.vue#8761299256f1d051.1",
         "apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1"
       ],
       "sourceContractKeys": [
-        "delete.submit：表单submit→removeTask",
-        "delete.submit：确认按钮，busy禁用"
+        "task.delete.submit：按当前任务版本及既有原因合同调用removeTask",
+        "task.delete.submit：确认删除；busy时禁用"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "busy/无canUpdate/无目标/空trim原因早退；原因required/500",
@@ -538,7 +540,7 @@
         "apps/web/src/components/TaskListPanel.vue#2a0d4451e2faa34a.1"
       ],
       "sourceContractKeys": [
-        "list.status：全部/todo/in_progress/paused/completed/cancelled六个显式变体"
+        "task.list.status：切换全部及五个既有任务状态筛选"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "列表ready/empty可见，六状态计数来自本人summary而非筛选列表",
@@ -600,7 +602,7 @@
         "apps/web/src/components/TaskListPanel.vue#ac860f86ea23bb4c.1"
       ],
       "sourceContractKeys": [
-        "list.search.disclose：原生details展开/关闭，无API写入"
+        "task.list.search.disclose：展开/收起搜索和排序，无请求写入"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "原生details；hasAdvancedFilter只判断query或非默认sort，不含status",
@@ -652,8 +654,8 @@
         "apps/web/src/components/TaskListPanel.vue#b79994ab2dc7702d.1"
       ],
       "sourceContractKeys": [
-        "list.search.apply：搜索trim，带当前sort；重置page与选中项",
-        "list.search.apply：与L88同一表单提交"
+        "task.list.search.apply：提交搜索和现有排序值",
+        "task.list.search.apply：同表单搜索提交按钮"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "输入maxlength200；表单submit带draftQuery.trim和当前sort",
@@ -710,7 +712,7 @@
         "apps/web/src/components/TaskListPanel.vue#faf2a52b6a6f528b.1"
       ],
       "sourceContractKeys": [
-        "list.sort：四个sort白名单，选择即应用当前搜索草稿"
+        "task.list.sort.change：四个已有排序选项写入本地筛选状态"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "四个select选项；不以按钮应用为前置",
@@ -763,8 +765,8 @@
         "apps/web/src/components/TaskListPanel.vue#86b8060a633774c0.1"
       ],
       "sourceContractKeys": [
-        "list.reset：清status/query/sort/page与选中项，保留其他query",
-        "list.reset：无结果态重置入口，同L115"
+        "task.list.filters.reset：清理现有筛选、分页和选择状态",
+        "task.list.filters.reset：空结果状态下清除筛选"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "搜索表单入口常有；空列表且query/status另有入口",
@@ -819,7 +821,7 @@
         "apps/web/src/components/TaskListPanel.vue#9960c69204257423.1"
       ],
       "sourceContractKeys": [
-        "list.select.page：canUpdate且有任务，选中/清空本页"
+        "task.list.selection.page：当前页全选/清空的受控模型更新"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "canUpdate且tasks.length；checkbox根据每个任务id是否选中计算",
@@ -871,7 +873,7 @@
         "apps/web/src/components/TaskListPanel.vue#2cb28f705efccf29.1"
       ],
       "sourceContractKeys": [
-        "list.select.clear：有选中时清空"
+        "task.list.selection.clear：清除当前选择"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "canUpdate且任务存在、selectedIds.length>0",
@@ -917,7 +919,7 @@
         "apps/web/src/components/TaskListPanel.vue#fe99684a58d4750c.1"
       ],
       "sourceContractKeys": [
-        "list.select.row：canUpdate，单行checkbox不等于详情跳转"
+        "task.list.selection.row：更新单行选择，不等于打开详情"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "仅canUpdate；与RouterLink查看入口分开",
@@ -968,7 +970,7 @@
         "apps/web/src/components/TaskListPanel.vue#a32f374b623fc146.1"
       ],
       "sourceContractKeys": [
-        "list.detail.open：/tasks/id?from=route.fullPath"
+        "task.detail.open：通过现有路由打开任务详情并保留来源路径"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "每条真实列表任务，read角色也可导航",
@@ -1024,7 +1026,7 @@
         "apps/web/src/components/TaskListPanel.vue#a52d2fd8d2453f5a.1"
       ],
       "sourceContractKeys": [
-        "list.row-menu：canUpdate，原生details，局部删除入口"
+        "task.list.row-menu：行内更多菜单，保留现有canUpdate门"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "canUpdate原生details；不受任务终态前端隐藏",
@@ -1080,7 +1082,7 @@
         "apps/web/src/components/TaskListPanel.vue#b4c8f55424911113.1"
       ],
       "sourceContractKeys": [
-        "delete.open：askRemove(row)，清删除原因"
+        "task.delete.open：选择目标任务并打开既有删除确认窗"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "canUpdate，askRemove仅检查该能力，不检查busy/终态",
@@ -1133,10 +1135,10 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#dcc3dd67cea16d16.1"
+        "apps/web/src/components/TaskBatchActions.vue#62a85ecfcbf87cd0.1"
       ],
       "sourceContractKeys": [
-        "batch.pause.open：有选中且canUpdate，预览in_progress可执行项"
+        "task.batch.pause.open：批量暂停预览入口"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
@@ -1185,10 +1187,10 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#8c9d3d93d6a0168a.1"
+        "apps/web/src/components/TaskBatchActions.vue#e5ca8829d0379397.1"
       ],
       "sourceContractKeys": [
-        "batch.resume.open：有选中且canUpdate，预览paused可执行项"
+        "task.batch.resume.open：批量继续预览入口"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
@@ -1237,10 +1239,10 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#238f1a6251ae9783.1"
+        "apps/web/src/components/TaskBatchActions.vue#2891c626e1bace29.1"
       ],
       "sourceContractKeys": [
-        "batch.delay.open：有选中且canUpdate，未结束项可执行"
+        "task.batch.delay.open：批量延期预览入口"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
@@ -1289,10 +1291,10 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#5694b69e2e543c38.1"
+        "apps/web/src/components/TaskBatchActions.vue#9c5e331f305cf169.1"
       ],
       "sourceContractKeys": [
-        "batch.transfer.open：另需canAssign，未结束项可执行"
+        "task.batch.transfer.open：受canAssign约束的批量转交入口"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
@@ -1349,10 +1351,10 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#70c47404dd2cc51e.1"
+        "apps/web/src/components/TaskBatchActions.vue#4a8081057a9059a8.1"
       ],
       "sourceContractKeys": [
-        "batch.cancel.open：canUpdate，未结束项可执行"
+        "task.batch.cancel.open：批量取消预览入口"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "父canUpdate、targets.length>0；transfer另需canAssign，previewBatch无busy检查",
@@ -1401,12 +1403,14 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#446106c89d9d1204.1",
-        "apps/web/src/components/TaskBatchActions.vue#99031a2db9919db6.1"
+        "apps/web/src/components/TaskBatchActions.vue#6ed34d8b411b3e7e.1",
+        "apps/web/src/components/TaskBatchActions.vue#79fb7e0ae4a473b6.1",
+        "apps/web/src/components/TaskBatchActions.vue#9ff94b39657d19fc.1"
       ],
       "sourceContractKeys": [
-        "batch.{x}.close：原生cancel→close，不清选中项",
-        "batch.{x}.close：返回按钮，保留选择，无写入"
+        "task.batch.close：原生cancel事件；busy时由现有处理器阻止关闭",
+        "task.batch.close：可见标题关闭入口，仅目录呈现下显示",
+        "task.batch.close：返回，不提交；busy时禁用"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "返回与原生Escape均没有busy保护",
@@ -1455,12 +1459,12 @@
       "kind": "write",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#e81628577b69db40.1",
-        "apps/web/src/components/TaskBatchActions.vue#83d4d6c6f2015e2f.1"
+        "apps/web/src/components/TaskBatchActions.vue#cdc6296242911520.1",
+        "apps/web/src/components/TaskBatchActions.vue#49ed8961275ff562.1"
       ],
       "sourceContractKeys": [
-        "batch.{x}.submit：confirmBatch，逐任务POST，不存在批量API",
-        "batch.{x}.submit：busy或无eligible禁用"
+        "task.batch.{x}.submit：先固定目标、资格及跳过范围，再逐项调用既有动作",
+        "task.batch.submit：busy或无eligible时禁用"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "确认按钮busy或无eligible禁用；函数只检查资格/所需字段，无busy/capability早退",
@@ -1533,10 +1537,10 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#d4003ff11f44d9cc.1"
+        "apps/web/src/components/TaskBatchActions.vue#170684fa7d28fc34.1"
       ],
       "sourceContractKeys": [
-        "batch.reason.change：resume之外必填原因，最多500"
+        "task.batch.reason.change：非resume动作更新本地原因"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "除resume外required maxlength500；无busy disabled",
@@ -1599,10 +1603,10 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#0fc52b5608263ef6.1"
+        "apps/web/src/components/TaskBatchActions.vue#34eb3f72bf807954.1"
       ],
       "sourceContractKeys": [
-        "batch.delay.due.change：延期必填日期"
+        "task.batch.due.change：延期日期本地模型更新"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "仅delay，datetime-local required，无busy disabled",
@@ -1646,10 +1650,10 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#f7f3da8b759864b6.1"
+        "apps/web/src/components/TaskBatchActions.vue#a66f600d04692725.1"
       ],
       "sourceContractKeys": [
-        "batch.transfer.assignee.change：转交必选现有成员"
+        "task.batch.assignee.change：当前工作区成员本地选择"
       ],
       "contractAliasReason": "既有任务合同最后一列含语义及解释；按完整原单元格绑定，组键仅用于P13归属，不新增业务规则。",
       "condition": "仅transfer，required select，选项来自memberOptions，无busy disabled",
@@ -1701,10 +1705,10 @@
       "kind": "wiring",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1"
+        "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1"
       ],
       "sourceContractKeys": [
-        "batch.{x}.open/submit/close，batch.field.change：子组件事件中转，不是独立控件"
+        "task.batch.events：转发批量操作、关闭、确认及字段变化，不新增写路径"
       ],
       "contractAliasReason": "原合同容器或转发记录；关联到本页显式动作，不把事件中转算作额外按钮。",
       "condition": "业务列表挂载；批量调用另需canUpdate",
@@ -1742,7 +1746,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
           "event": "@start",
           "handler": "previewBatch",
           "targets": [
@@ -1754,7 +1758,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
           "event": "@close",
           "handler": "showBatchImpact = false",
           "targets": [
@@ -1762,7 +1766,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
           "event": "@confirm",
           "handler": "confirmBatch",
           "targets": [
@@ -1770,7 +1774,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
           "event": "@update:reason",
           "handler": "batchReason = $event",
           "targets": [
@@ -1778,7 +1782,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
           "event": "@update:due-at",
           "handler": "batchDueAt = $event",
           "targets": [
@@ -1786,7 +1790,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#4910da2c0141bbb4.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
           "event": "@update:assignee-id",
           "handler": "batchAssigneeId = $event",
           "targets": [
@@ -1804,7 +1808,7 @@
         "apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1"
       ],
       "sourceContractKeys": [
-        "list.select/status/search/reset/create.open/delete.open：子组件事件中转，不是独立控件"
+        "task.list.events：转发列表筛选、选择、新建、删除意图"
       ],
       "contractAliasReason": "原合同容器或转发记录；关联到本页显式动作，不把事件中转算作额外按钮。",
       "condition": "业务列表挂载；批量调用另需canUpdate",
@@ -1902,7 +1906,7 @@
         "apps/web/src/components/TaskWorkspace.vue#8bf4c56bada725b4.1"
       ],
       "sourceContractKeys": [
-        "task.editor.create / task.editor.edit（2变体）"
+        "task.editor.create/edit：新建与编辑共享既有表单"
       ],
       "contractAliasReason": "原合同容器或转发记录；关联到本页显式动作，不把事件中转算作额外按钮。",
       "condition": "相应isOpen通过useModalDialog控制showModal",
@@ -1935,10 +1939,10 @@
       "kind": "wiring",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1"
+        "apps/web/src/components/TaskWorkspace.vue#6c7534a24387a114.1"
       ],
       "sourceContractKeys": [
-        "task.delete（1变体）"
+        "task.delete：显示目标、影响、原因及保留审计的事实"
       ],
       "contractAliasReason": "原合同容器或转发记录；关联到本页显式动作，不把事件中转算作额外按钮。",
       "condition": "相应isOpen通过useModalDialog控制showModal",
@@ -1971,10 +1975,10 @@
       "kind": "wiring",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#6b0b774adfa59ad6.1"
+        "apps/web/src/components/TaskBatchActions.vue#d094dbe2ef220124.1"
       ],
       "sourceContractKeys": [
-        "task.batch.pause / resume / delay / transfer / cancel（5变体）"
+        "task.batch.{pause,resume,delay,transfer,cancel}：共享影响确认窗"
       ],
       "contractAliasReason": "原合同容器或转发记录；关联到本页显式动作，不把事件中转算作额外按钮。",
       "condition": "相应isOpen通过useModalDialog控制showModal",
