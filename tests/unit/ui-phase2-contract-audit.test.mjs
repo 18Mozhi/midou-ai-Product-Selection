@@ -2542,6 +2542,40 @@ test("current P39 account center maps refresh control and parent-owned load wiri
     assert.equal(record.recordedLine, candidate?.line, record.candidateId);
     assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
   }
+  const staleSignatures = [
+    "eedb593a22243281.1",
+    "6d8a89fda1f94214.1",
+    "454d991f8fed8550.1",
+    "4681ec75ac4845ca.1",
+    "3ba83336a51e7303.1",
+    "e112a995ce86318a.1",
+    "ebbfe99328a93a8a.1",
+    "08063437101eb52f.1",
+    "6a22c249121aeb4d.1",
+    "d4e23c718ed64cd0.1",
+    "9ea6aa71cb45580a.1",
+    "15769a468957ac3f.1",
+    "df9b0cebe8f296a1.1",
+    "d4e23c718ed64cd0.2",
+    "64fa4a4db515a792.1",
+    "23e58bc5ed3b6439.1",
+    "4eb362af5381776f.1",
+    "c43be07eff2d7020.1",
+    "6d8a89fda1f94214.2",
+    "454d991f8fed8550.2",
+    "4681ec75ac4845ca.2",
+    "1d3e2d941d1ed0f3.1",
+    "636343c5842c998f.1",
+  ];
+  const historicalRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.candidateId &&
+      staleSignatures.some((signature) => record.candidateId.endsWith(`#${signature}`)),
+  );
+  assert.equal(historicalRows.length, staleSignatures.length);
+  assert.ok(historicalRows.every((record) => record.temporalScope === "historical"));
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );

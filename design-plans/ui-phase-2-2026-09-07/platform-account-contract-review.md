@@ -10,7 +10,9 @@
 
 别名全部位于apps/web/src/components/：D=PlatformDashboard.vue，C=PlatformAccountCenter.vue，O=PlatformOrganizationRecords.vue，M=PlatformAdminRecords.vue，W=OrganizationCreationWizard.vue，G=PlatformOrganizationDetailDialog.vue，R=PlatformRoleComparison.vue；P43既有A=PlatformAccountDialogs.vue、U=PlatformUserRecords.vue、V=PlatformUserDetailDialog.vue、F=PlatformUserMembershipForm.vue。共享S=ResponsiveDataView.vue、Q=ResponsiveFilterDrawer.vue、T=TableViewControls.vue、X=TechnicalDetails.vue。sig只在所属文件内唯一，不跨文件相加去重。
 
-### 1.1 本族新增79候选的逐对象归属
+### 1.1 本族新增79候选的逐对象归属（历史快照）
+
+此表保持2026-09-08初始归属的语义记录；其中`PlatformAccountCenter.vue`有23个旧签名已在当前源码中不存在，见1.6。它们不计入当前候选覆盖；当前118候选及源码身份以[当前合同接续](platform-account-current-contract.md)和后续精确增量为准，不推定23条旧身份与新签名一一对应。
 
 | 文件 | candidate sig | 归属/真实语义 |
 | --- | --- | --- |
@@ -38,36 +40,13 @@
 | C | bcd4023ebe5d9ca9.1 | PA45-REFRESH 刷新角色目录 |
 | C | 280136c1a545dff9.1 | PA-ORG-CREATE 非P45页头打开组织向导 |
 | C | 1516ea5a6c3b1540.1 | PA-USER-CREATE 新用户/管理员，admins默认运营角色 |
-| C | eedb593a22243281.1 | PA-REFRESH 刷新账号，refreshing/busy禁用 |
 | C | c4cfef52bcc169fb.1 | PA45-REFRESH 角色首读错误重试 |
 | C | c526b71b2b59e702.1 | PA45-REFRESH 空角色目录重新检查 |
-| C | 6d8a89fda1f94214.1 | PA-NAV-ORG 跳P40 |
-| C | 454d991f8fed8550.1 | PA-NAV-USER 跳P43 |
-| C | 4681ec75ac4845ca.1 | PA-NAV-ADMIN 跳P44 |
-| C | 3ba83336a51e7303.1 | PA-FILTER-DRAWER 共享筛选调用，不是独立业务写窗 |
-| C | e112a995ce86318a.1 | PA-FILTER form→applyFilters |
-| C | ebbfe99328a93a8a.1 | PA-FILTER 搜索submit按钮，与form归并 |
-| C | 08063437101eb52f.1 | PA-RESET 重置query/status；无条件/刷新时禁用 |
-| C | 6a22c249121aeb4d.1 | PA-REFRESH 账号首读错误重试 |
-| C | d4e23c718ed64cd0.1 | PA-RESET 组织筛选空态清除 |
-| C | 9ea6aa71cb45580a.1 | PA-ORG-CREATE P40无组织空态新建 |
-| C | 15769a468957ac3f.1 | PA-ORG-DETAIL 组织记录事件转发 |
-| C | df9b0cebe8f296a1.1 | PA43-DETAIL 用户记录事件转发 |
-| C | d4e23c718ed64cd0.2 | PA-RESET 管理员筛选空态清除 |
-| C | 64fa4a4db515a792.1 | PA-USER-CREATE 管理员空态新建 |
-| C | 23e58bc5ed3b6439.1 | PA43-DETAIL 管理员记录转同一用户详情 |
 | C | 5db731eeed33ba4f.1 | PA41 向导clearError/close/submit事件集合 |
 | C | 559dcb14c786950e.1 | PA43窗口事件集合：创建、密码、原因、关闭、reason更新 |
 | C | 1fff4198190d6ece.1 | 同上一项AccountDialogs组件调用，非新增业务动作 |
-| C | 4eb362af5381776f.1 | PA42 close/retry/clearFeedback/save/toggleStatus转发 |
-| C | c43be07eff2d7020.1 | 同上一项组织详情组件调用 |
 | C | 39878a11789ae9ce.1 | PA43 close/retry/status/role/membership/password/session转发 |
 | C | cab997ead119619a.1 | 同上一项用户详情组件调用 |
-| C | 6d8a89fda1f94214.2 | PA-NAV-ORG 同一组织管理路径；`!adminListRoute` 导航分支 |
-| C | 454d991f8fed8550.2 | PA-NAV-USER 同一用户管理路径；`!adminListRoute` 导航分支 |
-| C | 4681ec75ac4845ca.2 | PA-NAV-ADMIN 同一管理员管理路径；`!adminListRoute` 导航分支 |
-| C | 1d3e2d941d1ed0f3.1 | PA-FILTER-DRAWER ResponsiveFilterDrawer调用；共享容器，不另计业务动作 |
-| C | 636343c5842c998f.1 | PA-FILTER form提交调用applyFilters；搜索与form语义归并 |
 | C | 6f151cbab1f5518e.1 | PA42 close/retry/clear-feedback/save/toggle-status事件转发，非新增动作 |
 | C | 39ba950db197263c.1 | 同上一项PlatformOrganizationDetailDialog调用 |
 | O | 6923b73e52535ef3.1 | PA-ORG-DETAIL 桌面详情；busy禁用 |
@@ -189,6 +168,38 @@ T只在组件内保存hiddenColumns索引/freezeFirst/density；默认全显示�
 | T | density | standard/compact，当前实例，不写URL/API |
 
 共享原因textarea是value/input转发，属于A的候选b313681d9ad25f0e.1，不是漏掉的第25处v-model；列开关为checked/change也非v-model。原生select弹层不作为产品业务弹窗。
+
+### 1.6 P39账号中心早期身份归档（历史）
+
+以下23个C身份属于初始源码快照，当前`PlatformAccountCenter.vue`中均已无该签名。当前合同接续基于真实源码扫描确定候选集，但没有为这23个旧控件逐条声明一一替代项；因此这里只保留旧语义和追溯身份，不推定按钮/导航/筛选/父级事件仍按旧实现运行。P39当前刷新增量见第9节。
+
+#### PlatformAccountCenter.vue
+
+| 旧candidateId | 初始快照语义 |
+| --- | --- |
+| C#eedb593a22243281.1 | PA-REFRESH 刷新账号，refreshing/busy禁用 |
+| C#6d8a89fda1f94214.1 | PA-NAV-ORG 跳P40 |
+| C#454d991f8fed8550.1 | PA-NAV-USER 跳P43 |
+| C#4681ec75ac4845ca.1 | PA-NAV-ADMIN 跳P44 |
+| C#3ba83336a51e7303.1 | PA-FILTER-DRAWER 共享筛选调用，不是独立业务写窗 |
+| C#e112a995ce86318a.1 | PA-FILTER form→applyFilters |
+| C#ebbfe99328a93a8a.1 | PA-FILTER 搜索submit按钮，与form归并 |
+| C#08063437101eb52f.1 | PA-RESET 重置query/status；无条件/刷新时禁用 |
+| C#6a22c249121aeb4d.1 | PA-REFRESH 账号首读错误重试 |
+| C#d4e23c718ed64cd0.1 | PA-RESET 组织筛选空态清除 |
+| C#9ea6aa71cb45580a.1 | PA-ORG-CREATE P40无组织空态新建 |
+| C#15769a468957ac3f.1 | PA-ORG-DETAIL 组织记录事件转发 |
+| C#df9b0cebe8f296a1.1 | PA43-DETAIL 用户记录事件转发 |
+| C#d4e23c718ed64cd0.2 | PA-RESET 管理员筛选空态清除 |
+| C#64fa4a4db515a792.1 | PA-USER-CREATE 管理员空态新建 |
+| C#23e58bc5ed3b6439.1 | PA43-DETAIL 管理员记录转同一用户详情 |
+| C#4eb362af5381776f.1 | PA42 close/retry/clearFeedback/save/toggleStatus转发 |
+| C#c43be07eff2d7020.1 | PA42组织详情组件调用 |
+| C#6d8a89fda1f94214.2 | PA-NAV-ORG 同一组织管理路径；`!adminListRoute` 导航分支 |
+| C#454d991f8fed8550.2 | PA-NAV-USER 同一用户管理路径；`!adminListRoute` 导航分支 |
+| C#4681ec75ac4845ca.2 | PA-NAV-ADMIN 同一管理员管理路径；`!adminListRoute` 导航分支 |
+| C#1d3e2d941d1ed0f3.1 | PA-FILTER-DRAWER ResponsiveFilterDrawer调用；共享容器，不另计业务动作 |
+| C#636343c5842c998f.1 | PA-FILTER form提交调用applyFilters；搜索与form语义归并 |
 
 ## 2. 语义动作与真实调用链
 
