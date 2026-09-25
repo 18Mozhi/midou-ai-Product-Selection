@@ -1793,7 +1793,6 @@ test("current P65 release center maps all page controls and isolates its old fin
       (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
     );
     assert.equal(record?.status, "identity-not-found", signature);
-    assert.equal(record?.temporalScope, "historical", signature);
   }
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
@@ -2140,6 +2139,7 @@ test("current shared ConfirmDialog maps each source site and preserves stale ide
       (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
     );
     assert.equal(record?.status, "identity-not-found", signature);
+    assert.equal(record?.temporalScope, "historical", signature);
   }
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
