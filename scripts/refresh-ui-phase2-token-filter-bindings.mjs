@@ -8,7 +8,10 @@ import {
   tokenComponent,
 } from "./lib/ui-phase2-token-filter-delta.mjs";
 import { undoTokenQuerySync } from "./lib/ui-phase2-token-query-delta.mjs";
-import { historicalTokenCopySource } from "./lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  historicalTokenCopySource,
+} from "./lib/ui-phase2-token-copy-baseline.mjs";
 import {
   readBeforeAuditPage,
   hasAuditPageAssociations,
@@ -35,7 +38,7 @@ const actual = JSON.parse(await text("output/playwright/p36-mobile-filters-vue/e
 assert.equal(actual.baselineCommit, baselineCommit);
 assert.deepEqual([...new Set(actual.checks.map((c) => c.width))], [390, 760, 761, 1440]);
 for (const [f, sha] of Object.entries(actual.sourceHashes))
-  assert.equal(hash(await text(f)), sha, f);
+  assertCaptureSourceRevision(f, await text(f), sha);
 for (const s of actual.screenshots)
   assert.equal(
     hash(await readFile(`output/playwright/p36-mobile-filters-vue/${s.file}`)),
@@ -56,7 +59,7 @@ for (const dir of dirs) {
     next = structuredClone(old);
   assert.equal(old.sourceHashes[tokenComponent], hash(oldSource));
   for (const [f, sha] of Object.entries(old.sourceHashes))
-    if (f !== tokenComponent) assert.equal(hash(await text(f)), sha, f);
+    if (f !== tokenComponent) assertCaptureSourceRevision(f, await text(f), sha);
   for (const s of old.screenshots)
     assert.equal(hash(await readFile(`${dir}/${s.file}`)), s.sha256, s.file);
   pngCount += old.screenshots.length;

@@ -104,7 +104,12 @@ test("P36 reason preview is CSS-only and leaves production and approved filter e
     assert.equal(read(file).includes("token-reason-preview"), false, file);
   const source = read("apps/web/src/components/AuditedReasonDialog.vue");
   assert.match(source, /:minlength="minimumLength \?\? 2"/);
-  assert.equal(source.includes("maxlength"), false);
+  const parent = read("apps/web/src/components/OrganizationAdminCenter.vue");
+  const p36ReasonCall = parent
+    .match(/<AuditedReasonDialog\b[\s\S]*?\/>/gu)
+    ?.find((tag) => tag.includes("auditedReasonOpen"));
+  assert.ok(p36ReasonCall, "P36 reason dialog caller remains present");
+  assert.doesNotMatch(p36ReasonCall, /maximum(?:-|_)?length|maximumLength/u);
   const css = read("design-plans/ui-phase-2-2026-09-07/implementation/token-reason-preview.css");
   assert.match(css, /\.p36-reason-preview #app \.audited-reason-dialog\[aria-label\^="撤销"\]/);
   assert.match(css, /prefers-reduced-motion: reduce/);

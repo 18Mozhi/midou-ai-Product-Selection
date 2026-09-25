@@ -1,5 +1,8 @@
 import assert from "node:assert/strict";
-import { historicalTokenCopySource } from "./lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  historicalTokenCopySource,
+} from "./lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
@@ -223,13 +226,13 @@ const parentInputs = [
   "form.reason",
 ];
 const meanings = {
-  "createForm.name": "名称required/max120，提交trim；等待仍可编辑",
-  "createForm.ttl_days": "number模型，required/min1/max365；默认90，四快捷只改草稿",
-  "createForm.reason": "创建原因required/max500，提交trim；不等于共享原因窗上限",
   tokenQuery: "搜索名称/前缀/中文状态/scope，不搜索ID；本地无maxlength，URL初读200",
   statusFilter: "all/active/expiring/never_used/revoked/rotated/expired；按已返回数据计算",
   scopeFilter: "全部及四固定scope，只筛选已有数据不更改授权",
   tokenSort: "created_desc/expires_asc/last_used_desc/name_asc/status_asc，完整数组先排序再分页",
+  "createForm.name": "名称required/max120，提交trim；等待仍可编辑",
+  "createForm.ttl_days": "number模型，required/min1/max365；默认90，四快捷只改草稿",
+  "createForm.reason": "创建原因required/max500，提交trim；不等于共享原因窗上限",
 };
 const controlAction = {
   reset: "OG-K-FILTER",
@@ -251,6 +254,37 @@ const sharedFiles = [
   "apps/web/src/use-audited-reason.ts",
   "apps/web/src/use-modal-dialog.ts",
 ];
+const serializeReview = (review) => {
+  const lines = JSON.stringify(review, null, 2).split("\n");
+  for (let index = 0; index < lines.length; index += 1) {
+    const opener = /^(\s*.*?:\s*)\[$/u.exec(lines[index]);
+    if (!opener) continue;
+    const prefix = opener[1];
+    const indent = /^\s*/u.exec(lines[index])[0];
+    const values = [];
+    let end = index + 1;
+    for (; end < lines.length; end += 1) {
+      if (lines[end] === `${indent}]` || lines[end] === `${indent}],`) break;
+      if (!lines[end].startsWith(`${indent}  `)) break;
+      try {
+        const value = JSON.parse(lines[end].trim().replace(/,$/u, ""));
+        if (value !== null && typeof value === "object") break;
+        values.push(value);
+      } catch {
+        break;
+      }
+    }
+    if (!values.length || end >= lines.length || !lines[end].trim().startsWith("]")) continue;
+    const compact = `[${values.map((value) => JSON.stringify(value)).join(", ")}]`;
+    if (compact.length + indent.length > 100) continue;
+    lines.splice(
+      index,
+      end - index + 1,
+      `${prefix}${compact}${lines[end].trim().endsWith(",") ? "," : ""}`,
+    );
+  }
+  return `${lines.join("\n")}\n`;
+};
 export function readOrgTokenReviewInputs() {
   return {
     sources: Object.fromEntries([...dependencies, ...sharedFiles].map((f) => [f, text(f)])),
@@ -329,7 +363,7 @@ export function buildOrgTokenReview({ sources, external }) {
             ? ["f850a4abcc7ccc3a.1"]
             : suffix === "cancel"
               ? ["8724bc1f65aaf63a.1"]
-              : ["e571bad78d52022e.1", "e7e63c4215a43738.1"]),
+              : ["e7e63c4215a43738.1"]),
         ),
       };
     }
@@ -632,7 +666,7 @@ export function validateOrgTokenBindings(review, inputs) {
   for (const [key, e] of Object.entries(inputs.external)) {
     for (const [f, sha] of Object.entries(e.sourceHashes))
       // External captures remain historical; action mapping above uses actual current sources.
-      assert.equal(hash(historicalTokenCopySource(f, text(f))), sha, `${key}: ${f}`);
+      assertCaptureSourceRevision(f, text(f), sha);
     for (const s of e.screenshots)
       assert.equal(
         hash(readFileSync(`${path.posix.dirname(externalPaths[key])}/${s.file}`)),
@@ -674,7 +708,11 @@ export function validateOrgTokenBindings(review, inputs) {
       .flatMap((a) => a.sourceCandidateIds)
       .sort(),
   );
-  assert.doesNotMatch(inputs.sources[reasonFile], /maxlength=/);
+  const p36ReasonCall = inputs.sources[parentFile]
+    .match(/<AuditedReasonDialog\b[\s\S]*?\/>/gu)
+    ?.find((tag) => tag.includes("auditedReasonOpen"));
+  assert.ok(p36ReasonCall, "P36 shared reason dialog caller remains present");
+  assert.doesNotMatch(p36ReasonCall, /maximum(?:-|_)?length|maximumLength/u);
   return {
     sourceSites: review.actions.flatMap((a) => a.sourceCandidateIds).length,
     semanticGroups: review.actions.length,
@@ -709,10 +747,10 @@ ${inputs.external.implementation.screenshots.map((s) => `<article><h2>${s.scene}
 </html>\n`;
   const galleryPath = `${path.posix.dirname(externalPaths.implementation)}/index.html`;
   if (process.argv.includes("--write")) {
-    writeFileSync(target, JSON.stringify(review, null, 2) + "\n");
+    writeFileSync(target, serializeReview(review));
     writeFileSync(galleryPath, gallery);
   } else {
-    assert.deepEqual(JSON.parse(text(target)), review);
+    assert.equal(text(target), serializeReview(review));
     assert.equal(text(galleryPath), gallery);
   }
   console.log(JSON.stringify({ pageId: "P36", ...result, approval: review.approval }));

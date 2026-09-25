@@ -6,17 +6,15 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-    "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
   },
   "actions": [
     {
       "actionId": "OG-REFRESH",
       "label": "刷新令牌数据",
       "kind": "read",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"],
       "sourceContractKeys": ["OG-REFRESH"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "loading或refreshing禁用",
@@ -48,9 +46,7 @@
       "actionId": "OG-RETRY",
       "label": "重新读取",
       "kind": "read",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"],
       "sourceContractKeys": ["OG-RETRY"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "父error/blocked/expired/forbidden/rate_limited/conflict分支",
@@ -153,9 +149,7 @@
       "actionId": "EX-P30-MEMBERS",
       "label": "成员转发排除",
       "kind": "excluded",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"],
       "sourceContractKeys": ["P30全部成员事件父转发，复用M语义"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅members",
@@ -187,9 +181,7 @@
       "actionId": "EX-P31-ROLES",
       "label": "资源授权转发排除",
       "kind": "excluded",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"],
       "sourceContractKeys": ["P31资源授权父转发，复用已有合同"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅roles",
@@ -221,9 +213,7 @@
       "actionId": "EX-GENERIC-REASON",
       "label": "他页原因入口排除",
       "kind": "excluded",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1"],
       "sourceContractKeys": ["D-OG-REASON通用成员/邀请/工作区/团队及P31调用"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "非tokenAction路径",
@@ -317,9 +307,7 @@
       "actionId": "W-K-ASK",
       "label": "轮换/撤销原因调用",
       "kind": "wiring",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"],
       "sourceContractKeys": ["D-OG-REASON令牌轮换/撤销调用"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "tokenAction调用",
@@ -353,9 +341,7 @@
       "actionId": "OG-K-COPY",
       "label": "复制明文",
       "kind": "local",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"],
       "sourceContractKeys": ["OG-K-COPY"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "secret非空",
@@ -387,9 +373,7 @@
       "actionId": "OG-K-DISMISS",
       "label": "关闭本次明文",
       "kind": "local",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"],
       "sourceContractKeys": ["OG-K-DISMISS"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "secret非空",
@@ -456,9 +440,7 @@
       "actionId": "OG-K-SCOPE",
       "label": "选择读取范围",
       "kind": "local",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sourceContractKeys": ["OG-K-SCOPE四种"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "四固定复选框，等待时仍可编辑",
@@ -490,9 +472,7 @@
       "actionId": "OG-K-TTL",
       "label": "有效期快捷选择",
       "kind": "local",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sourceContractKeys": ["OG-K-TTL四快捷"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "30/90/180/365与aria-pressed",
@@ -524,9 +504,7 @@
       "actionId": "OG-K-FILTER",
       "label": "重置筛选",
       "kind": "local",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"],
       "sourceContractKeys": ["OG-K-FILTER重置"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "本地四条件，等待可用",
@@ -558,9 +536,7 @@
       "actionId": "OG-TECH",
       "label": "技术详情",
       "kind": "local",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"],
       "sourceContractKeys": ["OG-TECH"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "可见记录的原生details",
@@ -592,9 +568,7 @@
       "actionId": "OG-K-ROTATE",
       "label": "轮换密钥",
       "kind": "write",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"],
       "sourceContractKeys": ["OG-K-ROTATE"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "active且非busy",
@@ -626,9 +600,7 @@
       "actionId": "OG-K-REVOKE",
       "label": "撤销访问",
       "kind": "write",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"],
       "sourceContractKeys": ["OG-K-REVOKE"],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "active且非busy",
@@ -706,13 +678,13 @@
       "form.reason"
     ],
     "OrganizationTokenPanel.vue": [
-      "createForm.name",
-      "createForm.ttl_days",
-      "createForm.reason",
       "tokenQuery",
       "statusFilter",
       "scopeFilter",
-      "tokenSort"
+      "tokenSort",
+      "createForm.name",
+      "createForm.ttl_days",
+      "createForm.reason"
     ]
   },
   "propBindings": [
@@ -885,9 +857,7 @@
       "sharedReason": false,
       "parentReference": true,
       "actionId": "OG-REFRESH",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -952,9 +922,7 @@
       "sharedReason": false,
       "parentReference": true,
       "actionId": "OG-RETRY",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1064,9 +1032,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-FILTER",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1176,9 +1142,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-TECH",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1233,9 +1197,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-TECH",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1290,9 +1252,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-PAGE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1347,9 +1307,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-PAGE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1374,9 +1332,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-PAGE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1431,9 +1387,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-PAGE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1526,9 +1480,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1583,9 +1535,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1640,9 +1590,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1697,9 +1645,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1754,9 +1700,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1811,9 +1755,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1868,9 +1810,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1925,9 +1865,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1982,9 +1920,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2039,9 +1975,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2096,9 +2030,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2153,9 +2085,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2210,9 +2140,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2267,9 +2195,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2324,9 +2250,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2381,9 +2305,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2438,9 +2360,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-COPY",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2495,9 +2415,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-COPY",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2552,9 +2470,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-COPY",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2609,9 +2525,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-DISMISS",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2666,9 +2580,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2844,10 +2756,7 @@
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#7aa809a5cd2d2124.1",
-        "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
-      ],
+      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/rotate-submit-default-1440.png",
@@ -2911,9 +2820,7 @@
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -3089,10 +2996,7 @@
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#7aa809a5cd2d2124.1",
-        "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
-      ],
+      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/revoke-submit-default-1440.png",
@@ -3599,7 +3503,7 @@
     "sourceHashes": {
       "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
-      "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f"
+      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc"
     },
     "scope": "P36消费上下文，不将共享源加入本页唯一按钮分母",
     "sourceSites": [
@@ -3655,7 +3559,7 @@
       "minimum": 2,
       "maxlength": null,
       "initialValue": "",
-      "meaning": "P36消费者未传maximumLength，仍无maxlength；P54单独传300不改变本页合同"
+      "meaning": "当前Vue没有maxlength；原提案500上限未获业务批准"
     },
     "contexts": [
       {
@@ -3803,8 +3707,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-      "apps/web/src/components/OrganizationTokenPanel.vue": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+      "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
     },
     "inputs": [
       {
@@ -3842,312 +3746,6 @@
         "binding": "form.reason",
         "meaning": "P29资料分支，本页排除",
         "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
-      },
-      {
-        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-        "binding": "createForm.name",
-        "meaning": "名称required/max120，提交trim；等待仍可编辑",
-        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-        "fieldEvidence": {
-          "id": "create-name",
-          "selector": "#create-name",
-          "screenshots": [
-            {
-              "file": "output/playwright/p36-fields-review/create-name-default-1440.png",
-              "width": 1440,
-              "sha256": "abfda97a264dfaad9652a1876f1de09e5864c86618774fdfd819708727849deb"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-hover-1440.png",
-              "width": 1440,
-              "sha256": "17679e209705510577418d1fa7b9069d7b676cfc407bcd4d01d5c2a00a2a23c5"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-focus-1440.png",
-              "width": 1440,
-              "sha256": "185a7297425170522a5cf46b23cf9006e00ec2f1e6c45c367e3d4d0eec0e4703"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-filled-1440.png",
-              "width": 1440,
-              "sha256": "49b718aa2cb08853982d31f96df98a5e5d618985834931f3ba08848249bbfeac"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-limit-1440.png",
-              "width": 1440,
-              "sha256": "6a7f8a0efc944b9904b07140d587585deecee3712ce4c570fe3c511ab735ee2d"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-spaces-1440.png",
-              "width": 1440,
-              "sha256": "79e8cebcc9e9a1ceee509f2e6989c992290099b935e964521c69e2be2a2750cf"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-error-1440.png",
-              "width": 1440,
-              "sha256": "bd5631d26d0ff7cafa2f9ee5809c3cf13b513ad52f085f3bd39afe225321b978"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-busy-1440.png",
-              "width": 1440,
-              "sha256": "d9b8b6b38196502815a63bcb7eccc5c5e6b20aae5b8b6c82e610025c6e06c77f"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-default-390.png",
-              "width": 390,
-              "sha256": "cc710db0e12b21698ffd9feaa3a3170ecab2dec87194957bd7385806f42dbe7e"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-hover-390.png",
-              "width": 390,
-              "sha256": "93137222dca2d739d05053687ac40e03cb3717d237b7f7189fc7d98c053b7cba"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-focus-390.png",
-              "width": 390,
-              "sha256": "83c1ce1ec55e4a710d475170a63c4e814ec5b100ffbff511e3c1b271796d391f"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-filled-390.png",
-              "width": 390,
-              "sha256": "6a1d868d50a02981d6de179367e13bfdc283cf14b4834e34ee35cea6b84d2cab"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-limit-390.png",
-              "width": 390,
-              "sha256": "0824cc9fb40897d0a0e1726b7ef158e10583e322c6988b5fe8de133551e46354"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-spaces-390.png",
-              "width": 390,
-              "sha256": "1510d70079ecff9bc8fdbfee7edc88fcba73d8d888c1e65e288e9e6216903750"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-error-390.png",
-              "width": 390,
-              "sha256": "ab0ecf2cbb2f63c75000a822ef6a2e96ee8b2628022e212e5204d5d1d1a61bb8"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-name-busy-390.png",
-              "width": 390,
-              "sha256": "6f1d7004b44e0464b067cc29cb37da504696f42d4fff8c16def279125a783c96"
-            }
-          ]
-        }
-      },
-      {
-        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-        "binding": "createForm.ttl_days",
-        "meaning": "number模型，required/min1/max365；默认90，四快捷只改草稿",
-        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-        "fieldEvidence": {
-          "id": "create-ttl",
-          "selector": "#create-ttl",
-          "screenshots": [
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-default-1440.png",
-              "width": 1440,
-              "sha256": "31b117002ab04e4dabf260b8a23fc1f16bef64e6b335aa250494d784f3b473ce"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-hover-1440.png",
-              "width": 1440,
-              "sha256": "c859fc2abc1b148aac902d958fa6ebcb41cdd5d7761cb71c2c3de238cd916f4d"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-focus-1440.png",
-              "width": 1440,
-              "sha256": "c1f25663d6c7b8aff99b84e23164e9fdc6a295ae10e9bcb429c8e2c540ef21e8"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-minimum-1440.png",
-              "width": 1440,
-              "sha256": "db55f6f4270bee780c7b6ecac47dbbe4fc38a8880224364d6b4d849175921724"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-maximum-1440.png",
-              "width": 1440,
-              "sha256": "bba1aca22391ac50ff2d471769b50ed4b74e5712df7ba38c1407524550a7c922"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-zero-1440.png",
-              "width": 1440,
-              "sha256": "c147251018175a0865f736a0d02659767bb6687f2822cf28548de14b2c4abc0d"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-over-1440.png",
-              "width": 1440,
-              "sha256": "b0524b0a225729d32f4c65659fcd941b72a9e5a46a81cd8afa862ca6d279a33b"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-fraction-1440.png",
-              "width": 1440,
-              "sha256": "cd164102e0d59233d436116dd829526473aee1e38038c27bf326af03fde77bab"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-empty-1440.png",
-              "width": 1440,
-              "sha256": "18a178fe9fcb44f5542351c3df5f8d532df7c7d379572ee661aa7fa0e6e20418"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-error-1440.png",
-              "width": 1440,
-              "sha256": "ae919d976f751cee65eafb5a41546de552e32b22fdee94d15583a4cfe643cbb3"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-busy-1440.png",
-              "width": 1440,
-              "sha256": "a7690c1b9775388779d22912c2169859c6c27adebb0b3f9343d64257d75312da"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-default-390.png",
-              "width": 390,
-              "sha256": "d5112389ca193be2bbbebc242bc5e94f74130a372a4fc9525a8ae88bf92e3b46"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-hover-390.png",
-              "width": 390,
-              "sha256": "d8c2e7dbee45fa326ed6acac9cc6f92063c753eb508454eb1cc30b984b190d10"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-focus-390.png",
-              "width": 390,
-              "sha256": "5dd7a93a281983baee171d8bee2a71019f3050fb4141918b8418ba42d2607893"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-minimum-390.png",
-              "width": 390,
-              "sha256": "c5e815968a384e299bd068ccfeae05eef31ba8f8865609cd84789966a4979315"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-maximum-390.png",
-              "width": 390,
-              "sha256": "297053edc217f84a297890fdc39f7db627d0333e7c18fedf15d51403bd379760"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-zero-390.png",
-              "width": 390,
-              "sha256": "9a92258a706d977e56ecdb4b7635696b01bbf8c182677e73653ecf74ac1e897d"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-over-390.png",
-              "width": 390,
-              "sha256": "e67567c9f4ae4d710a2f81f93c08ea6580bb50ca3e62805f5d3297ef7936f498"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-fraction-390.png",
-              "width": 390,
-              "sha256": "4e42df58c7eb60422acc9a35139936d541ce9b50897e026675b9a4cc1428879c"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-empty-390.png",
-              "width": 390,
-              "sha256": "7bdb7c96520df3801b092111b772df7d7937ebebd8b31d176571fb0b7bde6acd"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-error-390.png",
-              "width": 390,
-              "sha256": "b496f7d412c8f501bc0ebe74044591458d772273b51e60d58dfaa92b29ccb4f1"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-ttl-busy-390.png",
-              "width": 390,
-              "sha256": "dbae8bffdd8a5fc78e07b77e9154fa77ab6b2c43a221e838b46006f7e8d31de9"
-            }
-          ]
-        }
-      },
-      {
-        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-        "binding": "createForm.reason",
-        "meaning": "创建原因required/max500，提交trim；不等于共享原因窗上限",
-        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-        "fieldEvidence": {
-          "id": "create-reason",
-          "selector": "#create-reason",
-          "screenshots": [
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-default-1440.png",
-              "width": 1440,
-              "sha256": "1824f36c4202b559d952f647b9e77faf56c5b04bd6810958f8f5a4f95d89ba14"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-hover-1440.png",
-              "width": 1440,
-              "sha256": "230901835927ab98c19cf9f621a77e6717e90455be98f861b0c60ecf6247e06f"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-focus-1440.png",
-              "width": 1440,
-              "sha256": "33441804054a476268df92dd6eec73961a885b8e236a7b13bb0eee7875fbab77"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-filled-1440.png",
-              "width": 1440,
-              "sha256": "9a349cec74a809d787f312b29dc3e2c1fa6e2c20835242b8bf9b667a5c044bb2"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-limit-1440.png",
-              "width": 1440,
-              "sha256": "173854344478b635948e0f91a2f9af7e4e5894b1bdca24652a4ad3023f1048cf"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-spaces-1440.png",
-              "width": 1440,
-              "sha256": "85a5bc40c0cb24fd3cc8afc5e1bbed91b06a5863c95d0b46fc89afcd0a32ae87"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-error-1440.png",
-              "width": 1440,
-              "sha256": "4b9af0e29ba2c5890dd6a012f181add7e2812771f4b91c48e0036e8d9e0de460"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-busy-1440.png",
-              "width": 1440,
-              "sha256": "7cc40fd36c29585233576b92859fa991ae84e97a798285c05cff0c240b303b27"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-default-390.png",
-              "width": 390,
-              "sha256": "d2fd8cb9bdb5b4609f84af70c7336c66f07019c3649f55046e2398fb5cbf2b4d"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-hover-390.png",
-              "width": 390,
-              "sha256": "4f30bd6001d1bcb2b22fc02f9e088f3a1ae7c632e8171af22bea06f19528d5bc"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-focus-390.png",
-              "width": 390,
-              "sha256": "7ddf6b293bada08f80ce7991921adcfad91dd2415fa1c1f94dca653e6fcbf82d"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-filled-390.png",
-              "width": 390,
-              "sha256": "1ec6565797214de689396dc4c484e735b389611beb8b483ef1553fb7815dfcc3"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-limit-390.png",
-              "width": 390,
-              "sha256": "ffa8ee6e424aad7407a7a096d5257a6ee790429ab65c732ff3c296b539b7d2f7"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-spaces-390.png",
-              "width": 390,
-              "sha256": "b01594935529d6d50469a72bce452e4525eef39eef0371ce2fe0a45e183b4023"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-error-390.png",
-              "width": 390,
-              "sha256": "45d3fc446fa664a8021305c4904ce6ab50505a339cd1f127a871bab134f1f63e"
-            },
-            {
-              "file": "output/playwright/p36-fields-review/create-reason-busy-390.png",
-              "width": 390,
-              "sha256": "042c778cc1b002d9c546cc83960656c3245c668445ecaaa7d688ccf943ae2213"
-            }
-          ]
-        }
       },
       {
         "file": "apps/web/src/components/OrganizationTokenPanel.vue",
@@ -4536,6 +4134,312 @@
             }
           ]
         }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "createForm.name",
+        "meaning": "名称required/max120，提交trim；等待仍可编辑",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "create-name",
+          "selector": "#create-name",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/create-name-default-1440.png",
+              "width": 1440,
+              "sha256": "abfda97a264dfaad9652a1876f1de09e5864c86618774fdfd819708727849deb"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-hover-1440.png",
+              "width": 1440,
+              "sha256": "17679e209705510577418d1fa7b9069d7b676cfc407bcd4d01d5c2a00a2a23c5"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-focus-1440.png",
+              "width": 1440,
+              "sha256": "185a7297425170522a5cf46b23cf9006e00ec2f1e6c45c367e3d4d0eec0e4703"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-filled-1440.png",
+              "width": 1440,
+              "sha256": "49b718aa2cb08853982d31f96df98a5e5d618985834931f3ba08848249bbfeac"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-limit-1440.png",
+              "width": 1440,
+              "sha256": "6a7f8a0efc944b9904b07140d587585deecee3712ce4c570fe3c511ab735ee2d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-spaces-1440.png",
+              "width": 1440,
+              "sha256": "79e8cebcc9e9a1ceee509f2e6989c992290099b935e964521c69e2be2a2750cf"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-error-1440.png",
+              "width": 1440,
+              "sha256": "bd5631d26d0ff7cafa2f9ee5809c3cf13b513ad52f085f3bd39afe225321b978"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-busy-1440.png",
+              "width": 1440,
+              "sha256": "d9b8b6b38196502815a63bcb7eccc5c5e6b20aae5b8b6c82e610025c6e06c77f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-default-390.png",
+              "width": 390,
+              "sha256": "cc710db0e12b21698ffd9feaa3a3170ecab2dec87194957bd7385806f42dbe7e"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-hover-390.png",
+              "width": 390,
+              "sha256": "93137222dca2d739d05053687ac40e03cb3717d237b7f7189fc7d98c053b7cba"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-focus-390.png",
+              "width": 390,
+              "sha256": "83c1ce1ec55e4a710d475170a63c4e814ec5b100ffbff511e3c1b271796d391f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-filled-390.png",
+              "width": 390,
+              "sha256": "6a1d868d50a02981d6de179367e13bfdc283cf14b4834e34ee35cea6b84d2cab"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-limit-390.png",
+              "width": 390,
+              "sha256": "0824cc9fb40897d0a0e1726b7ef158e10583e322c6988b5fe8de133551e46354"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-spaces-390.png",
+              "width": 390,
+              "sha256": "1510d70079ecff9bc8fdbfee7edc88fcba73d8d888c1e65e288e9e6216903750"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-error-390.png",
+              "width": 390,
+              "sha256": "ab0ecf2cbb2f63c75000a822ef6a2e96ee8b2628022e212e5204d5d1d1a61bb8"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-name-busy-390.png",
+              "width": 390,
+              "sha256": "6f1d7004b44e0464b067cc29cb37da504696f42d4fff8c16def279125a783c96"
+            }
+          ]
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "createForm.ttl_days",
+        "meaning": "number模型，required/min1/max365；默认90，四快捷只改草稿",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "create-ttl",
+          "selector": "#create-ttl",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-default-1440.png",
+              "width": 1440,
+              "sha256": "31b117002ab04e4dabf260b8a23fc1f16bef64e6b335aa250494d784f3b473ce"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-hover-1440.png",
+              "width": 1440,
+              "sha256": "c859fc2abc1b148aac902d958fa6ebcb41cdd5d7761cb71c2c3de238cd916f4d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-focus-1440.png",
+              "width": 1440,
+              "sha256": "c1f25663d6c7b8aff99b84e23164e9fdc6a295ae10e9bcb429c8e2c540ef21e8"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-minimum-1440.png",
+              "width": 1440,
+              "sha256": "db55f6f4270bee780c7b6ecac47dbbe4fc38a8880224364d6b4d849175921724"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-maximum-1440.png",
+              "width": 1440,
+              "sha256": "bba1aca22391ac50ff2d471769b50ed4b74e5712df7ba38c1407524550a7c922"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-zero-1440.png",
+              "width": 1440,
+              "sha256": "c147251018175a0865f736a0d02659767bb6687f2822cf28548de14b2c4abc0d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-over-1440.png",
+              "width": 1440,
+              "sha256": "b0524b0a225729d32f4c65659fcd941b72a9e5a46a81cd8afa862ca6d279a33b"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-fraction-1440.png",
+              "width": 1440,
+              "sha256": "cd164102e0d59233d436116dd829526473aee1e38038c27bf326af03fde77bab"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-empty-1440.png",
+              "width": 1440,
+              "sha256": "18a178fe9fcb44f5542351c3df5f8d532df7c7d379572ee661aa7fa0e6e20418"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-error-1440.png",
+              "width": 1440,
+              "sha256": "ae919d976f751cee65eafb5a41546de552e32b22fdee94d15583a4cfe643cbb3"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-busy-1440.png",
+              "width": 1440,
+              "sha256": "a7690c1b9775388779d22912c2169859c6c27adebb0b3f9343d64257d75312da"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-default-390.png",
+              "width": 390,
+              "sha256": "d5112389ca193be2bbbebc242bc5e94f74130a372a4fc9525a8ae88bf92e3b46"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-hover-390.png",
+              "width": 390,
+              "sha256": "d8c2e7dbee45fa326ed6acac9cc6f92063c753eb508454eb1cc30b984b190d10"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-focus-390.png",
+              "width": 390,
+              "sha256": "5dd7a93a281983baee171d8bee2a71019f3050fb4141918b8418ba42d2607893"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-minimum-390.png",
+              "width": 390,
+              "sha256": "c5e815968a384e299bd068ccfeae05eef31ba8f8865609cd84789966a4979315"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-maximum-390.png",
+              "width": 390,
+              "sha256": "297053edc217f84a297890fdc39f7db627d0333e7c18fedf15d51403bd379760"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-zero-390.png",
+              "width": 390,
+              "sha256": "9a92258a706d977e56ecdb4b7635696b01bbf8c182677e73653ecf74ac1e897d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-over-390.png",
+              "width": 390,
+              "sha256": "e67567c9f4ae4d710a2f81f93c08ea6580bb50ca3e62805f5d3297ef7936f498"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-fraction-390.png",
+              "width": 390,
+              "sha256": "4e42df58c7eb60422acc9a35139936d541ce9b50897e026675b9a4cc1428879c"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-empty-390.png",
+              "width": 390,
+              "sha256": "7bdb7c96520df3801b092111b772df7d7937ebebd8b31d176571fb0b7bde6acd"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-error-390.png",
+              "width": 390,
+              "sha256": "b496f7d412c8f501bc0ebe74044591458d772273b51e60d58dfaa92b29ccb4f1"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-ttl-busy-390.png",
+              "width": 390,
+              "sha256": "dbae8bffdd8a5fc78e07b77e9154fa77ab6b2c43a221e838b46006f7e8d31de9"
+            }
+          ]
+        }
+      },
+      {
+        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+        "binding": "createForm.reason",
+        "meaning": "创建原因required/max500，提交trim；不等于共享原因窗上限",
+        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+        "fieldEvidence": {
+          "id": "create-reason",
+          "selector": "#create-reason",
+          "screenshots": [
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-default-1440.png",
+              "width": 1440,
+              "sha256": "1824f36c4202b559d952f647b9e77faf56c5b04bd6810958f8f5a4f95d89ba14"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-hover-1440.png",
+              "width": 1440,
+              "sha256": "230901835927ab98c19cf9f621a77e6717e90455be98f861b0c60ecf6247e06f"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-focus-1440.png",
+              "width": 1440,
+              "sha256": "33441804054a476268df92dd6eec73961a885b8e236a7b13bb0eee7875fbab77"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-filled-1440.png",
+              "width": 1440,
+              "sha256": "9a349cec74a809d787f312b29dc3e2c1fa6e2c20835242b8bf9b667a5c044bb2"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-limit-1440.png",
+              "width": 1440,
+              "sha256": "173854344478b635948e0f91a2f9af7e4e5894b1bdca24652a4ad3023f1048cf"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-spaces-1440.png",
+              "width": 1440,
+              "sha256": "85a5bc40c0cb24fd3cc8afc5e1bbed91b06a5863c95d0b46fc89afcd0a32ae87"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-error-1440.png",
+              "width": 1440,
+              "sha256": "4b9af0e29ba2c5890dd6a012f181add7e2812771f4b91c48e0036e8d9e0de460"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-busy-1440.png",
+              "width": 1440,
+              "sha256": "7cc40fd36c29585233576b92859fa991ae84e97a798285c05cff0c240b303b27"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-default-390.png",
+              "width": 390,
+              "sha256": "d2fd8cb9bdb5b4609f84af70c7336c66f07019c3649f55046e2398fb5cbf2b4d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-hover-390.png",
+              "width": 390,
+              "sha256": "4f30bd6001d1bcb2b22fc02f9e088f3a1ae7c632e8171af22bea06f19528d5bc"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-focus-390.png",
+              "width": 390,
+              "sha256": "7ddf6b293bada08f80ce7991921adcfad91dd2415fa1c1f94dca653e6fcbf82d"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-filled-390.png",
+              "width": 390,
+              "sha256": "1ec6565797214de689396dc4c484e735b389611beb8b483ef1553fb7815dfcc3"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-limit-390.png",
+              "width": 390,
+              "sha256": "ffa8ee6e424aad7407a7a096d5257a6ee790429ab65c732ff3c296b539b7d2f7"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-spaces-390.png",
+              "width": 390,
+              "sha256": "b01594935529d6d50469a72bce452e4525eef39eef0371ce2fe0a45e183b4023"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-error-390.png",
+              "width": 390,
+              "sha256": "45d3fc446fa664a8021305c4904ce6ab50505a339cd1f127a871bab134f1f63e"
+            },
+            {
+              "file": "output/playwright/p36-fields-review/create-reason-busy-390.png",
+              "width": 390,
+              "sha256": "042c778cc1b002d9c546cc83960656c3245c668445ecaaa7d688ccf943ae2213"
+            }
+          ]
+        }
       }
     ],
     "containers": [
@@ -4700,10 +4604,7 @@
         ]
       }
     ],
-    "sharedRemaining": [
-      "6处caller结构不等于6个业务弹窗；共享原生原因窗仅两种上下文。",
-      "共享reason字段和6个源位置单独登记，原提案max500、busy草稿锁与复制归属保护不冒充实际Vue。"
-    ]
+    "sharedRemaining": ["6处caller结构不等于6个业务弹窗；共享原生原因窗仅两种上下文。", "共享reason字段和6个源位置单独登记，原提案max500、busy草稿锁与复制归属保护不冒充实际Vue。"]
   },
   "approvalRecords": ["P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"],
   "compositionGaps": [
@@ -4712,8 +4613,5 @@
     "父级完整错误/刷新、URL历史、路由/组织/KeepAlive生命周期、OG-G05、真实MySQL/权限/审计/幂等与全73页部署验收仍待。",
     "既有P35颜色门失败仍未获修复授权；不以本登记通过代替完整测试或自动提交。"
   ],
-  "limits": [
-    "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-    "本登记不改生产代码/API/env/依赖/权限或数据库，不授予批准。"
-  ]
+  "limits": ["源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。", "本登记不改生产代码/API/env/依赖/权限或数据库，不授予批准。"]
 }
