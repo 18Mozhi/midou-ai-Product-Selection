@@ -2177,8 +2177,26 @@ test("current P34 organization approvals map both pagers and isolate the histori
     "25d2be8fec5c35cd.1",
     "62fcf758cc715685.1",
   ].map((signature) => `${file}#${signature}`);
+  const expectedHistoricalIds = [
+    "184674807c82ee93.1",
+    "3169b6613d3ce948.1",
+    "0b242741fe22e1a9.1",
+    "0ab42724896b9cf9.1",
+  ].map((signature) => `${file}#${signature}`);
   assert.equal(candidates.length, 14);
   assert.deepEqual(currentRows.map((record) => record.candidateId).sort(), expectedIds.sort());
+  const historicalPagerRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      expectedHistoricalIds.includes(record.candidateId) &&
+      record.temporalScope === "historical",
+  );
+  assert.deepEqual(
+    historicalPagerRows.map((record) => record.candidateId).sort(),
+    expectedHistoricalIds.sort(),
+  );
+  assert.ok(historicalPagerRows.every((record) => record.currentLine === null));
   for (const record of currentRows) {
     const candidate = candidates.find((item) => item.candidateId === record.candidateId);
     assert.equal(record.status, "identity-current", record.candidateId);

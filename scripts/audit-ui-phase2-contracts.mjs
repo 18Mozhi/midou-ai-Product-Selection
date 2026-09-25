@@ -161,7 +161,10 @@ const history = {
     ],
   },
   "organization-governance-contract-review.md": {
-    historicalSections: ["OrganizationApprovalPanel.vue 旧源码指纹（历史）"],
+    historicalSections: [
+      "OrganizationApprovalPanel.vue 旧源码指纹（历史）",
+      "OrganizationApprovalPanel",
+    ],
   },
   "runtime-resilience-contract-review.md": {
     historicalSections: ["6. 历史源码指纹（LF SHA-256）"],
