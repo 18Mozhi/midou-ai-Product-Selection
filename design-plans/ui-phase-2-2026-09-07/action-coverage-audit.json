@@ -249,7 +249,7 @@
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b5463da0234f707cbbd40804c227b7ffc02959bc399a8e22bdeeba7092640ea1",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "f4c2ca930b5818ac0b71c231f77f4ee991488ae98db27f1773b1b9d5c320f530",
-    "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "665e010b0cc7f265fec00a8d541ffa8d1d735b97314e6c334dbd82985fb3f498",
+    "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "e3f9ca12116d968a504a90a56ae49c75e6c4b5cbe7888063f0f83e05ee647a12",
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "9e90766df41be0e25e1c97a7aa88f6d31d8d73bcf57f86b1ea1b6ce3b9c70092",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "73ccec3c884d7f0f2037640bf851a734ba81d9dff1ab02f7ecfffd193902b0e5",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "663f7750ce15423be375fb5c0ec820386f4a265f73f812579d24c1a40b2e49ab",
@@ -536,6 +536,8 @@
     "tests/unit/ui-phase2-p60-action-review.test.mjs": "e8f136322989684a16a3a7817c7d191aad657e33f5996a4f106ce22772d65248",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P61.json": "e8ae2d3928773346902a8cbf3472b0979d5b87b34317da9d4c49c12f81744013",
     "tests/unit/ui-phase2-p61-action-review.test.mjs": "13917fe4ac69e2b6dd497f1268267ea01908a7cca5eda7ca6c1a10814c7ba58e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P62.json": "49bb056829eaebd80fb30e76e5c90b3ff8eb9fc298cafc9c49ed4e706095b91c",
+    "tests/unit/ui-phase2-p62-action-review.test.mjs": "4a271af55652c368b8d631d2726ff0dbe203d08bcac7837c20c19c4e153c2e18",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "b55592c802f1c2298d7910080beae7e68aec828a11357363546a1007f3c859fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
@@ -597,7 +599,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "171d9e09f0a49a2ef6abf0714256d394870c6f7ad510e7320767a6329276c33f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "5eda7a24e776cdd72336d1ef23433570dc6f856aa07c6b9c639dc74b0c285123",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "64a12e0759f7c35565dc469d2b4293324dcf547784d6e535d9cd52eac5755eb0",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "90ace44955294c0a8ed4cdd4f27ab7b6ede4d762dd867d76c1e11e6e5ec46efd",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "afbb50b6d388d79c09e8321c9456718b6b9f62cd990e0b78126c976fdb503047",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "b08d0fff83950f31e15d60520f785f282fe948b9753c3de41e2692cb990cc81d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "4869f2a7553d65cb5355570511b38e73af1a34075a028e1d07f7564c89d71ee3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "65b44de90a0dfb850a5511f7cbfa75c14a2ef0fce5a3279aefeada46560ba2e8",
@@ -622,13 +624,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 61,
-    "explicitlyGroupedSourceSites": 1425,
-    "semanticGroups": 1204,
-    "routeActions": 982,
+    "reviewedPages": 62,
+    "explicitlyGroupedSourceSites": 1457,
+    "semanticGroups": 1216,
+    "routeActions": 994,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [
-      "P62",
       "P63",
       "P64",
       "P65",
@@ -643,7 +644,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 61,
+    "visualApprovedReviewedPages": 62,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -3302,13 +3303,42 @@
       "path": "/platform-admin/logs",
       "title": "链路日志",
       "oldStaticAssociatedCandidates": 58,
-      "review": null,
+      "review": {
+        "pageId": "P62",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 32,
+        "semanticGroups": 12,
+        "routeActions": 12,
+        "wiringGroups": 0,
+        "excludedGroups": 0,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 72,
+        "surfaces": {
+          "callerFiles": 3,
+          "localModelBindings": 3,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 3,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "logs-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "覆盖三个P62局部源码文件的32个当前候选，包含筛选抽屉与审计原因窗共享组件；共享数据详情/表格控件内部不重复计数。",
+        "日志结果最多为当前规范化条件下最新200条；CSV请求由服务重新查询，不得称为不可变DOM快照。",
+        "查询、导出、取消、读/写追踪编号和迟到下载分开；本图不推定离页会取消已提交服务器导出。"
+      ]
     },
     {
       "id": "P63",
@@ -5037,6 +5067,32 @@
         "localModelBindings": 0,
         "reviewedInputBindings": 0,
         "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P62",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 32,
+      "semanticGroups": 12,
+      "routeActions": 12,
+      "wiringGroups": 0,
+      "excludedGroups": 0,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 72,
+      "surfaces": {
+        "callerFiles": 3,
+        "localModelBindings": 3,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 3,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -6902,7 +6958,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#0b86489e495d6b17.1",
@@ -6921,7 +6983,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#7aa809a5cd2d2124.1",
@@ -6940,7 +7008,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1",
@@ -6977,7 +7051,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1",
@@ -7014,7 +7094,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1",
@@ -7051,7 +7137,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/AuditSecurityCenter.vue#07db575ab56f90da.1",
@@ -45802,7 +45894,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#d37ca26c235aab7a.1",
@@ -45821,7 +45919,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#e4314256fea2aeac.1",
@@ -45842,7 +45946,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-FILTER-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#ef169b3c5b08be4e.1",
@@ -45863,7 +45973,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-APPLY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#d2bd484790411f68.1",
@@ -45884,7 +46000,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-RESET",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#280c88beee4f3de8.1",
@@ -45905,7 +46027,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-APPLY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#fa83b88a7082fbd5.1",
@@ -45933,7 +46061,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#d7ff6351cbc06807.1",
@@ -45959,7 +46093,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#af1fa7b422aa7bcd.1",
@@ -45997,7 +46137,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-TASK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#c4b53a994d00ca34.1",
@@ -46035,7 +46181,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-PROVIDER",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#5d0b99550cb761b8.1",
@@ -46065,7 +46217,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-IDS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#1b10ffebcf6798fe.1",
@@ -46099,7 +46257,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-TASK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#ec46ae5cddba062a.1",
@@ -46133,7 +46297,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-PROVIDER",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#1c008f867673db60.1",
@@ -46159,7 +46329,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-IDS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#8189528db997f296.1",
@@ -46187,7 +46363,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#f71cf4e0c63914cf.1",
@@ -46215,7 +46397,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#be642d45b3e34274.1",
@@ -46243,7 +46431,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-TRACE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#13b398e8ab4b93d3.1",
@@ -46262,7 +46456,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#2c239372ff0167e8.1",
@@ -46281,7 +46481,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT-DIALOG",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogCenter.vue#5d23ad02d6538b9c.1",
@@ -46302,7 +46508,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-EXPORT-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformLogWorkspace.vue#d61db9a9a6e44c28.1",
@@ -56472,7 +56684,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-FILTER-DRAWER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ResponsiveFilterDrawer.vue#7e0fa28eaeb1cc09.1",
@@ -56496,7 +56714,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-FILTER-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ResponsiveFilterDrawer.vue#e03968eb8d9e92a8.1",
@@ -56541,7 +56765,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-FILTER-DRAWER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ResponsiveFilterDrawer.vue#483082db5a776bf3.1",
@@ -56586,7 +56816,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-FILTER-DRAWER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ResponsiveFilterDrawer.vue#df1390feb7424a07.1",
@@ -56631,7 +56867,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-FILTER-DRAWER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ResponsiveFilterDrawer.vue#cd956325fcd081da.1",
@@ -56676,7 +56918,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P62",
+          "actionId": "LG62-FILTER-DRAWER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RuntimeTopologyCenter.vue#58a7337b2cdfab3b.1",

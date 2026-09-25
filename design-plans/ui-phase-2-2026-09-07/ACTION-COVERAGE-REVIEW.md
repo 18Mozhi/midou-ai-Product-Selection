@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应61页/1425源位置/1204组；其中路由动作982组，转发/容器关联118组，其余明确排除。其余12页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应62页/1457源位置/1216组；其中路由动作994组，转发/容器关联118组，其余明确排除。其余11页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记61页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记62页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -75,7 +75,7 @@
 | [P59 安全中心](page-specs/P59.md) | 69 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P60 开放平台](page-specs/P60.md) | 72 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P61 系统状态](page-specs/P61.md) | 75 | [6组](action-reviews/P61.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P62 链路日志](page-specs/P62.md) | 58 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P62 链路日志](page-specs/P62.md) | 58 | [12组](action-reviews/P62.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P63 接口覆盖证据](page-specs/P63.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P64 备份与恢复](page-specs/P64.md) | 44 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P65 发布管理](page-specs/P65.md) | 45 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -4650,3 +4650,41 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 四分区切换仅为本地状态；拓扑、异常处理、采集与来源入口只导航，不在P61启动/恢复任何服务。
 - 状态依赖、业务汇总与浏览器标签页会话指标各自按现有事实来源显示，不互相推导为全平台健康率。
 - 本映射覆盖PlatformStatusCenterView和PlatformStatusWorkspace；父级PlatformManagementCenter只交叉引用P61读取所有者候选，NavigationShell与拓扑数据定义沿各自合同验收。
+
+## P62 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P62.json)：32个局部源位置 → 12组；1类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射0/3个源码字段位置，0/3处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| LG62-LOAD 读取或重读当前链路日志 / read | 2处；current-route-source-contract | ；其余见JSON | 重读不证明SQL范围/记录完整或拥有真实日志读取权限。 |
+| LG62-FILTER-OPEN 打开移动端日志筛选抽屉 / local | 2处；current-route-source-contract | ；其余见JSON | 打开抽屉不证明筛选已应用。 |
+| LG62-FILTER-DRAWER 管理移动日志筛选抽屉开关与键盘边界 / local | 5处；current-route-source-contract | ；其余见JSON | 局部源映射不代表所有设备读屏/焦点恢复均已验收。 |
+| LG62-APPLY 应用搜索词与运行面筛选 / read | 2处；current-route-source-contract | ；其余见JSON | 提交不证明服务端检索、排序或审计范围正确。 |
+| LG62-RESET 恢复默认日志筛选并重新读取 / read | 1处；current-route-source-contract | ；其余见JSON | 重置筛选不是删除日志或清除服务器审计。 |
+| LG62-EXPORT-OPEN 准备当前筛选CSV审计导出原因流程 / local | 2处；current-route-source-contract | ；其余见JSON | 流程打开不证明原因校验、审计写入或CSV生成。 |
+| LG62-EXPORT-DIALOG 呈现日志导出原因窗并允许取消 / local | 5处；current-route-source-contract | ；其余见JSON | 局部定义不证明跨离页/迟到请求的完整浏览器生命周期。 |
+| LG62-EXPORT 提交审计原因并导出当前规范化日志条件CSV / write | 3处；current-route-source-contract | ；其余见JSON | 不证明真实CSV、MySQL审计/RBAC、离页迟到下载归属或失败后可安全重发。 |
+| LG62-TRACE 披露链路、快照读取、最近失败及最近导出追踪编号 / local | 4处；current-route-source-contract | ；其余见JSON | 显示关联编号不证明关联请求成功或后端日志脱敏正确。 |
+| LG62-TASK 从异常日志跳转到关联采集任务 / navigation | 2处；current-route-source-contract | ；其余见JSON | 存在跳转目标不证明任务当前存在或用户可读取。 |
+| LG62-PROVIDER 从异常日志跳转到关联来源配置 / navigation | 2处；current-route-source-contract | ；其余见JSON | 链接不证明来源配置当前有效或具备编辑权限。 |
+| LG62-IDS 展开或查看日志记录编号与技术详情 / local | 2处；current-route-source-contract | ；其余见JSON | 编号披露不代表完整链历史、原始payload或敏感标识可导出。 |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 覆盖三个P62局部源码文件的32个当前候选，包含筛选抽屉与审计原因窗共享组件；共享数据详情/表格控件内部不重复计数。
+- 日志结果最多为当前规范化条件下最新200条；CSV请求由服务重新查询，不得称为不可变DOM快照。
+- 查询、导出、取消、读/写追踪编号和迟到下载分开；本图不推定离页会取消已提交服务器导出。
+- P62局部来源含PlatformLogCenter、ResponsiveFilterDrawer和AuditedReasonDialog；ResponsiveDataView、TableViewControls及PlatformManagementCenter父所有者仅作为共享消费者/合同交叉引用。

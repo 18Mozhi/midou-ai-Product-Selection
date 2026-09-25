@@ -303,6 +303,18 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 ## 11. P62/P64/P65 已替代源码身份
 
+## 12. P62 当前日志、筛选与导出动作映射（2026-09-26）
+
+新增 `action-reviews/P62.json` 与永久回归，将 `PlatformLogCenter`、共享 `ResponsiveFilterDrawer` 和 `AuditedReasonDialog` 的32个当前候选逐项归入12组日志合同动作。父级读取所有者、`ResponsiveDataView` 与 `TableViewControls` 仅交叉引用。明确导出原因窗取消不发请求、明确提交才进入审计导出；服务按规范化条件重查最新200条生成CSV，不是当前DOM快照。映射不证明真实CSV、RBAC/SQL审计、迟到下载或正式M06-02/M07-03验收。
+
+| 当前源文件 | 当前LF SHA-256 | 当前候选 |
+| --- | --- | ---: |
+| apps/web/src/components/PlatformLogCenter.vue | 029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518 | 20 |
+| apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f | 6 |
+| apps/web/src/components/AuditedReasonDialog.vue | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a | 6 |
+
+三个文件合计32候选、12动作组。
+
 以下早期签名来自第5节初始候选表，已被第7–9节现行刷新/重试/导出映射或共享移动详情合同中的现行候选替代。它们仅保留为可追溯历史，不计入当前源码覆盖；替代关系仅依据静态候选身份和语义描述，不表示交互、服务、权限或生产验收。
 
 | 旧身份 | 旧语义 | 当前映射位置 |
