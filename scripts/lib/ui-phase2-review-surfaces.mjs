@@ -95,7 +95,8 @@ export function validateReviewSurfaces(review, { sources, sourceHashes = {}, pac
     for (const input of inputs)
       available.set(inputKey(input), (available.get(inputKey(input)) ?? 0) + 1);
     for (const input of review.inputs) {
-      const key = inputKey(input), count = available.get(key) ?? 0;
+      const key = inputKey(input),
+        count = available.get(key) ?? 0;
       assert.ok(count > 0, "unknown reviewed input binding");
       available.set(key, count - 1);
     }

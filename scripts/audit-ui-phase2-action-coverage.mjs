@@ -94,7 +94,9 @@ for (const name of readdirSync(base + "/action-reviews")
     for (const file of Object.keys(review.surfaceReview.dependencyHashes)) read(file);
     assert.deepEqual(
       [...review.surfaceReview.files].sort(),
-      Object.keys(review.sourceHashes).filter((file) => file.endsWith(".vue")).sort(),
+      Object.keys(review.sourceHashes)
+        .filter((file) => file.endsWith(".vue"))
+        .sort(),
       "surface review must cover the same local callers",
     );
     reviewSummaries.at(-1).surfaces = validateReviewSurfaces(review.surfaceReview, {

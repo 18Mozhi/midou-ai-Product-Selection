@@ -379,7 +379,9 @@ export function validateActionReview(
       0,
     ),
     testEvidenceTypes: [
-      ...new Set(review.actions.flatMap((action) => action.testReferences.map((ref) => ref.evidenceType))),
+      ...new Set(
+        review.actions.flatMap((action) => action.testReferences.map((ref) => ref.evidenceType)),
+      ),
     ].sort(),
     unmappedVisualSlots: review.actions
       .filter((a) => a.kind !== "excluded")
