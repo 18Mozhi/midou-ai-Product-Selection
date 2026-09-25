@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
-- 已具体语义对应51页/1145源位置/1038组；其中路由动作826组，转发/容器关联108组，其余明确排除。其余22页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应52页/1166源位置/1049组；其中路由动作835组，转发/容器关联110组，其余明确排除。其余21页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记51页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记52页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -62,7 +62,7 @@
 | [P46 来源设置](page-specs/P46.md) | 78 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P47 采集程序](page-specs/P47.md) | 78 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P48 热点来源](page-specs/P48.md) | 78 | [25组](action-reviews/P48.json) | 150个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P49 1688 启用检查](page-specs/P49.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P49 1688 启用检查](page-specs/P49.md) | 78 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P50 凭证与档案](page-specs/P50.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P51 采集任务](page-specs/P51.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P52 采集总览](page-specs/P52.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -4032,6 +4032,53 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 烟测可能触达外部来源；固定样本创建、快照回放、另一管理员复核是不同写入阶段；本次未执行真实请求。
 - 用户全局视觉授权仅记录在visualApproval；actionApproval、全状态交互、真实RBAC/MySQL/外部来源和正式M07-03生产验收仍未通过。
 - 此合同只纳入P48路由的九个本地Vue组件；不扩大到ProviderRuntimeSurface、NavigationShell或P49/P50共享路由消费者。
+
+## P49 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P49.json)：21个局部源位置 → 11组；1类写入，9组路由动作，2组转发/容器关联不重复计动作。已映射0/3个源码字段位置，0/1处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| SC49-NAV 进入既有登录档案或固定样本工作区 / navigation | 4处；current-route-source-contract | ；其余见JSON | 客户端目标路由不证明目标页角色授权或其中后续写入已通过。 |
+| SC49-GATE-COPY 展开启用门口径说明 / local | 1处；current-route-source-contract | ；其余见JSON | 静态合同不替代对读屏器实际播报与窄屏排版的运行验收。 |
+| SC49-LOAD 读取或重读 1688 启用检查 / read | 2处；current-route-source-contract | ；其余见JSON | 映射不证明真实平台角色、MySQL 数据、请求超时策略或线上响应。 |
+| SC49-DETAILS 按需展开检查、范围或运行追踪 / local | 5处；current-route-source-contract | ；其余见JSON | 编号披露只核对当前 DOM 与映射，不代表服务端追踪系统或任务终态已验证。 |
+| SC49-AUTH 按读取失败状态进入登录或平台概览 / navigation | 2处；current-route-source-contract | ；其余见JSON | 前端状态分流不能证明真实会话签发、角色授权或服务端访问控制。 |
+| SC49-EXECUTION-WIRING 验收表单意图与既有父级处理器接线 / wiring | 2处；current-route-source-contract | ；其余见JSON | 静态事件接线不证明真实 API、组织隔离、角色权限或浏览器任务已执行。 |
+| SC49-ORG-WIRING 组织选择变化交由父级协调可用范围 / wiring | 1处；current-route-source-contract | ；其余见JSON | 隔离样例不证明生产账号实际可见的组织和工作区范围。 |
+| SC49-WORKSPACE-INPUT 更新受控工作区选择值 / local | 1处；current-route-source-contract | ；其余见JSON | 静态映射不证明真实服务端工作区归属或组织隔离。 |
+| SC49-QUERY 编辑本次验收关键词 / local | 1处；current-route-source-contract | ；其余见JSON | 源映射不替代真实浏览器输入法、错误提示和服务端字段验证。 |
+| SC49-RUN 发起一次受控 1688 登录验收运行 / write | 1处；current-route-source-contract | ；其余见JSON | 此审计不批准真实外部浏览器任务；真实 RBAC、幂等、MySQL、队列终态和生产采集仍未验收。 |
+| SC49-SCOPE-READ 重读可用组织与工作区范围 / read | 1处；current-route-source-contract | ；其余见JSON | 本地审计不证明真实组织成员关系过滤、默认工作区策略或范围接口权限。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| SC49-EXECUTION-WIRING | @organization-change / selectOrganization | SC49-SCOPE-READ、SC49-RUN |
+| SC49-EXECUTION-WIRING | @submit / scheduleAcceptanceRun | SC49-SCOPE-READ、SC49-RUN |
+| SC49-EXECUTION-WIRING | @retry-scopes / retryExecutionScopes | SC49-SCOPE-READ、SC49-RUN |
+| SC49-EXECUTION-WIRING | @submit.prevent / emit('submit') | SC49-SCOPE-READ、SC49-RUN |
+| SC49-ORG-WIRING | @change / emit('organization-change', ($event.target as HTMLSelectElement).value) | SC49-SCOPE-READ |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 逐项覆盖三个P49页面局部Vue组件的21个当前候选；共享导航及其他通用消费者不计入P49局部候选总数。
+- 仅登记现有检查读取、范围读取、人工验收排队、既有登录/固定样本导航和本地披露；不增加直接启用、任务轮询、停止任务或自动重试POST。
+- 用户视觉自动通过与源码语义映射分开记录；动作审批、真实角色授权、MySQL、队列终态、真实1688登录采集和正式M07-03签收仍未通过。
+- 本映射只覆盖P49的检查宿主、执行表单和下一步/技术详情组件；共享导航壳、响应式详情、发现浮层与其他来源目录消费者沿用各自页面合同。
 
 ## P54 局部动作与共享消费者
 

@@ -576,3 +576,9 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/CredentialAssetCenter.vue#15bb54ff377e917e.1 | SC50-PROFILE 选择加密资产并同步来源 | #56cda485ff9a67e1.1 档案与来源同步 |
 | apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2 | SC50-CLOSE 取消浏览器档案引用 | #2f453887d0cc66db.2 取消档案关联编辑器 |
 | apps/web/src/components/CredentialAssetCenter.vue#91ffac2d135459f2.1 | SC50-PROFILE 按既有表单保存档案引用 | #98e4c1aff937289a.1 按原档案表单保存关联 |
+
+## 17. P49 1688启用检查当前页面动作归组（2026-09-25）
+
+`action-reviews/P49.json` 将当前检查宿主、验收执行表单与下一步/技术详情三个页面局部组件中的21个扫描候选归入既有SC49读取、范围、人工运行、授权失败导航、固定样本/凭证导航及本地披露语义。原生表单与宿主事件接线按既有所有者关系记录；组织变化可触发原范围协调，工作区选择与关键词编辑分别只更新受控值。既有“检查门口径说明”明确是本地details展开，不产生读取或写入。
+
+`tests/unit/ui-phase2-p49-action-map.test.mjs` 校验候选身份、合同键、事件去向及外部运行边界。该静态映射不覆盖共享导航壳与通用移动详情的重复消费者，不代表视觉控件状态、真实组织权限、MySQL、外部浏览器运行终态或M07-03生产验收通过；动作审批保持pending。

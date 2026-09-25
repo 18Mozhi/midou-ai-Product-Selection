@@ -265,7 +265,7 @@
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "458a1816ede8758e1c5579c7e86d08ed0e2a6677625eb513662fc48f0c1e6bb1",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "397590fc13cc8b8464b7f71973412e4d598652708ef722b1416d4ed2e391619f",
-    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "5860e6de9d632964d563c1b0464b11fe7876382ffee0eecce3e60f6a726a751b",
+    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "e32cf911f6f385ada27937a4b24ec7eeaff9196deff06413de03c05215e9d502",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "53418f5884776c80af2aee2d9c253f9c62e6517adbd92997cda678a4806e62eb",
@@ -507,6 +507,8 @@
     "tests/unit/ui-phase2-p47-action-map.test.mjs": "c7afdcccdf764a8f41001ad63502435b47b6a1fc11a11f5a64752dc8fce90870",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "6133987e50474b50f427453fdadb2dc1636edc1eba43becfbc030691a15b39f0",
     "tests/unit/ui-phase2-p48-action-map.test.mjs": "8bb605c5a19e7ecb268927ba83d19cda6ca4533f49abab09f4bbf45ee731b8b3",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "96a62a7bd311026549d9b269a1ab268bb83f6624b3e173dfee8df955a72688a2",
+    "tests/unit/ui-phase2-p49-action-map.test.mjs": "e68ae4976a2e7aaa11a201227c2d32139789eb698210448e5dad3382643728ed",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -602,13 +604,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 611,
     "oldOnlyIdentities": 387,
-    "reviewedPages": 51,
-    "explicitlyGroupedSourceSites": 1145,
-    "semanticGroups": 1038,
-    "routeActions": 826,
-    "wiringGroups": 108,
+    "reviewedPages": 52,
+    "explicitlyGroupedSourceSites": 1166,
+    "semanticGroups": 1049,
+    "routeActions": 835,
+    "wiringGroups": 110,
     "pagesWithoutExplicitSemanticReview": [
-      "P49",
       "P50",
       "P51",
       "P52",
@@ -633,7 +634,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 51,
+    "visualApprovedReviewedPages": 52,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2742,13 +2743,42 @@
       "path": "/platform-admin/providers/sources/1688-acceptance",
       "title": "1688 启用检查",
       "oldStaticAssociatedCandidates": 78,
-      "review": null,
+      "review": {
+        "pageId": "P49",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 21,
+        "semanticGroups": 11,
+        "routeActions": 9,
+        "wiringGroups": 2,
+        "excludedGroups": 0,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "offline-proposal-check-not-Vue"
+        ],
+        "unmappedVisualSlots": 66,
+        "surfaces": {
+          "callerFiles": 3,
+          "localModelBindings": 3,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 1,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "1688-acceptance-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "逐项覆盖三个P49页面局部Vue组件的21个当前候选；共享导航及其他通用消费者不计入P49局部候选总数。",
+        "仅登记现有检查读取、范围读取、人工验收排队、既有登录/固定样本导航和本地披露；不增加直接启用、任务轮询、停止任务或自动重试POST。",
+        "用户视觉自动通过与源码语义映射分开记录；动作审批、真实角色授权、MySQL、队列终态、真实1688登录采集和正式M07-03签收仍未通过。"
+      ]
     },
     {
       "id": "P50",
@@ -4405,6 +4435,32 @@
       }
     },
     {
+      "pageId": "P49",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 21,
+      "semanticGroups": 11,
+      "routeActions": 9,
+      "wiringGroups": 2,
+      "excludedGroups": 0,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "offline-proposal-check-not-Vue"
+      ],
+      "unmappedVisualSlots": 66,
+      "surfaces": {
+        "callerFiles": 3,
+        "localModelBindings": 3,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
       "pageId": "P54",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
@@ -4640,7 +4696,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#16f98bc87eeb7bf3.1",
@@ -4664,7 +4726,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#191135a63725390b.1",
@@ -4683,7 +4751,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-GATE-COPY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#b39d5c4a0f3599f8.1",
@@ -4702,7 +4776,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#71ad1e14ab5adcdd.1",
@@ -4730,7 +4810,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#ff6d5fbc586803ed.1",
@@ -4764,7 +4850,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#5587941412d5210f.1",
@@ -4798,7 +4890,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-AUTH",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#441fd57e4a421b3a.1",
@@ -4832,7 +4930,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-AUTH",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#a1d4481c811f2e52.1",
@@ -4860,7 +4964,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#d7d20d959f3300b0.1",
@@ -4884,7 +4994,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-EXECUTION-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ApiCoverageOperationCard.vue#0555e1f79d8d4038.1",
@@ -47995,7 +48111,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-EXECUTION-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceExecution.vue#6b7a113037c90aeb.1",
@@ -48014,7 +48136,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-ORG-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceExecution.vue#df6130602862326a.1",
@@ -48033,7 +48161,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-WORKSPACE-INPUT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceExecution.vue#e941099000a6691d.1",
@@ -48052,7 +48186,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-QUERY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceExecution.vue#4d5599c177edbee1.1",
@@ -48071,7 +48211,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-RUN",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceExecution.vue#91f41f7556925861.1",
@@ -48099,7 +48245,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-SCOPE-READ",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceExecution.vue#78c1c9ecc2d9214c.1",
@@ -48127,7 +48279,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceExecution.vue#f617d68579969564.1",
@@ -48155,7 +48313,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceOperations.vue#b3ddac540b01d0e1.1",
@@ -48174,7 +48338,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceOperations.vue#1f17b9f55d6b83f1.1",
@@ -48193,7 +48363,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-NAV",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceOperations.vue#3454720e54e9d8c8.1",
@@ -48212,7 +48388,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P49",
+          "actionId": "SC49-DETAILS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#4d3ea4004d92534e.1",
