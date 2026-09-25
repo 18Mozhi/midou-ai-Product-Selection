@@ -75,47 +75,42 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| c989a362f5cc118d.1 | 590 | control | CO58-LOAD 刷新 |
-| be51bdf2cdf9a55b.1 | 593 | control | CO58-NEW 顶部新建 |
-| 493a928ba76cfd75.1 | 617 | form-event | CO58-ORG 读取form |
-| ad67cce2619c5349.1 | 625 | control | CO58-ORG 同form提交按钮 |
-| b48d0677e26f41b1.1 | 626 | control | CO58-ORG 清除 |
-| d776ea6a30d93887.1 | 656 | control | CO58-LOAD 错误重试 |
-| 242e3015fcd7a833.1 | 690 | control | CO58-SUSPEND 暂停确认入口 |
-| 13e46057d2fb04d8.1 | 707 | control | CO58-RESUME 恢复确认入口 |
-| dd38746d8ffdb0c3.1 | 724 | control | CO58-END 结束确认入口 |
-| b892a7fa2cef5f0a.1 | 744 | form-event | CO58-ASSIGN 分配/变更form |
-| 9e4e87ab21464529.1 | 759 | control | CO58-ASSIGN 同form按钮 |
-| ee61aee8d61107d7.1 | 778 | form-event | CO58-ADJUST 调整form |
-| 813b6f6555c53581.1 | 801 | control | CO58-ADJUST 同form按钮 |
-| f89ab4cc10f2272c.1 | 816 | control | CO58-REVOKE 调整撤销 |
-| 30584d1112c65a3f.1 | 838 | control | CO58-ADJ-PAGE 上一页 |
-| dcf33a943a6cf78c.1 | 845 | control | CO58-ADJ-PAGE 下一页 |
-| 63cd4281b5c9bba9.1 | 865 | control | CO58-NEW 目录重复入口 |
-| 6ccee5bf5f08a84f.1 | 867 | form-event | CO58-FILTER 查询form |
-| dd360735505349d1.1 | 879 | control | CO58-FILTER 同form按钮 |
-| 2f1b49bdefe2e793.1 | 880 | control | CO58-RESET 重置 |
-| b9b9138a457290a7.1 | 918 | control | CO58-EDIT 打开编辑 |
-| 08f74ebab8ffdc18.1 | 919 | control | CO58-ACTIVATE 启用确认 |
-| 3bb72b8a5d05954f.1 | 935 | control | CO58-RETIRE 退役确认 |
-| b80d8e0853709211.1 | 970 | control | CO58-PAGE 上一页 |
-| 56d050ac5ca9e0cd.1 | 972 | control | CO58-PAGE 下一页 |
-| 6d27a406542824e4.1 | 982 | dialog-definition | CO58-CREATE 新建dialog定义 |
-| 34969a9757091454.1 | 982 | event-binding | CO58-CREATE Escape转发 |
-| 925fc3fffe999c5a.1 | 983 | form-event | CO58-CREATE 创建form |
-| 1afdd47b63111a06.1 | 989 | control | CO58-CREATE 顶部关闭 |
-| a4c5a912e246ba93.1 | 1037 | control | CO58-CREATE 取消 |
-| 2be90b500fbc2735.1 | 1038 | control | CO58-CREATE 同form提交按钮 |
-| 2580b7a172938724.1 | 1046 | dialog-definition | CO58-EDIT 编辑dialog定义 |
-| fdd65c58da16291a.1 | 1046 | event-binding | CO58-EDIT Escape转发 |
-| c272d770b0c006ce.1 | 1047 | form-event | CO58-SAVE 编辑form转影响确认 |
-| be9bcd04e462aa25.1 | 1082 | control | CO58-EDIT 取消 |
-| 5dc1a96390934ee9.1 | 1083 | control | CO58-SAVE 同form按钮 |
-| d3b00b7eb8292418.1 | 1089 | dialog-definition | CO58-CONFIRM 影响dialog定义 |
-| 5a1af08abe5636bc.1 | 1089 | event-binding | CO58-CONFIRM Escape转发 |
-| 5c175a797dcf657a.1 | 1090 | form-event | CO58-CONFIRM form |
-| 53e49d44934e8397.1 | 1110 | control | CO58-CONFIRM 取消 |
-| 0406cc973c1194af.1 | 1111 | control | CO58-CONFIRM 执行按钮 |
+| c989a362f5cc118d.1 | 609 | control | CO58-LOAD 刷新 |
+| be51bdf2cdf9a55b.1 | 612 | control | CO58-NEW 顶部新建 |
+| 493a928ba76cfd75.1 | 636 | form-event | CO58-ORG 读取form |
+| ad67cce2619c5349.1 | 644 | control | CO58-ORG 同form提交按钮 |
+| b48d0677e26f41b1.1 | 645 | control | CO58-ORG 清除 |
+| d776ea6a30d93887.1 | 675 | control | CO58-LOAD 错误重试 |
+| 242e3015fcd7a833.1 | 709 | control | CO58-SUSPEND 暂停确认入口 |
+| 13e46057d2fb04d8.1 | 726 | control | CO58-RESUME 恢复确认入口 |
+| dd38746d8ffdb0c3.1 | 743 | control | CO58-END 结束确认入口 |
+| b892a7fa2cef5f0a.1 | 763 | form-event | CO58-ASSIGN 分配/变更form |
+| 9e4e87ab21464529.1 | 778 | control | CO58-ASSIGN 同form按钮 |
+| ee61aee8d61107d7.1 | 797 | form-event | CO58-ADJUST 调整form |
+| 813b6f6555c53581.1 | 820 | control | CO58-ADJUST 同form按钮 |
+| f89ab4cc10f2272c.1 | 835 | control | CO58-REVOKE 调整撤销 |
+| 30584d1112c65a3f.1 | 857 | control | CO58-ADJ-PAGE 上一页 |
+| dcf33a943a6cf78c.1 | 864 | control | CO58-ADJ-PAGE 下一页 |
+| 63cd4281b5c9bba9.1 | 884 | control | CO58-NEW 目录重复入口 |
+| 6ccee5bf5f08a84f.1 | 886 | form-event | CO58-FILTER 查询form |
+| dd360735505349d1.1 | 898 | control | CO58-FILTER 同form按钮 |
+| 2f1b49bdefe2e793.1 | 899 | control | CO58-RESET 重置 |
+| b9b9138a457290a7.1 | 937 | control | CO58-EDIT 打开编辑 |
+| 08f74ebab8ffdc18.1 | 938 | control | CO58-ACTIVATE 启用确认 |
+| 3bb72b8a5d05954f.1 | 954 | control | CO58-RETIRE 退役确认 |
+| b80d8e0853709211.1 | 989 | control | CO58-PAGE 上一页 |
+| 56d050ac5ca9e0cd.1 | 991 | control | CO58-PAGE 下一页 |
+| 2be90b500fbc2735.1 | 1123 | control | CO58-CREATE 同form提交按钮 |
+| 2580b7a172938724.1 | 1131 | dialog-definition | CO58-EDIT 编辑dialog定义 |
+| fdd65c58da16291a.1 | 1131 | event-binding | CO58-EDIT Escape转发 |
+| c272d770b0c006ce.1 | 1132 | form-event | CO58-SAVE 编辑form转影响确认 |
+| be9bcd04e462aa25.1 | 1167 | control | CO58-EDIT 取消 |
+| 5dc1a96390934ee9.1 | 1168 | control | CO58-SAVE 同form按钮 |
+| d3b00b7eb8292418.1 | 1174 | dialog-definition | CO58-CONFIRM 影响dialog定义 |
+| 5a1af08abe5636bc.1 | 1174 | event-binding | CO58-CONFIRM Escape转发 |
+| 5c175a797dcf657a.1 | 1175 | form-event | CO58-CONFIRM form |
+| 53e49d44934e8397.1 | 1195 | control | CO58-CONFIRM 取消 |
+| 0406cc973c1194af.1 | 1196 | control | CO58-CONFIRM 执行按钮 |
 
 | v-model字段 | 行 | 元素 |
 | --- | --- | --- |
@@ -190,41 +185,41 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 05407b8a7159149a.1 | 533 | form-event | OP60-LOAD 组织读取form |
-| 88a9882a80ac28a2.1 | 541 | control | OP60-LOAD 同form按钮 |
-| 32b3ac036c571c07.1 | 552 | control | OP60-SECRET 复制 |
+| 05407b8a7159149a.1 | 573 | form-event | OP60-LOAD 组织读取form |
+| 88a9882a80ac28a2.1 | 581 | control | OP60-LOAD 同form按钮 |
+| 32b3ac036c571c07.1 | 592 | control | OP60-SECRET 复制 |
 | 0b5f3917e5414006.1 | 593 | control | OP60-SECRET 安全保存后清除并使迟到密钥响应失效 |
-| 1c008f867673db60.1 | 578 | control | OP60-TECH 请求详情 |
-| 5367bd616a3abe62.1 | 622 | control | OP60-LOAD 首读错误重试 |
-| b70e50f696b891f1.1 | 751 | event-binding | OP60-EVENT 四事件checkbox转发 |
-| 7a625f6edefd5043.1 | 773 | control | OP60-NEW 两类创建转确认 |
-| a67ea3327ba9afd7.1 | 796 | control | OP60-LOAD 刷新 |
-| 1a48a72d882d501b.1 | 800 | form-event | OP60-FILTER form |
-| cec60f4bd63b9b5e.1 | 828 | control | OP60-FILTER 同form按钮 |
-| 2f1b49bdefe2e793.1 | 829 | control | OP60-RESET 重置 |
-| 2c7db35d039ef2f4.1 | 835 | control | OP60-RESET 空态清除 |
-| f8b804e268ceefea.1 | 875 | control | OP60-CLIENT-ROTATE 桌面 |
-| 1c4ff4af0e8fd8d3.1 | 876 | control | OP60-CLIENT-REVOKE 桌面 |
-| 1c008f867673db60.2 | 619 | control | OP60-TECH Client桌面 |
-| 1c008f867673db60.3 | 884 | control | OP60-TECH Client移动 |
-| 7510ef03037c8a3a.1 | 942 | control | OP60-CLIENT-ROTATE 移动 |
-| 1df8fceeaa98b0b3.1 | 943 | control | OP60-CLIENT-REVOKE 移动 |
-| dd00f77d258cbab6.1 | 985 | control | OP60-HOOK-STATUS 桌面 |
-| 1f4e699773a73075.1 | 987 | control | OP60-HOOK-TEST 桌面 |
-| 861b950a0ddc1651.1 | 993 | control | OP60-HOOK-ROTATE 桌面 |
-| 1c008f867673db60.4 | 925 | control | OP60-TECH Webhook桌面 |
-| 1c008f867673db60.5 | 998 | control | OP60-TECH Webhook移动 |
-| 3a8f13d630c643d0.1 | 1050 | control | OP60-HOOK-STATUS 移动 |
-| aafad6da5f70f220.1 | 1052 | control | OP60-HOOK-TEST 移动 |
-| 861b950a0ddc1651.2 | 1058 | control | OP60-HOOK-ROTATE 移动 |
-| 92629450188f4d4f.1 | 1100 | control | OP60-REPLAY 桌面 |
-| 1c008f867673db60.6 | 1034 | control | OP60-TECH 投递桌面 |
-| 1c008f867673db60.7 | 1110 | control | OP60-TECH 投递移动 |
-| 92629450188f4d4f.2 | 1175 | control | OP60-REPLAY 移动 |
-| 5535b1d4b215afda.1 | 1191 | control | OP60-PAGE 上一页 |
-| 266a3696f502c16e.1 | 1197 | control | OP60-PAGE 下一页 |
-| 7dff4b4ffb8ff617.1 | 1220 | event-binding | OP60-CONFIRM 确认/取消事件转发 |
-| 0e765674026efce4.1 | 1220 | dialog-component-call | OP60-CONFIRM 共享组件调用候选 |
+| 1c008f867673db60.1 | 618 | control | OP60-TECH 请求详情 |
+| 5367bd616a3abe62.1 | 662 | control | OP60-LOAD 首读错误重试 |
+| b70e50f696b891f1.1 | 791 | event-binding | OP60-EVENT 四事件checkbox转发 |
+| 7a625f6edefd5043.1 | 813 | control | OP60-NEW 两类创建转确认 |
+| a67ea3327ba9afd7.1 | 836 | control | OP60-LOAD 刷新 |
+| 1a48a72d882d501b.1 | 840 | form-event | OP60-FILTER form |
+| cec60f4bd63b9b5e.1 | 868 | control | OP60-FILTER 同form按钮 |
+| 2f1b49bdefe2e793.1 | 869 | control | OP60-RESET 重置 |
+| 2c7db35d039ef2f4.1 | 875 | control | OP60-RESET 空态清除 |
+| f8b804e268ceefea.1 | 915 | control | OP60-CLIENT-ROTATE 桌面 |
+| 1c4ff4af0e8fd8d3.1 | 916 | control | OP60-CLIENT-REVOKE 桌面 |
+| 1c008f867673db60.2 | 659 | control | OP60-TECH Client桌面 |
+| 1c008f867673db60.3 | 924 | control | OP60-TECH Client移动 |
+| 7510ef03037c8a3a.1 | 982 | control | OP60-CLIENT-ROTATE 移动 |
+| 1df8fceeaa98b0b3.1 | 983 | control | OP60-CLIENT-REVOKE 移动 |
+| dd00f77d258cbab6.1 | 1025 | control | OP60-HOOK-STATUS 桌面 |
+| 1f4e699773a73075.1 | 1027 | control | OP60-HOOK-TEST 桌面 |
+| 861b950a0ddc1651.1 | 1033 | control | OP60-HOOK-ROTATE 桌面 |
+| 1c008f867673db60.4 | 965 | control | OP60-TECH Webhook桌面 |
+| 1c008f867673db60.5 | 1038 | control | OP60-TECH Webhook移动 |
+| 3a8f13d630c643d0.1 | 1090 | control | OP60-HOOK-STATUS 移动 |
+| aafad6da5f70f220.1 | 1092 | control | OP60-HOOK-TEST 移动 |
+| 861b950a0ddc1651.2 | 1098 | control | OP60-HOOK-ROTATE 移动 |
+| 92629450188f4d4f.1 | 1140 | control | OP60-REPLAY 桌面 |
+| 1c008f867673db60.6 | 1074 | control | OP60-TECH 投递桌面 |
+| 1c008f867673db60.7 | 1150 | control | OP60-TECH 投递移动 |
+| 92629450188f4d4f.2 | 1215 | control | OP60-REPLAY 移动 |
+| 5535b1d4b215afda.1 | 1231 | control | OP60-PAGE 上一页 |
+| 266a3696f502c16e.1 | 1237 | control | OP60-PAGE 下一页 |
+| 7dff4b4ffb8ff617.1 | 1260 | event-binding | OP60-CONFIRM 确认/取消事件转发 |
+| 0e765674026efce4.1 | 1260 | dialog-component-call | OP60-CONFIRM 共享组件调用候选 |
 
 ### OpenPlatformCenter
 
@@ -352,9 +347,37 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/CommercialOperationsCenter.vue#97ebdc1b722c2d96.1 | 597 | control | CO58-CURRENT-WORKSPACE / 切换至全局方案目录，仅本地视图状态 |
-| apps/web/src/components/CommercialOperationsCenter.vue#dc703a87b7ae511f.1 | 600 | control | CO58-CURRENT-WORKSPACE / 切换至组织配额视图，本身不触发组织读取或写入 |
+| apps/web/src/components/CommercialOperationsCenter.vue#97ebdc1b722c2d96.1 | 616 | control | CO58-CURRENT-WORKSPACE / 切换至全局方案目录，仅本地视图状态 |
+| apps/web/src/components/CommercialOperationsCenter.vue#dc703a87b7ae511f.1 | 619 | control | CO58-CURRENT-WORKSPACE / 切换至组织配额视图，本身不触发组织读取或写入 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/CommercialOperationsCenter.vue | 5fea14bb21308bc2df7526e8485698525881b227d5ba1715b5eea5bea6e1754e |
+
+## 11. P58 创建配额方案窗当前 Vue 候选（2026-09-25）
+
+将新接入的创建草稿窗五个当前源候选绑定到既有 `CO58-CREATE` 合同：弹窗结构及原生 cancel、受控表单提交、显式关闭和取消。创建仍仅生成 draft，不启用方案或向组织分配额度；保留现有字段、请求、单飞与幂等合同。此映射补齐静态来源归属，不代表动作审批、真实创建/RBAC/MySQL或生产验收。
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/CommercialOperationsCenter.vue#151c3c8c32d92c80.1 | 1001 | dialog-definition | CO58-CREATE / 创建配额方案草稿窗结构及身份说明 |
+| apps/web/src/components/CommercialOperationsCenter.vue#30d28c64a162319d.1 | 1001 | event-binding | CO58-CREATE / 原生cancel转发至现有关闭守卫 |
+| apps/web/src/components/CommercialOperationsCenter.vue#de9a0d9bc0232967.1 | 1008 | form-event | CO58-CREATE / 受控表单提交既有创建处理器 |
+| apps/web/src/components/CommercialOperationsCenter.vue#c172959eea18c58e.1 | 1017 | control | CO58-CREATE / 显式关闭创建草稿窗，提交期间禁用 |
+| apps/web/src/components/CommercialOperationsCenter.vue#64a8d5e746c9adce.1 | 1122 | control | CO58-CREATE / 取消创建草稿，提交期间禁用 |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/CommercialOperationsCenter.vue | 3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257 |
+
+### P58旧创建窗源码签名（历史）
+
+以下五个候选属于当前创建草稿窗替换前的组件身份，保留审计追溯，不计入当前候选覆盖。
+
+| 旧candidateId | 旧行 | 类型 | 历史语义 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/CommercialOperationsCenter.vue#6d27a406542824e4.1 | 982 | dialog-definition | CO58-CREATE 旧新建dialog定义 |
+| apps/web/src/components/CommercialOperationsCenter.vue#34969a9757091454.1 | 982 | event-binding | CO58-CREATE 旧Escape转发 |
+| apps/web/src/components/CommercialOperationsCenter.vue#925fc3fffe999c5a.1 | 983 | form-event | CO58-CREATE 旧创建form |
+| apps/web/src/components/CommercialOperationsCenter.vue#1afdd47b63111a06.1 | 989 | control | CO58-CREATE 旧顶部关闭 |
+| apps/web/src/components/CommercialOperationsCenter.vue#a4c5a912e246ba93.1 | 1037 | control | CO58-CREATE 旧取消 |

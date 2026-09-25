@@ -384,7 +384,7 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformAccountCenter.vue | eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213 |
+| apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
 
 ## 10. P41 创建向导逐页动作映射（2026-09-25）
 

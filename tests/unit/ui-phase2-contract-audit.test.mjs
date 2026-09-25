@@ -2517,8 +2517,8 @@ test("current P16 decision form map refreshes its line while isolating the super
   assert.equal(historicalRow?.currentLine, null);
   assert.equal(currentRow?.status, "identity-current");
   assert.equal(currentRow?.sourceBinding, "unrecorded");
-  assert.equal(currentRow?.recordedLine, 550);
-  assert.equal(currentRow?.currentLine, 550);
+  assert.equal(currentRow?.recordedLine, 575);
+  assert.equal(currentRow?.currentLine, 575);
   assert.equal(
     report.unreferenced.some((candidate) => candidate.candidateId === currentId),
     false,

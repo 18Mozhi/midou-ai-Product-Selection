@@ -33,7 +33,7 @@
     "apps/web/src/components/CollectionRuntimeCenter.vue": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17",
     "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
     "apps/web/src/components/CollectionTaskCenter.vue": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de",
-    "apps/web/src/components/CommercialOperationsCenter.vue": "5fea14bb21308bc2df7526e8485698525881b227d5ba1715b5eea5bea6e1754e",
+    "apps/web/src/components/CommercialOperationsCenter.vue": "3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257",
     "apps/web/src/components/CompetitorMonitor.vue": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0",
     "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
@@ -67,7 +67,7 @@
     "apps/web/src/components/OnboardingGuide.vue": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed",
     "apps/web/src/components/OpenActionReasonDialog.vue": "74d65b519372cb12d6741eb348a9b2af46470929eea887d709796dace1db5370",
     "apps/web/src/components/OpenCreateDialog.vue": "165d6b784316b4a9ff88d0e8490d0abc21103c1fe7ec9c03e321d74f892b1261",
-    "apps/web/src/components/OpenPlatformCenter.vue": "9bcb38c92f614302ad155436cbdba9e43507bddb62bca0a8d0fefee676ddb3b1",
+    "apps/web/src/components/OpenPlatformCenter.vue": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa",
     "apps/web/src/components/opportunity-decision-presentation.ts": "5db9df1a291feb7a5b2d0dba0fa2e27160c19389fb141bfcf92c6e28dab0dc4d",
     "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
     "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
@@ -244,7 +244,7 @@
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "5311066f4b9987ae7c02369bc9533fd6ee2ea502667b1f4dfa483af81c7853ca",
-    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "ec2cab3c24626cde97b7c7d2fd7c897d5c5e1b8b0609b4e9cf0f07b2b4ac1130",
+    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "52bcc443860a0bb026603c721ab806104450f0780cb4d2a9f9898ca59ee80884",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "6350ced052c4283d850746b8736e64ab76ed2ed7eabe2ecd3feac5dcb630f815",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
@@ -253,23 +253,23 @@
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "9e90766df41be0e25e1c97a7aa88f6d31d8d73bcf57f86b1ea1b6ce3b9c70092",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "73ccec3c884d7f0f2037640bf851a734ba81d9dff1ab02f7ecfffd193902b0e5",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "663f7750ce15423be375fb5c0ec820386f4a265f73f812579d24c1a40b2e49ab",
-    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "c9e516955b3dc822f8e7e5567dd919e869e846ac49b2d5af05f65fd14b367c97",
+    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "ab7d526cd854e95a126fd67f6c61c4298a9df59505522c4db8f0d1842aeb6380",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "bb96f5d6c067255f9e22f4051e117c6352f18dea2184eaf7639a6b305cd8f9cd",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "cf100dafa46b0a9dc7f11b51fe923e99da9bb3166b23a905f116ffc2d0a935ba",
-    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "9514a192992f81a59c2a031bab4f61f45d6849fdf984e96ebf4720c3a080cb7f",
+    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "e92899302297a5b0ac4c41aa58abe8e51a353f0c8edf42bc2bcb5dec05da857e",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "31d1354c3f232fbce6a74028e25e4aa9578fc76654096a1fc14d614759c19898",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "e15b64fe4d46d8d63f06f47c86b5ab9e504c840a4ecfd994c2f58b88233a86c6",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "458a1816ede8758e1c5579c7e86d08ed0e2a6677625eb513662fc48f0c1e6bb1",
-    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "66c0ba24ccd6ac7b84a951c64923beac9868df315f427325e0a429ae900650ed",
+    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "397590fc13cc8b8464b7f71973412e4d598652708ef722b1416d4ed2e391619f",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "5860e6de9d632964d563c1b0464b11fe7876382ffee0eecce3e60f6a726a751b",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "53418f5884776c80af2aee2d9c253f9c62e6517adbd92997cda678a4806e62eb",
-    "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "00887da6021733c1580f816077c47924d9946fbce06ef4df2d5433272dbd7941",
+    "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "34d9faf49a0d92979430bb29a2dea5d28c1ffec5e380d3146a92deff9b11c3cc",
     "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "133ad0f55aab8e3614fc80844ff8ebd331ebd38cde0ea487ba0e8bcc595de1be",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "86bc709d10fd9b28a7cf87ae5b21b73e3ac1ec0ff6c9dc60fd8cec027d66d3a9",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
@@ -505,6 +505,8 @@
     "tests/m03-01/provider-registry.test.mjs": "063dc557443189915365dac01a4b33e36d97bd841f23eec1ba9cdd8acf11a15a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P47.json": "b34e8925bc188dda4b953b60776562b09c3aeb3af3dcda3c8b4e6bc9cb53b4f3",
     "tests/unit/ui-phase2-p47-action-map.test.mjs": "c7afdcccdf764a8f41001ad63502435b47b6a1fc11a11f5a64752dc8fce90870",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "6133987e50474b50f427453fdadb2dc1636edc1eba43becfbc030691a15b39f0",
+    "tests/unit/ui-phase2-p48-action-map.test.mjs": "8bb605c5a19e7ecb268927ba83d19cda6ca4533f49abab09f4bbf45ee731b8b3",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -571,9 +573,9 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "eecb01a5420fe50237138a202cd58f9623faac8741c8942a50695acda7f1499a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "0e4e2251072e0b24a261d350bd476434aebcb2a1dfc4c329e5d2625a7d667222",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "8b3ecc637cdd7afadc3906676aa6bcd083a0cc5c1bb4bf6608e20c73b8e9dc5b",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "c29131899d379f94166b28fee3180ee5458a15464eb94972d1802756e4e66c9b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "6db483dbff408114f131efc73a947ea4133e6b9182f2c273a08f830940667231",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "529f3048769ab67e059a66d9f71b7893b25d2a320eacb047f7fac3dcdff374f7",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "a2bf26800169f245383b622582c8f0767e6d9849a9a4ba5dedafc505ea8e345f",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "e37bda1d2dee311b10ea1a4422f5b2e74e2a9cca8e6c00830619c90094028d4e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "72af7291f7d1b8d03f95fe02106b7a2a772e348277562ab5377e8847171c4a4a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "90ace44955294c0a8ed4cdd4f27ab7b6ede4d762dd867d76c1e11e6e5ec46efd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "b08d0fff83950f31e15d60520f785f282fe948b9753c3de41e2692cb990cc81d",
@@ -591,22 +593,21 @@
     "scripts/lib/ui-phase2-action-coverage.mjs": "39ccdd68059bfd76f0ed3a534088bee6f4e958aca6ea38e2bdb224b02357edee",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "22f0710e70d77f4335a86a3ed6ef6d14c54fc23ec98d50aa2e22c50809e4e523",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
-    "scripts/audit-ui-phase2-contracts.mjs": "a0a20c732719c3609737765024bce72d2afd16ab41145af62a871f8276d2389d",
+    "scripts/audit-ui-phase2-contracts.mjs": "90b15bf450af7aa7846bbf27db3d911ee822e3e2a05db41e456e30cb92d2df4b",
     "scripts/lib/ui-phase2-contract-audit.mjs": "b7b12201094c94705ce2e0e0f5145830b4a2468632f1a33b09fe96a54e7039da"
   },
   "summary": {
     "routes": 73,
     "currentSourceCandidates": 1701,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 605,
-    "oldOnlyIdentities": 381,
-    "reviewedPages": 50,
-    "explicitlyGroupedSourceSites": 1062,
-    "semanticGroups": 1013,
-    "routeActions": 803,
-    "wiringGroups": 106,
+    "newSourceIdentities": 611,
+    "oldOnlyIdentities": 387,
+    "reviewedPages": 51,
+    "explicitlyGroupedSourceSites": 1145,
+    "semanticGroups": 1038,
+    "routeActions": 826,
+    "wiringGroups": 108,
     "pagesWithoutExplicitSemanticReview": [
-      "P48",
       "P49",
       "P50",
       "P51",
@@ -632,7 +633,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 50,
+    "visualApprovedReviewedPages": 51,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2698,13 +2699,43 @@
       "path": "/platform-admin/providers/sources",
       "title": "热点来源",
       "oldStaticAssociatedCandidates": 78,
-      "review": null,
+      "review": {
+        "pageId": "P48",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 83,
+        "semanticGroups": 25,
+        "routeActions": 23,
+        "wiringGroups": 2,
+        "excludedGroups": 0,
+        "writeActions": 4,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "actual-vue-review-fixture"
+        ],
+        "unmappedVisualSlots": 150,
+        "surfaces": {
+          "callerFiles": 9,
+          "localModelBindings": 1,
+          "reviewedInputBindings": 0,
+          "sourceCallerContainers": 1,
+          "callerContainers": 0,
+          "consumerVariants": 0,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "source-channels-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "本登记逐项覆盖九个P48本地Vue源文件的当前83个扫描候选；候选归组依据现有SC48合同，不把候选数当作独立按钮或业务动作总数。",
+        "来源规则登记、即时采集、关闭来源、绕过1688门禁均不是P48入口，不因API或其他页面能力而新增。",
+        "烟测可能触达外部来源；固定样本创建、快照回放、另一管理员复核是不同写入阶段；本次未执行真实请求。",
+        "用户全局视觉授权仅记录在visualApproval；actionApproval、全状态交互、真实RBAC/MySQL/外部来源和正式M07-03生产验收仍未通过。"
+      ]
     },
     {
       "id": "P49",
@@ -2918,7 +2949,7 @@
       "id": "P58",
       "path": "/platform-admin/commercial",
       "title": "配额管理",
-      "oldStaticAssociatedCandidates": 76,
+      "oldStaticAssociatedCandidates": 71,
       "review": null,
       "proposalPackages": [
         "commercial-direction-c"
@@ -2944,7 +2975,7 @@
       "id": "P60",
       "path": "/platform-admin/open-platform",
       "title": "开放平台",
-      "oldStaticAssociatedCandidates": 73,
+      "oldStaticAssociatedCandidates": 72,
       "review": null,
       "proposalPackages": [
         "open-platform-direction-c"
@@ -4344,6 +4375,32 @@
         "sourceCallerContainers": 2,
         "callerContainers": 2,
         "consumerVariants": 2,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P48",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 83,
+      "semanticGroups": 25,
+      "routeActions": 23,
+      "wiringGroups": 2,
+      "excludedGroups": 0,
+      "writeActions": 4,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "actual-vue-review-fixture"
+      ],
+      "unmappedVisualSlots": 150,
+      "surfaces": {
+        "callerFiles": 9,
+        "localModelBindings": 1,
+        "reviewedInputBindings": 0,
+        "sourceCallerContainers": 1,
+        "callerContainers": 0,
+        "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -9947,7 +10004,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#c989a362f5cc118d.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 590,
+      "line": 609,
       "kind": "control",
       "label": "{{ refreshing ? \"读取中…\" : \"刷新数据\" }}",
       "conditions": [],
@@ -9968,7 +10025,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#be51bdf2cdf9a55b.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 593,
+      "line": 612,
       "kind": "control",
       "label": "新建配额方案",
       "conditions": [],
@@ -9989,7 +10046,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#97ebdc1b722c2d96.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 597,
+      "line": 616,
       "kind": "control",
       "label": "方案目录 全局配置与额度",
       "conditions": [],
@@ -9999,7 +10056,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 355,
+          "line": 350,
           "jsonPointer": null
         }
       ],
@@ -10008,7 +10065,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#dc703a87b7ae511f.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 600,
+      "line": 619,
       "kind": "control",
       "label": "组织配额 读取组织、分配与用量",
       "conditions": [],
@@ -10018,7 +10075,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 356,
+          "line": 351,
           "jsonPointer": null
         }
       ],
@@ -10027,7 +10084,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#493a928ba76cfd75.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 617,
+      "line": 636,
       "kind": "form-event",
       "label": "组织内部编号 读取组织 清除组织",
       "conditions": [
@@ -10053,7 +10110,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#ad67cce2619c5349.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 625,
+      "line": 644,
       "kind": "control",
       "label": "读取组织",
       "conditions": [
@@ -10079,7 +10136,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#b48d0677e26f41b1.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 626,
+      "line": 645,
       "kind": "control",
       "label": "清除组织",
       "conditions": [
@@ -10109,7 +10166,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#d776ea6a30d93887.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 656,
+      "line": 675,
       "kind": "control",
       "label": "重新读取",
       "conditions": [
@@ -10135,7 +10192,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#242e3015fcd7a833.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 690,
+      "line": 709,
       "kind": "control",
       "label": "暂停",
       "conditions": [
@@ -10177,7 +10234,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#13e46057d2fb04d8.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 707,
+      "line": 726,
       "kind": "control",
       "label": "恢复",
       "conditions": [
@@ -10219,7 +10276,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#dd38746d8ffdb0c3.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 724,
+      "line": 743,
       "kind": "control",
       "label": "结束",
       "conditions": [
@@ -10261,7 +10318,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#b892a7fa2cef5f0a.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 744,
+      "line": 763,
       "kind": "form-event",
       "label": "{{ data.assignment ? \"调整配额方案\" : \"首次分配配额方案\" }} 配额方案 选择当前筛选结果中的启用方案 {{ item.name }} · {{ item.code }} 开始 结束 原因 {{ data.ass",
       "conditions": [
@@ -10295,7 +10352,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#9e4e87ab21464529.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 759,
+      "line": 778,
       "kind": "control",
       "label": "{{ data.assignment ? \"确认调整\" : \"确认分配\" }}",
       "conditions": [
@@ -10329,7 +10386,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#ee61aee8d61107d7.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 778,
+      "line": 797,
       "kind": "form-event",
       "label": "计量项 {{ quotaNames[String(key)] || key }} 调整量 生效时间 失效时间（可选） 原因 提交调整",
       "conditions": [
@@ -10367,7 +10424,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#813b6f6555c53581.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 801,
+      "line": 820,
       "kind": "control",
       "label": "提交调整",
       "conditions": [
@@ -10405,7 +10462,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#f89ab4cc10f2272c.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 816,
+      "line": 835,
       "kind": "control",
       "label": "撤销",
       "conditions": [
@@ -10455,7 +10512,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#30584d1112c65a3f.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 838,
+      "line": 857,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -10497,7 +10554,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#dcf33a943a6cf78c.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 845,
+      "line": 864,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -10539,7 +10596,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#63cd4281b5c9bba9.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 865,
+      "line": 884,
       "kind": "control",
       "label": "新建方案",
       "conditions": [
@@ -10569,7 +10626,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#6ccee5bf5f08a84f.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 867,
+      "line": 886,
       "kind": "form-event",
       "label": "搜索 状态 全部状态 已启用 草稿 已退役 查询 重置",
       "conditions": [
@@ -10599,7 +10656,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#dd360735505349d1.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 879,
+      "line": 898,
       "kind": "control",
       "label": "查询",
       "conditions": [
@@ -10629,7 +10686,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2f1b49bdefe2e793.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 880,
+      "line": 899,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -10659,7 +10716,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#b9b9138a457290a7.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 918,
+      "line": 937,
       "kind": "control",
       "label": "编辑",
       "conditions": [
@@ -10697,7 +10754,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#08f74ebab8ffdc18.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 919,
+      "line": 938,
       "kind": "control",
       "label": "启用",
       "conditions": [
@@ -10739,7 +10796,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#3bb72b8a5d05954f.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 935,
+      "line": 954,
       "kind": "control",
       "label": "退役",
       "conditions": [
@@ -10781,7 +10838,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#b80d8e0853709211.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 970,
+      "line": 989,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -10815,7 +10872,7 @@
     {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#56d050ac5ca9e0cd.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 972,
+      "line": 991,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -10847,11 +10904,106 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#6d27a406542824e4.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#151c3c8c32d92c80.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 982,
+      "line": 1001,
       "kind": "dialog-definition",
-      "label": "新建配额方案",
+      "label": "新建配额方案 创建配额方案草稿 只创建草稿，不启用方案，也不向组织分配额度。 关闭 正在创建草稿，请等待本次结果。暂时不能修改或关闭此窗。 请求反馈 {{ createPlanFeedback }} 填写与核对 方案资料 三项基础配额 创建",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 363,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#30d28c64a162319d.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 1001,
+      "kind": "event-binding",
+      "label": "新建配额方案 创建配额方案草稿 只创建草稿，不启用方案，也不向组织分配额度。 关闭 正在创建草稿，请等待本次结果。暂时不能修改或关闭此窗。 请求反馈 {{ createPlanFeedback }} 填写与核对 方案资料 三项基础配额 创建",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 364,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#de9a0d9bc0232967.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 1008,
+      "kind": "form-event",
+      "label": "新建配额方案 创建配额方案草稿 只创建草稿，不启用方案，也不向组织分配额度。 关闭 正在创建草稿，请等待本次结果。暂时不能修改或关闭此窗。 请求反馈 {{ createPlanFeedback }} 填写与核对 方案资料 三项基础配额 创建",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 365,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#c172959eea18c58e.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 1017,
+      "kind": "control",
+      "label": "关闭新建配额方案",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 366,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#64a8d5e746c9adce.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 1122,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 367,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2be90b500fbc2735.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 1123,
+      "kind": "control",
+      "label": "{{ mutating ? \"创建中…\" : \"创建草稿\" }}",
       "conditions": [],
       "staticRouteIds": [
         "P58"
@@ -10868,11 +11020,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#34969a9757091454.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2580b7a172938724.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 982,
-      "kind": "event-binding",
-      "label": "新建配额方案",
+      "line": 1131,
+      "kind": "dialog-definition",
+      "label": "编辑配额方案",
       "conditions": [],
       "staticRouteIds": [
         "P58"
@@ -10889,11 +11041,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#925fc3fffe999c5a.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#fdd65c58da16291a.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 983,
-      "kind": "form-event",
-      "label": "新建配额方案 创建配额方案草稿 关闭 内部标识 方案名称 方案说明 基础配额 采集任务 外部接口请求 报表导出 创建原因 取消 {{ mutating ? \"创建中…\" : \"创建草稿\" }}",
+      "line": 1131,
+      "kind": "event-binding",
+      "label": "编辑配额方案",
       "conditions": [],
       "staticRouteIds": [
         "P58"
@@ -10910,12 +11062,17 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#1afdd47b63111a06.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#c272d770b0c006ce.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 989,
-      "kind": "control",
-      "label": "关闭新建配额方案",
-      "conditions": [],
+      "line": 1132,
+      "kind": "form-event",
+      "label": "编辑配额方案 名称 说明 采集任务 外部接口请求 报表导出 状态 草稿 启用 退役 原因 取消 保存新版本",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "editingPlan"
+        }
+      ],
       "staticRouteIds": [
         "P58"
       ],
@@ -10931,12 +11088,17 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#a4c5a912e246ba93.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#be9bcd04e462aa25.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1037,
+      "line": 1167,
       "kind": "control",
       "label": "取消",
-      "conditions": [],
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "editingPlan"
+        }
+      ],
       "staticRouteIds": [
         "P58"
       ],
@@ -10952,12 +11114,17 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2be90b500fbc2735.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5dc1a96390934ee9.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1038,
+      "line": 1168,
       "kind": "control",
-      "label": "{{ mutating ? \"创建中…\" : \"创建草稿\" }}",
-      "conditions": [],
+      "label": "保存新版本",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "editingPlan"
+        }
+      ],
       "staticRouteIds": [
         "P58"
       ],
@@ -10973,11 +11140,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#2580b7a172938724.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#d3b00b7eb8292418.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1046,
+      "line": 1174,
       "kind": "dialog-definition",
-      "label": "编辑配额方案",
+      "label": "确认配额变更",
       "conditions": [],
       "staticRouteIds": [
         "P58"
@@ -10994,11 +11161,11 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#fdd65c58da16291a.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5a1af08abe5636bc.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1046,
+      "line": 1174,
       "kind": "event-binding",
-      "label": "编辑配额方案",
+      "label": "确认配额变更",
       "conditions": [],
       "staticRouteIds": [
         "P58"
@@ -11015,15 +11182,15 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#c272d770b0c006ce.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5c175a797dcf657a.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1047,
+      "line": 1175,
       "kind": "form-event",
-      "label": "编辑配额方案 名称 说明 采集任务 外部接口请求 报表导出 状态 草稿 启用 退役 原因 取消 保存新版本",
+      "label": "确认 {{ pending.title }} ？ 该操作会改变配额方案版本、分配状态或组织额度，并写入平台审计。 影响范围 {{ pending.impact.scope }} {{ row.label }} {{ row.before }",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "editingPlan"
+          "expression": "pending"
         }
       ],
       "staticRouteIds": [
@@ -11041,15 +11208,15 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#be9bcd04e462aa25.1",
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#53e49d44934e8397.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1082,
+      "line": 1195,
       "kind": "control",
       "label": "取消",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "editingPlan"
+          "expression": "pending"
         }
       ],
       "staticRouteIds": [
@@ -11067,129 +11234,9 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5dc1a96390934ee9.1",
-      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1083,
-      "kind": "control",
-      "label": "保存新版本",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "editingPlan"
-        }
-      ],
-      "staticRouteIds": [
-        "P58"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 113,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#d3b00b7eb8292418.1",
-      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1089,
-      "kind": "dialog-definition",
-      "label": "确认配额变更",
-      "conditions": [],
-      "staticRouteIds": [
-        "P58"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 114,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5a1af08abe5636bc.1",
-      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1089,
-      "kind": "event-binding",
-      "label": "确认配额变更",
-      "conditions": [],
-      "staticRouteIds": [
-        "P58"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 115,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#5c175a797dcf657a.1",
-      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1090,
-      "kind": "form-event",
-      "label": "确认 {{ pending.title }} ？ 该操作会改变配额方案版本、分配状态或组织额度，并写入平台审计。 影响范围 {{ pending.impact.scope }} {{ row.label }} {{ row.before }",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "pending"
-        }
-      ],
-      "staticRouteIds": [
-        "P58"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 116,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#53e49d44934e8397.1",
-      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1110,
-      "kind": "control",
-      "label": "取消",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "pending"
-        }
-      ],
-      "staticRouteIds": [
-        "P58"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 117,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#0406cc973c1194af.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-      "line": 1111,
+      "line": 1196,
       "kind": "control",
       "label": "{{ mutating ? \"执行中…\" : \"确认执行\" }}",
       "conditions": [
@@ -11206,7 +11253,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 118,
+          "line": 113,
           "jsonPointer": null
         }
       ],
@@ -25090,7 +25137,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 314,
+          "line": 309,
           "jsonPointer": null
         }
       ],
@@ -25109,7 +25156,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 315,
+          "line": 310,
           "jsonPointer": null
         }
       ],
@@ -25128,7 +25175,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 316,
+          "line": 311,
           "jsonPointer": null
         }
       ],
@@ -25147,7 +25194,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 317,
+          "line": 312,
           "jsonPointer": null
         }
       ],
@@ -25166,7 +25213,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 318,
+          "line": 313,
           "jsonPointer": null
         }
       ],
@@ -25185,7 +25232,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 319,
+          "line": 314,
           "jsonPointer": null
         }
       ],
@@ -25204,7 +25251,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 320,
+          "line": 315,
           "jsonPointer": null
         }
       ],
@@ -25223,7 +25270,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 321,
+          "line": 316,
           "jsonPointer": null
         }
       ],
@@ -25242,7 +25289,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 337,
+          "line": 332,
           "jsonPointer": null
         }
       ],
@@ -25261,7 +25308,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 338,
+          "line": 333,
           "jsonPointer": null
         }
       ],
@@ -25280,7 +25327,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 339,
+          "line": 334,
           "jsonPointer": null
         }
       ],
@@ -25299,7 +25346,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 340,
+          "line": 335,
           "jsonPointer": null
         }
       ],
@@ -25318,7 +25365,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 341,
+          "line": 336,
           "jsonPointer": null
         }
       ],
@@ -25327,7 +25374,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#05407b8a7159149a.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 533,
+      "line": 573,
       "kind": "form-event",
       "label": "组织内部编号 {{ refreshing ? \"读取中…\" : \"读取\" }}",
       "conditions": [],
@@ -25339,7 +25386,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 193,
+          "line": 188,
           "jsonPointer": null
         }
       ],
@@ -25348,7 +25395,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#88a9882a80ac28a2.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 541,
+      "line": 581,
       "kind": "control",
       "label": "{{ refreshing ? \"读取中…\" : \"读取\" }}",
       "conditions": [],
@@ -25360,7 +25407,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 194,
+          "line": 189,
           "jsonPointer": null
         }
       ],
@@ -25369,7 +25416,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#32b3ac036c571c07.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 552,
+      "line": 592,
       "kind": "control",
       "label": "复制密钥",
       "conditions": [
@@ -25386,16 +25433,16 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 195,
+          "line": 190,
           "jsonPointer": null
         }
       ],
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#e70a65ac56ee311f.1",
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#0b5f3917e5414006.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 553,
+      "line": 593,
       "kind": "control",
       "label": "我已安全保存",
       "conditions": [
@@ -25404,15 +25451,13 @@
           "expression": "secret"
         }
       ],
-      "staticRouteIds": [
-        "P60"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 196,
+          "line": 191,
           "jsonPointer": null
         }
       ],
@@ -25421,7 +25466,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#217f0846e7bba1ee.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 568,
+      "line": 608,
       "kind": "control",
       "label": "本次操作追踪",
       "conditions": [
@@ -25440,7 +25485,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 271,
+          "line": 266,
           "jsonPointer": null
         }
       ],
@@ -25449,7 +25494,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#e4c0454be34c0156.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 571,
+      "line": 611,
       "kind": "control",
       "label": "{{ refreshing ? \"读取中…\" : \"重新读取列表\" }}",
       "conditions": [
@@ -25464,7 +25509,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 272,
+          "line": 267,
           "jsonPointer": null
         }
       ],
@@ -25473,7 +25518,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 578,
+      "line": 618,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -25494,7 +25539,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 197,
+          "line": 192,
           "jsonPointer": null
         }
       ],
@@ -25503,7 +25548,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 619,
+      "line": 659,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -25524,7 +25569,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 208,
+          "line": 203,
           "jsonPointer": null
         }
       ],
@@ -25533,7 +25578,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#5367bd616a3abe62.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 622,
+      "line": 662,
       "kind": "control",
       "label": "重试",
       "conditions": [
@@ -25550,7 +25595,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 198,
+          "line": 193,
           "jsonPointer": null
         }
       ],
@@ -25559,7 +25604,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#378899e48c4d8c4e.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 627,
+      "line": 667,
       "kind": "control",
       "label": "接口访问账号 {{ data.summary.clients.total }} {{ data.summary.clients.active }} 个可用 · {{ data.summary.clients.expired }} 个过期",
       "conditions": [
@@ -25574,7 +25619,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 273,
+          "line": 268,
           "jsonPointer": null
         }
       ],
@@ -25583,7 +25628,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#e16baed7fd7574cb.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 640,
+      "line": 680,
       "kind": "control",
       "label": "事件回调地址 {{ data.summary.webhooks.total }} {{ data.summary.webhooks.active }} 个启用",
       "conditions": [
@@ -25598,7 +25643,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 274,
+          "line": 269,
           "jsonPointer": null
         }
       ],
@@ -25607,7 +25652,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#b224f20b7d8e3bc6.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 650,
+      "line": 690,
       "kind": "control",
       "label": "投递记录 {{ data.summary.deliveries.total }} {{ data.summary.deliveries.retry_scheduled }} 个重试 · {{ data.summary.deliveries.",
       "conditions": [
@@ -25622,7 +25667,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 275,
+          "line": 270,
           "jsonPointer": null
         }
       ],
@@ -25631,7 +25676,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#4fe0f29d19fbaf47.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 665,
+      "line": 705,
       "kind": "dialog-component-call",
       "label": "新增连接 {{ activeView === \"clients\" ? \"创建接口访问账号\" : \"创建事件回调地址\" }} 组织编号、名称和变更原因必填；所有写入均使用幂等键并记录审计。 组织内部编号 填写目标组织 UUID；与上方组织读取",
       "conditions": [
@@ -25650,7 +25695,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 276,
+          "line": 271,
           "jsonPointer": null
         }
       ],
@@ -25659,7 +25704,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#b70e50f696b891f1.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 751,
+      "line": 791,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -25688,7 +25733,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 199,
+          "line": 194,
           "jsonPointer": null
         }
       ],
@@ -25697,7 +25742,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7a625f6edefd5043.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 773,
+      "line": 813,
       "kind": "control",
       "label": "{{ actionBusy ? \"提交中…\" : activeView === \"clients\" ? \"创建接口访问账号\" : \"创建事件回调地址\" }}",
       "conditions": [
@@ -25718,7 +25763,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 200,
+          "line": 195,
           "jsonPointer": null
         }
       ],
@@ -25727,7 +25772,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#a67ea3327ba9afd7.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 796,
+      "line": 836,
       "kind": "control",
       "label": "{{ refreshing ? \"刷新中…\" : \"刷新\" }}",
       "conditions": [
@@ -25744,7 +25789,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 201,
+          "line": 196,
           "jsonPointer": null
         }
       ],
@@ -25753,7 +25798,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1a48a72d882d501b.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 800,
+      "line": 840,
       "kind": "form-event",
       "label": "搜索 状态 {{ option[1] }} 排序 {{ option[1] }} 每页 10 20 50 应用 重置",
       "conditions": [
@@ -25770,7 +25815,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 202,
+          "line": 197,
           "jsonPointer": null
         }
       ],
@@ -25779,7 +25824,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#cec60f4bd63b9b5e.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 828,
+      "line": 868,
       "kind": "control",
       "label": "应用",
       "conditions": [
@@ -25796,7 +25841,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 203,
+          "line": 198,
           "jsonPointer": null
         }
       ],
@@ -25805,7 +25850,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#2f1b49bdefe2e793.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 829,
+      "line": 869,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -25822,7 +25867,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 204,
+          "line": 199,
           "jsonPointer": null
         }
       ],
@@ -25831,7 +25876,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#2c7db35d039ef2f4.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 835,
+      "line": 875,
       "kind": "control",
       "label": "清除筛选",
       "conditions": [
@@ -25852,7 +25897,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 205,
+          "line": 200,
           "jsonPointer": null
         }
       ],
@@ -25861,7 +25906,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#f8b804e268ceefea.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 875,
+      "line": 915,
       "kind": "control",
       "label": "轮换",
       "conditions": [
@@ -25890,7 +25935,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 206,
+          "line": 201,
           "jsonPointer": null
         }
       ],
@@ -25899,7 +25944,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c4ff4af0e8fd8d3.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 876,
+      "line": 916,
       "kind": "control",
       "label": "撤销",
       "conditions": [
@@ -25928,7 +25973,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 207,
+          "line": 202,
           "jsonPointer": null
         }
       ],
@@ -25937,7 +25982,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.3",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 884,
+      "line": 924,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -25962,7 +26007,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 209,
+          "line": 204,
           "jsonPointer": null
         }
       ],
@@ -25971,7 +26016,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.4",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 925,
+      "line": 965,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -25992,7 +26037,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 215,
+          "line": 210,
           "jsonPointer": null
         }
       ],
@@ -26001,7 +26046,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7510ef03037c8a3a.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 942,
+      "line": 982,
       "kind": "control",
       "label": "轮换密钥",
       "conditions": [
@@ -26026,7 +26071,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 210,
+          "line": 205,
           "jsonPointer": null
         }
       ],
@@ -26035,7 +26080,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1df8fceeaa98b0b3.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 943,
+      "line": 983,
       "kind": "control",
       "label": "撤销账号",
       "conditions": [
@@ -26060,7 +26105,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 211,
+          "line": 206,
           "jsonPointer": null
         }
       ],
@@ -26069,7 +26114,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#dd00f77d258cbab6.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 985,
+      "line": 1025,
       "kind": "control",
       "label": "{{ row.status === \"active\" ? \"停用\" : \"启用\" }}",
       "conditions": [
@@ -26094,7 +26139,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 212,
+          "line": 207,
           "jsonPointer": null
         }
       ],
@@ -26103,7 +26148,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1f4e699773a73075.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 987,
+      "line": 1027,
       "kind": "control",
       "label": "测试",
       "conditions": [
@@ -26132,7 +26177,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 213,
+          "line": 208,
           "jsonPointer": null
         }
       ],
@@ -26141,7 +26186,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#861b950a0ddc1651.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 993,
+      "line": 1033,
       "kind": "control",
       "label": "轮换密钥",
       "conditions": [
@@ -26166,7 +26211,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 214,
+          "line": 209,
           "jsonPointer": null
         }
       ],
@@ -26175,7 +26220,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.5",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 998,
+      "line": 1038,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -26200,7 +26245,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 216,
+          "line": 211,
           "jsonPointer": null
         }
       ],
@@ -26209,7 +26254,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.6",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1034,
+      "line": 1074,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -26230,7 +26275,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 221,
+          "line": 216,
           "jsonPointer": null
         }
       ],
@@ -26239,7 +26284,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#3a8f13d630c643d0.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1050,
+      "line": 1090,
       "kind": "control",
       "label": "{{ row.status === \"active\" ? \"停用回调\" : \"启用回调\" }}",
       "conditions": [
@@ -26260,7 +26305,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 217,
+          "line": 212,
           "jsonPointer": null
         }
       ],
@@ -26269,7 +26314,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#aafad6da5f70f220.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1052,
+      "line": 1092,
       "kind": "control",
       "label": "发送测试",
       "conditions": [
@@ -26294,7 +26339,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 218,
+          "line": 213,
           "jsonPointer": null
         }
       ],
@@ -26303,7 +26348,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#861b950a0ddc1651.2",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1058,
+      "line": 1098,
       "kind": "control",
       "label": "轮换密钥",
       "conditions": [
@@ -26324,7 +26369,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 219,
+          "line": 214,
           "jsonPointer": null
         }
       ],
@@ -26333,7 +26378,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#92629450188f4d4f.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1100,
+      "line": 1140,
       "kind": "control",
       "label": "重放",
       "conditions": [
@@ -26352,6 +26397,154 @@
         {
           "directive": "v-if",
           "expression": "['dead_letter', 'succeeded'].includes(row.status)"
+        }
+      ],
+      "staticRouteIds": [
+        "P60"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 215,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.7",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1150,
+      "kind": "control",
+      "label": "技术详情",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else-if",
+          "expression": "activeView === 'deliveries'"
+        },
+        {
+          "directive": "v-for",
+          "expression": "row in data.deliveries"
+        }
+      ],
+      "staticRouteIds": [
+        "P60"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 217,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.8",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1195,
+      "kind": "control",
+      "label": "技术详情",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else-if",
+          "expression": "activeView === 'deliveries'"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 272,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#92629450188f4d4f.2",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1215,
+      "kind": "control",
+      "label": "重放",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-else-if",
+          "expression": "activeView === 'deliveries'"
+        },
+        {
+          "directive": "v-if",
+          "expression": "['dead_letter', 'succeeded'].includes(row.status)"
+        }
+      ],
+      "staticRouteIds": [
+        "P60"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 218,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#5535b1d4b215afda.1",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1231,
+      "kind": "control",
+      "label": "上一页",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "staticRouteIds": [
+        "P60"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 219,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#266a3696f502c16e.1",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1237,
+      "kind": "control",
+      "label": "下一页",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
         }
       ],
       "staticRouteIds": [
@@ -26369,25 +26562,71 @@
       "semanticReviews": []
     },
     {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.7",
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#f371f0b36489e592.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1110,
-      "kind": "control",
-      "label": "技术详情",
-      "conditions": [
+      "line": 1249,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
         {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-else-if",
-          "expression": "activeView === 'deliveries'"
-        },
-        {
-          "directive": "v-for",
-          "expression": "row in data.deliveries"
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 273,
+          "jsonPointer": null
         }
       ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#55ddee7e496796ca.1",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1249,
+      "kind": "dialog-component-call",
+      "label": "",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 274,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7dff4b4ffb8ff617.1",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1260,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [],
+      "staticRouteIds": [
+        "P60"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
+          "line": 221,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": []
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#0e765674026efce4.1",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 1260,
+      "kind": "dialog-component-call",
+      "label": "",
+      "conditions": [],
       "staticRouteIds": [
         "P60"
       ],
@@ -26397,200 +26636,6 @@
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
           "line": 222,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.8",
-      "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1155,
-      "kind": "control",
-      "label": "技术详情",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-else-if",
-          "expression": "activeView === 'deliveries'"
-        }
-      ],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 277,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#92629450188f4d4f.2",
-      "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1175,
-      "kind": "control",
-      "label": "重放",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-else-if",
-          "expression": "activeView === 'deliveries'"
-        },
-        {
-          "directive": "v-if",
-          "expression": "['dead_letter', 'succeeded'].includes(row.status)"
-        }
-      ],
-      "staticRouteIds": [
-        "P60"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 223,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#5535b1d4b215afda.1",
-      "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1191,
-      "kind": "control",
-      "label": "上一页",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        }
-      ],
-      "staticRouteIds": [
-        "P60"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 224,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#266a3696f502c16e.1",
-      "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1197,
-      "kind": "control",
-      "label": "下一页",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        }
-      ],
-      "staticRouteIds": [
-        "P60"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 225,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#f371f0b36489e592.1",
-      "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1209,
-      "kind": "event-binding",
-      "label": "",
-      "conditions": [],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 278,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#55ddee7e496796ca.1",
-      "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1209,
-      "kind": "dialog-component-call",
-      "label": "",
-      "conditions": [],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 279,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7dff4b4ffb8ff617.1",
-      "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1220,
-      "kind": "event-binding",
-      "label": "",
-      "conditions": [],
-      "staticRouteIds": [
-        "P60"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 226,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": []
-    },
-    {
-      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#0e765674026efce4.1",
-      "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1220,
-      "kind": "dialog-component-call",
-      "label": "",
-      "conditions": [],
-      "staticRouteIds": [
-        "P60"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 227,
           "jsonPointer": null
         }
       ],
@@ -48892,7 +48937,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#4e008aa9606a1b01.1",
@@ -48911,7 +48962,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#279ef6005288b890.1",
@@ -48930,7 +48987,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#1c008f867673db60.1",
@@ -48964,7 +49027,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#de2e72710c0578f2.1",
@@ -48992,7 +49061,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#3cbfff12b70782af.1",
@@ -49011,7 +49086,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#8ee37a2198be5237.1",
@@ -49030,7 +49111,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#f99085051f5e9a07.1",
@@ -49049,7 +49136,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#2f8ca16ba8121e8d.1",
@@ -49068,7 +49161,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.1",
@@ -49102,7 +49201,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#479570dac45574ea.1",
@@ -49134,7 +49239,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#bff21091a1634b97.1",
@@ -49162,7 +49273,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#78c716f6150b4d8d.1",
@@ -49190,7 +49307,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.2",
@@ -49224,7 +49347,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#d589eec4cb2fcd7b.1",
@@ -49256,7 +49385,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#27382a3b9a4eeefc.1",
@@ -49284,7 +49419,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.3",
@@ -49312,7 +49453,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleDialog.vue#1fc800f4950732d7.1",
@@ -49331,7 +49478,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleReview.vue#915c93b75eb41a91.1",
@@ -49361,7 +49514,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderParserSampleReview.vue#35b9cb8eaccc4d26.1",
@@ -49391,7 +49550,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#7895edf33d41a47a.1",
@@ -50434,7 +50599,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1",
@@ -50464,7 +50635,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-DEFINE",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#090fa072a224b63e.1",
@@ -50488,7 +50665,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.1",
@@ -50516,7 +50699,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#b1a60fde5d6ec9d6.1",
@@ -50544,7 +50733,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.2",
@@ -50572,7 +50767,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#adb5a27ee7e15104.1",
@@ -50600,7 +50801,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-LOAD-OR-LOGIN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.3",
@@ -50632,7 +50839,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#22e451664b4ba746.1",
@@ -50664,7 +50877,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#52eea605d2c84eb0.1",
@@ -50688,7 +50907,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-DIRECTORY-EVENT-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#0d05b40ba4543887.1",
@@ -50707,7 +50932,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG-VERSION-DIALOG-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#7f36e42eb80bca2d.1",
@@ -50726,7 +50957,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG-VERSION-DIALOG-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#aebc04fe71463aa3.1",
@@ -50750,7 +50987,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#e86a06afbe712ab0.1",
@@ -50774,7 +51017,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#8665cbf979729f72.1",
@@ -50798,7 +51047,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#1c8002dd18f07872.1",
@@ -50822,7 +51077,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceConfigurationDialog.vue#f8f748c674190729.1",
@@ -50841,7 +51102,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceConfigurationDialog.vue#0e32b5a54eb60075.1",
@@ -50860,7 +51127,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceConfigurationDialog.vue#ed9b168dbe1f3587.1",
@@ -50879,7 +51152,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceConfigurationDialog.vue#6b2f9fa5430c552d.1",
@@ -50898,7 +51177,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#2d157da14935d5c1.1",
@@ -50930,7 +51215,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-DETAIL-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#7d1dbd0396d36c73.1",
@@ -50958,7 +51249,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-DETAIL-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#825fda3d056d6a41.1",
@@ -50990,7 +51287,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-LINK",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#2379d17cd7b2d01d.1",
@@ -51022,7 +51325,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-PROBE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#130f527eb216a92c.1",
@@ -51054,7 +51363,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#e6b03d1f68d67db6.1",
@@ -51086,7 +51401,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-COMPAT",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#7209e2bc02cd1433.1",
@@ -51118,7 +51439,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#7f3b2921d6d294b5.1",
@@ -51150,7 +51477,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-LOGIN",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#d0be2fd8fba97ff5.1",
@@ -51182,7 +51515,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SAMPLES",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#b9ce58d9e8408695.1",
@@ -51214,7 +51553,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-ACCEPT",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#6f7e71d427cb36b9.1",
@@ -51238,7 +51583,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-PAGE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceDirectory.vue#f3f3456654086e7b.1",
@@ -51262,7 +51613,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-PAGE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#5dde29b862125b0e.1",
@@ -51286,7 +51643,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#fd96a0ddfd39623f.1",
@@ -51310,7 +51673,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#683678bf384a1e42.1",
@@ -51334,7 +51703,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#004f04ff66f655ca.1",
@@ -51358,7 +51733,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#1c008f867673db60.1",
@@ -51390,7 +51771,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#a3dad946584f7803.1",
@@ -51414,7 +51801,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#73764f74b8f1a61a.1",
@@ -51438,7 +51831,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#0d47ebf53fe0590e.1",
@@ -51462,7 +51861,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#c57686ba7c1f6588.1",
@@ -51486,7 +51891,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#c0923c491565b4ef.1",
@@ -51510,7 +51921,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#c74c69289cda1b1c.1",
@@ -51538,7 +51955,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#a8cf70fb83e27873.1",
@@ -51566,7 +51989,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#d166a16792084fe1.1",
@@ -51594,7 +52023,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CONFIG",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#93ca4e5e94727229.1",
@@ -51613,7 +52048,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#5281327449b79f93.1",
@@ -51632,7 +52073,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-QUERY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#75e56e4f7649133c.1",
@@ -51651,7 +52098,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-FILTER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#e11b831f9f4d2c7d.1",
@@ -51670,7 +52123,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-CATEGORY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#0f44dd2cc5c4f38d.1",
@@ -51689,7 +52148,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-AVAILABILITY",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#6fd1d25947538652.1",
@@ -51708,7 +52173,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-MARKET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#cdae0919d938956d.1",
@@ -51727,7 +52198,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-LANGUAGE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#a13365beca192210.1",
@@ -51746,7 +52223,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-ACCESS",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#6f2c0ea92fa946fa.1",
@@ -51765,7 +52248,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-SORT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceFilters.vue#1c28ad647bfe0100.1",
@@ -51784,7 +52273,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#22ecf14cfd3d483f.1",
@@ -51808,7 +52303,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#6998c14c2116e210.1",
@@ -51832,7 +52333,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#7cef35300d9577fb.1",
@@ -51856,7 +52363,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#1c008f867673db60.1",
@@ -51888,7 +52401,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#c73ff040b3307a5d.1",
@@ -51920,7 +52439,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#ada59de7960940c4.1",
@@ -51944,7 +52469,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#812f9da80a8dbb06.1",
@@ -51980,7 +52511,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue#b7bbd08aecc4de79.1",
@@ -52004,7 +52541,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P48",
+          "actionId": "SC48-VERSIONS",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/RedisFoundation.vue#a92895beabbe57e2.1",
@@ -55556,7 +56099,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 153,
+          "line": 148,
           "jsonPointer": null
         }
       ],
@@ -55577,7 +56120,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 154,
+          "line": 149,
           "jsonPointer": null
         }
       ],
@@ -55607,7 +56150,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 155,
+          "line": 150,
           "jsonPointer": null
         }
       ],
@@ -55637,7 +56180,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 156,
+          "line": 151,
           "jsonPointer": null
         }
       ],
@@ -55667,7 +56210,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 157,
+          "line": 152,
           "jsonPointer": null
         }
       ],
@@ -55693,7 +56236,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 158,
+          "line": 153,
           "jsonPointer": null
         }
       ],
@@ -55719,7 +56262,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 159,
+          "line": 154,
           "jsonPointer": null
         }
       ],
@@ -55745,7 +56288,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 160,
+          "line": 155,
           "jsonPointer": null
         }
       ],
@@ -55783,7 +56326,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 161,
+          "line": 156,
           "jsonPointer": null
         }
       ],
@@ -55817,7 +56360,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 162,
+          "line": 157,
           "jsonPointer": null
         }
       ],
@@ -55851,7 +56394,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 163,
+          "line": 158,
           "jsonPointer": null
         }
       ],
@@ -55885,7 +56428,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 164,
+          "line": 159,
           "jsonPointer": null
         }
       ],
@@ -55923,7 +56466,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 165,
+          "line": 160,
           "jsonPointer": null
         }
       ],
@@ -55957,7 +56500,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 166,
+          "line": 161,
           "jsonPointer": null
         }
       ],
@@ -55991,7 +56534,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 167,
+          "line": 162,
           "jsonPointer": null
         }
       ],
@@ -56025,7 +56568,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 168,
+          "line": 163,
           "jsonPointer": null
         }
       ],
@@ -56063,7 +56606,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 169,
+          "line": 164,
           "jsonPointer": null
         }
       ],
@@ -56097,7 +56640,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 170,
+          "line": 165,
           "jsonPointer": null
         }
       ],
@@ -56131,7 +56674,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 171,
+          "line": 166,
           "jsonPointer": null
         }
       ],
@@ -56165,7 +56708,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 172,
+          "line": 167,
           "jsonPointer": null
         }
       ],
@@ -56195,7 +56738,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 173,
+          "line": 168,
           "jsonPointer": null
         }
       ],
@@ -56233,7 +56776,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 174,
+          "line": 169,
           "jsonPointer": null
         }
       ],
@@ -56267,7 +56810,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 175,
+          "line": 170,
           "jsonPointer": null
         }
       ],
@@ -56301,7 +56844,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 176,
+          "line": 171,
           "jsonPointer": null
         }
       ],
@@ -56335,7 +56878,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 177,
+          "line": 172,
           "jsonPointer": null
         }
       ],
@@ -56373,7 +56916,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 178,
+          "line": 173,
           "jsonPointer": null
         }
       ],
@@ -56407,7 +56950,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 179,
+          "line": 174,
           "jsonPointer": null
         }
       ],
@@ -56441,7 +56984,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 180,
+          "line": 175,
           "jsonPointer": null
         }
       ],
@@ -56475,7 +57018,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
-          "line": 181,
+          "line": 176,
           "jsonPointer": null
         }
       ],
@@ -65313,6 +65856,30 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#34969a9757091454.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 951,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#925fc3fffe999c5a.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 952,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#1afdd47b63111a06.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 958,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#a4c5a912e246ba93.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 1006,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/ConfirmDialog.vue#0f50ae650a1895b3.1",
       "file": "apps/web/src/components/ConfirmDialog.vue",
       "line": 91,
@@ -65820,6 +66387,12 @@
       "candidateId": "apps/web/src/components/OnboardingGuide.vue#176ac690f7c39e94.1",
       "file": "apps/web/src/components/OnboardingGuide.vue",
       "line": 74,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#e70a65ac56ee311f.1",
+      "file": "apps/web/src/components/OpenPlatformCenter.vue",
+      "line": 497,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
@@ -67134,6 +67707,12 @@
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#472cf13bb7c4d799.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
       "line": 710,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#6d27a406542824e4.1",
+      "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+      "line": 951,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

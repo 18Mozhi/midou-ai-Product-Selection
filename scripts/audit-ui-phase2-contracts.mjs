@@ -193,7 +193,7 @@ const history = {
     historicalColumns: ["旧签名"],
   },
   "commercial-security-open-platform-contract-review.md": {
-    historicalSections: ["6. 来源指纹与证据边界", "OpenPlatformCenter"],
+    historicalSections: ["6. 来源指纹与证据边界", "OpenPlatformCenter", "P58旧创建窗源码签名（历史）"],
   },
   "log-backup-release-contract-review.md": {
     historicalSections: [

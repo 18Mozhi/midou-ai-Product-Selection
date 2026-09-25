@@ -2,11 +2,11 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1701；旧登记1477；新身份605，旧表独有身份381。签名变化不等于增删业务能力。
-- 已具体语义对应50页/1062源位置/1013组；其中路由动作803组，转发/容器关联106组，其余明确排除。其余23页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1701；旧登记1477；新身份611，旧表独有身份387。签名变化不等于增删业务能力。
+- 已具体语义对应51页/1145源位置/1038组；其中路由动作826组，转发/容器关联108组，其余明确排除。其余22页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记50页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记51页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -61,7 +61,7 @@
 | [P45 角色权限](page-specs/P45.md) | 97 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P46 来源设置](page-specs/P46.md) | 78 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P47 采集程序](page-specs/P47.md) | 78 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P48 热点来源](page-specs/P48.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P48 热点来源](page-specs/P48.md) | 78 | [25组](action-reviews/P48.json) | 150个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P49 1688 启用检查](page-specs/P49.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P50 凭证与档案](page-specs/P50.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P51 采集任务](page-specs/P51.md) | 81 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -71,9 +71,9 @@
 | [P55 质量与规则](page-specs/P55.md) | 59 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P56 内容管理](page-specs/P56.md) | 75 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P57 通知管理](page-specs/P57.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P58 配额管理](page-specs/P58.md) | 76 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P58 配额管理](page-specs/P58.md) | 71 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P59 安全中心](page-specs/P59.md) | 69 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P60 开放平台](page-specs/P60.md) | 73 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P60 开放平台](page-specs/P60.md) | 72 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P61 系统状态](page-specs/P61.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P62 链路日志](page-specs/P62.md) | 58 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P63 接口覆盖证据](page-specs/P63.md) | 75 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -3953,6 +3953,85 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 不在P47直接触发采集、恢复熔断、修改来源定义或生成适配器；相关能力归属其他路由/API。
 - 视觉通过仅记录为用户全局授权；actionApproval、动态状态/弹窗完整性、真实RBAC、外部探针、MySQL及M07-03生产验收仍未通过。
 - 仅覆盖P47适配器消费者的移动预览容器；不将共享组件的其他页面调用者纳入本页验收。
+
+## P48 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P48.json)：83个局部源位置 → 25组；4类写入，23组路由动作，2组转发/容器关联不重复计动作。已映射0/1个源码字段位置，0/1处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有150个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| SC48-LOAD 来源目录读取、刷新与恢复 / read | 4处；current-route-source-contract | ；其余见JSON | 本地拦截与静态合同不证明真实角色授权、生产读取范围或后端数据正确性。 |
+| SC48-LOAD-OR-LOGIN 按目录失败状态重新读取或重新登录 / local | 1处；current-route-source-contract | ；其余见JSON | 真实会话失效、平台角色与服务端授权仍需独立验证。 |
+| SC48-DEFINE 进入来源规则目录 / navigation | 1处；current-route-source-contract | ；其余见JSON | 客户端路由可达不证明目标路由的真实角色授权。 |
+| SC48-FILTER 展开筛选与更新本地筛选条件 / local | 3处；current-route-source-contract | ；其余见JSON | 本映射确认源码边界，不代表所有字段组合、URL后退前进或真实浏览器全状态均已验收。 |
+| SC48-QUERY 按来源名称或关键字筛选 / local | 1处；current-route-source-contract | ；其余见JSON | 不扩大为后端全文检索或即时采集请求。 |
+| SC48-CATEGORY 按来源业务类别筛选 / local | 1处；current-route-source-contract | ；其余见JSON | 筛选值不改变来源启用或准入规则。 |
+| SC48-AVAILABILITY 按目录准备/接入状态筛选 / local | 1处；current-route-source-contract | ；其余见JSON | 状态筛选不代表服务端授权或来源真实可用。 |
+| SC48-MARKET 按市场筛选 / local | 1处；current-route-source-contract | ；其余见JSON | 不推断目录外部来源覆盖。 |
+| SC48-LANGUAGE 按语言筛选 / local | 1处；current-route-source-contract | ；其余见JSON | 不推断目录外部来源覆盖。 |
+| SC48-ACCESS 按来源接入模式筛选 / local | 1处；current-route-source-contract | ；其余见JSON | 显示筛选项不新增接入模式或修改安全策略。 |
+| SC48-SORT 按业务顺序、待配置、名称或最近成功排序 / local | 1处；current-route-source-contract | ；其余见JSON | 不改变服务端分页或来源资格判定。 |
+| SC48-RESET 恢复筛选默认值 / local | 1处；current-route-source-contract | ；其余见JSON | 重置筛选不等同于返回未限定的全目录。 |
+| SC48-PAGE 来源目录分页 / local | 2处；current-route-source-contract | ；其余见JSON | 隔离测试不证明服务端记录总数或生产分页范围。 |
+| SC48-LINK 打开来源 HTTPS 页面 / navigation | 1处；current-route-source-contract | ；其余见JSON | 外部站点内容与可用性不由本页验证。 |
+| SC48-PROBE 匿名来源健康烟测 / write | 1处；current-route-source-contract | ；其余见JSON | 此审阅不批准真实外部请求；须另行验证RBAC、限流、幂等和真实来源结果。 |
+| SC48-CONFIG 编辑来源采集配置及读取回执 / write | 18处；current-route-source-contract | ；其余见JSON | 本地用例不证明真实 provider:configure、MySQL版本竞争、外部烟测或审计持久化。 |
+| SC48-CONFIG-VERSION-DIALOG-WIRING 配置编辑与版本窗父子事件接线 / wiring | 2处；current-route-source-contract | ；其余见JSON | 事件接线映射不证明真实写入或角色权限。 |
+| SC48-VERSIONS 查看配置历史并按版本回滚 / write | 11处；current-route-source-contract | ；其余见JSON | 隔离用例不证明生产并发冲突、RBAC或MySQL审计结果。 |
+| SC48-COMPAT 只读查看来源解析兼容矩阵 / read | 9处；current-route-source-contract | ；其余见JSON | 读取失败、真实外部页面和保留策略仍需真实环境验证；矩阵不触发采集或自动启用。 |
+| SC48-LOGIN 进入指定来源网页登录凭证 / navigation | 1处；current-route-source-contract | ；其余见JSON | 不在P48读取、展示或生成Cookie与凭证秘密。 |
+| SC48-SAMPLES 固定样本、快照回放与独立复核 / write | 17处；current-route-source-contract | ；其余见JSON | 本地合成响应不证明真实browser_job_id、独立管理员身份、权限、存储或外部浏览器执行。 |
+| SC48-ACCEPT 进入1688登录准备检查 / navigation | 1处；current-route-source-contract | ；其余见JSON | 真实门禁证据及资格由P49和服务端合同判定。 |
+| SC48-DIRECTORY-EVENT-WIRING 目录行操作父级事件转发 / wiring | 1处；current-route-source-contract | ；其余见JSON | 目录子组件的事件转发本身不构成新的权限、采集或来源启用能力。 |
+| SC48-DETAIL-OPEN 展开来源行内详情 / local | 1处；current-route-source-contract | ；其余见JSON | 不另发详情读取请求。 |
+| SC48-DETAIL-CLOSE 收起来源行内详情 / local | 1处；current-route-source-contract | ；其余见JSON | 不改变筛选、URL或来源记录。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @close-edit / closeEdit | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @acknowledge / acknowledgeConfigurationSave | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @save / save | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @close-versions / closeConfigurationVersions | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @retry-versions / retryConfigurationVersions | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @rollback / rollbackConfiguration | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @update:form / Object.assign(form, $event) | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @update:rollback-reason / rollbackReason = $event | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @close-edit / closeEdit | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @acknowledge / acknowledgeConfigurationSave | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @save / save | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @close-versions / closeConfigurationVersions | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @retry-versions / retryConfigurationVersions | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @rollback / rollbackConfiguration | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @update:form / Object.assign(form, $event) | SC48-CONFIG、SC48-VERSIONS |
+| SC48-CONFIG-VERSION-DIALOG-WIRING | @update:rollback-reason / rollbackReason = $event | SC48-CONFIG、SC48-VERSIONS |
+| SC48-DIRECTORY-EVENT-WIRING | @page-change / changePage | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |
+| SC48-DIRECTORY-EVENT-WIRING | @test / testSource | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |
+| SC48-DIRECTORY-EVENT-WIRING | @edit / beginEdit | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |
+| SC48-DIRECTORY-EVENT-WIRING | @compatibility / loadCompatibility | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |
+| SC48-DIRECTORY-EVENT-WIRING | @versions / loadConfigurationVersions | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |
+| SC48-DIRECTORY-EVENT-WIRING | @samples / openParserSamples | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+
+### 明确保留的边界
+
+- 本登记逐项覆盖九个P48本地Vue源文件的当前83个扫描候选；候选归组依据现有SC48合同，不把候选数当作独立按钮或业务动作总数。
+- 来源规则登记、即时采集、关闭来源、绕过1688门禁均不是P48入口，不因API或其他页面能力而新增。
+- 烟测可能触达外部来源；固定样本创建、快照回放、另一管理员复核是不同写入阶段；本次未执行真实请求。
+- 用户全局视觉授权仅记录在visualApproval；actionApproval、全状态交互、真实RBAC/MySQL/外部来源和正式M07-03生产验收仍未通过。
+- 此合同只纳入P48路由的九个本地Vue组件；不扩大到ProviderRuntimeSurface、NavigationShell或P49/P50共享路由消费者。
 
 ## P54 局部动作与共享消费者
 
