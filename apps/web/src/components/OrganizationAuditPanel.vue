@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
+import { computed, nextTick, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import "../organization-audit.css";
 
@@ -122,14 +122,40 @@ watch(
 watch(
   [loadedQuery, selectedId],
   () => {
+    if (route.path !== copyOwnerPath) return;
     const query = { ...route.query } as Record<string, string | string[] | null | undefined>;
     setQuery(query, "org_audit_query", loadedQuery.value);
     setQuery(query, "org_audit_selected", selectedId.value);
-    void router.replace({ query });
+    void replaceRouteQuery(query);
   },
   { flush: "post" },
 );
+let routeRestorePending = false,
+  preserveRouteSelection = false,
+  routeRestoreGeneration = 0;
+const pendingOwnQueryWrites = new Set<string>();
+watch(
+  [() => route.path, () => route.query],
+  () => {
+    if (route.path !== copyOwnerPath) {
+      routeRestoreGeneration++;
+      routeRestorePending = false;
+      preserveRouteSelection = false;
+      return;
+    }
+    if (pendingOwnQueryWrites.delete(queryFingerprint(route.query))) return;
+    void restoreRouteState();
+  },
+  { flush: "post" },
+);
+watch(
+  () => props.busy,
+  (busy) => {
+    if (!busy && routeRestorePending) void restoreRouteState();
+  },
+);
 watch(visibleEvents, (events) => {
+  if (preserveRouteSelection) return;
   if (!events.length) selectedId.value = "";
   else if (!events.some((event) => event.id === selectedId.value)) selectedId.value = events[0].id;
 });
@@ -153,7 +179,10 @@ watch(
   invalidateCopy,
   { flush: "sync" },
 );
-onActivated(() => (copyActive = true));
+onActivated(() => {
+  copyActive = true;
+  void restoreRouteState();
+});
 function suspendCopy() {
   copyActive = false;
   invalidateCopy();
@@ -172,6 +201,83 @@ function setQuery(
 ) {
   if (value) query[key] = value;
   else delete query[key];
+}
+function routeQueryText(value: unknown) {
+  if (typeof value === "string") return value;
+  if (Array.isArray(value) && typeof value[0] === "string") return value[0];
+  return "";
+}
+function routeFilters(): AuditFilters {
+  return {
+    action: routeQueryText(route.query.org_audit_action),
+    outcome: routeQueryText(route.query.org_audit_outcome),
+    resource_type: routeQueryText(route.query.org_audit_resource),
+    request_id: routeQueryText(route.query.org_audit_request),
+    trace_id: routeQueryText(route.query.org_audit_trace),
+    occurred_from: routeQueryText(route.query.org_audit_from),
+    occurred_to: routeQueryText(route.query.org_audit_to),
+  };
+}
+function sameFilters(left: AuditFilters, right: AuditFilters) {
+  return (
+    left.action === right.action &&
+    left.outcome === right.outcome &&
+    left.resource_type === right.resource_type &&
+    left.request_id === right.request_id &&
+    left.trace_id === right.trace_id &&
+    left.occurred_from === right.occurred_from &&
+    left.occurred_to === right.occurred_to
+  );
+}
+function queryFingerprint(query: Record<string, unknown>) {
+  return JSON.stringify(
+    Object.entries(query)
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([key, value]) => [key, Array.isArray(value) ? [...value] : value]),
+  );
+}
+async function replaceRouteQuery(query: Record<string, string | string[] | null | undefined>) {
+  if (route.path !== copyOwnerPath || queryFingerprint(query) === queryFingerprint(route.query))
+    return;
+  const fingerprint = queryFingerprint(query);
+  pendingOwnQueryWrites.add(fingerprint);
+  try {
+    await router.replace({ query });
+    await nextTick();
+  } finally {
+    pendingOwnQueryWrites.delete(fingerprint);
+  }
+}
+async function restoreRouteState() {
+  if (route.path !== copyOwnerPath) return;
+  const generation = ++routeRestoreGeneration,
+    filters = routeFilters();
+  loadedQuery.value = queryText("org_audit_query", 160);
+  selectedId.value = queryText("org_audit_selected", 36);
+  form.value = formFromFilters(filters);
+  validationMessage.value = "";
+  if (sameFilters(filters, props.filters)) {
+    routeRestorePending = false;
+    return;
+  }
+  routeRestorePending = true;
+  if (props.busy) return;
+  routeRestorePending = false;
+  preserveRouteSelection = true;
+  try {
+    await props.applyFilters(filters);
+    await nextTick();
+  } finally {
+    if (generation === routeRestoreGeneration) {
+      preserveRouteSelection = false;
+      if (route.path === copyOwnerPath && !sameFilters(routeFilters(), props.filters))
+        routeRestorePending = true;
+      const events = visibleEvents.value;
+      if (!events.length) selectedId.value = "";
+      else if (!events.some((event) => event.id === selectedId.value))
+        selectedId.value = events[0].id;
+    }
+  }
 }
 function formFromFilters(filters: AuditFilters) {
   return {
@@ -217,7 +323,7 @@ async function syncServerQuery(filters: AuditFilters) {
   ] as const)
     setQuery(query, key, value);
   delete query.org_audit_selected;
-  await router.replace({ query });
+  await replaceRouteQuery(query);
   selectedId.value = "";
 }
 async function submitFilters() {

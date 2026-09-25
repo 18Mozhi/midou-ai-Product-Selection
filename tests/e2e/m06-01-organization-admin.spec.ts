@@ -1330,6 +1330,65 @@ test("organization audit unifies readable details filters cursor and URL state",
   await expect(page.getByLabel("操作代码（精确）")).toHaveValue("");
 });
 
+test("organization audit restores URL filters on history and cached return", async ({ page }) => {
+  await setup(page);
+  const auditRequests: URL[] = [];
+  const expectedFilteredCount = organizationAuditEvents.filter(
+    (event) => event.action === "organization.member.invited",
+  ).length;
+  page.on("request", (request) => {
+    const url = new URL(request.url());
+    if (url.pathname.includes("/audit-events")) auditRequests.push(url);
+  });
+
+  await page.goto("/org-admin/audit");
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(50);
+
+  const pushRoute = async (path: string, query?: Record<string, string>) =>
+    page.evaluate(
+      async ({ path, query }) => {
+        const root = document.querySelector("#app") as (HTMLElement & { __vue_app__?: any }) | null;
+        const router = root?.__vue_app__?.config.globalProperties.$router;
+        if (!router) throw new Error("Vue Router is unavailable on the mounted app");
+        await router.push({ path, query });
+      },
+      { path, query },
+    );
+
+  await pushRoute("/org-admin/audit", {
+    org_audit_query: "成员",
+    org_audit_action: "organization.member.invited",
+    keep: "preserved",
+  });
+  await expect(page.getByLabel("页内搜索")).toHaveValue("成员");
+  await expect(page.getByLabel("操作代码（精确）")).toHaveValue("organization.member.invited");
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(
+    expectedFilteredCount,
+  );
+  expect(auditRequests.at(-1)?.searchParams.get("action")).toBe("organization.member.invited");
+  expect(new URL(page.url()).searchParams.get("keep")).toBe("preserved");
+
+  await page.goBack();
+  await expect(page.getByLabel("页内搜索")).toHaveValue("");
+  await expect(page.getByLabel("操作代码（精确）")).toHaveValue("");
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(50);
+
+  await page.goForward();
+  await expect(page.getByLabel("页内搜索")).toHaveValue("成员");
+  await expect(page.getByLabel("操作代码（精确）")).toHaveValue("organization.member.invited");
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(
+    expectedFilteredCount,
+  );
+
+  await pushRoute("/org-admin/tokens");
+  await expect(page.getByRole("heading", { name: "组织 Token" })).toBeVisible();
+  await pushRoute("/org-admin/audit");
+  await expect(page.getByLabel("页内搜索")).toHaveValue("");
+  await expect(page.getByLabel("操作代码（精确）")).toHaveValue("");
+  await expect(page.getByLabel("组织审计列表").getByRole("listitem")).toHaveCount(50);
+  expect(auditRequests.at(-1)?.searchParams.has("action")).toBe(false);
+});
+
 test("organization audit collapses high-frequency realtime connection records without hiding them", async ({
   page,
 }) => {
