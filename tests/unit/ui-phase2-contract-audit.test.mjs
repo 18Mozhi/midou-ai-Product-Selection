@@ -2585,6 +2585,41 @@ test("current P39 account center maps refresh control and parent-owned load wiri
   assert.equal(report.denominatorFrozen, false);
 });
 
+test("P56/P57 parent snapshot signatures remain historical after domain components split", () => {
+  const file = "apps/web/src/components/PlatformManagementCenter.vue";
+  const document = "content-notification-evidence-contract-review.md";
+  const report = runContractAudit();
+  const staleSignatures = [
+    "2f53f8bf6591930e.1",
+    "3a1faf0f5682bde3.1",
+    "f2761a2c8d2de54d.1",
+    "d5eb4065543ab970.1",
+    "280c245be99b4194.1",
+    "528025bcfd01008c.1",
+    "5ec3f86a53bdd26b.1",
+    "1c29b9e693b1be23.1",
+    "4c8c3c0ab5222aee.1",
+    "0e70539c0b003023.1",
+    "ca5a09f3ba2d41f2.1",
+    "13361d81d5bab45e.1",
+    "bc72ebe875dbe028.1",
+    "55da33db3f9ca4bf.1",
+    "642126a04c8cf655.1",
+    "d0dbab0cf156eec0.1",
+    "7da8341abecdd3b7.1",
+  ];
+  const archivedRows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.sourceFile === file &&
+      record.candidateId &&
+      staleSignatures.some((signature) => record.candidateId.endsWith(`#${signature}`)),
+  );
+  assert.equal(archivedRows.length, staleSignatures.length);
+  assert.ok(archivedRows.every((record) => record.temporalScope === "historical"));
+  assert.ok(archivedRows.every((record) => record.status === "identity-not-found"));
+});
+
 test("current P57 notification management maps its four child event boundaries", () => {
   const file = "apps/web/src/components/PlatformNotificationManagement.vue";
   const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(

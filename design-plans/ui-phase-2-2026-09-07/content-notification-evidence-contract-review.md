@@ -71,34 +71,18 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 ## 5. 局部候选与字段绑定
 
-10个局部Vue合计63个控件/事件/模态定义或调用候选，16个v-model位置包含2个父级转发，不等于16个独立输入；原生审核/编辑的事件与定义、提交form与按钮，以及关闭邮件/复用P61分支均单列，不能直接作为去重业务动作分母。新增正文summary一项，旧动作签名保留；全局actions/dialogs/coverage历史源不在此处手改。
+原10个局部Vue快照合计63个控件/事件/模态定义或调用候选，16个v-model位置包含2个父级转发，不等于16个独立输入；原生审核/编辑的事件与定义、提交form与按钮，以及关闭邮件/复用P61分支均单列，不能直接作为去重业务动作分母。新增正文summary一项；17个已失效的旧父组件签名移至第15节历史归档。全局actions/dialogs/coverage历史源不在此处手改。
 
 ### apps/web/src/components/PlatformManagementCenter.vue
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 2f53f8bf6591930e.1 | 383 | control | PN57-NEW 新通知草稿 |
 | 5eebd25c337b0a2c.1 | 455 | control | EMAIL-CLOSED 关闭路由保留分支 |
 | 62c28f83dd77541b.1 | 456 | control | CT56/PN57/AC63/P61-LOAD 按域刷新 |
-| 3a1faf0f5682bde3.1 | 392 | event-binding | CT56/PN57/AC63-FILTER 父转发 |
 | 79f3cfdde95076be.1 | 502 | control | CT56/PN57/AC63/P61-RETRY 非loading重读 |
 | dd1ae8b1dd3126a2.1 | 514 | event-binding | EMAIL-CLOSED 草稿转发 |
-| f2761a2c8d2de54d.1 | 432 | event-binding | CT56-REVIEW 内容行审核；email-action在本分支无生产触发 |
-| d5eb4065543ab970.1 | 442 | event-binding | CT56-PAGE 父转发 |
-| 280c245be99b4194.1 | 448 | event-binding | PN57 编辑/发布/取消及双分页父转发 |
 | 1cb3318f1d3fb321.1 | 523 | event-binding | EMAIL-CLOSED 邮件行转发 |
-| 528025bcfd01008c.1 | 477 | control | P61 拓扑关联链接（复用记录） |
-| 5ec3f86a53bdd26b.1 | 485 | control | P61 动态节点链接（复用记录） |
-| 1c29b9e693b1be23.1 | 520 | control | P61 异常处理链接（复用记录） |
-| 4c8c3c0ab5222aee.1 | 575 | control | P61 采集任务关联（复用记录） |
-| 0e70539c0b003023.1 | 584 | control | P61 来源配置关联（复用记录） |
 | 1c008f867673db60.1 | 551 | control | SHARED-TECH 请求编号披露 |
-| ca5a09f3ba2d41f2.1 | 595 | dialog-definition | CT56-REVIEW 原生审核定义 |
-| 13361d81d5bab45e.1 | 595 | event-binding | CT56-CANCEL 原生Escape事件 |
-| bc72ebe875dbe028.1 | 596 | form-event | CT56-CONFIRM 审核form |
-| 55da33db3f9ca4bf.1 | 616 | control | CT56-CANCEL 取消审核 |
-| 642126a04c8cf655.1 | 617 | control | CT56-CONFIRM 提交按钮（同form） |
-| d0dbab0cf156eec0.1 | 621 | event-binding | PN57-EDITOR 编辑器保存/关闭调用 |
 | 2c3cf7108ad053c1.1 | 576 | event-binding | SHARED-REASON 原因提交/取消转发 |
 | 4b3a546a74b4e7c1.1 | 576 | dialog-component-call | SHARED-REASON 同组件调用候选，不重复业务计数 |
 | b285a03c301c82db.1 | 260 | dialog-script-call | EMAIL-CLOSED 重试/抑制原因变体 |
@@ -225,7 +209,6 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
 | bfe687b5e3775fab.1 | 419 | event-binding | CT56-LOAD/FILTER/PAGE/REVIEW 将P56专用工作台事件转发到当前组合式状态 |
-| 7da8341abecdd3b7.1 | 444 | event-binding | 非P56管理域继续使用旧筛选分支；`domain !== 'content'` 明确隔离 |
 | f5cb087b206b4a60.1 | 556 | event-binding | CT56-CANCEL/CONFIRM 将P56审核窗事件转发到单飞提交状态 |
 | 6ac3264cbd6eac5b.1 | 556 | dialog-component-call | CT56-REVIEW P56专用审核窗组件调用；与同节点事件候选不重复计数 |
 
@@ -476,3 +459,29 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformNotificationOperations.vue | 73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07 |
+
+## 15. P56/P57旧父组件签名归档（历史）
+
+以下17个签名属于早期`PlatformManagementCenter.vue`实现，当前源码中均不存在。P56/P57后来拆分到专用目录、过滤、分页、编辑及操作组件；现有第5.1、5.2、5.3、10–14节按真实当前源码记录子组件与父接线。这里仅保留早期语义、行号和类型，不为旧签名虚构一对一的新candidateId，也不推断其旧行为仍在线。
+
+#### apps/web/src/components/PlatformManagementCenter.vue
+
+| 旧签名 | 旧源码位置 / 类型 | 初始语义 |
+| --- | --- | --- |
+| 2f53f8bf6591930e.1 | 383 / control | PN57-NEW 新通知草稿 |
+| 3a1faf0f5682bde3.1 | 392 / event-binding | CT56/PN57/AC63-FILTER 父转发 |
+| f2761a2c8d2de54d.1 | 432 / event-binding | CT56-REVIEW 内容行审核；email-action在本分支无生产触发 |
+| d5eb4065543ab970.1 | 442 / event-binding | CT56-PAGE 父转发 |
+| 280c245be99b4194.1 | 448 / event-binding | PN57 编辑/发布/取消及双分页父转发 |
+| 528025bcfd01008c.1 | 477 / control | P61 拓扑关联链接（复用记录） |
+| 5ec3f86a53bdd26b.1 | 485 / control | P61 动态节点链接（复用记录） |
+| 1c29b9e693b1be23.1 | 520 / control | P61 异常处理链接（复用记录） |
+| 4c8c3c0ab5222aee.1 | 575 / control | P61 采集任务关联（复用记录） |
+| 0e70539c0b003023.1 | 584 / control | P61 来源配置关联（复用记录） |
+| ca5a09f3ba2d41f2.1 | 595 / dialog-definition | CT56-REVIEW 原生审核定义 |
+| 13361d81d5bab45e.1 | 595 / event-binding | CT56-CANCEL 原生Escape事件 |
+| bc72ebe875dbe028.1 | 596 / form-event | CT56-CONFIRM 审核form |
+| 55da33db3f9ca4bf.1 | 616 / control | CT56-CANCEL 取消审核 |
+| 642126a04c8cf655.1 | 617 / control | CT56-CONFIRM 提交按钮（同form） |
+| d0dbab0cf156eec0.1 | 621 / event-binding | PN57-EDITOR 编辑器保存/关闭调用 |
+| 7da8341abecdd3b7.1 | 444 / event-binding | 非P56管理域继续使用旧筛选分支；`domain !== 'content'` 明确隔离 |

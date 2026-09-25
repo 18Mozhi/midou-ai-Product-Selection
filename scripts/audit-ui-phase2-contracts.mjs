@@ -139,6 +139,7 @@ const history = {
       "apps/web/src/components/PlatformMessageWorkbench.vue",
       "6. 引用版本指纹",
       "7.1 PlatformMessageEditor 已替代候选身份（历史）",
+      "15. P56/P57旧父组件签名归档（历史）",
     ],
   },
   "task-contract-review.md": {
