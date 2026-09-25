@@ -17,8 +17,8 @@
 | apps/web/src/components/PlatformAccountCenter.vue | c526b71b2b59e702.1 | PA45-REFRESH · 仅平台权限空目录重试 |
 | apps/web/src/components/PlatformAccountCenter.vue | 8458edc51af426a6.1 | PA40-WORKSPACE-WIRING · 父页将筛选、刷新、创建与详情意图接到既有处理器 |
 | apps/web/src/components/PlatformAccountCenter.vue | 5db731eeed33ba4f.1 | PA40-P41-WIZARD-OUT · 创建组织向导只在P41路由开放 |
-| apps/web/src/components/PlatformAccountCenter.vue | 559dcb14c786950e.1 | PA40-USER-DIALOG-WIRING · 新建用户、改密和原因事件父子接线 |
-| apps/web/src/components/PlatformAccountCenter.vue | 1fff4198190d6ece.1 | PA40-USER-DIALOG-WIRING · 同一用户弹窗调用的对话框候选身份 |
+| apps/web/src/components/PlatformAccountCenter.vue | 2dcca5d38d8e9ea8.1 | PA40-USER-DIALOG-WIRING · 新建用户、改密和原因事件父子接线；改密关闭走清理处理器 |
+| apps/web/src/components/PlatformAccountCenter.vue | 316b73a793573a29.1 | PA40-USER-DIALOG-WIRING · 同一用户弹窗调用的对话框候选身份 |
 | apps/web/src/components/PlatformAccountCenter.vue | 6f151cbab1f5518e.1 | PA40-P42-DETAIL-OUT · 组织详情事件由P42路由消费 |
 | apps/web/src/components/PlatformAccountCenter.vue | 39ba950db197263c.1 | PA40-P42-DETAIL-OUT · 同一组织详情弹窗调用候选 |
 | apps/web/src/components/PlatformAccountCenter.vue | 39878a11789ae9ce.1 | PA40-P43-DETAIL-OUT · 用户详情事件不属于P40列表 |

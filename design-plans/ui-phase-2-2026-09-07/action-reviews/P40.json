@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213",
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
     "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
     "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
@@ -100,8 +100,8 @@
       "label": "P40用户弹窗的父子事件接线",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1",
-        "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
         "apps/web/src/components/PlatformAccountDialogs.vue#96a5d8f14ce43590.1",
         "apps/web/src/components/PlatformAccountDialogs.vue#9e8b9d6531d0203d.1"
       ],
@@ -125,20 +125,20 @@
       "remaining": "接线登记不等于每个共享弹窗分支的字段/焦点/写入验收；P40只验当前可达用户创建分支。",
       "forwardsTo": ["PA-USER-CREATE", "PA40-USER-CREATE-CANCEL", "PA40-EXCLUDED-CONDITIONAL-BRANCHES"],
       "forwardBindings": [
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@close-create-user", "handler": "closeCreateUser", "targets": ["PA40-USER-CREATE-CANCEL"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@create-user", "handler": "createUser", "targets": ["PA-USER-CREATE"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@close-password", "handler": "passwordOpen = false", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@reset-password", "handler": "resetPassword", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@close-reason", "handler": "cancelReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@submit-reason", "handler": "submitReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1", "event": "@update:reason-text", "handler": "reasonText = $event", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@close-create-user", "handler": "closeCreateUser", "targets": ["PA40-USER-CREATE-CANCEL"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@create-user", "handler": "createUser", "targets": ["PA-USER-CREATE"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@close-password", "handler": "passwordOpen = false", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@reset-password", "handler": "resetPassword", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@close-reason", "handler": "cancelReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@submit-reason", "handler": "submitReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
-        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1", "event": "@update:reason-text", "handler": "reasonText = $event", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1", "event": "@close-create-user", "handler": "closeCreateUser", "targets": ["PA40-USER-CREATE-CANCEL"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1", "event": "@create-user", "handler": "createUser", "targets": ["PA-USER-CREATE"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1", "event": "@close-password", "handler": "closePassword", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1", "event": "@reset-password", "handler": "resetPassword", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1", "event": "@close-reason", "handler": "cancelReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1", "event": "@submit-reason", "handler": "submitReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1", "event": "@update:reason-text", "handler": "reasonText = $event", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1", "event": "@close-create-user", "handler": "closeCreateUser", "targets": ["PA40-USER-CREATE-CANCEL"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1", "event": "@create-user", "handler": "createUser", "targets": ["PA-USER-CREATE"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1", "event": "@close-password", "handler": "closePassword", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1", "event": "@reset-password", "handler": "resetPassword", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1", "event": "@close-reason", "handler": "cancelReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1", "event": "@submit-reason", "handler": "submitReason", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
+        { "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1", "event": "@update:reason-text", "handler": "reasonText = $event", "targets": ["PA40-EXCLUDED-CONDITIONAL-BRANCHES"] },
         { "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#9e8b9d6531d0203d.1", "event": "@cancel", "handler": "handleCreateUserCancel", "targets": ["PA40-USER-CREATE-CANCEL"] }
       ]
     },
@@ -515,7 +515,7 @@
       "apps/web/src/components/PlatformOrganizationRecords.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213",
+      "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
       "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
       "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
       "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",

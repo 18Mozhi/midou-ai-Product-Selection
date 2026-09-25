@@ -2,11 +2,11 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1701；旧登记1477；新身份603，旧表独有身份379。签名变化不等于增删业务能力。
-- 已具体语义对应45页/993源位置/878组；其中路由动作701组，转发/容器关联93组，其余明确排除。其余28页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1701；旧登记1477；新身份605，旧表独有身份381。签名变化不等于增删业务能力。
+- 已具体语义对应46页/1013源位置/917组；其中路由动作728组，转发/容器关联98组，其余明确排除。其余27页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记45页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记46页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -52,13 +52,13 @@
 | [P36 组织令牌](page-specs/P36.md) | 155 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P37 组织审计](page-specs/P37.md) | 155 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P38 平台概览](page-specs/P38.md) | 60 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P39 账号与组织](page-specs/P39.md) | 99 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P40 组织管理](page-specs/P40.md) | 99 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P41 创建组织](page-specs/P41.md) | 99 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P42 组织详情](page-specs/P42.md) | 99 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P43 用户管理](page-specs/P43.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P44 管理员管理](page-specs/P44.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
-| [P45 角色权限](page-specs/P45.md) | 99 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P39 账号与组织](page-specs/P39.md) | 97 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P40 组织管理](page-specs/P40.md) | 97 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P41 创建组织](page-specs/P41.md) | 97 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P42 组织详情](page-specs/P42.md) | 97 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P43 用户管理](page-specs/P43.md) | 97 | [39组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P44 管理员管理](page-specs/P44.md) | 97 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P45 角色权限](page-specs/P45.md) | 97 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P46 来源设置](page-specs/P46.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P47 采集程序](page-specs/P47.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P48 热点来源](page-specs/P48.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -3327,14 +3327,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | --- | --- | --- |
 | PA40-USER-DIALOG-WIRING | @close-create-user / closeCreateUser | PA40-USER-CREATE-CANCEL |
 | PA40-USER-DIALOG-WIRING | @create-user / createUser | PA-USER-CREATE |
-| PA40-USER-DIALOG-WIRING | @close-password / passwordOpen = false | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @close-password / closePassword | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
 | PA40-USER-DIALOG-WIRING | @reset-password / resetPassword | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
 | PA40-USER-DIALOG-WIRING | @close-reason / cancelReason | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
 | PA40-USER-DIALOG-WIRING | @submit-reason / submitReason | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
 | PA40-USER-DIALOG-WIRING | @update:reason-text / reasonText = $event | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
 | PA40-USER-DIALOG-WIRING | @close-create-user / closeCreateUser | PA40-USER-CREATE-CANCEL |
 | PA40-USER-DIALOG-WIRING | @create-user / createUser | PA-USER-CREATE |
-| PA40-USER-DIALOG-WIRING | @close-password / passwordOpen = false | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
+| PA40-USER-DIALOG-WIRING | @close-password / closePassword | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
 | PA40-USER-DIALOG-WIRING | @reset-password / resetPassword | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
 | PA40-USER-DIALOG-WIRING | @close-reason / cancelReason | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
 | PA40-USER-DIALOG-WIRING | @submit-reason / submitReason | PA40-EXCLUDED-CONDITIONAL-BRANCHES |
@@ -3474,14 +3474,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | PA42-DIALOG-CONTAINERS | 容器定义，无额外事件 | PA42-CLOSE、PA42-RETRY、PA42-INPUT、PA42-SAVE、PA42-TECH、PA42-STATUS、PA42-REASON-INPUT、PA42-REASON-CANCEL、PA42-REASON-SUBMIT |
 | PA42-REASON-WIRING | @close-create-user / closeCreateUser | PA42-EXCLUDED-DIALOGS |
 | PA42-REASON-WIRING | @create-user / createUser | PA42-EXCLUDED-DIALOGS |
-| PA42-REASON-WIRING | @close-password / passwordOpen = false | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @close-password / closePassword | PA42-EXCLUDED-DIALOGS |
 | PA42-REASON-WIRING | @reset-password / resetPassword | PA42-EXCLUDED-DIALOGS |
 | PA42-REASON-WIRING | @close-reason / cancelReason | PA42-REASON-CANCEL |
 | PA42-REASON-WIRING | @submit-reason / submitReason | PA42-REASON-SUBMIT |
 | PA42-REASON-WIRING | @update:reason-text / reasonText = $event | PA42-REASON-INPUT |
 | PA42-REASON-WIRING | @close-create-user / closeCreateUser | PA42-EXCLUDED-DIALOGS |
 | PA42-REASON-WIRING | @create-user / createUser | PA42-EXCLUDED-DIALOGS |
-| PA42-REASON-WIRING | @close-password / passwordOpen = false | PA42-EXCLUDED-DIALOGS |
+| PA42-REASON-WIRING | @close-password / closePassword | PA42-EXCLUDED-DIALOGS |
 | PA42-REASON-WIRING | @reset-password / resetPassword | PA42-EXCLUDED-DIALOGS |
 | PA42-REASON-WIRING | @close-reason / cancelReason | PA42-REASON-CANCEL |
 | PA42-REASON-WIRING | @submit-reason / submitReason | PA42-REASON-SUBMIT |
@@ -3514,6 +3514,138 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 父级PlatformAccountCenter仍承载P39/P40/P41/P42/P43/P45；本动作映射只接收P42组织详情及其原因链路。
 - 共享用户创建/密码重置窗口明确作为P43排除；其可视DOM复用不代表P42可达。
 - 视觉自动通过、动作映射与真实生产RBAC/MySQL/审计/M07-03验收是独立结论。
+
+## P43 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P43.json)：67个局部源位置 → 39组；3类写入，27组路由动作，5组转发/容器关联不重复计动作。已映射11/17个源码字段位置，12/12处调用/内嵌容器，12个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有156个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PA43-OUT-ADMINS 权限管理入口（仅P45可达） / excluded | 1处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-OUT-ROLE-REFRESH 角色目录读取入口（仅P45可达） / excluded | 3处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-OUT-ORG-CREATE 组织创建入口（归P41） / excluded | 2处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-CREATE-OPEN 打开新建用户窗 / local | 1处；open、busy | [users--list · 1440](design/user-admin-direction-c/1440-users--list.png) / [users--list · 390](design/user-admin-direction-c/390-users--list.png)、[users--create · 1440](design/user-admin-direction-c/1440-users--create.png) / [users--create · 390](design/user-admin-direction-c/390-users--create.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-REFRESH 读取或刷新用户目录 / read | 2处；initial、manual-refresh、retry | [users--list · 1440](design/user-admin-direction-c/1440-users--list.png) / [users--list · 390](design/user-admin-direction-c/390-users--list.png)、[users--error · 1440](design/user-admin-direction-c/1440-users--error.png) / [users--error · 390](design/user-admin-direction-c/390-users--error.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-WORKSPACE-WIRING 目录子组件到父级的事件接线 / wiring | 1处；filters、reset、load、open-user | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)、[users--list · 1440](design/user-admin-direction-c/1440-users--list.png) / [users--list · 390](design/user-admin-direction-c/390-users--list.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-OUT-WIZARD 组织创建向导事件（归P41） / excluded | 1处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-DIALOGS-WIRING 创建、改密与原因窗父子接线 / wiring | 2处；create、password、reason | [users--create · 1440](design/user-admin-direction-c/1440-users--create.png) / [users--create · 390](design/user-admin-direction-c/390-users--create.png)、[users--password · 1440](design/user-admin-direction-c/1440-users--password.png) / [users--password · 390](design/user-admin-direction-c/390-users--password.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-OUT-ORG-DETAIL 组织详情事件（归P42） / excluded | 3处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-DETAIL-WIRING 用户详情事件父级接线 / wiring | 2处；close、retry、status、role、membership、password、session | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--reason_disable · 1440](design/user-admin-direction-c/1440-users--reason_disable.png) / [users--reason_disable · 390](design/user-admin-direction-c/390-users--reason_disable.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-NAVIGATION 账号工作区二级导航 / navigation | 3处；organizations、users、admins | [users--list · 1440](design/user-admin-direction-c/1440-users--list.png) / [users--list · 390](design/user-admin-direction-c/390-users--list.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-OUT-ORG-REFRESH 组织记录刷新（归P40） / excluded | 1处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-FILTER-DRAWER 移动端筛选抽屉容器 / local | 1处；closed、open | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-FILTER 提交邮箱/组织/状态筛选 / read | 2处；submit、empty | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)、[users--filtered_empty · 1440](design/user-admin-direction-c/1440-users--filtered_empty.png) / [users--filtered_empty · 390](design/user-admin-direction-c/390-users--filtered_empty.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-RESET 清除用户筛选 / local | 2处；toolbar、filtered-empty | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)、[users--filtered_empty · 1440](design/user-admin-direction-c/1440-users--filtered_empty.png) / [users--filtered_empty · 390](design/user-admin-direction-c/390-users--filtered_empty.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-OUT-ADMIN-FILTER 管理员筛选/创建（归P44） / excluded | 3处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-DETAIL-ROW-WIRING 用户记录打开详情事件 / wiring | 1处；desktop-row、mobile-row | [users--list · 1440](design/user-admin-direction-c/1440-users--list.png) / [users--list · 390](design/user-admin-direction-c/390-users--list.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-OPEN-DETAIL 打开账号详情 / read | 2处；desktop、mobile-preview-to-detail | [users--list · 1440](design/user-admin-direction-c/1440-users--list.png) / [users--list · 390](design/user-admin-direction-c/390-users--list.png)、[users--preview · 1440](design/user-admin-direction-c/1440-users--preview.png) / [users--preview · 390](design/user-admin-direction-c/390-users--preview.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-TECH 展开用户技术标识 / local | 1处；collapsed、expanded | [users--preview · 1440](design/user-admin-direction-c/1440-users--preview.png) / [users--preview · 390](design/user-admin-direction-c/390-users--preview.png)、[users--technical · 1440](design/user-admin-direction-c/1440-users--technical.png) / [users--technical · 390](design/user-admin-direction-c/390-users--technical.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-DETAIL-CONTAINER 账号详情原生窗口 / local | 1处；loading、ready、error | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--detail_loading · 1440](design/user-admin-direction-c/1440-users--detail_loading.png) / [users--detail_loading · 390](design/user-admin-direction-c/390-users--detail_loading.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-DETAIL-CLOSE 关闭账号详情 / local | 4处；escape、header、footer、error | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--detail_error · 1440](design/user-admin-direction-c/1440-users--detail_error.png) / [users--detail_error · 390](design/user-admin-direction-c/390-users--detail_error.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-DETAIL-SECTION 详情内跳转分区 / local | 3处；memberships、roles、security | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--memberships · 1440](design/user-admin-direction-c/1440-users--memberships.png) / [users--memberships · 390](design/user-admin-direction-c/390-users--memberships.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-DETAIL-RETRY 重试读取账号详情 / read | 1处；retry、loading、success | [users--detail_error · 1440](design/user-admin-direction-c/1440-users--detail_error.png) / [users--detail_error · 390](design/user-admin-direction-c/390-users--detail_error.png)、[users--detail_loading · 1440](design/user-admin-direction-c/1440-users--detail_loading.png) / [users--detail_loading · 390](design/user-admin-direction-c/390-users--detail_loading.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-MEMBERSHIP-WIRING 详情转发加入组织表单提交 / wiring | 1处；valid、error | [users--memberships · 1440](design/user-admin-direction-c/1440-users--memberships.png) / [users--memberships · 390](design/user-admin-direction-c/390-users--memberships.png)、[users--membership_error · 1440](design/user-admin-direction-c/1440-users--membership_error.png) / [users--membership_error · 390](design/user-admin-direction-c/390-users--membership_error.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-MEMBERSHIP-SUBMIT 提交加入组织意图 / write | 2处；valid、invalid、busy、failure | [users--memberships · 1440](design/user-admin-direction-c/1440-users--memberships.png) / [users--memberships · 390](design/user-admin-direction-c/390-users--memberships.png)、[users--membership_error · 1440](design/user-admin-direction-c/1440-users--membership_error.png) / [users--membership_error · 390](design/user-admin-direction-c/390-users--membership_error.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-ROLE-CHOOSE 选择固定平台角色授予或撤销 / local | 1处；grant、revoke、inactive-disabled、self-protection | [users--roles · 1440](design/user-admin-direction-c/1440-users--roles.png) / [users--roles · 390](design/user-admin-direction-c/390-users--roles.png)、[users--disabled_roles · 1440](design/user-admin-direction-c/1440-users--disabled_roles.png) / [users--disabled_roles · 390](design/user-admin-direction-c/390-users--disabled_roles.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-SESSION-CHOOSE 选择撤销单个或全部会话 / local | 2处；single、all、none、expired | [users--security · 1440](design/user-admin-direction-c/1440-users--security.png) / [users--security · 390](design/user-admin-direction-c/390-users--security.png)、[users--no_sessions · 1440](design/user-admin-direction-c/1440-users--no_sessions.png) / [users--no_sessions · 390](design/user-admin-direction-c/390-users--no_sessions.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-STATUS-CHOOSE 选择停用或恢复账号登录 / local | 1处；active-to-disabled、disabled-to-active、self-protection | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--disabled · 1440](design/user-admin-direction-c/1440-users--disabled.png) / [users--disabled · 390](design/user-admin-direction-c/390-users--disabled.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-PASSWORD-OPEN 打开强制改密窗 / local | 1处；open、cancel | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--password · 1440](design/user-admin-direction-c/1440-users--password.png) / [users--password · 390](design/user-admin-direction-c/390-users--password.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-CREATE-CONTAINER 新建用户原生窗口 / local | 1处；default、organization-selected、error | [users--create · 1440](design/user-admin-direction-c/1440-users--create.png) / [users--create · 390](design/user-admin-direction-c/390-users--create.png)、[users--create_org · 1440](design/user-admin-direction-c/1440-users--create_org.png) / [users--create_org · 390](design/user-admin-direction-c/390-users--create_org.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-CREATE-CANCEL 取消新建用户 / local | 2处；escape、button | [users--create · 1440](design/user-admin-direction-c/1440-users--create.png) / [users--create · 390](design/user-admin-direction-c/390-users--create.png)、[users--create_error · 1440](design/user-admin-direction-c/1440-users--create_error.png) / [users--create_error · 390](design/user-admin-direction-c/390-users--create_error.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-CREATE-SUBMIT 提交新建用户 / write | 2处；valid、invalid、busy、failure、success | [users--create · 1440](design/user-admin-direction-c/1440-users--create.png) / [users--create · 390](design/user-admin-direction-c/390-users--create.png)、[users--create_org · 1440](design/user-admin-direction-c/1440-users--create_org.png) / [users--create_org · 390](design/user-admin-direction-c/390-users--create_org.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-PASSWORD-CONTAINER 强制改密原生窗口 / local | 1处；default、invalid、error | [users--password · 1440](design/user-admin-direction-c/1440-users--password.png) / [users--password · 390](design/user-admin-direction-c/390-users--password.png)、[users--password_invalid · 1440](design/user-admin-direction-c/1440-users--password_invalid.png) / [users--password_invalid · 390](design/user-admin-direction-c/390-users--password_invalid.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-PASSWORD-CANCEL 取消强制改密 / local | 2处；escape、button | [users--password · 1440](design/user-admin-direction-c/1440-users--password.png) / [users--password · 390](design/user-admin-direction-c/390-users--password.png)、[users--password_error · 1440](design/user-admin-direction-c/1440-users--password_error.png) / [users--password_error · 390](design/user-admin-direction-c/390-users--password_error.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-PASSWORD-SUBMIT 确认临时密码并进入原因确认 / local | 2处；valid、invalid、reason-step | [users--password · 1440](design/user-admin-direction-c/1440-users--password.png) / [users--password · 390](design/user-admin-direction-c/390-users--password.png)、[users--password_invalid · 1440](design/user-admin-direction-c/1440-users--password_invalid.png) / [users--password_invalid · 390](design/user-admin-direction-c/390-users--password_invalid.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-REASON-CONTAINER 共享原因原生窗口 / local | 1处；11-operation-variants、invalid | [users--reason_disable · 1440](design/user-admin-direction-c/1440-users--reason_disable.png) / [users--reason_disable · 390](design/user-admin-direction-c/390-users--reason_disable.png)、[users--reason_restore · 1440](design/user-admin-direction-c/1440-users--reason_restore.png) / [users--reason_restore · 390](design/user-admin-direction-c/390-users--reason_restore.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-REASON-CANCEL 取消原因确认 / local | 2处；escape、button | [users--reason_disable · 1440](design/user-admin-direction-c/1440-users--reason_disable.png) / [users--reason_disable · 390](design/user-admin-direction-c/390-users--reason_disable.png)、[users--reason_restore · 1440](design/user-admin-direction-c/1440-users--reason_restore.png) / [users--reason_restore · 390](design/user-admin-direction-c/390-users--reason_restore.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-REASON-INPUT 编辑操作原因 / local | 1处；edit、required、minlength、maxlength | [users--reason_disable · 1440](design/user-admin-direction-c/1440-users--reason_disable.png) / [users--reason_disable · 390](design/user-admin-direction-c/390-users--reason_disable.png)、[users--reason_reset_password · 1440](design/user-admin-direction-c/1440-users--reason_reset_password.png) / [users--reason_reset_password · 390](design/user-admin-direction-c/390-users--reason_reset_password.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-REASON-SUBMIT 确认原因并执行已选操作 / write | 2处；valid、invalid、busy、failure、write-success-read-warning、success | [users--reason_disable · 1440](design/user-admin-direction-c/1440-users--reason_disable.png) / [users--reason_disable · 390](design/user-admin-direction-c/390-users--reason_disable.png)、[users--reason_restore · 1440](design/user-admin-direction-c/1440-users--reason_restore.png) / [users--reason_restore · 390](design/user-admin-direction-c/390-users--reason_restore.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PA43-WORKSPACE-WIRING | @apply-filters / applyFilters | PA43-FILTER |
+| PA43-WORKSPACE-WIRING | @reset-filters / resetFilters | PA43-RESET |
+| PA43-WORKSPACE-WIRING | @load / load | PA43-REFRESH |
+| PA43-WORKSPACE-WIRING | @create-organization / openOrganizationWizard | PA43-OUT-ORG-CREATE |
+| PA43-WORKSPACE-WIRING | @create-admin / openCreateUser(true) | PA43-OUT-ADMIN-FILTER |
+| PA43-WORKSPACE-WIRING | @open-organization / openOrganization | PA43-OUT-ORG-DETAIL |
+| PA43-WORKSPACE-WIRING | @open-user / openUserDetail | PA43-OPEN-DETAIL |
+| PA43-DIALOGS-WIRING | @close-create-user / closeCreateUser | PA43-CREATE-CANCEL |
+| PA43-DIALOGS-WIRING | @create-user / createUser | PA43-CREATE-SUBMIT |
+| PA43-DIALOGS-WIRING | @close-password / closePassword | PA43-PASSWORD-CANCEL |
+| PA43-DIALOGS-WIRING | @reset-password / resetPassword | PA43-PASSWORD-SUBMIT |
+| PA43-DIALOGS-WIRING | @close-reason / cancelReason | PA43-REASON-CANCEL |
+| PA43-DIALOGS-WIRING | @submit-reason / submitReason | PA43-REASON-SUBMIT |
+| PA43-DIALOGS-WIRING | @update:reason-text / reasonText = $event | PA43-REASON-INPUT |
+| PA43-DIALOGS-WIRING | @close-create-user / closeCreateUser | PA43-CREATE-CANCEL |
+| PA43-DIALOGS-WIRING | @create-user / createUser | PA43-CREATE-SUBMIT |
+| PA43-DIALOGS-WIRING | @close-password / closePassword | PA43-PASSWORD-CANCEL |
+| PA43-DIALOGS-WIRING | @reset-password / resetPassword | PA43-PASSWORD-SUBMIT |
+| PA43-DIALOGS-WIRING | @close-reason / cancelReason | PA43-REASON-CANCEL |
+| PA43-DIALOGS-WIRING | @submit-reason / submitReason | PA43-REASON-SUBMIT |
+| PA43-DIALOGS-WIRING | @update:reason-text / reasonText = $event | PA43-REASON-INPUT |
+| PA43-DETAIL-WIRING | @close / closeUserDetail | PA43-DETAIL-CLOSE |
+| PA43-DETAIL-WIRING | @retry / selected && openUserDetail(selected) | PA43-DETAIL-RETRY |
+| PA43-DETAIL-WIRING | @toggle-status / toggleUser | PA43-STATUS-CHOOSE |
+| PA43-DETAIL-WIRING | @role / role | PA43-ROLE-CHOOSE |
+| PA43-DETAIL-WIRING | @add-membership / addMembership | PA43-MEMBERSHIP-SUBMIT |
+| PA43-DETAIL-WIRING | @reset-password / openPassword | PA43-PASSWORD-OPEN |
+| PA43-DETAIL-WIRING | @revoke-sessions / revokeSessions | PA43-SESSION-CHOOSE |
+| PA43-DETAIL-WIRING | @close / closeUserDetail | PA43-DETAIL-CLOSE |
+| PA43-DETAIL-WIRING | @retry / selected && openUserDetail(selected) | PA43-DETAIL-RETRY |
+| PA43-DETAIL-WIRING | @toggle-status / toggleUser | PA43-STATUS-CHOOSE |
+| PA43-DETAIL-WIRING | @role / role | PA43-ROLE-CHOOSE |
+| PA43-DETAIL-WIRING | @add-membership / addMembership | PA43-MEMBERSHIP-SUBMIT |
+| PA43-DETAIL-WIRING | @reset-password / openPassword | PA43-PASSWORD-OPEN |
+| PA43-DETAIL-WIRING | @revoke-sessions / revokeSessions | PA43-SESSION-CHOOSE |
+| PA43-DETAIL-ROW-WIRING | @open-user / emit('open-user', $event) | PA43-OPEN-DETAIL |
+| PA43-MEMBERSHIP-WIRING | @submit / $emit('addMembership', selected.id, $event) | PA43-MEMBERSHIP-SUBMIT |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| PlatformAccountCenter.vue / query | 用户目录邮箱/组织关键词草稿 | 沿用现有URL同步和长度截断，不增设查询条件。 |
+| PlatformAccountCenter.vue / status | 用户账号状态筛选草稿 | 只筛选账号状态，不混入角色权限。 |
+| PlatformAccountDialogs.vue / userForm.email | 创建用户邮箱 | 继续现有必填和长度约束，由既有API校验最终确认。 |
+| PlatformAccountDialogs.vue / userForm.temporary_password | 新用户临时密码 | 保持现有长度约束，不在本变更中扩展安全规则。 |
+| PlatformAccountDialogs.vue / userForm.platform_role_code | 可选固定平台角色 | 仅使用当前普通用户和三种平台角色。 |
+| PlatformAccountDialogs.vue / userForm.organization_id | 可选组织ID | 空值继续转null；不推导或补造组织数据。 |
+| PlatformAccountDialogs.vue / userForm.organization_role_code | 组织初始角色 | 只在选择组织时按既有选项使用。 |
+| PlatformAccountDialogs.vue / passwordForm.temporary_password | 强制重置的临时密码 | 关闭后敏感值清理仍列待修，不假设自动清理。 |
+| PlatformUserMembershipForm.vue / form.organization_id | 目标组织ID | 仅从现有eligible组织项选择。 |
+| PlatformUserMembershipForm.vue / form.role_code | 组织角色代码 | 只使用既有五种角色选项。 |
+| PlatformUserMembershipForm.vue / form.reason | 加入组织审计原因 | 沿用既有2–300字符规则。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| PlatformAccountDirectoryWorkspace.vue / ResponsiveFilterDrawer.1 / p43-mobile-filter | responsive-filter / related-scene-only | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)、[users--filtered_empty · 1440](design/user-admin-direction-c/1440-users--filtered_empty.png) / [users--filtered_empty · 390](design/user-admin-direction-c/390-users--filtered_empty.png) | 图稿代表用户筛选区域，不表示所有其他页面消费者。 |
+| PlatformAccountDirectoryWorkspace.vue / form.1 / p43-user-filter-form | form-container / matching-inline-form-scene | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)、[users--filtered_empty · 1440](design/user-admin-direction-c/1440-users--filtered_empty.png) / [users--filtered_empty · 390](design/user-admin-direction-c/390-users--filtered_empty.png) | 查询行为需以父级与当前GET合同为准。 |
+| PlatformUserRecords.vue / ResponsiveDataView.1 / p43-user-mobile-preview | responsive-row-detail / related-scene-only | [users--preview · 1440](design/user-admin-direction-c/1440-users--preview.png) / [users--preview · 390](design/user-admin-direction-c/390-users--preview.png)、[users--technical · 1440](design/user-admin-direction-c/1440-users--technical.png) / [users--technical · 390](design/user-admin-direction-c/390-users--technical.png) | 移动预览不是V组件的原生dialog实现。 |
+| PlatformUserDetailDialog.vue / dialog.1 / p43-user-detail-dialog | native-dialog / matching-dialog-scene | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--detail_loading · 1440](design/user-admin-direction-c/1440-users--detail_loading.png) / [users--detail_loading · 390](design/user-admin-direction-c/390-users--detail_loading.png)、[users--detail_error · 1440](design/user-admin-direction-c/1440-users--detail_error.png) / [users--detail_error · 390](design/user-admin-direction-c/390-users--detail_error.png) | 加载、就绪、错误视图不代替真实权限验收。 |
+| PlatformUserDetailDialog.vue / aside.1 / p43-user-identity-aside | inline-aside / related-scene-only | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--memberships · 1440](design/user-admin-direction-c/1440-users--memberships.png) / [users--memberships · 390](design/user-admin-direction-c/390-users--memberships.png) | 样例身份不代表生产数据。 |
+| PlatformUserMembershipForm.vue / form.1 / p43-membership-inline-form | form-container / matching-inline-form-scene | [users--memberships · 1440](design/user-admin-direction-c/1440-users--memberships.png) / [users--memberships · 390](design/user-admin-direction-c/390-users--memberships.png)、[users--membership_error · 1440](design/user-admin-direction-c/1440-users--membership_error.png) / [users--membership_error · 390](design/user-admin-direction-c/390-users--membership_error.png) | 真实POST与服务端拒绝状态另需生产证据。 |
+| PlatformAccountDialogs.vue / dialog.1 / p43-create-user-dialog | native-dialog / matching-dialog-scene | [users--create · 1440](design/user-admin-direction-c/1440-users--create.png) / [users--create · 390](design/user-admin-direction-c/390-users--create.png)、[users--create_org · 1440](design/user-admin-direction-c/1440-users--create_org.png) / [users--create_org · 390](design/user-admin-direction-c/390-users--create_org.png)、[users--create_error · 1440](design/user-admin-direction-c/1440-users--create_error.png) / [users--create_error · 390](design/user-admin-direction-c/390-users--create_error.png)、[users--create_busy · 1440](design/user-admin-direction-c/1440-users--create_busy.png) / [users--create_busy · 390](design/user-admin-direction-c/390-users--create_busy.png) | 隔离场景不证明真实创建或MFA策略。 |
+| PlatformAccountDialogs.vue / form.1 / p43-create-user-form | form-container / matching-inline-form-scene | [users--create · 1440](design/user-admin-direction-c/1440-users--create.png) / [users--create · 390](design/user-admin-direction-c/390-users--create.png)、[users--create_org · 1440](design/user-admin-direction-c/1440-users--create_org.png) / [users--create_org · 390](design/user-admin-direction-c/390-users--create_org.png)、[users--create_error · 1440](design/user-admin-direction-c/1440-users--create_error.png) / [users--create_error · 390](design/user-admin-direction-c/390-users--create_error.png)、[users--create_busy · 1440](design/user-admin-direction-c/1440-users--create_busy.png) / [users--create_busy · 390](design/user-admin-direction-c/390-users--create_busy.png) | 真实重复邮箱冲突由服务器返回，不从原型推断。 |
+| PlatformAccountDialogs.vue / dialog.2 / p43-password-dialog | native-dialog / matching-dialog-scene | [users--password · 1440](design/user-admin-direction-c/1440-users--password.png) / [users--password · 390](design/user-admin-direction-c/390-users--password.png)、[users--password_invalid · 1440](design/user-admin-direction-c/1440-users--password_invalid.png) / [users--password_invalid · 390](design/user-admin-direction-c/390-users--password_invalid.png)、[users--password_error · 1440](design/user-admin-direction-c/1440-users--password_error.png) / [users--password_error · 390](design/user-admin-direction-c/390-users--password_error.png) | 隔离视觉和回执不证明内存清理或真实写入。 |
+| PlatformAccountDialogs.vue / form.2 / p43-password-form | form-container / matching-inline-form-scene | [users--password · 1440](design/user-admin-direction-c/1440-users--password.png) / [users--password · 390](design/user-admin-direction-c/390-users--password.png)、[users--password_invalid · 1440](design/user-admin-direction-c/1440-users--password_invalid.png) / [users--password_invalid · 390](design/user-admin-direction-c/390-users--password_invalid.png)、[users--password_error · 1440](design/user-admin-direction-c/1440-users--password_error.png) / [users--password_error · 390](design/user-admin-direction-c/390-users--password_error.png) | 服务端安全策略和真实重置仍需独立验证。 |
+| PlatformAccountDialogs.vue / dialog.3 / p43-shared-reason-dialog | native-dialog / matching-dialog-scene | [users--reason_disable · 1440](design/user-admin-direction-c/1440-users--reason_disable.png) / [users--reason_disable · 390](design/user-admin-direction-c/390-users--reason_disable.png)、[users--reason_restore · 1440](design/user-admin-direction-c/1440-users--reason_restore.png) / [users--reason_restore · 390](design/user-admin-direction-c/390-users--reason_restore.png)、[users--reason_grant_operations · 1440](design/user-admin-direction-c/1440-users--reason_grant_operations.png) / [users--reason_grant_operations · 390](design/user-admin-direction-c/390-users--reason_grant_operations.png)、[users--reason_revoke_operations · 1440](design/user-admin-direction-c/1440-users--reason_revoke_operations.png) / [users--reason_revoke_operations · 390](design/user-admin-direction-c/390-users--reason_revoke_operations.png)、[users--reason_grant_security · 1440](design/user-admin-direction-c/1440-users--reason_grant_security.png) / [users--reason_grant_security · 390](design/user-admin-direction-c/390-users--reason_grant_security.png)、[users--reason_revoke_security · 1440](design/user-admin-direction-c/1440-users--reason_revoke_security.png) / [users--reason_revoke_security · 390](design/user-admin-direction-c/390-users--reason_revoke_security.png)、[users--reason_grant_super · 1440](design/user-admin-direction-c/1440-users--reason_grant_super.png) / [users--reason_grant_super · 390](design/user-admin-direction-c/390-users--reason_grant_super.png)、[users--reason_revoke_super · 1440](design/user-admin-direction-c/1440-users--reason_revoke_super.png) / [users--reason_revoke_super · 390](design/user-admin-direction-c/390-users--reason_revoke_super.png)、[users--reason_session · 1440](design/user-admin-direction-c/1440-users--reason_session.png) / [users--reason_session · 390](design/user-admin-direction-c/390-users--reason_session.png)、[users--reason_sessions · 1440](design/user-admin-direction-c/1440-users--reason_sessions.png) / [users--reason_sessions · 390](design/user-admin-direction-c/390-users--reason_sessions.png)、[users--reason_reset_password · 1440](design/user-admin-direction-c/1440-users--reason_reset_password.png) / [users--reason_reset_password · 390](design/user-admin-direction-c/390-users--reason_reset_password.png)、[users--reason_invalid · 1440](design/user-admin-direction-c/1440-users--reason_invalid.png) / [users--reason_invalid · 390](design/user-admin-direction-c/390-users--reason_invalid.png) | 11类目标在图上呈现不等于全部服务器权限通过。 |
+| PlatformAccountDialogs.vue / form.3 / p43-shared-reason-form | form-container / matching-inline-form-scene | [users--reason_disable · 1440](design/user-admin-direction-c/1440-users--reason_disable.png) / [users--reason_disable · 390](design/user-admin-direction-c/390-users--reason_disable.png)、[users--reason_restore · 1440](design/user-admin-direction-c/1440-users--reason_restore.png) / [users--reason_restore · 390](design/user-admin-direction-c/390-users--reason_restore.png)、[users--reason_grant_operations · 1440](design/user-admin-direction-c/1440-users--reason_grant_operations.png) / [users--reason_grant_operations · 390](design/user-admin-direction-c/390-users--reason_grant_operations.png)、[users--reason_revoke_operations · 1440](design/user-admin-direction-c/1440-users--reason_revoke_operations.png) / [users--reason_revoke_operations · 390](design/user-admin-direction-c/390-users--reason_revoke_operations.png)、[users--reason_grant_security · 1440](design/user-admin-direction-c/1440-users--reason_grant_security.png) / [users--reason_grant_security · 390](design/user-admin-direction-c/390-users--reason_grant_security.png)、[users--reason_revoke_security · 1440](design/user-admin-direction-c/1440-users--reason_revoke_security.png) / [users--reason_revoke_security · 390](design/user-admin-direction-c/390-users--reason_revoke_security.png)、[users--reason_grant_super · 1440](design/user-admin-direction-c/1440-users--reason_grant_super.png) / [users--reason_grant_super · 390](design/user-admin-direction-c/390-users--reason_grant_super.png)、[users--reason_revoke_super · 1440](design/user-admin-direction-c/1440-users--reason_revoke_super.png) / [users--reason_revoke_super · 390](design/user-admin-direction-c/390-users--reason_revoke_super.png)、[users--reason_session · 1440](design/user-admin-direction-c/1440-users--reason_session.png) / [users--reason_session · 390](design/user-admin-direction-c/390-users--reason_session.png)、[users--reason_sessions · 1440](design/user-admin-direction-c/1440-users--reason_sessions.png) / [users--reason_sessions · 390](design/user-admin-direction-c/390-users--reason_sessions.png)、[users--reason_reset_password · 1440](design/user-admin-direction-c/1440-users--reason_reset_password.png) / [users--reason_reset_password · 390](design/user-admin-direction-c/390-users--reason_reset_password.png)、[users--reason_invalid · 1440](design/user-admin-direction-c/1440-users--reason_invalid.png) / [users--reason_invalid · 390](design/user-admin-direction-c/390-users--reason_invalid.png) | 视觉/本地验证不代表真实审计日志持久化。 |
+
+### 明确保留的边界
+
+- 移动用户预览到账号详情、三路由共享父组件条件、四个原生dialog与11种原因目标仍需按真实App组合回归；静态候选和图稿不证明每条状态时序。
+- 新建/密码回调的跨窗口归属与原因窗自动关闭仍按已有业务合同核验；创建/改密取消及成功清空前端临时密码已按实际Vue和定向单测实现。
+- 所有图稿仅支持用户已授予的自动视觉通过；按钮六态、真实RBAC、MySQL写入、审计持久化、全站G0-G5与生产权限验收各自独立。
+- 父级PlatformAccountCenter由P39–P45共享；本次只核对P43用户路由消费的工作区/详情/共享弹窗。
+- ResponsiveDataView与ResponsiveFilterDrawer的其他页面调用、完整键盘/屏幕阅读器和触控设备验证仍需独立验收。
+- 自动视觉批准、局部容器组合、动作审核与真实RBAC/MySQL/审计验收仍是不同证据层。
 
 ## P54 局部动作与共享消费者
 

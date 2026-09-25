@@ -1383,6 +1383,7 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
       organization_id: null,
     });
   await expect(page.getByText(/账号已创建，但列表刷新未成功，请手动刷新核对/)).toBeVisible();
+  await expect(page.locator(".p43-create-user-dialog input[type='password']")).toHaveValue("");
   await page
     .getByRole("navigation", { name: "账号与组织二级导航" })
     .getByRole("link", { name: "用户管理", exact: true })
@@ -1562,6 +1563,7 @@ test("administrator write failures stay inside their active dialogs", async ({ p
   await createDialog.getByRole("button", { name: "确认创建" }).click();
   await expect(createDialog.getByRole("alert")).toContainText("请使用其他邮箱");
   await createDialog.getByRole("button", { name: "取消" }).click();
+  await expect(page.locator(".p43-create-user-dialog input[type='password']")).toHaveValue("");
 
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
   if (mobile) {

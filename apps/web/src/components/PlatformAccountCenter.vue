@@ -542,6 +542,7 @@ function openCreateUser(asAdmin = false) {
 function closeCreateUser() {
   createUserOpen.value = false;
   createUserError.value = "";
+  userForm.temporary_password = "";
 }
 async function createUser() {
   const isCurrent = createUserOwner.capture();
@@ -563,7 +564,7 @@ async function createUser() {
       },
     )
   ) {
-    if (isCurrent()) createUserOpen.value = false;
+    if (isCurrent()) closeCreateUser();
     message.value = accountListReloaded
       ? "账号已创建；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。"
       : "账号已创建，但列表刷新未成功，请手动刷新核对；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。";
@@ -574,6 +575,11 @@ function openPassword(item: any) {
   passwordForm.temporary_password = "";
   passwordError.value = "";
   passwordOpen.value = true;
+}
+function closePassword() {
+  passwordOpen.value = false;
+  passwordForm.temporary_password = "";
+  passwordError.value = "";
 }
 async function resetPassword() {
   if (!selected.value) return;
@@ -593,7 +599,7 @@ async function resetPassword() {
       )
     ) {
       if (isCurrent()) {
-        passwordOpen.value = false;
+        closePassword();
         detailOpen.value = false;
       }
       message.value = "临时密码已更新，全部活动会话已撤销。";
@@ -786,7 +792,7 @@ onMounted(load);
       :busy="Boolean(busy)"
       @close-create-user="closeCreateUser"
       @create-user="createUser"
-      @close-password="passwordOpen = false"
+      @close-password="closePassword"
       @reset-password="resetPassword"
       @close-reason="cancelReason"
       @submit-reason="submitReason"

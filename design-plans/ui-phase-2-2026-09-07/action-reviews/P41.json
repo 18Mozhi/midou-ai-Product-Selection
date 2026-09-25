@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/OrganizationCreationWizard.vue": "6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53",
-    "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213"
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
   },
   "actions": [
     {
@@ -275,8 +275,8 @@
         "apps/web/src/components/PlatformAccountCenter.vue#1516ea5a6c3b1540.1",
         "apps/web/src/components/PlatformAccountCenter.vue#c4cfef52bcc169fb.1",
         "apps/web/src/components/PlatformAccountCenter.vue#c526b71b2b59e702.1",
-        "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1",
-        "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
+        "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
         "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
         "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
         "apps/web/src/components/PlatformAccountCenter.vue#6f151cbab1f5518e.1",
@@ -337,7 +337,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/OrganizationCreationWizard.vue": "6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53",
-      "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213"
+      "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
     },
     "includeStructuralContainers": true,
     "inputScope": "reviewed-subset-of-shared-source",

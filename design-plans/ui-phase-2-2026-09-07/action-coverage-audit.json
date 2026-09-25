@@ -111,7 +111,7 @@
     "apps/web/src/components/platform-notification-request.ts": "236aa17226cb5f070003febf1bd633d15fb441d85ef8bde55f1bc3bb91aeefa8",
     "apps/web/src/components/platform-notification-types.ts": "519574c615d416b5a617a6cf3c0a34efc7c17af6d2b976ac4858e2c993035f32",
     "apps/web/src/components/platform-status-topology.ts": "e1442a8a3d6e28939865f063e6a155c9314445dab7f508f9a2c902da4e909c37",
-    "apps/web/src/components/PlatformAccountCenter.vue": "eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213",
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
     "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
     "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
@@ -239,7 +239,7 @@
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
-    "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "4a922922fb714f0a8be0853c2114139af7dad65a8ff89fd30884359cc4b1f77f",
+    "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "c9a91fa02e8b678490728fe9e0fb92d46dc031527cd7ca0bcd7b446477ecd64b",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "ff6b41e79cb7eba143652e3114c1a979379d22bcdf88a4a1de246d9b969fb378",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
@@ -253,10 +253,10 @@
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "9e90766df41be0e25e1c97a7aa88f6d31d8d73bcf57f86b1ea1b6ce3b9c70092",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "73ccec3c884d7f0f2037640bf851a734ba81d9dff1ab02f7ecfffd193902b0e5",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "663f7750ce15423be375fb5c0ec820386f4a265f73f812579d24c1a40b2e49ab",
-    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "df5e92bbb28ece186d3bf667fef3bb4bcb5704637e8987676df2c7d547fd8248",
+    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "72f28e42992559de4b18b3c07e6be9ddf27c1dc0c09aef4d4c024d3f62435384",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "bb96f5d6c067255f9e22f4051e117c6352f18dea2184eaf7639a6b305cd8f9cd",
-    "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "9a2a82e07d85ee7815264d9dfb5c632f6117e653da51ebb1c0faf49b8bf28f41",
+    "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "1c9c86d41f6a742dceea23c1838fa75dee7fe51f2bdcbdaa1041db71624b1782",
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "159477ef01be7308fda95d8c7582b085ba74012847c99cea6f0f329823fbdfa1",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
@@ -485,13 +485,16 @@
     "scripts/verify-ui-phase2-platform-overview-c.mjs": "b7049fb563871534d11742ebf0a42e51d0ecb9505eaa4cb2472ff26c631ee37b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P39.json": "2f8a3d33dcd0940fe7d48217fb50707eed3b9559d3c5dfa5693693d30c32bab4",
     "scripts/verify-ui-phase2-account-overview-c.mjs": "311828bc0e24463f905f0020d001177a648f29b3822df4d708f33fd28ac9dbca",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "f845f70352ed7a077b087afb96b5f5df6915ed83b8dd2d6150d9653407ba9216",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "9608411f1dc2ec202b79d4ef4bc53408cefb4e3f46c3e5cc6d9806d310046c55",
     "scripts/verify-ui-phase2-organization-list-preview.mjs": "c18b5b76788f00e85512f763a31decdf86b01043146e5de1a0bfd2c4ece6c057",
-    "tests/e2e/m06-01-platform-accounts.spec.ts": "721b2fc8606c53a1b660acc4822cab2fb19c051d569cbf1720f5e0f7a5579f9b",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P41.json": "112e0fc04c9a8d2f3adb4659c7acb773275f3281efd9f81150489298d125e1ce",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P41.json": "d118f4c717d573790abbee86f168cf07f6451a861b21d7ccfe43146b14179a4c",
     "tests/unit/ui-phase2-organization-create-preview.test.mjs": "2c967cb27c5ce0e088131c7dfacc6d8ecdddb83e200c6ac228b676f2b38b18eb",
     "tests/unit/ui-phase2-organization-create-production-composition.test.mjs": "d7c255007b0ec09cccb67e87450abd47ec3e6e972c411f005948127619b78820",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P42.json": "6743aaeb6058a3e886a90999d1aad5232ad678d82815524c0b3418c868323a55",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P42.json": "85a762e8cffcd1a72f585ba7edbf9e23415a65172065842898ef94c9f494e154",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P43.json": "226998f2688e80ec947503e4a797182dba9e1f27a273d42caae70cb7aa186e6f",
+    "tests/m06-01/platform-accounts.test.mjs": "613efe80a997f2ac45fcbe88000b52d9084c28afaee875dce93c8c431004cd00",
+    "tests/unit/ui-phase2-p43-action-map.test.mjs": "72f91bf29fcc742d62015463be669abebb9500e24c0e60cc23346a08577cebac",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -543,7 +546,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P40.md": "b14be62156584d73ff6c60addccdf74ae180b5361b74f77d95311d3163f690ef",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "bc0c619fbce430464f86835046d52f5e41650d71bdbdaccd082db892cd45ed1b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "9150e5fe051df95622f6fb398b5488ce1b45ec6f68fce79c3cf37ca972293e60",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "8266f393cd17ac6d1be339d6f657152e2e37adcadaddd26558fb541e3654d182",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "24ac7c62938906bbc19509db3421df39e56cc1b21a714defd153114fa6a4e783",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "2ede4acf8d40faa102438a32461abd7783e3d251e48c4df2be851618a3b3c011",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "88cf61feef9df714003bdb8eb4a5cc6d5d7ce31594ac6e39efbfe187a9243687",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "84a98f5df3d13cc72dcddee8d11709e41b9ecb746ccfb7acd9c811a6da014c7a",
@@ -585,15 +588,14 @@
     "routes": 73,
     "currentSourceCandidates": 1701,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 603,
-    "oldOnlyIdentities": 379,
-    "reviewedPages": 45,
-    "explicitlyGroupedSourceSites": 993,
-    "semanticGroups": 878,
-    "routeActions": 701,
-    "wiringGroups": 93,
+    "newSourceIdentities": 605,
+    "oldOnlyIdentities": 381,
+    "reviewedPages": 46,
+    "explicitlyGroupedSourceSites": 1013,
+    "semanticGroups": 917,
+    "routeActions": 728,
+    "wiringGroups": 98,
     "pagesWithoutExplicitSemanticReview": [
-      "P43",
       "P44",
       "P45",
       "P46",
@@ -624,7 +626,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 45,
+    "visualApprovedReviewedPages": 46,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2302,7 +2304,7 @@
       "id": "P39",
       "path": "/platform-admin/accounts",
       "title": "账号与组织",
-      "oldStaticAssociatedCandidates": 99,
+      "oldStaticAssociatedCandidates": 97,
       "review": {
         "pageId": "P39",
         "actionApproval": "pending-user-review",
@@ -2344,7 +2346,7 @@
       "id": "P40",
       "path": "/platform-admin/organizations",
       "title": "组织管理",
-      "oldStaticAssociatedCandidates": 99,
+      "oldStaticAssociatedCandidates": 97,
       "review": {
         "pageId": "P40",
         "actionApproval": "pending-user-review",
@@ -2387,7 +2389,7 @@
       "id": "P41",
       "path": "/platform-admin/organizations/new",
       "title": "创建组织",
-      "oldStaticAssociatedCandidates": 99,
+      "oldStaticAssociatedCandidates": 97,
       "review": {
         "pageId": "P41",
         "actionApproval": "pending-user-review",
@@ -2431,7 +2433,7 @@
       "id": "P42",
       "path": "/platform-admin/organizations/:organizationId",
       "title": "组织详情",
-      "oldStaticAssociatedCandidates": 99,
+      "oldStaticAssociatedCandidates": 97,
       "review": {
         "pageId": "P42",
         "actionApproval": "pending-user-review",
@@ -2473,21 +2475,51 @@
       "id": "P43",
       "path": "/platform-admin/users",
       "title": "用户管理",
-      "oldStaticAssociatedCandidates": 99,
-      "review": null,
+      "oldStaticAssociatedCandidates": 97,
+      "review": {
+        "pageId": "P43",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 67,
+        "semanticGroups": 39,
+        "routeActions": 27,
+        "wiringGroups": 5,
+        "excludedGroups": 7,
+        "writeActions": 3,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "actual-vue-local-interception",
+          "actual-vue-review-fixture"
+        ],
+        "unmappedVisualSlots": 156,
+        "surfaces": {
+          "callerFiles": 6,
+          "localModelBindings": 17,
+          "reviewedInputBindings": 11,
+          "sourceCallerContainers": 12,
+          "callerContainers": 12,
+          "consumerVariants": 12,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "user-admin-direction-c",
         "account-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "移动用户预览到账号详情、三路由共享父组件条件、四个原生dialog与11种原因目标仍需按真实App组合回归；静态候选和图稿不证明每条状态时序。",
+        "新建/密码回调的跨窗口归属与原因窗自动关闭仍按已有业务合同核验；创建/改密取消及成功清空前端临时密码已按实际Vue和定向单测实现。",
+        "所有图稿仅支持用户已授予的自动视觉通过；按钮六态、真实RBAC、MySQL写入、审计持久化、全站G0-G5与生产权限验收各自独立。"
+      ]
     },
     {
       "id": "P44",
       "path": "/platform-admin/admins",
       "title": "管理员管理",
-      "oldStaticAssociatedCandidates": 99,
+      "oldStaticAssociatedCandidates": 97,
       "review": null,
       "proposalPackages": [
         "user-admin-direction-c"
@@ -2500,7 +2532,7 @@
       "id": "P45",
       "path": "/platform-admin/permissions",
       "title": "角色权限",
-      "oldStaticAssociatedCandidates": 99,
+      "oldStaticAssociatedCandidates": 97,
       "review": null,
       "proposalPackages": [
         "permission-comparison-direction-c"
@@ -4052,6 +4084,33 @@
         "sourceCallerContainers": 10,
         "callerContainers": 5,
         "consumerVariants": 5,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P43",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 67,
+      "semanticGroups": 39,
+      "routeActions": 27,
+      "wiringGroups": 5,
+      "excludedGroups": 7,
+      "writeActions": 3,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "actual-vue-local-interception",
+        "actual-vue-review-fixture"
+      ],
+      "unmappedVisualSlots": 156,
+      "surfaces": {
+        "callerFiles": 6,
+        "localModelBindings": 17,
+        "reviewedInputBindings": 11,
+        "sourceCallerContainers": 12,
+        "callerContainers": 12,
+        "consumerVariants": 12,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -37801,7 +37860,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#adcd96ea7cc90712.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 679,
+      "line": 685,
       "kind": "control",
       "label": "管理管理员",
       "conditions": [
@@ -37831,6 +37890,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 39,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 125,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 125,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -37848,13 +37917,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ADMINS",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#bcd4023ebe5d9ca9.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 680,
+      "line": 686,
       "kind": "control",
       "label": "{{ rolesLoading ? \"正在刷新…\" : \"刷新角色目录\" }}",
       "conditions": [
@@ -37884,6 +37958,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 40,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 126,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 126,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -37901,13 +37985,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ROLE-REFRESH",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 685,
+      "line": 691,
       "kind": "control",
       "label": "新建组织",
       "conditions": [
@@ -37937,6 +38026,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 41,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 127,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 127,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -37954,13 +38053,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ORG-CREATE",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1516ea5a6c3b1540.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 687,
+      "line": 693,
       "kind": "control",
       "label": "{{ tab === \"admins\" ? \"新建管理员\" : \"新建用户\" }}",
       "conditions": [
@@ -37990,6 +38094,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 42,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 128,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 128,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38007,13 +38121,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-CREATE-OPEN",
+          "kind": "local"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 689,
+      "line": 695,
       "kind": "control",
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新数据\" }}",
       "conditions": [
@@ -38039,6 +38158,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 382,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 129,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 129,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38056,13 +38185,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-REFRESH",
+          "kind": "read"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#c4cfef52bcc169fb.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 722,
+      "line": 728,
       "kind": "control",
       "label": "重新加载",
       "conditions": [
@@ -38096,6 +38230,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 43,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 130,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 130,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38113,13 +38257,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ROLE-REFRESH",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#c526b71b2b59e702.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 727,
+      "line": 733,
       "kind": "control",
       "label": "重新检查",
       "conditions": [
@@ -38153,6 +38302,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 44,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 131,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 131,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38170,13 +38329,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ROLE-REFRESH",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 732,
+      "line": 738,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -38198,6 +38362,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 383,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 132,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 132,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38215,13 +38389,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-WORKSPACE-WIRING",
+          "kind": "wiring"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#5db731eeed33ba4f.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 763,
+      "line": 769,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -38246,6 +38425,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 45,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 133,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 133,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38263,27 +38452,24 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-WIZARD",
+          "kind": "excluded"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1",
+      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#2dcca5d38d8e9ea8.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 773,
+      "line": 779,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
-      "staticRouteIds": [
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
@@ -38294,6 +38480,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 46,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 134,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 134,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38311,27 +38507,24 @@
           "pageId": "P42",
           "actionId": "PA42-REASON-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DIALOGS-WIRING",
+          "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1",
+      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#316b73a793573a29.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 773,
+      "line": 779,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
-      "staticRouteIds": [
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
@@ -38342,6 +38535,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 47,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 135,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 135,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38359,13 +38562,18 @@
           "pageId": "P42",
           "actionId": "PA42-REASON-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DIALOGS-WIRING",
+          "kind": "wiring"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#6f151cbab1f5518e.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 795,
+      "line": 801,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -38382,6 +38590,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 50,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 136,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 136,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38399,13 +38617,18 @@
           "pageId": "P42",
           "actionId": "PA42-DETAIL-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ORG-DETAIL",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39ba950db197263c.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 795,
+      "line": 801,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -38422,6 +38645,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 51,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 137,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 137,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38439,13 +38672,18 @@
           "pageId": "P42",
           "actionId": "PA42-DETAIL-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ORG-DETAIL",
+          "kind": "excluded"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#39878a11789ae9ce.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 812,
+      "line": 818,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -38470,6 +38708,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 48,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 138,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 138,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38487,13 +38735,18 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-WIRING",
+          "kind": "wiring"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#cab997ead119619a.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
-      "line": 812,
+      "line": 818,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -38518,6 +38771,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
           "line": 49,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 139,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 139,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -38535,6 +38798,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-CENTER",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-WIRING",
+          "kind": "wiring"
         }
       ]
     },
@@ -38583,6 +38851,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-CREATE-CONTAINER",
+          "kind": "local"
         }
       ]
     },
@@ -38631,6 +38904,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-CREATE-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -38679,6 +38957,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-CREATE-SUBMIT",
+          "kind": "write"
         }
       ]
     },
@@ -38727,6 +39010,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-CREATE-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -38775,6 +39063,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-CREATE-SUBMIT",
+          "kind": "write"
         }
       ]
     },
@@ -38823,6 +39116,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-PASSWORD-CONTAINER",
+          "kind": "local"
         }
       ]
     },
@@ -38871,6 +39169,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-PASSWORD-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -38919,6 +39222,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-PASSWORD-SUBMIT",
+          "kind": "local"
         }
       ]
     },
@@ -38967,6 +39275,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-PASSWORD-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -39015,6 +39328,11 @@
           "pageId": "P42",
           "actionId": "PA42-EXCLUDED-DIALOGS",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-PASSWORD-SUBMIT",
+          "kind": "local"
         }
       ]
     },
@@ -39063,6 +39381,11 @@
           "pageId": "P42",
           "actionId": "PA42-DIALOG-CONTAINERS",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-REASON-CONTAINER",
+          "kind": "local"
         }
       ]
     },
@@ -39111,6 +39434,11 @@
           "pageId": "P42",
           "actionId": "PA42-REASON-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-REASON-CANCEL",
+          "kind": "local"
         }
       ]
     },
@@ -39158,6 +39486,11 @@
         {
           "pageId": "P42",
           "actionId": "PA42-REASON-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-REASON-SUBMIT",
           "kind": "write"
         }
       ]
@@ -39207,6 +39540,11 @@
           "pageId": "P42",
           "actionId": "PA42-REASON-INPUT",
           "kind": "local"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-REASON-INPUT",
+          "kind": "local"
         }
       ]
     },
@@ -39254,6 +39592,11 @@
         {
           "pageId": "P42",
           "actionId": "PA42-REASON-CANCEL",
+          "kind": "local"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-REASON-CANCEL",
           "kind": "local"
         }
       ]
@@ -39303,6 +39646,11 @@
           "pageId": "P42",
           "actionId": "PA42-REASON-SUBMIT",
           "kind": "write"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-REASON-SUBMIT",
+          "kind": "write"
         }
       ]
     },
@@ -39331,6 +39679,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 26,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 145,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 145,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39343,6 +39701,11 @@
           "pageId": "P40",
           "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-NAVIGATION",
+          "kind": "navigation"
         }
       ]
     },
@@ -39371,6 +39734,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 27,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 146,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 146,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39383,6 +39756,11 @@
           "pageId": "P40",
           "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-NAVIGATION",
+          "kind": "navigation"
         }
       ]
     },
@@ -39411,6 +39789,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 28,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 147,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 147,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39423,6 +39811,11 @@
           "pageId": "P40",
           "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-NAVIGATION",
+          "kind": "navigation"
         }
       ]
     },
@@ -39451,6 +39844,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 29,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 148,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 148,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39463,6 +39866,11 @@
           "pageId": "P40",
           "actionId": "PA-REFRESH",
           "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ORG-REFRESH",
+          "kind": "excluded"
         }
       ]
     },
@@ -39486,6 +39894,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 30,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 149,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 149,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39498,6 +39916,11 @@
           "pageId": "P40",
           "actionId": "PA40-FILTER-DRAWER",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-FILTER-DRAWER",
+          "kind": "local"
         }
       ]
     },
@@ -39521,6 +39944,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 31,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 150,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 150,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39532,6 +39965,11 @@
         {
           "pageId": "P40",
           "actionId": "PA-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-FILTER",
           "kind": "read"
         }
       ]
@@ -39556,6 +39994,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 32,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 151,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 151,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39567,6 +40015,11 @@
         {
           "pageId": "P40",
           "actionId": "PA-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-FILTER",
           "kind": "read"
         }
       ]
@@ -39591,6 +40044,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 33,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 152,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 152,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39603,6 +40066,11 @@
           "pageId": "P40",
           "actionId": "PA-RESET",
           "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-RESET",
+          "kind": "local"
         }
       ]
     },
@@ -39631,6 +40099,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 34,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 153,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 153,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39642,6 +40120,11 @@
         {
           "pageId": "P40",
           "actionId": "PA-REFRESH",
+          "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-REFRESH",
           "kind": "read"
         }
       ]
@@ -39679,6 +40162,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 35,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 154,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 154,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39691,6 +40184,11 @@
           "pageId": "P40",
           "actionId": "PA-RESET",
           "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-RESET",
+          "kind": "local"
         }
       ]
     },
@@ -39727,6 +40225,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 36,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 155,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 155,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39739,6 +40247,11 @@
           "pageId": "P40",
           "actionId": "PA-ORG-CREATE",
           "kind": "navigation"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ORG-CREATE",
+          "kind": "excluded"
         }
       ]
     },
@@ -39771,6 +40284,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 37,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 156,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 156,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39783,6 +40306,11 @@
           "pageId": "P40",
           "actionId": "PA40-ORG-DETAIL-WIRING",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ORG-DETAIL",
+          "kind": "excluded"
         }
       ]
     },
@@ -39815,6 +40343,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 38,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 157,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 157,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39827,6 +40365,11 @@
           "pageId": "P40",
           "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
           "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-ROW-WIRING",
+          "kind": "wiring"
         }
       ]
     },
@@ -39863,6 +40406,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 39,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 158,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 158,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39874,6 +40427,11 @@
         {
           "pageId": "P40",
           "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ADMIN-FILTER",
           "kind": "excluded"
         }
       ]
@@ -39911,6 +40469,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 40,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 159,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 159,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39922,6 +40490,11 @@
         {
           "pageId": "P40",
           "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ADMIN-FILTER",
           "kind": "excluded"
         }
       ]
@@ -39955,6 +40528,16 @@
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
           "line": 41,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 160,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 160,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -39966,6 +40549,11 @@
         {
           "pageId": "P40",
           "actionId": "PA40-EXCLUDED-CONDITIONAL-BRANCHES",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OUT-ADMIN-FILTER",
           "kind": "excluded"
         }
       ]
@@ -45852,7 +46440,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-CONTAINER",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#c396c48b2557ec90.1",
@@ -45884,7 +46478,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#03bf338e0dc8663a.1",
@@ -45908,7 +46508,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-SECTION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#f575608b4ce38790.1",
@@ -45932,7 +46538,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-SECTION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#04d8d432043cc06f.1",
@@ -45956,7 +46568,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-SECTION",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#2086f54419d742e3.1",
@@ -45980,7 +46598,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#2964730aa12dbf82.1",
@@ -46017,7 +46641,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-MEMBERSHIP-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#d7a92de7086fdce6.1",
@@ -46045,7 +46675,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-ROLE-CHOOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#86b2bcafa2c5529c.1",
@@ -46081,7 +46717,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-SESSION-CHOOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#a187b4fc34f4ab4e.1",
@@ -46105,7 +46747,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-STATUS-CHOOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#8406f17273df6864.1",
@@ -46129,7 +46777,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-PASSWORD-OPEN",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#f1dd7ea535b03340.1",
@@ -46153,7 +46807,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-SESSION-CHOOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#138b8370ecdca0d1.1",
@@ -46177,7 +46837,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#2a92366d39ac198e.1",
@@ -46214,7 +46880,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-RETRY",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserDetailDialog.vue#02668382bdda9d3b.1",
@@ -46251,7 +46923,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-DETAIL-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserMembershipForm.vue#e88849ecc037f9c2.1",
@@ -46283,7 +46961,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-MEMBERSHIP-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserMembershipForm.vue#505257661bdbe17b.1",
@@ -46315,7 +46999,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-MEMBERSHIP-SUBMIT",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserRecords.vue#b77b1781563a48b8.1",
@@ -46347,7 +47037,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OPEN-DETAIL",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserRecords.vue#18553297e6cbdd0a.1",
@@ -46374,7 +47070,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-OPEN-DETAIL",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformUserRecords.vue#1c008f867673db60.1",
@@ -46401,7 +47103,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P43",
+          "actionId": "PA43-TECH",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderAcceptanceExecution.vue#9dc337a873726e6c.1",
@@ -63881,6 +64589,12 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#559dcb14c786950e.1",
+      "file": "apps/web/src/components/PlatformAccountCenter.vue",
+      "line": 789,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#4eb362af5381776f.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
       "line": 811,
@@ -64994,6 +65708,12 @@
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#3ba83336a51e7303.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
       "line": 708,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#1fff4198190d6ece.1",
+      "file": "apps/web/src/components/PlatformAccountCenter.vue",
+      "line": 789,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

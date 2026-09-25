@@ -43,8 +43,8 @@
 | C | c4cfef52bcc169fb.1 | PA45-REFRESH 角色首读错误重试 |
 | C | c526b71b2b59e702.1 | PA45-REFRESH 空角色目录重新检查 |
 | C | 5db731eeed33ba4f.1 | PA41 向导clearError/close/submit事件集合 |
-| C | 559dcb14c786950e.1 | PA43窗口事件集合：创建、密码、原因、关闭、reason更新 |
-| C | 1fff4198190d6ece.1 | 同上一项AccountDialogs组件调用，非新增业务动作 |
+| C | 2dcca5d38d8e9ea8.1 | PA43窗口事件集合：创建、密码、原因、关闭、reason更新 |
+| C | 316b73a793573a29.1 | 同上一项AccountDialogs组件调用，非新增业务动作 |
 | C | 39878a11789ae9ce.1 | PA43 close/retry/status/role/membership/password/session转发 |
 | C | cab997ead119619a.1 | 同上一项用户详情组件调用 |
 | C | 6f151cbab1f5518e.1 | PA42 close/retry/clear-feedback/save/toggle-status事件转发，非新增动作 |

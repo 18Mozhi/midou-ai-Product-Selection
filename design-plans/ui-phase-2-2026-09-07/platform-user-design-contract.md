@@ -91,7 +91,7 @@
 | PA43-STATUS | toggleUser → POST users/{id}/status | status=disabled/active，reason；服务端禁止停用自己；停用撤销活动会话 |
 | PA43-ROLE | role → POST users/{id}/platform-role | role_code、enabled、reason；固定三角色；禁止撤销自己的超级管理员；非active前端禁用 |
 | PA43-MEMBERSHIP | addMembership → POST users/{id}/memberships | organization_id、五选一role_code、reason；后台检查active/已验证/组织/关系；写反馈及重读前检查捕获的窗口代次/账号/路由 |
-| PA43-PASSWORD | openPassword/resetPassword → POST users/{id}/password | temporary_password、reason；撤销活动会话，要求首次改密；前端密码关闭后保留待验 |
+| PA43-PASSWORD | openPassword/resetPassword → POST users/{id}/password | temporary_password、reason；撤销活动会话，要求首次改密；关闭及成功后清理前端临时密码，失败时保留供修正 |
 | PA43-SESSION | revokeSessions → POST users/{id}/sessions/revoke | session_id为单ID或null、reason；原因确认及写反馈/成功重读均检查窗口归属；全部会话时序实例不代表每个业务变体验收 |
 
 users短路径均相对/platform/accounts。所有写入仍由既有Origin/Idempotency-Key/服务端能力校验和审计执行。浏览器中的无副作用C原型不证明这些真实合同已执行。
@@ -113,3 +113,55 @@ C原型提议将组织授权改为独立模态、移动直接开详情；这些�
 ## 5. 源与证据
 
 C的evidence.json记录设计源、此批实际读取的P43产品入口及账号路由/服务LF哈希，18张图的像素哈希、视口、场景、时间、浏览器和sourceRevision。只读--check在源或图片变化后失败关闭；不是全站baseline/coverage的替代。正式研究入口及复验命令见[README](design/account-direction-c/README.md)。本地33候选与9绑定通过扫描器逐对象核对；不修改生成器来匹配手工表。
+
+## 1.2 2026-09-25 当前父级与目录工作区候选接续
+
+P43动作映射使用本合同作为单一语义源。下表接续共享父组件与目录工作区的当前候选；P39/P40旧归属保留在各自合同中，以下键仅标识P43消费边界，按路由条件将组织/P41与管理员/P44/P45入口明确排除。
+
+### apps/web/src/components/PlatformAccountCenter.vue
+
+| 当前签名 | P43当前语义合同键 |
+| --- | --- |
+| adcd96ea7cc90712.1 | P43-CURRENT-adcd96ea7cc90712.1 · 仅权限路由显示管理员管理入口，P43不触发 |
+| bcd4023ebe5d9ca9.1 | P43-CURRENT-bcd4023ebe5d9ca9.1 · 权限目录的角色刷新入口仅归P45 |
+| 280136c1a545dff9.1 | P43-CURRENT-280136c1a545dff9.1 · 组织创建路由入口归P41 |
+| 1516ea5a6c3b1540.1 | P43-CURRENT-1516ea5a6c3b1540.1 · 用户路由打开新建用户窗 |
+| 8f18fbff9e2c1c99.1 | P43-CURRENT-8f18fbff9e2c1c99.1 · 用户目录页头读取/刷新 |
+| c4cfef52bcc169fb.1 | P43-CURRENT-c4cfef52bcc169fb.1 · 权限角色目录首读错误重试归P45 |
+| c526b71b2b59e702.1 | P43-CURRENT-c526b71b2b59e702.1 · 权限角色目录空态重试归P45 |
+| 8458edc51af426a6.1 | P43-CURRENT-8458edc51af426a6.1 · 目录筛选刷新导航详情事件由父级接线 |
+| 5db731eeed33ba4f.1 | P43-CURRENT-5db731eeed33ba4f.1 · 组织向导事件接线只归P41 |
+| 2dcca5d38d8e9ea8.1 | P43-CURRENT-2dcca5d38d8e9ea8.1 · 新建改密共享原因事件父级接线；改密关闭走清理处理器 |
+| 316b73a793573a29.1 | P43-CURRENT-316b73a793573a29.1 · 共享账号弹窗组件调用身份，不另计业务动作 |
+| 6f151cbab1f5518e.1 | P43-CURRENT-6f151cbab1f5518e.1 · 组织详情事件接线只归P42 |
+| 39ba950db197263c.1 | P43-CURRENT-39ba950db197263c.1 · 组织详情弹窗调用身份只归P42 |
+| 39878a11789ae9ce.1 | P43-CURRENT-39878a11789ae9ce.1 · 用户详情事件父级接线 |
+| cab997ead119619a.1 | P43-CURRENT-cab997ead119619a.1 · 用户详情弹窗组件调用身份 |
+
+### apps/web/src/components/PlatformAccountDirectoryWorkspace.vue
+
+| 当前签名 | P43当前语义合同键 |
+| --- | --- |
+| 29448f61eb8ffc80.1 | P43-CURRENT-29448f61eb8ffc80.1 · 平台账号工作区组织导航 |
+| 968274c5acaf5a33.1 | P43-CURRENT-968274c5acaf5a33.1 · 平台账号工作区用户导航 |
+| e400286c7cd59e44.1 | P43-CURRENT-e400286c7cd59e44.1 · 平台账号工作区管理员导航 |
+| 9c9141422bfd2c11.1 | P43-CURRENT-9c9141422bfd2c11.1 · 组织记录手动读取归P40 |
+| 03d32a05b1b3fd19.1 | P43-CURRENT-03d32a05b1b3fd19.1 · 响应式筛选抽屉容器 |
+| 2d610959fc00fb96.1 | P43-CURRENT-2d610959fc00fb96.1 · 筛选表单提交到父级applyFilters |
+| e9658d470d4cbeaf.1 | P43-CURRENT-e9658d470d4cbeaf.1 · 搜索按钮提交同一用户筛选表单 |
+| 20080e701de7f5cb.1 | P43-CURRENT-20080e701de7f5cb.1 · 重置用户query/status |
+| 322a4ac62ce3a305.1 | P43-CURRENT-322a4ac62ce3a305.1 · 用户目录首读失败重试 |
+| 86ea70e081f1f8e3.1 | P43-CURRENT-86ea70e081f1f8e3.1 · 用户筛选空态清除筛选 |
+| f68d2406f8c1db70.1 | P43-CURRENT-f68d2406f8c1db70.1 · 组织目录空态创建归P40 |
+| 8871f6d994e9fced.1 | P43-CURRENT-8871f6d994e9fced.1 · 组织行详情事件归P40 |
+| 44e761922e1da1d0.1 | P43-CURRENT-44e761922e1da1d0.1 · 用户行详情事件转发 |
+| 86ea70e081f1f8e3.2 | P43-CURRENT-86ea70e081f1f8e3.2 · 管理员空态筛选归P44 |
+| 38003e3f7b002f71.1 | P43-CURRENT-38003e3f7b002f71.1 · 管理员创建入口归P44 |
+| 103fa7d7798d62d6.1 | P43-CURRENT-103fa7d7798d62d6.1 · 管理员行详情转发归P44 |
+
+| 当前父/工作区源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/PlatformAccountCenter.vue | eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08 |
+
+其余四个直接页面组件沿用本合同已有当前候选记录；P43.json另固定六个组件的当前LF指纹。源位置数不等于唯一按钮或业务动作数。

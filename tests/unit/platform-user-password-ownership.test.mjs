@@ -26,7 +26,9 @@ function functions(text) {
 }
 function harness(parent = source) {
   const names = ["openPassword", "resetPassword", "askReason", "submitReason", "cancelReason"];
-  const selected = functions(parent).filter((n) => names.includes(n.name));
+  const available = functions(parent);
+  if (available.some((n) => n.name === "closePassword")) names.push("closePassword");
+  const selected = available.filter((n) => names.includes(n.name));
   assert.equal(selected.length, names.length);
   let resolve;
   const held = new Promise((r) => {
@@ -149,7 +151,7 @@ for (const kind of ["other-account", "same-account-reopened", "route-return", "d
   }
 }
 for (const outcome of [true, false]) {
-  test(`valid original scope preserves ${outcome ? "success" : "failure"} and draft behavior`, async () => {
+  test(`valid original scope ${outcome ? "clears password draft after success" : "preserves password draft after failure"}`, async () => {
     const h = harness();
     await prepare(h);
     const pending = h.context.submitReason();
@@ -158,14 +160,40 @@ for (const outcome of [true, false]) {
     assert.equal(h.box.detailOpen.value, !outcome);
     assert.equal(h.box.passwordOpen.value, !outcome);
     assert.equal(h.box.passwordError.value, outcome ? "" : "original password failure");
-    assert.equal(h.box.passwordForm.temporary_password, "SyntheticPasswordOnly-123");
+    assert.equal(h.box.passwordForm.temporary_password, outcome ? "" : "SyntheticPasswordOnly-123");
   });
 }
+test("closing the password dialog clears the sensitive draft", () => {
+  const h = harness();
+  h.box.passwordOpen.value = true;
+  h.box.passwordError.value = "previous error";
+  h.box.passwordForm.temporary_password = "SyntheticPasswordOnly-123";
+  h.context.closePassword();
+  assert.equal(h.box.passwordOpen.value, false);
+  assert.equal(h.box.passwordError.value, "");
+  assert.equal(h.box.passwordForm.temporary_password, "");
+});
+test("closing the create-user dialog clears the sensitive draft", () => {
+  const closeCreateUser = functions(source).find((item) => item.name === "closeCreateUser");
+  assert.ok(closeCreateUser);
+  const box = {
+    createUserOpen: { value: true },
+    createUserError: { value: "previous error" },
+    userForm: { temporary_password: "SyntheticPasswordOnly-123" },
+  };
+  const context = vm.createContext(box);
+  vm.runInContext(closeCreateUser.code, context);
+  context.closeCreateUser();
+  assert.equal(box.createUserOpen.value, false);
+  assert.equal(box.createUserError.value, "");
+  assert.equal(box.userForm.temporary_password, "");
+});
 test("current account composition retains the guarded password write and reason flow", () => {
   const template = parse(source).descriptor.template.content;
   assert.match(template, /account-center--user-admin-c/);
   assert.match(template, /@reset-password="openPassword"/);
   assert.match(template, /@submit-reason="submitReason"/);
+  assert.match(template, /@close-password="closePassword"/);
   const resetPassword = functions(source).find((item) => item.name === "resetPassword").code;
   assert.match(resetPassword, /captureDetailAction\(\)/);
   assert.match(resetPassword, /"强制重置密码并撤销全部会话"/);
