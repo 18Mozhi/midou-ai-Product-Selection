@@ -427,7 +427,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
     /if \(refreshing\.value\) \{[\s\S]*queuedAccountsRead = true[\s\S]*return false/,
   );
   assert.match(accountDirectory, /没有符合当前条件的组织/);
-  assert.match(accountShell, /organizationListRoute[\s\S]*管理组织状态与隔离边界/);
+  assert.match(accountShell, /organizationListRoute[\s\S]*"组织状态"/);
+  assert.match(accountDirectory, /仅筛选组织状态，不代表成员账号状态/);
   assert.match(accountShell, /搜索组织名称或标识/);
   assert.match(accountShell, /organizationEmptyState/);
   assert.match(accountDirectory, /清除筛选/);
