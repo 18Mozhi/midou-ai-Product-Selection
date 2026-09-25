@@ -58,8 +58,7 @@
 | T:680ca05fdeabfdbf.1 | control / 698 | CL51-PAGE / 前页 |
 | T:cda5e997a43d64c9.1 | control / 702 | CL51-PAGE / 后页 |
 | T:33bc529b8390aa3d.1 | control / 731 | CL51-DETAIL / 失败后读取当前task |
-| T:e2f1f3476ece93e2.1 | control / 732 | CL51-DETAIL / 失败关闭 |
-| T:30e32a01e61d8558.1 | control / 744 | CL51-DETAIL / 已加载关闭 |
+| T:30e32a01e61d8558.1 | control / 868 | CL51-DETAIL / loading、error、loaded共用关闭详情 |
 | T:96164ff76e31b8d8.1 | control / 774 | CL51-RECOVER / 重放原因区锚点 |
 | T:9334ac0d41264e22.1 | control / 775 | CL51-RECOVER / 凭证、来源或总览链接 |
 | T:d499af7185a1f039.1 | control / 798 | CL51-TECH / robots判定展开 |
@@ -174,7 +173,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 ### 9.1 P51详情状态与关闭旧身份归档
 
-以下四个早期签名由第9节现行状态面、详情遮罩、dialog语义与键盘候选替代；仍无替代映射的“失败关闭”旧候选保留在第2节，不作推定。历史身份不计当前覆盖，替代映射仅证明源码位置。
+以下五个早期签名由第9节现行状态面、详情遮罩、dialog语义、键盘候选与跨状态关闭按钮替代。原“失败关闭”是错误态专用按钮；372ecd71 起详情头部关闭按钮覆盖 loading/error/loaded，且仍调用同一 `closeDetail`，由当前源码与双端真实路由 E2E 核对。历史身份不计当前覆盖，替代映射仅证明源码位置，不代替完整读屏或真实后端验收。
 
 | 旧candidateId | 原始语义 | 当前替代身份 |
 | --- | --- | --- |
@@ -182,6 +181,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/CollectionTaskCenter.vue#b6414d02a0f96150.1 | CL51-DETAIL 遮罩mousedown.self关闭 | #6b55734308f206c3.1 CL51-CURRENT-DETAIL-DISMISS |
 | apps/web/src/components/CollectionTaskCenter.vue#472cf13bb7c4d799.1 | CL51-DETAIL loading/error/loaded容器 | #ed8b70dc2e6170f2.1 CL51-CURRENT-DETAIL-SEMANTICS |
 | apps/web/src/components/CollectionTaskCenter.vue#86cb88a88c044c05.1 | CL51-DETAIL detailKeydown Tab/Escape | #d3da42ac8f789e3b.1 CL51-CURRENT-DETAIL-KEYBOARD |
+| apps/web/src/components/CollectionTaskCenter.vue#e2f1f3476ece93e2.1 | CL51-DETAIL 错误态专用关闭按钮 | #30e32a01e61d8558.1 CL51-DETAIL 跨状态关闭详情 |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | apps/web/src/route-catalog.ts | 6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956 |

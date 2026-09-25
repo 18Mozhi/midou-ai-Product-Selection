@@ -439,6 +439,13 @@ test("detail read failure never leaves the previous task visible", async ({ page
   } else await page.getByRole("button", { name: "查看" }).nth(1).click();
   await expect(page.getByRole("alert")).toContainText("任务详情未能读取");
   await expect(page.getByRole("dialog")).not.toContainText(tasks[0].id.slice(0, 8));
+  const failureDialog = page.getByRole("dialog", { name: "任务详情未能读取" });
+  const closeFailure = page.getByRole("button", { name: "关闭任务详情" });
+  await expect(failureDialog).toBeVisible();
+  await expect(closeFailure).toBeFocused();
+  await closeFailure.click();
+  await expect(failureDialog).toHaveCount(0);
+  await expect(page).not.toHaveURL(/task=/);
 });
 
 for (const outcome of ["success", "failure"] as const) {

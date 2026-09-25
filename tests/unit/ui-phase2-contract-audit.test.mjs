@@ -2075,12 +2075,15 @@ test("current P51 task center maps missing state recovery and detail shell candi
       (item) => item.document.endsWith(document) && item.candidateId === `${file}#${signature}`,
     );
     assert.equal(record?.status, "identity-not-found", signature);
-    if (signature !== "e2f1f3476ece93e2.1") {
-      assert.equal(record?.temporalScope, "historical", signature);
-    } else {
-      assert.equal(record?.temporalScope, "unclassified", signature);
-    }
+    assert.equal(record?.temporalScope, "historical", signature);
   }
+  const sharedClose = report.records.find(
+    (record) =>
+      record.document.endsWith(document) && record.candidateId === `${file}#30e32a01e61d8558.1`,
+  );
+  assert.equal(sharedClose?.status, "identity-current");
+  assert.equal(sharedClose?.recordedLine, 868);
+  assert.match(sharedClose?.claim ?? "", /loading、error、loaded共用关闭详情/);
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
