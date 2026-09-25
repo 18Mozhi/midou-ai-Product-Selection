@@ -257,7 +257,7 @@
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "bb96f5d6c067255f9e22f4051e117c6352f18dea2184eaf7639a6b305cd8f9cd",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "cf100dafa46b0a9dc7f11b51fe923e99da9bb3166b23a905f116ffc2d0a935ba",
-    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "159477ef01be7308fda95d8c7582b085ba74012847c99cea6f0f329823fbdfa1",
+    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "a4491f104c95d7990b095e7b45274a809072e11a977bf4e1c73ab97f49c1eb0f",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "31d1354c3f232fbce6a74028e25e4aa9578fc76654096a1fc14d614759c19898",
@@ -499,6 +499,10 @@
     "tests/unit/ui-phase2-p44-action-map.test.mjs": "180618ba5065cf84c449d3ce4878f863a8f0077c8f48d4c85a94cfaf62784ac0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P45.json": "d17050ba541a969fcff493fbed839331d74b621833749ffa43679c3c3c7ecf13",
     "tests/unit/ui-phase2-p45-action-map.test.mjs": "8764c41dc01059d68ab3de158c83c097a30c33a6e85709961823b77820661ef9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P46.json": "5799ca6a7dc4e9bc98df87ed88dae27d3b3300f2b0042a80a0b1f28c01c8a086",
+    "tests/e2e/m03-01-provider-registry.spec.ts": "72915fae648b4c45fd6017de436d33d0032be5abff8d473713788cc314730f88",
+    "tests/unit/ui-phase2-p46-action-map.test.mjs": "2013206d1dab1da9d1c496db1cf8041f1d1f17a8f7938d7c8aa4e81c15bb6416",
+    "tests/m03-01/provider-registry.test.mjs": "063dc557443189915365dac01a4b33e36d97bd841f23eec1ba9cdd8acf11a15a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "077621e403cc46d1ee487b3e98a895ec1fd86017bddf709839404ed5b7ea30de",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
@@ -553,7 +557,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "24ac7c62938906bbc19509db3421df39e56cc1b21a714defd153114fa6a4e783",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "14d8f23dafcda1a8c4777327e70a989a34f208fbd7a56785df0cc82ce6eaa4e3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "6a648fe4dbbff3bb60dd991ffe32af97a6552095613d76ef35c85cdece6ae91c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "84a98f5df3d13cc72dcddee8d11709e41b9ecb746ccfb7acd9c811a6da014c7a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "79d4020e2d6c74c44545316cc8f6838cf1da4396ca1528d940a11135ce6b207e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "66af69788896fa8dbb75addce94d60eca1218681390f477c857c35f8002d6269",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "4a5cb92a6568dc94b2f3edc4479fc6bd7f26cab83692e3008743ac9e01493722",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "242f27618e2b314c7ba6aa8b7cc3873a9c037f34fdf99b1a477ef70c8cff19a0",
@@ -582,7 +586,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "6ae1dfb2006bf2f162a2279d4819f07bd93a00cafe366e7119e2c775a666b020",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "9d3cc2106db392ab9ff72215f3e9c79f8375e592477ce15aa4866bfe2ef01c3a",
     "scripts/audit-ui-phase2-action-coverage.mjs": "dbed9ad7022d527bb6b3897dc51a395fc1b8d2f150219057887650a638c000bf",
-    "scripts/lib/ui-phase2-action-coverage.mjs": "f5cdfea52a1dae23099b9fad6d77fd8d72c7fa8124f1ff940afb53525975d27e",
+    "scripts/lib/ui-phase2-action-coverage.mjs": "39ccdd68059bfd76f0ed3a534088bee6f4e958aca6ea38e2bdb224b02357edee",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "22f0710e70d77f4335a86a3ed6ef6d14c54fc23ec98d50aa2e22c50809e4e523",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
     "scripts/audit-ui-phase2-contracts.mjs": "a0a20c732719c3609737765024bce72d2afd16ab41145af62a871f8276d2389d",
@@ -594,13 +598,12 @@
     "historicalCandidates": 1477,
     "newSourceIdentities": 605,
     "oldOnlyIdentities": 381,
-    "reviewedPages": 48,
-    "explicitlyGroupedSourceSites": 1017,
-    "semanticGroups": 966,
-    "routeActions": 761,
-    "wiringGroups": 103,
+    "reviewedPages": 49,
+    "explicitlyGroupedSourceSites": 1046,
+    "semanticGroups": 990,
+    "routeActions": 782,
+    "wiringGroups": 105,
     "pagesWithoutExplicitSemanticReview": [
-      "P46",
       "P47",
       "P48",
       "P49",
@@ -628,7 +631,7 @@
     ],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 48,
+    "visualApprovedReviewedPages": 49,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2607,13 +2610,44 @@
       "path": "/platform-admin/providers",
       "title": "来源设置",
       "oldStaticAssociatedCandidates": 78,
-      "review": null,
+      "review": {
+        "pageId": "P46",
+        "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
+        "sourceSites": 37,
+        "semanticGroups": 24,
+        "routeActions": 21,
+        "wiringGroups": 2,
+        "excludedGroups": 1,
+        "writeActions": 1,
+        "sourceAbsentProposals": 0,
+        "sourceInapplicableVisualSlots": 0,
+        "testEvidenceTypes": [
+          "actual-vue-local-interception",
+          "actual-vue-review-fixture"
+        ],
+        "unmappedVisualSlots": 120,
+        "surfaces": {
+          "callerFiles": 5,
+          "localModelBindings": 29,
+          "reviewedInputBindings": 23,
+          "sourceCallerContainers": 3,
+          "callerContainers": 3,
+          "consumerVariants": 4,
+          "runtimeAcceptance": "unproven"
+        }
+      },
       "proposalPackages": [
         "provider-registry-direction-c"
       ],
       "userReview": "approved",
       "fullStateCoverage": "unproven",
-      "compositionGaps": []
+      "compositionGaps": [
+        "P46路由自身的37个当前扫描候选映射到页面动作、事件接线、未绑定secondary及共享行预览控件；NavigationShell和其他来源子路由静态关联候选不属于此页直接动作范围。",
+        "来源设置没有删除、单行启停、导出或健康检查按钮；不要凭旧目录提案补造入口。",
+        "P46 PR-G01公开来源启用门槛冲突、PR-G02模态/可访问性残余、PR-G03只读字段/时区/迟到请求和PR-G04状态secondary未绑定继续开放；映射记录事实而不擅改业务/安全规则。",
+        "视觉自动批准不提升actionApproval、所有控件全状态、真实来源授权、provider:configure、MySQL、审计、采集执行或正式M07-03生产验收。"
+      ]
     },
     {
       "id": "P47",
@@ -4226,6 +4260,33 @@
         "sourceCallerContainers": 0,
         "callerContainers": 0,
         "consumerVariants": 0,
+        "runtimeAcceptance": "unproven"
+      }
+    },
+    {
+      "pageId": "P46",
+      "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
+      "sourceSites": 37,
+      "semanticGroups": 24,
+      "routeActions": 21,
+      "wiringGroups": 2,
+      "excludedGroups": 1,
+      "writeActions": 1,
+      "sourceAbsentProposals": 0,
+      "sourceInapplicableVisualSlots": 0,
+      "testEvidenceTypes": [
+        "actual-vue-local-interception",
+        "actual-vue-review-fixture"
+      ],
+      "unmappedVisualSlots": 120,
+      "surfaces": {
+        "callerFiles": 5,
+        "localModelBindings": 29,
+        "reviewedInputBindings": 23,
+        "sourceCallerContainers": 3,
+        "callerContainers": 3,
+        "consumerVariants": 4,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -49122,7 +49183,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-CREATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#3eebd05a35b5e2d1.1",
@@ -49152,7 +49219,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#2e080ad21acf1f26.1",
@@ -49174,9 +49247,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 208,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 237,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-LOAD-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#de4c1cd1ccf4c8da.1",
@@ -49206,7 +49290,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-CREATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#27f5c560567881c4.1",
@@ -49236,7 +49326,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#0da6a9c39b0f685c.1",
@@ -49266,7 +49362,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#f9d454b64dd4b22a.1",
@@ -49296,7 +49398,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-RESET",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#f8fbe8533c9685db.1",
@@ -49324,7 +49432,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-EDIT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#5d4463e03e3aa18b.1",
@@ -49354,7 +49468,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-EDIT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#1c008f867673db60.1",
@@ -49384,7 +49504,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-TECH-ROW",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#83d11b8719b1c99d.1",
@@ -49414,7 +49540,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-PAGE-PREV",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#bd43d7b540116c32.1",
@@ -49444,7 +49576,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-PAGE-NEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#51517865bc5117a4.1",
@@ -49468,7 +49606,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d36ecadeb20b9988.1",
@@ -49492,7 +49636,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-EDITOR",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#eb72344b9c9f3d10.1",
@@ -49516,7 +49666,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-EDITOR-KEYBOARD-WIRING",
+          "kind": "wiring"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#e03ff4bf86eb6a89.1",
@@ -49546,7 +49702,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-CLOSE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#71fedaee68dde679.1",
@@ -49580,7 +49742,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-STEP-JUMP",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#83ffe5899e1ccfcf.1",
@@ -49610,7 +49778,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-TEMPLATE",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#1c008f867673db60.2",
@@ -49648,7 +49822,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-TECH-FEEDBACK",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#4ba7742e75103fa4.1",
@@ -49682,7 +49862,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-STEP-PREV",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d0e6c4e6deaeab8a.1",
@@ -49716,7 +49902,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-STEP-NEXT",
+          "kind": "local"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#addbc979a88d3d3a.1",
@@ -49744,7 +49936,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-SAVE",
+          "kind": "write"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRuntimeSurface.vue#7d0657958d2afe06.1",
@@ -49769,7 +49967,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRuntimeSurface.vue#c91c2e71e426b739.1",
@@ -49794,7 +49998,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRuntimeSurface.vue#d6812914ba6d07da.1",
@@ -49819,7 +50029,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRuntimeSurface.vue#c56767a09d40c33b.1",
@@ -49849,7 +50065,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderRuntimeSurface.vue#23ee0a87fa977a0d.1",
@@ -49879,7 +50101,13 @@
           "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-NAVIGATION",
+          "kind": "navigation"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#8b5b066073993a3a.1",
@@ -52948,6 +53176,11 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 241,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 13,
           "jsonPointer": null
@@ -52957,6 +53190,11 @@
         {
           "pageId": "P38",
           "actionId": "PA38-PREVIEW-OPEN",
+          "kind": "local"
+        },
+        {
+          "pageId": "P46",
+          "actionId": "PR46-PREVIEW-OPEN",
           "kind": "local"
         }
       ]
@@ -52983,6 +53221,11 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 242,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 14,
           "jsonPointer": null
@@ -52992,6 +53235,11 @@
         {
           "pageId": "P38",
           "actionId": "PA38-PREVIEW-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P46",
+          "actionId": "PR46-PREVIEW-CLOSE",
           "kind": "local"
         }
       ]
@@ -53018,6 +53266,11 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 243,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 15,
           "jsonPointer": null
@@ -53027,6 +53280,11 @@
         {
           "pageId": "P38",
           "actionId": "PA38-PREVIEW-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P46",
+          "actionId": "PR46-PREVIEW-CLOSE",
           "kind": "local"
         }
       ]
@@ -53053,6 +53311,11 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 244,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 16,
           "jsonPointer": null
@@ -53063,6 +53326,11 @@
           "pageId": "P38",
           "actionId": "PA38-PREVIEW-DIALOG",
           "kind": "wiring"
+        },
+        {
+          "pageId": "P46",
+          "actionId": "PR46-PREVIEW-SURFACE",
+          "kind": "local"
         }
       ]
     },
@@ -53131,6 +53399,11 @@
           "jsonPointer": null
         },
         {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 245,
+          "jsonPointer": null
+        },
+        {
           "file": "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md",
           "line": 17,
           "jsonPointer": null
@@ -53140,6 +53413,11 @@
         {
           "pageId": "P38",
           "actionId": "PA38-PREVIEW-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P46",
+          "actionId": "PR46-PREVIEW-CLOSE",
           "kind": "local"
         }
       ]
@@ -57732,12 +58010,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 110,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 238,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P38",
           "actionId": "PA38-COLUMNS",
+          "kind": "local"
+        },
+        {
+          "pageId": "P46",
+          "actionId": "PR46-COLUMNS",
           "kind": "local"
         }
       ]
@@ -57809,12 +58097,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 111,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 239,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P38",
           "actionId": "PA38-COLUMN-TOGGLE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P46",
+          "actionId": "PR46-COLUMNS",
           "kind": "local"
         }
       ]
@@ -57882,12 +58180,22 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 112,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 240,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P38",
           "actionId": "PA38-FREEZE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P46",
+          "actionId": "PR46-FREEZE",
           "kind": "local"
         }
       ]
@@ -63948,9 +64256,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 113,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 246,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-LOAD",
+          "kind": "read"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1",
@@ -64039,9 +64358,20 @@
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
           "line": 114,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
+          "line": 247,
+          "jsonPointer": null
         }
       ],
-      "semanticReviews": []
+      "semanticReviews": [
+        {
+          "pageId": "P46",
+          "actionId": "PR46-PANEL-SECONDARY-UNBOUND",
+          "kind": "excluded"
+        }
+      ]
     },
     {
       "candidateId": "apps/web/src/components/UiStateShowcase.vue#6716f11d5cb87664.1",

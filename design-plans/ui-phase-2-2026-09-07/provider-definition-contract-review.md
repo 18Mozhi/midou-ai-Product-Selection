@@ -227,3 +227,21 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | apps/web/src/components/ResponsiveDataView.vue | 4fa7deb3456a41ae.1 | 共享移动详情旧Escape处理 |
 | apps/web/src/components/ResponsiveDataView.vue | 53d89072117d7eda.1 | 共享移动详情旧遮罩关闭 |
 | apps/web/src/components/ResponsiveDataView.vue | e23893d134b1daa1.1 | 共享移动详情旧dialog定义 |
+
+## P46 页面动作映射与共享控件归属（2026-09-25）
+
+P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT-*` 仅描述 P46 路由中的当前候选归属，不扩展P47或全局导航范围；UiStatePanel secondary保留为当前未接入父处理器的无效入口，不能作为可用恢复动作验收。
+
+| 别名 | 当前签名 | P46语义合同 |
+| --- | --- | --- |
+| R | 2e080ad21acf1f26.1 | PR46-CURRENT-LOAD-WIRING · UiStatePanel primary事件转给现有load读取 |
+| T | e2fd0d02cbd9f684.1 | PR46-CURRENT-COLUMNS · 列设置原生展开控件 |
+| T | 921f4be18a3fe814.1 | PR46-CURRENT-COLUMNS · 动态列显示开关，至少保留一列 |
+| T | d09cd5524db7bee5.1 | PR46-CURRENT-FREEZE · 冻结首个可见列的本地显示偏好 |
+| D | 6da4dad42cb34c8d.1 | PR46-CURRENT-PREVIEW-OPEN · 移动来源记录详情预览入口 |
+| D | c182428cb2c0ed66.1 | PR46-CURRENT-PREVIEW-CLOSE · Escape及Tab/Shift+Tab处理 |
+| D | 988131834dc4bd6f.1 | PR46-CURRENT-PREVIEW-CLOSE · 移动详情遮罩关闭 |
+| D | a3c9be2acacfd788.1 | PR46-CURRENT-PREVIEW-SURFACE · 移动来源详情容器定义 |
+| D | 847801b2ac6e7a17.1 | PR46-CURRENT-PREVIEW-CLOSE · 移动详情标题关闭与焦点返回 |
+| U | 589e8eedc7c9c864.1 | PR46-LOAD · P46的primary读取按钮事件 |
+| U | 3eebdb6b72e10446.1 | PR46-SECONDARY-UNBOUND · secondary事件在P46无父级监听，不能算作已实现恢复 |

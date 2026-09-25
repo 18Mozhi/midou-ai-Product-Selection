@@ -3,10 +3,10 @@
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
 - 当前源候选1701；旧登记1477；新身份605，旧表独有身份381。签名变化不等于增删业务能力。
-- 已具体语义对应48页/1017源位置/966组；其中路由动作761组，转发/容器关联103组，其余明确排除。其余25页未完成此级映射，不称没有图或没有测试。
+- 已具体语义对应49页/1046源位置/990组；其中路由动作782组，转发/容器关联105组，其余明确排除。其余24页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记48页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记49页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -59,7 +59,7 @@
 | [P43 用户管理](page-specs/P43.md) | 97 | [39组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P44 管理员管理](page-specs/P44.md) | 97 | [44组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P45 角色权限](page-specs/P45.md) | 97 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P46 来源设置](page-specs/P46.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
+| [P46 来源设置](page-specs/P46.md) | 78 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P47 采集程序](page-specs/P47.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P48 热点来源](page-specs/P48.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
 | [P49 1688 启用检查](page-specs/P49.md) | 78 | 未逐项映射 | 对齐合同动作、动态变体、场景与测试 |
@@ -3807,6 +3807,94 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - P45当前映射覆盖本页父组件和角色比较组件的16个扫描候选；NavigationShell与P44复用全局侧栏按共享壳层/其他路由范围单独核对。
 - PlatformAccountCenter仍被P39-P44共享；其账号/组织模板、父级筛选字段和共享对话框消费者由对应页面合同覆盖，本映射不重复算作P45入口。
 - NavigationShell、P44 PlatformAccountGlobalRail、浏览器历史/KeepAlive与真实权限链不由此局部页面合同验收。
+
+## P46 局部动作与共享消费者
+
+[逐项机器清单](action-reviews/P46.json)：37个局部源位置 → 24组；1类写入，21组路由动作，2组转发/容器关联不重复计动作。已映射23/29个源码字段位置，3/3处调用/内嵌容器，4个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+
+尚有120个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+
+| 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
+| --- | --- | --- | --- |
+| PR46-NAVIGATION 来源管理视图导航 / navigation | 5处；registry-current、adapters、sources、1688-acceptance-superadmin、credentials-superadmin | [default · 1440](design/provider-registry-direction-c/1440-default.png) / [default · 390](design/provider-registry-direction-c/390-default.png)；其余见JSON | 本地路由和菜单可见性不证明真实角色守卫、provider:configure或目标路由授权。 |
+| PR46-CREATE 打开来源创建编辑器 / local | 2处；header、empty-directory、editor-open、create-mode | [default · 1440](design/provider-registry-direction-c/1440-default.png) / [default · 390](design/provider-registry-direction-c/390-default.png)、[empty · 1440](design/provider-registry-direction-c/1440-empty.png) / [empty · 390](design/provider-registry-direction-c/390-empty.png)；其余见JSON | 草稿默认值、创建/编辑转换清理及字段残留合同仍按PR-G03列项，不在动作映射中擅自修正。 |
+| PR46-LOAD 读取、刷新或重试来源定义 / read | 3处；initial、manual-refresh、retained-snapshot-retry、loading、empty、error、forbidden、expired、refresh-error、refresh-busy | [loading · 1440](design/provider-registry-direction-c/1440-loading.png) / [loading · 390](design/provider-registry-direction-c/390-loading.png)、[error · 1440](design/provider-registry-direction-c/1440-error.png) / [error · 390](design/provider-registry-direction-c/390-error.png)；其余见JSON | 本地拦截不证明真实MySQL定义、provider:configure授权或过期会话的服务端拒绝语义。 |
+| PR46-LOAD-WIRING 状态面板primary读取事件转发 / wiring | 1处；primary-retry | [error · 1440](design/provider-registry-direction-c/1440-error.png) / [error · 390](design/provider-registry-direction-c/390-error.png)、[forbidden · 1440](design/provider-registry-direction-c/1440-forbidden.png) / [forbidden · 390](design/provider-registry-direction-c/390-forbidden.png)；其余见JSON | 转发接线不证明状态按钮文案与会话导航正确，也不代表真实权限已验证。 |
+| PR46-PANEL-SECONDARY-UNBOUND 状态面板secondary当前无父级处理器 / excluded | 1处；error、forbidden、blocked、expired | [forbidden · 1440](design/provider-registry-direction-c/1440-forbidden.png) / [forbidden · 390](design/provider-registry-direction-c/390-forbidden.png)、[expired · 1440](design/provider-registry-direction-c/1440-expired.png) / [expired · 390](design/provider-registry-direction-c/390-expired.png)；其余见JSON | 真实登录/路由恢复目标属安全与可见行为决策；本轮保留现状并明确不接受为可用功能。 |
+| PR46-RESET 重置全部目录筛选与排序 / local | 2处；toolbar、filtered-empty、filters-active、reset | [search · 1440](design/provider-registry-direction-c/1440-search.png) / [search · 390](design/provider-registry-direction-c/390-search.png)、[no-match · 1440](design/provider-registry-direction-c/1440-no-match.png) / [no-match · 390](design/provider-registry-direction-c/390-no-match.png)；其余见JSON | 本地筛选与分页回归不证明服务端过滤或持久化偏好。 |
+| PR46-EDIT 打开指定来源编辑器 / local | 2处；desktop-row、mobile-preview-to-edit、edit-mode | [default · 1440](design/provider-registry-direction-c/1440-default.png) / [default · 390](design/provider-registry-direction-c/390-default.png)、[preview · 1440](design/provider-registry-direction-c/1440-preview.png) / [preview · 390](design/provider-registry-direction-c/390-preview.png)；其余见JSON | 来源销毁、KeepAlive返回与目标触发器是否仍可见等焦点边界需实际路由/生命周期独立回归。 |
+| PR46-TECH-ROW 展开来源行技术详情 / local | 1处；collapsed、expanded、long-technical-value | [default · 1440](design/provider-registry-direction-c/1440-default.png) / [default · 390](design/provider-registry-direction-c/390-default.png)、[preview-tech · 1440](design/provider-registry-direction-c/1440-preview-tech.png) / [preview-tech · 390](design/provider-registry-direction-c/390-preview-tech.png)；其余见JSON | 原生details键盘操作/全量技术事实屏幕阅读仍未由本动作映射验收。 |
+| PR46-PAGE-PREV 来源目录上一页 / local | 1处；first-page-disabled、later-page-enabled | [default · 1440](design/provider-registry-direction-c/1440-default.png) / [default · 390](design/provider-registry-direction-c/390-default.png)、[page-two · 1440](design/provider-registry-direction-c/1440-page-two.png) / [page-two · 390](design/provider-registry-direction-c/390-page-two.png)；其余见JSON | 分页为浏览器本地视图，不是服务端分页或跨刷新状态。 |
+| PR46-PAGE-NEXT 来源目录下一页 / local | 1处；last-page-disabled、later-page-enabled、filter-shrinks-page-count | [default · 1440](design/provider-registry-direction-c/1440-default.png) / [default · 390](design/provider-registry-direction-c/390-default.png)、[page-two · 1440](design/provider-registry-direction-c/1440-page-two.png) / [page-two · 390](design/provider-registry-direction-c/390-page-two.png)；其余见JSON | 分页为浏览器本地视图，不是服务端分页或跨刷新状态。 |
+| PR46-CLOSE 关闭来源编辑器 / local | 2处；close-button、backdrop-mousedown、escape、create、edit、saving-guard | [create-1 · 1440](design/provider-registry-direction-c/1440-create-1.png) / [create-1 · 390](design/provider-registry-direction-c/390-create-1.png)、[edit-1 · 1440](design/provider-registry-direction-c/1440-edit-1.png) / [edit-1 · 390](design/provider-registry-direction-c/390-edit-1.png)；其余见JSON | 完整浏览器叠层/软键盘/读屏与实际未提交草稿生命周期不由图稿或源码映射代替。 |
+| PR46-EDITOR 创建/编辑四步模态编辑器容器 / local | 1处；create-step-1-to-4、edit-step-1-to-4、validation、save-feedback | [create-1 · 1440](design/provider-registry-direction-c/1440-create-1.png) / [create-1 · 390](design/provider-registry-direction-c/390-create-1.png)、[create-2 · 1440](design/provider-registry-direction-c/1440-create-2.png) / [create-2 · 390](design/provider-registry-direction-c/390-create-2.png)；其余见JSON | 视觉提案、局部键盘回归不等于完整原生dialog、所有断点、背景/返回/软键盘或读屏验收。 |
+| PR46-EDITOR-KEYBOARD-WIRING 编辑器Tab/Escape/form提交事件接线 / wiring | 1处；tab-loop、escape-close、submit-save | [create-1 · 1440](design/provider-registry-direction-c/1440-create-1.png) / [create-1 · 390](design/provider-registry-direction-c/390-create-1.png)、[save-busy · 1440](design/provider-registry-direction-c/1440-save-busy.png) / [save-busy · 390](design/provider-registry-direction-c/390-save-busy.png)；其余见JSON | 局部实际Vue用例不证明完整App叠层或真实读屏器键盘体验。 |
+| PR46-STEP-JUMP 直接切换编辑步骤 / local | 1处；step-1、step-2、step-3、step-4、error-count | [create-1 · 1440](design/provider-registry-direction-c/1440-create-1.png) / [create-1 · 390](design/provider-registry-direction-c/390-create-1.png)、[errors-2 · 1440](design/provider-registry-direction-c/1440-errors-2.png) / [errors-2 · 390](design/provider-registry-direction-c/390-errors-2.png)；其余见JSON | 焦点/错误汇总的完整读屏顺序仍待独立验收；不把直接跳步改写成受校验向导。 |
+| PR46-TEMPLATE 应用当前接入模式技术模板 / local | 1处；public_rss、public_page、authenticated_browser、import、manual、reapply-overwrites-shared-strategy | [template-public_rss · 1440](design/provider-registry-direction-c/1440-template-public_rss.png) / [template-public_rss · 390](design/provider-registry-direction-c/390-template-public_rss.png)、[template-authenticated_browser · 1440](design/provider-registry-direction-c/1440-template-authenticated_browser.png) / [template-authenticated_browser · 390](design/provider-registry-direction-c/390-template-authenticated_browser.png)；其余见JSON | 模板只提供技术草稿，不代表目标站点、字段、频率、条款或采集能力已验证。 |
+| PR46-TECH-FEEDBACK 展开编辑结果追踪信息 / local | 1处；collapsed、expanded、save-failure、save-success | [save-error · 1440](design/provider-registry-direction-c/1440-save-error.png) / [save-error · 390](design/provider-registry-direction-c/390-save-error.png)、[save-success · 1440](design/provider-registry-direction-c/1440-save-success.png) / [save-success · 390](design/provider-registry-direction-c/390-save-success.png)；其余见JSON | request id存在与服务端已持久化/审计完成不能等同。 |
+| PR46-STEP-PREV 编辑器上一步 / local | 1处；step-2-to-1、step-3-to-2、step-4-to-3 | [create-2 · 1440](design/provider-registry-direction-c/1440-create-2.png) / [create-2 · 390](design/provider-registry-direction-c/390-create-2.png)、[edit-4 · 1440](design/provider-registry-direction-c/1440-edit-4.png) / [edit-4 · 390](design/provider-registry-direction-c/390-edit-4.png)；其余见JSON | 字段保留在当前组件内存；不表示草稿跨关闭/刷新持久化。 |
+| PR46-STEP-NEXT 校验当前字段组并前进 / local | 1处；step-valid、step-invalid、last-step-no-next | [create-1 · 1440](design/provider-registry-direction-c/1440-create-1.png) / [create-1 · 390](design/provider-registry-direction-c/390-create-1.png)、[errors-1 · 1440](design/provider-registry-direction-c/1440-errors-1.png) / [errors-1 · 390](design/provider-registry-direction-c/390-errors-1.png)；其余见JSON | 逐字段前后端约束差异、全部错误焦点与读屏顺序按P46合同单独核查。 |
+| PR46-SAVE 创建来源定义或保存新版本 / write | 1处；create、update、validation-error、saving、waiting-prior-save、409、dependency-error、save-success、save-reload-failed、unknown-result、late-result | [create-4 · 1440](design/provider-registry-direction-c/1440-create-4.png) / [create-4 · 390](design/provider-registry-direction-c/390-create-4.png)、[edit-4 · 1440](design/provider-registry-direction-c/1440-edit-4.png) / [edit-4 · 390](design/provider-registry-direction-c/390-edit-4.png)；其余见JSON | 本地拒绝写入拦截不证明真实MySQL版本冲突、条款/执行权限或审计持久化；PR-G01启用差异、PR-G03只读字段残留/时区/迟到请求仍须按真实合同另验，不在此映射中改变。 |
+| PR46-COLUMNS 展开列设置并切换可见列 / local | 2处；closed、open、column-toggle、last-visible-protected | [columns · 1440](design/provider-registry-direction-c/1440-columns.png) / [columns · 390](design/provider-registry-direction-c/390-columns.png)；其余见JSON | 实际列状态偏好持久化/三主题密度和读屏状态仍需独立验收。 |
+| PR46-FREEZE 冻结或取消冻结首个可见列 / local | 1处；frozen、unfrozen | [unfrozen · 1440](design/provider-registry-direction-c/1440-unfrozen.png) / [unfrozen · 390](design/provider-registry-direction-c/390-unfrozen.png)；其余见JSON | 本地冻结偏好不证明跨刷新或用户偏好存储。 |
+| PR46-PREVIEW-OPEN 手机打开来源记录详情预览 / local | 1处；open-preview、return-to-row | [preview · 1440](design/provider-registry-direction-c/1440-preview.png) / [preview · 390](design/provider-registry-direction-c/390-preview.png)、[preview-tech · 1440](design/provider-registry-direction-c/1440-preview-tech.png) / [preview-tech · 390](design/provider-registry-direction-c/390-preview-tech.png)；其余见JSON | 详情内容由当前记录快照提供，不等于一次新的权限/详情服务端读取。 |
+| PR46-PREVIEW-CLOSE 关闭手机来源详情预览 / local | 3处；escape、tab-loop、backdrop、header-close、focus-return | [preview · 1440](design/provider-registry-direction-c/1440-preview.png) / [preview · 390](design/provider-registry-direction-c/390-preview.png)、[preview-tech · 1440](design/provider-registry-direction-c/1440-preview-tech.png) / [preview-tech · 390](design/provider-registry-direction-c/390-preview-tech.png)；其余见JSON | 只读隔离用例不证明真机软键盘/读屏器或所有App路由卸载下的触发器生命周期。 |
+| PR46-PREVIEW-SURFACE 手机来源详情容器 / local | 1处；preview、preview-tech、long-content | [preview · 1440](design/provider-registry-direction-c/1440-preview.png) / [preview · 390](design/provider-registry-direction-c/390-preview.png)、[preview-tech · 1440](design/provider-registry-direction-c/1440-preview-tech.png) / [preview-tech · 390](design/provider-registry-direction-c/390-preview-tech.png)；其余见JSON | 共享消费者完整范围与App背景隔离/真实辅助技术仍不因页面复用而自动验收。 |
+
+### 事件转发关系（不增加业务动作）
+
+| 关系键 | 源事件 / handler | 目标合同组 |
+| --- | --- | --- |
+| PR46-LOAD-WIRING | @primary / load | PR46-LOAD |
+| PR46-EDITOR-KEYBOARD-WIRING | @keydown / containEditorTab | PR46-EDITOR |
+| PR46-EDITOR-KEYBOARD-WIRING | @keydown.esc.stop.prevent / closeEditor | PR46-CLOSE |
+| PR46-EDITOR-KEYBOARD-WIRING | @submit.prevent / save | PR46-SAVE |
+
+### 字段绑定（不重复计算为提交动作）
+
+| 本地字段 | 含义 | 未验事项 |
+| --- | --- | --- |
+| ProviderRegistry.vue / form.code | 来源技术代码 | 保持现有code校验及创建/更新请求映射；PR-G03写入body字段残留仍待按真实合同复核。 |
+| ProviderRegistry.vue / form.name | 来源显示名称 | 沿用当前必填语义与服务端校验。 |
+| ProviderRegistry.vue / form.target_url | 来源目标URL | 不推导或造出未提供的目标地址/采集授权。 |
+| ProviderRegistry.vue / form.owner_label | 来源责任标记 | 沿用现有前后端字段合同。 |
+| ProviderRegistry.vue / form.access_mode | 五种来源接入模式选择 | 模板只调整已有技术字段，不证明真实程序已注册。 |
+| ProviderRegistry.vue / form.markets | 逗号分隔的市场草稿 | 保存时按现有list函数转数组，不扩展分隔符规则。 |
+| ProviderRegistry.vue / form.languages | 逗号分隔的语言草稿 | 保存时按现有list函数转数组，不扩展分隔符规则。 |
+| ProviderRegistry.vue / form.fields | 采集字段草稿 | 不由AI/模板推断来源事实；模板覆盖范围保持现状。 |
+| ProviderRegistry.vue / form.dedupe_key | 去重字段策略 | 沿用当前模式模板及服务端合同。 |
+| ProviderRegistry.vue / form.parser_version | 解析器版本标识 | 值不证明该解析器已部署/通过验收。 |
+| ProviderRegistry.vue / form.healthcheck_url | 可选健康检查URL | 该字段可选与否以当前API/蓝图合同为准；未触发检查按钮。 |
+| ProviderRegistry.vue / form.schedule_minutes | 计划间隔分钟 | 只是来源技术定义配置，不证明任务已调度。 |
+| ProviderRegistry.vue / form.concurrency_limit | 并发上限 | 保持现有数值范围与服务端约束。 |
+| ProviderRegistry.vue / form.timeout_ms | 请求超时毫秒 | 保持现有数值范围与运行端约束。 |
+| ProviderRegistry.vue / form.retry_limit | 重试上限 | 保持现有调度/重试合同，不做UI层重放。 |
+| ProviderRegistry.vue / form.circuit_failure_threshold | 熔断连续失败阈值 | 不代表本页可直接恢复或解除实际熔断。 |
+| ProviderRegistry.vue / form.retention_days | 来源记录保留天数 | 保留服务端范围和既有安全策略。 |
+| ProviderRegistry.vue / form.failure_rules | 逗号分隔的失败规则草稿 | 不把换行另作分隔符；按当前字段逻辑处理。 |
+| ProviderRegistry.vue / form.terms_review_status | 条款复核状态选择 | PR-G01记载公开来源启用规则冲突；动作映射不改变该安全/业务门禁。 |
+| ProviderRegistry.vue / form.status | 定义草稿/启用状态选择 | 启用状态不等于真实采集运行成功或有权执行。 |
+| ProviderRegistry.vue / form.terms_reference_url | 条款参考地址 | 无用户/权威来源时不填造地址，具体启用要求继续由PR-G01追踪。 |
+| ProviderRegistry.vue / form.terms_version | 条款版本文本 | 保存不证明条款事实或合规已审。 |
+| ProviderRegistry.vue / form.terms_expires_at | 条款到期本地输入 | Asia/Shanghai本地输入转UTC ISO的8小时时差仍按PR-G03复核，不擅改时区合同。 |
+
+### 弹窗与详情消费者（有图不自动等价）
+
+| 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
+| --- | --- | --- | --- |
+| ProviderRegistry.vue / aside.1 / status-truth-note | inline-aside / related-scene-only | [default · 1440](design/provider-registry-direction-c/1440-default.png) / [default · 390](design/provider-registry-direction-c/390-default.png) | 本地视图只校验文案和排列。 |
+| ProviderRegistry.vue / ResponsiveDataView.1 / provider-definition-preview | responsive-row-detail / related-scene-only | [preview · 1440](design/provider-registry-direction-c/1440-preview.png) / [preview · 390](design/provider-registry-direction-c/390-preview.png)、[preview-tech · 1440](design/provider-registry-direction-c/1440-preview-tech.png) / [preview-tech · 390](design/provider-registry-direction-c/390-preview-tech.png) | 不证明真实后端详情GET或所有共享消费者通过。 |
+| ProviderRegistry.vue / form.1 / create-mode-four-steps | form-container / matching-inline-form-scene | [create-1 · 1440](design/provider-registry-direction-c/1440-create-1.png) / [create-1 · 390](design/provider-registry-direction-c/390-create-1.png)、[create-2 · 1440](design/provider-registry-direction-c/1440-create-2.png) / [create-2 · 390](design/provider-registry-direction-c/390-create-2.png)、[create-3 · 1440](design/provider-registry-direction-c/1440-create-3.png) / [create-3 · 390](design/provider-registry-direction-c/390-create-3.png)、[create-4 · 1440](design/provider-registry-direction-c/1440-create-4.png) / [create-4 · 390](design/provider-registry-direction-c/390-create-4.png) | 字段/必填/模板与真实目标来源和后端保存条件仍分开核对。 |
+| ProviderRegistry.vue / form.1 / edit-mode-four-steps | form-container / matching-inline-form-scene | [edit-1 · 1440](design/provider-registry-direction-c/1440-edit-1.png) / [edit-1 · 390](design/provider-registry-direction-c/390-edit-1.png)、[edit-2 · 1440](design/provider-registry-direction-c/1440-edit-2.png) / [edit-2 · 390](design/provider-registry-direction-c/390-edit-2.png)、[edit-3 · 1440](design/provider-registry-direction-c/1440-edit-3.png) / [edit-3 · 390](design/provider-registry-direction-c/390-edit-3.png)、[edit-4 · 1440](design/provider-registry-direction-c/1440-edit-4.png) / [edit-4 · 390](design/provider-registry-direction-c/390-edit-4.png) | expected_version及现有PUT/body字段风险未由视觉/表单图解决。 |
+
+### 明确保留的边界
+
+- P46路由自身的37个当前扫描候选映射到页面动作、事件接线、未绑定secondary及共享行预览控件；NavigationShell和其他来源子路由静态关联候选不属于此页直接动作范围。
+- 来源设置没有删除、单行启停、导出或健康检查按钮；不要凭旧目录提案补造入口。
+- P46 PR-G01公开来源启用门槛冲突、PR-G02模态/可访问性残余、PR-G03只读字段/时区/迟到请求和PR-G04状态secondary未绑定继续开放；映射记录事实而不擅改业务/安全规则。
+- 视觉自动批准不提升actionApproval、所有控件全状态、真实来源授权、provider:configure、MySQL、审计、采集执行或正式M07-03生产验收。
+- ProviderRuntimeSurface的全局shell、DiscoveryOverlay、NavigationShell和其他子路由源组件不在P46本地表面范围；它们按各自页面/共享合同审阅，不在本映射中重复计数。
+- P46筛选字段与TableViewControls density在顶层inputs中绑定核对；本局部surface输入表只展开23个来源表单字段，不代表全局偏好/读屏验收。
 
 ## P54 局部动作与共享消费者
 

@@ -159,6 +159,7 @@ export function validateActionReview(
         eventCandidates.every((c) =>
           [
             "event-binding",
+            "form-event",
             "dialog-component-call",
             "dialog-script-call",
             "dialog-definition",
