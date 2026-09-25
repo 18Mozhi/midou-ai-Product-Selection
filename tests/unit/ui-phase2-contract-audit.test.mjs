@@ -247,6 +247,8 @@ test("real repository audit is deterministic and preserves historical inventorie
   assert.deepEqual(snapshot(), before);
   assert.deepEqual(report.pages.issues, []);
   assert.equal(report.pages.specs, report.pages.routes);
+  assert.equal(report.summary.statuses["line-moved"] ?? 0, 0);
+  assert.equal(report.summary.statuses["identity-not-found"] ?? 0, 0);
   assert.equal(
     report.summary.sourceCandidates,
     report.summary.uniquelyReferencedCandidates + report.unreferenced.length,
@@ -2493,7 +2495,7 @@ test("current P34 organization approvals map both pagers and isolate the histori
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current P16 decision form map isolates the superseded form-event identity", () => {
+test("current P16 decision form map refreshes its line while isolating the superseded identity", () => {
   const file = "apps/web/src/components/SelectionJourney.vue";
   const document = "selection-journey-contract-review.md";
   const report = runContractAudit();
@@ -2513,8 +2515,9 @@ test("current P16 decision form map isolates the superseded form-event identity"
   );
   assert.equal(historicalRow?.status, "identity-not-found");
   assert.equal(historicalRow?.currentLine, null);
-  assert.equal(currentRow?.status, "line-moved");
+  assert.equal(currentRow?.status, "identity-current");
   assert.equal(currentRow?.sourceBinding, "unrecorded");
+  assert.equal(currentRow?.recordedLine, 550);
   assert.equal(currentRow?.currentLine, 550);
   assert.equal(
     report.unreferenced.some((candidate) => candidate.candidateId === currentId),

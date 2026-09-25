@@ -98,45 +98,45 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/RuntimeTopologyCenter.vue#5587941412d5210f.1 | 410 | control | RT66-LOGIN：expired才显示，/login跳转 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#dac6cbc2991374ba.1 | 520 | control | RT66-PROCESS：last_failure原生披露 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#1c45c779df2fcc7f.1 | 630 | control | RT66-QUEUES：只改本地showAllQueues |
-| apps/web/src/components/RuntimeTopologyCenter.vue#e41c915a9e93bf55.1 | 727 | control | RT66-POLICY：每个已显示队列原生披露 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#fcf7c9f746bc706b.1 | 739 | control | RT66-SNAPSHOT：发布失败计数非零才出现 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#d9de878e4de4767e.1 | 804 | control | RT66-OBJECT：仅真实object.href跳转，目标重新授权 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.1 | 812 | control | RT66-ALERT：告警码/根因/业务ID原生披露 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.2 | 836 | control | RT66-BLOCKER：阻断code原生披露 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#5587941412d5210f.1 | 520 | control | RT66-LOGIN：expired才显示，/login跳转 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#dac6cbc2991374ba.1 | 645 | control | RT66-PROCESS：last_failure原生披露 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#1c45c779df2fcc7f.1 | 789 | control | RT66-QUEUES：只改本地showAllQueues |
+| apps/web/src/components/RuntimeTopologyCenter.vue#e41c915a9e93bf55.1 | 890 | control | RT66-POLICY：每个已显示队列原生披露 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#fcf7c9f746bc706b.1 | 903 | control | RT66-SNAPSHOT：发布失败计数非零才出现 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#d9de878e4de4767e.1 | 944 | control | RT66-OBJECT：仅真实object.href跳转，目标重新授权 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.1 | 952 | control | RT66-ALERT：告警码/根因/业务ID原生披露 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.2 | 975 | control | RT66-BLOCKER：阻断code原生披露 |
 
 ### apps/web/src/components/RedisResilienceCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1 | 233 | control | RD67-LOGIN：expired登录 |
+| apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1 | 296 | control | RD67-LOGIN：expired登录 |
 
 ### apps/web/src/components/MySqlResilienceCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
 | apps/web/src/components/MySqlResilienceCenter.vue#99e387027e98dda9.1 | 169 | control | MY68-LOAD：顶部单飞GET |
-| apps/web/src/components/MySqlResilienceCenter.vue#21c66441891be768.1 | 184 | control | MY68-RETRY：刷新失败重试 |
-| apps/web/src/components/MySqlResilienceCenter.vue#5587941412d5210f.1 | 210 | control | MY68-LOGIN：expired登录 |
-| apps/web/src/components/MySqlResilienceCenter.vue#6a87ca890e2cd293.1 | 211 | control | MY68-RETRY：首次错误重试 |
+| apps/web/src/components/MySqlResilienceCenter.vue#21c66441891be768.1 | 188 | control | MY68-RETRY：刷新失败重试 |
+| apps/web/src/components/MySqlResilienceCenter.vue#5587941412d5210f.1 | 212 | control | MY68-LOGIN：expired登录 |
+| apps/web/src/components/MySqlResilienceCenter.vue#6a87ca890e2cd293.1 | 213 | control | MY68-RETRY：首次错误重试 |
 
 ### apps/web/src/components/FileResilienceCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/FileResilienceCenter.vue#cdc9d1538d58eb3c.1 | 155 | control | FL69-LOAD：顶部单飞GET |
-| apps/web/src/components/FileResilienceCenter.vue#21c66441891be768.1 | 170 | control | FL69-RETRY：刷新失败重试 |
-| apps/web/src/components/FileResilienceCenter.vue#5587941412d5210f.1 | 196 | control | FL69-LOGIN：expired登录 |
-| apps/web/src/components/FileResilienceCenter.vue#6a87ca890e2cd293.1 | 197 | control | FL69-RETRY：首次错误重试 |
+| apps/web/src/components/FileResilienceCenter.vue#cdc9d1538d58eb3c.1 | 143 | control | FL69-LOAD：顶部单飞GET |
+| apps/web/src/components/FileResilienceCenter.vue#21c66441891be768.1 | 162 | control | FL69-RETRY：刷新失败重试 |
+| apps/web/src/components/FileResilienceCenter.vue#5587941412d5210f.1 | 186 | control | FL69-LOGIN：expired登录 |
+| apps/web/src/components/FileResilienceCenter.vue#6a87ca890e2cd293.1 | 187 | control | FL69-RETRY：首次错误重试 |
 
 ### apps/web/src/components/TechnicalDetails.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/TechnicalDetails.vue#b3ffca8eb967d682.1 | 36 | control | 共享TECH：rows非空才有原生details |
-| apps/web/src/components/TechnicalDetails.vue#c19091da9e2471f1.1 | 43 | control | 共享COPY：clipboard.writeText，成功标签1500ms |
+| apps/web/src/components/TechnicalDetails.vue#b3ffca8eb967d682.1 | 62 | control | 共享TECH：rows非空才有原生details |
+| apps/web/src/components/TechnicalDetails.vue#c19091da9e2471f1.1 | 69 | control | 共享COPY：clipboard.writeText，成功标签1500ms |
 
 ## 6. 历史源码指纹（LF SHA-256）
 

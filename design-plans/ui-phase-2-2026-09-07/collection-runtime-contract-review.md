@@ -45,27 +45,27 @@
 
 | 位置键 | 类型 / 行 | 语义归属 |
 | --- | --- | --- |
-| S:3c465962052e3b24.1 | control / 12 | CL-NAV / 总览 |
-| S:ebad8fdaf536f0e3.1 | control / 16 | CL-NAV / 任务页 |
-| S:404044c1ac23071f.1 | control / 20 | CL-NAV / 浏览器运行 |
-| T:d1849db8e18799fd.1 | control / 488 | CL51-LOAD / 保留快照刷新 |
-| T:a0dc06b99ac90370.1 | control / 491 | CL51-LINK / 浏览器运行 |
-| T:4ec44b3c83794aca.1 | control / 503 | CL51-LOAD / 错误重读 |
-| T:7e6436ac5e8e9b15.1 | event-binding / 539 | CL51-FILTER / changeStatus |
-| T:dfaa056b9550313b.1 | control / 616 | CL51-DETAIL / 桌面查看push task |
-| T:5efbd64729e57af0.1 | control / 661 | CL51-DETAIL / 关闭移动记录后开完整详情 |
-| T:1c008f867673db60.1 | control / 671 | CL51-TECH / 移动技术详情 |
-| T:680ca05fdeabfdbf.1 | control / 698 | CL51-PAGE / 前页 |
-| T:cda5e997a43d64c9.1 | control / 702 | CL51-PAGE / 后页 |
-| T:33bc529b8390aa3d.1 | control / 731 | CL51-DETAIL / 失败后读取当前task |
+| S:3c465962052e3b24.1 | control / 16 | CL-NAV / 总览 |
+| S:ebad8fdaf536f0e3.1 | control / 20 | CL-NAV / 任务页 |
+| S:404044c1ac23071f.1 | control / 24 | CL-NAV / 浏览器运行 |
+| T:d1849db8e18799fd.1 | control / 597 | CL51-LOAD / 保留快照刷新 |
+| T:a0dc06b99ac90370.1 | control / 600 | CL51-LINK / 浏览器运行 |
+| T:4ec44b3c83794aca.1 | control / 612 | CL51-LOAD / 错误重读 |
+| T:7e6436ac5e8e9b15.1 | event-binding / 648 | CL51-FILTER / changeStatus |
+| T:dfaa056b9550313b.1 | control / 727 | CL51-DETAIL / 桌面查看push task |
+| T:5efbd64729e57af0.1 | control / 772 | CL51-DETAIL / 关闭移动记录后开完整详情 |
+| T:1c008f867673db60.1 | control / 782 | CL51-TECH / 移动技术详情 |
+| T:680ca05fdeabfdbf.1 | control / 825 | CL51-PAGE / 前页 |
+| T:cda5e997a43d64c9.1 | control / 829 | CL51-PAGE / 后页 |
+| T:33bc529b8390aa3d.1 | control / 887 | CL51-DETAIL / 失败后读取当前task |
 | T:30e32a01e61d8558.1 | control / 868 | CL51-DETAIL / loading、error、loaded共用关闭详情 |
-| T:96164ff76e31b8d8.1 | control / 774 | CL51-RECOVER / 重放原因区锚点 |
-| T:9334ac0d41264e22.1 | control / 775 | CL51-RECOVER / 凭证、来源或总览链接 |
-| T:d499af7185a1f039.1 | control / 798 | CL51-TECH / robots判定展开 |
-| T:79686f2d00e174f0.1 | control / 857 | CL51-TECH / 完整技术标识 |
-| T:5046ae27ac1c3e07.1 | control / 896 | CL51-REPLAY / 确认预览 |
-| T:acbca874b622fd25.1 | event-binding / 908 | CL51-REPLAY / cancel、replay |
-| T:e9f14f18f727a992.1 | dialog-component-call / 908 | CL51-REPLAY / 共享确认调用 |
+| T:96164ff76e31b8d8.1 | control / 911 | CL51-RECOVER / 重放原因区锚点 |
+| T:9334ac0d41264e22.1 | control / 912 | CL51-RECOVER / 凭证、来源或总览链接 |
+| T:d499af7185a1f039.1 | control / 935 | CL51-TECH / robots判定展开 |
+| T:79686f2d00e174f0.1 | control / 994 | CL51-TECH / 完整技术标识 |
+| T:5046ae27ac1c3e07.1 | control / 1043 | CL51-REPLAY / 确认预览 |
+| T:acbca874b622fd25.1 | event-binding / 1055 | CL51-REPLAY / cancel、replay |
+| T:e9f14f18f727a992.1 | dialog-component-call / 1055 | CL51-REPLAY / 共享确认调用 |
 | O:2506d9788c717641.1 | dialog-component-call / 586 | CL52-SCOPE / 移动筛选抽屉 |
 | O:9ba7fa048065cd28.1 | form-event / 587 | CL52-SCOPE / applyScope |
 | O:3a14c060674cdbaa.1 | control / 670 | CL52-LINK / 响应links六类目标 |
@@ -77,10 +77,10 @@
 | O:660c7a198b93551d.1 | control / 972 | CL52-BATCH / 安全重放区展开 |
 | O:9ebd065e5010fd46.1 | control / 1022 | CL52-DEAD / 链接单任务详情重放 |
 | O:1c008f867673db60.4 | control / 1026 | CL52-DEAD / 技术详情 |
-| R:25af292333a00121.1 | event-binding / 291 | CL53-LOAD / 状态面primary |
-| R:a9a0bd7b83bfaa17.1 | control / 374 | CL53-RENEW / blocked_login任务链接 |
-| R:cbea42c5b9e6a6b3.1 | form-event / 388 | CL53-FILTER / applyFilters |
-| R:1c008f867673db60.1 | control / 500 | CL53-DETAIL / 移动技术展开 |
+| R:25af292333a00121.1 | event-binding / 433| CL53-LOAD / 状态面primary |
+| R:a9a0bd7b83bfaa17.1 | control / 516| CL53-RENEW / blocked_login任务链接 |
+| R:cbea42c5b9e6a6b3.1 | form-event / 530| CL53-FILTER / applyFilters |
+| R:1c008f867673db60.1 | control / 648| CL53-DETAIL / 移动技术展开 |
 
 ## 3. 输入绑定和弹窗变体
 

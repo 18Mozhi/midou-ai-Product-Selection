@@ -10,11 +10,11 @@
 
 | 稳定候选 ID | 当前行 | 类型 | 语义动作 | 范围 |
 | --- | --- | --- | --- | --- |
-| apps/web/src/components/ResponsiveDataView.vue#6da4dad42cb34c8d.1 | 124 | control | shared.detail.open | 手机记录按钮；保存触发器，按 rowKey 打开，初焦点与背景隔离 |
-| apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1 | 131 | event-binding | shared.detail.keyboard | 既有 Escape 关闭和新增 Tab/Shift+Tab 循环；不是业务提交 |
-| apps/web/src/components/ResponsiveDataView.vue#988131834dc4bd6f.1 | 138 | control | shared.detail.scrim.close | 遮罩仍可点击关闭，但不再进入键盘 Tab 序列 |
-| apps/web/src/components/ResponsiveDataView.vue#a3c9be2acacfd788.1 | 145 | dialog-definition | shared.detail.dialog | 来自 detailTitle 的命名详情；并非原生 dialog；各消费详情内容独立 |
-| apps/web/src/components/ResponsiveDataView.vue#847801b2ac6e7a17.1 | 157 | control | shared.detail.header.close | 初焦点关闭按钮，关闭后返焦；记录移除时列表回退 |
+| apps/web/src/components/ResponsiveDataView.vue#6da4dad42cb34c8d.1 | 165 | control | shared.detail.open | 手机记录按钮；保存触发器，按 rowKey 打开，初焦点与背景隔离 |
+| apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1 | 172 | event-binding | shared.detail.keyboard | 既有 Escape 关闭和新增 Tab/Shift+Tab 循环；不是业务提交 |
+| apps/web/src/components/ResponsiveDataView.vue#988131834dc4bd6f.1 | 184 | control | shared.detail.scrim.close | 遮罩仍可点击关闭，但不再进入键盘 Tab 序列 |
+| apps/web/src/components/ResponsiveDataView.vue#a3c9be2acacfd788.1 | 191 | dialog-definition | shared.detail.dialog | 来自 detailTitle 的命名详情；并非原生 dialog；各消费详情内容独立 |
+| apps/web/src/components/ResponsiveDataView.vue#847801b2ac6e7a17.1 | 203 | control | shared.detail.header.close | 初焦点关闭按钮，关闭后返焦；记录移除时列表回退 |
 
 ## 本次当前源码指纹
 

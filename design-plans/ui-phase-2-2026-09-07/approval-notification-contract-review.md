@@ -60,29 +60,29 @@
 | AQ | 59 | 64616041c6d5fc5e.1 | AN-A-REQUEST-OPEN；空队列有模板 |
 | AQ | 62 | 3f91c4917c0bca2a.1 | AN-A-TEMPLATE-OPEN；空队列无模板 |
 | AQ | 68 | 134055fa33da350e.1 | AN-A-DETAIL；每个真实审批对象 |
-| NC | 401 | 9b4302ca61b627ec.1 | AN-N-PREF-OPEN；busy禁用 |
-| NC | 402 | fd5620d41b8a74b5.1 | AN-N-ALL-READ；当前接收范围全部 |
-| NC | 408 | 1c008f867673db60.1 | AN-TECH；页级requestId |
-| NC | 427 | bfefb7250e532e63.1 | AN-N-FILTER-CATEGORY；五项 |
-| NC | 441 | cafe657338aefab6.1 | AN-N-UNREAD；URL unread=1/API true |
-| NC | 445 | 106ed8618827fe65.1 | AN-N-FILTER-STATUS；四项 |
-| NC | 480 | 6a22c249121aeb4d.1 | AN-N-LOAD；重读列表/summary/preferences |
-| NC | 487 | d953dfdf4cb40b85.1 | AN-N-DETAIL；打开，未读时自动read |
-| NC | 509 | 01c7bba15fa9f7ce.1 | AN-N-PAGE；上一页 |
-| NC | 511 | bd5dbf08f126da53.1 | AN-N-PAGE；下一页 |
-| NC | 513 | 1eb1c4db747d37c9.1 | D-AN-NOTIFICATION；消息详情 |
-| NC | 513 | a81227b33b62c0a9.1 | AN-N-CLOSE-DETAIL；Escape，busy不关闭 |
-| NC | 520 | 24417e6753ed4eb7.1 | AN-N-CLOSE-DETAIL；按钮同busy边界 |
-| NC | 547 | 9c8237833082965f.1 | AN-N-SOURCE；站内来源+from |
-| NC | 550 | d0ef81cb0803db4e.1 | AN-N-START；仅open |
-| NC | 558 | 7490571390181453.1 | AN-N-CLOSE；非closed |
-| NC | 566 | 696dcabbd8c2d73e.1 | AN-N-REOPEN；closed |
-| NC | 574 | 1c008f867673db60.2 | AN-TECH；资源/根因键 |
-| NC | 591 | b332799077351299.1 | D-AN-PREFERENCES；偏好 |
-| NC | 591 | bcb7add4c71c18a6.1 | AN-N-PREF-CLOSE；Escape |
-| NC | 597 | 72947e74a11b9abc.1 | AN-N-PREF-SAVE；PUT expected_version |
-| NC | 608 | 25755513ca77e550.1 | AN-N-PREF-CLOSE；取消保留当前ref |
-| NC | 609 | 0285caea2e8607bf.1 | AN-N-PREF-SAVE；原生submit |
+| NC | 481 | 9b4302ca61b627ec.1 | AN-N-PREF-OPEN；busy禁用 |
+| NC | 482 | fd5620d41b8a74b5.1 | AN-N-ALL-READ；当前接收范围全部 |
+| NC | 488 | 1c008f867673db60.1 | AN-TECH；页级requestId |
+| NC | 507 | bfefb7250e532e63.1 | AN-N-FILTER-CATEGORY；五项 |
+| NC | 521 | cafe657338aefab6.1 | AN-N-UNREAD；URL unread=1/API true |
+| NC | 525 | 106ed8618827fe65.1 | AN-N-FILTER-STATUS；四项 |
+| NC | 560 | 6a22c249121aeb4d.1 | AN-N-LOAD；重读列表/summary/preferences |
+| NC | 567 | d953dfdf4cb40b85.1 | AN-N-DETAIL；打开，未读时自动read |
+| NC | 589 | 01c7bba15fa9f7ce.1 | AN-N-PAGE；上一页 |
+| NC | 591 | bd5dbf08f126da53.1 | AN-N-PAGE；下一页 |
+| NC | 593 | 1eb1c4db747d37c9.1 | D-AN-NOTIFICATION；消息详情 |
+| NC | 593 | a81227b33b62c0a9.1 | AN-N-CLOSE-DETAIL；Escape，busy不关闭 |
+| NC | 600 | 24417e6753ed4eb7.1 | AN-N-CLOSE-DETAIL；按钮同busy边界 |
+| NC | 627 | 9c8237833082965f.1 | AN-N-SOURCE；站内来源+from |
+| NC | 630 | d0ef81cb0803db4e.1 | AN-N-START；仅open |
+| NC | 638 | 7490571390181453.1 | AN-N-CLOSE；非closed |
+| NC | 646 | 696dcabbd8c2d73e.1 | AN-N-REOPEN；closed |
+| NC | 654 | 1c008f867673db60.2 | AN-TECH；资源/根因键 |
+| NC | 671 | b332799077351299.1 | D-AN-PREFERENCES；偏好 |
+| NC | 671 | bcb7add4c71c18a6.1 | AN-N-PREF-CLOSE；Escape |
+| NC | 677 | 72947e74a11b9abc.1 | AN-N-PREF-SAVE；PUT expected_version |
+| NC | 688 | 25755513ca77e550.1 | AN-N-PREF-CLOSE；取消保留当前ref |
+| NC | 689 | 0285caea2e8607bf.1 | AN-N-PREF-SAVE；原生submit |
 
 ## 3. 字段绑定与真实请求
 

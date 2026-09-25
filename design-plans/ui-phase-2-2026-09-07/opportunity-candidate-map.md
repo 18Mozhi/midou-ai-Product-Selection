@@ -65,32 +65,32 @@
 | OpportunityProfitPanel:126 | fcdcabfef1ea3474.1 | OP-COST-SUBMIT |
 | OpportunityProfitPanel:158 | b2258379fb999070.1 | OP-COST-SUBMIT |
 | OpportunityProfitPanel:159 | aff5d679009764bc.1 | OP-PROFIT-QUEUE |
-| OpportunityWorkspace:658 | 169dd3f4eac94585.1 | OP-JOURNEY-NAV |
-| OpportunityWorkspace:660 | bbd1b04e367f3e80.1 | OP-TREND-RULES-NAV |
-| OpportunityWorkspace:662 | 98ee78e079ff2f4c.1 | OP-ERP-OPEN |
-| OpportunityWorkspace:669 | d9bac0eae791bdd6.1 | OP-CREATE-OPEN |
-| OpportunityWorkspace:681 | 43e671d75fd48bea.1 | OP-RETURN |
-| OpportunityWorkspace:687 | 0951033614435a4e.1 | 列表apply/batch/create/setup/page/reset/view/selectedIds转发 |
-| OpportunityWorkspace:710 | 7219811dcc02cc91.1 | OP-DETAIL-RETRY |
-| OpportunityWorkspace:729 | e5851472e99b48d6.1 | OP-RUNTIME-DETAILS |
-| OpportunityWorkspace:739 | 6bbaa8f037121cf9.1 | OP-DECISION-OPEN/OP-EVIDENCE-TASK转发 |
-| OpportunityWorkspace:751 | f563427d32a93860.1 | OP-MANUAL-COLLECTION-DETAILS |
-| OpportunityWorkspace:754 | 0027d6cd14c50e46.1 | OP-COMPETITOR-DISCOVER |
-| OpportunityWorkspace:761 | 927ece864672036d.1 | OP-SUPPLIER-DISCOVER |
-| OpportunityWorkspace:768 | 145043f313e0dfef.1 | OP-SCORE-RULES |
-| OpportunityWorkspace:773 | 8dfb1ee903d0b053.1 | OP-TAB：四主分区 |
-| OpportunityWorkspace:783 | badd0afd80b50ce6.1 | OP-MORE-ANALYSIS |
-| OpportunityWorkspace:785 | 1aef42d09991a143.1 | OP-TAB：六辅助分区 |
-| OpportunityWorkspace:797 | 65bed8657e147596.1 | 竞品/供应采集、评分、下游重读转发 |
-| OpportunityWorkspace:817 | 3e5dca6610ac19d8.1 | OP-FEEDBACK-SUBMIT转发 |
-| OpportunityWorkspace:825 | a91f12f030c2fe66.1 | 成本提交/复核/利润重算转发 |
-| OpportunityWorkspace:836 | 76ae53c237c00264.1 | AI排队/重读/复核转发 |
-| OpportunityWorkspace:873 | ebc2bd495e3582f5.1 | 创建/决定/ERP浏览器/文件导入转发 |
-| OpportunityWorkspace:889 | 2f4e238755b201b9.1 | OP-BATCH-CANCEL：Escape |
-| OpportunityWorkspace:896 | 44686188d9948fca.1 | OP-BATCH-SUBMIT |
-| OpportunityWorkspace:928 | 64891e806e385e12.1 | OP-BATCH-CANCEL |
-| OpportunityWorkspace:929 | c70ff783b9d26396.1 | OP-BATCH-SUBMIT |
-| OpportunityWorkspace:933 | 1fec9eace35dae6b.1 | OP-AI-REASON-SUBMIT/CANCEL转发 |
+| OpportunityWorkspace:668| 169dd3f4eac94585.1 | OP-JOURNEY-NAV |
+| OpportunityWorkspace:670| bbd1b04e367f3e80.1 | OP-TREND-RULES-NAV |
+| OpportunityWorkspace:672| 98ee78e079ff2f4c.1 | OP-ERP-OPEN |
+| OpportunityWorkspace:679| d9bac0eae791bdd6.1 | OP-CREATE-OPEN |
+| OpportunityWorkspace:691| 43e671d75fd48bea.1 | OP-RETURN |
+| OpportunityWorkspace:697| 0951033614435a4e.1 | 列表apply/batch/create/setup/page/reset/view/selectedIds转发 |
+| OpportunityWorkspace:720| 7219811dcc02cc91.1 | OP-DETAIL-RETRY |
+| OpportunityWorkspace:739| e5851472e99b48d6.1 | OP-RUNTIME-DETAILS |
+| OpportunityWorkspace:749| 6bbaa8f037121cf9.1 | OP-DECISION-OPEN/OP-EVIDENCE-TASK转发 |
+| OpportunityWorkspace:761| f563427d32a93860.1 | OP-MANUAL-COLLECTION-DETAILS |
+| OpportunityWorkspace:764| 0027d6cd14c50e46.1 | OP-COMPETITOR-DISCOVER |
+| OpportunityWorkspace:771| 927ece864672036d.1 | OP-SUPPLIER-DISCOVER |
+| OpportunityWorkspace:778| 145043f313e0dfef.1 | OP-SCORE-RULES |
+| OpportunityWorkspace:783| 8dfb1ee903d0b053.1 | OP-TAB：四主分区 |
+| OpportunityWorkspace:793| badd0afd80b50ce6.1 | OP-MORE-ANALYSIS |
+| OpportunityWorkspace:795| 1aef42d09991a143.1 | OP-TAB：六辅助分区 |
+| OpportunityWorkspace:807| 65bed8657e147596.1 | 竞品/供应采集、评分、下游重读转发 |
+| OpportunityWorkspace:827| 3e5dca6610ac19d8.1 | OP-FEEDBACK-SUBMIT转发 |
+| OpportunityWorkspace:835| a91f12f030c2fe66.1 | 成本提交/复核/利润重算转发 |
+| OpportunityWorkspace:846| 76ae53c237c00264.1 | AI排队/重读/复核转发 |
+| OpportunityWorkspace:883| ebc2bd495e3582f5.1 | 创建/决定/ERP浏览器/文件导入转发 |
+| OpportunityWorkspace:899| 2f4e238755b201b9.1 | OP-BATCH-CANCEL：Escape |
+| OpportunityWorkspace:906| 44686188d9948fca.1 | OP-BATCH-SUBMIT |
+| OpportunityWorkspace:938| 64891e806e385e12.1 | OP-BATCH-CANCEL |
+| OpportunityWorkspace:939| c70ff783b9d26396.1 | OP-BATCH-SUBMIT |
+| OpportunityWorkspace:943| 1fec9eace35dae6b.1 | OP-AI-REASON-SUBMIT/CANCEL转发 |
 | OpportunityWorkspaceDialogs:44 | f9352d9bba967662.1 | OP-ERP-CLOSE：Escape |
 | OpportunityWorkspaceDialogs:51 | 674fd720e5afc0a1.1 | OP-ERP-BROWSER |
 | OpportunityWorkspaceDialogs:57 | 072a94228fa0ed02.1 | OP-ERP-CLOSE |
@@ -116,10 +116,10 @@
 | 文件:行 | 候选尾键 | 定义/调用 |
 | --- | --- | --- |
 | OpportunityListPanel.vue:186 | 3b502c874c5bc655.1 | 共享筛选抽屉 |
-| OpportunityWorkspace.vue:873 | 4f1225f6705d3e1d.1 | 三类业务弹窗集合调用 |
-| OpportunityWorkspace.vue:889 | acc11467e72e9b66.1 | 本地批量原生dialog；三变体 |
-| OpportunityWorkspace.vue:933 | 38deb219e719849f.1 | 共享原因框组件调用 |
-| OpportunityWorkspace.vue:495 | 36cdbd1cb98185c2.1 | AI原因helper调用；通过/驳回 |
+| OpportunityWorkspace.vue:883| 4f1225f6705d3e1d.1 | 三类业务弹窗集合调用 |
+| OpportunityWorkspace.vue:899| acc11467e72e9b66.1 | 本地批量原生dialog；三变体 |
+| OpportunityWorkspace.vue:943| 38deb219e719849f.1 | 共享原因框组件调用 |
+| OpportunityWorkspace.vue:505| 36cdbd1cb98185c2.1 | AI原因helper调用；通过/驳回 |
 | OpportunityWorkspaceDialogs.vue:44 | 1ed288cd855ce1c0.1 | ERP导入原生dialog |
 | OpportunityWorkspaceDialogs.vue:100 | ac06eb6f17f7829e.1 | 机会创建原生dialog |
 | OpportunityWorkspaceDialogs.vue:137 | 8b4dc3f5856d3c5a.1 | 人工决策原生dialog；三变体 |

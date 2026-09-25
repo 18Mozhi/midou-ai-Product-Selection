@@ -16,42 +16,42 @@ config/route-catalog.json → NavigationShell.vue → navigation-shell-route-sta
 
 | 行 | candidate后缀 | 语义ID / 页面 | 行为 |
 | --- | --- | --- | --- |
-| 619 | 92a11027f1dd1f3c.1 | CP-RULE-OPEN / P20 | 管理者页首新建/首条规则 |
-| 622 | d17349bf034941db.1 | CP-RULE-BACK / P20 | RouterLink /competitors |
-| 625 | f006bd8812c49ea9.1 | CP-STATE-PRIMARY/SECONDARY / P20 | 按状态恢复或导航，两个事件分别验 |
-| 656 | 5c8a7bc537511253.1 | CP-RULE-OPEN / P20 | 真空规则列表的新建入口 |
-| 669 | 056cc0832d94cfb3.1 | CP-RULE-NAV / P19 | 无启用规则且manager时进入P20 |
-| 677 | 4fe322a77ae77170.1 | CP-CREATE-OPEN / P19 | 有启用规则的页首创建 |
-| 680 | 9e3339029c06290e.1 | CP-CREATE-OPEN / P19 | 无启用规则的次级创建 |
-| 683 | 908bdb9143e5350e.1 | CP-RULE-NAV / P19 | 包含只读者的规则入口 |
-| 700 | 8d078d22d63338ea.1 | CP-STATE-PRIMARY/SECONDARY / P19 | 空态manager创建，其他恢复/导航 |
-| 709 | ec3b988601b97577.1 | CP-SEARCH-CLEAR/EMPTY-SECONDARY / P19 | 清搜索；manager创建或只读刷新 |
-| 721 | 0832ce1b3b353933.1 | CP-DETAIL / P19 | v-for实际对象逐项读取、选中及URL |
-| 741 | e39ead97fb52b914.1 | CP-SOURCE / P19 | 新窗口打开真实商品URL |
-| 746 | 3d04d80f54cd9d35.1 | CP-COLLECT / P19 | 管理者、active、无busy/pending可执行 |
-| 761 | 301ee04052a2735e.1 | CP-RULE-NAV-CURRENT / P19 | 带当前competitor进入P20 |
-| 763 | d176f11e3e762c47.1 | CP-TOGGLE / P19桌面 | status/revision启停 |
-| 765 | 219a5337696882de.1 | CP-DELETE-OPEN / P19桌面 | 选择删除对象并清原因 |
-| 770 | 6bc70845bac2b99a.1 | CP-MORE / P19移动 | 原生details开合 |
-| 771 | d176f11e3e762c47.2 | CP-TOGGLE / P19移动 | 与桌面同一合同，独立可达性 |
-| 773 | 219a5337696882de.2 | CP-DELETE-OPEN / P19移动 | 同上，不能漏移动入口 |
-| 826 | c14a7d89545c4bbd.1 | CP-SOURCE-FIRST / P19 | 无快照时外部来源补充入口 |
-| 885 | 3edcc1c1730d78dd.1 | CP-TASK-LINK / P19 | 本次已建任务/tasks?task=id |
-| 889 | 9f03a53fb65e7c6b.1 | CP-TASK-CREATE / P19 | task:create，按变化建验证任务 |
-| 920 | 9deedc4f8d67733e.1 | CP-HELP / P19 | 原生帮助details开合 |
-| 937 | e6be6aad71e6c32f.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | 前两步本地，第三步POST |
-| 943 | 933d6f0c73f9a623.1 | CP-CREATE-CLOSE / 创建表单 | 关闭、step归1、去create query |
-| 1009 | 76ebcf7c57bc49e4.1 | CP-CREATE-CLOSE / 创建表单 | 第一步取消 |
-| 1011 | 4ae114e438c807d5.1 | CP-CREATE-PREVIOUS / 创建表单 | 第2/3步本地回退 |
-| 1012 | d32ececd9e3b4c22.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | submit按钮，表单handler驱动 |
-| 1026 | 0effcb12f0e7344b.1 | CP-RULE-SUBMIT / 规则表单 | POST明确阈值 |
-| 1032 | ad5c3e206797e35f.1 | CP-RULE-CLOSE / 规则表单 | 关闭且去competitor query |
-| 1075 | c40c87a6e5ef3e66.1 | CP-RULE-CLOSE / 规则表单 | 取消同合同 |
-| 1076 | 108089b4d17a2d6e.1 | CP-RULE-SUBMIT / 规则表单 | busy禁用的submit |
-| 1087 | 33765167c1ac37f5.1 | CP-DELETE-SUBMIT / 删除表单 | DELETE + trim原因/revision |
-| 1093 | 8436b1677c6263f6.1 | CP-DELETE-CLOSE / 删除表单 | 删除选择归null，无DELETE |
-| 1115 | a94cde21d7759e06.1 | CP-DELETE-CLOSE / 删除表单 | 取消同合同 |
-| 1116 | 9d23c498e72940a2.1 | CP-DELETE-SUBMIT / 删除表单 | busy禁用的submit |
+| 651 | 92a11027f1dd1f3c.1 | CP-RULE-OPEN / P20 | 管理者页首新建/首条规则 |
+| 654 | d17349bf034941db.1 | CP-RULE-BACK / P20 | RouterLink /competitors |
+| 657 | f006bd8812c49ea9.1 | CP-STATE-PRIMARY/SECONDARY / P20 | 按状态恢复或导航，两个事件分别验 |
+| 688 | 5c8a7bc537511253.1 | CP-RULE-OPEN / P20 | 真空规则列表的新建入口 |
+| 701 | 056cc0832d94cfb3.1 | CP-RULE-NAV / P19 | 无启用规则且manager时进入P20 |
+| 709 | 4fe322a77ae77170.1 | CP-CREATE-OPEN / P19 | 有启用规则的页首创建 |
+| 712 | 9e3339029c06290e.1 | CP-CREATE-OPEN / P19 | 无启用规则的次级创建 |
+| 715 | 908bdb9143e5350e.1 | CP-RULE-NAV / P19 | 包含只读者的规则入口 |
+| 732 | 8d078d22d63338ea.1 | CP-STATE-PRIMARY/SECONDARY / P19 | 空态manager创建，其他恢复/导航 |
+| 741 | ec3b988601b97577.1 | CP-SEARCH-CLEAR/EMPTY-SECONDARY / P19 | 清搜索；manager创建或只读刷新 |
+| 753 | 0832ce1b3b353933.1 | CP-DETAIL / P19 | v-for实际对象逐项读取、选中及URL |
+| 773 | e39ead97fb52b914.1 | CP-SOURCE / P19 | 新窗口打开真实商品URL |
+| 778 | 3d04d80f54cd9d35.1 | CP-COLLECT / P19 | 管理者、active、无busy/pending可执行 |
+| 793 | 301ee04052a2735e.1 | CP-RULE-NAV-CURRENT / P19 | 带当前competitor进入P20 |
+| 795 | d176f11e3e762c47.1 | CP-TOGGLE / P19桌面 | status/revision启停 |
+| 797 | 219a5337696882de.1 | CP-DELETE-OPEN / P19桌面 | 选择删除对象并清原因 |
+| 802 | 6bc70845bac2b99a.1 | CP-MORE / P19移动 | 原生details开合 |
+| 803 | d176f11e3e762c47.2 | CP-TOGGLE / P19移动 | 与桌面同一合同，独立可达性 |
+| 805 | 219a5337696882de.2 | CP-DELETE-OPEN / P19移动 | 同上，不能漏移动入口 |
+| 858 | c14a7d89545c4bbd.1 | CP-SOURCE-FIRST / P19 | 无快照时外部来源补充入口 |
+| 917 | 3edcc1c1730d78dd.1 | CP-TASK-LINK / P19 | 本次已建任务/tasks?task=id |
+| 921 | 9f03a53fb65e7c6b.1 | CP-TASK-CREATE / P19 | task:create，按变化建验证任务 |
+| 952 | 9deedc4f8d67733e.1 | CP-HELP / P19 | 原生帮助details开合 |
+| 969 | e6be6aad71e6c32f.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | 前两步本地，第三步POST |
+| 975 | 933d6f0c73f9a623.1 | CP-CREATE-CLOSE / 创建表单 | 关闭、step归1、去create query |
+| 1041 | 76ebcf7c57bc49e4.1 | CP-CREATE-CLOSE / 创建表单 | 第一步取消 |
+| 1043 | 4ae114e438c807d5.1 | CP-CREATE-PREVIOUS / 创建表单 | 第2/3步本地回退 |
+| 1044 | d32ececd9e3b4c22.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | submit按钮，表单handler驱动 |
+| 1058 | 0effcb12f0e7344b.1 | CP-RULE-SUBMIT / 规则表单 | POST明确阈值 |
+| 1064 | ad5c3e206797e35f.1 | CP-RULE-CLOSE / 规则表单 | 关闭且去competitor query |
+| 1107 | c40c87a6e5ef3e66.1 | CP-RULE-CLOSE / 规则表单 | 取消同合同 |
+| 1108 | 108089b4d17a2d6e.1 | CP-RULE-SUBMIT / 规则表单 | busy禁用的submit |
+| 1119 | 33765167c1ac37f5.1 | CP-DELETE-SUBMIT / 删除表单 | DELETE + trim原因/revision |
+| 1125 | 8436b1677c6263f6.1 | CP-DELETE-CLOSE / 删除表单 | 删除选择归null，无DELETE |
+| 1147 | a94cde21d7759e06.1 | CP-DELETE-CLOSE / 删除表单 | 取消同合同 |
+| 1148 | 9d23c498e72940a2.1 | CP-DELETE-SUBMIT / 删除表单 | busy禁用的submit |
 
 v-model分别为695 query；954 URL、962 market、970 opportunity_id、978 title；1037规则目标、1044 metric、1051 direction、1061 threshold；1105 deleteReason。全局keydown还支持Escape按删除→规则→创建顺序关闭，不在36个模板候选中；需单独验键盘及缓存生命周期，不能漏计。
 

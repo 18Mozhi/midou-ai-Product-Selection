@@ -40,23 +40,23 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 
 | 候选键 | 行 | actionId / 分类 | 条件、行为与验收卡 |
 | --- | --- | --- | --- |
-| L#9b4b982bf643379f.1 | 286 | ID-ROOT | 品牌→`/`；I01/I02 |
-| L#4ea44facc4e04130.1 | 413 | ID-SHOW-FORGOT | login→局部 forgot，无请求/URL变化；I02 |
-| L#dc876249a8119b09.1 | 452 | ID-SHOW-LOGIN | verify结果返回；I04/I05 |
-| L#dc876249a8119b09.2 | 515 | ID-SHOW-LOGIN | 首次设置结束、恢复码后返回；I07 |
-| L#f29375268246ac09.1 | 591 | ID-LEGACY-SESSION-REVOKE | 旧sessions模板行，暂无公开模式入口；源码保留、运行入口待归并P11 |
-| L#ba3feba8b42af0bf.1 | 612 | ID-ACCOUNT-SECURITY | RouterLink→`/me?section=security`；I09 |
-| L#df188704ef470c64.1 | 613 | ID-MFA-ROUTE | RouterLink→P07，会话守卫适用；I09 |
-| T#5587941412d5210f.1 | 201 | ID-LOGIN-ROUTE | expired→`/login`；I10 |
-| T#222cadb1072dc1d8.1 | 202 | ID-ORG-RELOAD | error/forbidden→loadOrganizations；I10 |
-| T#9dde30dd57699c01.1 | 213 | ID-ORG-RELOAD | 无工作区→loadOrganizations；I10 |
-| T#ecd9e9dbd8b34d05.1 | 217 | ID-PERSONAL-PROVISION | 无组织→创建本人空间、成功replace；I11 |
-| T#d29e9f25fe7a5452.1 | 218 | ID-ACCOUNT-ROUTE | 无组织→`/me`；I11 |
-| T#df188704ef470c64.1 | 219 | ID-MFA-ROUTE | 无组织→P07；I09/I11 |
-| T#72a9593314273d39.1 | 232 | ID-CONTEXT-CONTINUE | selectedContext就绪→safeReturnTo；I10 |
-| T#04d5594b96977687.1 | 237 | ID-ORG-RELOAD | 已选组织时返回组织，重新读目录；I10 |
-| T#087b197306ae2192.1 | 274 | ID-ORG-CLEAR | 搜索无结果→清空query，无写请求；I10 |
-| O#7142f76fc59ad9ee.1 | 41 | ID-GUIDE-SKIP | 跳过→P01，不写完成状态；I12 |
+| L#9b4b982bf643379f.1 | 1260 | ID-ROOT | 品牌→`/`；I01/I02 |
+| L#4ea44facc4e04130.1 | 726 | ID-SHOW-FORGOT | login→局部 forgot，无请求/URL变化；I02 |
+| L#dc876249a8119b09.1 | 838 | ID-SHOW-LOGIN | verify结果返回；I04/I05 |
+| L#dc876249a8119b09.2 | 851 | ID-SHOW-LOGIN | 首次设置结束、恢复码后返回；I07 |
+| L#f29375268246ac09.1 | 1333 | ID-LEGACY-SESSION-REVOKE | 旧sessions模板行，暂无公开模式入口；源码保留、运行入口待归并P11 |
+| L#ba3feba8b42af0bf.1 | 545 | ID-ACCOUNT-SECURITY | RouterLink→`/me?section=security`；I09 |
+| L#df188704ef470c64.1 | 1343 | ID-MFA-ROUTE | RouterLink→P07，会话守卫适用；I09 |
+| T#5587941412d5210f.1 | 216 | ID-LOGIN-ROUTE | expired→`/login`；I10 |
+| T#222cadb1072dc1d8.1 | 219 | ID-ORG-RELOAD | error/forbidden→loadOrganizations；I10 |
+| T#9dde30dd57699c01.1 | 232 | ID-ORG-RELOAD | 无工作区→loadOrganizations；I10 |
+| T#ecd9e9dbd8b34d05.1 | 241 | ID-PERSONAL-PROVISION | 无组织→创建本人空间、成功replace；I11 |
+| T#d29e9f25fe7a5452.1 | 244 | ID-ACCOUNT-ROUTE | 无组织→`/me`；I11 |
+| T#df188704ef470c64.1 | 245 | ID-MFA-ROUTE | 无组织→P07；I09/I11 |
+| T#72a9593314273d39.1 | 258 | ID-CONTEXT-CONTINUE | selectedContext就绪→safeReturnTo；I10 |
+| T#04d5594b96977687.1 | 263 | ID-ORG-RELOAD | 已选组织时返回组织，重新读目录；I10 |
+| T#087b197306ae2192.1 | 304 | ID-ORG-CLEAR | 搜索无结果→清空query，无写请求；I10 |
+| O#7142f76fc59ad9ee.1 | 39 | ID-GUIDE-SKIP | 跳过→P01，不写完成状态；I12 |
 
 ### 2.1 当前 LocalIdentity 源标识补记
 
