@@ -506,7 +506,6 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/Alibaba1688AcceptanceCenter.vue#441fd57e4a421b3a.1 | 181 | control | SC49-AUTH / 无权时返回平台概览 |
 | apps/web/src/components/CredentialAssetCenter.vue#889e842f4791c19d.1 | 1003 | control | SC50-BRIDGE / 下载浏览器助手 |
 | apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1 | 1229 | control | SC50-TECH / 展开来源代码技术详情 |
-| apps/web/src/components/CredentialAssetCenter.vue#91ffac2d135459f2.1 | 1302 | control | SC50-PROFILE / 按既有表单保存档案引用 |
 | apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#1c008f867673db60.1 | 84 | control | SC48-COMPAT / 展开兼容观测读取失败编号 |
 | apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.1 | 132 | control | SC48-SAMPLES / 展开本次样本操作编号 |
 | apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.2 | 165 | control | SC48-SAMPLES / 展开候选采集解析器版本 |
@@ -576,3 +575,4 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1 | SC50-ASSET/ROTATE 保存或轮换 | #584e25b2c7498fe2.1 资产表单保存 |
 | apps/web/src/components/CredentialAssetCenter.vue#15bb54ff377e917e.1 | SC50-PROFILE 选择加密资产并同步来源 | #56cda485ff9a67e1.1 档案与来源同步 |
 | apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2 | SC50-CLOSE 取消浏览器档案引用 | #2f453887d0cc66db.2 取消档案关联编辑器 |
+| apps/web/src/components/CredentialAssetCenter.vue#91ffac2d135459f2.1 | SC50-PROFILE 按既有表单保存档案引用 | #98e4c1aff937289a.1 按原档案表单保存关联 |

@@ -513,6 +513,7 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
     "apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1",
     "apps/web/src/components/CredentialAssetCenter.vue#15bb54ff377e917e.1",
     "apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2",
+    "apps/web/src/components/CredentialAssetCenter.vue#91ffac2d135459f2.1",
   ]) {
     const old = report.records.find(
       (record) => record.document.endsWith(document) && record.candidateId === candidateId,
@@ -2564,6 +2565,100 @@ test("current P41 organization wizard maps its form submission and three field o
   assert.equal(previousHash?.status, "hash-drift");
   assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
   assert.equal(report.denominatorFrozen, false);
+});
+
+test("P41 organization wizard keeps replaced initial signatures historical", () => {
+  const document = "platform-account-contract-review.md";
+  const report = runContractAudit();
+  const oldIds = [
+    "fa23daedbd2c0827.1",
+    "b18325f688280598.1",
+    "494420d478dadefe.1",
+    "47a9ebd58cf57e57.1",
+  ].map((signature) => `apps/web/src/components/OrganizationCreationWizard.vue#${signature}`);
+  for (const candidateId of oldIds) {
+    const record = report.records.find(
+      (item) => item.document.endsWith(document) && item.candidateId === candidateId,
+    );
+    assert.equal(record?.status, "identity-not-found", candidateId);
+    assert.equal(record?.temporalScope, "historical", candidateId);
+  }
+  const currentRows = report.records.filter(
+    (item) =>
+      item.document.endsWith(document) &&
+      item.sourceFile === "apps/web/src/components/OrganizationCreationWizard.vue" &&
+      item.claim.includes("PA41-CURRENT-") &&
+      item.temporalScope !== "historical",
+  );
+  assert.equal(currentRows.length, 4);
+  assert.ok(currentRows.every((item) => item.status === "identity-current"));
+});
+
+test("P56 and P57 split component signatures remain historical beside current mappings", () => {
+  const document = "content-notification-evidence-contract-review.md";
+  const report = runContractAudit();
+  const oldRows = [
+    ["PlatformManagementFilter.vue", "ef05faf55a95a9e3.1"],
+    ["PlatformManagementFilter.vue", "b0cd0b7f407d1c7c.1"],
+    ["PlatformManagementFilter.vue", "da86b1e4e15c0477.1"],
+    ["PlatformNotificationManagement.vue", "3007e82db0685abe.1"],
+    ["PlatformNotificationManagement.vue", "d5b397392cb4b109.1"],
+    ["PlatformNotificationManagement.vue", "21e70175990c8170.1"],
+    ["PlatformNotificationOperations.vue", "bf271304a21c8a72.1"],
+    ["PlatformNotificationOperations.vue", "656bc15c15ec0ab7.1"],
+    ["PlatformNotificationOperations.vue", "2f1d0bb94a278adc.1"],
+  ];
+  for (const [file, signature] of oldRows) {
+    const candidateId = `apps/web/src/components/${file}#${signature}`;
+    const record = report.records.find(
+      (item) => item.document.endsWith(document) && item.candidateId === candidateId,
+    );
+    assert.equal(record?.status, "identity-not-found", candidateId);
+    assert.equal(record?.temporalScope, "historical", candidateId);
+  }
+  const currentIds = [
+    "apps/web/src/components/PlatformManagementFilter.vue#ec5c5407e5528004.1",
+    "apps/web/src/components/PlatformManagementFilter.vue#34a39302f4e7c582.1",
+    "apps/web/src/components/PlatformNotificationManagement.vue#a84b9b74f461a608.1",
+    "apps/web/src/components/PlatformNotificationManagement.vue#22aeb336eb22dffc.1",
+    "apps/web/src/components/PlatformNotificationManagement.vue#70cfd76c23fd89d4.1",
+    "apps/web/src/components/PlatformNotificationManagement.vue#ae1971e3fd4a8474.1",
+    "apps/web/src/components/PlatformNotificationFacts.vue#9c897f6109cc18aa.1",
+    "apps/web/src/components/PlatformNotificationFacts.vue#b57765191bc5cdc3.1",
+    "apps/web/src/components/PlatformNotificationOperations.vue#a2abccb13e9ed5e1.1",
+  ];
+  for (const candidateId of currentIds) {
+    const record = report.records.find(
+      (item) =>
+        item.document.endsWith(document) &&
+        item.candidateId === candidateId &&
+        item.temporalScope !== "historical",
+    );
+    assert.equal(record?.status, "identity-current", candidateId);
+  }
+});
+
+test("P01 pre-split retry signature remains historical beside current parent-child wiring", () => {
+  const document = "identity-onboarding-contract-review.md";
+  const report = runContractAudit();
+  const oldId = "apps/web/src/components/LandingRedirect.vue#0c5f729c6e5f1db6.1";
+  const oldRow = report.records.find(
+    (item) => item.document.endsWith(document) && item.candidateId === oldId,
+  );
+  assert.equal(oldRow?.status, "identity-not-found");
+  assert.equal(oldRow?.temporalScope, "historical");
+  for (const candidateId of [
+    "apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1",
+    "apps/web/src/components/LandingRedirectSurface.vue#bb7cd7dbbdfa84a2.1",
+  ]) {
+    const record = report.records.find(
+      (item) =>
+        item.document.endsWith(document) &&
+        item.candidateId === candidateId &&
+        item.temporalScope !== "historical",
+    );
+    assert.equal(record?.status, "identity-current", candidateId);
+  }
 });
 
 test("current P39 account center maps refresh control and parent-owned load wiring", () => {

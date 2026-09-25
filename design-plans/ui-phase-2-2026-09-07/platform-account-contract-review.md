@@ -57,10 +57,6 @@
 | M | 1c008f867673db60.1 | PA44-TECH 预览用户UUID展开 |
 | W | 0b065ffdf54ab12b.1 | PA41-DIALOG 原生向导定义 |
 | W | faacd7ed42835c46.1 | PA41-CANCEL 原生cancel→父关闭 |
-| W | fa23daedbd2c0827.1 | PA41-CREATE form提交 |
-| W | b18325f688280598.1 | PA41-INPUT name变化清错误 |
-| W | 494420d478dadefe.1 | PA41-INPUT slug变化清错误 |
-| W | 47a9ebd58cf57e57.1 | PA41-INPUT 初始管理员变化清错误 |
 | W | dbb9c697adbd2614.1 | PA41-CANCEL 按钮取消，step回1 |
 | W | d4a2da9643d6151e.1 | PA41-BACK 返回上一步清错误 |
 | W | 10583294b61e5704.1 | PA41-NEXT reportValidity后进入确认 |
@@ -78,12 +74,8 @@
 | 文件 | candidate sig | 归属/真实语义 |
 | --- | --- | --- |
 | S | 6da4dad42cb34c8d.1 | PA-S-PREVIEW 移动每条记录打开预览 |
-| S | 4fa7deb3456a41ae.1 | PA-S-CLOSE 预览Escape |
-| S | 53d89072117d7eda.1 | PA-S-CLOSE 遮罩按钮关闭 |
-| S | e23893d134b1daa1.1 | 共享role=dialog预览定义，不是native dialog |
 | S | 847801b2ac6e7a17.1 | PA-S-CLOSE 页首关闭与返回触发器焦点 |
 | Q | 28fb788b88500472.1 | PA-Q-KEY 外包装键盘处理 |
-| Q | beb5f8d5846aa028.1 | PA-Q-OPEN 移动打开筛选 |
 | Q | e03968eb8d9e92a8.1 | PA-Q-KEY Teleport后键盘处理 |
 | Q | 483082db5a776bf3.1 | PA-Q-CLOSE 筛选遮罩关闭 |
 | Q | df1390feb7424a07.1 | PA-Q-CLOSE 筛选页首关闭 |
@@ -200,6 +192,28 @@ T只在组件内保存hiddenColumns索引/freezeFirst/density；默认全显示�
 | C#4681ec75ac4845ca.2 | PA-NAV-ADMIN 同一管理员管理路径；`!adminListRoute` 导航分支 |
 | C#1d3e2d941d1ed0f3.1 | PA-FILTER-DRAWER ResponsiveFilterDrawer调用；共享容器，不另计业务动作 |
 | C#636343c5842c998f.1 | PA-FILTER form提交调用applyFilters；搜索与form语义归并 |
+
+### 1.7 P41组织创建向导早期身份归档（历史）
+
+以下四条属于早期 `OrganizationCreationWizard.vue` 快照，当前源码签名已变化。第8节记录现行表单提交事件及三个字段事件；两组映射只按语义归属对照，不宣称逐控件身份连续、创建请求由子组件发出或运行时交互已验收。
+
+| 旧candidateId | 初始快照语义 | 当前语义参照（非一一替代声明） |
+| --- | --- | --- |
+| apps/web/src/components/OrganizationCreationWizard.vue#fa23daedbd2c0827.1 | PA41-CREATE 表单提交 | 第8节现行表单提交事件映射：向父层转发 submit |
+| apps/web/src/components/OrganizationCreationWizard.vue#b18325f688280598.1 | PA41-INPUT 名称变化清错误 | 第8节现行名称字段映射：输入及 clearError 事件 |
+| apps/web/src/components/OrganizationCreationWizard.vue#494420d478dadefe.1 | PA41-INPUT 标识变化清错误 | 第8节现行标识字段映射：输入及 clearError 事件 |
+| apps/web/src/components/OrganizationCreationWizard.vue#47a9ebd58cf57e57.1 | PA41-INPUT 初始管理员变化清错误 | 第8节现行管理员字段映射：选择及 clearError 事件 |
+
+### 1.8 共享手机详情与筛选旧身份归档（历史）
+
+以下四个共享控件签名来自较早源码快照。现行 `ResponsiveDataView` 的焦点/键盘边界由[共享详情动作归属表](responsive-detail-focus-contract-review.md)独立维护；`ResponsiveFilterDrawer` 的打开触发器仅增补 `aria-controls`。这里保留旧签名供历史追溯，不表示旧候选仍是当前身份，也不把共享组件源级核对扩大为全部页面消费者的生命周期验收。
+
+| 旧candidateId | 旧快照语义 | 当前语义参照 |
+| --- | --- | --- |
+| apps/web/src/components/ResponsiveDataView.vue#4fa7deb3456a41ae.1 | PA-S-CLOSE 预览Escape | 共享详情动作表：现行键盘候选覆盖 Escape 关闭及 Tab 循环 |
+| apps/web/src/components/ResponsiveDataView.vue#53d89072117d7eda.1 | PA-S-CLOSE 遮罩按钮关闭 | 共享详情动作表：现行遮罩关闭候选不进入 Tab 序列 |
+| apps/web/src/components/ResponsiveDataView.vue#e23893d134b1daa1.1 | 共享 role=dialog 预览定义 | 共享详情动作表：现行命名详情定义候选 |
+| apps/web/src/components/ResponsiveFilterDrawer.vue#beb5f8d5846aa028.1 | PA-Q-OPEN 移动筛选触发按钮 | 当前合同第1.2节：增加 aria-controls 的打开触发候选 |
 
 ## 2. 语义动作与真实调用链
 

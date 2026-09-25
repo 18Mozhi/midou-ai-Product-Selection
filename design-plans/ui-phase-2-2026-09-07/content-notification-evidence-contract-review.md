@@ -92,8 +92,6 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| ef05faf55a95a9e3.1 | 12 | dialog-component-call | CT56/PN57/AC63-FILTER 移动筛选调用 |
-| b0cd0b7f407d1c7c.1 | 13 | form-event | CT56/PN57/AC63-FILTER 表单提交 |
 | 9e678b77e73d5618.1 | 79 | control | CT56/PN57/AC63-FILTER 筛选按钮（同form） |
 | 790334fe5c024f7f.1 | 80 | control | CT56/PN57/AC63-RESET 清空读取 |
 
@@ -139,17 +137,11 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 3007e82db0685abe.1 | 21 | event-binding | PN57-EDIT/PUBLISH/CANCEL 工作台转发 |
-| d5b397392cb4b109.1 | 29 | event-binding | PN57-MESSAGE-PAGE 草稿分页转发 |
-| 21e70175990c8170.1 | 37 | event-binding | PN57-PAGE 投递分页转发 |
 
 ### apps/web/src/components/PlatformNotificationOperations.vue
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| bf271304a21c8a72.1 | 83 | control | PN57-LINK /me 当前操作者偏好 |
-| 656bc15c15ec0ab7.1 | 95 | control | PN57-LINK /platform-admin/governance |
-| 2f1d0bb94a278adc.1 | 112 | control | PN57-LINK 同治理页另一个调用点 |
 | 1c008f867673db60.1 | 106 | control | PN57-TECH 移动投递技术字段 |
 
 ### apps/web/src/components/PlatformNotificationPagination.vue
@@ -216,7 +208,6 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| da86b1e4e15c0477.1 | 18 | dialog-component-call | CT56-FILTER 共享筛选抽屉以content外观和dialog模式被P56复用 |
 
 ### 输入/转发绑定
 
@@ -485,3 +476,19 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | 642126a04c8cf655.1 | 617 / control | CT56-CONFIRM 提交按钮（同form） |
 | d0dbab0cf156eec0.1 | 621 / event-binding | PN57-EDITOR 编辑器保存/关闭调用 |
 | 7da8341abecdd3b7.1 | 444 / event-binding | 非P56管理域继续使用旧筛选分支；`domain !== 'content'` 明确隔离 |
+
+## 16. P56/P57早期子组件身份归档（历史）
+
+以下九条来自拆分前/早期子组件快照，当前签名已不存在。第10–14节记录现行子组件与导航候选；筛选调用、父级转发及多个指向相同路由的链接经过拆分后数量和所有者均有变化。表中仅提供可追溯的语义参照，不声称控件连续、旧身份与新身份一一替代，或相关业务链路已完成运行时/生产验收。
+
+| 旧candidateId | 旧快照语义 | 当前语义参照 |
+| --- | --- | --- |
+| apps/web/src/components/PlatformManagementFilter.vue#ef05faf55a95a9e3.1 | CT56/PN57/AC63移动筛选抽屉调用 | 第11节：共享抽屉调用边界 |
+| apps/web/src/components/PlatformManagementFilter.vue#b0cd0b7f407d1c7c.1 | CT56/PN57/AC63筛选表单提交 | 第11节：向父级发出apply意图 |
+| apps/web/src/components/PlatformManagementFilter.vue#da86b1e4e15c0477.1 | CT56内容域复用筛选抽屉的dialog/content外观 | 第11节：由父级mode与appearance决定的共享抽屉调用 |
+| apps/web/src/components/PlatformNotificationManagement.vue#3007e82db0685abe.1 | PN57编辑/发布/取消工作台事件转发 | 第10节：工作台编辑与动作转发 |
+| apps/web/src/components/PlatformNotificationManagement.vue#d5b397392cb4b109.1 | PN57草稿分页事件转发 | 第10节：草稿分页事件转发 |
+| apps/web/src/components/PlatformNotificationManagement.vue#21e70175990c8170.1 | PN57投递分页事件转发 | 第10节：投递分页及筛选转发边界 |
+| apps/web/src/components/PlatformNotificationOperations.vue#bf271304a21c8a72.1 | PN57当前操作者偏好导航至 `/me` | 第13节：通知事实区的个人中心导航 |
+| apps/web/src/components/PlatformNotificationOperations.vue#656bc15c15ec0ab7.1 | PN57治理页导航 | 第13/14节：现行治理总览导航入口 |
+| apps/web/src/components/PlatformNotificationOperations.vue#2f1d0bb94a278adc.1 | PN57同治理页的另一个调用点 | 第13/14节：治理导航的当前分区与调用点 |

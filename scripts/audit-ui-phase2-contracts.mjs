@@ -143,6 +143,7 @@ const history = {
       "6. 引用版本指纹",
       "7.1 PlatformMessageEditor 已替代候选身份（历史）",
       "15. P56/P57旧父组件签名归档（历史）",
+      "16. P56/P57早期子组件身份归档（历史）",
     ],
   },
   "task-contract-review.md": {
@@ -180,6 +181,8 @@ const history = {
       "7. 源码指纹（LF SHA-256）",
       "1.5 P42旧组织详情身份（历史）",
       "1.6 P39账号中心早期身份归档（历史）",
+      "1.7 P41组织创建向导早期身份归档（历史）",
+      "1.8 共享手机详情与筛选旧身份归档（历史）",
     ],
   },
   "provider-definition-contract-review.md": {

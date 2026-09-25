@@ -40,7 +40,6 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 
 | 候选键 | 行 | actionId / 分类 | 条件、行为与验收卡 |
 | --- | --- | --- | --- |
-| R#0c5f729c6e5f1db6.1 | 42 | ID-LANDING-CHECK | UiStatePanel primary→resolveLanding；加载时无按钮，受阻重读；I01 |
 | L#9b4b982bf643379f.1 | 286 | ID-ROOT | 品牌→`/`；I01/I02 |
 | L#4ea44facc4e04130.1 | 413 | ID-SHOW-FORGOT | login→局部 forgot，无请求/URL变化；I02 |
 | L#dc876249a8119b09.1 | 452 | ID-SHOW-LOGIN | verify结果返回；I04/I05 |
@@ -154,6 +153,12 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | T#9b4b982bf643379f.1 | ID-ROOT 品牌回P01 | P08-CURRENT-ROOT |
 | T#fbfed57848d7366f.1 | NONACTION-ACCOUNT 当前账号文字，没有handler/href | 无当前操作候选；仍不得描述为账号菜单入口 |
 | T#6f0aae6f4f0ea461.1 | ID-ORG-CHOOSE 选择组织并读取工作区/团队 | P08-CURRENT-ORG-CHOOSE |
+
+#### apps/web/src/components/LandingRedirect.vue
+
+| 旧candidateId | 初始语义 | 当前映射边界 |
+| --- | --- | --- |
+| apps/web/src/components/LandingRedirect.vue#0c5f729c6e5f1db6.1 | ID-LANDING-CHECK 受阻态主操作直接调用入口解析 | 第6节记录的当前父子事件链：Surface 发出 retry，父级复用既有 resolveLanding；语义参照，不宣称旧签名连续 |
 | T#a556210b61698de6.1 | ID-WORKSPACE-CHOOSE 选择活动工作区并更新会话范围 | P08-CURRENT-WORKSPACE-CHOOSE |
 
 ## 3. 输入、请求与成功事实
