@@ -252,9 +252,9 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 本批三份规格和此合同是永久交付；正式设计/实现图片仍待F00反馈及F05，不产生新的用户通过数。没有新配置、迁移、依赖或生产服务；前端文案需未来按既有发布流程上线，本批不部署、不单独重启任何服务。W06下一事实小批为P51/P52/P53；整体73页、全动作/弹窗、正式图、Vue、真实验收、宝塔与用户签收目标保持未完成。
 2026-09-12 P50焦点实施补充：[P50-CREDENTIAL-EDITOR-FOCUS-IMPLEMENTATION](P50-CREDENTIAL-EDITOR-FOCUS-IMPLEMENTATION.md)。创建/轮换、档案引用和网页登录四类生产编辑窗已迁移到原生dialog顶层模态并复用useModalDialog；撤销继续共享ConfirmDialog。五状态四宽度236项检查覆盖初焦点、双向循环、Escape、遮罩和返焦，保存成功返焦另有真实Vue E2E。焦点筛选仍只显式排除hidden属性；CSS隐藏、字段错误关联、主题/缩放和跨KeepAlive实例淘汰仍待验。审核CSS与20图未进入生产，未部署；旧19源指纹是事实规格批历史记录，不表示当前源码哈希。
 
-## 8. P50 当前源码身份复核（2026-09-24）
+## 8. P50 早期当前源码映射（已由第15节替代）
 
-本节按当前 `CredentialAssetCenter.vue` 的真实标签、文本、属性与事件，将24个已变更身份对回既有SC50语义组；没有新增业务动作、路由、授权规则或API合同。另8个仍有效的身份在第14节重新登记为当前引用，避免依赖第2节旧快照。旧身份中未再匹配的项留作历史对账，不据此宣称业务行为已删除。当前文件扫描为32个候选、14个v-model源码位置。映射只证明静态源位置归属，不证明动态可达性、控件状态覆盖、真实Vue行为或生产验收。
+本节是2026-09-24当时的 `CredentialAssetCenter.vue` 身份映射快照，现由第15节的完整32候选当前映射替代。原24个变更身份与另8个有效身份只作为历史来源保留；本节不再用于推断当前行号、签名或行为。来源合同和业务语义未因此改变，也不据静态归档宣称交互或生产验收。
 
 ### C
 
@@ -285,7 +285,6 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 | C:23573257838670f1.1 | event-binding / 1425 | SC50-REVOKE / ConfirmDialog取消与确认事件 |
 | C:af931088469ec90b.1 | dialog-component-call / 1425 | SC50-REVOKE / ConfirmDialog调用 |
 
-| apps/web/src/components/CredentialAssetCenter.vue | d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845 |
 
 第7节全部旧指纹保留为历史快照；审计器仅用非历史指纹判断当前源码绑定。此项对账不覆盖P50未决真实扩展、后端/RBAC、加密、MySQL、完整交互矩阵与生产验收。
 
@@ -506,12 +505,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/Alibaba1688AcceptanceCenter.vue#5587941412d5210f.1 | 180 | control | SC49-AUTH / 检查会话过期时返回登录 |
 | apps/web/src/components/Alibaba1688AcceptanceCenter.vue#441fd57e4a421b3a.1 | 181 | control | SC49-AUTH / 无权时返回平台概览 |
 | apps/web/src/components/CredentialAssetCenter.vue#889e842f4791c19d.1 | 1003 | control | SC50-BRIDGE / 下载浏览器助手 |
-| apps/web/src/components/CredentialAssetCenter.vue#d2b72f6631a5008b.1 | 945 | event-binding | SC50-LOAD / 错误状态主操作转发至现有读取函数 |
 | apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1 | 1229 | control | SC50-TECH / 展开来源代码技术详情 |
-| apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.1 | 1233 | control | SC50-CLOSE / 取消资产新建或凭证轮换 |
-| apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1 | 1236 | control | SC50-ASSET/ROTATE / 按既有表单保存或轮换加密资料 |
-| apps/web/src/components/CredentialAssetCenter.vue#15bb54ff377e917e.1 | 1265 | event-binding | SC50-PROFILE / 选择加密资产并同步来源上下文 |
-| apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2 | 1299 | control | SC50-CLOSE / 取消浏览器档案引用 |
 | apps/web/src/components/CredentialAssetCenter.vue#91ffac2d135459f2.1 | 1302 | control | SC50-PROFILE / 按既有表单保存档案引用 |
 | apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#1c008f867673db60.1 | 84 | control | SC48-COMPAT / 展开兼容观测读取失败编号 |
 | apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.1 | 132 | control | SC48-SAMPLES / 展开本次样本操作编号 |
@@ -523,7 +517,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 ## 15. P50 当前凭证台账与表单候选补映射（2026-09-25）
 
-本节补齐当前 `CredentialAssetCenter.vue` 真实模板中此前未被来源合同引用的 32 个候选。每个候选都归入既有 SC50 读取、资产、档案、登录、焦点/关闭或撤销语义；复用子表单、原生字段错误反馈与父级事件转发不扩大业务动作分母，不新增路由、API、字段、权限或数据行为。历史扫描行继续作为历史证据；本节位置、类型和当前文件指纹用于全站静态来源覆盖，不等于运行时、读屏器、真实 RBAC、秘密材料或生产验收。
+本节按当前 `CredentialAssetCenter.vue` 真实模板重建现行源码映射，并承接第8节五个仍有效的控件身份。每个候选都归入既有 SC50 读取、资产、档案、登录、焦点/关闭或撤销语义；复用子表单、原生字段错误反馈与父级事件转发不扩大业务动作分母，不新增路由、API、字段、权限或数据行为。历史扫描行继续作为历史证据；本节位置、类型和当前文件指纹用于全站静态来源覆盖，不等于运行时、读屏器、真实 RBAC、秘密材料或生产验收。
 
 | 当前candidateId | 行 | 类型 | 既有语义归属 |
 | --- | ---: | --- | --- |
@@ -559,5 +553,26 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/CredentialAssetCenter.vue#a6de35af2d13a51e.1 | 1608 | control | SC50-LOGIN / 按当前来源、材料与阶段状态提交既有加密导入流程 |
 | apps/web/src/components/CredentialAssetCenter.vue#5eca67d4ff8b7b15.1 | 1630 | event-binding | SC50-REVOKE / 取消与确认事件交给父级现有撤销处理函数 |
 | apps/web/src/components/CredentialAssetCenter.vue#cb14d6dea1ed210f.1 | 1630 | dialog-component-call | SC50-REVOKE / 调用共享危险确认窗；不另计撤销写动作 |
+| apps/web/src/components/CredentialAssetCenter.vue#d2a64908945092ff.1 | 1546 | event-binding | SC50-LOGIN / 来源选择及材料上下文重置 |
+| apps/web/src/components/CredentialAssetCenter.vue#1430f57a236d6ea1.1 | 1558 | event-binding | SC50-LOGIN / 导入方式切换及材料上下文重置 |
+| apps/web/src/components/CredentialAssetCenter.vue#7443d228a98eebd4.1 | 1569 | event-binding | SC50-FILE / 受控文件选择 |
+| apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1 | 1593 | control | SC50-EXTERNAL / 打开来源登录页 |
+| apps/web/src/components/CredentialAssetCenter.vue#f176fdb4640192de.1 | 1596 | control | SC50-BRIDGE / 请求助手Cookie |
 
-以上候选逐项来自当前Vue的真实按钮、原生表单、字段事件和对话框标签；新表与第8、14节共同覆盖当前扫描器识别的全部P50候选。完整来源哈希在第8节指纹行更新为当前LF SHA-256。该静态覆盖不提升P50的真实屏幕阅读器、后端权限、加密材料、MySQL或正式生产验收状态。
+以上候选逐项来自当前Vue的真实按钮、原生表单、字段事件和对话框标签；本节与第14节仍有效的其他文件映射共同覆盖当前扫描器识别的全部P50候选。该静态覆盖不提升P50的真实屏幕阅读器、后端权限、加密材料、MySQL或正式生产验收状态。
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/CredentialAssetCenter.vue | d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845 |
+
+## 16. P50 凭证台账被替代的旧身份
+
+第8节较早的映射版本已由第15节完整的32候选映射替代；以下第14节中仍有的五条旧凭证台账身份也归入历史。它们用于追溯、不计当前覆盖；替代关系仅按既有语义标注，不代表凭证读写、秘密材料、权限或生产验收。
+
+| 旧candidateId | 原始语义 | 当前替代身份 |
+| --- | --- | --- |
+| apps/web/src/components/CredentialAssetCenter.vue#d2b72f6631a5008b.1 | SC50-LOAD 错误状态主操作 | #466d5492514f7a0e.1 读取失败面板主操作转发 |
+| apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.1 | SC50-CLOSE 取消资产新建或凭证轮换 | #2f453887d0cc66db.1 取消资产编辑器 |
+| apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1 | SC50-ASSET/ROTATE 保存或轮换 | #584e25b2c7498fe2.1 资产表单保存 |
+| apps/web/src/components/CredentialAssetCenter.vue#15bb54ff377e917e.1 | SC50-PROFILE 选择加密资产并同步来源 | #56cda485ff9a67e1.1 档案与来源同步 |
+| apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2 | SC50-CLOSE 取消浏览器档案引用 | #2f453887d0cc66db.2 取消档案关联编辑器 |

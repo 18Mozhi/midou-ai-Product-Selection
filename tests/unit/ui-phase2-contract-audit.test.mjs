@@ -493,6 +493,32 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
     oldMappingRows.filter((record) => record.status === "identity-not-found").length,
     81,
   );
+  const earlyP50Start = documentLines.findIndex(
+    (line) => line === "## 8. P50 早期当前源码映射（已由第15节替代）",
+  );
+  const nextP50Section = documentLines.findIndex(
+    (line, index) => index > earlyP50Start && /^## \d+\./.test(line),
+  );
+  const earlyP50Rows = report.records.filter(
+    (record) =>
+      record.document.endsWith(document) &&
+      record.documentLine > earlyP50Start &&
+      record.documentLine < nextP50Section + 1,
+  );
+  assert.equal(earlyP50Rows.length, 24);
+  assert.ok(earlyP50Rows.every((record) => record.temporalScope === "historical"));
+  for (const candidateId of [
+    "apps/web/src/components/CredentialAssetCenter.vue#d2b72f6631a5008b.1",
+    "apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.1",
+    "apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1",
+    "apps/web/src/components/CredentialAssetCenter.vue#15bb54ff377e917e.1",
+    "apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2",
+  ]) {
+    const old = report.records.find(
+      (record) => record.document.endsWith(document) && record.candidateId === candidateId,
+    );
+    assert.equal(old?.temporalScope, "historical", candidateId);
+  }
   for (const [name, firstCurrentLine] of [
     ["CredentialAssetCenter.vue", 255],
     ["ProviderSourceConfigurationDialog.vue", 292],

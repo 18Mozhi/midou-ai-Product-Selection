@@ -153,7 +153,12 @@ const history = {
     historicalSections: ["1. 入口与源码事实", "2. 源候选到语义动作"],
   },
   "source-channel-credential-contract-review.md": {
-    historicalSections: ["2. 逐候选对应", "7. 来源指纹与交付边界"],
+    historicalSections: [
+      "2. 逐候选对应",
+      "7. 来源指纹与交付边界",
+      "8. P50 早期当前源码映射（已由第15节替代）",
+      "16. P50 凭证台账被替代的旧身份",
+    ],
   },
   "platform-account-detail-contract-review.md": {
     historicalSections: ["5. 源码依据（LF SHA-256）"],
