@@ -36,6 +36,7 @@ export function useAlibaba1688Acceptance(apiBaseUrl: string) {
   const scopeMessage = ref("");
   const scopeRequestId = ref("");
   const scopeRetryable = ref(false);
+  const reactivating = ref(false);
 
   const scheduling = ref(false);
   const scheduledTaskId = ref("");
@@ -44,6 +45,7 @@ export function useAlibaba1688Acceptance(apiBaseUrl: string) {
   let pageMounted = false;
   let pageActive = true;
   let wasDeactivated = false;
+  let activationOperation = 0;
   let acceptanceReadOperation = 0;
   let membershipReadOperation = 0;
   let workspaceReadOperation = 0;
@@ -335,10 +337,12 @@ export function useAlibaba1688Acceptance(apiBaseUrl: string) {
     }
   }
 
-  function activatePage() {
+  async function activatePage() {
     pageActive = true;
-    void load();
-    void loadExecutionScopes();
+    const operation = ++activationOperation;
+    reactivating.value = true;
+    await Promise.all([load(), loadExecutionScopes()]);
+    if (pageActive && operation === activationOperation) reactivating.value = false;
   }
 
   onMounted(() => {
@@ -350,6 +354,8 @@ export function useAlibaba1688Acceptance(apiBaseUrl: string) {
   onDeactivated(() => {
     wasDeactivated = true;
     pageActive = false;
+    activationOperation += 1;
+    reactivating.value = false;
     invalidateAcceptanceRead();
     invalidateScopeReads();
   });
@@ -361,6 +367,8 @@ export function useAlibaba1688Acceptance(apiBaseUrl: string) {
   onBeforeUnmount(() => {
     pageMounted = false;
     pageActive = false;
+    activationOperation += 1;
+    reactivating.value = false;
     submissionOperation += 1;
     invalidateAcceptanceRead();
     invalidateScopeReads();
@@ -385,6 +393,7 @@ export function useAlibaba1688Acceptance(apiBaseUrl: string) {
     scopeMessage,
     scopeRequestId,
     scopeRetryable,
+    reactivating,
     scheduling,
     scheduledTaskId,
     runOutcome,

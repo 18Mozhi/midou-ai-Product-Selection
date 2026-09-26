@@ -53,9 +53,9 @@ test("P49 action feedback preserves task, scope, and enablement boundaries", () 
     rereadPreserved: "最新检查结果未刷新",
   });
   const review = previewAlibaba1688AcceptanceActions(read(component));
+  const composable = read("apps/web/src/composables/useAlibaba1688Acceptance.ts");
   for (const marker of [
     'maxlength="200"',
-    "acceptance_run",
     "loadExecutionScopes",
     "正在读取可用执行范围",
     "正在创建一次受控验收运行",
@@ -65,6 +65,7 @@ test("P49 action feedback preserves task, scope, and enablement boundaries", () 
     assert.ok(review.includes(marker), marker);
   assert.equal(review.includes("任务已完成"), false);
   assert.equal(review.includes("来源已自动启用"), false);
+  assert.match(composable, /acceptance_run: true/);
 });
 
 test("P49 action CSS is isolated, responsive, and does not suppress focus", () => {

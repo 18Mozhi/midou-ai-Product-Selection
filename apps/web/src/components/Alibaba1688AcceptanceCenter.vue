@@ -26,6 +26,7 @@ const {
   scopeMessage,
   scopeRequestId,
   scopeRetryable,
+  reactivating,
   scheduling,
   runOutcome,
   canSchedule,
@@ -151,6 +152,15 @@ const currentRunState = computed(() => {
             </button>
           </div>
         </header>
+
+        <p
+          v-if="reactivating"
+          class="acceptance-1688__notice acceptance-1688__lifecycle-notice"
+          role="status"
+          aria-live="polite"
+        >
+          页面已恢复，正在重新读取启用检查和执行范围。
+        </p>
 
         <p
           v-if="readNotice"
@@ -636,6 +646,10 @@ const currentRunState = computed(() => {
 .acceptance-1688__content :deep(.acceptance-1688__notice[data-tone="danger"]) {
   border-color: var(--so-warning);
   background: color-mix(in srgb, var(--so-warning) 10%, var(--so-bg-elevated));
+}
+.acceptance-1688__content :deep(.acceptance-1688__lifecycle-notice) {
+  border-color: var(--so-info);
+  background: color-mix(in srgb, var(--so-info) 9%, var(--so-bg-elevated));
 }
 .acceptance-1688__content :deep(.acceptance-1688__notice details) {
   margin-top: 5px;

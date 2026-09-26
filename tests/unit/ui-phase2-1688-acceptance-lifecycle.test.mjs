@@ -3,60 +3,94 @@ import { acceptanceHistoricalCapture } from "../../scripts/lib/ui-phase2-accepta
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
+import vm from "node:vm";
+import ts from "typescript";
+import { computed, ref } from "vue";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
-import {
-  acceptanceLifecycleCopy,
-  previewAlibaba1688AcceptanceLifecycle,
-} from "../../scripts/lib/ui-phase2-1688-acceptance-lifecycle-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
   cssFile =
     "design-plans/ui-phase-2-2026-09-07/implementation/1688-acceptance-lifecycle-preview.css",
+  composableFile = "apps/web/src/composables/useAlibaba1688Acceptance.ts",
   root = "output/playwright/p49-acceptance-lifecycle-review";
 
-test("P49 lifecycle review adds cache ownership to the actual Vue surface and compiles", () => {
+test("P49 production lifecycle status is rendered by the actual Vue page", () => {
   const source = read(component),
-    review = previewAlibaba1688AcceptanceLifecycle(source),
-    parsed = parse(review);
+    parsed = parse(source);
   assert.deepEqual(parsed.errors, []);
-  compileScript(parsed.descriptor, { id: "p49-lifecycle" });
+  const compiled = compileScript(parsed.descriptor, { id: "p49-lifecycle" });
   assert.deepEqual(
     compileTemplate({
       source: parsed.descriptor.template.content,
       filename: component,
       id: "p49-lifecycle",
+      compilerOptions: { bindingMetadata: compiled.bindings },
     }).errors,
     [],
   );
-  assert.equal(source.includes("onActivated"), false);
-  assert.equal(source.includes("onDeactivated"), false);
-  for (const marker of [
-    "onActivated",
-    "onDeactivated",
-    "acceptanceReadSequence",
-    "scopeReadSequence",
-    "ownsAcceptanceRead",
-    "ownsScopeRead",
-    "p49-lifecycle__notice",
-  ])
-    assert.ok(review.includes(marker), marker);
+  assert.match(source, /v-if="reactivating"/);
+  assert.match(source, /role="status"/);
+  assert.match(source, /aria-live="polite"/);
+  assert.match(source, /页面已恢复，正在重新读取启用检查和执行范围。/);
+  assert.match(read(composableFile), /onActivated\(\(\) =>/);
+  assert.match(read(composableFile), /onDeactivated\(\(\) =>/);
 });
 
-test("P49 lifecycle copy explains preserved facts and stale-response boundary", () => {
-  assert.deepEqual(acceptanceLifecycleCopy, {
-    title: "正在重新读取最新启用条件",
-    boundary: "读取完成前暂时保留上次成功事实；迟到的旧响应不会覆盖本次结果。",
-  });
-  const review = previewAlibaba1688AcceptanceLifecycle(read(component));
-  assert.ok(review.includes("activeController?.abort()"));
-  assert.ok(review.includes("scopeController?.abort()"));
-  assert.ok(review.includes("controller.signal.aborted"));
-  assert.ok(review.includes("if (!lifecycleActive.value || refreshing.value) return"));
-  assert.ok(review.includes("if (!lifecycleActive.value || scopeLoading.value) return"));
-  assert.equal(review.includes("scheduleAcceptanceRun();"), false);
+test("P49 KeepAlive return announces fresh reads until both requests settle", async () => {
+  const source = read(composableFile).replace(
+      "export function useAlibaba1688Acceptance",
+      "function useAlibaba1688Acceptance",
+    ),
+    ast = ts.createSourceFile(composableFile, source, ts.ScriptTarget.Latest, true),
+    code = ts.transpileModule(
+      ast.statements
+        .filter((node) => !ts.isImportDeclaration(node))
+        .map((node) => node.getText(ast))
+        .join("\n") + "\nglobalThis.subject = useAlibaba1688Acceptance('/api/v1');",
+      { compilerOptions: { target: ts.ScriptTarget.ES2022 } },
+    ).outputText,
+    calls = [],
+    hooks = { mounted: [], activated: [], deactivated: [], unmounted: [] },
+    box = {
+      AbortController,
+      ApiClientError: class ApiClientError extends Error {},
+      computed,
+      ref,
+      onMounted: (callback) => hooks.mounted.push(callback),
+      onActivated: (callback) => hooks.activated.push(callback),
+      onDeactivated: (callback) => hooks.deactivated.push(callback),
+      onBeforeUnmount: (callback) => hooks.unmounted.push(callback),
+      createApiClient: () => (path, options) =>
+        new Promise((resolve, reject) => calls.push({ path, options, resolve, reject })),
+      window: { setTimeout: () => 1, clearTimeout: () => {} },
+    };
+  vm.runInNewContext(code, box);
+  const respond = (index, data) => calls[index].resolve({ data, request_id: `request-${index}` });
+  const flush = async () => {
+    for (let index = 0; index < 6; index += 1) await Promise.resolve();
+  };
+  hooks.mounted[0]();
+  respond(0, { provider_id: "1688_search", overall: "setup_required", gates: [] });
+  respond(1, []);
+  await flush();
+  hooks.deactivated[0]();
+  hooks.activated[0]();
+  assert.equal(box.subject.reactivating.value, true);
+  assert.deepEqual(
+    calls.slice(2).map((call) => call.path),
+    ["/platform/provider-sources/1688-acceptance", "/org/memberships"],
+  );
+  respond(2, { provider_id: "1688_search", overall: "setup_required", gates: [] });
+  await flush();
+  assert.equal(box.subject.reactivating.value, true, "membership read is still pending");
+  respond(3, []);
+  await flush();
+  assert.equal(box.subject.reactivating.value, false);
+  assert.equal(calls.length, 4, "reactivation performs reads only");
+  hooks.unmounted[0]();
 });
 
 test("P49 lifecycle CSS is isolated, token-based, and responsive", () => {

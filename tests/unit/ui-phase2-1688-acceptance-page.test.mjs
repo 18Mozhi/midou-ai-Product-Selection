@@ -53,9 +53,9 @@ test("P49 acceptance copy preserves privacy and factual boundaries", () => {
   );
   assert.equal(acceptancePageCopy.coverage, "诊断证据，不计入三项启用门禁。");
   const review = previewAlibaba1688AcceptanceCenter(read(component));
+  const composable = read("apps/web/src/composables/useAlibaba1688Acceptance.ts");
   for (const marker of [
     'maxlength="200"',
-    "acceptance_run",
     "配置或续期登录档案",
     "定位 1688 固定样本",
     "发起登录验收运行",
@@ -63,6 +63,7 @@ test("P49 acceptance copy preserves privacy and factual boundaries", () => {
   ])
     assert.ok(review.includes(marker), marker);
   assert.equal(review.includes("自动启用来源"), false);
+  assert.match(composable, /acceptance_run: true/);
 });
 
 test("P49 acceptance CSS is isolated, responsive, and keyboard visible", () => {
