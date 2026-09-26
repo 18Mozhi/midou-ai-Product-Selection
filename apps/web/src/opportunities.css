@@ -850,7 +850,7 @@
   .responsive-filter-drawer--overlay .opportunity-filters > label:last-of-type {
     flex-basis: 100%;
   }
-  .responsive-filter-drawer--overlay .opportunity-filter-actions {
+  .responsive-filter-drawer--overlay .opportunity-filters .opportunity-filter-actions {
     position: fixed;
     z-index: 2;
     inset-inline: 18px;

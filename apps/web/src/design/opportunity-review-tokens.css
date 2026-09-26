@@ -1,0 +1,26 @@
+/* Approved P15/P18 blue workspace colors, scoped to the mounted opportunity page. */
+.opportunity-workspace--review {
+  --so-opportunity-review-blue: #1748a0;
+  --so-opportunity-review-ink: #182d4a;
+  --so-opportunity-review-muted: #52647b;
+  --so-opportunity-review-line: #dce4ee;
+  --so-opportunity-review-focus: #2465d7;
+  --so-opportunity-review-surface: #ffffff;
+  --so-opportunity-review-canvas: #f3f6fb;
+  --so-opportunity-review-pale: #edf4ff;
+  --so-opportunity-review-danger: #b42318;
+  --so-opportunity-review-danger-pale: #fff5f4;
+  --so-opportunity-review-scrim: rgb(24 45 74 / 48%);
+  --so-opportunity-list-blue: #2853a4;
+  --so-opportunity-list-line: #d4deeb;
+  --so-opportunity-list-positive: #1d6c58;
+  --so-opportunity-list-ink: #172e4c;
+  --so-opportunity-list-muted: #526987;
+  --so-opportunity-list-progress-border: #9ab4db;
+  --so-opportunity-list-progress-track: #e1eaf7;
+  --so-opportunity-list-hover: #f1f5fb;
+  --so-opportunity-list-disabled: #9aacbf;
+  --so-opportunity-list-disabled-bg: #f5f7fa;
+  --so-opportunity-list-batch-bg: #eef4fc;
+  --so-opportunity-list-cta: #173a7a;
+}

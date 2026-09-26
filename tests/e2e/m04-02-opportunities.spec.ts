@@ -410,6 +410,7 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await expect(drawer).toHaveCSS("box-shadow", "none");
   const actionDock = drawer.locator(".opportunity-filter-actions");
   await expect(actionDock).toHaveCSS("position", "fixed");
+  await expect(actionDock).toHaveCSS("display", "grid");
   await expect
     .poll(() => actionDock.evaluate((element) => element.getBoundingClientRect().bottom))
     .toBe(844);
