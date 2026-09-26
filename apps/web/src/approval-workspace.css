@@ -1,3 +1,5 @@
+@import "./design/approval-workspace-tokens.css";
+
 .approval-workspace {
   color: var(--so-text);
   padding: 4px 0 48px;
@@ -5,12 +7,12 @@
 
 /* P25 C direction: production surface aligned with the approved approval workspace. */
 .approval-workspace--review {
-  --review-blue: #1748a0;
-  --review-blue-strong: #123d8a;
-  --review-ink: #182d4a;
-  --review-muted: #52647b;
-  --review-line: #dce4ee;
-  --review-pale: #edf4ff;
+  --review-blue: var(--so-approval-review-blue);
+  --review-blue-strong: var(--so-approval-review-blue-strong);
+  --review-ink: var(--so-approval-review-ink);
+  --review-muted: var(--so-approval-review-muted);
+  --review-line: var(--so-approval-review-line);
+  --review-pale: var(--so-approval-review-pale);
   max-width: 1160px;
   margin: 0 auto;
   color: var(--review-ink);
@@ -25,13 +27,13 @@
   border: 0;
   border-radius: 0;
   background: var(--review-blue);
-  color: #fff;
+  color: var(--so-approval-review-on-blue);
 }
 
 .approval-workspace--review .approval-header p,
 .approval-workspace--review .approval-header span,
 .approval-workspace--review .approval-header h1 {
-  color: #fff;
+  color: var(--so-approval-review-on-blue);
 }
 
 .approval-workspace--review .approval-header > div:first-child {
@@ -41,7 +43,7 @@
 
 .approval-workspace--review .approval-header > div:first-child > p {
   margin: 0;
-  color: #d8e5ff;
+  color: var(--so-approval-review-blue-kicker);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -59,7 +61,7 @@
   min-height: 44px;
   border: 1px solid var(--review-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
   color: var(--review-blue);
   box-shadow: none;
   font: inherit;
@@ -68,7 +70,7 @@
 
 .approval-workspace--review button:hover:not(:disabled),
 .approval-workspace--review a:hover {
-  background: #f3f7ff;
+  background: var(--so-approval-review-surface-hover);
   color: var(--review-blue-strong);
 }
 
@@ -78,7 +80,7 @@
 .approval-workspace--review select:focus-visible,
 .approval-workspace--review textarea:focus-visible,
 .approval-workspace--review summary:focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--so-approval-review-focus);
   outline-offset: 3px;
 }
 
@@ -87,7 +89,7 @@
 .approval-workspace--review dialog button:not(.secondary):not(.danger),
 .approval-workspace--review .approval-state button:not(.secondary) {
   background: var(--review-blue);
-  color: #fff;
+  color: var(--so-approval-review-on-blue);
 }
 
 .approval-workspace--review .approval-header button:not(.secondary):hover:not(:disabled),
@@ -97,7 +99,7 @@
 .approval-workspace--review dialog button:not(.secondary):not(.danger):hover:not(:disabled),
 .approval-workspace--review .approval-state button:not(.secondary):hover:not(:disabled) {
   background: var(--review-blue-strong);
-  color: #fff;
+  color: var(--so-approval-review-on-blue);
 }
 
 .approval-workspace--review .approval-notice,
@@ -149,19 +151,19 @@
 
 .approval-workspace--review .approval-queue-panel {
   overflow: hidden;
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
 }
 
 .approval-workspace--review .approval-queue-toolbar {
   border-bottom: 1px solid var(--review-line);
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
 }
 
 .approval-workspace--review .approval-inbox-tabs button,
 .approval-workspace--review .approval-status-filter button {
   border: 0;
   border-bottom: 3px solid transparent;
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
   color: var(--review-muted);
 }
 
@@ -176,12 +178,12 @@
   border: 0;
   border-bottom: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
   color: var(--review-ink);
 }
 
 .approval-workspace--review .approval-list > button:hover {
-  background: #f8fbff;
+  background: var(--so-approval-review-row-hover);
 }
 
 .approval-workspace--review .approval-list .approval-mark {
@@ -198,26 +200,26 @@
 .approval-workspace--review .approval-pagination {
   margin: 0;
   padding: 14px;
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
   color: var(--review-muted);
 }
 
 .approval-workspace--review .approval-state {
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
   color: var(--review-muted);
 }
 
 .approval-workspace--review dialog[open] {
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
   color: var(--review-ink);
-  box-shadow: 0 0 0 100vmax rgb(24 45 74 / 42%);
+  box-shadow: 0 0 0 100vmax var(--so-approval-review-overlay);
 }
 
 .approval-workspace--review dialog.approval-detail[open] {
   border-top: 8px solid var(--review-blue);
-  box-shadow: -18px 0 0 rgb(24 45 74 / 15%);
+  box-shadow: -18px 0 0 var(--so-approval-review-overlay-edge);
 }
 
 .approval-workspace--review .approval-impact-summary,
@@ -229,7 +231,7 @@
 .approval-workspace--review .approval-decision-basis {
   border-color: var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
   box-shadow: none;
 }
 
@@ -252,15 +254,15 @@
 .approval-workspace--review dialog textarea {
   border-color: var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-approval-review-on-blue);
   color: var(--review-ink);
 }
 
 .approval-workspace--review .approval-detail .danger,
 .approval-workspace--review dialog .danger {
-  border-color: #b42318;
-  background: #fff;
-  color: #b42318;
+  border-color: var(--so-approval-review-danger);
+  background: var(--so-approval-review-on-blue);
+  color: var(--so-approval-review-danger);
 }
 
 .approval-workspace--review .approval-timeline i,

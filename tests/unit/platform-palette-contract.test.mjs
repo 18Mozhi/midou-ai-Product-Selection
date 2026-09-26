@@ -84,6 +84,30 @@ test("content palette includes the review, filter and record portal boundaries",
   assert.doesNotMatch(tokens, /:root|html|body|!important/);
 });
 
+test("approval workspace review colors resolve from its page-scoped semantic palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/approval-workspace-tokens.css", "utf8"),
+    readFile("apps/web/src/approval-workspace.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--so-approval-review-[a-z-]+):\s*(?:#[0-9a-f]{6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-approval-review-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 14);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^\.approval-workspace--review\s*\{/,
+  );
+  assert.ok(css.startsWith('@import "./design/approval-workspace-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+});
+
 test("P47 palette resolves page, portal detail and feedback without broadening activation", async () => {
   const tokens = await readFile("apps/web/src/design/provider-adapter-tokens.css", "utf8");
   const declarations = [...tokens.matchAll(/(--p47-[a-z-]+):\s*([^;]+);/g)];

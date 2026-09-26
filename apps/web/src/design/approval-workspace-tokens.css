@@ -1,0 +1,17 @@
+/* P25 approved blue/white review palette, scoped to its page only. */
+.approval-workspace--review {
+  --so-approval-review-blue: #1748a0;
+  --so-approval-review-blue-strong: #123d8a;
+  --so-approval-review-ink: #182d4a;
+  --so-approval-review-muted: #52647b;
+  --so-approval-review-line: #dce4ee;
+  --so-approval-review-pale: #edf4ff;
+  --so-approval-review-on-blue: #ffffff;
+  --so-approval-review-blue-kicker: #d8e5ff;
+  --so-approval-review-surface-hover: #f3f7ff;
+  --so-approval-review-focus: #2465d7;
+  --so-approval-review-row-hover: #f8fbff;
+  --so-approval-review-overlay: rgb(24 45 74 / 42%);
+  --so-approval-review-overlay-edge: rgb(24 45 74 / 15%);
+  --so-approval-review-danger: #b42318;
+}
