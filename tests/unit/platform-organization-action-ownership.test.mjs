@@ -1,4 +1,3 @@
-import { adminDirectoryHeading } from "../../scripts/lib/ui-phase2-admin-directory-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -229,10 +228,14 @@ test("unscoped writes still reread and organization feedback is connected", asyn
   await run;
   assert.equal(h.box.loads, 1);
   const template = parse(current).descriptor.template.content;
+  const directoryTemplate = parse(
+    readFileSync("apps/web/src/components/PlatformAccountDirectoryWorkspace.vue", "utf8"),
+  ).descriptor.template.content;
   assert.match(template, /:refresh-warning="organizationRefreshWarning"/);
   assert.match(template, /:refreshing="refreshing"/);
   assert.match(template, /@retry="retryOrganizationRead"/);
-  assert.ok(template.includes(adminDirectoryHeading));
+  assert.match(directoryTemplate, /v-if="props\.adminListRoute"/);
+  assert.match(directoryTemplate, /<h3>可授权账号<\/h3>/);
 });
 test("current restore retains active target status and original reason", async () => {
   const h = harness();
@@ -306,9 +309,14 @@ for (const failure of [false, true])
       box.syncs++;
     };
     vm.runInNewContext(
-      ts.transpileModule(fn.getFullText(ast) + "\nglobalThis.load=loadAccounts;", {
-        compilerOptions: { target: ts.ScriptTarget.ES2022 },
-      }).outputText,
+      ts.transpileModule(
+        "let queuedAccountsRead = false; let activeAccountsRead = null;\n" +
+          fn.getFullText(ast) +
+          "\nglobalThis.load=loadAccounts;",
+        {
+          compilerOptions: { target: ts.ScriptTarget.ES2022 },
+        },
+      ).outputText,
       box,
     );
     const run = box.load(() => owns);

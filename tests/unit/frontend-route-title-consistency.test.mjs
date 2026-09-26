@@ -66,8 +66,9 @@ test("crawler scheduler menu, page heading and content heading have distinct con
     "采集调度",
   );
   assert.match(routeState, /label: "采集调度"/);
-  assert.match(page, /<h2>运行与配额<\/h2>/);
-  assert.doesNotMatch(page, /<h2>采集执行器调度<\/h2>/);
+  assert.match(page, /<h1>采集调度核验<\/h1>/);
+  assert.match(page, /<h2>单机运行与租约<\/h2>/);
+  assert.doesNotMatch(page, /<h1>采集调度<\/h1>/);
 });
 
 test("formal routes centralize titles, permissions and breadcrumbs without fallback highlighting", async () => {
