@@ -1,3 +1,5 @@
+@import "../design/provider-compatibility-tokens.css";
+
 .source-modal {
   position: fixed;
   z-index: 80;
@@ -74,7 +76,7 @@
 }
 .source-modal.p48-parser-samples-modal {
   padding: 24px;
-  background: rgb(15 23 42 / 72%);
+  background: var(--p48-scrim);
   backdrop-filter: blur(8px);
 }
 .p48-parser-samples-panel {
@@ -83,28 +85,28 @@
   gap: 0;
   padding: 0;
   overflow: auto;
-  border: 1px solid #d3deec;
+  border: 1px solid var(--p48-panel-border);
   border-radius: 20px;
-  background: #f7f9fc;
-  box-shadow: 0 28px 72px rgb(15 23 42 / 28%);
+  background: var(--p48-panel);
+  box-shadow: 0 28px 72px var(--p48-shadow);
 }
 .p48-parser-samples-panel > .p48-parser-samples-identity {
   align-items: flex-start;
   padding: 26px 30px;
-  color: #fff;
-  background: #164fae;
+  color: var(--p48-on-accent);
+  background: var(--p48-accent);
 }
 .p48-parser-samples-identity > div {
   display: grid;
   gap: 8px;
 }
 .p48-parser-samples-identity p {
-  color: rgb(255 255 255 / 82%);
+  color: var(--p48-on-accent-muted);
   font-size: 13px;
   line-height: 1.55;
 }
 .p48-parser-samples-identity h3 {
-  color: #fff;
+  color: var(--p48-on-accent);
   font-size: clamp(24px, 3vw, 32px);
   line-height: 1.2;
   outline: none;
@@ -113,20 +115,20 @@
   flex: 0 0 44px;
   width: 44px;
   min-height: 44px;
-  border: 1px solid rgb(255 255 255 / 38%);
+  border: 1px solid var(--p48-on-accent-border);
   border-radius: 10px;
-  color: #fff;
-  background: rgb(255 255 255 / 10%);
+  color: var(--p48-on-accent);
+  background: var(--p48-on-accent-soft);
 }
 .p48-parser-samples-gates {
   padding: 16px 30px;
-  border-bottom: 1px solid #cbdcf6;
-  color: #244a7c;
-  background: #eaf3ff;
+  border-bottom: 1px solid var(--p48-gates-border);
+  color: var(--p48-gates-ink);
+  background: var(--p48-adapter-panel);
 }
 .p48-parser-samples-gates p {
   margin: 0 0 10px;
-  color: #164fae;
+  color: var(--p48-accent);
   font-weight: 700;
 }
 .p48-parser-samples-gates ol {
@@ -139,11 +141,11 @@
 .p48-parser-samples-body {
   display: grid;
   gap: 0;
-  background: #fff;
+  background: var(--p48-error-panel);
 }
 .p48-parser-samples-body > section {
   padding: 20px 30px;
-  border-bottom: 1px solid #dce4ef;
+  border-bottom: 1px solid var(--p48-detail-divider);
 }
 .p48-parser-samples-body > .p48-parser-samples-feedback {
   display: grid;
@@ -151,16 +153,16 @@
   margin: 0 30px;
   padding: 13px 15px;
   border: 0;
-  border-left: 4px solid #1769e0;
-  color: #344d6a;
-  background: #eaf3ff;
+  border-left: 4px solid var(--p48-adapter-accent);
+  color: var(--p48-feedback-ink);
+  background: var(--p48-adapter-panel);
 }
 .p48-parser-samples-body > .p48-parser-samples-refreshing {
   margin: 14px 30px 0;
   padding: 11px 14px;
-  border-left: 3px solid #1769e0;
-  color: #244a7c;
-  background: #edf4ff;
+  border-left: 3px solid var(--p48-adapter-accent);
+  color: var(--p48-gates-ink);
+  background: var(--p48-adapter-subtle);
   font-size: 13px;
 }
 .p48-parser-samples-body > .p48-parser-samples-read-error {
@@ -168,10 +170,10 @@
   gap: 8px;
   margin: 14px 30px 0;
   padding: 14px 16px;
-  border: 1px solid #f2c9c5;
-  border-left: 4px solid #c2413b;
-  color: #633b39;
-  background: #fff8f7;
+  border: 1px solid var(--p48-error-border);
+  border-left: 4px solid var(--p48-error-accent);
+  color: var(--p48-error-ink);
+  background: var(--p48-on-accent);
 }
 .p48-parser-samples-read-error p {
   margin: 0;
@@ -203,14 +205,14 @@
 }
 .p48-parser-samples-body h4 {
   margin: 0 0 12px;
-  color: #172033;
+  color: var(--p48-ink);
   font-size: 17px;
 }
 .p48-parser-samples-body article {
   margin: 0;
   padding: 14px 0;
   border: 0;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid var(--p48-mobile-divider);
   border-radius: 0;
   background: transparent;
 }
@@ -218,7 +220,7 @@
   min-width: 0;
 }
 .p48-parser-samples-body article strong {
-  color: #172033;
+  color: var(--p48-ink);
 }
 .p48-parser-samples-body article button,
 .p48-parser-samples-body .sample-review button,
@@ -235,7 +237,7 @@
 .p48-parser-samples-body :focus-visible,
 .p48-parser-samples-actions :focus-visible,
 .p48-parser-samples-read-error :focus-visible {
-  outline: 3px solid #66a3ff;
+  outline: 3px solid var(--p48-focus);
   outline-offset: 3px;
 }
 .p48-parser-samples-body details summary {
@@ -243,8 +245,8 @@
   line-height: 44px;
 }
 .p48-parser-samples-body .parser-diff {
-  border-left: 4px solid #1769e0;
-  background: #edf4ff;
+  border-left: 4px solid var(--p48-adapter-accent);
+  background: var(--p48-adapter-subtle);
 }
 .p48-parser-samples-actions {
   position: sticky;
@@ -255,14 +257,14 @@
   justify-content: space-between;
   gap: 16px;
   padding: 14px 30px;
-  border-top: 1px solid #d3deec;
-  background: rgb(255 255 255 / 96%);
-  box-shadow: 0 -10px 22px rgb(15 23 42 / 6%);
+  border-top: 1px solid var(--p48-panel-border);
+  background: var(--p48-sticky-panel);
+  box-shadow: 0 -10px 22px var(--p48-sticky-shadow);
   backdrop-filter: blur(10px);
 }
 .p48-parser-samples-actions p {
   margin: 0;
-  color: #64748b;
+  color: var(--p48-muted);
   font-size: 13px;
   line-height: 1.5;
 }

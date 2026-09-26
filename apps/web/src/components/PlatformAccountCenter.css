@@ -1,3 +1,7 @@
+@import "../design/account-center-tokens.css";
+
+@import "../design/account-center-tokens.css";
+
 .account-center {
   display: grid;
   gap: 18px;
@@ -323,12 +327,6 @@
 
 /* P39 C composition: a blue scope rail, factual account workbench, and quiet actions. */
 .account-center--review {
-  --account-review-blue: #0b63ce;
-  --account-review-blue-deep: #08458f;
-  --account-review-ink: #14243a;
-  --account-review-muted: #60728b;
-  --account-review-line: #d7e1ec;
-  --account-review-soft: #f4f7fb;
   max-width: 1280px;
   margin-inline: auto;
   gap: 20px;
@@ -344,14 +342,14 @@
   border: 1px solid var(--account-review-blue-deep);
   border-radius: 18px;
   background: var(--account-review-blue);
-  color: #fff;
-  box-shadow: 0 16px 40px rgb(8 69 143 / 14%);
+  color: var(--account-review-on-blue);
+  box-shadow: 0 16px 40px var(--account-review-shadow);
 }
 .account-center--review .account-hero > div:first-child {
   padding: 30px 32px;
 }
 .account-center--review .account-hero p {
-  color: #cfe3ff;
+  color: var(--account-review-hero-muted);
   font-size: 13px;
   font-weight: 850;
   letter-spacing: 0.14em;
@@ -360,35 +358,35 @@
 .account-center--review .account-hero h2 {
   max-width: 680px;
   margin: 9px 0 10px;
-  color: #fff;
+  color: var(--account-review-on-blue);
   font-size: clamp(26px, 3vw, 38px);
   line-height: 1.08;
 }
 .account-center--review .account-hero span {
   display: block;
   max-width: 700px;
-  color: #e8f2ff;
+  color: var(--account-review-hero-subtle);
   line-height: 1.6;
 }
 .account-center--review .hero-actions {
   align-content: center;
   justify-content: flex-end;
   padding: 24px 26px;
-  background: rgb(5 47 102 / 28%);
+  background: var(--account-review-overlay);
 }
 .account-center--review .account-hero button,
 .account-center--review .account-hero .hero-actions a {
-  border: 1px solid rgb(255 255 255 / 38%);
-  background: #fff;
+  border: 1px solid var(--account-review-outline);
+  background: var(--account-review-surface);
   color: var(--account-review-blue-deep);
   box-shadow: none;
 }
 .account-center--review .account-hero button:last-child,
 .account-center--review .hero-actions button:last-child,
 .account-center--review .hero-actions a.secondary {
-  border-color: rgb(255 255 255 / 45%);
+  border-color: var(--account-review-outline-strong);
   background: transparent;
-  color: #fff;
+  color: var(--account-review-on-blue);
 }
 .account-center--review .account-metrics {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -399,8 +397,8 @@
   padding: 18px 20px;
   border: 1px solid var(--account-review-line);
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 7px 22px rgb(20 36 58 / 5%);
+  background: var(--account-review-surface);
+  box-shadow: 0 7px 22px var(--account-review-metric-shadow);
 }
 .account-center--review .account-metrics small,
 .account-center--review .account-metrics span {
@@ -426,9 +424,9 @@
   font-weight: 800;
 }
 .account-center--review .account-tabs a.on {
-  background: #fff;
+  background: var(--account-review-surface);
   color: var(--account-review-blue-deep);
-  box-shadow: 0 2px 8px rgb(20 36 58 / 9%);
+  box-shadow: 0 2px 8px var(--account-review-selected-shadow);
 }
 .account-center--review .account-filter {
   display: grid;
@@ -438,13 +436,13 @@
   padding: 16px;
   border: 1px solid var(--account-review-line);
   border-radius: 14px;
-  background: #fff;
+  background: var(--account-review-surface);
 }
 .account-center--review .account-filter input,
 .account-center--review .account-filter select {
   min-width: 0;
   border-color: var(--account-review-line);
-  background: #fff;
+  background: var(--account-review-surface);
 }
 .account-center--review .account-query-field {
   display: grid;
@@ -483,8 +481,8 @@
 .account-center--review .account-state {
   border: 1px solid var(--account-review-line);
   border-radius: 14px;
-  background: #fff;
-  box-shadow: 0 7px 22px rgb(20 36 58 / 4%);
+  background: var(--account-review-surface);
+  box-shadow: 0 7px 22px var(--account-review-container-shadow);
 }
 .account-center--review .account-table-wrap {
   overflow: auto;
@@ -510,11 +508,11 @@
 .account-center--review .account-empty button,
 .account-center--review .account-state button {
   border-color: var(--account-review-line);
-  background: #fff;
+  background: var(--account-review-surface);
   color: var(--account-review-blue-deep);
 }
 .account-center--review :is(a, button, input, select, textarea):focus-visible {
-  outline: 3px solid rgb(13 110 253 / 32%);
+  outline: 3px solid var(--account-review-focus);
   outline-offset: 3px;
 }
 .account-center--organization-review .account-hero {
@@ -530,19 +528,19 @@
   border-top: 3px solid var(--account-review-blue-deep);
 }
 .account-center--organization-review {
-  --account-review-blue: #254a9c;
-  --account-review-blue-deep: #18386f;
-  --account-review-ink: #202c3d;
-  --account-review-muted: #58677b;
-  --account-review-line: #dbe1e9;
-  --account-review-soft: #edf1f6;
+  --account-review-blue: var(--account-org-blue);
+  --account-review-blue-deep: var(--account-org-blue-deep);
+  --account-review-ink: var(--account-org-ink);
+  --account-review-muted: var(--account-org-muted);
+  --account-review-line: var(--account-org-line);
+  --account-review-soft: var(--account-org-soft);
 }
 .account-center--organization-review .account-hero {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
   border-color: var(--account-review-line);
-  background: #fff;
+  background: var(--account-org-surface);
   color: var(--account-review-ink);
   box-shadow: none;
 }
@@ -567,14 +565,14 @@
   background: transparent;
 }
 .account-center--organization-review .account-hero button {
-  border-color: #254a9c;
-  background: #254a9c;
-  color: #fff;
+  border-color: var(--account-org-blue);
+  background: var(--account-org-blue);
+  color: var(--account-org-on-blue);
 }
 .account-center--organization-review .account-hero button:nth-child(2) {
-  border-color: #254a9c;
-  background: #fff;
-  color: #18386f;
+  border-color: var(--account-org-blue);
+  background: var(--account-org-surface);
+  color: var(--account-org-blue-deep);
 }
 .account-center .account-page-layout--organizations {
   display: grid;
@@ -608,14 +606,14 @@
   min-height: 0;
   padding: 16px 20px;
   border: 0;
-  border-top: 1px solid rgb(255 255 255 / 28%);
+  border-top: 1px solid var(--account-org-divider);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
 }
 .account-center--organization-review .account-page-rail .account-metrics :is(small, strong, span) {
   display: block;
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 .account-center--organization-review .account-page-rail .account-metrics small,
 .account-center--organization-review .account-page-rail .account-metrics span {
@@ -639,22 +637,22 @@
 .account-center--organization-review .account-page-rail .account-tabs a {
   justify-content: flex-start;
   padding: 9px 12px;
-  border: 1px solid rgb(255 255 255 / 36%);
+  border: 1px solid var(--account-org-outline);
   border-radius: 7px;
   background: transparent;
-  color: #fff;
+  color: var(--account-org-on-blue);
   text-decoration: none;
 }
 .account-center--organization-review .account-page-rail .account-tabs a.on {
-  border-color: #fff;
-  background: #fff;
-  color: #18386f;
+  border-color: var(--account-org-surface);
+  background: var(--account-org-surface);
+  color: var(--account-org-blue-deep);
 }
 .account-center--organization-review .account-page-layout--organizations .account-page-main {
   padding: 24px;
   border: 1px solid var(--account-review-line);
   border-radius: 14px;
-  background: #fff;
+  background: var(--account-org-surface);
 }
 .account-center--organization-review .organization-directory-heading {
   display: flex;
@@ -672,9 +670,9 @@
   color: var(--account-review-muted);
 }
 .account-center--organization-review .organization-directory-heading button {
-  border-color: #254a9c;
-  background: #fff;
-  color: #18386f;
+  border-color: var(--account-org-blue);
+  background: var(--account-org-surface);
+  color: var(--account-org-blue-deep);
 }
 .account-center--organization-review .organization-filter-field {
   display: grid;
@@ -773,7 +771,7 @@
   .account-center--organization-review .account-page-rail .account-metrics article {
     padding: 8px 12px;
     border: 0;
-    border-left: 1px solid rgb(255 255 255 / 28%);
+    border-left: 1px solid var(--account-org-divider);
   }
   .account-center--organization-review .account-page-rail .account-tabs {
     grid-column: 1 / -1;
@@ -821,7 +819,7 @@
   .account-center--organization-review .account-page-rail__intro {
     margin-bottom: 0;
     padding: 14px 16px;
-    border-bottom: 1px solid rgb(255 255 255 / 28%);
+    border-bottom: 1px solid var(--account-org-divider);
   }
   .account-center--organization-review .account-page-rail .account-metrics {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -855,34 +853,34 @@
   }
 }
 .account-center--user-admin-c {
-  --account-review-blue: #254a9c;
-  --account-review-blue-deep: #18386f;
-  --account-review-ink: #202c3d;
-  --account-review-muted: #58677b;
-  --account-review-line: #dbe1e9;
-  --account-review-soft: #edf1f6;
+  --account-review-blue: var(--account-org-blue);
+  --account-review-blue-deep: var(--account-org-blue-deep);
+  --account-review-ink: var(--account-org-ink);
+  --account-review-muted: var(--account-org-muted);
+  --account-review-line: var(--account-org-line);
+  --account-review-soft: var(--account-org-soft);
 }
 .account-center--user-admin-c .account-hero {
-  border-color: #18386f;
-  background: #254a9c;
+  border-color: var(--account-org-blue-deep);
+  background: var(--account-org-blue);
 }
 .account-center--user-admin-c .account-tabs {
   width: fit-content;
   max-width: 100%;
 }
 .account-center--user-admin-c .account-table-wrap {
-  border-top: 3px solid #254a9c;
+  border-top: 3px solid var(--account-org-blue);
 }
 .account-center--user-admin-c th {
-  background: #edf1f6;
+  background: var(--account-org-soft);
 }
 .account-center--user-admin-c td button:hover,
 .account-center--user-admin-c .account-empty button:hover,
 .account-center--user-admin-c .account-state button:hover {
-  border-color: #254a9c;
-  color: #18386f;
-  background: #f4f7fc;
+  border-color: var(--account-org-blue);
+  color: var(--account-org-blue-deep);
+  background: var(--account-org-hover-surface);
 }
 .account-center--user-admin-c :is(a, button, input, select, textarea):focus-visible {
-  outline-color: rgb(37 74 156 / 38%);
+  outline-color: var(--account-org-focus);
 }

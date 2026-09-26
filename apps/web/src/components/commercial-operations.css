@@ -1,3 +1,5 @@
+@import "../design/commercial-review-tokens.css";
+
 .commercial {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
@@ -687,16 +689,6 @@ dialog::backdrop {
 
 /* P58 C direction: separate global plan configuration from organization quota work. */
 .commercial--review {
-  --so-primary: #1748b5;
-  --so-primary-strong: #102a63;
-  --so-text: #17253c;
-  --so-text-muted: #536985;
-  --so-panel: #fff;
-  --so-panel-soft: #edf2fa;
-  --so-bg-elevated: #fff;
-  --so-border: #c7d3e4;
-  --so-border-strong: #94a8c4;
-  --so-focus: #2f6ee5;
   min-width: 0;
   padding: 0;
   gap: 20px;
@@ -737,26 +729,26 @@ dialog::backdrop {
 
 .commercial--review :is(input, select, textarea) {
   width: 100%;
-  background: #fff;
+  background: var(--so-panel);
   color: var(--so-text);
 }
 
 .commercial--review button {
   color: var(--so-primary);
-  background: #fff;
+  background: var(--so-panel);
   border: 1px solid var(--so-border-strong);
 }
 
 .commercial--review button.primary {
-  color: #fff;
+  color: var(--so-panel);
   background: var(--so-primary);
   border-color: var(--so-primary);
 }
 
 .commercial--review button.danger {
-  color: #a52630;
-  border-color: #d9949b;
-  background: #fff;
+  color: var(--so-danger);
+  border-color: var(--so-danger-border);
+  background: var(--so-panel);
 }
 
 .commercial--review :is(h2, h3, h4, strong, b, th, code) {
@@ -791,7 +783,7 @@ dialog::backdrop {
 }
 
 .commercial--review .p58-task-switch button[aria-pressed="true"] {
-  color: #fff;
+  color: var(--so-panel);
   background: var(--so-primary-strong);
   border-color: var(--so-primary-strong);
 }
@@ -800,7 +792,7 @@ dialog::backdrop {
   gap: 0;
   border: 1px solid var(--so-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-panel);
 }
 
 .commercial--review .commercial-summary article {
@@ -820,7 +812,7 @@ dialog::backdrop {
   padding: 24px;
   border: 1px solid var(--so-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-panel);
 }
 
 .commercial--review .p58-task-heading h3 {
@@ -848,7 +840,7 @@ dialog::backdrop {
   margin: 0;
   padding: 24px;
   color: var(--so-text-muted);
-  background: #f3f6fa;
+  background: var(--so-muted-panel);
   line-height: 1.7;
 }
 
@@ -856,7 +848,7 @@ dialog::backdrop {
   padding: 24px;
   border: 1px solid var(--so-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-panel);
 }
 
 .commercial--review :is(.renew, .adjust) {
@@ -883,7 +875,7 @@ dialog::backdrop {
 
 .commercial--review .commercial-catalog > header button {
   color: var(--so-primary);
-  background: #fff;
+  background: var(--so-panel);
 }
 
 .commercial--review .commercial-plan-table-wrap {
@@ -912,13 +904,13 @@ dialog::backdrop {
   padding: 20px;
   border: 1px solid var(--so-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-panel);
   line-height: 1.7;
 }
 
 .commercial--review > .notice {
   border-left: 3px solid var(--so-primary);
-  background: #edf2fa;
+  background: var(--so-panel-soft);
 }
 
 .commercial--review > .state > strong {
@@ -928,7 +920,7 @@ dialog::backdrop {
 .commercial--review > .state > button {
   justify-self: start;
   padding-inline: 18px;
-  color: #fff;
+  color: var(--so-panel);
   background: var(--so-primary);
 }
 

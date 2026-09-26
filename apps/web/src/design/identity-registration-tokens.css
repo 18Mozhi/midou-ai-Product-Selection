@@ -1,0 +1,21 @@
+html:has(body #app .p03-registration-page) {
+  --p03-blue: #1748a0;
+  --p03-ink: #182d4a;
+  --p03-muted: #52647b;
+  --p03-line: #dce4ee;
+  --p03-focus: #2465d7;
+  --p03-surface: #fff;
+  --p03-hero-muted: #e2ecff;
+  --p03-surface-soft: #f6f9ff;
+  --p03-info: #edf4ff;
+  --p03-danger: #b42318;
+  --p03-danger-soft: #fff6f5;
+  --p03-danger-ink: #812018;
+  --p03-control-border: #bfcddd;
+  --p03-control-hover: #7187a3;
+  --p03-button-hover: #103b88;
+  --p03-button-active: #0c2e6a;
+  --p03-disabled-border: #d5dde8;
+  --p03-disabled-ink: #65758a;
+  --p03-disabled-surface: #edf1f6;
+}

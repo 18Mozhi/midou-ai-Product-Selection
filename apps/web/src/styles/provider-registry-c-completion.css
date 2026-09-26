@@ -113,7 +113,7 @@ html body:has(#app .provider-registry) #app .table-view-controls__toolbar fields
   border-radius: 6px;
   color: var(--p46-ink);
   background: var(--p46-panel);
-  box-shadow: 0 12px 28px rgb(20 42 70 / 12%);
+  box-shadow: 0 12px 28px var(--p46-control-shadow);
 }
 html body:has(#app .provider-registry) #app .table-view-controls__toolbar input[type="checkbox"] {
   width: 20px;
@@ -319,7 +319,7 @@ html body:has(#app .provider-registry) .responsive-data-view__details > button {
 html body:has(#app .provider-registry) .responsive-data-view__details > details {
   border: 1px solid var(--p46-border);
   border-radius: 6px;
-  background: #f5f7fb;
+  background: var(--p46-details-panel);
 }
 html body:has(#app .provider-registry) .responsive-data-view__details summary {
   min-height: 48px;

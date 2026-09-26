@@ -1,3 +1,7 @@
+@import "../design/account-permissions-tokens.css";
+
+@import "../design/account-permissions-tokens.css";
+
 .role-comparison__workspace {
   display: grid;
   gap: 16px;
@@ -23,22 +27,22 @@
 .role-comparison--permission-page > header {
   align-items: center;
   padding: 22px 24px;
-  border: 1px solid #d8e1ed;
+  border: 1px solid var(--account-permission-line);
   border-bottom: 0;
   border-radius: 12px 12px 0 0;
-  background: #fff;
+  background: var(--account-permission-surface);
 }
 
 .role-comparison--permission-page > header :is(p, h3) {
-  color: #142a46;
+  color: var(--account-permission-ink);
 }
 
 .role-comparison--permission-page > header p {
-  color: #294caf;
+  color: var(--account-permission-blue);
 }
 
 .role-comparison--permission-page > header span {
-  color: #536b86;
+  color: var(--account-permission-muted);
   font-size: 14px;
   line-height: 1.6;
 }
@@ -46,7 +50,7 @@
 .role-comparison--permission-page .role-comparison__toggle {
   min-height: 44px;
   margin: 0;
-  color: #294caf;
+  color: var(--account-permission-blue);
   font-size: 14px;
 }
 
@@ -56,7 +60,7 @@
   min-height: 20px;
   margin: 0;
   padding: 0;
-  accent-color: #294caf;
+  accent-color: var(--account-permission-blue);
 }
 
 .role-comparison--permission-page .role-comparison__workspace {
@@ -65,7 +69,7 @@
   gap: 0;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid #d8e1ed;
+  border: 1px solid var(--account-permission-line);
   border-radius: 0 0 12px 12px;
 }
 
@@ -73,8 +77,8 @@
   display: block;
   min-width: 0;
   padding: 28px 24px;
-  background: #294caf;
-  color: #fff;
+  background: var(--account-permission-blue);
+  color: var(--account-permission-on-blue);
 }
 
 .role-comparison--permission-page .role-comparison__selectors {
@@ -84,22 +88,22 @@
 
 .role-comparison--permission-page .role-comparison__selectors label {
   gap: 8px;
-  color: #fff;
+  color: var(--account-permission-on-blue);
   font-size: 14px;
 }
 
 .role-comparison--permission-page .role-comparison__selectors select {
   width: 100%;
   min-height: 48px;
-  border-color: #bdcbe0;
+  border-color: var(--account-permission-control-hover);
   border-radius: 6px;
-  background: #fff;
-  color: #142a46;
+  background: var(--account-permission-surface);
+  color: var(--account-permission-ink);
   font-size: 16px;
 }
 
 .role-comparison--permission-page .role-comparison__context select:focus-visible {
-  outline-color: #fff;
+  outline-color: var(--account-permission-on-blue);
 }
 
 .role-comparison--permission-page .role-comparison__summaries {
@@ -113,21 +117,21 @@
   padding: 20px 0 0;
   overflow-wrap: anywhere;
   border: 0;
-  border-top: 1px solid #7795d8;
+  border-top: 1px solid var(--account-permission-blue-divider);
   border-radius: 0;
   background: transparent;
 }
 
 .role-comparison--permission-page .role-comparison__summaries strong {
   display: block;
-  color: #fff;
+  color: var(--account-permission-on-blue);
   font-size: 17px;
 }
 
 .role-comparison--permission-page .role-comparison__summaries :is(span, small) {
   display: block;
   margin-top: 8px;
-  color: #edf3ff;
+  color: var(--account-permission-blue-subtle);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -136,7 +140,7 @@
   display: block;
   min-width: 0;
   padding: 28px;
-  background: #fff;
+  background: var(--account-permission-surface);
 }
 
 .role-comparison--permission-page .role-comparison__filters {
@@ -146,7 +150,7 @@
 
 .role-comparison--permission-page .role-comparison__filters label {
   min-width: 0;
-  color: #536b86;
+  color: var(--account-permission-muted);
   font-size: 14px;
 }
 
@@ -154,22 +158,22 @@
   width: 100%;
   min-height: 48px;
   border-radius: 6px;
-  background: #fff;
-  color: #142a46;
+  background: var(--account-permission-surface);
+  color: var(--account-permission-ink);
   font-size: 16px;
 }
 
 .role-comparison--permission-page .role-comparison__filters button {
   min-height: 44px;
   padding: 10px 14px;
-  border: 1px solid #d8e1ed;
+  border: 1px solid var(--account-permission-line);
   border-radius: 6px;
-  background: #e8edf4;
-  color: #294caf;
+  background: var(--account-permission-disabled-bg);
+  color: var(--account-permission-blue);
 }
 
 .role-comparison--permission-page .role-comparison__filters button:disabled {
-  color: #66748a;
+  color: var(--account-permission-disabled-ink);
   cursor: not-allowed;
   opacity: 1;
 }
@@ -177,8 +181,8 @@
 .role-comparison--permission-page .role-comparison__result {
   margin: 22px 0 0;
   padding: 14px 16px;
-  background: #eef2f7;
-  color: #536b86;
+  background: var(--account-permission-result-surface);
+  color: var(--account-permission-muted);
   font-size: 14px;
 }
 
@@ -192,20 +196,20 @@
   padding: 22px 0;
   overflow-wrap: anywhere;
   border: 0;
-  border-bottom: 1px solid #d8e1ed;
+  border-bottom: 1px solid var(--account-permission-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--account-permission-surface);
 }
 
 .role-comparison--permission-page .role-comparison__matrix h4 {
   margin: 0 0 14px;
-  color: #142a46;
+  color: var(--account-permission-ink);
   font-size: 18px;
 }
 
 .role-comparison--permission-page .role-comparison__matrix h4 small {
   margin-top: 5px;
-  color: #536b86;
+  color: var(--account-permission-muted);
   font-size: 13px;
 }
 
@@ -215,30 +219,30 @@
 }
 
 .role-comparison--permission-page .role-comparison__matrix dt {
-  color: #536b86;
+  color: var(--account-permission-muted);
   font-size: 13px;
 }
 
 .role-comparison--permission-page .role-comparison__matrix dd {
   margin: 6px 0 0;
-  color: #142a46;
+  color: var(--account-permission-ink);
   font-size: 16px;
 }
 
 .role-comparison--permission-page .role-comparison__matrix dd[data-enabled="true"] {
-  color: #294caf;
+  color: var(--account-permission-blue);
   font-weight: 700;
 }
 
 .role-comparison--permission-page .role-comparison__matrix > p {
   padding: 28px 16px;
-  background: #f6f8fc;
-  color: #536b86;
+  background: var(--account-permission-empty-surface);
+  color: var(--account-permission-muted);
   text-align: left;
 }
 
 .role-comparison--permission-page :is(button, input, select):focus-visible {
-  outline: 3px solid #4276df;
+  outline: 3px solid var(--account-permission-focus);
   outline-offset: 3px;
 }
 

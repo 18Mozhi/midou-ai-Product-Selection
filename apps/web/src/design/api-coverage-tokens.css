@@ -1,0 +1,21 @@
+html:has(body #app .api-coverage--c) {
+  --p63-blue: #1748a0;
+  --p63-ink: #182d4a;
+  --p63-line: #dce4ee;
+  --p63-muted: #52647b;
+  --p63-panel: #fff;
+  --p63-on-blue: #fff;
+  --p63-blue-muted: #d9e6ff;
+  --p63-blue-subtle: #e2ebff;
+  --p63-blue-soft: #edf4ff;
+  --p63-truth-soft: #f6f9ff;
+  --p63-success: #276247;
+  --p63-warning: #8a5900;
+  --p63-breakdown-soft: #f9fbfe;
+  --p63-note: #f1f5fa;
+  --p63-card-soft: #f7f9fc;
+  --p63-success-text: #185f47;
+  --p63-error-text: #9a3f36;
+  --p63-warning-text: #805300;
+  --p63-focus: #2465d7;
+}

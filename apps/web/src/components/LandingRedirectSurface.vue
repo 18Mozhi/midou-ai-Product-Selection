@@ -65,14 +65,12 @@ const emit = defineEmits<{ retry: [] }>();
 </template>
 
 <style scoped>
+@import "../design/landing-redirect-tokens.css";
+
 .landing-redirect {
-  --p01-blue: #1748a0;
-  --p01-ink: #182d4a;
-  --p01-muted: #52647b;
-  --p01-line: #dce4ee;
   min-height: 100dvh;
   color: var(--p01-ink);
-  background: #f3f6fb;
+  background: var(--p01-canvas);
   font-size: 17px;
   line-height: 1.65;
 }
@@ -106,7 +104,7 @@ const emit = defineEmits<{ retry: [] }>();
   padding: 4px 10px;
   display: inline-flex;
   align-items: center;
-  color: #fff;
+  color: var(--p01-on-blue);
   background: var(--p01-blue);
   font-size: 16px;
   font-weight: 800;
@@ -115,12 +113,12 @@ const emit = defineEmits<{ retry: [] }>();
 
 .p01-hero {
   padding: 34px 36px;
-  color: #fff;
+  color: var(--p01-on-blue);
   background: var(--p01-blue);
 }
 
 .p01-hero p {
-  color: #d9e6ff;
+  color: var(--p01-hero-muted);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.06em;
@@ -128,13 +126,13 @@ const emit = defineEmits<{ retry: [] }>();
 
 .p01-hero h1 {
   margin: 5px 0;
-  color: #fff;
+  color: var(--p01-on-blue);
   font-size: 34px;
   line-height: 1.35;
 }
 
 .p01-hero > span {
-  color: #e2ebff;
+  color: var(--p01-hero-subtle);
 }
 
 .p01-boundary {
@@ -142,7 +140,7 @@ const emit = defineEmits<{ retry: [] }>();
   display: flex;
   gap: 12px;
   border-left: 3px solid var(--p01-blue);
-  background: #edf4ff;
+  background: var(--p01-boundary);
 }
 
 .p01-boundary span {
@@ -151,13 +149,13 @@ const emit = defineEmits<{ retry: [] }>();
 
 .p01-workspace {
   border: 1px solid var(--p01-line);
-  background: #fff;
+  background: var(--p01-on-blue);
 }
 
 .p01-workspace > header {
   padding: 20px 24px;
   border-bottom: 1px solid var(--p01-line);
-  background: #f6f9ff;
+  background: var(--p01-workspace-soft);
 }
 
 .p01-workspace > header small {
@@ -176,14 +174,14 @@ const emit = defineEmits<{ retry: [] }>();
   padding: 28px 24px;
   border: 0;
   border-radius: 0;
-  background: #fff;
+  background: var(--p01-on-blue);
   box-shadow: none;
 }
 
 .p01-workspace :deep(.ui-state-symbol) {
   border-radius: 0;
   color: var(--p01-blue);
-  background: #edf4ff;
+  background: var(--p01-boundary);
 }
 
 .p01-workspace :deep(.ui-state-panel h2) {
@@ -199,7 +197,7 @@ const emit = defineEmits<{ retry: [] }>();
 .p01-workspace :deep(.ui-state-panel dl) {
   border-color: var(--p01-line);
   border-radius: 0;
-  background: #f6f9ff;
+  background: var(--p01-workspace-soft);
 }
 
 .p01-workspace :deep(.ui-state-panel dd) {
@@ -211,20 +209,20 @@ const emit = defineEmits<{ retry: [] }>();
   min-height: 44px;
   border: 1px solid var(--p01-blue);
   border-radius: 0;
-  color: #fff;
+  color: var(--p01-on-blue);
   background: var(--p01-blue);
   box-shadow: none;
   font-size: 17px;
 }
 
 .p01-workspace :deep(.ui-state-panel footer button:hover:not(:disabled)) {
-  border-color: #103b85;
-  background: #103b85;
+  border-color: var(--p01-blue-hover);
+  background: var(--p01-blue-hover);
 }
 
 .p01-workspace :deep(.ui-state-panel footer button:active:not(:disabled)) {
-  border-color: #0e3474;
-  background: #0e3474;
+  border-color: var(--p01-blue-pressed);
+  background: var(--p01-blue-pressed);
 }
 
 .p01-workspace :deep(.ui-state-panel footer button:not(.primary)) {
@@ -232,7 +230,7 @@ const emit = defineEmits<{ retry: [] }>();
 }
 
 .p01-workspace :deep(.ui-state-panel button:focus-visible) {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p01-focus);
   outline-offset: 3px;
 }
 

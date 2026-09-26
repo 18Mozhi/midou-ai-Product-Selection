@@ -1,0 +1,15 @@
+html:has(body #app .landing-redirect) {
+  --p01-blue: #1748a0;
+  --p01-ink: #182d4a;
+  --p01-muted: #52647b;
+  --p01-line: #dce4ee;
+  --p01-canvas: #f3f6fb;
+  --p01-on-blue: #fff;
+  --p01-hero-muted: #d9e6ff;
+  --p01-hero-subtle: #e2ebff;
+  --p01-boundary: #edf4ff;
+  --p01-workspace-soft: #f6f9ff;
+  --p01-blue-hover: #103b85;
+  --p01-blue-pressed: #0e3474;
+  --p01-focus: #2465d7;
+}

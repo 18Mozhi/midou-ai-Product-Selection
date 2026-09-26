@@ -1473,15 +1473,17 @@ dialog {
 </style>
 <style scoped src="./commercial-operations.css"></style>
 <style scoped>
+@import "../design/commercial-review-tokens.css";
+
 .p58-draft-c {
   box-sizing: border-box;
   width: min(920px, calc(100% - 32px));
   max-height: calc(100dvh - 32px);
   padding: 0;
-  border: 1px solid #d3ddea;
+  border: 1px solid var(--so-dialog-border);
   border-radius: 8px;
-  background: #fff;
-  color: #17253c;
+  background: var(--so-panel);
+  color: var(--so-text);
   font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
 }
 .p58-draft-c .commercial-dialog-form {
@@ -1493,8 +1495,8 @@ dialog {
 .p58-draft-c header {
   grid-column: 1 / -1;
   padding: 24px 28px;
-  background: #102a63;
-  color: #fff;
+  background: var(--so-primary-strong);
+  color: var(--so-panel);
 }
 .p58-draft-c header p {
   margin: 0 0 8px;
@@ -1506,7 +1508,7 @@ dialog {
   margin: 0;
   font-size: 26px;
   line-height: 1.4;
-  color: #fff;
+  color: var(--so-panel);
   font-family: inherit;
 }
 .p58-draft-c header .p58-intro {
@@ -1517,9 +1519,9 @@ dialog {
   grid-column: 1;
   grid-row: 2 / 6;
   padding: 28px 22px;
-  border-right: 1px solid #d3ddea;
-  background: #f3f6fa;
-  color: #17253c;
+  border-right: 1px solid var(--so-dialog-border);
+  background: var(--so-muted-panel);
+  color: var(--so-text);
   font-size: 16px;
   line-height: 1.7;
 }
@@ -1532,7 +1534,7 @@ dialog {
 }
 .p58-draft-c .p58-draft-guide p {
   font-size: 13px;
-  color: #52637c;
+  color: var(--so-secondary-muted);
 }
 .p58-draft-c :is(.p58-draft-identity, .p58-draft-reason, fieldset) {
   grid-column: 2;
@@ -1541,16 +1543,16 @@ dialog {
   margin: 0;
   padding: 24px 28px;
   border: 0;
-  border-bottom: 1px solid #d3ddea;
+  border-bottom: 1px solid var(--so-dialog-border);
   border-radius: 0;
   min-width: 0;
-  background: #fff;
-  color: #17253c;
+  background: var(--so-panel);
+  color: var(--so-text);
 }
 .p58-draft-c h4 {
   margin: 0;
   font-size: 18px;
-  color: #17253c;
+  color: var(--so-text);
 }
 .p58-draft-c header button {
   min-width: 56px;
@@ -1558,7 +1560,7 @@ dialog {
   white-space: nowrap;
 }
 .p58-draft-c .p58-draft-guide :is(strong, li, ol) {
-  color: #17253c;
+  color: var(--so-text);
 }
 .p58-draft-c fieldset {
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -1567,27 +1569,27 @@ dialog {
 .p58-draft-c legend {
   padding: 18px 0 0;
   font-size: 18px;
-  color: #17253c;
+  color: var(--so-text);
 }
 .p58-draft-c label {
-  color: #17253c;
+  color: var(--so-text);
   font-size: 16px;
   gap: 8px;
 }
 .p58-draft-c small {
   font-size: 13px;
   line-height: 1.65;
-  color: #52637c;
+  color: var(--so-secondary-muted);
 }
 .p58-draft-c :is(input, textarea, button) {
   box-sizing: border-box;
   min-width: 0;
   min-height: 44px;
-  border: 1px solid #d3ddea;
+  border: 1px solid var(--so-dialog-border);
   border-radius: 5px;
   padding: 10px 12px;
-  background: #fff;
-  color: #17253c;
+  background: var(--so-panel);
+  color: var(--so-text);
   font: inherit;
   font-size: 16px;
 }
@@ -1598,22 +1600,22 @@ dialog {
   min-height: 96px;
 }
 .p58-draft-c button.primary {
-  border-color: #1748b5;
-  background: #1748b5;
-  color: #fff;
+  border-color: var(--so-primary);
+  background: var(--so-primary);
+  color: var(--so-panel);
 }
 .p58-draft-c :is(input, textarea, button):focus-visible {
-  outline: 3px solid #1748b5;
+  outline: 3px solid var(--so-primary);
   outline-offset: 2px;
 }
 .p58-draft-c header button:focus-visible {
-  outline-color: #fff;
+  outline-color: var(--so-panel);
 }
 .p58-draft-c footer {
   grid-column: 2;
   margin: 0;
   padding: 18px 28px;
-  background: #fff;
+  background: var(--so-panel);
 }
 .p58-draft-c .p58-draft-wait,
 .p58-draft-c .p58-draft-feedback {
@@ -1621,33 +1623,33 @@ dialog {
   margin: 0;
   padding: 18px 28px;
   border: 0;
-  border-bottom: 1px solid #d3ddea;
-  background: #f3f6fa;
-  color: #17253c;
+  border-bottom: 1px solid var(--so-dialog-border);
+  background: var(--so-muted-panel);
+  color: var(--so-text);
   font-size: 16px;
   line-height: 1.65;
 }
 .p58-draft-c .p58-draft-feedback {
-  border-left: 4px solid #a43730;
-  background: #fff8f7;
+  border-left: 4px solid var(--so-danger-strong);
+  background: var(--so-danger-panel);
 }
 .p58-draft-c .p58-draft-feedback p {
   margin: 8px 0;
 }
 .p58-draft-c .p58-draft-feedback h4 {
-  color: #842f29;
+  color: var(--so-danger-text);
 }
 .p58-draft-c:has(.p58-draft-wait, .p58-draft-feedback) .p58-draft-guide {
   grid-row: 3 / 7;
 }
 .p58-draft-c h3:focus {
-  outline: 2px solid #fff;
+  outline: 2px solid var(--so-panel);
   outline-offset: 4px;
 }
 .p58-draft-c :is(input, textarea, button):disabled {
-  border-color: #d3ddea;
-  background: #e8edf4;
-  color: #68778d;
+  border-color: var(--so-dialog-border);
+  background: var(--so-disabled-panel);
+  color: var(--so-disabled-text);
   opacity: 1;
   cursor: not-allowed;
 }
@@ -1670,7 +1672,7 @@ dialog {
     grid-row: auto;
     padding: 16px 18px;
     border-right: 0;
-    border-bottom: 1px solid #d3ddea;
+    border-bottom: 1px solid var(--so-dialog-border);
   }
   .p58-draft-c .p58-draft-guide ol {
     display: flex;

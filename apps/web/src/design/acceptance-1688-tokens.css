@@ -1,0 +1,18 @@
+html:has(body #app .acceptance-1688) {
+  --acceptance-blue: #185adb;
+  --acceptance-ink: #14243a;
+  --acceptance-muted: #64748b;
+  --acceptance-rail-start: #123f9c;
+  --acceptance-rail-end: #2878ed;
+  --acceptance-on-rail: #fff;
+  --acceptance-rail-shadow: #173f8729;
+  --acceptance-rail-muted: #d9e7ff;
+  --acceptance-rail-mark-border: #ffffff55;
+  --acceptance-rail-mark-surface: #ffffff16;
+  --acceptance-rail-state-border: #ffffff2e;
+  --acceptance-rail-state-surface: #ffffff12;
+  --acceptance-rail-copy: #e2ecff;
+  --acceptance-rail-link-border: #ffffff42;
+  --acceptance-rail-divider: #ffffff35;
+  --acceptance-focus: #8bb7ff;
+}

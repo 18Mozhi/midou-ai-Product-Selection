@@ -201,6 +201,8 @@ const { dialogElement, handleCancel } = useModalDialog(
 </template>
 
 <style scoped>
+@import "../design/account-center-tokens.css";
+
 .organization-detail-dialog {
   position: fixed;
   inset: 0;
@@ -210,14 +212,14 @@ const { dialogElement, handleCancel } = useModalDialog(
   overflow: auto;
   margin: auto;
   padding: 0;
-  border: 1px solid #dbe1e9;
+  border: 1px solid var(--account-org-line);
   border-radius: 12px;
-  color: #202c3d;
-  background: #fff;
-  box-shadow: 0 20px 60px #10244226;
+  color: var(--account-org-ink);
+  background: var(--account-org-surface);
+  box-shadow: 0 20px 60px var(--account-org-dialog-shadow);
 }
 .organization-detail-dialog::backdrop {
-  background: #23354e99;
+  background: var(--account-org-dialog-scrim);
   backdrop-filter: blur(3px);
 }
 .p42-detail-form {
@@ -229,8 +231,8 @@ const { dialogElement, handleCancel } = useModalDialog(
 .p42-identity {
   min-width: 0;
   padding: 28px 24px;
-  color: #fff;
-  background: #254a9c;
+  color: var(--account-org-on-blue);
+  background: var(--account-org-blue);
 }
 .p42-identity-head {
   display: block;
@@ -238,13 +240,13 @@ const { dialogElement, handleCancel } = useModalDialog(
 }
 .p42-identity-head h3 {
   margin: 12px 0 0;
-  color: #fff;
+  color: var(--account-org-on-blue);
   font-size: 24px;
   line-height: 1.5;
   overflow-wrap: anywhere;
 }
 .p42-identity-head small {
-  color: #e5edff;
+  color: var(--account-org-dialog-subtle);
 }
 .detail-grid {
   display: grid;
@@ -254,14 +256,14 @@ const { dialogElement, handleCancel } = useModalDialog(
 .detail-grid article {
   padding: 18px 0;
   border: 0;
-  border-top: 1px solid #ffffff55;
+  border-top: 1px solid var(--account-org-dialog-divider);
   border-radius: 0;
   background: transparent;
 }
 .detail-grid small,
 .detail-grid strong {
   display: block;
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 .detail-grid strong {
   margin-top: 6px;
@@ -284,7 +286,7 @@ const { dialogElement, handleCancel } = useModalDialog(
 }
 .p42-work-head small,
 .p42-missing-identity small {
-  color: #58677b;
+  color: var(--account-org-muted);
 }
 .p42-work-head h3 {
   margin: 4px 0 0;
@@ -315,15 +317,15 @@ const { dialogElement, handleCancel } = useModalDialog(
   min-width: 0;
   min-height: 48px;
   padding: 10px 12px;
-  border: 1px solid #6680a2;
+  border: 1px solid var(--account-org-control-hover);
   border-radius: 8px;
-  color: #202c3d;
-  background: #fff;
+  color: var(--account-org-ink);
+  background: var(--account-org-surface);
   font: inherit;
   font-size: 16px;
 }
 .field-help {
-  color: #58677b;
+  color: var(--account-org-muted);
   font-size: 13px;
   font-weight: 400;
   line-height: 1.5;
@@ -341,15 +343,15 @@ const { dialogElement, handleCancel } = useModalDialog(
 }
 .p42-work button,
 .p42-missing-work button {
-  border: 1px solid #dbe1e9;
-  color: #202c3d;
-  background: #fff;
+  border: 1px solid var(--account-org-line);
+  color: var(--account-org-ink);
+  background: var(--account-org-surface);
   cursor: pointer;
 }
 .p42-work .p42-save {
-  border-color: #254a9c;
-  color: #fff;
-  background: #254a9c;
+  border-color: var(--account-org-blue);
+  color: var(--account-org-on-blue);
+  background: var(--account-org-blue);
 }
 .p42-status-zone {
   display: flex;
@@ -357,9 +359,9 @@ const { dialogElement, handleCancel } = useModalDialog(
   justify-content: space-between;
   gap: 18px;
   padding: 18px;
-  border: 1px solid #dbe1e9;
+  border: 1px solid var(--account-org-line);
   border-radius: 8px;
-  background: #f6f8fb;
+  background: var(--account-org-status-surface);
 }
 .p42-status-zone h4,
 .p42-status-zone p {
@@ -370,28 +372,28 @@ const { dialogElement, handleCancel } = useModalDialog(
   font-size: 16px;
 }
 .p42-status-zone p {
-  color: #58677b;
+  color: var(--account-org-muted);
   font-size: 13px;
   line-height: 1.5;
 }
 .p42-work .p42-status-action {
   flex-shrink: 0;
-  color: #254a9c;
-  border-color: #254a9c;
+  color: var(--account-org-blue);
+  border-color: var(--account-org-blue);
 }
 .p42-work .p42-status-action[data-danger="true"] {
-  color: #8c3c32;
-  border-color: #c9786d;
-  background: #fff8f6;
+  color: var(--account-org-danger);
+  border-color: var(--account-org-danger-border);
+  background: var(--account-org-danger-surface);
 }
 .p42-technical {
-  border-block: 1px solid #dbe1e9;
+  border-block: 1px solid var(--account-org-line);
 }
 .p42-technical summary {
   display: flex;
   align-items: center;
   padding-inline: 0;
-  color: #202c3d;
+  color: var(--account-org-ink);
   cursor: pointer;
 }
 .p42-technical dl {
@@ -406,7 +408,7 @@ const { dialogElement, handleCancel } = useModalDialog(
   gap: 10px;
 }
 .p42-technical dt {
-  color: #58677b;
+  color: var(--account-org-muted);
 }
 .p42-technical dd {
   min-width: 0;
@@ -423,22 +425,22 @@ const { dialogElement, handleCancel } = useModalDialog(
   overflow-wrap: anywhere;
 }
 .organization-feedback.is-error {
-  border-color: #c9786d;
-  color: #8c3c32;
-  background: #fff3ef;
+  border-color: var(--account-org-danger-border);
+  color: var(--account-org-danger);
+  background: var(--account-org-danger-soft);
 }
 .organization-feedback.is-success {
-  border-color: #82a89a;
-  color: #23664c;
-  background: #eff8f3;
+  border-color: var(--account-org-success-border);
+  color: var(--account-org-success);
+  background: var(--account-org-success-soft);
 }
 .organization-feedback.is-warning {
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 12px;
-  border-color: #d2a958;
-  color: #604d22;
-  background: #fff9e9;
+  border-color: var(--account-org-warning-border);
+  color: var(--account-org-warning);
+  background: var(--account-org-warning-soft);
 }
 .organization-feedback > div {
   display: grid;
@@ -453,23 +455,23 @@ const { dialogElement, handleCancel } = useModalDialog(
   flex-wrap: wrap;
   gap: 10px;
   padding: 18px 0;
-  border-top: 1px solid #dbe1e9;
-  background: #fff;
+  border-top: 1px solid var(--account-org-line);
+  background: var(--account-org-surface);
 }
 .p42-actions button {
   min-height: 46px;
 }
 .p42-missing-identity {
   padding: 28px 24px;
-  color: #fff;
-  background: #254a9c;
+  color: var(--account-org-on-blue);
+  background: var(--account-org-blue);
 }
 .p42-missing-identity small {
-  color: #e5edff;
+  color: var(--account-org-dialog-subtle);
 }
 .p42-missing-identity h3 {
   margin: 12px 0 0;
-  color: #fff;
+  color: var(--account-org-on-blue);
   font-size: 24px;
 }
 .p42-missing-work {
@@ -488,16 +490,16 @@ const { dialogElement, handleCancel } = useModalDialog(
   flex-wrap: wrap;
   gap: 10px;
   padding-top: 18px;
-  border-top: 1px solid #dbe1e9;
+  border-top: 1px solid var(--account-org-line);
 }
 .organization-detail-dialog :is(button, input, summary):focus-visible {
-  outline: 3px solid #254a9c;
+  outline: 3px solid var(--account-org-blue);
   outline-offset: 3px;
 }
 .organization-detail-dialog button:disabled {
-  border-color: #dbe1e9;
-  color: #58677b;
-  background: #edf1f6;
+  border-color: var(--account-org-line);
+  color: var(--account-org-muted);
+  background: var(--account-org-soft);
   opacity: 1;
   cursor: not-allowed;
 }
@@ -549,7 +551,7 @@ const { dialogElement, handleCancel } = useModalDialog(
     z-index: 1;
     margin: 0 -20px;
     padding: 12px 20px max(12px, env(safe-area-inset-bottom));
-    box-shadow: 0 -8px 20px #172b4512;
+    box-shadow: 0 -8px 20px var(--account-org-mobile-action-shadow);
   }
   .p42-work .p42-actions button {
     min-height: 48px;

@@ -1,3 +1,5 @@
+@import "../design/collection-ops-tokens.css";
+
 @media (max-width: 780px) {
   .state-showcase {
     padding: 14px 12px;
@@ -298,8 +300,8 @@
 .collection-ops--review {
   max-width: 1160px;
   margin: 0 auto;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--p52-ink);
+  background: var(--p52-canvas);
 }
 
 .collection-ops--review > header {
@@ -309,11 +311,11 @@
 .collection-ops--review .collection-ops-heading {
   margin: 0;
   padding: 31px 36px;
-  background: #1748a0;
+  background: var(--p52-blue);
 }
 
 .collection-ops--review .collection-ops-heading :is(p, h1, span) {
-  color: #fff;
+  color: var(--p52-on-blue);
 }
 
 .collection-ops--review .collection-ops-heading h1 {
@@ -324,49 +326,49 @@
 }
 
 .collection-ops--review .collection-ops-heading button {
-  border-color: #1748a0;
+  border-color: var(--p52-blue);
   border-radius: 0;
-  color: #1748a0;
-  background: #fff;
+  color: var(--p52-blue);
+  background: var(--p52-panel);
   font-weight: 800;
 }
 
 .collection-ops--review > header > .responsive-filter-drawer {
   margin: 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--p52-border);
   border-top: 0;
   border-radius: 0;
-  background: #fff;
+  background: var(--p52-panel);
 }
 
 .collection-ops--review .collection-ops-links {
   gap: 0;
   margin: 24px 0;
-  border: 1px solid #dce4ee;
-  background: #fff;
+  border: 1px solid var(--p52-border);
+  background: var(--p52-panel);
 }
 
 .collection-ops--review .collection-ops-links a {
-  border-color: #dce4ee;
+  border-color: var(--p52-border);
   border-radius: 0;
-  color: #1748a0;
+  color: var(--p52-blue);
   font-weight: 800;
 }
 
 .collection-ops--review .collection-ops-grid {
   gap: 0;
-  border: 1px solid #dce4ee;
-  border-top: 5px solid #1748a0;
-  background: #fff;
+  border: 1px solid var(--p52-border);
+  border-top: 5px solid var(--p52-blue);
+  background: var(--p52-panel);
 }
 
 .collection-ops--review .collection-ops-grid > section {
   padding: 24px;
   border: 0;
-  border-right: 1px solid #dce4ee;
-  border-bottom: 1px solid #dce4ee;
+  border-right: 1px solid var(--p52-border);
+  border-bottom: 1px solid var(--p52-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--p52-panel);
   box-shadow: none;
 }
 
@@ -375,38 +377,38 @@
 }
 
 .collection-ops--review .collection-section-header {
-  border-bottom: 1px solid #dce4ee;
+  border-bottom: 1px solid var(--p52-border);
 }
 
 .collection-ops--review :is(h3, h4, code) {
-  color: #1748a0;
+  color: var(--p52-blue);
 }
 
 .collection-ops--review :is(table th, table td) {
-  border-color: #dce4ee;
+  border-color: var(--p52-border);
 }
 
 .collection-ops--review table th {
-  color: #fff;
-  background: #1748a0;
+  color: var(--p52-on-blue);
+  background: var(--p52-blue);
 }
 
 .collection-ops--review .collection-state-chips span,
 .collection-ops--review .collection-root-list article,
 .collection-ops--review details,
 .collection-ops--review .collection-ops-grid > section > ul > li {
-  border-color: #dce4ee;
+  border-color: var(--p52-border);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--p52-muted-panel);
 }
 
 .collection-ops--review .collection-root-list article[data-selected="true"] {
-  border-left: 5px solid #1748a0;
-  background: #edf4ff;
+  border-left: 5px solid var(--p52-blue);
+  background: var(--p52-selected-panel);
 }
 
 .collection-ops--review :is(button, input, select, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p52-focus);
   outline-offset: 3px;
 }
 .collection-ops > header {

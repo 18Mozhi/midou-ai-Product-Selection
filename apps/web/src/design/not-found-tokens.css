@@ -1,0 +1,13 @@
+html:has(body #app .not-found-page--review) {
+  --p73-blue: #1748a0;
+  --p73-ink: #182d4a;
+  --p73-muted: #52647b;
+  --p73-line: #dce4ee;
+  --p73-canvas: #f3f6fb;
+  --p73-focus: #2465d7;
+  --p73-surface: #fff;
+  --p73-hero-muted: #d9e6ff;
+  --p73-hero-subtle: #e2ebff;
+  --p73-route-surface: #f6f9ff;
+  --p73-boundary: #edf4ff;
+}

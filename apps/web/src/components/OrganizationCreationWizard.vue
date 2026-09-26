@@ -170,6 +170,8 @@ function close() {
 </template>
 
 <style scoped>
+@import "../design/organization-wizard-tokens.css";
+
 .organization-wizard {
   position: fixed;
   inset: 0;
@@ -179,14 +181,14 @@ function close() {
   overflow: auto;
   margin: auto;
   padding: 0;
-  border: 1px solid #c8d7e8;
+  border: 1px solid var(--ow-border);
   border-radius: 14px;
-  color: #182b45;
-  background: #fff;
-  box-shadow: 0 28px 90px rgb(8 25 49 / 34%);
+  color: var(--ow-ink);
+  background: var(--ow-surface);
+  box-shadow: 0 28px 90px var(--ow-shadow);
 }
 .organization-wizard::backdrop {
-  background: rgb(11 24 43 / 58%);
+  background: var(--ow-backdrop);
   backdrop-filter: blur(5px);
 }
 .organization-wizard form {
@@ -200,24 +202,24 @@ function close() {
 }
 .organization-wizard__identity {
   padding: 28px 24px;
-  color: #fff;
-  background: #254a9c;
+  color: var(--ow-on-blue);
+  background: var(--ow-blue);
 }
 .organization-wizard__identity > small {
-  color: #dbe8ff;
+  color: var(--ow-blue-muted);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
 .organization-wizard__identity h3 {
   margin: 12px 0 6px;
-  color: #fff;
+  color: var(--ow-on-blue);
   font-size: 26px;
   line-height: 1.25;
 }
 .organization-wizard__identity > p {
   margin: 0;
-  color: #e6eeff;
+  color: var(--ow-blue-subtle);
   font-size: 14px;
   line-height: 1.55;
 }
@@ -233,12 +235,12 @@ function close() {
   display: flex;
   align-items: center;
   gap: 10px;
-  border-bottom: 1px solid rgb(255 255 255 / 28%);
-  color: #d7e3ff;
+  border-bottom: 1px solid var(--ow-divider);
+  color: var(--ow-copy-muted);
   font-size: 14px;
 }
 .organization-wizard__progress li[aria-current="step"] {
-  color: #fff;
+  color: var(--ow-on-blue);
   font-weight: 800;
 }
 .organization-wizard__progress span {
@@ -247,16 +249,16 @@ function close() {
   display: grid;
   place-items: center;
   flex: 0 0 auto;
-  border: 1px solid rgb(255 255 255 / 46%);
+  border: 1px solid var(--ow-outline);
   border-radius: 50%;
-  color: #fff;
+  color: var(--ow-on-blue);
   font-size: 13px;
   font-weight: 800;
 }
 .organization-wizard__progress li[aria-current="step"] span {
-  border-color: #fff;
-  background: #fff;
-  color: #254a9c;
+  border-color: var(--ow-surface);
+  background: var(--ow-surface);
+  color: var(--ow-blue);
 }
 .organization-wizard__content {
   min-width: 0;
@@ -272,15 +274,15 @@ function close() {
 .organization-wizard__step > p {
   margin: 0;
   padding-bottom: 16px;
-  border-bottom: 1px solid #dbe4ee;
-  color: #273d58;
+  border-bottom: 1px solid var(--ow-line);
+  color: var(--ow-secondary-ink);
   font-size: 17px;
   line-height: 1.55;
 }
 .organization-wizard__step label {
   display: grid;
   gap: 7px;
-  color: #263d59;
+  color: var(--ow-secondary-ink);
   font-size: 14px;
   font-weight: 750;
 }
@@ -289,18 +291,18 @@ function close() {
   width: 100%;
   min-height: 48px;
   padding: 11px 13px;
-  border: 1px solid #bdcad9;
+  border: 1px solid var(--ow-control-border);
   border-radius: 7px;
-  color: #172b45;
-  background: #fff;
+  color: var(--ow-ink);
+  background: var(--ow-surface);
   font: inherit;
   font-size: 16px;
 }
 .organization-wizard__step input::placeholder {
-  color: #78879a;
+  color: var(--ow-muted);
 }
 .organization-wizard__step small {
-  color: #64758c;
+  color: var(--ow-secondary-muted);
   font-size: 13px;
   font-weight: 400;
   line-height: 1.5;
@@ -309,41 +311,41 @@ function close() {
   padding: 12px 14px;
   display: grid;
   gap: 4px;
-  border: 1px solid #dba9a5;
-  border-left: 4px solid #a33d3a;
+  border: 1px solid var(--ow-error-border);
+  border-left: 4px solid var(--ow-danger);
   border-radius: 7px;
-  color: #572b2a;
-  background: #fbf3f2;
+  color: var(--ow-error-ink);
+  background: var(--ow-error-surface);
 }
 .organization-wizard__error strong {
-  color: #8f3431;
+  color: var(--ow-danger-muted);
 }
 .organization-wizard__summary {
   margin: 0;
   padding: 14px 16px;
   display: grid;
   gap: 0;
-  border: 1px solid #dbe4ee;
+  border: 1px solid var(--ow-line);
   border-radius: 8px;
-  background: #f6f8fb;
+  background: var(--ow-soft-surface);
 }
 .organization-wizard__summary div {
   padding: 10px 0;
   display: grid;
   grid-template-columns: 104px minmax(0, 1fr);
   gap: 12px;
-  border-bottom: 1px solid #dbe4ee;
+  border-bottom: 1px solid var(--ow-line);
 }
 .organization-wizard__summary div:last-child {
   border-bottom: 0;
 }
 .organization-wizard__summary dt {
-  color: #64758c;
+  color: var(--ow-secondary-muted);
   font-size: 13px;
 }
 .organization-wizard__summary dd {
   margin: 0;
-  color: #172b45;
+  color: var(--ow-ink);
   overflow-wrap: anywhere;
 }
 .organization-wizard__actions {
@@ -353,46 +355,46 @@ function close() {
   justify-content: flex-end;
   gap: 10px;
   flex-wrap: wrap;
-  border-top: 1px solid #dbe4ee;
-  background: #fff;
+  border-top: 1px solid var(--ow-line);
+  background: var(--ow-surface);
 }
 .organization-wizard__actions button {
   min-height: 46px;
   padding: 10px 16px;
-  border: 1px solid #bdcad9;
+  border: 1px solid var(--ow-control-border);
   border-radius: 7px;
-  color: #253b56;
-  background: #fff;
+  color: var(--ow-paper);
+  background: var(--ow-surface);
   font: inherit;
   font-size: 15px;
   font-weight: 750;
   cursor: pointer;
 }
 .organization-wizard__actions .organization-wizard__primary {
-  border-color: #254a9c;
-  color: #fff;
-  background: #254a9c;
+  border-color: var(--ow-blue);
+  color: var(--ow-on-blue);
+  background: var(--ow-blue);
 }
 .organization-wizard__actions button:hover:not(:disabled) {
-  border-color: #254a9c;
-  color: #173978;
-  background: #edf3ff;
+  border-color: var(--ow-blue);
+  color: var(--ow-primary);
+  background: var(--ow-primary-soft);
 }
 .organization-wizard__actions .organization-wizard__primary:hover:not(:disabled) {
-  color: #fff;
-  background: #193b80;
+  color: var(--ow-on-blue);
+  background: var(--ow-primary-hover);
 }
 .organization-wizard__actions button:active:not(:disabled) {
   transform: translateY(1px);
 }
 .organization-wizard__actions button:disabled {
-  border-color: #d7dee8;
-  color: #718096;
-  background: #edf0f5;
+  border-color: var(--ow-disabled-border);
+  color: var(--ow-disabled-ink);
+  background: var(--ow-disabled-surface);
   cursor: not-allowed;
 }
 .organization-wizard :is(input, select, button):focus-visible {
-  outline: 3px solid rgb(13 110 253 / 34%);
+  outline: 3px solid var(--ow-focus);
   outline-offset: 3px;
 }
 @media (max-width: 700px) {
@@ -448,8 +450,8 @@ function close() {
     margin: 20px -20px 0;
     padding: 12px 20px;
     justify-content: flex-end;
-    background: #fff;
-    box-shadow: 0 -8px 20px rgb(23 43 69 / 7%);
+    background: var(--ow-surface);
+    box-shadow: 0 -8px 20px var(--ow-sticky-shadow);
   }
   .organization-wizard__actions button {
     min-height: 44px;

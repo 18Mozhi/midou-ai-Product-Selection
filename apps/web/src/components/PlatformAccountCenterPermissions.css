@@ -1,8 +1,10 @@
+@import "../design/account-permissions-tokens.css";
+
 .account-center--permissions-c {
   display: grid;
   gap: 16px;
   min-width: 0;
-  color: #142a46;
+  color: var(--account-permission-ink);
 }
 
 .account-center--permissions-c .account-hero {
@@ -11,7 +13,7 @@
   overflow: visible;
   padding: 0 0 22px;
   border: 0;
-  border-bottom: 1px solid #c9d6e8;
+  border-bottom: 1px solid var(--account-permission-divider);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -22,19 +24,19 @@
 }
 
 .account-center--permissions-c .account-hero p {
-  color: #294caf;
+  color: var(--account-permission-blue);
   font-size: 14px;
 }
 
 .account-center--permissions-c .account-hero h2 {
   margin: 8px 0;
-  color: #142a46;
+  color: var(--account-permission-ink);
   font-size: 28px;
 }
 
 .account-center--permissions-c .account-hero span {
   max-width: 72ch;
-  color: #536b86;
+  color: var(--account-permission-muted);
   font-size: 14px;
   line-height: 1.65;
 }
@@ -50,18 +52,18 @@
 .account-center--permissions-c .hero-actions button.secondary {
   min-height: 44px;
   padding: 10px 14px;
-  border: 1px solid #9db1cc;
+  border: 1px solid var(--account-permission-control);
   border-radius: 6px;
-  background: #fff;
-  color: #294caf;
+  background: var(--account-permission-surface);
+  color: var(--account-permission-blue);
   font-size: 14px;
   font-weight: 600;
 }
 
 .account-center--permissions-c .hero-actions button:disabled {
-  border-color: #d8e1ed;
-  background: #e8edf4;
-  color: #66748a;
+  border-color: var(--account-permission-line);
+  background: var(--account-permission-disabled-bg);
+  color: var(--account-permission-disabled-ink);
   opacity: 1;
   cursor: not-allowed;
 }
@@ -83,7 +85,7 @@
   min-height: 34px;
   padding: 0 22px 0 0;
   border: 0;
-  border-right: 1px solid #c9d6e8;
+  border-right: 1px solid var(--account-permission-divider);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -94,19 +96,19 @@
 }
 
 .account-center--permissions-c .permission-metrics :is(small, span) {
-  color: #536b86;
+  color: var(--account-permission-muted);
   font-size: 13px;
 }
 
 .account-center--permissions-c .permission-metrics strong {
   margin: 0;
-  color: #142a46;
+  color: var(--account-permission-ink);
   font-size: 18px;
 }
 
 .account-center--permissions-c .account-updated {
   margin: 0;
-  color: #536b86;
+  color: var(--account-permission-muted);
   font-size: 13px;
   text-align: right;
 }
@@ -114,10 +116,10 @@
 .account-center--permissions-c .account-message {
   margin: 0;
   padding: 14px 18px;
-  border: 1px solid #e5bca4;
+  border: 1px solid var(--account-permission-warning-border);
   border-radius: 8px;
-  background: #fff8ef;
-  color: #75461f;
+  background: var(--account-permission-warning-bg);
+  color: var(--account-permission-warning-ink);
   line-height: 1.6;
 }
 
@@ -127,32 +129,32 @@
   justify-items: start;
   gap: 14px;
   padding: 30px 24px;
-  border: 1px solid #d8e1ed;
+  border: 1px solid var(--account-permission-line);
   border-radius: 10px;
-  background: #fff;
-  color: #142a46;
+  background: var(--account-permission-surface);
+  color: var(--account-permission-ink);
 }
 
 .account-center--permissions-c .account-state button,
 .account-center--permissions-c .account-empty button {
   min-height: 44px;
   padding: 10px 14px;
-  border: 1px solid #9db1cc;
+  border: 1px solid var(--account-permission-control);
   border-radius: 6px;
-  background: #fff;
-  color: #294caf;
+  background: var(--account-permission-surface);
+  color: var(--account-permission-blue);
 }
 
 .account-center--permissions-c .account-state button:disabled,
 .account-center--permissions-c .account-empty button:disabled {
-  border-color: #d8e1ed;
-  background: #e8edf4;
-  color: #66748a;
+  border-color: var(--account-permission-line);
+  background: var(--account-permission-disabled-bg);
+  color: var(--account-permission-disabled-ink);
   cursor: not-allowed;
 }
 
 .account-center--permissions-c :is(a, button, input, select):focus-visible {
-  outline: 3px solid #4276df;
+  outline: 3px solid var(--account-permission-focus);
   outline-offset: 3px;
 }
 

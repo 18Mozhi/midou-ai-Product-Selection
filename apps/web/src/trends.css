@@ -1,3 +1,5 @@
+@import "./design/trend-dashboard-tokens.css";
+
 .trend-dashboard {
   margin-top: 18px;
   min-width: 0;
@@ -789,12 +791,6 @@
 
 /* P14 C direction: evidence desk with one clear reading path. */
 .trend-dashboard--review {
-  --trend-blue: #2853a4;
-  --trend-blue-strong: #173b82;
-  --trend-ink: #14284a;
-  --trend-muted: #5b6f91;
-  --trend-line: #d4deec;
-  --trend-focus: #0f6fff;
   gap: 14px;
   color: var(--trend-ink);
 }
@@ -811,7 +807,7 @@
   border: 0;
   border-radius: 0;
   background: var(--trend-blue);
-  color: #fff;
+  color: var(--trend-on-blue);
   box-shadow: none;
 }
 .trend-dashboard--review .monitoring-readiness__summary {
@@ -820,24 +816,24 @@
   gap: 8px;
 }
 .trend-dashboard--review .monitoring-readiness :is(p, h2, span, dt, small) {
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--trend-on-blue-muted);
 }
 .trend-dashboard--review .monitoring-readiness p {
   letter-spacing: 0.14em;
 }
 .trend-dashboard--review .monitoring-readiness h2 {
-  color: #fff;
+  color: var(--trend-on-blue);
   font-size: clamp(26px, 3.2vw, 40px);
   line-height: 1.1;
 }
 .trend-dashboard--review .monitoring-readiness__summary span {
-  color: rgba(255, 255, 255, 0.82);
+  color: var(--trend-on-blue-subtle);
 }
 .trend-dashboard--review .monitoring-readiness__summary > strong {
   justify-self: start;
   min-height: 0;
   padding: 0;
-  color: #fff;
+  color: var(--trend-on-blue);
   background: transparent;
   font-size: 15px;
 }
@@ -852,13 +848,13 @@
   display: grid;
   align-content: center;
   border: 0;
-  border-left: 1px solid rgba(255, 255, 255, 0.45);
+  border-left: 1px solid var(--trend-on-blue-divider);
   border-radius: 0;
   background: transparent;
 }
 .trend-dashboard--review .monitoring-readiness dd,
 .trend-dashboard--review .monitoring-readiness dl > div[data-state] dd {
-  color: #fff;
+  color: var(--trend-on-blue);
   font-size: 20px;
 }
 .trend-dashboard--review .monitoring-readiness footer {
@@ -870,22 +866,22 @@
 .trend-dashboard--review .monitoring-readiness footer :is(button, a) {
   min-height: 42px;
   padding-inline: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.78);
+  border: 1px solid var(--trend-on-blue-outline);
   border-radius: 4px;
-  color: #fff;
+  color: var(--trend-on-blue);
   background: transparent;
 }
 .trend-dashboard--review .monitoring-readiness footer .primary {
-  border-color: #fff;
+  border-color: var(--trend-on-blue);
   color: var(--trend-blue-strong);
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-tabs {
   padding: 0;
   gap: 0;
   border: 1px solid var(--trend-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-tabs button {
   min-height: 48px;
@@ -893,13 +889,13 @@
   border-radius: 0;
   border-bottom: 3px solid transparent;
   color: var(--trend-muted);
-  background: #fff;
+  background: var(--trend-surface);
   font-weight: 750;
 }
 .trend-dashboard--review .trend-tabs button[aria-current="page"] {
   border-bottom-color: var(--trend-blue);
   color: var(--trend-blue);
-  background: #edf3fc;
+  background: var(--trend-surface-selected);
 }
 .trend-dashboard--review .trend-tabs b {
   min-width: 22px;
@@ -907,17 +903,17 @@
   display: inline-flex;
   justify-content: center;
   border-radius: 999px;
-  color: #fff;
+  color: var(--trend-on-blue);
   background: var(--trend-blue);
 }
 .trend-dashboard--review .trend-message {
   margin: 0;
   padding: 12px 15px;
-  border: 1px solid #bed0ea;
+  border: 1px solid var(--trend-info-border);
   border-left: 4px solid var(--trend-blue);
   border-radius: 0;
   color: var(--trend-ink);
-  background: #edf4ff;
+  background: var(--trend-surface-info);
 }
 .trend-dashboard--review .trend-filters {
   margin: 0;
@@ -926,7 +922,7 @@
   gap: 12px;
   border: 1px solid var(--trend-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-filters label {
   color: var(--trend-muted);
@@ -934,23 +930,23 @@
 .trend-dashboard--review .trend-filters :is(input, select),
 .trend-dashboard--review .trend-modal :is(input, select, textarea) {
   min-height: 44px;
-  border: 1px solid #9db2d0;
+  border: 1px solid var(--trend-control-border);
   border-radius: 4px;
   color: var(--trend-ink);
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-filters button {
   min-height: 44px;
   padding-inline: 14px;
-  border: 1px solid #9db2d0;
+  border: 1px solid var(--trend-control-border);
   border-radius: 4px;
   color: var(--trend-blue);
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-filters button:hover:not(:disabled),
 .trend-dashboard--review .trend-filters button:focus-visible {
   border-color: var(--trend-blue);
-  background: #edf3fc;
+  background: var(--trend-surface-selected);
 }
 .trend-dashboard--review .trend-workbench {
   height: auto;
@@ -959,12 +955,12 @@
   grid-template-columns: minmax(340px, 38%) minmax(0, 1fr);
   border: 1px solid var(--trend-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-list {
   padding: 20px 0 0;
   border-right: 1px solid var(--trend-line);
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-list > header {
   padding: 0 22px 17px;
@@ -990,10 +986,10 @@
   margin-top: 0;
 }
 .trend-dashboard--review .trend-list > button[aria-pressed="true"] {
-  border-top-color: #d5e1f2;
-  border-bottom-color: #d5e1f2;
+  border-top-color: var(--trend-selected-border);
+  border-bottom-color: var(--trend-selected-border);
   box-shadow: inset 3px 0 var(--trend-blue);
-  background: #edf3fc;
+  background: var(--trend-surface-selected);
 }
 .trend-dashboard--review .topic-mark {
   width: 10px;
@@ -1005,7 +1001,7 @@
   display: none;
 }
 .trend-dashboard--review .topic-mark[data-followed="true"] {
-  background: #c78322;
+  background: var(--trend-followed);
 }
 .trend-dashboard--review .trend-list button strong {
   color: var(--trend-ink);
@@ -1031,14 +1027,14 @@
 }
 .trend-dashboard--review .trend-pagination button {
   min-height: 42px;
-  border: 1px solid #b9c9df;
+  border: 1px solid var(--trend-pagination-border);
   border-radius: 4px;
   color: var(--trend-blue);
-  background: #f4f7fb;
+  background: var(--trend-pagination-surface);
 }
 .trend-dashboard--review .trend-detail {
   padding: 26px 28px 32px;
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-detail h3 {
   margin: 9px 0 8px;
@@ -1063,15 +1059,15 @@
   padding: 9px 0;
   border-block: 1px solid var(--trend-line);
   border-inline: 0;
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-actions :is(button, a) {
   min-height: 42px;
   padding: 9px 14px;
-  border: 1px solid #9db2d0;
+  border: 1px solid var(--trend-control-border);
   border-radius: 4px;
   color: var(--trend-blue);
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-actions .quiet {
   border-color: transparent;
@@ -1082,11 +1078,11 @@
 .trend-dashboard--review .trend-lower > section {
   border: 1px solid var(--trend-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-conclusion {
   padding: 20px;
-  background: #f8fbff;
+  background: var(--trend-subtle-surface);
 }
 .trend-dashboard--review .trend-conclusion p,
 .trend-dashboard--review .trend-evidence > header p,
@@ -1096,19 +1092,19 @@
 .trend-dashboard--review .trend-conclusion dl div {
   border: 1px solid var(--trend-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-evidence-item,
 .trend-dashboard--review .keyword-cloud > span {
   border: 1px solid var(--trend-line);
   border-radius: 0;
-  background: #f8fbff;
+  background: var(--trend-subtle-surface);
 }
 .trend-dashboard--review .trend-evidence-actions :is(a, button) {
   min-height: 40px;
   border-radius: 4px;
   color: var(--trend-blue);
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-explainer {
   border: 0;
@@ -1124,7 +1120,7 @@
 .trend-dashboard--review .trend-rule-empty {
   border: 1px solid var(--trend-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-rule-heading {
   padding: 18px 0 14px;
@@ -1138,23 +1134,23 @@
   min-height: 42px;
   border: 1px solid var(--trend-blue);
   border-radius: 4px;
-  color: #fff;
+  color: var(--trend-on-blue);
   background: var(--trend-blue);
 }
 .trend-dashboard--review .trend-rules article > button.secondary {
   color: var(--trend-blue);
-  background: #fff;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-modal {
-  background: rgba(20, 40, 74, 0.56);
+  background: var(--trend-modal-backdrop);
   backdrop-filter: blur(6px);
 }
 .trend-dashboard--review .trend-modal form {
   border: 1px solid var(--trend-line);
   border-top: 5px solid var(--trend-blue);
   border-radius: 0;
-  background: #fff;
-  box-shadow: 0 22px 48px rgba(20, 40, 74, 0.24);
+  background: var(--trend-surface);
+  box-shadow: 0 22px 48px var(--trend-modal-shadow);
 }
 .trend-dashboard--review .trend-modal footer button:last-child {
   border-color: var(--trend-blue);

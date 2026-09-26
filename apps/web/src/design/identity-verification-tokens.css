@@ -1,0 +1,19 @@
+html:has(body #app .p05-verification-page) {
+  --p05-blue: #1748a0;
+  --p05-ink: #182d4a;
+  --p05-muted: #52647b;
+  --p05-line: #dce4ee;
+  --p05-focus: #2465d7;
+  --p05-surface: #fff;
+  --p05-hero-muted: #dce8ff;
+  --p05-hero-subtle: #e2ecff;
+  --p05-info: #edf4ff;
+  --p05-success: #267a54;
+  --p05-success-soft: #effaf4;
+  --p05-danger: #b42318;
+  --p05-danger-soft: #fff6f5;
+  --p05-button-hover: #123b85;
+  --p05-button-active: #0f3270;
+  --p05-disabled-border: #aab6c5;
+  --p05-disabled-surface: #e7ebf0;
+}

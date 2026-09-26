@@ -1,0 +1,25 @@
+html:has(body #app .trend-dashboard--review) {
+  --trend-blue: #2853a4;
+  --trend-blue-strong: #173b82;
+  --trend-ink: #14284a;
+  --trend-muted: #5b6f91;
+  --trend-line: #d4deec;
+  --trend-focus: #0f6fff;
+  --trend-on-blue: #fff;
+  --trend-on-blue-muted: rgba(255, 255, 255, 0.9);
+  --trend-on-blue-subtle: rgba(255, 255, 255, 0.82);
+  --trend-on-blue-divider: rgba(255, 255, 255, 0.45);
+  --trend-on-blue-outline: rgba(255, 255, 255, 0.78);
+  --trend-surface: #fff;
+  --trend-surface-selected: #edf3fc;
+  --trend-surface-info: #edf4ff;
+  --trend-info-border: #bed0ea;
+  --trend-control-border: #9db2d0;
+  --trend-selected-border: #d5e1f2;
+  --trend-followed: #c78322;
+  --trend-pagination-border: #b9c9df;
+  --trend-pagination-surface: #f4f7fb;
+  --trend-subtle-surface: #f8fbff;
+  --trend-modal-backdrop: rgba(20, 40, 74, 0.56);
+  --trend-modal-shadow: rgba(20, 40, 74, 0.24);
+}

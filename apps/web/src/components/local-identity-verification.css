@@ -1,8 +1,6 @@
+@import "../design/identity-verification-tokens.css";
+
 .p05-verification-page {
-  --p05-blue: #1748a0;
-  --p05-ink: #182d4a;
-  --p05-muted: #52647b;
-  --p05-line: #dce4ee;
   width: min(780px, calc(100% - 48px));
   min-height: 100dvh;
   margin: 0 auto;
@@ -23,7 +21,7 @@
 }
 
 .p05-verification-page :focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p05-focus);
   outline-offset: 3px;
 }
 
@@ -40,7 +38,7 @@
   align-items: center;
   padding: 0 12px;
   background: var(--p05-blue);
-  color: #fff;
+  color: var(--p05-surface);
   font-weight: 800;
   text-decoration: none;
 }
@@ -53,11 +51,11 @@
 .p05-verification-hero {
   padding: 32px 38px;
   background: var(--p05-blue);
-  color: #fff;
+  color: var(--p05-surface);
 }
 
 .p05-verification-hero > p {
-  color: #dce8ff;
+  color: var(--p05-hero-muted);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -65,18 +63,18 @@
 
 .p05-verification-hero h1 {
   margin: 8px 0;
-  color: #fff;
+  color: var(--p05-surface);
   font-size: 34px;
   line-height: 1.25;
 }
 
 .p05-verification-hero > span {
-  color: #e2ecff;
+  color: var(--p05-hero-subtle);
 }
 
 .p05-verification-workspace {
   border: 1px solid var(--p05-line);
-  background: #fff;
+  background: var(--p05-surface);
 }
 
 .p05-verification-notice {
@@ -85,7 +83,7 @@
   margin: 28px 38px;
   padding: 16px;
   border-left: 3px solid var(--p05-blue);
-  background: #edf4ff;
+  background: var(--p05-info);
   color: var(--p05-muted);
   overflow-wrap: anywhere;
 }
@@ -95,13 +93,13 @@
 }
 
 .p05-verification-success {
-  border-color: #267a54;
-  background: #effaf4;
+  border-color: var(--p05-success);
+  background: var(--p05-success-soft);
 }
 
 .p05-verification-error {
-  border-color: #b42318;
-  background: #fff6f5;
+  border-color: var(--p05-danger);
+  background: var(--p05-danger-soft);
 }
 
 .p05-verification-next {
@@ -119,24 +117,24 @@
   border: 1px solid var(--p05-blue);
   border-radius: 0;
   background: var(--p05-blue);
-  color: #fff;
+  color: var(--p05-surface);
   font: inherit;
   font-weight: 800;
   cursor: pointer;
 }
 
 .p05-verification-page .p05-verification-primary:hover {
-  background: #123b85;
+  background: var(--p05-button-hover);
 }
 
 .p05-verification-page .p05-verification-primary:active {
-  background: #0f3270;
+  background: var(--p05-button-active);
 }
 
 .p05-verification-page .p05-verification-primary:disabled {
-  border-color: #aab6c5;
-  background: #e7ebf0;
-  color: #52647b;
+  border-color: var(--p05-disabled-border);
+  background: var(--p05-disabled-surface);
+  color: var(--p05-muted);
   cursor: not-allowed;
 }
 

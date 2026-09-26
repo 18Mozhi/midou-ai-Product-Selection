@@ -240,10 +240,9 @@ const currentRunState = computed(() => {
 </template>
 
 <style scoped>
+@import "../design/acceptance-1688-tokens.css";
+
 .acceptance-1688 {
-  --acceptance-blue: #185adb;
-  --acceptance-ink: #14243a;
-  --acceptance-muted: #64748b;
   color: var(--acceptance-ink);
 }
 .acceptance-1688__layout {
@@ -259,9 +258,14 @@ const currentRunState = computed(() => {
   gap: 18px;
   padding: 20px;
   border-radius: 16px;
-  background: linear-gradient(155deg, #123f9c, #185adb 60%, #2878ed);
-  color: #fff;
-  box-shadow: 0 12px 32px #173f8729;
+  background: linear-gradient(
+    155deg,
+    var(--acceptance-rail-start),
+    var(--acceptance-blue) 60%,
+    var(--acceptance-rail-end)
+  );
+  color: var(--acceptance-on-rail);
+  box-shadow: 0 12px 32px var(--acceptance-rail-shadow);
 }
 .acceptance-1688__identity {
   display: flex;
@@ -277,7 +281,7 @@ const currentRunState = computed(() => {
 }
 .acceptance-1688__identity p,
 .acceptance-1688__rail-state > span {
-  color: #d9e7ff;
+  color: var(--acceptance-rail-muted);
   font-size: 13px;
 }
 .acceptance-1688__mark {
@@ -285,9 +289,9 @@ const currentRunState = computed(() => {
   width: 48px;
   height: 48px;
   place-items: center;
-  border: 1px solid #ffffff55;
+  border: 1px solid var(--acceptance-rail-mark-border);
   border-radius: 13px;
-  background: #ffffff16;
+  background: var(--acceptance-rail-mark-surface);
   font-size: 13px;
   font-weight: 800;
 }
@@ -299,9 +303,9 @@ const currentRunState = computed(() => {
   display: grid;
   gap: 7px;
   padding: 14px;
-  border: 1px solid #ffffff2e;
+  border: 1px solid var(--acceptance-rail-state-border);
   border-radius: 12px;
-  background: #ffffff12;
+  background: var(--acceptance-rail-state-surface);
 }
 .acceptance-1688__rail-state strong {
   font-size: 17px;
@@ -309,7 +313,7 @@ const currentRunState = computed(() => {
 }
 .acceptance-1688__rail-state p,
 .acceptance-1688__rail-context p {
-  color: #e2ecff;
+  color: var(--acceptance-rail-copy);
   font-size: 13px;
   line-height: 1.55;
 }
@@ -319,7 +323,7 @@ const currentRunState = computed(() => {
   margin: 0;
 }
 .acceptance-1688__rail-stats dt {
-  color: #d9e7ff;
+  color: var(--acceptance-rail-muted);
   font-size: 13px;
 }
 .acceptance-1688__rail-stats dd {
@@ -338,19 +342,19 @@ const currentRunState = computed(() => {
   align-items: center;
   justify-content: space-between;
   padding: 9px 11px;
-  border: 1px solid #ffffff42;
+  border: 1px solid var(--acceptance-rail-link-border);
   border-radius: 9px;
-  color: #fff;
+  color: var(--acceptance-on-rail);
   text-decoration: none;
 }
 .acceptance-1688__rail-context {
-  border-top: 1px solid #ffffff35;
+  border-top: 1px solid var(--acceptance-rail-divider);
   padding-top: 12px;
 }
 .acceptance-1688__rail-context summary {
   min-height: 38px;
   cursor: pointer;
-  color: #fff;
+  color: var(--acceptance-on-rail);
 }
 .acceptance-1688__rail-context p + p {
   margin-top: 7px;
@@ -551,7 +555,7 @@ const currentRunState = computed(() => {
 .acceptance-1688__content :deep(button:focus-visible),
 .acceptance-1688__content :deep(a:focus-visible),
 .acceptance-1688__content :deep(summary:focus-visible) {
-  outline: 3px solid #8bb7ff;
+  outline: 3px solid var(--acceptance-focus);
   outline-offset: 2px;
 }
 .acceptance-1688__content :deep(button:disabled) {
@@ -561,7 +565,7 @@ const currentRunState = computed(() => {
 .acceptance-1688__content :deep(.acceptance-1688__start-button) {
   border-color: var(--acceptance-blue);
   background: var(--acceptance-blue);
-  color: #fff;
+  color: var(--acceptance-on-rail);
   font-weight: 700;
 }
 .acceptance-1688__content :deep(.acceptance-1688__scope-feedback),

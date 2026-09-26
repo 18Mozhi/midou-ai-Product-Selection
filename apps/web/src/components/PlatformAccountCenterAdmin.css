@@ -1,10 +1,12 @@
+@import "../design/account-center-tokens.css";
+
 .account-center--admins-c {
-  --account-review-blue: #254a9c;
-  --account-review-blue-deep: #18386f;
-  --account-review-ink: #202c3d;
-  --account-review-muted: #58677b;
-  --account-review-line: #dbe1e9;
-  --account-review-soft: #edf1f6;
+  --account-review-blue: var(--account-org-blue);
+  --account-review-blue-deep: var(--account-org-blue-deep);
+  --account-review-ink: var(--account-org-ink);
+  --account-review-muted: var(--account-org-muted);
+  --account-review-line: var(--account-org-line);
+  --account-review-soft: var(--account-org-soft);
   color: var(--account-review-ink);
 }
 
@@ -15,7 +17,7 @@
   gap: 24px;
   padding: 0 0 24px;
   border: 0;
-  border-bottom: 1px solid #cbd6e5;
+  border-bottom: 1px solid var(--account-org-admin-border);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -56,9 +58,9 @@
 .account-center--admins-c .hero-actions a {
   min-height: 44px;
   padding: 10px 14px;
-  border: 1px solid #bdcbe0;
+  border: 1px solid var(--account-org-admin-control);
   border-radius: 8px;
-  background: #fff;
+  background: var(--account-org-surface);
   color: var(--account-review-blue-deep);
   font-weight: 700;
 }
@@ -66,12 +68,12 @@
 .account-center--admins-c .hero-actions button:nth-child(2) {
   border-color: var(--account-review-blue);
   background: var(--account-review-blue);
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 
 .account-center--admins-c .hero-actions button:last-child {
-  border-color: #bdcbe0;
-  background: #fff;
+  border-color: var(--account-org-admin-control);
+  background: var(--account-org-surface);
   color: var(--account-review-blue-deep);
 }
 
@@ -93,19 +95,19 @@
   top: 16px;
   min-width: 0;
   padding: 22px;
-  border: 1px solid #18386f;
+  border: 1px solid var(--account-org-blue-deep);
   border-radius: 14px;
   background: var(--account-review-blue);
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 
 .account-center .account-page-rail__intro {
   padding-bottom: 16px;
-  border-bottom: 1px solid rgb(255 255 255 / 28%);
+  border-bottom: 1px solid var(--account-org-divider);
 }
 
 .account-center .account-page-rail__intro small {
-  color: #dce8ff;
+  color: var(--account-org-hero-muted);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -113,13 +115,13 @@
 
 .account-center .account-page-rail__intro h3 {
   margin: 8px 0 6px;
-  color: #fff;
+  color: var(--account-org-on-blue);
   font-size: 22px;
 }
 
 .account-center .account-page-rail__intro p {
   margin: 0;
-  color: #e4edff;
+  color: var(--account-org-hero-subtle);
   font-size: 13px;
   line-height: 1.7;
 }
@@ -134,16 +136,16 @@
 .account-center--admins-c .account-page-rail .account-metrics article {
   padding: 16px 0;
   border: 0;
-  border-bottom: 1px solid rgb(255 255 255 / 28%);
+  border-bottom: 1px solid var(--account-org-divider);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 
 .account-center--admins-c .account-page-rail .account-metrics :is(small, strong, span) {
   display: block;
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 
 .account-center--admins-c .account-page-rail .account-metrics small,
@@ -171,17 +173,17 @@
   min-height: 44px;
   justify-content: flex-start;
   padding: 9px 12px;
-  border: 1px solid rgb(255 255 255 / 36%);
+  border: 1px solid var(--account-org-outline);
   border-radius: 7px;
   background: transparent;
-  color: #fff;
+  color: var(--account-org-on-blue);
   font-size: 14px;
   text-decoration: none;
 }
 
 .account-center--admins-c .account-page-rail .account-tabs a.on {
-  border-color: #fff;
-  background: #fff;
+  border-color: var(--account-org-surface);
+  background: var(--account-org-surface);
   color: var(--account-review-blue-deep);
   font-weight: 800;
 }
@@ -221,7 +223,7 @@
   padding: 18px 20px;
   border: 1px solid var(--account-review-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--account-org-surface);
 }
 
 .account-center .admin-filter-field {
@@ -239,9 +241,9 @@
   min-width: 0;
   min-height: 44px;
   padding: 9px 11px;
-  border: 1px solid #bdcbe0;
+  border: 1px solid var(--account-org-admin-control);
   border-radius: 7px;
-  background: #fff;
+  background: var(--account-org-surface);
   color: var(--account-review-ink);
   font: inherit;
   font-weight: 500;
@@ -267,11 +269,11 @@
   border: 1px solid var(--account-review-blue);
   border-radius: 7px;
   background: var(--account-review-blue);
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 
 .account-center--admins-c .admin-filter-actions button.secondary {
-  border-color: #bdcbe0;
+  border-color: var(--account-org-admin-control);
   background: var(--account-review-soft);
   color: var(--account-review-ink);
 }
@@ -281,7 +283,7 @@
   border: 1px solid var(--account-review-line);
   border-top: 3px solid var(--account-review-blue);
   border-radius: 10px;
-  background: #fff;
+  background: var(--account-org-surface);
 }
 
 .account-center--admins-c .account-table-wrap table {
@@ -313,20 +315,20 @@
   padding: 0;
   border: 1px solid var(--account-review-line);
   border-radius: 12px;
-  background: #fff;
+  background: var(--account-org-surface);
 }
 
 .account-center--admins-c .role-comparison > header {
   align-items: center;
   padding: 20px 22px;
   background: var(--account-review-blue);
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 
 .account-center--admins-c .role-comparison > header p,
 .account-center--admins-c .role-comparison > header h3,
 .account-center--admins-c .role-comparison > header span {
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 
 .account-center--admins-c .role-comparison > header p {
@@ -339,9 +341,9 @@
 
 .account-center--admins-c .role-comparison__toggle {
   padding: 8px 12px;
-  border: 1px solid rgb(255 255 255 / 45%);
+  border: 1px solid var(--account-org-outline-strong);
   border-radius: 7px;
-  color: #fff;
+  color: var(--account-org-on-blue);
 }
 
 .account-center--admins-c .role-comparison__selectors,
@@ -362,7 +364,7 @@
 
 .account-center--admins-c .role-comparison__summaries article {
   border-radius: 7px;
-  background: #f4f7fb;
+  background: var(--account-org-admin-surface);
 }
 
 .account-center--admins-c .role-comparison__result {
@@ -378,12 +380,12 @@
 
 .account-center--admins-c .role-comparison__matrix article {
   border-radius: 7px;
-  background: #fff;
+  background: var(--account-org-surface);
 }
 
 .account-center--admins-c :is(a, button, input, select, textarea):focus-visible,
 .account-center--admins-c .role-comparison :is(a, button, input, select, textarea):focus-visible {
-  outline: 3px solid rgb(37 74 156 / 42%);
+  outline: 3px solid var(--account-org-focus-strong);
   outline-offset: 3px;
 }
 
@@ -412,7 +414,7 @@
   .account-center--admins-c .account-page-rail .account-metrics article {
     padding: 4px 12px;
     border: 0;
-    border-left: 1px solid rgb(255 255 255 / 28%);
+    border-left: 1px solid var(--account-org-divider);
   }
 
   .account-center--admins-c .account-tabs {
@@ -481,7 +483,7 @@
   .account-center .account-page-rail__intro {
     margin-bottom: 14px;
     padding-bottom: 14px;
-    border-bottom: 1px solid rgb(255 255 255 / 28%);
+    border-bottom: 1px solid var(--account-org-divider);
   }
 
   .account-center--admins-c .account-page-rail .account-metrics {

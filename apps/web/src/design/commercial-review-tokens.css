@@ -1,0 +1,22 @@
+html:has(body #app .commercial--review) {
+  --so-primary: #1748b5;
+  --so-primary-strong: #102a63;
+  --so-text: #17253c;
+  --so-text-muted: #536985;
+  --so-panel: #fff;
+  --so-panel-soft: #edf2fa;
+  --so-bg-elevated: #fff;
+  --so-border: #c7d3e4;
+  --so-border-strong: #94a8c4;
+  --so-focus: #2f6ee5;
+  --so-danger: #a52630;
+  --so-danger-border: #d9949b;
+  --so-muted-panel: #f3f6fa;
+  --so-secondary-muted: #52637c;
+  --so-dialog-border: #d3ddea;
+  --so-danger-strong: #a43730;
+  --so-danger-panel: #fff8f7;
+  --so-danger-text: #842f29;
+  --so-disabled-panel: #e8edf4;
+  --so-disabled-text: #68778d;
+}

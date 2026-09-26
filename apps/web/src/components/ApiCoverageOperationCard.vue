@@ -100,11 +100,13 @@ const evidenceStatusName = (value: string) =>
 </template>
 
 <style scoped>
+@import "../design/api-coverage-tokens.css";
+
 .p63-operation {
   min-width: 0;
   padding: 18px;
   border: 1px solid var(--p63-line);
-  background: #fff;
+  background: var(--p63-panel);
 }
 .p63-operation + .p63-operation {
   margin-top: 12px;
@@ -125,8 +127,8 @@ const evidenceStatusName = (value: string) =>
 .p63-operation__method {
   flex: 0 0 auto;
   padding: 2px 7px;
-  background: #edf4ff;
-  color: #1748a0;
+  background: var(--p63-blue-soft);
+  color: var(--p63-blue);
   font-size: 13px;
 }
 .p63-operation code,
@@ -137,7 +139,7 @@ const evidenceStatusName = (value: string) =>
   word-break: break-word;
 }
 .p63-operation__identity code {
-  color: #182d4a;
+  color: var(--p63-ink);
 }
 .p63-operation__identity small {
   min-width: 0;
@@ -147,22 +149,22 @@ const evidenceStatusName = (value: string) =>
 }
 .p63-operation__outcome {
   flex: 0 0 auto;
-  color: #52647b;
+  color: var(--p63-muted);
 }
 .p63-operation [data-state="success"],
 .p63-operation [data-state="passed"] {
-  color: #185f47;
+  color: var(--p63-success-text);
 }
 .p63-operation [data-state="blocked"],
 .p63-operation [data-state="unauthorized"],
 .p63-operation [data-state="unauthenticated"],
 .p63-operation [data-state="failed"] {
-  color: #9a3f36;
+  color: var(--p63-error-text);
 }
 .p63-operation [data-state="not_run"],
 .p63-operation [data-state="not_applicable"],
 .p63-operation [data-state="empty"] {
-  color: #805300;
+  color: var(--p63-warning-text);
 }
 .p63-operation__facts,
 .p63-operation__trace dl {
@@ -175,7 +177,7 @@ const evidenceStatusName = (value: string) =>
 .p63-operation__trace dl div {
   min-width: 0;
   padding: 10px;
-  background: #f7f9fc;
+  background: var(--p63-card-soft);
 }
 .p63-operation dt {
   color: var(--p63-muted);
@@ -183,7 +185,7 @@ const evidenceStatusName = (value: string) =>
 }
 .p63-operation dd {
   margin: 3px 0 0;
-  color: #182d4a;
+  color: var(--p63-ink);
 }
 .p63-operation details {
   margin-top: 10px;
@@ -192,11 +194,11 @@ const evidenceStatusName = (value: string) =>
 .p63-operation summary {
   min-height: 44px;
   padding: 10px 2px;
-  color: #1748a0;
+  color: var(--p63-blue);
   cursor: pointer;
 }
 .p63-operation summary:focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p63-focus);
   outline-offset: 2px;
 }
 .p63-operation__evidence ul {
@@ -210,7 +212,7 @@ const evidenceStatusName = (value: string) =>
 .p63-operation__evidence li {
   min-width: 0;
   padding: 12px;
-  background: #f7f9fc;
+  background: var(--p63-card-soft);
 }
 .p63-operation__evidence li > span {
   display: block;
@@ -220,7 +222,7 @@ const evidenceStatusName = (value: string) =>
 }
 .p63-operation__evidence p {
   margin: 7px 0 0;
-  color: #182d4a;
+  color: var(--p63-ink);
 }
 .p63-operation__trace dl {
   grid-template-columns: repeat(2, minmax(0, 1fr));

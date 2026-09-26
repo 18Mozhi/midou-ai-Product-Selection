@@ -92,11 +92,9 @@ watch(() => route.fullPath, focusHeading);
 </template>
 
 <style scoped>
+@import "../design/not-found-tokens.css";
+
 .not-found-page {
-  --p73-blue: #1748a0;
-  --p73-ink: #182d4a;
-  --p73-muted: #52647b;
-  --p73-line: #dce4ee;
   box-sizing: border-box;
   width: 100%;
   min-height: 100dvh;
@@ -106,7 +104,7 @@ watch(() => route.fullPath, focusHeading);
   align-content: start;
   gap: 16px;
   color: var(--p73-ink);
-  background: #f3f6fb;
+  background: var(--p73-canvas);
   font:
     16px/1.65 "Microsoft YaHei",
     sans-serif;
@@ -120,7 +118,7 @@ watch(() => route.fullPath, focusHeading);
   margin: 0;
 }
 .not-found-page :is(a, button):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p73-focus);
   outline-offset: 3px;
 }
 .p73-top,
@@ -146,23 +144,23 @@ watch(() => route.fullPath, focusHeading);
   height: 32px;
   display: grid;
   place-items: center;
-  color: #fff;
+  color: var(--p73-surface);
   background: var(--p73-blue);
 }
 .p73-hero {
   padding: 34px 36px;
-  color: #fff;
+  color: var(--p73-surface);
   background: var(--p73-blue);
 }
 .p73-hero p {
-  color: #d9e6ff;
+  color: var(--p73-hero-muted);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.06em;
 }
 .p73-hero h1 {
   margin: 5px 0;
-  color: #fff;
+  color: var(--p73-surface);
   font-size: 34px;
   line-height: 1.35;
 }
@@ -170,11 +168,11 @@ watch(() => route.fullPath, focusHeading);
   outline: none;
 }
 .p73-hero > span {
-  color: #e2ebff;
+  color: var(--p73-hero-subtle);
 }
 .p73-workspace {
   border: 1px solid var(--p73-line);
-  background: #fff;
+  background: var(--p73-surface);
 }
 .p73-route {
   display: grid;
@@ -183,7 +181,7 @@ watch(() => route.fullPath, focusHeading);
   align-items: center;
   padding: 18px 22px;
   border-bottom: 1px solid var(--p73-line);
-  background: #f6f9ff;
+  background: var(--p73-route-surface);
 }
 .p73-route small,
 .p73-recovery small {
@@ -227,11 +225,11 @@ watch(() => route.fullPath, focusHeading);
   justify-content: center;
   border: 1px solid var(--p73-blue);
   color: var(--p73-blue);
-  background: #fff;
+  background: var(--p73-surface);
   text-decoration: none;
 }
 .p73-recovery nav .not-found-primary {
-  color: #fff;
+  color: var(--p73-surface);
   background: var(--p73-blue);
 }
 .not-found-continuity {
@@ -246,7 +244,7 @@ watch(() => route.fullPath, focusHeading);
   gap: 4px 12px;
   padding: 12px 16px;
   border-left: 3px solid var(--p73-blue);
-  background: #edf4ff;
+  background: var(--p73-boundary);
 }
 .p73-boundary span {
   color: var(--p73-muted);

@@ -1,0 +1,23 @@
+.source-center--p48 {
+  --p48-source-ink: #142a46;
+  --p48-source-focus: #185adb;
+  --p48-source-blue: #294caf;
+  --p48-source-success: #3b7d63;
+  --p48-source-muted: #52657e;
+  --p48-source-info: #53759f;
+  --p48-source-neutral: #6e8199;
+  --p48-source-danger: #a44a4a;
+  --p48-source-warning: #a97016;
+  --p48-source-return-border: #cbd8ea;
+  --p48-source-line: #cfd9e7;
+  --p48-source-hero-muted: #dce6ff;
+  --p48-source-hero-subtle: #edf2ff;
+  --p48-source-canvas: #eef2f7;
+  --p48-source-info-panel: #f6f9ff;
+  --p48-source-soft: #f8fbff;
+  --p48-source-success-panel: #f8fcfa;
+  --p48-source-surface: #fff;
+  --p48-source-danger-panel: #fffafa;
+  --p48-source-warning-panel: #fffdf8;
+  --p48-source-outline: rgb(255 255 255 / 55%);
+}

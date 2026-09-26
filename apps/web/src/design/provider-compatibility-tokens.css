@@ -1,0 +1,46 @@
+.source-modal.p48-compatibility-modal,
+.source-modal.p48-parser-samples-modal {
+  --p48-scrim: rgb(15 23 42 / 72%);
+  --p48-panel-border: #d3deec;
+  --p48-panel: #f7f9fc;
+  --p48-shadow: rgb(15 23 42 / 28%);
+  --p48-accent: #164fae;
+  --p48-on-accent: #fff;
+  --p48-on-accent-muted: rgb(255 255 255 / 82%);
+  --p48-on-accent-border: rgb(255 255 255 / 38%);
+  --p48-on-accent-soft: rgb(255 255 255 / 10%);
+  --p48-adapter-accent: #1769e0;
+  --p48-adapter-ink: #37516f;
+  --p48-adapter-panel: #eaf3ff;
+  --p48-missing-border: #94a3b8;
+  --p48-missing-panel: #f1f5f9;
+  --p48-summary-border: #cad7e8;
+  --p48-ink: #172033;
+  --p48-divider: #d7e0eb;
+  --p48-summary-cell: #f8fafc;
+  --p48-muted: #64748b;
+  --p48-subtle: #53657d;
+  --p48-table-ink: #243247;
+  --p48-table-muted: #52657d;
+  --p48-table-header: #edf3fa;
+  --p48-code-ink: #334155;
+  --p48-badge-ink: #526176;
+  --p48-badge-panel: #edf1f6;
+  --p48-success: #11653f;
+  --p48-success-panel: #dff5e9;
+  --p48-warning: #8a5100;
+  --p48-warning-panel: #fff0cf;
+  --p48-sticky-panel: rgb(255 255 255 / 96%);
+  --p48-mobile-divider: #e2e8f0;
+  --p48-gates-border: #cbdcf6;
+  --p48-gates-ink: #244a7c;
+  --p48-adapter-subtle: #edf4ff;
+  --p48-detail-divider: #dce4ef;
+  --p48-feedback-ink: #344d6a;
+  --p48-error-border: #f2c9c5;
+  --p48-error-accent: #c2413b;
+  --p48-error-ink: #633b39;
+  --p48-error-panel: #fff8f7;
+  --p48-focus: #66a3ff;
+  --p48-sticky-shadow: rgb(15 23 42 / 6%);
+}

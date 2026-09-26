@@ -1,10 +1,6 @@
+@import "../design/account-center-tokens.css";
+
 .account-center--users-c {
-  --account-users-blue: #254a9c;
-  --account-users-blue-deep: #18386f;
-  --account-users-ink: #202c3d;
-  --account-users-muted: #58677b;
-  --account-users-line: #dbe1e9;
-  --account-users-soft: #edf1f6;
   gap: 16px;
   color: var(--account-users-ink);
 }
@@ -24,7 +20,7 @@
 }
 
 .account-center--users-c .account-hero p {
-  color: #dce8ff;
+  color: var(--account-users-hero-muted);
   font-size: 16px;
 }
 
@@ -35,34 +31,34 @@
 }
 
 .account-center--users-c .account-hero span {
-  color: #e8efff;
+  color: var(--account-users-hero-subtle);
   font-size: 16px;
 }
 
 .account-center--users-c .hero-actions {
   justify-content: flex-end;
   padding: 18px 20px;
-  background: rgb(5 34 78 / 24%);
+  background: var(--account-users-overlay);
 }
 
 .account-center--users-c .hero-actions button {
   min-height: 44px;
-  border: 1px solid rgb(255 255 255 / 50%);
+  border: 1px solid var(--account-users-outline);
   border-radius: 8px;
-  background: #fff;
+  background: var(--account-users-surface);
   color: var(--account-users-blue-deep);
 }
 
 .account-center--users-c .hero-actions button:nth-child(2) {
-  border-color: #fff;
-  background: #fff;
+  border-color: var(--account-users-on-blue);
+  background: var(--account-users-surface);
   color: var(--account-users-blue-deep);
 }
 
 .account-center--users-c .hero-actions button:last-child {
-  border-color: rgb(255 255 255 / 50%);
+  border-color: var(--account-users-outline);
   background: transparent;
-  color: #fff;
+  color: var(--account-users-on-blue);
 }
 
 .account-center--users-c .account-page-layout.account-page-layout--users .account-page-main {
@@ -88,29 +84,29 @@
   border: 1px solid var(--account-users-blue-deep);
   border-radius: 12px;
   background: var(--account-users-blue);
-  color: #fff;
+  color: var(--account-users-on-blue);
 }
 
 .account-center--users-c .account-page-rail__intro {
   padding-bottom: 14px;
-  border-bottom: 1px solid rgb(255 255 255 / 30%);
+  border-bottom: 1px solid var(--account-users-divider);
 }
 
 .account-center--users-c .account-page-rail__intro small {
-  color: #dce8ff;
+  color: var(--account-users-hero-muted);
   font-size: 16px;
   font-weight: 700;
 }
 
 .account-center--users-c .account-page-rail__intro h3 {
   margin: 7px 0;
-  color: #fff;
+  color: var(--account-users-on-blue);
   font-size: 21px;
 }
 
 .account-center--users-c .account-page-rail__intro p {
   margin: 0;
-  color: #e8efff;
+  color: var(--account-users-hero-subtle);
   font-size: 16px;
   line-height: 1.55;
 }
@@ -126,7 +122,7 @@
   min-height: 0;
   padding: 13px 0;
   border: 0;
-  border-bottom: 1px solid rgb(255 255 255 / 30%);
+  border-bottom: 1px solid var(--account-users-divider);
   border-radius: 0;
   background: transparent;
   box-shadow: none;
@@ -134,7 +130,7 @@
 
 .account-center--users-c .account-page-rail .account-metrics :is(small, strong, span) {
   display: block;
-  color: #fff;
+  color: var(--account-users-on-blue);
 }
 
 .account-center--users-c .account-page-rail .account-metrics small,
@@ -165,17 +161,17 @@
   min-height: 44px;
   justify-content: flex-start;
   padding: 9px 12px;
-  border: 1px solid rgb(255 255 255 / 42%);
+  border: 1px solid var(--account-users-outline);
   border-radius: 7px;
   background: transparent;
-  color: #fff;
+  color: var(--account-users-on-blue);
   font-size: 16px;
   text-decoration: none;
 }
 
 .account-center--users-c .account-page-rail .account-tabs a.on {
-  border-color: #fff;
-  background: #fff;
+  border-color: var(--account-users-on-blue);
+  background: var(--account-users-surface);
   color: var(--account-users-blue-deep);
   font-weight: 800;
 }
@@ -200,7 +196,7 @@
 .account-center--users-c .responsive-filter-drawer__surface {
   border: 1px solid var(--account-users-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--account-users-surface);
 }
 
 .account-center--users-c .account-filter {
@@ -212,9 +208,9 @@
 .account-center--users-c .account-filter input,
 .account-center--users-c .account-filter select {
   min-height: 44px;
-  border-color: #aab8ca;
+  border-color: var(--account-users-control-border);
   border-radius: 7px;
-  background: #fff;
+  background: var(--account-users-surface);
 }
 
 .account-center--users-c .account-filter button {
@@ -224,8 +220,8 @@
 }
 
 .account-center--users-c .account-filter button.secondary {
-  border: 1px solid #aab8ca;
-  background: #fff;
+  border: 1px solid var(--account-users-control-border);
+  background: var(--account-users-surface);
   color: var(--account-users-ink);
 }
 
@@ -240,7 +236,7 @@
 .account-center--users-c .account-empty {
   border: 1px solid var(--account-users-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--account-users-surface);
   box-shadow: none;
 }
 
@@ -263,14 +259,14 @@
 .account-center--users-c .account-empty button,
 .account-center--users-c .account-state button {
   min-height: 44px;
-  border: 1px solid #aab8ca;
+  border: 1px solid var(--account-users-control-border);
   border-radius: 7px;
-  background: #fff;
+  background: var(--account-users-surface);
   color: var(--account-users-blue-deep);
 }
 
 .account-center--users-c :is(a, button, input, select, textarea):focus-visible {
-  outline: 3px solid rgb(37 74 156 / 42%);
+  outline: 3px solid var(--account-users-focus);
   outline-offset: 3px;
 }
 
@@ -343,7 +339,7 @@
 
   .account-center--users-c .account-page-rail .account-metrics article {
     padding: 12px 8px;
-    border-right: 1px solid rgb(255 255 255 / 30%);
+    border-right: 1px solid var(--account-users-divider);
     border-bottom: 0;
   }
 

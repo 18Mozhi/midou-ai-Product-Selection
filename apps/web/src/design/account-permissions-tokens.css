@@ -1,0 +1,21 @@
+html:has(body #app .account-center--permissions-c) {
+  --account-permission-ink: #142a46;
+  --account-permission-blue: #294caf;
+  --account-permission-muted: #536b86;
+  --account-permission-divider: #c9d6e8;
+  --account-permission-line: #d8e1ed;
+  --account-permission-control: #9db1cc;
+  --account-permission-surface: #fff;
+  --account-permission-disabled-bg: #e8edf4;
+  --account-permission-disabled-ink: #66748a;
+  --account-permission-warning-border: #e5bca4;
+  --account-permission-warning-bg: #fff8ef;
+  --account-permission-warning-ink: #75461f;
+  --account-permission-focus: #4276df;
+  --account-permission-on-blue: #fff;
+  --account-permission-control-hover: #bdcbe0;
+  --account-permission-blue-divider: #7795d8;
+  --account-permission-blue-subtle: #edf3ff;
+  --account-permission-result-surface: #eef2f7;
+  --account-permission-empty-surface: #f6f8fc;
+}

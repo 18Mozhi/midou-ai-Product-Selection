@@ -1,0 +1,90 @@
+html:has(body #app .account-center--review) {
+  --account-review-blue: #0b63ce;
+  --account-review-blue-deep: #08458f;
+  --account-review-ink: #14243a;
+  --account-review-muted: #60728b;
+  --account-review-line: #d7e1ec;
+  --account-review-soft: #f4f7fb;
+  --account-review-surface: #fff;
+  --account-review-on-blue: #fff;
+  --account-review-shadow: rgb(8 69 143 / 14%);
+  --account-review-hero-muted: #cfe3ff;
+  --account-review-hero-subtle: #e8f2ff;
+  --account-review-overlay: rgb(5 47 102 / 28%);
+  --account-review-outline: rgb(255 255 255 / 38%);
+  --account-review-outline-strong: rgb(255 255 255 / 45%);
+  --account-review-metric-shadow: rgb(20 36 58 / 5%);
+  --account-review-container-shadow: rgb(20 36 58 / 4%);
+  --account-review-selected-shadow: rgb(20 36 58 / 9%);
+  --account-review-focus: rgb(13 110 253 / 32%);
+}
+
+html:has(body #app .account-center--organization-review),
+html:has(body #app .account-center--user-admin-c),
+html:has(body #app .account-center--admins-c),
+html:has(body #app .account-center--users-c) {
+  --account-org-blue: #254a9c;
+  --account-org-blue-deep: #18386f;
+  --account-org-ink: #202c3d;
+  --account-org-muted: #58677b;
+  --account-org-line: #dbe1e9;
+  --account-org-soft: #edf1f6;
+  --account-org-surface: #fff;
+  --account-org-on-blue: #fff;
+  --account-org-divider: rgb(255 255 255 / 28%);
+  --account-org-outline: rgb(255 255 255 / 36%);
+  --account-org-outline-strong: rgb(255 255 255 / 45%);
+  --account-org-hover-surface: #f4f7fc;
+  --account-org-focus: rgb(37 74 156 / 38%);
+  --account-org-focus-strong: rgb(37 74 156 / 42%);
+  --account-org-admin-border: #cbd6e5;
+  --account-org-admin-control: #bdcbe0;
+  --account-org-hero-muted: #dce8ff;
+  --account-org-hero-subtle: #e4edff;
+  --account-org-admin-surface: #f4f7fb;
+  --account-org-dialog-subtle: #e5edff;
+  --account-org-control-hover: #6680a2;
+  --account-org-danger: #8c3c32;
+  --account-org-field-border: #9cabc0;
+  --account-org-dialog-border: #cbd6e4;
+  --account-org-dialog-shadow: #10244226;
+  --account-org-dialog-scrim: #23354e99;
+  --account-org-dialog-divider: #ffffff55;
+  --account-org-status-surface: #f6f8fb;
+  --account-org-danger-border: #c9786d;
+  --account-org-danger-surface: #fff8f6;
+  --account-org-danger-soft: #fff3ef;
+  --account-org-success-border: #82a89a;
+  --account-org-success: #23664c;
+  --account-org-success-soft: #eff8f3;
+  --account-org-warning-border: #d2a958;
+  --account-org-warning: #604d22;
+  --account-org-warning-soft: #fff9e9;
+  --account-org-mobile-action-shadow: #172b4512;
+  --account-org-user-dialog-shadow: rgb(22 38 63 / 24%);
+  --account-org-user-dialog-scrim: rgb(24 37 55 / 54%);
+  --account-org-user-outline: rgb(255 255 255 / 34%);
+  --account-org-user-overlay: rgb(9 35 82 / 24%);
+  --account-org-user-surface-soft: #f4f7fb;
+  --account-org-user-danger-border: #b97068;
+  --account-org-user-disabled-ink: #738096;
+  --account-org-user-focus: rgb(37 74 156 / 35%);
+}
+
+html:has(body #app .account-center--users-c) {
+  --account-users-blue: #254a9c;
+  --account-users-blue-deep: #18386f;
+  --account-users-ink: #202c3d;
+  --account-users-muted: #58677b;
+  --account-users-line: #dbe1e9;
+  --account-users-soft: #edf1f6;
+  --account-users-hero-muted: #dce8ff;
+  --account-users-hero-subtle: #e8efff;
+  --account-users-overlay: rgb(5 34 78 / 24%);
+  --account-users-surface: #fff;
+  --account-users-on-blue: #fff;
+  --account-users-divider: rgb(255 255 255 / 30%);
+  --account-users-outline: rgb(255 255 255 / 42%);
+  --account-users-control-border: #aab8ca;
+  --account-users-focus: rgb(37 74 156 / 42%);
+}

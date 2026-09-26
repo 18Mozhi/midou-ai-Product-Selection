@@ -1,8 +1,6 @@
+@import "../design/identity-registration-tokens.css";
+
 #app .p03-registration-page {
-  --p03-blue: #1748a0;
-  --p03-ink: #182d4a;
-  --p03-muted: #52647b;
-  --p03-line: #dce4ee;
   box-sizing: border-box;
   width: min(860px, calc(100% - 48px));
   min-height: 100dvh;
@@ -23,7 +21,7 @@
 }
 
 #app .p03-registration-page :is(button, input, a):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p03-focus);
   outline-offset: 3px;
 }
 
@@ -40,7 +38,7 @@
   min-height: 44px;
   align-items: center;
   padding: 0 12px;
-  color: #fff;
+  color: var(--p03-surface);
   background: var(--p03-blue);
   font-weight: 800;
   text-decoration: none;
@@ -59,7 +57,7 @@
 
 #app .p03-registration-hero {
   padding: 34px 38px;
-  color: #fff;
+  color: var(--p03-surface);
   background: var(--p03-blue);
 }
 
@@ -72,24 +70,24 @@
 
 #app .p03-registration-hero > h1 {
   margin: 10px 0 12px;
-  color: #fff;
+  color: var(--p03-surface);
   font-size: 34px;
   line-height: 1.35;
 }
 
 #app .p03-registration-hero > span {
-  color: #e2ecff;
+  color: var(--p03-hero-muted);
 }
 
 #app .p03-registration-workspace {
   border: 1px solid var(--p03-line);
-  background: #fff;
+  background: var(--p03-surface);
 }
 
 #app .p03-registration-workspace > header {
   padding: 27px 38px;
   border-bottom: 1px solid var(--p03-line);
-  background: #f6f9ff;
+  background: var(--p03-surface-soft);
 }
 
 #app .p03-registration-workspace > header > p {
@@ -112,21 +110,21 @@
   margin: 22px 38px 0;
   padding: 13px 15px;
   border-left: 3px solid var(--p03-blue);
-  background: #edf4ff;
+  background: var(--p03-info);
   font-size: 14px;
 }
 
 #app .p03-registration-error {
-  border-left-color: #b42318;
-  background: #fff6f5;
+  border-left-color: var(--p03-danger);
+  background: var(--p03-danger-soft);
 }
 
 #app .p03-registration-error > strong {
-  color: #812018;
+  color: var(--p03-danger-ink);
 }
 
 #app .p03-registration-error > small {
-  color: #52647b;
+  color: var(--p03-muted);
   overflow-wrap: anywhere;
 }
 
@@ -153,22 +151,22 @@
   width: 100%;
   min-height: 48px;
   padding: 9px 12px;
-  border: 1px solid #bfcddd;
+  border: 1px solid var(--p03-control-border);
   border-radius: 0;
   color: var(--p03-ink);
-  background: #fff;
+  background: var(--p03-surface);
   font: inherit;
 }
 
 #app .p03-registration-form input:hover {
-  border-color: #7187a3;
+  border-color: var(--p03-control-hover);
 }
 
 #app .p03-registration-primary {
   min-height: 48px;
   border: 1px solid var(--p03-blue);
   border-radius: 0;
-  color: #fff;
+  color: var(--p03-surface);
   background: var(--p03-blue);
   font: inherit;
   font-weight: 800;
@@ -176,17 +174,17 @@
 }
 
 #app .p03-registration-primary:hover:not(:disabled) {
-  background: #103b88;
+  background: var(--p03-button-hover);
 }
 
 #app .p03-registration-primary:active:not(:disabled) {
-  background: #0c2e6a;
+  background: var(--p03-button-active);
 }
 
 #app .p03-registration-primary:disabled {
-  border-color: #d5dde8;
-  color: #65758a;
-  background: #edf1f6;
+  border-color: var(--p03-disabled-border);
+  color: var(--p03-disabled-ink);
+  background: var(--p03-disabled-surface);
   cursor: not-allowed;
 }
 
@@ -222,7 +220,7 @@
   padding: 14px 18px;
   border-left: 3px solid var(--p03-blue);
   color: var(--p03-muted);
-  background: #edf4ff;
+  background: var(--p03-info);
 }
 
 #app .p03-registration-boundary > strong {

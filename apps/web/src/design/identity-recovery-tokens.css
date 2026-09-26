@@ -1,0 +1,23 @@
+html:has(body #app .p04-recovery-page) {
+  --p04-blue: #1748a0;
+  --p04-ink: #182d4a;
+  --p04-muted: #52647b;
+  --p04-line: #dce4ee;
+  --p04-canvas: #f3f6fb;
+  --p04-focus: #2465d7;
+  --p04-surface: #fff;
+  --p04-hero-muted: #dce8ff;
+  --p04-hero-subtle: #e2ecff;
+  --p04-surface-soft: #f6f9ff;
+  --p04-control-border: #bfcddd;
+  --p04-disabled-ink: #69788d;
+  --p04-button-hover: #123b85;
+  --p04-button-active: #0f3270;
+  --p04-disabled-border: #aab6c5;
+  --p04-disabled-bg: #e7ebf0;
+  --p04-info-bg: #edf4ff;
+  --p04-danger: #b42318;
+  --p04-danger-bg: #fff6f5;
+  --p04-success: #267a54;
+  --p04-success-bg: #effaf4;
+}

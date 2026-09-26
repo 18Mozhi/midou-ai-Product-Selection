@@ -20,4 +20,6 @@ html:has(#app .provider-registry) {
   --p46-saved-warning-ink: #75461f;
   --p46-saved-warning-panel: #fff8ef;
   --p46-saved-warning-border: #e5bca4;
+  --p46-control-shadow: rgb(20 42 70 / 12%);
+  --p46-details-panel: #f5f7fb;
 }

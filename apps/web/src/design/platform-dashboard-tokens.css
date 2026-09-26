@@ -1,0 +1,12 @@
+html:has(body #app .platform-dashboard--review) {
+  --pd-ink: #182d4a;
+  --pd-canvas: #edf2f8;
+  --pd-rail: #1748a0;
+  --pd-on-rail: #fff;
+  --pd-rail-control-border: #b9cbea;
+  --pd-border: #dce4ee;
+  --pd-warning: #b57900;
+  --pd-panel: #fff;
+  --pd-muted-panel: #f7faff;
+  --pd-focus: #2465d7;
+}

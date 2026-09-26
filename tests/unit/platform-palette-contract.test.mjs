@@ -6,7 +6,7 @@ for (const [paletteFile, prefix, count, paths] of [
   [
     "provider-registry-tokens",
     "--p46-",
-    20,
+    22,
     ["styles/provider-approved-structure.css", "styles/provider-approved-feedback.css"],
   ],
   [
@@ -301,6 +301,33 @@ test("crawler scheduler palette resolves the approved P70 page and shell colors"
   assert.ok(css.startsWith('@import "./design/crawler-scheduler-tokens.css";'));
   assert.deepEqual([...references].sort(), [...names].sort());
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("platform account permissions use their route-scoped palette", async () => {
+  const [tokens, css, comparisonCss] = await Promise.all([
+    readFile("apps/web/src/design/account-permissions-tokens.css", "utf8"),
+    readFile("apps/web/src/components/PlatformAccountCenterPermissions.css", "utf8"),
+    readFile("apps/web/src/components/PlatformRoleComparisonPermissions.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--account-permission-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...`${css}\n${comparisonCss}`.matchAll(/var\((--account-permission-[a-z-]+)\)/g)].map(
+      (match) => match[1],
+    ),
+  );
+
+  assert.equal(names.size, 19);
+  assert.equal(declarations.length, names.size, "no duplicate account permissions tokens");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.account-center--permissions-c\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/account-permissions-tokens.css";'));
+  assert.ok(comparisonCss.startsWith('@import "../design/account-permissions-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  assert.doesNotMatch(comparisonCss, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
 test("credential asset palette resolves P50 component, modal and status colors in page scope", async () => {
@@ -762,4 +789,468 @@ test("P47 palette resolves page, portal detail and feedback without broadening a
     "--p47-on-accent-muted",
     "--p47-scrim",
   ]);
+});
+
+test("P13/P23/P24 task workspace colors resolve from one route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/task-workspace-tokens.css", "utf8"),
+    readFile("apps/web/src/task-workspace-enhancements.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--tw-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--tw-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 47);
+  assert.equal(declarations.length, names.size, "no duplicate task palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.task-workspace--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/task-workspace-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P14 trend desk colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/trend-dashboard-tokens.css", "utf8"),
+    readFile("apps/web/src/trends.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--trend-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--trend-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 23);
+  assert.equal(declarations.length, names.size, "no duplicate trend palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.trend-dashboard--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/trend-dashboard-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P38 platform dashboard colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/platform-dashboard-tokens.css", "utf8"),
+    readFile("apps/web/src/styles/platform-dashboard.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--pd-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--pd-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 10);
+  assert.equal(
+    declarations.length,
+    names.size,
+    "no duplicate platform dashboard palette declarations",
+  );
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.platform-dashboard--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/platform-dashboard-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P52 collection operations colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/collection-ops-tokens.css", "utf8"),
+    readFile("apps/web/src/styles/platform-operations.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p52-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p52-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 9);
+  assert.equal(
+    declarations.length,
+    names.size,
+    "no duplicate collection operations palette declarations",
+  );
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.collection-ops--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/collection-ops-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P49 1688 acceptance colors resolve from its route-scoped palette", async () => {
+  const [tokens, component] = await Promise.all([
+    readFile("apps/web/src/design/acceptance-1688-tokens.css", "utf8"),
+    readFile("apps/web/src/components/Alibaba1688AcceptanceCenter.vue", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--acceptance-[a-z-]+):\s*#[0-9a-f]{3,8};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...component.matchAll(/var\((--acceptance-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 16);
+  assert.equal(
+    declarations.length,
+    names.size,
+    "no duplicate 1688 acceptance palette declarations",
+  );
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.acceptance-1688\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(component.includes('@import "../design/acceptance-1688-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P63 API coverage colors resolve from its route-scoped palette", async () => {
+  const [tokens, component, operationCard] = await Promise.all([
+    readFile("apps/web/src/design/api-coverage-tokens.css", "utf8"),
+    readFile("apps/web/src/components/ApiCoverageDashboard.vue", "utf8"),
+    readFile("apps/web/src/components/ApiCoverageOperationCard.vue", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p63-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...`${component}\n${operationCard}`.matchAll(/var\((--p63-[a-z-]+)\)/g)].map(
+      (match) => match[1],
+    ),
+  );
+
+  assert.equal(names.size, 19);
+  assert.equal(declarations.length, names.size, "no duplicate API coverage palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.api-coverage--c\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(component.includes('@import "../design/api-coverage-tokens.css";'));
+  assert.ok(operationCard.includes('@import "../design/api-coverage-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  assert.doesNotMatch(operationCard, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P58 commercial operations colors resolve from its route-scoped palette", async () => {
+  const [tokens, css, component] = await Promise.all([
+    readFile("apps/web/src/design/commercial-review-tokens.css", "utf8"),
+    readFile("apps/web/src/components/commercial-operations.css", "utf8"),
+    readFile("apps/web/src/components/CommercialOperationsCenter.vue", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--so-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...`${css}\n${component}`.matchAll(/var\((--so-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 20);
+  assert.equal(declarations.length, names.size, "no duplicate commercial operations declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.commercial--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/commercial-review-tokens.css";'));
+  assert.ok(component.includes('@import "../design/commercial-review-tokens.css";'));
+  assert.ok([...names].every((name) => references.has(name)));
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P01 landing redirect colors resolve from its route-scoped palette", async () => {
+  const [tokens, component] = await Promise.all([
+    readFile("apps/web/src/design/landing-redirect-tokens.css", "utf8"),
+    readFile("apps/web/src/components/LandingRedirectSurface.vue", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p01-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...component.matchAll(/var\((--p01-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 13);
+  assert.equal(declarations.length, names.size, "no duplicate landing palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.landing-redirect\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(component.includes('@import "../design/landing-redirect-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P02 login colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/local-identity-login-tokens.css", "utf8"),
+    readFile("apps/web/src/components/local-identity-login.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p02-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p02-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 29);
+  assert.equal(declarations.length, names.size, "no duplicate login palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.p02-login-page\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/local-identity-login-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P07 MFA colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/identity-mfa-tokens.css", "utf8"),
+    readFile("apps/web/src/components/local-identity-mfa.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p07-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p07-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 26);
+  assert.equal(declarations.length, names.size, "no duplicate MFA palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.p07-mfa-page\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/identity-mfa-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P04 recovery colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/identity-recovery-tokens.css", "utf8"),
+    readFile("apps/web/src/components/local-identity-recovery.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p04-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p04-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 21);
+  assert.equal(declarations.length, names.size, "no duplicate identity recovery declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.p04-recovery-page\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/identity-recovery-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P03 registration colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/identity-registration-tokens.css", "utf8"),
+    readFile("apps/web/src/components/local-identity-registration.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p03-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p03-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 19);
+  assert.equal(declarations.length, names.size, "no duplicate registration palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.p03-registration-page\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/identity-registration-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P06 password reset colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/identity-reset-tokens.css", "utf8"),
+    readFile("apps/web/src/components/local-identity-reset.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p06-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p06-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 22);
+  assert.equal(declarations.length, names.size, "no duplicate password reset declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.p06-reset-page\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/identity-reset-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P05 verification colors resolve from its route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/identity-verification-tokens.css", "utf8"),
+    readFile("apps/web/src/components/local-identity-verification.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p05-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p05-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 17);
+  assert.equal(declarations.length, names.size, "no duplicate verification palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.p05-verification-page\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "../design/identity-verification-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P73 not-found colors resolve from its route-scoped palette", async () => {
+  const [tokens, component] = await Promise.all([
+    readFile("apps/web/src/design/not-found-tokens.css", "utf8"),
+    readFile("apps/web/src/components/NotFoundPage.vue", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p73-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...component.matchAll(/var\((--p73-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 11);
+  assert.equal(declarations.length, names.size, "no duplicate not-found palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.not-found-page--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(component.includes('@import "../design/not-found-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("organization creation wizard colors resolve from the dialog-scoped palette", async () => {
+  const [tokens, component] = await Promise.all([
+    readFile("apps/web/src/design/organization-wizard-tokens.css", "utf8"),
+    readFile("apps/web/src/components/OrganizationCreationWizard.vue", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--ow-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...component.matchAll(/var\((--ow-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 32);
+  assert.equal(declarations.length, names.size, "no duplicate organization wizard declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.organization-wizard\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(component.includes('@import "../design/organization-wizard-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("platform account center palettes stay scoped to their distinct account pages", async () => {
+  const [tokens, css, adminCss, dialogsCss, usersCss, organizationDialog, userDialog] =
+    await Promise.all([
+      readFile("apps/web/src/design/account-center-tokens.css", "utf8"),
+      readFile("apps/web/src/components/PlatformAccountCenter.css", "utf8"),
+      readFile("apps/web/src/components/PlatformAccountCenterAdmin.css", "utf8"),
+      readFile("apps/web/src/components/PlatformAccountDialogs.css", "utf8"),
+      readFile("apps/web/src/components/PlatformAccountUsersC.css", "utf8"),
+      readFile("apps/web/src/components/PlatformOrganizationDetailDialog.vue", "utf8"),
+      readFile("apps/web/src/components/PlatformUserDetailDialog.vue", "utf8"),
+    ]);
+  const declarations = [
+    ...tokens.matchAll(
+      /(--(?:account-review|account-org|account-users)-[a-z-]+):\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));/gi,
+    ),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [
+      ...`${css}\n${adminCss}\n${dialogsCss}\n${usersCss}\n${organizationDialog}\n${userDialog}`.matchAll(
+        /var\((--(?:account-review|account-org|account-users)-[a-z-]+)\)/g,
+      ),
+    ].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 79);
+  assert.equal(declarations.length, names.size, "no duplicate account center palette declarations");
+  assert.match(tokens, /html:has\(body #app \.account-center--review\)/);
+  assert.match(tokens, /html:has\(body #app \.account-center--organization-review\)/);
+  assert.match(tokens, /html:has\(body #app \.account-center--user-admin-c\)/);
+  assert.match(tokens, /html:has\(body #app \.account-center--admins-c\)/);
+  assert.ok(css.startsWith('@import "../design/account-center-tokens.css";'));
+  assert.ok(adminCss.startsWith('@import "../design/account-center-tokens.css";'));
+  assert.ok(dialogsCss.startsWith('@import "../design/account-center-tokens.css";'));
+  assert.ok(usersCss.startsWith('@import "../design/account-center-tokens.css";'));
+  assert.ok(organizationDialog.includes('@import "../design/account-center-tokens.css";'));
+  assert.ok(userDialog.includes('@import "../design/account-center-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  assert.doesNotMatch(adminCss, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  assert.doesNotMatch(dialogsCss, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  assert.doesNotMatch(usersCss, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  assert.doesNotMatch(organizationDialog, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  assert.doesNotMatch(userDialog, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+});
+
+test("P48 provider compatibility colors resolve from the modal-scoped palette", async () => {
+  const [tokens, component, samplesCss, reviewComponent] = await Promise.all([
+    readFile("apps/web/src/design/provider-compatibility-tokens.css", "utf8"),
+    readFile("apps/web/src/components/ProviderCompatibilityMatrixDialog.vue", "utf8"),
+    readFile("apps/web/src/components/ProviderParserSampleDialog.css", "utf8"),
+    readFile("apps/web/src/components/ProviderParserSampleReview.vue", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--p48-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...component.matchAll(/var\((--p48-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 43);
+  assert.equal(declarations.length, names.size, "no duplicate P48 palette declarations");
+  assert.match(
+    tokens,
+    /^\.source-modal\.p48-compatibility-modal,\s*\.source-modal\.p48-parser-samples-modal\s*\{/,
+  );
+  assert.ok(component.includes('@import "../design/provider-compatibility-tokens.css";'));
+  assert.ok(samplesCss.startsWith('@import "../design/provider-compatibility-tokens.css";'));
+  assert.ok(reviewComponent.includes('@import "../design/provider-compatibility-tokens.css";'));
+  const sampleReferences = new Set(
+    [...samplesCss.matchAll(/var\((--p48-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+  const reviewReferences = new Set(
+    [...reviewComponent.matchAll(/var\((--p48-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+  assert.deepEqual(
+    [...new Set([...references, ...sampleReferences, ...reviewReferences])].sort(),
+    [...names].sort(),
+  );
+  assert.doesNotMatch(component, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  assert.doesNotMatch(samplesCss, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  assert.doesNotMatch(reviewComponent, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+});
+
+test("P48 provider source page colors resolve from its page-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/provider-source-tokens.css", "utf8"),
+    readFile("apps/web/src/components/ProviderSourceCenter.p48.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--p48-source-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--p48-source-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 21);
+  assert.equal(declarations.length, names.size, "no duplicate P48 source palette declarations");
+  assert.match(tokens, /^\.source-center--p48\s*\{/);
+  assert.ok(css.startsWith('@import "../design/provider-source-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
 });

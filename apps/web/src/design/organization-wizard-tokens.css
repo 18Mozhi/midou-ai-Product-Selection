@@ -1,0 +1,34 @@
+html:has(body #app .organization-wizard) {
+  --ow-border: #c8d7e8;
+  --ow-ink: #182b45;
+  --ow-surface: #fff;
+  --ow-shadow: rgb(8 25 49 / 34%);
+  --ow-backdrop: rgb(11 24 43 / 58%);
+  --ow-blue: #254a9c;
+  --ow-on-blue: #fff;
+  --ow-blue-muted: #dbe8ff;
+  --ow-blue-subtle: #e6eeff;
+  --ow-divider: rgb(255 255 255 / 28%);
+  --ow-copy-muted: #d7e3ff;
+  --ow-outline: rgb(255 255 255 / 46%);
+  --ow-line: #dbe4ee;
+  --ow-secondary-ink: #273d58;
+  --ow-control-border: #bdcad9;
+  --ow-muted: #78879a;
+  --ow-secondary-muted: #64758c;
+  --ow-error-border: #dba9a5;
+  --ow-danger: #a33d3a;
+  --ow-error-ink: #572b2a;
+  --ow-error-surface: #fbf3f2;
+  --ow-danger-muted: #8f3431;
+  --ow-soft-surface: #f6f8fb;
+  --ow-paper: #253b56;
+  --ow-primary: #173978;
+  --ow-primary-soft: #edf3ff;
+  --ow-primary-hover: #193b80;
+  --ow-disabled-border: #d7dee8;
+  --ow-disabled-ink: #718096;
+  --ow-disabled-surface: #edf0f5;
+  --ow-focus: rgb(13 110 253 / 34%);
+  --ow-sticky-shadow: rgb(23 43 69 / 7%);
+}

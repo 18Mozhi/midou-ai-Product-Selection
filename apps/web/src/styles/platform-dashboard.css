@@ -1,3 +1,5 @@
+@import "../design/platform-dashboard-tokens.css";
+
 .platform-dashboard {
   display: grid;
   gap: 20px;
@@ -452,8 +454,8 @@
   grid-template-columns: minmax(220px, 240px) minmax(0, 1fr);
   gap: 14px 24px;
   padding: 0;
-  color: #182d4a;
-  background: #edf2f8;
+  color: var(--pd-ink);
+  background: var(--pd-canvas);
 }
 
 .platform-dashboard--review > :not(.platform-dashboard-toolbar):not(.platform-dashboard-state) {
@@ -472,8 +474,8 @@
   padding: 22px 20px;
   border: 0;
   border-radius: 0;
-  color: #fff;
-  background: #1748a0;
+  color: var(--pd-on-rail);
+  background: var(--pd-rail);
   box-shadow: none;
 }
 
@@ -482,7 +484,7 @@
 }
 
 .platform-dashboard--review .platform-dashboard-toolbar :is(p, h2, span, label) {
-  color: #fff;
+  color: var(--pd-on-rail);
 }
 
 .platform-dashboard--review .platform-dashboard-toolbar h2 {
@@ -498,9 +500,9 @@
 .platform-dashboard--review .platform-dashboard-toolbar :is(select, button) {
   width: 100%;
   border-radius: 0;
-  border-color: #b9cbea;
-  color: #182d4a;
-  background: #fff;
+  border-color: var(--pd-rail-control-border);
+  color: var(--pd-ink);
+  background: var(--pd-panel);
 }
 
 .platform-dashboard--review .platform-dashboard-toolbar button {
@@ -511,26 +513,26 @@
 .platform-dashboard--review .platform-facts,
 .platform-dashboard--review .platform-get-started,
 .platform-dashboard--review .platform-dashboard-grid > section {
-  border-color: #dce4ee;
+  border-color: var(--pd-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--pd-panel);
   box-shadow: none;
 }
 
 .platform-dashboard--review .platform-refresh-feedback {
-  border-left: 4px solid #b57900;
+  border-left: 4px solid var(--pd-warning);
 }
 
 .platform-dashboard--review .platform-action-summary {
   gap: 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--pd-border);
 }
 
 .platform-dashboard--review .platform-action-summary a {
   border: 0;
-  border-right: 1px solid #dce4ee;
+  border-right: 1px solid var(--pd-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--pd-panel);
 }
 
 .platform-dashboard--review .platform-action-summary a:last-child {
@@ -538,7 +540,7 @@
 }
 
 .platform-dashboard--review .platform-action-summary strong {
-  color: #1748a0;
+  color: var(--pd-rail);
 }
 
 .platform-dashboard--review .platform-facts,
@@ -548,13 +550,13 @@
 
 .platform-dashboard--review .platform-facts > div {
   gap: 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--pd-border);
 }
 
 .platform-dashboard--review .platform-facts article {
-  border-right: 1px solid #dce4ee;
+  border-right: 1px solid var(--pd-border);
   border-left: 0;
-  background: #fff;
+  background: var(--pd-panel);
 }
 
 .platform-dashboard--review .platform-facts article:last-child {
@@ -562,14 +564,14 @@
 }
 
 .platform-dashboard--review .platform-facts article strong {
-  color: #1748a0;
+  color: var(--pd-rail);
 }
 
 .platform-dashboard--review .platform-get-started a,
 .platform-dashboard--review .platform-provider-disclosure {
   border-radius: 0;
-  border-color: #dce4ee;
-  background: #f7faff;
+  border-color: var(--pd-border);
+  background: var(--pd-muted-panel);
 }
 
 .platform-dashboard--review .platform-dashboard-grid {
@@ -581,27 +583,27 @@
 }
 
 .platform-dashboard--review .platform-dashboard-grid table {
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--pd-border);
 }
 
 .platform-dashboard--review .platform-dashboard-grid :is(th, td) {
-  border-color: #dce4ee;
+  border-color: var(--pd-border);
 }
 
 .platform-dashboard--review .platform-dashboard-grid tr:nth-child(even) {
-  background: #f7faff;
+  background: var(--pd-muted-panel);
 }
 
 .platform-dashboard--review :is(button, select, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--pd-focus);
   outline-offset: 3px;
 }
 
 .platform-dashboard--review .platform-dashboard-state {
   grid-column: 1 / -1;
   border-radius: 0;
-  border-color: #dce4ee;
-  background: #fff;
+  border-color: var(--pd-border);
+  background: var(--pd-panel);
 }
 
 @media (max-width: 1100px) {
@@ -635,7 +637,7 @@
 
   .platform-dashboard--review .platform-action-summary a {
     border-right: 0;
-    border-bottom: 1px solid #dce4ee;
+    border-bottom: 1px solid var(--pd-border);
   }
 
   .platform-dashboard--review .platform-action-summary a:last-child {
@@ -648,7 +650,7 @@
 
   .platform-dashboard--review .platform-facts article {
     border-right: 0;
-    border-bottom: 1px solid #dce4ee;
+    border-bottom: 1px solid var(--pd-border);
   }
 
   .platform-dashboard--review .platform-facts article:last-child {

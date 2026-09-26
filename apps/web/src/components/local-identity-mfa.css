@@ -1,12 +1,10 @@
+@import "../design/identity-mfa-tokens.css";
+
 /* P07: authenticated MFA management workspace, extracted with the lazy identity route. */
 .p07-mfa-page {
-  --p07-blue: #1748a0;
-  --p07-ink: #182d4a;
-  --p07-muted: #52647b;
-  --p07-line: #dce4ee;
   min-height: 100vh;
   padding: 18px 24px 32px;
-  background: #f3f6fb;
+  background: var(--p07-canvas);
   color: var(--p07-ink);
   font:
     16px/1.6 "Microsoft YaHei",
@@ -16,7 +14,7 @@
   margin: 0;
 }
 html[data-design="signal-ledger"] body .p07-mfa-page :is(button, input, a):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p07-focus);
   outline-offset: 3px;
 }
 .p07-mfa-top,
@@ -44,7 +42,7 @@ html[data-design="signal-ledger"] body .p07-mfa-page :is(button, input, a):focus
   align-items: center;
   padding: 0 10px;
   background: var(--p07-blue);
-  color: #fff;
+  color: var(--p07-surface);
   font-weight: 800;
   text-decoration: none;
 }
@@ -56,26 +54,26 @@ html[data-design="signal-ledger"] body .p07-mfa-page :is(button, input, a):focus
 .p07-mfa-hero {
   padding: 30px 38px;
   background: var(--p07-blue);
-  color: #fff;
+  color: var(--p07-surface);
 }
 .p07-mfa-hero p {
-  color: #dce8ff;
+  color: var(--p07-hero-muted);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
 .p07-mfa-hero h1 {
   margin: 8px 0;
-  color: #fff;
+  color: var(--p07-surface);
   font-size: clamp(26px, 4vw, 34px);
   line-height: 1.25;
 }
 .p07-mfa-hero > span {
-  color: #e2ecff;
+  color: var(--p07-hero-subtle);
 }
 .p07-mfa-workspace {
   border: 1px solid var(--p07-line);
-  background: #fff;
+  background: var(--p07-surface);
 }
 .p07-mfa-notice,
 .p07-mfa-success,
@@ -87,7 +85,7 @@ html[data-design="signal-ledger"] body .p07-mfa-page :is(button, input, a):focus
   margin: 24px 38px;
   padding: 16px;
   border-left: 3px solid var(--p07-blue);
-  background: #edf4ff;
+  background: var(--p07-info);
   color: var(--p07-muted);
 }
 .p07-mfa-notice strong,
@@ -99,8 +97,8 @@ html[data-design="signal-ledger"] body .p07-mfa-page :is(button, input, a):focus
 }
 .p07-mfa-error,
 .p07-mfa-danger {
-  border-color: #b42318;
-  background: #fff6f5;
+  border-color: var(--p07-danger);
+  background: var(--p07-danger-soft);
 }
 .p07-mfa-error small {
   overflow-wrap: anywhere;
@@ -140,10 +138,10 @@ html[data-design="signal-ledger"] body .p07-mfa-page :is(button, input, a):focus
 html[data-design="signal-ledger"] body .p07-mfa-workspace input {
   width: 100%;
   min-height: 44px;
-  border: 1px solid #9cacbf;
+  border: 1px solid var(--p07-control-border);
   border-radius: 0;
   padding: 8px 12px;
-  background: #fff;
+  background: var(--p07-surface);
   color: var(--p07-ink);
   font: inherit;
 }
@@ -163,45 +161,45 @@ html[data-design="signal-ledger"] body .p07-mfa-secondary {
 }
 html[data-design="signal-ledger"] body .p07-mfa-primary {
   background: var(--p07-blue);
-  color: #fff;
+  color: var(--p07-surface);
 }
 html[data-design="signal-ledger"] body .p07-mfa-danger-button {
-  border-color: #b42318;
-  background: #b42318;
-  color: #fff;
+  border-color: var(--p07-danger);
+  background: var(--p07-danger);
+  color: var(--p07-surface);
 }
 html[data-design="signal-ledger"] body .p07-mfa-secondary {
-  background: #fff;
+  background: var(--p07-surface);
   color: var(--p07-blue);
 }
 html[data-design="signal-ledger"] body .p07-mfa-primary:hover:not(:disabled) {
-  border-color: #123b86;
-  background: #123b86;
+  border-color: var(--p07-primary-hover);
+  background: var(--p07-primary-hover);
 }
 html[data-design="signal-ledger"] body .p07-mfa-danger-button:hover:not(:disabled) {
-  border-color: #8f1c13;
-  background: #8f1c13;
+  border-color: var(--p07-danger-hover);
+  background: var(--p07-danger-hover);
 }
 html[data-design="signal-ledger"] body .p07-mfa-secondary:hover:not(:disabled) {
-  background: #edf4ff;
+  background: var(--p07-info);
 }
 html[data-design="signal-ledger"] body .p07-mfa-primary:active:not(:disabled) {
-  border-color: #0f326f;
-  background: #0f326f;
+  border-color: var(--p07-primary-pressed);
+  background: var(--p07-primary-pressed);
 }
 html[data-design="signal-ledger"] body .p07-mfa-danger-button:active:not(:disabled) {
-  border-color: #74170f;
-  background: #74170f;
+  border-color: var(--p07-danger-pressed);
+  background: var(--p07-danger-pressed);
 }
 html[data-design="signal-ledger"] body .p07-mfa-secondary:active:not(:disabled) {
-  background: #dceaff;
+  background: var(--p07-info-selected);
 }
 html[data-design="signal-ledger"] body .p07-mfa-primary:disabled,
 html[data-design="signal-ledger"] body .p07-mfa-danger-button:disabled,
 html[data-design="signal-ledger"] body .p07-mfa-secondary:disabled {
-  border-color: #aeb8c5;
-  background: #e8edf3;
-  color: #596777;
+  border-color: var(--p07-disabled-border);
+  background: var(--p07-disabled-surface);
+  color: var(--p07-disabled-ink);
   cursor: wait;
 }
 .p07-mfa-secret,
@@ -210,8 +208,8 @@ html[data-design="signal-ledger"] body .p07-mfa-secondary:disabled {
 }
 .p07-mfa-secret {
   padding: 12px;
-  border: 1px solid #a8b8cc;
-  background: #f6f8fb;
+  border: 1px solid var(--p07-field-border);
+  background: var(--p07-field-surface);
   color: var(--p07-ink);
 }
 .p07-mfa-help {
@@ -222,11 +220,11 @@ html[data-design="signal-ledger"] body .p07-mfa-secondary:disabled {
   gap: 8px;
   margin: 0 38px 24px;
   padding: 18px;
-  border-left: 3px solid #267a54;
-  background: #effaf4;
+  border-left: 3px solid var(--p07-success);
+  background: var(--p07-success-soft);
 }
 .p07-mfa-recovery > p {
-  color: #236547;
+  color: var(--p07-success-ink);
 }
 .p07-mfa-recovery code {
   font-weight: 800;

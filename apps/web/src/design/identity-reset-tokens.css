@@ -1,0 +1,24 @@
+html:has(body #app .p06-reset-page) {
+  --p06-blue: #1748a0;
+  --p06-ink: #182d4a;
+  --p06-muted: #52647b;
+  --p06-line: #dce4ee;
+  --p06-canvas: #f3f6fb;
+  --p06-focus: #2465d7;
+  --p06-surface: #fff;
+  --p06-hero-muted: #dce8ff;
+  --p06-hero-subtle: #e2ecff;
+  --p06-info: #edf4ff;
+  --p06-warning: #a86600;
+  --p06-warning-soft: #fff9ed;
+  --p06-success: #267a54;
+  --p06-success-soft: #effaf4;
+  --p06-danger: #b42318;
+  --p06-danger-soft: #fff6f5;
+  --p06-control-border: #9cacbf;
+  --p06-primary-hover: #123b86;
+  --p06-primary-pressed: #0f326f;
+  --p06-disabled-border: #bdc8d7;
+  --p06-disabled-surface: #e8edf4;
+  --p06-disabled-ink: #697a90;
+}

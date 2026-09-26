@@ -1,0 +1,31 @@
+html:has(body #app .p02-login-page) {
+  --p02-blue: #1748a0;
+  --p02-ink: #182d4a;
+  --p02-muted: #52647b;
+  --p02-line: #dce4ee;
+  --p02-canvas: #f3f6fb;
+  --p02-focus: #2465d7;
+  --p02-surface: #fff;
+  --p02-hero-muted: #e2ecff;
+  --p02-info-border: #759bdb;
+  --p02-info-copy: #d3e2ff;
+  --p02-success-border: #91d1b0;
+  --p02-success-copy: #f1fff7;
+  --p02-selected-border: #fff;
+  --p02-selected-copy: #fff;
+  --p02-selected-bg: #0f3987;
+  --p02-surface-soft: #f6f9ff;
+  --p02-info-bg: #edf4ff;
+  --p02-warning-border: #a75b11;
+  --p02-warning-bg: #fff8e8;
+  --p02-danger-border: #b42318;
+  --p02-danger-bg: #fff6f5;
+  --p02-danger-copy: #812018;
+  --p02-control-border: #bfcddd;
+  --p02-control-hover: #7187a3;
+  --p02-button-hover: #103b88;
+  --p02-button-active: #0c2e6a;
+  --p02-disabled-border: #d5dde8;
+  --p02-disabled-copy: #65758a;
+  --p02-disabled-bg: #edf1f6;
+}

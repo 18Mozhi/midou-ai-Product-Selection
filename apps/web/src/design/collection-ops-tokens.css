@@ -1,0 +1,11 @@
+html:has(body #app .collection-ops--review) {
+  --p52-ink: #182d4a;
+  --p52-canvas: #f3f6fb;
+  --p52-blue: #1748a0;
+  --p52-on-blue: #fff;
+  --p52-border: #dce4ee;
+  --p52-panel: #fff;
+  --p52-muted-panel: #f7faff;
+  --p52-selected-panel: #edf4ff;
+  --p52-focus: #2465d7;
+}

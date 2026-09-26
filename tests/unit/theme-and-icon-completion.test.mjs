@@ -96,8 +96,22 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         new RegExp(
-          "^html:has\\(#app\\s*\\.provider-registry\\)\\s*\\{(?:\\s*--p46-[a-z-]+:\\s*(?:#[0-9a-f]{3,6}|rgba\\(15, 31, 53, 0\\.55\\));)+\\s*\\}$",
+          "^html:has\\(#app\\s*\\.provider-registry\\)\\s*\\{(?:\\s*--p46-[a-z-]+:\\s*(?:#[0-9a-f]{3,6}|rgba?\\([^;]+\\));)+\\s*\\}$",
         ),
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/provider-compatibility-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.source-modal\.p48-compatibility-modal,\s*\.source-modal\.p48-parser-samples-modal\s*\{(?:\s*--p48-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/provider-source-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.source-center--p48\s*\{(?:\s*--p48-source-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));)+\s*\}$/,
       );
       continue;
     }
@@ -123,7 +137,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         new RegExp(
-          "^\\.responsive-data-view__overlay--governance,\\s*\\.responsive-data-view__overlay--content,\\s*\\.responsive-filter-drawer--governance,\\s*\\.responsive-filter-drawer--content\\s*\\{(?:\\s*--so-workspace-overlay-[a-z-]+:\\s*#[0-9a-f]{3,6};)+\\s*\\}$",
+          "^\\.responsive-data-view__overlay--governance,\\s*\\.responsive-data-view__overlay--content,\\s*\\.responsive-filter-drawer--governance,\\s*\\.responsive-filter-drawer--content,\\s*\\.responsive-filter-drawer--notifications\\s*\\{(?:\\s*--so-workspace-overlay-[a-z-]+:\\s*#[0-9a-f]{3,6};)+\\s*\\}$",
         ),
       );
       continue;
@@ -138,7 +152,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     if (paths[index] === "apps/web/src/design/platform-notification-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^\.platform-notifications,\s*\.message-dialog,\s*\.message-reader-dialog,\s*\.notification-action-dialog\s*\{(?:\s*--so-platform-notification-[a-z-]+:\s*#[0-9a-f]{6};)+\s*\}$/,
+        /^\.platform-notifications,\s*\.message-dialog,\s*\.message-reader-dialog,\s*\.notification-action-dialog,\s*\.responsive-filter-drawer--notifications\s*\{(?:\s*--so-platform-notification-[a-z-]+:\s*#[0-9a-f]{6};)+\s*\}$/,
       );
       continue;
     }
@@ -297,7 +311,134 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     if (paths[index] === "apps/web/src/design/organization-admin-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.org-admin-center\)\s*\{(?:\s*--org-admin-review-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+        /^html:has\(body #app \.org-admin-center\)\s*\{(?:\s*--oa-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/task-workspace-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.task-workspace--review\)\s*\{(?:\s*--tw-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/trend-dashboard-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.trend-dashboard--review\)\s*\{(?:\s*--trend-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/platform-dashboard-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.platform-dashboard--review\)\s*\{(?:\s*--pd-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/collection-ops-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.collection-ops--review\)\s*\{(?:\s*--p52-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/acceptance-1688-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.acceptance-1688\)\s*\{(?:\s*--acceptance-[a-z-]+:\s*#[0-9a-f]{3,8};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/api-coverage-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.api-coverage--c\)\s*\{(?:\s*--p63-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/commercial-review-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.commercial--review\)\s*\{(?:\s*--so-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/landing-redirect-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.landing-redirect\)\s*\{(?:\s*--p01-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/local-identity-login-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.p02-login-page\)\s*\{(?:\s*--p02-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/identity-mfa-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.p07-mfa-page\)\s*\{(?:\s*--p07-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/identity-recovery-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.p04-recovery-page\)\s*\{(?:\s*--p04-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/identity-registration-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.p03-registration-page\)\s*\{(?:\s*--p03-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/identity-reset-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.p06-reset-page\)\s*\{(?:\s*--p06-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/identity-verification-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.p05-verification-page\)\s*\{(?:\s*--p05-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/not-found-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.not-found-page--review\)\s*\{(?:\s*--p73-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/organization-wizard-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.organization-wizard\)\s*\{(?:\s*--ow-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/account-center-tokens.css") {
+      const palette = source.replace(/\/\*[\s\S]*?\*\//g, "").trim();
+      assert.match(
+        palette,
+        /^html:has\(body #app \.account-center--review\)\s*\{(?:\s*--account-review-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}\s*html:has\(body #app \.account-center--organization-review\),\s*html:has\(body #app \.account-center--user-admin-c\),\s*html:has\(body #app \.account-center--admins-c\),\s*html:has\(body #app \.account-center--users-c\)\s*\{(?:\s*--account-org-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}\s*html:has\(body #app \.account-center--users-c\)\s*\{(?:\s*--account-users-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/account-permissions-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.account-center--permissions-c\)\s*\{(?:\s*--account-permission-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }
@@ -427,7 +568,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       // Page-lazy token source: only scoped custom properties, never ordinary CSS rules.
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html #app \.selection-journey\s*\{(?:\s*--so-selection-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+        /^html #app \.selection-journey\s*\{(?:\s*--so-selection-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|var\(--so-panel\));)+\s*\}$/,
       );
       continue;
     }

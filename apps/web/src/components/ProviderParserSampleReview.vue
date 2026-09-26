@@ -64,6 +64,8 @@ const submit = (decision: "approved" | "rejected") => {
 </template>
 
 <style scoped>
+@import "../design/provider-compatibility-tokens.css";
+
 .sample-review,
 .sample-review label {
   display: grid;
@@ -73,17 +75,17 @@ const submit = (decision: "approved" | "rejected") => {
   min-width: min(420px, 62vw);
 }
 .sample-review label > span {
-  color: #243247;
+  color: var(--p48-table-ink);
   font-weight: 650;
 }
 .sample-review small {
-  color: #64748b;
+  color: var(--p48-muted);
   font-size: 13px;
   line-height: 1.5;
 }
 .sample-review input:focus-visible,
 .sample-review button:focus-visible {
-  outline: 3px solid #66a3ff;
+  outline: 3px solid var(--p48-focus);
   outline-offset: 3px;
 }
 .sample-review-actions {

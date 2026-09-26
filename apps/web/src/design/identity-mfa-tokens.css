@@ -1,0 +1,28 @@
+html:has(body #app .p07-mfa-page) {
+  --p07-blue: #1748a0;
+  --p07-ink: #182d4a;
+  --p07-muted: #52647b;
+  --p07-line: #dce4ee;
+  --p07-canvas: #f3f6fb;
+  --p07-focus: #2465d7;
+  --p07-surface: #fff;
+  --p07-hero-muted: #dce8ff;
+  --p07-hero-subtle: #e2ecff;
+  --p07-info: #edf4ff;
+  --p07-danger: #b42318;
+  --p07-danger-soft: #fff6f5;
+  --p07-control-border: #9cacbf;
+  --p07-primary-hover: #123b86;
+  --p07-danger-hover: #8f1c13;
+  --p07-info-selected: #dceaff;
+  --p07-disabled-border: #aeb8c5;
+  --p07-disabled-surface: #e8edf3;
+  --p07-disabled-ink: #596777;
+  --p07-field-border: #a8b8cc;
+  --p07-field-surface: #f6f8fb;
+  --p07-success: #267a54;
+  --p07-success-soft: #effaf4;
+  --p07-success-ink: #236547;
+  --p07-primary-pressed: #0f326f;
+  --p07-danger-pressed: #74170f;
+}

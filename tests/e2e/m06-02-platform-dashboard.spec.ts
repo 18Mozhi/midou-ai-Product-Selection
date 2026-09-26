@@ -835,7 +835,12 @@ test("UI2-PN56 C ledger exposes complete facts and the review contract", async (
   );
 
   await page.goto("/platform-admin/content");
-  await expect(page.getByRole("heading", { name: "内容管理", level: 1 })).toBeVisible();
+  await expect(
+    page.locator(".platform-content--review").getByRole("heading", {
+      name: "内容管理",
+      level: 1,
+    }),
+  ).toBeVisible();
   const summary = page.getByRole("region", { name: "当前查询统计" });
   await expect(summary).toContainText("135");
   await expect(summary).toContainText("90");

@@ -1,15 +1,13 @@
+@import "../design/local-identity-login-tokens.css";
+
 #app .p02-login-page {
-  --p02-blue: #1748a0;
-  --p02-ink: #182d4a;
-  --p02-muted: #52647b;
-  --p02-line: #dce4ee;
   box-sizing: border-box;
   width: min(1120px, calc(100% - 48px));
   min-height: 100dvh;
   margin: 0 auto;
   padding: 28px 0 40px;
   color: var(--p02-ink);
-  background: #f3f6fb;
+  background: var(--p02-canvas);
   font:
     17px/1.6 "Microsoft YaHei",
     sans-serif;
@@ -24,7 +22,7 @@
 }
 
 #app .p02-login-page :is(button, input, a):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p02-focus);
   outline-offset: 3px;
 }
 
@@ -41,7 +39,7 @@
   min-height: 44px;
   align-items: center;
   padding: 0 12px;
-  color: #fff;
+  color: var(--p02-surface);
   background: var(--p02-blue);
   font-size: 18px;
   font-weight: 800;
@@ -62,7 +60,7 @@
   display: grid;
   grid-template-columns: minmax(320px, 0.86fr) minmax(0, 1.14fr);
   border: 1px solid var(--p02-line);
-  background: #fff;
+  background: var(--p02-surface);
 }
 
 #app .p02-login-context {
@@ -70,7 +68,7 @@
   min-height: 690px;
   flex-direction: column;
   padding: 38px 34px 28px;
-  color: #fff;
+  color: var(--p02-surface);
   background: var(--p02-blue);
 }
 
@@ -83,13 +81,13 @@
 
 #app .p02-login-context > h1 {
   margin: 14px 0 16px;
-  color: #fff;
+  color: var(--p02-surface);
   font-size: 34px;
   line-height: 1.38;
 }
 
 #app .p02-login-context > span {
-  color: #e2ecff;
+  color: var(--p02-hero-muted);
 }
 
 #app .p02-login-context > ol {
@@ -106,19 +104,19 @@
   align-items: center;
   gap: 12px;
   padding: 0 12px;
-  border-left: 2px solid #759bdb;
-  color: #d3e2ff;
+  border-left: 2px solid var(--p02-info-border);
+  color: var(--p02-info-copy);
 }
 
 #app .p02-login-context > ol > li.is-complete {
-  border-left-color: #91d1b0;
-  color: #f1fff7;
+  border-left-color: var(--p02-success-border);
+  color: var(--p02-success-copy);
 }
 
 #app .p02-login-context > ol > li.is-current {
-  border-left-color: #fff;
-  color: #fff;
-  background: #0f3987;
+  border-left-color: var(--p02-selected-border);
+  color: var(--p02-selected-copy);
+  background: var(--p02-selected-bg);
 }
 
 #app .p02-login-context > ol > li > b {
@@ -134,7 +132,7 @@
   gap: 8px 12px;
   margin-top: auto;
   padding-top: 28px;
-  color: #d3e2ff;
+  color: var(--p02-info-copy);
   font-size: 17px;
 }
 
@@ -142,13 +140,13 @@
   display: flex;
   min-width: 0;
   flex-direction: column;
-  background: #fff;
+  background: var(--p02-surface);
 }
 
 #app .p02-login-workspace > header {
   padding: 34px 40px 28px;
   border-bottom: 1px solid var(--p02-line);
-  background: #f6f9ff;
+  background: var(--p02-surface-soft);
 }
 
 #app .p02-login-workspace > header > p {
@@ -172,7 +170,7 @@
   padding: 13px 15px;
   border-left: 3px solid var(--p02-blue);
   color: var(--p02-muted);
-  background: #edf4ff;
+  background: var(--p02-info-bg);
 }
 
 #app .p02-login-notice > strong {
@@ -180,17 +178,17 @@
 }
 
 #app .p02-login-warning {
-  border-left-color: #a75b11;
-  background: #fff8e8;
+  border-left-color: var(--p02-warning-border);
+  background: var(--p02-warning-bg);
 }
 
 #app .p02-login-error {
-  border-left-color: #b42318;
-  background: #fff6f5;
+  border-left-color: var(--p02-danger-border);
+  background: var(--p02-danger-bg);
 }
 
 #app .p02-login-error > strong {
-  color: #812018;
+  color: var(--p02-danger-copy);
 }
 
 #app .p02-login-error > small {
@@ -227,15 +225,15 @@
   width: 100%;
   min-height: 48px;
   padding: 9px 12px;
-  border: 1px solid #bfcddd;
+  border: 1px solid var(--p02-control-border);
   border-radius: 0;
   color: var(--p02-ink);
-  background: #fff;
+  background: var(--p02-surface);
   font: inherit;
 }
 
 #app .p02-login-page input:hover {
-  border-color: #7187a3;
+  border-color: var(--p02-control-hover);
 }
 
 #app .p02-login-form-row {
@@ -267,7 +265,7 @@
   padding: 9px 16px;
   border: 1px solid var(--p02-blue);
   border-radius: 0;
-  color: #fff;
+  color: var(--p02-surface);
   background: var(--p02-blue);
   font: inherit;
   font-weight: 800;
@@ -275,17 +273,17 @@
 }
 
 #app .p02-login-primary:hover:not(:disabled) {
-  background: #103b88;
+  background: var(--p02-button-hover);
 }
 
 #app .p02-login-primary:active:not(:disabled) {
-  background: #0c2e6a;
+  background: var(--p02-button-active);
 }
 
 #app .p02-login-primary:disabled {
-  border-color: #d5dde8;
-  color: #65758a;
-  background: #edf1f6;
+  border-color: var(--p02-disabled-border);
+  color: var(--p02-disabled-copy);
+  background: var(--p02-disabled-bg);
   cursor: not-allowed;
 }
 
@@ -304,7 +302,7 @@
   padding: 10px 12px;
   overflow-wrap: anywhere;
   color: var(--p02-ink);
-  background: #f6f9ff;
+  background: var(--p02-surface-soft);
   font-size: 17px;
 }
 
@@ -345,7 +343,7 @@
   padding: 12px 40px;
   border-top: 1px solid var(--p02-line);
   color: var(--p02-muted);
-  background: #fff;
+  background: var(--p02-surface);
   font-size: 17px;
 }
 

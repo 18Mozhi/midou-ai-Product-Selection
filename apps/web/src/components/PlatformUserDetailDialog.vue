@@ -232,6 +232,8 @@ function scrollToSection(section: "memberships" | "roles" | "security") {
 </template>
 
 <style scoped>
+@import "../design/account-center-tokens.css";
+
 .detail-dialog {
   position: fixed;
   inset: 0;
@@ -242,17 +244,17 @@ function scrollToSection(section: "memberships" | "roles" | "security") {
   overflow: hidden;
   margin: auto;
   padding: 0;
-  border: 1px solid #dbe1e9;
+  border: 1px solid var(--account-org-line);
   border-radius: 14px;
-  color: #202c3d;
-  background: #fff;
-  box-shadow: 0 24px 80px rgb(22 38 63 / 24%);
+  color: var(--account-org-ink);
+  background: var(--account-org-surface);
+  box-shadow: 0 24px 80px var(--account-org-user-dialog-shadow);
 }
 .detail-dialog[open] {
   display: block;
 }
 dialog::backdrop {
-  background: rgb(24 37 55 / 54%);
+  background: var(--account-org-user-dialog-scrim);
 }
 .user-detail-shell {
   display: grid;
@@ -265,27 +267,27 @@ dialog::backdrop {
   flex-direction: column;
   gap: 26px;
   padding: 28px 22px;
-  color: #fff;
-  background: #254a9c;
+  color: var(--account-org-on-blue);
+  background: var(--account-org-blue);
 }
 .user-detail-identity small,
 .user-detail-identity p {
-  color: #e5edff;
+  color: var(--account-org-dialog-subtle);
 }
 .user-detail-identity h3 {
   overflow-wrap: anywhere;
   margin: 8px 0 12px;
-  color: #fff;
+  color: var(--account-org-on-blue);
   font-size: 18px;
   line-height: 1.35;
 }
 .user-detail-status {
   display: inline-flex;
   padding: 5px 9px;
-  border: 1px solid rgb(255 255 255 / 34%);
+  border: 1px solid var(--account-org-user-outline);
   border-radius: 999px;
-  color: #fff;
-  background: rgb(9 35 82 / 24%);
+  color: var(--account-org-on-blue);
+  background: var(--account-org-user-overlay);
   font-size: 13px;
 }
 .user-detail-identity nav {
@@ -297,7 +299,7 @@ dialog::backdrop {
   padding: 10px 12px;
   border: 1px solid transparent;
   border-radius: 8px;
-  color: #fff;
+  color: var(--account-org-on-blue);
   background: transparent;
   text-align: left;
   font: inherit;
@@ -305,9 +307,9 @@ dialog::backdrop {
 }
 .user-detail-identity nav button:hover,
 .user-detail-identity nav button:focus-visible {
-  border-color: #fff;
-  color: #18386f;
-  background: #fff;
+  border-color: var(--account-org-on-blue);
+  color: var(--account-org-blue-deep);
+  background: var(--account-org-surface);
 }
 .user-detail-context {
   margin-top: auto;
@@ -320,7 +322,7 @@ dialog::backdrop {
   min-width: 0;
   min-height: 0;
   max-height: min(90dvh, 900px);
-  background: #fff;
+  background: var(--account-org-surface);
 }
 .user-detail-toolbar {
   display: flex;
@@ -328,23 +330,23 @@ dialog::backdrop {
   align-items: center;
   gap: 12px;
   padding: 16px 24px;
-  border-bottom: 1px solid #dbe1e9;
-  color: #58677b;
+  border-bottom: 1px solid var(--account-org-line);
+  color: var(--account-org-muted);
 }
 .user-detail-toolbar button,
 .user-detail-actions button,
 .user-detail-section button {
   min-height: 44px;
   padding: 9px 13px;
-  border: 1px solid #cbd6e4;
+  border: 1px solid var(--account-org-dialog-border);
   border-radius: 8px;
-  color: #254a9c;
-  background: #fff;
+  color: var(--account-org-blue);
+  background: var(--account-org-surface);
   font: inherit;
   cursor: pointer;
 }
 .user-detail-toolbar button {
-  color: #202c3d;
+  color: var(--account-org-ink);
 }
 .user-detail-scroll {
   min-height: 0;
@@ -358,7 +360,7 @@ dialog::backdrop {
 .user-detail-section {
   scroll-margin-top: 12px;
   padding: 22px 26px;
-  border-bottom: 1px solid #dbe1e9;
+  border-bottom: 1px solid var(--account-org-line);
 }
 .user-detail-section > header {
   display: flex;
@@ -369,18 +371,18 @@ dialog::backdrop {
 }
 .user-detail-section > header h4 {
   margin: 0;
-  color: #202c3d;
+  color: var(--account-org-ink);
   font-size: 21px;
 }
 .user-detail-section > header p {
   margin: 6px 0 0;
-  color: #58677b;
+  color: var(--account-org-muted);
   font-size: 14px;
   line-height: 1.5;
 }
 .user-detail-section > header > strong {
   flex: 0 0 auto;
-  color: #254a9c;
+  color: var(--account-org-blue);
   font-size: 14px;
 }
 .user-detail-facts {
@@ -393,12 +395,12 @@ dialog::backdrop {
   display: grid;
   gap: 5px;
   padding: 12px 14px;
-  border-left: 3px solid #254a9c;
-  background: #f4f7fb;
+  border-left: 3px solid var(--account-org-blue);
+  background: var(--account-org-user-surface-soft);
 }
 .user-detail-facts small,
 .user-detail-list small {
-  color: #58677b;
+  color: var(--account-org-muted);
 }
 .user-detail-list {
   display: grid;
@@ -412,7 +414,7 @@ dialog::backdrop {
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  border: 1px solid #dbe1e9;
+  border: 1px solid var(--account-org-line);
   border-radius: 8px;
 }
 .user-detail-list li strong,
@@ -429,12 +431,12 @@ dialog::backdrop {
 .user-detail-boundary {
   margin: 12px 0;
   padding: 12px 14px;
-  color: #58677b;
-  background: #f4f7fb;
+  color: var(--account-org-muted);
+  background: var(--account-org-user-surface-soft);
   line-height: 1.5;
 }
 .user-detail-boundary {
-  border-left: 3px solid #254a9c;
+  border-left: 3px solid var(--account-org-blue);
 }
 .user-role-list > li {
   grid-template-columns: minmax(0, 1fr) auto;
@@ -443,9 +445,9 @@ dialog::backdrop {
   grid-template-columns: minmax(0, 1fr) auto auto;
 }
 .detail-dialog .button-danger {
-  border-color: #b97068;
-  color: #8c3c32;
-  background: #fff;
+  border-color: var(--account-org-user-danger-border);
+  color: var(--account-org-danger);
+  background: var(--account-org-surface);
 }
 .user-detail-actions {
   position: sticky;
@@ -455,17 +457,17 @@ dialog::backdrop {
   justify-content: flex-end;
   gap: 8px;
   padding: 14px 20px;
-  border-top: 1px solid #dbe1e9;
-  background: #fff;
+  border-top: 1px solid var(--account-org-line);
+  background: var(--account-org-surface);
 }
 .detail-dialog button:disabled {
   cursor: not-allowed;
-  color: #738096;
-  background: #edf1f6;
+  color: var(--account-org-user-disabled-ink);
+  background: var(--account-org-soft);
   opacity: 1;
 }
 .detail-dialog :is(button, input, select, textarea):focus-visible {
-  outline: 3px solid rgb(37 74 156 / 35%);
+  outline: 3px solid var(--account-org-user-focus);
   outline-offset: 2px;
 }
 .detail-feedback {
