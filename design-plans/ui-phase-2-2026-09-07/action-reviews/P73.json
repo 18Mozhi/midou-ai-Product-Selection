@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/NotFoundPage.vue": "9ebbf97a724300fa2b17be2bc76973fe22abb14a290d84222915c09b7e2f44b7"
+    "apps/web/src/components/NotFoundPage.vue": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
   },
   "inputs": {},
   "actions": [
@@ -115,7 +115,7 @@
     "status": "source-reviewed-not-runtime-accepted",
     "files": ["apps/web/src/components/NotFoundPage.vue"],
     "dependencyHashes": {
-      "apps/web/src/components/NotFoundPage.vue": "9ebbf97a724300fa2b17be2bc76973fe22abb14a290d84222915c09b7e2f44b7"
+      "apps/web/src/components/NotFoundPage.vue": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43",
     "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
   },
   "actions": [
@@ -269,7 +269,7 @@
     "files": ["apps/web/src/components/PlatformAccountCenter.vue", "apps/web/src/components/PlatformOrganizationDetailDialog.vue", "apps/web/src/components/PlatformAccountDialogs.vue"],
     "dependencyHashes": {
       "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-      "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e",
+      "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43",
       "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
     },
     "includeStructuralContainers": true,

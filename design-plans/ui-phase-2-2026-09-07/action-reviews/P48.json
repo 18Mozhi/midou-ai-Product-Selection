@@ -8,9 +8,9 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "a801a72cdebfcfc1d549263e3307fe923260606b934468a070ebbe2d33504f03",
+    "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9",
     "apps/web/src/components/ProviderParserSampleDialog.vue": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6",
-    "apps/web/src/components/ProviderParserSampleReview.vue": "c95c962e4757cf419bbca6c338da3a0c459c7301604c901b3da5e3e0d4c0ceb7",
+    "apps/web/src/components/ProviderParserSampleReview.vue": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8",
     "apps/web/src/components/ProviderSourceCenter.vue": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a",
     "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f",
     "apps/web/src/components/ProviderSourceDirectory.vue": "ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34",
@@ -1226,9 +1226,9 @@
       "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "a801a72cdebfcfc1d549263e3307fe923260606b934468a070ebbe2d33504f03",
+      "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9",
       "apps/web/src/components/ProviderParserSampleDialog.vue": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6",
-      "apps/web/src/components/ProviderParserSampleReview.vue": "c95c962e4757cf419bbca6c338da3a0c459c7301604c901b3da5e3e0d4c0ceb7",
+      "apps/web/src/components/ProviderParserSampleReview.vue": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8",
       "apps/web/src/components/ProviderSourceCenter.vue": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a",
       "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f",
       "apps/web/src/components/ProviderSourceDirectory.vue": "ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34",

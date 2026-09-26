@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationCreationWizard.vue": "6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314",
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
   },
   "actions": [
@@ -336,7 +336,7 @@
       "apps/web/src/components/PlatformAccountCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationCreationWizard.vue": "6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53",
+      "apps/web/src/components/OrganizationCreationWizard.vue": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314",
       "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
     },
     "includeStructuralContainers": true,

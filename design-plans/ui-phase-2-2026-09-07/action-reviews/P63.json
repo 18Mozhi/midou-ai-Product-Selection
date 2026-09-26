@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ApiCoverageOperationCard.vue": "1bbda614ea0bf0aa4f59ebaf69275cead59c8ee6b876de2e18b008278015d11a"
+    "apps/web/src/components/ApiCoverageOperationCard.vue": "cb844d7a0b1cb8abd8fcafc38cc3a867f4f3f9b4d193fe5dc7363517229f1a0d"
   },
   "inputs": {},
   "actions": [
@@ -106,7 +106,7 @@
       "apps/web/src/components/ApiCoverageOperationCard.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/ApiCoverageOperationCard.vue": "1bbda614ea0bf0aa4f59ebaf69275cead59c8ee6b876de2e18b008278015d11a"
+      "apps/web/src/components/ApiCoverageOperationCard.vue": "cb844d7a0b1cb8abd8fcafc38cc3a867f4f3f9b4d193fe5dc7363517229f1a0d"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

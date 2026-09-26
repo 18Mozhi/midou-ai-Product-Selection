@@ -1105,7 +1105,7 @@
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
       "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
       "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
-      "apps/web/src/components/local-identity-recovery.css": "4d1a7df356e2e0830f5ced845d0edc6e75ab6df574980855e2611c51a725327e"
+      "apps/web/src/components/local-identity-recovery.css": "0a7a7ee95210cdec20fb1ce28634649797df3ff349aa299b55ca833b78715761"
     },
     "inputs": [
       {

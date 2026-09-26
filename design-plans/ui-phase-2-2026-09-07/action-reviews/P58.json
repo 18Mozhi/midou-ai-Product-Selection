@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CommercialOperationsCenter.vue": "3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257"
+    "apps/web/src/components/CommercialOperationsCenter.vue": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
   },
   "inputs": {
     "apps/web/src/components/CommercialOperationsCenter.vue": [
@@ -882,7 +882,7 @@
       "apps/web/src/components/CommercialOperationsCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CommercialOperationsCenter.vue": "3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257"
+      "apps/web/src/components/CommercialOperationsCenter.vue": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],
