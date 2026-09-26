@@ -14,13 +14,27 @@ export const responsiveFocusRevision = Object.freeze({
   contentBaseline: "388b311d8e470a8f54467da4c38f14c051d350de",
   contentAfter: "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
   paletteBaseline: "af239b08b69f7d97cd0372f9840a70009eeef0c7",
-  paletteAfter: "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+  paletteCommit: "699ac3f3",
+  paletteSnapshot: "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+  paletteAfter: "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
   paletteFile: "apps/web/src/design/platform-overlay-tokens.css",
   paletteBeforeNotifications: "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
   paletteSha256: "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5",
   focusCapture: "635e5538a96493fcf62e95938c78fb07aebcc9b7",
+  tableControlsFile: "apps/web/src/components/TableViewControls.vue",
+  tableControlsAfter: "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
   reasonFile: "apps/web/src/components/AuditedReasonDialog.vue",
   reasonAfter: "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+  currentDependencyHashes: Object.freeze({
+    "apps/web/src/main.ts": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+    "apps/web/src/styles.css": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364",
+    "apps/web/src/styles/onboarding-navigation.css":
+      "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
+    "apps/web/src/styles/platform-operations.css":
+      "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922",
+    "apps/web/src/styles/platform-dashboard.css":
+      "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be",
+  }),
 });
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
@@ -33,8 +47,10 @@ const at = (revision, file) =>
 export function verifyResponsivePalette(source = read) {
   const revision = responsiveFocusRevision,
     current = source(revision.file),
+    extracted = at(revision.paletteCommit, revision.file),
     palette = source(revision.paletteFile);
   assert.equal(hash(current), revision.paletteAfter, "unreviewed current responsive source");
+  assert.equal(hash(extracted), revision.paletteSnapshot, "unreviewed extracted palette revision");
   assert.equal(hash(palette), revision.paletteSha256, "unreviewed overlay palette");
   // Only add the omitted notification scope; retain every prior selector and color byte.
   assert.equal(
@@ -50,7 +66,7 @@ export function verifyResponsivePalette(source = read) {
   );
   const imported = '@import "../design/platform-overlay-tokens.css";\n\n';
   assert.equal(current.split(imported).length, 2, "one explicit palette import");
-  const expanded = current
+  const expanded = extracted
     .replace(imported, "")
     .replace(/var\((--so-workspace-overlay-[\w-]+)\)/g, (_, name) => {
       assert.ok(values.has(name), `missing palette role ${name}`);
@@ -75,9 +91,11 @@ export function verifyResponsiveFocusDependencies(source = read) {
     const currentExpected =
       file === revision.file
         ? revision.paletteAfter
-        : file === revision.reasonFile
-          ? revision.reasonAfter
-          : fingerprint;
+        : file === revision.tableControlsFile
+          ? revision.tableControlsAfter
+          : file === revision.reasonFile
+            ? revision.reasonAfter
+            : (revision.currentDependencyHashes[file] ?? fingerprint);
     assert.equal(hash(source(file)), currentExpected, `${file}: unreviewed current dependency`);
   }
   return Object.keys(evidence.sourceHashes).length;
