@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "8fbcc5c66beb1ecff7488dc7e4c14298e5e3869201b72c5e20f7a9c17991330c",
+    "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "1a37b85bb3f72e2d1b595333a14878f50ec54925c581b2996833d8b82e8a3fd3",
     "apps/web/src/components/ProviderAcceptanceExecution.vue": "8845f961637e96dedb38d9aa362560410eabffea7ab97f80ca64ff9d54fb2422",
     "apps/web/src/components/ProviderAcceptanceOperations.vue": "12724a3fa2359a87e48748313448f7eece817fa3f8d6423f9faf409fd4a99f8f"
   },
@@ -471,7 +471,7 @@
       "apps/web/src/components/ProviderAcceptanceOperations.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "8fbcc5c66beb1ecff7488dc7e4c14298e5e3869201b72c5e20f7a9c17991330c",
+      "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "1a37b85bb3f72e2d1b595333a14878f50ec54925c581b2996833d8b82e8a3fd3",
       "apps/web/src/components/ProviderAcceptanceExecution.vue": "8845f961637e96dedb38d9aa362560410eabffea7ab97f80ca64ff9d54fb2422",
       "apps/web/src/components/ProviderAcceptanceOperations.vue": "12724a3fa2359a87e48748313448f7eece817fa3f8d6423f9faf409fd4a99f8f"
     },
