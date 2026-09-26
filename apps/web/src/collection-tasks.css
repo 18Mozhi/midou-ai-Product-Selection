@@ -1,3 +1,5 @@
+@import "./design/collection-task-tokens.css";
+
 .collection-task-center {
   display: grid;
   gap: 20px;
@@ -8,18 +10,18 @@
 .collection-task-center--review {
   max-width: 1160px;
   margin: 0 auto;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--so-collection-task-c-ink);
+  background: var(--so-collection-task-c-canvas);
 }
 
 .collection-task-center--review .collection-task-title {
   margin: 0;
   padding: 31px 36px;
-  background: #1748a0;
+  background: var(--so-collection-task-c-primary);
 }
 
 .collection-task-center--review .collection-task-title :is(p, h1, span) {
-  color: #fff;
+  color: var(--so-collection-task-c-surface);
 }
 
 .collection-task-center--review .collection-task-title h1 {
@@ -31,24 +33,24 @@
 
 .collection-task-center--review .collection-task-title-actions :is(button, a) {
   min-height: 42px;
-  border-color: #fff;
+  border-color: var(--so-collection-task-c-surface);
   border-radius: 0;
-  color: #1748a0;
-  background: #fff;
+  color: var(--so-collection-task-c-primary);
+  background: var(--so-collection-task-c-surface);
   font-weight: 800;
 }
 
 .collection-task-center--review .collection-task-metrics {
   gap: 0;
   margin: 24px 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--so-collection-task-c-line);
 }
 
 .collection-task-center--review .collection-task-metrics article {
   border: 0;
-  border-right: 1px solid #dce4ee;
+  border-right: 1px solid var(--so-collection-task-c-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-collection-task-c-surface);
   box-shadow: none;
 }
 
@@ -57,73 +59,73 @@
 }
 
 .collection-task-center--review .collection-task-metrics strong {
-  color: #1748a0;
+  color: var(--so-collection-task-c-primary);
 }
 
 .collection-task-center--review .collection-task-table-card {
   overflow: hidden;
-  border-color: #dce4ee;
-  border-top: 5px solid #1748a0;
+  border-color: var(--so-collection-task-c-line);
+  border-top: 5px solid var(--so-collection-task-c-primary);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-collection-task-c-surface);
   box-shadow: none;
 }
 
 .collection-task-center--review .collection-task-table-card > header {
   padding: 23px 26px;
-  border-bottom: 1px solid #dce4ee;
+  border-bottom: 1px solid var(--so-collection-task-c-line);
 }
 
 .collection-task-center--review .collection-task-filters :is(input, select) {
-  border-color: #dce4ee;
+  border-color: var(--so-collection-task-c-line);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--so-collection-task-c-filter);
 }
 
 .collection-task-center--review .collection-task-table-card table th {
-  color: #fff;
-  background: #1748a0;
+  color: var(--so-collection-task-c-surface);
+  background: var(--so-collection-task-c-primary);
 }
 
 .collection-task-center--review .collection-task-table-card table :is(th, td) {
-  border-color: #dce4ee;
+  border-color: var(--so-collection-task-c-line);
 }
 
 .collection-task-center--review .collection-task-table-card table tbody tr:nth-child(even) {
-  background: #f7faff;
+  background: var(--so-collection-task-c-filter);
 }
 
 .collection-task-center--review .collection-task-table-card button,
 .collection-task-center--review .collection-task-detail button {
   min-height: 40px;
-  border: 1px solid #1748a0;
+  border: 1px solid var(--so-collection-task-c-primary);
   border-radius: 0;
-  color: #fff;
-  background: #1748a0;
+  color: var(--so-collection-task-c-surface);
+  background: var(--so-collection-task-c-primary);
   font-weight: 800;
 }
 
 .collection-task-center--review .collection-task-detail {
   border-radius: 0;
-  box-shadow: 0 18px 48px rgb(24 45 74 / 24%);
+  box-shadow: 0 18px 48px var(--so-collection-task-c-shadow);
 }
 
 .collection-task-center--review .collection-task-detail :is(header, section, aside) {
-  border-color: #dce4ee;
+  border-color: var(--so-collection-task-c-line);
 }
 
 .collection-task-center--review .collection-task-detail :is(h3, h4) {
-  color: #1748a0;
+  color: var(--so-collection-task-c-primary);
 }
 
 .collection-task-center--review .collection-task-detail [role="region"] {
-  border-left: 5px solid #1748a0;
+  border-left: 5px solid var(--so-collection-task-c-primary);
   border-radius: 0;
-  background: #edf4ff;
+  background: var(--so-collection-task-c-pale);
 }
 
 .collection-task-center--review :is(button, input, select, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--so-collection-task-c-focus);
   outline-offset: 3px;
 }
 .collection-task-title,

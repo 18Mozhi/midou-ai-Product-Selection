@@ -1,13 +1,15 @@
+@import "./design/backup-recovery-tokens.css";
+
 .backup-center.backup-center--c {
-  --so-text: #182739;
-  --so-text-muted: #526278;
-  --so-border: #c7d3e4;
-  --so-primary: #1249b8;
-  --so-primary-strong: #1249b8;
-  --so-on-primary: #fff;
-  --so-bg-elevated: #fff;
-  --so-panel: #fff;
-  --so-bg: #f3f6fa;
+  --so-text: var(--so-backup-c-ink);
+  --so-text-muted: var(--so-backup-c-muted);
+  --so-border: var(--so-backup-c-border);
+  --so-primary: var(--so-backup-c-primary);
+  --so-primary-strong: var(--so-backup-c-primary);
+  --so-on-primary: var(--so-backup-c-white);
+  --so-bg-elevated: var(--so-backup-c-white);
+  --so-panel: var(--so-backup-c-white);
+  --so-bg: var(--so-backup-c-canvas);
   font:
     16px/1.65 "Microsoft YaHei",
     "PingFang SC",
@@ -21,22 +23,22 @@ html body:has(.backup-center--c) {
   --so-font-display: "Microsoft YaHei", "PingFang SC", sans-serif;
   #app .role-shell {
     .platform-secondary-nav {
-      background: #fff;
-      border: 1px solid #c7d3e4;
+      background: var(--so-backup-c-white);
+      border: 1px solid var(--so-backup-c-border);
       gap: 0;
     }
     .platform-secondary-nav a {
       min-height: 44px;
-      background: #fff;
-      color: #526278;
+      background: var(--so-backup-c-white);
+      color: var(--so-backup-c-muted);
       border: 0;
       border-bottom: 3px solid transparent;
       box-shadow: none;
     }
     .platform-secondary-nav a[aria-current="page"] {
-      background: #edf3ff;
-      color: #1249b8;
-      border-bottom-color: #1249b8;
+      background: var(--so-backup-c-active);
+      color: var(--so-backup-c-primary);
+      border-bottom-color: var(--so-backup-c-primary);
     }
     .backup-center--c {
       h1,
@@ -49,38 +51,38 @@ html body:has(.backup-center--c) {
         font-size: 21px;
       }
       .backup-read-action[aria-disabled="true"] {
-        background: #edf0f5;
-        color: #66758a;
-        border-color: #c7d3e4;
+        background: var(--so-backup-c-disabled-bg);
+        color: var(--so-backup-c-disabled-text);
+        border-color: var(--so-backup-c-border);
         opacity: 0.65;
         cursor: wait;
       }
       .table-view-controls :is(button, summary, select) {
-        background: #fff;
-        color: #1249b8;
-        border: 1px solid #c7d3e4;
+        background: var(--so-backup-c-white);
+        color: var(--so-backup-c-primary);
+        border: 1px solid var(--so-backup-c-border);
         font: inherit;
         min-height: 44px;
         border-radius: 4px;
         box-shadow: none;
       }
       .technical-details button {
-        color: #1249b8;
-        background: #fff;
-        border: 1px solid #c7d3e4;
+        color: var(--so-backup-c-primary);
+        background: var(--so-backup-c-white);
+        border: 1px solid var(--so-backup-c-border);
       }
       .technical-details summary {
         min-height: 44px;
         padding: 10px 0;
-        color: #1249b8;
+        color: var(--so-backup-c-primary);
       }
       footer {
         text-align: left;
       }
       .table-view-controls__toolbar fieldset {
-        background: #fff;
+        background: var(--so-backup-c-white);
         max-height: min(440px, 70vh);
-        border: 1px solid #c7d3e4;
+        border: 1px solid var(--so-backup-c-border);
         border-radius: 0;
         box-shadow: none;
         gap: 4px;
@@ -98,7 +100,7 @@ html body:has(.backup-center--c) {
         min-height: 20px;
         padding: 0;
         margin: 0;
-        accent-color: #1249b8;
+        accent-color: var(--so-backup-c-primary);
       }
       .table-view-controls__toolbar fieldset label {
         display: flex;
@@ -109,7 +111,7 @@ html body:has(.backup-center--c) {
         cursor: pointer;
       }
       .table-view-controls__toolbar fieldset input:disabled + label {
-        color: #66758a;
+        color: var(--so-backup-c-disabled-text);
         cursor: default;
       }
       table {
@@ -117,22 +119,22 @@ html body:has(.backup-center--c) {
         box-shadow: none;
       }
       th {
-        background: #f3f6fa;
-        color: #526278;
+        background: var(--so-backup-c-canvas);
+        color: var(--so-backup-c-muted);
         border: 0;
-        border-bottom: 1px solid #c7d3e4;
+        border-bottom: 1px solid var(--so-backup-c-border);
       }
       td {
-        background: #fff;
+        background: var(--so-backup-c-white);
         border: 0;
-        border-bottom: 1px solid #c7d3e4;
+        border-bottom: 1px solid var(--so-backup-c-border);
       }
     }
   }
   .responsive-data-view__drawer {
-    border: 1px solid #c7d3e4;
+    border: 1px solid var(--so-backup-c-border);
     border-radius: 0;
-    background: #fff;
+    background: var(--so-backup-c-white);
     box-shadow: none;
     font:
       16px/1.65 "Microsoft YaHei",
@@ -141,29 +143,29 @@ html body:has(.backup-center--c) {
   }
   .responsive-data-view__drawer > header {
     margin: -18px -18px 20px;
-    background: #1249b8;
-    color: #fff;
+    background: var(--so-backup-c-primary);
+    color: var(--so-backup-c-white);
   }
   .responsive-data-view__drawer > header small {
-    color: #e1eaff;
+    color: var(--so-backup-c-focus-bg);
   }
   .responsive-data-view__drawer button {
     min-width: 44px;
     min-height: 44px;
-    background: #fff;
-    color: #1249b8;
-    border: 1px solid #c7d3e4;
+    background: var(--so-backup-c-white);
+    color: var(--so-backup-c-primary);
+    border: 1px solid var(--so-backup-c-border);
     border-radius: 4px;
     box-shadow: none;
   }
   .responsive-data-view__drawer summary {
-    color: #1249b8;
+    color: var(--so-backup-c-primary);
     min-height: 44px;
   }
   .responsive-data-view__drawer :is(button, summary):focus-visible {
-    outline: 3px solid #1249b8;
+    outline: 3px solid var(--so-backup-c-primary);
     outline-offset: 3px;
-    box-shadow: 0 0 0 2px #fff;
+    box-shadow: 0 0 0 2px var(--so-backup-c-white);
   }
 }
 .backup-center--c *,
@@ -202,8 +204,8 @@ html body:has(.backup-center--c) {
   align-items: start;
 }
 .backup-center--c .p64-directory {
-  background: #1249b8;
-  color: #fff;
+  background: var(--so-backup-c-primary);
+  color: var(--so-backup-c-white);
   padding: 24px;
 }
 .backup-center--c .p64-directory h2 {
@@ -222,9 +224,9 @@ html body:has(.backup-center--c) {
   gap: 8px;
 }
 .backup-center--c .p64-directory a {
-  color: #fff;
+  color: var(--so-backup-c-white);
   padding: 12px 0;
-  border-bottom: 1px solid #7196e2;
+  border-bottom: 1px solid var(--so-backup-c-focus);
   text-decoration: none;
   min-height: 44px;
 }
@@ -240,18 +242,18 @@ html body:has(.backup-center--c) {
   :is(.truth-banner, .panel, .p64-objectives, .blockers, .state-card, .refresh-notice) {
   border-radius: 0;
   padding: 24px;
-  background: #fff;
-  border: 1px solid #c7d3e4;
+  background: var(--so-backup-c-white);
+  border: 1px solid var(--so-backup-c-border);
   min-width: 0;
 }
 .backup-center.backup-center--c .truth-banner {
   display: block;
-  border-left: 4px solid #1249b8;
+  border-left: 4px solid var(--so-backup-c-primary);
 }
 .backup-center--c .truth-banner strong {
   display: block;
   font-size: 23px;
-  color: #182739;
+  color: var(--so-backup-c-ink);
 }
 .backup-center--c .truth-banner p {
   margin: 12px 0 0;
@@ -269,7 +271,7 @@ html body:has(.backup-center--c) {
   gap: 20px;
 }
 .backup-center--c .p64-comparisons section {
-  background: #f3f6fa;
+  background: var(--so-backup-c-canvas);
   padding: 16px;
   min-width: 0;
 }
@@ -286,10 +288,10 @@ html body:has(.backup-center--c) {
 .backup-center--c .p64-comparisons dd {
   font-variant-numeric: tabular-nums;
   font-size: 21px;
-  color: #182739;
+  color: var(--so-backup-c-ink);
 }
 .backup-center--c dt {
-  color: #526278;
+  color: var(--so-backup-c-muted);
   font-size: 14px;
 }
 .backup-center--c dd {
@@ -313,20 +315,20 @@ html body:has(.backup-center--c) {
 .backup-center.backup-center--c .p64-evidence > dl > div {
   display: block;
   padding: 14px 0;
-  border-bottom: 1px solid #c7d3e4;
+  border-bottom: 1px solid var(--so-backup-c-border);
   min-width: 0;
 }
 .backup-center.backup-center--c .p64-evidence dd {
   text-align: left;
 }
 .backup-center.backup-center--c .drill-expiry {
-  background: #f3f6fa;
+  background: var(--so-backup-c-canvas);
 }
 .backup-center.backup-center--c .blockers article {
   border-radius: 0;
   padding: 16px 0;
   border: 0;
-  border-top: 1px solid #c7d3e4;
+  border-top: 1px solid var(--so-backup-c-border);
   background: none;
 }
 .backup-center--c .blockers p {
@@ -341,7 +343,7 @@ html body:has(.backup-center--c) {
 .backup-center.backup-center--c td {
   padding: 12px 10px;
   font-size: 14px;
-  border-bottom: 1px solid #c7d3e4;
+  border-bottom: 1px solid var(--so-backup-c-border);
   text-align: left;
   vertical-align: top;
 }
@@ -366,25 +368,25 @@ html body:has(.backup-center--c) {
   box-shadow: none;
 }
 .backup-center--c :is(button, a, summary):focus-visible {
-  outline: 3px solid #1249b8;
+  outline: 3px solid var(--so-backup-c-primary);
   outline-offset: 3px;
-  box-shadow: 0 0 0 2px #fff;
+  box-shadow: 0 0 0 2px var(--so-backup-c-white);
 }
 .backup-center--c .p64-directory a:focus-visible {
-  outline-color: #fff;
+  outline-color: var(--so-backup-c-white);
   box-shadow: none;
 }
 .backup-center--c [tabindex="-1"] {
   scroll-margin-top: 90px;
 }
 .backup-center--c [tabindex="-1"]:focus-visible {
-  outline: 3px solid #1249b8;
+  outline: 3px solid var(--so-backup-c-primary);
   outline-offset: 3px;
 }
 .backup-center.backup-center--c button:disabled {
-  background: #edf0f5;
-  color: #66758a;
-  border-color: #c7d3e4;
+  background: var(--so-backup-c-disabled-bg);
+  color: var(--so-backup-c-disabled-text);
+  border-color: var(--so-backup-c-border);
   opacity: 0.65;
 }
 .backup-center--c .responsive-record-summary {
@@ -393,13 +395,13 @@ html body:has(.backup-center--c) {
 }
 .backup-center.backup-center--c .responsive-data-view__mobile article {
   border-radius: 0;
-  background: #fff;
+  background: var(--so-backup-c-white);
   box-shadow: none;
 }
 .backup-center.backup-center--c .responsive-data-view__mobile button {
-  color: #1249b8;
-  background: #fff;
-  border-color: #c7d3e4;
+  color: var(--so-backup-c-primary);
+  background: var(--so-backup-c-white);
+  border-color: var(--so-backup-c-border);
 }
 .backup-center--c code {
   overflow-wrap: anywhere;
@@ -407,12 +409,12 @@ html body:has(.backup-center--c) {
 }
 body:has(.backup-center--c) .responsive-data-view__drawer {
   border-radius: 0;
-  background: #fff;
-  color: #182739;
+  background: var(--so-backup-c-white);
+  color: var(--so-backup-c-ink);
 }
 body:has(.backup-center--c) .responsive-data-view__drawer > header {
-  background: #1249b8;
-  color: #fff;
+  background: var(--so-backup-c-primary);
+  color: var(--so-backup-c-white);
   padding: 20px;
 }
 body:has(.backup-center--c) .responsive-data-view__drawer h3 {
@@ -427,10 +429,10 @@ body:has(.backup-center--c) .responsive-data-view__drawer dt {
   font-size: 14px;
 }
 body:has(.backup-center--c) .responsive-data-view__overlay {
-  --so-text: #182739;
-  --so-text-muted: #526278;
-  --so-bg-elevated: #fff;
-  --so-border: #c7d3e4;
+  --so-text: var(--so-backup-c-ink);
+  --so-text-muted: var(--so-backup-c-muted);
+  --so-bg-elevated: var(--so-backup-c-white);
+  --so-border: var(--so-backup-c-border);
   font:
     16px/1.65 "Microsoft YaHei",
     "PingFang SC",
@@ -443,16 +445,16 @@ body:has(.backup-center--c) .responsive-data-view__drawer dd {
 body:has(.backup-center--c) .responsive-data-view__drawer button {
   min-width: 44px;
   min-height: 44px;
-  background: #fff;
-  color: #1249b8;
-  border: 1px solid #c7d3e4;
+  background: var(--so-backup-c-white);
+  color: var(--so-backup-c-primary);
+  border: 1px solid var(--so-backup-c-border);
   border-radius: 4px;
   font: inherit;
 }
 body:has(.backup-center--c) .responsive-data-view__drawer :is(button, summary):focus-visible {
-  outline: 3px solid #1249b8;
+  outline: 3px solid var(--so-backup-c-primary);
   outline-offset: 3px;
-  box-shadow: 0 0 0 2px #fff;
+  box-shadow: 0 0 0 2px var(--so-backup-c-white);
 }
 @media (max-width: 1000px) {
   .backup-center--c .p64-layout {

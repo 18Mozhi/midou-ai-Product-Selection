@@ -151,13 +151,112 @@ test("automation rules palette resolves every page-local color reference", async
 
   assert.equal(names.size, 15);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^\.automation-center--review\s*\{/,
-  );
+  assert.match(tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(), /^\.automation-center--review\s*\{/);
   assert.ok(css.startsWith('@import "./design/automation-rule-tokens.css";'));
   assert.deepEqual([...references].sort(), [...names].sort());
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("backup recovery palette resolves page and portal colors without broadening scope", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/backup-recovery-tokens.css", "utf8"),
+    readFile("apps/web/src/backup-recovery-center-c.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--so-backup-c-[a-z-]+):\s*#[0-9a-f]{6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-backup-c-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 11);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html body:has\(\.backup-center--c\),\s*\.backup-center\.backup-center--c\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/backup-recovery-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("capacity boundary palette resolves the page and scoped shell color references", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/capacity-boundary-tokens.css", "utf8"),
+    readFile("apps/web/src/capacity-boundary-c.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--so-capacity-c-[a-z-]+):\s*(?:#[0-9a-f]{6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-capacity-c-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 35);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html body:has\(#app \.capacity-boundary--c\),\s*\.capacity-boundary--c\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(
+    css.startsWith(
+      '/* P71 route-scoped C layout; inherited shell composition is isolated to this page. */\n@import "./design/capacity-boundary-tokens.css";',
+    ),
+  );
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("collection task palette resolves the reviewed workspace colors", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/collection-task-tokens.css", "utf8"),
+    readFile("apps/web/src/collection-tasks.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--so-collection-task-c-[a-z-]+):\s*(?:#[0-9a-f]{6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-collection-task-c-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 9);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^\.collection-task-center--review\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/collection-task-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("competitor review palette resolves P19/P20 colors and scoped cascade overrides", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/competitor-review-tokens.css", "utf8"),
+    readFile("apps/web/src/competitor.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--so-competitor-c-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-competitor-c-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 12);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^\.competitor-monitor--review\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/competitor-review-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(
+    css.slice(css.indexOf("#app .competitor-monitor--review")),
+    /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(|!important/i,
+  );
+  assert.doesNotMatch(css, /!important/);
 });
 
 test("P47 palette resolves page, portal detail and feedback without broadening activation", async () => {

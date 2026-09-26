@@ -197,6 +197,34 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
+    if (paths[index] === "apps/web/src/design/backup-recovery-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html body:has\(\.backup-center--c\),\s*\.backup-center\.backup-center--c\s*\{(?:\s*--so-backup-c-[a-z-]+:\s*#[0-9a-f]{6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/capacity-boundary-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html body:has\(#app \.capacity-boundary--c\),\s*\.capacity-boundary--c\s*\{(?:\s*--so-capacity-c-[a-z-]+:\s*(?:#[0-9a-f]{6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/collection-task-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.collection-task-center--review\s*\{(?:\s*--so-collection-task-c-[a-z-]+:\s*(?:#[0-9a-f]{6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/competitor-review-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.competitor-monitor--review\s*\{(?:\s*--so-competitor-c-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/export-detail-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

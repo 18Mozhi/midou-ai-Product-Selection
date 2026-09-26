@@ -1,0 +1,39 @@
+/* P71 C colors stay inside the capacity page and its same-route shell. */
+html body:has(#app .capacity-boundary--c),
+.capacity-boundary--c {
+  --so-capacity-c-nav-primary: #1249b8;
+  --so-capacity-c-shell-ink: #172d4c;
+  --so-capacity-c-primary: #1748a0;
+  --so-capacity-c-ink: #182d4a;
+  --so-capacity-c-sidebar: #244bb0;
+  --so-capacity-c-focus: #2465d7;
+  --so-capacity-c-sidebar-hover: #365fc6;
+  --so-capacity-c-shell-focus: #4878e9;
+  --so-capacity-c-shell-muted: #526278;
+  --so-capacity-c-muted: #52647b;
+  --so-capacity-c-sidebar-muted: #536985;
+  --so-capacity-c-sidebar-divider: #7595db;
+  --so-capacity-c-warning: #875300;
+  --so-capacity-c-note-border: #8aa0bc;
+  --so-capacity-c-danger: #8f2231;
+  --so-capacity-c-sidebar-input-border: #91afea;
+  --so-capacity-c-danger-strong: #b02d3c;
+  --so-capacity-c-conclusion-border: #b8c9e6;
+  --so-capacity-c-secondary-border: #c7d3e4;
+  --so-capacity-c-shell-border: #d8e2ef;
+  --so-capacity-c-hero-subtext: #d9e6ff;
+  --so-capacity-c-line: #dce4ee;
+  --so-capacity-c-sidebar-subtitle: #e2ebff;
+  --so-capacity-c-mobile-nav-active: #e8efff;
+  --so-capacity-c-nav-active-bg: #edf3ff;
+  --so-capacity-c-boundary-bg: #edf4ff;
+  --so-capacity-c-sidebar-link: #eef3ff;
+  --so-capacity-c-note-bg: #f1f5fa;
+  --so-capacity-c-canvas: #f3f6fb;
+  --so-capacity-c-conclusion-bg: #f6f9ff;
+  --so-capacity-c-evidence-bg: #f9fbfe;
+  --so-capacity-c-surface: #ffffff;
+  --so-capacity-c-danger-bg: #fff5f5;
+  --so-capacity-c-warning-bg: #fffbf1;
+  --so-capacity-c-shadow: rgb(12 29 54 / 24%);
+}

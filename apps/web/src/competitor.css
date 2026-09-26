@@ -1,3 +1,4 @@
+@import "./design/competitor-review-tokens.css";
 .competitor-monitor {
   --ink: var(--so-text);
   --blue: var(--so-primary);
@@ -724,79 +725,82 @@
 }
 
 /* P20 C direction: production monitoring-rule ledger aligned with the approved scope. */
-.competitor-monitor--review {
-  --ink: #182d4a;
-  --blue: #1748a0;
+#app .competitor-monitor--review {
+  --ink: var(--so-competitor-c-ink);
+  --blue: var(--so-competitor-c-blue);
   display: grid;
   gap: 14px;
-  color: #182d4a;
+  color: var(--so-competitor-c-ink);
   font:
     16px/1.6 "Microsoft YaHei",
     sans-serif;
 }
-.competitor-monitor--review :is(h1, h2, h3, h4, p, ol, ul) {
+#app .competitor-monitor--review :is(h1, h2, h3, h4, p, ol, ul) {
   margin: 0;
 }
-.competitor-monitor--review :is(button, input, select, textarea, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+#app .competitor-monitor--review :is(button, input, select, textarea, a, summary):focus-visible {
+  outline: 3px solid var(--so-competitor-c-focus);
   outline-offset: 3px;
 }
-.competitor-monitor--review .monitoring-readiness-strip {
+#app .competitor-monitor--review .monitoring-readiness-strip {
   margin: 0;
   padding: 30px;
-  border: 1px solid #1748a0;
+  border: 1px solid var(--so-competitor-c-blue);
   border-radius: 0;
-  background: #1748a0;
+  background: var(--so-competitor-c-blue);
   box-shadow: none;
 }
-.competitor-monitor--review .monitoring-readiness-strip :is(h1, h2, h3, p, span, small, strong, b) {
-  color: #fff;
+#app
+  .competitor-monitor--review
+  .monitoring-readiness-strip
+  :is(h1, h2, h3, p, span, small, strong, b) {
+  color: var(--so-competitor-c-white);
 }
-.competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
+#app .competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
   min-height: 44px;
   padding: 9px 14px;
-  border: 1px solid #fff !important;
-  border-radius: 0 !important;
-  background: #fff !important;
-  color: #1748a0 !important;
+  border: 1px solid var(--so-competitor-c-white);
+  border-radius: 0;
+  background: var(--so-competitor-c-white);
+  color: var(--so-competitor-c-blue);
   font: inherit;
   font-weight: 800;
   text-decoration: none;
 }
-.competitor-monitor--review .competitor-rule-page-list {
+#app .competitor-monitor--review .competitor-rule-page-list {
   margin: 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--so-competitor-c-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-competitor-c-white);
   box-shadow: none;
 }
-.competitor-monitor--review .competitor-section-heading {
+#app .competitor-monitor--review .competitor-section-heading {
   display: flex;
   align-items: end;
   justify-content: space-between;
   gap: 18px;
   padding: 26px 30px;
-  border-bottom: 1px solid #dce4ee;
-  background: #fff;
+  border-bottom: 1px solid var(--so-competitor-c-border);
+  background: var(--so-competitor-c-white);
 }
-.competitor-monitor--review .competitor-section-heading p {
-  color: #1748a0;
+#app .competitor-monitor--review .competitor-section-heading p {
+  color: var(--so-competitor-c-blue);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
-.competitor-monitor--review .competitor-section-heading h2 {
+#app .competitor-monitor--review .competitor-section-heading h2 {
   font-size: 30px;
-  color: #182d4a;
+  color: var(--so-competitor-c-ink);
 }
-.competitor-monitor--review .competitor-section-heading > span {
+#app .competitor-monitor--review .competitor-section-heading > span {
   padding: 6px 10px;
-  border: 1px solid #dce4ee;
-  background: #edf4ff;
-  color: #1748a0;
+  border: 1px solid var(--so-competitor-c-border);
+  background: var(--so-competitor-c-soft-blue);
+  color: var(--so-competitor-c-blue);
   font-weight: 800;
 }
-.competitor-monitor--review .competitor-rule-page-list > article {
+#app .competitor-monitor--review .competitor-rule-page-list > article {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(220px, 0.8fr) auto;
   gap: 20px;
@@ -804,95 +808,95 @@
   margin: 0;
   padding: 22px 30px;
   border: 0;
-  border-bottom: 1px solid #dce4ee;
+  border-bottom: 1px solid var(--so-competitor-c-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-competitor-c-white);
 }
-.competitor-monitor--review .competitor-rule-page-list article > div {
+#app .competitor-monitor--review .competitor-rule-page-list article > div {
   display: grid;
   gap: 4px;
 }
-.competitor-monitor--review .competitor-rule-page-list article small {
-  color: #52647b;
+#app .competitor-monitor--review .competitor-rule-page-list article small {
+  color: var(--so-competitor-c-muted);
 }
-.competitor-monitor--review .competitor-rule-page-list article strong {
-  color: #182d4a;
+#app .competitor-monitor--review .competitor-rule-page-list article strong {
+  color: var(--so-competitor-c-ink);
   font-size: 21px;
 }
-.competitor-monitor--review .competitor-rule-meta {
+#app .competitor-monitor--review .competitor-rule-meta {
   display: grid;
   gap: 4px;
   min-width: 0;
-  color: #52647b;
+  color: var(--so-competitor-c-muted);
 }
-.competitor-monitor--review .competitor-rule-meta b {
+#app .competitor-monitor--review .competitor-rule-meta b {
   overflow-wrap: anywhere;
-  color: #1748a0;
+  color: var(--so-competitor-c-blue);
 }
-.competitor-monitor--review .competitor-rule-page-list em {
+#app .competitor-monitor--review .competitor-rule-page-list em {
   min-width: 72px;
   padding: 7px 10px;
-  border: 1px solid #1748a0;
-  background: #edf4ff;
-  color: #1748a0;
+  border: 1px solid var(--so-competitor-c-blue);
+  background: var(--so-competitor-c-soft-blue);
+  color: var(--so-competitor-c-blue);
   font-size: 13px;
   font-style: normal;
   font-weight: 800;
   text-align: center;
 }
-.competitor-monitor--review .competitor-rule-page-list em[data-status="disabled"] {
-  border-color: #a9b7c8;
-  background: #f3f6fb;
-  color: #52647b;
+#app .competitor-monitor--review .competitor-rule-page-list em[data-status="disabled"] {
+  border-color: var(--so-competitor-c-disabled-border);
+  background: var(--so-competitor-c-muted-surface);
+  color: var(--so-competitor-c-muted);
 }
-.competitor-monitor--review .competitor-rule-empty {
+#app .competitor-monitor--review .competitor-rule-empty {
   display: grid;
   gap: 10px;
   padding: 48px 30px;
-  border-top: 3px solid #1748a0;
-  background: #f3f6fb;
+  border-top: 3px solid var(--so-competitor-c-blue);
+  background: var(--so-competitor-c-muted-surface);
 }
-.competitor-monitor--review .competitor-rule-empty strong {
+#app .competitor-monitor--review .competitor-rule-empty strong {
   font-size: 24px;
 }
-.competitor-monitor--review .competitor-rule-empty p {
-  color: #52647b;
+#app .competitor-monitor--review .competitor-rule-empty p {
+  color: var(--so-competitor-c-muted);
 }
-.competitor-monitor--review .competitor-rule-empty button,
-.competitor-monitor--review .competitor-modal button {
+#app .competitor-monitor--review .competitor-rule-empty button,
+#app .competitor-monitor--review .competitor-modal button {
   width: max-content;
   min-height: 44px;
   padding: 9px 14px;
-  border: 1px solid #1748a0 !important;
-  border-radius: 0 !important;
-  background: #1748a0 !important;
-  color: #fff !important;
+  border: 1px solid var(--so-competitor-c-blue);
+  border-radius: 0;
+  background: var(--so-competitor-c-blue);
+  color: var(--so-competitor-c-white);
   font: inherit;
   font-weight: 800;
 }
-.competitor-monitor--review .competitor-notice {
+#app .competitor-monitor--review .competitor-notice {
   margin: 0;
   padding: 14px 18px;
-  border-left: 4px solid #1748a0;
+  border-left: 4px solid var(--so-competitor-c-blue);
   border-radius: 0;
-  background: #edf4ff;
-  color: #182d4a;
+  background: var(--so-competitor-c-soft-blue);
+  color: var(--so-competitor-c-ink);
 }
-.competitor-monitor--review .competitor-modal {
-  background: rgba(24, 45, 74, 0.5);
+#app .competitor-monitor--review .competitor-modal {
+  background: var(--so-competitor-c-overlay);
 }
-.competitor-monitor--review .competitor-modal form {
-  border: 1px solid #dce4ee;
+#app .competitor-monitor--review .competitor-modal form {
+  border: 1px solid var(--so-competitor-c-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-competitor-c-white);
   box-shadow: none;
 }
-.competitor-monitor--review .competitor-modal :is(input, select, textarea) {
+#app .competitor-monitor--review .competitor-modal :is(input, select, textarea) {
   min-height: 44px;
-  border: 1px solid #b9c9dc;
+  border: 1px solid var(--so-competitor-c-field-border);
   border-radius: 0;
-  background: #fff;
-  color: #182d4a;
+  background: var(--so-competitor-c-white);
+  color: var(--so-competitor-c-ink);
 }
 @media (max-width: 820px) {
   .competitor-head {
@@ -1020,323 +1024,333 @@
 }
 
 /* P19 C direction: production competitor evidence workspace aligned with the approved ledger. */
-.competitor-monitor--review {
-  --ink: #182d4a;
-  --blue: #1748a0;
+#app .competitor-monitor--review {
+  --ink: var(--so-competitor-c-ink);
+  --blue: var(--so-competitor-c-blue);
   display: grid;
   gap: 14px;
-  color: #182d4a;
+  color: var(--so-competitor-c-ink);
   font:
     16px/1.6 "Microsoft YaHei",
     sans-serif;
 }
-.competitor-monitor--review :is(h1, h2, h3, h4, p, ol, ul) {
+#app .competitor-monitor--review :is(h1, h2, h3, h4, p, ol, ul) {
   margin: 0;
 }
-.competitor-monitor--review :is(button, input, select, textarea, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+#app .competitor-monitor--review :is(button, input, select, textarea, a, summary):focus-visible {
+  outline: 3px solid var(--so-competitor-c-focus);
   outline-offset: 3px;
 }
-.competitor-monitor--review .monitoring-readiness-strip {
+#app .competitor-monitor--review .monitoring-readiness-strip {
   margin: 0;
   padding: 28px 30px;
-  border: 1px solid #1748a0;
+  border: 1px solid var(--so-competitor-c-blue);
   border-radius: 0;
-  background: #1748a0;
+  background: var(--so-competitor-c-blue);
   box-shadow: none;
 }
-.competitor-monitor--review .monitoring-readiness-strip :is(h1, h2, h3, p, span, small, strong, b) {
-  color: #fff;
+#app
+  .competitor-monitor--review
+  .monitoring-readiness-strip
+  :is(h1, h2, h3, p, span, small, strong, b) {
+  color: var(--so-competitor-c-white);
 }
-.competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
+#app .competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
   min-height: 44px;
   padding: 9px 14px;
-  border: 1px solid #fff !important;
-  border-radius: 0 !important;
-  background: #fff !important;
-  color: #1748a0 !important;
+  border: 1px solid var(--so-competitor-c-white);
+  border-radius: 0;
+  background: var(--so-competitor-c-white);
+  color: var(--so-competitor-c-blue);
   font: inherit;
   font-weight: 800;
   text-decoration: none;
 }
-.competitor-monitor--review .monitoring-readiness-strip .primary {
-  background: #edf4ff !important;
+#app .competitor-monitor--review .monitoring-readiness-strip .primary {
+  background: var(--so-competitor-c-soft-blue);
 }
-.competitor-monitor--review .competitor-toolbar {
+#app .competitor-monitor--review .competitor-toolbar {
   margin: 0;
   padding: 14px 18px;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--so-competitor-c-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-competitor-c-white);
 }
-.competitor-monitor--review .competitor-toolbar input,
-.competitor-monitor--review .competitor-modal :is(input, select, textarea) {
+#app .competitor-monitor--review .competitor-toolbar input,
+#app .competitor-monitor--review .competitor-modal :is(input, select, textarea) {
   min-height: 44px;
-  border: 1px solid #b9c9dc;
+  border: 1px solid var(--so-competitor-c-field-border);
   border-radius: 0;
-  background: #fff;
-  color: #182d4a;
+  background: var(--so-competitor-c-white);
+  color: var(--so-competitor-c-ink);
 }
-.competitor-monitor--review .competitor-grid {
+#app .competitor-monitor--review .competitor-grid {
   grid-template-columns: minmax(280px, 0.8fr) minmax(0, 2fr);
   gap: 0;
   min-height: 580px;
-  border: 1px solid #dce4ee;
-  background: #fff;
+  border: 1px solid var(--so-competitor-c-border);
+  background: var(--so-competitor-c-white);
 }
-.competitor-monitor--review .competitor-list {
+#app .competitor-monitor--review .competitor-list {
   gap: 0;
-  border-right: 1px solid #dce4ee;
-  background: #f3f6fb;
+  border-right: 1px solid var(--so-competitor-c-border);
+  background: var(--so-competitor-c-muted-surface);
 }
-.competitor-monitor--review .competitor-list button {
+#app .competitor-monitor--review .competitor-list button {
   min-height: 126px;
-  border: 0 !important;
-  border-bottom: 1px solid #dce4ee !important;
-  border-radius: 0 !important;
-  background: #f3f6fb !important;
-  box-shadow: none !important;
+  border: 0;
+  border-bottom: 1px solid var(--so-competitor-c-border);
+  border-radius: 0;
+  background: var(--so-competitor-c-muted-surface);
+  box-shadow: none;
 }
-.competitor-monitor--review .competitor-list button.selected {
-  border-left: 5px solid #1748a0 !important;
-  background: #edf4ff !important;
-  box-shadow: none !important;
+#app .competitor-monitor--review .competitor-list button.selected {
+  border-left: 5px solid var(--so-competitor-c-blue);
+  background: var(--so-competitor-c-soft-blue);
+  box-shadow: none;
 }
-.competitor-monitor--review .competitor-list .competitor-detail-entry {
-  color: #1748a0 !important;
+#app .competitor-monitor--review .competitor-list .competitor-detail-entry {
+  color: var(--so-competitor-c-blue);
 }
-.competitor-monitor--review .competitor-detail {
+#app .competitor-monitor--review .competitor-detail {
   min-width: 0;
   padding: 28px 30px;
-  border: 0 !important;
-  border-radius: 0 !important;
-  background: #fff !important;
-  box-shadow: none !important;
+  border: 0;
+  border-radius: 0;
+  background: var(--so-competitor-c-white);
+  box-shadow: none;
 }
-.competitor-monitor--review .competitor-detail > header {
+#app .competitor-monitor--review .competitor-detail > header {
   padding-bottom: 20px;
-  border-bottom: 1px solid #dce4ee;
+  border-bottom: 1px solid var(--so-competitor-c-border);
 }
-.competitor-monitor--review .competitor-detail h3 {
+#app .competitor-monitor--review .competitor-detail h3 {
   font-size: 30px;
   line-height: 1.25;
 }
-.competitor-monitor--review .competitor-detail header p,
-.competitor-monitor--review .competitor-history h4 {
-  color: #1748a0 !important;
+#app .competitor-monitor--review .competitor-detail header p,
+#app .competitor-monitor--review .competitor-history h4 {
+  color: var(--so-competitor-c-blue);
 }
-.competitor-monitor--review .competitor-detail a {
-  color: #1748a0 !important;
+#app .competitor-monitor--review .competitor-detail a {
+  color: var(--so-competitor-c-blue);
   font-weight: 800;
 }
-.competitor-monitor--review .competitor-actions button,
-.competitor-monitor--review .competitor-guide summary,
-.competitor-monitor--review .competitor-modal button {
+#app .competitor-monitor--review .competitor-actions button,
+#app .competitor-monitor--review .competitor-guide summary,
+#app .competitor-monitor--review .competitor-modal button {
   min-height: 44px;
   padding: 9px 14px;
-  border: 1px solid #1748a0 !important;
-  border-radius: 0 !important;
-  background: #fff !important;
-  color: #1748a0 !important;
+  border: 1px solid var(--so-competitor-c-blue);
+  border-radius: 0;
+  background: var(--so-competitor-c-white);
+  color: var(--so-competitor-c-blue);
   font: inherit;
   font-weight: 800;
 }
-.competitor-monitor--review .competitor-actions button:first-child,
-.competitor-monitor--review .competitor-modal button[type="submit"] {
-  background: #1748a0 !important;
-  color: #fff !important;
+#app .competitor-monitor--review .competitor-actions button:first-child,
+#app .competitor-monitor--review .competitor-modal button[type="submit"] {
+  background: var(--so-competitor-c-blue);
+  color: var(--so-competitor-c-white);
 }
-.competitor-monitor--review .competitor-actions .danger,
-.competitor-monitor--review .competitor-modal .danger {
-  border-color: #b42318 !important;
-  color: #b42318 !important;
+#app .competitor-monitor--review .competitor-actions .danger,
+#app .competitor-monitor--review .competitor-modal .danger {
+  border-color: var(--so-competitor-c-danger);
+  color: var(--so-competitor-c-danger);
 }
-.competitor-monitor--review .competitor-metrics,
-.competitor-monitor--review .competitor-comparison {
+#app .competitor-monitor--review .competitor-metrics,
+#app .competitor-monitor--review .competitor-comparison {
   gap: 0;
   margin: 20px 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--so-competitor-c-border);
 }
-.competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article {
+#app .competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article {
   min-height: 124px;
   padding: 16px;
-  border: 0 !important;
-  border-right: 1px solid #dce4ee !important;
-  border-radius: 0 !important;
-  background: #f3f6fb !important;
+  border: 0;
+  border-right: 1px solid var(--so-competitor-c-border);
+  border-radius: 0;
+  background: var(--so-competitor-c-muted-surface);
 }
-.competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article:last-child {
-  border-right: 0 !important;
+#app
+  .competitor-monitor--review
+  :is(.competitor-metrics, .competitor-comparison)
+  article:last-child {
+  border-right: 0;
 }
-.competitor-monitor--review .competitor-source,
-.competitor-monitor--review .competitor-collection-state,
-.competitor-monitor--review .competitor-baseline-pending {
-  border: 1px solid #dce4ee !important;
-  border-radius: 0 !important;
-  background: #edf4ff !important;
+#app .competitor-monitor--review .competitor-source,
+#app .competitor-monitor--review .competitor-collection-state,
+#app .competitor-monitor--review .competitor-baseline-pending {
+  border: 1px solid var(--so-competitor-c-border);
+  border-radius: 0;
+  background: var(--so-competitor-c-soft-blue);
 }
-.competitor-monitor--review .competitor-history {
+#app .competitor-monitor--review .competitor-history {
   margin-top: 24px;
   padding-top: 20px;
-  border-top: 3px solid #1748a0;
+  border-top: 3px solid var(--so-competitor-c-blue);
 }
-.competitor-monitor--review .competitor-history > header {
+#app .competitor-monitor--review .competitor-history > header {
   padding-bottom: 12px;
-  border-bottom: 1px solid #dce4ee;
+  border-bottom: 1px solid var(--so-competitor-c-border);
 }
-.competitor-monitor--review .competitor-history > article {
+#app .competitor-monitor--review .competitor-history > article {
   grid-template-columns: 130px 1fr auto;
-  border-bottom-color: #dce4ee;
+  border-bottom-color: var(--so-competitor-c-border);
 }
-.competitor-monitor--review
+#app
+  .competitor-monitor--review
   :is(.snapshot-history, .competitor-activity-timeline)
   > article::before {
   border-radius: 0;
-  background: #1748a0;
+  background: var(--so-competitor-c-blue);
   box-shadow: none;
 }
-.competitor-monitor--review .competitor-timeline-status span {
+#app .competitor-monitor--review .competitor-timeline-status span {
   border-radius: 0;
-  background: #f3f6fb;
+  background: var(--so-competitor-c-muted-surface);
 }
-.competitor-monitor--review .competitor-guide {
+#app .competitor-monitor--review .competitor-guide {
   padding: 16px 18px;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--so-competitor-c-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-competitor-c-white);
 }
-.competitor-monitor--review .competitor-guide[open] summary {
+#app .competitor-monitor--review .competitor-guide[open] summary {
   margin-bottom: 14px;
 }
-.competitor-monitor--review .competitor-modal {
-  background: rgba(24, 45, 74, 0.5);
+#app .competitor-monitor--review .competitor-modal {
+  background: var(--so-competitor-c-overlay);
 }
-.competitor-monitor--review .competitor-modal form {
-  border: 1px solid #dce4ee;
+#app .competitor-monitor--review .competitor-modal form {
+  border: 1px solid var(--so-competitor-c-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-competitor-c-white);
   box-shadow: none;
 }
-.competitor-monitor--review .competitor-create-steps li {
+#app .competitor-monitor--review .competitor-create-steps li {
   border-radius: 0;
 }
 @media (max-width: 760px) {
-  .competitor-monitor--review .monitoring-readiness-strip {
+  #app .competitor-monitor--review .monitoring-readiness-strip {
     padding: 22px 18px;
   }
-  .competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
+  #app .competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
     width: 100%;
     text-align: center;
   }
-  .competitor-monitor--review .competitor-toolbar {
+  #app .competitor-monitor--review .competitor-toolbar {
     align-items: stretch;
     flex-direction: column;
   }
-  .competitor-monitor--review .competitor-grid {
+  #app .competitor-monitor--review .competitor-grid {
     grid-template-columns: 1fr;
     gap: 12px;
     border: 0;
     background: transparent;
   }
-  .competitor-monitor--review .competitor-list {
-    border: 1px solid #dce4ee;
+  #app .competitor-monitor--review .competitor-list {
+    border: 1px solid var(--so-competitor-c-border);
   }
-  .competitor-monitor--review .competitor-list button {
+  #app .competitor-monitor--review .competitor-list button {
     min-height: 112px;
   }
-  .competitor-monitor--review .competitor-detail {
+  #app .competitor-monitor--review .competitor-detail {
     padding: 22px 18px;
-    border: 1px solid #dce4ee !important;
+    border: 1px solid var(--so-competitor-c-border);
   }
-  .competitor-monitor--review .competitor-detail > header {
+  #app .competitor-monitor--review .competitor-detail > header {
     align-items: stretch;
     flex-direction: column;
   }
-  .competitor-monitor--review .competitor-detail h3 {
+  #app .competitor-monitor--review .competitor-detail h3 {
     font-size: 26px;
   }
-  .competitor-monitor--review .competitor-actions {
+  #app .competitor-monitor--review .competitor-actions {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr;
   }
-  .competitor-monitor--review .competitor-desktop-actions {
+  #app .competitor-monitor--review .competitor-desktop-actions {
     display: none;
   }
-  .competitor-monitor--review .competitor-actions button {
+  #app .competitor-monitor--review .competitor-actions button {
     width: 100%;
   }
-  .competitor-monitor--review .competitor-metrics,
-  .competitor-monitor--review .competitor-comparison {
+  #app .competitor-monitor--review .competitor-metrics,
+  #app .competitor-monitor--review .competitor-comparison {
     grid-template-columns: 1fr;
   }
-  .competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article {
+  #app .competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article {
     min-height: 0;
-    border-right: 0 !important;
-    border-bottom: 1px solid #dce4ee !important;
+    border-right: 0;
+    border-bottom: 1px solid var(--so-competitor-c-border);
   }
-  .competitor-monitor--review :is(.competitor-metrics, .competitor-comparison) article:last-child {
-    border-bottom: 0 !important;
+  #app
+    .competitor-monitor--review
+    :is(.competitor-metrics, .competitor-comparison)
+    article:last-child {
+    border-bottom: 0;
   }
-  .competitor-monitor--review .competitor-source,
-  .competitor-monitor--review .competitor-collection-state {
+  #app .competitor-monitor--review .competitor-source,
+  #app .competitor-monitor--review .competitor-collection-state {
     align-items: flex-start;
     flex-direction: column;
   }
-  .competitor-monitor--review .competitor-history > article {
+  #app .competitor-monitor--review .competitor-history > article {
     grid-template-columns: 1fr;
     gap: 5px;
     padding-left: 22px;
   }
-  .competitor-monitor--review .competitor-history article p,
-  .competitor-monitor--review .competitor-timeline-status {
+  #app .competitor-monitor--review .competitor-history article p,
+  #app .competitor-monitor--review .competitor-timeline-status {
     grid-column: auto;
   }
-  .competitor-monitor--review .competitor-modal {
+  #app .competitor-monitor--review .competitor-modal {
     padding: 12px;
   }
-  .competitor-monitor--review .competitor-modal form {
+  #app .competitor-monitor--review .competitor-modal form {
     padding: 20px 16px;
   }
 }
 
 @media (max-width: 760px) {
-  .competitor-monitor--review .monitoring-readiness-strip {
+  #app .competitor-monitor--review .monitoring-readiness-strip {
     padding: 22px 18px;
   }
-  .competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
+  #app .competitor-monitor--review .monitoring-readiness-strip :is(button, a) {
     width: 100%;
     text-align: center;
   }
-  .competitor-monitor--review .competitor-section-heading {
+  #app .competitor-monitor--review .competitor-section-heading {
     align-items: start;
     flex-direction: column;
     padding: 22px 18px;
   }
-  .competitor-monitor--review .competitor-section-heading h2 {
+  #app .competitor-monitor--review .competitor-section-heading h2 {
     font-size: 26px;
   }
-  .competitor-monitor--review .competitor-rule-page-list > article {
+  #app .competitor-monitor--review .competitor-rule-page-list > article {
     grid-template-columns: 1fr;
     gap: 10px;
     padding: 20px 18px;
   }
-  .competitor-monitor--review .competitor-rule-page-list article strong {
+  #app .competitor-monitor--review .competitor-rule-page-list article strong {
     font-size: 19px;
   }
-  .competitor-monitor--review .competitor-rule-page-list em {
+  #app .competitor-monitor--review .competitor-rule-page-list em {
     width: max-content;
   }
-  .competitor-monitor--review .competitor-rule-empty {
+  #app .competitor-monitor--review .competitor-rule-empty {
     padding: 34px 18px;
   }
-  .competitor-monitor--review .competitor-rule-empty button {
+  #app .competitor-monitor--review .competitor-rule-empty button {
     width: 100%;
   }
-  .competitor-monitor--review .competitor-modal {
+  #app .competitor-monitor--review .competitor-modal {
     padding: 12px;
   }
-  .competitor-monitor--review .competitor-modal form {
+  #app .competitor-monitor--review .competitor-modal form {
     padding: 20px 16px;
   }
 }

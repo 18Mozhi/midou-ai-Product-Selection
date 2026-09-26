@@ -1,0 +1,12 @@
+/* P51 C colors, limited to the reviewed collection-task workspace. */
+.collection-task-center--review {
+  --so-collection-task-c-ink: #182d4a;
+  --so-collection-task-c-canvas: #f3f6fb;
+  --so-collection-task-c-primary: #1748a0;
+  --so-collection-task-c-surface: #ffffff;
+  --so-collection-task-c-line: #dce4ee;
+  --so-collection-task-c-filter: #f7faff;
+  --so-collection-task-c-pale: #edf4ff;
+  --so-collection-task-c-focus: #2465d7;
+  --so-collection-task-c-shadow: rgb(24 45 74 / 24%);
+}

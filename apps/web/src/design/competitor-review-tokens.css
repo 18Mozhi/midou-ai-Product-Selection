@@ -1,0 +1,14 @@
+.competitor-monitor--review {
+  --so-competitor-c-ink: #182d4a;
+  --so-competitor-c-blue: #1748a0;
+  --so-competitor-c-focus: #2465d7;
+  --so-competitor-c-muted: #52647b;
+  --so-competitor-c-disabled-border: #a9b7c8;
+  --so-competitor-c-danger: #b42318;
+  --so-competitor-c-field-border: #b9c9dc;
+  --so-competitor-c-border: #dce4ee;
+  --so-competitor-c-soft-blue: #edf4ff;
+  --so-competitor-c-muted-surface: #f3f6fb;
+  --so-competitor-c-white: #fff;
+  --so-competitor-c-overlay: rgba(24, 45, 74, 0.5);
+}

@@ -1,0 +1,15 @@
+/* P64 C palette: scoped to the page and its same-route portal surfaces. */
+html body:has(.backup-center--c),
+.backup-center.backup-center--c {
+  --so-backup-c-ink: #182739;
+  --so-backup-c-muted: #526278;
+  --so-backup-c-border: #c7d3e4;
+  --so-backup-c-primary: #1249b8;
+  --so-backup-c-white: #ffffff;
+  --so-backup-c-canvas: #f3f6fa;
+  --so-backup-c-disabled-text: #66758a;
+  --so-backup-c-focus: #7196e2;
+  --so-backup-c-active: #edf3ff;
+  --so-backup-c-disabled-bg: #edf0f5;
+  --so-backup-c-focus-bg: #e1eaff;
+}
