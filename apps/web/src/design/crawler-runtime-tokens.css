@@ -1,0 +1,12 @@
+.crawler-center--review {
+  --so-crawler-c-ink: #182d4a;
+  --so-crawler-c-canvas: #f3f6fb;
+  --so-crawler-c-primary: #1748a0;
+  --so-crawler-c-white: #fff;
+  --so-crawler-c-border: #dce4ee;
+  --so-crawler-c-card: #f7faff;
+  --so-crawler-c-selected: #edf4ff;
+  --so-crawler-c-warning: #a65f00;
+  --so-crawler-c-warning-surface: #fff5df;
+  --so-crawler-c-focus: #2465d7;
+}

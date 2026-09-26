@@ -1,3 +1,5 @@
+@import "./design/notification-inbox-tokens.css";
+
 .notification-center {
   color: var(--so-text);
   padding-bottom: 48px;
@@ -347,12 +349,6 @@
 
 /* P26 C direction: production surface aligned with the approved notification inbox. */
 .notification-center--review {
-  --review-blue: #1748a0;
-  --review-blue-strong: #123d8a;
-  --review-ink: #182d4a;
-  --review-muted: #52647b;
-  --review-line: #dce4ee;
-  --review-pale: #edf4ff;
   max-width: 1160px;
   margin: 0 auto;
   color: var(--review-ink);
@@ -368,13 +364,13 @@
   border: 0;
   border-radius: 0;
   background: var(--review-blue);
-  color: #fff;
+  color: var(--review-white);
 }
 
 .notification-center--review > header p,
 .notification-center--review > header span,
 .notification-center--review > header h1 {
-  color: #fff;
+  color: var(--review-white);
 }
 
 .notification-center--review > header > div:first-child {
@@ -384,7 +380,7 @@
 
 .notification-center--review > header p {
   margin: 0;
-  color: #d8e5ff;
+  color: var(--review-light-blue);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -406,7 +402,7 @@
   min-height: 44px;
   border: 1px solid var(--review-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--review-white);
   color: var(--review-blue);
   box-shadow: none;
   font: inherit;
@@ -415,7 +411,7 @@
 
 .notification-center--review button:hover:not(:disabled),
 .notification-center--review .notification-detail a:hover {
-  background: #f3f7ff;
+  background: var(--review-hover);
   color: var(--review-blue-strong);
 }
 
@@ -423,7 +419,7 @@
 .notification-center--review a:focus-visible,
 .notification-center--review input:focus-visible,
 .notification-center--review summary:focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--review-focus);
   outline-offset: 3px;
 }
 
@@ -431,14 +427,14 @@
 .notification-center--review .notification-preferences button:not(.secondary),
 .notification-center--review .notification-state button {
   background: var(--review-blue);
-  color: #fff;
+  color: var(--review-white);
 }
 
 .notification-center--review > header button:not(.secondary):hover:not(:disabled),
 .notification-center--review .notification-preferences button:not(.secondary):hover:not(:disabled),
 .notification-center--review .notification-state button:hover:not(:disabled) {
   background: var(--review-blue-strong);
-  color: #fff;
+  color: var(--review-white);
 }
 
 .notification-center--review .realtime-badge {
@@ -446,14 +442,14 @@
   display: inline-flex;
   align-items: center;
   padding: 0 10px;
-  border: 1px solid #9ebaff;
+  border: 1px solid var(--review-badge-border);
   border-radius: 0;
-  color: #d8e5ff;
+  color: var(--review-light-blue);
   font-weight: 700;
 }
 
 .notification-center--review .realtime-badge[data-state="reconnecting"] {
-  color: #ffe2ae;
+  color: var(--review-warning);
 }
 
 .notification-center--review .notification-notice,
@@ -462,7 +458,7 @@
 .notification-center--review .notification-summary {
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--review-white);
   box-shadow: none;
 }
 
@@ -480,7 +476,7 @@
   border: 0;
   border-right: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--review-white);
 }
 
 .notification-center--review .notification-summary article:last-child {
@@ -501,7 +497,7 @@
   padding: 0 12px;
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--review-white);
 }
 
 .notification-center--review > nav + nav {
@@ -511,7 +507,7 @@
 .notification-center--review > nav button {
   border: 0;
   border-bottom: 3px solid transparent;
-  background: #fff;
+  background: var(--review-white);
   color: var(--review-muted);
 }
 
@@ -547,7 +543,7 @@
   border: 0;
   border-bottom: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--review-white);
   color: var(--review-ink);
 }
 
@@ -557,7 +553,7 @@
 
 .notification-center--review .notification-list > button.unread {
   border-left: 4px solid var(--review-blue);
-  background: #fbfdff;
+  background: var(--review-paper);
 }
 
 .notification-center--review .notification-list i {
@@ -587,14 +583,14 @@
 .notification-center--review dialog[open] {
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--review-white);
   color: var(--review-ink);
-  box-shadow: 0 0 0 100vmax rgb(24 45 74 / 42%);
+  box-shadow: 0 0 0 100vmax var(--review-overlay);
 }
 
 .notification-center--review .notification-detail {
   border-top: 8px solid var(--review-blue);
-  box-shadow: -20px 0 60px rgb(24 45 74 / 18%);
+  box-shadow: -20px 0 60px var(--review-overlay-shadow);
 }
 
 .notification-center--review .notification-detail > p {
@@ -649,7 +645,7 @@
 .notification-center--review .notification-preferences label {
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--review-white);
   color: var(--review-ink);
 }
 

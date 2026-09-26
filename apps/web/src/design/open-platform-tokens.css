@@ -1,0 +1,33 @@
+.role-shell:has(.open-platform--c) {
+  --p60-shell-ink: #17253c;
+  --p60-muted: #536985;
+  --p60-white: #fff;
+  --p60-canvas: #f3f6fa;
+  --p60-border: #c7d3e4;
+  --p60-primary: #1748b5;
+  --p60-danger: #b42336;
+  --p60-warning: #9a5800;
+  --p60-primary-strong: #102a63;
+  --p60-disabled-ink: #64748b;
+  --p60-disabled-bg: #e9eef5;
+  --p60-control-border: #94a8c4;
+  --p60-focus: #2f6ee5;
+  --p60-summary-border: #5979ae;
+  --p60-pale-blue: #edf3ff;
+  --p60-scrim: rgb(8 22 48 / 60%);
+  --p60-secret-bg: #fffaf0;
+  --text: var(--p60-shell-ink);
+  --text-muted: var(--p60-muted);
+  --surface: var(--p60-white);
+  --bg: var(--p60-canvas);
+  --border: var(--p60-border);
+  --primary: var(--p60-primary);
+  --danger: var(--p60-danger);
+  --warning: var(--p60-warning);
+}
+
+.open-platform--c {
+  --so-primary: var(--p60-primary);
+  --so-primary-strong: var(--p60-primary-strong);
+  --so-border: var(--p60-border);
+}

@@ -1,0 +1,17 @@
+.notification-center--review {
+  --review-blue: #1748a0;
+  --review-blue-strong: #123d8a;
+  --review-ink: #182d4a;
+  --review-muted: #52647b;
+  --review-line: #dce4ee;
+  --review-pale: #edf4ff;
+  --review-white: #fff;
+  --review-light-blue: #d8e5ff;
+  --review-hover: #f3f7ff;
+  --review-focus: #2465d7;
+  --review-badge-border: #9ebaff;
+  --review-warning: #ffe2ae;
+  --review-paper: #fbfdff;
+  --review-overlay: rgb(24 45 74 / 42%);
+  --review-overlay-shadow: rgb(24 45 74 / 18%);
+}

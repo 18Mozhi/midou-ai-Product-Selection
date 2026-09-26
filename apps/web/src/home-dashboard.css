@@ -1,3 +1,5 @@
+@import "./design/home-dashboard-tokens.css";
+
 .home-dashboard {
   --home-accent: var(--so-primary);
   --home-positive: var(--so-success);
@@ -19,7 +21,7 @@
   justify-content: space-between;
   gap: 28px;
   border: 1px solid var(--home-accent);
-  color: #fff;
+  color: var(--home-white);
   background: var(--home-accent);
 }
 
@@ -38,7 +40,7 @@
 
 .home-command-bar p {
   margin-top: 8px;
-  color: color-mix(in srgb, #fff 88%, var(--home-accent));
+  color: color-mix(in srgb, var(--home-white) 88%, var(--home-accent));
 }
 
 .home-system-state {
@@ -52,17 +54,17 @@
 .home-system-state i {
   width: 10px;
   height: 10px;
-  border: 2px solid #fff;
+  border: 2px solid var(--home-white);
   border-radius: 50%;
   background: transparent;
 }
 
 .home-system-state[data-state="running"] i {
-  background: #fff;
+  background: var(--home-white);
 }
 
 .home-system-state[data-state="attention"] i {
-  background: #f4c66a;
+  background: var(--home-attention);
 }
 
 .home-command-bar nav {
@@ -94,22 +96,22 @@
 }
 
 .home-command-bar nav a {
-  border-color: #fff;
-  color: #fff;
+  border-color: var(--home-white);
+  color: var(--home-white);
   background: transparent;
 }
 
 .home-command-bar nav .home-primary-action {
   grid-column: 1 / -1;
-  border-color: #fff;
+  border-color: var(--home-white);
   color: var(--home-accent);
-  background: #fff;
+  background: var(--home-white);
 }
 
 .home-command-bar nav a:hover,
 .home-command-bar nav a:focus-visible {
   color: var(--home-accent);
-  background: #fff;
+  background: var(--home-white);
 }
 
 .home-setup-callout,
@@ -169,7 +171,7 @@
 .home-setup-callout > button:hover,
 .home-setup-callout > button:focus-visible {
   border-color: var(--home-accent);
-  color: #fff;
+  color: var(--home-white);
   background: var(--home-accent);
 }
 
@@ -265,7 +267,7 @@
 .home-dashboard button:focus-visible,
 .home-dashboard a:focus-visible,
 .home-dashboard summary:focus-visible {
-  outline: 3px solid color-mix(in srgb, var(--home-accent) 40%, #fff);
+  outline: 3px solid color-mix(in srgb, var(--home-accent) 40%, var(--home-white));
   outline-offset: 2px;
 }
 
@@ -286,7 +288,7 @@
 .home-rule-setup > footer button {
   min-height: 50px;
   border-color: var(--home-accent);
-  color: #fff;
+  color: var(--home-white);
   background: var(--home-accent);
 }
 

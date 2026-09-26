@@ -1,10 +1,6 @@
+@import "./design/file-resilience-tokens.css";
+
 .file-resilience--c {
-  --file-blue: #1748a0;
-  --file-blue-strong: #123c87;
-  --file-blue-soft: #edf4ff;
-  --file-ink: #182d4a;
-  --file-muted: #52647b;
-  --file-line: #dce4ee;
   display: grid;
   gap: 18px;
   color: var(--file-ink);
@@ -48,7 +44,7 @@
   border: 1px solid var(--file-blue);
   border-radius: 4px;
   background: var(--file-blue);
-  color: #fff;
+  color: var(--file-white);
   cursor: pointer;
 }
 
@@ -62,7 +58,7 @@
 }
 
 #app .file-resilience--c :is(button, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--file-focus);
   outline-offset: 3px;
 }
 
@@ -73,7 +69,7 @@
   gap: 24px;
   padding: 22px 28px;
   background: var(--file-blue);
-  color: #fff;
+  color: var(--file-white);
 }
 
 .file-resilience--c .file-resilience__hero > div {
@@ -82,17 +78,17 @@
 }
 
 .file-resilience--c .file-resilience__hero p {
-  color: #d9e6ff;
+  color: var(--file-hero-subtext);
 }
 
 .file-resilience--c .file-resilience__hero span {
-  color: #e2ebff;
+  color: var(--file-hero-secondary);
 }
 
 .file-resilience--c .file-resilience__hero button {
   flex: 0 0 auto;
-  border-color: #fff;
-  background: #fff;
+  border-color: var(--file-white);
+  background: var(--file-white);
   color: var(--file-blue);
 }
 
@@ -117,15 +113,15 @@
   gap: 16px;
   padding: 16px 18px;
   border: 1px solid var(--file-line);
-  background: #fff;
+  background: var(--file-white);
 }
 
 .file-resilience--c .file-resilience__refresh-notice {
-  border-left: 4px solid #875300;
+  border-left: 4px solid var(--file-warning);
 }
 
 .file-resilience--c .file-resilience__refresh-notice[data-kind="unavailable"] {
-  border-left-color: #a52938;
+  border-left-color: var(--file-danger);
 }
 
 .file-resilience--c .file-resilience__refresh-notice p,
@@ -140,11 +136,11 @@
 }
 
 .file-resilience--c .file-resilience__state--danger {
-  border-left: 4px solid #a52938;
+  border-left: 4px solid var(--file-danger);
 }
 
 .file-resilience--c .file-resilience__state--danger > strong {
-  color: #a52938;
+  color: var(--file-danger);
   font-size: 22px;
 }
 
@@ -156,7 +152,7 @@
 
 .file-resilience--c .p69-paper {
   border: 1px solid var(--file-line);
-  background: #fff;
+  background: var(--file-white);
 }
 
 .file-resilience--c .p69-conclusion {
@@ -165,7 +161,7 @@
   gap: 24px;
   padding: 22px 28px;
   border-bottom: 1px solid var(--file-line);
-  background: #f6f9ff;
+  background: var(--file-conclusion-bg);
 }
 
 .file-resilience--c .p69-conclusion h2 {
@@ -227,13 +223,13 @@
   align-items: start;
   margin: 12px 0;
   padding: 14px 16px;
-  border-left: 3px solid #a52938;
-  background: #fff5f5;
+  border-left: 3px solid var(--file-danger);
+  background: var(--file-danger-bg);
 }
 
 .file-resilience--c .p69-findings article[data-severity="warning"] {
-  border-color: #875300;
-  background: #fffbf1;
+  border-color: var(--file-warning);
+  background: var(--file-warning-bg);
 }
 
 .file-resilience--c .p69-findings code {
@@ -255,7 +251,7 @@
 .file-resilience--c .p69-directory {
   margin-top: 20px;
   padding-top: 16px;
-  border-top: 2px solid #b7c9e2;
+  border-top: 2px solid var(--file-comparison-border);
 }
 
 .file-resilience--c .p69-directory > header {
@@ -293,11 +289,11 @@
   height: 10px;
   margin: 8px 0;
   border: 0;
-  background: #e5ecf6;
+  background: var(--file-progress-track);
 }
 
 .file-resilience--c .p69-root-evidence progress::-webkit-progress-bar {
-  background: #e5ecf6;
+  background: var(--file-progress-track);
 }
 
 .file-resilience--c .p69-root-evidence progress::-webkit-progress-value {
@@ -318,8 +314,8 @@
 .file-resilience--c .p69-note {
   margin-top: 14px;
   padding: 12px 14px;
-  border-left: 3px solid #8aa0bc;
-  background: #f1f5fa;
+  border-left: 3px solid var(--file-note-border);
+  background: var(--file-note-bg);
   color: var(--file-muted);
 }
 
@@ -368,7 +364,7 @@
 }
 
 .file-resilience--c .p69-recovery {
-  background: #f9fbfe;
+  background: var(--file-evidence-bg);
 }
 
 .file-resilience--c .p69-recovery-state {
@@ -450,7 +446,7 @@
 
   .file-resilience--c .p69-observed {
     padding-top: 12px;
-    border-top: 1px solid #b8c9e6;
+    border-top: 1px solid var(--file-conclusion-border);
     text-align: left;
   }
 
@@ -489,10 +485,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .file-resilience--c * {
-    scroll-behavior: auto !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+  html body:has(#app .file-resilience--c) #app .file-resilience--c * {
+    scroll-behavior: auto;
+    animation-duration: 0.01ms;
+    animation-iteration-count: 1;
+    transition-duration: 0.01ms;
   }
 }

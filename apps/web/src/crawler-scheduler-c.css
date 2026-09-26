@@ -1,7 +1,9 @@
+@import "./design/crawler-scheduler-tokens.css";
+
 /* P68 route-scoped C layout; inherited shell composition is isolated to this page. */
 html body:has(#app .crawler-scheduler--c) {
-  background: #f3f6fb;
-  color: #172d4c;
+  background: var(--p70-canvas);
+  color: var(--p70-shell-ink);
   font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-shell {
@@ -10,8 +12,8 @@ html body:has(#app .crawler-scheduler--c) #app .role-shell {
   grid-template-rows: 76px minmax(0, 1fr);
   min-height: 100dvh;
   padding: 0;
-  background: #f3f6fb;
-  color: #172d4c;
+  background: var(--p70-canvas);
+  color: var(--p70-shell-ink);
   font-family: inherit;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-topbar {
@@ -22,18 +24,18 @@ html body:has(#app .crawler-scheduler--c) #app .role-topbar {
   min-height: 0;
   padding: 0 24px;
   border: 0;
-  border-bottom: 1px solid #d8e2ef;
-  background: #fff;
+  border-bottom: 1px solid var(--p70-shell-border);
+  background: var(--p70-white);
 }
 html body:has(#app .crawler-scheduler--c) #app .role-brand {
   gap: 12px;
-  color: #172d4c;
+  color: var(--p70-shell-ink);
 }
 html body:has(#app .crawler-scheduler--c) #app .role-brand > span {
   border: 0;
   border-radius: 8px;
-  background: #244bb0;
-  color: #fff;
+  background: var(--p70-sidebar);
+  color: var(--p70-white);
 }
 html body:has(#app .crawler-scheduler--c) #app .role-brand > b {
   font-family: inherit;
@@ -41,17 +43,17 @@ html body:has(#app .crawler-scheduler--c) #app .role-brand > b {
   letter-spacing: 0.06em;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-brand > em {
-  color: #536985;
+  color: var(--p70-sidebar-muted);
   font-size: 13px;
   letter-spacing: 0;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-top-actions :is(a, button) {
   min-height: 44px;
   min-width: 44px;
-  border: 1px solid #d8e2ef;
+  border: 1px solid var(--p70-shell-border);
   border-radius: 7px;
-  background: #fff;
-  color: #172d4c;
+  background: var(--p70-white);
+  color: var(--p70-shell-ink);
 }
 html body:has(#app .crawler-scheduler--c) #app .role-sidebar {
   grid-column: 1;
@@ -67,8 +69,8 @@ html body:has(#app .crawler-scheduler--c) #app .role-sidebar {
   overflow-y: auto;
   border: 0;
   border-radius: 0;
-  background: #244bb0;
-  color: #fff;
+  background: var(--p70-sidebar);
+  color: var(--p70-white);
   transform: none;
   transition: none;
 }
@@ -79,13 +81,13 @@ html body:has(#app .crawler-scheduler--c) #app .role-sidebar-head {
   border: 0;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-sidebar-head strong {
-  color: #fff;
+  color: var(--p70-white);
   font:
     700 18px/1.5 "Microsoft YaHei",
     sans-serif;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-sidebar-head small {
-  color: #e2ebff;
+  color: var(--p70-sidebar-subtitle);
   font:
     13px/1.7 "Microsoft YaHei",
     sans-serif;
@@ -97,18 +99,18 @@ html body:has(#app .crawler-scheduler--c) #app .role-menu-search {
   min-height: 44px;
   margin-bottom: 16px;
   padding: 0 10px;
-  border: 1px solid #91afea;
+  border: 1px solid var(--p70-sidebar-input-border);
   border-radius: 7px;
-  background: #fff;
-  color: #172d4c;
+  background: var(--p70-white);
+  color: var(--p70-shell-ink);
 }
 html body:has(#app .crawler-scheduler--c) #app .role-menu-search input {
   width: 100%;
   min-width: 0;
   min-height: 44px;
   border: 0;
-  background: #fff;
-  color: #172d4c;
+  background: var(--p70-white);
+  color: var(--p70-shell-ink);
   font:
     16px/1.5 "Microsoft YaHei",
     sans-serif;
@@ -130,13 +132,13 @@ html body:has(#app .crawler-scheduler--c) #app .role-nav-groups details > summar
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: #fff;
+  color: var(--p70-white);
   font-size: 14px;
   letter-spacing: 0;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-nav-groups summary:hover,
 html body:has(#app .crawler-scheduler--c) #app .role-nav-menu a:hover {
-  background: #365fc6;
+  background: var(--p70-sidebar-hover);
 }
 html body:has(#app .crawler-scheduler--c) #app .role-nav-menu {
   position: static;
@@ -154,12 +156,12 @@ html body:has(#app .crawler-scheduler--c) #app .role-nav-menu a {
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: #eef3ff;
+  color: var(--p70-sidebar-link);
   font-size: 14px;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-nav-menu a[aria-current="page"] {
-  background: #fff;
-  color: #244bb0;
+  background: var(--p70-white);
+  color: var(--p70-sidebar);
   font-weight: 700;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-sidebar-utility {
@@ -172,10 +174,10 @@ html body:has(#app .crawler-scheduler--c) #app .role-sidebar-utility a {
   min-height: 44px;
   padding: 10px 8px;
   border: 0;
-  border-top: 1px solid #7595db;
+  border-top: 1px solid var(--p70-sidebar-divider);
   border-radius: 0;
   background: transparent;
-  color: #fff;
+  color: var(--p70-white);
   font-size: 14px;
   white-space: normal;
 }
@@ -194,7 +196,7 @@ html body:has(#app .crawler-scheduler--c) #app .role-context-rail {
   margin: 0 0 24px;
   padding: 12px 0;
   border: 0;
-  border-block: 1px solid #d8e2ef;
+  border-block: 1px solid var(--p70-shell-border);
   border-radius: 0;
   background: transparent;
 }
@@ -203,14 +205,14 @@ html body:has(#app .crawler-scheduler--c) #app .role-context-rail > div {
   border: 0;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-context-rail small {
-  color: #536985;
+  color: var(--p70-sidebar-muted);
   font:
     13px/1.5 "Microsoft YaHei",
     sans-serif;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-context-rail strong {
   margin-top: 3px;
-  color: #172d4c;
+  color: var(--p70-shell-ink);
   font-size: 14px;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-context-drawer,
@@ -219,28 +221,28 @@ html body:has(#app .crawler-scheduler--c) #app .role-mobile-nav {
 }
 html body:has(#app .crawler-scheduler--c) #app .platform-secondary-nav {
   gap: 0;
-  border: 1px solid #c7d3e4;
-  background: #fff;
+  border: 1px solid var(--p70-secondary-border);
+  background: var(--p70-white);
 }
 html body:has(#app .crawler-scheduler--c) #app .platform-secondary-nav a {
   min-height: 44px;
   border: 0;
   border-bottom: 3px solid transparent;
-  background: #fff;
-  color: #526278;
+  background: var(--p70-white);
+  color: var(--p70-shell-muted);
   box-shadow: none;
 }
 html body:has(#app .crawler-scheduler--c) #app .platform-secondary-nav a[aria-current="page"] {
-  border-bottom-color: #1249b8;
-  background: #edf3ff;
-  color: #1249b8;
+  border-bottom-color: var(--p70-c-nav-primary);
+  background: var(--p70-nav-active-bg);
+  color: var(--p70-c-nav-primary);
 }
 html
   body:has(#app .crawler-scheduler--c)
   #app
   .role-shell
   :is(a, button, input, summary):focus-visible {
-  outline: 3px solid #4878e9;
+  outline: 3px solid var(--p70-shell-focus);
   outline-offset: 3px;
 }
 @media (max-width: 1100px) and (min-width: 841px) {
@@ -284,9 +286,9 @@ html
   html body:has(#app .crawler-scheduler--c) #app .role-context-drawer {
     display: block;
     margin-bottom: 20px;
-    border: 1px solid #d8e2ef;
+    border: 1px solid var(--p70-shell-border);
     border-radius: 7px;
-    background: #fff;
+    background: var(--p70-white);
   }
   html body:has(#app .crawler-scheduler--c) #app .role-context-drawer > div {
     grid-template-columns: 1fr 1fr;
@@ -304,7 +306,7 @@ html
     max-height: 100dvh;
     padding: 16px;
     overflow-y: auto;
-    box-shadow: 12px 0 32px rgb(12 29 54 / 24%);
+    box-shadow: 12px 0 32px var(--p70-shell-shadow);
   }
   html body:has(#app .crawler-scheduler--c) #app .role-sidebar:not(.is-open) {
     display: none;
@@ -317,24 +319,20 @@ html
     grid-template-columns: repeat(5, minmax(0, 1fr));
     min-height: 72px;
     border: 0;
-    border-top: 1px solid #d8e2ef;
-    background: #fff;
+    border-top: 1px solid var(--p70-shell-border);
+    background: var(--p70-white);
   }
   html body:has(#app .crawler-scheduler--c) #app .role-mobile-nav :is(a, button, i) {
-    color: #536985;
+    color: var(--p70-sidebar-muted);
   }
   html body:has(#app .crawler-scheduler--c) #app .role-mobile-nav [aria-current="page"] {
-    background: #e8efff;
-    color: #244bb0;
+    background: var(--p70-mobile-nav-active);
+    color: var(--p70-sidebar);
   }
 }
 
 /* P70 C page composition. */
 .crawler-scheduler--c {
-  --p70-blue: #1748a0;
-  --p70-ink: #182d4a;
-  --p70-line: #dce4ee;
-  --p70-muted: #52647b;
   display: grid;
   gap: 20px;
   color: var(--p70-ink);
@@ -364,10 +362,10 @@ html
   border: 1px solid var(--p70-blue);
   border-radius: 4px;
   background: var(--p70-blue);
-  color: #fff;
+  color: var(--p70-white);
 }
 .crawler-scheduler--c :is(button, input, select, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p70-focus);
   outline-offset: 3px;
 }
 .crawler-scheduler--c .crawler-scheduler__hero {
@@ -376,23 +374,23 @@ html
   border-radius: 0;
   box-shadow: none;
   background: var(--p70-blue);
-  color: #fff;
+  color: var(--p70-white);
 }
 .crawler-scheduler--c .crawler-scheduler__hero p {
-  color: #d9e6ff;
+  color: var(--p70-hero-subtext);
   letter-spacing: 0;
 }
 .crawler-scheduler--c .crawler-scheduler__hero span {
-  color: #e2ebff;
+  color: var(--p70-sidebar-subtitle);
 }
 .crawler-scheduler--c .crawler-scheduler__hero button {
-  background: #fff;
+  background: var(--p70-white);
   color: var(--p70-blue);
-  border-color: #fff;
+  border-color: var(--p70-white);
 }
 .crawler-scheduler--c .crawler-scheduler__hero button.danger {
-  color: #8f2231;
-  border-color: #fff;
+  color: var(--p70-danger);
+  border-color: var(--p70-white);
 }
 .crawler-scheduler--c .p70-review-note {
   color: var(--p70-muted);
@@ -403,14 +401,14 @@ html
   gap: 14px;
   padding: 12px 16px;
   border-left: 3px solid var(--p70-blue);
-  background: #edf4ff;
+  background: var(--p70-boundary-bg);
 }
 .crawler-scheduler--c .p70-boundary span {
   color: var(--p70-muted);
 }
 .crawler-scheduler--c .p70-paper {
   border: 1px solid var(--p70-line);
-  background: #fff;
+  background: var(--p70-white);
 }
 .crawler-scheduler--c .p70-conclusion {
   display: flex;
@@ -418,7 +416,7 @@ html
   gap: 24px;
   padding: 24px 28px;
   border-bottom: 1px solid var(--p70-line);
-  background: #f6f9ff;
+  background: var(--p70-conclusion-bg);
 }
 .crawler-scheduler--c .p70-conclusion h2 {
   margin-top: 5px;
@@ -444,12 +442,12 @@ html
 .crawler-scheduler--c .p70-findings article {
   margin: 12px 0;
   padding: 14px 16px;
-  border-left: 3px solid #b02d3c;
-  background: #fff5f5;
+  border-left: 3px solid var(--p70-danger-strong);
+  background: var(--p70-danger-bg);
 }
 .crawler-scheduler--c .p70-findings article[data-severity="warning"] {
-  border-color: #875300;
-  background: #fffbf1;
+  border-color: var(--p70-warning);
+  background: var(--p70-warning-bg);
 }
 .crawler-scheduler--c .p70-findings code {
   display: block;
@@ -468,7 +466,7 @@ html
 .crawler-scheduler--c .p70-runtime > section + section,
 .crawler-scheduler--c .p70-evidence > section + section {
   border-left: 1px solid var(--p70-line);
-  background: #f9fbfe;
+  background: var(--p70-evidence-bg);
 }
 .crawler-scheduler--c dl > div {
   padding: 12px 0;
@@ -504,7 +502,7 @@ html
   padding: 8px;
   border: 1px solid var(--p70-line);
   border-radius: 4px;
-  background: #fff;
+  background: var(--p70-white);
 }
 .crawler-scheduler--c .p70-provider-list {
   display: grid;
@@ -516,8 +514,8 @@ html
   border: 1px solid var(--p70-line);
 }
 .crawler-scheduler--c .p70-provider-list article[data-circuit="open"] {
-  border-left: 3px solid #b02d3c;
-  background: #fff5f5;
+  border-left: 3px solid var(--p70-danger-strong);
+  background: var(--p70-danger-bg);
 }
 .crawler-scheduler--c .p70-provider-list p {
   margin-top: 6px;
@@ -530,10 +528,10 @@ html
   height: 8px;
   margin: 12px 0;
   border: 0;
-  background: #e5ecf6;
+  background: var(--p70-progress-track);
 }
 .crawler-scheduler--c progress::-webkit-progress-bar {
-  background: #e5ecf6;
+  background: var(--p70-progress-track);
 }
 .crawler-scheduler--c progress::-webkit-progress-value {
   background: var(--p70-blue);
@@ -557,8 +555,8 @@ html
 .crawler-scheduler--c .p70-note {
   margin-top: 14px;
   padding: 12px 14px;
-  border-left: 3px solid #8aa0bc;
-  background: #f1f5fa;
+  border-left: 3px solid var(--p70-note-border);
+  background: var(--p70-note-bg);
   color: var(--p70-muted);
   font-size: 14px;
 }
@@ -601,7 +599,7 @@ html
   }
   .crawler-scheduler--c .p70-conclusion > div:last-child {
     padding-top: 14px;
-    border-top: 1px solid #b8c9e6;
+    border-top: 1px solid var(--p70-conclusion-border);
     text-align: left;
   }
   .crawler-scheduler--c :is(.p70-findings, .p70-providers, .p70-receipts, .p70-leases, .p70-trend) {

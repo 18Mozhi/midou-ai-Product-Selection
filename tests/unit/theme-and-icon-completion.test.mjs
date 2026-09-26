@@ -225,6 +225,62 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
+    if (paths[index] === "apps/web/src/design/crawler-runtime-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.crawler-center--review\s*\{(?:\s*--so-crawler-c-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/crawler-scheduler-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html body:has\(#app \.crawler-scheduler--c\),\s*\.crawler-scheduler--c\s*\{(?:\s*--p70-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/credential-assets-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html body:has\(#app \.credential-center\)\s*\{(?:\s*--p50-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/file-resilience-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.file-resilience--c\s*\{(?:\s*--file-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/home-dashboard-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.home-dashboard\s*\{(?:\s*--home-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/mysql-resilience-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html body:has\(#app \.mysql-resilience--c\),\s*\.mysql-resilience--c\s*\{(?:\s*--p68-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/notification-inbox-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.notification-center--review\s*\{(?:\s*--review-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/open-platform-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.role-shell:has\(\.open-platform--c\)\s*\{(?:\s*--p60-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*--(?:text|text-muted|surface|bg|border|primary|danger|warning):\s*var\(--p60-[a-z-]+\);(?:\s*--(?:text|text-muted|surface|bg|border|primary|danger|warning):\s*var\(--p60-[a-z-]+\);)*\s*\}\s*\.open-platform--c\s*\{(?:\s*--so-[a-z-]+:\s*var\(--p60-[a-z-]+\);)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/export-detail-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

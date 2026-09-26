@@ -1,27 +1,15 @@
+@import "./design/open-platform-tokens.css";
+
 /* P60 C: three connection tasks, clear organization scope, and a white evidence ledger. */
 .role-shell:has(.open-platform--c) .role-page-title {
   display: none;
 }
 
-.role-shell:has(.open-platform--c) {
-  --text: #17253c;
-  --text-muted: #536985;
-  --surface: #fff;
-  --bg: #f3f6fa;
-  --border: #c7d3e4;
-  --primary: #1748b5;
-  --danger: #b42336;
-  --warning: #9a5800;
-}
-
 .open-platform--c {
-  --so-primary: #1748b5;
-  --so-primary-strong: #102a63;
-  --so-border: #c7d3e4;
   --so-font-ui: "Microsoft YaHei", sans-serif;
   min-width: 0;
   gap: 22px;
-  color: #17253c;
+  color: var(--p60-shell-ink);
   font:
     16px/1.65 "Microsoft YaHei",
     sans-serif;
@@ -34,36 +22,36 @@
 }
 
 .open-platform--c button {
-  border: 1px solid #1748b5;
+  border: 1px solid var(--p60-primary);
   border-radius: 4px;
-  color: #fff;
-  background: #1748b5;
+  color: var(--p60-white);
+  background: var(--p60-primary);
   box-shadow: none;
 }
 
 .open-platform--c button:not(:disabled):not([aria-disabled="true"]):hover {
-  color: #fff;
-  background: #102a63;
+  color: var(--p60-white);
+  background: var(--p60-primary-strong);
 }
 
 .open-platform--c button:disabled,
 .open-platform--c .open-action-reread[aria-disabled="true"] {
-  color: #64748b;
-  border-color: #c7d3e4;
-  background: #e9eef5;
+  color: var(--p60-disabled-ink);
+  border-color: var(--p60-border);
+  background: var(--p60-disabled-bg);
   opacity: 1;
 }
 
 .open-platform--c :is(input, select) {
   min-width: 0;
-  border: 1px solid #94a8c4;
+  border: 1px solid var(--p60-control-border);
   border-radius: 4px;
-  color: #17253c;
-  background: #fff;
+  color: var(--p60-shell-ink);
+  background: var(--p60-white);
 }
 
 .open-platform--c :is(button, input, select, summary, a):focus-visible {
-  outline: 3px solid #2f6ee5;
+  outline: 3px solid var(--p60-focus);
   outline-offset: 3px;
 }
 
@@ -79,7 +67,7 @@
 
 .open-platform--c .open-hero p {
   margin: 0;
-  color: #1748b5;
+  color: var(--p60-primary);
   font: inherit;
   letter-spacing: 0;
 }
@@ -93,7 +81,7 @@
 .open-platform--c .open-hero span,
 .open-platform--c .open-workspace header p,
 .open-platform--c .open-platform small {
-  color: #536985;
+  color: var(--p60-muted);
 }
 
 .open-platform--c .open-org-filter {
@@ -102,8 +90,8 @@
   align-items: end;
   gap: 12px;
   padding: 18px;
-  border: 1px solid #c7d3e4;
-  background: #fff;
+  border: 1px solid var(--p60-border);
+  background: var(--p60-white);
 }
 
 .open-platform--c .open-org-filter label,
@@ -127,7 +115,7 @@
   gap: 12px;
   padding: 16px;
   border-radius: 0;
-  background: #102a63;
+  background: var(--p60-primary-strong);
   overflow: visible;
 }
 
@@ -138,8 +126,8 @@
   justify-items: start;
   gap: 4px;
   text-align: left;
-  border: 1px solid #5979ae;
-  color: #fff;
+  border: 1px solid var(--p60-summary-border);
+  color: var(--p60-white);
   background: transparent;
 }
 
@@ -154,9 +142,9 @@
 
 .open-platform--c .open-summary button.active,
 .open-platform--c .open-summary button[aria-current="page"] {
-  border-color: #fff;
-  color: #102a63;
-  background: #fff;
+  border-color: var(--p60-white);
+  color: var(--p60-primary-strong);
+  background: var(--p60-white);
 }
 
 .open-platform--c .p60-create-launch {
@@ -165,13 +153,13 @@
   justify-content: space-between;
   gap: 20px;
   padding: 16px;
-  border-left: 3px solid #1748b5;
-  background: #edf3ff;
+  border-left: 3px solid var(--p60-primary);
+  background: var(--p60-pale-blue);
 }
 
 .open-platform--c .p60-create-launch p {
   margin: 0;
-  color: #17253c;
+  color: var(--p60-shell-ink);
   font-size: 14px;
 }
 
@@ -181,14 +169,14 @@
   max-height: calc(100dvh - 32px);
   padding: 0;
   overflow: auto;
-  border: 1px solid #c7d3e4;
+  border: 1px solid var(--p60-border);
   border-radius: 6px;
-  color: #17253c;
-  background: #fff;
+  color: var(--p60-shell-ink);
+  background: var(--p60-white);
 }
 
 .open-platform--c .p60-create-dialog::backdrop {
-  background: rgb(8 22 48 / 60%);
+  background: var(--p60-scrim);
 }
 
 .open-platform--c .p60-action-dialog {
@@ -197,14 +185,14 @@
   max-height: calc(100dvh - 32px);
   padding: 0;
   overflow: auto;
-  border: 1px solid #c7d3e4;
+  border: 1px solid var(--p60-border);
   border-radius: 6px;
-  color: #17253c;
-  background: #fff;
+  color: var(--p60-shell-ink);
+  background: var(--p60-white);
 }
 
 .open-platform--c .p60-action-dialog::backdrop {
-  background: rgb(8 22 48 / 60%);
+  background: var(--p60-scrim);
 }
 
 .open-platform--c .p60-action-heading {
@@ -213,13 +201,13 @@
   justify-content: space-between;
   gap: 16px;
   padding: 24px;
-  color: #fff;
-  background: #102a63;
+  color: var(--p60-white);
+  background: var(--p60-primary-strong);
 }
 
 .open-platform--c .p60-action-heading :is(h2, p, span) {
   margin: 0;
-  color: #fff;
+  color: var(--p60-white);
 }
 
 .open-platform--c .p60-action-heading h2 {
@@ -235,7 +223,7 @@
 }
 
 .open-platform--c .p60-action-summary {
-  background: #f3f6fa;
+  background: var(--p60-canvas);
 }
 
 .open-platform--c .p60-action-summary p {
@@ -246,10 +234,10 @@
   min-height: 112px;
   resize: vertical;
   padding: 10px 12px;
-  border: 1px solid #94a8c4;
+  border: 1px solid var(--p60-control-border);
   border-radius: 4px;
-  color: #17253c;
-  background: #fff;
+  color: var(--p60-shell-ink);
+  background: var(--p60-white);
   font: inherit;
 }
 
@@ -262,9 +250,9 @@
 
 .open-platform--c .p60-action-form footer button:first-child,
 .open-platform--c .p60-create-heading > button {
-  border-color: #c7d3e4;
-  color: #17253c;
-  background: #fff;
+  border-color: var(--p60-border);
+  color: var(--p60-shell-ink);
+  background: var(--p60-white);
 }
 
 .open-platform--c .p60-create-heading {
@@ -273,13 +261,13 @@
   justify-content: space-between;
   gap: 16px;
   padding: 24px;
-  color: #fff;
-  background: #102a63;
+  color: var(--p60-white);
+  background: var(--p60-primary-strong);
 }
 
 .open-platform--c .p60-create-heading :is(h2, p, span) {
   margin: 0;
-  color: #fff;
+  color: var(--p60-white);
 }
 
 .open-platform--c .p60-create-heading h2 {
@@ -293,7 +281,7 @@
   padding: 24px;
   border: 0;
   border-radius: 0;
-  background: #fff;
+  background: var(--p60-white);
 }
 
 .open-platform--c .open-create > header {
@@ -305,7 +293,7 @@
 
 .open-platform--c .open-create > header p {
   margin: 0;
-  color: #1748b5;
+  color: var(--p60-primary);
 }
 
 .open-platform--c .open-create h3,
@@ -330,7 +318,7 @@
   gap: 10px 18px;
   margin: 0;
   padding: 12px;
-  border: 1px solid #c7d3e4;
+  border: 1px solid var(--p60-border);
   border-radius: 4px;
 }
 
@@ -342,7 +330,7 @@
 }
 
 .open-platform--c .field-error {
-  color: #b42336;
+  color: var(--p60-danger);
   font-weight: 650;
 }
 
@@ -351,9 +339,9 @@
   min-width: 0;
   gap: 16px;
   padding: 24px;
-  border: 1px solid #c7d3e4;
+  border: 1px solid var(--p60-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--p60-white);
 }
 
 .open-platform--c .open-workspace > header {
@@ -371,7 +359,7 @@
   gap: 12px;
   margin: 8px 0;
   padding: 16px;
-  background: #f3f6fa;
+  background: var(--p60-canvas);
 }
 
 .open-platform--c .open-toolbar .grow {
@@ -390,44 +378,44 @@
 
 .open-platform--c .open-workspace :is(th, td) {
   padding: 14px 12px;
-  border-color: #c7d3e4;
+  border-color: var(--p60-border);
   font-size: 14px;
 }
 
 .open-platform--c .open-workspace th {
-  color: #536985;
-  background: #f3f6fa;
+  color: var(--p60-muted);
+  background: var(--p60-canvas);
 }
 
 .open-platform--c .open-workspace td.table-view-controls__frozen {
-  background: #fff;
+  background: var(--p60-white);
 }
 
 .open-platform--c .open-workspace th.table-view-controls__frozen {
-  background: #f3f6fa;
+  background: var(--p60-canvas);
 }
 
 .open-platform--c .open-inline-empty {
   padding: 24px;
   border-radius: 4px;
   text-align: left;
-  background: #f3f6fa;
+  background: var(--p60-canvas);
 }
 
 .open-platform--c .open-notice,
 .open-platform--c .open-empty,
 .open-platform--c .open-state {
-  background: #fff;
+  background: var(--p60-white);
 }
 
 .open-platform--c .open-secret {
-  border-color: #9a5800;
+  border-color: var(--p60-warning);
   border-radius: 4px;
-  background: #fffaf0;
+  background: var(--p60-secret-bg);
 }
 
 .open-platform--c .open-secret code {
-  color: #17253c;
+  color: var(--p60-shell-ink);
   overflow-wrap: anywhere;
 }
 
@@ -435,7 +423,7 @@
   flex-wrap: wrap;
   gap: 12px;
   padding-top: 12px;
-  border-top: 1px solid #c7d3e4;
+  border-top: 1px solid var(--p60-border);
 }
 
 @media (max-width: 760px) {

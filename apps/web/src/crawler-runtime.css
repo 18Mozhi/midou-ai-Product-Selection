@@ -1,3 +1,5 @@
+@import "./design/crawler-runtime-tokens.css";
+
 .crawler-center {
   display: grid;
   gap: 22px;
@@ -313,18 +315,18 @@
 .crawler-center--review {
   max-width: 1160px;
   margin: 0 auto;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--so-crawler-c-ink);
+  background: var(--so-crawler-c-canvas);
 }
 
 .crawler-center--review .crawler-title {
   margin: 0 -36px;
   padding: 31px 36px;
-  background: #1748a0;
+  background: var(--so-crawler-c-primary);
 }
 
 .crawler-center--review .crawler-title :is(p, h1, span, small) {
-  color: #fff;
+  color: var(--so-crawler-c-white);
 }
 
 .crawler-center--review .crawler-title h1 {
@@ -337,10 +339,10 @@
 
 .crawler-center--review .crawler-title-actions :is(button, a) {
   min-height: 42px;
-  border: 1px solid #fff;
+  border: 1px solid var(--so-crawler-c-white);
   border-radius: 0;
-  background: #fff;
-  color: #1748a0;
+  background: var(--so-crawler-c-white);
+  color: var(--so-crawler-c-primary);
   font-weight: 800;
   box-shadow: none;
 }
@@ -348,14 +350,14 @@
 .crawler-center--review .crawler-metrics {
   gap: 0;
   margin: 24px 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--so-crawler-c-border);
 }
 
 .crawler-center--review .crawler-metrics article {
   border: 0;
-  border-right: 1px solid #dce4ee;
+  border-right: 1px solid var(--so-crawler-c-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-crawler-c-white);
   box-shadow: none;
 }
 
@@ -365,21 +367,21 @@
 
 .crawler-center--review .crawler-metrics strong,
 .crawler-center--review :is(.crawler-leases, .crawler-runs) h3 {
-  color: #1748a0;
+  color: var(--so-crawler-c-primary);
 }
 
 .crawler-center--review :is(.crawler-leases, .crawler-runs) {
   overflow: hidden;
-  border: 1px solid #dce4ee;
-  border-top: 5px solid #1748a0;
+  border: 1px solid var(--so-crawler-c-border);
+  border-top: 5px solid var(--so-crawler-c-primary);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-crawler-c-white);
   box-shadow: none;
 }
 
 .crawler-center--review :is(.crawler-leases > header, .crawler-runs > header) {
   padding: 22px 26px;
-  border-bottom: 1px solid #dce4ee;
+  border-bottom: 1px solid var(--so-crawler-c-border);
 }
 
 .crawler-center--review .crawler-profile-grid {
@@ -387,49 +389,49 @@
 }
 
 .crawler-center--review .crawler-profile-grid article {
-  border-color: #dce4ee;
+  border-color: var(--so-crawler-c-border);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--so-crawler-c-card);
   box-shadow: none;
 }
 
 .crawler-center--review .crawler-profile-grid article[data-leased="true"] {
-  border-left: 5px solid #1748a0;
-  background: #edf4ff;
+  border-left: 5px solid var(--so-crawler-c-primary);
+  background: var(--so-crawler-c-selected);
 }
 
 .crawler-center--review .crawler-lease-warning {
-  border-left: 4px solid #a65f00;
+  border-left: 4px solid var(--so-crawler-c-warning);
   border-radius: 0;
-  background: #fff5df;
+  background: var(--so-crawler-c-warning-surface);
 }
 
 .crawler-center--review .crawler-run-filters :is(input, select) {
-  border-color: #dce4ee;
+  border-color: var(--so-crawler-c-border);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--so-crawler-c-card);
 }
 
 .crawler-center--review .crawler-run-filters button,
 .crawler-center--review .crawler-pagination button {
-  border: 1px solid #1748a0;
+  border: 1px solid var(--so-crawler-c-primary);
   border-radius: 0;
-  background: #1748a0;
-  color: #fff;
+  background: var(--so-crawler-c-primary);
+  color: var(--so-crawler-c-white);
   box-shadow: none;
 }
 
 .crawler-center--review :is(table th, table td) {
-  border-color: #dce4ee;
+  border-color: var(--so-crawler-c-border);
 }
 
 .crawler-center--review table th {
-  background: #1748a0;
-  color: #fff;
+  background: var(--so-crawler-c-primary);
+  color: var(--so-crawler-c-white);
 }
 
 .crawler-center--review :is(button, input, select, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--so-crawler-c-focus);
   outline-offset: 3px;
 }
 

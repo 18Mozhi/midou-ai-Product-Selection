@@ -1,0 +1,23 @@
+.file-resilience--c {
+  --file-blue: #1748a0;
+  --file-blue-strong: #123c87;
+  --file-blue-soft: #edf4ff;
+  --file-ink: #182d4a;
+  --file-muted: #52647b;
+  --file-line: #dce4ee;
+  --file-focus: #2465d7;
+  --file-white: #fff;
+  --file-hero-subtext: #d9e6ff;
+  --file-hero-secondary: #e2ebff;
+  --file-warning: #875300;
+  --file-note-border: #8aa0bc;
+  --file-danger: #a52938;
+  --file-comparison-border: #b7c9e2;
+  --file-conclusion-border: #b8c9e6;
+  --file-progress-track: #e5ecf6;
+  --file-note-bg: #f1f5fa;
+  --file-conclusion-bg: #f6f9ff;
+  --file-evidence-bg: #f9fbfe;
+  --file-danger-bg: #fff5f5;
+  --file-warning-bg: #fffbf1;
+}

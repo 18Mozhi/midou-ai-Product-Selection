@@ -1,0 +1,38 @@
+html body:has(#app .mysql-resilience--c),
+.mysql-resilience--c {
+  --p68-nav-primary: #1249b8;
+  --p68-shell-ink: #172d4c;
+  --p68-blue: #1748a0;
+  --p68-ink: #182d4a;
+  --p68-sidebar: #244bb0;
+  --p68-focus: #2465d7;
+  --p68-sidebar-hover: #365fc6;
+  --p68-shell-focus: #4878e9;
+  --p68-shell-muted: #526278;
+  --p68-muted: #52647b;
+  --p68-sidebar-muted: #536985;
+  --p68-sidebar-divider: #7595db;
+  --p68-warning: #875300;
+  --p68-note-border: #8aa0bc;
+  --p68-sidebar-input-border: #91afea;
+  --p68-danger-strong: #b02d3c;
+  --p68-conclusion-border: #b8c9e6;
+  --p68-secondary-border: #c7d3e4;
+  --p68-shell-border: #d8e2ef;
+  --p68-hero-subtext: #d9e6ff;
+  --p68-line: #dce4ee;
+  --p68-sidebar-subtitle: #e2ebff;
+  --p68-progress-track: #e5ecf6;
+  --p68-mobile-nav-active: #e8efff;
+  --p68-nav-active-bg: #edf3ff;
+  --p68-boundary-bg: #edf4ff;
+  --p68-sidebar-link: #eef3ff;
+  --p68-note-bg: #f1f5fa;
+  --p68-canvas: #f3f6fb;
+  --p68-conclusion-bg: #f6f9ff;
+  --p68-evidence-bg: #f9fbfe;
+  --p68-white: #fff;
+  --p68-danger-bg: #fff5f5;
+  --p68-warning-bg: #fffbf1;
+  --p68-shell-shadow: rgb(12 29 54 / 24%);
+}
