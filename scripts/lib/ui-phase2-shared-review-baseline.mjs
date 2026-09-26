@@ -22,7 +22,7 @@ export const sharedReviewRevisions = Object.freeze({
   "scripts/lib/ui-phase2-responsive-focus-contract.mjs": {
     baseline: "54ec47364b3422b1d49a6eea18f070229af56a59",
     captured: "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
-    current: "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+    current: "4e66e98077fae86a56015d3330817c3e8f86f2aa191479deb621ebc50c21d849",
   },
   "apps/web/src/components/ConfirmDialog.vue": {
     baseline: "060e0b591af732c4c69060a468f526c45cc1330c",
@@ -83,13 +83,13 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "af239b08b69f7d97cd0372f9840a70009eeef0c7",
       captured: "c1095b828706864ee9eb2be430e08e0277522f4e4cf3d1beb084499265fcd457",
-      current: "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+      current: "4e66e98077fae86a56015d3330817c3e8f86f2aa191479deb621ebc50c21d849",
     },
   "scripts/lib/ui-phase2-responsive-focus-contract.mjs#86e109870bed9731f32a5beae9a5f8a316d31dcb5c5b163681e8523a8b79fde8":
     {
       baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
       captured: "86e109870bed9731f32a5beae9a5f8a316d31dcb5c5b163681e8523a8b79fde8",
-      current: "cf120ce244300ab3ea15358bf4d1fa3d297e6f0286f28128f550aee2842e4f3a",
+      current: "4e66e98077fae86a56015d3330817c3e8f86f2aa191479deb621ebc50c21d849",
     },
   "apps/web/src/components/SelectionJourney.vue#107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f":
     {

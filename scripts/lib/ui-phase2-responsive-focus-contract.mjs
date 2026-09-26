@@ -15,8 +15,8 @@ export const responsiveFocusRevision = Object.freeze({
   contentAfter: "6d3088d1c82d962e748dec1b68ae9b4dd5eeff6895fa3e42ba84c6f59a01f8ac",
   paletteBaseline: "af239b08b69f7d97cd0372f9840a70009eeef0c7",
   paletteCommit: "699ac3f3",
-  paletteSnapshot: "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
-  paletteAfter: "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
+  paletteAfter: "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+  currentAfter: "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
   paletteFile: "apps/web/src/design/platform-overlay-tokens.css",
   paletteBeforeNotifications: "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
   paletteSha256: "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5",
@@ -49,8 +49,8 @@ export function verifyResponsivePalette(source = read) {
     current = source(revision.file),
     extracted = at(revision.paletteCommit, revision.file),
     palette = source(revision.paletteFile);
-  assert.equal(hash(current), revision.paletteAfter, "unreviewed current responsive source");
-  assert.equal(hash(extracted), revision.paletteSnapshot, "unreviewed extracted palette revision");
+  assert.equal(hash(current), revision.currentAfter, "unreviewed current responsive source");
+  assert.equal(hash(extracted), revision.paletteAfter, "unreviewed extracted palette revision");
   assert.equal(hash(palette), revision.paletteSha256, "unreviewed overlay palette");
   // Only add the omitted notification scope; retain every prior selector and color byte.
   assert.equal(
@@ -90,7 +90,7 @@ export function verifyResponsiveFocusDependencies(source = read) {
     assert.equal(hash(at(revision.focusCapture, file)), fingerprint, `${file}: capture source`);
     const currentExpected =
       file === revision.file
-        ? revision.paletteAfter
+        ? revision.currentAfter
         : file === revision.tableControlsFile
           ? revision.tableControlsAfter
           : file === revision.reasonFile

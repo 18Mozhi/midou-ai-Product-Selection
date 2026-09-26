@@ -39,22 +39,24 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/web/src/design/platform-overlay-tokens.css | 1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5 |
 | apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
 
-## 当前38个来源的LF指纹（2026-09-25）
+## 当前40个来源的LF指纹（2026-09-27）
 
-候选当前集合从平台账号、用户与共享响应式控件三份合同中按实际扫描状态取`identity-current`/`line-moved`记录，历史身份不冒充现行候选。当前15个Vue文件共118个源码候选、24个v-model；这与原128候选历史快照口径不同，不表示删减业务动作。以下38项包括原32源及六个当前新增依赖，校验器逐项对真实工作树做LF SHA-256核对。
+候选当前集合从平台账号、用户与共享响应式控件三份合同中按实际扫描状态取`identity-current`/`line-moved`记录，历史身份不冒充现行候选。当前17个Vue文件共137个源码候选；原15个别名源的24个v-model绑定保持原口径，P43目录工作区的重复响应式控件绑定由用户页合同单独约束。计数扩展不改原128候选历史快照分母。以下40项包括原32源、六个既有新增依赖及两个当前候选源，校验器逐项对真实工作树做LF SHA-256核对。
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformDashboard.vue | 902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e |
-| apps/web/src/components/PlatformAccountCenter.vue | eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213 |
+| apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08 |
+| apps/web/src/components/PlatformAccountGlobalRail.vue | cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e |
 | apps/web/src/components/PlatformOrganizationRecords.vue | 392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a |
 | apps/web/src/components/PlatformAdminRecords.vue | 74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297 |
-| apps/web/src/components/OrganizationCreationWizard.vue | 6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53 |
-| apps/web/src/components/PlatformOrganizationDetailDialog.vue | 99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e |
+| apps/web/src/components/OrganizationCreationWizard.vue | 11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314 |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue | 47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43 |
 | apps/web/src/components/PlatformRoleComparison.vue | a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309 |
 | apps/web/src/components/PlatformAccountDialogs.vue | 4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da |
 | apps/web/src/components/PlatformUserRecords.vue | a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228 |
-| apps/web/src/components/PlatformUserDetailDialog.vue | 87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b |
 | apps/web/src/components/PlatformUserMembershipForm.vue | 553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644 |
 | apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
@@ -107,4 +109,4 @@ node --test tests/unit/ui-phase2-platform-current-contract.test.mjs
 
 ## 2026-09-25 当前对账续记
 
-上述01af0262及P43批次数字均是当时记录。当前只读工具保留原32源/128候选历史快照，并从平台账号、用户、响应式控件三份现行合同与真实Vue扫描对账：15个Vue文件118个当前候选、24个v-model，连同依赖共38个当前源；当前完整LF指纹见本文表。`node scripts/verify-ui-phase2-platform-account-contract.mjs` 与对应30项正反例通过后，才可据此更新门禁状态。本次不代表P38–P45运行时、真人读屏、真实RBAC/数据库或生产验收。
+上述01af0262及P43批次数字均是当时记录。当前只读工具保留原32源/128候选历史快照，并从平台账号、用户、响应式控件三份现行合同与真实Vue扫描对账：17个Vue文件137个当前候选、24个别名源v-model，连同依赖共40个当前源；当前完整LF指纹见本文表。`node scripts/verify-ui-phase2-platform-account-contract.mjs` 与对应30项正反例通过后，才可据此更新门禁状态。本次不代表P38–P45运行时、真人读屏、真实RBAC/数据库或生产验收。

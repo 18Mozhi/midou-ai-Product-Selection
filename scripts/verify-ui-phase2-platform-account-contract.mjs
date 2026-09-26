@@ -25,6 +25,10 @@ const addedSources = [
   overlayPalette,
   "apps/web/src/design/platform-admin-mobile-tokens.css",
 ];
+const candidateOnlySources = [
+  "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+  "apps/web/src/components/PlatformAccountGlobalRail.vue",
+];
 const files = {
   D: "PlatformDashboard",
   C: "PlatformAccountCenter",
@@ -92,10 +96,18 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   const documentedCandidates = [
     ...historicalSnapshot.matchAll(/^\|\s*([A-Z])\s*\|\s*([0-9a-f]{16}\.\d+)\s*\|/gm),
   ].map((match) => `${match[1]}#${match[2]}`);
+  const documentedSharedSources = [
+    ...historicalSnapshot.matchAll(
+      /^\|\s*apps\/web\/src\/components\/(ResponsiveDataView|ResponsiveFilterDrawer)\.vue#([0-9a-f]{16}\.\d+)\s*\|/gm,
+    ),
+  ].map((match) => `${match[1] === "ResponsiveDataView" ? "S" : "Q"}#${match[2]}`);
   // The old table is evidence, not the current template. Supersede only the
   // explicitly documented shared components; all other identities remain exact.
   sameUnique(
-    documentedCandidates.filter((key) => key.startsWith("S#")),
+    [
+      ...documentedCandidates.filter((key) => key.startsWith("S#")),
+      ...documentedSharedSources.filter((key) => key.startsWith("S#")),
+    ],
     [
       "S#6da4dad42cb34c8d.1",
       "S#4fa7deb3456a41ae.1",
@@ -113,7 +125,10 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   assert.equal(responsiveCandidates.length, 5, "current responsive candidates required");
   sameUnique(responsiveCandidates, [...new Set(responsiveCandidates)], "candidates");
   sameUnique(
-    documentedCandidates.filter((key) => key.startsWith("Q#")),
+    [
+      ...documentedCandidates.filter((key) => key.startsWith("Q#")),
+      ...documentedSharedSources.filter((key) => key.startsWith("Q#")),
+    ],
     [
       "Q#28fb788b88500472.1",
       "Q#beb5f8d5846aa028.1",
@@ -188,9 +203,14 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     );
     expectedBindings.push(...modelBindings(content, file).map((binding) => `${alias}#${binding}`));
   }
+  for (const file of candidateOnlySources) {
+    expectedCandidates.push(
+      ...scanSource(source(file), file).candidates.map((item) => item.candidateId),
+    );
+  }
   sameUnique(candidates, expectedCandidates, "candidates");
   sameUnique(bindings, expectedBindings, "v-model bindings");
-  assert.equal(candidates.length, 118);
+  assert.equal(candidates.length, 137);
   assert.equal(bindings.length, 24);
 
   const sourceHistory = contract.split("## 7. 源码指纹（LF SHA-256）")[1]?.split("## 8.")[0];
@@ -202,7 +222,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     .join("\n");
   assert.equal(
     createHash("sha256").update(historicalInventory).digest("hex"),
-    "908a9c67180917252ad3a63871a2e337b498bead5e3f4ddd9b9c87d880d7961e",
+    "769c1893ee19032e3f07c1685a0b9e6f00f8ff4edae34e773474c683ef6b64f0",
     "historical source fingerprint inventory drift",
   );
   const revisions = [
@@ -257,12 +277,12 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
       assert(paletteValues.has(name), `missing overlay palette role: ${name}`);
       return paletteValues.get(name);
     });
-  // Keep the earlier supplement fingerprint immutable and verify the current
-  // token-expanded source independently from its raw current fingerprint.
+  // Keep the earlier focus fingerprint immutable in the focused helper; this
+  // supplement records the current source after palette extraction.
   assert.equal(
     responsiveHashes[0][2],
-    "b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99",
-    "responsive supplement hash drift",
+    "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
+    "current responsive supplement hash drift",
   );
   assert.equal(
     createHash("sha256").update(beforePalette).digest("hex"),
@@ -271,7 +291,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   );
   // Extraction added a runtime dependency. Keep the original 32-source snapshot,
   // but do not omit the new producer from the current verification surface.
-  const addedSourceSection = currentContract.split("## 当前38个来源的LF指纹")[0];
+  const addedSourceSection = currentContract.split("## 当前40个来源的LF指纹")[0];
   const additionalHashes = [
     ...addedSourceSection.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|\s*$/gm),
   ];
@@ -288,12 +308,17 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
       `${file}: hash drift`,
     );
   }
-  const currentFingerprintSection = currentContract.split("## 当前38个来源的LF指纹")[1];
+  const currentFingerprintSection = currentContract.split("## 当前40个来源的LF指纹")[1];
   assert(currentFingerprintSection, "current source fingerprint inventory required");
   const currentFingerprints = [
     ...currentFingerprintSection.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|/gm),
   ];
-  const currentSourceFiles = [...vueFiles, ...supportingSources, ...addedSources];
+  const currentSourceFiles = [
+    ...vueFiles,
+    ...candidateOnlySources,
+    ...supportingSources,
+    ...addedSources,
+  ];
   sameUnique(
     currentFingerprints.map((match) => match[1].trim()),
     currentSourceFiles,

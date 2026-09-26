@@ -36,15 +36,15 @@ function rejectsChange(file, mutate, pattern) {
   assert(used, `missing negative read: ${file}`);
 }
 
-test("platform current contract separates its historical inventory from all 38 current sources", () => {
+test("platform current contract separates its historical inventory from all 40 current sources", () => {
   const result = verifyPlatformAccountContract(read);
   assert.deepEqual(
     { ...result, links: undefined },
     {
       pages: 8,
-      candidates: 118,
+      candidates: 137,
       bindings: 24,
-      sources: 38,
+      sources: 40,
       historicalSources: 32,
       revisedSources: 7,
       links: undefined,
@@ -135,8 +135,8 @@ test("rejects historical, current and cross-document fingerprint mismatches", ()
   rejectsChange(current, (s) => replaced(s, "902ade12", "002ade12"), /current hash drift/);
   rejectsChange(
     responsive,
-    (s) => replaced(s, "b9e635a", "09e635a"),
-    /responsive supplement hash drift/,
+    (s) => replaced(s, "e848f34", "09e635a"),
+    /current responsive supplement hash drift/,
   );
 });
 test("rejects omitting the extracted organization action dependency", () => {
@@ -161,7 +161,7 @@ test("retains page sections and link gates", () => {
 test("normalizes Windows CRLF without treating it as a new source revision", () => {
   assert.equal(
     verifyPlatformAccountContract((file) => read(file).replaceAll("\n", "\r\n")).sources,
-    38,
+    40,
   );
 });
 
