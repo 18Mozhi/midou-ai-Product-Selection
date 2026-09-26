@@ -276,9 +276,9 @@ export async function verifyCostRulesSource() {
     await s.load();
     late(ok([rule("old-scope")]));
     await old;
-    assert.equal(s.rules.value[0].id, "old-scope");
+    assert.equal(s.rules.value[0].id, "new-scope");
     checks.push(
-      "UNFIXED SC-G05: late earlier GET overwrites later list in actual setup; draft snapshot alone is not a Vue lifecycle fix",
+      "SC-G05: late earlier GET is ignored and the latest read remains the displayed list",
     );
     return {
       checks,

@@ -14,7 +14,7 @@ export async function verifyCostRulesReview() {
     if (ts.isImportDeclaration(node)) script = script.slice(0, node.pos) + script.slice(node.end);
   const js = ts.transpileModule(
     script +
-      "\nreturn {load,rules,selected,state,beginAction,submitAction,actionReason,showAction,busy,search,route};",
+      "\nreturn {load,rules,selected,state,beginAction,submitAction,actionReason,showAction,pendingAction,busy,search,route};",
     { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None } },
   ).outputText;
   const scopes = [];
@@ -90,14 +90,32 @@ export async function verifyCostRulesReview() {
     assert.equal(s.actionReason.value, "核对 A 的依据");
     s.replies.push(new Error("isolated stop; no persistence"));
     await s.submitAction();
-    assert.equal(s.calls.at(-1).url, "/cost-rules/B/actions");
+    assert.equal(s.pendingAction.value.target.id, "A");
+    assert.equal(s.calls.at(-1).url, "/cost-rules/A/actions");
     assert.deepEqual(s.calls.at(-1).options.body, {
       action: "submit",
       reason: "核对 A 的依据",
-      expected_revision: 11,
+      expected_revision: 7,
     });
     checks.push(
-      "UNFIXED: load replacing A with B keeps open action/reason for A, then submit reads B ID/revision; setup reachability only, not a mounted user sequence",
+      "Action confirmation retains the original A ID/revision and context after the selected read snapshot changes to B",
+    );
+
+    s = setup();
+    let resolveOld, resolveNew;
+    s.replies.push(new Promise((resolve) => (resolveOld = resolve)));
+    const olderLoad = s.load();
+    s.replies.push(new Promise((resolve) => (resolveNew = resolve)));
+    const newerLoad = s.load();
+    resolveNew(ok([rule("B", 11)]));
+    await newerLoad;
+    resolveOld(ok([rule("A")]));
+    await olderLoad;
+    await nextTick();
+    assert.equal(s.rules.value[0].id, "B");
+    assert.equal(s.selected.value.id, "B");
+    checks.push(
+      "Out-of-order reads apply only the latest response and cannot restore an older snapshot",
     );
 
     s = setup();

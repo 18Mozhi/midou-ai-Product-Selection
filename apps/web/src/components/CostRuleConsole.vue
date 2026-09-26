@@ -41,6 +41,7 @@ interface Rule {
 interface PendingAction {
   action: Action;
   approvalRole?: ApprovalRole;
+  target: Pick<Rule, "id" | "name" | "market" | "platform" | "version_code" | "revision">;
 }
 
 const props = defineProps<{ apiBaseUrl: string; roles: string[]; capabilities: string[] }>();
@@ -65,6 +66,7 @@ const route = useRoute(),
   page = ref(1);
 
 const pageSize = 10;
+let loadSequence = 0;
 
 const localDay = () =>
   new Intl.DateTimeFormat("en-CA", {
@@ -142,12 +144,13 @@ const canManage = computed(() => props.capabilities.includes("opportunity:approv
     return /^\/sourcing(?:[/?#]|$)/.test(value) && !value.startsWith("//") ? value : "/sourcing";
   }),
   rollbackTargets = computed(() => {
-    if (!selected.value) return [];
+    const target = pendingAction.value?.target ?? selected.value;
+    if (!target) return [];
     return rules.value.filter(
       (item) =>
-        item.id !== selected.value?.id &&
-        item.market === selected.value?.market &&
-        item.platform === selected.value?.platform &&
+        item.id !== target.id &&
+        item.market === target.market &&
+        item.platform === target.platform &&
         ["approved", "retired"].includes(item.status),
     );
   }),
@@ -303,10 +306,12 @@ const normalizeRule = (rule: Rule): Rule => ({
 });
 
 async function load() {
+  const sequence = ++loadSequence;
   state.value = "loading";
   notice.value = "";
   try {
     const response = await request<Rule[]>("/cost-rules");
+    if (sequence !== loadSequence) return;
     requestId.value = response.request_id;
     rules.value = response.data.map(normalizeRule);
     const routeRuleId = typeof route.query.rule === "string" ? route.query.rule : "";
@@ -319,6 +324,7 @@ async function load() {
     if (selectedIndex >= 0) page.value = Math.floor(selectedIndex / pageSize) + 1;
     state.value = rules.value.length ? "ready" : "empty";
   } catch (error) {
+    if (sequence !== loadSequence) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = apiErrorText(error);
@@ -443,7 +449,12 @@ async function create() {
 }
 function beginAction(action: Action, approvalRole?: ApprovalRole) {
   if (!selected.value || !canManage.value) return;
-  pendingAction.value = { action, ...(approvalRole ? { approvalRole } : {}) };
+  const { id, name, market, platform, version_code, revision } = selected.value;
+  pendingAction.value = {
+    action,
+    ...(approvalRole ? { approvalRole } : {}),
+    target: { id, name, market, platform, version_code, revision },
+  };
   actionReason.value = "";
   actionError.value = "";
   rollbackTargetId.value = action === "rollback" ? (rollbackTargets.value[0]?.id ?? "") : "";
@@ -456,7 +467,7 @@ function closeAction() {
   actionError.value = "";
 }
 async function submitAction() {
-  if (!selected.value || !pendingAction.value) return;
+  if (!pendingAction.value) return;
   const reason = actionReason.value.trim();
   if (reason.length < 2) {
     actionError.value = "请填写至少 2 个字的审计原因。";
@@ -468,11 +479,11 @@ async function submitAction() {
   }
   const currentAction = pendingAction.value;
   const result = await post(
-    `/cost-rules/${selected.value.id}/actions`,
+    `/cost-rules/${currentAction.target.id}/actions`,
     {
       action: currentAction.action,
       reason,
-      expected_revision: selected.value.revision,
+      expected_revision: currentAction.target.revision,
       ...(currentAction.approvalRole ? { approval_role: currentAction.approvalRole } : {}),
       ...(currentAction.action === "rollback" ? { target_rule_id: rollbackTargetId.value } : {}),
     },
@@ -858,7 +869,7 @@ onMounted(load);
       </form>
     </dialog>
     <dialog
-      v-if="showAction && selected && pendingAction"
+      v-if="showAction && pendingAction"
       ref="actionDialogElement"
       class="cost-modal cost-action-modal"
       :aria-label="actionTitle"
@@ -873,8 +884,8 @@ onMounted(load);
           <button type="button" aria-label="关闭操作确认" @click="closeAction">×</button>
         </header>
         <p class="cost-action-context">
-          {{ selected.name }} · {{ selected.market }} / {{ selected.platform }} ·
-          {{ selected.version_code }}
+          {{ pendingAction.target.name }} · {{ pendingAction.target.market }} /
+          {{ pendingAction.target.platform }} · {{ pendingAction.target.version_code }}
         </p>
         <label v-if="pendingAction.action === 'rollback'">
           恢复目标

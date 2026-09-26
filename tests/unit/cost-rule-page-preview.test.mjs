@@ -12,6 +12,6 @@ test("P22 makes rule activation distinct from per-opportunity cost approval", as
 test("P22 retains explicit rule states and server-side action transitions", async () => {
   const source = await readFile("apps/web/src/components/CostRuleConsole.vue", "utf8");
   assert.match(source, /pending_approval: "待审批"/);
-  assert.match(source, /expected_revision: selected\.value\.revision/);
+  assert.match(source, /expected_revision: currentAction\.target\.revision/);
   assert.match(source, /action: currentAction\.action/);
 });
