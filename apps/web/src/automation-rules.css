@@ -1,3 +1,5 @@
+@import "./design/automation-rule-tokens.css";
+
 .automation-center {
   display: grid;
   gap: 22px;
@@ -385,12 +387,12 @@
 
 /* P27 C direction: production surface aligned with the approved review composition. */
 .automation-center--review {
-  --review-blue: #1748a0;
-  --review-blue-strong: #123d8a;
-  --review-ink: #17263c;
-  --review-muted: #5d6d82;
-  --review-line: #dce4ee;
-  --review-pale: #edf4ff;
+  --review-blue: var(--so-automation-rule-primary);
+  --review-blue-strong: var(--so-automation-rule-primary-strong);
+  --review-ink: var(--so-automation-rule-ink);
+  --review-muted: var(--so-automation-rule-muted);
+  --review-line: var(--so-automation-rule-line);
+  --review-pale: var(--so-automation-rule-pale);
   max-width: 1160px;
   margin: 0 auto;
   gap: 16px;
@@ -403,7 +405,7 @@
   border: 0;
   border-radius: 0;
   background: var(--review-blue);
-  color: #fff;
+  color: var(--so-automation-rule-on-primary);
   box-shadow: none;
 }
 
@@ -414,7 +416,7 @@
 
 .automation-center--review > header p,
 .automation-center--review > header span {
-  color: #d9e6ff;
+  color: var(--so-automation-rule-pale-strong);
 }
 
 .automation-center--review > header p {
@@ -427,7 +429,7 @@
 
 .automation-center--review > header h1 {
   margin: 0;
-  color: #fff;
+  color: var(--so-automation-rule-on-primary);
   font-size: clamp(25px, 3vw, 34px);
   line-height: 1.1;
 }
@@ -440,14 +442,14 @@
   min-height: 44px;
   border: 1px solid var(--review-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-automation-rule-on-primary);
   color: var(--review-blue);
   box-shadow: none;
   font-weight: 700;
 }
 
 .automation-center--review button:hover:not(:disabled) {
-  background: #f3f7ff;
+  background: var(--so-automation-rule-hover);
   color: var(--review-blue-strong);
 }
 
@@ -456,7 +458,7 @@
 .automation-center--review input:focus-visible,
 .automation-center--review select:focus-visible,
 .automation-center--review textarea:focus-visible {
-  outline: 3px solid #6f9fff;
+  outline: 3px solid var(--so-automation-rule-focus);
   outline-offset: 2px;
 }
 
@@ -464,13 +466,13 @@
 .automation-center--review dialog form > footer button:last-child {
   border-color: var(--review-blue);
   background: var(--review-blue);
-  color: #fff;
+  color: var(--so-automation-rule-on-primary);
 }
 
 .automation-center--review > header button:hover:not(:disabled),
 .automation-center--review dialog form > footer button:last-child:hover:not(:disabled) {
   background: var(--review-blue-strong);
-  color: #fff;
+  color: var(--so-automation-rule-on-primary);
 }
 
 .automation-center--review .automation-notice,
@@ -485,7 +487,7 @@
 
 .automation-center--review .automation-notice,
 .automation-center--review .automation-state {
-  background: #fff;
+  background: var(--so-automation-rule-on-primary);
   color: var(--review-ink);
 }
 
@@ -511,12 +513,12 @@
   grid-template-rows: auto auto;
   gap: 18px 24px;
   padding: 22px 24px;
-  background: #fff;
+  background: var(--so-automation-rule-on-primary);
 }
 
 .automation-center--review .automation-grid article:hover {
-  border-color: #b8cbe5;
-  background: #f8fbff;
+  border-color: var(--so-automation-rule-line-hover);
+  background: var(--so-automation-rule-surface-soft);
 }
 
 .automation-center--review .automation-grid article > div:first-child {
@@ -594,7 +596,7 @@
 .automation-center--review .automation-grid article > div:first-child i {
   border-color: var(--review-blue);
   background: var(--review-blue);
-  color: #fff;
+  color: var(--so-automation-rule-on-primary);
   font-weight: 700;
 }
 
@@ -627,17 +629,17 @@
 
 .automation-center--review .automation-last-run em,
 .automation-center--review .automation-grid article > em {
-  color: #a23b3b;
+  color: var(--so-automation-rule-danger);
 }
 
 .automation-center--review dialog {
   border: 1px solid var(--review-line);
   border-radius: 0;
-  box-shadow: 0 20px 60px rgb(12 31 64 / 18%);
+  box-shadow: 0 20px 60px var(--so-automation-rule-dialog-shadow);
 }
 
 .automation-center--review dialog::backdrop {
-  background: rgb(13 28 52 / 48%);
+  background: var(--so-automation-rule-scrim);
 }
 
 .automation-center--review dialog.automation-detail[open] {
@@ -653,7 +655,7 @@
 .automation-center--review dialog.automation-detail li {
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-automation-rule-on-primary);
 }
 
 .automation-center--review dialog form {
@@ -684,7 +686,7 @@
   min-height: 44px;
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-automation-rule-on-primary);
   color: var(--review-ink);
   padding: 10px 12px;
 }
@@ -723,7 +725,7 @@
 .automation-center--review .automation-templates button {
   min-height: 84px;
   border-color: var(--review-line);
-  background: #fff;
+  background: var(--so-automation-rule-on-primary);
 }
 
 .automation-center--review .automation-templates button b {
@@ -739,7 +741,7 @@
   padding: 14px;
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--so-automation-rule-on-primary);
 }
 
 .automation-center--review .automation-builder label > b {
@@ -807,6 +809,15 @@
   .automation-center--review .automation-grid article > footer {
     grid-column: 1;
     grid-row: auto;
+  }
+
+  .automation-center--review .automation-grid article > dl,
+  .automation-center--review .automation-grid article > .automation-last-run {
+    display: grid;
+    grid-column: 1;
+    grid-row: auto;
+    padding-left: 0;
+    border-left: 0;
   }
 
   .automation-center--review .automation-grid article > h3 {

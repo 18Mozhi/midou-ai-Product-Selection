@@ -190,6 +190,13 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
+    if (paths[index] === "apps/web/src/design/automation-rule-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.automation-center--review\s*\{(?:\s*--so-automation-rule-[a-z-]+:\s*(?:#[0-9a-f]{6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/export-detail-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

@@ -136,6 +136,30 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|!important/i);
 });
 
+test("automation rules palette resolves every page-local color reference", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/automation-rule-tokens.css", "utf8"),
+    readFile("apps/web/src/automation-rules.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--so-automation-rule-[a-z-]+):\s*(?:#[0-9a-f]{6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-automation-rule-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 15);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^\.automation-center--review\s*\{/,
+  );
+  assert.ok(css.startsWith('@import "./design/automation-rule-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
 test("P47 palette resolves page, portal detail and feedback without broadening activation", async () => {
   const tokens = await readFile("apps/web/src/design/provider-adapter-tokens.css", "utf8");
   const declarations = [...tokens.matchAll(/(--p47-[a-z-]+):\s*([^;]+);/g)];

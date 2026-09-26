@@ -1,0 +1,18 @@
+/* Approved P27 C colors, scoped to the automation rules page. */
+.automation-center--review {
+  --so-automation-rule-primary: #1748a0;
+  --so-automation-rule-primary-strong: #123d8a;
+  --so-automation-rule-ink: #17263c;
+  --so-automation-rule-muted: #5d6d82;
+  --so-automation-rule-line: #dce4ee;
+  --so-automation-rule-pale: #edf4ff;
+  --so-automation-rule-on-primary: #ffffff;
+  --so-automation-rule-pale-strong: #d9e6ff;
+  --so-automation-rule-hover: #f3f7ff;
+  --so-automation-rule-focus: #6f9fff;
+  --so-automation-rule-line-hover: #b8cbe5;
+  --so-automation-rule-surface-soft: #f8fbff;
+  --so-automation-rule-danger: #a23b3b;
+  --so-automation-rule-dialog-shadow: rgb(12 31 64 / 18%);
+  --so-automation-rule-scrim: rgb(13 28 52 / 48%);
+}
