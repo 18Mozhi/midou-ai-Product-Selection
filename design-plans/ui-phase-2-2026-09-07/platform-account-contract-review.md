@@ -110,7 +110,7 @@ S/T本族四类消费者为D来源健康、O组织记录、U用户记录、M管�
 
 | 文件 | SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformOrganizationDetailDialog.vue | 99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue | 47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43 |
 
 #### 1.5 P42旧组织详情身份（历史）
 
@@ -334,7 +334,7 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 | apps/web/src/components/PlatformRoleComparison.vue | d97345c58748d4dd480bd80dd0ee7106b411bb1488652a7621a5a3adfc3dd0ba |
 | apps/web/src/components/PlatformAccountDialogs.vue | 53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829 |
 | apps/web/src/components/PlatformUserRecords.vue | a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228 |
-| apps/web/src/components/PlatformUserDetailDialog.vue | 27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24 |
+| apps/web/src/components/PlatformUserDetailDialog.vue | 43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b |
 | apps/web/src/components/PlatformUserMembershipForm.vue | 553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39 |
@@ -371,7 +371,7 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/OrganizationCreationWizard.vue | 6ec50816ecc69c9b707e5a309ef789129f8fb5f6087bad0c4427709055b03c53 |
+| apps/web/src/components/OrganizationCreationWizard.vue | 11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314 |
 
 ## 9. P39 PlatformAccountCenter 当前刷新与目录接线（2026-09-24）
 

@@ -379,7 +379,7 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ApiCoverageOperationCard.vue | 1bbda614ea0bf0aa4f59ebaf69275cead59c8ee6b876de2e18b008278015d11a |
+| apps/web/src/components/ApiCoverageOperationCard.vue | cb844d7a0b1cb8abd8fcafc38cc3a867f4f3f9b4d193fe5dc7363517229f1a0d |
 
 这两项是原生`details/summary`控件，不是业务详情弹窗或操作按钮。源码归属和可见名称不证明证据的真实性、实际探测覆盖或辅助技术全验；原P63关于生产报告、角色和接口证据的限制保持有效。
 

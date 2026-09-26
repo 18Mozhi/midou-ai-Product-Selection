@@ -469,7 +469,9 @@ test("audited reason source bindings retain every current site and all consumer 
     assert.match(record.claim, /LG62-REASON/);
   }
   const claims = report.sourceClaims.filter((claim) => claim.file === file);
-  assert.equal(claims.length, 4);
+  assert.equal(claims.length, 5);
+  assert.equal(claims.filter((claim) => claim.temporalScope === "historical").length, 1);
+  assert.equal(claims.filter((claim) => claim.temporalScope !== "historical").length, 4);
   for (const claim of claims) assert.equal(claim.hash, digest(source), claim.document);
   assert.equal(report.unreferenced.filter((item) => item.file === file).length, 0);
 });
@@ -1220,7 +1222,9 @@ test("current open platform map binds live operations and keeps old hash history
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
-  assert.equal(hashes.length, 2);
+  assert.equal(hashes.length, 3);
+  assert.equal(hashes.filter((claim) => claim.temporalScope === "historical").length, 1);
+  assert.equal(hashes.filter((claim) => claim.temporalScope !== "historical").length, 2);
   assert.equal(
     hashes.find((claim) => claim.temporalScope === "historical")?.hash,
     "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
@@ -1361,7 +1365,9 @@ test("current P62 log center maps remaining controls and isolates the superseded
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
-  assert.equal(hashes.length, 2);
+  assert.equal(hashes.length, 3);
+  assert.equal(hashes.filter((claim) => claim.temporalScope === "historical").length, 1);
+  assert.equal(hashes.filter((claim) => claim.temporalScope !== "historical").length, 2);
   const currentHash = hashes.find((claim) => claim.temporalScope !== "historical");
   const previousHash = hashes.find((claim) => claim.temporalScope === "historical");
   assert.equal(currentHash?.hash, digest(source));
@@ -2336,7 +2342,8 @@ test("current P61 status view maps its five navigation candidates and current ha
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
-  assert.equal(hashes.length, 1);
+  assert.equal(hashes.length, 2);
+  assert.ok(hashes.every((claim) => claim.temporalScope !== "historical"));
   assert.equal(hashes[0]?.hash, digest(source));
   assert.equal(hashes[0]?.status, "hash-current");
   assert.equal(report.unreferenced.filter((candidate) => candidate.file === file).length, 0);
@@ -2373,7 +2380,8 @@ test("current P61 status workspace maps its local section switch without persist
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
-  assert.equal(hashes.length, 1);
+  assert.equal(hashes.length, 2);
+  assert.ok(hashes.every((claim) => claim.temporalScope !== "historical"));
   assert.equal(hashes[0]?.hash, digest(source));
   assert.equal(hashes[0]?.status, "hash-current");
   assert.equal(report.unreferenced.filter((item) => item.file === file).length, 0);
