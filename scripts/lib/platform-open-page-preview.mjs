@@ -103,8 +103,8 @@ export function previewOpenPage(source) {
 export function previewOpenShell(source) {
   return once(
     previewShellVue(source),
-    '<header v-if="!opportunityId" class="role-page-title">',
-    '<header v-if="!opportunityId && routePath !== \'/platform-admin/open-platform\'" class="role-page-title">',
+    "routePath !== '/platform-admin/redis'",
+    "routePath !== '/platform-admin/redis' &&\n            routePath !== '/platform-admin/open-platform'",
   );
 }
 export const openPageSources = [
