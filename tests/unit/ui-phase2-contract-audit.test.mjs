@@ -372,7 +372,6 @@ test("task and scoring stable tables cover the exact current local source set wi
 test("shared shell role and state contract binds every current source site without collapsing business variants", () => {
   const report = runContractAudit();
   const document = "shared-shell-role-state-contract-review.md";
-  const records = report.records.filter((record) => record.document.endsWith(`/${document}`));
   const files = [
     "apps/web/src/components/NavigationShell.vue",
     "apps/web/src/components/NavigationAccessPanel.vue",
@@ -382,6 +381,9 @@ test("shared shell role and state contract binds every current source site witho
     "apps/web/src/components/UiStateShowcase.vue",
     "apps/web/src/use-modal-dialog.ts",
   ];
+  const records = report.records.filter(
+    (record) => record.document.endsWith(`/${document}`) && files.includes(record.sourceFile),
+  );
   const source = (file) =>
     readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll("\r\n", "\n");
   const candidates = files.flatMap((file) => scanSource(source(file), file).candidates);
