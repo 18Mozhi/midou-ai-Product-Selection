@@ -189,7 +189,7 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformContentCenter.vue | 577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc |
+| apps/web/src/components/PlatformContentCenter.vue | f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993 |
 | apps/web/src/components/PlatformContentReviewDialog.vue | 7183474efd2f6fdb6080d3273855b69c742675b5aa36ae026d9cd82f6a6726f4 |
 
 ### P56 当前父级与共享筛选转发

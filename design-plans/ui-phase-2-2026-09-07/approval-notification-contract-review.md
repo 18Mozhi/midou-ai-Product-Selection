@@ -126,9 +126,9 @@ AW的11处绑定为reason；templateForm.name/resource_type/node_name/sla_minute
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| AW | 0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177 |
+| AW | 792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee |
 | AQ | 247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075 |
-| NC | 9b39758c091e24df6a49d9edfbc5684faa1ad1531a1c0930b09b5fb2cba85ddc |
+| NC | 154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036 |
 | approval-workspace.css | 3baa1bd6bd42b620024d8b0930e018e985929df2dce6b4a904333417c5ac2053 |
 | notification-center.css | 3b76371449dfee575dfc3cbe52e73425b3517d1f0f544e8116ce30f8bc56e386 |
 | use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |

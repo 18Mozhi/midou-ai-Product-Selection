@@ -209,9 +209,9 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 
 | 文件                                                 | LF SHA-256                                                       |
 | ---------------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/PlatformDataCenter.vue       | 10f653d56272859493121550b668ec02a88e7a2586aa9590e9cf31659115ccf4 |
-| apps/web/src/components/PlatformGovernanceCenter.vue | aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048 |
-| apps/web/src/components/DataQualityCenter.vue        | 92bfec2ad010bc6f6b0c82571a911a0107075acba1c3b5643376f86716b94d2c |
+| apps/web/src/components/PlatformDataCenter.vue       | 904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08 |
+| apps/web/src/components/PlatformGovernanceCenter.vue | 65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9 |
+| apps/web/src/components/DataQualityCenter.vue        | 2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120 |
 | apps/api/src/platform-dashboard-routes.ts            | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
 | apps/api/src/platform-dashboard-service.ts           | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |
 | apps/api/src/mysql-platform-dashboard-repository.ts  | b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28 |
@@ -222,9 +222,9 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | apps/web/src/use-audited-reason.ts                   | e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab |
 | apps/web/src/use-modal-dialog.ts                     | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
 | apps/web/src/ui/state-contract.ts                    | 9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a |
-| apps/web/src/components/ResponsiveDataView.vue       | 739ac85b109ec7c2557909d1f267d1b67a8384aa385afb80f2fd512502d17f7a |
-| apps/web/src/components/ResponsiveFilterDrawer.vue   | 727009735e3fb767e5f5d84c4a83f2dcc63a8f09e05623c3cb1609103ece9be4 |
-| apps/web/src/components/TableViewControls.vue        | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
+| apps/web/src/components/ResponsiveDataView.vue       | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
+| apps/web/src/components/ResponsiveFilterDrawer.vue   | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
+| apps/web/src/components/TableViewControls.vue        | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
 | apps/web/src/components/TechnicalDetails.vue         | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/components/AuditedReasonDialog.vue      | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
 | apps/web/src/components/ConfirmDialog.vue            | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |

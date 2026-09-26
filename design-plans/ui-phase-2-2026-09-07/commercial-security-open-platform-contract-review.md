@@ -278,10 +278,10 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 | apps/web/src/components/OpenPlatformCenter.vue | 888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa |
 
 本节与原有OP60请求/权限/密钥/投递合同并列；所有映射均为静态源码身份，不验证数据库、真实外部回调、RBAC、密钥隔离或生产交付。
-| apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
-| apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
-| apps/web/src/components/ConfirmDialog.vue | 6bc5c8473243a8647d901aa0c748640857474f864e7a7636cd10636dbf85db4b |
-| apps/web/src/use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |
+| apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
+| apps/web/src/components/TableViewControls.vue | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
+| apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
+| apps/web/src/use-modal-dialog.ts | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/api/src/commercial-routes.ts | 0a05af04dc9264c7aad783653e461858b8c6b7e464bfaea903b8f3df018f371b |
 | apps/api/src/commercial-service.ts | 14efec9b0a8fe912ad4c19d560c4ef5ab91c124a5d0d452c9e1f2615b940df76 |
@@ -352,7 +352,7 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/CommercialOperationsCenter.vue | 5fea14bb21308bc2df7526e8485698525881b227d5ba1715b5eea5bea6e1754e |
+| apps/web/src/components/CommercialOperationsCenter.vue | 48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec |
 
 ## 11. P58 创建配额方案窗当前 Vue 候选（2026-09-25）
 
@@ -368,7 +368,7 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/CommercialOperationsCenter.vue | 3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257 |
+| apps/web/src/components/CommercialOperationsCenter.vue | 48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec |
 
 ### P58旧创建窗源码签名（历史）
 
@@ -388,7 +388,7 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 当前源文件 | 当前LF SHA-256 | 当前候选 | 语义组 |
 | --- | --- | ---: | ---: |
-| apps/web/src/components/CommercialOperationsCenter.vue | 3b783a9e9b70b366da425f11ef81526b15a05d797c86cb1c5d563ec663252257 | 43 | 24 |
+| apps/web/src/components/CommercialOperationsCenter.vue | 48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec | 43 | 24 |
 
 ## 13. P59 当前动作与共享详情消费者映射（2026-09-26）
 
