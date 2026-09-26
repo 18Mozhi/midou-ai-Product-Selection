@@ -20,34 +20,34 @@
 
 | 文件:行 | 候选尾键 | 语义ID/入口 |
 | --- | --- | --- |
-| W:465 | e8d58f837015480a.1 | TR-RULE-OPEN：顶部首条/新增入口 |
-| W:473 | 5abb2c07be024e83.1 | TR-REFRESH-SOURCES |
-| W:476 | 2bfafa5dccf5b5ae.1 | TR-TAB-RULES：顶部入口 |
-| W:479 | c0646bdf3263a017.1 | TR-TAB-TOPICS |
-| W:481 | aef07f12388401cc.1 | TR-TAB-RULES：导航入口 |
-| W:483 | 83125cc8b9f30181.1 | TR-TAB-GOVERNANCE |
-| W:495 | 377da84835906aec.1 | TR-FILTER-APPLY/CLEAR/COPY/EDIT/SORT转发 |
-| W:505 | eecc513e3286758d.1 | TR-RECOVER：empty清除，否则load |
-| W:520 | 28d08ea282407ca1.1 | TR-TOPIC-SELECT：每个主题实例 |
-| W:546 | a9dcb53568c4deee.1 | TR-PAGE-PREV |
-| W:548 | ec3e2e186729ef5d.1 | TR-PAGE-NEXT |
-| W:553 | de1bcb04278ad1bc.1 | TR-BACK/FOLLOW/RULE-OPEN/RELEVANCE-OPEN/ANOMALY-OPEN转发 |
-| W:568 | a8eb23a11ff39fa0.1 | TR-HELP：原生details展开 |
-| W:593 | 5b07ed8ea36a238e.1 | TR-RULE-OPEN：规则标题入口 |
-| W:595 | d2b72f6631a5008b.1 | TR-RELOAD：规则状态恢复 |
-| W:605 | 095a96a218ee248e.1 | TR-RULE-OPEN：规则空态入口 |
-| W:653 | 5731738b8db06002.1 | TR-RULE-STATUS：暂停/启用 |
-| W:656 | 273b9f9c2069857f.1 | TR-RULE-RESULTS：首关键词筛选 |
-| W:659 | 05ccd6821ef51315.1 | TR-PROPOSE/TR-DECIDE转发 |
-| W:668 | f7ec792b7d0fd73d.1 | TR-RULE-CLOSE/TR-RULE-SUBMIT转发 |
-| W:681 | 470531a4d9d0cddb.1 | TR-ANOMALY-SUBMIT表单 |
-| W:687 | 7d73f8399a9950b5.1 | TR-ANOMALY-CLOSE：叉号 |
-| W:707 | a13a34f2af9d90ee.1 | TR-ANOMALY-CLOSE：取消 |
-| W:708 | 3ca40e4dc9ea598c.1 | TR-ANOMALY-SUBMIT按钮 |
-| W:721 | eefb1c65886b1a81.1 | TR-RELEVANCE-SUBMIT表单 |
-| W:729 | 690d51553ff51b5d.1 | TR-RELEVANCE-CLOSE：叉号 |
-| W:745 | 51e4bb1af788a0bf.1 | TR-RELEVANCE-CLOSE：取消 |
-| W:746 | 5ddc6be7e1b242d6.1 | TR-RELEVANCE-SUBMIT按钮 |
+| W:463 | e8d58f837015480a.1 | TR-RULE-OPEN：顶部首条/新增入口 |
+| W:471 | 5abb2c07be024e83.1 | TR-REFRESH-SOURCES |
+| W:474 | 2bfafa5dccf5b5ae.1 | TR-TAB-RULES：顶部入口 |
+| W:477 | c0646bdf3263a017.1 | TR-TAB-TOPICS |
+| W:479 | aef07f12388401cc.1 | TR-TAB-RULES：导航入口 |
+| W:481 | 83125cc8b9f30181.1 | TR-TAB-GOVERNANCE |
+| W:493 | 377da84835906aec.1 | TR-FILTER-APPLY/CLEAR/COPY/EDIT/SORT转发 |
+| W:503 | eecc513e3286758d.1 | TR-RECOVER：empty清除，否则load |
+| W:518 | 28d08ea282407ca1.1 | TR-TOPIC-SELECT：每个主题实例 |
+| W:544 | a9dcb53568c4deee.1 | TR-PAGE-PREV |
+| W:546 | ec3e2e186729ef5d.1 | TR-PAGE-NEXT |
+| W:551 | de1bcb04278ad1bc.1 | TR-BACK/FOLLOW/RULE-OPEN/RELEVANCE-OPEN/ANOMALY-OPEN转发 |
+| W:566 | a8eb23a11ff39fa0.1 | TR-HELP：原生details展开 |
+| W:591 | 5b07ed8ea36a238e.1 | TR-RULE-OPEN：规则标题入口 |
+| W:593 | d2b72f6631a5008b.1 | TR-RELOAD：规则状态恢复 |
+| W:603 | 095a96a218ee248e.1 | TR-RULE-OPEN：规则空态入口 |
+| W:651 | 5731738b8db06002.1 | TR-RULE-STATUS：暂停/启用 |
+| W:654 | 273b9f9c2069857f.1 | TR-RULE-RESULTS：首关键词筛选 |
+| W:657 | 05ccd6821ef51315.1 | TR-PROPOSE/TR-DECIDE转发 |
+| W:666 | f7ec792b7d0fd73d.1 | TR-RULE-CLOSE/TR-RULE-SUBMIT转发 |
+| W:679 | 470531a4d9d0cddb.1 | TR-ANOMALY-SUBMIT表单 |
+| W:685 | 7d73f8399a9950b5.1 | TR-ANOMALY-CLOSE：叉号 |
+| W:705 | a13a34f2af9d90ee.1 | TR-ANOMALY-CLOSE：取消 |
+| W:706 | 3ca40e4dc9ea598c.1 | TR-ANOMALY-SUBMIT按钮 |
+| W:719 | eefb1c65886b1a81.1 | TR-RELEVANCE-SUBMIT表单 |
+| W:727 | 690d51553ff51b5d.1 | TR-RELEVANCE-CLOSE：叉号 |
+| W:743 | 51e4bb1af788a0bf.1 | TR-RELEVANCE-CLOSE：取消 |
+| W:744 | 5ddc6be7e1b242d6.1 | TR-RELEVANCE-SUBMIT按钮 |
 | F:22 | 5dfd077f141d48f4.1 | TR-FILTER-APPLY表单 |
 | F:24 | be2b881b65e1cc00.1 | TR-FILTER-EDIT.market |
 | F:29 | 49faf4c9e9529254.1 | TR-FILTER-EDIT.category |
@@ -87,9 +87,9 @@
 
 | 定义/调用候选 | 业务变体 | 字段与行为 |
 | --- | --- | --- |
-| W:668 #14e2daa05c9f34c8.1 → R:52 #ee0ee052b72fc674.1 | TR-D-RULE | 一个调用/一个role定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消销毁后重开默认US/en-US/60/1 |
-| W:674 #2b5e528bd9cb343d.1 | TR-D-ANOMALY | warning/critical、原因2–500；提交severity/reason，证据/来源身份由URL和服务端关联；失败保留；created=false显示已有工单，当前实例按钮禁用 |
-| W:714 #75e0cda23916c7c2.1 | TR-D-IRRELEVANT / TR-D-RESTORE | 同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；当前失败也关闭清空，需修复验证，不认可为最终体验 |
+| W:666 #14e2daa05c9f34c8.1 → R:52 #ee0ee052b72fc674.1 | TR-D-RULE | 一个调用/一个role定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消销毁后重开默认US/en-US/60/1 |
+| W:672 #2b5e528bd9cb343d.1 | TR-D-ANOMALY | warning/critical、原因2–500；提交severity/reason，证据/来源身份由URL和服务端关联；失败保留；created=false显示已有工单，当前实例按钮禁用 |
+| W:712 #75e0cda23916c7c2.1 | TR-D-IRRELEVANT / TR-D-RESTORE | 同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；当前失败也关闭清空，需修复验证，不认可为最终体验 |
 | F:21 #574e84bbfac61d8b.1 | TR-D-FILTER（共享） | 760px及以下role=dialog，桌面group；打开焦点关闭键、Tab首尾/Escape/遮罩/叉号、关闭归还；submit.capture关闭，清除/复制不触发表单提交 |
 
 三个本地role定义、四业务变体加一个共享筛选实例。合并/拆分以及确认/驳回是四种内联表单态，不新建dialogId。规则/异常/相关性均未使用useModalDialog，无初焦点/循环/Escape/归还控制；提交中取消仍可达，外层全局message不是弹窗内字段错误。须按最终设计补齐并验证，而非自动登记无障碍通过。

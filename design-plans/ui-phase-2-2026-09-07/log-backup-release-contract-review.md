@@ -317,6 +317,8 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 以下早期签名来自第5节初始候选表，已被第7–9节现行刷新/重试/导出映射或共享移动详情合同中的现行候选替代。它们仅保留为可追溯历史，不计入当前源码覆盖；替代关系仅依据静态候选身份和语义描述，不表示交互、服务、权限或生产验收。
 
+### 历史候选（已由当前映射替代；仅追溯，不计入当前源码覆盖）
+
 | 旧身份 | 旧语义 | 当前映射位置 |
 | --- | --- | --- |
 | apps/web/src/components/PlatformLogCenter.vue#a4a224d771806ee7.1 | LG62-EXPORT 导出原因入口 | 第7节 LG62-CURRENT-EXPORT 与 LG62-CURRENT-EXPORT-REASON |

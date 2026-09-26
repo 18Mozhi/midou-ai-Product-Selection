@@ -443,13 +443,13 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前位置键 | 类型 / 行 | 既有语义归属 |
 | --- | --- | --- |
-| A:708367f1d5691c04.1 | control / 128 | SC49-LOGIN / 打开本来源凭证导入深链 |
-| A:16f98bc87eeb7bf3.1 | control / 129 | SC49-SAMPLE / 打开本来源固定样本入口 |
-| A:191135a63725390b.1 | control / 132 | 检查门口径说明折叠；不新增业务动作 |
-| A:b39d5c4a0f3599f8.1 | control / 149 | SC49-LOAD / 重新读取登录验收检查 |
-| A:71ad1e14ab5adcdd.1 | control / 164 | SC49-TECH / 本次读取追踪折叠 |
-| A:a1d4481c811f2e52.1 | control / 183 | SC49-LOAD / 按既有读取流程重试 |
-| A:d7d20d959f3300b0.1 | event-binding / 200 | SC49-SCOPE/RUN / 范围、表单与既有验收提交子组件事件转发 |
+| A:708367f1d5691c04.1 | control / 129 | SC49-LOGIN / 打开本来源凭证导入深链 |
+| A:16f98bc87eeb7bf3.1 | control / 130 | SC49-SAMPLE / 打开本来源固定样本入口 |
+| A:191135a63725390b.1 | control / 133 | 检查门口径说明折叠；不新增业务动作 |
+| A:b39d5c4a0f3599f8.1 | control / 150 | SC49-LOAD / 重新读取登录验收检查 |
+| A:71ad1e14ab5adcdd.1 | control / 174 | SC49-TECH / 本次读取追踪折叠 |
+| A:a1d4481c811f2e52.1 | control / 193 | SC49-LOAD / 按既有读取流程重试 |
+| A:d7d20d959f3300b0.1 | event-binding / 210 | SC49-SCOPE/RUN / 范围、表单与既有验收提交子组件事件转发 |
 
 ### E
 
@@ -476,10 +476,10 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 `ProviderParserSampleReview.vue` 的审批通过/驳回仍是既有SC48-SAMPLES动作；其当前源身份在第14节重新登记，避免依赖第2节旧快照。四个文件的当前LF归一指纹单独记录如下。
 
-| apps/web/src/components/Alibaba1688AcceptanceCenter.vue | 8fbcc5c66beb1ecff7488dc7e4c14298e5e3869201b72c5e20f7a9c17991330c |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue | f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da |
 | apps/web/src/components/ProviderParserSampleDialog.vue | 28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6 |
-| apps/web/src/components/ProviderParserSampleReview.vue | c95c962e4757cf419bbca6c338da3a0c459c7301604c901b3da5e3e0d4c0ceb7 |
-| apps/web/src/components/ProviderCompatibilityMatrixDialog.vue | a801a72cdebfcfc1d549263e3307fe923260606b934468a070ebbe2d33504f03 |
+| apps/web/src/components/ProviderParserSampleReview.vue | 9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8 |
+| apps/web/src/components/ProviderCompatibilityMatrixDialog.vue | 0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9 |
 
 ## 13. P49 ProviderAcceptanceOperations 当前呈现归属（2026-09-24）
 
@@ -501,9 +501,9 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前candidateId | 行 | 类型 | 既有语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#ff6d5fbc586803ed.1 | 176 | control | SC49-TECH / 展开本次检查故障编号 |
-| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#5587941412d5210f.1 | 180 | control | SC49-AUTH / 检查会话过期时返回登录 |
-| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#441fd57e4a421b3a.1 | 181 | control | SC49-AUTH / 无权时返回平台概览 |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#ff6d5fbc586803ed.1 | 186 | control | SC49-TECH / 展开本次检查故障编号 |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#5587941412d5210f.1 | 190 | control | SC49-AUTH / 检查会话过期时返回登录 |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#441fd57e4a421b3a.1 | 191 | control | SC49-AUTH / 无权时返回平台概览 |
 | apps/web/src/components/CredentialAssetCenter.vue#889e842f4791c19d.1 | 1003 | control | SC50-BRIDGE / 下载浏览器助手 |
 | apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1 | 1229 | control | SC50-TECH / 展开来源代码技术详情 |
 | apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#1c008f867673db60.1 | 84 | control | SC48-COMPAT / 展开兼容观测读取失败编号 |
