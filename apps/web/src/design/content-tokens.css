@@ -21,4 +21,9 @@
   --so-content-rail: #15346d;
   --so-content-dialog-border: #aebdd1;
   --so-content-field-bg: #f8faff;
+  --so-content-review-border: #dce4ee;
+  --so-content-review-ink: #182d4a;
+  --so-content-review-primary: #1748a0;
+  --so-content-review-primary-soft: #edf4ff;
+  --so-content-review-focus: #2465d7;
 }

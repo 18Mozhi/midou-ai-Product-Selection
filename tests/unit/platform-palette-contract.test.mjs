@@ -40,8 +40,8 @@ for (const [paletteFile, prefix, count, paths] of [
 }
 
 for (const [page, count, stylesheet] of [
-  ["content", 18, "platform-content"],
-  ["governance", 13, "platform-governance"],
+  ["content", 23, "platform-content"],
+  ["governance", 17, "platform-governance"],
   ["platform-notification", 22, "platform-notifications"],
 ]) {
   test(`${page} palette resolves every page-local color reference`, async () => {

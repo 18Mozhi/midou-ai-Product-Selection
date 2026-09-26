@@ -13,4 +13,8 @@
   --so-governance-warning: #996000;
   --so-governance-danger: #b53229;
   --so-governance-rail: #15346d;
+  --so-governance-review-border: #dce4ee;
+  --so-governance-review-ink: #182d4a;
+  --so-governance-review-primary: #1748a0;
+  --so-governance-review-focus: #2465d7;
 }

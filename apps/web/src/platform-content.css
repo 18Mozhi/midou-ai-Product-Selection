@@ -36,35 +36,35 @@
 .platform-content--review {
   max-width: 1160px;
   margin: 0 auto;
-  border-color: #dce4ee;
-  background: #f3f6fb;
-  color: #182d4a;
+  border-color: var(--so-content-review-border);
+  background: var(--so-content-canvas);
+  color: var(--so-content-review-ink);
 }
 
 .platform-content--review .platform-content__rail {
   border: 0;
-  background: #1748a0;
-  color: #fff;
+  background: var(--so-content-review-primary);
+  color: var(--so-content-surface);
 }
 
 .platform-content--review .platform-content__rail :is(small, strong, span, p, li) {
-  color: #fff;
+  color: var(--so-content-surface);
 }
 
 .platform-content--review .platform-content__surface {
   padding: 0 36px 32px;
-  background: #f3f6fb;
+  background: var(--so-content-canvas);
 }
 
 .platform-content--review .platform-content__hero {
   margin: 0 -36px;
   padding: 31px 36px;
   border: 0;
-  background: #1748a0;
+  background: var(--so-content-review-primary);
 }
 
 .platform-content--review .platform-content__hero :is(p, h1, span) {
-  color: #fff;
+  color: var(--so-content-surface);
 }
 
 .platform-content--review .platform-content__hero h1 {
@@ -75,58 +75,58 @@
 }
 
 .platform-content--review .platform-content__hero button {
-  border-color: #fff;
+  border-color: var(--so-content-surface);
   border-radius: 0;
-  color: #1748a0;
-  background: #fff;
+  color: var(--so-content-review-primary);
+  background: var(--so-content-surface);
   font-weight: 800;
 }
 
 .platform-content--review .platform-content__summary {
   margin: 24px 0;
-  border-color: #dce4ee;
-  background: #fff;
+  border-color: var(--so-content-review-border);
+  background: var(--so-content-surface);
 }
 
 .platform-content--review .platform-content__summary article {
-  border-color: #dce4ee;
-  background: #fff;
+  border-color: var(--so-content-review-border);
+  background: var(--so-content-surface);
 }
 
 .platform-content--review .platform-content__summary strong,
 .platform-content--review .platform-content__ledger h3 {
-  color: #1748a0;
+  color: var(--so-content-review-primary);
 }
 
 .platform-content--review .platform-content__scope-note,
 .platform-content--review .platform-content__review-note {
   padding: 11px 13px;
-  border-left: 5px solid #1748a0;
-  background: #edf4ff;
+  border-left: 5px solid var(--so-content-review-primary);
+  background: var(--so-content-review-primary-soft);
 }
 
 .platform-content--review .platform-content__ledger {
-  border-color: #dce4ee;
-  border-top: 5px solid #1748a0;
-  background: #fff;
+  border-color: var(--so-content-review-border);
+  border-top: 5px solid var(--so-content-review-primary);
+  background: var(--so-content-surface);
 }
 
 .platform-content--review .platform-content__ledger > header {
   padding-bottom: 16px;
-  border-bottom-color: #dce4ee;
+  border-bottom-color: var(--so-content-review-border);
 }
 
 .platform-content--review :is(table th, table td) {
-  border-color: #dce4ee;
+  border-color: var(--so-content-review-border);
 }
 
 .platform-content--review table th {
-  color: #fff;
-  background: #1748a0;
+  color: var(--so-content-surface);
+  background: var(--so-content-review-primary);
 }
 
 .platform-content--review :is(button, input, select, textarea, summary):focus-visible {
-  outline-color: #2465d7;
+  outline-color: var(--so-content-review-focus);
   outline-offset: 3px;
 }
 
