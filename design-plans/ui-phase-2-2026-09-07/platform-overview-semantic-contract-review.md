@@ -6,9 +6,9 @@
 
 | 文件 | LF SHA256 |
 | --- | --- |
-| apps/web/src/components/PlatformDashboard.vue | b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498 |
-| apps/web/src/components/ResponsiveDataView.vue | b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99 |
-| apps/web/src/components/TableViewControls.vue | d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff |
+| apps/web/src/components/PlatformDashboard.vue | 902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e |
+| apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
+| apps/web/src/components/TableViewControls.vue | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 
 ## 逐来源位置

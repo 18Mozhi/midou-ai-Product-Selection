@@ -181,13 +181,13 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| `apps/web/src/components/OrganizationAdminCenter.vue` | `71da000e0335225084a4f089c355fb141cbed333231b9fc6faa2619bf188f0fb` |
+| `apps/web/src/components/OrganizationAdminCenter.vue` | `0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04` |
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
 | `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
 | `apps/web/src/components/OrganizationTeamPanel.vue` | `cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174` |
-| `apps/web/src/components/OrganizationDataPanel.vue` | `0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478` |
-| `apps/web/src/components/OrganizationTokenPanel.vue` | `cd90fc469e663ef0e49bd5371b3c9a91f24d68f6039affb55b8ead8be5540725` |
-| `apps/web/src/components/OrganizationAuditPanel.vue` | `b0f7e9452a81914dfa71c3812765f93726804d2ed1e56494e9004314a6f8ac7a` |
+| `apps/web/src/components/OrganizationDataPanel.vue` | `00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270` |
+| `apps/web/src/components/OrganizationTokenPanel.vue` | `f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c` |
+| `apps/web/src/components/OrganizationAuditPanel.vue` | `e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d` |
 | `apps/web/src/components/AuditedReasonDialog.vue` | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
 | `apps/web/src/use-audited-reason.ts` | `e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab` |
 | `apps/web/src/use-modal-dialog.ts` | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |

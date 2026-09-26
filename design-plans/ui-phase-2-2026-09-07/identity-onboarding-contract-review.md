@@ -227,4 +227,4 @@ MFA和首次设置按钮是 form 外的 type=button，输入虽然部分有minle
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/LandingRedirect.vue | bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5 |
-| apps/web/src/components/LandingRedirectSurface.vue | 7c4100c1eb8d4dd56d5dec61446ef2ebe544873b9c57cec49db62d1a2bad370d |
+| apps/web/src/components/LandingRedirectSurface.vue | 321c65bae80e602f2403983f6b949ca54a6795cb44fd90704a3c72898203eddb |
