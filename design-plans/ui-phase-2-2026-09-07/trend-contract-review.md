@@ -100,7 +100,7 @@
 
 | 动作 | method/path及准确输入 | 成功/失败原页行为 |
 | --- | --- | --- |
-| TR-FOLLOW | PUT或DELETE /trends/:id/follow；无body | 使用返回followed同步当前详情和列表；失败保持 |
+| TR-FOLLOW | PUT或DELETE /trends/:id/follow；无body | 使用请求发起主题的返回followed同步该主题详情/列表，不能按回执到达时的selected对象回写；失败保持 |
 | TR-RELEVANCE-SUBMIT | POST /trends/:id/relevance；status、reason、expected_version | 成功load；当前失败也关窗清空，保留待修 |
 | TR-ANOMALY-SUBMIT | POST /trends/:topic/evidence/:evidence/quality-issues；severity、reason | 201 created=true新工单或200 created=false复用；成功记qualityIssueIds，失败保留输入 |
 | TR-RULE-SUBMIT | POST /trends/monitoring-rules；八表单字段转数组/null/number，加notification_channel=in_app | 成功关窗重读转rules；失败留窗；不预填选中主题到规则 |
@@ -124,7 +124,7 @@
 | UI2-TR07 | 确认/驳回先取消零写入，再提交对应reason/expected_version，成功状态由重读返回 | 两例隔离Vue；第二管理员和权限拒绝需真实后端 |
 | UI2-TR08 | 全部状态/清除/分页/排序范围/复制失败；移动筛选首尾焦点、Escape、提交关闭与返回；来源切换重置 | 待补；复用旧URL/空态/只读用例但不当全部通过 |
 | UI2-TR09 | 三个本地弹窗初焦点/循环/归还；字段错误关联与弹窗内播报；相关性失败保留；提交关闭/重开/重复点击 | 待修待验，不通过弱化断言接受缺陷 |
-| UI2-TR10 | 切主题/筛选/路由/组织后的迟到成功或失败不得覆盖当前范围；治理load失败和规则旧列表不可冒充成功 | 待复现/修复；当前watch无读取归属保护 |
+| UI2-TR10 | 切主题/筛选/路由/组织后的迟到成功或失败不得覆盖当前范围；治理load失败和规则旧列表不可冒充成功。关注操作切换主题时回执仍归发起主题 | 关注切主题子项由真实Vue隔离响应桌面/390px回归验证；筛选/组织迟到读写及治理/规则失败归属仍待 |
 | UI2-TR11 | 真实后端版本冲突、Origin、幂等、同范围、本人提议拒绝、拆分留一信号、异常工单复用；刷新来源read权限及范围错配 | 待真实隔离服务；不在生产制造外部采集或客户数据 |
 | UI2-TR12 | 新布局桌面/移动、三主题两密度、长内容和缩放、全按钮六态及全部变体图，与获审方案逐项对照 | 方向审核后；当前截图只旧Vue基线 |
 

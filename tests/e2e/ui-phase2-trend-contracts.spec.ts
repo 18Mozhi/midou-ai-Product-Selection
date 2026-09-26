@@ -170,6 +170,63 @@ test("UI2-TR01 follow and unfollow preserve bodyless methods and returned state"
   );
 });
 
+test("UI2-TR follow completion updates the topic that started the request", async ({ page }) => {
+  const data = await ready(page);
+  const secondTopicId = id(417);
+  const secondTopic = { ...data.detail, id: secondTopicId, title: "另一条观察主题" };
+  await page.route("**/api/v1/trends**", async (route) => {
+    const request = route.request();
+    if (request.method() !== "GET") return route.fallback();
+    const pathname = new URL(request.url()).pathname;
+    if (pathname.endsWith("/monitoring-rules"))
+      return route.fulfill({ json: envelope([data.rule]) });
+    if (pathname.endsWith("/change-requests"))
+      return route.fulfill({ json: envelope(data.changes) });
+    if (pathname === `/api/v1/trends/${topicId}`)
+      return route.fulfill({ json: envelope(data.detail) });
+    if (pathname === `/api/v1/trends/${secondTopicId}`)
+      return route.fulfill({ json: envelope(secondTopic) });
+    if (pathname === "/api/v1/trends")
+      return route.fulfill({
+        json: envelope([data.detail, secondTopic], { page: 1, page_size: 20, total: 2 }),
+      });
+    return route.fallback();
+  });
+
+  let releaseFollow!: () => void;
+  let markFollowStarted!: () => void;
+  const followStarted = new Promise<void>((resolve) => (markFollowStarted = resolve));
+  const followPending = new Promise<void>((resolve) => (releaseFollow = resolve));
+  await page.route(`**/api/v1/trends/${topicId}/follow`, async (route) => {
+    markFollowStarted();
+    await followPending;
+    await route.fulfill({ json: envelope({ topic_id: topicId, followed: true }) });
+  });
+
+  await openDetail(page);
+  await page.getByRole("button", { name: "关注", exact: true }).click();
+  await followStarted;
+  if ((page.viewportSize()?.width ?? 0) <= 1100)
+    await page.getByRole("button", { name: "返回趋势列表" }).click();
+  await page
+    .locator(".trend-list")
+    .getByRole("button", { name: /另一条观察主题/ })
+    .click();
+  await expect(page.locator(".trend-detail")).toContainText("另一条观察主题");
+  await expect(page.locator(".trend-detail").getByRole("button", { name: "关注" })).toBeVisible();
+
+  releaseFollow();
+  await expect(page.locator(".trend-detail").getByRole("button", { name: "关注" })).toBeVisible();
+  if ((page.viewportSize()?.width ?? 0) <= 1100)
+    await page.getByRole("button", { name: "返回趋势列表" }).click();
+  const firstRow = page.locator(".trend-list").getByRole("button", { name: /AI 护肤观察主题/ });
+  const secondRow = page.locator(".trend-list").getByRole("button", { name: /另一条观察主题/ });
+  await expect(firstRow).toContainText("已关注");
+  await expect(secondRow).not.toContainText("已关注");
+  expect(data.writes).toHaveLength(1);
+  assertWrite(data.writes[0], "PUT", `/trends/${topicId}/follow`, null);
+});
+
 test("UI2-TR02 relevance cancel writes nothing and restore uses the refreshed version", async ({
   page,
 }) => {

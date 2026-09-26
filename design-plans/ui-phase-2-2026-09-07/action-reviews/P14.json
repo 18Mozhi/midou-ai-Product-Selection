@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "7e894cc321871b09052f72daeaf8113edbb80956f4244e734d89ebddf73fc9a4",
+    "apps/web/src/components/TrendDashboard.vue": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -2800,7 +2800,7 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "7e894cc321871b09052f72daeaf8113edbb80956f4244e734d89ebddf73fc9a4",
+      "apps/web/src/components/TrendDashboard.vue": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -3202,7 +3202,7 @@
   "compositionGaps": [
     "42页面动作组的252代表视觉槽均未逐selector映射；146旧图涵盖68双端场景及10下部，不代表每按钮六态/动态行/全部主题。",
     "源applyFilters全部status回active、相关性失败关窗清原因、已启用无时间仍显示已暂停等与C稿有差异，原型不得冒充修复。",
-    "本轮actual follow在惰性VM中确认A请求等待时selected改B，成功回写B详情及B列表，A未同步；setTab(topics)保留legacy tab=rules并恢复到rules。不是实际浏览器/持久化/权限失败证明，需列入真实实现验收。",
+    "历史惰性VM曾确认A关注请求等待时selected改B会错写B；2026-09-26已由真实Vue受控回执桌面/390px回归关闭该子项。setTab(topics)仍保留legacy tab=rules并恢复到rules，需独立兼容深链验收。",
     "三工作面共享单个state/busy；规则旧条目可与错误同屏，治理无同级状态面板；原型隔离失败、统一忙碌保护与原生模态仍待批准/实现。"
   ],
   "approval": "pending-user-review",

@@ -287,14 +287,12 @@ function requireTrendManage() {
   return false;
 }
 async function follow() {
-  if (!selected.value || !requireTrendManage()) return;
-  const result = await write(
-    `/trends/${selected.value.id}/follow`,
-    selected.value.followed ? "DELETE" : "PUT",
-  );
+  const target = selected.value;
+  if (!target || !requireTrendManage()) return;
+  const result = await write(`/trends/${target.id}/follow`, target.followed ? "DELETE" : "PUT");
   if (result) {
-    selected.value.followed = result.followed;
-    const item = topics.value.find((topic) => topic.id === selected.value?.id);
+    target.followed = result.followed;
+    const item = topics.value.find((topic) => topic.id === target.id);
     if (item) item.followed = result.followed;
     message.value = result.followed ? "已关注该主题。" : "已取消关注。";
   }

@@ -957,7 +957,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 - 42页面动作组的252代表视觉槽均未逐selector映射；146旧图涵盖68双端场景及10下部，不代表每按钮六态/动态行/全部主题。
 - 源applyFilters全部status回active、相关性失败关窗清原因、已启用无时间仍显示已暂停等与C稿有差异，原型不得冒充修复。
-- 本轮actual follow在惰性VM中确认A请求等待时selected改B，成功回写B详情及B列表，A未同步；setTab(topics)保留legacy tab=rules并恢复到rules。不是实际浏览器/持久化/权限失败证明，需列入真实实现验收。
+- 历史惰性VM曾确认A关注请求等待时selected改B会错写B；2026-09-26已由真实Vue受控回执桌面/390px回归关闭该子项。setTab(topics)仍保留legacy tab=rules并恢复到rules，需独立兼容深链验收。
 - 三工作面共享单个state/busy；规则旧条目可与错误同屏，治理无同级状态面板；原型隔离失败、统一忙碌保护与原生模态仍待批准/实现。
 - 局部65候选包括60控件/事件、3role定义与2共享/规则调用；source scan与结构scan统计对象不同，不能合并为业务弹窗总数。
 - MonitoringReadinessStrip只展示事实；外层NavigationShell另审。UiStatePanel两个primary消费者已列，secondary未监听，不能宣称恢复链接真实可用。
