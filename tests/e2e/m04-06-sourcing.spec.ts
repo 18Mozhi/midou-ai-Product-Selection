@@ -158,7 +158,7 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
 }) => {
   await setup(page);
   await page.goto("/sourcing?create=1");
-  await expect(page.getByRole("heading", { name: "供应链找货", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "供应链找货", level: 1 })).toBeVisible();
   await expect(page.getByRole("heading", { name: "发起供应商找货" })).toBeVisible();
   await expect(page.getByLabel("输入类型").locator("option")).toHaveText([
     "关键词",

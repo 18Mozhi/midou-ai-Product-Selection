@@ -1,3 +1,5 @@
+@import "./design/organization-audit-tokens.css";
+
 .org-audit-panel {
   display: grid;
   gap: 16px;
@@ -503,14 +505,14 @@
 .org-admin-center--audit-review {
   max-width: 1280px;
   margin: 0 auto;
-  color: #182d4a;
-  background: #edf2f8;
+  color: var(--org-audit-ink);
+  background: var(--org-audit-soft);
 }
 
 .org-admin-center--audit-review .org-admin-hero {
   border: 0;
   border-radius: 0;
-  background: #edf2f8;
+  background: var(--org-audit-soft);
   box-shadow: none;
 }
 
@@ -528,16 +530,16 @@
 .org-admin-center--audit-review .org-audit-overview {
   grid-area: overview;
   padding: 26px 24px;
-  border-color: #dce4ee;
+  border-color: var(--org-audit-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--org-audit-white);
   box-shadow: none;
 }
 
 .org-admin-center--audit-review .org-audit-overview aside {
-  border-color: #dce4ee;
+  border-color: var(--org-audit-line);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--org-audit-pale);
 }
 
 .org-admin-center--audit-review .org-audit-filters {
@@ -547,8 +549,8 @@
   padding: 20px;
   border: 0;
   border-radius: 0;
-  color: #fff;
-  background: #1748a0;
+  color: var(--org-audit-white);
+  background: var(--org-audit-blue);
   box-shadow: none;
 }
 
@@ -558,7 +560,7 @@
 
 .org-admin-center--audit-review .org-audit-filters header :is(h3, span),
 .org-admin-center--audit-review .org-audit-filters header > small {
-  color: #fff;
+  color: var(--org-audit-white);
 }
 
 .org-admin-center--audit-review .org-audit-filters header > small {
@@ -578,23 +580,23 @@
 }
 
 .org-admin-center--audit-review .org-audit-filters label {
-  color: #fff;
+  color: var(--org-audit-white);
 }
 
 .org-admin-center--audit-review .org-audit-filters :is(input, select) {
-  border-color: #b9cbea;
+  border-color: var(--org-audit-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--org-audit-white);
 }
 
 .org-admin-center--audit-review .org-audit-advanced {
-  border-color: #90addb;
+  border-color: var(--org-audit-focus-border);
   border-radius: 0;
   background: transparent;
 }
 
 .org-admin-center--audit-review .org-audit-advanced summary {
-  color: #fff;
+  color: var(--org-audit-white);
 }
 
 .org-admin-center--audit-review .org-audit-filters footer {
@@ -604,27 +606,27 @@
 
 .org-admin-center--audit-review .org-audit-filters button {
   border-radius: 0;
-  background: #fff;
-  color: #1748a0;
+  background: var(--org-audit-white);
+  color: var(--org-audit-blue);
 }
 
 .org-admin-center--audit-review .org-audit-filters button.org-admin-secondary {
-  border: 1px solid #90addb;
-  color: #fff;
+  border: 1px solid var(--org-audit-focus-border);
+  color: var(--org-audit-white);
   background: transparent;
 }
 
 .org-admin-center--audit-review .org-audit-metrics {
   grid-area: metrics;
   gap: 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--org-audit-line);
 }
 
 .org-admin-center--audit-review .org-audit-metrics article {
   border: 0;
-  border-right: 1px solid #dce4ee;
+  border-right: 1px solid var(--org-audit-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--org-audit-white);
 }
 
 .org-admin-center--audit-review .org-audit-metrics article:last-child {
@@ -632,7 +634,7 @@
 }
 
 .org-admin-center--audit-review .org-audit-metrics b {
-  color: #1748a0;
+  color: var(--org-audit-blue);
 }
 
 .org-admin-center--audit-review .org-audit-ledger {
@@ -658,17 +660,17 @@
   max-height: 760px;
   padding: 0 4px 0 0;
   gap: 0;
-  border: 1px solid #dce4ee;
-  background: #fff;
+  border: 1px solid var(--org-audit-line);
+  background: var(--org-audit-white);
 }
 
 .org-admin-center--audit-review .org-audit-row {
   min-height: 94px;
   padding: 14px;
   border: 0;
-  border-bottom: 1px solid #dce4ee;
+  border-bottom: 1px solid var(--org-audit-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--org-audit-white);
 }
 
 .org-admin-center--audit-review .org-audit-row:last-of-type {
@@ -677,37 +679,37 @@
 
 .org-admin-center--audit-review .org-audit-row:hover,
 .org-admin-center--audit-review .org-audit-row.selected {
-  border-color: #dce4ee;
-  border-left: 4px solid #1748a0;
-  background: #eaf2ff;
+  border-color: var(--org-audit-line);
+  border-left: 4px solid var(--org-audit-blue);
+  background: var(--org-audit-blue-pale);
 }
 
 .org-admin-center--audit-review .org-audit-row-icon {
   border-radius: 0;
-  color: #1748a0;
-  background: #eaf2ff;
+  color: var(--org-audit-blue);
+  background: var(--org-audit-blue-pale);
 }
 
 .org-admin-center--audit-review .org-audit-system-events,
 .org-admin-center--audit-review .org-audit-empty {
   border: 0;
-  border-bottom: 1px solid #dce4ee;
+  border-bottom: 1px solid var(--org-audit-line);
   border-radius: 0;
 }
 
 .org-admin-center--audit-review .org-audit-load-more {
   border: 0;
-  border-top: 1px solid #dce4ee;
+  border-top: 1px solid var(--org-audit-line);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--org-audit-pale);
 }
 
 .org-admin-center--audit-review .org-audit-detail {
   position: static;
   padding: 20px;
-  border-color: #dce4ee;
+  border-color: var(--org-audit-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--org-audit-white);
   box-shadow: none;
 }
 
@@ -715,22 +717,22 @@
 .org-admin-center--audit-review .org-audit-detail pre,
 .org-admin-center--audit-review .org-audit-correlation > div {
   border-radius: 0;
-  background: #f7faff;
+  background: var(--org-audit-pale);
 }
 
 .org-admin-center--audit-review .org-audit-detail pre {
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--org-audit-line);
 }
 
 .org-admin-center--audit-review .org-audit-correlation button {
-  border: 1px solid #1748a0;
+  border: 1px solid var(--org-audit-blue);
   border-radius: 0;
-  color: #1748a0;
-  background: #fff;
+  color: var(--org-audit-blue);
+  background: var(--org-audit-white);
 }
 
 .org-admin-center--audit-review :is(button, input, select, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--org-audit-focus);
   outline-offset: 3px;
 }
 
@@ -788,7 +790,7 @@
 
   .org-admin-center--audit-review .org-audit-metrics article {
     border-right: 0;
-    border-bottom: 1px solid #dce4ee;
+    border-bottom: 1px solid var(--org-audit-line);
   }
 
   .org-admin-center--audit-review .org-audit-metrics article:last-child {

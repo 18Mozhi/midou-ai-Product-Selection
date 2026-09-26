@@ -1,3 +1,5 @@
+@import "./design/tenancy-tokens.css";
+
 :root {
   color: var(--so-text);
   background: var(--so-bg);
@@ -1233,10 +1235,6 @@ a {
 
 /* P08: production C-direction organization/workspace scope selector. */
 .tenancy-page {
-  --p08-blue: #1748a0;
-  --p08-ink: #182d4a;
-  --p08-muted: #52647b;
-  --p08-line: #dce4ee;
   width: min(920px, calc(100% - 48px));
   min-height: 100dvh;
   margin-inline: auto;
@@ -1251,7 +1249,7 @@ a {
   margin: 0;
 }
 .tenancy-page :is(button, input, a):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p08-focus);
   outline-offset: 3px;
 }
 .p08-top {
@@ -1283,30 +1281,30 @@ a {
 }
 .p08-hero {
   padding: 34px 38px;
-  color: #fff;
+  color: var(--p08-white);
   background: var(--p08-blue);
 }
 .p08-hero p {
-  color: #dce8ff;
+  color: var(--p08-light-blue);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
 }
 .p08-hero h1 {
   margin: 8px 0;
-  color: #fff;
+  color: var(--p08-white);
   font-size: clamp(30px, 4vw, 38px);
   line-height: 1.2;
 }
 .p08-hero > span {
   display: block;
-  color: #e2ecff;
+  color: var(--p08-highlight);
 }
 .p08-workspace {
   min-height: 330px;
   border: 1px solid var(--p08-line);
   border-top: 0;
-  background: #fff;
+  background: var(--p08-white);
 }
 .p08-notice {
   display: grid;
@@ -1316,7 +1314,7 @@ a {
   padding: 18px;
   border-left: 3px solid var(--p08-blue);
   color: var(--p08-muted);
-  background: #edf4ff;
+  background: var(--p08-pale-blue);
 }
 .p08-notice b {
   color: var(--p08-ink);
@@ -1331,12 +1329,12 @@ a {
   font-size: 14px;
 }
 .p08-error {
-  border-color: #b42318;
-  background: #fff6f5;
+  border-color: var(--p08-danger);
+  background: var(--p08-danger-bg);
 }
 .p08-success {
-  border-color: #267a54;
-  background: #effaf4;
+  border-color: var(--p08-success);
+  background: var(--p08-success-bg);
 }
 .p08-directory,
 .p08-organization {
@@ -1355,10 +1353,10 @@ a {
   width: 100%;
   min-height: 48px;
   padding: 8px 12px;
-  border: 1px solid #9cacbf;
+  border: 1px solid var(--p08-control-border);
   border-radius: 0;
   color: var(--p08-ink);
-  background: #fff;
+  background: var(--p08-white);
   font: inherit;
 }
 .p08-list,
@@ -1377,7 +1375,7 @@ a {
   border: 1px solid var(--p08-line);
   border-radius: 0;
   color: var(--p08-ink);
-  background: #fff;
+  background: var(--p08-white);
   text-align: left;
   font: inherit;
 }
@@ -1387,14 +1385,14 @@ a {
 .p08-org-row:hover:not(:disabled),
 .p08-workspace-row:hover:not(:disabled) {
   border-color: var(--p08-blue);
-  background: #f6f9ff;
+  background: var(--p08-summary-bg);
 }
 .p08-org-initial {
   width: 40px;
   height: 40px;
   display: grid;
   place-items: center;
-  color: #fff;
+  color: var(--p08-white);
   background: var(--p08-blue);
   font-weight: 800;
 }
@@ -1428,9 +1426,9 @@ a {
   justify-items: start;
   gap: 8px;
   padding: 16px;
-  border-left: 3px solid #9cacbf;
+  border-left: 3px solid var(--p08-control-border);
   color: var(--p08-muted);
-  background: #f6f8fb;
+  background: var(--p08-soft-bg);
 }
 .p08-empty-search b,
 .p08-team-summary p {
@@ -1467,17 +1465,17 @@ a {
   grid-column: 1 / -1;
 }
 .p08-workspace-row:disabled {
-  color: #718096;
-  border-color: #d6dde7;
-  background: #f0f3f7;
+  color: var(--p08-disabled-ink);
+  border-color: var(--p08-disabled-border);
+  background: var(--p08-disabled-bg);
   cursor: not-allowed;
 }
 .p08-workspace-row:disabled > :is(span, small) {
-  color: #718096;
+  color: var(--p08-disabled-ink);
 }
 .p08-team-summary {
   border-color: var(--p08-blue);
-  background: #edf4ff;
+  background: var(--p08-pale-blue);
 }
 .p08-team-summary strong {
   color: var(--p08-blue);
@@ -1513,12 +1511,12 @@ a {
 }
 .p08-primary,
 .p08-primary-link {
-  color: #fff;
+  color: var(--p08-white);
   background: var(--p08-blue);
 }
 .p08-secondary {
   color: var(--p08-blue);
-  background: #fff;
+  background: var(--p08-white);
 }
 .p08-actions {
   display: flex;

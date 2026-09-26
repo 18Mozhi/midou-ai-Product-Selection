@@ -1,4 +1,5 @@
 @import "./design/roles-tokens.css";
+@import "./design/organization-admin-tokens.css";
 
 .org-admin-center {
   margin-top: 26px;
@@ -9,19 +10,19 @@
 .org-admin-center--token-review {
   max-width: 1160px;
   margin: 0 auto;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--oa-ink);
+  background: var(--oa-soft);
 }
 
 .org-admin-center--token-review .org-admin-hero {
   padding: 31px 36px;
   border: 0;
   border-radius: 0;
-  background: #1748a0;
+  background: var(--oa-blue);
 }
 
 .org-admin-center--token-review .org-admin-hero :is(p, h1, h2, span) {
-  color: #fff;
+  color: var(--oa-white);
 }
 
 .org-admin-center--token-review .org-admin-hero :is(h1, h2) {
@@ -42,29 +43,29 @@
 .org-admin-center--token-review .org-token-overview {
   padding: 26px 30px;
   border: 0;
-  border-left: 5px solid #1748a0;
+  border-left: 5px solid var(--oa-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--token-review .org-token-overview aside {
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--token-review .org-token-metrics {
   gap: 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--oa-line);
   border-radius: 0;
 }
 
 .org-admin-center--token-review .org-token-metrics article {
   border: 0;
-  border-right: 1px solid #dce4ee;
+  border-right: 1px solid var(--oa-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -73,7 +74,7 @@
 }
 
 .org-admin-center--token-review .org-token-metrics b {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center--token-review .org-token-secret {
@@ -98,8 +99,8 @@
 
 .org-admin-center--token-review .org-token-ledger,
 .org-admin-center--token-review .org-token-create {
-  border-color: #dce4ee;
-  background: #fff;
+  border-color: var(--oa-line);
+  background: var(--oa-white);
 }
 
 .org-admin-center--token-review .org-token-ledger {
@@ -112,15 +113,15 @@
 
 .org-admin-center--token-review .org-token-toolbar {
   margin: 0 24px 14px;
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--token-review .org-token-toolbar :is(input, select) {
-  border-color: #b8c9df;
+  border-color: var(--oa-input);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--token-review .org-token-list {
@@ -132,9 +133,9 @@
 .org-admin-center--token-review .org-token-list article {
   padding: 20px 24px;
   border: 0;
-  border-top: 1px solid #dce4ee;
+  border-top: 1px solid var(--oa-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -153,10 +154,10 @@
   gap: 14px;
   margin: 0;
   padding: 18px 22px;
-  border: 1px solid #dce4ee;
-  border-left: 5px solid #1748a0;
+  border: 1px solid var(--oa-line);
+  border-left: 5px solid var(--oa-blue);
   border-radius: 0;
-  background: #edf4ff;
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--token-review .org-token-create {
@@ -165,9 +166,9 @@
 }
 
 .org-admin-center--token-review .org-token-create :is(input, textarea) {
-  border-color: #b8c9df;
+  border-color: var(--oa-input);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--token-review .org-token-create .org-token-scope-field,
@@ -181,11 +182,11 @@
 
 .org-admin-center--token-review .org-token-create .org-token-scope-field > div label {
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--token-review :is(button, input, select, textarea, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--oa-focus);
   outline-offset: 3px;
 }
 
@@ -199,7 +200,7 @@
   }
 
   .org-admin-center--token-review .org-token-metrics article:nth-child(n + 4) {
-    border-top: 1px solid #dce4ee;
+    border-top: 1px solid var(--oa-line);
   }
 
   .org-admin-center--token-review .org-token-toolbar {
@@ -228,7 +229,7 @@
     min-width: 0;
     width: 100%;
     box-sizing: border-box;
-    border-top: 1px solid #dce4ee;
+    border-top: 1px solid var(--oa-line);
     border-left: 0;
   }
 
@@ -302,19 +303,19 @@
 .org-admin-center--review {
   max-width: 1160px;
   margin: 0 auto;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--oa-ink);
+  background: var(--oa-soft);
 }
 
 .org-admin-center--review .org-admin-hero {
   padding: 31px 36px;
   border: 0;
   border-radius: 0;
-  background: #1748a0;
+  background: var(--oa-blue);
 }
 
 .org-admin-center--review .org-admin-hero :is(p, h1, h2, span) {
-  color: #fff;
+  color: var(--oa-white);
 }
 
 .org-admin-center--review .org-admin-hero h1 {
@@ -330,28 +331,28 @@
 
 .org-admin-center--review .org-data-overview {
   padding: 25px 28px;
-  border-left: 5px solid #1748a0;
+  border-left: 5px solid var(--oa-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--review .org-data-overview aside {
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--review .org-data-metrics {
   gap: 0;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--oa-line);
 }
 
 .org-admin-center--review .org-data-metrics article {
   border: 0;
-  border-right: 1px solid #dce4ee;
+  border-right: 1px solid var(--oa-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -360,88 +361,88 @@
 }
 
 .org-admin-center--review .org-data-metrics b {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center--review .org-data-truth {
-  border-left: 5px solid #1748a0;
+  border-left: 5px solid var(--oa-blue);
   border-radius: 0;
-  background: #edf4ff;
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--review .org-data-tabs {
   gap: 0;
   padding: 0;
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--review .org-data-tabs button {
   border: 0;
-  border-right: 1px solid #dce4ee;
+  border-right: 1px solid var(--oa-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--review .org-data-tabs button[aria-pressed="true"] {
-  background: #edf4ff;
-  color: #1748a0;
+  background: var(--oa-highlight);
+  color: var(--oa-blue);
 }
 
 .org-admin-center--review .org-data-section {
-  border-top: 5px solid #1748a0;
+  border-top: 5px solid var(--oa-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--review .org-data-toolbar {
   padding: 14px;
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--review .org-data-toolbar :is(input, select) {
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--review .org-data-table-scroll,
 .org-admin-center--review .org-data-table [role="row"] {
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
 }
 
 .org-admin-center--review .org-data-table-head {
-  color: #fff;
-  background: #1748a0;
+  color: var(--oa-white);
+  background: var(--oa-blue);
 }
 
 .org-admin-center--review .org-data-table [role="row"]:nth-child(2n) {
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--review .org-data-export-list article {
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--review .org-data-export-list article header {
-  border-bottom-color: #dce4ee;
+  border-bottom-color: var(--oa-line);
 }
 
 .org-admin-center--review .org-data-export-list dl > div {
-  border-color: #dce4ee;
+  border-color: var(--oa-line);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--review :is(button, input, select, a, summary):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--oa-focus);
   outline-offset: 3px;
 }
 
@@ -4144,19 +4145,19 @@
   max-width: 1160px;
   margin: 0 auto;
   padding-bottom: 28px;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--oa-ink);
+  background: var(--oa-soft);
 }
 
 .org-admin-center--profile-review .org-admin-hero {
   padding: 31px 36px;
   border: 0;
   border-radius: 0;
-  background: #1748a0;
+  background: var(--oa-blue);
 }
 
 .org-admin-center--profile-review .org-admin-hero :is(p, h1, h2, span) {
-  color: #fff;
+  color: var(--oa-white);
 }
 
 .org-admin-center--profile-review .org-admin-hero h1 {
@@ -4168,14 +4169,14 @@
 
 .org-admin-center--profile-review .org-admin-metrics {
   gap: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
 }
 
 .org-admin-center--profile-review .org-admin-metrics article {
   border: 0;
-  border-right: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -4184,7 +4185,7 @@
 }
 
 .org-admin-center--profile-review .org-admin-metrics b {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center--profile-review .org-admin-grid {
@@ -4193,20 +4194,20 @@
 }
 
 .org-admin-center--profile-review .org-admin-card {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--profile-review .org-admin-profile {
-  border-top: 5px solid #1748a0;
+  border-top: 5px solid var(--oa-blue);
 }
 
 .org-admin-center--profile-review .org-admin-profile i {
   border-radius: 999px;
-  color: #1748a0;
-  background: #edf4ff;
+  color: var(--oa-blue);
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--profile-review .org-admin-card form,
@@ -4216,33 +4217,33 @@
 
 .org-admin-center--profile-review .org-admin-card :is(input, select, textarea) {
   min-height: 44px;
-  border-color: #c7d4e4;
+  border-color: var(--oa-outline);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--oa-ink);
+  background: var(--oa-white);
 }
 
 .org-admin-center--profile-review .org-admin-card :is(input, select, textarea):focus-visible,
 .org-admin-center--profile-review :is(button, a, summary):focus-visible {
-  border-color: #1748a0;
-  outline: 3px solid #a9c5f5;
+  border-color: var(--oa-blue);
+  outline: 3px solid var(--oa-focus-soft);
   outline-offset: 2px;
 }
 
 .org-admin-center--profile-review .org-admin-profile dl > div {
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--profile-review :is(.org-admin-notice, .org-admin-state) {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--profile-review .org-admin-notice {
-  border-left: 4px solid #1748a0;
+  border-left: 4px solid var(--oa-blue);
 }
 
 @media (max-width: 760px) {
@@ -4277,19 +4278,19 @@
   max-width: 1160px;
   margin: 0 auto;
   padding-bottom: 28px;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--oa-ink);
+  background: var(--oa-soft);
 }
 
 .org-admin-center--role-review .org-admin-hero {
   padding: 31px 36px;
   border: 0;
   border-radius: 0;
-  background: #1748a0;
+  background: var(--oa-blue);
 }
 
 .org-admin-center--role-review .org-admin-hero :is(p, h1, h2, span) {
-  color: #fff;
+  color: var(--oa-white);
 }
 
 .org-admin-center--role-review .org-admin-hero h1 {
@@ -4301,14 +4302,14 @@
 
 .org-admin-center--role-review .org-role-summary {
   gap: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
 }
 
 .org-admin-center--role-review .org-role-summary article {
   border: 0;
-  border-right: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -4317,24 +4318,24 @@
 }
 
 .org-admin-center--role-review .org-role-summary b {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center--role-review .org-role-tabs {
   gap: 0;
   padding: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--role-review .org-role-tabs button {
   flex: 1;
   border: 0;
-  border-right: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
   border-radius: 0;
-  color: #61738b;
-  background: #fff;
+  color: var(--oa-muted);
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -4343,15 +4344,15 @@
 }
 
 .org-admin-center--role-review .org-role-tabs button[aria-pressed="true"] {
-  color: #1748a0;
-  background: #edf4ff;
+  color: var(--oa-blue);
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--role-review :is(.org-role-toolbar, .org-grant-toolbar) {
   padding: 14px 16px;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--role-review :is(.org-role-browser, .org-grant-browser) {
@@ -4360,19 +4361,19 @@
 }
 
 .org-admin-center--role-review :is(.org-role-list, .org-grant-list) {
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--role-review :is(.org-role-list, .org-grant-list) > button {
   width: 100%;
   min-height: 82px;
   border: 0;
-  border-bottom: 1px solid #d6e0ec;
+  border-bottom: 1px solid var(--oa-section);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--oa-ink);
+  background: var(--oa-white);
   text-align: left;
   box-shadow: none;
 }
@@ -4382,95 +4383,95 @@
 }
 
 .org-admin-center--role-review :is(.org-role-list, .org-grant-list) > button.selected {
-  border-left: 5px solid #1748a0;
-  color: #182d4a;
-  background: #edf4ff;
+  border-left: 5px solid var(--oa-blue);
+  color: var(--oa-ink);
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--role-review :is(.org-admin-card, .org-admin-role-matrix) {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--role-review :is(.org-role-detail, .org-grant-detail) {
-  border-top: 5px solid #1748a0;
+  border-top: 5px solid var(--oa-blue);
 }
 
 .org-admin-center--role-review .org-admin-card :is(input, select, textarea) {
   min-height: 42px;
-  border-color: #c7d4e4;
+  border-color: var(--oa-outline);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--oa-ink);
+  background: var(--oa-white);
 }
 
 .org-admin-center--role-review .org-admin-card :is(input, select, textarea):focus-visible,
 .org-admin-center--role-review :is(button, a, summary):focus-visible {
-  border-color: #1748a0;
-  outline: 3px solid #a9c5f5;
+  border-color: var(--oa-blue);
+  outline: 3px solid var(--oa-focus-soft);
   outline-offset: 2px;
 }
 
 .org-admin-center--role-review .org-admin-chips span {
   border-radius: 999px;
-  color: #1748a0;
-  background: #edf4ff;
+  color: var(--oa-blue);
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--role-review .org-role-matrix-filters {
   gap: 12px;
   padding: 14px;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--role-review .org-role-matrix-scroll {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
 }
 
 .org-admin-center--role-review .org-role-matrix-scroll [role="row"] {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
 }
 
 .org-admin-center--role-review .org-role-matrix-scroll [role="row"]:nth-child(2n) {
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--role-review .org-admin-matrix-head {
-  color: #fff;
-  background: #1748a0;
+  color: var(--oa-white);
+  background: var(--oa-blue);
 }
 
 .org-admin-center--role-review .org-grant-intro {
-  border-left: 5px solid #1748a0;
+  border-left: 5px solid var(--oa-blue);
   border-radius: 0;
 }
 
 .org-admin-center--role-review .org-grant-toolbar button[aria-pressed="true"] {
-  color: #1748a0;
-  background: #edf4ff;
+  color: var(--oa-blue);
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--role-review .org-grant-detail dl > div {
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--role-review .org-admin-center button:disabled,
 .org-admin-center--role-review button:disabled {
-  border-color: #c7d0dc;
-  color: #7a8999;
-  background: #e8edf3;
+  border-color: var(--oa-secondary);
+  color: var(--oa-disabled-ink);
+  background: var(--oa-disabled-bg);
 }
 
 .org-admin-center--role-review .org-admin-actions button.danger {
-  border-color: #b42318;
-  color: #fff;
-  background: #b42318;
+  border-color: var(--oa-danger);
+  color: var(--oa-white);
+  background: var(--oa-danger);
 }
 
 @media (max-width: 760px) {
@@ -4497,7 +4498,7 @@
 
   .org-admin-center--role-review .org-role-tabs button {
     border-right: 0;
-    border-bottom: 1px solid #d6e0ec;
+    border-bottom: 1px solid var(--oa-section);
     text-align: left;
   }
 
@@ -4523,19 +4524,19 @@
   max-width: 1160px;
   margin: 0 auto;
   padding-bottom: 28px;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--oa-ink);
+  background: var(--oa-soft);
 }
 
 .org-admin-center--member-review .org-admin-hero {
   padding: 31px 36px;
   border: 0;
   border-radius: 0;
-  background: #1748a0;
+  background: var(--oa-blue);
 }
 
 .org-admin-center--member-review .org-admin-hero :is(p, h1, h2, span) {
-  color: #fff;
+  color: var(--oa-white);
 }
 
 .org-admin-center--member-review .org-admin-hero h1 {
@@ -4547,14 +4548,14 @@
 
 .org-admin-center--member-review .org-admin-metrics {
   gap: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
 }
 
 .org-admin-center--member-review .org-admin-metrics article {
   border: 0;
-  border-right: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -4563,7 +4564,7 @@
 }
 
 .org-admin-center--member-review .org-admin-metrics b {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center--member-review .org-admin-grid {
@@ -4572,22 +4573,22 @@
 }
 
 .org-admin-center--member-review .org-admin-card {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--member-review .org-admin-invite-form {
-  border-top: 5px solid #1748a0;
+  border-top: 5px solid var(--oa-blue);
 }
 
 .org-admin-center--member-review .org-admin-card :is(input, select, textarea) {
   min-height: 44px;
-  border-color: #c7d4e4;
+  border-color: var(--oa-outline);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--oa-ink);
+  background: var(--oa-white);
 }
 
 .org-admin-center--member-review .org-admin-card textarea {
@@ -4596,42 +4597,42 @@
 
 .org-admin-center--member-review .org-admin-card :is(input, select, textarea):focus-visible,
 .org-admin-center--member-review :is(button, a, summary):focus-visible {
-  border-color: #1748a0;
-  outline: 3px solid #a9c5f5;
+  border-color: var(--oa-blue);
+  outline: 3px solid var(--oa-focus-soft);
   outline-offset: 2px;
 }
 
 .org-admin-center--member-review .org-admin-section-header {
-  border-bottom: 1px solid #d6e0ec;
+  border-bottom: 1px solid var(--oa-section);
 }
 
 .org-admin-center--member-review .org-admin-section-header nav button {
   min-height: 36px;
   padding: 5px 10px;
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  color: #1748a0;
-  background: #fff;
+  color: var(--oa-blue);
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--member-review .org-admin-section-header nav button[aria-pressed="true"] {
-  border-color: #1748a0;
-  background: #edf4ff;
+  border-color: var(--oa-blue);
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--member-review .org-admin-line {
   gap: 16px;
   padding: 17px 0;
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
 }
 
 .org-admin-center--member-review .org-admin-line > div:first-child > b {
-  color: #182d4a;
+  color: var(--oa-ink);
 }
 
 .org-admin-center--member-review .org-admin-line small {
-  color: #61738b;
+  color: var(--oa-muted);
 }
 
 .org-admin-center--member-review .org-admin-actions {
@@ -4640,21 +4641,21 @@
 
 .org-admin-center--member-review .org-admin-actions i {
   border-radius: 999px;
-  color: #1748a0;
-  background: #edf4ff;
+  color: var(--oa-blue);
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--member-review .org-admin-filters {
   grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
   gap: 12px;
   padding: 15px;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--member-review .org-admin-filters label {
-  color: #61738b;
+  color: var(--oa-muted);
   font-weight: 700;
 }
 
@@ -4668,8 +4669,8 @@
   display: grid;
   gap: 2px;
   padding: 11px 12px;
-  border-left: 4px solid #1748a0;
-  background: #edf4ff;
+  border-left: 4px solid var(--oa-blue);
+  background: var(--oa-highlight);
 }
 
 @media (max-width: 760px) {
@@ -4717,19 +4718,19 @@
   max-width: 1160px;
   margin: 0 auto;
   padding-bottom: 28px;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--oa-ink);
+  background: var(--oa-soft);
 }
 
 .org-admin-center--workspace-review .org-admin-hero {
   padding: 31px 36px;
   border: 0;
   border-radius: 0;
-  background: #1748a0;
+  background: var(--oa-blue);
 }
 
 .org-admin-center--workspace-review .org-admin-hero :is(p, h1, h2, span) {
-  color: #fff;
+  color: var(--oa-white);
 }
 
 .org-admin-center--workspace-review .org-admin-hero h1 {
@@ -4748,10 +4749,10 @@
   min-height: 144px;
   padding: 27px 30px;
   border: 0;
-  border-left: 5px solid #1748a0;
+  border-left: 5px solid var(--oa-blue);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--oa-ink);
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -4760,7 +4761,7 @@
 }
 
 .org-admin-center--workspace-review .org-workspace-overview :is(p, h3, span) {
-  color: #182d4a;
+  color: var(--oa-ink);
 }
 
 .org-admin-center--workspace-review .org-workspace-overview p,
@@ -4771,62 +4772,62 @@
 }
 
 .org-admin-center--workspace-review .org-workspace-overview > button {
-  border: 1px solid #1748a0;
+  border: 1px solid var(--oa-blue);
   border-radius: 0;
-  color: #fff;
-  background: #1748a0;
+  color: var(--oa-white);
+  background: var(--oa-blue);
   box-shadow: none;
 }
 
 .org-admin-center--workspace-review .org-workspace-overview > button:hover {
-  color: #1748a0;
-  background: #eaf1ff;
+  color: var(--oa-blue);
+  background: var(--oa-blue-soft);
 }
 
 .org-admin-center--workspace-review .org-workspace-metrics {
   gap: 0;
-  border: 1px solid #d6e0ec;
-  background: #fff;
+  border: 1px solid var(--oa-section);
+  background: var(--oa-white);
 }
 
 .org-admin-center--workspace-review .org-workspace-metrics article {
   min-height: 112px;
   padding: 18px;
   border: 0;
-  border-right: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--workspace-review .org-workspace-metrics article:last-child {
   border-right: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--workspace-review .org-workspace-metrics span,
 .org-admin-center--workspace-review .org-workspace-metrics small {
-  color: #61738b;
+  color: var(--oa-muted);
 }
 
 .org-admin-center--workspace-review .org-workspace-metrics b {
   margin: 9px 0 5px;
-  color: #1748a0;
+  color: var(--oa-blue);
   font-size: 27px;
 }
 
 .org-admin-center--workspace-review .org-workspace-create,
 .org-admin-center--workspace-review .org-workspace-directory,
 .org-admin-center--workspace-review .org-workspace-detail {
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--workspace-review .org-workspace-create,
 .org-admin-center--workspace-review .org-workspace-directory,
 .org-admin-center--workspace-review .org-workspace-detail {
-  border-top: 5px solid #1748a0;
+  border-top: 5px solid var(--oa-blue);
 }
 
 .org-admin-center--workspace-review .org-workspace-create {
@@ -4842,36 +4843,36 @@
 .org-admin-center--workspace-review .org-workspace-detail dt,
 .org-admin-center--workspace-review .org-workspace-detail .org-admin-technical,
 .org-admin-center--workspace-review .org-workspace-detail .org-admin-technical code {
-  color: #61738b;
+  color: var(--oa-muted);
 }
 
 .org-admin-center--workspace-review .org-workspace-create input,
 .org-admin-center--workspace-review .org-workspace-create textarea,
 .org-admin-center--workspace-review .org-workspace-toolbar input,
 .org-admin-center--workspace-review .org-workspace-toolbar select {
-  border-color: #c7d4e4;
+  border-color: var(--oa-outline);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--oa-ink);
+  background: var(--oa-white);
 }
 
 .org-admin-center--workspace-review .org-workspace-create :is(input, textarea):focus-visible,
 .org-admin-center--workspace-review .org-workspace-toolbar :is(input, select):focus-visible,
 .org-admin-center--workspace-review :is(button, a, summary):focus-visible {
-  border-color: #1748a0;
-  outline: 3px solid #a9c5f5;
+  border-color: var(--oa-blue);
+  outline: 3px solid var(--oa-focus-soft);
   outline-offset: 2px;
 }
 
 .org-admin-center--workspace-review .org-workspace-create > footer {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
 }
 
 .org-admin-center--workspace-review .org-workspace-create > footer button,
 .org-admin-center--workspace-review .org-workspace-actions button:not(.org-admin-secondary) {
   border-radius: 0;
-  color: #fff;
-  background: #1748a0;
+  color: var(--oa-white);
+  background: var(--oa-blue);
   box-shadow: none;
 }
 
@@ -4881,39 +4882,39 @@
 
 .org-admin-center--workspace-review .org-workspace-section-heading {
   padding-bottom: 15px;
-  border-bottom: 1px solid #d6e0ec;
+  border-bottom: 1px solid var(--oa-section);
 }
 
 .org-admin-center--workspace-review .org-workspace-section-heading > span {
   border-radius: 0;
-  color: #1748a0;
-  background: #eaf1ff;
+  color: var(--oa-blue);
+  background: var(--oa-blue-soft);
 }
 
 .org-admin-center--workspace-review .org-workspace-status-tabs {
   margin: 15px 0 11px;
   padding: 14px;
-  border: 1px solid #d6e0ec;
-  background: #f7faff;
+  border: 1px solid var(--oa-section);
+  background: var(--oa-pale);
 }
 
 .org-admin-center--workspace-review .org-workspace-status-tabs button {
   border: 0;
   border-radius: 0;
-  color: #61738b;
-  background: #fff;
+  color: var(--oa-muted);
+  background: var(--oa-white);
 }
 
 .org-admin-center--workspace-review .org-workspace-status-tabs button[aria-pressed="true"] {
-  color: #1748a0;
-  background: #edf4ff;
+  color: var(--oa-blue);
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--workspace-review .org-workspace-toolbar {
   padding: 13px;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--workspace-review .org-workspace-toolbar > button,
@@ -4925,25 +4926,25 @@
 .org-admin-center--workspace-review .org-workspace-list > button {
   min-height: 78px;
   padding: 13px;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--workspace-review .org-workspace-list > button:hover,
 .org-admin-center--workspace-review .org-workspace-list > button.is-selected {
-  border-color: #83a9e7;
-  background: #eef4ff;
+  border-color: var(--oa-blue-mid);
+  background: var(--oa-blue-pale);
 }
 
 .org-admin-center--workspace-review .org-workspace-list > button.is-selected {
-  box-shadow: inset 4px 0 #1748a0;
+  box-shadow: inset 4px 0 var(--oa-blue);
 }
 
 .org-admin-center--workspace-review .org-workspace-mark {
   border-radius: 0;
-  color: #1748a0;
-  background: #eaf1ff;
+  color: var(--oa-blue);
+  background: var(--oa-blue-soft);
 }
 
 .org-admin-center--workspace-review .org-workspace-list em,
@@ -4960,19 +4961,19 @@
 .org-admin-center--workspace-review .org-workspace-impact {
   border-radius: 0;
   border-left-width: 4px;
-  background: #edf4ff;
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--workspace-review .org-workspace-detail dl div {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--workspace-review .org-workspace-actions a {
   border-radius: 0;
-  color: #1748a0;
-  background: #f7faff;
+  color: var(--oa-blue);
+  background: var(--oa-pale);
 }
 
 @media (max-width: 620px) {
@@ -5116,19 +5117,19 @@
   max-width: 1160px;
   margin: 0 auto;
   padding-bottom: 28px;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--oa-ink);
+  background: var(--oa-soft);
 }
 
 .org-admin-center--team-review .org-admin-hero {
   padding: 31px 36px;
   border: 0;
   border-radius: 0;
-  background: #1748a0;
+  background: var(--oa-blue);
 }
 
 .org-admin-center--team-review .org-admin-hero :is(p, h1, h2, span) {
-  color: #fff;
+  color: var(--oa-white);
 }
 
 .org-admin-center--team-review .org-admin-hero h1 {
@@ -5146,9 +5147,9 @@
   min-height: 144px;
   padding: 27px 30px;
   border: 0;
-  border-left: 5px solid #1748a0;
+  border-left: 5px solid var(--oa-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -5158,7 +5159,7 @@
 }
 
 .org-admin-center--team-review .org-team-overview :is(p, h3, span) {
-  color: #182d4a;
+  color: var(--oa-ink);
 }
 
 .org-admin-center--team-review .org-team-overview p,
@@ -5172,32 +5173,32 @@
 .org-admin-center--team-review .org-team-overview > button,
 .org-admin-center--team-review .org-team-create > footer button,
 .org-admin-center--team-review .org-team-empty > button {
-  border: 1px solid #1748a0;
+  border: 1px solid var(--oa-blue);
   border-radius: 0;
-  color: #fff;
-  background: #1748a0;
+  color: var(--oa-white);
+  background: var(--oa-blue);
   box-shadow: none;
 }
 
 .org-admin-center--team-review .org-team-overview > button:hover,
 .org-admin-center--team-review .org-team-create > footer button:hover,
 .org-admin-center--team-review .org-team-empty > button:hover {
-  color: #1748a0;
-  background: #eaf1ff;
+  color: var(--oa-blue);
+  background: var(--oa-blue-soft);
 }
 
 .org-admin-center--team-review .org-team-metrics {
   gap: 0;
-  border: 1px solid #d6e0ec;
-  background: #fff;
+  border: 1px solid var(--oa-section);
+  background: var(--oa-white);
 }
 
 .org-admin-center--team-review .org-team-metrics article {
   min-height: 108px;
   border: 0;
-  border-right: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -5207,30 +5208,30 @@
 
 .org-admin-center--team-review .org-team-metrics b,
 .org-admin-center--team-review .org-team-list b {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center--team-review .org-team-create,
 .org-admin-center--team-review .org-team-directory,
 .org-admin-center--team-review .org-team-detail {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center--team-review .org-team-create {
-  border-top: 5px solid #1748a0;
+  border-top: 5px solid var(--oa-blue);
 }
 
 .org-admin-center--team-review .org-team-create :is(input, select, textarea),
 .org-admin-center--team-review .org-team-toolbar :is(input, select),
 .org-admin-center--team-review .org-team-membership select {
   min-height: 44px;
-  border-color: #c7d4e4;
+  border-color: var(--oa-outline);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--oa-ink);
+  background: var(--oa-white);
 }
 
 .org-admin-center--team-review .org-team-create textarea {
@@ -5251,18 +5252,18 @@
   gap: 0;
   margin: 17px 0 12px;
   padding: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--team-review .org-team-status-tabs button {
   min-height: 42px;
   border: 0;
-  border-right: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
   border-radius: 0;
-  color: #61738b;
-  background: #fff;
+  color: var(--oa-muted);
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -5271,38 +5272,38 @@
 }
 
 .org-admin-center--team-review .org-team-status-tabs button[aria-pressed="true"] {
-  color: #1748a0;
-  background: #edf4ff;
-  box-shadow: inset 0 -3px #1748a0;
+  color: var(--oa-blue);
+  background: var(--oa-highlight);
+  box-shadow: inset 0 -3px var(--oa-blue);
 }
 
 .org-admin-center--team-review .org-team-toolbar {
   padding: 14px;
-  border: 1px solid #d6e0ec;
-  background: #f7faff;
+  border: 1px solid var(--oa-section);
+  background: var(--oa-pale);
 }
 
 .org-admin-center--team-review .org-team-toolbar button,
 .org-admin-center--team-review .org-team-member-actions button.org-admin-secondary,
 .org-admin-center--team-review .org-team-create > header button {
-  border-color: #c7d4e4;
+  border-color: var(--oa-outline);
   border-radius: 0;
-  color: #1748a0;
-  background: #fff;
+  color: var(--oa-blue);
+  background: var(--oa-white);
 }
 
 .org-admin-center--team-review .org-team-list {
   gap: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
 }
 
 .org-admin-center--team-review .org-team-list > button {
   min-height: 84px;
   padding: 13px 14px;
   border: 0;
-  border-bottom: 1px solid #d6e0ec;
+  border-bottom: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center--team-review .org-team-list > button:last-child {
@@ -5311,48 +5312,48 @@
 
 .org-admin-center--team-review .org-team-list > button:hover,
 .org-admin-center--team-review .org-team-list > button.is-selected {
-  border-color: #d6e0ec;
-  border-left: 5px solid #1748a0;
-  background: #edf4ff;
+  border-color: var(--oa-section);
+  border-left: 5px solid var(--oa-blue);
+  background: var(--oa-highlight);
   transform: none;
 }
 
 .org-admin-center--team-review .org-team-mark {
   border-radius: 0;
-  border-color: #b9cceb;
-  color: #1748a0;
-  background: #f7faff;
+  border-color: var(--oa-blue-light);
+  color: var(--oa-blue);
+  background: var(--oa-pale);
 }
 
 .org-admin-center--team-review .org-team-list em,
 .org-admin-center--team-review .org-team-section-heading > span,
 .org-admin-center--team-review .org-team-membership header > span {
   border-radius: 0;
-  color: #1748a0;
-  border-color: #b9cceb;
-  background: #f7faff;
+  color: var(--oa-blue);
+  border-color: var(--oa-blue-light);
+  background: var(--oa-pale);
 }
 
 .org-admin-center--team-review .org-team-detail {
-  border-top: 5px solid #1748a0;
+  border-top: 5px solid var(--oa-blue);
 }
 
 .org-admin-center--team-review .org-team-detail dl > div {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--team-review .org-team-membership {
-  border-color: #b9cceb;
+  border-color: var(--oa-blue-light);
   border-radius: 0;
-  background: #edf4ff;
+  background: var(--oa-highlight);
 }
 
 .org-admin-center--team-review .org-team-boundary-note {
   border-radius: 0;
   border-left-width: 5px;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center--team-review .org-team-links a,
@@ -5362,8 +5363,8 @@
 }
 
 .org-admin-center--team-review :is(button, input, select, textarea, a, summary):focus-visible {
-  border-color: #1748a0;
-  outline: 3px solid #a9c5f5;
+  border-color: var(--oa-blue);
+  outline: 3px solid var(--oa-focus-soft);
   outline-offset: 2px;
 }
 
@@ -5413,7 +5414,7 @@
 
   .org-admin-center--team-review .org-team-status-tabs button {
     border-right: 0;
-    border-bottom: 1px solid #d6e0ec;
+    border-bottom: 1px solid var(--oa-section);
     text-align: left;
   }
 
@@ -5459,19 +5460,19 @@
   max-width: 1160px;
   margin: 0 auto;
   padding-bottom: 28px;
-  color: #182d4a;
-  background: #f3f6fb;
+  color: var(--oa-ink);
+  background: var(--oa-soft);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-admin-hero {
   padding: 31px 36px;
   border: 0;
   border-radius: 0;
-  background: #1748a0;
+  background: var(--oa-blue);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-admin-hero :is(p, h1, h2, span) {
-  color: #fff;
+  color: var(--oa-white);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-admin-hero :is(h1, h2) {
@@ -5490,9 +5491,9 @@
   min-height: 144px;
   padding: 27px 30px;
   border: 0;
-  border-left: 5px solid #1748a0;
+  border-left: 5px solid var(--oa-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -5501,7 +5502,7 @@
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-overview :is(p, h3, span) {
-  color: #182d4a;
+  color: var(--oa-ink);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-overview p,
@@ -5511,24 +5512,24 @@
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-overview aside {
-  border-left: 4px solid #1748a0;
+  border-left: 4px solid var(--oa-blue);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-metrics {
   gap: 0;
-  border: 1px solid #d6e0ec;
-  background: #fff;
+  border: 1px solid var(--oa-section);
+  background: var(--oa-white);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-metrics article {
   min-height: 108px;
   border: 0;
-  border-right: 1px solid #d6e0ec;
-  border-top: 4px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
+  border-top: 4px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -5537,26 +5538,26 @@
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-metrics b {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-section-tabs {
   gap: 0;
   width: 100%;
   padding: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-section-tabs button {
   flex: 1;
   min-height: 44px;
   border: 0;
-  border-right: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
   border-radius: 0;
-  color: #61738b;
-  background: #fff;
+  color: var(--oa-muted);
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -5567,61 +5568,61 @@
 .org-admin-center:has(.org-approval-governance)
   .org-approval-section-tabs
   button[aria-pressed="true"] {
-  color: #1748a0;
-  background: #edf4ff;
-  box-shadow: inset 0 -3px #1748a0;
+  color: var(--oa-blue);
+  background: var(--oa-highlight);
+  box-shadow: inset 0 -3px var(--oa-blue);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-section-tabs span {
   border-radius: 0;
-  color: #1748a0;
-  background: #dfeaff;
+  color: var(--oa-blue);
+  background: var(--oa-blue-wash);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-section {
   padding: 22px;
-  border: 1px solid #d6e0ec;
-  border-top: 5px solid #1748a0;
+  border: 1px solid var(--oa-section);
+  border-top: 5px solid var(--oa-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-section-heading > span {
-  color: #61738b;
+  color: var(--oa-muted);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-toolbar {
   padding: 14px;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-toolbar :is(input, select, button) {
   min-height: 42px;
-  border-color: #c7d4e4;
+  border-color: var(--oa-outline);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--oa-ink);
+  background: var(--oa-white);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-toolbar > button {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-request-list {
   gap: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-request-list > article {
   padding: 16px;
   border: 0;
-  border-right: 1px solid #d6e0ec;
-  border-bottom: 1px solid #d6e0ec;
+  border-right: 1px solid var(--oa-section);
+  border-bottom: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-request-list > article:nth-child(2n) {
@@ -5637,9 +5638,9 @@
 .org-admin-center:has(.org-approval-governance) .org-approval-request-list dl > div,
 .org-admin-center:has(.org-approval-governance) .org-approval-template-detail > dl > div {
   border-left: 0;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-template-summary {
@@ -5648,13 +5649,13 @@
 
 .org-admin-center:has(.org-approval-governance) .org-approval-template-summary span {
   border-radius: 0;
-  border-color: #d6e0ec;
-  color: #61738b;
-  background: #f7faff;
+  border-color: var(--oa-section);
+  color: var(--oa-muted);
+  background: var(--oa-pale);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-template-summary b {
-  color: #1748a0;
+  color: var(--oa-blue);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-template-browser {
@@ -5665,9 +5666,9 @@
 .org-admin-center:has(.org-approval-governance)
   :is(.org-approval-template-directory, .org-approval-template-detail) {
   padding: 14px;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
   box-shadow: none;
 }
 
@@ -5680,60 +5681,60 @@
   min-height: 84px;
   padding: 13px 14px;
   border: 0;
-  border-bottom: 1px solid #d6e0ec;
+  border-bottom: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center:has(.org-approval-governance)
   .org-approval-template-directory
   > button.is-selected {
-  border-left: 5px solid #1748a0;
-  background: #edf4ff;
+  border-left: 5px solid var(--oa-blue);
+  background: var(--oa-highlight);
   box-shadow: none;
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-template-detail {
-  border-top: 5px solid #1748a0;
+  border-top: 5px solid var(--oa-blue);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-version-diff {
-  border-color: #d6e0ec;
+  border-color: var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-version-diff > article {
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-empty {
   min-height: 220px;
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #f7faff;
+  background: var(--oa-pale);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-empty > span {
-  color: #b9cceb;
+  color: var(--oa-blue-light);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-pagination {
   padding-top: 14px;
-  border-top: 1px solid #d6e0ec;
+  border-top: 1px solid var(--oa-section);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-links {
-  border: 1px solid #d6e0ec;
+  border: 1px solid var(--oa-section);
   border-radius: 0;
-  background: #fff;
+  background: var(--oa-white);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-approval-links a {
   border-radius: 0;
-  color: #1748a0;
-  background: #f7faff;
+  color: var(--oa-blue);
+  background: var(--oa-pale);
 }
 
 .org-admin-center:has(.org-approval-governance) .org-admin-notice,
@@ -5743,8 +5744,8 @@
 
 .org-admin-center:has(.org-approval-governance)
   :is(button, input, select, textarea, a, summary):focus-visible {
-  border-color: #1748a0;
-  outline: 3px solid #a9c5f5;
+  border-color: var(--oa-blue);
+  outline: 3px solid var(--oa-focus-soft);
   outline-offset: 2px;
 }
 
@@ -5782,7 +5783,7 @@
 
   .org-admin-center:has(.org-approval-governance) .org-approval-section-tabs button {
     border-right: 0;
-    border-bottom: 1px solid #d6e0ec;
+    border-bottom: 1px solid var(--oa-section);
     text-align: left;
   }
 
@@ -5817,7 +5818,7 @@
     .org-approval-request-list
     > article:nth-child(2n) {
     border-right: 0;
-    border-bottom: 1px solid #d6e0ec;
+    border-bottom: 1px solid var(--oa-section);
   }
 
   .org-admin-center:has(.org-approval-governance) .org-approval-request-list > article:last-child {

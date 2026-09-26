@@ -1,6 +1,8 @@
+@import "./design/runtime-topology-tokens.css";
+
 html body:has(#app .topology-center--c) {
-  background: #f3f6fb;
-  color: #172d4c;
+  background: var(--topology-canvas);
+  color: var(--topology-ink);
   font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
 }
 html body:has(#app .topology-center--c) #app .role-shell {
@@ -9,8 +11,8 @@ html body:has(#app .topology-center--c) #app .role-shell {
   grid-template-rows: 76px minmax(0, 1fr);
   min-height: 100dvh;
   padding: 0;
-  background: #f3f6fb;
-  color: #172d4c;
+  background: var(--topology-canvas);
+  color: var(--topology-ink);
   font-family: inherit;
 }
 html body:has(#app .topology-center--c) #app .role-topbar {
@@ -21,18 +23,18 @@ html body:has(#app .topology-center--c) #app .role-topbar {
   min-height: 0;
   padding: 0 24px;
   border: 0;
-  border-bottom: 1px solid #d8e2ef;
-  background: #fff;
+  border-bottom: 1px solid var(--topology-border);
+  background: var(--topology-white);
 }
 html body:has(#app .topology-center--c) #app .role-brand {
   gap: 12px;
-  color: #172d4c;
+  color: var(--topology-ink);
 }
 html body:has(#app .topology-center--c) #app .role-brand > span {
   border: 0;
   border-radius: 8px;
-  background: #244bb0;
-  color: #fff;
+  background: var(--topology-blue);
+  color: var(--topology-white);
 }
 html body:has(#app .topology-center--c) #app .role-brand > b {
   font-family: inherit;
@@ -40,17 +42,17 @@ html body:has(#app .topology-center--c) #app .role-brand > b {
   letter-spacing: 0.06em;
 }
 html body:has(#app .topology-center--c) #app .role-brand > em {
-  color: #536985;
+  color: var(--topology-muted);
   font-size: 13px;
   letter-spacing: 0;
 }
 html body:has(#app .topology-center--c) #app .role-top-actions :is(a, button) {
   min-height: 44px;
   min-width: 44px;
-  border: 1px solid #d8e2ef;
+  border: 1px solid var(--topology-border);
   border-radius: 7px;
-  background: #fff;
-  color: #172d4c;
+  background: var(--topology-white);
+  color: var(--topology-ink);
 }
 html body:has(#app .topology-center--c) #app .role-sidebar {
   grid-column: 1;
@@ -66,8 +68,8 @@ html body:has(#app .topology-center--c) #app .role-sidebar {
   overflow-y: auto;
   border: 0;
   border-radius: 0;
-  background: #244bb0;
-  color: #fff;
+  background: var(--topology-blue);
+  color: var(--topology-white);
   transform: none;
   transition: none;
 }
@@ -78,13 +80,13 @@ html body:has(#app .topology-center--c) #app .role-sidebar-head {
   border: 0;
 }
 html body:has(#app .topology-center--c) #app .role-sidebar-head strong {
-  color: #fff;
+  color: var(--topology-white);
   font:
     700 18px/1.5 "Microsoft YaHei",
     sans-serif;
 }
 html body:has(#app .topology-center--c) #app .role-sidebar-head small {
-  color: #e2ebff;
+  color: var(--topology-pale-blue);
   font:
     13px/1.7 "Microsoft YaHei",
     sans-serif;
@@ -96,18 +98,18 @@ html body:has(#app .topology-center--c) #app .role-menu-search {
   min-height: 44px;
   margin-bottom: 16px;
   padding: 0 10px;
-  border: 1px solid #91afea;
+  border: 1px solid var(--topology-border-blue);
   border-radius: 7px;
-  background: #fff;
-  color: #172d4c;
+  background: var(--topology-white);
+  color: var(--topology-ink);
 }
 html body:has(#app .topology-center--c) #app .role-menu-search input {
   width: 100%;
   min-width: 0;
   min-height: 44px;
   border: 0;
-  background: #fff;
-  color: #172d4c;
+  background: var(--topology-white);
+  color: var(--topology-ink);
   font:
     16px/1.5 "Microsoft YaHei",
     sans-serif;
@@ -129,13 +131,13 @@ html body:has(#app .topology-center--c) #app .role-nav-groups details > summary 
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: #fff;
+  color: var(--topology-white);
   font-size: 14px;
   letter-spacing: 0;
 }
 html body:has(#app .topology-center--c) #app .role-nav-groups summary:hover,
 html body:has(#app .topology-center--c) #app .role-nav-menu a:hover {
-  background: #365fc6;
+  background: var(--topology-blue-soft);
 }
 html body:has(#app .topology-center--c) #app .role-nav-menu {
   position: static;
@@ -153,12 +155,12 @@ html body:has(#app .topology-center--c) #app .role-nav-menu a {
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: #eef3ff;
+  color: var(--topology-pale);
   font-size: 14px;
 }
 html body:has(#app .topology-center--c) #app .role-nav-menu a[aria-current="page"] {
-  background: #fff;
-  color: #244bb0;
+  background: var(--topology-white);
+  color: var(--topology-blue);
   font-weight: 700;
 }
 html body:has(#app .topology-center--c) #app .role-sidebar-utility {
@@ -171,10 +173,10 @@ html body:has(#app .topology-center--c) #app .role-sidebar-utility a {
   min-height: 44px;
   padding: 10px 8px;
   border: 0;
-  border-top: 1px solid #7595db;
+  border-top: 1px solid var(--topology-blue-mid);
   border-radius: 0;
   background: transparent;
-  color: #fff;
+  color: var(--topology-white);
   font-size: 14px;
   white-space: normal;
 }
@@ -193,7 +195,7 @@ html body:has(#app .topology-center--c) #app .role-context-rail {
   margin: 0 0 24px;
   padding: 12px 0;
   border: 0;
-  border-block: 1px solid #d8e2ef;
+  border-block: 1px solid var(--topology-border);
   border-radius: 0;
   background: transparent;
 }
@@ -202,14 +204,14 @@ html body:has(#app .topology-center--c) #app .role-context-rail > div {
   border: 0;
 }
 html body:has(#app .topology-center--c) #app .role-context-rail small {
-  color: #536985;
+  color: var(--topology-muted);
   font:
     13px/1.5 "Microsoft YaHei",
     sans-serif;
 }
 html body:has(#app .topology-center--c) #app .role-context-rail strong {
   margin-top: 3px;
-  color: #172d4c;
+  color: var(--topology-ink);
   font-size: 14px;
 }
 html body:has(#app .topology-center--c) #app .role-context-drawer,
@@ -218,28 +220,28 @@ html body:has(#app .topology-center--c) #app .role-mobile-nav {
 }
 html body:has(#app .topology-center--c) #app .platform-secondary-nav {
   gap: 0;
-  border: 1px solid #c7d3e4;
-  background: #fff;
+  border: 1px solid var(--topology-line);
+  background: var(--topology-white);
 }
 html body:has(#app .topology-center--c) #app .platform-secondary-nav a {
   min-height: 44px;
   border: 0;
   border-bottom: 3px solid transparent;
-  background: #fff;
-  color: #526278;
+  background: var(--topology-white);
+  color: var(--topology-muted-dark);
   box-shadow: none;
 }
 html body:has(#app .topology-center--c) #app .platform-secondary-nav a[aria-current="page"] {
-  border-bottom-color: #1249b8;
-  background: #edf3ff;
-  color: #1249b8;
+  border-bottom-color: var(--topology-primary);
+  background: var(--topology-blue-light);
+  color: var(--topology-primary);
 }
 html
   body:has(#app .topology-center--c)
   #app
   .role-shell
   :is(a, button, input, summary):focus-visible {
-  outline: 3px solid #4878e9;
+  outline: 3px solid var(--topology-focus);
   outline-offset: 3px;
 }
 @media (max-width: 1100px) and (min-width: 841px) {
@@ -283,9 +285,9 @@ html
   html body:has(#app .topology-center--c) #app .role-context-drawer {
     display: block;
     margin-bottom: 20px;
-    border: 1px solid #d8e2ef;
+    border: 1px solid var(--topology-border);
     border-radius: 7px;
-    background: #fff;
+    background: var(--topology-white);
   }
   html body:has(#app .topology-center--c) #app .role-context-drawer > div {
     grid-template-columns: 1fr 1fr;
@@ -303,7 +305,7 @@ html
     max-height: 100dvh;
     padding: 16px;
     overflow-y: auto;
-    box-shadow: 12px 0 32px rgb(12 29 54 / 24%);
+    box-shadow: 12px 0 32px var(--topology-shadow);
   }
   html body:has(#app .topology-center--c) #app .role-sidebar:not(.is-open) {
     display: none;
@@ -316,35 +318,35 @@ html
     grid-template-columns: repeat(5, minmax(0, 1fr));
     min-height: 72px;
     border: 0;
-    border-top: 1px solid #d8e2ef;
-    background: #fff;
+    border-top: 1px solid var(--topology-border);
+    background: var(--topology-white);
   }
   html body:has(#app .topology-center--c) #app .role-mobile-nav :is(a, button, i) {
-    color: #536985;
+    color: var(--topology-muted);
   }
   html body:has(#app .topology-center--c) #app .role-mobile-nav [aria-current="page"] {
-    background: #e8efff;
-    color: #244bb0;
+    background: var(--topology-blue-wash);
+    color: var(--topology-blue);
   }
 }
 
 html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
-  --so-primary: #1748a0;
-  --so-primary-strong: #1748a0;
-  --so-primary-border: #1748a0;
-  --so-on-primary: #fff;
-  --so-text: #182d4a;
-  --so-text-muted: #53647c;
-  --so-panel: #fff;
-  --so-panel-soft: #fff;
-  --so-bg-elevated: #fff;
-  --so-border: #dce4ee;
-  --topology-line: #dce4ee;
-  --topology-muted: #53647c;
-  --topology-cyan: #1748a0;
-  --topology-green: #1748a0;
-  --topology-amber: #875300;
-  --topology-red: #b02d3c;
+  --so-primary: var(--topology-blue-strong);
+  --so-primary-strong: var(--topology-blue-strong);
+  --so-primary-border: var(--topology-blue-strong);
+  --so-on-primary: var(--topology-white);
+  --so-text: var(--topology-ink-strong);
+  --so-text-muted: var(--topology-muted-soft);
+  --so-panel: var(--topology-white);
+  --so-panel-soft: var(--topology-white);
+  --so-bg-elevated: var(--topology-white);
+  --so-border: var(--topology-border-soft);
+  --topology-line: var(--topology-border-soft);
+  --topology-muted: var(--topology-muted-soft);
+  --topology-cyan: var(--topology-blue-strong);
+  --topology-green: var(--topology-blue-strong);
+  --topology-amber: var(--topology-warning);
+  --topology-red: var(--topology-danger);
   font:
     16px/1.65 "Microsoft YaHei",
     "Segoe UI",
@@ -362,7 +364,7 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   h3 {
     font-family: inherit;
     font-weight: 700;
-    color: #182d4a;
+    color: var(--topology-ink-strong);
   }
   h1 {
     font-size: 32px;
@@ -388,7 +390,7 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
       monospace;
     white-space: normal;
     overflow-wrap: anywhere;
-    color: #1748a0;
+    color: var(--topology-blue-strong);
   }
   small {
     font-size: 13px;
@@ -407,12 +409,12 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     flex: 1 1 400px;
   }
   .topology-hero p {
-    color: #1748a0;
+    color: var(--topology-blue-strong);
   }
   .p66-review-note {
     margin: 0;
     font-size: 13px;
-    color: #53647c;
+    color: var(--topology-muted-soft);
   }
   .p66-layout {
     display: grid;
@@ -421,13 +423,13 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     align-items: start;
   }
   .p66-directory {
-    background: #1748a0;
+    background: var(--topology-blue-strong);
     padding: 24px;
-    color: #fff;
+    color: var(--topology-white);
     min-width: 0;
   }
   .p66-directory :is(h2, h3, p, a, dt, dd) {
-    color: #fff;
+    color: var(--topology-white);
   }
   .p66-directory nav {
     display: grid;
@@ -436,14 +438,14 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   }
   .p66-directory a {
     padding: 12px 0;
-    border-bottom: 1px solid #7396d4;
+    border-bottom: 1px solid var(--topology-blue-muted);
     text-decoration: none;
   }
   .p66-directory a:hover {
     text-decoration: underline;
   }
   .p66-boundary {
-    border-top: 1px solid #7396d4;
+    border-top: 1px solid var(--topology-blue-muted);
     margin-top: 24px;
     padding-top: 20px;
   }
@@ -477,20 +479,20 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   .topology-state,
   .topology-refresh-notice {
     padding: 24px;
-    border: 1px solid #dce4ee;
+    border: 1px solid var(--topology-border-soft);
     border-radius: 0;
-    background: #fff;
+    background: var(--topology-white);
     min-width: 0;
   }
   .topology-verdict {
     display: block;
-    border-left: 4px solid #1748a0;
+    border-left: 4px solid var(--topology-blue-strong);
   }
   .topology-state {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 20px;
-    border-left: 4px solid #1748a0;
+    border-left: 4px solid var(--topology-blue-strong);
   }
   .topology-state > :is(button, a) {
     justify-self: start;
@@ -515,8 +517,8 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   }
   .topology-verdict em {
     display: inline-block;
-    background: #f3f6fa;
-    color: #53647c;
+    background: var(--topology-canvas-soft);
+    color: var(--topology-muted-soft);
     border: 0;
     border-radius: 0;
   }
@@ -526,7 +528,7 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     gap: 20px;
     margin: 0;
     padding: 20px 0;
-    border-block: 1px solid #dce4ee;
+    border-block: 1px solid var(--topology-border-soft);
   }
   .p66-summary dd {
     font-size: 28px;
@@ -534,14 +536,14 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     margin: 6px 0 0;
   }
   .p66-summary dt {
-    color: #53647c;
+    color: var(--topology-muted-soft);
     font-size: 14px;
   }
   .p66-section-note,
   .p66-relation-note {
     padding: 14px;
-    background: #eff4fc;
-    color: #365272;
+    background: var(--topology-panel);
+    color: var(--topology-muted-blue);
     font-size: 14px;
   }
   .topology-flow {
@@ -555,9 +557,9 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   }
   .topology-nodes article {
     border: 0;
-    border-left: 3px solid #1748a0;
+    border-left: 3px solid var(--topology-blue-strong);
     border-radius: 0;
-    background: #fff;
+    background: var(--topology-white);
     padding: 0 0 0 18px;
   }
   .topology-nodes dl {
@@ -580,8 +582,8 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   .topology-processes article {
     display: block;
     border: 0;
-    border-bottom: 1px solid #dce4ee;
-    background: #fff;
+    border-bottom: 1px solid var(--topology-border-soft);
+    background: var(--topology-white);
     border-radius: 0;
     padding: 16px 0;
   }
@@ -594,12 +596,12 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     overflow-wrap: anywhere;
   }
   .p66-restart-records {
-    border-top: 1px solid #dce4ee;
+    border-top: 1px solid var(--topology-border-soft);
     padding-top: 20px;
   }
   .p66-restart-records > p {
     font-size: 14px;
-    color: #53647c;
+    color: var(--topology-muted-soft);
   }
   .p66-restart-records ol {
     list-style: none;
@@ -608,7 +610,7 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   }
   .p66-restart-records li {
     padding: 16px 0;
-    border-bottom: 1px solid #dce4ee;
+    border-bottom: 1px solid var(--topology-border-soft);
   }
   .p66-restart-records li dl {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -625,9 +627,9 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   }
   .topology-health-grid article {
     border: 0;
-    border-top: 1px solid #dce4ee;
+    border-top: 1px solid var(--topology-border-soft);
     padding: 20px 0 0;
-    background: #fff;
+    background: var(--topology-white);
     border-radius: 0;
   }
   .topology-health-grid dl {
@@ -649,9 +651,9 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     gap: 0 20px;
   }
   .topology-scheduler-metrics > div {
-    background: #fff;
+    background: var(--topology-white);
     border: 0;
-    border-bottom: 1px solid #dce4ee;
+    border-bottom: 1px solid var(--topology-border-soft);
     border-radius: 0;
     padding: 14px 0;
   }
@@ -673,7 +675,7 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     text-align: left;
   }
   .topology-queue-list article > details {
-    border-top: 1px solid #e8edf4;
+    border-top: 1px solid var(--topology-disabled);
   }
   .p66-queue-code {
     display: block;
@@ -692,7 +694,7 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     padding: 16px;
   }
   .topology-blockers article > strong {
-    color: #182d4a;
+    color: var(--topology-ink-strong);
   }
   .topology-blockers article > span {
     margin-right: 12px;
@@ -701,9 +703,9 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     margin: 12px 0;
   }
   .topology-alert-associations > :is(a, b) {
-    background: #f3f6fa;
-    border: 1px solid #dce4ee;
-    color: #182d4a;
+    background: var(--topology-canvas-soft);
+    border: 1px solid var(--topology-border-soft);
+    color: var(--topology-ink-strong);
     border-radius: 3px;
     overflow-wrap: anywhere;
     min-width: 0;
@@ -711,19 +713,19 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   .topology-alert-associations > a {
     align-items: center;
     display: inline-flex;
-    background: #fff;
-    color: #1748a0;
+    background: var(--topology-white);
+    color: var(--topology-blue-strong);
     text-decoration: underline;
     text-underline-offset: 3px;
   }
   .topology-alert-associations > a:hover {
-    background: #eff4fc;
-    border-color: #1748a0;
+    background: var(--topology-panel);
+    border-color: var(--topology-blue-strong);
   }
   .topology-empty,
   .topology-clear,
   .topology-queue-empty {
-    background: #f3f6fa;
+    background: var(--topology-canvas-soft);
     border: 0;
     border-radius: 0;
     padding: 24px;
@@ -741,14 +743,14 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
     width: 100%;
   }
   .technical-details button {
-    background: #fff;
-    color: #1748a0;
-    border: 1px solid #dce4ee;
+    background: var(--topology-white);
+    color: var(--topology-blue-strong);
+    border: 1px solid var(--topology-border-soft);
     padding: 8px 12px;
     min-height: 44px;
   }
   .technical-details button:hover {
-    background: #eff4fc;
+    background: var(--topology-panel);
   }
   .technical-details summary {
     min-height: 44px;
@@ -773,26 +775,26 @@ html body:has(#app .topology-center--c) #app .role-shell .topology-center--c {
   summary {
     display: flex;
     align-items: center;
-    color: #1748a0;
+    color: var(--topology-blue-strong);
     cursor: pointer;
   }
   button:disabled,
   .topology-read-action[aria-disabled="true"] {
-    background: #edf0f5;
-    color: #66758a;
-    border-color: #dce4ee;
+    background: var(--topology-disabled-soft);
+    color: var(--topology-secondary-ink);
+    border-color: var(--topology-border-soft);
   }
   .topology-read-action[aria-disabled="true"] {
     opacity: 1;
   }
   :is(button, a, summary):focus-visible,
   [tabindex="-1"]:focus-visible {
-    outline: 3px solid #1748a0;
+    outline: 3px solid var(--topology-blue-strong);
     outline-offset: 3px;
-    box-shadow: 0 0 0 2px #fff;
+    box-shadow: 0 0 0 2px var(--topology-white);
   }
   .p66-directory a:focus-visible {
-    outline-color: #fff;
+    outline-color: var(--topology-white);
     box-shadow: none;
   }
   [tabindex="-1"] {

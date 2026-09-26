@@ -1,0 +1,33 @@
+html:has(body #app .topology-center--c) {
+  --topology-canvas: #f3f6fb;
+  --topology-ink: #172d4c;
+  --topology-border: #d8e2ef;
+  --topology-white: #fff;
+  --topology-blue: #244bb0;
+  --topology-muted: #536985;
+  --topology-pale-blue: #e2ebff;
+  --topology-border-blue: #91afea;
+  --topology-blue-soft: #365fc6;
+  --topology-pale: #eef3ff;
+  --topology-blue-mid: #7595db;
+  --topology-line: #c7d3e4;
+  --topology-muted-dark: #526278;
+  --topology-primary: #1249b8;
+  --topology-blue-light: #edf3ff;
+  --topology-focus: #4878e9;
+  --topology-shadow: rgb(12 29 54 / 24%);
+  --topology-blue-wash: #e8efff;
+  --topology-blue-strong: #1748a0;
+  --topology-ink-strong: #182d4a;
+  --topology-muted-soft: #53647c;
+  --topology-border-soft: #dce4ee;
+  --topology-warning: #875300;
+  --topology-danger: #b02d3c;
+  --topology-blue-muted: #7396d4;
+  --topology-canvas-soft: #f3f6fa;
+  --topology-panel: #eff4fc;
+  --topology-muted-blue: #365272;
+  --topology-disabled: #e8edf4;
+  --topology-disabled-soft: #edf0f5;
+  --topology-secondary-ink: #66758a;
+}

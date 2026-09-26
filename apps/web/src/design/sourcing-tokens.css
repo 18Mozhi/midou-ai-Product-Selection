@@ -1,0 +1,14 @@
+html:has(body #app .sourcing-workspace--review) {
+  --so-sourcing-review-ink: var(--so-text);
+  --so-sourcing-review-focus: #2465d7;
+  --so-sourcing-review-blue: #1748a0;
+  --so-sourcing-review-white: var(--so-panel);
+  --so-sourcing-review-border: #dce4ee;
+  --so-sourcing-review-pale-blue: #edf4ff;
+  --so-sourcing-review-muted: #52647b;
+  --so-sourcing-review-danger: #b42318;
+  --so-sourcing-review-soft: #f3f6fb;
+  --so-sourcing-review-control-border: #b9c9dc;
+  --so-sourcing-review-shadow: rgba(24, 45, 74, 0.18);
+  --so-sourcing-review-scrim: rgba(24, 45, 74, 0.5);
+}

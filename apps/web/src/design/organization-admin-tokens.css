@@ -1,0 +1,24 @@
+html:has(body #app .org-admin-center) {
+  --oa-ink: #182d4a;
+  --oa-soft: #f3f6fb;
+  --oa-blue: #1748a0;
+  --oa-white: #fff;
+  --oa-line: #dce4ee;
+  --oa-pale: #f7faff;
+  --oa-input: #b8c9df;
+  --oa-highlight: #edf4ff;
+  --oa-focus: #2465d7;
+  --oa-section: #d6e0ec;
+  --oa-outline: #c7d4e4;
+  --oa-focus-soft: #a9c5f5;
+  --oa-muted: #61738b;
+  --oa-secondary: #c7d0dc;
+  --oa-disabled-ink: #7a8999;
+  --oa-disabled-bg: #e8edf3;
+  --oa-danger: #b42318;
+  --oa-blue-soft: #eaf1ff;
+  --oa-blue-mid: #83a9e7;
+  --oa-blue-pale: #eef4ff;
+  --oa-blue-light: #b9cceb;
+  --oa-blue-wash: #dfeaff;
+}

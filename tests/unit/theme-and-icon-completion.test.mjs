@@ -9,8 +9,14 @@ test("production CSS has no global compatibility patch or important overrides", 
   const sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
   assert.ok(!paths.includes("apps/web/src/theme-compat.css"));
-  for (const [index, source] of sources.entries())
-    assert.doesNotMatch(source, /!important/, paths[index]);
+  for (const [index, source] of sources.entries()) {
+    // Keep high-priority overrides inside OS reduced-motion blocks, but reject them elsewhere.
+    const withoutReducedMotionBlocks = source.replace(
+      /@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?^\}/gm,
+      "",
+    );
+    assert.doesNotMatch(withoutReducedMotionBlocks, /!important/, paths[index]);
+  }
 });
 
 test("body copy and interactive controls preserve the accessibility floor", async () => {
@@ -278,6 +284,97 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         /^\.role-shell:has\(\.open-platform--c\)\s*\{(?:\s*--p60-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*--(?:text|text-muted|surface|bg|border|primary|danger|warning):\s*var\(--p60-[a-z-]+\);(?:\s*--(?:text|text-muted|surface|bg|border|primary|danger|warning):\s*var\(--p60-[a-z-]+\);)*\s*\}\s*\.open-platform--c\s*\{(?:\s*--so-[a-z-]+:\s*var\(--p60-[a-z-]+\);)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/sourcing-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.sourcing-workspace--review\)\s*\{(?:\s*--so-sourcing-review-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\)|var\(--so-(?:text|panel)\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/organization-admin-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.org-admin-center\)\s*\{(?:\s*--org-admin-review-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/tenancy-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.tenancy-page\s*\{(?:\s*--p08-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/organization-audit-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.org-admin-center \.org-audit-panel\)\s*\{(?:\s*--org-audit-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/platform-log-center-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.platform-log-center--c\)\s*\{(?:\s*--p62-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/provider-source-filters-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.source-filter\s*\{(?:\s*--source-filter-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/platform-status-center-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.platform-management--status-c\)\s*\{(?:\s*--p61-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/cost-rule-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.cost-console--review\)\s*\{(?:\s*--p22-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/redis-resilience-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.redis-resilience--c\)\s*\{(?:\s*--rr-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/report-center-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.report-center--review\)\s*\{(?:\s*--report-review-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/runtime-topology-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.topology-center--c\)\s*\{(?:\s*--topology-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/scoring-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.score-rules--review\)\s*\{(?:\s*--p17-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/security-operations-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(body #app \.security-ops--c\)\s*\{(?:\s*--p59-[a-z-]+:\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));)+\s*\}$/,
       );
       continue;
     }

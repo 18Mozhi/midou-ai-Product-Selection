@@ -438,6 +438,294 @@ test("open platform palette resolves the approved P60 page and shell colors", as
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
+test("sourcing palette resolves its original colors and overrides without important", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/sourcing-tokens.css", "utf8"),
+    readFile("apps/web/src/sourcing.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(
+      /(--so-sourcing-review-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\)|var\(--so-(?:text|panel)\));/gi,
+    ),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-sourcing-review-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 12);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.sourcing-workspace--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/sourcing-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(|!important/i);
+  assert.match(css, /#app \.sourcing-workspace--review button\.danger\s*\{/);
+  assert.match(
+    css,
+    /#app \.sourcing-workspace--review \.sourcing-layout > aside button\.selected\s*\{/,
+  );
+});
+
+test("organization admin palette resolves its approved C page colors in route scope", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/organization-admin-tokens.css", "utf8"),
+    readFile("apps/web/src/organization-admin.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--oa-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--oa-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 22);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.org-admin-center\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/roles-tokens.css";'));
+  assert.ok(css.includes('@import "./design/organization-admin-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P08 tenancy palette resolves its original C direction colors in page scope", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/tenancy-tokens.css", "utf8"),
+    readFile("apps/web/src/styles.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p08-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p08-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 19);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(), /^\.tenancy-page\s*\{[\s\S]*\}$/);
+  assert.ok(css.startsWith('@import "./design/tenancy-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("organization audit palette resolves its original C direction colors in route scope", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/organization-audit-tokens.css", "utf8"),
+    readFile("apps/web/src/organization-audit.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--org-audit-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--org-audit-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 10);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.org-admin-center \.org-audit-panel\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/organization-audit-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P62 platform log palette keeps the reviewed color contract route-scoped", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/platform-log-center-tokens.css", "utf8"),
+    readFile("apps/web/src/platform-log-center-c.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p62-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p62-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 16);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.platform-log-center--c\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/platform-log-center-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("provider source filter palette resolves its local controls without broadening scope", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/provider-source-filters-tokens.css", "utf8"),
+    readFile("apps/web/src/components/ProviderSourceFilters.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--source-filter-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--source-filter-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 7);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(), /^\.source-filter\s*\{[\s\S]*\}$/);
+  assert.ok(css.startsWith('@import "../design/provider-source-filters-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(|!important/i);
+  assert.match(css, /#app \.source-filter \.source-filter-toggle/);
+});
+
+test("P61 platform status palette resolves its shell and feedback colors in route scope", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/platform-status-center-tokens.css", "utf8"),
+    readFile("apps/web/src/platform-status-center-c.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--p61-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p61-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 15);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.platform-management--status-c\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/platform-status-center-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(|\bwhite\b/i);
+});
+
+test("P22 cost rule palette resolves its approved workbench colors in route scope", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/cost-rule-tokens.css", "utf8"),
+    readFile("apps/web/src/profit.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--p22-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p22-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 14);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.cost-console--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/cost-rule-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P67 Redis palette resolves route colors from one page-scoped source", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/redis-resilience-tokens.css", "utf8"),
+    readFile("apps/web/src/redis-resilience.css", "utf8"),
+  ]);
+  const declarations = [...tokens.matchAll(/(--rr-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--rr-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 22);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.redis-resilience--c\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/redis-resilience-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("report center palette resolves its approved colors only on the review route", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/report-center-tokens.css", "utf8"),
+    readFile("apps/web/src/report-center.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--report-review-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--report-review-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 13);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.report-center--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/report-center-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("runtime topology palette resolves the P68 route shell and state colors", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/runtime-topology-tokens.css", "utf8"),
+    readFile("apps/web/src/runtime-topology-c.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--topology-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--topology-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 31);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.topology-center--c\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/runtime-topology-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P17 scoring palette resolves the reviewed console and modal colors in route scope", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/scoring-tokens.css", "utf8"),
+    readFile("apps/web/src/scoring.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--p17-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p17-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 21);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.score-rules--review\)\s*\{[\s\S]*\}$/,
+  );
+  assert.ok(css.startsWith('@import "./design/scoring-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
+test("P59 security operations palette resolves route colors and elevation tokens", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/security-operations-tokens.css", "utf8"),
+    readFile("apps/web/src/security-operations-c.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--p59-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set([...css.matchAll(/var\((--p59-[a-z-]+)\)/g)].map((match) => match[1]));
+
+  assert.equal(names.size, 17);
+  assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(body #app \.security-ops--c\)\s*\{[\s\S]*\}$/,
+  );
+  assert.match(
+    css,
+    /^(?:\/\*[\s\S]*?\*\/\s*)?@import "\.\/design\/security-operations-tokens\.css";/,
+  );
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+});
+
 test("P47 palette resolves page, portal detail and feedback without broadening activation", async () => {
   const tokens = await readFile("apps/web/src/design/provider-adapter-tokens.css", "utf8");
   const declarations = [...tokens.matchAll(/(--p47-[a-z-]+):\s*([^;]+);/g)];

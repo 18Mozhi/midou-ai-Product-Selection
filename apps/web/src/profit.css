@@ -1,3 +1,5 @@
+@import "./design/cost-rule-tokens.css";
+
 .cost-console {
   display: grid;
   gap: 18px;
@@ -474,12 +476,12 @@
 
 /* P22 C direction: production cost-rule workbench aligned with the approved ledger. */
 .cost-console--review {
-  --review-blue: #1748a0;
-  --review-blue-strong: #123d8a;
-  --review-ink: #182d4a;
-  --review-muted: #52647b;
-  --review-line: #dce4ee;
-  --review-pale: #edf4ff;
+  --review-blue: var(--p22-blue);
+  --review-blue-strong: var(--p22-blue-strong);
+  --review-ink: var(--p22-ink);
+  --review-muted: var(--p22-muted);
+  --review-line: var(--p22-line);
+  --review-pale: var(--p22-pale);
   max-width: 1160px;
   margin: 0 auto;
   color: var(--review-ink);
@@ -494,13 +496,13 @@
   border: 0;
   border-radius: 0;
   background: var(--review-blue);
-  color: #fff;
+  color: var(--p22-white);
 }
 
 .cost-console--review > header p,
 .cost-console--review > header h1,
 .cost-console--review > header span {
-  color: #fff;
+  color: var(--p22-white);
 }
 
 .cost-console--review > header h1 {
@@ -511,7 +513,7 @@
 
 .cost-console--review > header p {
   margin: 0;
-  color: #d8e5ff;
+  color: var(--p22-soft-blue);
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -525,7 +527,7 @@
   padding: 9px 14px;
   border: 1px solid var(--review-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--p22-white);
   color: var(--review-blue);
   box-shadow: none;
   font: inherit;
@@ -535,7 +537,7 @@
 
 .cost-console--review button:hover:not(:disabled),
 .cost-console--review a:hover {
-  background: #f3f7ff;
+  background: var(--p22-hover);
   color: var(--review-blue-strong);
 }
 
@@ -545,7 +547,7 @@
 .cost-console--review select:focus-visible,
 .cost-console--review textarea:focus-visible,
 .cost-console--review summary:focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p22-focus);
   outline-offset: 3px;
 }
 
@@ -553,12 +555,12 @@
 .cost-console--review .quality-gate-next,
 .cost-console--review .cost-rule-actions button:not(.danger) {
   background: var(--review-blue);
-  color: #fff;
+  color: var(--p22-white);
 }
 
 .cost-console--review > header .cost-head-actions a {
-  border-color: #fff;
-  background: #fff;
+  border-color: var(--p22-white);
+  background: var(--p22-white);
   color: var(--review-blue);
 }
 
@@ -583,7 +585,7 @@
 .cost-console--review .quality-gate-setup-summary {
   margin: 0;
   padding: 24px 28px;
-  background: #fff;
+  background: var(--p22-white);
 }
 
 .cost-console--review .quality-gate-setup-summary h3,
@@ -600,20 +602,20 @@
   grid-template-columns: minmax(300px, 0.85fr) minmax(0, 2fr);
   gap: 0;
   overflow: hidden;
-  background: #fff;
+  background: var(--p22-white);
 }
 
 .cost-console--review .cost-rule-browser {
   padding: 0;
   border-right: 1px solid var(--review-line);
-  background: #f3f6fb;
+  background: var(--p22-canvas);
 }
 
 .cost-console--review .cost-rule-filters {
   gap: 10px;
   padding: 16px;
   border-bottom: 1px solid var(--review-line);
-  background: #fff;
+  background: var(--p22-white);
 }
 
 .cost-console--review .cost-rule-filters label {
@@ -626,22 +628,22 @@
 .cost-console--review .cost-modal select,
 .cost-console--review .cost-modal textarea {
   min-height: 44px;
-  border: 1px solid #b9c9dc;
+  border: 1px solid var(--p22-control-border);
   border-radius: 0;
-  background: #fff;
+  background: var(--p22-white);
   color: var(--review-ink);
 }
 
 .cost-console--review .cost-rule-filters button {
   width: max-content;
-  background: #fff;
+  background: var(--p22-white);
   color: var(--review-blue);
 }
 
 .cost-console--review .cost-rule-list {
   border: 0;
   border-radius: 0;
-  background: #f3f6fb;
+  background: var(--p22-canvas);
 }
 
 .cost-console--review .cost-rule-list > button {
@@ -649,7 +651,7 @@
   border: 0;
   border-bottom: 1px solid var(--review-line);
   border-radius: 0;
-  background: #f3f6fb;
+  background: var(--p22-canvas);
   color: var(--review-ink);
 }
 
@@ -672,7 +674,7 @@
 .cost-console--review .cost-rule-detail {
   padding: 28px;
   border: 0;
-  background: #fff;
+  background: var(--p22-white);
 }
 
 .cost-console--review .cost-rule-detail > header {
@@ -697,7 +699,7 @@
   border: 0;
   border-right: 1px solid var(--review-line);
   border-radius: 0;
-  background: #f3f6fb;
+  background: var(--p22-canvas);
 }
 
 .cost-console--review .cost-fees article:last-child {
@@ -706,7 +708,7 @@
 
 .cost-console--review .cost-rule-detail section {
   border-color: var(--review-line);
-  background: #fff;
+  background: var(--p22-white);
 }
 
 .cost-console--review .cost-rule-detail section p {
@@ -720,9 +722,9 @@
 }
 
 .cost-console--review .cost-rule-actions .danger {
-  border-color: #b42318;
-  background: #fff;
-  color: #b42318;
+  border-color: var(--p22-danger);
+  background: var(--p22-white);
+  color: var(--p22-danger);
 }
 
 .cost-console--review .cost-modal {
@@ -732,13 +734,13 @@
 }
 
 .cost-console--review .cost-modal::backdrop {
-  background: rgb(24 45 74 / 50%);
+  background: var(--p22-scrim);
 }
 
 .cost-console--review .cost-modal form {
   border: 1px solid var(--review-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--p22-white);
   box-shadow: none;
 }
 

@@ -1,0 +1,24 @@
+html:has(body #app .redis-resilience--c) {
+  --rr-cyan: #1748a0;
+  --rr-muted: #526784;
+  --rr-ink: #182d4a;
+  --rr-blue-strong: #113b84;
+  --rr-disabled: #e8edf4;
+  --rr-border: #ccd7e5;
+  --rr-focus: #2465d7;
+  --rr-hover: #f3f7ff;
+  --rr-line: #dce4ee;
+  --rr-border-soft: #c7d5ec;
+  --rr-warning: #875300;
+  --rr-danger: #b02d3c;
+  --rr-canvas: #f8faff;
+  --rr-border-muted: #9baac0;
+  --rr-panel-soft: #e5edf7;
+  --rr-panel: #f1f5fb;
+  --rr-blue-muted: #8ca4c9;
+  --rr-danger-pale: #fff7f8;
+  --rr-warning-pale: #fffaf1;
+  --rr-shell: #f3f6fa;
+  --rr-control-border: #9eafc7;
+  --rr-pale-blue: #edf4ff;
+}

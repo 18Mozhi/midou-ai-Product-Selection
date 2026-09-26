@@ -1,0 +1,21 @@
+.tenancy-page {
+  --p08-blue: #1748a0;
+  --p08-ink: #182d4a;
+  --p08-muted: #52647b;
+  --p08-line: #dce4ee;
+  --p08-focus: #2465d7;
+  --p08-white: #fff;
+  --p08-light-blue: #dce8ff;
+  --p08-highlight: #e2ecff;
+  --p08-pale-blue: #edf4ff;
+  --p08-danger: #b42318;
+  --p08-danger-bg: #fff6f5;
+  --p08-success: #267a54;
+  --p08-success-bg: #effaf4;
+  --p08-control-border: #9cacbf;
+  --p08-summary-bg: #f6f9ff;
+  --p08-soft-bg: #f6f8fb;
+  --p08-disabled-ink: #718096;
+  --p08-disabled-border: #d6dde7;
+  --p08-disabled-bg: #f0f3f7;
+}

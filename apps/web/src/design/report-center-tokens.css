@@ -1,0 +1,15 @@
+html:has(body #app .report-center--review) {
+  --report-review-ink: #182d4a;
+  --report-review-soft: #f3f6fb;
+  --report-review-blue: #1748a0;
+  --report-review-white: #fff;
+  --report-review-border: #c7d0dc;
+  --report-review-muted: #6f7f93;
+  --report-review-disabled: #e6ebf1;
+  --report-review-focus-soft: #a9c5f5;
+  --report-review-line: #d6e0ec;
+  --report-review-muted-strong: #61738b;
+  --report-review-pale: #edf4ff;
+  --report-review-danger: #a52b2b;
+  --report-review-shadow: rgb(24 45 74 / 0.24);
+}

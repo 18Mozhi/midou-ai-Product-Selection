@@ -1,0 +1,9 @@
+.source-filter {
+  --source-filter-border: #cfd9e7;
+  --source-filter-white: #fff;
+  --source-filter-muted: #52657e;
+  --source-filter-control-border: #9eb1ca;
+  --source-filter-ink: #142a46;
+  --source-filter-focus: #185adb;
+  --source-filter-accent: #294caf;
+}

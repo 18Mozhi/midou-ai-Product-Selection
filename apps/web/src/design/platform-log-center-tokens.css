@@ -1,0 +1,18 @@
+html:has(body #app .platform-log-center--c) {
+  --p62-border: #c7d3e4;
+  --p62-white: #fff;
+  --p62-muted: #536985;
+  --p62-primary: #1748b5;
+  --p62-pale-blue: #edf3ff;
+  --p62-ink: #17253c;
+  --p62-canvas: #f3f6fa;
+  --p62-primary-strong: #102a63;
+  --p62-focus: #2f6ee5;
+  --p62-disabled-bg: #e9eef5;
+  --p62-disabled-ink: #64748b;
+  --p62-navy: #29446e;
+  --p62-border-muted: #aabbd1;
+  --p62-blue-soft: #dae5ff;
+  --p62-blue-muted: #58729e;
+  --p62-warning-bg: #fff9eb;
+}

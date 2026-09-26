@@ -1,0 +1,16 @@
+html:has(body #app .cost-console--review) {
+  --p22-blue: #1748a0;
+  --p22-blue-strong: #123d8a;
+  --p22-ink: #182d4a;
+  --p22-muted: #52647b;
+  --p22-line: #dce4ee;
+  --p22-pale: #edf4ff;
+  --p22-white: #fff;
+  --p22-soft-blue: #d8e5ff;
+  --p22-hover: #f3f7ff;
+  --p22-focus: #2465d7;
+  --p22-canvas: #f3f6fb;
+  --p22-control-border: #b9c9dc;
+  --p22-danger: #b42318;
+  --p22-scrim: rgb(24 45 74 / 50%);
+}

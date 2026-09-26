@@ -216,8 +216,11 @@ async function setup(page: Page) {
 }
 test("M05-06.A07/A08/A15 desktop factual report and export lifecycle", async ({ page }) => {
   await setup(page);
+  await page.clock.install({ time: new Date("2026-08-08T12:05:00.000Z") });
   await page.goto("/reports");
-  await expect(page.getByRole("heading", { name: "报表与导出", level: 2 })).toBeVisible();
+  await expect(
+    page.locator(".report-center").getByRole("heading", { name: "报表与导出", level: 1 }),
+  ).toBeVisible();
   await expect(page.getByText("28").first()).toBeVisible();
   await expect(page.getByText("文件到期后由 Worker 清理")).toBeVisible();
   await expect(page.locator('i[data-status="queued"]')).toHaveText("排队中");

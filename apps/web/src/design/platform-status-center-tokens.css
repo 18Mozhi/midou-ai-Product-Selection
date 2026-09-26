@@ -1,0 +1,17 @@
+html:has(body #app .platform-management--status-c) {
+  --p61-ink: #17253c;
+  --p61-muted: #536985;
+  --p61-paper: #fff;
+  --p61-canvas: #f3f6fa;
+  --p61-line: #c7d3e4;
+  --p61-blue: #1748b5;
+  --p61-navy: #102a63;
+  --p61-disabled-bg: #e9eef5;
+  --p61-disabled-ink: #64748b;
+  --p61-focus: #2f6ee5;
+  --p61-pale-blue: #edf3ff;
+  --p61-blue-muted: #456293;
+  --p61-warning: #a76700;
+  --p61-warning-bg: #fffaf0;
+  --p61-warning-ink: #604419;
+}

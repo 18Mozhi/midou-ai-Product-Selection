@@ -1,3 +1,5 @@
+@import "./design/scoring-tokens.css";
+
 .score-rules {
   margin-top: 28px;
   color: var(--so-text);
@@ -381,57 +383,52 @@
 
 /* P17 C direction: a blue-white rule workbench, scoped to the production page. */
 .score-rules--review {
-  --score-review-blue: #2853a4;
-  --score-review-blue-deep: #173a7a;
-  --score-review-wash: #eef4fc;
-  --score-review-line: #cbd7e8;
-  --score-review-ink: #152b4a;
   margin-top: 24px;
-  color: var(--score-review-ink);
+  color: var(--p17-ink);
 }
 .score-rules--review .score-rules-hero {
   min-height: 148px;
   padding: 28px 30px;
   border: 0;
   border-radius: 0;
-  background: linear-gradient(135deg, var(--score-review-blue-deep), var(--score-review-blue));
-  color: #fff;
+  background: linear-gradient(135deg, var(--p17-blue-strong), var(--p17-blue));
+  color: var(--p17-white);
   box-shadow: none;
 }
 .score-rules--review .score-rules-hero p {
   margin-bottom: 9px;
-  color: #d6e4ff;
+  color: var(--p17-blue-pale);
   font-size: 13px;
   letter-spacing: 0.15em;
 }
 .score-rules--review .score-rules-hero h2 {
   margin: 0;
-  color: #fff;
+  color: var(--p17-white);
   font-size: clamp(28px, 3vw, 38px);
   letter-spacing: -0.03em;
 }
 .score-rules--review .score-rules-hero span {
   max-width: 540px;
-  color: #e6efff;
+  color: var(--p17-pale);
   line-height: 1.65;
 }
 .score-rules--review .score-rules-hero button,
 .score-rules--review .score-empty button {
   min-height: 44px;
   padding: 10px 16px;
-  border: 1px solid #fff;
+  border: 1px solid var(--p17-white);
   border-radius: 0;
-  color: var(--score-review-blue-deep);
-  background: #fff;
+  color: var(--p17-blue-strong);
+  background: var(--p17-white);
   box-shadow: none;
 }
 .score-rules--review .score-rules-hero > .score-rule-readonly-note {
-  color: #e6efff;
+  color: var(--p17-pale);
 }
 .score-rules--review .opportunity-message {
   border-radius: 0;
   border-left-width: 4px;
-  background: var(--score-review-wash);
+  background: var(--p17-canvas);
 }
 .score-rules--review > .quality-gate-setup,
 .score-rules--review :deep(.quality-gate-setup) {
@@ -439,20 +436,20 @@
 }
 .score-rules--review :deep(.quality-gate-setup) {
   padding: 20px;
-  border: 1px solid var(--score-review-line);
+  border: 1px solid var(--p17-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--p17-white);
   box-shadow: none;
 }
 .score-rules--review :deep(.quality-gate-setup) > header {
   padding-bottom: 3px;
 }
 .score-rules--review :deep(.quality-gate-setup) p {
-  color: var(--score-review-blue);
+  color: var(--p17-blue);
   letter-spacing: 0.13em;
 }
 .score-rules--review :deep(.quality-gate-setup) h3 {
-  color: var(--score-review-ink);
+  color: var(--p17-ink);
   font-size: 22px;
 }
 .score-rules--review :deep(.quality-gate-setup) ul {
@@ -464,17 +461,17 @@
   padding: 12px;
   border: 0;
   border-radius: 0;
-  background: var(--score-review-wash);
+  background: var(--p17-canvas);
 }
 .score-rules--review :deep(.quality-gate-setup) li[data-ready="false"] {
-  background: #fff1e1;
+  background: var(--p17-orange-pale);
 }
 .score-rules--review :deep(.quality-gate-setup) li i {
   border-radius: 0;
 }
 .score-rules--review :deep(.quality-gate-setup) footer :deep(button) {
   border-radius: 0;
-  background: var(--score-review-blue);
+  background: var(--p17-blue);
 }
 .score-rules--review .score-rule-list {
   margin-top: 18px;
@@ -485,8 +482,8 @@
 }
 .score-rules--review .score-rule-list > header {
   padding: 10px 0;
-  border-bottom: 1px solid var(--score-review-line);
-  color: #526987;
+  border-bottom: 1px solid var(--p17-line);
+  color: var(--p17-muted);
   font-size: 13px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -495,38 +492,38 @@
   margin-top: 0;
   padding: 22px 0;
   border: 0;
-  border-bottom: 1px solid var(--score-review-line);
+  border-bottom: 1px solid var(--p17-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--p17-white);
 }
 .score-rules--review .score-rule-list article strong {
-  color: var(--score-review-ink);
+  color: var(--p17-ink);
   font-size: 18px;
 }
 .score-rules--review .score-rule-list article code {
-  color: var(--score-review-blue);
+  color: var(--p17-blue);
   font-size: 13px;
 }
 .score-rules--review .score-rule-list article small {
-  color: #526987;
+  color: var(--p17-muted);
 }
 .score-rules--review .score-rule-list article b[data-status] {
   display: inline-block;
   padding: 5px 8px;
   border-radius: 0;
   font-size: 13px;
-  background: var(--score-review-wash);
+  background: var(--p17-canvas);
 }
 .score-rules--review .score-rule-list article b[data-status="active"] {
-  color: #1e6a56;
-  background: #e8f5ef;
+  color: var(--p17-success);
+  background: var(--p17-success-pale);
 }
 .score-rules--review .score-rule-list article b[data-status="pending_approval"] {
-  color: #925b13;
-  background: #fff1df;
+  color: var(--p17-warning);
+  background: var(--p17-warning-pale);
 }
 .score-rules--review .score-rule-list article b[data-status="approved"] {
-  color: var(--score-review-blue);
+  color: var(--p17-blue);
 }
 .score-rules--review .score-weight-list {
   gap: 4px;
@@ -534,14 +531,14 @@
 .score-rules--review .score-weight-list span {
   height: 22px;
   border-radius: 0;
-  background: #eef2f7;
+  background: var(--p17-disabled);
 }
 .score-rules--review .score-weight-list i {
-  background: #d9e6fb;
+  background: var(--p17-blue-soft);
 }
 .score-rules--review .score-weight-list em {
   padding: 4px 7px;
-  color: var(--score-review-ink);
+  color: var(--p17-ink);
   font-size: 13px;
 }
 .score-rules--review .score-rule-list nav {
@@ -550,34 +547,34 @@
 .score-rules--review .score-rule-list nav button {
   min-height: 40px;
   padding: 8px 12px;
-  border: 1px solid var(--score-review-line);
+  border: 1px solid var(--p17-line);
   border-radius: 0;
-  color: var(--score-review-blue);
-  background: #fff;
+  color: var(--p17-blue);
+  background: var(--p17-white);
 }
 .score-rules--review .score-rule-list nav button:last-of-type {
-  border-color: var(--score-review-blue);
-  color: #fff;
-  background: var(--score-review-blue);
+  border-color: var(--p17-blue);
+  color: var(--p17-white);
+  background: var(--p17-blue);
 }
 .score-rules--review .score-rule-list nav .score-rule-readonly-note {
-  color: #526987;
+  color: var(--p17-muted);
 }
 .score-rules--review .score-empty {
-  border: 1px dashed var(--score-review-line);
+  border: 1px dashed var(--p17-line);
   border-radius: 0;
-  background: #fff;
+  background: var(--p17-white);
 }
 .score-rules--review .opportunity-modal::backdrop {
-  background: rgb(18 39 76 / 68%);
+  background: var(--p17-scrim);
   backdrop-filter: blur(5px);
 }
 .score-rules--review .opportunity-modal form,
 .score-rules--review .score-preview-modal > section {
-  border: 1px solid var(--score-review-line);
+  border: 1px solid var(--p17-line);
   border-radius: 0;
-  background: #fff;
-  box-shadow: 0 20px 60px rgb(17 42 86 / 18%);
+  background: var(--p17-white);
+  box-shadow: 0 20px 60px var(--p17-shadow);
 }
 .score-rules--review .opportunity-modal form {
   width: min(760px, 100%);
@@ -587,13 +584,13 @@
 .score-rules--review .opportunity-modal form > header,
 .score-rules--review .score-preview-modal > section > header {
   padding: 22px 26px;
-  border-bottom: 1px solid var(--score-review-line);
+  border-bottom: 1px solid var(--p17-line);
 }
 .score-rules--review .opportunity-modal header p {
-  color: var(--score-review-blue);
+  color: var(--p17-blue);
 }
 .score-rules--review .opportunity-modal h3 {
-  color: var(--score-review-ink);
+  color: var(--p17-ink);
   font-size: 25px;
 }
 .score-rules--review .opportunity-modal header button {
@@ -616,7 +613,7 @@
   gap: 12px;
 }
 .score-rules--review .opportunity-modal label {
-  color: #526987;
+  color: var(--p17-muted);
 }
 .score-rules--review .opportunity-modal input,
 .score-rules--review .opportunity-modal select,
@@ -624,25 +621,25 @@
 .score-rules--review .score-dimension-form input,
 .score-rules--review .score-dimension-form select {
   min-height: 44px;
-  border: 1px solid #9eb2d0;
+  border: 1px solid var(--p17-border);
   border-radius: 0;
-  color: var(--score-review-ink);
-  background: #fff;
+  color: var(--p17-ink);
+  background: var(--p17-white);
 }
 .score-rules--review .score-dimension-form {
   margin-top: 18px;
   padding-top: 18px;
-  border-top: 1px solid var(--score-review-line);
+  border-top: 1px solid var(--p17-line);
 }
 .score-rules--review .score-dimension-form > div {
   padding: 10px;
   border: 0;
   border-left: 3px solid transparent;
   border-radius: 0;
-  background: var(--score-review-wash);
+  background: var(--p17-canvas);
 }
 .score-rules--review .score-dimension-form > div:focus-within {
-  border-left-color: var(--score-review-blue);
+  border-left-color: var(--p17-blue);
 }
 .score-rules--review .score-form-summary,
 .score-rules--review .score-dialog-error {
@@ -650,14 +647,14 @@
 }
 .score-rules--review .opportunity-modal aside {
   border-radius: 0;
-  border-left-color: var(--score-review-blue);
-  background: var(--score-review-wash);
+  border-left-color: var(--p17-blue);
+  background: var(--p17-canvas);
 }
 .score-rules--review .opportunity-modal footer {
   margin-top: 18px;
   padding: 14px 26px;
-  border-top: 1px solid var(--score-review-line);
-  background: #f7f9fc;
+  border-top: 1px solid var(--p17-line);
+  background: var(--p17-panel);
 }
 .score-rules--review .opportunity-modal footer button {
   min-height: 44px;
@@ -665,9 +662,9 @@
 }
 .score-rules--review .opportunity-modal footer button:last-child,
 .score-rules--review .score-preview-modal footer button:not(:disabled):last-of-type {
-  border-color: var(--score-review-blue);
-  color: #fff;
-  background: var(--score-review-blue);
+  border-color: var(--p17-blue);
+  color: var(--p17-white);
+  background: var(--p17-blue);
 }
 .score-rules--review .score-preview-modal > section {
   width: min(980px, 100%);
@@ -687,8 +684,8 @@
 .score-rules--review .score-preview-summary div,
 .score-rules--review .score-preview-table article {
   border-radius: 0;
-  border-color: var(--score-review-line);
-  background: var(--score-review-wash);
+  border-color: var(--p17-line);
+  background: var(--p17-canvas);
 }
 .score-rules--review .score-preview-table {
   margin-top: 16px;
@@ -697,14 +694,14 @@
 .score-rules--review .score-preview-modal footer {
   margin: 0;
   padding: 14px 26px;
-  border-top: 1px solid var(--score-review-line);
-  background: #f7f9fc;
+  border-top: 1px solid var(--p17-line);
+  background: var(--p17-panel);
 }
 .score-rules--review button:focus-visible,
 .score-rules--review input:focus-visible,
 .score-rules--review select:focus-visible,
 .score-rules--review textarea:focus-visible {
-  outline: 3px solid #4d77c8;
+  outline: 3px solid var(--p17-blue-mid);
   outline-offset: 2px;
 }
 @media (max-width: 800px) {

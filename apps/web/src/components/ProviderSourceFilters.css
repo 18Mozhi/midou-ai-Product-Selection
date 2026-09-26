@@ -1,19 +1,21 @@
+@import "../design/provider-source-filters-tokens.css";
+
 .source-filter {
   display: grid;
   grid-template-columns: minmax(260px, 1.6fr) auto;
   align-items: end;
   gap: 12px 16px;
   padding: 20px;
-  border: 1px solid #cfd9e7;
+  border: 1px solid var(--source-filter-border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--source-filter-white);
 }
 
 .source-filter label {
   display: grid;
   gap: 6px;
   min-width: 0;
-  color: #52657e;
+  color: var(--source-filter-muted);
   font-size: 13px;
   font-weight: 700;
 }
@@ -32,22 +34,22 @@
   min-width: 0;
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid #9eb1ca;
+  border: 1px solid var(--source-filter-control-border);
   border-radius: 6px;
-  background: #fff;
-  color: #142a46;
+  background: var(--source-filter-white);
+  color: var(--source-filter-ink);
   font: inherit;
 }
 
 .source-filter input:focus-visible,
 .source-filter select:focus-visible,
 .source-filter button:focus-visible {
-  outline: 3px solid #185adb;
+  outline: 3px solid var(--source-filter-focus);
   outline-offset: 2px;
 }
 
 .source-filter .source-reset {
-  color: #294caf;
+  color: var(--source-filter-accent);
   font-weight: 700;
 }
 
@@ -58,7 +60,7 @@
 .source-filter .source-result-count {
   grid-column: 1 / -1;
   margin: 0;
-  color: #52657e;
+  color: var(--source-filter-muted);
   font-size: 13px;
 }
 
@@ -79,13 +81,13 @@
     padding: 16px;
   }
 
-  .source-filter-toggle {
-    display: inline-flex !important;
+  #app .source-filter .source-filter-toggle {
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    color: #294caf !important;
-    font-size: 13px !important;
-    font-weight: 700 !important;
+    color: var(--source-filter-accent);
+    font-size: 13px;
+    font-weight: 700;
     white-space: nowrap;
   }
 

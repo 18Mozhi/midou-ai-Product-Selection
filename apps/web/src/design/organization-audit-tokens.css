@@ -1,0 +1,12 @@
+html:has(body #app .org-admin-center .org-audit-panel) {
+  --org-audit-ink: #182d4a;
+  --org-audit-soft: #edf2f8;
+  --org-audit-line: #dce4ee;
+  --org-audit-white: #fff;
+  --org-audit-pale: #f7faff;
+  --org-audit-blue: #1748a0;
+  --org-audit-border: #b9cbea;
+  --org-audit-focus-border: #90addb;
+  --org-audit-blue-pale: #eaf2ff;
+  --org-audit-focus: #2465d7;
+}

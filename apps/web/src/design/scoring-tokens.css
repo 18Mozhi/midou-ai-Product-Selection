@@ -1,0 +1,23 @@
+html:has(body #app .score-rules--review) {
+  --p17-blue: #2853a4;
+  --p17-blue-strong: #173a7a;
+  --p17-canvas: #eef4fc;
+  --p17-line: #cbd7e8;
+  --p17-ink: #152b4a;
+  --p17-white: #fff;
+  --p17-blue-pale: #d6e4ff;
+  --p17-pale: #e6efff;
+  --p17-orange-pale: #fff1e1;
+  --p17-muted: #526987;
+  --p17-success: #1e6a56;
+  --p17-success-pale: #e8f5ef;
+  --p17-warning: #925b13;
+  --p17-warning-pale: #fff1df;
+  --p17-disabled: #eef2f7;
+  --p17-blue-soft: #d9e6fb;
+  --p17-scrim: rgb(18 39 76 / 68%);
+  --p17-shadow: rgb(17 42 86 / 18%);
+  --p17-border: #9eb2d0;
+  --p17-panel: #f7f9fc;
+  --p17-blue-mid: #4d77c8;
+}

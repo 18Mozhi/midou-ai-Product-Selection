@@ -1,0 +1,19 @@
+html:has(body #app .security-ops--c) {
+  --p59-primary: #1748b5;
+  --p59-primary-strong: #102a63;
+  --p59-ink: #17253c;
+  --p59-muted: #536985;
+  --p59-white: #fff;
+  --p59-canvas: #f3f6fa;
+  --p59-border: #c7d3e4;
+  --p59-control-border: #94a8c4;
+  --p59-focus: #2f6ee5;
+  --p59-warning: #9a5800;
+  --p59-disabled-ink: #64748b;
+  --p59-disabled: #e9eef5;
+  --p59-blue-border: #5979ae;
+  --p59-shadow-strong: rgb(16 42 99 / 32%);
+  --p59-shadow-soft: rgb(16 42 99 / 16%);
+  --p59-blue-pale: #dce7fa;
+  --p59-blue-wash: #e9effa;
+}
