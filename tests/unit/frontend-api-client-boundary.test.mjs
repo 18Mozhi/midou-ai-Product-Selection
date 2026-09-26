@@ -35,7 +35,6 @@ test("migrated frontend surfaces use the shared API client instead of direct fet
     "apps/web/src/components/LocalIdentity.vue",
     "apps/web/src/components/TenancyChooser.vue",
     "apps/web/src/components/LandingRedirect.vue",
-    "apps/web/src/components/PersonalCenter.vue",
     "apps/web/src/components/ThemeStudio.vue",
     "apps/web/src/components/ApiFoundation.vue",
     "apps/web/src/components/TaskWorkspace.vue",
@@ -57,6 +56,16 @@ test("migrated frontend surfaces use the shared API client instead of direct fet
     assert.match(source, /ApiClientError/);
     assert.doesNotMatch(source, /\bfetch\s*\(/);
   }
+
+  const personalCenter = await read("apps/web/src/components/PersonalCenter.vue");
+  const personalCenterClient = await read(
+    "apps/web/src/components/personal-center/usePersonalCenter.ts",
+  );
+  assert.match(personalCenter, /usePersonalCenter/);
+  assert.doesNotMatch(personalCenter, /\bfetch\s*\(/);
+  assert.match(personalCenterClient, /createApiClient/);
+  assert.match(personalCenterClient, /ApiClientError/);
+  assert.doesNotMatch(personalCenterClient, /\bfetch\s*\(/);
 });
 
 test("all frontend business modules keep direct fetch inside the shared transport", async () => {
