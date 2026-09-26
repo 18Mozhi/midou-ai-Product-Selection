@@ -20,6 +20,6 @@
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ResponsiveDataView.vue | b9e635a3708a3733fd66ead2be6ac840fd70872e0b5af94b3fab171407245d99 |
+| apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
 
 全量单测首次发现三处新候选未入归属表（两个审计测试共同检查同一缺口）；本表补齐真实候选，不改扫描器、不屏蔽遗漏检查，也不重新定义完成分母。业务 API、权限、生产验收和页面批准均未扩大。

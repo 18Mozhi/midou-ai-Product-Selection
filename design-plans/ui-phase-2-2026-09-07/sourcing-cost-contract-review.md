@@ -8,11 +8,11 @@ route-catalog → NavigationShell → surfaceProps：P21 SourcingWorkspace，P22
 
 | 源码简称 | 文件（apps/web/src/components/下） | 本批LF SHA256 |
 | --- | --- | --- |
-| SW | SourcingWorkspace.vue | f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81 |
+| SW | SourcingWorkspace.vue | eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219 |
 | SD | SourcingWorkspaceDialogs.vue | e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8 |
 | SP | SourcingComparisonPanel.vue | 2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406 |
 | SC | SourcingCostConfirmationPanel.vue | bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4 |
-| CR | CostRuleConsole.vue | f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba |
+| CR | CostRuleConsole.vue | e758b90453bda8b028798b627c53bbe4c46587c1c1b9b3ccfad1c8ec1c63ef9b |
 | PP | OpportunityProfitPanel.vue | a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f |
 | RQ | OpportunityCostReviewQueue.vue | e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339 |
 

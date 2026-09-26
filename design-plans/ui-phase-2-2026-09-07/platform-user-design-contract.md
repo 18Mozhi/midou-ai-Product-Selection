@@ -161,7 +161,7 @@ P43动作映射使用本合同作为单一语义源。下表接续共享父组�
 
 | 当前父/工作区源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformAccountCenter.vue | eda65671ef8a8cb49af3de234a552ec96db0571a82b68f39ea533b6b72a27213 |
+| apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08 |
 
 其余四个直接页面组件沿用本合同已有当前候选记录；P43.json另固定六个组件的当前LF指纹。源位置数不等于唯一按钮或业务动作数。
