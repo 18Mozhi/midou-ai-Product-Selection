@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onDeactivated,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
@@ -107,8 +117,13 @@ const pendingCollections = new Map<string, CollectionAttempt>();
 let readVersion = 0;
 let ruleReadVersion = 0;
 let disposed = false;
-const currentRead = (version: number) => !disposed && version === readVersion;
-const currentRuleRead = (version: number) => !disposed && version === ruleReadVersion;
+let wasDeactivated = false;
+let syncingQueryFromRoute = false;
+let lastRouteCompetitor = typeof route.query.competitor === "string" ? route.query.competitor : "";
+let lastRouteCreate = route.query.create === "1";
+const pageActive = () => !disposed && !wasDeactivated;
+const currentRead = (version: number) => pageActive() && version === readVersion;
+const currentRuleRead = (version: number) => pageActive() && version === ruleReadVersion;
 const form = reactive({
     market: "US",
     product_url: "",
@@ -355,15 +370,15 @@ function clearCollectionRefresh() {
 }
 function scheduleCollectionRefresh() {
   clearCollectionRefresh();
-  if (!selected.value || !collectionPending.value) return;
+  if (!pageActive() || !selected.value || !collectionPending.value) return;
   const competitorId = selected.value.id;
   collectionRefreshTimer = setTimeout(() => {
-    if (selected.value?.id !== competitorId) return;
+    if (!pageActive() || selected.value?.id !== competitorId) return;
     void detail(selected.value, false);
   }, 2000);
 }
 async function load() {
-  if (disposed) return;
+  if (!pageActive()) return;
   const version = ++readVersion;
   ++ruleReadVersion;
   ruleReadState.value = "idle";
@@ -415,7 +430,7 @@ async function load() {
   }
 }
 async function reloadRules() {
-  if (disposed) return;
+  if (!pageActive()) return;
   const version = ++ruleReadVersion;
   ruleReadState.value = "loading";
   requestId.value = "";
@@ -439,7 +454,7 @@ async function reloadRules() {
   }
 }
 async function detail(item: Competitor, syncRoute = true) {
-  if (disposed) return;
+  if (!pageActive()) return;
   const version = ++readVersion;
   clearCollectionRefresh();
   if (syncRoute) notice.value = "";
@@ -702,12 +717,68 @@ function handleStateSecondary() {
 function clearSearch() {
   query.value = "";
 }
-onMounted(() => {
-  showCreate.value = route.query.create === "1" && canManage.value;
-  if (rulesPage.value && typeof route.query.competitor === "string") {
-    rule.competitor_id = route.query.competitor;
-    showRule.value = canManage.value;
+function syncSearchFromRoute(value: unknown) {
+  const next = typeof value === "string" ? value : "";
+  if (next === query.value) return;
+  syncingQueryFromRoute = true;
+  query.value = next;
+  void nextTick(() => (syncingQueryFromRoute = false));
+}
+function syncCreateFromRoute(value: unknown, force = false) {
+  const requested = value === "1",
+    changed = requested !== lastRouteCreate;
+  lastRouteCreate = requested;
+  if (!force && !changed) return;
+  const shouldOpen = requested && canManage.value;
+  if (shouldOpen === showCreate.value) return;
+  createStep.value = 1;
+  if (shouldOpen) {
+    notice.value = "";
+    requestId.value = "";
   }
+  showCreate.value = shouldOpen;
+}
+function syncCompetitorFromRoute(value: unknown, force = false) {
+  const next = typeof value === "string" ? value : "",
+    previous = lastRouteCompetitor;
+  lastRouteCompetitor = next;
+  if (!force && next === previous) return;
+  if (rulesPage.value) {
+    if (next && canManage.value) {
+      if (showRule.value && rule.competitor_id === next) return;
+      notice.value = "";
+      requestId.value = "";
+      rule.competitor_id = next;
+      rule.metric = "price";
+      rule.direction = "decrease";
+      rule.threshold_value = 1;
+      showRule.value = true;
+    } else if (!next && previous && showRule.value) showRule.value = false;
+    return;
+  }
+  if (!next || state.value === "loading" || !pageActive()) return;
+  const item = items.value.find((candidate) => candidate.id === next);
+  if (item && item.id !== selected.value?.id) void detail(item, false);
+}
+onMounted(() => {
+  syncCreateFromRoute(route.query.create, true);
+  syncCompetitorFromRoute(route.query.competitor, true);
+  void load();
+});
+onDeactivated(() => {
+  wasDeactivated = true;
+  readVersion += 1;
+  ruleReadVersion += 1;
+  clearCollectionRefresh();
+});
+onActivated(() => {
+  if (!wasDeactivated) return;
+  wasDeactivated = false;
+  syncSearchFromRoute(route.query.q);
+  syncCreateFromRoute(route.query.create);
+  if (rulesPage.value) syncCompetitorFromRoute(route.query.competitor);
+  else
+    lastRouteCompetitor = typeof route.query.competitor === "string" ? route.query.competitor : "";
   void load();
 });
 onUnmounted(() => {
@@ -740,6 +811,7 @@ watch(
   { flush: "post" },
 );
 watch(query, (value) => {
+  if (syncingQueryFromRoute || !pageActive()) return;
   void router.replace({
     query: {
       ...route.query,
@@ -749,6 +821,25 @@ watch(query, (value) => {
     },
   });
 });
+watch(
+  () => route.query.q,
+  (value) => {
+    if (pageActive()) syncSearchFromRoute(value);
+  },
+  { flush: "sync" },
+);
+watch(
+  () => route.query.create,
+  (value) => {
+    if (pageActive()) syncCreateFromRoute(value);
+  },
+);
+watch(
+  () => route.query.competitor,
+  (value) => {
+    if (pageActive()) syncCompetitorFromRoute(value);
+  },
+);
 watch(canManage, (allowed) => {
   if (allowed) return;
   discardCreateReturnFocus();

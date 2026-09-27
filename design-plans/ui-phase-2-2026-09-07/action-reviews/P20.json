@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "2ab8c2582af0f9f2c39302f4221959159a86b59f790c6b425b9e2ce4028cfdf0"
+    "apps/web/src/components/CompetitorMonitor.vue": "d78f87b8afc4b8b2cf38f09fe184758dca99752ba5dd2697615988a22948a278"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -1543,7 +1543,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/CompetitorMonitor.vue": "2ab8c2582af0f9f2c39302f4221959159a86b59f790c6b425b9e2ce4028cfdf0",
+    "apps/web/src/components/CompetitorMonitor.vue": "d78f87b8afc4b8b2cf38f09fe184758dca99752ba5dd2697615988a22948a278",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
       "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",

@@ -1,5 +1,9 @@
 # 2026-09-24 · 全阶段剩余视觉审核授权
 
+## 2026-09-28 · P19/P20 竞品监控 CP-G04 KeepAlive 与路由状态
+
+竞品页停用时现在清理采集详情轮询并使未完成GET结果失效；KeepAlive返回后读取当前路由对应竞品与规则状态。详情competitor、搜索q、create窗及规则目标query会反向同步到当前界面。桌面/390px `UI2-CP-G04`各2/2，完整竞品与竞态套件各30/30；Web类型检查通过。保留GET/POST/权限/API/数据库合同，不声称真实session/RBAC/collection或M07-03。CP-G04本地Vue合同关闭；CP-G03、CP-G05–G07及全站收官继续。格式/构建、提交与宝塔部署待本批闭环。
+
 ## 2026-09-27 · P19/P20 竞品监控 CP-G02 事实呈现修复
 
 修复规则读取失败被误呈现为空、停用规则被计为生效，以及价格规则错误借用当前对象币种的问题。P19详情现在只计启用且作用域适用规则；P20全局价格阈值明示规则未记录币种，指定竞品价格阈值标注其自身最新快照币种。P19规则GET失败单独显示未知并提供只重试GET的操作。M04-05真实Vue E2E桌面与390px各23/23，定向单测4/4、22工作区构建及格式/文档/计划/发布归属门通过；未改API、OpenAPI、数据库、权限或写入。提交/build SHA `6246e46a4fe865422c8dc7ed112a9b9a6a43e7be` 已推送并经固定宝塔脚本部署，脚本确认生产 live/ready/available/version、路由边界与浏览器 helper；代码包临时产物已删除。安全门受 `git ls-files` 输出触发 `ENOBUFS`，M04-05模块门受前置 M04-04 未完成阻塞，均未宣称通过。CP-G02关闭；CP-G03–G07、真实RBAC与生产业务验收仍开放。详见[合同复核](competitor-contract-review.md)与[P20实施记录](P20-PAGE-COMPOSITION-IMPLEMENTATION.md)。

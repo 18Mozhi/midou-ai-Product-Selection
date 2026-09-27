@@ -182,6 +182,51 @@ test("M04-05.A07/A08/A09/A15 renders source-backed baseline changes thresholds a
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
+test("UI2-CP-G04 suspends collection polling while cached and rereads on activation", async ({
+  page,
+}) => {
+  await setup(page);
+  let listDetailReads = 0,
+    rulesDetailReads = 0;
+  await page.route(`**/api/v1/competitors/${id}`, (route) => {
+    const rulesPage = page.url().includes("/competitors/monitoring-rules");
+    if (rulesPage) rulesDetailReads += 1;
+    else listDetailReads += 1;
+    return route.fulfill({
+      json: envelope({
+        ...item,
+        latest_collection: {
+          task_id: "00000000-0000-4000-8000-000000000599",
+          status: rulesPage ? "succeeded" : "queued",
+          last_error_code: null,
+          attempt_count: 0,
+          available_result_count: 0,
+          updated_at: "2026-09-27T12:01:01.000Z",
+        },
+        snapshots: [item.latest_snapshot, baseline],
+        changes: [],
+        alerts: [],
+      }),
+    });
+  });
+  await page.goto("/competitors");
+  await expect(page.locator(".competitor-detail h3")).toHaveText(item.title);
+  expect(listDetailReads).toBe(1);
+
+  await page.getByRole("button", { name: "当前竞品规则" }).click();
+  await expect(page).toHaveURL(/\/competitors\/monitoring-rules/);
+  await expect(page.getByRole("heading", { name: "新建监控规则" })).toBeVisible();
+  await expect.poll(() => rulesDetailReads).toBe(1);
+  await page.waitForTimeout(2100);
+  expect(listDetailReads).toBe(1);
+  expect(rulesDetailReads).toBe(1);
+
+  await page.goBack();
+  await expect(page).toHaveURL(/\/competitors$/);
+  await expect(page.locator(".competitor-detail h3")).toHaveText(item.title);
+  await expect.poll(() => listDetailReads).toBe(2);
+});
+
 test("competitor creation uses link, market and confirmation steps", async ({ page }) => {
   await setup(page);
   await page.goto("/competitors");

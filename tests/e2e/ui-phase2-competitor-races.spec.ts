@@ -225,3 +225,47 @@ test("UI2-CP-RACE04 returning to the same ID still rejects an older read generat
     release.release();
   }
 });
+
+test("UI2-CP-G04 follows browser route-query changes for competitor detail and search", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.evaluate((competitorId) => {
+    history.pushState({}, "", `/competitors?competitor=${competitorId}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, bId);
+  await expect(page).toHaveURL(new RegExp(`competitor=${bId}`));
+  await expect(page.locator(".competitor-detail h3")).toHaveText(b.title);
+
+  await page.evaluate(() => {
+    history.pushState({}, "", "/competitors?q=B000000002");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page).toHaveURL(/q=B000000002/);
+  await expect(page.getByRole("searchbox", { name: "搜索竞品" })).toHaveValue("B000000002");
+  await expect(page.locator(".competitor-list button")).toHaveCount(1);
+  await expect(page.locator(".competitor-list button").first()).toContainText(b.title);
+
+  await page.evaluate(() => {
+    history.pushState({}, "", "/competitors?create=1");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page.getByRole("heading", { name: "添加竞品监控" })).toBeVisible();
+  await page.evaluate(() => {
+    history.pushState({}, "", "/competitors");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page.getByRole("heading", { name: "添加竞品监控" })).toHaveCount(0);
+
+  await page.evaluate((competitorId) => {
+    history.pushState({}, "", `/competitors/monitoring-rules?competitor=${competitorId}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, bId);
+  await expect(page.getByRole("heading", { name: "新建监控规则" })).toBeVisible();
+  await expect(page.getByLabel("竞品（留空为工作区全局）")).toHaveValue(bId);
+  await page.evaluate(() => {
+    history.pushState({}, "", "/competitors/monitoring-rules");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page.getByRole("heading", { name: "新建监控规则" })).toHaveCount(0);
+});
