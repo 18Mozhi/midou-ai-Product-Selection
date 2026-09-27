@@ -7,14 +7,14 @@
   "sourceHashes": {
     "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
-    "apps/web/src/components/OpportunityDecisionPanel.vue": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
     "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-    "apps/web/src/components/OpportunityWorkspace.vue": "74e03f8d2eb05efcb0f254844eed474be76efaf4d2374f5ba39e0d0ada258ae1",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+    "apps/web/src/components/OpportunityWorkspace.vue": "527907dfeac5dd817f9f40bc822955c27e33f616196d80fe1f59608e0f287d3c",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "63b16658e3b1fac8838a19828a5ff564d6d8e55d30e5c4b40ed608c1aacc2f2c",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
   "dialogs": {
@@ -1865,9 +1865,9 @@
           "scene": "reject-dialog"
         }
       ],
-      "remaining": "重复标题ID仍在真实Vue；原型忙碌限制不等于旧源已生效。",
+      "remaining": "弹窗名称已绑定独立标题；完整键盘/读屏、忙碌期间关闭与服务端写入归属仍需独立验证。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f3f35ebc7969e030.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#e6463826c649de97.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1"
       ],
@@ -2613,7 +2613,7 @@
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#8b4dc3f5856d3c5a.1"
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#21d6397072095d87.1"
       ],
       "sourceContractKeys": ["人工决策原生dialog；三变体"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
@@ -2653,14 +2653,14 @@
     "dependencyHashes": {
       "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
       "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
-      "apps/web/src/components/OpportunityDecisionPanel.vue": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+      "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
       "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
       "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
       "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-      "apps/web/src/components/OpportunityWorkspace.vue": "74e03f8d2eb05efcb0f254844eed474be76efaf4d2374f5ba39e0d0ada258ae1",
-      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+      "apps/web/src/components/OpportunityWorkspace.vue": "527907dfeac5dd817f9f40bc822955c27e33f616196d80fe1f59608e0f287d3c",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "63b16658e3b1fac8838a19828a5ff564d6d8e55d30e5c4b40ed608c1aacc2f2c",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",

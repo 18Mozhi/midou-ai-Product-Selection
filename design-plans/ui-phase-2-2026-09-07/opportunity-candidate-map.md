@@ -2,6 +2,8 @@
 
 2026-09-07；草稿起点main/181ab16，本批main/a329cfd重新核对并补齐关联合同；产品指纹c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183。12个已读组件、104个控件/事件候选一一归属；完整candidateId为apps/web/src/components/文件.vue#尾键。源码行号辅助定位，业务语义以[机会合同](opportunity-contract-review.md)为准。转发事件和提交按钮不重复算业务能力；此表不冻结全站分母，不表示全部已运行。
 
+2026-09-28更新：人工决定原生 dialog 的标题ID从 `opportunity-decision-title` 独立为 `opportunity-decision-dialog-title` 后，其 `dialog-definition` 与 `@cancel` 当前签名分别更新为 `21d6397072095d87.1`、`e6463826c649de97.1`；对应人工决定 close 与容器合同继续保持原归属。
+
 | 文件:行 | 候选尾键 | 语义归属 |
 | --- | --- | --- |
 | AutomaticSelectionReadinessPanel:58 | 0d20f52ad0f021a6.1 | OP-SETUP-NEXT |
@@ -103,7 +105,7 @@
 | OpportunityWorkspaceDialogs:113 | 93e4be8029abb2a0.1 | OP-CREATE-CLOSE |
 | OpportunityWorkspaceDialogs:129 | 87e5a2bcb170606c.1 | OP-CREATE-CLOSE |
 | OpportunityWorkspaceDialogs:130 | ff7a5f3105576981.1 | OP-CREATE-SUBMIT |
-| OpportunityWorkspaceDialogs:137 | f3f35ebc7969e030.1 | OP-DECISION-CLOSE：Escape |
+| OpportunityWorkspaceDialogs:137 | e6463826c649de97.1 | OP-DECISION-CLOSE：Escape |
 | OpportunityWorkspaceDialogs:144 | 10c891f118c2001b.1 | OP-DECISION-SUBMIT |
 | OpportunityWorkspaceDialogs:150 | 5e85f75285d7eb96.1 | OP-DECISION-CLOSE |
 | OpportunityWorkspaceDialogs:164 | d594d7628cde3706.1 | OP-DECISION-CLOSE |
@@ -122,7 +124,7 @@
 | OpportunityWorkspace.vue:505| 36cdbd1cb98185c2.1 | AI原因helper调用；通过/驳回 |
 | OpportunityWorkspaceDialogs.vue:44 | 1ed288cd855ce1c0.1 | ERP导入原生dialog |
 | OpportunityWorkspaceDialogs.vue:100 | ac06eb6f17f7829e.1 | 机会创建原生dialog |
-| OpportunityWorkspaceDialogs.vue:137 | 8b4dc3f5856d3c5a.1 | 人工决策原生dialog；三变体 |
+| OpportunityWorkspaceDialogs.vue:137 | 21d6397072095d87.1 | 人工决策原生dialog；三变体 |
 
 ### P18 AI 原因共享组件源候选
 

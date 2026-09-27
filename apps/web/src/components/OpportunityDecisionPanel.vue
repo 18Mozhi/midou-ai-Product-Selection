@@ -61,11 +61,14 @@ const recommendationCopy = computed(() =>
     </div>
     <a href="#opportunity-decision-actions">前往决策</a>
   </section>
-  <section class="opportunity-decision-summary" aria-labelledby="opportunity-decision-title">
+  <section
+    class="opportunity-decision-summary"
+    aria-labelledby="opportunity-decision-summary-title"
+  >
     <header class="opportunity-decision-summary__lead">
       <div>
         <p>系统建议</p>
-        <h3 id="opportunity-decision-title">{{ recommendationTitle }}</h3>
+        <h3 id="opportunity-decision-summary-title">{{ recommendationTitle }}</h3>
         <span>{{ recommendationCopy }}</span>
       </div>
       <dl aria-label="推荐判断摘要">

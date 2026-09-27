@@ -138,14 +138,16 @@ const decisionLabel = {
     v-if="decisionOpen && hasDetail"
     ref="decisionDialog"
     class="opportunity-modal"
-    aria-labelledby="opportunity-decision-title"
+    aria-labelledby="opportunity-decision-dialog-title"
     @cancel="cancelDecision"
   >
     <form class="so-dialog-manifest" @submit.prevent="emit('decide')">
       <header>
         <div>
           <p>留痕决策</p>
-          <h3 id="opportunity-decision-title">记录{{ decisionLabel[decisionAction] }}决定</h3>
+          <h3 id="opportunity-decision-dialog-title">
+            记录{{ decisionLabel[decisionAction] }}决定
+          </h3>
         </div>
         <button
           class="so-action-quiet"

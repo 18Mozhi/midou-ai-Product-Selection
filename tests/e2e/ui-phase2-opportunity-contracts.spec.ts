@@ -418,9 +418,7 @@ for (const [action, label] of [
       .getByRole("navigation", { name: "候选提前人工处理" })
       .getByRole("button", { name: label, exact: true });
     await trigger.click();
-    // Scope by native top-layer: current source duplicates the decision heading ID.
-    // This test does not certify the dialog's accessible-name contract.
-    const modal = page.locator("dialog.opportunity-modal[open]");
+    const modal = page.getByRole("dialog", { name: `记录${label}决定`, exact: true });
     await modal.getByLabel("原因（必填）").fill("取消原因");
     await modal.press("Escape");
     await expect(modal).toHaveCount(0);
