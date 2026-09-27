@@ -495,7 +495,8 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
   await page.setViewportSize({ width: 390, height: 844 });
   await ready(page);
   await page.goto("/opportunities");
-  await page.getByRole("button", { name: /高级筛选/ }).click();
+  const filterTrigger = page.getByRole("button", { name: /高级筛选/ });
+  await filterTrigger.click();
   const drawer = page.getByRole("dialog", { name: "高级筛选" });
   await expect(drawer).toHaveCSS("width", "390px");
   await expect(drawer).toHaveCSS("height", "844px");
@@ -508,15 +509,18 @@ test("mobile opportunity filters preserve selected adoption blocker inside the d
     .poll(() => actionDock.evaluate((element) => element.getBoundingClientRect().bottom))
     .toBe(844);
   await drawer.getByLabel("阻断原因").selectOption("recommendation_insufficient");
+  await expect(filterTrigger).not.toContainText("1 项已选");
   await drawer.getByRole("button", { name: "关闭筛选条件" }).click();
-  await page.getByRole("button", { name: /高级筛选/ }).click();
+  await filterTrigger.click();
   await expect(drawer.getByLabel("阻断原因")).toHaveValue("recommendation_insufficient");
+  await expect(filterTrigger).not.toContainText("1 项已选");
   const filtered = page.waitForRequest((request) =>
     request.url().includes("blocking_reason=recommendation_insufficient"),
   );
   await drawer.getByRole("button", { name: "筛选", exact: true }).click();
   await filtered;
   await expect(page).toHaveURL(/blocking_reason=recommendation_insufficient/);
+  await expect(filterTrigger).toContainText("1 项已选");
   await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
 });
 

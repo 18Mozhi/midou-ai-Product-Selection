@@ -1,8 +1,9 @@
 # P15/P18 机会列表与详情 · 源码合同复核
 
 2026-09-28 P15 UI2-OP04续记：真实Vue列表已将总selectedIds与本次当前items交集分开呈现；筛选后隐藏的已选项有明确说明，零当前项时三个批量动作禁用，弹窗文案与POST items共享同一currentPageSelectedItems派生值。当前隔离fixture下桌面Chromium、390px移动各1/1，覆盖筛选保留A、结果仅B、先禁用再选B并仅提交B。OP06由“UI范围未披露”局部收窄为“跨页/筛选后选择策略未定”；不宣称跨页全部提交，不改变API、后端或服务端事务/RBAC。
+2026-09-28 P15筛选计数续记：高级筛选触发器“已选”数字根据 URL 中已应用的七项筛选派生，而非实时 v-model 草稿；空状态清除入口仍识别草稿。移动 E2E 验证编辑、关闭重开、应用前不计数、应用后计数。非 all 深链 decision_status 的既有传递行为未改变。
 
-2026-09-08 P15图稿接续：[OPPORTUNITY-C-r1](design/opportunity-direction-c/README.md)126图待审；本批不覆盖P18。源confirmBatch曾复现selectedIds两项、当前items一项时body只含一项；当时OP06记为“已隔离复现、未修Vue/未真实验收”，提案建议展示有效范围和本页外选择。现由上方2026-09-28续记更新其UI缺口状态；原activeFilterCount使用可变草稿、列表图片无error handler亦保留待修边界。创建/三批量/URL/ERP文件输入及rowFacts已与源执行结果核对，不等于后端事务/权限/ERP服务通过。
+2026-09-08 P15图稿接续：[OPPORTUNITY-C-r1](design/opportunity-direction-c/README.md)126图待审；本批不覆盖P18。源confirmBatch曾复现selectedIds两项、当前items一项时body只含一项；当时OP06记为“已隔离复现、未修Vue/未真实验收”，提案建议展示有效范围和本页外选择。现由上方2026-09-28续记更新其UI缺口状态；activeFilterCount草稿误计数已修复，列表图片无error handler仍为待修边界。创建/三批量/URL/ERP文件输入及rowFacts已与源执行结果核对，不等于后端事务/权限/ERP服务通过。
 
 日期：2026-09-07；N02；复核起点main/a329cfd。产品源码指纹仍为c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183，inventory --check通过。既有候选草稿经当前源码/清单核对后纳入本批，不改生成清单或全站通过计数。
 

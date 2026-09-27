@@ -25,6 +25,15 @@ const viewOptions: Array<{ value: SelectionView; label: string }> = [
   { value: "evidence_pending", label: "采集中" },
   { value: "all", label: "全部机会" },
 ];
+const filterQueryKeys = [
+  "q",
+  "market",
+  "decision_status",
+  "coverage_status",
+  "blocking_reason",
+  "lifecycle_status",
+  "owner_id",
+] as const;
 
 const props = defineProps<{
     items: Opportunity[];
@@ -53,7 +62,15 @@ const props = defineProps<{
   }>(),
   route = useRoute(),
   pageCount = computed(() => Math.max(1, Math.ceil(props.total / 20))),
-  activeFilterCount = computed(() => Object.values(props.filters).filter(Boolean).length),
+  activeFilterCount = computed(
+    () =>
+      filterQueryKeys.filter((key) => {
+        const value = route.query[key];
+        return typeof value === "string" && value.length > 0;
+      }).length,
+  ),
+  draftFilterCount = computed(() => Object.values(props.filters).filter(Boolean).length),
+  hasFiltersToClear = computed(() => activeFilterCount.value > 0 || draftFilterCount.value > 0),
   showAutomationReadiness = computed(() =>
     ["recommended", "rule_candidates"].includes(props.selectionView),
   ),
@@ -166,7 +183,7 @@ const opportunityStatus = (value: string) =>
     ];
   },
   clearOrShowAll = () => {
-    if (activeFilterCount.value) emit("reset");
+    if (hasFiltersToClear.value) emit("reset");
     else if (props.selectionView === "all") emit("apply");
     else emit("view", "all");
   };
@@ -258,7 +275,7 @@ const opportunityStatus = (value: string) =>
     "
     :secondary-label="
       state === 'empty'
-        ? activeFilterCount
+        ? hasFiltersToClear
           ? '清除筛选'
           : selectionView === 'all'
             ? '刷新列表'
