@@ -95,6 +95,36 @@ const props = defineProps<{
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref("");
 const aiReviewError = ref("");
+const createFeedback = ref<
+  | {
+      type: "error";
+      message: string;
+    }
+  | {
+      type: "created";
+      id: string;
+      name: string;
+      submitted: { name: string; market: string; category: string; source_topic_id: string };
+    }
+  | null
+>(null);
+let createDialogGeneration = 0;
+watch(
+  showCreate,
+  () => {
+    createDialogGeneration += 1;
+    createFeedback.value = null;
+  },
+  { flush: "sync" },
+);
+watch(
+  () => [route.fullPath, props.opportunityId],
+  () => {
+    createDialogGeneration += 1;
+    createFeedback.value = null;
+  },
+  { flush: "sync" },
+);
 const { filters, form, costForm, feedbackForm } = createOpportunityWorkspaceForms();
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
@@ -323,16 +353,41 @@ async function write(path: string, body: unknown) {
   }
 }
 async function create() {
+  if (busy.value) return;
+  const submitted = { ...form },
+    dialogGeneration = createDialogGeneration,
+    routePath = route.fullPath,
+    opportunityId = props.opportunityId;
   const result = await write("/opportunities", {
-    name: form.name,
-    market: form.market,
-    category: form.category || null,
-    source_topic_id: form.source_topic_id || null,
+    name: submitted.name,
+    market: submitted.market,
+    category: submitted.category || null,
+    source_topic_id: submitted.source_topic_id || null,
   });
-  if (result) {
+  const sameRoute = route.fullPath === routePath && props.opportunityId === opportunityId;
+  if (!result) {
+    if (sameRoute && showCreate.value)
+      createFeedback.value = {
+        type: "error",
+        message: message.value || "本次创建未能确认；请核对反馈后再重试。",
+      };
+    return;
+  }
+  if (sameRoute && showCreate.value && dialogGeneration === createDialogGeneration) {
+    createFeedback.value = null;
     showCreate.value = false;
     await router.push(`/opportunities/${result.id}`);
+    return;
   }
+  const staleSuccess = {
+    type: "created" as const,
+    id: String(result.id),
+    name: submitted.name,
+    submitted,
+  };
+  if (!sameRoute) return;
+  if (showCreate.value) createFeedback.value = staleSuccess;
+  else message.value = `机会“${submitted.name}”已创建；当前列表未跳转，请在列表中查看。`;
 }
 function browserBridge<T>(action: string, payload: Record<string, unknown>) {
   return new Promise<T>((resolve, reject) => {
@@ -970,6 +1025,7 @@ onBeforeUnmount(() => {
       v-model:decision-reason="decisionReason"
       :busy="busy"
       :form="form"
+      :create-feedback="createFeedback"
       :decision-action="decisionAction"
       :has-detail="Boolean(detail)"
       @create="create"

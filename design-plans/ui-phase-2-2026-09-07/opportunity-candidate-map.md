@@ -1,6 +1,6 @@
 # P15/P18 机会共享入口候选映射
 
-2026-09-07；草稿起点main/181ab16，本批main/a329cfd重新核对并补齐关联合同；产品指纹c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183。12个已读组件、104个控件/事件候选一一归属；完整candidateId为apps/web/src/components/文件.vue#尾键。源码行号辅助定位，业务语义以[机会合同](opportunity-contract-review.md)为准。转发事件和提交按钮不重复算业务能力；此表不冻结全站分母，不表示全部已运行。
+2026-09-07；草稿起点main/181ab16，本批main/a329cfd重新核对并补齐关联合同；产品指纹c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183。12个已读组件、111个当前控件/事件候选一一归属；完整candidateId为apps/web/src/components/文件.vue#尾键。源码行号辅助定位，业务语义以[机会合同](opportunity-contract-review.md)为准。转发事件和提交按钮不重复算业务能力；此表不冻结全站分母，不表示全部已运行。
 
 2026-09-28更新：人工决定原生 dialog 的标题ID从 `opportunity-decision-title` 独立为 `opportunity-decision-dialog-title` 后，其 `dialog-definition` 与 `@cancel` 当前签名分别更新为 `21d6397072095d87.1`、`e6463826c649de97.1`；对应人工决定 close 与容器合同继续保持原归属。
 
@@ -88,7 +88,7 @@
 | OpportunityWorkspace:827| 3e5dca6610ac19d8.1 | OP-FEEDBACK-SUBMIT转发 |
 | OpportunityWorkspace:835| a91f12f030c2fe66.1 | 成本提交/复核/利润重算转发 |
 | OpportunityWorkspace:846| 76ae53c237c00264.1 | AI排队/重读/复核转发 |
-| OpportunityWorkspace:883| ebc2bd495e3582f5.1 | 创建/决定/ERP浏览器/文件导入转发 |
+| OpportunityWorkspace:1019 | c46fc24a5bfcc314.1 | 创建/决定/ERP浏览器/文件导入转发 |
 | OpportunityWorkspace:899| 2f4e238755b201b9.1 | OP-BATCH-CANCEL：Escape |
 | OpportunityWorkspace:980| 2f4e238755b201b9.1 | OP-BATCH-CANCEL |
 | OpportunityWorkspace:1023| 64891e806e385e12.1 | OP-BATCH-CANCEL |
@@ -105,16 +105,17 @@
 | OpportunityWorkspaceDialogs:89 | 598ca963b90371ed.1 | OP-HELPER-DOWNLOAD |
 | OpportunityWorkspaceDialogs:90 | 71b07908a7d1f426.1 | OP-ERP-CLOSE |
 | OpportunityWorkspaceDialogs:93 | 429c64115868d9c6.1 | OP-ERP-BROWSER |
-| OpportunityWorkspaceDialogs:100 | 364dc8e63849b27f.1 | OP-CREATE-CLOSE：Escape |
-| OpportunityWorkspaceDialogs:107 | 781b6e8e908ba7ac.1 | OP-CREATE-SUBMIT |
+| OpportunityWorkspaceDialogs:121 | cb6531d91ea2d929.1 | OP-CREATE-CLOSE：Escape |
+| OpportunityWorkspaceDialogs:128 | 92c0e7988ecb5b9b.1 | OP-CREATE-SUBMIT |
 | OpportunityWorkspaceDialogs:113 | 93e4be8029abb2a0.1 | OP-CREATE-CLOSE |
 | OpportunityWorkspaceDialogs:129 | 87e5a2bcb170606c.1 | OP-CREATE-CLOSE |
-| OpportunityWorkspaceDialogs:130 | ff7a5f3105576981.1 | OP-CREATE-SUBMIT |
+| OpportunityWorkspaceDialogs:158 | 439b2aeecca24b47.1 | OP-CREATE-SUBMIT |
 | OpportunityWorkspaceDialogs:137 | e6463826c649de97.1 | OP-DECISION-CLOSE：Escape |
 | OpportunityWorkspaceDialogs:144 | 10c891f118c2001b.1 | OP-DECISION-SUBMIT |
 | OpportunityWorkspaceDialogs:150 | 5e85f75285d7eb96.1 | OP-DECISION-CLOSE |
 | OpportunityWorkspaceDialogs:164 | d594d7628cde3706.1 | OP-DECISION-CLOSE |
 | OpportunityWorkspaceDialogs:167 | ced3effe8f7058f1.1 | OP-DECISION-SUBMIT |
+| OpportunityWorkspaceDialogs:150 | 2f7a15b104750d49.1 | OP-DETAIL-NAV |
 
 ## 八个弹窗定义/调用候选
 
@@ -123,12 +124,12 @@
 | 文件:行 | 候选尾键 | 定义/调用 |
 | --- | --- | --- |
 | OpportunityListPanel.vue:186 | 3b502c874c5bc655.1 | 共享筛选抽屉 |
-| OpportunityWorkspace.vue:883| 4f1225f6705d3e1d.1 | 三类业务弹窗集合调用 |
+| OpportunityWorkspace.vue:1019 | 67266c4b90185a39.1 | 三类业务弹窗集合调用 |
 | OpportunityWorkspace.vue:899| acc11467e72e9b66.1 | 本地批量原生dialog；三变体 |
 | OpportunityWorkspace.vue:943| 38deb219e719849f.1 | 共享原因框组件调用 |
 | OpportunityWorkspace.vue:505| 36cdbd1cb98185c2.1 | AI原因helper调用；通过/驳回 |
 | OpportunityWorkspaceDialogs.vue:44 | 1ed288cd855ce1c0.1 | ERP导入原生dialog |
-| OpportunityWorkspaceDialogs.vue:100 | ac06eb6f17f7829e.1 | 机会创建原生dialog |
+| OpportunityWorkspaceDialogs.vue:121 | c36983c07beb5b75.1 | 机会创建原生dialog |
 | OpportunityWorkspaceDialogs.vue:137 | 21d6397072095d87.1 | 人工决策原生dialog；三变体 |
 
 ### P18 AI 原因共享组件源候选

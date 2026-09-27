@@ -327,6 +327,60 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await expect(page.getByRole("heading", { name: "AI 驱动的个性化护肤机会" })).toBeVisible();
 });
 
+test("a late create success does not close or navigate away from a reopened create dialog", async ({
+  page,
+}) => {
+  await ready(page);
+  let releaseCreate!: () => void;
+  let markCreateStarted!: () => void;
+  const createStarted = new Promise<void>((resolve) => {
+    markCreateStarted = resolve;
+  });
+  const createGate = new Promise<void>((resolve) => {
+    releaseCreate = resolve;
+  });
+  const createdId = "00000000-0000-4000-8000-000000000432";
+  await page.route("**/api/v1/opportunities", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    markCreateStarted();
+    await createGate;
+    return route.fulfill({
+      status: 201,
+      contentType: "application/json",
+      body: JSON.stringify(envelope({ ...base, id: createdId, name: "第一个草稿" })),
+    });
+  });
+
+  await page.goto("/opportunities?view=all&create=1");
+  const dialog = page.getByRole("dialog");
+  await expect(dialog).toBeVisible();
+  await dialog.getByLabel("机会名称").fill("第一个草稿");
+  await dialog.getByRole("button", { name: "创建机会", exact: true }).click();
+  await createStarted;
+
+  await dialog.getByRole("button", { name: "关闭" }).click();
+  await expect(dialog).toBeHidden();
+  await page.getByRole("button", { name: "手工添加", exact: true }).click();
+  await expect(dialog).toBeVisible();
+  await dialog.getByLabel("机会名称").fill("第二个草稿");
+
+  releaseCreate();
+
+  await expect(dialog).toBeVisible();
+  await expect(page).toHaveURL(/\/opportunities\?view=all&create=1$/u);
+  await expect(dialog.getByLabel("机会名称")).toHaveValue("第二个草稿");
+  await expect(dialog.getByRole("link", { name: "查看已创建机会" })).toHaveAttribute(
+    "href",
+    `/opportunities/${createdId}`,
+  );
+  await dialog.getByLabel("机会名称").fill("第一个草稿");
+  await expect(
+    dialog.getByRole("button", { name: "内容已创建，请修改后再提交", exact: true }),
+  ).toBeDisabled();
+  await dialog.getByLabel("机会名称").fill("第二个草稿");
+  await expect(dialog.getByRole("button", { name: "创建机会", exact: true })).toBeEnabled();
+});
+
 test("opportunity list distinguishes a failed product image from one not yet collected", async ({
   page,
 }) => {

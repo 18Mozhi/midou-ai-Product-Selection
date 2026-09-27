@@ -13,8 +13,8 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-    "apps/web/src/components/OpportunityWorkspace.vue": "527907dfeac5dd817f9f40bc822955c27e33f616196d80fe1f59608e0f287d3c",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "63b16658e3b1fac8838a19828a5ff564d6d8e55d30e5c4b40ed608c1aacc2f2c",
+    "apps/web/src/components/OpportunityWorkspace.vue": "2ffa5745e6682991fb277b16c6d29c3071f808690c0a6147e651b517ce1cc69e",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "fc8184fa5c8962d79e58c988f80d76ff414491079f6223e27f8852b63a85790f",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
   "dialogs": {
@@ -1991,12 +1991,13 @@
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#364dc8e63849b27f.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#781b6e8e908ba7ac.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c36983c07beb5b75.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#cb6531d91ea2d929.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#92c0e7988ecb5b9b.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ff7a5f3105576981.1"
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#439b2aeecca24b47.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#2f7a15b104750d49.1"
       ],
       "sourceContractKeys": [
         "OP-JOURNEY-NAV",
@@ -2017,7 +2018,8 @@
         "机会创建原生dialog",
         "OP-CREATE-CLOSE：Escape",
         "OP-CREATE-SUBMIT",
-        "OP-CREATE-CLOSE"
+        "OP-CREATE-CLOSE",
+        "OP-DETAIL-NAV"
       ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
@@ -2383,49 +2385,49 @@
       "forwardsTo": ["OP-P15-EXCLUDED", "OP-DECISION-SUBMIT"],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
           "event": "@create",
           "handler": "create",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
           "event": "@decide",
           "handler": "decide",
           "targets": ["OP-DECISION-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
           "event": "@import-file",
           "handler": "importErpFile",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
           "event": "@create",
           "handler": "create",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
           "event": "@decide",
           "handler": "decide",
           "targets": ["OP-DECISION-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
           "event": "@import-file",
           "handler": "importErpFile",
           "targets": ["OP-P15-EXCLUDED"]
@@ -2443,8 +2445,8 @@
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1"
+        "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1"
       ],
       "sourceContractKeys": ["创建/决定/ERP浏览器/文件导入转发", "三类业务弹窗集合调用"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
@@ -2659,8 +2661,8 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
       "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-      "apps/web/src/components/OpportunityWorkspace.vue": "527907dfeac5dd817f9f40bc822955c27e33f616196d80fe1f59608e0f287d3c",
-      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "63b16658e3b1fac8838a19828a5ff564d6d8e55d30e5c4b40ed608c1aacc2f2c",
+      "apps/web/src/components/OpportunityWorkspace.vue": "2ffa5745e6682991fb277b16c6d29c3071f808690c0a6147e651b517ce1cc69e",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "fc8184fa5c8962d79e58c988f80d76ff414491079f6223e27f8852b63a85790f",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
@@ -3478,6 +3480,28 @@
       },
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "tag": "aside",
+        "ordinal": 3,
+        "shape": "inline-aside",
+        "sourceBehavior": "P15创建窗的迟到成功回执与已创建机会链接；不属于P18正常入口。",
+        "remaining": "仅登记共享文件中的列表创建结构，不将P15回执视觉或行为提升为P18验收。",
+        "variants": [
+          {
+            "name": "P15-create-receipt",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "列表创建迟到响应反馈，P18详情入口不适用。",
+            "scenes": [
+              {
+                "package": "opportunity-direction-c",
+                "scene": "create-open"
+              }
+            ],
+            "remaining": "场景仅作相关源码引用；P18不继承P15回执交互验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "dialog",
         "ordinal": 3,
         "shape": "native-dialog",
@@ -3565,7 +3589,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "aside",
-        "ordinal": 3,
+        "ordinal": 4,
         "shape": "inline-aside",
         "sourceBehavior": "只读决定影响说明，嵌入决定form",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",

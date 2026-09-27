@@ -82,8 +82,8 @@
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-    "apps/web/src/components/OpportunityWorkspace.vue": "527907dfeac5dd817f9f40bc822955c27e33f616196d80fe1f59608e0f287d3c",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "63b16658e3b1fac8838a19828a5ff564d6d8e55d30e5c4b40ed608c1aacc2f2c",
+    "apps/web/src/components/OpportunityWorkspace.vue": "2ffa5745e6682991fb277b16c6d29c3071f808690c0a6147e651b517ce1cc69e",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "fc8184fa5c8962d79e58c988f80d76ff414491079f6223e27f8852b63a85790f",
     "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
@@ -252,8 +252,8 @@
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b8c7eed0c5b6b1ea3bfcb4df1febb5a1b47ab98d0d8a4fa3c914739d10c6a47f",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "2a6c6dd60fa660ff2758463c2b85cb51ff3868eefc9860f376d1e7b982ccc750",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "02c8b8a8a8bbad5738e5674d655908d4436fe3b2e26ef1ed9213d02e97a1d302",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "6788eea9002c60c68e3a654419e4e40768452e6fcac60e756b929ab126d86f5c",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "83242e6e0e3e3247b77be78b89a68b962f378223676ed4fc33f7ff5b4a471158",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "48ee7d2bfb4b6c4974f4d3484c68217905dc5ae2a410deb63083c35345ef1fce",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "5dc7fd6a3ee005421917375cc0de591f9edbfd2dff57d9ffdcfb589223a3f9e4",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "11dc7f844e20c19e2bbcd068da11b72a0c8bd9b69b5fa7da2bd91985e31ef4a1",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
@@ -414,15 +414,15 @@
     "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
     "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
     "tests/e2e/ui-phase2-trend-contracts.spec.ts": "c9b3be8f0656b2c4f008bcfa5741ac8185e75787b871eba310a8b6baad1db01f",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "70791b25c1e14cbb76a39ac6db8571dd9a1212df2eb9c3f5ddbba35c3d24af7f",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "58d44ae41a9bb6f2f3b0b8b7b17e190cf3ebea417be1336dc3936dbd47a6ae66",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "tests/e2e/m04-02-opportunities.spec.ts": "39da7afa927eb3377781ed1f64c34bc46cb876af59e3e4e46a16e4aa5e5851ad",
+    "tests/e2e/m04-02-opportunities.spec.ts": "d6317438937b9156afdc5dd2f5b3a147a795b9e536e3b6439a791fe340b1f64a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "93ebb1504c08352084de44f476df8a24b1e43b0893e87be8ed68fed95b8a4da7",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "79b6a0986ce36c1f6f3cfc93fc871b4650cff9f686b5a3f389e5f697b3d00e53",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "53e74e1256124b55de351a5ff20686baf79699df4f4b66c08ce90605680f1af0",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "711a6c69dcd2c66f5fd4d709adf1311df454f383c265dac34447a07e274c3693",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "ce8bbbe088cb08566b3deeb4ef2fce6dd539a30f6e8c3bb1afb9b5af27c8413e",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -649,12 +649,12 @@
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1712,
+    "currentSourceCandidates": 1713,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 658,
-    "oldOnlyIdentities": 423,
+    "newSourceIdentities": 665,
+    "oldOnlyIdentities": 429,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1552,
+    "explicitlyGroupedSourceSites": 1553,
     "semanticGroups": 1274,
     "routeActions": 1052,
     "wiringGroups": 118,
@@ -1263,12 +1263,12 @@
       "id": "P15",
       "path": "/opportunities",
       "title": "选品机会",
-      "oldStaticAssociatedCandidates": 142,
+      "oldStaticAssociatedCandidates": 136,
       "review": {
         "pageId": "P15",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 69,
+        "sourceSites": 70,
         "semanticGroups": 36,
         "routeActions": 28,
         "wiringGroups": 6,
@@ -1285,9 +1285,9 @@
           "callerFiles": 4,
           "localModelBindings": 20,
           "reviewedInputBindings": 20,
-          "sourceCallerContainers": 17,
-          "callerContainers": 17,
-          "consumerVariants": 35,
+          "sourceCallerContainers": 18,
+          "callerContainers": 18,
+          "consumerVariants": 36,
           "runtimeAcceptance": "unproven"
         }
       },
@@ -1401,12 +1401,12 @@
       "id": "P18",
       "path": "/opportunities/:opportunityId",
       "title": "机会详情",
-      "oldStaticAssociatedCandidates": 142,
+      "oldStaticAssociatedCandidates": 136,
       "review": {
         "pageId": "P18",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 102,
+        "sourceSites": 103,
         "semanticGroups": 53,
         "routeActions": 44,
         "wiringGroups": 8,
@@ -1423,9 +1423,9 @@
           "callerFiles": 11,
           "localModelBindings": 35,
           "reviewedInputBindings": 35,
-          "sourceCallerContainers": 25,
-          "callerContainers": 25,
-          "consumerVariants": 41,
+          "sourceCallerContainers": 26,
+          "callerContainers": 26,
+          "consumerVariants": 42,
           "runtimeAcceptance": "unproven"
         }
       },
@@ -4195,7 +4195,7 @@
       "pageId": "P15",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 69,
+      "sourceSites": 70,
       "semanticGroups": 36,
       "routeActions": 28,
       "wiringGroups": 6,
@@ -4212,9 +4212,9 @@
         "callerFiles": 4,
         "localModelBindings": 20,
         "reviewedInputBindings": 20,
-        "sourceCallerContainers": 17,
-        "callerContainers": 17,
-        "consumerVariants": 35,
+        "sourceCallerContainers": 18,
+        "callerContainers": 18,
+        "consumerVariants": 36,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -4274,7 +4274,7 @@
       "pageId": "P18",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 102,
+      "sourceSites": 103,
       "semanticGroups": 53,
       "routeActions": 44,
       "wiringGroups": 8,
@@ -4291,9 +4291,9 @@
         "callerFiles": 11,
         "localModelBindings": 35,
         "reviewedInputBindings": 35,
-        "sourceCallerContainers": 25,
-        "callerContainers": 25,
-        "consumerVariants": 41,
+        "sourceCallerContainers": 26,
+        "callerContainers": 26,
+        "consumerVariants": 42,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -7609,7 +7609,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 140,
+          "line": 141,
           "jsonPointer": null
         }
       ],
@@ -7644,7 +7644,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 141,
+          "line": 142,
           "jsonPointer": null
         }
       ],
@@ -7679,7 +7679,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 142,
+          "line": 143,
           "jsonPointer": null
         }
       ],
@@ -7732,7 +7732,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 143,
+          "line": 144,
           "jsonPointer": null
         }
       ],
@@ -7785,7 +7785,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 144,
+          "line": 145,
           "jsonPointer": null
         }
       ],
@@ -7838,7 +7838,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 145,
+          "line": 146,
           "jsonPointer": null
         }
       ],
@@ -31136,7 +31136,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 125,
+          "line": 126,
           "jsonPointer": null
         }
       ],
@@ -31873,7 +31873,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 747,
+      "line": 802,
       "kind": "control",
       "label": "创建选品 →",
       "conditions": [
@@ -31915,7 +31915,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 749,
+      "line": 804,
       "kind": "control",
       "label": "管理选品规则",
       "conditions": [
@@ -31957,7 +31957,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 751,
+      "line": 806,
       "kind": "control",
       "label": "从 ERP 导入",
       "conditions": [
@@ -32003,7 +32003,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 758,
+      "line": 813,
       "kind": "control",
       "label": "手工添加",
       "conditions": [
@@ -32049,7 +32049,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 770,
+      "line": 825,
       "kind": "control",
       "label": "← 返回来源列表",
       "conditions": [
@@ -32087,7 +32087,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 776,
+      "line": 831,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32122,7 +32122,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#7219811dcc02cc91.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 801,
+      "line": 856,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32164,7 +32164,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 820,
+      "line": 875,
       "kind": "control",
       "label": "运行信息",
       "conditions": [
@@ -32206,7 +32206,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 830,
+      "line": 885,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32248,7 +32248,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 842,
+      "line": 897,
       "kind": "control",
       "label": "补证异常时手动处理",
       "conditions": [
@@ -32294,7 +32294,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 845,
+      "line": 900,
       "kind": "control",
       "label": "采集 Amazon 竞品",
       "conditions": [
@@ -32344,7 +32344,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 852,
+      "line": 907,
       "kind": "control",
       "label": "采集公开供应商",
       "conditions": [
@@ -32394,7 +32394,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 859,
+      "line": 914,
       "kind": "control",
       "label": "检查评分规则",
       "conditions": [
@@ -32440,7 +32440,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#8dfb1ee903d0b053.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 864,
+      "line": 919,
       "kind": "control",
       "label": "{{ item[1] }}",
       "conditions": [
@@ -32486,7 +32486,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#badd0afd80b50ce6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 874,
+      "line": 929,
       "kind": "control",
       "label": "更多分析",
       "conditions": [
@@ -32528,7 +32528,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#1aef42d09991a143.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 876,
+      "line": 931,
       "kind": "control",
       "label": "{{ item[1] }}",
       "conditions": [
@@ -32574,7 +32574,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 888,
+      "line": 943,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32620,7 +32620,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3e5dca6610ac19d8.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 908,
+      "line": 963,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32666,7 +32666,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 916,
+      "line": 971,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32712,7 +32712,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 927,
+      "line": 982,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32756,9 +32756,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 964,
+      "line": 1019,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32767,12 +32767,9 @@
           "expression": "canDecide"
         }
       ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
@@ -32794,9 +32791,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 964,
+      "line": 1019,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [
@@ -32805,16 +32802,13 @@
           "expression": "canDecide"
         }
       ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 126,
+          "line": 127,
           "jsonPointer": null
         }
       ],
@@ -32834,7 +32828,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 980,
+      "line": 1036,
       "kind": "dialog-definition",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -32852,7 +32846,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 127,
+          "line": 128,
           "jsonPointer": null
         }
       ],
@@ -32872,7 +32866,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 980,
+      "line": 1036,
       "kind": "event-binding",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -32915,7 +32909,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 987,
+      "line": 1043,
       "kind": "form-event",
       "label": "影响预览 批量 {{ batchAction === \"assign\" ? \"指派\" : batchAction === \"archive\" ? \"归档\" : \"复核\" }} 本次仅处理当前结果中已选的 {{ currentPageSele",
       "conditions": [
@@ -32955,7 +32949,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1023,
+      "line": 1079,
       "kind": "control",
       "label": "返回",
       "conditions": [
@@ -32993,7 +32987,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1024,
+      "line": 1080,
       "kind": "control",
       "label": "确认执行",
       "conditions": [
@@ -33031,38 +33025,8 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b413cc394b21a4ed.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1028,
+      "line": 1084,
       "kind": "event-binding",
-      "label": "",
-      "conditions": [],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 148,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-P18-EXCLUDED",
-          "kind": "excluded"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-WIRING-REASON",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3d03bfde11490c97.1",
-      "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1028,
-      "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
       "staticRouteIds": [],
@@ -33089,11 +33053,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b74012fbdb739187.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3d03bfde11490c97.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 556,
-      "kind": "dialog-script-call",
-      "label": "askAiReviewReason(reasonRequest)",
+      "line": 1084,
+      "kind": "dialog-component-call",
+      "label": "",
       "conditions": [],
       "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
@@ -33101,7 +33065,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 146,
+          "line": 150,
           "jsonPointer": null
         }
       ],
@@ -33119,11 +33083,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca674a075f274bff.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b74012fbdb739187.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 569,
+      "line": 611,
       "kind": "dialog-script-call",
-      "label": "askAiReviewReason({ ...reasonRequest, initialValue: notes })",
+      "label": "askAiReviewReason(reasonRequest)",
       "conditions": [],
       "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
@@ -33149,9 +33113,39 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca674a075f274bff.1",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "line": 624,
+      "kind": "dialog-script-call",
+      "label": "askAiReviewReason({ ...reasonRequest, initialValue: notes })",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 148,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-P18-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-WIRING-REASON",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 44,
+      "line": 65,
       "kind": "dialog-definition",
       "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
       "conditions": [
@@ -33169,7 +33163,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 130,
+          "line": 131,
           "jsonPointer": null
         }
       ],
@@ -33189,7 +33183,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f9352d9bba967662.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 44,
+      "line": 65,
       "kind": "event-binding",
       "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
       "conditions": [
@@ -33227,7 +33221,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 51,
+      "line": 72,
       "kind": "form-event",
       "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
       "conditions": [
@@ -33265,7 +33259,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 57,
+      "line": 78,
       "kind": "control",
       "label": "关闭 ERP 导入",
       "conditions": [
@@ -33303,7 +33297,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 82,
+      "line": 103,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33341,7 +33335,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 89,
+      "line": 110,
       "kind": "control",
       "label": "下载浏览器助手",
       "conditions": [
@@ -33379,7 +33373,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 90,
+      "line": 111,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -33417,7 +33411,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 93,
+      "line": 114,
       "kind": "control",
       "label": "{{ busy ? \"读取并导入中…\" : \"从当前浏览器读取\" }}",
       "conditions": [
@@ -33453,27 +33447,24 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c36983c07beb5b75.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 100,
+      "line": 121,
       "kind": "dialog-definition",
-      "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 创建后由宝塔 Node Worker 刷新真实证据覆盖；评分、利润与风险不会自动填充。 取消 {{ busy ? \"创建中…\" : \"创",
+      "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "createOpen"
         }
       ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 131,
+          "line": 132,
           "jsonPointer": null
         }
       ],
@@ -33491,23 +33482,20 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#364dc8e63849b27f.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#cb6531d91ea2d929.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 100,
+      "line": 121,
       "kind": "event-binding",
-      "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 创建后由宝塔 Node Worker 刷新真实证据覆盖；评分、利润与风险不会自动填充。 取消 {{ busy ? \"创建中…\" : \"创",
+      "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "createOpen"
         }
       ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
@@ -33529,23 +33517,20 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#781b6e8e908ba7ac.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#92c0e7988ecb5b9b.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 107,
+      "line": 128,
       "kind": "form-event",
-      "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 创建后由宝塔 Node Worker 刷新真实证据覆盖；评分、利润与风险不会自动填充。 取消 {{ busy ? \"创建中…\" : \"创",
+      "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "createOpen"
         }
       ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
@@ -33569,7 +33554,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 113,
+      "line": 134,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -33605,9 +33590,48 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#2f7a15b104750d49.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 150,
+      "kind": "control",
+      "label": "查看已创建机会",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "createOpen"
+        },
+        {
+          "directive": "v-if",
+          "expression": "createFeedback?.type === 'created'"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 118,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-DETAIL-NAV",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 129,
+      "line": 157,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -33643,23 +33667,20 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ff7a5f3105576981.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#439b2aeecca24b47.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 130,
+      "line": 158,
       "kind": "control",
-      "label": "{{ busy ? \"创建中…\" : \"创建机会\" }}",
+      "label": "{{ busy ? \"创建中…\" : createFeedbackMatchesForm ? \"内容已创建，请修改后再提交\" : \"创建机会\" }}",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "createOpen"
         }
       ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
@@ -33683,7 +33704,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#21d6397072095d87.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 137,
+      "line": 171,
       "kind": "dialog-definition",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 {{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -33703,7 +33724,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 132,
+          "line": 133,
           "jsonPointer": null
         }
       ],
@@ -33723,7 +33744,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#e6463826c649de97.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 137,
+      "line": 171,
       "kind": "event-binding",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 {{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -33763,7 +33784,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#10c891f118c2001b.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 144,
+      "line": 178,
       "kind": "form-event",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 {{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -33801,7 +33822,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 152,
+      "line": 186,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -33839,7 +33860,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 166,
+      "line": 200,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -33877,7 +33898,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ced3effe8f7058f1.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 169,
+      "line": 203,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -70509,6 +70530,12 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "line": 873,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#44686188d9948fca.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
       "line": 896,
@@ -70518,6 +70545,24 @@
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
       "line": 933,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#364dc8e63849b27f.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 100,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#781b6e8e908ba7ac.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 107,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ff7a5f3105576981.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 130,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
@@ -71955,6 +72000,12 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
+      "file": "apps/web/src/components/OpportunityWorkspace.vue",
+      "line": 873,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
       "line": 933,
@@ -71964,6 +72015,12 @@
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#36cdbd1cb98185c2.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
       "line": 495,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 100,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
