@@ -1235,22 +1235,28 @@ test("P48 provider compatibility colors resolve from the modal-scoped palette", 
 });
 
 test("P48 provider source page colors resolve from its page-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
+  const [tokens, ...stylesheets] = await Promise.all([
     readFile("apps/web/src/design/provider-source-tokens.css", "utf8"),
-    readFile("apps/web/src/components/ProviderSourceCenter.p48.css", "utf8"),
+    ...[
+      "apps/web/src/components/ProviderSourceCenter.p48.css",
+      "apps/web/src/components/ProviderSourceDirectory.css",
+      "apps/web/src/components/ProviderSourceConfigurationDialog.css",
+    ].map((path) => readFile(path, "utf8")),
   ]);
   const declarations = [
     ...tokens.matchAll(/(--p48-source-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgba?\([^;]+\));/gi),
   ];
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set(
-    [...css.matchAll(/var\((--p48-source-[a-z-]+)\)/g)].map((match) => match[1]),
+    stylesheets.flatMap((css) =>
+      [...css.matchAll(/var\((--p48-source-[a-z-]+)\)/g)].map((match) => match[1]),
+    ),
   );
 
-  assert.equal(names.size, 21);
+  assert.equal(names.size, 52);
   assert.equal(declarations.length, names.size, "no duplicate P48 source palette declarations");
   assert.match(tokens, /^\.source-center--p48\s*\{/);
-  assert.ok(css.startsWith('@import "../design/provider-source-tokens.css";'));
+  assert.ok(stylesheets[0].startsWith('@import "../design/provider-source-tokens.css";'));
   assert.deepEqual([...references].sort(), [...names].sort());
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+  for (const css of stylesheets) assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
 });
