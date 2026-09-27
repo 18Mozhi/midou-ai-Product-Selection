@@ -7,7 +7,7 @@
   "sourceHashes": {
     "apps/web/src/components/OpportunityWorkspace.vue": "527907dfeac5dd817f9f40bc822955c27e33f616196d80fe1f59608e0f287d3c",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "63b16658e3b1fac8838a19828a5ff564d6d8e55d30e5c4b40ed608c1aacc2f2c",
-    "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+    "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
   },
   "dialogs": {
@@ -374,7 +374,7 @@
       "label": "状态面板主次行动",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#35fbcba5eab1163b.1"],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#2995ff91584f5d46.1"],
       "sourceContractKeys": [
         "OP-RECOVER/OP-EMPTY-CREATE/OP-SETUP-NEXT/OP-VIEW/OP-FILTER-RESET转发"
       ],
@@ -456,6 +456,35 @@
         "busy": "not-mapped"
       },
       "remaining": "一个复合消费者含两个实际事件，不省略secondary；异常primary沿共享文案（重新登录/返回工作台等）但实际apply，secondary明确标返回机会列表而实际reset，并非history back。原型恢复导航不冒充真实接线。"
+    },
+    {
+      "actionId": "OP-IMAGE-LOAD-FAILURE",
+      "label": "机会图片加载失败回退",
+      "kind": "local",
+      "routeApplicability": "P15-list-four-local-callers-only",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#18a777cbd9195919.1"],
+      "sourceContractKeys": ["OP-IMAGE-LOAD-FAILURE"],
+      "contractAliasReason": "机会候选表独立标注img error源事件；该本地呈现回退不是重试或网络请求。",
+      "condition": "Opportunity.image_url存在且img加载触发error；若URL变化，清除对应旧失败状态。",
+      "handler": "记录该机会当前image_url为失败源，以同尺寸占位及可访问名称区分失败与尚未采集；不发送请求。",
+      "variants": ["failed-request", "missing-url", "source-changed"],
+      "scenes": [],
+      "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "隔离Vue E2E将机会图片响应设为404，并断言失败图与无URL占位具有不同可访问名称；不证明生产CDN或真实图片源可用。"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "缺少生产图片/CDN响应与主题组合实测；不自动重试，也不以局部404拦截证明线上资源可用。"
     },
     {
       "actionId": "OP-SELECT",
@@ -834,7 +863,7 @@
       "label": "打开批量指派",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#e4d77eb7a4a580f1.1"],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#49aa86998e70364c.1"],
       "sourceContractKeys": ["OP-BATCH-OPEN.assign"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
@@ -881,7 +910,7 @@
       "label": "打开批量复核",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#08f90a95059f6dac.1"],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#a1959483e41eb1bf.1"],
       "sourceContractKeys": ["OP-BATCH-OPEN.review"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
@@ -928,7 +957,7 @@
       "label": "打开批量归档",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#120a674bf7e0ed5a.1"],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#b113acbf01a0938d.1"],
       "sourceContractKeys": ["OP-BATCH-OPEN.archive"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
@@ -1030,7 +1059,7 @@
       "kind": "write",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#44686188d9948fca.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
         "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1"
       ],
       "sourceContractKeys": ["OP-BATCH-SUBMIT"],
@@ -1514,8 +1543,8 @@
       "kind": "excluded",
       "routeApplicability": "P18-normal-entry-excluded-from-P15",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#8b4dc3f5856d3c5a.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f3f35ebc7969e030.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#21d6397072095d87.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#e6463826c649de97.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#10c891f118c2001b.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1",
@@ -1572,7 +1601,7 @@
       "label": "消费者/容器关联",
       "kind": "wiring",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1"],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1"],
       "sourceContractKeys": ["列表apply/batch/create/setup/page/reset/view/selectedIds转发"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
@@ -1624,49 +1653,49 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
           "event": "@apply",
           "handler": "applyListFilters",
           "targets": ["OP-FILTER-APPLY"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
           "event": "@batch",
           "handler": "openBatch",
           "targets": ["OP-BATCH-OPEN.assign", "OP-BATCH-OPEN.review", "OP-BATCH-OPEN.archive"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
           "event": "@create",
           "handler": "showCreate = true",
           "targets": ["OP-CREATE-OPEN"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
           "event": "@manage-setup",
           "handler": "router.push($event)",
           "targets": ["OP-SETUP-NEXT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
           "event": "@page",
           "handler": "goListPage",
           "targets": ["OP-PAGE-PREV", "OP-PAGE-NEXT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
           "event": "@reset",
           "handler": "resetListFilters",
           "targets": ["OP-FILTER-RESET"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
           "event": "@view",
           "handler": "setSelectionView",
           "targets": ["OP-VIEW"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
           "event": "@update:selected-ids",
           "handler": "selectedOpportunityIds = $event",
           "targets": ["OP-SELECT"]
@@ -1961,9 +1990,9 @@
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "74e03f8d2eb05efcb0f254844eed474be76efaf4d2374f5ba39e0d0ada258ae1",
+      "apps/web/src/components/OpportunityWorkspace.vue": "527907dfeac5dd817f9f40bc822955c27e33f616196d80fe1f59608e0f287d3c",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "63b16658e3b1fac8838a19828a5ff564d6d8e55d30e5c4b40ed608c1aacc2f2c",
-      "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+      "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",

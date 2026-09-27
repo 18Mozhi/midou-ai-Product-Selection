@@ -1,6 +1,7 @@
 # P15/P18 机会列表与详情 · 源码合同复核
 
 2026-09-28无障碍续记：P18 `OpportunityDecisionPanel` 的系统建议标题与决定弹窗标题原先复用 `opportunity-decision-title`，导致 document 中重复 ID，弹窗的 `aria-labelledby` 无法可靠命名。现在摘要和弹窗分别使用独立ID，E2E 按 `记录继续观察决定` / `记录驳回决定` 的 dialog accessible name 定位。无 API、请求、权限或业务行为变化；未以自动化断言替代真实读屏器验收。
+2026-09-28 P15当前候选复核：动作候选表与P15 source review 已更新到 `OpportunityListPanel` 和 `OpportunityWorkspace` 当前签名，归入空态事件、三种批量入口、图片失败回退、列表父子事件转发与批量表单提交。静态归属与实际 Vue E2E 分开记录；图片错误仅为本地显示回退，不触发业务请求。
 
 2026-09-28 P15 UI2-OP04续记：真实Vue列表已将总selectedIds与本次当前items交集分开呈现；筛选后隐藏的已选项有明确说明，零当前项时三个批量动作禁用，弹窗文案与POST items共享同一currentPageSelectedItems派生值。当前隔离fixture下桌面Chromium、390px移动各1/1，覆盖筛选保留A、结果仅B、先禁用再选B并仅提交B。OP06由“UI范围未披露”局部收窄为“跨页/筛选后选择策略未定”；不宣称跨页全部提交，不改变API、后端或服务端事务/RBAC。
 2026-09-28 P15筛选计数续记：高级筛选触发器“已选”数字根据 URL 中已应用的七项筛选派生，而非实时 v-model 草稿；空状态清除入口仍识别草稿。移动 E2E 验证编辑、关闭重开、应用前不计数、应用后计数。非 all 深链 decision_status 的既有传递行为未改变。
@@ -40,6 +41,7 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 | OP-JOURNEY-NAV / OP-TREND-RULES-NAV | 列表canDecide | 到/opportunities/start（P16）或/trends?section=rules（P14）；不直接创建机会 |
 | OP-SETUP-NEXT / OP-SETUP-STEP / OP-SETUP-DETAILS / OP-SCORE-RULES | 配置检查适用于recommended/rule_candidates；详情也有评分规则入口 | 跳第一未完成步骤或各step.route；详情展开只读；评分页P17是配置动作，不是本页评分排队 |
 | OP-RECOVER / OP-EMPTY-CREATE | 取决于状态、视图、canDecide及已有筛选 | all空且可写可手工创建；非all空去配置或全部；有条件可重置；错误主行动重读。共享状态组件的每个事件需单独核对，详情只有primary监听 |
+| OP-IMAGE-LOAD-FAILURE | 列表机会有 image_url 且浏览器图片触发 error | 记录当前失败URL并以同尺寸占位区分“加载失败/待采集”；URL变化清除旧失败态；无网络重试或业务写入，隔离Vue 404测试不证明生产CDN |
 | OP-CREATE-OPEN / CLOSE / SUBMIT | 手工入口在all且canDecide；初次挂载create=1或source_topic_id可预填打开 | create→POST /opportunities `{name,market,category:空转null,source_topic_id:空转null}`；201后关闭并导航返回id的详情；失败保留，取消不写，父表单未重置 |
 | OP-ERP-OPEN / CLOSE / BROWSER / FILE / OP-HELPER-DOWNLOAD | all且canDecide | 打开导入；browserBridge请求erp.products.read(limit)；或选JSON即persistErpProducts；POST /imports/erp-products；下载既有助手zip是独立链接 |
 | OP-BATCH-OPEN.assign/review/archive / CANCEL / SUBMIT | all且canDecide且有selectedIds；指派还需负责人 | openBatch重置原因/负责人；confirmBatch取当前items中的选中项，POST /opportunities/batch `{action,items:[{id,expected_version}],reason:trim,assignee_id:指派ID或null}`；成功清选择、关闭、重读及affected_count提示 |
@@ -67,7 +69,7 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 | D-OP-FILTER（共享抽屉1） | q≤200、market≤40、decision_status（仅all可见）、coverage_status、blocking_reason、lifecycle_status、owner_id共7项；草稿与URL分开，应用/重置才改URL；桌面内联、移动共享抽屉，具体断点随共享组件复核 |
 | D-OP-CREATE（本地1） | name required≤200、market required≤40、category≤80、source_topic_id≤36；后端名称trim、市场格式/大写、主题UUID与当前范围验证。取消保留父级草稿，提交失败不关闭，成功到返回id。初焦点当前为关闭按钮，并非名称输入 |
 | D-OP-ERP（本地1） | limit初始200、number required 1–500；文件接受JSON数组或list，选择即写入，不等待浏览器读取按钮；file模式使用固定ERP来源网址与当前ISO时间。browser模式传items/source_url/captured_at/total，120秒超时；登录打开/失效/助手不可用有不同提示。取消/关闭不代表中断正在运行的bridge或服务器事务 |
-| D-OP-DECISION.adopt / observe / reject（本地3） | required原因≤1000；父级传原输入，后端去空白；每次start重置，取消零写；请求失败保留，成功重读关闭。标题按动作变化；当前和DecisionPanel重复使用opportunity-decision-title，完整可访问名称未通过 |
+| D-OP-DECISION.adopt / observe / reject（本地3） | required原因≤1000；父级传原输入，后端去空白；每次start重置，取消零写；请求失败保留，成功重读关闭。标题按动作变化；弹窗与系统建议摘要使用独立标题ID，E2E 按动作名称定位；真实读屏仍待 |
 | D-OP-BATCH.assign / review / archive（本地3） | 原因required≤1000，JS还检查trim；assign负责人required；另两种发null。每次打开清草稿，取消零写；失败保留、成功关闭并清选择。服务端单批1–50、唯一UUID与各自正版本；页面每页20。当前预览selectedIds.length和提交current items交集可能不一致，不能以此宣称跨页选择已正确支持 |
 | D-OP-AI.approved / rejected（共享原因2） | useAuditedReason默认trim≥2；先关闭原因框再发POST，失败不会自动恢复原框和原因；不同于人工决定“失败保留”的合同。原始AI输出不改写 |
 | 成本确认（内联，不是弹窗） | platform required≤80、input_type三种sale_price/purchase_price/logistics、amount required≥0 step0.000001、currency required≤3、source_type required≤80、source_ref_id required≤255、evidence_id required≤36、observed_at required datetime-local、reviewer_id required。POST含以上9项及expected_version，amount转Number/time转ISO；另一人复核是服务端规则，不由UI推断；重算是type=button，不触发表单required校验 |

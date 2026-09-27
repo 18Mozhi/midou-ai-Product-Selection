@@ -54,14 +54,15 @@
 | OpportunityListPanel:187 | ebed9d735d2650ea.1 | OP-FILTER-APPLY |
 | OpportunityListPanel:230 | 3cacb9b51913365b.1 | OP-FILTER-APPLY |
 | OpportunityListPanel:233 | 55d7dcd38e3f0b22.1 | OP-FILTER-RESET |
-| OpportunityListPanel:244 | 35fbcba5eab1163b.1 | OP-RECOVER/OP-EMPTY-CREATE/OP-SETUP-NEXT/OP-VIEW/OP-FILTER-RESET转发 |
-| OpportunityListPanel:289 | e4d77eb7a4a580f1.1 | OP-BATCH-OPEN.assign |
-| OpportunityListPanel:290 | 08f90a95059f6dac.1 | OP-BATCH-OPEN.review |
-| OpportunityListPanel:291 | 120a674bf7e0ed5a.1 | OP-BATCH-OPEN.archive |
+| OpportunityListPanel:283 | 2995ff91584f5d46.1 | OP-RECOVER/OP-EMPTY-CREATE/OP-SETUP-NEXT/OP-VIEW/OP-FILTER-RESET转发 |
+| OpportunityListPanel:337 | 49aa86998e70364c.1 | OP-BATCH-OPEN.assign |
+| OpportunityListPanel:344 | a1959483e41eb1bf.1 | OP-BATCH-OPEN.review |
+| OpportunityListPanel:351 | b113acbf01a0938d.1 | OP-BATCH-OPEN.archive |
 | OpportunityListPanel:300 | bf27afc54dc87ac9.1 | OP-SELECT |
 | OpportunityListPanel:314 | e16bf068f58122c0.1 | OP-DETAIL-NAV |
 | OpportunityListPanel:349 | 30387aeecee66240.1 | OP-PAGE-PREV |
 | OpportunityListPanel:351 | 7090c56fb876cebe.1 | OP-PAGE-NEXT |
+| OpportunityListPanel:392 | 18a777cbd9195919.1 | OP-IMAGE-LOAD-FAILURE |
 | OpportunityProfitPanel:54 | 2bab3ff056a52675.1 | OP-COST-RULES |
 | OpportunityProfitPanel:121 | fbf7d2a587c0931b.1 | OP-COST-REVIEW-SUBMIT转发 |
 | OpportunityProfitPanel:126 | fcdcabfef1ea3474.1 | OP-COST-SUBMIT |
@@ -72,7 +73,7 @@
 | OpportunityWorkspace:672| 98ee78e079ff2f4c.1 | OP-ERP-OPEN |
 | OpportunityWorkspace:679| d9bac0eae791bdd6.1 | OP-CREATE-OPEN |
 | OpportunityWorkspace:691| 43e671d75fd48bea.1 | OP-RETURN |
-| OpportunityWorkspace:697| 0951033614435a4e.1 | 列表apply/batch/create/setup/page/reset/view/selectedIds转发 |
+| OpportunityWorkspace:776| 5eb2834c0e9007bc.1 | 列表apply/batch/create/setup/page/reset/view/selectedIds转发 |
 | OpportunityWorkspace:720| 7219811dcc02cc91.1 | OP-DETAIL-RETRY |
 | OpportunityWorkspace:739| e5851472e99b48d6.1 | OP-RUNTIME-DETAILS |
 | OpportunityWorkspace:749| 6bbaa8f037121cf9.1 | OP-DECISION-OPEN/OP-EVIDENCE-TASK转发 |
@@ -89,12 +90,16 @@
 | OpportunityWorkspace:846| 76ae53c237c00264.1 | AI排队/重读/复核转发 |
 | OpportunityWorkspace:883| ebc2bd495e3582f5.1 | 创建/决定/ERP浏览器/文件导入转发 |
 | OpportunityWorkspace:899| 2f4e238755b201b9.1 | OP-BATCH-CANCEL：Escape |
-| OpportunityWorkspace:906| 44686188d9948fca.1 | OP-BATCH-SUBMIT |
-| OpportunityWorkspace:938| 64891e806e385e12.1 | OP-BATCH-CANCEL |
-| OpportunityWorkspace:939| c70ff783b9d26396.1 | OP-BATCH-SUBMIT |
+| OpportunityWorkspace:980| 2f4e238755b201b9.1 | OP-BATCH-CANCEL |
+| OpportunityWorkspace:1023| 64891e806e385e12.1 | OP-BATCH-CANCEL |
+| OpportunityWorkspace:987| b4d79d3e558083d3.1 | OP-BATCH-SUBMIT |
+| OpportunityWorkspace:1024| c70ff783b9d26396.1 | OP-BATCH-SUBMIT |
+| OpportunityWorkspace:987| b4d79d3e558083d3.1 | OP-BATCH-SUBMIT |
 | OpportunityWorkspace:943| 1fec9eace35dae6b.1 | OP-AI-REASON-SUBMIT/CANCEL转发 |
 | OpportunityWorkspaceDialogs:44 | f9352d9bba967662.1 | OP-ERP-CLOSE：Escape |
 | OpportunityWorkspaceDialogs:51 | 674fd720e5afc0a1.1 | OP-ERP-BROWSER |
+| OpportunityWorkspaceDialogs:137 | 21d6397072095d87.1 | OP-DECISION-EXCLUDED：P15不适用 |
+| OpportunityWorkspaceDialogs:137 | e6463826c649de97.1 | OP-DECISION-EXCLUDED：P15不适用 |
 | OpportunityWorkspaceDialogs:57 | 072a94228fa0ed02.1 | OP-ERP-CLOSE |
 | OpportunityWorkspaceDialogs:82 | a8109ecf87f0762f.1 | OP-ERP-FILE |
 | OpportunityWorkspaceDialogs:89 | 598ca963b90371ed.1 | OP-HELPER-DOWNLOAD |
