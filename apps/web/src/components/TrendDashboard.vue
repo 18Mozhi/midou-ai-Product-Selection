@@ -214,7 +214,7 @@ async function applyFilters() {
       q: filters.q || undefined,
       market: filters.market || undefined,
       category: filters.category || undefined,
-      status: filters.status === "active" ? undefined : filters.status || undefined,
+      status: filters.status === "active" ? undefined : filters.status,
       sort: sort.value === "impact" ? undefined : sort.value,
       page: undefined,
       topic: undefined,

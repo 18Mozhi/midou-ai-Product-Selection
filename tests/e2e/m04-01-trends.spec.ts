@@ -393,6 +393,49 @@ test("trend view URL restores filters, sorting and direct topic navigation", asy
   );
 });
 
+test("all-status selection survives the URL and reload without adding an API status filter", async ({
+  page,
+}) => {
+  await ready(page);
+  const listQueries: { routeStatus: string | null; query: URLSearchParams }[] = [];
+  await page.unroute("**/api/v1/trends?*");
+  await page.route("**/api/v1/trends?*", (route) => {
+    listQueries.push({
+      routeStatus: new URL(page.url()).searchParams.get("status"),
+      query: new URL(route.request().url()).searchParams,
+    });
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(envelope([topic], { page: 1, page_size: 20, total: 1 })),
+    });
+  });
+
+  await page.goto("/trends");
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await page.getByRole("button", { name: /筛选趋势/ }).click();
+  await page.getByLabel("状态").selectOption("");
+  await page.getByRole("button", { name: "筛选", exact: true }).click();
+  await expect.poll(() => new URL(page.url()).searchParams.has("status")).toBe(true);
+  await expect.poll(() => new URL(page.url()).searchParams.get("status")).toBe("");
+  await expect(page.getByLabel("状态")).toHaveValue("");
+  await expect.poll(() => listQueries.some((entry) => entry.routeStatus === "")).toBe(true);
+
+  await page.reload();
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await page.getByRole("button", { name: /筛选趋势/ }).click();
+  await expect(page.getByLabel("状态")).toHaveValue("");
+  await expect
+    .poll(() => listQueries.filter((entry) => entry.routeStatus === "").length >= 2)
+    .toBe(true);
+  expect(listQueries.some((entry) => entry.query.get("status") === "active")).toBe(true);
+  expect(
+    listQueries
+      .filter((entry) => entry.routeStatus === "")
+      .every((entry) => !entry.query.has("status")),
+  ).toBe(true);
+});
+
 test("empty trend filters expose a one-step recovery action", async ({ page }) => {
   await ready(page);
   await page.unroute("**/api/v1/trends?*");
