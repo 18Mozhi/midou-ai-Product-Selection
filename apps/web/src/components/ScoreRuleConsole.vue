@@ -106,6 +106,9 @@ const form = reactive({
   observe_min: null as number | null,
   dimensions: blankDimensions(),
 });
+let actionDialogGeneration = 0;
+let previewReadGeneration = 0;
+let pendingPreviewRead: { rule: Rule; page: number; generation: number } | null = null;
 const capabilities = computed(() => new Set(props.capabilities)),
   canDecide = computed(() => capabilities.value.has("opportunity:decide")),
   canApprove = computed(() => capabilities.value.has("opportunity:approve")),
@@ -262,21 +265,26 @@ const scoreRuleErrorLabels: Record<string, string> = {
   },
   apiErrorText = (error: ApiClientError) =>
     `${scoreRuleErrorLabels[error.code] ?? error.userMessage} ${error.actionHint}`.trim();
-async function post(path: string, body: unknown, setError: (value: string) => void) {
+async function post(
+  path: string,
+  body: unknown,
+  setError: (value: string) => void,
+  isCurrent: () => boolean = () => true,
+) {
   if (busy.value) return null;
   busy.value = true;
   setError("");
   try {
     const response = await request<any>(path, { method: "POST", body });
-    requestId.value = response.request_id;
+    if (isCurrent()) requestId.value = response.request_id;
     return response.data;
   } catch (error) {
-    if (error instanceof ApiClientError) {
+    if (isCurrent() && error instanceof ApiClientError) {
       requestId.value = error.requestId;
       setError(apiErrorText(error));
       return null;
     }
-    setError("依赖暂不可用，未写入状态。请检查网络后重试。");
+    if (isCurrent()) setError("依赖暂不可用，未写入状态。请检查网络后重试。");
     return null;
   } finally {
     busy.value = false;
@@ -300,8 +308,12 @@ function closeCreate() {
 function closePreview() {
   showPreview.value = false;
   previewError.value = "";
+  previewReadGeneration += 1;
+  pendingPreviewRead = null;
+  preview.value = null;
 }
 function closeAction() {
+  actionDialogGeneration += 1;
   showAction.value = false;
   actionError.value = "";
 }
@@ -330,6 +342,7 @@ async function create() {
 }
 function begin(rule: Rule, value: Action) {
   if ((value === "submit" && !canDecide.value) || (value !== "submit" && !canApprove.value)) return;
+  actionDialogGeneration += 1;
   selected.value = rule;
   action.value = value;
   reason.value = "";
@@ -337,27 +350,56 @@ function begin(rule: Rule, value: Action) {
   actionError.value = "";
   showAction.value = true;
 }
-async function loadPreview(rule: Rule, page = 1) {
-  if (!canApprove.value || previewing.value) return;
-  previewRule.value = rule;
-  showPreview.value = true;
+async function runPreviewRead(rule: Rule, page: number, generation: number) {
   previewing.value = true;
-  previewError.value = "";
-  preview.value = null;
   try {
     const response = await request<RulePreview>(
       `/opportunity-score-rules/${rule.id}/preview?page=${page}&page_size=20`,
     );
+    if (
+      generation !== previewReadGeneration ||
+      !showPreview.value ||
+      previewRule.value?.id !== rule.id
+    )
+      return;
     requestId.value = response.request_id;
     preview.value = response.data;
   } catch (error) {
+    if (
+      generation !== previewReadGeneration ||
+      !showPreview.value ||
+      previewRule.value?.id !== rule.id
+    )
+      return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       previewError.value = apiErrorText(error);
     } else previewError.value = "预览依赖暂不可用；规则和机会状态均未改变。";
   } finally {
     previewing.value = false;
+    const queued = pendingPreviewRead;
+    pendingPreviewRead = null;
+    if (
+      queued &&
+      queued.generation === previewReadGeneration &&
+      showPreview.value &&
+      previewRule.value?.id === queued.rule.id
+    )
+      void runPreviewRead(queued.rule, queued.page, queued.generation);
   }
+}
+function loadPreview(rule: Rule, page = 1) {
+  if (!canApprove.value) return;
+  const generation = ++previewReadGeneration;
+  previewRule.value = rule;
+  showPreview.value = true;
+  previewError.value = "";
+  preview.value = null;
+  if (previewing.value) {
+    pendingPreviewRead = { rule, page, generation };
+    return;
+  }
+  void runPreviewRead(rule, page, generation);
 }
 function changePreviewPage(page: number) {
   if (previewRule.value) void loadPreview(previewRule.value, page);
@@ -366,21 +408,30 @@ const scoreText = (value: number | null) => (value == null ? "数据不足" : va
   deltaText = (value: number | null) =>
     value == null ? "不可比较" : `${value > 0 ? "+" : ""}${value.toFixed(2)}`;
 async function runAction() {
-  if (!selected.value) return;
+  const selectedRule = selected.value;
+  if (!selectedRule) return;
+  const submittedAction = action.value,
+    submittedReason = reason.value,
+    submittedTargetRuleId = targetRuleId.value,
+    generation = actionDialogGeneration,
+    isCurrent = () => generation === actionDialogGeneration;
   const result = await post(
-    `/opportunity-score-rules/${selected.value.id}/actions`,
+    `/opportunity-score-rules/${selectedRule.id}/actions`,
     {
-      action: action.value,
-      reason: reason.value,
-      expected_revision: selected.value.revision,
-      ...(action.value === "rollback" ? { target_rule_id: targetRuleId.value } : {}),
+      action: submittedAction,
+      reason: submittedReason,
+      expected_revision: selectedRule.revision,
+      ...(submittedAction === "rollback" ? { target_rule_id: submittedTargetRuleId } : {}),
     },
-    (value) => (actionError.value = value),
+    (value) => {
+      if (isCurrent()) actionError.value = value;
+    },
+    isCurrent,
   );
   if (result) {
-    closeAction();
+    if (isCurrent()) closeAction();
     await load();
-    message.value = `${actionLabels[action.value]}已完成并写入审计记录。`;
+    message.value = `${actionLabels[submittedAction]}已完成并写入审计记录。`;
   }
 }
 onMounted(() => void load());

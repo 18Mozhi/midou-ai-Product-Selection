@@ -307,6 +307,183 @@ test("UI2-S04 preview retries and paginates by server totals without any write",
   await expect(trigger).toBeFocused();
 });
 
+test("late scoring action success stays with its original rule and does not close a newer dialog", async ({
+  page,
+}) => {
+  const writes = await setup(page);
+  let releaseFirst!: () => void;
+  let markFirstStarted!: () => void;
+  const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve));
+  const firstStarted = new Promise<void>((resolve) => (markFirstStarted = resolve));
+  let firstRule = rule("pending_approval", ruleId, 4),
+    secondRule = rule("pending_approval", targetId, 9);
+  await page.route("**/api/v1/opportunity-score-rules", (route) =>
+    route.fulfill({ json: envelope([firstRule, secondRule]) }),
+  );
+  await page.route("**/api/v1/opportunity-score-rules/*/actions", async (route) => {
+    const body = route.request().postDataJSON();
+    if (route.request().url().includes(`/${ruleId}/actions`)) {
+      markFirstStarted();
+      await firstGate;
+      firstRule = rule("approved", ruleId, 5);
+      await route.fulfill({ json: envelope(firstRule) });
+      return;
+    }
+    secondRule = rule("rejected", targetId, 10);
+    await route.fulfill({ json: envelope(secondRule) });
+    expect(body).toMatchObject({ action: "reject", expected_revision: 9 });
+  });
+
+  await page.goto("/opportunities/scoring-rules");
+  const rows = page.locator(".score-rule-list > article");
+  const firstRow = rows.filter({ hasText: "org-v1" });
+  const secondRow = rows.filter({ hasText: "org-v2" });
+  await firstRow.getByRole("button", { name: "批准", exact: true }).click();
+  const firstDialog = page.getByRole("dialog", { name: "批准 · org-v1" });
+  await firstDialog.getByLabel("原因（必填）").fill("原规则批准原因");
+  await firstDialog.getByRole("button", { name: "确认批准" }).click();
+  await firstStarted;
+  await page.keyboard.press("Escape");
+  await secondRow.getByRole("button", { name: "拒绝", exact: true }).click();
+  const secondDialog = page.getByRole("dialog", { name: "拒绝 · org-v2" });
+  await secondDialog.getByLabel("原因（必填）").fill("新规则拒绝原因");
+
+  releaseFirst();
+  await expect(secondDialog).toBeVisible();
+  await expect(secondDialog.getByLabel("原因（必填）")).toHaveValue("新规则拒绝原因");
+  await expect(page.locator(".opportunity-message")).toContainText("批准已完成");
+  await expect(firstRow).toContainText("已批准");
+  await expect(secondDialog.getByRole("button", { name: "确认拒绝" })).toBeEnabled();
+  await secondDialog.getByRole("button", { name: "确认拒绝" }).click();
+  await expect(secondDialog).toBeHidden();
+  await expect(page.locator(".opportunity-message")).toContainText("拒绝已完成");
+  expect(writes).toHaveLength(2);
+  expect(writes.map((write) => write.body)).toEqual([
+    { action: "approve", reason: "原规则批准原因", expected_revision: 4 },
+    { action: "reject", reason: "新规则拒绝原因", expected_revision: 9 },
+  ]);
+});
+
+test("preview opened for another rule queues behind the active read and owns the result", async ({
+  page,
+}) => {
+  const writes = await setup(page);
+  const reads: string[] = [];
+  let releaseFirst!: () => void;
+  let markFirstStarted!: () => void;
+  const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve));
+  const firstStarted = new Promise<void>((resolve) => (markFirstStarted = resolve));
+  const previewResult = (id: string, name: string) => ({
+    rule_id: id,
+    rule_version_code: id === ruleId ? "org-v1" : "org-v2",
+    rule_status: "draft",
+    page: 1,
+    page_size: 20,
+    total: 1,
+    items: [
+      {
+        opportunity_id: targetId,
+        opportunity_name: name,
+        lifecycle_status: "ready",
+        current_score: null,
+        current_recommendation_status: "insufficient_data",
+        current_rule_version: null,
+        projected_score: null,
+        projected_recommendation_status: "insufficient_data",
+        projected_coverage_percent: 0,
+        score_delta: null,
+        recommendation_changed: false,
+        missing_fields: ["market_demand"],
+      },
+    ],
+    page_summary: {
+      increased: 0,
+      decreased: 0,
+      unchanged: 0,
+      newly_calculable: 0,
+      insufficient_data: 1,
+      recommendation_changed: 0,
+    },
+    read_only: true,
+  });
+  await page.route("**/api/v1/opportunity-score-rules", (route) =>
+    route.fulfill({ json: envelope([rule("draft"), rule("draft", targetId, 9)]) }),
+  );
+  await page.route("**/api/v1/opportunity-score-rules/*/preview?*", async (route) => {
+    const url = new URL(route.request().url());
+    reads.push(url.pathname);
+    if (url.pathname.includes(`/${ruleId}/preview`)) {
+      markFirstStarted();
+      await firstGate;
+      await route.fulfill({ json: envelope(previewResult(ruleId, "旧规则的预览结果")) });
+      return;
+    }
+    await route.fulfill({ json: envelope(previewResult(targetId, "当前规则的预览结果")) });
+  });
+
+  await page.goto("/opportunities/scoring-rules");
+  const rows = page.locator(".score-rule-list > article");
+  await rows
+    .filter({ hasText: "org-v1" })
+    .getByRole("button", { name: "预览影响", exact: true })
+    .click();
+  await firstStarted;
+  await page.getByRole("dialog").getByRole("button", { name: "关闭" }).click();
+  await rows
+    .filter({ hasText: "org-v2" })
+    .getByRole("button", { name: "预览影响", exact: true })
+    .click();
+  const secondDialog = page.getByRole("dialog", { name: "发布影响预览 · org-v2" });
+  await expect(secondDialog).toBeVisible();
+  await expect(secondDialog.getByRole("status")).toContainText("正在按当前持久化输入试算");
+  expect(reads).toEqual([`/api/v1/opportunity-score-rules/${ruleId}/preview`]);
+  releaseFirst();
+  await expect(secondDialog.getByText("当前规则的预览结果", { exact: true })).toBeVisible();
+  expect(reads).toEqual([
+    `/api/v1/opportunity-score-rules/${ruleId}/preview`,
+    `/api/v1/opportunity-score-rules/${targetId}/preview`,
+  ]);
+  expect(writes).toHaveLength(0);
+});
+
+test("closing a queued scoring preview drops that unopened request", async ({ page }) => {
+  await setup(page);
+  const reads: string[] = [];
+  let releaseFirst!: () => void;
+  let markFirstStarted!: () => void;
+  const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve));
+  const firstStarted = new Promise<void>((resolve) => (markFirstStarted = resolve));
+  await page.route("**/api/v1/opportunity-score-rules", (route) =>
+    route.fulfill({ json: envelope([rule("draft"), rule("draft", targetId, 9)]) }),
+  );
+  await page.route("**/api/v1/opportunity-score-rules/*/preview?*", async (route) => {
+    const url = new URL(route.request().url());
+    reads.push(url.pathname);
+    markFirstStarted();
+    await firstGate;
+    await route.fulfill({ json: envelope({ rule_id: ruleId }) });
+  });
+  await page.goto("/opportunities/scoring-rules");
+  const rows = page.locator(".score-rule-list > article");
+  await rows
+    .filter({ hasText: "org-v1" })
+    .getByRole("button", { name: "预览影响", exact: true })
+    .click();
+  await firstStarted;
+  await page.getByRole("dialog").getByRole("button", { name: "关闭" }).click();
+  await rows
+    .filter({ hasText: "org-v2" })
+    .getByRole("button", { name: "预览影响", exact: true })
+    .click();
+  await page
+    .getByRole("dialog", { name: "发布影响预览 · org-v2" })
+    .getByRole("button", { name: "关闭" })
+    .click();
+  releaseFirst();
+  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect.poll(() => reads).toEqual([`/api/v1/opportunity-score-rules/${ruleId}/preview`]);
+});
+
 for (const capability of ["read", "decide", "approve"]) {
   test(`UI2-S05 ${capability}: every lifecycle entry follows its capability and status`, async ({
     page,

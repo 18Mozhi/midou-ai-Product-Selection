@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ScoreRuleConsole.vue": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+    "apps/web/src/components/ScoreRuleConsole.vue": "6885770e8d9627786e368f8b6c99ffa5d011fcfafa4b3d22213f9f2d95f695a9"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -1012,7 +1012,7 @@
       "apps/web/src/components/ScoreRuleConsole.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/ScoreRuleConsole.vue": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723",
+      "apps/web/src/components/ScoreRuleConsole.vue": "6885770e8d9627786e368f8b6c99ffa5d011fcfafa4b3d22213f9f2d95f695a9",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
