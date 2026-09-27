@@ -21,12 +21,14 @@ export function buildAdapterRefreshFocusCurrentRunner(source) {
     'import { beforeAdapterRefreshFocus } from "./lib/ui-phase2-adapter-refresh-focus-baseline.mjs";',
     'import { beforeAdapterRefreshFocus } from "./lib/ui-phase2-adapter-refresh-focus-baseline.mjs";\n' +
       'import { beforeAdapterEmptyMobile } from "./lib/ui-phase2-adapter-empty-mobile-baseline.mjs";\n' +
-      'import { beforeAdapterPaginationFocus } from "./lib/ui-phase2-adapter-pagination-focus-baseline.mjs";',
+      'import { beforeAdapterPaginationFocus } from "./lib/ui-phase2-adapter-pagination-focus-baseline.mjs";\n' +
+      'import { beforeAdapterReadError } from "./lib/ui-phase2-adapter-read-error-baseline.mjs";\n' +
+      'import { beforeAdapterTableTools } from "./lib/ui-phase2-adapter-table-tools-baseline.mjs";',
   );
-  // Validate pagination -> mobile -> pre-mobile -> pre-focus without rendering the inverse.
+  // Validate approved source layers without rendering the historical inverses.
   replace(
     "  before = beforeAdapterRefreshFocus(source);",
-    "  before = beforeAdapterRefreshFocus(beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(source)));",
+    "  before = beforeAdapterRefreshFocus(beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(beforeAdapterTableTools(beforeAdapterReadError(source)))));",
   );
   replace('for (const mode of ["before", "current"]) {', 'for (const mode of ["current"]) {');
   replace(
@@ -34,6 +36,8 @@ export function buildAdapterRefreshFocusCurrentRunner(source) {
     '  "scripts/lib/ui-phase2-adapter-refresh-focus-baseline.mjs",\n' +
       '  "scripts/lib/ui-phase2-adapter-empty-mobile-baseline.mjs",\n' +
       '  "scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs",\n' +
+      '  "scripts/lib/ui-phase2-adapter-read-error-baseline.mjs",\n' +
+      '  "scripts/lib/ui-phase2-adapter-table-tools-baseline.mjs",\n' +
       '  "scripts/lib/ui-adapter-refresh-focus-current-runner.mjs",\n' +
       '  "scripts/verify-provider-adapter-refresh-focus-current.mjs",',
   );

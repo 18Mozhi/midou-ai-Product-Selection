@@ -24,13 +24,19 @@ import {
   paginationBeforeNav,
   paginationCurrentNav,
 } from "./ui-phase2-adapter-pagination-focus-baseline.mjs";
+import { beforeAdapterP47ReadAndTableTools } from "./ui-phase2-adapter-historical-source.mjs";
 
 // Preserve all verified production focus fixes when composing the archived proposals.
 function compose(source, preview, handler, needsTick) {
   source = source.replaceAll("\r\n", "\n");
-  const hasPaginationFocus =
-    createHash("sha256").update(source).digest("hex") === paginationFocusRevision.current;
-  if (hasPaginationFocus) source = beforeAdapterPaginationFocus(source);
+  const revision = createHash("sha256").update(source).digest("hex");
+  const hasPaginationFocus = [
+    paginationFocusRevision.current,
+    "7fce30d574f08ef93c5530b7d609e5d5fde38c0ab246e20c91fbd8c45497b798",
+    "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746",
+  ].includes(revision);
+  if (hasPaginationFocus)
+    source = beforeAdapterPaginationFocus(beforeAdapterP47ReadAndTableTools(source));
   let emptyFocusSource, presentationSource;
   try {
     presentationSource =

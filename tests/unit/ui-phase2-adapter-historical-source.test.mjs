@@ -7,8 +7,44 @@ import {
   p47HistoricalSourceFiles as files,
   p47PaletteRevisions,
 } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
+import {
+  beforeAdapterReadError,
+  readErrorRevision,
+} from "../../scripts/lib/ui-phase2-adapter-read-error-baseline.mjs";
+import {
+  beforeAdapterTableTools,
+  tableToolsRevision,
+} from "../../scripts/lib/ui-phase2-adapter-table-tools-baseline.mjs";
 const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
+
+test("P47 read-error inverse removes only its exact approved current presentation change", () => {
+  const source = read(files.component);
+  assert.equal(hash(source), readErrorRevision.current);
+  const previous = beforeAdapterReadError(source);
+  assert.equal(hash(previous), readErrorRevision.before);
+  assert.equal(beforeAdapterReadError(previous), previous);
+  for (const changed of [
+    source + "\n<!-- drift -->",
+    source.replace("这次读取未完成。你可以重新读取，获取最新状态。", "改写的状态提示"),
+    source.replace('@primary="load"', '@primary="refresh"'),
+  ]) {
+    assert.notEqual(changed, source);
+    assert.throws(() => beforeAdapterReadError(changed));
+  }
+});
+
+test("P47 table-tools history inverse removes only its exact route stylesheet import", () => {
+  const source = beforeAdapterReadError(read(files.component));
+  assert.equal(hash(source), tableToolsRevision.current);
+  const previous = beforeAdapterTableTools(source);
+  assert.equal(hash(previous), tableToolsRevision.before);
+  assert.equal(beforeAdapterTableTools(previous), previous);
+  assert.throws(() => beforeAdapterTableTools(source + "\n// drift"));
+  assert.throws(() =>
+    beforeAdapterTableTools(source.replace("provider-adapters-c-table-tools.css", "unknown.css")),
+  );
+});
 
 test("P47 archive resolver recovers only the two complete verified capture revisions", () => {
   const source = read(files.component);
@@ -63,8 +99,10 @@ test("P47 archive resolver cannot substitute unrelated source files or mutate cu
 test("P47 historical resolution preserves pre-pagination input support and current pagination source", async () => {
   const { beforeAdapterPaginationFocus } =
     await import("../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs");
-  const source = read(files.component),
-    previous = beforeAdapterPaginationFocus(source);
+  const source = read(files.component);
+  const beforeReadError = beforeAdapterReadError(source);
+  const beforeTableTools = beforeAdapterTableTools(beforeReadError);
+  const previous = beforeAdapterPaginationFocus(beforeTableTools);
   for (const stage of ["pre-mobile", "pre-refresh"])
     assert.equal(
       p47HistoricalSource(files.component, previous, stage),

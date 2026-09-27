@@ -19,6 +19,8 @@
 
 ## 验证与边界
 
+2026-09-27 历史回放补充：当前真实 SFC 在读取失败样式/文案之后又加入表格工具样式。历史证据转换器现以各自精确原始/当前 SHA-256 做 fail-closed 逆变换，再进入既有历史链；历史截图与 `evidence.json` 没有重绑或修改。关联测试对当前 Vue 主组件做精确阶段校验，对旧证据包中的依赖 `sourceHashes` 保留其捕获时清单语义，不将它们宣称为当前全源快照。
+
 - 新生产与历史证据单测 7/7 通过。
 - `m03-03-provider-adapter.spec.ts`：desktop-chromium 9/9、mobile-390 9/9；API 由本地 fixture 拦截，无真实探针请求。
 - `npm run typecheck:web` 与 `npm run build:web` 通过。

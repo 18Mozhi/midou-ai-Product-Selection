@@ -6,10 +6,10 @@ export const emptyMobileDriverHash =
 export const currentEmptyMobileInsertion = `// Current-only replay: historical inverses are validated but never rendered.
 replace('const capture = process.argv.includes("--capture");', 'const capture = false;');
 replace('for (const mode of ["baseline", "review", "current"])', 'for (const mode of ["current"])');
-replace('  previous = beforeAdapterEmptyMobile(source),', '  previous = beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(source)),');
-replace('  "scripts/verify-provider-adapter-empty-mobile.mjs",', '  "scripts/verify-provider-adapter-empty-mobile.mjs",\\n  "scripts/verify-provider-adapter-empty-mobile-current.mjs",\\n  "scripts/lib/ui-adapter-empty-mobile-current-runner.mjs",\\n  "scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs",');
+replace('  previous = beforeAdapterEmptyMobile(source),', '  previous = beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(beforeAdapterTableTools(beforeAdapterReadError(source)))),');
+replace('  "scripts/verify-provider-adapter-empty-mobile.mjs",', '  "scripts/verify-provider-adapter-empty-mobile.mjs",\\n  "scripts/verify-provider-adapter-empty-mobile-current.mjs",\\n  "scripts/lib/ui-adapter-empty-mobile-current-runner.mjs",\\n  "scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs",\\n  "scripts/lib/ui-phase2-adapter-read-error-baseline.mjs",\\n  "scripts/lib/ui-phase2-adapter-table-tools-baseline.mjs",');
 replace('      runs: runs.length,', '      runs: runs.length,\\n      currentOnly: true,\\n      currentSha: hash(source),\\n      outcomes: runs.map(({mode,width,scene,checks,requests}) => ({mode,width,scene,checks:checks.length,requests})),');
-runner = 'import { beforeAdapterPaginationFocus } from "./lib/ui-phase2-adapter-pagination-focus-baseline.mjs";\\n' + runner;
+runner = 'import { beforeAdapterPaginationFocus } from "./lib/ui-phase2-adapter-pagination-focus-baseline.mjs";\\nimport { beforeAdapterReadError } from "./lib/ui-phase2-adapter-read-error-baseline.mjs";\\nimport { beforeAdapterTableTools } from "./lib/ui-phase2-adapter-table-tools-baseline.mjs";\\n' + runner;
 `;
 
 export function buildAdapterEmptyMobileCurrentRunner(source) {

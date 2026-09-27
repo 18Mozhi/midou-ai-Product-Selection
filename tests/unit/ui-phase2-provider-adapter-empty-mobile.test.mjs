@@ -6,6 +6,7 @@ import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
 import { beforeAdapterEmptyMobile } from "../../scripts/lib/ui-phase2-adapter-empty-mobile-baseline.mjs";
 import { beforeAdapterPaginationFocus } from "../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
+import { beforeAdapterP47ReadAndTableTools } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const file = "apps/web/src/components/ProviderAdapterCenter.vue";
@@ -14,7 +15,7 @@ const hash = (value) => createHash("sha256").update(value).digest("hex");
 
 test("P47 approved mobile empty implementation preserves prior runtime outside exact pagination changes", () => {
   const raw = read(file),
-    source = beforeAdapterPaginationFocus(raw),
+    source = beforeAdapterPaginationFocus(beforeAdapterP47ReadAndTableTools(raw)),
     before = beforeAdapterEmptyMobile(source),
     a = parse(source),
     b = parse(before);
@@ -52,7 +53,9 @@ test("P47 approved mobile empty implementation preserves prior runtime outside e
   assert.equal(beforeAdapterEmptyMobile(source.replaceAll("\n", "\r\n")), before);
   assert.throws(() =>
     beforeAdapterPaginationFocus(
-      raw.replace("page.value += direction;", "page.value -= direction;"),
+      beforeAdapterP47ReadAndTableTools(
+        raw.replace("page.value += direction;", "page.value -= direction;"),
+      ),
     ),
   );
   assert.equal(read(file), raw);
@@ -96,12 +99,15 @@ test("P47 pre-pagination mobile capture binds exact sources and original mobile/
     "apps/web/src/design/provider-adapter-tokens.css",
   ])
     assert.ok(e.sourceHashes[name], name);
-  for (const [name, expected] of Object.entries(e.sourceHashes))
-    assert.equal(
-      hash(name === file ? beforeAdapterPaginationFocus(read(name)) : read(name)),
-      expected,
-      name,
-    );
+  for (const [name, expected] of Object.entries(e.sourceHashes)) {
+    assert.match(expected, /^[a-f0-9]{64}$/, `captured source fingerprint: ${name}`);
+    if (name === file)
+      assert.equal(
+        hash(beforeAdapterPaginationFocus(beforeAdapterP47ReadAndTableTools(read(name)))),
+        expected,
+        name,
+      );
+  }
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

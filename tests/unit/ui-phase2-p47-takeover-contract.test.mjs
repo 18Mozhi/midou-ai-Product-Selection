@@ -32,7 +32,14 @@ test("P47 takeover preserves the original data, API and business script outside 
   const originalStatements = ast.statements
     .filter((node) => !ts.isFunctionDeclaration(node) || !wrappers.includes(node.name?.text))
     .map((node) => node.getText(ast))
-    .filter((text) => text !== 'import "../provider-adapters-empty-mobile.css";')
+    .filter(
+      (text) =>
+        ![
+          'import "../provider-adapters-empty-mobile.css";',
+          'import "../provider-adapters-c-table-tools.css";',
+          'import "../provider-adapters-c-read-error.css";',
+        ].includes(text),
+    )
     .map((text) => text.replace("computed, nextTick,", "computed,"))
     .join("\n");
   // SHA of the same TypeScript statement serialization at 883a533c.

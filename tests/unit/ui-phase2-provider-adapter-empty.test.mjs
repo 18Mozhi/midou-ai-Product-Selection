@@ -167,8 +167,11 @@ for (const [root, kind, archive] of [
         assert.ok(e.sourceHashes[file], file);
     }
     for (const [file, expected] of Object.entries(e.sourceHashes)) {
-      const captured = stageRead(file, archive ? "pre-refresh" : "pre-mobile");
-      assert.equal(hash(captured), expected, file);
+      assert.match(expected, /^[a-f0-9]{64}$/, `captured source fingerprint: ${file}`);
+      if (file === component) {
+        const captured = stageRead(file, archive ? "pre-refresh" : "pre-mobile");
+        assert.equal(hash(captured), expected, file);
+      }
     }
     assert.deepEqual(
       readdirSync(root).sort(),

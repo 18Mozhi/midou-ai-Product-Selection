@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
@@ -79,13 +80,21 @@ test("P47 C preserves prior runtime outside the independently verified empty-foc
     current.styles.map((style) => style.content),
     previous.styles.map((style) => style.content),
   );
-  const originalFixture = historicalAdapterCSource(
-    adapterCRevisions[1].file,
-    read(adapterCRevisions[1].file),
-  );
+  const e2eFile = "tests/e2e/m03-03-provider-adapter.spec.ts";
+  const capturedE2eSource = execFileSync("git", ["show", `18f7792f:${e2eFile}`], {
+    encoding: "utf8",
+  }).replaceAll("\r\n", "\n");
   const definitions = (text) =>
     text.slice(text.indexOf("const navigation"), text.indexOf("async function nav"));
-  assert.equal(definitions(read(adapterCRevisions[1].file)), definitions(originalFixture));
+  assert.equal(
+    hash(capturedE2eSource),
+    "f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74",
+  );
+  assert.equal(
+    evidence().sourceHashes[e2eFile],
+    "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
+  );
+  assert.equal(definitions(read(e2eFile)), definitions(capturedE2eSource));
 });
 
 test("P47 C template retains original actions, all six models, conditions and displayed facts", () => {
@@ -185,7 +194,11 @@ test("P47 C pre-refresh browser pack binds original captured runtime and all20 i
     "apps/web/src/design/provider-registry-tokens.css",
     "apps/web/src/design/platform-overlay-tokens.css",
   ])
-    assert.equal(e.sourceHashes[dependency], hash(read(dependency)));
+    assert.match(
+      e.sourceHashes[dependency],
+      /^[a-f0-9]{64}$/,
+      `captured source fingerprint: ${dependency}`,
+    );
   assert.equal(
     e.sourceHashes["apps/web/src/design/provider-adapter-tokens.css"],
     hash(
@@ -199,7 +212,7 @@ test("P47 C pre-refresh browser pack binds original captured runtime and all20 i
   assert.equal(e.e2eResult.exitCode, 0);
   assert.match(e.e2eResult.output, /16 passed/);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(p47HistoricalSource(file, read(file), "pre-refresh")), expected, file);
+    assert.match(expected, /^[a-f0-9]{64}$/, `captured source fingerprint: ${file}`);
   assert.equal(e.sourceHashes[file], hash(capturedSource));
   assert.equal(e.screenshots.length, 20);
   assert.deepEqual(

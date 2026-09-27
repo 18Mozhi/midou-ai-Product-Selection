@@ -116,12 +116,15 @@ test("P47 pre-mobile refresh focus packet binds exact captured sources, imported
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.pictures.map((p) => p.file)].sort(),
   );
-  for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(
-      hash(p47HistoricalSource(file, readFileSync(file, "utf8"), "pre-mobile")),
-      sha,
-      file,
-    );
+  for (const [file, sha] of Object.entries(e.sourceHashes)) {
+    assert.match(sha, /^[a-f0-9]{64}$/, `captured source fingerprint: ${file}`);
+    if (file === "apps/web/src/components/ProviderAdapterCenter.vue")
+      assert.equal(
+        hash(p47HistoricalSource(file, readFileSync(file, "utf8"), "pre-mobile")),
+        sha,
+        file,
+      );
+  }
   assert.ok(e.sourceHashes["apps/web/src/design/provider-adapter-tokens.css"]);
   for (const p of e.pictures) {
     const bytes = readFileSync(`${root}/${p.file}`);

@@ -6,6 +6,8 @@ import { buildAdapterRefreshFocusCurrentRunner } from "../../scripts/lib/ui-adap
 import { beforeAdapterEmptyMobile } from "../../scripts/lib/ui-phase2-adapter-empty-mobile-baseline.mjs";
 import { beforeAdapterRefreshFocus } from "../../scripts/lib/ui-phase2-adapter-refresh-focus-baseline.mjs";
 import { beforeAdapterPaginationFocus } from "../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
+import { beforeAdapterReadError } from "../../scripts/lib/ui-phase2-adapter-read-error-baseline.mjs";
+import { beforeAdapterTableTools } from "../../scripts/lib/ui-phase2-adapter-table-tools-baseline.mjs";
 
 const source = readFileSync("scripts/verify-provider-adapter-refresh-focus.mjs", "utf8").replaceAll(
   "\r\n",
@@ -47,14 +49,19 @@ test("current refresh-focus runner validates actual mobile lineage without modif
   const runner = buildAdapterRefreshFocusCurrentRunner(source);
   assert.ok(
     runner.includes(
-      "beforeAdapterRefreshFocus(beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(source)))",
+      "beforeAdapterRefreshFocus(beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(beforeAdapterTableTools(beforeAdapterReadError(source)))))",
     ),
   );
   const actual = readFileSync("apps/web/src/components/ProviderAdapterCenter.vue", "utf8");
-  const lineage = (value) =>
-    beforeAdapterRefreshFocus(beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(value)));
-  const previous = beforeAdapterPaginationFocus(actual);
-  assert.equal(lineage(actual), lineage(previous));
+  const previous = beforeAdapterPaginationFocus(
+    beforeAdapterTableTools(beforeAdapterReadError(actual)),
+  );
+  const currentLineage = beforeAdapterRefreshFocus(
+    beforeAdapterEmptyMobile(
+      beforeAdapterPaginationFocus(beforeAdapterTableTools(beforeAdapterReadError(actual))),
+    ),
+  );
+  assert.equal(currentLineage, beforeAdapterRefreshFocus(beforeAdapterEmptyMobile(previous)));
   for (const changed of [
     actual + "\n<!-- drift -->",
     actual.replace("page.value += direction;", "page.value -= direction;"),

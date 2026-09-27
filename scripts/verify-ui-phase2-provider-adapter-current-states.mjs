@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { paginationFocusRevision } from "./lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
+import { readErrorRevision } from "./lib/ui-phase2-adapter-read-error-baseline.mjs";
+import { tableToolsRevision } from "./lib/ui-phase2-adapter-table-tools-baseline.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
@@ -10,15 +12,19 @@ assert.ok(
 const selectors = args.filter((arg) => arg.startsWith("--state="));
 assert.equal(selectors.length, 1);
 const state = selectors[0].slice(8);
-const paginationFocusPreserved =
-  createHash("sha256")
-    .update(
-      (await readFile("apps/web/src/components/ProviderAdapterCenter.vue", "utf8")).replaceAll(
-        "\r\n",
-        "\n",
-      ),
-    )
-    .digest("hex") === paginationFocusRevision.current;
+const currentAdapterSourceHash = createHash("sha256")
+  .update(
+    (await readFile("apps/web/src/components/ProviderAdapterCenter.vue", "utf8")).replaceAll(
+      "\r\n",
+      "\n",
+    ),
+  )
+  .digest("hex");
+const paginationFocusPreserved = [
+  paginationFocusRevision.current,
+  tableToolsRevision.current,
+  readErrorRevision.current,
+].includes(currentAdapterSourceHash);
 assert.ok(
   !paginationFocusPreserved || !args.includes("--capture"),
   "Pagination-focus revision is replay-only here; do not overwrite historical current-review images",
@@ -56,6 +62,9 @@ replace(
       "scripts/lib/ui-phase2-adapter-refresh-focus-baseline.mjs",
       "scripts/lib/ui-phase2-adapter-empty-mobile-baseline.mjs",
       "scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs",
+      "scripts/lib/ui-phase2-adapter-historical-source.mjs",
+      "scripts/lib/ui-phase2-adapter-read-error-baseline.mjs",
+      "scripts/lib/ui-phase2-adapter-table-tools-baseline.mjs",
       "scripts/lib/ui-imported-style-sources.mjs",
       `scripts/lib/ui-phase2-adapter-${state === "access" ? "filter-pagination" : "access"}-preview.mjs`,
     ]

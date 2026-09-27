@@ -27,6 +27,8 @@ test("nested import resolver preserves its own regex instead of resolving it as 
   assert.ok(resolved.includes('"typescript":"file:///verified/typescript"'));
   assert.ok(!resolved.includes("import.meta.resolve(specifier)"));
   assert.ok(imports.includes("./lib/ui-phase2-adapter-pagination-focus-baseline.mjs"));
+  assert.ok(imports.includes("./lib/ui-phase2-adapter-read-error-baseline.mjs"));
+  assert.ok(imports.includes("./lib/ui-phase2-adapter-table-tools-baseline.mjs"));
   assert.ok(resolved.includes(String.raw`/from "([^"\n]+)"/g`));
   assert.throws(() =>
     resolveEmptyMobileRunnerImports(built + String.raw`/from "([^"\n]+)"/g`, () => ""),
@@ -39,7 +41,7 @@ test("current empty runner preserves the complete original driver outside explic
   assert.ok(currentEmptyMobileInsertion.includes('for (const mode of ["current"])'));
   assert.ok(
     currentEmptyMobileInsertion.includes(
-      "beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(source))",
+      "beforeAdapterEmptyMobile(beforeAdapterPaginationFocus(beforeAdapterTableTools(beforeAdapterReadError(source))))",
     ),
   );
   assert.throws(() => buildAdapterEmptyMobileCurrentRunner(original + "\n"));

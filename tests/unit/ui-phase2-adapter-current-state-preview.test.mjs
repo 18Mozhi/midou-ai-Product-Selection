@@ -21,11 +21,13 @@ import {
   paginationFocusRevision,
 } from "../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
 import { pageTurnHandler } from "../../scripts/lib/ui-phase2-adapter-filter-pagination-preview.mjs";
+import { beforeAdapterP47ReadAndTableTools } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const source = read("apps/web/src/components/ProviderAdapterCenter.vue");
-const previous = beforeAdapterPaginationFocus(source);
+const beforeLaterPresentation = beforeAdapterP47ReadAndTableTools(source);
+const previous = beforeAdapterPaginationFocus(beforeLaterPresentation);
 const focusFunction = (text, name = "resetEmptyFilters") => {
   const script = parse(text).descriptor.scriptSetup.content;
   const ast = ts.createSourceFile("adapter.ts", script, ts.ScriptTarget.Latest, true);
@@ -144,9 +146,14 @@ for (const [state, preview, digest, count] of [
 
 test("P47 pagination inverse accepts only exact current/before snapshots, never unknown changes", () => {
   assert.equal(hash(previous), paginationFocusRevision.before);
-  assert.equal(hash(source), paginationFocusRevision.current);
+  assert.equal(hash(beforeLaterPresentation), paginationFocusRevision.current);
   assert.equal(beforeAdapterPaginationFocus(previous), previous);
-  assert.equal(beforeAdapterPaginationFocus(source.replaceAll("\n", "\r\n")), previous);
+  assert.equal(
+    beforeAdapterPaginationFocus(
+      beforeAdapterP47ReadAndTableTools(source.replaceAll("\n", "\r\n")),
+    ),
+    previous,
+  );
   for (const changed of [
     source + "\n",
     previous + "\n",
