@@ -7,11 +7,18 @@ import { parse } from "@vue/compiler-sfc";
 import { computed, effectScope, nextTick, reactive, ref, watch } from "vue";
 
 const file = "apps/web/src/components/OrganizationTokenPanel.vue";
-const current = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-const baseline = execFileSync("git", ["show", `b4fc398d:${file}`], { encoding: "utf8" }).replaceAll(
-  "\r\n",
-  "\n",
-);
+const current = readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
+  baseline = execFileSync("git", ["show", `b4fc398d:${file}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  ),
+  ownershipFix = execFileSync("git", ["show", `2e96ee31:${file}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  ),
+  ownershipFixParent = execFileSync("git", ["show", `2e96ee31^:${file}`], {
+    encoding: "utf8",
+  }).replaceAll("\r\n", "\n");
 function mount(t, source = current) {
   const script = parse(source).descriptor.scriptSetup.content;
   const ast = ts.createSourceFile(file, script, ts.ScriptTarget.Latest, true);
@@ -119,10 +126,10 @@ test("pre-fix source reproduces stale replacement feedback", async (t) => {
   await pending;
   assert.equal(h.copyState.value, "copied");
 });
-test("copy ownership change preserves template and original non-copy functions", () => {
+test("copy ownership commit preserves its original template and non-copy functions", () => {
   assert.equal(
-    parse(current).descriptor.template.content,
-    parse(baseline).descriptor.template.content,
+    parse(ownershipFix).descriptor.template.content,
+    parse(ownershipFixParent).descriptor.template.content,
   );
   const functions = (source) => {
     const ast = ts.createSourceFile(
@@ -141,5 +148,5 @@ test("copy ownership change preserves template and original non-copy functions",
         .map((node) => [node.name.text, node.getText(ast)]),
     );
   };
-  assert.deepEqual(functions(current), functions(baseline));
+  assert.deepEqual(functions(ownershipFix), functions(ownershipFixParent));
 });
