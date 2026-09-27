@@ -311,6 +311,17 @@ test("monitoring-rule deep links open the rule view and keep the legacy alias wo
   await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
   await page.goto("/trends?tab=rules");
   await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
+
+  await page.getByRole("button", { name: "趋势主题" }).click();
+  await expect(page).not.toHaveURL(/(?:\?|&)tab=rules(?:&|$)/);
+  await expect(page.getByRole("button", { name: "趋势主题" })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await page.getByRole("button", { name: /^监控规则/ }).click();
+  await expect(page).toHaveURL(/section=rules/);
+  await expect(page).not.toHaveURL(/(?:\?|&)tab=/);
+  await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
 });
 
 test("trend:read-only loads topics and rules without requesting or exposing governance", async ({

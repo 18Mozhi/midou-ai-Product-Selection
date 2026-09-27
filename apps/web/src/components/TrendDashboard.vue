@@ -243,6 +243,7 @@ async function setTab(nextTab: "topics" | "rules" | "governance") {
   await router.push({
     query: {
       ...route.query,
+      tab: undefined,
       section: nextTab === "topics" ? undefined : nextTab,
     },
   });
