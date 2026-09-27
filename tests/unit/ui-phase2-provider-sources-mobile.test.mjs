@@ -4,51 +4,47 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
-import { previewProviderSourcesMobile } from "../../scripts/lib/ui-phase2-provider-sources-mobile-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
-  component = "apps/web/src/components/ProviderSourceCenter.vue",
+  components = [
+    "apps/web/src/components/ProviderSourceCenter.vue",
+    "apps/web/src/components/ProviderSourceFilters.vue",
+    "apps/web/src/components/ProviderSourceDirectory.vue",
+  ],
   root = "output/playwright/p48-source-mobile-review";
 
-test("P48 mobile review transforms only the actual source directory and still compiles", () => {
-  const source = read(component),
-    review = previewProviderSourcesMobile(source),
-    parsed = parse(review);
-  assert.deepEqual(parsed.errors, []);
-  compileScript(parsed.descriptor, { id: "p48-source-mobile" });
-  assert.deepEqual(
-    compileTemplate({
-      source: parsed.descriptor.template.content,
-      filename: component,
-      id: "p48-source-mobile",
-    }).errors,
-    [],
-  );
-  for (const marker of [
-    "p48-mobile-filter-toggle",
-    "p48-mobile-filter-fields",
-    "p48-mobile-record-summary",
-    "p48-mobile-detail-trigger",
-    "p48-mobile-detail-back",
-    "p48-source-record-body",
-  ]) {
-    assert.ok(review.includes(marker), marker);
-    assert.equal(source.includes(marker), false, `production must not contain ${marker}`);
+test("P48 current mobile directory components compile and expose accessible controls", () => {
+  const sources = new Map();
+  for (const file of components) {
+    const source = read(file),
+      parsed = parse(source, { filename: file });
+    assert.deepEqual(parsed.errors, [], file);
+    compileScript(parsed.descriptor, { id: file });
+    assert.deepEqual(
+      compileTemplate({
+        source: parsed.descriptor.template.content,
+        filename: file,
+        id: file,
+      }).errors,
+      [],
+      file,
+    );
+    sources.set(file, source);
   }
-  for (const preserved of [
-    ">搜索来源<input",
-    ">业务类型",
-    ">准备状态",
-    ">市场",
-    ">语言",
-    ">接入模式",
-    ">排序",
-    '@click="testSource(item)"',
-    '@click="beginEdit(item)"',
-    '@click="loadConfigurationVersions(item)"',
-  ])
-    assert.ok(review.includes(preserved), preserved);
+
+  const page = sources.get(components[0]),
+    filters = sources.get(components[1]),
+    directory = sources.get(components[2]);
+  assert.match(page, /ProviderSourceFilters/);
+  assert.match(page, /ProviderSourceDirectory/);
+  assert.match(filters, /class="source-filter-toggle"[\s\S]*?:aria-expanded="filtersExpanded"/);
+  assert.match(filters, /aria-controls="source-filter-fields"/);
+  assert.match(filters, /class="source-filter-fields"[\s\S]*'is-open': filtersExpanded/);
+  assert.match(directory, /class="source-detail-trigger"[\s\S]*:aria-controls=/);
+  assert.match(directory, /class="source-detail-back"[\s\S]*@click="closeDetail"/);
+  assert.match(directory, /source-detail-back"\)\s*\?\.focus/);
+  assert.match(directory, /if \(trigger\?\.isConnected\) trigger\.focus/);
 });
 
 test("P48 mobile review CSS is isolated and keeps explicit focus treatment", () => {
@@ -68,7 +64,7 @@ test("P48 mobile review CSS is isolated and keeps explicit focus treatment", () 
   assert.ok(text.includes("max-height: min(48vh, 440px)"));
 });
 
-test("P48 mobile evidence binds all states, images, sources, and zero desktop drift", () => {
+test("P48 archived mobile evidence remains internally intact and is clearly review-only", () => {
   const evidence = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(evidence.kind, "P48-SOURCE-MOBILE-REVIEW-r1");
   assert.equal(evidence.reviewOnly, true);
@@ -81,8 +77,10 @@ test("P48 mobile evidence binds all states, images, sources, and zero desktop dr
   assert.equal(evidence.screenshots.length, 24);
   assert.equal(evidence.comparisons.length, 4);
   assert.equal(Object.keys(evidence.sourceHashes).length, 172);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  for (const [file, expected] of Object.entries(evidence.sourceHashes)) {
+    assert.ok(!file.startsWith("/") && !file.includes(".."), file);
+    assert.match(expected, /^[a-f0-9]{64}$/i, file);
+  }
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

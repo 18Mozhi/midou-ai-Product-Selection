@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/UiStateShowcase.vue": "398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3",
+    "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
   },
   "inputs": {},
@@ -17,12 +17,18 @@
       "actionId": "ST72-HOME",
       "kind": "navigation",
       "label": "返回 ScoutOps 首页",
-      "sourceCandidateIds": ["apps/web/src/components/UiStateShowcase.vue#6716f11d5cb87664.1"],
-      "sourceContractKeys": ["ST05/ST06"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/UiStateShowcase.vue#6716f11d5cb87664.1"
+      ],
+      "sourceContractKeys": [
+        "ST05/ST06"
+      ],
       "contractAliasReason": "依据P72开发专用状态演示当前源候选、八态合同与UiStatePanel当前候选逐项归组，不扩大为生产业务动作。",
       "condition": "用户点击开发演示顶部品牌入口时。",
       "handler": "按当前Vue Router品牌链接导航到既有首页；不持久化演示状态或改变返回路径合同。",
-      "variants": ["current-route-source-contract"],
+      "variants": [
+        "current-route-source-contract"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-mapped",
@@ -44,12 +50,18 @@
       "actionId": "ST72-SELECT",
       "kind": "local",
       "label": "选择一个开发态界面状态",
-      "sourceCandidateIds": ["apps/web/src/components/UiStateShowcase.vue#7f48e1357c8dae41.1"],
-      "sourceContractKeys": ["ST05/ST06"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/UiStateShowcase.vue#7f48e1357c8dae41.1"
+      ],
+      "sourceContractKeys": [
+        "ST05/ST06"
+      ],
       "contractAliasReason": "依据P72开发专用状态演示当前源候选、八态合同与UiStatePanel当前候选逐项归组，不扩大为生产业务动作。",
       "condition": "审核者选择八种合法状态之一时。",
       "handler": "沿既有query.state更新单个合法值，保留其他query；合法同态不增加history，清空当前actionResult。",
-      "variants": ["current-route-source-contract"],
+      "variants": [
+        "current-route-source-contract"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-mapped",
@@ -84,7 +96,9 @@
       "contractAliasReason": "依据P72开发专用状态演示当前源候选、八态合同与UiStatePanel当前候选逐项归组，不扩大为生产业务动作。",
       "condition": "当前状态卡片展示主动作，或其已有次动作可用且非loading时。",
       "handler": "UiStatePanel只emit primary/secondary；父级依八态表执行本地actionResult、既有导航或恢复示例；loading不展示动作。",
-      "variants": ["current-route-source-contract"],
+      "variants": [
+        "current-route-source-contract"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-mapped",
@@ -111,11 +125,15 @@
         "apps/web/src/components/UiStateShowcase.vue#5cb580b48eea94d3.1",
         "apps/web/src/components/UiStateShowcase.vue#659be34503b475d2.1"
       ],
-      "sourceContractKeys": ["ST05/ST06"],
+      "sourceContractKeys": [
+        "ST05/ST06"
+      ],
       "contractAliasReason": "依据P72开发专用状态演示当前源候选、八态合同与UiStatePanel当前候选逐项归组，不扩大为生产业务动作。",
       "condition": "用户打开演示确认窗，满足确认勾选和trim后短语匹配并显式确认时。",
       "handler": "打开/取消只改变本地状态；确认仅设置confirmed=true并关闭，无API、授权撤销、持久化或审计。",
-      "variants": ["current-route-source-contract"],
+      "variants": [
+        "current-route-source-contract"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-mapped",
@@ -158,7 +176,7 @@
       "apps/web/src/components/UiStatePanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/UiStateShowcase.vue": "398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3",
+      "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
     },
     "inputScope": "reviewed-subset-of-shared-source",

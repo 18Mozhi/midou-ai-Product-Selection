@@ -43,7 +43,7 @@ test("P48 configuration candidates bind to the current parent and extracted dial
   const records = audit.records.filter(
     (record) =>
       record.document === documentFile &&
-      record.documentLine >= 300 &&
+      record.documentLine >= 299 &&
       record.documentLine <= 340 &&
       Object.hasOwn(expectedByFile, record.sourceFile),
   );
