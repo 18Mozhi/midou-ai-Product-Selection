@@ -384,8 +384,9 @@ function scheduleCollectionRefresh() {
     void detail(selected.value, false);
   }, 2000);
 }
-async function load() {
-  if (!pageActive()) return;
+async function load(): Promise<"applied" | "superseded" | "inactive" | "failed"> {
+  const staleRead = (): "superseded" | "inactive" => (pageActive() ? "superseded" : "inactive");
+  if (!pageActive()) return "inactive";
   const version = ++readVersion;
   ++ruleReadVersion;
   ruleReadState.value = "idle";
@@ -393,21 +394,22 @@ async function load() {
   clearCollectionRefresh();
   state.value = "loading";
   notice.value = "";
+  pageOutcomeNotice.value = "";
   try {
     const response = await request<Competitor[]>("/competitors");
-    if (!currentRead(version)) return;
+    if (!currentRead(version)) return staleRead();
     requestId.value = response.request_id;
     items.value = response.data.map(withPendingCollection);
     ruleReadState.value = "loading";
     try {
       const ruleResponse = await request<Rule[]>("/competitor-monitor-rules");
-      if (!currentRead(version)) return;
+      if (!currentRead(version)) return staleRead();
       rules.value = ruleResponse.data;
       ruleReadState.value = "ready";
       ruleRequestId.value = ruleResponse.request_id;
       if (rulesPage.value) requestId.value = ruleResponse.request_id;
     } catch (error) {
-      if (!currentRead(version)) return;
+      if (!currentRead(version)) return staleRead();
       ruleReadState.value = "error";
       ruleRequestId.value = error instanceof ApiClientError ? error.requestId : "";
       if (rulesPage.value) throw error;
@@ -427,13 +429,15 @@ async function load() {
     selected.value = nextSelected;
     state.value = rulesPage.value ? "ready" : items.value.length ? "ready" : "empty";
     if (selected.value) await detail(selected.value, false);
+    return "applied";
   } catch (error) {
-    if (!currentRead(version)) return;
+    if (!currentRead(version)) return staleRead();
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
       state.value = stateFrom(error.kind);
     } else state.value = "blocked";
+    return "failed";
   }
 }
 async function reloadRules() {
@@ -523,7 +527,11 @@ async function create() {
         ? "已关闭表单对应的竞品创建操作已成功；当前表单保持不变。"
         : "已提交的竞品创建操作已成功。";
     await load();
-    if (ownsDialog) pageOutcomeNotice.value = "竞品已建立，商品页公开数据采集已排队。";
+    pageOutcomeNotice.value = ownsDialog
+      ? "竞品已建立，商品页公开数据采集已排队。"
+      : showCreate.value
+        ? "已关闭表单对应的竞品创建操作已成功；当前表单保持不变。"
+        : "已提交的竞品创建操作已成功。";
   } else if (isCurrentDialog()) focusDialogAlert(createDialog.value);
   else if (pageActive())
     pageOutcomeNotice.value = "已关闭表单对应的保存结果暂无法确认；请重新读取竞品列表核对状态。";
@@ -653,13 +661,22 @@ async function remove() {
         : `竞品「${target.title}」已删除；当前显示对象保持不变。`;
     }
     if (selected.value?.id === target.id) selected.value = null;
-    await load();
-    if (ownsDialog) pageOutcomeNotice.value = "竞品已从监控列表删除，历史审计仍保留。";
+    const refreshOutcome = await load();
+    if (refreshOutcome === "failed")
+      pageOutcomeNotice.value = `竞品「${target.title}」删除已确认，但列表刷新失败；请重新加载以核对当前列表。`;
+    else if (refreshOutcome === "superseded")
+      pageOutcomeNotice.value = `竞品「${target.title}」删除已确认；列表刷新已由较新的读取接替。`;
+    else if (refreshOutcome === "inactive")
+      pageOutcomeNotice.value = `竞品「${target.title}」删除已确认；离开页面期间未刷新列表，请返回后重读核对。`;
+    else if (ownsDialog)
+      pageOutcomeNotice.value = "竞品已从监控列表删除，列表已更新，历史审计仍保留。";
+    else
+      pageOutcomeNotice.value = `竞品「${target.title}」已删除；当前显示对象保持不变，列表已更新。`;
   } catch (error) {
-    const message =
-      error instanceof ApiClientError
-        ? error.actionHint
-        : "删除请求结果暂无法确认；请重新读取竞品列表核对状态。";
+    const outcomeUnknown = !(error instanceof ApiClientError) || error.status === 0;
+    const message = outcomeUnknown
+      ? "删除请求未收到服务器确认，结果暂无法确定；请关闭此窗口并重读列表核对后再操作。"
+      : error.actionHint;
     if (isCurrentDialog()) {
       if (error instanceof ApiClientError) requestId.value = error.requestId;
       notice.value = message;
@@ -689,7 +706,11 @@ async function createRule() {
         ? "已关闭窗口对应的监控规则创建操作已成功；当前窗口保持不变。"
         : "已提交的监控规则创建操作已成功。";
     await load();
-    if (ownsDialog) pageOutcomeNotice.value = "监控阈值已启用。";
+    pageOutcomeNotice.value = ownsDialog
+      ? "监控阈值已启用。"
+      : showRule.value
+        ? "已关闭窗口对应的监控规则创建操作已成功；当前窗口保持不变。"
+        : "已提交的监控规则创建操作已成功。";
   } else if (isCurrentDialog()) focusDialogAlert(ruleDialog.value);
   else if (pageActive())
     pageOutcomeNotice.value = "已关闭窗口对应的规则创建结果暂无法确认；请重新读取列表核对状态。";

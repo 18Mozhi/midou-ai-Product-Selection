@@ -386,7 +386,9 @@ test("UI2-CP-G05 late delete for A cannot clear B's selected detail", async ({ p
     await expect(page.getByRole("dialog", { name: "删除竞品监控" })).toHaveCount(0);
     await expect(page.locator(".competitor-list button")).toHaveCount(1);
     await expect(page.locator(".competitor-detail h3")).toHaveText(b.title);
-    await expect(page.getByText(`竞品「${a.title}」已删除；当前显示对象保持不变。`)).toBeVisible();
+    await expect(
+      page.getByText(`竞品「${a.title}」已删除；当前显示对象保持不变，列表已更新。`),
+    ).toBeVisible();
     expect(deletes).toEqual([
       {
         url: `/api/v1/competitors/${aId}`,
@@ -396,4 +398,80 @@ test("UI2-CP-G05 late delete for A cannot clear B's selected detail", async ({ p
   } finally {
     release.release();
   }
+});
+
+test("UI2-CP-G06 keeps confirmed delete separate from a failed list refresh", async ({ page }) => {
+  await setup(page);
+  let listRefreshes = 0;
+  const deletes: Array<{ body: unknown }> = [];
+  await page.route("**/api/v1/competitors", async (route) => {
+    if (route.request().method() !== "GET") return route.fallback();
+    listRefreshes += 1;
+    await route.fulfill({
+      status: 503,
+      json: {
+        error: { code: "dependency_unavailable", message: "列表暂时无法刷新" },
+        request_id: "competitor-list-refresh-failed",
+        trace_id: "competitor-list-refresh-trace",
+      },
+    });
+  });
+  await page.route(`**/api/v1/competitors/${aId}`, async (route) => {
+    if (route.request().method() !== "DELETE") return route.fallback();
+    deletes.push({ body: route.request().postDataJSON() });
+    await route.fulfill({ json: envelope({ deleted: true }) });
+  });
+  const mobileActions = page.locator(".competitor-mobile-actions");
+  if (await mobileActions.isVisible())
+    await mobileActions.evaluate((element: HTMLDetailsElement) => {
+      element.open = true;
+    });
+
+  await page.getByRole("button", { name: "删除竞品监控", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "删除竞品监控" });
+  await dialog.getByLabel("删除原因").fill("已确认停止跟踪");
+  await dialog.getByRole("button", { name: "确认删除" }).click();
+
+  await expect(dialog).toHaveCount(0);
+  await expect(
+    page.getByText("竞品「竞品 A」删除已确认，但列表刷新失败；请重新加载以核对当前列表。"),
+  ).toBeVisible();
+  await expect(page.getByText("竞品已从监控列表删除，列表已更新，历史审计仍保留。")).toHaveCount(0);
+  expect(listRefreshes).toBeGreaterThan(0);
+  expect(deletes).toEqual([{ body: { expected_revision: 7, reason: "已确认停止跟踪" } }]);
+});
+
+test("UI2-CP-G06 reports an uncertain delete transport without claiming success", async ({
+  page,
+}) => {
+  await setup(page);
+  let listRefreshes = 0;
+  let deletes = 0;
+  await page.route("**/api/v1/competitors", (route) => {
+    if (route.request().method() === "GET") listRefreshes += 1;
+    return route.fallback();
+  });
+  await page.route(`**/api/v1/competitors/${aId}`, async (route) => {
+    if (route.request().method() !== "DELETE") return route.fallback();
+    deletes += 1;
+    await route.abort("failed");
+  });
+  const mobileActions = page.locator(".competitor-mobile-actions");
+  if (await mobileActions.isVisible())
+    await mobileActions.evaluate((element: HTMLDetailsElement) => {
+      element.open = true;
+    });
+
+  await page.getByRole("button", { name: "删除竞品监控", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "删除竞品监控" });
+  await dialog.getByLabel("删除原因").fill("核对删除结果");
+  await dialog.getByRole("button", { name: "确认删除" }).click();
+
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("alert")).toContainText(
+    "删除请求未收到服务器确认，结果暂无法确定；请关闭此窗口并重读列表核对后再操作。",
+  );
+  await expect(page.getByText("竞品已从监控列表删除，列表已更新，历史审计仍保留。")).toHaveCount(0);
+  expect(deletes).toBe(1);
+  expect(listRefreshes).toBe(0);
 });
