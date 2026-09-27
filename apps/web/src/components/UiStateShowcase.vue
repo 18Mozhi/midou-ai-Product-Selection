@@ -189,10 +189,6 @@ async function secondary() {
 
 <style scoped>
 .state-showcase--review {
-  --p72-blue: #1748a0;
-  --p72-ink: #182d4a;
-  --p72-muted: #52647b;
-  --p72-line: #dce4ee;
   box-sizing: border-box;
   display: grid;
   align-content: start;
@@ -202,7 +198,7 @@ async function secondary() {
   margin: 0 auto;
   padding: 28px max(24px, calc((100vw - 1180px) / 2)) 44px;
   color: var(--p72-ink);
-  background: #f3f6fb;
+  background: var(--p72-canvas);
   font:
     16px/1.65 "Microsoft YaHei",
     sans-serif;
@@ -220,7 +216,7 @@ async function secondary() {
   font: inherit;
 }
 .state-showcase--review :is(button, input):focus-visible {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p72-focus);
   outline-offset: 3px;
 }
 .p72-top {
@@ -243,7 +239,7 @@ async function secondary() {
   width: 32px;
   height: 32px;
   place-items: center;
-  color: #fff;
+  color: var(--p72-surface);
   background: var(--p72-blue);
 }
 .p72-top strong {
@@ -251,25 +247,25 @@ async function secondary() {
 }
 .p72-hero {
   padding: 28px 32px;
-  color: #fff;
+  color: var(--p72-surface);
   background: var(--p72-blue);
 }
 .p72-hero p {
-  color: #d9e6ff;
+  color: var(--p72-soft-blue);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 .p72-hero h1 {
   margin: 5px 0;
-  color: #fff;
+  color: var(--p72-surface);
   font-size: 32px;
   line-height: 1.35;
 }
 .p72-hero > span {
   display: block;
   max-width: 760px;
-  color: #e2ebff;
+  color: var(--p72-hero-muted);
 }
 .p72-boundary {
   display: flex;
@@ -277,7 +273,7 @@ async function secondary() {
   gap: 4px 12px;
   padding: 12px 16px;
   border-left: 3px solid var(--p72-blue);
-  background: #edf4ff;
+  background: var(--p72-info);
 }
 .p72-boundary span {
   color: var(--p72-muted);
@@ -295,12 +291,12 @@ async function secondary() {
   border: 0;
   border-radius: 0;
   color: var(--p72-ink);
-  background: #fff;
+  background: var(--p72-surface);
   box-shadow: none;
   cursor: pointer;
 }
 .p72-state-picker button[aria-pressed="true"] {
-  color: #fff;
+  color: var(--p72-surface);
   background: var(--p72-blue);
 }
 .p72-state-picker i {
@@ -313,7 +309,7 @@ async function secondary() {
 }
 .p72-workspace {
   border: 1px solid var(--p72-line);
-  background: #fff;
+  background: var(--p72-surface);
 }
 .p72-workspace > header {
   display: flex;
@@ -341,7 +337,7 @@ async function secondary() {
 }
 .p72-preview {
   padding: 24px;
-  background: #f9fbfe;
+  background: var(--p72-surface-soft);
 }
 .p72-preview :deep(.ui-state-panel) {
   max-width: 720px;
@@ -350,13 +346,13 @@ async function secondary() {
   border: 1px solid var(--p72-line);
   border-left: 4px solid var(--p72-blue);
   border-radius: 0;
-  background: #fff;
+  background: var(--p72-surface);
   box-shadow: none;
 }
 .p72-preview :deep(.ui-state-panel .ui-state-symbol) {
   border-radius: 0;
   color: var(--p72-blue);
-  background: #edf4ff;
+  background: var(--p72-info);
 }
 .p72-preview :deep(.ui-state-panel > p) {
   color: var(--p72-muted);
@@ -371,7 +367,7 @@ async function secondary() {
 }
 .p72-preview :deep(.ui-state-panel dl) {
   border-color: var(--p72-line);
-  background: #f6f9ff;
+  background: var(--p72-info-strong);
 }
 .p72-preview :deep(.ui-state-panel footer) {
   display: flex;
@@ -383,13 +379,13 @@ async function secondary() {
   border: 1px solid var(--p72-blue);
   border-radius: 0;
   color: var(--p72-blue);
-  background: #fff;
+  background: var(--p72-surface);
   box-shadow: none;
   cursor: pointer;
 }
 .p72-preview :deep(.ui-state-panel footer .primary),
 .open-confirm {
-  color: #fff;
+  color: var(--p72-surface);
   background: var(--p72-blue);
 }
 .state-action-result,
@@ -400,7 +396,7 @@ async function secondary() {
   padding: 12px 14px;
   overflow-wrap: anywhere;
   color: var(--p72-muted);
-  background: #edf4ff;
+  background: var(--p72-info);
 }
 .p72-confirmation {
   display: flex;
@@ -409,7 +405,7 @@ async function secondary() {
   gap: 24px;
   padding: 22px 24px;
   border: 1px solid var(--p72-line);
-  background: #fff;
+  background: var(--p72-surface);
 }
 .p72-confirmation > div:first-child {
   max-width: 720px;
@@ -438,52 +434,52 @@ async function secondary() {
   display: grid;
   place-items: center;
   padding: 18px;
-  background: rgb(24 45 74 / 58%);
+  background: var(--p72-scrim);
 }
 :global(body:has(.state-showcase--review) .confirm-dialog) {
   width: min(560px, 100%);
   max-height: calc(100dvh - 36px);
   overflow-y: auto;
   padding: 28px;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--p72-line);
   border-radius: 0;
-  color: #182d4a;
-  background: #fff;
+  color: var(--p72-ink);
+  background: var(--p72-surface);
   box-shadow: none;
 }
 :global(body:has(.state-showcase--review) .confirm-dialog :is(button, input):focus-visible) {
-  outline: 3px solid #2465d7;
+  outline: 3px solid var(--p72-focus);
   outline-offset: 3px;
 }
 :global(body:has(.state-showcase--review) .confirm-dialog > span) {
   border-radius: 0;
-  color: #b42318;
-  background: #fff1f0;
+  color: var(--p72-danger);
+  background: var(--p72-danger-soft);
 }
 :global(body:has(.state-showcase--review) .confirm-dialog > p) {
-  color: #b42318;
+  color: var(--p72-danger);
   letter-spacing: 0.04em;
 }
 :global(body:has(.state-showcase--review) .confirm-dialog aside) {
-  border-left-color: #b42318 !important;
+  border-left-color: var(--p72-danger);
   border-radius: 0;
-  background: #fff7f6;
+  background: var(--p72-danger-subtle);
 }
 :global(body:has(.state-showcase--review) .confirm-check) {
   display: grid;
   grid-template-columns: 20px minmax(0, 1fr);
   align-items: start;
-  color: #52647b;
+  color: var(--p72-muted);
 }
 :global(body:has(.state-showcase--review) .confirm-check input) {
   width: 20px;
   height: 20px;
   margin: 0;
-  accent-color: #1748a0;
+  accent-color: var(--p72-blue);
 }
 :global(body:has(.state-showcase--review) .confirm-phrase input) {
   width: 100%;
-  border: 1px solid #dce4ee;
+  border: 1px solid var(--p72-line);
   border-radius: 0;
 }
 :global(body:has(.state-showcase--review) .confirm-dialog footer button) {
@@ -491,8 +487,8 @@ async function secondary() {
   border-radius: 0;
 }
 :global(body:has(.state-showcase--review) .confirm-dialog .confirm-submit.is-danger) {
-  border-color: #b42318;
-  background: #b42318;
+  border-color: var(--p72-danger);
+  background: var(--p72-danger);
 }
 @media (max-width: 760px) {
   .state-showcase--review {

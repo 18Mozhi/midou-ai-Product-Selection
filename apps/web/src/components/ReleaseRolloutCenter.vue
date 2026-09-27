@@ -1048,8 +1048,8 @@ footer details span {
 
 <style scoped>
 :global(html body:has(#app .release-center--c)) {
-  background: #f3f6fb;
-  color: #172d4c;
+  background: var(--p65-bg);
+  color: var(--p65-ink);
   font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
 }
 :global(html body:has(#app .release-center--c) #app .role-shell) {
@@ -1058,8 +1058,8 @@ footer details span {
   grid-template-rows: 76px minmax(0, 1fr);
   min-height: 100dvh;
   padding: 0;
-  background: #f3f6fb;
-  color: #172d4c;
+  background: var(--p65-bg);
+  color: var(--p65-ink);
   font-family: inherit;
 }
 :global(html body:has(#app .release-center--c) #app .role-topbar) {
@@ -1070,18 +1070,18 @@ footer details span {
   min-height: 0;
   padding: 0 24px;
   border: 0;
-  border-bottom: 1px solid #d8e2ef;
-  background: #fff;
+  border-bottom: 1px solid var(--p65-border-subtle);
+  background: var(--p65-surface);
 }
 :global(html body:has(#app .release-center--c) #app .role-brand) {
   gap: 12px;
-  color: #172d4c;
+  color: var(--p65-ink);
 }
 :global(html body:has(#app .release-center--c) #app .role-brand > span) {
   border: 0;
   border-radius: 8px;
-  background: #244bb0;
-  color: #fff;
+  background: var(--p65-primary-hover);
+  color: var(--p65-surface);
 }
 :global(html body:has(#app .release-center--c) #app .role-brand > b) {
   font-family: inherit;
@@ -1089,17 +1089,17 @@ footer details span {
   letter-spacing: 0.06em;
 }
 :global(html body:has(#app .release-center--c) #app .role-brand > em) {
-  color: #536985;
+  color: var(--p65-secondary-muted);
   font-size: 13px;
   letter-spacing: 0;
 }
 :global(html body:has(#app .release-center--c) #app .role-top-actions :is(a, button)) {
   min-height: 44px;
   min-width: 44px;
-  border: 1px solid #d8e2ef;
+  border: 1px solid var(--p65-border-subtle);
   border-radius: 7px;
-  background: #fff;
-  color: #172d4c;
+  background: var(--p65-surface);
+  color: var(--p65-ink);
 }
 :global(html body:has(#app .release-center--c) #app .role-sidebar) {
   grid-column: 1;
@@ -1115,8 +1115,8 @@ footer details span {
   overflow-y: auto;
   border: 0;
   border-radius: 0;
-  background: #244bb0;
-  color: #fff;
+  background: var(--p65-primary-hover);
+  color: var(--p65-surface);
   transform: none;
   transition: none;
 }
@@ -1127,13 +1127,13 @@ footer details span {
   border: 0;
 }
 :global(html body:has(#app .release-center--c) #app .role-sidebar-head strong) {
-  color: #fff;
+  color: var(--p65-surface);
   font:
     700 18px/1.5 "Microsoft YaHei",
     sans-serif;
 }
 :global(html body:has(#app .release-center--c) #app .role-sidebar-head small) {
-  color: #e2ebff;
+  color: var(--p65-blue-soft);
   font:
     13px/1.7 "Microsoft YaHei",
     sans-serif;
@@ -1145,18 +1145,18 @@ footer details span {
   min-height: 44px;
   margin-bottom: 16px;
   padding: 0 10px;
-  border: 1px solid #91afea;
+  border: 1px solid var(--p65-outline);
   border-radius: 7px;
-  background: #fff;
-  color: #172d4c;
+  background: var(--p65-surface);
+  color: var(--p65-ink);
 }
 :global(html body:has(#app .release-center--c) #app .role-menu-search input) {
   width: 100%;
   min-width: 0;
   min-height: 44px;
   border: 0;
-  background: #fff;
-  color: #172d4c;
+  background: var(--p65-surface);
+  color: var(--p65-ink);
   font:
     16px/1.5 "Microsoft YaHei",
     sans-serif;
@@ -1177,13 +1177,13 @@ footer details span {
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: #fff;
+  color: var(--p65-surface);
   font-size: 14px;
   letter-spacing: 0;
 }
 :global(html body:has(#app .release-center--c) #app .role-nav-groups summary:hover),
 :global(html body:has(#app .release-center--c) #app .role-nav-menu a:hover) {
-  background: #365fc6;
+  background: var(--p65-primary-active);
 }
 :global(html body:has(#app .release-center--c) #app .role-nav-menu) {
   position: static;
@@ -1202,12 +1202,12 @@ footer details span {
   border: 0;
   border-radius: 6px;
   background: transparent;
-  color: #eef3ff;
+  color: var(--p65-on-blue-muted);
   font-size: 14px;
 }
 :global(html body:has(#app .release-center--c) #app .role-nav-menu a[aria-current="page"]) {
-  background: #fff;
-  color: #244bb0;
+  background: var(--p65-surface);
+  color: var(--p65-primary-hover);
   font-weight: 700;
 }
 :global(html body:has(#app .release-center--c) #app .role-sidebar-utility) {
@@ -1220,10 +1220,10 @@ footer details span {
   min-height: 44px;
   padding: 10px 8px;
   border: 0;
-  border-top: 1px solid #7595db;
+  border-top: 1px solid var(--p65-divider);
   border-radius: 0;
   background: transparent;
-  color: #fff;
+  color: var(--p65-surface);
   font-size: 14px;
   white-space: normal;
 }
@@ -1242,7 +1242,7 @@ footer details span {
   margin: 0 0 24px;
   padding: 12px 0;
   border: 0;
-  border-block: 1px solid #d8e2ef;
+  border-block: 1px solid var(--p65-border-subtle);
   border-radius: 0;
   background: transparent;
 }
@@ -1251,14 +1251,14 @@ footer details span {
   border: 0;
 }
 :global(html body:has(#app .release-center--c) #app .role-context-rail small) {
-  color: #536985;
+  color: var(--p65-secondary-muted);
   font:
     13px/1.5 "Microsoft YaHei",
     sans-serif;
 }
 :global(html body:has(#app .release-center--c) #app .role-context-rail strong) {
   margin-top: 3px;
-  color: #172d4c;
+  color: var(--p65-ink);
   font-size: 14px;
 }
 :global(html body:has(#app .release-center--c) #app .role-context-drawer) {
@@ -1274,7 +1274,7 @@ footer details span {
     .role-shell
     :is(a, button, input, summary):focus-visible
 ) {
-  outline: 3px solid #4878e9;
+  outline: 3px solid var(--p65-focus);
   outline-offset: 3px;
 }
 @media (max-width: 1100px) and (min-width: 841px) {
@@ -1318,9 +1318,9 @@ footer details span {
   :global(html body:has(#app .release-center--c) #app .role-context-drawer) {
     display: block;
     margin-bottom: 20px;
-    border: 1px solid #d8e2ef;
+    border: 1px solid var(--p65-border-subtle);
     border-radius: 7px;
-    background: #fff;
+    background: var(--p65-surface);
   }
   :global(html body:has(#app .release-center--c) #app .role-context-drawer > div) {
     grid-template-columns: 1fr 1fr;
@@ -1338,7 +1338,7 @@ footer details span {
     max-height: 100dvh;
     padding: 16px;
     overflow-y: auto;
-    box-shadow: 12px 0 32px rgb(12 29 54 / 24%);
+    box-shadow: 12px 0 32px var(--p65-shadow);
   }
   :global(html body:has(#app .release-center--c) #app .role-sidebar:not(.is-open)) {
     display: none;
@@ -1351,46 +1351,46 @@ footer details span {
     grid-template-columns: repeat(5, minmax(0, 1fr));
     min-height: 72px;
     border: 0;
-    border-top: 1px solid #d8e2ef;
-    background: #fff;
+    border-top: 1px solid var(--p65-border-subtle);
+    background: var(--p65-surface);
   }
   :global(html body:has(#app .release-center--c) #app .role-mobile-nav :is(a, button, i)) {
-    color: #536985;
+    color: var(--p65-secondary-muted);
   }
   :global(html body:has(#app .release-center--c) #app .role-mobile-nav [aria-current="page"]) {
-    background: #e8efff;
-    color: #244bb0;
+    background: var(--p65-blue-muted);
+    color: var(--p65-primary-hover);
   }
 }
 :global(body:has(.release-center--c) #app .platform-secondary-nav) {
-  background: #fff;
-  border: 1px solid #c7d3e4;
+  background: var(--p65-surface);
+  border: 1px solid var(--p65-border);
   gap: 0;
 }
 :global(body:has(.release-center--c) #app .platform-secondary-nav a) {
   min-height: 44px;
-  background: #fff;
-  color: #526278;
+  background: var(--p65-surface);
+  color: var(--p65-muted);
   border: 0;
   border-bottom: 3px solid transparent;
   box-shadow: none;
 }
 :global(body:has(.release-center--c) #app .platform-secondary-nav a[aria-current="page"]) {
-  color: #1249b8;
-  background: #edf3ff;
-  border-bottom-color: #1249b8;
+  color: var(--p65-primary);
+  background: var(--p65-blue-panel);
+  border-bottom-color: var(--p65-primary);
 }
 .release-center--c {
-  --so-text: #182739;
-  --so-text-muted: #526278;
-  --so-border: #c7d3e4;
-  --so-primary: #1249b8;
-  --so-primary-strong: #1249b8;
-  --so-on-primary: #fff;
-  --so-panel: #fff;
-  --so-panel-soft: #fff;
-  --so-bg-elevated: #fff;
-  color: #182739;
+  --so-text: var(--p65-text);
+  --so-text-muted: var(--p65-muted);
+  --so-border: var(--p65-border);
+  --so-primary: var(--p65-primary);
+  --so-primary-strong: var(--p65-primary);
+  --so-on-primary: var(--p65-surface);
+  --so-panel: var(--p65-surface);
+  --so-panel-soft: var(--p65-surface);
+  --so-bg-elevated: var(--p65-surface);
+  color: var(--p65-text);
   font:
     16px/1.65 "Microsoft YaHei",
     "PingFang SC",
@@ -1401,7 +1401,7 @@ footer details span {
 .release-center--c h1,
 .release-center--c h2,
 .release-center--c h3 {
-  color: #182739;
+  color: var(--p65-text);
   font-family: inherit;
   font-weight: 700;
 }
@@ -1436,20 +1436,20 @@ footer details span {
   flex: 1 1 420px;
 }
 .release-center--c .hero p {
-  color: #1249b8;
+  color: var(--p65-primary);
   letter-spacing: 0.08em;
   margin: 0;
 }
 .release-center--c .hero span {
-  color: #526278;
+  color: var(--p65-muted);
 }
 .release-center--c .release-read-action,
 .release-center--c .release-center__secondary-tool {
   align-items: center;
-  background: #1249b8;
-  border: 1px solid #1249b8;
+  background: var(--p65-primary);
+  border: 1px solid var(--p65-primary);
   border-radius: 0;
-  color: #fff;
+  color: var(--p65-surface);
   display: inline-flex;
   justify-content: center;
   min-height: 44px;
@@ -1457,7 +1457,7 @@ footer details span {
   text-decoration: none;
 }
 .release-center--c :is(button, a, summary, select, input):focus-visible {
-  outline: 3px solid #1249b8;
+  outline: 3px solid var(--p65-primary);
   outline-offset: 3px;
 }
 .release-center--c button:disabled,
@@ -1473,12 +1473,12 @@ footer details span {
 }
 .release-center--c .p65-directory {
   align-self: start;
-  background: #1249b8;
-  color: #fff;
+  background: var(--p65-primary);
+  color: var(--p65-surface);
   padding: 24px;
 }
 .release-center--c .p65-directory :is(h2, p, a) {
-  color: #fff;
+  color: var(--p65-surface);
 }
 .release-center--c .p65-directory nav {
   display: grid;
@@ -1486,7 +1486,7 @@ footer details span {
   margin: 24px 0;
 }
 .release-center--c .p65-directory a {
-  border-bottom: 1px solid #7196e2;
+  border-bottom: 1px solid var(--p65-border-strong);
   min-height: 44px;
   padding: 12px 0;
   text-decoration: none;
@@ -1505,8 +1505,8 @@ footer details span {
 }
 .release-center--c
   :is(.verdict, .p65-identities, .p65-actions, .panel, .blockers, .state, .refresh-notice) {
-  background: #fff;
-  border: 1px solid #c7d3e4;
+  background: var(--p65-surface);
+  border: 1px solid var(--p65-border);
   border-radius: 0;
   min-width: 0;
   padding: 24px;
@@ -1516,7 +1516,7 @@ footer details span {
   display: none;
 }
 .release-center--c .verdict {
-  border-left: 4px solid #1249b8;
+  border-left: 4px solid var(--p65-primary);
   display: block;
 }
 .release-center--c .verdict strong {
@@ -1530,8 +1530,8 @@ footer details span {
   display: block;
 }
 .release-center--c .p65-source-note {
-  background: #edf3ff;
-  color: #29446e;
+  background: var(--p65-blue-panel);
+  color: var(--p65-secondary-ink);
   padding: 16px;
 }
 .release-center--c .p65-sources {
@@ -1546,30 +1546,30 @@ footer details span {
   min-width: 0;
 }
 .release-center--c .p65-version-production {
-  border-bottom: 1px solid #c7d3e4;
+  border-bottom: 1px solid var(--p65-border);
   margin-top: 0;
   padding-bottom: 12px;
 }
 .release-center--c .p65-match,
 .release-center--c .p65-history {
-  border-top: 1px solid #c7d3e4;
+  border-top: 1px solid var(--p65-border);
   padding-top: 20px;
 }
 .release-center--c dl {
   margin: 0;
 }
 .release-center--c dl > div {
-  border-bottom: 1px solid #e5ebf3;
+  border-bottom: 1px solid var(--p65-divider-neutral);
   display: block;
   min-width: 0;
   padding: 12px 0;
 }
 .release-center--c dt {
-  color: #526278;
+  color: var(--p65-muted);
   font-size: 14px;
 }
 .release-center--c dd {
-  color: #182739;
+  color: var(--p65-text);
   font-size: 16px;
   font-weight: 600;
   margin: 5px 0 0;
@@ -1577,7 +1577,7 @@ footer details span {
   text-align: left;
 }
 .release-center--c code {
-  color: #29446e;
+  color: var(--p65-secondary-ink);
   font:
     15px/1.65 Consolas,
     monospace;
@@ -1589,7 +1589,7 @@ footer details span {
   margin-bottom: 18px;
 }
 .release-center--c .panel header span {
-  color: #526278;
+  color: var(--p65-muted);
   font-size: 14px;
 }
 .release-center--c .threshold > dl {
@@ -1613,24 +1613,24 @@ footer details span {
 }
 .release-center--c :is(th, td) {
   border: 0;
-  border-bottom: 1px solid #c7d3e4;
+  border-bottom: 1px solid var(--p65-border);
   font-size: 14px;
   padding: 12px 10px;
   text-align: left;
   vertical-align: top;
 }
 .release-center--c th {
-  background: #f3f6fa;
-  color: #526278;
+  background: var(--p65-neutral-bg);
+  color: var(--p65-muted);
 }
 .release-center--c td {
-  background: #fff;
+  background: var(--p65-surface);
 }
 .release-center--c .blockers h2 {
   margin-bottom: 16px;
 }
 .release-center--c .blockers article {
-  border-top: 1px solid #c7d3e4;
+  border-top: 1px solid var(--p65-border);
   display: grid;
   gap: 14px;
   grid-template-columns: 210px 1fr;
@@ -1640,12 +1640,12 @@ footer details span {
   grid-column: 2;
 }
 .release-center--c footer {
-  color: #526278;
+  color: var(--p65-muted);
   font-size: 13px;
 }
 .release-center--c :is(.blockers details summary, footer details summary) {
   align-items: center;
-  color: #1249b8;
+  color: var(--p65-primary);
   cursor: pointer;
   display: inline-flex;
   min-height: var(--so-touch-target);

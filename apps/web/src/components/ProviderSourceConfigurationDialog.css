@@ -141,7 +141,7 @@
 .provider-source-configuration-dialog .source-modal.p48-source-configuration-modal,
 .provider-source-configuration-dialog .source-modal.p48-source-versions-modal {
   padding: 24px;
-  background: rgb(15 23 42 / 72%);
+  background: var(--p48-source-modal-overlay);
   backdrop-filter: blur(8px);
 }
 .provider-source-configuration-dialog .p48-source-configuration-form,
@@ -151,18 +151,18 @@
   gap: 0;
   padding: 0;
   overflow: auto;
-  border: 1px solid #d3deec;
+  border: 1px solid var(--p48-source-modal-line);
   border-radius: 20px;
-  background: #f7f9fc;
-  color: #172033;
-  box-shadow: 0 28px 72px rgb(15 23 42 / 28%);
+  background: var(--p48-source-modal-soft);
+  color: var(--p48-source-modal-ink);
+  box-shadow: 0 28px 72px var(--p48-source-modal-shadow);
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > header,
 .provider-source-configuration-dialog .p48-source-versions-identity {
   align-items: flex-start;
   padding: 26px 30px;
-  color: #fff;
-  background: #164fae;
+  color: var(--p48-source-surface);
+  background: var(--p48-source-modal-accent);
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > header > div,
 .provider-source-configuration-dialog .p48-source-versions-identity > div {
@@ -171,13 +171,13 @@
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > header p,
 .provider-source-configuration-dialog .p48-source-versions-identity p {
-  color: rgb(255 255 255 / 82%);
+  color: var(--p48-source-on-hero-muted);
   font-size: 13px;
   line-height: 1.55;
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > header h3,
 .provider-source-configuration-dialog .p48-source-versions-identity h3 {
-  color: #fff;
+  color: var(--p48-source-surface);
   font-size: clamp(23px, 3vw, 31px);
   line-height: 1.2;
   outline: none;
@@ -187,10 +187,10 @@
   flex: 0 0 44px;
   width: 44px;
   min-height: 44px;
-  border: 1px solid rgb(255 255 255 / 40%);
+  border: 1px solid var(--p48-source-on-hero-border);
   border-radius: 10px;
-  color: #fff;
-  background: rgb(255 255 255 / 10%);
+  color: var(--p48-source-surface);
+  background: var(--p48-source-on-hero-soft);
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > header > button:disabled,
 .provider-source-configuration-dialog .p48-source-versions-identity > button:disabled {
@@ -204,9 +204,9 @@
 }
 .provider-source-configuration-dialog .p48-source-configuration-meta span {
   padding: 6px 10px;
-  border: 1px solid rgb(255 255 255 / 32%);
+  border: 1px solid var(--p48-source-on-hero-subtle-border);
   border-radius: 999px;
-  color: #fff;
+  color: var(--p48-source-surface);
   font-size: 13px;
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > label,
@@ -216,9 +216,9 @@
 .provider-source-configuration-dialog .p48-source-versions-panel > .p48-source-dialog-feedback {
   padding: 18px 30px;
   border: 0;
-  border-bottom: 1px solid #dce4ef;
+  border-bottom: 1px solid var(--p48-source-detail-divider);
   border-radius: 0;
-  background: #fff;
+  background: var(--p48-source-surface);
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > .p48-source-dialog-feedback,
 .provider-source-configuration-dialog .p48-source-versions-panel > .p48-source-dialog-feedback {
@@ -226,9 +226,9 @@
   gap: 6px;
   padding-top: 14px;
   padding-bottom: 14px;
-  border-left: 4px solid #1769e0;
-  color: #344d6a;
-  background: #eaf3ff;
+  border-left: 4px solid var(--p48-source-adapter-accent);
+  color: var(--p48-source-feedback-ink);
+  background: var(--p48-source-adapter-panel);
 }
 .provider-source-configuration-dialog .p48-source-dialog-feedback p {
   margin: 0;
@@ -244,7 +244,7 @@
 .provider-source-configuration-dialog .p48-source-configuration-form > label {
   display: grid;
   gap: 8px;
-  color: #243247;
+  color: var(--p48-source-table-ink);
   font-size: 14px;
   font-weight: 650;
 }
@@ -254,14 +254,14 @@
 .provider-source-configuration-dialog .p48-source-versions-panel textarea {
   min-height: 44px;
   padding: 10px 12px;
-  border: 1px solid #aebdd0;
+  border: 1px solid var(--p48-source-input-border);
   border-radius: 9px;
-  background: #fff;
-  color: #172033;
+  background: var(--p48-source-surface);
+  color: var(--p48-source-modal-ink);
 }
 .provider-source-configuration-dialog .p48-source-configuration-form small,
 .provider-source-configuration-dialog .p48-source-versions-panel small {
-  color: #64748b;
+  color: var(--p48-source-neutral-muted);
   font-size: 13px;
   font-weight: 450;
   line-height: 1.5;
@@ -273,26 +273,26 @@
 }
 .provider-source-configuration-dialog .p48-source-configuration-form :focus-visible,
 .provider-source-configuration-dialog .p48-source-versions-panel :focus-visible {
-  outline: 3px solid #66a3ff;
+  outline: 3px solid var(--p48-source-focus-ring);
   outline-offset: 3px;
 }
 .provider-source-configuration-dialog .p48-source-configuration-form .source-smoke-notice {
-  border-left: 5px solid #d97706;
-  color: #6b4a1c;
-  background: #fff8e8;
+  border-left: 5px solid var(--p48-source-warning-accent);
+  color: var(--p48-source-warning-ink);
+  background: var(--p48-source-warning-soft);
   line-height: 1.6;
 }
 .provider-source-configuration-dialog .p48-source-configuration-form .source-schedule-preview {
-  border-bottom: 1px solid #dce4ef;
-  background: #edf4ff;
+  border-bottom: 1px solid var(--p48-source-detail-divider);
+  background: var(--p48-source-adapter-subtle);
 }
 .provider-source-configuration-dialog
   .p48-source-configuration-form
   .source-schedule-preview
   dl
   > div {
-  border: 1px solid #d6e2f1;
-  background: #fff;
+  border: 1px solid var(--p48-source-identity-border);
+  background: var(--p48-source-surface);
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > footer,
 .provider-source-configuration-dialog .p48-source-versions-actions {
@@ -301,14 +301,14 @@
   z-index: 2;
   justify-content: space-between;
   padding: 14px 30px;
-  border-top: 1px solid #d3deec;
-  background: rgb(255 255 255 / 96%);
-  box-shadow: 0 -10px 22px rgb(15 23 42 / 6%);
+  border-top: 1px solid var(--p48-source-modal-line);
+  background: var(--p48-source-sticky-panel);
+  box-shadow: 0 -10px 22px var(--p48-source-sticky-shadow);
   backdrop-filter: blur(10px);
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > footer p,
 .provider-source-configuration-dialog .p48-source-versions-actions p {
-  color: #64748b;
+  color: var(--p48-source-neutral-muted);
   font-size: 13px;
   line-height: 1.5;
 }
@@ -325,9 +325,9 @@
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > footer button:first-child,
 .provider-source-configuration-dialog .p48-source-versions-actions button {
-  border: 1px solid #aebdd0;
-  color: #243247;
-  background: #fff;
+  border: 1px solid var(--p48-source-input-border);
+  color: var(--p48-source-table-ink);
+  background: var(--p48-source-surface);
 }
 .provider-source-configuration-dialog .p48-source-versions-panel {
   width: min(920px, 100%);
@@ -337,16 +337,16 @@
 }
 .provider-source-configuration-dialog .p48-source-versions-panel > p {
   padding: 14px 30px;
-  color: #53657d;
-  background: #eaf3ff;
+  color: var(--p48-source-subtle-ink);
+  background: var(--p48-source-adapter-panel);
   line-height: 1.55;
 }
 .provider-source-configuration-dialog .p48-source-versions-panel > label {
   display: grid;
   gap: 8px;
   padding: 16px 30px;
-  border-bottom: 1px solid #dce4ef;
-  background: #fff;
+  border-bottom: 1px solid var(--p48-source-detail-divider);
+  background: var(--p48-source-surface);
   font-weight: 650;
 }
 .provider-source-configuration-dialog .p48-source-versions-panel > .source-state,
@@ -360,27 +360,27 @@
   display: grid;
   gap: 7px;
   padding: 14px 30px;
-  border-bottom: 1px solid #dce4ef;
-  border-left: 4px solid #294caf;
-  background: #f6f9ff;
+  border-bottom: 1px solid var(--p48-source-detail-divider);
+  border-left: 4px solid var(--p48-source-blue);
+  background: var(--p48-source-info-panel);
 }
 .provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="success"] {
-  border-left-color: #3b7d63;
-  background: #f8fcfa;
+  border-left-color: var(--p48-source-success);
+  background: var(--p48-source-success-panel);
 }
 .provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="sync_failed"],
 .provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="read_failed"],
 .provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="conflict"],
 .provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="forbidden"],
 .provider-source-configuration-dialog .p48-source-version-action-feedback[data-stage="failed"] {
-  border-left-color: #a97016;
-  background: #fffdf8;
+  border-left-color: var(--p48-source-warning);
+  background: var(--p48-source-warning-panel);
 }
 .provider-source-configuration-dialog .p48-source-version-action-feedback > :is(p, h4) {
   margin: 0;
 }
 .provider-source-configuration-dialog .p48-source-version-action-feedback > p {
-  color: #52657e;
+  color: var(--p48-source-muted);
   font-size: 13px;
   line-height: 1.6;
 }
@@ -388,10 +388,10 @@
   min-height: 44px;
   justify-self: start;
   padding: 8px 12px;
-  border: 1px solid #294caf;
+  border: 1px solid var(--p48-source-blue);
   border-radius: 5px;
-  color: #fff;
-  background: #294caf;
+  color: var(--p48-source-surface);
+  background: var(--p48-source-blue);
   font: inherit;
   font-size: 13px;
   font-weight: 700;
@@ -410,14 +410,14 @@
 .provider-source-configuration-dialog .configuration-version-list {
   gap: 0;
   padding: 0 30px;
-  background: #fff;
+  background: var(--p48-source-surface);
 }
 .provider-source-configuration-dialog .configuration-version-list > li {
   display: grid;
   gap: 10px;
   padding: 16px 0;
   border: 0;
-  border-bottom: 1px solid #dce4ef;
+  border-bottom: 1px solid var(--p48-source-detail-divider);
   border-radius: 0;
   background: transparent;
 }
@@ -425,12 +425,12 @@
   gap: 5px;
 }
 .provider-source-configuration-dialog .configuration-version-list > li > header strong {
-  color: #172033;
+  color: var(--p48-source-modal-ink);
   font-size: 16px;
 }
 .provider-source-configuration-dialog .configuration-version-list > li > header span,
 .provider-source-configuration-dialog .configuration-version-list > li > p {
-  color: #64748b;
+  color: var(--p48-source-neutral-muted);
   font-size: 13px;
 }
 .provider-source-configuration-dialog .configuration-version-list ul {
@@ -442,12 +442,12 @@
 .provider-source-configuration-dialog .configuration-version-list ul li {
   align-items: baseline;
   padding: 8px 0;
-  border-top: 1px solid #edf1f6;
+  border-top: 1px solid var(--p48-source-neutral-panel);
   font-size: 13px;
 }
 .provider-source-configuration-dialog .configuration-version-list code {
   overflow-wrap: anywhere;
-  color: #334155;
+  color: var(--p48-source-code-ink);
 }
 .provider-source-configuration-dialog .p48-source-versions-actions {
   display: flex;
@@ -530,15 +530,15 @@
   gap: 6px;
   padding: 14px 30px;
   border: 0;
-  border-bottom: 1px solid #dce4ef;
-  border-left: 4px solid #294caf;
-  background: #f6f9ff;
+  border-bottom: 1px solid var(--p48-source-detail-divider);
+  border-left: 4px solid var(--p48-source-blue);
+  background: var(--p48-source-info-panel);
 }
 .provider-source-configuration-dialog
   .p48-source-configuration-form
   > .p48-source-configuration-save-feedback[data-stage="success"] {
-  border-left-color: #3b7d63;
-  background: #f8fcfa;
+  border-left-color: var(--p48-source-success);
+  background: var(--p48-source-success-panel);
 }
 .provider-source-configuration-dialog
   .p48-source-configuration-form
@@ -549,28 +549,28 @@
 .provider-source-configuration-dialog
   .p48-source-configuration-form
   > .p48-source-configuration-save-feedback[data-stage="conflict"] {
-  border-left-color: #a97016;
-  background: #fffdf8;
+  border-left-color: var(--p48-source-warning);
+  background: var(--p48-source-warning-panel);
 }
 .provider-source-configuration-dialog .p48-source-configuration-save-feedback > :is(p, h4) {
   margin: 0;
 }
 .provider-source-configuration-dialog .p48-source-configuration-save-feedback > p {
-  color: #52657e;
+  color: var(--p48-source-muted);
   font-size: 13px;
   line-height: 1.6;
 }
 .provider-source-configuration-dialog .p48-source-configuration-form > footer > p {
   flex: 1 1 100%;
   margin: 0;
-  color: #64748b;
+  color: var(--p48-source-neutral-muted);
   font-size: 13px;
   line-height: 1.55;
 }
 .provider-source-configuration-dialog
   .p48-source-configuration-form
   :is(input, select, textarea):disabled {
-  color: #64748b;
-  background: #eef2f7;
+  color: var(--p48-source-neutral-muted);
+  background: var(--p48-source-canvas);
   cursor: wait;
 }
