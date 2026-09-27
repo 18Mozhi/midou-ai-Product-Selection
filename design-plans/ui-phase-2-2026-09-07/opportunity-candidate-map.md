@@ -123,3 +123,20 @@
 | OpportunityWorkspaceDialogs.vue:44 | 1ed288cd855ce1c0.1 | ERP导入原生dialog |
 | OpportunityWorkspaceDialogs.vue:100 | ac06eb6f17f7829e.1 | 机会创建原生dialog |
 | OpportunityWorkspaceDialogs.vue:137 | 8b4dc3f5856d3c5a.1 | 人工决策原生dialog；三变体 |
+
+### P18 AI 原因共享组件源候选
+
+以下绑定本页 AI 通过/驳回两调用实际共用的 `AuditedReasonDialog` 当前组件源位，不将其推定为其他页面的全局交互验收。
+
+| 文件:行 | 候选尾键 | P18来源语义 |
+| --- | --- | --- |
+| AuditedReasonDialog.vue:61 | 0a9c82c5c5fb1fd7.1 | 共享原因框组件调用 |
+| AuditedReasonDialog.vue:61 | 0b86489e495d6b17.1 | 共享原因框组件调用 |
+| AuditedReasonDialog.vue:70 | a9a93b43dd0dda5b.1 | 共享原因框组件调用 |
+| AuditedReasonDialog.vue:76 | f850a4abcc7ccc3a.1 | 共享原因框组件调用 |
+| AuditedReasonDialog.vue:114 | 8724bc1f65aaf63a.1 | 共享原因框组件调用 |
+| AuditedReasonDialog.vue:115 | e7e63c4215a43738.1 | 共享原因框组件调用 |
+| OpportunityWorkspace.vue:551 | b74012fbdb739187.1 | AI原因helper调用；通过/驳回 |
+| OpportunityWorkspace.vue:564 | ca674a075f274bff.1 | AI原因helper调用；通过/驳回 |
+| OpportunityWorkspace.vue:1012 | b413cc394b21a4ed.1 | OP-AI-REASON-SUBMIT/CANCEL转发 |
+| OpportunityWorkspace.vue:1012 | 3d03bfde11490c97.1 | 共享原因框组件调用 |

@@ -13,12 +13,13 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-    "apps/web/src/components/OpportunityWorkspace.vue": "3db6475ec7226b25e62ba813a23c1c20b3341bb7d374aab53906d661c77d99c9",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617"
+    "apps/web/src/components/OpportunityWorkspace.vue": "74e03f8d2eb05efcb0f254844eed474be76efaf4d2374f5ba39e0d0ada258ae1",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+    "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
-    "reason": "P18业务原因5变体：决定3+AI2；P15 ERP/创建/批量以及所有form/aside/父集合调用单列，不将容器引用数当业务弹窗数。10个局部组件纳入全部候选，P15专属ListPanel/AutomaticSelectionReadinessPanel和全局壳另审。",
+    "reason": "P18业务原因5变体：决定3+AI2；P15 ERP/创建/批量以及所有form/aside/父集合调用单列，不将容器引用数当业务弹窗数。10个局部组件纳入全部候选；AuditedReasonDialog作为AI原因共享组件单独列明，P15专属ListPanel/AutomaticSelectionReadinessPanel和全局壳另审。",
     "businessVariants": [
       "decision.adopt",
       "decision.observe",
@@ -28,6 +29,7 @@
     ]
   },
   "inputs": {
+    "AuditedReasonDialog.vue": ["reason"],
     "OpportunityCostReviewQueue.vue": ["review.reason"],
     "OpportunityFeedbackPanel.vue": [
       "form.period_start",
@@ -106,6 +108,11 @@
       },
       "testReferences": [
         {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "approved/rejected两变体覆盖503后恢复原原因和操作提示、没有自动重发、显式再次确认才发第二个准确body；桌面/390px共4/4，不证明服务端commit。"
+        },
+        {
           "file": "scripts/verify-ui-phase2-review-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
@@ -164,7 +171,7 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide且result.review_status=pending；按钮没有busy禁用",
       "handler": "reviewAi(result.id,approved) await共享原因；POST /ai-analyses/:resultId/reviews outcome/notes",
-      "variants": ["pending", "already-reviewed", "replaced-ask"],
+      "variants": ["pending", "already-reviewed", "replaced-ask", "failure-restored", "explicit-retry"],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -179,8 +186,10 @@
           "scene": "approve-dialog--long-error-footer"
         }
       ],
-      "remaining": "源先关原因窗后POST，原型失败保留是改动；不保证重复ask/迟到响应归属。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1"],
+      "remaining": "失败后在同机会AI分区恢复原因和action_hint；不自动重发，真实服务端结果/RBAC仍未验。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -190,6 +199,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "approved/rejected两变体覆盖503后恢复原原因和操作提示、没有自动重发、显式再次确认才发第二个准确body；桌面/390px共4/4，不证明服务端commit。"
+        },
         {
           "file": "scripts/verify-ui-phase2-review-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -209,7 +223,7 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide且pending；非busy禁用缺失",
       "handler": "reviewAi(result.id,rejected)；原始输出不改写，成功load/setTab(ai)",
-      "variants": ["pending", "rejected", "cancel", "failure"],
+      "variants": ["pending", "rejected", "cancel", "failure-restored", "explicit-retry"],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -224,8 +238,10 @@
           "scene": "ai-reject-dialog--long-error-footer"
         }
       ],
-      "remaining": "未知不等于未写入；真实结果ID/审计及失败恢复未验。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1"],
+      "remaining": "失败后在同机会AI分区恢复原因和action_hint；不自动重发，真实服务端结果/RBAC仍未验。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1"
+      ],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -235,6 +251,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "approved/rejected两变体覆盖503后恢复原原因和操作提示、没有自动重发、显式再次确认才发第二个准确body；桌面/390px共4/4，不证明服务端commit。"
+        },
         {
           "file": "scripts/verify-ui-phase2-review-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -2449,6 +2470,42 @@
       ]
     },
     {
+      "actionId": "OP-AI-REASON-DIALOG",
+      "label": "AI抽检原因填写与失败恢复窗",
+      "kind": "local",
+      "routeApplicability": "P18-AI-approved-and-rejected-shared-dialog",
+      "condition": "AI通过/驳回动作打开原因窗；写入失败时仅在原机会AI分区恢复",
+      "handler": "共享AuditedReasonDialog显示原文和action_hint；取消退出；再次确认才由reviewAi发起新POST",
+      "variants": ["AI.approved", "AI.rejected", "failure-restored", "cancel"],
+      "scenes": [],
+      "remaining": "当前仅本地受控响应证明前端呈现与显式重试；不证明未知服务端commit、真实幂等/RBAC或其他调用页生命周期。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#0a9c82c5c5fb1fd7.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#0b86489e495d6b17.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#a9a93b43dd0dda5b.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
+      ],
+      "sourceContractKeys": ["共享原因框组件调用"],
+      "contractAliasReason": "共享原因组件内的定义、错误呈现、确认/取消控件作为同一P18 AI原因任务的局部交互，不拆成全站独立操作。",
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "通过/驳回失败均恢复原原因与操作提示；没有自动重发，用户确认才发第二次请求；桌面/390px共4/4。"
+        }
+      ]
+    },
+    {
       "actionId": "OP-WIRING-REASON",
       "label": "组件事件/容器关联：REASON",
       "kind": "wiring",
@@ -2459,25 +2516,25 @@
       "forwardsTo": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b413cc394b21a4ed.1",
           "event": "@submit",
           "handler": "submitAiReviewReason",
           "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b413cc394b21a4ed.1",
           "event": "@cancel",
           "handler": "cancelAiReviewReason",
           "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3d03bfde11490c97.1",
           "event": "@submit",
           "handler": "submitAiReviewReason",
           "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3d03bfde11490c97.1",
           "event": "@cancel",
           "handler": "cancelAiReviewReason",
           "targets": ["OP-AI-REVIEW.approved", "OP-AI-REVIEW.rejected"]
@@ -2495,9 +2552,10 @@
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#36cdbd1cb98185c2.1"
+        "apps/web/src/components/OpportunityWorkspace.vue#b413cc394b21a4ed.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#3d03bfde11490c97.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#b74012fbdb739187.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#ca674a075f274bff.1"
       ],
       "sourceContractKeys": [
         "OP-AI-REASON-SUBMIT/CANCEL转发",
@@ -2580,6 +2638,7 @@
     "status": "source-reviewed-not-runtime-accepted",
     "includeStructuralContainers": true,
     "files": [
+      "apps/web/src/components/AuditedReasonDialog.vue",
       "apps/web/src/components/OpportunityAiPanel.vue",
       "apps/web/src/components/OpportunityCostReviewQueue.vue",
       "apps/web/src/components/OpportunityDecisionPanel.vue",
@@ -2600,9 +2659,9 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
       "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-      "apps/web/src/components/OpportunityWorkspace.vue": "3db6475ec7226b25e62ba813a23c1c20b3341bb7d374aab53906d661c77d99c9",
+      "apps/web/src/components/OpportunityWorkspace.vue": "74e03f8d2eb05efcb0f254844eed474be76efaf4d2374f5ba39e0d0ada258ae1",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
-      "apps/web/src/components/AuditedReasonDialog.vue": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+      "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
       "apps/web/src/components/opportunity-workspace-forms.ts": "e9e8291dc8b8ef37e34ac5dd95ac45a4b1b305c72bb8abc9251e190df8e1b4fa",
@@ -2612,6 +2671,12 @@
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },
     "inputs": [
+      {
+        "file": "apps/web/src/components/AuditedReasonDialog.vue",
+        "binding": "reason",
+        "meaning": "AI通过/驳回审计原因，trim后至少2字；失败恢复时保留已提交文案",
+        "remaining": "新增验证仅覆盖P18 AI原因的两种结果/失败恢复，不代表共享调用方全集或服务端写入验收。"
+      },
       {
         "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
         "binding": "review.reason",
@@ -2818,6 +2883,44 @@
       }
     ],
     "containers": [
+      {
+        "file": "apps/web/src/components/AuditedReasonDialog.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "P18 AI通过/驳回共享原因窗，错误提示随表单留在同一模态层",
+        "remaining": "共享组件其他调用方、完整焦点/读屏和服务端生命周期不由P18失败恢复用例覆盖。",
+        "variants": [
+          {
+            "name": "AI-approved-reason",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [{ "package": "review-direction-c", "scene": "approved-filled" }],
+            "remaining": "设计稿关联不是运行期错误容器或用户审图通过的运行验收。"
+          },
+          {
+            "name": "AI-rejected-reason",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [{ "package": "review-direction-c", "scene": "rejected-filled" }],
+            "remaining": "设计稿关联不是运行期错误容器或用户审图通过的运行验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/AuditedReasonDialog.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "原因trim/最小长度校验后提交；失败重新打开时恢复初始原因值",
+        "remaining": "其他调用方与全部校验状态未由本批覆盖。",
+        "variants": [
+          {
+            "name": "AI-reason-form",
+            "evidenceScope": "related-scene-only",
+            "scenes": [{ "package": "review-direction-c", "scene": "approved-failed" }],
+            "remaining": "离线场景为相关参考；实际Vue错误/草稿关联由m04-07-ai-analysis.spec.ts验证。"
+          }
+        ]
+      },
       {
         "file": "apps/web/src/components/OpportunityAiPanel.vue",
         "tag": "aside",

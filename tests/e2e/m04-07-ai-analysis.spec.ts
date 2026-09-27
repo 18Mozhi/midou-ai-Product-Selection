@@ -147,4 +147,58 @@ for (const outcome of ["approved", "rejected"] as const) {
     await expect(trigger).toBeFocused();
     expect(writes).toEqual([]);
   });
+
+  test(`UI2-SM02 AI ${outcome} failure restores the submitted reason without an automatic retry`, async ({
+    page,
+  }) => {
+    const attempts: Array<Record<string, unknown>> = [];
+    await setup(page);
+    await page.route(`**/api/v1/ai-analyses/${resultId}/reviews`, (route) => {
+      attempts.push(route.request().postDataJSON());
+      if (attempts.length === 1)
+        return route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "service_unavailable",
+              message: "暂不可用",
+              action_hint: "稍后确认抽检记录状态，再决定是否重试。",
+            },
+            request_id: "ui2-ai-review-failure",
+            trace_id: "ui2-ai-review-failure",
+          },
+        });
+      return route.fulfill({
+        status: 201,
+        json: envelope({ id: "00000000-0000-4000-8000-000000000706" }),
+      });
+    });
+    await page.goto(`/opportunities/${opportunityId}`);
+    await page.locator(".opportunity-tabs details > summary").click();
+    await page.getByRole("button", { name: "AI 辅助" }).click();
+    await page
+      .getByRole("button", {
+        name: outcome === "approved" ? "抽检通过" : "抽检驳回",
+        exact: true,
+      })
+      .click();
+    const dialog = page.getByRole("dialog", {
+      name: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
+    });
+    const reason = "核对来源后作出的人工抽检判断";
+    await dialog.getByRole("textbox", { name: /原因/ }).fill(reason);
+    await dialog.getByRole("button", { name: "确认提交" }).click();
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("textbox", { name: /原因/ })).toHaveValue(reason);
+    await expect(dialog.getByRole("alert")).toContainText("稍后确认抽检记录状态，再决定是否重试。");
+    expect(attempts).toEqual([{ outcome, notes: reason }]);
+
+    await dialog.getByRole("button", { name: "确认提交" }).click();
+    await expect(dialog).toBeHidden();
+    await expect(page.locator(".opportunity-message")).toContainText("人工抽检已记录");
+    expect(attempts).toEqual([
+      { outcome, notes: reason },
+      { outcome, notes: reason },
+    ]);
+  });
 }

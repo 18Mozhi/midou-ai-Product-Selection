@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityWorkspace.vue": "3db6475ec7226b25e62ba813a23c1c20b3341bb7d374aab53906d661c77d99c9",
+    "apps/web/src/components/OpportunityWorkspace.vue": "74e03f8d2eb05efcb0f254844eed474be76efaf4d2374f5ba39e0d0ada258ae1",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
     "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
@@ -1451,9 +1451,10 @@
         "apps/web/src/components/OpportunityWorkspace.vue#3e5dca6610ac19d8.1",
         "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
         "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#1fec9eace35dae6b.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#38deb219e719849f.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#36cdbd1cb98185c2.1"
+        "apps/web/src/components/OpportunityWorkspace.vue#b413cc394b21a4ed.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#3d03bfde11490c97.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#b74012fbdb739187.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#ca674a075f274bff.1"
       ],
       "sourceContractKeys": [
         "OP-RETURN",
@@ -1960,7 +1961,7 @@
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "3db6475ec7226b25e62ba813a23c1c20b3341bb7d374aab53906d661c77d99c9",
+      "apps/web/src/components/OpportunityWorkspace.vue": "74e03f8d2eb05efcb0f254844eed474be76efaf4d2374f5ba39e0d0ada258ae1",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
       "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",

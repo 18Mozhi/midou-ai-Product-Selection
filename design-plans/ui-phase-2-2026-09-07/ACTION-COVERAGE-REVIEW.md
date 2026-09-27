@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1706；旧登记1477；新身份632，旧表独有身份403。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1546源位置/1271组；其中路由动作1049组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1707；旧登记1477；新身份636，旧表独有身份406。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1547源位置/1272组；其中路由动作1050组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -28,10 +28,10 @@
 | [P12 今日行动](page-specs/P12.md) | 47 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P13 今日工作](page-specs/P13.md) | 73 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P14 热点趋势](page-specs/P14.md) | 91 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P15 选品机会](page-specs/P15.md) | 153 | [35组](action-reviews/P15.json) | 162个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P15 选品机会](page-specs/P15.md) | 150 | [35组](action-reviews/P15.json) | 162个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P16 创建选品](page-specs/P16.md) | 41 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 61 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P18 机会详情](page-specs/P18.md) | 153 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P18 机会详情](page-specs/P18.md) | 150 | [53组](action-reviews/P18.json) | 264个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 72 | [22组](action-reviews/P19.json) | 20个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 72 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P21 供应链与利润](page-specs/P21.md) | 87 | [39组](action-reviews/P21.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -973,7 +973,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P15 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P15.json)：67个局部源位置 → 35组；4类写入，27组路由动作，6组转发/容器关联不重复计动作。已映射20/20个源码字段位置，17/17处调用/内嵌容器，35个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P15.json)：68个局部源位置 → 35组；4类写入，27组路由动作，6组转发/容器关联不重复计动作。已映射20/20个源码字段位置，17/17处调用/内嵌容器，35个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有162个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1006,7 +1006,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-HELPER-DOWNLOAD 下载浏览器助手 / navigation | 1处；link-only | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)、[erp-helper-missing · 1440](design/opportunity-direction-c/1440-erp-helper-missing.png) / [erp-helper-missing · 390](design/opportunity-direction-c/390-erp-helper-missing.png)；其余见JSON | 本轮无真实下载或扩展安装；不能把链接点击当助手已连接。 |
 | OP-CREATE-CLOSE 关闭手工添加 / local | 3处；close、cancel、escape、busy-close | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[create-edited · 1440](design/opportunity-direction-c/1440-create-edited.png) / [create-edited · 390](design/opportunity-direction-c/390-create-edited.png)；其余见JSON | 初焦点是关闭按钮；取消返回与请求后成功导航需实际Vue验证。 |
 | OP-CREATE-SUBMIT 保存手工候选 / write | 2处；empty-required、edited、busy、failed、saved | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[create-edited · 1440](design/opportunity-direction-c/1440-create-edited.png) / [create-edited · 390](design/opportunity-direction-c/390-create-edited.png)；其余见JSON | 客户端不trim四字段；后端规范化/UUID/scope另验；未知write文案未写入任何状态不是事务证据。 |
-| OP-P18-EXCLUDED 详情读取、十分区与AI操作排除 / excluded | 18处；detail、analysis-tabs、AI-reason | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)；其余见JSON | 共享父组件仍需真实缓存/跨路由残留测试；排除指正常入口，不宣称任何show ref均按路由清空。 |
+| OP-P18-EXCLUDED 详情读取、十分区与AI操作排除 / excluded | 19处；detail、analysis-tabs、AI-reason | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)；其余见JSON | 共享父组件仍需真实缓存/跨路由残留测试；排除指正常入口，不宣称任何show ref均按路由清空。 |
 | OP-DECISION-EXCLUDED 三种人工决定原因排除 / excluded | 6处；adopt、observe、reject | [adopt-empty · 1440](design/opportunity-detail-direction-c/1440-adopt-empty.png) / [adopt-empty · 390](design/opportunity-detail-direction-c/390-adopt-empty.png)、[observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)；其余见JSON | 正常路由排除，不抵扣P18具体图审/权限/五质量门验收。 |
 | OP-LIST-WIRING 消费者/容器关联 / wiring | 1处；source-forwarding | [all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)、[recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
 | OP-DIALOGS-WIRING 消费者/容器关联 / wiring | 2处；source-forwarding | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
@@ -1281,16 +1281,16 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P18 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P18.json)：95个局部源位置 → 52组；12类写入，43组路由动作，8组转发/容器关联不重复计动作。已映射34/34个源码字段位置，23/23处调用/内嵌容器，38个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P18.json)：102个局部源位置 → 53组；12类写入，44组路由动作，8组转发/容器关联不重复计动作。已映射35/35个源码字段位置，25/25处调用/内嵌容器，41个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有258个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有264个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | OP-AI-QUEUE 生成AI分析 / write | 1处；can-write、readonly、busy、failed | [ai-queue-busy · 1440](design/review-direction-c/1440-ai-queue-busy.png) / [ai-queue-busy · 390](design/review-direction-c/390-ai-queue-busy.png)、[ai-reload-error · 1440](design/review-direction-c/1440-ai-reload-error.png) / [ai-reload-error · 390](design/review-direction-c/390-ai-reload-error.png)；其余见JSON | 排队不代表模型成功；跨ID晚到结果、真实权限与完整生命周期未验。 |
 | OP-AI-RETRY 重读AI记录 / read | 1处；error、stale-error、malformed | [ai-error · 1440](design/review-direction-c/1440-ai-error.png) / [ai-error · 390](design/review-direction-c/390-ai-error.png)、[ai-stale-error · 1440](design/review-direction-c/1440-ai-stale-error.png) / [ai-stale-error · 390](design/review-direction-c/390-ai-stale-error.png)；其余见JSON | 失败后旧articles仍渲染；具体恢复策略待审。 |
-| OP-AI-REVIEW.approved AI抽检通过 / write | 1处；pending、already-reviewed、replaced-ask | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[approved-failed · 1440](design/review-direction-c/1440-approved-failed.png) / [approved-failed · 390](design/review-direction-c/390-approved-failed.png)；其余见JSON | 源先关原因窗后POST，原型失败保留是改动；不保证重复ask/迟到响应归属。 |
-| OP-AI-REVIEW.rejected AI抽检驳回 / write | 1处；pending、rejected、cancel、failure | [rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)、[review-unknown · 1440](design/review-direction-c/1440-review-unknown.png) / [review-unknown · 390](design/review-direction-c/390-review-unknown.png)；其余见JSON | 未知不等于未写入；真实结果ID/审计及失败恢复未验。 |
+| OP-AI-REVIEW.approved AI抽检通过 / write | 1处；pending、already-reviewed、replaced-ask、failure-restored、explicit-retry | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[approved-failed · 1440](design/review-direction-c/1440-approved-failed.png) / [approved-failed · 390](design/review-direction-c/390-approved-failed.png)；其余见JSON | 失败后在同机会AI分区恢复原因和action_hint；不自动重发，真实服务端结果/RBAC仍未验。 |
+| OP-AI-REVIEW.rejected AI抽检驳回 / write | 1处；pending、rejected、cancel、failure-restored、explicit-retry | [rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)、[review-unknown · 1440](design/review-direction-c/1440-review-unknown.png) / [review-unknown · 390](design/review-direction-c/390-review-unknown.png)；其余见JSON | 失败后在同机会AI分区恢复原因和action_hint；不自动重发，真实服务端结果/RBAC仍未验。 |
 | OP-COST-REVIEW-OPEN.rejected 打开驳回复核表单 / local | 1处；own、other、overdue | [rejected-empty · 1440](design/profit-direction-c/1440-rejected-empty.png) / [rejected-empty · 390](design/profit-direction-c/390-rejected-empty.png)、[other-reviewer · 1440](design/profit-direction-c/1440-other-reviewer.png) / [other-reviewer · 390](design/profit-direction-c/390-other-reviewer.png)；其余见JSON | 未因新reviews或can_review变化清review.id，旧表单可能残留。 |
 | OP-COST-REVIEW-OPEN.approved 打开通过复核表单 / local | 1处；own、other、overdue | [approved-empty · 1440](design/profit-direction-c/1440-approved-empty.png) / [approved-empty · 390](design/profit-direction-c/390-approved-empty.png)、[permissions-lost · 1440](design/profit-direction-c/1440-permissions-lost.png) / [permissions-lost · 390](design/profit-direction-c/390-permissions-lost.png)；其余见JSON | 未验动态资格变化/忙碌重复打开；不可把已超时直接等同源按钮禁用。 |
 | OP-COST-REVIEW-SUBMIT 提交成本复核 / write | 2处；approved、rejected | [approved-edited · 1440](design/profit-direction-c/1440-approved-edited.png) / [approved-edited · 390](design/profit-direction-c/390-approved-edited.png)、[rejected-edited · 1440](design/profit-direction-c/1440-rejected-edited.png) / [rejected-edited · 390](design/profit-direction-c/390-rejected-edited.png)；其余见JSON | 源表单可独立于item.can_review存在；提交函数只查原因不查busy；服务端资格和版本待实库验收。 |
@@ -1337,7 +1337,8 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-WIRING-FEEDBACK 组件事件/容器关联：FEEDBACK / wiring | 1处；OP-FEEDBACK-SUBMIT | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-AI 组件事件/容器关联：AI / wiring | 1处；OP-AI-QUEUE、OP-AI-RETRY、OP-AI-REVIEW.approved、OP-AI-REVIEW.rejected | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-DIALOGS 组件事件/容器关联：DIALOGS / wiring | 2处；OP-P15-EXCLUDED、OP-DECISION-SUBMIT | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
-| OP-WIRING-REASON 组件事件/容器关联：REASON / wiring | 3处；OP-AI-REVIEW.approved、OP-AI-REVIEW.rejected | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
+| OP-AI-REASON-DIALOG AI抽检原因填写与失败恢复窗 / local | 6处；AI.approved、AI.rejected、failure-restored、cancel | ；其余见JSON | 当前仅本地受控响应证明前端呈现与显式重试；不证明未知服务端commit、真实幂等/RBAC或其他调用页生命周期。 |
+| OP-WIRING-REASON 组件事件/容器关联：REASON / wiring | 4处；OP-AI-REVIEW.approved、OP-AI-REVIEW.rejected | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-DECISION-CONTAINER 组件事件/容器关联：DECISION-CONTAINER / wiring | 1处；OP-DECISION-OPEN.adopt、OP-DECISION-OPEN.observe、OP-DECISION-OPEN.reject、OP-DECISION-CLOSE、OP-DECISION-SUBMIT | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 
 ### 事件转发关系（不增加业务动作）
@@ -1376,6 +1377,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 本地字段 | 含义 | 未验事项 |
 | --- | --- | --- |
+| AuditedReasonDialog.vue / reason | AI通过/驳回审计原因，trim后至少2字；失败恢复时保留已提交文案 | 新增验证仅覆盖P18 AI原因的两种结果/失败恢复，不代表共享调用方全集或服务端写入验收。 |
 | OpportunityCostReviewQueue.vue / review.reason | 成本复核原因：required、2–1000；提交trim，打开清空；不是模态 | 仅核对绑定/现行约束，不证明全部输入组合、读屏、错误关联和真实后端；父model与用户字段不重复计数。 |
 | OpportunityFeedbackPanel.vue / form.period_start | 复盘周期开始，required date | 仅核对绑定/现行约束，不证明全部输入组合、读屏、错误关联和真实后端；父model与用户字段不重复计数。 |
 | OpportunityFeedbackPanel.vue / form.period_end | 复盘周期结束，required date；源表单不交叉验证先后 | 仅核对绑定/现行约束，不证明全部输入组合、读屏、错误关联和真实后端；父model与用户字段不重复计数。 |
@@ -1415,6 +1417,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
 | --- | --- | --- | --- |
+| AuditedReasonDialog.vue / dialog.1 / AI-approved-reason | native-dialog / matching-dialog-scene | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png) | 设计稿关联不是运行期错误容器或用户审图通过的运行验收。 |
+| AuditedReasonDialog.vue / dialog.1 / AI-rejected-reason | native-dialog / matching-dialog-scene | [rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png) | 设计稿关联不是运行期错误容器或用户审图通过的运行验收。 |
+| AuditedReasonDialog.vue / form.1 / AI-reason-form | form-container / related-scene-only | [approved-failed · 1440](design/review-direction-c/1440-approved-failed.png) / [approved-failed · 390](design/review-direction-c/390-approved-failed.png) | 离线场景为相关参考；实际Vue错误/草稿关联由m04-07-ai-analysis.spec.ts验证。 |
 | OpportunityAiPanel.vue / aside.1 / ai-disclaimer | inline-aside / related-scene-only | [ai · 1440](design/review-direction-c/1440-ai.png) / [ai · 390](design/review-direction-c/390-ai.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
 | OpportunityCostReviewQueue.vue / form.1 / approved | form-container / matching-inline-form-scene | [approved-edited · 1440](design/profit-direction-c/1440-approved-edited.png) / [approved-edited · 390](design/profit-direction-c/390-approved-edited.png) | 源资格变化与旧review.id未清，不能依赖展示或单元验证替代服务端复核。 |
 | OpportunityCostReviewQueue.vue / form.1 / rejected | form-container / matching-inline-form-scene | [rejected-edited · 1440](design/profit-direction-c/1440-rejected-edited.png) / [rejected-edited · 390](design/profit-direction-c/390-rejected-edited.png) | 源资格变化与旧review.id未清，不能依赖展示或单元验证替代服务端复核。 |

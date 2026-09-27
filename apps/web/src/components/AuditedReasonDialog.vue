@@ -9,6 +9,7 @@ const props = defineProps<{
   title: string;
   description: string;
   initialValue?: string;
+  error?: string;
   minimumLength?: number;
   maximumLength?: number;
   workspaceRestore?: WorkspaceRestoreReasonContext;
@@ -85,6 +86,9 @@ function handleTab(event: KeyboardEvent) {
         </p>
       </section>
       <p v-else>{{ description }}</p>
+      <p v-if="error" id="audited-reason-error" class="audited-reason-error" role="alert">
+        {{ error }}
+      </p>
       <label>
         原因（至少 {{ minimumLength ?? 2 }} 个字<span v-if="maximumLength"
           >，最多 {{ maximumLength }} 个字</span
@@ -96,7 +100,9 @@ function handleTab(event: KeyboardEvent) {
           :minlength="minimumLength ?? 2"
           :maxlength="maximumLength"
           rows="4"
-          aria-describedby="audited-reason-help"
+          :aria-describedby="
+            error ? 'audited-reason-help audited-reason-error' : 'audited-reason-help'
+          "
         ></textarea>
       </label>
       <small id="audited-reason-help"
@@ -131,6 +137,14 @@ form {
   display: grid;
   gap: 14px;
   padding: 20px;
+}
+.audited-reason-error {
+  margin: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--so-danger, #a52630);
+  border-radius: 8px;
+  background: var(--so-danger-panel, #fff8f7);
+  color: var(--so-danger-text, #842f29);
 }
 header,
 footer {

@@ -94,6 +94,7 @@ const props = defineProps<{
   batchAssigneeId = ref(""),
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref("");
+const aiReviewError = ref("");
 const { filters, form, costForm, feedbackForm } = createOpportunityWorkspaceForms();
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
@@ -540,16 +541,29 @@ async function queueAi() {
   }
 }
 async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
-  const notes = await askAiReviewReason({
+  const opportunityId = detail.value?.id;
+  if (!opportunityId) return;
+  const reasonRequest = {
     title: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
     description: "说明会写入 AI 分析人工复核记录，原始输出不会被改写。",
-  });
-  if (!notes) return;
-  if (await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes })) {
-    await load();
-    await setTab("ai");
-    message.value = "人工抽检已记录，AI 原始输出未被改写。";
+  };
+  aiReviewError.value = "";
+  let notes = await askAiReviewReason(reasonRequest);
+  while (notes) {
+    aiReviewError.value = "";
+    const result = await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes });
+    if (result) {
+      if (detail.value?.id !== opportunityId) return;
+      await load();
+      if (tab.value === "ai") await setTab("ai");
+      message.value = "人工抽检已记录，AI 原始输出未被改写。";
+      return;
+    }
+    if (detail.value?.id !== opportunityId || tab.value !== "ai") return;
+    aiReviewError.value = message.value || "本次抽检未能确认，请核对记录后再决定是否重试。";
+    notes = await askAiReviewReason({ ...reasonRequest, initialValue: notes });
   }
+  aiReviewError.value = "";
 }
 function syncListRoute() {
   filters.q = typeof route.query.q === "string" ? route.query.q : "";
@@ -1000,6 +1014,7 @@ onBeforeUnmount(() => {
       :title="aiReviewReasonRequest?.title || '填写复核说明'"
       :description="aiReviewReasonRequest?.description || ''"
       :initial-value="aiReviewReasonRequest?.initialValue"
+      :error="aiReviewError"
       :minimum-length="aiReviewReasonRequest?.minimumLength"
       @submit="submitAiReviewReason"
       @cancel="cancelAiReviewReason"
