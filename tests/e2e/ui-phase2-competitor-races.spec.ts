@@ -269,3 +269,131 @@ test("UI2-CP-G04 follows browser route-query changes for competitor detail and s
   });
   await expect(page.getByRole("heading", { name: "新建监控规则" })).toHaveCount(0);
 });
+
+test("UI2-CP-G05 ignores duplicate create submits and keeps a reopened form after the old success", async ({
+  page,
+}) => {
+  await setup(page);
+  const started = gate(),
+    release = gate();
+  const posts: Array<{ body: unknown }> = [];
+  await page.route("**/api/v1/competitors", async (route) => {
+    if (route.request().method() === "GET") return route.fallback();
+    posts.push({ body: route.request().postDataJSON() });
+    started.release();
+    await release.wait;
+    await route.fulfill({
+      json: envelope(makeItem("00000000-0000-4000-8000-000000000594", "新建竞品")),
+    });
+  });
+
+  try {
+    await page.getByRole("button", { name: "添加竞品", exact: true }).click();
+    let dialog = page.getByRole("dialog", { name: "添加竞品监控" });
+    await dialog.getByLabel("商品网址").fill("https://www.amazon.com/dp/B000000003");
+    await dialog.getByRole("button", { name: "下一步" }).click();
+    await dialog.getByLabel("市场").fill("US");
+    await dialog.getByLabel("监控名称").fill("延迟创建竞品");
+    await dialog.getByRole("button", { name: "下一步" }).click();
+    await dialog.getByRole("button", { name: "确认并开始采集" }).click();
+    await started.wait;
+
+    await dialog.locator("form").evaluate((form) => {
+      (form as HTMLFormElement).requestSubmit();
+      (form as HTMLFormElement).requestSubmit();
+    });
+    await expect.poll(() => posts).toHaveLength(1);
+    await dialog.getByRole("button", { name: "关闭新建竞品" }).click();
+    await page.getByRole("button", { name: "添加竞品", exact: true }).click();
+    dialog = page.getByRole("dialog", { name: "添加竞品监控" });
+    await expect(dialog.getByLabel("商品网址")).toHaveValue("https://www.amazon.com/dp/B000000003");
+
+    const response = page.waitForResponse(
+      (candidate) =>
+        candidate.url().endsWith("/api/v1/competitors") && candidate.request().method() === "POST",
+    );
+    release.release();
+    await (await response).finished();
+    await settleResponse(page);
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByLabel("商品网址")).toHaveValue("https://www.amazon.com/dp/B000000003");
+    await expect(
+      page.getByText("已关闭表单对应的竞品创建操作已成功；当前表单保持不变。"),
+    ).toBeVisible();
+    expect(posts).toEqual([
+      {
+        body: {
+          market: "US",
+          product_url: "https://www.amazon.com/dp/B000000003",
+          title: "延迟创建竞品",
+        },
+      },
+    ]);
+  } finally {
+    release.release();
+  }
+});
+
+test("UI2-CP-G05 late delete for A cannot clear B's selected detail", async ({ page }) => {
+  await setup(page);
+  const started = gate(),
+    release = gate();
+  const deletes: Array<{ url: string; body: unknown }> = [];
+  await page.route("**/api/v1/competitors", (route) =>
+    route.request().method() === "GET" ? route.fulfill({ json: envelope([b]) }) : route.fallback(),
+  );
+  await page.route(`**/api/v1/competitors/${aId}`, async (route) => {
+    if (route.request().method() !== "DELETE") return route.fallback();
+    deletes.push({
+      url: new URL(route.request().url()).pathname,
+      body: route.request().postDataJSON(),
+    });
+    started.release();
+    await release.wait;
+    await route.fulfill({ json: envelope({ deleted: true }) });
+  });
+  const openDeleteForCurrent = async () => {
+    const actions = page.locator(".competitor-mobile-actions");
+    if (await actions.isVisible())
+      await actions.evaluate((element: HTMLDetailsElement) => {
+        element.open = true;
+      });
+    await page.getByRole("button", { name: "删除竞品监控", exact: true }).click();
+  };
+
+  try {
+    await openDeleteForCurrent();
+    let dialog = page.getByRole("dialog", { name: "删除竞品监控" });
+    await dialog.getByLabel("删除原因").fill("停止跟踪 A");
+    await dialog.getByRole("button", { name: "确认删除" }).click();
+    await started.wait;
+    await dialog.getByRole("button", { name: "关闭删除确认" }).click();
+    await page.locator(".competitor-list button").filter({ hasText: b.title }).click();
+    await expect(page.locator(".competitor-detail h3")).toHaveText(b.title);
+    const actions = page.locator(".competitor-mobile-actions");
+    if (await actions.isVisible())
+      await actions.evaluate((element: HTMLDetailsElement) => {
+        element.open = true;
+      });
+    await expect(page.getByRole("button", { name: "删除竞品监控", exact: true })).toBeDisabled();
+
+    const response = page.waitForResponse((candidate) =>
+      candidate.url().endsWith(`/api/v1/competitors/${aId}`),
+    );
+    release.release();
+    await (await response).finished();
+    await settleResponse(page);
+    await expect(page.getByRole("dialog", { name: "删除竞品监控" })).toHaveCount(0);
+    await expect(page.locator(".competitor-list button")).toHaveCount(1);
+    await expect(page.locator(".competitor-detail h3")).toHaveText(b.title);
+    await expect(page.getByText(`竞品「${a.title}」已删除；当前显示对象保持不变。`)).toBeVisible();
+    expect(deletes).toEqual([
+      {
+        url: `/api/v1/competitors/${aId}`,
+        body: { expected_revision: 7, reason: "停止跟踪 A" },
+      },
+    ]);
+  } finally {
+    release.release();
+  }
+});

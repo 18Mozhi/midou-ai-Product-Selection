@@ -22,6 +22,7 @@ export async function verifyCompetitorBoundaries() {
     "selected",
     "state",
     "notice",
+    "pageOutcomeNotice",
     "busy",
     "showCreate",
     "showRule",
@@ -34,7 +35,8 @@ export async function verifyCompetitorBoundaries() {
     "createRule",
     "openDelete",
     "remove",
-    "handleEscape",
+    "handleCreateCancel",
+    "handleRuleCancel",
   ];
   const compiled = ts.transpileModule(script + `\nreturn {${exposed.join(",")}};`, {
     compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.None },
@@ -62,6 +64,14 @@ export async function verifyCompetitorBoundaries() {
       watch,
       nextTick,
       ApiClientError,
+      useModalDialog: (_, requestClose) => ({
+        dialogElement: ref(null),
+        handleCancel(event) {
+          event.preventDefault();
+          requestClose();
+        },
+        discardReturnFocus() {},
+      }),
       defineProps: () => ({ mode, capabilities, apiBaseUrl: "inert" }),
       withDefaults: (props) => props,
       useRoute: () => route,
@@ -75,6 +85,8 @@ export async function verifyCompetitorBoundaries() {
       }),
       onMounted: (fn) => mounts.push(fn),
       onUnmounted: (fn) => unmounts.push(fn),
+      onActivated() {},
+      onDeactivated() {},
       window: { addEventListener() {}, removeEventListener() {} },
       buildCompetitionMonitoringReadiness: () => ({}),
       setTimeout: (fn, ms) => {
@@ -139,11 +151,11 @@ export async function verifyCompetitorBoundaries() {
       assert.equal(s.calls.filter((call) => call.options?.method).length, 0);
       if (mode === "rules") {
         assert.equal(s.rule.competitor_id, a.id);
-        s.handleEscape({ key: "Escape" });
+        s.handleRuleCancel({ preventDefault() {} });
         assert.equal(s.showRule.value, false);
         assert.equal(s.showCreate.value, true);
         assert.equal(s.route.query.competitor, undefined);
-        s.handleEscape({ key: "Escape" });
+        s.handleCreateCancel({ preventDefault() {} });
         assert.equal(s.showCreate.value, false);
         assert.equal(s.route.query.create, undefined);
       }
@@ -254,39 +266,36 @@ export async function verifyCompetitorBoundaries() {
       method: "DELETE",
       body: { expected_revision: 7, reason: "删除 A" },
     });
-    assert.equal(s.deleting.value, null);
-    assert.equal(s.deleteReason.value, "");
+    assert.equal(s.deleting.value.id, b.id);
+    assert.equal(s.deleteReason.value, "B 的新草稿");
     assert.equal(s.notice.value, "");
+    assert.match(s.pageOutcomeNotice.value, /隔离对象 object-a/);
     assert.equal(s.calls.filter((call) => call.options?.method === "DELETE").length, 1);
     checks.push({
       id: "CP-B04",
-      status: "UNFIXED-reproduced",
+      status: "fixed-source-regression",
       result:
-        "Function-level A delete completion clears a newer B dialog/draft and reload clears success notice. Only A DELETE intended; DOM reachability/SQL unproven.",
+        "Late A delete keeps B dialog/draft intact, reloads list against current selection, and reports A completion separately. Only A DELETE intended; real Vue coverage is separate; SQL unproven.",
     });
 
     s = setup({ mode: "rules" });
-    const first = deferred(),
-      second = deferred();
-    s.replies.push(first.promise, second.promise);
+    s.showRule.value = true;
+    const first = deferred();
+    s.replies.push(first.promise, response([]), response([]));
     const one = s.createRule();
     assert.equal(s.busy.value, true);
     const two = s.createRule();
-    assert.equal(s.calls.length, 2);
-    assert.ok(
-      s.calls.every(
-        (call) => call.url === "/competitor-monitor-rules" && call.options.method === "POST",
-      ),
-    );
-    first.resolve(response(null));
-    second.resolve(response(null));
+    assert.equal(s.calls.length, 1);
+    assert.equal(s.calls[0].url, "/competitor-monitor-rules");
+    assert.equal(s.calls[0].options.method, "POST");
+    first.resolve(response({ id: "rule-created" }));
     await Promise.all([one, two]);
     assert.equal(s.busy.value, false);
     checks.push({
       id: "CP-B05",
-      status: "UNFIXED-reproduced",
+      status: "fixed-source-regression",
       result:
-        "Direct re-entry of createRule issues two request intents despite busy; disabled button, actual Enter/double-click and server idempotency are not tested.",
+        "Direct createRule re-entry while busy emits only one POST intent; actual DOM/keyboard submission and server idempotency are covered separately or remain unproven.",
     });
 
     return {
@@ -294,7 +303,7 @@ export async function verifyCompetitorBoundaries() {
       sourceSha256: createHash("sha256").update(source).digest("hex"),
       checks,
       limits:
-        "Actual setup with inert router/transport/timers; no Vue mount, real permission/HTTP/idempotency/SQL/Worker/production assertion. UNFIXED assertions must be replaced by desired-behavior regressions when implementing fixes.",
+        "Actual setup with inert router/transport/timers; no Vue mount, real permission/HTTP/idempotency/SQL/Worker/production assertion. UNFIXED indicates a reproduced open gap; fixed-source-regression is only a local source check.",
     };
   } finally {
     for (const scope of scopes) scope.stop();

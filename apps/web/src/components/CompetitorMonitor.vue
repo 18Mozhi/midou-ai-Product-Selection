@@ -104,6 +104,7 @@ const props = withDefaults(
   requestId = ref(""),
   ruleRequestId = ref(""),
   notice = ref(""),
+  pageOutcomeNotice = ref(""),
   busy = ref(false),
   showCreate = ref(false),
   createStep = ref(1),
@@ -121,6 +122,9 @@ let wasDeactivated = false;
 let syncingQueryFromRoute = false;
 let lastRouteCompetitor = typeof route.query.competitor === "string" ? route.query.competitor : "";
 let lastRouteCreate = route.query.create === "1";
+let createDialogGeneration = 0;
+let ruleDialogGeneration = 0;
+let deleteDialogGeneration = 0;
 const pageActive = () => !disposed && !wasDeactivated;
 const currentRead = (version: number) => pageActive() && version === readVersion;
 const currentRuleRead = (version: number) => pageActive() && version === ruleReadVersion;
@@ -481,6 +485,7 @@ async function detail(item: Competitor, syncRoute = true) {
   }
 }
 async function post(path: string, body: unknown, canPresent = () => !disposed) {
+  if (busy.value || disposed) return null;
   busy.value = true;
   if (canPresent()) notice.value = "";
   try {
@@ -499,28 +504,42 @@ async function post(path: string, body: unknown, canPresent = () => !disposed) {
   }
 }
 async function create() {
-  if (!canManage.value) return;
-  const result = await post("/competitors", {
+  if (!canManage.value || busy.value || !showCreate.value) return;
+  const generation = createDialogGeneration;
+  const isCurrentDialog = () =>
+    pageActive() && showCreate.value && generation === createDialogGeneration;
+  const body = {
     market: form.market,
     product_url: form.product_url,
     title: form.title,
     ...(form.opportunity_id ? { opportunity_id: form.opportunity_id } : {}),
-  });
+  };
+  const result = await post("/competitors", body, isCurrentDialog);
   if (result) {
-    closeCreate();
+    const ownsDialog = isCurrentDialog();
+    if (ownsDialog) closeCreate();
+    else
+      pageOutcomeNotice.value = showCreate.value
+        ? "已关闭表单对应的竞品创建操作已成功；当前表单保持不变。"
+        : "已提交的竞品创建操作已成功。";
     await load();
-    notice.value = "竞品已建立，商品页公开数据采集已排队。";
-  } else focusDialogAlert(createDialog.value);
+    if (ownsDialog) pageOutcomeNotice.value = "竞品已建立，商品页公开数据采集已排队。";
+  } else if (isCurrentDialog()) focusDialogAlert(createDialog.value);
+  else if (pageActive())
+    pageOutcomeNotice.value = "已关闭表单对应的保存结果暂无法确认；请重新读取竞品列表核对状态。";
 }
 function openCreate() {
   if (!canManage.value) return;
+  createDialogGeneration += 1;
   notice.value = "";
+  pageOutcomeNotice.value = "";
   requestId.value = "";
   createStep.value = 1;
   showCreate.value = true;
   void router.replace({ query: { ...route.query, create: "1" } });
 }
 function closeCreate() {
+  createDialogGeneration += 1;
   createStep.value = 1;
   showCreate.value = false;
   void router.replace({ query: { ...route.query, create: undefined } });
@@ -540,7 +559,9 @@ async function openRule(item?: Competitor) {
     return;
   }
   if (!canManage.value) return;
+  ruleDialogGeneration += 1;
   notice.value = "";
+  pageOutcomeNotice.value = "";
   requestId.value = "";
   rule.competitor_id = item?.id ?? "";
   rule.metric = "price";
@@ -549,6 +570,7 @@ async function openRule(item?: Competitor) {
   showRule.value = true;
 }
 function closeRule() {
+  ruleDialogGeneration += 1;
   showRule.value = false;
   void router.replace({ query: { ...route.query, competitor: undefined } });
 }
@@ -586,82 +608,123 @@ async function collect() {
   }
 }
 async function createValidationTask(change: NonNullable<Competitor["changes"]>[number]) {
-  if (!selected.value || !canCreateTask.value) return;
-  const result = await post("/tasks", {
-    title: `复核竞品变化 · ${fieldText(change.field)} · ${selected.value.title}`.slice(0, 200),
+  if (!selected.value || !canCreateTask.value || busy.value) return;
+  const target = selected.value;
+  const canPresent = () => pageActive() && selected.value?.id === target.id;
+  const body = {
+    title: `复核竞品变化 · ${fieldText(change.field)} · ${target.title}`.slice(0, 200),
     description:
-      `核验竞品 ${selected.value.id} 的变化事件 ${change.id}。\n` +
+      `核验竞品 ${target.id} 的变化事件 ${change.id}。\n` +
       `字段：${fieldText(change.field)}\n变化：${changeText(change)}\n` +
       `证据：${change.evidence_id}\n采集时间：${change.changed_at}\n` +
       "请核对原始证据后记录结论，不覆盖竞品快照历史。",
     priority: "high",
     due_at: null,
-  });
+  };
+  const result = await post("/tasks", body, canPresent);
   if (!result) return;
   validationTasks.value = { ...validationTasks.value, [change.id]: result.id };
-  notice.value = `验证任务已创建：${result.title}`;
+  if (canPresent()) notice.value = `验证任务已创建：${result.title}`;
+  else pageOutcomeNotice.value = `竞品「${target.title}」的验证任务已创建。`;
 }
 async function remove() {
-  if (!deleting.value || !deleteReason.value.trim() || !canManage.value) return;
+  if (!deleting.value || !deleteReason.value.trim() || !canManage.value || busy.value) return;
+  const target = deleting.value;
+  const reason = deleteReason.value.trim();
+  const generation = deleteDialogGeneration;
+  const isCurrentDialog = () =>
+    pageActive() && deleting.value?.id === target.id && generation === deleteDialogGeneration;
   busy.value = true;
   try {
-    const response = await request(`/competitors/${deleting.value.id}`, {
+    const response = await request(`/competitors/${target.id}`, {
       method: "DELETE",
       body: {
-        expected_revision: deleting.value.revision,
-        reason: deleteReason.value.trim(),
+        expected_revision: target.revision,
+        reason,
       },
     });
-    requestId.value = response.request_id;
-    notice.value = "竞品已从监控列表删除，历史审计仍保留。";
-    selected.value = null;
-    deleting.value = null;
-    deleteReason.value = "";
+    const ownsDialog = isCurrentDialog();
+    if (ownsDialog) {
+      requestId.value = response.request_id;
+      closeDelete();
+    } else {
+      pageOutcomeNotice.value = deleting.value
+        ? `竞品「${target.title}」已删除；当前打开的删除窗口保持不变。`
+        : `竞品「${target.title}」已删除；当前显示对象保持不变。`;
+    }
+    if (selected.value?.id === target.id) selected.value = null;
     await load();
+    if (ownsDialog) pageOutcomeNotice.value = "竞品已从监控列表删除，历史审计仍保留。";
   } catch (error) {
-    if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      notice.value = error.actionHint;
-    } else notice.value = "依赖暂不可用，删除未完成。";
-    focusDialogAlert(deleteDialog.value);
+    const message =
+      error instanceof ApiClientError
+        ? error.actionHint
+        : "删除请求结果暂无法确认；请重新读取竞品列表核对状态。";
+    if (isCurrentDialog()) {
+      if (error instanceof ApiClientError) requestId.value = error.requestId;
+      notice.value = message;
+      focusDialogAlert(deleteDialog.value);
+    } else pageOutcomeNotice.value = `竞品「${target.title}」：${message}`;
   } finally {
     busy.value = false;
   }
 }
 async function createRule() {
-  if (!canManage.value) return;
-  const result = await post("/competitor-monitor-rules", {
+  if (!canManage.value || busy.value || !showRule.value) return;
+  const generation = ruleDialogGeneration;
+  const isCurrentDialog = () =>
+    pageActive() && showRule.value && generation === ruleDialogGeneration;
+  const body = {
     competitor_id: rule.competitor_id || null,
     metric: rule.metric,
     direction: rule.direction,
     ...(rule.metric === "availability" ? {} : { threshold_value: Number(rule.threshold_value) }),
-  });
+  };
+  const result = await post("/competitor-monitor-rules", body, isCurrentDialog);
   if (result) {
-    closeRule();
+    const ownsDialog = isCurrentDialog();
+    if (ownsDialog) closeRule();
+    else
+      pageOutcomeNotice.value = showRule.value
+        ? "已关闭窗口对应的监控规则创建操作已成功；当前窗口保持不变。"
+        : "已提交的监控规则创建操作已成功。";
     await load();
-    notice.value = "监控阈值已启用。";
-  } else focusDialogAlert(ruleDialog.value);
+    if (ownsDialog) pageOutcomeNotice.value = "监控阈值已启用。";
+  } else if (isCurrentDialog()) focusDialogAlert(ruleDialog.value);
+  else if (pageActive())
+    pageOutcomeNotice.value = "已关闭窗口对应的规则创建结果暂无法确认；请重新读取列表核对状态。";
 }
 async function toggle() {
-  if (!selected.value || !canManage.value) return;
-  const status = selected.value.status === "active" ? "paused" : "active",
-    result = await post(`/competitors/${selected.value.id}/actions`, {
-      status,
-      expected_revision: selected.value.revision,
-    });
+  if (!selected.value || !canManage.value || busy.value) return;
+  const target = selected.value;
+  const status = target.status === "active" ? "paused" : "active";
+  const canPresent = () => pageActive() && selected.value?.id === target.id;
+  const result = await post(
+    `/competitors/${target.id}/actions`,
+    { status, expected_revision: target.revision },
+    canPresent,
+  );
   if (result) {
     await load();
-    notice.value = status === "paused" ? "监控已暂停。" : "监控已恢复。";
+    pageOutcomeNotice.value = canPresent()
+      ? status === "paused"
+        ? "监控已暂停。"
+        : "监控已恢复。"
+      : `竞品「${target.title}」的监控已${status === "paused" ? "暂停" : "恢复"}。`;
   }
 }
 function openDelete() {
   if (!selected.value || !canManage.value) return;
+  deleteDialogGeneration += 1;
   deleting.value = selected.value;
   deleteReason.value = "";
   notice.value = "";
+  pageOutcomeNotice.value = "";
 }
 function closeDelete() {
+  deleteDialogGeneration += 1;
   deleting.value = null;
+  deleteReason.value = "";
 }
 function focusCreateStep() {
   const selector =
@@ -734,6 +797,7 @@ function syncCreateFromRoute(value: unknown, force = false) {
   if (!force && !changed) return;
   const shouldOpen = requested && canManage.value;
   if (shouldOpen === showCreate.value) return;
+  createDialogGeneration += 1;
   createStep.value = 1;
   if (shouldOpen) {
     notice.value = "";
@@ -749,14 +813,19 @@ function syncCompetitorFromRoute(value: unknown, force = false) {
   if (rulesPage.value) {
     if (next && canManage.value) {
       if (showRule.value && rule.competitor_id === next) return;
+      ruleDialogGeneration += 1;
       notice.value = "";
+      pageOutcomeNotice.value = "";
       requestId.value = "";
       rule.competitor_id = next;
       rule.metric = "price";
       rule.direction = "decrease";
       rule.threshold_value = 1;
       showRule.value = true;
-    } else if (!next && previous && showRule.value) showRule.value = false;
+    } else if (!next && previous && showRule.value) {
+      ruleDialogGeneration += 1;
+      showRule.value = false;
+    }
     return;
   }
   if (!next || state.value === "loading" || !pageActive()) return;
@@ -850,6 +919,9 @@ watch(canManage, (allowed) => {
   discardDeleteReturnFocus();
   showCreate.value = false;
   showRule.value = false;
+  createDialogGeneration += 1;
+  ruleDialogGeneration += 1;
+  deleteDialogGeneration += 1;
   deleting.value = null;
 });
 watch(
@@ -863,6 +935,9 @@ watch(
 </script>
 <template>
   <section class="competitor-monitor competitor-monitor--review" aria-label="竞品监控工作区">
+    <p v-if="pageOutcomeNotice" class="competitor-notice" role="status">
+      {{ pageOutcomeNotice }}
+    </p>
     <template v-if="rulesPage">
       <MonitoringReadinessStrip
         eyebrow="竞争质量门 · 规则就绪"

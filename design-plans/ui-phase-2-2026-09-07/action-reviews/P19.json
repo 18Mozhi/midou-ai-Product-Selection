@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "803f24f65034b6943cdda4974d7bd0de8dd91b3cb93b86f065e140dbab811318"
+    "apps/web/src/components/CompetitorMonitor.vue": "0cadc95f30e4ed5a00e6955e67a49db930e1f0ce8c1adc1042a2942c6a2c2345"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -2069,7 +2069,7 @@
         "disabled": "scene-reference-not-acceptance",
         "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "已补本页代表控件六态的双端实拍与逐selector关联，待用户审核，不是全部变体或实际Vue通过。代表第三步有效确认；前两步下一步、字段/全部错误/主题仍待。disabled与busy共用原busy条件，不新增业务校验禁用。P20 create=1背景不借本图算完成。",
+      "remaining": "已补本页代表控件六态的双端实拍与逐selector关联，待用户审核，不是全部变体或实际Vue通过。代表第三步有效确认；前两步下一步、字段/全部错误/主题仍待。UI2-CP-G05桌面/390px验证重复表单提交只产生一次请求及关闭重开后的旧成功归属；P20 create=1双query语义仍待评审。",
       "visualStateReferences": {
         "default": {
           "package": "competitor-direction-c",
@@ -2550,7 +2550,7 @@
         "disabled": "scene-reference-not-acceptance",
         "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "已补本页代表控件六态的双端实拍与逐selector关联，待用户审核，不是全部变体或实际Vue通过。代表已填原因的确认删除；disabled与busy共用原busy条件。版本冲突/空白/取消/关闭/在途结果归属及主题仍待。锁关闭仅是既有离线提案，未改Vue。",
+      "remaining": "已补本页代表控件六态的双端实拍与逐selector关联，待用户审核，不是全部变体或实际Vue通过。代表已填原因的确认删除；disabled与busy共用原busy条件。UI2-CP-G05桌面/390px验证关闭A请求期间切换到B后迟到成功不会清空B详情；隔离源码验证器另检查B删除草稿归属。CP-G06写入成功后刷新失败/网络未知仍待。",
       "visualStateReferences": {
         "default": {
           "package": "competitor-direction-c",
@@ -2743,7 +2743,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "803f24f65034b6943cdda4974d7bd0de8dd91b3cb93b86f065e140dbab811318",
+    "apps/web/src/components/CompetitorMonitor.vue": "0cadc95f30e4ed5a00e6955e67a49db930e1f0ce8c1adc1042a2942c6a2c2345",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
       "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
@@ -3132,7 +3132,7 @@
         "tag": "form",
         "ordinal": 3,
         "shape": "form-container",
-        "sourceBehavior": "删除form，trim原因与expected_revision；具名模态层的旧回调/新草稿问题仍待单独验证。",
+        "sourceBehavior": "删除form，trim原因与expected_revision；CP-G05按弹窗代次和竞品ID隔离迟到回执，真实Vue覆盖B详情保留，隔离源码验证器覆盖B草稿保留。",
         "remaining": "本场景为离线提案关联，不代表每个字段/控件六态、主题或实际Vue通过。",
         "variants": [
           {
@@ -3188,7 +3188,7 @@
       "角色隐藏写入口是前端分支，不等于服务端权限/RBAC/租户隔离证明。task:create与competitor:manage独立。",
       "十个v-model和七个结构容器是共享源位置；实际可见字段受route/step/metric/权限控制，不乘成所有分支验收。",
       "CP-B02/B03在54948dd8已局部修复并通过46个双端隔离Vue例；这里只复用未变化证据，不声称本轮重跑Vue或真实SQL/来源采集。",
-      "CP-B01双query并窗、CP-B04删除回调、CP-B05规则重入及CP-G01焦点、CP-G02事实呈现、CP-G03窗口、KeepAlive/scope/history仍未闭环。"
+      "CP-B01双query并窗仍未决；CP-B04删除回执归属、CP-B05规则函数重入已有局部回归，CP-G06失败/未知反馈、CP-G01焦点、CP-G02事实呈现、CP-G03窗口、KeepAlive/scope/history及真实服务端仍未闭环。"
     ]
   },
   "modeReachability": {
