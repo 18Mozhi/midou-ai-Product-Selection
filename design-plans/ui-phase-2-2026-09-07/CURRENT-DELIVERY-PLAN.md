@@ -2,7 +2,7 @@
 
 ## 2026-09-28 · P19/P20 竞品监控 CP-G04 KeepAlive 与路由状态
 
-竞品页停用时现在清理采集详情轮询并使未完成GET结果失效；KeepAlive返回后读取当前路由对应竞品与规则状态。详情competitor、搜索q、create窗及规则目标query会反向同步到当前界面。桌面/390px `UI2-CP-G04`各2/2，完整竞品与竞态套件各30/30；Web类型检查通过。保留GET/POST/权限/API/数据库合同，不声称真实session/RBAC/collection或M07-03。CP-G04本地Vue合同关闭；CP-G03、CP-G05–G07及全站收官继续。格式/构建、提交与宝塔部署待本批闭环。
+竞品页停用时现在清理采集详情轮询并使未完成GET结果失效；KeepAlive返回后读取当前路由对应竞品与规则状态。详情competitor、搜索q、create窗及规则目标query会反向同步到当前界面。桌面/390px `UI2-CP-G04`各2/2，完整竞品与竞态套件各30/30；Web类型检查、格式/文档/计划/发布归属门及全22工作区构建通过。提交 `d74f4bb205e79d076e59f1408e75b1f0a150ec29` 已推送并部署；线上 ready/available/version SHA 与 `/login` 200 核验通过，部署临时包已删除。保留GET/POST/权限/API/数据库合同，不声称真实session/RBAC/collection或M07-03。CP-G04本地Vue合同关闭；CP-G03、CP-G05–G07及全站收官继续。
 
 ## 2026-09-27 · P19/P20 竞品监控 CP-G02 事实呈现修复
 
