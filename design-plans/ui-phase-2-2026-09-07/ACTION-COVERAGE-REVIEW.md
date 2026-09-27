@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1701；旧登记1477；新身份615，旧表独有身份391。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1541源位置/1270组；其中路由动作1048组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1703；旧登记1477；新身份617，旧表独有身份391。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1543源位置/1271组；其中路由动作1049组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -34,7 +34,7 @@
 | [P18 机会详情](page-specs/P18.md) | 153 | [52组](action-reviews/P18.json) | 258个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 72 | [22组](action-reviews/P19.json) | 20个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 72 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P21 供应链与利润](page-specs/P21.md) | 87 | [38组](action-reviews/P21.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P21 供应链与利润](page-specs/P21.md) | 87 | [39组](action-reviews/P21.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P22 费用与利润规则](page-specs/P22.md) | 60 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P23 全部任务](page-specs/P23.md) | 73 | [40组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P24 任务详情](page-specs/P24.md) | 73 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -1650,9 +1650,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P21 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P21.json)：54个局部源位置 → 38组；9类写入，31组路由动作，7组转发/容器关联不重复计动作。已映射25/25个源码字段位置，12/12处调用/内嵌容器，33个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P21.json)：56个局部源位置 → 39组；9类写入，32组路由动作，7组转发/容器关联不重复计动作。已映射25/25个源码字段位置，12/12处调用/内嵌容器，33个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有6个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 另有20个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
 
@@ -1674,6 +1674,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | SC-QUOTE-OPEN 打开报价确认 / local | 1处；SC-QUOTE-OPEN 管理者无quote | [quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png)、[quote-defaults · 1440](design/sourcing-direction-c/1440-quote-defaults.png) / [quote-defaults · 390](design/sourcing-direction-c/390-quote-defaults.png)；其余见JSON | 四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。 |
 | SC-PURCHASE-OPEN 打开采购任务 / local | 1处；SC-PURCHASE-OPEN 管理者已有quote | [purchase · 1440](design/sourcing-direction-c/1440-purchase.png) / [purchase · 390](design/sourcing-direction-c/390-purchase.png)、[control-main-purchase-open-default · 1440](design/sourcing-direction-c/1440-control-main-purchase-open-default.png) / [control-main-purchase-open-default · 390](design/sourcing-direction-c/390-control-main-purchase-open-default.png)；其余见JSON | 四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。 |
 | SC-COMPARE 保存报价对比 / write | 1处；SC-COMPARE 至少2项且非busy | [select-one · 1440](design/sourcing-direction-c/1440-select-one.png) / [select-one · 390](design/sourcing-direction-c/390-select-one.png)、[select-two · 1440](design/sourcing-direction-c/1440-select-two.png) / [select-two · 390](design/sourcing-direction-c/390-select-two.png)；其余见JSON | 双端六态代表图已绑定；比较按至少两家与busy、重新采集按busy。pending仅记录不可变请求意图、无真实HTTP或成功/失败回调验收；SC-G01–08、主题密度、完整变体、批准与真实Vue仍待。 |
+| SC-COMPARISON-RETRY 重新读取对比历史 / read | 2处；initial-error、retained-snapshot-error、retry-loading、retry-success | ；其余见JSON | 本地夹具证明界面与请求边界，不证明真实 API、RBAC、数据库或正式 M07-03。 |
 | SC-DIALOG-WIRING 四窗调用与事件装配 / wiring | 2处；SD九个事件转发、删除原因更新、四窗共享调用，不另外计为第五个业务窗 | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png)、[quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
 | SC-S-DIALOG 找货窗口定义 / wiring | 1处；搜索四类输入，字段标签随类型变 | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png)、[search-image · 1440](design/sourcing-direction-c/1440-search-image.png) / [search-image · 390](design/sourcing-direction-c/390-search-image.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
 | SC-S-CLOSE 找货关闭/Escape/取消 / local | 3处；SC-S-CLOSE Escape、SC-S-CLOSE X、SC-S-CLOSE 取消 | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png)、[search-image · 1440](design/sourcing-direction-c/1440-search-image.png) / [search-image · 390](design/sourcing-direction-c/390-search-image.png)；其余见JSON | 关闭与取消双端六态已绑定；disabled/busy是父请求在途关闭锁提案，真实Vue仍允许关闭，不是取消网络请求。键盘回到实际入口及搜索/删除保留、报价/采购重开预填已离线验证；具体批准、直达query无入口回焦、真实路由/异步归属和辅助技术仍待。 |

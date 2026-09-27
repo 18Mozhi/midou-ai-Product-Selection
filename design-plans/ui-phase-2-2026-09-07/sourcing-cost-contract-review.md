@@ -8,15 +8,15 @@ route-catalog → NavigationShell → surfaceProps：P21 SourcingWorkspace，P22
 
 | 源码简称 | 文件（apps/web/src/components/下） | 本批LF SHA256 |
 | --- | --- | --- |
-| SW | SourcingWorkspace.vue | eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219 |
+| SW | SourcingWorkspace.vue | 2f7e0f7183d6e909fd884845136a24084d03285c02f685f8aca97d64e3c5b9db |
 | SD | SourcingWorkspaceDialogs.vue | e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8 |
-| SP | SourcingComparisonPanel.vue | 2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406 |
+| SP | SourcingComparisonPanel.vue | 5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd |
 | SC | SourcingCostConfirmationPanel.vue | bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4 |
 | CR | CostRuleConsole.vue | 1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3 |
 | PP | OpportunityProfitPanel.vue | a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f |
 | RQ | OpportunityCostReviewQueue.vue | e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339 |
 
-局部共77个控件/事件候选、7个弹窗定义/调用候选、44处v-model。SP与QualityGateSetupSummary只有呈现/slot，无本地交互候选；共享UiStatePanel和useModalDialog行为按实际调用方检查，不在此重复全站盘点。PP/RQ与P18共享，以下仅记录P21调用合同，不重复加算全站分母。
+局部共79个控件/事件候选、7个弹窗定义/调用候选、44处v-model。SP与QualityGateSetupSummary只有呈现/slot，无本地交互候选；共享UiStatePanel和useModalDialog行为按实际调用方检查，不在此重复全站盘点。PP/RQ与P18共享，以下仅记录P21调用合同，不重复加算全站分母。
 
 ## 2. 全部控件与事件候选
 
@@ -41,6 +41,8 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | SW | 634 | 6ec48a1f9259ef0d.1 | SC-PURCHASE-OPEN 管理者已有quote |
 | SW | 650 | 658745acd55fced2.1 | SC-COMPARE 至少2项且非busy |
 | SW | 654 | c63aa5ea813e730c.1 | SD九个事件转发、删除原因更新 |
+| SW | 642 | e60a87b8bebccb4b.1 | SC-G02 独立读取对比历史失败及重试事件转发 |
+| SP | 61 | 49464ad9054e6202.1 | SC-G02 重试对比历史 GET 按钮 |
 | SD | 92 | 0a19bece849d5a46.1 | SC-S-CLOSE Escape |
 | SD | 101 | d3c4c7748af92501.1 | SC-S-SUBMIT 表单 |
 | SD | 104 | e3badf15ec2af147.1 | SC-S-CLOSE X |
@@ -143,7 +145,7 @@ UI2-SC04四实例核对四类输入required、取消清query但保留当前草�
 | ID | 证据与边界 | 退出条件 |
 | --- | --- | --- |
 | SC-G01 | 当前缺失报价预填1/7/80；稳定性选项/API为variable，但SW标签字典为volatile | 核实预填是否符合业务期望；先复现真实variable展示，按确认范围处理，不用历史默认充当证据 |
-| SC-G02 | Feature Map称比较历史失败可选降级，SW.load实际同一try且阻断；详情失败可能保留列表对象 | 独立复现历史/详情失败及恢复，明确错误和空态合同，不能将文档当现实现 |
+| SC-G02 | 比较历史读取已独立降级：失败不阻断找货列表/详情；可重试错误仅重试GET，401/403不提供重试，刷新失败保留既有成功历史。桌面/手机 E2E 各16项通过；详情失败及其他恢复边界仍未解决 | 保持历史可选读取合同；后续独立验证详情失败、读代次/迟到响应及恢复，不扩大到写入或权限行为 |
 | SC-G03 | SW/SC无写入函数级busy守卫；SD可忙碌关闭；成本GET/写入共享busy | 复现重复提交、关闭重开/切对象和迟到结果，避免旧写入结果覆盖新上下文；不把关窗当撤销服务端任务 |
 | SC-G04 | SD四窗无完整焦点圈/归还，错误在父层；CR字段错误缺字段关联；RQ内联表单取消/成功归属未全验 | 四窗和七操作变体逐项键盘、焦点、错误可达、移动键盘及辅助技术验证 |
 | SC-G05 | SW/SC/CR无读版本/abort；路由反向同步、KeepAlive、范围和多标签未全验 | 迟到200/404/写入、离开返回、scope切换和history按实际对象归属处理，不用壳层缓存配置代替证据 |

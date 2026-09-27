@@ -2,6 +2,7 @@
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import { useSourcingComparisons } from "../composables/useSourcingComparisons";
 import SourcingComparisonPanel from "./SourcingComparisonPanel.vue";
 import SourcingCostConfirmationPanel from "./SourcingCostConfirmationPanel.vue";
 import SourcingWorkspaceDialogs from "./SourcingWorkspaceDialogs.vue";
@@ -29,7 +30,8 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: stri
   query = ref(""),
   deleting = ref<Search | null>(null),
   deleteReason = ref(""),
-  comparisons = ref<SourcingComparison[]>([]),
+  { comparisons, comparisonFailure, comparisonLoading, loadComparisons } =
+    useSourcingComparisons(request),
   quoteCandidate = ref<Candidate | null>(null),
   purchaseCandidate = ref<Candidate | null>(null),
   selectedQuotes = ref<string[]>([]),
@@ -163,7 +165,6 @@ async function load() {
     const response = await request<Search[]>("/sourcing/searches");
     requestId.value = response.request_id;
     items.value = response.data;
-    comparisons.value = (await request<SourcingComparison[]>("/sourcing/comparisons")).data;
     const requestedRecord = typeof route.query.record === "string" ? route.query.record : "";
     selected.value =
       items.value.find((x) => x.id === requestedRecord) ??
@@ -171,6 +172,7 @@ async function load() {
       items.value[0] ??
       null;
     state.value = items.value.length ? "ready" : "empty";
+    void loadComparisons();
     if (selected.value) {
       await detail(selected.value, false);
       if (route.query.record !== selected.value.id)
@@ -637,7 +639,12 @@ watch(
             </footer>
           </article>
         </section>
-        <SourcingComparisonPanel :comparisons="comparisons" />
+        <SourcingComparisonPanel
+          :comparisons="comparisons"
+          :failure="comparisonFailure"
+          :loading="comparisonLoading"
+          @retry="loadComparisons"
+        />
       </section>
     </div>
     <aside

@@ -178,9 +178,9 @@
     "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
     "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
     "apps/web/src/components/sourcing-workspace-types.ts": "70c451bf950fcd23c2a6dd87d693ceed46439ca68c9af92727302af09f025646",
-    "apps/web/src/components/SourcingComparisonPanel.vue": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+    "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
-    "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219",
+    "apps/web/src/components/SourcingWorkspace.vue": "2f7e0f7183d6e909fd884845136a24084d03285c02f685f8aca97d64e3c5b9db",
     "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/task-workspace-types.ts": "be914dacd68e7d4c163605082e74b9ee1ac91b07429ab68b6c08139903091b0a",
@@ -216,6 +216,7 @@
     "apps/web/src/composables/useProviderParserSamples.ts": "4f73b85d9b9e985a28817c4dbebd460a409662d7ae269a86739196c270152227",
     "apps/web/src/composables/useProviderSourceConfigurationVersions.ts": "635e798746d4df20e99fa25668429787e1c982111e105537282dc55e4f70a259",
     "apps/web/src/composables/useProviderSourceDirectory.ts": "3370711c104434a86af825d377a6377e7350e7c9ccb58bd618cfa982bdf5f544",
+    "apps/web/src/composables/useSourcingComparisons.ts": "8da6488999c953e6c1278643ffc00df30eab963fd5b5ede6d130a1bd8fdb1cab",
     "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
     "apps/web/src/credential-write-coordinator.ts": "234cc7ee8555089ed82462b2c7951c26081b2ecb7cc070e192535cae33486786",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
@@ -266,7 +267,7 @@
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "1222b429b0d72853ad55d30562deef00eb28c559aa8714e418af9fb6c8f57f35",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "3665796e60681cfab0fbde9a4971a00bb63ab7de440224550e3bafa3608b9898",
-    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "bf2fe35bba887bd8b68bdca5480d90780312df309095d0685756c0216577f5ac",
+    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "97c7775ff6bd938a7926b795e14f3e2d92df6ab1e949519c2f5c4d8838aad983",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "af93117972cab0cd3a69985cda8e8b487a7eac7c94f45e6cfd6972e556c04b70",
     "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "34d9faf49a0d92979430bb29a2dea5d28c1ffec5e380d3146a92deff9b11c3cc",
@@ -428,8 +429,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "aa6a606bcddb6d25544abaaf9f8b29d2a13f22483ee1cfee349f154e9eb25935",
     "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "3e8cd8ea912b2feba4c88ab94751555a8e076479ea1f1c6edec7be0a0c4e7640",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "d1a82204e372b91f01f777dc918671bdb73d0741cf4195fd517cbd65403e1120",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "566ae260fee4d577175ae19eff60fbdb5a33a64a722200a797a8d4267267c018",
     "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
+    "tests/e2e/m04-06-sourcing.spec.ts": "0f7e499b05670cdf3da924afccb804a3f5cbc46be13bf5dd33f990b7830f1af1",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "f8157fcc926e5a39461ca83f4563a05fc4290de81769bcd80d584a324ec671a4",
     "scripts/verify-ui-phase2-cost-rules-review.mjs": "e4998bfed38926c3c747bebe9325ec54b3ca9462969ccc6c64d2defda8d59c99",
     "scripts/verify-ui-phase2-cost-rules-c.mjs": "d96873a753a246b28fc4eb3442e80f95756da1aef4eab8bf4ee8b5a5ccd3f94b",
@@ -580,7 +582,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "e723e793c7b5107dbab1adf023f3b2ce65fb81d0b84a410fbe7c85869c08ec09",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "8e2822c8da24c4ea676cbb9b79e6ab1fb73d709d9f482ee27efd863b2f54d623",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3054941f06b46e2c2278f71dd027fb3b9f86e401df813fa174720ca40a02a765",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "cf7274836ef2ded4b059478198182c594d59d73ecc58488d9329751724ad82ee",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "05245c529066d750e719cbeaf35cfb5234cd86ad6e5a187bd79f987bcdd5d5df",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "1b1aba2d06d366a2f27973944121a37380b8e3c606e01d96731fef560e9d7abe",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "7dadafaa7b75a590e07f1999782c615f81d2b9263bdd7c51cd2028d86b47d6ef",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "10ebbb966c02c9feffc6e376e73ed882dcada2a915835c0af7c487f39994a5f3",
@@ -642,14 +644,14 @@
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1701,
+    "currentSourceCandidates": 1703,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 615,
+    "newSourceIdentities": 617,
     "oldOnlyIdentities": 391,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1541,
-    "semanticGroups": 1270,
-    "routeActions": 1048,
+    "explicitlyGroupedSourceSites": 1543,
+    "semanticGroups": 1271,
+    "routeActions": 1049,
     "wiringGroups": 118,
     "pagesWithoutExplicitSemanticReview": [],
     "globalDenominatorFrozen": false,
@@ -1533,18 +1535,19 @@
         "pageId": "P21",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 54,
-        "semanticGroups": 38,
-        "routeActions": 31,
+        "sourceSites": 56,
+        "semanticGroups": 39,
+        "routeActions": 32,
         "wiringGroups": 7,
         "excludedGroups": 0,
         "writeActions": 9,
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 20,
         "testEvidenceTypes": [
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
-        "unmappedVisualSlots": 0,
+        "unmappedVisualSlots": 6,
         "surfaces": {
           "callerFiles": 6,
           "localModelBindings": 25,
@@ -4336,18 +4339,19 @@
       "pageId": "P21",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 54,
-      "semanticGroups": 38,
-      "routeActions": 31,
+      "sourceSites": 56,
+      "semanticGroups": 39,
+      "routeActions": 32,
       "wiringGroups": 7,
       "excludedGroups": 0,
       "writeActions": 9,
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 20,
       "testEvidenceTypes": [
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
-      "unmappedVisualSlots": 0,
+      "unmappedVisualSlots": 6,
       "surfaces": {
         "callerFiles": 6,
         "localModelBindings": 25,
@@ -15184,7 +15188,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 66,
+          "line": 68,
           "jsonPointer": null
         }
       ],
@@ -15216,7 +15220,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 67,
+          "line": 69,
           "jsonPointer": null
         }
       ],
@@ -15248,7 +15252,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 68,
+          "line": 70,
           "jsonPointer": null
         }
       ],
@@ -15284,7 +15288,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 69,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -15316,7 +15320,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 70,
+          "line": 72,
           "jsonPointer": null
         }
       ],
@@ -15348,7 +15352,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 71,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -15380,7 +15384,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 72,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -15416,7 +15420,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 73,
+          "line": 75,
           "jsonPointer": null
         }
       ],
@@ -15452,7 +15456,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 74,
+          "line": 76,
           "jsonPointer": null
         }
       ],
@@ -15488,7 +15492,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 75,
+          "line": 77,
           "jsonPointer": null
         }
       ],
@@ -15532,7 +15536,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 76,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -15572,7 +15576,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 77,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -15616,7 +15620,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 78,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -15660,7 +15664,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 79,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -15704,7 +15708,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 80,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -15748,7 +15752,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 81,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -15788,7 +15792,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 82,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -15828,7 +15832,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 83,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -15860,7 +15864,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 115,
+          "line": 117,
           "jsonPointer": null
         }
       ],
@@ -15892,7 +15896,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 84,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -15924,7 +15928,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 85,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -15956,7 +15960,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 86,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -15988,7 +15992,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 87,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -16020,7 +16024,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 88,
+          "line": 90,
           "jsonPointer": null
         }
       ],
@@ -16050,12 +16054,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 90,
+          "line": 92,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 116,
+          "line": 118,
           "jsonPointer": null
         }
       ],
@@ -16085,7 +16089,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 89,
+          "line": 91,
           "jsonPointer": null
         }
       ],
@@ -16115,7 +16119,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 91,
+          "line": 93,
           "jsonPointer": null
         }
       ],
@@ -16147,7 +16151,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 92,
+          "line": 94,
           "jsonPointer": null
         }
       ],
@@ -16179,7 +16183,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 93,
+          "line": 95,
           "jsonPointer": null
         }
       ],
@@ -16211,7 +16215,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 94,
+          "line": 96,
           "jsonPointer": null
         }
       ],
@@ -29599,7 +29603,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 100,
+          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -29647,7 +29651,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 101,
+          "line": 103,
           "jsonPointer": null
         }
       ],
@@ -29695,7 +29699,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 102,
+          "line": 104,
           "jsonPointer": null
         }
       ],
@@ -29743,7 +29747,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 103,
+          "line": 105,
           "jsonPointer": null
         }
       ],
@@ -29791,7 +29795,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 104,
+          "line": 106,
           "jsonPointer": null
         }
       ],
@@ -31455,7 +31459,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 95,
+          "line": 97,
           "jsonPointer": null
         }
       ],
@@ -31494,7 +31498,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 96,
+          "line": 98,
           "jsonPointer": null
         }
       ],
@@ -31538,7 +31542,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 97,
+          "line": 99,
           "jsonPointer": null
         }
       ],
@@ -31582,7 +31586,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 98,
+          "line": 100,
           "jsonPointer": null
         }
       ],
@@ -31626,7 +31630,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 99,
+          "line": 101,
           "jsonPointer": null
         }
       ],
@@ -60979,6 +60983,40 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/SourcingComparisonPanel.vue#49464ad9054e6202.1",
+      "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+      "line": 61,
+      "kind": "control",
+      "label": "重新读取对比历史",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "failure"
+        },
+        {
+          "directive": "v-if",
+          "expression": "failure.retryable"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
+          "line": 45,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-COMPARISON-RETRY",
+          "kind": "read"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/SourcingCostConfirmationPanel.vue#bb5d5e072948baa9.1",
       "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
       "line": 127,
@@ -60993,7 +61031,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 64,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -61020,7 +61058,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 65,
+          "line": 67,
           "jsonPointer": null
         }
       ],
@@ -61035,7 +61073,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4c5b0e4130d85030.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 386,
+      "line": 388,
       "kind": "control",
       "label": "供应商找货",
       "conditions": [],
@@ -61062,7 +61100,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4862df3dce4b0f1c.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 387,
+      "line": 389,
       "kind": "control",
       "label": "费用与利润规则",
       "conditions": [],
@@ -61089,7 +61127,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 401,
+      "line": 403,
       "kind": "control",
       "label": "发起供应商找货",
       "conditions": [
@@ -61121,7 +61159,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 428,
+      "line": 430,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -61153,7 +61191,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 437,
+      "line": 439,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -61185,7 +61223,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 449,
+      "line": 451,
       "kind": "control",
       "label": "{{ searchName(item) }} {{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }} {{ item.candidate_count }} 个",
       "conditions": [
@@ -61221,7 +61259,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#100e00b6d8cb9e4a.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 471,
+      "line": 473,
       "kind": "control",
       "label": "重新采集",
       "conditions": [
@@ -61261,7 +61299,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#dd2297ed2ff6c2a5.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 474,
+      "line": 476,
       "kind": "control",
       "label": "费用与利润规则",
       "conditions": [
@@ -61297,7 +61335,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 478,
+      "line": 480,
       "kind": "control",
       "label": "删除找货记录",
       "conditions": [
@@ -61337,7 +61375,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#a9d2be84fdbc9665.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 538,
+      "line": 540,
       "kind": "control",
       "label": "查看采集任务明细",
       "conditions": [
@@ -61381,7 +61419,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#46efe1c7f3d39475.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 559,
+      "line": 561,
       "kind": "control",
       "label": "打开 ERP 商品列表 ↗",
       "conditions": [
@@ -61421,7 +61459,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 576,
+      "line": 578,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -61465,7 +61503,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#792656883236da58.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 628,
+      "line": 630,
       "kind": "control",
       "label": "打开外部原始商品页（新窗口）",
       "conditions": [
@@ -61505,7 +61543,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 632,
+      "line": 634,
       "kind": "control",
       "label": "确认报价",
       "conditions": [
@@ -61549,7 +61587,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 634,
+      "line": 636,
       "kind": "control",
       "label": "创建采购任务",
       "conditions": [
@@ -61591,9 +61629,43 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/SourcingWorkspace.vue#e60a87b8bebccb4b.1",
+      "file": "apps/web/src/components/SourcingWorkspace.vue",
+      "line": 642,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
+          "line": 44,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P21",
+          "actionId": "SC-COMPARISON-RETRY",
+          "kind": "read"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#658745acd55fced2.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 650,
+      "line": 657,
       "kind": "control",
       "label": "保存报价对比",
       "conditions": [
@@ -61625,7 +61697,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#c63aa5ea813e730c.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 654,
+      "line": 661,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -61657,7 +61729,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#fca0d2d5d8880776.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 654,
+      "line": 661,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [
@@ -61674,7 +61746,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 110,
+          "line": 112,
           "jsonPointer": null
         }
       ],
@@ -61706,7 +61778,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 111,
+          "line": 113,
           "jsonPointer": null
         }
       ],
@@ -61738,7 +61810,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 44,
+          "line": 46,
           "jsonPointer": null
         }
       ],
@@ -61770,7 +61842,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 45,
+          "line": 47,
           "jsonPointer": null
         }
       ],
@@ -61802,7 +61874,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 46,
+          "line": 48,
           "jsonPointer": null
         }
       ],
@@ -61834,7 +61906,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 47,
+          "line": 49,
           "jsonPointer": null
         }
       ],
@@ -61866,7 +61938,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 48,
+          "line": 50,
           "jsonPointer": null
         }
       ],
@@ -61898,7 +61970,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 112,
+          "line": 114,
           "jsonPointer": null
         }
       ],
@@ -61930,7 +62002,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 49,
+          "line": 51,
           "jsonPointer": null
         }
       ],
@@ -61962,7 +62034,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 50,
+          "line": 52,
           "jsonPointer": null
         }
       ],
@@ -61994,7 +62066,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 51,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -62026,7 +62098,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 52,
+          "line": 54,
           "jsonPointer": null
         }
       ],
@@ -62058,7 +62130,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 53,
+          "line": 55,
           "jsonPointer": null
         }
       ],
@@ -62090,7 +62162,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 113,
+          "line": 115,
           "jsonPointer": null
         }
       ],
@@ -62122,7 +62194,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 54,
+          "line": 56,
           "jsonPointer": null
         }
       ],
@@ -62154,7 +62226,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 55,
+          "line": 57,
           "jsonPointer": null
         }
       ],
@@ -62186,7 +62258,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 56,
+          "line": 58,
           "jsonPointer": null
         }
       ],
@@ -62218,7 +62290,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 57,
+          "line": 59,
           "jsonPointer": null
         }
       ],
@@ -62250,7 +62322,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 58,
+          "line": 60,
           "jsonPointer": null
         }
       ],
@@ -62282,7 +62354,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 114,
+          "line": 116,
           "jsonPointer": null
         }
       ],
@@ -62314,7 +62386,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 59,
+          "line": 61,
           "jsonPointer": null
         }
       ],
@@ -62346,7 +62418,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 60,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -62378,7 +62450,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 61,
+          "line": 63,
           "jsonPointer": null
         }
       ],
@@ -62410,7 +62482,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 62,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -62442,7 +62514,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 63,
+          "line": 65,
           "jsonPointer": null
         }
       ],

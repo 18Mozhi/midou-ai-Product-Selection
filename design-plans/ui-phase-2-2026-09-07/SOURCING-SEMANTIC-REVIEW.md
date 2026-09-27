@@ -76,7 +76,7 @@
 | 整页 empty 主操作 | 管理者打开找货；其他情况 load | 按身份分别呈现，不虚构只读创建 |
 | 整页 empty 次操作 | resetQuery；其他状态次操作 load | expired/forbidden 当前也 reload，不借用 P19 的登录/首页处理 |
 | 空筛选 | 主操作 resetQuery；次操作管理者打开找货，否则 load | 需分别绑定按钮、焦点及恢复后状态 |
-| 比较历史失败 | 列表与历史在同一 try；历史失败会阻断列表 | 独立降级是待审提案，SC-G02 未修 |
+| 比较历史失败 | 比较历史独立读取；失败不阻断列表/详情，可重试错误仅重读GET；401/403无重试入口，失败时保留已成功快照 | P21 SC-G02 部分实现；桌面与390px移动端E2E各16项通过；详情失败和迟到响应边界仍待验证 |
 | 找货与报价写入 | supplier_quote:manage | 不能用 cost:confirm 代替 |
 | 成本提交与重算 | cost:confirm | 复核人的每条动作另依 item.can_review |
 | 采集明细 | platform:operate 或 platform:superadmin | 不对普通用户绘制可访问管理详情的假入口 |

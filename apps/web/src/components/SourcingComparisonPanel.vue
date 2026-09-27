@@ -1,7 +1,14 @@
 <script setup lang="ts">
+import { sanitizeCorrelationId } from "../ui/state-contract";
+import type { SourcingComparisonFailure } from "../composables/useSourcingComparisons";
 import type { SourcingComparison, SourcingComparisonQuote } from "./sourcing-workspace-types";
 
-defineProps<{ comparisons: SourcingComparison[] }>();
+defineProps<{
+  comparisons: SourcingComparison[];
+  failure: SourcingComparisonFailure | null;
+  loading: boolean;
+}>();
+const emit = defineEmits<{ retry: [] }>();
 const specificationHint = (quotes: SourcingComparisonQuote[]) => {
   const raw = [...new Set(quotes.map((item) => item.specification.trim()))];
   const formatted = new Set(
@@ -36,6 +43,25 @@ const specificationHint = (quotes: SourcingComparisonQuote[]) => {
       </div>
       <span>{{ comparisons.length }} 份</span>
     </header>
+    <div v-if="loading" class="sourcing-comparison-loading" role="status" aria-live="polite">
+      正在读取已保存的对比记录…
+    </div>
+    <section v-if="failure" class="sourcing-comparison-error" role="status" aria-live="polite">
+      <div>
+        <strong>对比历史暂未读取</strong>
+        <p v-if="failure.retainedSnapshot">
+          本次读取未完成，仍显示上次成功读取的记录；当前找货列表和候选可以继续查看。
+        </p>
+        <p v-else>本次读取未完成。找货列表和候选仍可查看；历史记录不会被当作空列表。</p>
+        <small>{{ failure.actionHint }}</small>
+        <code v-if="sanitizeCorrelationId(failure.requestId)">
+          请求编号 {{ sanitizeCorrelationId(failure.requestId) }}
+        </code>
+      </div>
+      <button v-if="failure.retryable" type="button" :disabled="loading" @click="emit('retry')">
+        重新读取对比历史
+      </button>
+    </section>
     <article v-for="comparison in comparisons" :key="comparison.id">
       <header>
         <div>
@@ -79,6 +105,8 @@ const specificationHint = (quotes: SourcingComparisonQuote[]) => {
         </section>
       </div>
     </article>
-    <p v-if="!comparisons.length">选择两家以上已确认报价后，可保存对比记录。</p>
+    <p v-if="!comparisons.length && !failure && !loading">
+      选择两家以上已确认报价后，可保存对比记录。
+    </p>
   </section>
 </template>

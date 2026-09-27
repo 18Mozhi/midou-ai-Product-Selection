@@ -530,3 +530,58 @@ test("UI2-SC06 comparison accepts two through five current quote IDs and leaves 
   ]);
   await expect(page.locator(".sourcing-compare-tray")).toHaveCount(0);
 });
+
+test("SC-G02 comparison history failure preserves the sourcing list and retries only its GET", async ({
+  page,
+}) => {
+  await setup(page);
+  let attempts = 0;
+  const writes: string[] = [];
+  await page.route("**/api/v1/sourcing/comparisons", async (route) => {
+    if (route.request().method() !== "GET") {
+      writes.push(route.request().method());
+      return route.fallback();
+    }
+    attempts += 1;
+    if (attempts === 1) {
+      await route.fulfill({
+        status: 500,
+        json: {
+          error: {
+            code: "comparison_history_unavailable",
+            message: "对比历史读取失败。",
+            action_hint: "读取暂时不可用，请稍后重试。",
+          },
+          request_id: "comparison-history-failed-01",
+          trace_id: "comparison-history-trace-01",
+        },
+      });
+      return;
+    }
+    await route.fulfill({
+      json: envelope([
+        {
+          id: "00000000-0000-4000-8000-000000000651",
+          name: "恢复后的报价对比",
+          quotes: [],
+          created_at: "2026-08-08T13:00:00.000Z",
+        },
+      ]),
+    });
+  });
+
+  await page.goto("/sourcing");
+  await expect(page.locator(".sourcing-comparison-error")).toContainText("对比历史暂未读取");
+  await expect(page.getByText("宁波澄净户外用品厂")).toBeVisible();
+  await expect(page.locator(".sourcing-layout")).toBeVisible();
+  await expect(page.getByText("选择两家以上已确认报价后，可保存对比记录。")).toHaveCount(0);
+  await expect(page.locator(".sourcing-comparison-error")).toContainText(
+    "comparison-history-failed-01",
+  );
+
+  await page.getByRole("button", { name: "重新读取对比历史" }).click();
+  await expect(page.getByText("恢复后的报价对比")).toBeVisible();
+  await expect(page.getByText("宁波澄净户外用品厂")).toBeVisible();
+  expect(attempts).toBe(2);
+  expect(writes).toEqual([]);
+});
