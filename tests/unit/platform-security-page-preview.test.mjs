@@ -21,6 +21,8 @@ for (const [name, transform] of [
     const filename = `apps/web/src/components/${name}.vue`;
     const source = (await readFile(filename, "utf8")).replaceAll("\r\n", "\n"),
       result = transform(source);
+    if (name === "NavigationShell")
+      assert.match(result, /routePath !== '\/platform-admin\/security'/);
     const before = parse(source).descriptor,
       after = parse(result).descriptor;
     assert.equal(

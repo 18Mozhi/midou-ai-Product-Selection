@@ -68,8 +68,8 @@ export function previewSecurityShell(source) {
   if (result.includes("routePath !== '/platform-admin/security'")) return result;
   return once(
     result,
-    '<header v-if="!opportunityId" class="role-page-title">',
-    '<header v-if="!opportunityId && routePath !== \'/platform-admin/security\'" class="role-page-title">',
+    "            routePath !== '/platform-admin/redis'\n          \"",
+    "            routePath !== '/platform-admin/redis' &&\n            routePath !== '/platform-admin/security'\n          \"",
   );
 }
 export const securityPageSources = [

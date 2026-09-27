@@ -265,7 +265,8 @@ try {
                 pixelHeight: bytes.readUInt32BE(20),
                 view,
                 frame,
-                scope: "page structure only; local E2E fixtures; pending review",
+                scope:
+                  "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance",
               });
             }
           }
@@ -348,7 +349,7 @@ try {
           sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
           capturedAt: new Date().toISOString(),
           scope:
-            "actual Vue C review transform; source business scripts unchanged; original E2E aggregate/row counts are synthetic, not production metrics; no deployment or approval",
+            "actual Vue C review transform; page visuals auto-approved under user authorization; source business scripts unchanged; original E2E aggregate/row counts are synthetic, not production metrics; no permission, audit, or production acceptance",
           sources: sourceHashes,
           images,
           results,
@@ -359,11 +360,11 @@ try {
     );
     await writeFile(
       path.join(output, "index.html"),
-      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P59 实际Vue布局待审</title><style>body{font:16px/1.7 Microsoft YaHei;margin:24px;color:#17253c}img{display:block;max-width:100%;border:1px solid #c7d3e4}article{margin:28px 0}</style><h1>P59 C 实际Vue整合预览</h1><p>本地合成样例；结构待审，非生产。摘要与记录数量不代表真实统计；不含全部详情/按钮状态验收。</p><a href="manifest.json">来源与验证</a>' +
+      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P59 实际Vue布局 · 视觉已通过</title><style>body{font:16px/1.7 Microsoft YaHei;margin:24px;color:#17253c}img{display:block;max-width:100%;border:1px solid #c7d3e4}article{margin:28px 0}</style><h1>P59 C 实际Vue整合预览</h1><p>页面结构视觉按用户授权自动通过；本地合成样例不代表真实权限、审计或生产验收，摘要与记录数量也不代表生产统计。</p><a href="manifest.json">来源与验证</a>' +
         images
           .map(
             (image) =>
-              `<article><h2>${image.width} / ${image.view}</h2><a href="${image.file}"><img src="${image.file}" alt="${image.width} ${image.view} 待审"></a></article>`,
+              `<article><h2>${image.width} / ${image.view}</h2><a href="${image.file}"><img src="${image.file}" alt="${image.width} ${image.view} 安全中心页面"></a></article>`,
           )
           .join("\n") +
         "</html>",

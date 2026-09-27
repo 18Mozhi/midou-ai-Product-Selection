@@ -1,6 +1,6 @@
 # P59 实际 Vue C 整合 · 批次19
 
-当前审核入口：[r2 图册](../../output/playwright/p59-page-composition-r2/index.html)。17 张实际 Vue 图片，待用户确认展示区域；不是整页、全部状态或生产验收。P57 手机取消按钮四组合的既有局部批准保持不变，已核对按钮图包与页面规格，不重复扩大批准。
+最新当前源码证据：[r4 图册](../../output/playwright/p59-page-composition-r4/index.html) · [来源与检查清单](../../output/playwright/p59-page-composition-r4/manifest.json)。用户已授权完成页面视觉自动同意；该批准仅覆盖已展示的页面视觉，不代表真实权限、审计或生产验收。r1–r3 原图保留为历史版本，未覆盖。
 
 ## 改动及依据
 
@@ -11,6 +11,8 @@
 原 E2E 的摘要 14/2/8/3/1/5 与单条列表均为合成测试资料；不能据此解释真实平台计数或宣称真实统计一致性。预览显式注明本地样例与尚未部署。
 
 ## 验证与证据
+
+- 2026-09-27 r4：C 预览变换适配当前多行导航标题模板，17 张实际 Vue 图片、113 份来源、98 项检查通过；页面链接、交互/权限和生产合同未变。旧“待审”描述仅留在历史 r1–r3 图册。
 
 - `node --test tests/unit/platform-security-page-preview.test.mjs tests/unit/security-read-lifecycle.test.mjs`：16 项通过，包含源码绑定保持、Vue 编译、双集合和非法运行参数边界。
 - `node scripts/verify-security-page-preview.mjs`：实际 App/Router，1440 与 390 两组共 98 项检查；四视图、空搜索与重置、源顺序/视觉顺序、标题唯一、无横向溢出、原生 Tab 蓝色焦点通过。12 次本地 GET、0 写请求、0 页面错误或未知网络请求。
