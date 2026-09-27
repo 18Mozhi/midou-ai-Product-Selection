@@ -27,3 +27,10 @@
 ## 未覆盖事项
 
 真实 RBAC/成员数据、批量写入、ERP 助手、跨页选择的生产验证、完整读屏、200% 缩放以及正式 M07-03 证据仍需现场验收；本批不把 fixture 或截图基线当作生产业务证明。
+
+## 2026-09-28 补充：OP07 缓存趋势创建入口
+
+- 修复同成员壳层 `KeepAlive` 下从其他授权页返回 `/opportunities` 时，`create=1` / `source_topic_id` URL 已更新但机会页创建窗未重新打开的问题。
+- 首次挂载和重新激活共用 `syncCreateRouteIntent()`；重新激活只在列表路径、存在明确创建 URL 参数且已有 `opportunity:decide` capability 时更新现有表单并打开窗。不会自动提交或采纳，不改变 route/API/permission contract。
+- `UI2-OP07` 实际 Vue 双端各2/2：验证无创建意图的页面往返保留草稿；新趋势意图覆盖为新 URL 字段并打开；没有决定 capability 时不打开且零写入。
+- OP07 的旧读回执已有独立实施记录；写入在途、关闭重开/连点、P18 子面板读写归属与真实 RBAC/生产 M07-03 仍未关闭。

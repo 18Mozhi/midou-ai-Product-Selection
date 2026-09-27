@@ -1630,6 +1630,7 @@ W09 发布前必须取得干净且归属明确的提交，核对本地/远端/�
 批134实施 [P17 评分规则 C 方向生产 Vue](P17-PAGE-COMPOSITION-IMPLEMENTATION.md)：已将蓝白评分规则工作区、五项配置覆盖、版本目录、阈值/权重事实、创建/只读预览/生命周期窗迁移到真实 `ScoreRuleConsole`，保留既有读取、能力判断、原因、回滚目标与 `expected_revision` 合同。定向单测 6/6，桌面/390px 评分 E2E 8/8，类型检查、格式检查、构建与宝塔部署随本批提交完成。真实 RBAC、审批/回滚写入、跨页预览、正式 M07-03 证据仍待。
 批135收口 [P16 创建选品 C 方向生产 Vue](P16-PAGE-COMPOSITION-IMPLEMENTATION.md)：确认真实 `SelectionJourney.vue` 已包含批准的蓝色阶段栏、白色工作区、候选/决策双区、五项质量门、时间轴与双端状态；保留创建、恢复、轮询、观察/驳回/采纳及五门限制合同。桌面/390px UI2 旅程合同 32/32，线上 `/opportunities/start` 返回 200；本批随已部署构建完成。真实会话/RBAC、采集凭证、数据库竞争和正式 M07-03 证据仍待。
 批136实施 [P15 机会列表 C 方向生产 Vue](P15-PAGE-COMPOSITION-IMPLEMENTATION.md)：已将蓝色机会工作台、四队列、筛选工作区、五项配置摘要、列表事实、分页与手机布局迁移到真实 `OpportunityWorkspace` / `OpportunityListPanel`，并保留 P18 详情五门合同；移动详情“更多分析”入口恢复可达。单测 9/9，机会列表/详情/筛选 E2E 桌面与 390px 6/6，类型检查、格式检查与视觉基线更新通过。真实 RBAC、批量/ERP 写入和正式 M07-03 证据仍待。
+2026-09-28 P15 OP07续接：修复同成员壳层 KeepAlive 返回机会列表时，URL 带 `create=1`/`source_topic_id` 却未重开并预填创建窗的问题。仅复用既有 `opportunity:decide` capability 和 route query，未改变 API、权限、业务写入或自动采纳。隔离实际 Vue E2E 桌面/390px各2/2（包含无 capability 零写入）；读写在途竞态其余项仍待。生产部署受服务器磁盘 100% 与健康 API 502 阻塞，未运行部署器。
 
 # P62 链路日志 C 方向已接入生产 Vue
 

@@ -645,6 +645,21 @@ async function setTab(nextTab: OpportunityTypes.OpportunityTab) {
 function syncTabFromRoute() {
   tab.value = resolveOpportunityTab(route.query.tab);
 }
+function syncCreateRouteIntent() {
+  if (
+    props.opportunityId ||
+    route.path !== "/opportunities" ||
+    !canDecide.value ||
+    (route.query.create !== "1" && !route.query.source_topic_id)
+  )
+    return;
+  form.source_topic_id =
+    typeof route.query.source_topic_id === "string" ? route.query.source_topic_id : "";
+  form.name = typeof route.query.name === "string" ? route.query.name : "";
+  form.market = typeof route.query.market === "string" ? route.query.market : "US";
+  form.category = typeof route.query.category === "string" ? route.query.category : "";
+  showCreate.value = true;
+}
 let loadQueued = false;
 let wasDeactivated = false;
 function queueLoad() {
@@ -662,23 +677,13 @@ onDeactivated(() => {
 onActivated(() => {
   if (!wasDeactivated) return;
   wasDeactivated = false;
+  syncCreateRouteIntent();
   queueLoad();
 });
 onMounted(() => {
   syncTabFromRoute();
   syncListRoute();
-  if (
-    !props.opportunityId &&
-    canDecide.value &&
-    (route.query.create === "1" || route.query.source_topic_id)
-  ) {
-    form.source_topic_id =
-      typeof route.query.source_topic_id === "string" ? route.query.source_topic_id : "";
-    form.name = typeof route.query.name === "string" ? route.query.name : "";
-    form.market = typeof route.query.market === "string" ? route.query.market : "US";
-    form.category = typeof route.query.category === "string" ? route.query.category : "";
-    showCreate.value = true;
-  }
+  syncCreateRouteIntent();
   void load();
 });
 watch(

@@ -77,7 +77,7 @@ function detailFixture(): OpportunityDetail {
     },
   };
 }
-async function ready(page: Page, canDecide = true) {
+async function ready(page: Page, canDecide = true, extraCapabilities: string[] = []) {
   const detail = detailFixture();
   const data = {
     detail,
@@ -105,7 +105,11 @@ async function ready(page: Page, canDecide = true) {
         organization_id: id(421),
         workspace_id: id(422),
         roles: ["member"],
-        capabilities: ["opportunity:read", ...(canDecide ? ["opportunity:decide"] : [])],
+        capabilities: [
+          "opportunity:read",
+          ...(canDecide ? ["opportunity:decide"] : []),
+          ...extraCapabilities,
+        ],
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -149,6 +153,12 @@ function assertWrite(request: Request, path: string, body: unknown) {
   for (const header of ["idempotency-key", "x-request-id", "x-trace-id"])
     expect(request.headers()[header]).toMatch(/^[0-9a-f-]{36}$/);
 }
+async function navigateSpa(page: Page, href: string) {
+  await page.evaluate((target) => {
+    window.history.pushState({}, "", target);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, href);
+}
 
 test("UI2-OP01 manual creation validates, preserves canceled draft and follows returned ID", async ({
   page,
@@ -191,6 +201,63 @@ test("UI2-OP01 manual creation validates, preserves canceled draft and follows r
     category: null,
     source_topic_id: topicId,
   });
+});
+
+test("UI2-OP07 cached opportunity entry honors a new trend creation route", async ({ page }) => {
+  const data = await ready(page, true, ["task:read"]);
+  await page.goto("/opportunities?view=all");
+  const createTrigger = page.getByRole("button", { name: "手工添加", exact: true });
+  await expect(createTrigger).toBeVisible();
+  const initialCreate = page.getByRole("dialog", { name: "创建机会候选", exact: true });
+  await createTrigger.click();
+  await initialCreate.getByLabel("机会名称").fill("离开前保留的草稿");
+  await initialCreate.press("Escape");
+  await expect(initialCreate).toBeHidden();
+
+  await navigateSpa(page, "/home");
+  await expect(page).toHaveURL(/\/home$/);
+
+  await navigateSpa(page, "/opportunities?view=all");
+  await expect(page).toHaveURL(/\/opportunities\?view=all$/);
+  await createTrigger.click();
+  await expect(initialCreate.getByLabel("机会名称")).toHaveValue("离开前保留的草稿");
+  await initialCreate.press("Escape");
+  await expect(initialCreate).toBeHidden();
+  await navigateSpa(page, "/home");
+  await expect(page).toHaveURL(/\/home$/);
+
+  const target = new URL("/opportunities", page.url());
+  target.searchParams.set("source_topic_id", topicId);
+  target.searchParams.set("name", "缓存返回的趋势候选");
+  target.searchParams.set("market", "US");
+  target.searchParams.set("category", "居家");
+  await navigateSpa(page, target.href);
+
+  await expect(page).toHaveURL(/\/opportunities\?source_topic_id=/);
+  const modal = page.getByRole("dialog", { name: "创建机会候选", exact: true });
+  await expect(modal).toBeVisible();
+  await expect(modal.getByLabel("机会名称")).toHaveValue("缓存返回的趋势候选");
+  await expect(modal.getByLabel("市场", { exact: true })).toHaveValue("US");
+  await expect(modal.getByLabel("来源趋势 ID", { exact: false })).toHaveValue(topicId);
+  await expect(modal.getByLabel("分类（可选）")).toHaveValue("居家");
+  expect(data.writes).toHaveLength(0);
+});
+
+test("UI2-OP07 cached trend entry does not bypass the decision capability", async ({ page }) => {
+  const data = await ready(page, false, ["task:read"]);
+  await page.goto("/opportunities?view=all");
+  await expect(page.locator(".opportunity-workspace--review")).toBeVisible();
+  await navigateSpa(page, "/home");
+  await expect(page).toHaveURL(/\/home$/);
+
+  const target = new URL("/opportunities", page.url());
+  target.searchParams.set("source_topic_id", topicId);
+  target.searchParams.set("name", "无决策权限的趋势候选");
+  await navigateSpa(page, target.href);
+
+  await expect(page).toHaveURL(/\/opportunities\?source_topic_id=/);
+  await expect(page.getByRole("dialog", { name: "创建机会候选", exact: true })).toBeHidden();
+  expect(data.writes).toHaveLength(0);
 });
 
 for (const [action, label] of [
