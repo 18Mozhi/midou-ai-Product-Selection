@@ -396,6 +396,107 @@ test("UI2-TR08 responsive trend filters preserve desktop grouping and mobile foc
   expect(data.writes).toHaveLength(0);
 });
 
+test("UI2-TR08 preserves all-status URLs, current-page sorting, paging, and copy fallback", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  const highHeat = {
+      ...data.detail,
+      id: id(420),
+      title: "高热未关注主题",
+      heat: { value: 50, unit: "signals" as const },
+      followed: false,
+    },
+    followed = {
+      ...data.detail,
+      id: id(421),
+      title: "低热关注主题",
+      heat: { value: 1, unit: "signals" as const },
+      followed: true,
+    },
+    listRequests: URL[] = [];
+  await page.addInitScript(() => {
+    Object.defineProperty(navigator, "clipboard", {
+      configurable: true,
+      value: { writeText: () => Promise.reject(new Error("clipboard unavailable")) },
+    });
+  });
+  await page.route("**/api/v1/trends**", async (route) => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (request.method() !== "GET")
+      return route.fulfill({ status: 500, json: { error: { code: "unexpected_test_write" } } });
+    if (url.pathname === "/api/v1/trends") {
+      listRequests.push(url);
+      const currentPage = Number(url.searchParams.get("page") ?? 1);
+      return route.fulfill({
+        json: envelope([highHeat, followed], { page: currentPage, page_size: 20, total: 41 }),
+      });
+    }
+    const detailId = url.pathname.match(/^\/api\/v1\/trends\/([^/]+)$/)?.[1];
+    if (detailId && detailId !== "monitoring-rules" && detailId !== "change-requests")
+      return route.fulfill({ json: envelope({ ...data.detail, id: detailId }) });
+    return route.fallback();
+  });
+
+  await page.goto("/trends");
+  const topicButtons = page.locator("#trend-list > button");
+  await expect(topicButtons).toHaveCount(2);
+  await expect(topicButtons.nth(0)).toContainText("高热未关注主题");
+
+  const mobile = (page.viewportSize()?.width ?? 1440) <= 760;
+  if (mobile) await page.getByRole("button", { name: /筛选趋势/ }).click();
+  const filters = mobile ? page.getByRole("dialog", { name: "筛选趋势" }) : page.locator(".trend-filters");
+  await filters.getByRole("combobox", { name: "排序" }).selectOption("followed");
+  await expect(topicButtons.nth(0)).toContainText("低热关注主题");
+  await filters.getByRole("button", { name: "筛选", exact: true }).click();
+  await expect(page).toHaveURL(/sort=followed/);
+  expect(listRequests.length).toBeGreaterThan(0);
+  expect(listRequests.every((url) => !url.searchParams.has("sort"))).toBe(true);
+
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await expect(page.getByText("第 2 / 3 页")).toBeVisible();
+  await expect(page.getByRole("button", { name: "上一页" })).toBeEnabled();
+  expect(listRequests.at(-1)?.searchParams.get("page")).toBe("2");
+  await page.getByRole("button", { name: "上一页" }).click();
+  await expect(page).not.toHaveURL(/page=/);
+  await expect(page.getByRole("button", { name: "上一页" })).toBeDisabled();
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page).toHaveURL(/page=2/);
+  await page.getByRole("button", { name: "下一页" }).click();
+  await expect(page).toHaveURL(/page=3/);
+  await expect(page.getByRole("button", { name: "下一页" })).toBeDisabled();
+
+  if (mobile) await page.getByRole("button", { name: /筛选趋势/ }).click();
+  const activeFilters = mobile
+    ? page.getByRole("dialog", { name: "筛选趋势" })
+    : page.locator(".trend-filters");
+  await activeFilters.getByRole("combobox", { name: "状态" }).selectOption("");
+  await activeFilters.getByRole("button", { name: "筛选", exact: true }).click();
+  const address = new URL(page.url());
+  expect(address.searchParams.has("status")).toBe(true);
+  expect(address.searchParams.get("status")).toBe("");
+  expect(address.searchParams.has("page")).toBe(false);
+  expect(listRequests.at(-1)?.searchParams.has("status")).toBe(false);
+  await page.reload();
+  if (mobile) await page.getByRole("button", { name: /筛选趋势/ }).click();
+  const reloadedFilters = mobile
+    ? page.getByRole("dialog", { name: "筛选趋势" })
+    : page.locator(".trend-filters");
+  await expect(reloadedFilters.getByRole("combobox", { name: "状态" })).toHaveValue("");
+
+  await reloadedFilters.getByRole("button", { name: "清除", exact: true }).click();
+  const clearedAddress = new URL(page.url());
+  expect(clearedAddress.searchParams.has("status")).toBe(false);
+  expect(clearedAddress.searchParams.has("sort")).toBe(false);
+  expect(clearedAddress.searchParams.has("page")).toBe(false);
+  await expect(reloadedFilters.getByRole("combobox", { name: "状态" })).toHaveValue("active");
+  await reloadedFilters.getByRole("button", { name: "保存视图链接" }).click();
+  await expect(page.getByRole("status")).toContainText("当前视图已同步到地址栏，可复制地址保存。");
+  expect(data.writes).toHaveLength(0);
+});
+
 test("UI2-TR02 relevance failure retains the draft and prevents dismissal while saving", async ({
   page,
 }) => {

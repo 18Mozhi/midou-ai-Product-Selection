@@ -498,7 +498,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "页大小20，41总数为合成布局，不宣称真实全量任务。"
+      "remaining": "UI2-TR08实际Vue E2E以41条隔离总数验证首/中/末页边界与上一页回到第一页；不证明生产真实总数。"
     },
     {
       "actionId": "TR-PAGE-NEXT",
@@ -544,7 +544,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "当前页排序不保证跨页排名；所有分页组合尚未穷尽。"
+      "remaining": "UI2-TR08实际Vue E2E以41条隔离总数验证下一页、页码读取及末页禁用；不证明生产真实总数。"
     },
     {
       "actionId": "TR-HELP",
@@ -1067,7 +1067,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "全部status空被省略，syncFromRoute恢复active，旧缺口再次复验；shared capture先关闭不代表读取成功。"
+      "remaining": "UI2-TR08验证全部状态以status=保留在URL且重载后仍为空值；列表GET省略空status并清除按钮恢复默认状态。筛选结果仍需真实API验收。"
     },
     {
       "actionId": "TR-FILTER-EDIT.market",
@@ -1113,7 +1113,14 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "activeFilterCount按所有非空值计算，默认active也计1；取消抽屉不回滚草稿，复制只读当前URL。"
+      "remaining": "UI2-TR08验证状态字段选中全部状态后可保留空值并跨重载恢复；activeFilterCount默认值含义及抽屉取消后草稿策略未由此测试覆盖。",
+      "testReferences": [
+        {
+          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
+          "evidenceType": "actual-vue-isolated-browser",
+          "claim": "UI2-TR08检查全部状态选择、URL status=及重载后的空值状态。"
+        }
+      ]
     },
     {
       "actionId": "TR-FILTER-EDIT.category",
@@ -1159,7 +1166,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "activeFilterCount按所有非空值计算，默认active也计1；取消抽屉不回滚草稿，复制只读当前URL。"
+      "remaining": "UI2-TR08验证状态字段选中全部状态、URL status=及重载后的空值状态；activeFilterCount默认值含义及取消抽屉后草稿策略未由此测试覆盖。"
     },
     {
       "actionId": "TR-FILTER-EDIT.status",
@@ -1205,7 +1212,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "activeFilterCount按所有非空值计算，默认active也计1；取消抽屉不回滚草稿，复制只读当前URL。"
+      "remaining": "UI2-TR08验证全部状态字段、URL status=和重载后空值；activeFilterCount默认值含义与取消抽屉后草稿策略仍待核。"
     },
     {
       "actionId": "TR-FILTER-EDIT.q",
@@ -1303,7 +1310,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "不是全局排序；未应用草稿已经改变本页顺序，与URL不同。"
+      "remaining": "UI2-TR08验证本地排序即时改变当前页顺序，应用后写入URL且GET不传sort；不代表跨页全局排名。"
     },
     {
       "actionId": "TR-FILTER-CLEAR",
@@ -1353,7 +1360,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "不恢复全部状态；保留legacy tab及未知query，移动抽屉不会因clear按钮自动submit关闭。"
+      "remaining": "UI2-TR08验证清除后移除status/sort/page并恢复活跃默认值；保留legacy tab和未知query的行为及抽屉清除后关闭策略仍待核。"
     },
     {
       "actionId": "TR-FILTER-COPY",
@@ -1404,7 +1411,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "本轮无真实剪贴板写入；原型只展示复制意图，不是实际权限/剪贴板测试。"
+      "remaining": "UI2-TR08实际Vue E2E验证浏览器剪贴板拒绝时的手动复制回退提示；剪贴板权限弹窗及写入成功仍不属于此隔离用例。"
     },
     {
       "actionId": "TR-BACK",
@@ -2738,7 +2745,13 @@
         "listed-consumer-variants"
       ],
       "scenes": [],
-      "testReferences": [],
+      "testReferences": [
+        {
+          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
+          "evidenceType": "actual-vue-isolated-browser",
+          "claim": "UI2-TR08覆盖桌面分组、手机五字段和焦点关闭周期，及状态/URL/排序/分页/剪贴板回退合同。"
+        }
+      ],
       "visualStates": {
         "default": "not-applicable-wiring",
         "hover": "not-applicable-wiring",
@@ -2748,13 +2761,6 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "P14桌面/390px实际Vue E2E通过；其他共享调用方及其各自字段仍待核验。",
-      "testReferences": [
-        {
-          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
-          "evidenceType": "actual-vue-isolated-browser",
-          "claim": "UI2-TR08在桌面检查筛选group和手机真实dialog五字段，覆盖关闭按钮初焦点、首尾Tab、Escape/取消返焦、提交关闭与零写入。"
-        }
-      ],
       "forwardsTo": [
         "TR-FILTER-APPLY",
         "TR-FILTER-CLEAR",
