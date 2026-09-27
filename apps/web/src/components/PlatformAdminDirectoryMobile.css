@@ -8,7 +8,7 @@
   html[data-design="signal-ledger"]
     #app
     .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"]) {
-    > .admin-directory-heading {
+    .account-page-layout--admins > .account-page-main > .admin-directory-heading {
       display: block;
       margin: 0 16px;
       font-family: "Microsoft YaHei", sans-serif;
@@ -27,7 +27,7 @@
         color: var(--so-admin-mobile-text-muted);
       }
     }
-    > .account-table-wrap {
+    .account-page-layout--admins > .account-page-main > .account-table-wrap {
       margin: 0 16px;
       border: 1px solid var(--so-admin-mobile-border);
       border-radius: 10px;

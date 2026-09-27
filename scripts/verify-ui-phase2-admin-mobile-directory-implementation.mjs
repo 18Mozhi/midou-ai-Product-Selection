@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, writeFile } from "node:fs/promises";
 import { createServer as reservePort } from "node:net";
 import path from "node:path";
 import vm from "node:vm";
@@ -12,11 +12,24 @@ import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs
 
 const capture = process.argv.includes("--capture");
 const baseline = process.argv.includes("--baseline");
+const outputArg = process.argv.slice(2).find((arg) => arg.startsWith("--output="));
 
-assert.ok(process.argv.slice(2).every((arg) => ["--capture", "--baseline"].includes(arg)));
+assert.ok(
+  process.argv
+    .slice(2)
+    .every((arg) => ["--capture", "--baseline"].includes(arg) || arg.startsWith("--output=")),
+);
 const baselineCommit = "d9a28316";
-const output =
-  "output/playwright/p44-mobile-directory-implementation/" + (baseline ? "baseline" : "current");
+const output = outputArg
+  ? outputArg.slice("--output=".length)
+  : "output/playwright/p44-mobile-directory-implementation/" + (baseline ? "baseline" : "current");
+assert.ok(
+  !outputArg ||
+    (capture &&
+      !baseline &&
+      /^output\/playwright\/p44-mobile-directory-implementation\/current-r\d+$/.test(output)),
+  "Versioned output is only allowed for a new P44 current capture directory",
+);
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";
@@ -140,7 +153,12 @@ try {
   const origin = "http://127.0.0.1:" + port;
   console.log("p44_directory_host " + origin + " baseline=" + baseline);
   browser = await chromium.launch();
-  if (capture) await mkdir(output, { recursive: true });
+  if (capture) {
+    if (outputArg) {
+      await assert.rejects(access(output), { code: "ENOENT" });
+      await mkdir(output);
+    } else await mkdir(output, { recursive: true });
+  }
   for (const width of [390, 760, 761, 1440])
     for (const routeName of ["admins", "users", "permissions"]) {
       const context = await browser.newContext({
@@ -398,7 +416,7 @@ try {
           await shot("detail");
           await page
             .locator("dialog[open]")
-            .getByRole("button", { name: "关闭", exact: true })
+            .getByRole("button", { name: "关闭详情", exact: true })
             .click();
           check("detail closed", await page.locator("dialog[open]").count(), 0);
           check("route stays after detail", page.url(), initialUrl);

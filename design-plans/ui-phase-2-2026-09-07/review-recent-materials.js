@@ -13,9 +13,429 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 191,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39"
+        },
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "4290ac0831f3e231323f7f7eb4a5a0ee8f5f14d3d1ff2b4fb19fc213eda990de"
+        },
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+        },
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de"
+        },
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+        },
+        {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
           "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed"
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+        },
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+        },
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+        },
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+        },
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+        },
+        {
+          "file": "apps/web/src/components/LandingRedirect.vue",
+          "expected": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+          "actual": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5"
+        },
+        {
+          "file": "apps/web/src/components/LocalIdentity.vue",
+          "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+        },
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
+        },
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+        },
+        {
+          "file": "apps/web/src/components/OnboardingGuide.vue",
+          "expected": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+          "actual": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentCenter.vue",
+          "expected": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+          "actual": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementCenter.vue",
+          "expected": "e6bbae25a2f814f03f83a39c04aa2bd20f3b723911e5348493f12c4d17f99dd5",
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
+        },
+        {
+          "file": "apps/web/src/components/PlatformNotificationCenter.vue",
+          "expected": "a78a889436083b55609001c75cb72269a161588e4efd685a1aa1c719a12182bd",
+          "actual": "8dd089c006eeb5c731f0d040da20436e2958613657776373b2872fe6adde52b4"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
+          "file": "apps/web/src/components/ProviderAdapterCenter.vue",
+          "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+          "actual": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+        },
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+        },
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+        },
+        {
+          "file": "apps/web/src/components/SelectionJourney.vue",
+          "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
+          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/components/TaskBatchActions.vue",
+          "expected": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+          "actual": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
+        },
+        {
+          "file": "apps/web/src/components/TaskDetailPanel.vue",
+          "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+        },
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+        },
+        {
+          "file": "apps/web/src/components/TenancyChooser.vue",
+          "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+        },
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f"
+        },
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+        },
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09"
+        },
+        {
+          "file": "apps/web/src/components/use-platform-status.ts",
+          "expected": "735f0c250153e075fdf39ca40c5c47b63b7aa30dfe85e1c9f9381bc7e56d068a",
+          "actual": "3866ef2b8c4d1031386356f870e413870184e5c087599da0946c391a704ec855"
+        },
+        {
+          "file": "apps/web/src/design/content-tokens.css",
+          "expected": "62c0047948126ac81c509f82dca53e38a0f00f69f2da8d29e9b0e9f2ebf62798",
+          "actual": "e783fb9d9c7377450d217b039b91f54a562a0e10559cb4b53cd0eaa8ce6f07fd"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-scoped.css",
+          "expected": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+          "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
+        },
+        {
+          "file": "apps/web/src/platform-content.css",
+          "expected": "a92ef2925855909d73c456bd60307ec690ec749a9d96e44641b1f9437d71a9e9",
+          "actual": "beaa924acf8d99b8f553b70a3e3a7548233754fcac75c36869ad38c3807ace66"
+        },
+        {
+          "file": "apps/web/src/platform-notifications.css",
+          "expected": "73792ef4d3254cbe70dd6eac7425b3bf53d85d997aef7db6962f8547bfa33259",
+          "actual": "774a731fa8d18c3b30abac974ab698c5a796954ba23ee81cb76ba8cbd564b2ca"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/implementation/platform-notification-shell-preview.css",
@@ -23,9 +443,19 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "8c1de10013081fad0db5ce1655de754f74df9f335f590ccc10c81e5f6505b081"
         },
         {
+          "file": "scripts/lib/platform-notification-shell-preview.mjs",
+          "expected": "5ba8b716d1931670a744b9413cd87570b6bf74df030b3d01439c29ca7b0d7d6b",
+          "actual": "ada34ada484bdc6e5e204f2232fb11629818fcb110fdb4d5850e918e243d2dbf"
+        },
+        {
           "file": "scripts/verify-platform-notification-app.mjs",
           "expected": "e530e7e7dd2ab3ead0d13ccc988bc69e4e7bb1a7692357bdb54c22c766a2daa3",
-          "actual": "fe5f862b41ae595a3a59533879e10d452b504e01ad684b059fe3e992cb656ae7"
+          "actual": "ec17290896ec64a0c6baeaa30e95633550cf16f3b24f4801fbac1250ca156ff8"
+        },
+        {
+          "file": "tests/e2e/platform-message-management.spec.ts",
+          "expected": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
+          "actual": "3cc3638f3cda517fc4162466e49f2235838a8649cecd64c8f1e4b3581cbb90df"
         }
       ],
       "packetImages": 16,
@@ -52,14 +482,429 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "page": "P57",
       "title": "通知工作台 · 窄桌面排列 r3",
       "scope": "仅841px消息目录/阅读区上下排列及键盘区域待审；不包含所有宽度、整页或真实通知动作。",
-      "manifestSha256": "5edf73388739db0ca8878813d1cc94c0fa400f6ab5e9b9d34a3886d5e6b9d1db",
+      "manifestSha256": "eda9be26215feceb1e026d4a997e15def017d41bc5b859c1c31e773453a54938",
       "sourceStatus": "historical-source-differs",
       "sourceCount": 192,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39"
+        },
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "4290ac0831f3e231323f7f7eb4a5a0ee8f5f14d3d1ff2b4fb19fc213eda990de"
+        },
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+        },
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "969cd10fc0a99f35243278bbbc3b5896b10ea4627722f295911fc9ffb0d45100",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de"
+        },
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+        },
+        {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
-          "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed"
+          "expected": "5fea14bb21308bc2df7526e8485698525881b227d5ba1715b5eea5bea6e1754e",
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+        },
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+        },
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+        },
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+        },
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+        },
+        {
+          "file": "apps/web/src/components/LandingRedirect.vue",
+          "expected": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+          "actual": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5"
+        },
+        {
+          "file": "apps/web/src/components/LocalIdentity.vue",
+          "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+        },
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
+        },
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+        },
+        {
+          "file": "apps/web/src/components/OnboardingGuide.vue",
+          "expected": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+          "actual": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "81dad2d4a82e49b089d97dba8ed28a1eee23b5597446d3e460febea341f3b97b",
+          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentCenter.vue",
+          "expected": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+          "actual": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "caaf302bb0218ee1dc90117a77f558999d5765b9c7044408431b4a673231945a",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementCenter.vue",
+          "expected": "471e940d9f254ade77f69cbe47ad3f80d6a3b722189f7dca8c252094013aa6f1",
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
+          "file": "apps/web/src/components/ProviderAdapterCenter.vue",
+          "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "35614a7bdafc08e2b5c0079a5eefb423c4df71703b358daacd3c40d50217f344",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "b5344202cf358e7a5f61d8b0d73f4086c59157e395d12eda5f719a532bf79e63",
+          "actual": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+        },
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "64fb30168156d1656fc13699d499652c4b3017d497fe48d8f89591d3c2e1d701",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "aedf6a1e9a83b11ba8376aad116fe6e048261b79c6bbe92063e185d76cd3a7a3",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+        },
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "a583e75d6491fedc7ae94e449c5a31f421055587168101c81bf4922ffd4c2ba3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+        },
+        {
+          "file": "apps/web/src/components/SelectionJourney.vue",
+          "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
+          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/components/TaskBatchActions.vue",
+          "expected": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+          "actual": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
+        },
+        {
+          "file": "apps/web/src/components/TaskDetailPanel.vue",
+          "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+        },
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+        },
+        {
+          "file": "apps/web/src/components/TenancyChooser.vue",
+          "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+        },
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f"
+        },
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+        },
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09"
+        },
+        {
+          "file": "apps/web/src/design/content-tokens.css",
+          "expected": "62c0047948126ac81c509f82dca53e38a0f00f69f2da8d29e9b0e9f2ebf62798",
+          "actual": "e783fb9d9c7377450d217b039b91f54a562a0e10559cb4b53cd0eaa8ce6f07fd"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-scoped.css",
+          "expected": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+          "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
+        },
+        {
+          "file": "apps/web/src/platform-content.css",
+          "expected": "a92ef2925855909d73c456bd60307ec690ec749a9d96e44641b1f9437d71a9e9",
+          "actual": "beaa924acf8d99b8f553b70a3e3a7548233754fcac75c36869ad38c3807ace66"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "scripts/lib/platform-notification-shell-preview.mjs",
+          "expected": "e6936eb0e1695e78f9a4c355fe38e601a6908ca22a3310e527e491957e25c5b6",
+          "actual": "ada34ada484bdc6e5e204f2232fb11629818fcb110fdb4d5850e918e243d2dbf"
+        },
+        {
+          "file": "tests/e2e/platform-message-management.spec.ts",
+          "expected": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
+          "actual": "3cc3638f3cda517fc4162466e49f2235838a8649cecd64c8f1e4b3581cbb90df"
         }
       ],
       "packetImages": 4,
@@ -86,9 +931,409 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 166,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39"
+        },
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "4290ac0831f3e231323f7f7eb4a5a0ee8f5f14d3d1ff2b4fb19fc213eda990de"
+        },
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+        },
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de"
+        },
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+        },
+        {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
           "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed"
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+        },
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+        },
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+        },
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+        },
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+        },
+        {
+          "file": "apps/web/src/components/LandingRedirect.vue",
+          "expected": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+          "actual": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5"
+        },
+        {
+          "file": "apps/web/src/components/LocalIdentity.vue",
+          "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+        },
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
+        },
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+        },
+        {
+          "file": "apps/web/src/components/OnboardingGuide.vue",
+          "expected": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+          "actual": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentCenter.vue",
+          "expected": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+          "actual": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518"
+        },
+        {
+          "file": "apps/web/src/components/PlatformManagementCenter.vue",
+          "expected": "e6bbae25a2f814f03f83a39c04aa2bd20f3b723911e5348493f12c4d17f99dd5",
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
+          "file": "apps/web/src/components/ProviderAdapterCenter.vue",
+          "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+          "actual": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+        },
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+        },
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+        },
+        {
+          "file": "apps/web/src/components/SelectionJourney.vue",
+          "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
+          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/components/TaskBatchActions.vue",
+          "expected": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+          "actual": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
+        },
+        {
+          "file": "apps/web/src/components/TaskDetailPanel.vue",
+          "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+        },
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+        },
+        {
+          "file": "apps/web/src/components/TenancyChooser.vue",
+          "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+        },
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f"
+        },
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+        },
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09"
+        },
+        {
+          "file": "apps/web/src/components/commercial-operations.css",
+          "expected": "d046fd8522d11fb502759783d6d33f65f0a45f22fc08107465451aad0c6ce90b",
+          "actual": "45356a04a3dec231906d2d9b609b1d9d6b34ca83e9b17b247b3139858590d1b4"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-scoped.css",
+          "expected": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+          "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/implementation/platform-commercial-page-preview.css",
@@ -98,12 +1343,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "scripts/lib/platform-commercial-page-preview.mjs",
           "expected": "f783f18deec3282f65504d775811d5f4d8466af5916f551f5c346c2a3453164a",
-          "actual": "bc75c7dc542e1d0a6275dac0c319799136d68e2f59108d99b39576166ea8edb0"
+          "actual": "42cc04a480bda819dc82ee5b141a4dc6d1dac7c941dd3b801022f50763cc0eba"
         },
         {
           "file": "scripts/preview-platform-commercial-page.mjs",
           "expected": "9f5519a7d479fe7abfa3f1fbd26011c67e246d107a023316f9718bc9a5513c1b",
           "actual": "c4e6c0d52650a58bd4f3e4a5cdebda0de291cf09d96ebd637b8c3f1c81ab53ee"
+        },
+        {
+          "file": "tests/e2e/m06-06-commercial.spec.ts",
+          "expected": "4904d7473ce746b65f6233015121f8e3eab730047fbfb9f46b08af61d6a38982",
+          "actual": "b9fb68bdf65b61fa634b3c6fcd28ffc400e04233f54190f3d4c1a94e12a71e80"
         }
       ],
       "packetImages": 7,
@@ -141,9 +1391,30 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "title": "配额管理 · 读取反馈 r1",
       "scope": "仅读取反馈区域待审；11个选定交付源码摘要不是完整依赖图。首次/保留快照超时区已送审但未批准；429/503手机图底栏边缘不在审核范围。没有真实限流、服务、权限或整页验收。",
       "manifestSha256": "6d44e478d02e2bf55c37db6b84581925cb44e40bf51f4408a9743eb2224fc4bf",
-      "sourceStatus": "source-matched-at-index-build",
+      "sourceStatus": "historical-source-differs",
       "sourceCount": 11,
-      "sourceDifferences": [],
+      "sourceDifferences": [
+        {
+          "file": "apps/web/src/components/CommercialOperationsCenter.vue",
+          "expected": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed",
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/commercial-operations.css",
+          "expected": "d046fd8522d11fb502759783d6d33f65f0a45f22fc08107465451aad0c6ce90b",
+          "actual": "45356a04a3dec231906d2d9b609b1d9d6b34ca83e9b17b247b3139858590d1b4"
+        },
+        {
+          "file": "scripts/lib/platform-commercial-page-preview.mjs",
+          "expected": "bc75c7dc542e1d0a6275dac0c319799136d68e2f59108d99b39576166ea8edb0",
+          "actual": "42cc04a480bda819dc82ee5b141a4dc6d1dac7c941dd3b801022f50763cc0eba"
+        },
+        {
+          "file": "tests/e2e/m06-06-commercial.spec.ts",
+          "expected": "4904d7473ce746b65f6233015121f8e3eab730047fbfb9f46b08af61d6a38982",
+          "actual": "b9fb68bdf65b61fa634b3c6fcd28ffc400e04233f54190f3d4c1a94e12a71e80"
+        }
+      ],
       "packetImages": 10,
       "previews": [
         {
@@ -183,14 +1454,214 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 181,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39"
+        },
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "4290ac0831f3e231323f7f7eb4a5a0ee8f5f14d3d1ff2b4fb19fc213eda990de"
+        },
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+        },
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de"
+        },
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+        },
+        {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
           "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed"
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+        },
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+        },
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+        },
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+        },
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+        },
+        {
+          "file": "apps/web/src/components/LandingRedirect.vue",
+          "expected": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+          "actual": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5"
+        },
+        {
+          "file": "apps/web/src/components/LocalIdentity.vue",
+          "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+        },
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
+        },
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+        },
+        {
+          "file": "apps/web/src/components/OnboardingGuide.vue",
+          "expected": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+          "actual": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentCenter.vue",
+          "expected": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+          "actual": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518"
         },
         {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "c3dba75b134c70ff7bd23a9310395eb9e6f78c73d53a738a061e0071f2c89bf9",
-          "actual": "e6bbae25a2f814f03f83a39c04aa2bd20f3b723911e5348493f12c4d17f99dd5"
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
         },
         {
           "file": "apps/web/src/components/PlatformManagementFilter.vue",
@@ -208,9 +1679,214 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5"
         },
         {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
+          "file": "apps/web/src/components/ProviderAdapterCenter.vue",
+          "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+          "actual": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+        },
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+        },
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+        },
+        {
+          "file": "apps/web/src/components/SelectionJourney.vue",
+          "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
+          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/components/TaskBatchActions.vue",
+          "expected": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+          "actual": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
+        },
+        {
+          "file": "apps/web/src/components/TaskDetailPanel.vue",
+          "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+        },
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+        },
+        {
+          "file": "apps/web/src/components/TenancyChooser.vue",
+          "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+        },
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f"
+        },
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+        },
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09"
+        },
+        {
           "file": "apps/web/src/design/platform-overlay-tokens.css",
           "expected": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
           "actual": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-scoped.css",
+          "expected": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+          "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
+        },
+        {
+          "file": "apps/web/src/organization-admin.css",
+          "expected": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+          "actual": "b0a61a381e4542491d05bbdaeb339cb54fafa18867c74aa64145ddb719769a27"
+        },
+        {
+          "file": "apps/web/src/organization-audit.css",
+          "expected": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+          "actual": "452e12cb503b1da576e76819041e9dd2ab115f8475a45e2378d90a7f0a2c757b"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "tests/e2e/m06-01-organization-admin.spec.ts",
+          "expected": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+          "actual": "641800d676a2cde82cac232a23edcccd24dd8f8c1de707c33bc1fdf7dec5ee6a"
         }
       ],
       "packetImages": 82,
@@ -257,14 +1933,214 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 183,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39"
+        },
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "4290ac0831f3e231323f7f7eb4a5a0ee8f5f14d3d1ff2b4fb19fc213eda990de"
+        },
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+        },
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de"
+        },
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+        },
+        {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
           "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed"
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+        },
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+        },
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+        },
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+        },
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+        },
+        {
+          "file": "apps/web/src/components/LandingRedirect.vue",
+          "expected": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+          "actual": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5"
+        },
+        {
+          "file": "apps/web/src/components/LocalIdentity.vue",
+          "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+        },
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
+        },
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+        },
+        {
+          "file": "apps/web/src/components/OnboardingGuide.vue",
+          "expected": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+          "actual": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+          "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentCenter.vue",
+          "expected": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+          "actual": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518"
         },
         {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "c3dba75b134c70ff7bd23a9310395eb9e6f78c73d53a738a061e0071f2c89bf9",
-          "actual": "e6bbae25a2f814f03f83a39c04aa2bd20f3b723911e5348493f12c4d17f99dd5"
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
         },
         {
           "file": "apps/web/src/components/PlatformManagementFilter.vue",
@@ -282,9 +2158,214 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5"
         },
         {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
+          "file": "apps/web/src/components/ProviderAdapterCenter.vue",
+          "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+          "actual": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+        },
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+        },
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+        },
+        {
+          "file": "apps/web/src/components/SelectionJourney.vue",
+          "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
+          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/components/TaskBatchActions.vue",
+          "expected": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+          "actual": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
+        },
+        {
+          "file": "apps/web/src/components/TaskDetailPanel.vue",
+          "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+        },
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+        },
+        {
+          "file": "apps/web/src/components/TenancyChooser.vue",
+          "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+        },
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f"
+        },
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+        },
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09"
+        },
+        {
           "file": "apps/web/src/design/platform-overlay-tokens.css",
           "expected": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
           "actual": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-scoped.css",
+          "expected": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+          "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
+        },
+        {
+          "file": "apps/web/src/organization-admin.css",
+          "expected": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
+          "actual": "b0a61a381e4542491d05bbdaeb339cb54fafa18867c74aa64145ddb719769a27"
+        },
+        {
+          "file": "apps/web/src/organization-audit.css",
+          "expected": "383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d",
+          "actual": "452e12cb503b1da576e76819041e9dd2ab115f8475a45e2378d90a7f0a2c757b"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "tests/e2e/m06-01-organization-admin.spec.ts",
+          "expected": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+          "actual": "641800d676a2cde82cac232a23edcccd24dd8f8c1de707c33bc1fdf7dec5ee6a"
         }
       ],
       "packetImages": 18,
@@ -316,28 +2397,22 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "page": "P44",
       "title": "可授权账号目录",
       "scope": "已批准范围仅为手机目录区域；其他路由、详情及整页未批准。",
-      "manifestSha256": "85a274049f8557e7773dcd75fe8ef61c1942dcedd48922be2ed08200c6db0470",
-      "sourceStatus": "historical-source-differs",
-      "sourceCount": 40,
-      "sourceDifferences": [
-        {
-          "file": "apps/web/src/design/platform-overlay-tokens.css",
-          "expected": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
-          "actual": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
-        }
-      ],
+      "manifestSha256": "1d4e0046f21d7a0f47ea56e2389201739fd08e609ed6e529e6231ba2e2e93cd7",
+      "sourceStatus": "source-matched-at-index-build",
+      "sourceCount": 51,
+      "sourceDifferences": [],
       "packetImages": 30,
       "previews": [
         {
-          "file": "../../output/playwright/p44-mobile-directory-implementation/current/390-admins-directory.png",
+          "file": "../../output/playwright/p44-mobile-directory-implementation/current-r3/390-admins-directory.png",
           "label": "手机目录区域",
-          "sha256": "c1a8c97eda5808f6aba6cbbf8c18acfabfa3b41b435cf9be1f2d98c806347da6"
+          "sha256": "568fb138413fadb3801c8dec4d29833795c38f530c06ae52b934c782d2abaecd"
         }
       ],
-      "gallery": "../../output/playwright/p44-mobile-directory-implementation/current/index.html",
+      "gallery": "../../output/playwright/p44-mobile-directory-implementation/current-r3/index.html",
       "galleryLabel": "完整实施图册",
       "report": "P44-MOBILE-DIRECTORY-IMPLEMENTATION-REVIEW.md",
-      "evidence": "../../output/playwright/p44-mobile-directory-implementation/current/evidence.json",
+      "evidence": "../../output/playwright/p44-mobile-directory-implementation/current-r3/evidence.json",
       "approval": "not-full-page-acceptance"
     },
     {
@@ -345,14 +2420,84 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "page": "P44",
       "title": "角色比较控件",
       "scope": "已批准范围仅为手机比较控件；角色资料、结果及整页分别核对。",
-      "manifestSha256": "3fe47b0e7a0c02ed71eeba5262003aae8148cd91aa84a207c0ccb1049aa82a4e",
+      "manifestSha256": "b2c0904ddbf99b9468636d6ba115ae6d6505fca3cad24ce5aa6801c36be6f526",
       "sourceStatus": "historical-source-differs",
-      "sourceCount": 40,
+      "sourceCount": 43,
       "sourceDifferences": [
         {
-          "file": "apps/web/src/design/platform-overlay-tokens.css",
-          "expected": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
-          "actual": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "06f42856f4bd044703b7859d8218f2adf52ac3ae6d6ed66e30139f58067ae8b3",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.css",
+          "expected": "c95b3ae486202bc88b1cdedc7af0ac8af98d5ee55d5f8e31110a29d12fbd436a",
+          "actual": "c03dc79fa1c445fe6f7910a1bb0cb5605c01d620e555883de22df076199db7e7"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "0e577c1e35a346166c3fdb071b91baf95bda65c442b788fad91b67481b7efd1f",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenterAdmin.css",
+          "expected": "06c6e12d3c4e78dbe1c13046b7160ebba0ccfab66f01b25d3af647f5d91c80bb",
+          "actual": "5202e29089d051a797d0368131dd8dd8cb7c5f260a7cfed7ca569309f429e036"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenterPermissions.css",
+          "expected": "44bea75ad69cc065fd9c1a3268d808869331152790b34144a78411c1ed915bf7",
+          "actual": "5b356692a72f499de58e95b310840cccff19bbea48a3d501ee30ded0ad778a55"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.css",
+          "expected": "95fa0df51f92f87fabff07e3344a8c1bdbe60152a7f0a8b00be97e235e3590fa",
+          "actual": "46ca0a65a52aafa7fcf07fd6f0c92c158d4cb4875fb1bd954c16071fbf776d9d"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "expected": "6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3",
+          "actual": "fdfa34dd522009c2cdfcb2dc68d992d74ada376d6a05ec1cd89c0b5f39676048"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparisonPermissions.css",
+          "expected": "005ccd18049b2013010cbae378cd2977903c142eb9f55a20509600c2e76acd3e",
+          "actual": "1cdc42829c7583708369a462d00509504aee75180eded5b37006772ec6a4eb93"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "4d3f496112ece29924eafe59dd7f09fb68572542ffa42bda2d0f003d3adbc509",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "2a0a0936d6132cd3fdeb74def417edfd7a038dda43ece9f010b125b62698281b",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "expected": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+          "actual": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71"
         }
       ],
       "packetImages": 16,
@@ -360,12 +2505,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "../../output/playwright/p44-mobile-controls-implementation/current/390-admins-default.png",
           "label": "手机比较控件",
-          "sha256": "b9a93cfcc70cb46a7cbd6feb22f89eb3266673f159976c43b62535fa497feef3"
+          "sha256": "47db124f9ece6d49da770d8b419077beae276e6b90f873f3e66ab77372dd9bba"
         },
         {
           "file": "../../output/playwright/p44-mobile-controls-implementation/current/390-admins-keyboard-focus.png",
           "label": "键盘焦点状态",
-          "sha256": "45743954d9656280b8b8db8ad3db93dd6975ad08d287cdaa4b8209421109e5f1"
+          "sha256": "dea2354861483e7cc3285facdc3a1bb3ce217035439d8675294c62fd05b84805"
         }
       ],
       "gallery": "../../output/playwright/p44-mobile-controls-implementation/current/index.html",
@@ -379,14 +2524,84 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "page": "P44",
       "title": "同角色的两种结果",
       "scope": "仅无差异结果与同角色显示全部区域获批；搜索空态、其他结果及整页未批准。",
-      "manifestSha256": "39c3b74672afb699237ddb80d24c87e4ce6e90ea677ea70ea4f7c21299d4263c",
+      "manifestSha256": "7e8ed2db5f35062a75a6bf99a0374314a63e98627f6e3c6138deb3382710bf61",
       "sourceStatus": "historical-source-differs",
-      "sourceCount": 40,
+      "sourceCount": 43,
       "sourceDifferences": [
         {
-          "file": "apps/web/src/design/platform-overlay-tokens.css",
-          "expected": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
-          "actual": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "06f42856f4bd044703b7859d8218f2adf52ac3ae6d6ed66e30139f58067ae8b3",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.css",
+          "expected": "c95b3ae486202bc88b1cdedc7af0ac8af98d5ee55d5f8e31110a29d12fbd436a",
+          "actual": "c03dc79fa1c445fe6f7910a1bb0cb5605c01d620e555883de22df076199db7e7"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "0e577c1e35a346166c3fdb071b91baf95bda65c442b788fad91b67481b7efd1f",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenterAdmin.css",
+          "expected": "06c6e12d3c4e78dbe1c13046b7160ebba0ccfab66f01b25d3af647f5d91c80bb",
+          "actual": "5202e29089d051a797d0368131dd8dd8cb7c5f260a7cfed7ca569309f429e036"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenterPermissions.css",
+          "expected": "44bea75ad69cc065fd9c1a3268d808869331152790b34144a78411c1ed915bf7",
+          "actual": "5b356692a72f499de58e95b310840cccff19bbea48a3d501ee30ded0ad778a55"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.css",
+          "expected": "95fa0df51f92f87fabff07e3344a8c1bdbe60152a7f0a8b00be97e235e3590fa",
+          "actual": "46ca0a65a52aafa7fcf07fd6f0c92c158d4cb4875fb1bd954c16071fbf776d9d"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "expected": "6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3",
+          "actual": "fdfa34dd522009c2cdfcb2dc68d992d74ada376d6a05ec1cd89c0b5f39676048"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "99466d18329d4315db351e535f52214ae0c14d9d8cec8fc47307d41b4afb487e",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparisonPermissions.css",
+          "expected": "005ccd18049b2013010cbae378cd2977903c142eb9f55a20509600c2e76acd3e",
+          "actual": "1cdc42829c7583708369a462d00509504aee75180eded5b37006772ec6a4eb93"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "87e0b0906fded03d7c5337dafa5e6bfc801a2367d12deb652cc36f0f88d32d9a",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "4d3f496112ece29924eafe59dd7f09fb68572542ffa42bda2d0f003d3adbc509",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "2a0a0936d6132cd3fdeb74def417edfd7a038dda43ece9f010b125b62698281b",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "expected": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
+          "actual": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71"
         }
       ],
       "packetImages": 48,
@@ -394,12 +2609,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "../../output/playwright/p44-mobile-results-implementation/current/390-admins-same-role-empty.png",
           "label": "无差异结果",
-          "sha256": "ea2bc2070392b6d1d297a0b2fe8868c23e49c3e855c86608d6a24064f0e15dd5"
+          "sha256": "dec4dc96f356db0f41ae82911317f0780158bcde5e5b1fa21fceb75ff1c761a6"
         },
         {
           "file": "../../output/playwright/p44-mobile-results-implementation/current/390-admins-same-role-all.png",
           "label": "同角色显示全部",
-          "sha256": "bfb845936e58eb6bfe2ed018515f5c21ecd68edd23b8ece44cb1c88190cea457"
+          "sha256": "5a925f03cf444ffca8f5aa4a4cf2413511a9350ca4111111aba131d3f4818a70"
         }
       ],
       "gallery": "../../output/playwright/p44-mobile-results-implementation/current/index.html",
@@ -418,9 +2633,109 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 40,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.css",
+          "expected": "6078711ecf7dc1b68ca75004f2cbf92750317dfdc2d62c239e52facb562ff666",
+          "actual": "c03dc79fa1c445fe6f7910a1bb0cb5605c01d620e555883de22df076199db7e7"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.css",
+          "expected": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
+          "actual": "46ca0a65a52aafa7fcf07fd6f0c92c158d4cb4875fb1bd954c16071fbf776d9d"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "expected": "6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3",
+          "actual": "fdfa34dd522009c2cdfcb2dc68d992d74ada376d6a05ec1cd89c0b5f39676048"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
           "file": "apps/web/src/design/platform-overlay-tokens.css",
           "expected": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
           "actual": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "apps/web/src/use-platform-organization-actions.ts",
+          "expected": "3f61de65bc5b71d72998d5d184c079c1508d8d89beeffff002a678c6d7dc88eb",
+          "actual": "233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae"
+        },
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
+          "actual": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71"
         }
       ],
       "packetImages": 24,
@@ -447,14 +2762,149 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 173,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39"
+        },
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "4290ac0831f3e231323f7f7eb4a5a0ee8f5f14d3d1ff2b4fb19fc213eda990de"
+        },
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+        },
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de"
+        },
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+        },
+        {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
           "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed"
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+        },
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+        },
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+        },
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+        },
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+        },
+        {
+          "file": "apps/web/src/components/LandingRedirect.vue",
+          "expected": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+          "actual": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5"
+        },
+        {
+          "file": "apps/web/src/components/LocalIdentity.vue",
+          "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+        },
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
+        },
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+        },
+        {
+          "file": "apps/web/src/components/OnboardingGuide.vue",
+          "expected": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+          "actual": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba"
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
         },
         {
           "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
@@ -462,9 +2912,69 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b"
         },
         {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentCenter.vue",
+          "expected": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+          "actual": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518"
+        },
+        {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "c3dba75b134c70ff7bd23a9310395eb9e6f78c73d53a738a061e0071f2c89bf9",
-          "actual": "e6bbae25a2f814f03f83a39c04aa2bd20f3b723911e5348493f12c4d17f99dd5"
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
         },
         {
           "file": "apps/web/src/components/PlatformManagementFilter.vue",
@@ -482,14 +2992,154 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5"
         },
         {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40",
-          "actual": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2"
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+          "actual": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+        },
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+        },
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
         },
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573"
+          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/components/TaskBatchActions.vue",
+          "expected": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+          "actual": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
+        },
+        {
+          "file": "apps/web/src/components/TaskDetailPanel.vue",
+          "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+        },
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+        },
+        {
+          "file": "apps/web/src/components/TenancyChooser.vue",
+          "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+        },
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f"
+        },
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+        },
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09"
+        },
+        {
+          "file": "apps/web/src/credential-assets.css",
+          "expected": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
+          "actual": "67cab81d2eb2dbdf26ce12b346ac716ec55a898a4acb2a06214dc10e5989ea54"
         },
         {
           "file": "apps/web/src/design/platform-overlay-tokens.css",
@@ -500,6 +3150,61 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "file": "apps/web/src/design/provider-adapter-tokens.css",
           "expected": "c6ff4f890f97866b8e8faca8bee234532534ecb014e2acf5ba61567da24600a6",
           "actual": "ec274e4382f9b741d26d79f5cc8d5dd5b1602967000cb227320fca0e018fe214"
+        },
+        {
+          "file": "apps/web/src/design/provider-registry-tokens.css",
+          "expected": "d9dea3c996e5f5426766ebed1eb2b0a7956585036d09131af5dadb7bb7aa36fc",
+          "actual": "8be200080d45599729d9efe59cbfc62cd619bd89ab03bc17e7ec7477cba64255"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-scoped.css",
+          "expected": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+          "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "tests/e2e/m03-01-provider-registry.spec.ts",
+          "expected": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f",
+          "actual": "72915fae648b4c45fd6017de436d33d0032be5abff8d473713788cc314730f88"
         }
       ],
       "packetImages": 132,
@@ -536,9 +3241,69 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 53,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40",
-          "actual": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2"
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/credential-assets.css",
+          "expected": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
+          "actual": "67cab81d2eb2dbdf26ce12b346ac716ec55a898a4acb2a06214dc10e5989ea54"
         },
         {
           "file": "apps/web/src/design/platform-overlay-tokens.css",
@@ -549,6 +3314,51 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "file": "apps/web/src/design/provider-adapter-tokens.css",
           "expected": "c6ff4f890f97866b8e8faca8bee234532534ecb014e2acf5ba61567da24600a6",
           "actual": "ec274e4382f9b741d26d79f5cc8d5dd5b1602967000cb227320fca0e018fe214"
+        },
+        {
+          "file": "apps/web/src/design/provider-registry-tokens.css",
+          "expected": "d9dea3c996e5f5426766ebed1eb2b0a7956585036d09131af5dadb7bb7aa36fc",
+          "actual": "8be200080d45599729d9efe59cbfc62cd619bd89ab03bc17e7ec7477cba64255"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "tests/e2e/m03-01-provider-registry.spec.ts",
+          "expected": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f",
+          "actual": "72915fae648b4c45fd6017de436d33d0032be5abff8d473713788cc314730f88"
         }
       ],
       "packetImages": 40,
@@ -580,14 +3390,149 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 174,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39"
+        },
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "4290ac0831f3e231323f7f7eb4a5a0ee8f5f14d3d1ff2b4fb19fc213eda990de"
+        },
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+        },
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de"
+        },
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+        },
+        {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
           "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed"
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+        },
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+        },
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+        },
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+        },
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+        },
+        {
+          "file": "apps/web/src/components/LandingRedirect.vue",
+          "expected": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+          "actual": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5"
+        },
+        {
+          "file": "apps/web/src/components/LocalIdentity.vue",
+          "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+        },
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
+        },
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+        },
+        {
+          "file": "apps/web/src/components/OnboardingGuide.vue",
+          "expected": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+          "actual": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba"
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
         },
         {
           "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
@@ -595,9 +3540,69 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b"
         },
         {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentCenter.vue",
+          "expected": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+          "actual": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518"
+        },
+        {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "c3dba75b134c70ff7bd23a9310395eb9e6f78c73d53a738a061e0071f2c89bf9",
-          "actual": "e6bbae25a2f814f03f83a39c04aa2bd20f3b723911e5348493f12c4d17f99dd5"
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
         },
         {
           "file": "apps/web/src/components/PlatformManagementFilter.vue",
@@ -615,14 +3620,154 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5"
         },
         {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40",
-          "actual": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2"
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+          "actual": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+        },
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+        },
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
         },
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573"
+          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/components/TaskBatchActions.vue",
+          "expected": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+          "actual": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
+        },
+        {
+          "file": "apps/web/src/components/TaskDetailPanel.vue",
+          "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+        },
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+        },
+        {
+          "file": "apps/web/src/components/TenancyChooser.vue",
+          "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+        },
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f"
+        },
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+        },
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09"
+        },
+        {
+          "file": "apps/web/src/credential-assets.css",
+          "expected": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
+          "actual": "67cab81d2eb2dbdf26ce12b346ac716ec55a898a4acb2a06214dc10e5989ea54"
         },
         {
           "file": "apps/web/src/design/platform-overlay-tokens.css",
@@ -633,6 +3778,66 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "file": "apps/web/src/design/provider-adapter-tokens.css",
           "expected": "c6ff4f890f97866b8e8faca8bee234532534ecb014e2acf5ba61567da24600a6",
           "actual": "ec274e4382f9b741d26d79f5cc8d5dd5b1602967000cb227320fca0e018fe214"
+        },
+        {
+          "file": "apps/web/src/design/provider-registry-tokens.css",
+          "expected": "d9dea3c996e5f5426766ebed1eb2b0a7956585036d09131af5dadb7bb7aa36fc",
+          "actual": "8be200080d45599729d9efe59cbfc62cd619bd89ab03bc17e7ec7477cba64255"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-scoped.css",
+          "expected": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+          "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "config/route-catalog.json",
+          "expected": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150",
+          "actual": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b"
+        },
+        {
+          "file": "tests/e2e/m03-03-provider-adapter.spec.ts",
+          "expected": "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
+          "actual": "5382d8b68c3bf4e313daed5339c5f78c255570fa0df7d154ce8d7eb6a3dfd91f"
         }
       ],
       "packetImages": 20,
@@ -664,14 +3869,149 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "sourceCount": 179,
       "sourceDifferences": [
         {
+          "file": "apps/web/src/components/AccountShell.vue",
+          "expected": "3f43e0524e6410038258c0c4b9c528aebff9f295917cc1ca6e823ca4221815d1",
+          "actual": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39"
+        },
+        {
+          "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
+          "expected": "4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f",
+          "actual": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da"
+        },
+        {
+          "file": "apps/web/src/components/ApiCoverageDashboard.vue",
+          "expected": "dfa6e82e10a8410c3ad761bf8d0f9c56bb018a29c3f9ba935a67014c16d1a126",
+          "actual": "4290ac0831f3e231323f7f7eb4a5a0ee8f5f14d3d1ff2b4fb19fc213eda990de"
+        },
+        {
+          "file": "apps/web/src/components/ApprovalWorkspace.vue",
+          "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
+          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+        },
+        {
+          "file": "apps/web/src/components/AutomationRuleCenter.vue",
+          "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
+          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+        },
+        {
+          "file": "apps/web/src/components/BackupRecoveryCenter.vue",
+          "expected": "6da8b11e02114158f6189148d4edfb824179446794e4d20b798e5356a030cd02",
+          "actual": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de"
+        },
+        {
+          "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+          "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
+          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+        },
+        {
+          "file": "apps/web/src/components/CollectionOperationsConsole.vue",
+          "expected": "7acded3c40ce98f08e87955cd161bba67874aca496d1768b34505bb35b527d7d",
+          "actual": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+          "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
+          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+        },
+        {
+          "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
+          "expected": "f0420048e7dcdc8f0106f7c10644aee298c4b8204c9cbd378dfe2034a79f9335",
+          "actual": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f"
+        },
+        {
+          "file": "apps/web/src/components/CollectionTaskCenter.vue",
+          "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
+          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+        },
+        {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
           "expected": "4588f387404e14d4ab62ee30b1160d6f38e7978fcc4701a877700ca307be0e33",
-          "actual": "999f556ad6e719bbaed086c31bafb63a6a2e36d1cce674d29d4ab9f7f57cd5ed"
+          "actual": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec"
+        },
+        {
+          "file": "apps/web/src/components/CompetitorMonitor.vue",
+          "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
+          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+        },
+        {
+          "file": "apps/web/src/components/CostRuleConsole.vue",
+          "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
+          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+        },
+        {
+          "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
+          "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
+          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+        },
+        {
+          "file": "apps/web/src/components/CredentialAssetCenter.vue",
+          "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
+          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+        },
+        {
+          "file": "apps/web/src/components/DiscoveryOverlay.vue",
+          "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
+          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+        },
+        {
+          "file": "apps/web/src/components/FileResilienceCenter.vue",
+          "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
+          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+        },
+        {
+          "file": "apps/web/src/components/HomeDashboard.vue",
+          "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
+          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+        },
+        {
+          "file": "apps/web/src/components/LandingRedirect.vue",
+          "expected": "497fd10a8365b54d63692b1fd18100a1bd6f92efe7801000bd02ae2fab181ae7",
+          "actual": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5"
+        },
+        {
+          "file": "apps/web/src/components/LocalIdentity.vue",
+          "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
+          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+        },
+        {
+          "file": "apps/web/src/components/MySqlResilienceCenter.vue",
+          "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
+          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+        },
+        {
+          "file": "apps/web/src/components/NavigationShell.vue",
+          "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
+          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+        },
+        {
+          "file": "apps/web/src/components/NotFoundPage.vue",
+          "expected": "2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b",
+          "actual": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d"
+        },
+        {
+          "file": "apps/web/src/components/NotificationCenter.vue",
+          "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
+          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+        },
+        {
+          "file": "apps/web/src/components/OnboardingGuide.vue",
+          "expected": "c3b7efcfc47f00d5053e14c523a92825fec5dca9ad714252eb3228cf31aa2088",
+          "actual": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed"
+        },
+        {
+          "file": "apps/web/src/components/OpenPlatformCenter.vue",
+          "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
+          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspace.vue",
+          "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
+          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba"
+          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
         },
         {
           "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
@@ -679,9 +4019,69 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b"
         },
         {
+          "file": "apps/web/src/components/OrganizationAuditPanel.vue",
+          "expected": "34b990c4ba86043b098d41dd295f48504177ace16c0ae63693e2b3ffe420ff79",
+          "actual": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationCreationWizard.vue",
+          "expected": "6e0cefda653491671b244267a3c7a0538fc411ebcfc50ddac8556cf12180b8b0",
+          "actual": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationDataPanel.vue",
+          "expected": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
+          "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTokenPanel.vue",
+          "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
+          "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/PersonalCenter.vue",
+          "expected": "f8df150ce461de6f561db20664658fe9c5801e38a3f88b877fa54c66cfcef043",
+          "actual": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountCenter.vue",
+          "expected": "b6b04ced8763f8b5f8231dc19c2b7e6617024af2870f82defa6ba25afb042f00",
+          "actual": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
+          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+        },
+        {
+          "file": "apps/web/src/components/PlatformContentCenter.vue",
+          "expected": "577c6f761c9044e1c92e0a0d4f2e5092f94fb647aab8fc29093adc8cb6072ccc",
+          "actual": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDashboard.vue",
+          "expected": "b9b433afb9d39cf77aaf7dde1f153a5b689c19734ba32c022831b9587313e498",
+          "actual": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e"
+        },
+        {
+          "file": "apps/web/src/components/PlatformDataCenter.vue",
+          "expected": "cea9e38609e58f56c93bdbf1311c035f176640b5fc1829709c5f1acedb69ba61",
+          "actual": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08"
+        },
+        {
+          "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
+          "expected": "aaf41ff99d80d1e7055adf23c3abc3db7e256e54c06e54301735747db2e6a048",
+          "actual": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+        },
+        {
+          "file": "apps/web/src/components/PlatformLogCenter.vue",
+          "expected": "4929b467cd1c7922db86e0f191fb922b2dacdbc271aec9b6b4cde3c2842c8e4d",
+          "actual": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518"
+        },
+        {
           "file": "apps/web/src/components/PlatformManagementCenter.vue",
           "expected": "c3dba75b134c70ff7bd23a9310395eb9e6f78c73d53a738a061e0071f2c89bf9",
-          "actual": "e6bbae25a2f814f03f83a39c04aa2bd20f3b723911e5348493f12c4d17f99dd5"
+          "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
         },
         {
           "file": "apps/web/src/components/PlatformManagementFilter.vue",
@@ -699,19 +4099,214 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5"
         },
         {
+          "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+          "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
+          "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
+        },
+        {
+          "file": "apps/web/src/components/PlatformOrganizationRecords.vue",
+          "expected": "c818ebc93a17bccc072beb0f6d61c94584435e6bc3a4672a85616cc428794e82",
+          "actual": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
+        },
+        {
+          "file": "apps/web/src/components/PlatformRoleComparison.vue",
+          "expected": "53ea620ad7ef16c2e451d83e0be2a141a060a3668c50eb36c852bcabd9125809",
+          "actual": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309"
+        },
+        {
+          "file": "apps/web/src/components/PlatformUserDetailDialog.vue",
+          "expected": "27a70088acf71a873b9617c658fc4fbef2399b28b2d52b1354337b2a48040b24",
+          "actual": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b"
+        },
+        {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "51c0ba1f86fa1179fcb0d25b9cb327ef8a38f34b0cef53d5a916f0ef2f92a2ee",
-          "actual": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2"
+          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+        },
+        {
+          "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
+          "expected": "409cdda0a6bb75ec297de154713d731671a5dfc4c707d7d04695d139c2881334",
+          "actual": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
+          "expected": "4f78cca0615cf7ee6eaeff12d0d508ecb5e457eac6600e87ea89c2911fd549b0",
+          "actual": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6"
+        },
+        {
+          "file": "apps/web/src/components/ProviderParserSampleReview.vue",
+          "expected": "f320cb377f542762b993e7462177fe86aca5adc7d8c4e5d0ec4a2831cc66309a",
+          "actual": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRegistry.vue",
+          "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
+          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+        },
+        {
+          "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
+          "expected": "a00c9a5067e5756da93c4ea7b88d6a42cca963202eda533ab3ce96d16c5856a6",
+          "actual": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceCenter.vue",
+          "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
+          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+        },
+        {
+          "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+          "expected": "0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01",
+          "actual": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f"
+        },
+        {
+          "file": "apps/web/src/components/RedisResilienceCenter.vue",
+          "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
+          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+        },
+        {
+          "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
+          "expected": "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
+          "actual": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+        },
+        {
+          "file": "apps/web/src/components/ReportCenter.vue",
+          "expected": "e1ba01b8d56ca2fa35c48c15e52b18fd26188e23d5483f302c23bb9d1736c092",
+          "actual": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+        },
+        {
+          "file": "apps/web/src/components/ResponsiveDataView.vue",
+          "expected": "8669cbd3ecba514b449a3f4ec992e7b17fe45335cb6d2f40a1eae7032affdccf",
+          "actual": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7"
+        },
+        {
+          "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
+          "expected": "457ff21b3b62967c1cf4b0d19c4eab3aa83d9d1308a9cf9b6b7ef2dfab2a4f79",
+          "actual": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+        },
+        {
+          "file": "apps/web/src/components/ScoreRuleConsole.vue",
+          "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
+          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+        },
+        {
+          "file": "apps/web/src/components/SecurityOperationsCenter.vue",
+          "expected": "1674fd35baca05708781a57093690b77511b7439cfad621c122db5f82bf472f3",
+          "actual": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
         },
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573"
+          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspace.vue",
+          "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
+          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+        },
+        {
+          "file": "apps/web/src/components/TableViewControls.vue",
+          "expected": "d0611b8367773f915a885c6c09f34c958fed67e7b99110abec20bb0febeea9ff",
+          "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
+        },
+        {
+          "file": "apps/web/src/components/TaskBatchActions.vue",
+          "expected": "7511df92c2a324a561c8dd1fdc7a5de1434b2b40438600ed757c6e057f68811d",
+          "actual": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
+        },
+        {
+          "file": "apps/web/src/components/TaskDetailPanel.vue",
+          "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
+          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+        },
+        {
+          "file": "apps/web/src/components/TaskWorkspace.vue",
+          "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
+          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+        },
+        {
+          "file": "apps/web/src/components/TenancyChooser.vue",
+          "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
+          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+        },
+        {
+          "file": "apps/web/src/components/ThemeStudio.vue",
+          "expected": "1df8d4d0892ce3ec652ac8f8eb2c2687cb0848a8723869a26bf94b6e9fd3c5cc",
+          "actual": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f"
+        },
+        {
+          "file": "apps/web/src/components/TrendDashboard.vue",
+          "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+        },
+        {
+          "file": "apps/web/src/components/UiStateShowcase.vue",
+          "expected": "c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30",
+          "actual": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09"
+        },
+        {
+          "file": "apps/web/src/credential-assets.css",
+          "expected": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
+          "actual": "67cab81d2eb2dbdf26ce12b346ac716ec55a898a4acb2a06214dc10e5989ea54"
         },
         {
           "file": "apps/web/src/design/platform-overlay-tokens.css",
           "expected": "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b",
           "actual": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
+        },
+        {
+          "file": "apps/web/src/design/provider-registry-tokens.css",
+          "expected": "d9dea3c996e5f5426766ebed1eb2b0a7956585036d09131af5dadb7bb7aa36fc",
+          "actual": "8be200080d45599729d9efe59cbfc62cd619bd89ab03bc17e7ec7477cba64255"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-route-state.ts",
+          "expected": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
+          "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
+        },
+        {
+          "file": "apps/web/src/navigation-shell-scoped.css",
+          "expected": "71759d3ac790218d9a8627a1cbfcb3596071fbd116b1a0f843750a8aafc1c76f",
+          "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
+        },
+        {
+          "file": "apps/web/src/route-catalog.generated.json",
+          "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
+          "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
+          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+        },
+        {
+          "file": "apps/web/src/styles/onboarding-navigation.css",
+          "expected": "0b19e713464bb7c4d0ea8348fb09b5bf83a19302d9b82cbcf2f42d17a97ea114",
+          "actual": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26"
+        },
+        {
+          "file": "apps/web/src/styles/platform-dashboard.css",
+          "expected": "3fd3273ef919cbad4ba8b319f44523d634ff0203750e71582100a62d9592ecbf",
+          "actual": "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
+          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+        },
+        {
+          "file": "tests/e2e/m03-03-provider-adapter.spec.ts",
+          "expected": "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
+          "actual": "5382d8b68c3bf4e313daed5339c5f78c255570fa0df7d154ce8d7eb6a3dfd91f"
         }
       ],
       "packetImages": 96,

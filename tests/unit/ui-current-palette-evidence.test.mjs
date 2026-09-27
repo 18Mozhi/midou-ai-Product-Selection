@@ -7,7 +7,7 @@ import { p47HistoricalSource } from "../../scripts/lib/ui-phase2-adapter-histori
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 for (const [folder, kind, checks, images, palette] of [
   [
-    "p44-mobile-directory-implementation/current",
+    "p44-mobile-directory-implementation/current-r3",
     "P44-MOBILE-DIRECTORY-IMPLEMENTATION",
     134,
     30,

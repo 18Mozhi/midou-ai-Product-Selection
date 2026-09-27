@@ -109,7 +109,7 @@ export const recentReviewMaterials = [
     "p44-directory",
     "P44",
     "可授权账号目录",
-    "p44-mobile-directory-implementation/current",
+    "p44-mobile-directory-implementation/current-r3",
     "P44-MOBILE-DIRECTORY-IMPLEMENTATION-REVIEW",
     "已批准范围仅为手机目录区域；其他路由、详情及整页未批准。",
     [["390-admins-directory.png", "手机目录区域"]],
