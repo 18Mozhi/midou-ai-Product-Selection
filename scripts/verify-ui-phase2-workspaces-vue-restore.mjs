@@ -332,7 +332,7 @@ try {
         {
           kind: "P32-approved-restore-Vue-r1",
           boundary:
-            "Actual Vue; isolated API fixtures only,not production/audit acceptance. Approved mobile composition,desktop and remaining states pending review. Other shared callers retain existing behavior.",
+            "Actual Vue; isolated API fixtures only,not production/audit acceptance. User approved P32 desktop,mobile,and remaining visual states. Other shared callers retain existing behavior.",
           sourceHashes,
           checks,
           screenshots,

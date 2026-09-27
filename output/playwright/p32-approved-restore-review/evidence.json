@@ -1,9 +1,9 @@
 {
   "kind": "P32-approved-restore-Vue-r1",
-  "boundary": "Actual Vue; isolated API fixtures only,not production/audit acceptance. Approved mobile composition,desktop and remaining states pending review. Other shared callers retain existing behavior.",
+  "boundary": "Actual Vue; isolated API fixtures only,not production/audit acceptance. User approved P32 desktop,mobile,and remaining visual states. Other shared callers retain existing behavior.",
   "sourceHashes": {
     "tests/e2e/m06-01-organization-admin.spec.ts": "641800d676a2cde82cac232a23edcccd24dd8f8c1de707c33bc1fdf7dec5ee6a",
-    "scripts/verify-ui-phase2-workspaces-vue-restore.mjs": "b6dcb6cb97023f9ff667522776792c0cc39b733d09590ef97d6c3523ebcd64cb",
+    "scripts/verify-ui-phase2-workspaces-vue-restore.mjs": "2597f4deae525590a7408afd900ea502a8c52e7579d9f675bcb008127bdffd9b",
     "scripts/lib/ui-phase2-workspaces-design-data.mjs": "638b24c0fd3c9daaace7bb8ca624a967f863277532c93a1b56c5577688de2123",
     "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
     "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
@@ -12,8 +12,8 @@
     "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
     "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
     "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
-    "apps/web/src/organization-admin.css": "8442ac6897985cce39ecda8a2a7ae9e0c0a04efe9706a1e944be68337cda67ba",
-    "apps/web/src/styles.css": "4d3f496112ece29924eafe59dd7f09fb68572542ffa42bda2d0f003d3adbc509",
+    "apps/web/src/organization-admin.css": "b0a61a381e4542491d05bbdaeb339cb54fafa18867c74aa64145ddb719769a27",
+    "apps/web/src/styles.css": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364",
     "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
     "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
     "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
@@ -416,19 +416,19 @@
       "file": "1440-restore-cloud-white.png",
       "width": 1440,
       "scene": "restore-cloud-white",
-      "sha256": "61ad0bad0d806dd2b54608afc3b24f1bf3c584467167abf5da997ab044ec3f9b"
+      "sha256": "955b7cf6849f16663dff349baa60fdc655f91a1bc76344c8d929ca04ff7adfc4"
     },
     {
       "file": "1440-restore-short.png",
       "width": 1440,
       "scene": "restore-short",
-      "sha256": "e745933b291e6ca8ab7747e44785d9c0d91134df0b5b9d4f5c12cdc7a51b0158"
+      "sha256": "2f9a64fdcf6f1d78a4705cad6d5b7dd06edd1baa54461e601980911609204fe0"
     },
     {
       "file": "1440-restore-keyboard.png",
       "width": 1440,
       "scene": "restore-keyboard",
-      "sha256": "8130a0518b4ece631056a5fede790c92f79d09885565c84d0306001d6640a02a"
+      "sha256": "29610f5f1fdb68d290be54562e6cc3b48141da5faff9e2b4211c7ef0ba57d04c"
     },
     {
       "file": "1440-restore-pending.png",
@@ -446,7 +446,7 @@
       "file": "1440-restore-success.png",
       "width": 1440,
       "scene": "restore-success",
-      "sha256": "b19b09995442b38f2d797942dac8491a78067805058637e2adbf214118453b74"
+      "sha256": "29aad0b1a5aaf50bd69e35be3217cea93c8658794a5a9441ddbd2cc6fa3b6a8d"
     },
     {
       "file": "1440-archive-unchanged.png",
@@ -482,13 +482,13 @@
       "file": "390-restore-short.png",
       "width": 390,
       "scene": "restore-short",
-      "sha256": "42f0368af1be06d6619507e35e2431fdb8c70e282f6836f46fb52f659458ffad"
+      "sha256": "02d2a09b28d36b29ab5e929852bc3a7abd6edec050cfcb1bf6ed114d392a118a"
     },
     {
       "file": "390-restore-keyboard.png",
       "width": 390,
       "scene": "restore-keyboard",
-      "sha256": "b66b30837e6d95dc567481534a9c2ce70f19ce98309c7d1baf30b722a79a4bd1"
+      "sha256": "056c634bd21b68be3e94310fe3e2781067c484a65d8e7a6ee455bfd371039d0b"
     },
     {
       "file": "390-restore-pending.png",

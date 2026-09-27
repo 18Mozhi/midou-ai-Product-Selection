@@ -258,6 +258,7 @@ function frontendHarness(preview, lossAfterCommit) {
     requestId: ref(""),
     notice: ref(""),
     noticeKind: ref("info"),
+    createPlanFeedback: ref(""),
     page: ref(1),
     adjustmentPage: ref(1),
     organizationId: ref(""),
