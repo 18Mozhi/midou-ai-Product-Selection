@@ -1554,6 +1554,26 @@ test("administrator write failures stay inside their active dialogs", async ({ p
   await page.goto("/platform-admin/admins");
   await page.getByRole("button", { name: "新建管理员" }).click();
   const createDialog = page.getByRole("dialog", { name: "新建用户或平台管理员" });
+  const createRail = createDialog.locator(".p44-admin-create-rail");
+  const createForm = createDialog.locator(".p44-admin-create-form");
+  await expect(createRail).toContainText("新建平台管理员");
+  await expect(createDialog.locator(".p44-admin-create-layout")).toHaveCSS("display", "grid");
+  const railBox = await createRail.boundingBox();
+  const formBox = await createForm.boundingBox();
+  expect(railBox).not.toBeNull();
+  expect(formBox).not.toBeNull();
+  if ((page.viewportSize()?.width ?? 0) <= 760) {
+    expect(formBox!.y).toBeGreaterThanOrEqual(railBox!.y + railBox!.height);
+  } else {
+    expect(formBox!.x).toBeGreaterThanOrEqual(railBox!.x + railBox!.width);
+  }
+  await expect(
+    createDialog.getByText("从管理员页打开时默认运营管理员；选择普通用户则不授予平台角色。"),
+  ).toBeVisible();
+  await expect(createDialog.getByLabel("平台角色")).toHaveAttribute(
+    "aria-describedby",
+    "p44-platform-role-help",
+  );
   await expect(createDialog.getByLabel("临时密码", { exact: true })).toHaveAttribute(
     "maxlength",
     "128",
