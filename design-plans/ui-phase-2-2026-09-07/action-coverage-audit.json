@@ -196,11 +196,11 @@
     "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
     "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
     "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
-    "apps/web/src/components/TrendDashboard.vue": "78a03c587faa5a3449d330e051d70785fbd4b997d109b6f39315e2e4ad4d7afb",
+    "apps/web/src/components/TrendDashboard.vue": "2acf7409ff761e9918bb6421a2295ec6ff5d4a82e7c97c7b72126a3f5f30b1e1",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
-    "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+    "apps/web/src/components/TrendRuleDialog.vue": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
     "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
     "apps/web/src/components/use-platform-content-list.ts": "ff5e74901f493bfcdd9d2022e9f400382038cda38e63f2f75284b9a6d1837535",
@@ -221,6 +221,7 @@
     "apps/web/src/credential-write-coordinator.ts": "234cc7ee8555089ed82462b2c7951c26081b2ecb7cc070e192535cae33486786",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
     "apps/web/src/main.ts": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+    "apps/web/src/modal-dialog-keyboard.ts": "bb7e46c424647905c2efd7fabb5f15c3c9a62eb8b14b8ef556020b4cb31ca746",
     "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
     "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
     "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
@@ -271,7 +272,7 @@
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "af93117972cab0cd3a69985cda8e8b487a7eac7c94f45e6cfd6972e556c04b70",
     "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "34d9faf49a0d92979430bb29a2dea5d28c1ffec5e380d3146a92deff9b11c3cc",
-    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "f2e418dcb3e830666eb0d08956b4847ac6764c1ae1e654dcedba631c76a67877",
+    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "2071aad5507a4082c91811747bfdae9182aa365e6304e692d6f6c486fac00cb3",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "a9b294e2f83d2f8283901af7ca9fc067eb3e111ce36fa7fe0cf5cd0233cc329d",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
@@ -409,10 +410,10 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "e8dca5101872cc85e3ed62f6e06897c71de8a2e8f20337884843ea0b882d4b84",
     "scripts/lib/ui-phase2-work-design-data.mjs": "5a15eb532e64f186f5be90c2a036cbb55e37a2be897489ec971ce981040ece34",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "9226fb9763145219ffa0c21809f3a0479bd9d8ed16dd6c4f2aa7184db4f97c3c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "94689f169f7cd9249c6a7f15b2164dc1a4decedf502da9dd95c505dc9a382418",
     "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
     "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
-    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "0e3a0b7a52d9ca3786d4dc1e845ef5e383e39e51034c3e24a2a25db27c0e041e",
+    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "9cfe95c9b06ae2e278e97fcfa6fc4aa4b0bf262b51fd75a29f3cb71b4029c88f",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "9816a223c16d16d621b50ddbe00ec01e1ac26cb9947bba7657537df508684d98",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
@@ -576,7 +577,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "1b73dc9bf3ae8ede7d3b94faba9d6b480d2265437f4f9b9b4fdc12f9c39343c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "682add91925a79ee3dd98493cc141bed7d98c29b52c5c77c0de9d1ef985fe98f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "7fbacb6b0b1e2a3cf5d33dda101e9941f5e86c8c94d39fe950f61d30f05117ce",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "c16f44f8cb1459a513f6052ae760f7f3998b05a727db201d59c5593f8172f658",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "00a6481069f754f1bd70e76dbf5770fccbe1fd437d6e6648ae4dbb71843d5132",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "1477d73750991d2c8834f3648215871ce1348a3704e65a38120966d5e6f48fa0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "b4d5fab5992f1fe9473a23b0b955051492a0da7a1e7ede4d8330777b99902526",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "3883e11aba472a573a05f1518208579fb691e080ef6700a69404121f74884605",
@@ -645,12 +646,12 @@
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1704,
+    "currentSourceCandidates": 1706,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 623,
-    "oldOnlyIdentities": 396,
+    "newSourceIdentities": 632,
+    "oldOnlyIdentities": 403,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1544,
+    "explicitlyGroupedSourceSites": 1546,
     "semanticGroups": 1271,
     "routeActions": 1049,
     "wiringGroups": 118,
@@ -1214,12 +1215,12 @@
       "id": "P14",
       "path": "/trends",
       "title": "热点趋势",
-      "oldStaticAssociatedCandidates": 98,
+      "oldStaticAssociatedCandidates": 91,
       "review": {
         "pageId": "P14",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 66,
+        "sourceSites": 68,
         "semanticGroups": 51,
         "routeActions": 42,
         "wiringGroups": 9,
@@ -1236,9 +1237,9 @@
           "callerFiles": 6,
           "localModelBindings": 18,
           "reviewedInputBindings": 18,
-          "sourceCallerContainers": 11,
-          "callerContainers": 11,
-          "consumerVariants": 17,
+          "sourceCallerContainers": 13,
+          "callerContainers": 13,
+          "consumerVariants": 19,
           "runtimeAcceptance": "unproven"
         }
       },
@@ -4159,7 +4160,7 @@
       "pageId": "P14",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 66,
+      "sourceSites": 68,
       "semanticGroups": 51,
       "routeActions": 42,
       "wiringGroups": 9,
@@ -4176,9 +4177,9 @@
         "callerFiles": 6,
         "localModelBindings": 18,
         "reviewedInputBindings": 18,
-        "sourceCallerContainers": 11,
-        "callerContainers": 11,
-        "consumerVariants": 17,
+        "sourceCallerContainers": 13,
+        "callerContainers": 13,
+        "consumerVariants": 19,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -66773,7 +66774,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 74,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -66800,7 +66801,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 75,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -66827,7 +66828,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 76,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -66854,7 +66855,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 77,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -66890,7 +66891,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 78,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -66926,7 +66927,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 79,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -66966,7 +66967,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 80,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -67006,7 +67007,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 81,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -67046,7 +67047,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 82,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -67061,7 +67062,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e8d58f837015480a.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 494,
+      "line": 491,
       "kind": "control",
       "label": "{{ enabledRules.length ? \"创建趋势监控\" : \"创建第一条监控规则\" }}",
       "conditions": [
@@ -67093,7 +67094,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5abb2c07be024e83.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 502,
+      "line": 499,
       "kind": "control",
       "label": "{{ busy === \"/provider-sources/refresh\" ? \"正在启动…\" : \"立即刷新来源\" }}",
       "conditions": [],
@@ -67120,7 +67121,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#2bfafa5dccf5b5ae.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 505,
+      "line": 502,
       "kind": "control",
       "label": "管理监控规则",
       "conditions": [],
@@ -67147,7 +67148,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#c0646bdf3263a017.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 508,
+      "line": 505,
       "kind": "control",
       "label": "趋势主题",
       "conditions": [],
@@ -67174,7 +67175,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#aef07f12388401cc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 510,
+      "line": 507,
       "kind": "control",
       "label": "监控规则 {{ rules.length }}",
       "conditions": [],
@@ -67201,7 +67202,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#83125cc8b9f30181.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 512,
+      "line": 509,
       "kind": "control",
       "label": "合并与拆分 {{ changeRequests.filter((item) => item.status === \"pending\").length }}",
       "conditions": [
@@ -67233,7 +67234,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 524,
+      "line": 521,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67265,7 +67266,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 534,
+      "line": 531,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67301,7 +67302,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 549,
+      "line": 546,
       "kind": "control",
       "label": "{{ topic.title }} {{ topic.market }} · {{ topic.category || \"未分类\" }} · {{ statusLabel(topic.status) }} {{ topic.source_c",
       "conditions": [
@@ -67341,7 +67342,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 575,
+      "line": 572,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -67377,7 +67378,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 577,
+      "line": 574,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -67413,7 +67414,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 582,
+      "line": 579,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67453,7 +67454,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 597,
+      "line": 594,
       "kind": "control",
       "label": "帮助：热点趋势怎么看",
       "conditions": [
@@ -67485,7 +67486,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 622,
+      "line": 619,
       "kind": "control",
       "label": "＋ 创建规则",
       "conditions": [
@@ -67521,7 +67522,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 624,
+      "line": 621,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67557,7 +67558,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 634,
+      "line": 631,
       "kind": "control",
       "label": "创建监控规则",
       "conditions": [
@@ -67597,7 +67598,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 682,
+      "line": 679,
       "kind": "control",
       "label": "{{ item.status === \"enabled\" ? \"暂停\" : \"启用\" }}",
       "conditions": [
@@ -67637,7 +67638,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 685,
+      "line": 682,
       "kind": "control",
       "label": "查看趋势结果",
       "conditions": [
@@ -67673,7 +67674,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 688,
+      "line": 685,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67703,58 +67704,34 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#1c84e99801374a43.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 697,
+      "line": 694,
       "kind": "event-binding",
       "label": "",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showRule && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
+      "conditions": [],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
           "line": 42,
           "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RULE-CALLER",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 697,
-      "kind": "dialog-component-call",
-      "label": "",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showRule && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
+        },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 90,
+          "line": 76,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 97,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 100,
           "jsonPointer": null
         }
       ],
@@ -67767,26 +67744,59 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#e2a4499152c0f457.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 703,
-      "kind": "dialog-definition",
-      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"quality",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "anomalyEvidence && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
+      "line": 694,
+      "kind": "dialog-component-call",
+      "label": "",
+      "conditions": [],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 91,
+          "line": 43,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 77,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-CALLER",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#70140152f0bfc00c.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 700,
+      "kind": "dialog-definition",
+      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 47,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 98,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 101,
           "jsonPointer": null
         }
       ],
@@ -67799,26 +67809,54 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#470531a4d9d0cddb.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 710,
-      "kind": "form-event",
-      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"quality",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "anomalyEvidence && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
+      "line": 700,
+      "kind": "event-binding",
+      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
+      "conditions": [],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 43,
+          "line": 48,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 99,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 102,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#c6ce42d1e09856fa.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 707,
+      "kind": "form-event",
+      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 44,
           "jsonPointer": null
         }
       ],
@@ -67831,54 +67869,15 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#7d73f8399a9950b5.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#b5cb028d61878491.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 716,
+      "line": 713,
       "kind": "control",
       "label": "关闭异常报告",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "anomalyEvidence && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
+      "conditions": [],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 44,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-ANOMALY-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 736,
-      "kind": "control",
-      "label": "取消",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "anomalyEvidence && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
@@ -67895,17 +67894,37 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#79e6f49e70b53776.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 737,
+      "line": 741,
       "kind": "control",
-      "label": "{{ busy.includes(\"quality-issues\") ? \"创建中…\" : \"创建质量工单\" }}",
-      "conditions": [
+      "label": "取消",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
         {
-          "directive": "v-if",
-          "expression": "anomalyEvidence && canManageTrends"
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 46,
+          "jsonPointer": null
         }
       ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 743,
+      "kind": "control",
+      "label": "{{ busy.includes(\"quality-issues\") ? \"创建中…\" : \"创建质量工单\" }}",
+      "conditions": [],
       "staticRouteIds": [
         "P14"
       ],
@@ -67914,7 +67933,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 46,
+          "line": 49,
           "jsonPointer": null
         }
       ],
@@ -67929,7 +67948,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#029d267ba5289a36.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 743,
+      "line": 749,
       "kind": "dialog-definition",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -67944,7 +67963,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 92,
+          "line": 103,
           "jsonPointer": null
         }
       ],
@@ -67959,7 +67978,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 743,
+      "line": 749,
       "kind": "event-binding",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -67974,7 +67993,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 93,
+          "line": 104,
           "jsonPointer": null
         }
       ],
@@ -67989,7 +68008,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#60103acec5bdf33b.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 752,
+      "line": 758,
       "kind": "form-event",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -68004,7 +68023,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 47,
+          "line": 50,
           "jsonPointer": null
         }
       ],
@@ -68019,7 +68038,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#74456cadd4fd8246.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 760,
+      "line": 766,
       "kind": "control",
       "label": "关闭相关性变更",
       "conditions": [
@@ -68034,7 +68053,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 48,
+          "line": 51,
           "jsonPointer": null
         }
       ],
@@ -68049,7 +68068,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#90cb939f09706fb5.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 782,
+      "line": 788,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -68064,7 +68083,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 49,
+          "line": 52,
           "jsonPointer": null
         }
       ],
@@ -68079,7 +68098,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#288abda590fb34b7.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 784,
+      "line": 790,
       "kind": "control",
       "label": "{{ busy.includes(\"/relevance\") ? \"提交中…\" : \"确认并记录\" }}",
       "conditions": [
@@ -68094,7 +68113,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 50,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -68121,7 +68140,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 60,
+          "line": 63,
           "jsonPointer": null
         }
       ],
@@ -68153,7 +68172,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 61,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -68185,7 +68204,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 62,
+          "line": 65,
           "jsonPointer": null
         }
       ],
@@ -68212,7 +68231,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 63,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -68244,7 +68263,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 64,
+          "line": 67,
           "jsonPointer": null
         }
       ],
@@ -68276,7 +68295,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 65,
+          "line": 68,
           "jsonPointer": null
         }
       ],
@@ -68303,7 +68322,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 66,
+          "line": 69,
           "jsonPointer": null
         }
       ],
@@ -68335,7 +68354,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 67,
+          "line": 70,
           "jsonPointer": null
         }
       ],
@@ -68371,7 +68390,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 68,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -68403,7 +68422,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 69,
+          "line": 72,
           "jsonPointer": null
         }
       ],
@@ -68430,7 +68449,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 94,
+          "line": 105,
           "jsonPointer": null
         }
       ],
@@ -68457,7 +68476,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 51,
+          "line": 54,
           "jsonPointer": null
         }
       ],
@@ -68484,7 +68503,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 52,
+          "line": 55,
           "jsonPointer": null
         }
       ],
@@ -68511,7 +68530,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 53,
+          "line": 56,
           "jsonPointer": null
         }
       ],
@@ -68538,7 +68557,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 54,
+          "line": 57,
           "jsonPointer": null
         }
       ],
@@ -68565,7 +68584,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 55,
+          "line": 58,
           "jsonPointer": null
         }
       ],
@@ -68592,7 +68611,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 56,
+          "line": 59,
           "jsonPointer": null
         }
       ],
@@ -68619,7 +68638,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 57,
+          "line": 60,
           "jsonPointer": null
         }
       ],
@@ -68646,7 +68665,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 58,
+          "line": 61,
           "jsonPointer": null
         }
       ],
@@ -68673,7 +68692,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 59,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -68686,21 +68705,64 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1",
+      "candidateId": "apps/web/src/components/TrendRuleDialog.vue#f6c3de30580fd217.1",
       "file": "apps/web/src/components/TrendRuleDialog.vue",
-      "line": 52,
+      "line": 68,
       "kind": "dialog-definition",
       "label": "监控规则 创建趋势监控 × 规则名称 包含关键词（逗号分隔） 排除关键词（可选） 市场 语言 分类（可选） 自动采集周期 每 15 分钟 每 30 分钟 每 1 小时 每 3 小时 每 6 小时 每 12 小时 每天 候选来源门槛 命中 1",
       "conditions": [],
-      "staticRouteIds": [
-        "P14"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 90,
+          "line": 78,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 97,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 100,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendRuleDialog.vue#8cead402b77314e2.1",
+      "file": "apps/web/src/components/TrendRuleDialog.vue",
+      "line": 68,
+      "kind": "event-binding",
+      "label": "监控规则 创建趋势监控 × 规则名称 包含关键词（逗号分隔） 排除关键词（可选） 市场 语言 分类（可选） 自动采集周期 每 15 分钟 每 30 分钟 每 1 小时 每 3 小时 每 6 小时 每 12 小时 每天 候选来源门槛 命中 1",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 79,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 99,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -68715,7 +68777,7 @@
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#b2c35007732f84af.1",
       "file": "apps/web/src/components/TrendRuleDialog.vue",
-      "line": 53,
+      "line": 75,
       "kind": "form-event",
       "label": "监控规则 创建趋势监控 × 规则名称 包含关键词（逗号分隔） 排除关键词（可选） 市场 语言 分类（可选） 自动采集周期 每 15 分钟 每 30 分钟 每 1 小时 每 3 小时 每 6 小时 每 12 小时 每天 候选来源门槛 命中 1",
       "conditions": [],
@@ -68727,7 +68789,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 70,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -68742,7 +68804,7 @@
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#3886e9e1d2205bab.1",
       "file": "apps/web/src/components/TrendRuleDialog.vue",
-      "line": 59,
+      "line": 81,
       "kind": "control",
       "label": "关闭",
       "conditions": [],
@@ -68754,7 +68816,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 71,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -68769,7 +68831,7 @@
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#1c6857e568a31cf2.1",
       "file": "apps/web/src/components/TrendRuleDialog.vue",
-      "line": 97,
+      "line": 119,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -68781,7 +68843,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 72,
+          "line": 75,
           "jsonPointer": null
         }
       ],
@@ -68796,7 +68858,7 @@
     {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#d47ebd79f8eb69dd.1",
       "file": "apps/web/src/components/TrendRuleDialog.vue",
-      "line": 98,
+      "line": 120,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : \"创建并启用\" }}",
       "conditions": [],
@@ -68808,7 +68870,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 73,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -71430,6 +71492,30 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 668,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#470531a4d9d0cddb.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 681,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#7d73f8399a9950b5.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 687,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 707,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#eefb1c65886b1a81.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 721,
@@ -71688,9 +71774,27 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 668,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 674,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 714,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1",
+      "file": "apps/web/src/components/TrendRuleDialog.vue",
+      "line": 52,
       "disposition": "source-identity-changed-not-safe-to-delete"
     }
   ],

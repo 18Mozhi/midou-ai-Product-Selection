@@ -5,16 +5,16 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "78a03c587faa5a3449d330e051d70785fbd4b997d109b6f39315e2e4ad4d7afb",
+    "apps/web/src/components/TrendDashboard.vue": "2acf7409ff761e9918bb6421a2295ec6ff5d4a82e7c97c7b72126a3f5f30b1e1",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
-    "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+    "apps/web/src/components/TrendRuleDialog.vue": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500",
     "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
-    "reason": "六组件3处role=dialog div定义展开规则/异常/无关/恢复4业务变体；规则调用不另计；另有一个共享移动筛选消费者。6form/3aside/1drawer是扫描结构，不是10弹窗。治理4内联表单态不是modal。"
+    "reason": "六组件3处dialog定义展开规则/异常/无关/恢复4业务变体；规则调用不另计；另有一个共享移动筛选消费者。6form/3aside/1drawer是扫描结构，不是10弹窗。治理4内联表单态不是modal。"
   },
   "inputs": {
     "local": [
@@ -758,7 +758,7 @@
       "kind": "write",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#470531a4d9d0cddb.1",
+        "apps/web/src/components/TrendDashboard.vue#c6ce42d1e09856fa.1",
         "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1"
       ],
       "sourceContractKeys": [
@@ -826,16 +826,16 @@
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#7d73f8399a9950b5.1",
-        "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1"
+        "apps/web/src/components/TrendDashboard.vue#b5cb028d61878491.1",
+        "apps/web/src/components/TrendDashboard.vue#79e6f49e70b53776.1"
       ],
       "sourceContractKeys": [
         "TR-ANOMALY-CLOSE：叉号",
         "TR-ANOMALY-CLOSE：取消"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
-      "condition": "叉号/取消无busy禁用；role div无原生Escape合同",
-      "handler": "anomalyEvidence=null，原因值不在此清空；下次openAnomaly重置warning及空原因",
+      "condition": "叉号/取消/Escape在非busy关闭；busy期间按钮禁用且Escape保持模态",
+      "handler": "anomalyEvidence=null，原因值不在此清空；下次openAnomaly重置warning及空原因；关闭后返回仍存在的打开控件，成功后聚焦当前导航",
       "variants": [
         "cross",
         "cancel",
@@ -871,7 +871,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "C稿原生dialog、锁定与返焦不是源实现；关窗不取消已发请求。"
+      "remaining": "成功后的当前导航焦点已在Vue E2E覆盖；真实RBAC及生产行为未验证。"
     },
     {
       "actionId": "TR-RELEVANCE-SUBMIT",
@@ -2545,12 +2545,12 @@
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
-        "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1"
+        "apps/web/src/components/TrendDashboard.vue#1c84e99801374a43.1",
+        "apps/web/src/components/TrendDashboard.vue#e2a4499152c0f457.1"
       ],
       "sourceContractKeys": [
-        "TR-RULE-CLOSE/TR-RULE-SUBMIT转发",
-        "一个调用/一个role定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消销毁后重开默认US/en-US/60/1"
+        "TR-D-RULE-CALLER：open/busy/close/submit转发",
+        "TR-D-RULE-COMPONENT：受控规则组件调用"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
@@ -2576,7 +2576,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#1c84e99801374a43.1",
           "event": "@close",
           "handler": "showRule = false",
           "targets": [
@@ -2584,7 +2584,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TrendDashboard.vue#f7ec792b7d0fd73d.1",
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#1c84e99801374a43.1",
           "event": "@submit",
           "handler": "createRule",
           "targets": [
@@ -2592,7 +2592,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#e2a4499152c0f457.1",
           "event": "@close",
           "handler": "showRule = false",
           "targets": [
@@ -2600,7 +2600,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TrendDashboard.vue#14e2daa05c9f34c8.1",
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#e2a4499152c0f457.1",
           "event": "@submit",
           "handler": "createRule",
           "targets": [
@@ -2615,14 +2615,16 @@
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1"
+        "apps/web/src/components/TrendDashboard.vue#70140152f0bfc00c.1",
+        "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1"
       ],
       "sourceContractKeys": [
-        "warning/critical、原因2–500；提交severity/reason，证据/来源身份由URL和服务端关联；失败保留；created=false显示已有工单，当前实例按钮禁用"
+        "TR-D-ANOMALY 原生模态定义",
+        "TR-D-ANOMALY-KEYBOARD：cancel与Tab处理"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
-      "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
+      "handler": "原生dialog通过共享生命周期启用，handleAnomalyKeydown管理Tab边界，cancel按busy状态处理",
       "variants": [
         "listed-consumer-variants"
       ],
@@ -2636,13 +2638,26 @@
         "disabled": "not-applicable-wiring",
         "busy": "not-applicable-wiring"
       },
-      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "remaining": "本地桌面/390px E2E验证焦点生命周期；真实权限及工单仍待生产验收。",
       "forwardsTo": [
         "TR-ANOMALY-OPEN",
         "TR-ANOMALY-SUBMIT",
         "TR-ANOMALY-CLOSE"
       ],
-      "forwardBindings": []
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
+          "event": "@cancel",
+          "handler": "handleAnomalyCancel",
+          "targets": ["TR-ANOMALY-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
+          "event": "@keydown",
+          "handler": "handleAnomalyKeydown",
+          "targets": ["TR-ANOMALY-CLOSE"]
+        }
+      ]
     },
     {
       "actionId": "TR-RELEVANCE-DEFINITION",
@@ -2793,14 +2808,16 @@
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1"
+        "apps/web/src/components/TrendRuleDialog.vue#f6c3de30580fd217.1",
+        "apps/web/src/components/TrendRuleDialog.vue#8cead402b77314e2.1"
       ],
       "sourceContractKeys": [
-        "一个调用/一个role定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消销毁后重开默认US/en-US/60/1"
+        "TR-D-RULE 原生模态定义",
+        "TR-D-RULE-KEYBOARD：cancel与Tab处理"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
-      "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
+      "handler": "原生dialog通过共享生命周期启用，规则名称初始获焦，Tab和Escape由实际Vue处理",
       "variants": [
         "listed-consumer-variants"
       ],
@@ -2814,13 +2831,26 @@
         "disabled": "not-applicable-wiring",
         "busy": "not-applicable-wiring"
       },
-      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "remaining": "本地桌面/390px E2E验证键盘和取消返焦；真实规则写入/RBAC仍待生产验收。",
       "forwardsTo": [
         "TR-RULE-OPEN",
         "TR-RULE-SUBMIT",
         "TR-RULE-CLOSE"
       ],
-      "forwardBindings": []
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendRuleDialog.vue#8cead402b77314e2.1",
+          "event": "@cancel",
+          "handler": "handleCancel",
+          "targets": ["TR-RULE-CLOSE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendRuleDialog.vue#8cead402b77314e2.1",
+          "event": "@keydown",
+          "handler": "handleKeydown",
+          "targets": ["TR-RULE-CLOSE"]
+        }
+      ]
     }
   ],
   "surfaceReview": {
@@ -2836,11 +2866,11 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "78a03c587faa5a3449d330e051d70785fbd4b997d109b6f39315e2e4ad4d7afb",
+      "apps/web/src/components/TrendDashboard.vue": "2acf7409ff761e9918bb6421a2295ec6ff5d4a82e7c97c7b72126a3f5f30b1e1",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
-      "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+      "apps/web/src/components/TrendRuleDialog.vue": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500",
       "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
@@ -2967,8 +2997,8 @@
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",
-        "sourceBehavior": "异常role=dialog div内form，精确证据和severity/reason提交；失败保留。",
-        "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。",
+        "sourceBehavior": "原生异常dialog内form，精确证据和severity/reason提交；失败保留。",
+        "remaining": "form/aside为dialog内结构，不重复统计模态；本地E2E覆盖失败保留和关闭焦点。",
         "variants": [
           {
             "name": "anomaly-open",
@@ -2979,7 +3009,7 @@
                 "scene": "anomaly-open"
               }
             ],
-            "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。"
+            "remaining": "form/aside为dialog内结构，不重复统计模态；本地E2E覆盖失败保留和关闭焦点。"
           }
         ]
       },
@@ -2989,7 +3019,7 @@
         "ordinal": 1,
         "shape": "inline-aside",
         "sourceBehavior": "异常窗内说明aside，只解释工单关联；不是另一个弹窗。",
-        "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。",
+        "remaining": "说明内容不是另一个弹窗；dialog键盘生命周期由共享hook负责。",
         "variants": [
           {
             "name": "anomaly-open",
@@ -3000,7 +3030,28 @@
                 "scene": "anomaly-open"
               }
             ],
-            "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。"
+            "remaining": "说明内容不是另一个弹窗；dialog键盘生命周期由共享hook负责。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "异常工单原生模态；异常说明初始获焦，Tab边界循环，Escape非busy关闭，成功后聚焦当前视图导航。",
+        "remaining": "本地桌面/390px E2E覆盖初焦点、边界、Escape及返焦；不证明真实工单/RBAC。",
+        "variants": [
+          {
+            "name": "anomaly-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "anomaly-open"
+              }
+            ],
+            "remaining": "本地隔离响应，不是生产写入或权限验收。"
           }
         ]
       },
@@ -3039,7 +3090,7 @@
       {
         "file": "apps/web/src/components/TrendDashboard.vue",
         "tag": "dialog",
-        "ordinal": 1,
+        "ordinal": 2,
         "shape": "native-dialog",
         "sourceBehavior": "相关性确认原生模态；理由初始获焦，Tab/Shift+Tab首尾循环；Escape仅非busy关闭，关闭归还打开按钮焦点。",
         "remaining": "本地桌面/390px Vue E2E覆盖键盘生命周期；成功变更后原触发按钮替换时的焦点目的地仍待处理。",
@@ -3134,11 +3185,11 @@
       },
       {
         "file": "apps/web/src/components/TrendRuleDialog.vue",
-        "tag": "form",
+        "tag": "dialog",
         "ordinal": 1,
-        "shape": "form-container",
-        "sourceBehavior": "规则role div内八字段form，POST由父处理；不是P12七字段首次规则设置。",
-        "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。",
+        "shape": "native-dialog",
+        "sourceBehavior": "受控规则原生模态；规则名称初始获焦，Tab边界循环，Escape关闭并返回入口。",
+        "remaining": "本地桌面/390px E2E覆盖键盘生命周期；规则真实写入/RBAC仍待验收。",
         "variants": [
           {
             "name": "rule-open",
@@ -3149,7 +3200,28 @@
                 "scene": "rule-open"
               }
             ],
-            "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。"
+            "remaining": "本地隔离响应，不是生产写入或权限验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendRuleDialog.vue",
+        "tag": "form",
+        "ordinal": 1,
+        "shape": "form-container",
+        "sourceBehavior": "规则原生dialog内八字段form，POST由父处理；不是P12七字段首次规则设置。",
+        "remaining": "form/aside为dialog内结构，不重复统计模态；本地E2E验证取消重开默认值。",
+        "variants": [
+          {
+            "name": "rule-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "rule-open"
+              }
+            ],
+            "remaining": "form/aside为dialog内结构，不重复统计模态；本地E2E验证取消重开默认值。"
           }
         ]
       },
@@ -3159,7 +3231,7 @@
         "ordinal": 1,
         "shape": "inline-aside",
         "sourceBehavior": "候选不等于建议采纳的说明aside，无动作。",
-        "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。",
+        "remaining": "说明内容不是另一个弹窗；规则modal使用共享原生dialog生命周期。",
         "variants": [
           {
             "name": "rule-open",
@@ -3170,7 +3242,7 @@
                 "scene": "rule-open"
               }
             ],
-            "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。"
+            "remaining": "说明内容不是另一个弹窗；规则modal使用共享原生dialog生命周期。"
           }
         ]
       },
@@ -3180,7 +3252,7 @@
         "ordinal": 2,
         "shape": "inline-aside",
         "sourceBehavior": "固定站内通知说明aside，无邮件选择动作。",
-        "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。",
+        "remaining": "说明内容不是另一个弹窗；规则modal使用共享原生dialog生命周期。",
         "variants": [
           {
             "name": "rule-open",
@@ -3191,7 +3263,7 @@
                 "scene": "rule-open"
               }
             ],
-            "remaining": "规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。"
+            "remaining": "说明内容不是另一个弹窗；规则modal使用共享原生dialog生命周期。"
           }
         ]
       },

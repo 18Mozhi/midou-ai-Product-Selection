@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
+import { useModalDialog } from "../use-modal-dialog";
+import { trapModalTab } from "../modal-dialog-keyboard";
 
 export interface TrendRuleDraft {
   name: string;
@@ -13,12 +15,12 @@ export interface TrendRuleDraft {
   recommendation_min_source_count: number;
 }
 
-defineProps<{ busy: boolean }>();
+const props = defineProps<{ busy: boolean; open: boolean }>();
 const emit = defineEmits<{
   close: [];
   submit: [value: TrendRuleDraft];
 }>();
-const form = reactive({
+const emptyForm = () => ({
   name: "",
   include_keywords: "",
   negative_keywords: "",
@@ -28,6 +30,20 @@ const form = reactive({
   collection_interval_minutes: 60,
   recommendation_min_source_count: 1,
 });
+const form = reactive(emptyForm());
+const { dialogElement, handleCancel } = useModalDialog(
+  () => props.open,
+  () => emit("close"),
+);
+watch(
+  () => props.open,
+  (open) => {
+    if (open) Object.assign(form, emptyForm());
+  },
+);
+function handleKeydown(event: KeyboardEvent) {
+  trapModalTab(event, dialogElement.value);
+}
 const keywords = (value: string) =>
   value
     .split(/[,，\n]/)
@@ -49,7 +65,13 @@ function submit() {
 </script>
 
 <template>
-  <div class="trend-modal" role="dialog" aria-modal="true" aria-labelledby="trend-rule-title">
+  <dialog
+    ref="dialogElement"
+    class="trend-modal trend-native-dialog trend-rule-dialog"
+    aria-labelledby="trend-rule-title"
+    @cancel="handleCancel"
+    @keydown="handleKeydown"
+  >
     <form @submit.prevent="submit">
       <header>
         <div>
@@ -58,7 +80,7 @@ function submit() {
         </div>
         <button type="button" aria-label="关闭" @click="emit('close')">×</button>
       </header>
-      <label>规则名称<input v-model="form.name" required maxlength="120" /></label>
+      <label>规则名称<input v-model="form.name" required maxlength="120" autofocus /></label>
       <label
         >包含关键词（逗号分隔）<input v-model="form.include_keywords" required maxlength="500"
       /></label>
@@ -98,5 +120,5 @@ function submit() {
         <button type="submit" :disabled="busy">{{ busy ? "保存中…" : "创建并启用" }}</button>
       </footer>
     </form>
-  </div>
+  </dialog>
 </template>

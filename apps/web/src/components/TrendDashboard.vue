@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
+import { trapModalTab } from "../modal-dialog-keyboard";
 import UiStatePanel from "./UiStatePanel.vue";
 import MonitoringReadinessStrip from "./shared/MonitoringReadinessStrip.vue";
 import { buildTrendMonitoringReadiness } from "./shared/monitoring-readiness";
@@ -118,6 +119,16 @@ const { dialogElement: relevanceDialogElement, handleCancel: handleRelevanceCanc
       if (!busy.value) relevanceDialog.value = null;
     },
   );
+const {
+  dialogElement: anomalyDialogElement,
+  handleCancel: handleAnomalyCancel,
+  discardReturnFocus: discardAnomalyReturnFocus,
+} = useModalDialog(
+  () => Boolean(anomalyEvidence.value && canManageTrends.value),
+  () => {
+    if (!busy.value) anomalyEvidence.value = null;
+  },
+);
 const opportunityRoute = computed(() => {
   const topic = selected.value;
   if (!topic) return "/opportunities";
@@ -329,27 +340,10 @@ function openRelevance(status: "active" | "irrelevant") {
   relevanceDialog.value = status;
 }
 function handleRelevanceKeydown(event: KeyboardEvent) {
-  if (event.key !== "Tab" || !relevanceDialogElement.value) return;
-  const focusable = Array.from(
-    relevanceDialogElement.value.querySelectorAll<HTMLElement>(
-      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
-    ),
-  ).filter((element) => !element.hidden && element.getAttribute("aria-hidden") !== "true");
-  if (!focusable.length) {
-    event.preventDefault();
-    return;
-  }
-  const first = focusable[0],
-    last = focusable.at(-1),
-    active = document.activeElement;
-  if (!first || !last) return;
-  if (event.shiftKey && active === first) {
-    event.preventDefault();
-    last.focus();
-  } else if (!event.shiftKey && active === last) {
-    event.preventDefault();
-    first.focus();
-  }
+  trapModalTab(event, relevanceDialogElement.value);
+}
+function handleAnomalyKeydown(event: KeyboardEvent) {
+  trapModalTab(event, anomalyDialogElement.value);
 }
 function openAnomaly(item: Detail["evidence"][number]) {
   if (!requireTrendManage()) return;
@@ -367,11 +361,14 @@ async function createQualityIssue() {
     );
   if (!result) return;
   qualityIssueIds[evidenceId] = result.issue.id;
+  discardAnomalyReturnFocus();
   anomalyEvidence.value = null;
   anomalyReason.value = "";
   message.value = result.created
     ? `质量工单 ${result.issue.id} 已创建，可在数据质量页继续处理。`
     : `该证据已有未关闭质量工单 ${result.issue.id}，请直接继续处理。`;
+  await nextTick();
+  document.querySelector<HTMLButtonElement>('.trend-tabs button[aria-current="page"]')?.focus();
 }
 async function createRule(form: TrendRuleDraft) {
   if (!requireTrendManage()) return;
@@ -695,17 +692,17 @@ onMounted(() => {
       @decide="decideTopicChange"
     />
     <TrendRuleDialog
-      v-if="showRule && canManageTrends"
+      :open="showRule && canManageTrends"
       :busy="Boolean(busy)"
       @close="showRule = false"
       @submit="createRule"
     />
-    <div
-      v-if="anomalyEvidence && canManageTrends"
-      class="trend-modal"
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref="anomalyDialogElement"
+      class="trend-modal trend-native-dialog trend-anomaly-dialog"
       aria-labelledby="trend-anomaly-title"
+      @cancel="handleAnomalyCancel"
+      @keydown="handleAnomalyKeydown"
     >
       <form @submit.prevent="createQualityIssue">
         <header>
@@ -713,9 +710,16 @@ onMounted(() => {
             <p>异常证据</p>
             <h3 id="trend-anomaly-title">创建数据质量工单</h3>
           </div>
-          <button type="button" aria-label="关闭异常报告" @click="anomalyEvidence = null">×</button>
+          <button
+            type="button"
+            aria-label="关闭异常报告"
+            :disabled="Boolean(busy)"
+            @click="anomalyEvidence = null"
+          >
+            ×
+          </button>
         </header>
-        <p>{{ anomalyEvidence.title }}</p>
+        <p>{{ anomalyEvidence?.title }}</p>
         <label
           >风险等级<select v-model="anomalySeverity">
             <option value="warning">需要复核</option>
@@ -729,17 +733,19 @@ onMounted(() => {
             maxlength="500"
             rows="4"
             placeholder="说明哪个事实异常，以及复核时应检查什么"
+            autofocus
           ></textarea>
         </label>
         <aside>工单会关联当前主题、证据、来源、原始证据和解析器版本。</aside>
         <footer>
-          <button type="button" @click="anomalyEvidence = null">取消</button
+          <button type="button" :disabled="Boolean(busy)" @click="anomalyEvidence = null">
+            取消</button
           ><button type="submit" :disabled="anomalyReason.trim().length < 2 || Boolean(busy)">
             {{ busy.includes("quality-issues") ? "创建中…" : "创建质量工单" }}
           </button>
         </footer>
       </form>
-    </div>
+    </dialog>
     <dialog
       v-if="relevanceDialog && canManageTrends"
       ref="relevanceDialogElement"

@@ -596,7 +596,8 @@
   background: var(--so-overlay);
   backdrop-filter: blur(14px);
 }
-.trend-relevance-dialog:not([open]) {
+.trend-relevance-dialog:not([open]),
+.trend-native-dialog:not([open]) {
   display: none;
 }
 .trend-modal.trend-relevance-dialog[open] {
@@ -609,6 +610,21 @@
   color: var(--so-text);
   background: transparent;
   backdrop-filter: none;
+}
+.trend-modal.trend-native-dialog[open] {
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  color: var(--so-text);
+  background: transparent;
+  backdrop-filter: none;
+}
+.trend-native-dialog::backdrop {
+  background: var(--so-overlay);
+  backdrop-filter: blur(14px);
 }
 .trend-relevance-dialog::backdrop {
   background: var(--so-overlay);
@@ -1166,6 +1182,14 @@
 .trend-dashboard--review .trend-modal.trend-relevance-dialog[open] {
   background: transparent;
   backdrop-filter: none;
+}
+.trend-dashboard--review .trend-modal.trend-native-dialog[open] {
+  background: transparent;
+  backdrop-filter: none;
+}
+.trend-dashboard--review .trend-native-dialog::backdrop {
+  background: var(--trend-modal-backdrop);
+  backdrop-filter: blur(6px);
 }
 .trend-dashboard--review .trend-relevance-dialog::backdrop {
   background: var(--trend-modal-backdrop);

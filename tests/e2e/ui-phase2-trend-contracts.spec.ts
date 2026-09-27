@@ -306,6 +306,47 @@ test("UI2-TR02 relevance dialog traps focus, Escape closes, and focus returns to
   await expect(trigger).toBeFocused();
 });
 
+test("UI2-TR04 rule dialog uses native modal focus lifecycle", async ({ page }) => {
+  await ready(page);
+  await page.goto("/trends?section=rules");
+  const trigger = page.getByRole("button", { name: "＋ 创建规则", exact: true });
+  await trigger.click();
+  const modal = page.getByRole("dialog", { name: "创建趋势监控", exact: true });
+  const name = modal.getByLabel("规则名称", { exact: true });
+  expect(await modal.evaluate((element) => element.matches(":modal"))).toBe(true);
+  await expect(name).toBeFocused();
+  const close = modal.getByRole("button", { name: "关闭", exact: true });
+  await close.focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(modal.getByRole("button", { name: "创建并启用" })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(modal).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
+test("UI2-TR02 anomaly dialog uses native modal focus lifecycle", async ({ page }) => {
+  await ready(page);
+  await openDetail(page);
+  const evidence = page.locator(".trend-evidence-item").filter({ hasText: "隔离证据 406" });
+  const trigger = evidence.getByRole("button", { name: "报告异常" });
+  await trigger.click();
+  const modal = page.getByRole("dialog", { name: "创建数据质量工单" });
+  const reason = modal.getByLabel("异常说明");
+  expect(await modal.evaluate((element) => element.matches(":modal"))).toBe(true);
+  await expect(reason).toBeFocused();
+  const close = modal.getByRole("button", { name: "关闭异常报告" });
+  await close.focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(modal.getByRole("button", { name: "取消", exact: true })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(modal).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
 test("UI2-TR02 relevance failure retains the draft and prevents dismissal while saving", async ({
   page,
 }) => {

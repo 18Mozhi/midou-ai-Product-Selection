@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1704；旧登记1477；新身份623，旧表独有身份396。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1544源位置/1271组；其中路由动作1049组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1706；旧登记1477；新身份632，旧表独有身份403。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1546源位置/1271组；其中路由动作1049组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -27,7 +27,7 @@
 | [P11 个人中心](page-specs/P11.md) | 2 | [28组](action-reviews/P11.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P12 今日行动](page-specs/P12.md) | 47 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P13 今日工作](page-specs/P13.md) | 73 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P14 热点趋势](page-specs/P14.md) | 98 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P14 热点趋势](page-specs/P14.md) | 91 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P15 选品机会](page-specs/P15.md) | 153 | [35组](action-reviews/P15.json) | 162个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P16 创建选品](page-specs/P16.md) | 41 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 61 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -826,7 +826,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P14 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P14.json)：66个局部源位置 → 51组；8类写入，42组路由动作，9组转发/容器关联不重复计动作。已映射18/18个源码字段位置，11/11处调用/内嵌容器，17个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P14.json)：68个局部源位置 → 51组；8类写入，42组路由动作，9组转发/容器关联不重复计动作。已映射18/18个源码字段位置，13/13处调用/内嵌容器，19个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有252个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -846,7 +846,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | TR-RULE-STATUS 暂停或启用规则 / write | 1处；enabled-to-paused、paused-to-enabled、failure、repeat | [rules · 1440](design/trend-direction-c/1440-rules.png) / [rules · 390](design/trend-direction-c/390-rules.png)、[rules-paused · 1440](design/trend-direction-c/1440-rules-paused.png) / [rules-paused · 390](design/trend-direction-c/390-rules-paused.png)；其余见JSON | 下一次用返回version，但并发重入/旧对象结果和重读仍待验；无next_collection_at不能推断已暂停。 |
 | TR-RULE-RESULTS 查看规则趋势结果 / local | 1处；first-keyword、missing-keyword、existing-filter、legacy-tab | [filtered · 1440](design/trend-direction-c/1440-filtered.png) / [filtered · 390](design/trend-direction-c/390-filtered.png)、[rules-readonly · 1440](design/trend-direction-c/1440-rules-readonly.png) / [rules-readonly · 390](design/trend-direction-c/390-rules-readonly.png)；其余见JSON | 不是精确rule_id筛选，也不一定清除其他条件；C稿与原源URL兼容需逐项验收。 |
 | TR-ANOMALY-SUBMIT 创建或复用质量工单 / write | 2处；warning、critical、busy、failed、created、existing | [anomaly-edited · 1440](design/trend-direction-c/1440-anomaly-edited.png) / [anomaly-edited · 390](design/trend-direction-c/390-anomaly-edited.png)、[anomaly-busy · 1440](design/trend-direction-c/1440-anomaly-busy.png) / [anomaly-busy · 390](design/trend-direction-c/390-anomaly-busy.png)；其余见JSON | severity不是来源身份；created=false仍成功，内存id不证明下次服务端无工单；切主题与晚到结果待验。 |
-| TR-ANOMALY-CLOSE 关闭异常报告 / local | 2处；cross、cancel、busy-close | [anomaly-open · 1440](design/trend-direction-c/1440-anomaly-open.png) / [anomaly-open · 390](design/trend-direction-c/390-anomaly-open.png)、[anomaly-busy · 1440](design/trend-direction-c/1440-anomaly-busy.png) / [anomaly-busy · 390](design/trend-direction-c/390-anomaly-busy.png)；其余见JSON | C稿原生dialog、锁定与返焦不是源实现；关窗不取消已发请求。 |
+| TR-ANOMALY-CLOSE 关闭异常报告 / local | 2处；cross、cancel、busy-close | [anomaly-open · 1440](design/trend-direction-c/1440-anomaly-open.png) / [anomaly-open · 390](design/trend-direction-c/390-anomaly-open.png)、[anomaly-busy · 1440](design/trend-direction-c/1440-anomaly-busy.png) / [anomaly-busy · 390](design/trend-direction-c/390-anomaly-busy.png)；其余见JSON | 成功后的当前导航焦点已在Vue E2E覆盖；真实RBAC及生产行为未验证。 |
 | TR-RELEVANCE-SUBMIT 提交无关或恢复相关 / write | 2处；irrelevant、restore、busy、failed、saved | [irrelevant-open · 1440](design/trend-direction-c/1440-irrelevant-open.png) / [irrelevant-open · 390](design/trend-direction-c/390-irrelevant-open.png)、[irrelevant-busy · 1440](design/trend-direction-c/1440-irrelevant-busy.png) / [irrelevant-busy · 390](design/trend-direction-c/390-irrelevant-busy.png)；其余见JSON | E2E covers local intercepted failure/retry, busy close protection, and modal keyboard lifecycle; post-success focus after the triggering action is replaced remains unverified. |
 | TR-RELEVANCE-CLOSE 关闭相关性表单 / local | 2处；cross、cancel、busy-disabled | [irrelevant-open · 1440](design/trend-direction-c/1440-irrelevant-open.png) / [irrelevant-open · 390](design/trend-direction-c/390-irrelevant-open.png)、[restore-open · 1440](design/trend-direction-c/1440-restore-open.png) / [restore-open · 390](design/trend-direction-c/390-restore-open.png)；其余见JSON | Busy close protection, Escape guard, and focus return are covered locally; post-success focus after the trigger is replaced remains unverified. |
 | TR-FILTER-APPLY 应用筛选 / local | 2处；normal、same-url、all-status、dirty | [filter-edited · 1440](design/trend-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/trend-direction-c/390-filter-edited.png)、[filtered · 1440](design/trend-direction-c/1440-filtered.png) / [filtered · 390](design/trend-direction-c/390-filtered.png)；其余见JSON | 全部status空被省略，syncFromRoute恢复active，旧缺口再次复验；shared capture先关闭不代表读取成功。 |
@@ -878,11 +878,11 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | TR-DETAIL-FORWARD 父子事件完整转发 / wiring | 1处；@back、@follow、@create-rule、@change-relevance、@report-anomaly | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
 | TR-GOVERNANCE-FORWARD 父子事件完整转发 / wiring | 1处；@propose、@decide | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
 | TR-RULE-CALLER 父子事件完整转发 / wiring | 2处；@close、@submit | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
-| TR-ANOMALY-DEFINITION 模态定义或共享消费者关联 / wiring | 1处；listed-consumer-variants | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
+| TR-ANOMALY-DEFINITION 模态定义或共享消费者关联 / wiring | 2处；listed-consumer-variants | ；其余见JSON | 本地桌面/390px E2E验证焦点生命周期；真实权限及工单仍待生产验收。 |
 | TR-RELEVANCE-DEFINITION 模态定义或共享消费者关联 / wiring | 2处；listed-consumer-variants | ；其余见JSON | 失败保留、busy关闭保护与键盘生命周期由局部Vue E2E覆盖；跨主题结果归属、触发按钮替换后的成功焦点目的地和真实运行验收仍待完成。 |
 | TR-FILTER-CALLER 模态定义或共享消费者关联 / wiring | 1处；listed-consumer-variants | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
 | TR-EVIDENCE-FORWARD 父子事件完整转发 / wiring | 1处；@report-anomaly | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
-| TR-RULE-DEFINITION 模态定义或共享消费者关联 / wiring | 1处；listed-consumer-variants | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
+| TR-RULE-DEFINITION 模态定义或共享消费者关联 / wiring | 2处；listed-consumer-variants | ；其余见JSON | 本地桌面/390px E2E验证键盘和取消返焦；真实规则写入/RBAC仍待生产验收。 |
 
 ### 事件转发关系（不增加业务动作）
 
@@ -904,12 +904,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | TR-RULE-CALLER | @submit / createRule | TR-RULE-SUBMIT |
 | TR-RULE-CALLER | @close / showRule = false | TR-RULE-CLOSE |
 | TR-RULE-CALLER | @submit / createRule | TR-RULE-SUBMIT |
-| TR-ANOMALY-DEFINITION | 容器定义，无额外事件 | TR-ANOMALY-OPEN、TR-ANOMALY-SUBMIT、TR-ANOMALY-CLOSE |
+| TR-ANOMALY-DEFINITION | @cancel / handleAnomalyCancel | TR-ANOMALY-CLOSE |
+| TR-ANOMALY-DEFINITION | @keydown / handleAnomalyKeydown | TR-ANOMALY-CLOSE |
 | TR-RELEVANCE-DEFINITION | @cancel / handleRelevanceCancel | TR-RELEVANCE-CLOSE |
 | TR-RELEVANCE-DEFINITION | @keydown / handleRelevanceKeydown | TR-RELEVANCE-CLOSE |
 | TR-FILTER-CALLER | 容器定义，无额外事件 | TR-FILTER-APPLY、TR-FILTER-CLEAR、TR-FILTER-COPY、TR-FILTER-EDIT.market、TR-FILTER-EDIT.category、TR-FILTER-EDIT.status、TR-FILTER-EDIT.q、TR-FILTER-SORT |
 | TR-EVIDENCE-FORWARD | @report-anomaly / emit('reportAnomaly', $event) | TR-ANOMALY-OPEN |
-| TR-RULE-DEFINITION | 容器定义，无额外事件 | TR-RULE-OPEN、TR-RULE-SUBMIT、TR-RULE-CLOSE |
+| TR-RULE-DEFINITION | @cancel / handleCancel | TR-RULE-CLOSE |
+| TR-RULE-DEFINITION | @keydown / handleKeydown | TR-RULE-CLOSE |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -938,19 +940,21 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
 | --- | --- | --- | --- |
-| TrendDashboard.vue / form.1 / anomaly-open | form-container / matching-dialog-scene | [anomaly-open · 1440](design/trend-direction-c/1440-anomaly-open.png) / [anomaly-open · 390](design/trend-direction-c/390-anomaly-open.png) | 外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。 |
-| TrendDashboard.vue / aside.1 / anomaly-open | inline-aside / related-scene-only | [anomaly-open · 1440](design/trend-direction-c/1440-anomaly-open.png) / [anomaly-open · 390](design/trend-direction-c/390-anomaly-open.png) | 外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。 |
+| TrendDashboard.vue / form.1 / anomaly-open | form-container / matching-dialog-scene | [anomaly-open · 1440](design/trend-direction-c/1440-anomaly-open.png) / [anomaly-open · 390](design/trend-direction-c/390-anomaly-open.png) | form/aside为dialog内结构，不重复统计模态；本地E2E覆盖失败保留和关闭焦点。 |
+| TrendDashboard.vue / aside.1 / anomaly-open | inline-aside / related-scene-only | [anomaly-open · 1440](design/trend-direction-c/1440-anomaly-open.png) / [anomaly-open · 390](design/trend-direction-c/390-anomaly-open.png) | 说明内容不是另一个弹窗；dialog键盘生命周期由共享hook负责。 |
+| TrendDashboard.vue / dialog.1 / anomaly-open | native-dialog / matching-dialog-scene | [anomaly-open · 1440](design/trend-direction-c/1440-anomaly-open.png) / [anomaly-open · 390](design/trend-direction-c/390-anomaly-open.png) | 本地隔离响应，不是生产写入或权限验收。 |
 | TrendDashboard.vue / form.2 / irrelevant-open | form-container / matching-dialog-scene | [irrelevant-open · 1440](design/trend-direction-c/1440-irrelevant-open.png) / [irrelevant-open · 390](design/trend-direction-c/390-irrelevant-open.png) | 局部Vue E2E验证失败重试与状态写入；真实RBAC、数据库及生产行为未验证。 |
 | TrendDashboard.vue / form.2 / restore-open | form-container / matching-dialog-scene | [restore-open · 1440](design/trend-direction-c/1440-restore-open.png) / [restore-open · 390](design/trend-direction-c/390-restore-open.png) | 局部Vue E2E验证失败重试与状态写入；真实RBAC、数据库及生产行为未验证。 |
-| TrendDashboard.vue / dialog.1 / irrelevant-open | native-dialog / matching-dialog-scene | [irrelevant-open · 1440](design/trend-direction-c/1440-irrelevant-open.png) / [irrelevant-open · 390](design/trend-direction-c/390-irrelevant-open.png) | 成功变更后原触发按钮替换时的焦点目的地仍待处理。 |
-| TrendDashboard.vue / dialog.1 / restore-open | native-dialog / matching-dialog-scene | [restore-open · 1440](design/trend-direction-c/1440-restore-open.png) / [restore-open · 390](design/trend-direction-c/390-restore-open.png) | 成功变更后原触发按钮替换时的焦点目的地仍待处理。 |
+| TrendDashboard.vue / dialog.2 / irrelevant-open | native-dialog / matching-dialog-scene | [irrelevant-open · 1440](design/trend-direction-c/1440-irrelevant-open.png) / [irrelevant-open · 390](design/trend-direction-c/390-irrelevant-open.png) | 成功变更后原触发按钮替换时的焦点目的地仍待处理。 |
+| TrendDashboard.vue / dialog.2 / restore-open | native-dialog / matching-dialog-scene | [restore-open · 1440](design/trend-direction-c/1440-restore-open.png) / [restore-open · 390](design/trend-direction-c/390-restore-open.png) | 成功变更后原触发按钮替换时的焦点目的地仍待处理。 |
 | TrendFilterPanel.vue / ResponsiveFilterDrawer.1 / filter-open | responsive-filter / related-scene-only | [filter-open · 1440](design/trend-direction-c/1440-filter-open.png) / [filter-open · 390](design/trend-direction-c/390-filter-open.png) | 移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。 |
 | TrendFilterPanel.vue / ResponsiveFilterDrawer.1 / filter-edited | responsive-filter / related-scene-only | [filter-edited · 1440](design/trend-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/trend-direction-c/390-filter-edited.png) | 移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。 |
 | TrendFilterPanel.vue / form.1 / filter-open | form-container / matching-inline-form-scene | [filter-open · 1440](design/trend-direction-c/1440-filter-open.png) / [filter-open · 390](design/trend-direction-c/390-filter-open.png) | 移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。 |
 | TrendFilterPanel.vue / form.1 / filter-edited | form-container / matching-inline-form-scene | [filter-edited · 1440](design/trend-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/trend-direction-c/390-filter-edited.png) | 移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。 |
-| TrendRuleDialog.vue / form.1 / rule-open | form-container / matching-dialog-scene | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | 规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。 |
-| TrendRuleDialog.vue / aside.1 / rule-open | inline-aside / related-scene-only | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | 规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。 |
-| TrendRuleDialog.vue / aside.2 / rule-open | inline-aside / related-scene-only | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | 规则本体role div通过action定义关联，form/aside不重复算模态；全部八字段/关闭/忙碌失败仍待真实验收。 |
+| TrendRuleDialog.vue / dialog.1 / rule-open | native-dialog / matching-dialog-scene | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | 本地隔离响应，不是生产写入或权限验收。 |
+| TrendRuleDialog.vue / form.1 / rule-open | form-container / matching-dialog-scene | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | form/aside为dialog内结构，不重复统计模态；本地E2E验证取消重开默认值。 |
+| TrendRuleDialog.vue / aside.1 / rule-open | inline-aside / related-scene-only | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | 说明内容不是另一个弹窗；规则modal使用共享原生dialog生命周期。 |
+| TrendRuleDialog.vue / aside.2 / rule-open | inline-aside / related-scene-only | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | 说明内容不是另一个弹窗；规则modal使用共享原生dialog生命周期。 |
 | TrendChangeQueue.vue / form.1 / merge-edited | form-container / matching-inline-form-scene | [merge-edited · 1440](design/trend-direction-c/1440-merge-edited.png) / [merge-edited · 390](design/trend-direction-c/390-merge-edited.png) | 两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。 |
 | TrendChangeQueue.vue / form.1 / split-edited | form-container / matching-inline-form-scene | [split-edited · 1440](design/trend-direction-c/1440-split-edited.png) / [split-edited · 390](design/trend-direction-c/390-split-edited.png) | 两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。 |
 | TrendChangeQueue.vue / form.2 / confirm-open | form-container / matching-inline-form-scene | [confirm-open · 1440](design/trend-direction-c/1440-confirm-open.png) / [confirm-open · 390](design/trend-direction-c/390-confirm-open.png) | 两个内联form定义/四业务态，不算四个弹窗；每个动态队列行及同人/版本/失败待真实后端验收。 |
