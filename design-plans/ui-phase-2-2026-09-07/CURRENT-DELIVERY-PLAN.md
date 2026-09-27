@@ -14,7 +14,7 @@
 
 ## 2026-09-27 · P19/P20 三个竞品弹窗焦点闭环
 
-按合同缺口 CP-G01 在真实 `CompetitorMonitor` 接入 `useModalDialog`：创建、规则、删除弹窗改用原生模态层，具名并具备 Tab 边界、Esc/关闭返焦、步骤焦点迁移和失败提示首焦；深链/query 打开也覆盖。没有改字段、请求、权限或业务动作。完整 M04-05 桌面与390px手机各21/21通过；CP-G01焦点专项两端各3/3，modal单测2/2、Web类型、格式、文档、运行文档、静态分析、发布矩阵、来源动作审计及全22 workspace生产构建通过；宝塔部署与生产探针待本批收尾登记。CP-G02–G07及真实 RBAC/采集/生产验收仍保持开放；详见[P19实施记录](P19-PAGE-COMPOSITION-IMPLEMENTATION.md)。
+按合同缺口 CP-G01 在真实 `CompetitorMonitor` 接入 `useModalDialog`：创建、规则、删除弹窗改用原生模态层，具名并具备 Tab 边界、Esc/关闭返焦、步骤焦点迁移和失败提示首焦；深链/query 打开也覆盖。没有改字段、请求、权限或业务动作。完整 M04-05 桌面与390px手机各21/21通过；CP-G01焦点专项两端各3/3，modal单测2/2、Web类型、格式、文档、运行文档、静态分析、发布矩阵、来源动作审计及全22 workspace生产构建通过。代码提交 `d56b78df655738decf6fdea01bf15cb4ce5b5d38` 已推送并部署；生产 live/ready/available/version、页面与JS/CSS均返回200，线上JS/CSS与本地构建逐字节一致，健康版本SHA与部署SHA一致。CP-G02–G07及真实 RBAC/采集/生产业务验收仍保持开放；详见[P19实施记录](P19-PAGE-COMPOSITION-IMPLEMENTATION.md)。
 
 ## 2026-09-26 · P14 关注回执主题归属
 
