@@ -9,11 +9,18 @@ import ts from "typescript";
 import { buildWorkspacesDesignData } from "./lib/ui-phase2-workspaces-design-data.mjs";
 
 const repo = process.cwd(),
-  output = "output/playwright/p32-approved-restore-review";
-const capture = process.argv.includes("--capture"),
-  smoke = process.argv.includes("--smoke");
+  args = process.argv.slice(2),
+  capture = args.includes("--capture"),
+  smoke = args.includes("--smoke"),
+  outputArg = args.find((arg) => arg.startsWith("--output=")),
+  output =
+    outputArg?.slice("--output=".length) ?? "output/playwright/p32-approved-restore-review-r3";
 assert.ok(
-  process.argv.slice(2).every((a) => ["--capture", "--smoke"].includes(a)) && !(capture && smoke),
+  args.every((arg) => ["--capture", "--smoke"].includes(arg) || arg.startsWith("--output=")) &&
+    args.filter((arg) => arg.startsWith("--output=")).length <= 1 &&
+    !(capture && smoke) &&
+    (!outputArg ||
+      (capture && !smoke && /^output\/playwright\/p32-approved-restore-review-r\d+$/.test(output))),
 );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const fixtureFile = "tests/e2e/m06-01-organization-admin.spec.ts";
@@ -60,7 +67,7 @@ if (!capture && !smoke) {
   for (const shot of previous.screenshots)
     assert.equal(hash(await readFile(`${output}/${shot.file}`)), shot.sha256);
 }
-if (capture) await mkdir(output, { recursive: true });
+if (capture) await mkdir(output);
 const portProbe = reservePort();
 await new Promise((resolve) => portProbe.listen(0, "127.0.0.1", resolve));
 const port = portProbe.address().port;
@@ -330,9 +337,11 @@ try {
       `${output}/evidence.json`,
       JSON.stringify(
         {
-          kind: "P32-approved-restore-Vue-r1",
+          kind: outputArg
+            ? `P32-approved-restore-Vue-${output.slice(output.lastIndexOf("-") + 1)}`
+            : "P32-approved-restore-Vue-r1",
           boundary:
-            "Actual Vue; isolated API fixtures only,not production/audit acceptance. User approved P32 desktop,mobile,and remaining visual states. Other shared callers retain existing behavior.",
+            "Actual Vue with current-source screenshots; user's automatic approval applies only to page visuals. Isolated API fixtures do not prove production/audit acceptance. Other shared callers retain existing behavior.",
           sourceHashes,
           checks,
           screenshots,
@@ -349,7 +358,7 @@ try {
       .join("");
     await writeFile(
       `${output}/index.html`,
-      `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P32 恢复原因窗 · 真实 Vue</title><style>body{font:16px/1.6 'Microsoft YaHei',sans-serif;margin:24px;background:#edf1f6;color:#202c3d}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}figure{margin:0}img{max-width:100%;max-height:600px;object-fit:contain;object-position:top left}</style><h1>P32 恢复原因窗 · 真实 Vue</h1><p>已批准手机组合进入真实路由；其他状态与桌面待审核。请求由隔离夹具拦截，不代表生产写入或审计验收。归档/P30为相邻调用回归。</p><main>${cards}</main></html>`,
+      `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P32 恢复原因窗 · 真实 Vue</title><style>body{font:16px/1.6 'Microsoft YaHei',sans-serif;margin:24px;background:#edf1f6;color:#202c3d}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}figure{margin:0}img{max-width:100%;max-height:600px;object-fit:contain;object-position:top left}</style><h1>P32 恢复原因窗 · 真实 Vue</h1><p>当前真实 Vue 图用于页面视觉核对；用户授权已完成页面视觉自动通过。请求由隔离夹具拦截，不代表生产写入、权限或审计验收。归档/P30为相邻调用回归。</p><main>${cards}</main></html>`,
     );
   } else if (!smoke) assert.deepEqual(checks, previous.checks);
   console.log(

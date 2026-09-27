@@ -66,9 +66,11 @@ test("P32 restore context cannot leak into a replacement archive or another call
   assert.equal(await latest, null);
 });
 test("P32 actual Vue evidence binds current production sources and adjacent caller checks", () => {
-  const base = "output/playwright/p32-approved-restore-review";
+  const base = "output/playwright/p32-approved-restore-review-r3";
   const proof = JSON.parse(readFileSync(`${base}/evidence.json`, "utf8"));
   const hash = (v) => createHash("sha256").update(v).digest("hex");
+  assert.equal(proof.kind, "P32-approved-restore-Vue-r3");
+  assert.match(proof.boundary, /automatic approval applies only to page visuals/);
   for (const [f, sha] of Object.entries(proof.sourceHashes))
     assert.equal(hash(readFileSync(f, "utf8").replaceAll("\r\n", "\n")), sha, f);
   assert.equal(proof.screenshots.length, 20);
