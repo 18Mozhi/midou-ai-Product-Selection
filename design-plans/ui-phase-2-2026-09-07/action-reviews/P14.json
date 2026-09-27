@@ -2729,11 +2729,11 @@
         "apps/web/src/components/TrendFilterPanel.vue#574e84bbfac61d8b.1"
       ],
       "sourceContractKeys": [
-        "760px及以下role=dialog，桌面group；打开焦点关闭键、Tab首尾/Escape/遮罩/叉号、关闭归还；submit.capture关闭，清除/复制不触发表单提交"
+        "P14桌面保持group、手机760px及以下role=dialog；本地Vue桌面/390px E2E核验5字段、关闭初焦点、Tab首尾、Escape/取消归还焦点、submit.capture关闭。该共享实现其他调用方仍需独立验收"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "topics内筛选消费者，移动760px及以下覆盖层",
-      "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
+      "handler": "P14实际调用共享ResponsiveFilterDrawer；桌面保持group，手机teleport弹层由共享实现处理初焦点/Tab/Escape/关闭返焦",
       "variants": [
         "listed-consumer-variants"
       ],
@@ -2747,7 +2747,14 @@
         "disabled": "not-applicable-wiring",
         "busy": "not-applicable-wiring"
       },
-      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "remaining": "P14桌面/390px实际Vue E2E通过；其他共享调用方及其各自字段仍待核验。",
+      "testReferences": [
+        {
+          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
+          "evidenceType": "actual-vue-isolated-browser",
+          "claim": "UI2-TR08在桌面检查筛选group和手机真实dialog五字段，覆盖关闭按钮初焦点、首尾Tab、Escape/取消返焦、提交关闭与零写入。"
+        }
+      ],
       "forwardsTo": [
         "TR-FILTER-APPLY",
         "TR-FILTER-CLEAR",
@@ -3125,7 +3132,7 @@
         "ordinal": 1,
         "shape": "responsive-filter",
         "sourceBehavior": "一个ResponsiveFilterDrawer调用；760及以下dialog，桌面group；show/close/Tab/Escape/submit.capture均在共享实现。",
-        "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。",
+        "remaining": "P14测试绑定五个筛选字段并区分桌面group/手机dialog；其他调用方需单独验收。",
         "variants": [
           {
             "name": "filter-open",
@@ -3136,7 +3143,7 @@
                 "scene": "filter-open"
               }
             ],
-            "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。"
+            "remaining": "本地Vue桌面/390px覆盖五字段与键盘生命周期，不代表其他路由消费者。"
           },
           {
             "name": "filter-edited",
@@ -3147,7 +3154,7 @@
                 "scene": "filter-edited"
               }
             ],
-            "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。"
+            "remaining": "本地Vue桌面/390px覆盖五字段与键盘生命周期，不代表其他路由消费者。"
           }
         ]
       },
@@ -3157,7 +3164,7 @@
         "ordinal": 1,
         "shape": "form-container",
         "sourceBehavior": "搜索筛选form，应用提交，清除和复制type=button；排序草稿可立即重排。",
-        "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。",
+        "remaining": "本地Vue E2E验证提交关闭和零写入；API筛选结果语义未由本测试覆盖。",
         "variants": [
           {
             "name": "filter-open",
@@ -3168,7 +3175,7 @@
                 "scene": "filter-open"
               }
             ],
-            "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。"
+            "remaining": "本地Vue E2E验证提交关闭和零写入；API筛选结果语义未由本测试覆盖。"
           },
           {
             "name": "filter-edited",
@@ -3179,7 +3186,7 @@
                 "scene": "filter-edited"
               }
             ],
-            "remaining": "移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。"
+            "remaining": "本地Vue E2E验证提交关闭和零写入；API筛选结果语义未由本测试覆盖。"
           }
         ]
       },
@@ -3335,7 +3342,7 @@
     "sharedRemaining": [
       "局部65候选包括60控件/事件、3role定义与2共享/规则调用；source scan与结构scan统计对象不同，不能合并为业务弹窗总数。",
       "MonitoringReadinessStrip只展示事实；外层NavigationShell另审。UiStatePanel两个primary消费者已列，secondary未监听，不能宣称恢复链接真实可用。",
-      "ResponsiveFilterDrawer的show/close/遮罩/Tab/Escape由共享组件实现，当前只审一个调用；本页业务role div不复用它，不自动继承模态能力。",
+      "ResponsiveFilterDrawer的共享行为已有P14实际Vue桌面/390px测试；其他调用方仍须结合各自字段单独核验，不能由P14结果推及全站。",
       "父/trends为reset_on_scope且提供组织/工作区；局部read/watch没有任务页active/代次保护不等于父无scope隔离。晚到读写结果和缓存激活仍需真实Vue/范围测试。"
     ]
   },

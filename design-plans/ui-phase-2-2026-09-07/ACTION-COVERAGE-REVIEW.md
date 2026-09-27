@@ -880,7 +880,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | TR-RULE-CALLER 父子事件完整转发 / wiring | 2处；@close、@submit | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
 | TR-ANOMALY-DEFINITION 模态定义或共享消费者关联 / wiring | 2处；listed-consumer-variants | ；其余见JSON | 本地桌面/390px E2E验证焦点生命周期；真实权限及工单仍待生产验收。 |
 | TR-RELEVANCE-DEFINITION 模态定义或共享消费者关联 / wiring | 2处；listed-consumer-variants | ；其余见JSON | 失败保留、busy关闭保护与键盘生命周期由局部Vue E2E覆盖；跨主题结果归属、触发按钮替换后的成功焦点目的地和真实运行验收仍待完成。 |
-| TR-FILTER-CALLER 模态定义或共享消费者关联 / wiring | 1处；listed-consumer-variants | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
+| TR-FILTER-CALLER 模态定义或共享消费者关联 / wiring | 1处；listed-consumer-variants | ；其余见JSON | P14桌面/390px实际Vue E2E通过；其他共享调用方及其各自字段仍待核验。 |
 | TR-EVIDENCE-FORWARD 父子事件完整转发 / wiring | 1处；@report-anomaly | ；其余见JSON | 完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。 |
 | TR-RULE-DEFINITION 模态定义或共享消费者关联 / wiring | 2处；listed-consumer-variants | ；其余见JSON | 本地桌面/390px E2E验证键盘和取消返焦；真实规则写入/RBAC仍待生产验收。 |
 
@@ -947,10 +947,10 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | TrendDashboard.vue / form.2 / restore-open | form-container / matching-dialog-scene | [restore-open · 1440](design/trend-direction-c/1440-restore-open.png) / [restore-open · 390](design/trend-direction-c/390-restore-open.png) | 局部Vue E2E验证失败重试与状态写入；真实RBAC、数据库及生产行为未验证。 |
 | TrendDashboard.vue / dialog.2 / irrelevant-open | native-dialog / matching-dialog-scene | [irrelevant-open · 1440](design/trend-direction-c/1440-irrelevant-open.png) / [irrelevant-open · 390](design/trend-direction-c/390-irrelevant-open.png) | 成功变更后原触发按钮替换时的焦点目的地仍待处理。 |
 | TrendDashboard.vue / dialog.2 / restore-open | native-dialog / matching-dialog-scene | [restore-open · 1440](design/trend-direction-c/1440-restore-open.png) / [restore-open · 390](design/trend-direction-c/390-restore-open.png) | 成功变更后原触发按钮替换时的焦点目的地仍待处理。 |
-| TrendFilterPanel.vue / ResponsiveFilterDrawer.1 / filter-open | responsive-filter / related-scene-only | [filter-open · 1440](design/trend-direction-c/1440-filter-open.png) / [filter-open · 390](design/trend-direction-c/390-filter-open.png) | 移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。 |
-| TrendFilterPanel.vue / ResponsiveFilterDrawer.1 / filter-edited | responsive-filter / related-scene-only | [filter-edited · 1440](design/trend-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/trend-direction-c/390-filter-edited.png) | 移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。 |
-| TrendFilterPanel.vue / form.1 / filter-open | form-container / matching-inline-form-scene | [filter-open · 1440](design/trend-direction-c/1440-filter-open.png) / [filter-open · 390](design/trend-direction-c/390-filter-open.png) | 移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。 |
-| TrendFilterPanel.vue / form.1 / filter-edited | form-container / matching-inline-form-scene | [filter-edited · 1440](design/trend-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/trend-direction-c/390-filter-edited.png) | 移动变体需要与具体五输入共验；引用同场景的桌面内联不等于两个业务弹窗。 |
+| TrendFilterPanel.vue / ResponsiveFilterDrawer.1 / filter-open | responsive-filter / related-scene-only | [filter-open · 1440](design/trend-direction-c/1440-filter-open.png) / [filter-open · 390](design/trend-direction-c/390-filter-open.png) | 本地Vue桌面/390px覆盖五字段与键盘生命周期，不代表其他路由消费者。 |
+| TrendFilterPanel.vue / ResponsiveFilterDrawer.1 / filter-edited | responsive-filter / related-scene-only | [filter-edited · 1440](design/trend-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/trend-direction-c/390-filter-edited.png) | 本地Vue桌面/390px覆盖五字段与键盘生命周期，不代表其他路由消费者。 |
+| TrendFilterPanel.vue / form.1 / filter-open | form-container / matching-inline-form-scene | [filter-open · 1440](design/trend-direction-c/1440-filter-open.png) / [filter-open · 390](design/trend-direction-c/390-filter-open.png) | 本地Vue E2E验证提交关闭和零写入；API筛选结果语义未由本测试覆盖。 |
+| TrendFilterPanel.vue / form.1 / filter-edited | form-container / matching-inline-form-scene | [filter-edited · 1440](design/trend-direction-c/1440-filter-edited.png) / [filter-edited · 390](design/trend-direction-c/390-filter-edited.png) | 本地Vue E2E验证提交关闭和零写入；API筛选结果语义未由本测试覆盖。 |
 | TrendRuleDialog.vue / dialog.1 / rule-open | native-dialog / matching-dialog-scene | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | 本地隔离响应，不是生产写入或权限验收。 |
 | TrendRuleDialog.vue / form.1 / rule-open | form-container / matching-dialog-scene | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | form/aside为dialog内结构，不重复统计模态；本地E2E验证取消重开默认值。 |
 | TrendRuleDialog.vue / aside.1 / rule-open | inline-aside / related-scene-only | [rule-open · 1440](design/trend-direction-c/1440-rule-open.png) / [rule-open · 390](design/trend-direction-c/390-rule-open.png) | 说明内容不是另一个弹窗；规则modal使用共享原生dialog生命周期。 |
@@ -968,7 +968,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 三工作面共享单个state/busy；规则旧条目可与错误同屏，治理无同级状态面板；原型隔离失败、统一忙碌保护与原生模态仍待批准/实现。
 - 局部65候选包括60控件/事件、3role定义与2共享/规则调用；source scan与结构scan统计对象不同，不能合并为业务弹窗总数。
 - MonitoringReadinessStrip只展示事实；外层NavigationShell另审。UiStatePanel两个primary消费者已列，secondary未监听，不能宣称恢复链接真实可用。
-- ResponsiveFilterDrawer的show/close/遮罩/Tab/Escape由共享组件实现，当前只审一个调用；本页业务role div不复用它，不自动继承模态能力。
+- ResponsiveFilterDrawer的共享行为已有P14实际Vue桌面/390px测试；其他调用方仍须结合各自字段单独核验，不能由P14结果推及全站。
 - 父/trends为reset_on_scope且提供组织/工作区；局部read/watch没有任务页active/代次保护不等于父无scope隔离。晚到读写结果和缓存激活仍需真实Vue/范围测试。
 
 ## P15 局部动作与共享消费者

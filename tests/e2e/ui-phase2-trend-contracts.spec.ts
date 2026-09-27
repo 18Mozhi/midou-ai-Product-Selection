@@ -347,6 +347,55 @@ test("UI2-TR02 anomaly dialog uses native modal focus lifecycle", async ({ page 
   await expect(trigger).toBeFocused();
 });
 
+test("UI2-TR08 responsive trend filters preserve desktop grouping and mobile focus lifecycle", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  await page.goto("/trends");
+  if ((page.viewportSize()?.width ?? 1440) > 760) {
+    await expect(page.getByRole("group", { name: "筛选趋势" })).toBeVisible();
+    await expect(page.locator(".responsive-filter-drawer__trigger")).toBeHidden();
+    await expect(page.getByRole("dialog", { name: "筛选趋势" })).toHaveCount(0);
+    return;
+  }
+
+  const trigger = page.getByRole("button", { name: /筛选趋势/ });
+  await trigger.click();
+  const drawer = page.getByRole("dialog", { name: "筛选趋势" });
+  const close = drawer.getByRole("button", { name: "关闭筛选条件" });
+  const lastAction = drawer.getByRole("button", { name: "保存视图链接" });
+  await expect(drawer).toBeVisible();
+  await expect(drawer).toHaveAttribute("aria-modal", "true");
+  await expect(close).toBeFocused();
+  for (const [role, name] of [
+    ["combobox", "市场"],
+    ["textbox", "分类"],
+    ["combobox", "状态"],
+    ["textbox", "关键词"],
+    ["combobox", "排序"],
+  ] as const)
+    await expect(drawer.getByRole(role, { name, exact: true })).toBeVisible();
+
+  await page.keyboard.press("Shift+Tab");
+  await expect(lastAction).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await drawer.getByRole("button", { name: "关闭筛选条件" }).click();
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+
+  await trigger.click();
+  await drawer.getByRole("button", { name: "筛选", exact: true }).click();
+  await expect(drawer).toBeHidden();
+  await expect(trigger).toBeFocused();
+  expect(data.writes).toHaveLength(0);
+});
+
 test("UI2-TR02 relevance failure retains the draft and prevents dismissal while saving", async ({
   page,
 }) => {

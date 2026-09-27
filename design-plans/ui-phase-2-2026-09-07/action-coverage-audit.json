@@ -272,7 +272,7 @@
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "af93117972cab0cd3a69985cda8e8b487a7eac7c94f45e6cfd6972e556c04b70",
     "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "34d9faf49a0d92979430bb29a2dea5d28c1ffec5e380d3146a92deff9b11c3cc",
-    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "2071aad5507a4082c91811747bfdae9182aa365e6304e692d6f6c486fac00cb3",
+    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "2eaeac6bf6d771138b083e4055e8d57968f62b0a1b129fbc4bd782add2fcff77",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "a9b294e2f83d2f8283901af7ca9fc067eb3e111ce36fa7fe0cf5cd0233cc329d",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
@@ -410,10 +410,10 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "e8dca5101872cc85e3ed62f6e06897c71de8a2e8f20337884843ea0b882d4b84",
     "scripts/lib/ui-phase2-work-design-data.mjs": "5a15eb532e64f186f5be90c2a036cbb55e37a2be897489ec971ce981040ece34",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "94689f169f7cd9249c6a7f15b2164dc1a4decedf502da9dd95c505dc9a382418",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "bb2b8bc330558eeffc72cdf87495edf617d710ffae49a962be3ca5404b40281e",
     "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
     "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
-    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "9cfe95c9b06ae2e278e97fcfa6fc4aa4b0bf262b51fd75a29f3cb71b4029c88f",
+    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "5e58b009c69f2fdd241961531e892e91fb606d479169ea5f06908fca9a9fb136",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "9816a223c16d16d621b50ddbe00ec01e1ac26cb9947bba7657537df508684d98",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
@@ -577,7 +577,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "1b73dc9bf3ae8ede7d3b94faba9d6b480d2265437f4f9b9b4fdc12f9c39343c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "682add91925a79ee3dd98493cc141bed7d98c29b52c5c77c0de9d1ef985fe98f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "7fbacb6b0b1e2a3cf5d33dda101e9941f5e86c8c94d39fe950f61d30f05117ce",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "00a6481069f754f1bd70e76dbf5770fccbe1fd437d6e6648ae4dbb71843d5132",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "d6a392b1bfaefc73d2b764790304b14ca28e3251e1b86ac4b49f1e40b6319d04",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "1477d73750991d2c8834f3648215871ce1348a3704e65a38120966d5e6f48fa0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "b4d5fab5992f1fe9473a23b0b955051492a0da7a1e7ede4d8330777b99902526",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "3883e11aba472a573a05f1518208579fb691e080ef6700a69404121f74884605",
@@ -1229,6 +1229,7 @@
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
+          "actual-vue-isolated-browser",
           "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
@@ -4169,6 +4170,7 @@
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
+        "actual-vue-isolated-browser",
         "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
@@ -67728,11 +67730,6 @@
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
           "line": 97,
           "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 100,
-          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -67793,11 +67790,6 @@
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
           "line": 98,
           "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 101,
-          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -67827,11 +67819,6 @@
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
           "line": 99,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -67963,7 +67950,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 103,
+          "line": 100,
           "jsonPointer": null
         }
       ],
@@ -67993,7 +67980,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 104,
+          "line": 101,
           "jsonPointer": null
         }
       ],
@@ -68449,7 +68436,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 105,
+          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -68724,11 +68711,6 @@
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
           "line": 97,
           "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 100,
-          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -68758,11 +68740,6 @@
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
           "line": 99,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 102,
           "jsonPointer": null
         }
       ],
