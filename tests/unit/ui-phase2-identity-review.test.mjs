@@ -13,7 +13,10 @@ const review = (id = "P02") =>
   JSON.parse(readFileSync(`design-plans/ui-phase-2-2026-09-07/action-reviews/${id}.json`, "utf8"));
 for (const id of ["P02", "P03", "P04", "P05", "P06", "P07"])
   test(`${id}: initial path and reachable local modes remain distinct`, () => {
-    assert.equal(validateIdentityModeReview(review(id), contract, candidates).sourceSites, 18);
+    assert.equal(
+      validateIdentityModeReview(review(id), contract, candidates).sourceSites,
+      candidates.length,
+    );
   });
 for (const [label, mutate] of [
   [
@@ -63,7 +66,9 @@ for (const [label, mutate] of [
   [
     "omit candidate",
     (r) => {
-      r.actions.pop();
+      const action = r.actions.find((item) => item.actionId === "ID-ROOT");
+      action.sourceCandidateIds.pop();
+      action.sourceCandidateApplicability.pop();
     },
   ],
 ])
