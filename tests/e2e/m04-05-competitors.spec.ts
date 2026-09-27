@@ -1032,3 +1032,55 @@ test("UI2-CP06 task creation uses change evidence and its own permission without
   });
   expect(writes[0]?.key).toBeTruthy();
 });
+
+test("UI2-CPG07 P19 and P20 honor standard and compact density without shrinking controls", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/competitors");
+  const p19 = page.locator(".competitor-monitor--review");
+  await expect(p19.locator(".competitor-detail")).toBeVisible();
+  const readP19Density = () =>
+    p19.evaluate((root) => {
+      const detail = root.querySelector(".competitor-detail");
+      const snapshot = root.querySelector(".competitor-metrics article");
+      const listItem = root.querySelector(".competitor-list button");
+      return {
+        gap: Number.parseFloat(getComputedStyle(root).rowGap),
+        detailPadding: Number.parseFloat(getComputedStyle(detail!).paddingTop),
+        snapshotPadding: Number.parseFloat(getComputedStyle(snapshot!).paddingTop),
+        listItemHeight: Number.parseFloat(getComputedStyle(listItem!).minHeight),
+      };
+    });
+  const p19Standard = await readP19Density();
+  expect(p19Standard.gap).toBe(16);
+  await page.evaluate(() => {
+    document.documentElement.dataset.density = "compact";
+  });
+  const p19Compact = await readP19Density();
+  expect(p19Compact.gap).toBe(10);
+  expect(p19Compact.detailPadding).toBeLessThan(p19Standard.detailPadding);
+  expect(p19Compact.snapshotPadding).toBeLessThan(p19Standard.snapshotPadding);
+  expect(p19Compact.listItemHeight).toBeLessThan(p19Standard.listItemHeight);
+  await expect(p19.getByRole("button", { name: "立即采集" })).toHaveCSS("min-height", "44px");
+
+  await page.goto("/competitors/monitoring-rules");
+  const p20 = page.locator(".competitor-monitor--review");
+  const ruleRow = p20.locator(".competitor-rule-page-list > article").first();
+  await expect(ruleRow).toBeVisible();
+  await page.evaluate(() => {
+    document.documentElement.dataset.density = "compact";
+  });
+  const compactRulePadding = Number.parseFloat(
+    await ruleRow.evaluate((el) => getComputedStyle(el).paddingTop),
+  );
+  expect(compactRulePadding).toBeLessThan(22);
+  await page.evaluate(() => {
+    document.documentElement.dataset.density = "standard";
+  });
+  await expect(ruleRow).toHaveCSS("padding-top", "22px");
+  await expect(page.getByRole("button", { name: "新建监控规则", exact: true })).toHaveCSS(
+    "min-height",
+    "44px",
+  );
+});
