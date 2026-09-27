@@ -169,6 +169,9 @@ const rulesPage = computed(() => props.mode === "rules"),
   latest = computed(() => selected.value?.latest_snapshot ?? null),
   latestCollection = computed(() => selected.value?.latest_collection ?? null),
   collectionPending = computed(() => isCollectionPending(latestCollection.value)),
+  snapshotWindowTruncated = computed(
+    () => (selected.value?.snapshot_count ?? 0) > (selected.value?.snapshots?.length ?? 0),
+  ),
   baseline = computed(() => {
     const snapshots = selected.value?.snapshots ?? [];
     return snapshots.length ? (snapshots[snapshots.length - 1] ?? null) : latest.value;
@@ -1111,9 +1114,12 @@ watch(
           </section>
           <section v-if="latest" class="competitor-comparison" aria-label="基线、变动与阈值">
             <article>
-              <small>基线快照</small>
+              <small>{{ snapshotWindowTruncated ? "窗口最早快照" : "基线快照" }}</small>
               <b>{{ snapshotPrice(baseline) }}</b>
               <time>{{ baseline ? timeText(baseline.captured_at) : "尚未建立" }}</time>
+              <span v-if="snapshotWindowTruncated"
+                >显示最近 100 条中的最早一条，不代表全部历史里的首个基线。</span
+              >
             </article>
             <article>
               <small>当前快照</small>

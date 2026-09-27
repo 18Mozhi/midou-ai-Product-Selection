@@ -34,7 +34,7 @@
     "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
     "apps/web/src/components/CollectionTaskCenter.vue": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de",
     "apps/web/src/components/CommercialOperationsCenter.vue": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec",
-    "apps/web/src/components/CompetitorMonitor.vue": "d78f87b8afc4b8b2cf38f09fe184758dca99752ba5dd2697615988a22948a278",
+    "apps/web/src/components/CompetitorMonitor.vue": "803f24f65034b6943cdda4974d7bd0de8dd91b3cb93b86f065e140dbab811318",
     "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/CostRuleConsole.vue": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3",
@@ -247,7 +247,7 @@
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "ab4b381f48cc74f4d2a71d863fa221e989ca29a7a176674d97b429d5ef6159a8",
-    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "6a92ce1e4aad033e574848dbae11c7b00ae2a3f432a8f993fe03f40be1c77d87",
+    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "35dd9859c704aec7909855e6869e4ef2bbf1586cfa5eb8037d606708f5a270df",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b2fd4e487f62373cd0cc33b086f965a816758eede8f0036cc79a912ce7ce4db7",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b8c7eed0c5b6b1ea3bfcb4df1febb5a1b47ab98d0d8a4fa3c914739d10c6a47f",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "2a6c6dd60fa660ff2758463c2b85cb51ff3868eefc9860f376d1e7b982ccc750",
@@ -429,10 +429,10 @@
     "scripts/verify-ui-phase2-detail-cost-context-c.mjs": "9083d39ac582b9220f261d5b96ffc3a4a4ca987836c2e29b0fefe107de2c4260",
     "scripts/verify-ui-phase2-opportunity-detail-c.mjs": "e22ab61ee8b7caec58e8758a9ed2b0b598d4e340f47797f59a15e56d569876a5",
     "scripts/verify-ui-phase2-insights-c.mjs": "44840b3be73b1f8b754ec258b82f8d6d97ed2edc4bd7ed060ccfa90239319712",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "96fcfa9185912ba9996357b5919e745e21b4637c64f39bb42fa23dea736908bc",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "72c3f02f271aa7674e83803f4968907857327578d93b0d25e1f5211e245ce74a",
     "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
-    "tests/e2e/m04-05-competitors.spec.ts": "04f171fe0ea97077530efb61a9388af9ac0d51ea9328aef27906df0409df9682",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "4be12f0fa915af416f2c59a4c453a6b4b4ceb0ece30a828a70d40b4a3dbdd801",
+    "tests/e2e/m04-05-competitors.spec.ts": "562504b7cb2f1e21c3e7653c58f01573317a18cbc2cbbfe223327806daf1208c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "02a915c1d8a1e76846b9a586d2aa69381154b09d72b33831938b46af8cd3143f",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "566ae260fee4d577175ae19eff60fbdb5a33a64a722200a797a8d4267267c018",
     "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
     "tests/e2e/m04-06-sourcing.spec.ts": "0f7e499b05670cdf3da924afccb804a3f5cbc46be13bf5dd33f990b7830f1af1",
@@ -584,7 +584,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "b4d5fab5992f1fe9473a23b0b955051492a0da7a1e7ede4d8330777b99902526",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "d9fbcc07d9dd51e490cf8564b46c2839c0a229dc82d7c67d83bd2eef864035bf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "2f6c797783fd2c6cca861ae43805fd86d5ae1b3accf33531bd7810b4f1dfaca9",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "722df3f63ea299b15088f712ea28b4b34a7fde2f8c2af22c9fdab9f8f66d9c31",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "f23b74e7cb9f68a652d5c9e77c0f2d0553a913356134c55a736918ffe8fbc599",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "05245c529066d750e719cbeaf35cfb5234cd86ad6e5a187bd79f987bcdd5d5df",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "1b1aba2d06d366a2f27973944121a37380b8e3c606e01d96731fef560e9d7abe",
@@ -13458,7 +13458,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#1b193ec9f175425c.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 872,
+      "line": 875,
       "kind": "control",
       "label": "{{ enabledRules.length ? \"新建监控规则\" : \"配置第一条阈值\" }}",
       "conditions": [
@@ -13497,7 +13497,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 880,
+      "line": 883,
       "kind": "control",
       "label": "返回竞品列表",
       "conditions": [
@@ -13535,7 +13535,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 883,
+      "line": 886,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -13577,7 +13577,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 914,
+      "line": 917,
       "kind": "control",
       "label": "创建第一条规则",
       "conditions": [
@@ -13627,7 +13627,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6f1c1026f48433b0.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 927,
+      "line": 930,
       "kind": "control",
       "label": "重新读取监控规则",
       "conditions": [
@@ -13666,7 +13666,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0d2355591b57c284.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 930,
+      "line": 933,
       "kind": "control",
       "label": "配置监控阈值",
       "conditions": [
@@ -13705,7 +13705,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c626005c766fe7b8.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 938,
+      "line": 941,
       "kind": "control",
       "label": "添加竞品监控",
       "conditions": [
@@ -13744,7 +13744,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ec64e194fee06bf8.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 946,
+      "line": 949,
       "kind": "control",
       "label": "添加竞品",
       "conditions": [
@@ -13783,7 +13783,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#908bdb9143e5350e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 953,
+      "line": 956,
       "kind": "control",
       "label": "查看监控规则",
       "conditions": [
@@ -13821,7 +13821,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8d078d22d63338ea.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 970,
+      "line": 973,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -13863,7 +13863,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ec3b988601b97577.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 979,
+      "line": 982,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -13905,7 +13905,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0832ce1b3b353933.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 991,
+      "line": 994,
       "kind": "control",
       "label": "{{ item.title }} {{ item.source_site }} · {{ item.market }} {{ snapshotPrice(item.latest_snapshot) }} 等待首次采集 {{ statusTe",
       "conditions": [
@@ -13951,7 +13951,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e39ead97fb52b914.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1011,
+      "line": 1014,
       "kind": "control",
       "label": "打开外部来源商品（新窗口）",
       "conditions": [
@@ -13997,7 +13997,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3d04d80f54cd9d35.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1016,
+      "line": 1019,
       "kind": "control",
       "label": "{{ selected.status !== \"active\" ? \"恢复后可采集\" : collectionPending ? \"采集中…\" : latest ? \"立即采集\" : \"重新尝试首次采集\" }}",
       "conditions": [
@@ -14047,7 +14047,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#301ee04052a2735e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1031,
+      "line": 1034,
       "kind": "control",
       "label": "当前竞品规则",
       "conditions": [
@@ -14093,7 +14093,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1033,
+      "line": 1036,
       "kind": "control",
       "label": "{{ selected.status === \"active\" ? \"暂停监控\" : \"恢复监控\" }}",
       "conditions": [
@@ -14143,7 +14143,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1035,
+      "line": 1038,
       "kind": "control",
       "label": "删除竞品监控",
       "conditions": [
@@ -14193,7 +14193,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6bc70845bac2b99a.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1040,
+      "line": 1043,
       "kind": "control",
       "label": "更多操作",
       "conditions": [
@@ -14243,7 +14243,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.2",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1041,
+      "line": 1044,
       "kind": "control",
       "label": "{{ selected.status === \"active\" ? \"暂停监控\" : \"恢复监控\" }}",
       "conditions": [
@@ -14293,7 +14293,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.2",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1043,
+      "line": 1046,
       "kind": "control",
       "label": "删除竞品监控",
       "conditions": [
@@ -14343,7 +14343,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c14a7d89545c4bbd.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1108,
+      "line": 1111,
       "kind": "control",
       "label": "打开外部 Amazon 商品页（新窗口）",
       "conditions": [
@@ -14393,7 +14393,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3edcc1c1730d78dd.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1172,
+      "line": 1178,
       "kind": "control",
       "label": "打开验证任务",
       "conditions": [
@@ -14447,7 +14447,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9f03a53fb65e7c6b.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1176,
+      "line": 1182,
       "kind": "control",
       "label": "生成验证任务",
       "conditions": [
@@ -14501,7 +14501,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9deedc4f8d67733e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1207,
+      "line": 1213,
       "kind": "control",
       "label": "帮助：竞品监控如何工作",
       "conditions": [
@@ -14539,7 +14539,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#225c721c3e09266a.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1216,
+      "line": 1222,
       "kind": "dialog-definition",
       "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
       "conditions": [
@@ -14574,7 +14574,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0a5942425b87d8da.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1216,
+      "line": 1222,
       "kind": "event-binding",
       "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
       "conditions": [
@@ -14609,7 +14609,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e6be6aad71e6c32f.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1225,
+      "line": 1231,
       "kind": "form-event",
       "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
       "conditions": [
@@ -14647,7 +14647,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1231,
+      "line": 1237,
       "kind": "control",
       "label": "关闭新建竞品",
       "conditions": [
@@ -14685,7 +14685,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1297,
+      "line": 1303,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -14727,7 +14727,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#4ae114e438c807d5.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1299,
+      "line": 1305,
       "kind": "control",
       "label": "上一步",
       "conditions": [
@@ -14769,7 +14769,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d32ececd9e3b4c22.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1300,
+      "line": 1306,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : createStep === 3 ? \"确认并开始采集\" : \"下一步\" }}",
       "conditions": [
@@ -14807,7 +14807,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9538d57155059acf.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1306,
+      "line": 1312,
       "kind": "dialog-definition",
       "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
       "conditions": [
@@ -14842,7 +14842,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#eaaea75753101b7d.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1306,
+      "line": 1312,
       "kind": "event-binding",
       "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
       "conditions": [
@@ -14877,7 +14877,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1315,
+      "line": 1321,
       "kind": "form-event",
       "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
       "conditions": [
@@ -14915,7 +14915,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1321,
+      "line": 1327,
       "kind": "control",
       "label": "关闭告警规则",
       "conditions": [
@@ -14953,7 +14953,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1364,
+      "line": 1370,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -14991,7 +14991,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1365,
+      "line": 1371,
       "kind": "control",
       "label": "启用规则",
       "conditions": [
@@ -15029,7 +15029,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6a4b5c16df993837.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1369,
+      "line": 1375,
       "kind": "dialog-definition",
       "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
       "conditions": [
@@ -15069,7 +15069,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ef60f454df6c8376.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1369,
+      "line": 1375,
       "kind": "event-binding",
       "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
       "conditions": [
@@ -15104,7 +15104,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1378,
+      "line": 1384,
       "kind": "form-event",
       "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
       "conditions": [
@@ -15142,7 +15142,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9738acdb81108bf8.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1384,
+      "line": 1390,
       "kind": "control",
       "label": "关闭删除确认",
       "conditions": [
@@ -15177,7 +15177,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#5433acf9dddc7c6a.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1401,
+      "line": 1407,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -15212,7 +15212,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d23c498e72940a2.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1402,
+      "line": 1408,
       "kind": "control",
       "label": "确认删除",
       "conditions": [

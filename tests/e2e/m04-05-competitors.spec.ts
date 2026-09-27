@@ -182,6 +182,38 @@ test("M04-05.A07/A08/A09/A15 renders source-backed baseline changes thresholds a
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
+test("CP-G03 labels the oldest returned snapshot as a window start when history is truncated", async ({
+  page,
+}) => {
+  await setup(page);
+  const snapshots = Array.from({ length: 100 }, (_, index) => ({
+    ...item.latest_snapshot!,
+    id: `window-snapshot-${index}`,
+    captured_at: new Date(Date.UTC(2026, 7, 8, 12) - index * 60_000).toISOString(),
+  }));
+  await page.route(`**/api/v1/competitors/${id}`, (route) =>
+    route.fulfill({
+      json: envelope({
+        ...item,
+        snapshot_count: 101,
+        latest_collection: null,
+        snapshots,
+        changes: [],
+        alerts: [],
+      }),
+    }),
+  );
+
+  await page.goto("/competitors");
+  await page.getByRole("button", { name: /Wallet Case for iPhone 16/ }).click();
+  const comparison = page.getByLabel("基线、变动与阈值");
+  await expect(comparison.getByText("窗口最早快照", { exact: true })).toBeVisible();
+  await expect(
+    comparison.getByText("显示最近 100 条中的最早一条，不代表全部历史里的首个基线。"),
+  ).toBeVisible();
+  await expect(comparison.getByText("基线快照", { exact: true })).toHaveCount(0);
+});
+
 test("UI2-CP-G04 suspends collection polling while cached and rereads on activation", async ({
   page,
 }) => {
