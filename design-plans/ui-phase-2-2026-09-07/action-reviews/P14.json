@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "fb48f74ac862b4a62a6d4a39f63594d42ded627548d0575ef353f3e3e9c30d87",
+    "apps/web/src/components/TrendDashboard.vue": "09aab9722f9ffe73834bd19be7871a2891c3679c0a7cac48b5081a31b79b222a",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -1095,14 +1095,9 @@
       ],
       "testReferences": [
         {
-          "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
-          "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
-        },
-        {
-          "file": "scripts/verify-ui-phase2-trend-c.mjs",
-          "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "现有原型检查引用；本轮不重跑未变浏览器验证，引用不等于全结果验收。"
+          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
+          "evidenceType": "actual-vue-isolated-browser",
+          "claim": "UI2-TR08检查全部状态选择、URL status=及重载后的空值状态。"
         }
       ],
       "visualStates": {
@@ -1113,14 +1108,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "UI2-TR08验证状态字段选中全部状态后可保留空值并跨重载恢复；activeFilterCount默认值含义及抽屉取消后草稿策略未由此测试覆盖。",
-      "testReferences": [
-        {
-          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
-          "evidenceType": "actual-vue-isolated-browser",
-          "claim": "UI2-TR08检查全部状态选择、URL status=及重载后的空值状态。"
-        }
-      ]
+      "remaining": "UI2-TR08验证状态字段选中全部状态后可保留空值并跨重载恢复；activeFilterCount默认值含义及抽屉取消后草稿策略未由此测试覆盖。"
     },
     {
       "actionId": "TR-FILTER-EDIT.category",
@@ -2656,13 +2644,17 @@
           "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
           "event": "@cancel",
           "handler": "handleAnomalyCancel",
-          "targets": ["TR-ANOMALY-CLOSE"]
+          "targets": [
+            "TR-ANOMALY-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
           "event": "@keydown",
           "handler": "handleAnomalyKeydown",
-          "targets": ["TR-ANOMALY-CLOSE"]
+          "targets": [
+            "TR-ANOMALY-CLOSE"
+          ]
         }
       ]
     },
@@ -2855,13 +2847,17 @@
           "candidateId": "apps/web/src/components/TrendRuleDialog.vue#8cead402b77314e2.1",
           "event": "@cancel",
           "handler": "handleCancel",
-          "targets": ["TR-RULE-CLOSE"]
+          "targets": [
+            "TR-RULE-CLOSE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/TrendRuleDialog.vue#8cead402b77314e2.1",
           "event": "@keydown",
           "handler": "handleKeydown",
-          "targets": ["TR-RULE-CLOSE"]
+          "targets": [
+            "TR-RULE-CLOSE"
+          ]
         }
       ]
     }
@@ -2879,7 +2875,7 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "fb48f74ac862b4a62a6d4a39f63594d42ded627548d0575ef353f3e3e9c30d87",
+      "apps/web/src/components/TrendDashboard.vue": "09aab9722f9ffe73834bd19be7871a2891c3679c0a7cac48b5081a31b79b222a",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",

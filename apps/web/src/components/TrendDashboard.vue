@@ -53,7 +53,8 @@ const props = defineProps<{
   page = ref(1),
   sort = ref<TrendSort>("impact"),
   filters = reactive<TrendFilters>({ q: "", market: "", category: "", status: "active" });
-let listReadGeneration = 0;
+let listReadGeneration = 0,
+  topicDetailReadGeneration = 0;
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -159,7 +160,9 @@ async function read<T = any>(path: string, isCurrent: () => boolean = () => true
 }
 async function load() {
   const generation = ++listReadGeneration;
+  const detailGeneration = ++topicDetailReadGeneration;
   const isCurrent = () => generation === listReadGeneration;
+  const isCurrentDetail = () => isCurrent() && detailGeneration === topicDetailReadGeneration;
   state.value = "loading";
   message.value = "";
   try {
@@ -191,8 +194,8 @@ async function load() {
       state.value = "empty";
       return;
     }
-    const topicDetail = (await read(`/trends/${currentId}`, isCurrent)).data as Detail;
-    if (!isCurrent()) return;
+    const topicDetail = (await read(`/trends/${currentId}`, isCurrentDetail)).data as Detail;
+    if (!isCurrentDetail()) return;
     selected.value = {
       ...topicDetail,
       relevance_history: topicDetail.relevance_history ?? [],
@@ -201,7 +204,7 @@ async function load() {
     if (requestedTopic !== currentId)
       await router.replace({ query: { ...route.query, topic: currentId } });
   } catch (error) {
-    if (!isCurrent()) return;
+    if (!isCurrent() || !isCurrentDetail()) return;
     if (!(error instanceof ApiClientError)) state.value = "blocked";
   }
 }
@@ -452,18 +455,28 @@ watch(
 watch(
   () => route.query.topic,
   async (topicId) => {
-    if (typeof topicId !== "string" || selected.value?.id === topicId) return;
+    const generation = ++topicDetailReadGeneration;
+    const isCurrent = () => generation === topicDetailReadGeneration;
+    if (typeof topicId !== "string" || selected.value?.id === topicId) {
+      if (busy.value === "detail") busy.value = "";
+      return;
+    }
     busy.value = "detail";
     try {
-      const topicDetail = (await read(`/trends/${topicId}`)).data as Detail;
+      const topicDetail = (await read(`/trends/${topicId}`, isCurrent)).data as Detail;
+      if (!isCurrent()) return;
       selected.value = {
         ...topicDetail,
         relevance_history: topicDetail.relevance_history ?? [],
       };
+      state.value = "ready";
+    } catch {
+      if (!isCurrent()) return;
     } finally {
-      busy.value = "";
+      if (isCurrent() && busy.value === "detail") busy.value = "";
     }
   },
+  { flush: "sync" },
 );
 watch(
   () => [route.query.section, route.query.tab, route.query.sort],
@@ -486,6 +499,7 @@ onMounted(() => {
 });
 onBeforeUnmount(() => {
   listReadGeneration += 1;
+  topicDetailReadGeneration += 1;
 });
 </script>
 

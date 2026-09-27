@@ -76,7 +76,7 @@ function fixture() {
   return { detail, rule, changes, writes: [] as Request[] };
 }
 type Fixture = ReturnType<typeof fixture>;
-async function ready(page: Page) {
+async function ready(page: Page, capabilities = ["task:read", "trend:read", "trend:manage"]) {
   const data = fixture();
   page.on("request", (request) => {
     if (new URL(request.url()).pathname.startsWith("/api/v1/trends") && request.method() !== "GET")
@@ -92,7 +92,7 @@ async function ready(page: Page) {
         organization_id: id(401),
         workspace_id: id(402),
         roles: ["member"],
-        capabilities: ["task:read", "trend:read", "trend:manage"],
+        capabilities,
         platform_roles: [],
         platform_capabilities: [],
         guard_reason: "navigation_member_allowed",
@@ -595,6 +595,113 @@ test("UI2-TR10 late filter reads cannot replace or block the current topic list"
   await staleFailureResponse;
   await expect(page.locator("#trend-list > button").first()).toContainText("失败后当前主题");
   await expect(page.locator("#trend-list")).toBeVisible();
+  expect(data.writes).toHaveLength(0);
+});
+
+test("UI2-TR10 route topic reads discard stale success and failure responses", async ({ page }) => {
+  const data = await ready(page, ["task:read", "trend:read"]);
+  const secondTopic = { ...data.detail, id: id(425), title: "第二主题" },
+    thirdTopic = { ...data.detail, id: id(426), title: "第三主题" };
+  let secondTopicReads = 0,
+    raceArmed = false,
+    raceMode: "success" | "failure" = "success",
+    releaseLateSuccess!: () => void,
+    markLateSuccessStarted!: () => void,
+    releaseLateFailure!: () => void,
+    markLateFailureStarted!: () => void;
+  const lateSuccessGate = new Promise<void>((resolve) => (releaseLateSuccess = resolve));
+  const lateSuccessStarted = new Promise<void>((resolve) => (markLateSuccessStarted = resolve));
+  const lateFailureGate = new Promise<void>((resolve) => (releaseLateFailure = resolve));
+  const lateFailureStarted = new Promise<void>((resolve) => (markLateFailureStarted = resolve));
+
+  await page.route("**/api/v1/trends**", async (route) => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (request.method() !== "GET")
+      return route.fulfill({ status: 500, json: { error: { code: "unexpected_test_write" } } });
+    if (url.pathname === "/api/v1/trends")
+      return route.fulfill({
+        json: envelope([data.detail, secondTopic, thirdTopic], {
+          page: 1,
+          page_size: 20,
+          total: 3,
+        }),
+      });
+    if (url.pathname.endsWith("/monitoring-rules"))
+      return route.fulfill({ json: envelope([data.rule]) });
+    if (url.pathname.endsWith("/change-requests"))
+      return route.fulfill({ json: envelope(data.changes) });
+
+    const detailId = url.pathname.match(/^\/api\/v1\/trends\/([^/]+)$/)?.[1];
+    if (detailId === secondTopic.id) {
+      if (!raceArmed) return route.fulfill({ json: envelope(secondTopic) });
+      secondTopicReads += 1;
+      if (secondTopicReads > 1) return route.fulfill({ json: envelope(secondTopic) });
+      if (raceMode === "success") {
+        markLateSuccessStarted();
+        await lateSuccessGate;
+        return route.fulfill({ json: envelope(secondTopic) });
+      }
+      markLateFailureStarted();
+      await lateFailureGate;
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "service_unavailable",
+            message: "迟到主题读取失败",
+            action_hint: "迟到主题读取失败。",
+          },
+          request_id: "ui2-stale-topic-read",
+          trace_id: "ui2-stale-topic-read",
+        },
+      });
+    }
+    if (detailId === thirdTopic.id) return route.fulfill({ json: envelope(thirdTopic) });
+    if (detailId === data.detail.id) return route.fulfill({ json: envelope(data.detail) });
+    return route.fallback();
+  });
+
+  await page.goto(`/trends?topic=${topicId}`);
+  await expect(page.locator(".trend-detail")).toContainText(data.detail.title);
+  await page.waitForLoadState("networkidle");
+  await expect(page.locator("#trend-list > button")).toHaveCount(3);
+  raceArmed = true;
+  const mobile = (page.viewportSize()?.width ?? 1440) <= 760;
+  const chooseTopic = async (title: string) => {
+    if (mobile && !(await page.locator("#trend-list").isVisible()))
+      await page.getByRole("button", { name: "返回趋势列表" }).click();
+    await page.locator("#trend-list > button").filter({ hasText: title }).click();
+  };
+
+  await chooseTopic(secondTopic.title);
+  await lateSuccessStarted;
+  await chooseTopic(thirdTopic.title);
+  await expect(page.locator(".trend-detail")).toContainText(thirdTopic.title);
+  const lateSuccessResponse = page.waitForResponse(
+    (response) => new URL(response.url()).pathname === `/api/v1/trends/${secondTopic.id}`,
+  );
+  releaseLateSuccess();
+  await lateSuccessResponse;
+  await expect(page.locator(".trend-detail")).toContainText(thirdTopic.title);
+  await expect(page.locator(".trend-detail")).not.toContainText(secondTopic.title);
+
+  raceMode = "failure";
+  secondTopicReads = 0;
+  await chooseTopic(secondTopic.title);
+  await lateFailureStarted;
+  await chooseTopic(thirdTopic.title);
+  await expect(page.locator(".trend-detail")).toContainText(thirdTopic.title);
+  const lateFailureResponse = page.waitForResponse(
+    (response) =>
+      new URL(response.url()).pathname === `/api/v1/trends/${secondTopic.id}` &&
+      response.status() === 503,
+  );
+  releaseLateFailure();
+  await lateFailureResponse;
+  await expect(page.locator(".trend-detail")).toContainText(thirdTopic.title);
+  await expect(page.locator("body")).not.toContainText("迟到主题读取失败");
+  await expect(page.locator("body")).not.toContainText("ui2-stale-topic-read");
   expect(data.writes).toHaveLength(0);
 });
 
