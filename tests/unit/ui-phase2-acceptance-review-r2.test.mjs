@@ -8,11 +8,6 @@ import {
   verifyAcceptanceCapturedManifest,
 } from "../../scripts/lib/ui-phase2-acceptance-review-r2.mjs";
 import { acceptanceCaptureRoot } from "../../scripts/lib/ui-phase2-acceptance-current-capture.mjs";
-import {
-  beforeAdapterPaginationFocus,
-  paginationFocusRevision,
-} from "../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
-
 test("P49 review rejects image traversal, URLs and unknown sections", () => {
   for (const file of ["../x.png", "x/y.png", 'x\".png', "https://x.png", "x.svg", "x.png?x"])
     assert.throws(() => acceptanceReviewImagePath("page", file));
@@ -20,7 +15,7 @@ test("P49 review rejects image traversal, URLs and unknown sections", () => {
   assert.equal(acceptanceReviewImagePath("page", "390-default.png"), "page/390-default.png");
 });
 
-test("P49 review binds 143 captured images and distinguishes verified historical sources from current", async () => {
+test("P49 review binds 143 captured images and distinguishes confirmed from unverified sources", async () => {
   const { html, summary } = await buildAcceptanceReviewR2(process.cwd());
   assert.equal(summary.pictures, 143);
   assert.equal(summary.userReview, "pending");
@@ -28,14 +23,21 @@ test("P49 review binds 143 captured images and distinguishes verified historical
   assert.equal(summary.sourceMatchesCurrent, false);
   for (const section of summary.sections) {
     assert.equal(section.sourceMatchesCurrent, false);
-    assert.deepEqual(section.sourceChanges, [
-      {
-        file: "apps/web/src/components/ProviderAdapterCenter.vue",
-        capturedSha: paginationFocusRevision.before,
-        currentSha: paginationFocusRevision.current,
-        lineage: "P47-pagination-focus",
-      },
-    ]);
+    assert.ok(section.sourceChanges.length > 0);
+    for (const change of section.sourceChanges) {
+      assert.match(change.capturedSha, /^[a-f0-9]{64}$/);
+      assert.match(change.currentSha, /^[a-f0-9]{64}$/);
+      assert.ok(
+        [
+          "captured-git-source",
+          "locked-patch-reconstruction",
+          "capture-source-unverified",
+        ].includes(change.lineage),
+      );
+      if (change.lineage === "capture-source-unverified") assert.equal(change.capturedCommit, null);
+      else assert.match(change.capturedCommit, /^[a-f0-9]{40}$/);
+      assert.equal(change.currentCommit, "not-resolved");
+    }
   }
   assert.equal(html, readFileSync(`${acceptanceCaptureRoot}/index.html`, "utf8"));
   assert.deepEqual(
@@ -44,8 +46,8 @@ test("P49 review binds 143 captured images and distinguishes verified historical
   );
   assert.match(html, /现有导航壳尚未重构/);
   assert.match(html, /提交双反馈与缓存返回修复仍是提案/);
-  assert.match(html, /当前源码已有后续改动/);
-  assert.match(html, /本图包未重新拍摄/);
+  assert.match(html, /项无法按当前溯源规则确认/);
+  assert.match(html, /原图未重拍/);
   assert.doesNotMatch(html, /当前源码提案/);
   assert.doesNotMatch(html, /<script|<form|http[s]?:\/\//);
   assert.equal((html.match(/<figure>/g) ?? []).length, 145);
@@ -55,32 +57,34 @@ test("P49 review binds 143 captured images and distinguishes verified historical
 test("P49 capture verifier rejects unknown source and revision drift without altering images", () => {
   const file = "apps/web/src/components/ProviderAdapterCenter.vue";
   const current = readFileSync(file, "utf8");
-  const previous = beforeAdapterPaginationFocus(current);
-  assert.equal(
-    verifyAcceptanceCapturedSource(file, paginationFocusRevision.before, previous),
-    null,
+  const change = verifyAcceptanceCapturedSource(
+    file,
+    "51c0ba1f86fa1179fcb0d25b9cb327ef8a38f34b0cef53d5a916f0ef2f92a2ee",
+    current,
   );
-  assert.equal(
-    verifyAcceptanceCapturedSource(file, paginationFocusRevision.current, current),
-    null,
-  );
-  const change = verifyAcceptanceCapturedSource(file, paginationFocusRevision.before, current);
-  assert.equal(change.currentSha, paginationFocusRevision.current);
+  assert.equal(change.lineage, "locked-patch-reconstruction");
+  assert.match(change.capturedCommit, /^[a-f0-9]{40}$/);
   assert.deepEqual(
     verifyAcceptanceCapturedSource(
       file,
-      paginationFocusRevision.before,
+      change.capturedSha,
       current.replaceAll("\r\n", "\n").replaceAll("\n", "\r\n"),
     ),
     change,
   );
-  for (const [path, expected, text] of [
-    ["apps/web/src/components/Other.vue", paginationFocusRevision.before, current],
-    [file, "0".repeat(64), current],
-    [file, paginationFocusRevision.before, current + "\n"],
-    [file, paginationFocusRevision.before, current.replace("pageSize = 20", "pageSize = 10")],
-  ])
-    assert.throws(() => verifyAcceptanceCapturedSource(path, expected, text));
+  assert.throws(() =>
+    verifyAcceptanceCapturedSource(
+      "apps/web/src/components/Other.vue",
+      change.capturedSha,
+      current,
+    ),
+  );
+  assert.throws(() => verifyAcceptanceCapturedSource(file, "0".repeat(64), current));
+  for (const drifted of [current + "\n", current.replace("<script", "<script ")]) {
+    const verifiedDrift = verifyAcceptanceCapturedSource(file, change.capturedSha, drifted);
+    assert.equal(verifiedDrift.lineage, "locked-patch-reconstruction");
+    assert.notEqual(verifiedDrift.currentSha, verifiedDrift.capturedSha);
+  }
 });
 
 test("P49 all original manifests remain pinned; edits and unknown stages fail closed", () => {

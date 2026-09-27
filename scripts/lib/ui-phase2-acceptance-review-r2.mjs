@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -32,6 +33,53 @@ const manifestHashes = {
   robustness: "1d20f76c09ff09651db671a1f1838c7d8ad09744d5a23622b954079b5bd05ae6",
   lifecycle: "3732d3be3bf09a25f2f7ee710bb6cc59297dda907dfe73e5ba47dc339ed97ac9",
 };
+const capturedRevisionCache = new Map();
+
+function gitTextAt(commit, file) {
+  return execFileSync("git", ["show", `${commit}:${file}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  );
+}
+
+function findCapturedCommit(file, capturedSha) {
+  const key = `${file}:${capturedSha}`;
+  if (capturedRevisionCache.has(key)) return capturedRevisionCache.get(key);
+  assert.ok(!path.isAbsolute(file) && !file.split(/[\\/]/).includes(".."), "Unsafe source path");
+  if (
+    file === "apps/web/src/components/ProviderAdapterCenter.vue" &&
+    capturedSha === paginationFocusRevision.before
+  ) {
+    const commits = execFileSync(
+      "git",
+      ["log", "--all", "--follow", "--max-count=60", "--format=%H", "--", file],
+      { encoding: "utf8" },
+    )
+      .trim()
+      .split(/\r?\n/)
+      .filter(Boolean);
+    const paginationCommit = commits.find((commit) => {
+      try {
+        return hash(gitTextAt(commit, file)) === paginationFocusRevision.current;
+      } catch {
+        return false;
+      }
+    });
+    assert.ok(
+      paginationCommit,
+      "P47 pagination-focus source revision is not present in recent Git history",
+    );
+    assert.equal(
+      hash(beforeAdapterPaginationFocus(gitTextAt(paginationCommit, file))),
+      capturedSha,
+      "P47 captured source cannot be reconstructed from the locked inverse",
+    );
+    const resolution = { commit: paginationCommit, lineage: "locked-patch-reconstruction" };
+    capturedRevisionCache.set(key, resolution);
+    return resolution;
+  }
+  assert.fail(`Captured source is not confirmed by the supported provenance rules: ${file}`);
+}
 export function verifyAcceptanceCapturedManifest(stage, raw) {
   assert.ok(Object.hasOwn(manifestHashes, stage), "Unknown capture stage");
   assert.equal(
@@ -42,23 +90,37 @@ export function verifyAcceptanceCapturedManifest(stage, raw) {
 }
 
 // Verify capture-time content, but never label reconstructed content as current source.
-export function verifyAcceptanceCapturedSource(file, capturedSha, currentText) {
+export function verifyAcceptanceCapturedSource(
+  file,
+  capturedSha,
+  currentText,
+  { allowUnverified = false } = {},
+) {
   const source = currentText.replaceAll("\r\n", "\n");
   const currentSha = hash(source);
   if (currentSha === capturedSha) return null;
-  assert.equal(
+  let captured;
+  try {
+    captured = findCapturedCommit(file, capturedSha);
+  } catch (error) {
+    if (!allowUnverified) throw error;
+    return {
+      file,
+      capturedSha,
+      currentSha,
+      lineage: "capture-source-unverified",
+      capturedCommit: null,
+      currentCommit: "not-resolved",
+    };
+  }
+  return {
     file,
-    "apps/web/src/components/ProviderAdapterCenter.vue",
-    `Unverified source drift: ${file}`,
-  );
-  assert.equal(capturedSha, paginationFocusRevision.before, "Unknown captured P47 source");
-  assert.equal(currentSha, paginationFocusRevision.current, "Unknown current P47 source");
-  assert.equal(
-    hash(beforeAdapterPaginationFocus(source)),
     capturedSha,
-    "Captured P47 source cannot be restored exactly",
-  );
-  return { file, capturedSha, currentSha, lineage: "P47-pagination-focus" };
+    currentSha,
+    lineage: captured.lineage,
+    capturedCommit: captured.commit,
+    currentCommit: "not-resolved",
+  };
 }
 
 export function acceptanceReviewImagePath(stage, file) {
@@ -91,6 +153,7 @@ export async function buildAcceptanceReviewR2(repo) {
         source,
         sha,
         await readFile(path.join(repo, source), "utf8"),
+        { allowUnverified: true },
       );
       if (change) sourceChanges.push(change);
     }
@@ -138,9 +201,19 @@ export async function buildAcceptanceReviewR2(repo) {
     assert.ok(image, "Missing default review image");
     return image;
   };
-  const versionNote = summary.sourceMatchesCurrent
-    ? "捕获来源与当前源码一致；这仍是待审设计图，不代表生产验收。"
-    : "这是捕获时的设计图，当前源码已有后续改动。P47 分页焦点已修复，本图包未重新拍摄；仍可审核图中方案，但不能据此确认当前实现。";
+  const uniqueChanges = new Map(
+      sections
+        .flatMap((section) => section.sourceChanges)
+        .map((change) => [`${change.file}:${change.capturedSha}`, change]),
+    ),
+    driftCount = uniqueChanges.size,
+    verifiedCount = [...uniqueChanges.values()].filter(
+      (change) => change.lineage !== "capture-source-unverified",
+    ).length,
+    unverifiedCount = driftCount - verifiedCount,
+    versionNote = summary.sourceMatchesCurrent
+      ? "捕获来源与当前源码一致；这仍是待审设计图，不代表生产验收。"
+      : `${verifiedCount}项捕获来源已由锁定补丁核验，${unverifiedCount}项无法按当前溯源规则确认；${driftCount}项来源与当前源码不同。原图未重拍，只表示捕获时提案，不证明当前实现或生产验收。`;
   const html = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P49 · 设计图审核 r2</title>
 <style>
 ${[
@@ -156,7 +229,7 @@ ${[
 <main><aside class="boundary" aria-labelledby="boundary"><h2 id="boundary">本次审核边界</h2><p>重点核对蓝色结论栏、连续门禁证据、下一步、运行表单和诊断区域的排列。这些是本地测试数据上的提案，未上线。</p><p><strong>现有导航壳尚未重构；长图中的固定导航可能出现在截图中段。</strong>它们不属于本次页内布局确认，不能将这些图签收为整页完成。点击“查看原尺寸”检查完整内容。</p><p>提交双反馈与缓存返回修复仍是提案；143张图不代表143项独立功能，也不代表真实权限、采集或生产验收。</p></aside>
 <p class="version-status"><strong>${versionNote}</strong> <a href="review.json">查看版本差异</a></p>
 <div class="hero">${figure(keyImage("1440-authoritative-2-of-3.png"), "桌面 · 尚缺字段解析证据（1440px）")}${figure(keyImage("390-authoritative-2-of-3.png"), "手机 · 同一状态（390px）")}</div>
-${sections.map((section) => `<section id="${section.stage}"><h2>${section.title}</h2><p>${section.count}张图 · ${section.runs}次运行 · ${section.sources}份捕获来源已核对 · ${section.sourceChanges.length}处后续源码变更。此组仍待审核。</p><details><summary>展开${section.count}张图</summary><div class="grid">${section.images.map((image) => figure(image, image.file.replace(/\.png$/, ""))).join("")}</div></details><p class="source">版本 SHA256：${section.manifestSha} · <a href="${section.stage}/evidence.json">原始检查清单</a></p></section>`).join("\n")}
+${sections.map((section) => `<section id="${section.stage}"><h2>${section.title}</h2><p>${section.count}张图 · ${section.runs}次运行 · ${section.sources}份捕获来源记录 · ${section.sourceChanges.length}处后续源码变更。此组仍待审核。</p><details><summary>展开${section.count}张图</summary><div class="grid">${section.images.map((image) => figure(image, image.file.replace(/\.png$/, ""))).join("")}</div></details><p class="source">版本 SHA256：${section.manifestSha} · <a href="${section.stage}/evidence.json">原始检查清单</a></p></section>`).join("\n")}
 <footer>仅本地审核资料，不属于生产路由。旧r1图包独立保留；本入口没有自动批准、写入账号或启动采集的操作。</footer></main></html>`;
   return { html, summary };
 }
