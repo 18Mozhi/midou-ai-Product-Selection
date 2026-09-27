@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "f94369cc2a0abfbe5271e66b7ecd70fe2f3abb0e3b304b9b200156a23a60139f"
+    "apps/web/src/components/CompetitorMonitor.vue": "2ab8c2582af0f9f2c39302f4221959159a86b59f790c6b425b9e2ce4028cfdf0"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -52,7 +52,7 @@
       "kind": "excluded",
       "routeApplicability": "P19 fixed list route; see each condition/exclusion",
       "sourceCandidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1",
+        "apps/web/src/components/CompetitorMonitor.vue#1b193ec9f175425c.1",
         "apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1",
         "apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1",
         "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1"
@@ -109,7 +109,7 @@
       "kind": "navigation",
       "routeApplicability": "P19 fixed list route; see each condition/exclusion",
       "sourceCandidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#056cc0832d94cfb3.1",
+        "apps/web/src/components/CompetitorMonitor.vue#0d2355591b57c284.1",
         "apps/web/src/components/CompetitorMonitor.vue#908bdb9143e5350e.1",
         "apps/web/src/components/CompetitorMonitor.vue#301ee04052a2735e.1"
       ],
@@ -231,13 +231,44 @@
       ]
     },
     {
+      "actionId": "CP-RULE-READ-RETRY",
+      "label": "重新读取竞品监控规则",
+      "kind": "read",
+      "routeApplicability": "P19 fixed list route; rule-read failure only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/CompetitorMonitor.vue#6f1c1026f48433b0.1"
+      ],
+      "sourceContractKeys": ["只重读规则GET，不写入"],
+      "contractAliasReason": "P19/P20合同表的最终列记录该恢复操作的唯一副作用边界；它仅重读规则，不发起业务写入。",
+      "condition": "P19 ruleReadState=error; available to competitor:read users",
+      "handler": "reloadRules issues only GET /competitor-monitor-rules; no business write",
+      "variants": ["rule read failed", "retry in progress", "rules reread successfully", "retry fails again"],
+      "scenes": [],
+      "testReferences": [
+        {
+          "file": "tests/e2e/m04-05-competitors.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "CP-G02 verifies failed list-mode rule read remains unknown, retry issues only the rule GET, and a successful response restores the enabled count without writes."
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "remaining": "Action behavior mapping only; visual treatment follows the globally approved page direction, but this retry interaction has no separate action approval, complete button-state review, or production/API acceptance."
+    },
+    {
       "actionId": "CP-CREATE-OPEN",
       "label": "添加竞品入口",
       "kind": "local",
       "routeApplicability": "P19 fixed list route; see each condition/exclusion",
       "sourceCandidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#4fe322a77ae77170.1",
-        "apps/web/src/components/CompetitorMonitor.vue#9e3339029c06290e.1"
+        "apps/web/src/components/CompetitorMonitor.vue#c626005c766fe7b8.1",
+        "apps/web/src/components/CompetitorMonitor.vue#ec64e194fee06bf8.1"
       ],
       "sourceContractKeys": [
         "有启用规则的页首创建",
@@ -2712,10 +2743,10 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/CompetitorMonitor.vue": "f94369cc2a0abfbe5271e66b7ecd70fe2f3abb0e3b304b9b200156a23a60139f",
+      "apps/web/src/components/CompetitorMonitor.vue": "2ab8c2582af0f9f2c39302f4221959159a86b59f790c6b425b9e2ce4028cfdf0",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
-      "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
+      "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },

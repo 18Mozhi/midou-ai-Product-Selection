@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1710；旧登记1477；新身份644，旧表独有身份411。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1550源位置/1272组；其中路由动作1050组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1711；旧登记1477；新身份649，旧表独有身份415。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1551源位置/1273组；其中路由动作1051组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -32,8 +32,8 @@
 | [P16 创建选品](page-specs/P16.md) | 41 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 61 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P18 机会详情](page-specs/P18.md) | 150 | [53组](action-reviews/P18.json) | 264个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P19 竞品监控](page-specs/P19.md) | 67 | [22组](action-reviews/P19.json) | 20个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P20 竞品监控规则](page-specs/P20.md) | 67 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P19 竞品监控](page-specs/P19.md) | 63 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P20 竞品监控规则](page-specs/P20.md) | 63 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P21 供应链与利润](page-specs/P21.md) | 87 | [39组](action-reviews/P21.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P22 费用与利润规则](page-specs/P22.md) | 60 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P23 全部任务](page-specs/P23.md) | 73 | [40组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -1474,14 +1474,15 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P19 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P19.json)：42个局部源位置 → 22组；5类写入，18组路由动作，2组转发/容器关联不重复计动作。已映射10/10个源码字段位置，10/10处调用/内嵌容器，25个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P19.json)：43个局部源位置 → 23组；5类写入，19组路由动作，2组转发/容器关联不重复计动作。已映射10/10个源码字段位置，10/10处调用/内嵌容器，25个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有20个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有26个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | CP-P20-REGION-EXCLUDED P20规则目录区域排除 / excluded | 4处；P20页首、P20返回、P20恢复事件、P20规则空入口 | [rules · 1440](design/competitor-direction-c/1440-rules.png) / [rules · 390](design/competitor-direction-c/390-rules.png)、[rules-empty · 1440](design/competitor-direction-c/1440-rules-empty.png) / [rules-empty · 390](design/competitor-direction-c/390-rules-empty.png)；其余见JSON | 只排除该固定路由内正常区域；不删除共享源；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
 | CP-RULE-NAV 查看规则 / 配置阈值 / 当前竞品规则 / navigation | 3处；无启用规则manager、只读查看全部、当前竞品管理者、当前竞品只读 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[readonly · 1440](design/competitor-direction-c/1440-readonly.png) / [readonly · 390](design/competitor-direction-c/390-readonly.png)；其余见JSON | 已补本页精确代表控件双端状态图，用户尚未批准，不代表全变体/真实Vue/主题完成。导航仅有默认/hover/focus/pressed四态；源码没有disabled或请求busy，不造状态。未覆盖所有来源、权限、长文本/主题及真实页面跳转后的运行。 |
+| CP-RULE-READ-RETRY 重新读取竞品监控规则 / read | 1处；rule read failed、retry in progress、rules reread successfully、retry fails again | ；其余见JSON | Action behavior mapping only; visual treatment follows the globally approved page direction, but this retry interaction has no separate action approval, complete button-state review, or production/API acceptance. |
 | CP-CREATE-OPEN 添加竞品入口 / local | 2处；有规则页首、无规则次级、打开后继续已有实例字段 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[empty · 1440](design/competitor-direction-c/1440-empty.png) / [empty · 390](design/competitor-direction-c/390-empty.png)；其余见JSON | 已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。 |
 | CP-STATE-RECOVERY 列表异常状态主次恢复 / read | 1处；loading无按钮、empty管理者/只读、error重试/返回、expired仅登录、forbidden主次到home、blocked重读/回home | [loading · 1440](design/competitor-direction-c/1440-loading.png) / [loading · 390](design/competitor-direction-c/390-loading.png)、[empty · 1440](design/competitor-direction-c/1440-empty.png) / [empty · 390](design/competitor-direction-c/390-empty.png)；其余见JSON | 已补按页面和主次按钮独立的四态额外变体，详见COMPETITOR-RECOVERY-STATE-REVIEW；不将同一CP-STATE-RECOVERY跨页覆盖代表键。代表槽状态本批不提升，source loading隐藏footer，不伪造disabled/busy按钮。仍缺全部主题/密度/真实浏览器history和完整fullPath组合、实际异步恢复、真实Vue与用户批准。 |
 | CP-SEARCH-RECOVERY 无匹配结果主次操作 / read | 1处；清空搜索、管理者添加、只读刷新 | [search-empty · 1440](design/competitor-direction-c/1440-search-empty.png) / [search-empty · 390](design/competitor-direction-c/390-search-empty.png)、[create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)；其余见JSON | 已补按页面和主次按钮独立的四态额外变体，详见COMPETITOR-RECOVERY-STATE-REVIEW；不将同一CP-STATE-RECOVERY跨页覆盖代表键。代表槽状态本批不提升，source loading隐藏footer，不伪造disabled/busy按钮。仍缺全部主题/密度/真实浏览器history和完整fullPath组合、实际异步恢复、真实Vue与用户批准。 |
@@ -1576,7 +1577,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P20 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P20.json)：42个局部源位置 → 12组；2类写入，8组路由动作，2组转发/容器关联不重复计动作。已映射10/10个源码字段位置，10/10处调用/内嵌容器，25个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P20.json)：43个局部源位置 → 12组；2类写入，8组路由动作，2组转发/容器关联不重复计动作。已映射10/10个源码字段位置，10/10处调用/内嵌容器，25个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有8个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1585,7 +1586,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | CP-RULE-OPEN 新建 / 第一条监控规则 / local | 2处；页首新增、没有启用规则、规则数组为空 | [rules · 1440](design/competitor-direction-c/1440-rules.png) / [rules · 390](design/competitor-direction-c/390-rules.png)、[rules-empty · 1440](design/competitor-direction-c/1440-rules-empty.png) / [rules-empty · 390](design/competitor-direction-c/390-rules-empty.png)；其余见JSON | 已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。 |
 | CP-RULE-BACK 返回竞品列表 / navigation | 1处；管理者、只读者 | [rules · 1440](design/competitor-direction-c/1440-rules.png) / [rules · 390](design/competitor-direction-c/390-rules.png)、[rules-readonly · 1440](design/competitor-direction-c/1440-rules-readonly.png) / [rules-readonly · 390](design/competitor-direction-c/390-rules-readonly.png)；其余见JSON | 已补本页精确代表控件双端状态图，用户尚未批准，不代表全变体/真实Vue/主题完成。导航仅有默认/hover/focus/pressed四态；源码没有disabled或请求busy，不造状态。未覆盖所有来源、权限、长文本/主题及真实页面跳转后的运行。 |
 | CP-STATE-RECOVERY 规则页异常主次恢复 / read | 1处；loading无按钮、读取错误、expired、forbidden、blocked、empty分支非正常规则空态 | [rules-loading · 1440](design/competitor-direction-c/1440-rules-loading.png) / [rules-loading · 390](design/competitor-direction-c/390-rules-loading.png)、[rules-error · 1440](design/competitor-direction-c/1440-rules-error.png) / [rules-error · 390](design/competitor-direction-c/390-rules-error.png)；其余见JSON | 已补按页面和主次按钮独立的四态额外变体，详见COMPETITOR-RECOVERY-STATE-REVIEW；不将同一CP-STATE-RECOVERY跨页覆盖代表键。代表槽状态本批不提升，source loading隐藏footer，不伪造disabled/busy按钮。仍缺全部主题/密度/真实浏览器history和完整fullPath组合、实际异步恢复、真实Vue与用户批准。 |
-| CP-LIST-REGION-EXCLUDED P19列表/详情操作区排除 / excluded | 19处；P19页首与恢复、P19对象详情、P19外部来源、P19采集启停、P19验证任务、P19更多帮助 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[more-open · 1440](design/competitor-direction-c/1440-more-open.png) / [more-open · 390](design/competitor-direction-c/390-more-open.png)；其余见JSON | 不据静态导入把对象操作乘以2；下方独立创建窗因query可达不能一起排除；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
+| CP-LIST-REGION-EXCLUDED P19列表/详情操作区排除 / excluded | 20处；P19页首与恢复、P19对象详情、P19外部来源、P19采集启停、P19验证任务、P19更多帮助 | [directory · 1440](design/competitor-direction-c/1440-directory.png) / [directory · 390](design/competitor-direction-c/390-directory.png)、[more-open · 1440](design/competitor-direction-c/1440-more-open.png) / [more-open · 390](design/competitor-direction-c/390-more-open.png)；其余见JSON | 不据静态导入把对象操作乘以2；下方独立创建窗因query可达不能一起排除；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
 | CP-CREATE-CONTAINER 创建竞品弹窗定义 / wiring | 1处；步骤1链接、步骤2市场/机会/名称、步骤3确认、失败保留、busy | [create-link · 1440](design/competitor-direction-c/1440-create-link.png) / [create-link · 390](design/competitor-direction-c/390-create-link.png)、[create-market · 1440](design/competitor-direction-c/1440-create-market.png) / [create-market · 390](design/competitor-direction-c/390-create-market.png)；其余见JSON | P20仅初挂create=1可达；图的P19背景不能当P20异常双弹窗图；整页场景仅作关联，尚无本动作逐selector的适用六态、全变体/主题/密度验收；用户未批准，不得据此迁入生产。 |
 | CP-CREATE-SUBMIT 下一步 / 确认并开始采集 / write | 2处；链接下一步零写入、市场下一步零写入、确认提交、字段非法、失败保留确认步、busy | [rules-create-link · 1440](design/competitor-direction-c/1440-rules-create-link.png) / [rules-create-link · 390](design/competitor-direction-c/390-rules-create-link.png)、[rules-create-market · 1440](design/competitor-direction-c/1440-rules-create-market.png) / [rules-create-market · 390](design/competitor-direction-c/390-rules-create-market.png)；其余见JSON | 已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。 |
 | CP-CREATE-CLOSE 关闭 / 取消创建 / local | 3处；右上关闭、第1步取消、第2/3步关闭、busy关闭风险 | [rules-create-link · 1440](design/competitor-direction-c/1440-rules-create-link.png) / [rules-create-link · 390](design/competitor-direction-c/390-rules-create-link.png)、[rules-create-market · 1440](design/competitor-direction-c/1440-rules-create-market.png) / [rules-create-market · 390](design/competitor-direction-c/390-rules-create-market.png)；其余见JSON | 已补本页精确控件和背景，详见COMPETITOR-ENTRY-QUERY-REVIEW；尚未批准，不代表所有字段/主题/真实Vue。打开及前两步下一步只四态，不伪造busy；P20 create=1关闭回规则标题为无来源入口的离线焦点提案，routePreview不是真实路由。提交期间关闭/上一步锁定仍为提案；双query弹窗优先级、真实异步完成/失败及生命周期仍待。 |

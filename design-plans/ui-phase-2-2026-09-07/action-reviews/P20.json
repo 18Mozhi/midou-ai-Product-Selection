@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "f94369cc2a0abfbe5271e66b7ecd70fe2f3abb0e3b304b9b200156a23a60139f"
+    "apps/web/src/components/CompetitorMonitor.vue": "2ab8c2582af0f9f2c39302f4221959159a86b59f790c6b425b9e2ce4028cfdf0"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -52,7 +52,7 @@
       "kind": "local",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
       "sourceCandidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1",
+        "apps/web/src/components/CompetitorMonitor.vue#1b193ec9f175425c.1",
         "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1"
       ],
       "sourceContractKeys": [
@@ -550,9 +550,10 @@
       "kind": "excluded",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
       "sourceCandidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#056cc0832d94cfb3.1",
-        "apps/web/src/components/CompetitorMonitor.vue#4fe322a77ae77170.1",
-        "apps/web/src/components/CompetitorMonitor.vue#9e3339029c06290e.1",
+        "apps/web/src/components/CompetitorMonitor.vue#0d2355591b57c284.1",
+        "apps/web/src/components/CompetitorMonitor.vue#6f1c1026f48433b0.1",
+        "apps/web/src/components/CompetitorMonitor.vue#c626005c766fe7b8.1",
+        "apps/web/src/components/CompetitorMonitor.vue#ec64e194fee06bf8.1",
         "apps/web/src/components/CompetitorMonitor.vue#908bdb9143e5350e.1",
         "apps/web/src/components/CompetitorMonitor.vue#8d078d22d63338ea.1",
         "apps/web/src/components/CompetitorMonitor.vue#ec3b988601b97577.1",
@@ -572,6 +573,7 @@
       ],
       "sourceContractKeys": [
         "无启用规则且manager时进入P20",
+        "只重读规则GET，不写入",
         "有启用规则的页首创建",
         "无启用规则的次级创建",
         "包含只读者的规则入口",
@@ -1541,10 +1543,10 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/CompetitorMonitor.vue": "f94369cc2a0abfbe5271e66b7ecd70fe2f3abb0e3b304b9b200156a23a60139f",
+      "apps/web/src/components/CompetitorMonitor.vue": "2ab8c2582af0f9f2c39302f4221959159a86b59f790c6b425b9e2ce4028cfdf0",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
-      "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
+      "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },

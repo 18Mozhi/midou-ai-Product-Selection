@@ -8,6 +8,7 @@ import MonitoringReadinessStrip from "./shared/MonitoringReadinessStrip.vue";
 import { buildCompetitionMonitoringReadiness } from "./shared/monitoring-readiness";
 import "../competitor.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
+type RuleReadState = "idle" | "loading" | "ready" | "error";
 interface Snapshot {
   id: string;
   current_price: number | null;
@@ -86,10 +87,12 @@ const props = withDefaults(
   router = useRouter(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
+  ruleReadState = ref<RuleReadState>("idle"),
   items = ref<Competitor[]>([]),
   rules = ref<Rule[]>([]),
   selected = ref<Competitor | null>(null),
   requestId = ref(""),
+  ruleRequestId = ref(""),
   notice = ref(""),
   busy = ref(false),
   showCreate = ref(false),
@@ -102,8 +105,10 @@ const props = withDefaults(
 let collectionRefreshTimer: ReturnType<typeof setTimeout> | null = null;
 const pendingCollections = new Map<string, CollectionAttempt>();
 let readVersion = 0;
+let ruleReadVersion = 0;
 let disposed = false;
 const currentRead = (version: number) => !disposed && version === readVersion;
+const currentRuleRead = (version: number) => !disposed && version === ruleReadVersion;
 const form = reactive({
     market: "US",
     product_url: "",
@@ -154,7 +159,9 @@ const rulesPage = computed(() => props.mode === "rules"),
     return snapshots.length ? (snapshots[snapshots.length - 1] ?? null) : latest.value;
   }),
   applicableRules = computed(() =>
-    rules.value.filter((item) => !item.competitor_id || item.competitor_id === selected.value?.id),
+    enabledRules.value.filter(
+      (item) => !item.competitor_id || item.competitor_id === selected.value?.id,
+    ),
   ),
   activityTimeline = computed(() =>
     (selected.value?.changes ?? []).map((change) => ({
@@ -193,7 +200,8 @@ const rulesPage = computed(() => props.mode === "rules"),
   ),
   competitionReadiness = computed(() =>
     buildCompetitionMonitoringReadiness({
-      loading: state.value === "loading",
+      loading: state.value === "loading" || ruleReadState.value === "loading",
+      rulesUnavailable: ruleReadState.value === "error",
       total: summary.value.total,
       active: summary.value.active,
       pending: summary.value.pending,
@@ -308,8 +316,11 @@ const statusText = (value: string) =>
   ruleText = (item: Rule) => {
     const label = `${fieldText(item.metric)} · ${directionText(item.direction)}`;
     if (item.metric === "availability") return label;
-    const currency = item.metric === "price" ? `${latest.value?.currency ?? "币种未采到"} ` : "";
-    return `${label} ${currency}${item.threshold_value ?? "未提供"}`;
+    const threshold = `阈值 ${item.threshold_value ?? "未提供"}`;
+    if (item.metric !== "price") return `${label} · ${threshold}`;
+    if (!item.competitor_id) return `${label} · ${threshold}（规则未记录币种）`;
+    const target = items.value.find((row) => row.id === item.competitor_id);
+    return `${label} · ${threshold}（目标最新快照 ${target?.latest_snapshot?.currency ?? "币种未采到"}）`;
   },
   ruleTargetText = (item: Rule) =>
     item.competitor_id
@@ -354,6 +365,9 @@ function scheduleCollectionRefresh() {
 async function load() {
   if (disposed) return;
   const version = ++readVersion;
+  ++ruleReadVersion;
+  ruleReadState.value = "idle";
+  ruleRequestId.value = "";
   clearCollectionRefresh();
   state.value = "loading";
   notice.value = "";
@@ -362,15 +376,24 @@ async function load() {
     if (!currentRead(version)) return;
     requestId.value = response.request_id;
     items.value = response.data.map(withPendingCollection);
+    ruleReadState.value = "loading";
     try {
       const ruleResponse = await request<Rule[]>("/competitor-monitor-rules");
       if (!currentRead(version)) return;
       rules.value = ruleResponse.data;
+      ruleReadState.value = "ready";
+      ruleRequestId.value = ruleResponse.request_id;
       if (rulesPage.value) requestId.value = ruleResponse.request_id;
     } catch (error) {
       if (!currentRead(version)) return;
+      ruleReadState.value = "error";
+      ruleRequestId.value = error instanceof ApiClientError ? error.requestId : "";
       if (rulesPage.value) throw error;
       rules.value = [];
+      if (error instanceof ApiClientError) {
+        requestId.value = error.requestId;
+        notice.value = error.actionHint;
+      } else notice.value = "监控规则暂不可用，请重新读取。";
     }
     const requestedCompetitor =
       typeof route.query.competitor === "string" ? route.query.competitor : "";
@@ -389,6 +412,30 @@ async function load() {
       notice.value = error.actionHint;
       state.value = stateFrom(error.kind);
     } else state.value = "blocked";
+  }
+}
+async function reloadRules() {
+  if (disposed) return;
+  const version = ++ruleReadVersion;
+  ruleReadState.value = "loading";
+  requestId.value = "";
+  ruleRequestId.value = "";
+  try {
+    const response = await request<Rule[]>("/competitor-monitor-rules");
+    if (!currentRuleRead(version)) return;
+    rules.value = response.data;
+    requestId.value = response.request_id;
+    ruleRequestId.value = response.request_id;
+    ruleReadState.value = "ready";
+    notice.value = "";
+  } catch (error) {
+    if (!currentRuleRead(version)) return;
+    ruleReadState.value = "error";
+    ruleRequestId.value = error instanceof ApiClientError ? error.requestId : "";
+    if (error instanceof ApiClientError) {
+      requestId.value = error.requestId;
+      notice.value = error.actionHint;
+    } else notice.value = "监控规则暂不可用，请重新读取。";
   }
 }
 async function detail(item: Competitor, syncRoute = true) {
@@ -666,6 +713,7 @@ onMounted(() => {
 onUnmounted(() => {
   disposed = true;
   readVersion += 1;
+  ruleReadVersion += 1;
   pendingCollections.clear();
   clearCollectionRefresh();
 });
@@ -730,7 +778,12 @@ watch(
         :tone="competitionReadiness.summary.tone"
         :facts="competitionReadiness.facts"
       >
-        <button v-if="canManage" class="primary" type="button" @click="openRule()">
+        <button
+          v-if="canManage && ruleReadState !== 'error'"
+          class="primary"
+          type="button"
+          @click="openRule()"
+        >
           {{ enabledRules.length ? "新建监控规则" : "配置第一条阈值" }}
         </button>
         <RouterLink class="competitor-link-button" to="/competitors">返回竞品列表</RouterLink>
@@ -780,24 +833,36 @@ watch(
         :tone="competitionReadiness.summary.tone"
         :facts="competitionReadiness.facts"
       >
+        <button v-if="ruleReadState === 'error'" class="primary" type="button" @click="reloadRules">
+          重新读取监控规则
+        </button>
         <button
-          v-if="!enabledRules.length && canManage"
+          v-else-if="ruleReadState === 'ready' && !enabledRules.length && canManage"
           class="primary"
           type="button"
           @click="openRule()"
         >
           配置监控阈值
         </button>
-        <button v-else-if="canManage" class="primary" type="button" @click="openCreate">
+        <button
+          v-else-if="ruleReadState === 'ready' && canManage"
+          class="primary"
+          type="button"
+          @click="openCreate"
+        >
           添加竞品监控
         </button>
-        <button v-if="canManage && !enabledRules.length" type="button" @click="openCreate">
+        <button
+          v-if="ruleReadState === 'ready' && canManage && !enabledRules.length"
+          type="button"
+          @click="openCreate"
+        >
           添加竞品
         </button>
         <button type="button" @click="openRule()">查看监控规则</button>
       </MonitoringReadinessStrip>
       <p
-        v-if="notice && !showCreate && !showRule && !deleting"
+        v-if="notice && ruleReadState !== 'error' && !showCreate && !showRule && !deleting"
         class="competitor-notice"
         role="status"
       >
@@ -891,6 +956,18 @@ watch(
             </div>
           </header>
           <section
+            v-if="ruleReadState === 'error'"
+            class="competitor-notice"
+            role="alert"
+            aria-label="监控规则读取失败"
+          >
+            <span
+              >当前无法确认适用于此竞品的监控规则。重新读取成功前，不显示为“无规则”或“生效规则”。</span
+            >
+            <code v-if="ruleRequestId">{{ ruleRequestId }}</code>
+            <span>可使用页面上方的“重新读取监控规则”操作重试。</span>
+          </section>
+          <section
             v-if="latestCollection && latestCollection.status !== 'succeeded'"
             class="competitor-collection-state"
             :data-status="latestCollection.status"
@@ -957,13 +1034,18 @@ watch(
               <b>{{ selected.changes?.length ?? 0 }} 项</b>
               <span>首个快照只建立基线，后续快照才记录变化。</span>
             </article>
-            <article>
+            <article v-if="ruleReadState !== 'error'">
               <small>生效阈值</small>
               <b>{{ applicableRules.length }} 条</b>
               <ul v-if="applicableRules.length">
                 <li v-for="item in applicableRules" :key="item.id">{{ ruleText(item) }}</li>
               </ul>
               <span v-else>尚未配置适用于该竞品的阈值。</span>
+            </article>
+            <article v-else>
+              <small>监控规则</small>
+              <b>暂不可用</b>
+              <span>规则读取失败，当前无法确认适用于该竞品的启用规则。</span>
             </article>
           </section>
           <div v-if="latest" class="competitor-source">

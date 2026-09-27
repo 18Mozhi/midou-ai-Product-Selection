@@ -160,7 +160,9 @@ test("M04-05.A07/A08/A09/A15 renders source-backed baseline changes thresholds a
   await page.getByRole("button", { name: /Wallet Case for iPhone 16/ }).click();
   await expect(page).toHaveURL(new RegExp(`competitor=${id}`));
   await expect(page.getByLabel("基线、变动与阈值").getByText("USD 29.99")).toBeVisible();
-  await expect(page.getByLabel("基线、变动与阈值").getByText("价格 · 减少 USD 2")).toBeVisible();
+  await expect(
+    page.getByLabel("基线、变动与阈值").getByText("价格 · 减少 · 阈值 2（目标最新快照 USD）"),
+  ).toBeVisible();
   await expect(page.getByText(/证据 00000000/).first()).toBeVisible();
   await expect(page.getByText("USD 29.99 → 26.99")).toBeVisible();
   await expect(page.getByText("有货 → 缺货")).toBeVisible();
@@ -354,7 +356,9 @@ test("competitor monitoring rules use an independent route and retain the source
       ),
     )
     .toBe(true);
-  await expect(page.getByLabel("竞品监控规则列表").getByText("价格 · 减少 USD 2")).toBeVisible();
+  await expect(
+    page.getByLabel("竞品监控规则列表").getByText("价格 · 减少 · 阈值 2（目标最新快照 USD）"),
+  ).toBeVisible();
   await expect(page.getByLabel("竞品监控规则列表").getByText("已生效")).toBeVisible();
   await expect(page.getByText("更新于 2026/08/08 20:01 · 版本 1")).toBeVisible();
   await expect(page.getByRole("link", { name: "返回竞品列表" })).toHaveAttribute(
@@ -403,8 +407,140 @@ test("monitoring rules API failure is not presented as an empty rule list", asyn
     }),
   );
   await page.goto("/competitors/monitoring-rules");
-  await expect(page.getByText("规则读取失败")).toBeVisible();
+  await expect(page.getByLabel("竞争质量门 · 规则就绪").getByText("规则读取失败")).toBeVisible();
   await expect(page.getByText("尚未配置监控规则")).toHaveCount(0);
+});
+
+test("CP-G02 separates enabled applicable rules and currency provenance by target", async ({
+  page,
+}) => {
+  const otherId = "00000000-0000-4000-8000-000000000530",
+    other = {
+      ...item,
+      id: otherId,
+      market: "CA",
+      source_site: "Amazon CA",
+      latest_snapshot: { ...item.latest_snapshot, currency: "CAD" },
+    };
+  await setup(page);
+  await page.unroute("**/api/v1/competitors");
+  await page.route("**/api/v1/competitors", (route) =>
+    route.fulfill({ json: envelope([item, other]) }),
+  );
+  await page.unroute("**/api/v1/competitor-monitor-rules");
+  await page.route("**/api/v1/competitor-monitor-rules", (route) =>
+    route.fulfill({
+      json: envelope([
+        {
+          id: "global-price",
+          competitor_id: null,
+          metric: "price",
+          direction: "decrease",
+          threshold_value: 1,
+          status: "enabled",
+          revision: 1,
+          updated_at: "2026-08-08T12:01:01.000Z",
+        },
+        {
+          id: "target-us-price",
+          competitor_id: id,
+          metric: "price",
+          direction: "decrease",
+          threshold_value: 2,
+          status: "enabled",
+          revision: 1,
+          updated_at: "2026-08-08T12:01:01.000Z",
+        },
+        {
+          id: "target-ca-price",
+          competitor_id: otherId,
+          metric: "price",
+          direction: "decrease",
+          threshold_value: 3,
+          status: "enabled",
+          revision: 1,
+          updated_at: "2026-08-08T12:01:01.000Z",
+        },
+        {
+          id: "disabled-us-price",
+          competitor_id: id,
+          metric: "price",
+          direction: "decrease",
+          threshold_value: 9,
+          status: "disabled",
+          revision: 2,
+          updated_at: "2026-08-08T12:01:01.000Z",
+        },
+      ]),
+    }),
+  );
+
+  await page.goto("/competitors/monitoring-rules");
+  const directory = page.getByLabel("竞品监控规则列表");
+  await expect(directory.getByText("价格 · 减少 · 阈值 1（规则未记录币种）")).toBeVisible();
+  await expect(directory.getByText("价格 · 减少 · 阈值 2（目标最新快照 USD）")).toBeVisible();
+  await expect(directory.getByText("价格 · 减少 · 阈值 3（目标最新快照 CAD）")).toBeVisible();
+  await expect(directory.getByText("价格 · 减少 · 阈值 9（目标最新快照 USD）")).toBeVisible();
+  await expect(directory.getByText("已停用")).toBeVisible();
+
+  await page.goto("/competitors");
+  const effective = page.getByLabel("基线、变动与阈值");
+  await expect(effective.getByText("2 条")).toBeVisible();
+  await expect(effective.getByText("价格 · 减少 · 阈值 1（规则未记录币种）")).toBeVisible();
+  await expect(effective.getByText("价格 · 减少 · 阈值 2（目标最新快照 USD）")).toBeVisible();
+  await expect(effective.getByText("阈值 3", { exact: false })).toHaveCount(0);
+  await expect(effective.getByText("阈值 9", { exact: false })).toHaveCount(0);
+});
+
+test("CP-G02 list mode keeps rule read failures distinct and retries only that read", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.unroute("**/api/v1/competitor-monitor-rules");
+  let reads = 0;
+  await page.route("**/api/v1/competitor-monitor-rules", (route) => {
+    reads += 1;
+    if (reads === 1)
+      return route.fulfill({
+        status: 500,
+        json: {
+          error: {
+            code: "rule_read_failed",
+            message: "rule_read_failed",
+            action_hint: "规则读取失败",
+          },
+          request_id: "rule-read-failed-list-request",
+          trace_id: "rule-read-failed-list-trace",
+        },
+      });
+    return route.fulfill({
+      json: envelope([
+        {
+          id: "recovered-enabled-rule",
+          competitor_id: id,
+          metric: "price",
+          direction: "decrease",
+          threshold_value: 2,
+          status: "enabled",
+          revision: 1,
+          updated_at: "2026-08-08T12:01:01.000Z",
+        },
+      ]),
+    });
+  });
+  const writes = competitorWrites(page);
+  await page.goto("/competitors");
+  const readiness = page.getByLabel("竞争质量门 · 证据就绪"),
+    ruleFact = readiness.locator("dl > div").filter({ hasText: "变化阈值" });
+  await expect(readiness.getByText("规则读取失败", { exact: true })).toBeVisible();
+  await expect(ruleFact.getByText("暂不可用")).toBeVisible();
+  await expect(ruleFact.getByText("0 条启用")).toHaveCount(0);
+  await expect(page.getByLabel("监控规则读取失败")).toContainText("当前无法确认适用于此竞品");
+  await page.getByRole("button", { name: "重新读取监控规则" }).first().click();
+  await expect(ruleFact.getByText("1 条启用")).toBeVisible();
+  await expect(page.getByLabel("监控规则读取失败")).toHaveCount(0);
+  expect(reads).toBe(2);
+  expect(writes).toEqual([]);
 });
 
 test("auditor can read monitoring rules without receiving rule write controls", async ({

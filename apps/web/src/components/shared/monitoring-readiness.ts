@@ -69,6 +69,7 @@ export function buildTrendMonitoringReadiness(input: {
 
 export function buildCompetitionMonitoringReadiness(input: {
   loading: boolean;
+  rulesUnavailable?: boolean;
   total: number;
   active: number;
   pending: number;
@@ -78,27 +79,33 @@ export function buildCompetitionMonitoringReadiness(input: {
 }): MonitoringReadiness {
   const summary = input.loading
     ? { tone: "neutral" as const, title: "正在核对竞争监控状态", status: "读取中" }
-    : !input.total
-      ? { tone: "blocked" as const, title: "竞争证据链尚未建立", status: "需要添加竞品" }
-      : !input.enabledRules
-        ? {
-            tone: "blocked" as const,
-            title: "竞品已有数据，但变化阈值尚未配置",
-            status: "需要配置阈值",
-          }
-        : input.pending || input.unhealthySources
+    : input.rulesUnavailable
+      ? {
+          tone: "attention" as const,
+          title: "竞品数据已读取，监控规则状态暂不可用",
+          status: "规则读取失败",
+        }
+      : !input.total
+        ? { tone: "blocked" as const, title: "竞争证据链尚未建立", status: "需要添加竞品" }
+        : !input.enabledRules
           ? {
-              tone: "attention" as const,
-              title: "竞争监控运行中，仍有数据需要补齐",
-              status: input.pending
-                ? `${input.pending} 个等待快照`
-                : `${input.unhealthySources} 个来源异常`,
+              tone: "blocked" as const,
+              title: "竞品已有数据，但变化阈值尚未配置",
+              status: "需要配置阈值",
             }
-          : {
-              tone: "ready" as const,
-              title: "竞品变化正在持续进入竞争证据链",
-              status: "持续监控中",
-            };
+          : input.pending || input.unhealthySources
+            ? {
+                tone: "attention" as const,
+                title: "竞争监控运行中，仍有数据需要补齐",
+                status: input.pending
+                  ? `${input.pending} 个等待快照`
+                  : `${input.unhealthySources} 个来源异常`,
+              }
+            : {
+                tone: "ready" as const,
+                title: "竞品变化正在持续进入竞争证据链",
+                status: "持续监控中",
+              };
   return {
     summary,
     facts: [
@@ -122,11 +129,23 @@ export function buildCompetitionMonitoringReadiness(input: {
       },
       {
         label: "变化阈值",
-        value: input.loading ? "读取中" : `${input.enabledRules} 条启用`,
-        detail: input.enabledRules
-          ? "达到显式阈值才生成告警与任务"
-          : "尚无启用的价格、排名、评论或库存规则",
-        state: input.loading ? "neutral" : input.enabledRules ? "ready" : "blocked",
+        value: input.loading
+          ? "读取中"
+          : input.rulesUnavailable
+            ? "暂不可用"
+            : `${input.enabledRules} 条启用`,
+        detail: input.rulesUnavailable
+          ? "规则状态未能读取，不能据此判断是否已配置"
+          : input.enabledRules
+            ? "达到显式阈值才生成告警与任务"
+            : "尚无启用的价格、排名、评论或库存规则",
+        state: input.loading
+          ? "neutral"
+          : input.rulesUnavailable
+            ? "attention"
+            : input.enabledRules
+              ? "ready"
+              : "blocked",
       },
     ],
   };

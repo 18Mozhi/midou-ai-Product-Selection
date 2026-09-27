@@ -11,6 +11,9 @@ test("P20 keeps all rule states visible and does not invent edit actions", async
 
 test("P20 only exposes rule creation to monitoring managers", async () => {
   const source = await readFile("apps/web/src/components/CompetitorMonitor.vue", "utf8");
-  assert.match(source, /v-if="canManage" class="primary" type="button" @click="openRule\(\)"/);
+  assert.match(
+    source,
+    /v-if="canManage && ruleReadState !== 'error'"\s+class="primary"\s+type="button"\s+@click="openRule\(\)"/,
+  );
   assert.match(source, /competitor:manage/);
 });
