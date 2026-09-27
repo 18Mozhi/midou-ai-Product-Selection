@@ -22,7 +22,7 @@
 
 - `node --test tests/unit/competitor-rules-page-preview.test.mjs`：2/2 通过。
 - `node scripts/verify-competitor-rules-page-preview.mjs --capture-review r2`：1440/390、reduced/no-preference 共 36 项检查，0 次写入，6 张截图。
-- 类型检查、格式检查、生产构建、发布归属校验和宝塔部署在本批提交前完成。
+- Web 类型检查、格式检查、生产构建及发布归属校验通过。代码/build SHA `6246e46a4fe865422c8dc7ed112a9b9a6a43e7be` 已推送并由固定宝塔部署脚本发布；脚本的线上门核对 live/ready/available/version SHA、已知/未知路由与浏览器 helper 后返回 deployed，上传临时包已清理。安全门的仓库枚举因 `ENOBUFS` 失败，M04-05模块签收因前置 M04-04 未完成而阻塞。
 
 ## CP-G02 后续事实呈现修复（2026-09-27）
 
