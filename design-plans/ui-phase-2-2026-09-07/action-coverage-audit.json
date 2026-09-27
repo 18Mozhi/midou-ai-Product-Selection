@@ -37,7 +37,7 @@
     "apps/web/src/components/CompetitorMonitor.vue": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0",
     "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
-    "apps/web/src/components/CostRuleConsole.vue": "e758b90453bda8b028798b627c53bbe4c46587c1c1b9b3ccfad1c8ec1c63ef9b",
+    "apps/web/src/components/CostRuleConsole.vue": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72",
     "apps/web/src/components/CrawlerSchedulerEvidence.vue": "5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2",
     "apps/web/src/components/CredentialAssetCenter.vue": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845",
@@ -112,7 +112,7 @@
     "apps/web/src/components/platform-notification-types.ts": "519574c615d416b5a617a6cf3c0a34efc7c17af6d2b976ac4858e2c993035f32",
     "apps/web/src/components/platform-status-topology.ts": "e1442a8a3d6e28939865f063e6a155c9314445dab7f508f9a2c902da4e909c37",
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-    "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec",
     "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
     "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
@@ -165,7 +165,7 @@
     "apps/web/src/components/redis-resilience/RedisResourceEvidence.vue": "3ded48c9a122e981d6adeb1dac644247da7ef968f0aba378341983633ddc8f9e",
     "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
     "apps/web/src/components/RedisResilienceCenter.vue": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081",
-    "apps/web/src/components/ReleaseRolloutCenter.vue": "f362e65bea501d183d809d458497e5b3775377d12e83b8e4f52496d00b62107d",
+    "apps/web/src/components/ReleaseRolloutCenter.vue": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
     "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f",
     "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
@@ -202,7 +202,7 @@
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
     "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
-    "apps/web/src/components/UiStateShowcase.vue": "398e4c5ad69feb5259a69bc034ca6fdc98cf936426d3075637b253576d236ad3",
+    "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
     "apps/web/src/components/use-platform-content-list.ts": "ff5e74901f493bfcdd9d2022e9f400382038cda38e63f2f75284b9a6d1837535",
     "apps/web/src/components/use-platform-content-review.ts": "04a83f402bc5b98ede50e7b7ac2d05da0580d47aee638b04915917993d1436e6",
     "apps/web/src/components/use-platform-message-editor.ts": "cf8bb791830a84005646bdf436663c794d577e792c994a7445d8558934112e6d",
@@ -239,39 +239,39 @@
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
-    "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "c9a91fa02e8b678490728fe9e0fb92d46dc031527cd7ca0bcd7b446477ecd64b",
+    "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "9a37882127bf26c4a26b827a83023b332c3fbe8338ccf7e168c4b62bbfea33e6",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "ff6b41e79cb7eba143652e3114c1a979379d22bcdf88a4a1de246d9b969fb378",
-    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "46208241bd2c2586902709b5164d7c7c873569a0e5dd07eca3bf2196e009dbd6",
+    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "ca542ee29760f507481282fa94b9c15ef61369f0982475d06fe614c5cae4e036",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
-    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "70cd0a70d6b43205c11a04357617fa531afd072ff23a008c152872f8ffb0d697",
+    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "ab4b381f48cc74f4d2a71d863fa221e989ca29a7a176674d97b429d5ef6159a8",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
-    "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "80ed5a269d46f2b5098652248fca6f98db3d56893ff4ea9e9d291458038db8ea",
-    "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "5f3c64c9b20555b19912b0348b264904c1d624bcbac1cc5b9a64182ac71cf149",
-    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "f4c2ca930b5818ac0b71c231f77f4ee991488ae98db27f1773b1b9d5c320f530",
-    "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "80c4a5afc4d0f5cf92434eac97fa0e30a83e36bf249691703bd9bbbde9c586f5",
+    "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b2fd4e487f62373cd0cc33b086f965a816758eede8f0036cc79a912ce7ce4db7",
+    "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b8c7eed0c5b6b1ea3bfcb4df1febb5a1b47ab98d0d8a4fa3c914739d10c6a47f",
+    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "2a6c6dd60fa660ff2758463c2b85cb51ff3868eefc9860f376d1e7b982ccc750",
+    "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "4e03deb67e451746269362f8224c81f1955f2eabbcf9ff8099aee6674d93fe98",
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "9e90766df41be0e25e1c97a7aa88f6d31d8d73bcf57f86b1ea1b6ce3b9c70092",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "73ccec3c884d7f0f2037640bf851a734ba81d9dff1ab02f7ecfffd193902b0e5",
-    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "663f7750ce15423be375fb5c0ec820386f4a265f73f812579d24c1a40b2e49ab",
-    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "ab7d526cd854e95a126fd67f6c61c4298a9df59505522c4db8f0d1842aeb6380",
+    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "11dc7f844e20c19e2bbcd068da11b72a0c8bd9b69b5fa7da2bd91985e31ef4a1",
+    "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
-    "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "bb96f5d6c067255f9e22f4051e117c6352f18dea2184eaf7639a6b305cd8f9cd",
-    "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "cf100dafa46b0a9dc7f11b51fe923e99da9bb3166b23a905f116ffc2d0a935ba",
+    "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "dd2def25923858383f4371d3bb5ae643cf28b06ac185aab7017aeebff8d96291",
+    "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "df6390dce4ac9dc7d7019ad972f3ff57013adc448b6bcd26b56ae3e84ba006a2",
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "e92899302297a5b0ac4c41aa58abe8e51a353f0c8edf42bc2bcb5dec05da857e",
-    "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "f7ebe07d459e15dbbcf7277443fc9d62c5b1babd1722b7b869cf1c567232b385",
+    "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b3ed452522bdd2a90555b598dbbb202b0d066b3ee7ee428d649c3ad310de6c81",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
-    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "b0b320c6749b98de3949923851e09e11a177571ad15d6d382a754921e9cb0be7",
+    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "d187326a8319209cef7b060b48b43f1b0c5c0942365e6cdf4e2000ad681d827b",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "458a1816ede8758e1c5579c7e86d08ed0e2a6677625eb513662fc48f0c1e6bb1",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
-    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "38ba8918b66a8d2167554df758bc7666563c69d306f5b0674d41ec458e4c08c3",
-    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "807b562fa1c4ddd4b2fdf58f0fe635ce7a9af2dd7dcd246f89cfc59db508a762",
-    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fd1b93dc6825f0b746bbd85d7499d77042f173b163898c8835f70c2b38a91f64",
+    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "1222b429b0d72853ad55d30562deef00eb28c559aa8714e418af9fb6c8f57f35",
+    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "3665796e60681cfab0fbde9a4971a00bb63ab7de440224550e3bafa3608b9898",
+    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "bf2fe35bba887bd8b68bdca5480d90780312df309095d0685756c0216577f5ac",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "af93117972cab0cd3a69985cda8e8b487a7eac7c94f45e6cfd6972e556c04b70",
     "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "34d9faf49a0d92979430bb29a2dea5d28c1ffec5e380d3146a92deff9b11c3cc",
-    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "decfc9f13b7345f380eac8e3731632c089319d9a15994d9116ea8d5148d8fd81",
-    "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "86bc709d10fd9b28a7cf87ae5b21b73e3ac1ec0ff6c9dc60fd8cec027d66d3a9",
+    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "265ffe24eff4dc5b18c9156f3a4fcfc57f6096410dbb19c3fc2c3560fc347160",
+    "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "a9b294e2f83d2f8283901af7ca9fc067eb3e111ce36fa7fe0cf5cd0233cc329d",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
     "design-plans/ui-phase-2-2026-09-07/design/account-overview-direction-c/evidence.json": "04b870fc0d57af0bbed4ee90bd101f31f645b3d2566c1bf6b8bcbb840623c0ba",
@@ -380,17 +380,17 @@
     "scripts/verify-ui-phase2-identity-review.mjs": "560c5287210f1c068ced30531a2fd86fd15338fe7890e7bf8a0c5579e95aaff0",
     "tests/e2e/m00-01-runtime.spec.ts": "6199172b22c011e58285b64b8f093786754597619b66f05f6d53b3126f6046a4",
     "scripts/verify-landing-page-preview.mjs": "c353d7ec6e99bd0fecf918a8ab22b02b52a10e3034d2965fe994bb96317cf93d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "b79a821e1815b40f9e9943bbf37380d0553afde96879d68759c9729632378ea1",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "09c5069ff377afdec018e4b05eb5855f94b413fa116238f4bca6724aca933b94",
     "apps/web/src/components/local-identity-login.css": "6ae95e4f91c9308b49cac2fe5aa9686863ca932573c80d2cf163e9a7d80060cd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json": "954ab87c83b9cbe348dd3b0a9b7098e9ac228825eaa2fca957b933d31efae404",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json": "fdb2e01347986d3124da31abcc96397f7f7dbbab4429060d458e3ac235ab5a56",
     "apps/web/src/components/local-identity-registration.css": "940a27b3840b97c7a49f3a9044a6ec3705b32d6edbbb97b1efd02907a060e126",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P04.json": "9ab41a3572249b6ca6a8c5d93f12780d98fc7ec4ad148610be9e6a400cf18b0d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P04.json": "268e0818ba8828eddddc8bdf01c4dcbd886e7dfcf43c675583e29763be6d87d8",
     "apps/web/src/components/local-identity-recovery.css": "0a7a7ee95210cdec20fb1ce28634649797df3ff349aa299b55ca833b78715761",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P05.json": "460b4ec3d00acf795090d113bf8c07514f69ab71ed310798e7e3d26794823700",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P05.json": "591a09701b2beedee57a8a11b8a24b7be4351ed68b03335a5ac342a508eea86a",
     "apps/web/src/components/local-identity-verification.css": "1634922d971948d38e0ccadb11589e3b51f8e2933484fc51e4251ac06a99849d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json": "d4f023d3a398b1005a1853d80e8981350c350e709203a007c751282b2d89d64f",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json": "3f4a655d7486b1712c7446734401e603b364f2f4c3050fe6ff99d3aa7682f21e",
     "apps/web/src/components/local-identity-reset.css": "44165b011c3b10a2e9d75823aa965b3a8b40837f13ae1322dbc53204ee40b239",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "890bd4273add066af8a7ccf2072a593a53969f73411eb17641830fdce6da8117",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "31f5d0c42bd18ae9df7a656101409e928ee7062a61e9f95d8b60f012fd616320",
     "tests/e2e/m01-02-mfa.spec.ts": "50f3018cb51bac99256f78e625b40d4684430ee70833e7195e0e8e0dcaa4d184",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P08.json": "5e9388292892b6ecba631a0cd061b64ef697cb59474eecb491cbc0ab85968348",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P09.json": "d0db4debe1edc0a13e11cb949446b4fc57ec5f811d9484f97799067384778e08",
@@ -430,8 +430,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "3e8cd8ea912b2feba4c88ab94751555a8e076479ea1f1c6edec7be0a0c4e7640",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "d1a82204e372b91f01f777dc918671bdb73d0741cf4195fd517cbd65403e1120",
     "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "f1d659e9966c463786b1dad1376912745f35f7629ed085e4f441cc4c7117172e",
-    "scripts/verify-ui-phase2-cost-rules-review.mjs": "e48de4ae479273b97cc901647426c810e233b6ed23614f2957741e83d5f148e1",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "f8157fcc926e5a39461ca83f4563a05fc4290de81769bcd80d584a324ec671a4",
+    "scripts/verify-ui-phase2-cost-rules-review.mjs": "e4998bfed38926c3c747bebe9325ec54b3ca9462969ccc6c64d2defda8d59c99",
     "scripts/verify-ui-phase2-cost-rules-c.mjs": "d96873a753a246b28fc4eb3442e80f95756da1aef4eab8bf4ee8b5a5ccd3f94b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "8f3b9d1adb6c6d8700e5735a55f3064cf61abbea3400acde2a51e072a0ab35fc",
     "scripts/verify-ui-phase2-task-list-review.mjs": "b49bfb8bf6e4f72bf9b684b41f872f3387e93f9dadac9e5172e8b758cd211151",
@@ -485,17 +485,17 @@
     "scripts/verify-ui-phase2-platform-overview-c.mjs": "b7049fb563871534d11742ebf0a42e51d0ecb9505eaa4cb2472ff26c631ee37b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P39.json": "2f8a3d33dcd0940fe7d48217fb50707eed3b9559d3c5dfa5693693d30c32bab4",
     "scripts/verify-ui-phase2-account-overview-c.mjs": "311828bc0e24463f905f0020d001177a648f29b3822df4d708f33fd28ac9dbca",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "9608411f1dc2ec202b79d4ef4bc53408cefb4e3f46c3e5cc6d9806d310046c55",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "9916d3b7a0db8fb95ddbde4aca7d5bf4e5ac8cccd7077da9f68220cc80858c28",
     "scripts/verify-ui-phase2-organization-list-preview.mjs": "c18b5b76788f00e85512f763a31decdf86b01043146e5de1a0bfd2c4ece6c057",
-    "tests/e2e/m06-01-platform-accounts.spec.ts": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "aec6f7c5b3748f6aa618f8f23937b6eb3b78eea8ed21c9fefae2a7bacc1cf549",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P41.json": "88354639522a5d2f0a9040750986d2031299c6be1cd3d4963bc1b28565368ecb",
     "tests/unit/ui-phase2-organization-create-preview.test.mjs": "2c967cb27c5ce0e088131c7dfacc6d8ecdddb83e200c6ac228b676f2b38b18eb",
     "tests/unit/ui-phase2-organization-create-production-composition.test.mjs": "d7c255007b0ec09cccb67e87450abd47ec3e6e972c411f005948127619b78820",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P42.json": "942ebed25b2f30d952e747dc8c2512cc85e71e1b940b2f7b3859d0e968e4234b",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P43.json": "1a5709dbbf776fb9180a9287ac348e2108703246f99868fb4c121207a6d69c70",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P42.json": "ac25904ad5432406eff9cea03672ff71c50c92dfa4ad4c112b241cae12f54456",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P43.json": "c209e586ce5f5a237d92526b0a8091126d48607e999a51d3d711ed5c7d70ed85",
     "tests/m06-01/platform-accounts.test.mjs": "613efe80a997f2ac45fcbe88000b52d9084c28afaee875dce93c8c431004cd00",
     "tests/unit/ui-phase2-p43-action-map.test.mjs": "72f91bf29fcc742d62015463be669abebb9500e24c0e60cc23346a08577cebac",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P44.json": "303ba3a9d0772e6aef019d82bc5d475abfd31ba58bc1ec39e7d0291fd40aea27",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P44.json": "1f26929f3cf69daa2f54c30f73a613d54bfb6f29bb5cc0276eb7bb208c42a71f",
     "tests/unit/ui-phase2-p44-action-map.test.mjs": "180618ba5065cf84c449d3ce4878f863a8f0077c8f48d4c85a94cfaf62784ac0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P45.json": "d17050ba541a969fcff493fbed839331d74b621833749ffa43679c3c3c7ecf13",
     "tests/unit/ui-phase2-p45-action-map.test.mjs": "8764c41dc01059d68ab3de158c83c097a30c33a6e85709961823b77820661ef9",
@@ -542,7 +542,7 @@
     "tests/unit/ui-phase2-p63-action-review.test.mjs": "d960ed40575847ab67a05da9a14cc49f099be50a89fa2fd174e2bfe523376aa1",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P64.json": "4ee9656e3fd1d81de5d25be1ec4462e7d882f66cf3aa30d5c105afb397526cc1",
     "tests/unit/ui-phase2-p64-action-review.test.mjs": "1b9b95a91b5bccb6effd745c9b93138af017661cf923c7d8599acbec9da5acfd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P65.json": "94033b47bad5362f16be4390220fbd09da012e42525e661526eddfba921f5b6a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P65.json": "82b8ef02cf2fd3433d5cbe65ab55e6d74fc83a5b5ea42b25eb1ebc4e332fda79",
     "tests/unit/ui-phase2-p65-action-review.test.mjs": "7f02bf53e9a207961682fb575679af0832611507597b4bf3bf8d46f5e8412494",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P66.json": "61e1ee33e2bd3eefd68ccbc0281eb176e99873de38e5646e81b3684ca3837483",
     "tests/unit/ui-phase2-p66-action-review.test.mjs": "1a65f98a1262a4991353979572dd6cecf847e9a4b76674532d5dab927eef6202",
@@ -556,7 +556,7 @@
     "tests/unit/ui-phase2-p70-action-review.test.mjs": "3dff08f5329be88ff5468f1b781df2a6dbdd9e48fda4e64e8d92289f7ad55f6d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P71.json": "1fd32a8559d085ce493d68850e818fbb6f5bc26002ec0c12cf2744ff8f8b9a81",
     "tests/unit/ui-phase2-p71-action-review.test.mjs": "e407369ec7d08e30449592866f183973a99328901fe69647ac3e1ac0cd517fe5",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P72.json": "07f76a77ea8bb11487e1540375d5da1a3299f2c661dbdcecfa68381e9407e58b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P72.json": "901e4555dffe43dbeee6b7f13ad4932fcdf517dd0f88321839e924af027e5dfc",
     "tests/unit/ui-phase2-p72-action-review.test.mjs": "de5d14b49c8634b5ce568a84ef9e3cbfa0ed957b8a2c2ffc5e53cb3840ea8566",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P73.json": "9f9439ce01794ee2bed7ff8bf91d888ba8944c9e725d5b4615e71d19f4a0a677",
     "tests/unit/ui-phase2-p73-action-review.test.mjs": "684eb8bf6b75cf6aaf95663cad3caf1a8a0b77efdead974ac0bf74dfbcc38bdf",
@@ -581,7 +581,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "8e2822c8da24c4ea676cbb9b79e6ab1fb73d709d9f482ee27efd863b2f54d623",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3054941f06b46e2c2278f71dd027fb3b9f86e401df813fa174720ca40a02a765",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "cf7274836ef2ded4b059478198182c594d59d73ecc58488d9329751724ad82ee",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "43b1a9ee01ad1de633e82feb852718bdce4e0b5edafc53d9b5310387e85fae18",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "1b1aba2d06d366a2f27973944121a37380b8e3c606e01d96731fef560e9d7abe",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "7dadafaa7b75a590e07f1999782c615f81d2b9263bdd7c51cd2028d86b47d6ef",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "10ebbb966c02c9feffc6e376e73ed882dcada2a915835c0af7c487f39994a5f3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "1636ba8b1e8ee5cac64b9097d54838c330591ad64d33bc841a8ffcf731deab74",
@@ -637,15 +637,15 @@
     "scripts/lib/ui-phase2-action-coverage.mjs": "39ccdd68059bfd76f0ed3a534088bee6f4e958aca6ea38e2bdb224b02357edee",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "22f0710e70d77f4335a86a3ed6ef6d14c54fc23ec98d50aa2e22c50809e4e523",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
-    "scripts/audit-ui-phase2-contracts.mjs": "90b15bf450af7aa7846bbf27db3d911ee822e3e2a05db41e456e30cb92d2df4b",
+    "scripts/audit-ui-phase2-contracts.mjs": "23ac6180bb4a8749b0c34ba1af0c56fd901684f7db338a4764ea991edd628f8e",
     "scripts/lib/ui-phase2-contract-audit.mjs": "b7b12201094c94705ce2e0e0f5145830b4a2468632f1a33b09fe96a54e7039da"
   },
   "summary": {
     "routes": 73,
     "currentSourceCandidates": 1701,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 611,
-    "oldOnlyIdentities": 387,
+    "newSourceIdentities": 615,
+    "oldOnlyIdentities": 391,
     "reviewedPages": 73,
     "explicitlyGroupedSourceSites": 1541,
     "semanticGroups": 1270,
@@ -1571,7 +1571,7 @@
       "id": "P22",
       "path": "/sourcing/cost-rules",
       "title": "费用与利润规则",
-      "oldStaticAssociatedCandidates": 63,
+      "oldStaticAssociatedCandidates": 60,
       "review": {
         "pageId": "P22",
         "actionApproval": "pending-user-review",
@@ -1605,7 +1605,7 @@
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "30源位置/20语义组/19模型/7结构；166旧图的关联不等于每控件六态或19字段验收。",
-        "UNFIXED:打开A审批后load只返回B，当前selected切B而原因保留A，submit使用B ID/revision；setup组合复现不等于实际用户点击链。",
+        "局部修复已将操作目标及revision绑定到打开时快照，并以最后发起读取胜出；隔离setup测试覆盖乱序读取和A窗中读取返回B。实际Vue鼠标触发链、URL/history集成及真实服务审批仍待验收。",
         "筛选自动选B可保留query.rule=A；query单独变B无本地watch且load仍优先已选A，父history行为待测。",
         "关闭X无disabled但busy函数拒绝关闭；草稿字段无统一busy禁用，原型锁定是提案不是现状。",
         "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
@@ -2332,7 +2332,7 @@
       "id": "P39",
       "path": "/platform-admin/accounts",
       "title": "账号与组织",
-      "oldStaticAssociatedCandidates": 97,
+      "oldStaticAssociatedCandidates": 96,
       "review": {
         "pageId": "P39",
         "actionApproval": "pending-user-review",
@@ -2374,7 +2374,7 @@
       "id": "P40",
       "path": "/platform-admin/organizations",
       "title": "组织管理",
-      "oldStaticAssociatedCandidates": 97,
+      "oldStaticAssociatedCandidates": 96,
       "review": {
         "pageId": "P40",
         "actionApproval": "pending-user-review",
@@ -2396,7 +2396,7 @@
           "callerFiles": 5,
           "localModelBindings": 14,
           "reviewedInputBindings": 7,
-          "sourceCallerContainers": 10,
+          "sourceCallerContainers": 11,
           "callerContainers": 6,
           "consumerVariants": 6,
           "runtimeAcceptance": "unproven"
@@ -2417,7 +2417,7 @@
       "id": "P41",
       "path": "/platform-admin/organizations/new",
       "title": "创建组织",
-      "oldStaticAssociatedCandidates": 97,
+      "oldStaticAssociatedCandidates": 96,
       "review": {
         "pageId": "P41",
         "actionApproval": "pending-user-review",
@@ -2461,7 +2461,7 @@
       "id": "P42",
       "path": "/platform-admin/organizations/:organizationId",
       "title": "组织详情",
-      "oldStaticAssociatedCandidates": 97,
+      "oldStaticAssociatedCandidates": 96,
       "review": {
         "pageId": "P42",
         "actionApproval": "pending-user-review",
@@ -2482,7 +2482,7 @@
           "callerFiles": 3,
           "localModelBindings": 11,
           "reviewedInputBindings": 3,
-          "sourceCallerContainers": 10,
+          "sourceCallerContainers": 11,
           "callerContainers": 5,
           "consumerVariants": 5,
           "runtimeAcceptance": "unproven"
@@ -2503,7 +2503,7 @@
       "id": "P43",
       "path": "/platform-admin/users",
       "title": "用户管理",
-      "oldStaticAssociatedCandidates": 97,
+      "oldStaticAssociatedCandidates": 96,
       "review": {
         "pageId": "P43",
         "actionApproval": "pending-user-review",
@@ -2525,7 +2525,7 @@
           "callerFiles": 6,
           "localModelBindings": 17,
           "reviewedInputBindings": 11,
-          "sourceCallerContainers": 12,
+          "sourceCallerContainers": 13,
           "callerContainers": 12,
           "consumerVariants": 12,
           "runtimeAcceptance": "unproven"
@@ -2547,7 +2547,7 @@
       "id": "P44",
       "path": "/platform-admin/admins",
       "title": "管理员管理",
-      "oldStaticAssociatedCandidates": 97,
+      "oldStaticAssociatedCandidates": 96,
       "review": {
         "pageId": "P44",
         "actionApproval": "pending-user-review",
@@ -2569,7 +2569,7 @@
           "callerFiles": 8,
           "localModelBindings": 22,
           "reviewedInputBindings": 11,
-          "sourceCallerContainers": 13,
+          "sourceCallerContainers": 14,
           "callerContainers": 0,
           "consumerVariants": 0,
           "runtimeAcceptance": "unproven"
@@ -2589,7 +2589,7 @@
       "id": "P45",
       "path": "/platform-admin/permissions",
       "title": "角色权限",
-      "oldStaticAssociatedCandidates": 97,
+      "oldStaticAssociatedCandidates": 96,
       "review": {
         "pageId": "P45",
         "actionApproval": "pending-user-review",
@@ -4847,7 +4847,7 @@
         "callerFiles": 5,
         "localModelBindings": 14,
         "reviewedInputBindings": 7,
-        "sourceCallerContainers": 10,
+        "sourceCallerContainers": 11,
         "callerContainers": 6,
         "consumerVariants": 6,
         "runtimeAcceptance": "unproven"
@@ -4901,7 +4901,7 @@
         "callerFiles": 3,
         "localModelBindings": 11,
         "reviewedInputBindings": 3,
-        "sourceCallerContainers": 10,
+        "sourceCallerContainers": 11,
         "callerContainers": 5,
         "consumerVariants": 5,
         "runtimeAcceptance": "unproven"
@@ -4928,7 +4928,7 @@
         "callerFiles": 6,
         "localModelBindings": 17,
         "reviewedInputBindings": 11,
-        "sourceCallerContainers": 12,
+        "sourceCallerContainers": 13,
         "callerContainers": 12,
         "consumerVariants": 12,
         "runtimeAcceptance": "unproven"
@@ -4955,7 +4955,7 @@
         "callerFiles": 8,
         "localModelBindings": 22,
         "reviewedInputBindings": 11,
-        "sourceCallerContainers": 13,
+        "sourceCallerContainers": 14,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -15172,7 +15172,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ae99ecef74f5d4d3.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 523,
+      "line": 534,
       "kind": "control",
       "label": "返回当前找货记录",
       "conditions": [],
@@ -15199,7 +15199,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#5e3909def7e4baa9.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 524,
+      "line": 535,
       "kind": "control",
       "label": "新建规则版本",
       "conditions": [
@@ -15231,7 +15231,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#b2df3db97280e7e2.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 536,
+      "line": 547,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -15263,7 +15263,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ed4cdadd71405209.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 563,
+      "line": 574,
       "kind": "control",
       "label": "{{ nextCostRule ? \"创建后续版本\" : \"创建首个规则\" }}",
       "conditions": [
@@ -15299,7 +15299,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#6a49826ecb55d1fd.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 571,
+      "line": 582,
       "kind": "control",
       "label": "返回供应商与成本补全",
       "conditions": [
@@ -15331,7 +15331,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#e4a92ae55317039d.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 575,
+      "line": 586,
       "kind": "form-event",
       "label": "搜索规则 状态 全部状态 {{ statusLabels[status] ?? status }} 重置 共 {{ filteredRules.length }} 条",
       "conditions": [
@@ -15363,7 +15363,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#0aca31814d8e2a23.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 587,
+      "line": 598,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -15395,7 +15395,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#c4344a6ce7acbca8.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 593,
+      "line": 604,
       "kind": "control",
       "label": "{{ rule.name }} {{ rule.market }} · {{ rule.platform }} · {{ rule.version_code }} {{ statusLabels[rule.status] ?? rule.s",
       "conditions": [
@@ -15431,7 +15431,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#83d11b8719b1c99d.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 612,
+      "line": 623,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -15467,7 +15467,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#bd43d7b540116c32.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 614,
+      "line": 625,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -15503,7 +15503,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#9e33896b68e8e4fe.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 647,
+      "line": 658,
       "kind": "control",
       "label": "{{ rate.effective_on }} · 查看来源",
       "conditions": [
@@ -15547,7 +15547,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#55f48a15788735d1.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 661,
+      "line": 672,
       "kind": "control",
       "label": "提交审批",
       "conditions": [
@@ -15587,7 +15587,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#ea3ec6b286c61f0c.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 669,
+      "line": 680,
       "kind": "control",
       "label": "选品经理批准",
       "conditions": [
@@ -15631,7 +15631,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#eac5ef200003454a.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 676,
+      "line": 687,
       "kind": "control",
       "label": "选品经理拒绝",
       "conditions": [
@@ -15675,7 +15675,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#6ac633aba6b533bd.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 684,
+      "line": 695,
       "kind": "control",
       "label": "组织管理员批准",
       "conditions": [
@@ -15719,7 +15719,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#5d293fdba6594665.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 691,
+      "line": 702,
       "kind": "control",
       "label": "组织管理员拒绝",
       "conditions": [
@@ -15763,7 +15763,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#513ba8c3e39973c0.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 700,
+      "line": 711,
       "kind": "control",
       "label": "发布规则",
       "conditions": [
@@ -15803,7 +15803,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#fab085a093adfa3a.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 707,
+      "line": 718,
       "kind": "control",
       "label": "回滚到历史版本",
       "conditions": [
@@ -15843,7 +15843,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 731,
+      "line": 742,
       "kind": "dialog-definition",
       "label": "不使用默认费用 新建费用规则草稿 × 市场 平台 版本号 规则名称 生效日期 显式费用 平台费 % 支付手续费 % 税费 % 履约成本 履约币种 入仓物流（可选固定金额） 1688 采购价换算（可选） 自动成本适用品类 仅人工复核成本 手机",
       "conditions": [
@@ -15860,7 +15860,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 114,
+          "line": 115,
           "jsonPointer": null
         }
       ],
@@ -15875,7 +15875,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#8dec9b05190c02c6.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 731,
+      "line": 742,
       "kind": "event-binding",
       "label": "不使用默认费用 新建费用规则草稿 × 市场 平台 版本号 规则名称 生效日期 显式费用 平台费 % 支付手续费 % 税费 % 履约成本 履约币种 入仓物流（可选固定金额） 1688 采购价换算（可选） 自动成本适用品类 仅人工复核成本 手机",
       "conditions": [
@@ -15907,7 +15907,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#1fcf5a2247b2ad3e.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 738,
+      "line": 749,
       "kind": "form-event",
       "label": "不使用默认费用 新建费用规则草稿 × 市场 平台 版本号 规则名称 生效日期 显式费用 平台费 % 支付手续费 % 税费 % 履约成本 履约币种 入仓物流（可选固定金额） 1688 采购价换算（可选） 自动成本适用品类 仅人工复核成本 手机",
       "conditions": [
@@ -15939,7 +15939,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#8695390d77702f3f.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 744,
+      "line": 755,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -15971,7 +15971,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#4fa3694ad39564c9.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 853,
+      "line": 864,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -16003,7 +16003,7 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#bdb318fcff422d4c.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 854,
+      "line": 865,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : \"保存草稿\" }}",
       "conditions": [
@@ -16033,26 +16033,29 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1",
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#69fe3471229b26ea.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 860,
+      "line": 871,
       "kind": "dialog-definition",
       "label": "actionTitle",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "showAction && selected && pendingAction"
+          "expression": "showAction && pendingAction"
         }
       ],
-      "staticRouteIds": [
-        "P22"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 115,
+          "line": 90,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
+          "line": 116,
           "jsonPointer": null
         }
       ],
@@ -16065,22 +16068,20 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CostRuleConsole.vue#24b49021258ec509.1",
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#718d705955c5be28.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 860,
+      "line": 871,
       "kind": "event-binding",
       "label": "actionTitle",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "showAction && selected && pendingAction"
+          "expression": "showAction && pendingAction"
         }
       ],
-      "staticRouteIds": [
-        "P22"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
@@ -16097,26 +16098,24 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CostRuleConsole.vue#a8b2803881a9f5ba.1",
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#4ed28d61de7ebf6e.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 867,
+      "line": 878,
       "kind": "form-event",
-      "label": "审计操作 {{ actionTitle }} × {{ selected.name }} · {{ selected.market }} / {{ selected.platform }} · {{ selected.version_cod",
+      "label": "审计操作 {{ actionTitle }} × {{ pendingAction.target.name }} · {{ pendingAction.target.market }} / {{ pendingAction.target.p",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "showAction && selected && pendingAction"
+          "expression": "showAction && pendingAction"
         }
       ],
-      "staticRouteIds": [
-        "P22"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 90,
+          "line": 91,
           "jsonPointer": null
         }
       ],
@@ -16131,45 +16130,13 @@
     {
       "candidateId": "apps/web/src/components/CostRuleConsole.vue#9a6cc342b022be3d.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 873,
+      "line": 884,
       "kind": "control",
       "label": "关闭操作确认",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "showAction && selected && pendingAction"
-        }
-      ],
-      "staticRouteIds": [
-        "P22"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 91,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P22",
-          "actionId": "SC-R-ACTION-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/CostRuleConsole.vue#ca4f082d1ca76f11.1",
-      "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 897,
-      "kind": "control",
-      "label": "取消",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showAction && selected && pendingAction"
+          "expression": "showAction && pendingAction"
         }
       ],
       "staticRouteIds": [
@@ -16193,15 +16160,15 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CostRuleConsole.vue#1b870bc1240e4ab6.1",
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#ca4f082d1ca76f11.1",
       "file": "apps/web/src/components/CostRuleConsole.vue",
-      "line": 898,
+      "line": 908,
       "kind": "control",
-      "label": "{{ busy ? \"提交中…\" : `确认${actionLabels[pendingAction.action]}` }}",
+      "label": "取消",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "showAction && selected && pendingAction"
+          "expression": "showAction && pendingAction"
         }
       ],
       "staticRouteIds": [
@@ -16213,6 +16180,38 @@
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
           "line": 93,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P22",
+          "actionId": "SC-R-ACTION-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#1b870bc1240e4ab6.1",
+      "file": "apps/web/src/components/CostRuleConsole.vue",
+      "line": 909,
+      "kind": "control",
+      "label": "{{ busy ? \"提交中…\" : `确认${actionLabels[pendingAction.action]}` }}",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showAction && pendingAction"
+        }
+      ],
+      "staticRouteIds": [
+        "P22"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
+          "line": 94,
           "jsonPointer": null
         }
       ],
@@ -29600,7 +29599,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 99,
+          "line": 100,
           "jsonPointer": null
         }
       ],
@@ -29648,7 +29647,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 100,
+          "line": 101,
           "jsonPointer": null
         }
       ],
@@ -29696,7 +29695,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 101,
+          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -29744,7 +29743,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 102,
+          "line": 103,
           "jsonPointer": null
         }
       ],
@@ -29792,7 +29791,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 103,
+          "line": 104,
           "jsonPointer": null
         }
       ],
@@ -31456,7 +31455,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 94,
+          "line": 95,
           "jsonPointer": null
         }
       ],
@@ -31495,7 +31494,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 95,
+          "line": 96,
           "jsonPointer": null
         }
       ],
@@ -31539,7 +31538,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 96,
+          "line": 97,
           "jsonPointer": null
         }
       ],
@@ -31583,7 +31582,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 97,
+          "line": 98,
           "jsonPointer": null
         }
       ],
@@ -31627,7 +31626,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 98,
+          "line": 99,
           "jsonPointer": null
         }
       ],
@@ -42206,23 +42205,15 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#f76649b0950ec968.1",
+      "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#b5ddf69abc7e87e3.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 67,
+      "line": 74,
       "kind": "form-event",
-      "label": "{{ createUserTitle }} 账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。 {{ createUserError }} 邮箱 临时密码 平台角色 普通用户 运营管理员 安全管理员 超级管理员 加入组织",
+      "label": "{{ createUserTitle }} 账号立即可用；首次登录必须修改临时密码，平台管理员还必须绑定 MFA。 账号身份 填写登录邮箱与首次登录使用的临时密码。 {{ createUserError }} 邮箱 邮箱为必填项，最多254",
       "conditions": [],
-      "staticRouteIds": [
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
@@ -42266,7 +42257,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#c3a13fcf7d0fc151.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 113,
+      "line": 155,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -42324,7 +42315,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#472f3632b99eae63.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 114,
+      "line": 156,
       "kind": "control",
       "label": "确认创建",
       "conditions": [],
@@ -42382,7 +42373,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#0a0c76ebc577d650.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 119,
+      "line": 162,
       "kind": "dialog-definition",
       "label": "强制重置密码",
       "conditions": [],
@@ -42440,7 +42431,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#04769fc3148b559f.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 119,
+      "line": 162,
       "kind": "event-binding",
       "label": "强制重置密码",
       "conditions": [],
@@ -42498,7 +42489,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#22727b212f0b7505.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 125,
+      "line": 168,
       "kind": "form-event",
       "label": "强制重置密码 保存后会撤销该用户全部活动会话，并要求首次登录修改密码。 {{ passwordError }} 新临时密码 取消 确认重置",
       "conditions": [],
@@ -42556,7 +42547,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#0fbdc8b9a1396e9c.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 143,
+      "line": 186,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -42614,7 +42605,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#9ad3d7837ab53f7c.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 144,
+      "line": 187,
       "kind": "control",
       "label": "确认重置",
       "conditions": [],
@@ -42672,7 +42663,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#8cb5dc651024abe9.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 149,
+      "line": 192,
       "kind": "dialog-definition",
       "label": "reasonTitle",
       "conditions": [],
@@ -42730,7 +42721,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#bd4ff44ef0d1442c.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 149,
+      "line": 192,
       "kind": "event-binding",
       "label": "reasonTitle",
       "conditions": [],
@@ -42788,7 +42779,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#4a0496f0cb3d6338.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 155,
+      "line": 198,
       "kind": "form-event",
       "label": "{{ reasonTitle }} 原因会写入平台审计记录。 操作原因 取消 确认执行",
       "conditions": [],
@@ -42846,7 +42837,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#b313681d9ad25f0e.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 161,
+      "line": 204,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -42904,7 +42895,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#07d6870e96868709.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 170,
+      "line": 213,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -42962,7 +42953,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#7819d63c0a94ede2.1",
       "file": "apps/web/src/components/PlatformAccountDialogs.vue",
-      "line": 171,
+      "line": 214,
       "kind": "control",
       "label": "确认执行",
       "conditions": [],
@@ -61683,7 +61674,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 109,
+          "line": 110,
           "jsonPointer": null
         }
       ],
@@ -61715,7 +61706,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 110,
+          "line": 111,
           "jsonPointer": null
         }
       ],
@@ -61907,7 +61898,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 111,
+          "line": 112,
           "jsonPointer": null
         }
       ],
@@ -62099,7 +62090,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 112,
+          "line": 113,
           "jsonPointer": null
         }
       ],
@@ -62291,7 +62282,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
-          "line": 113,
+          "line": 114,
           "jsonPointer": null
         }
       ],
@@ -69550,6 +69541,18 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#24b49021258ec509.1",
+      "file": "apps/web/src/components/CostRuleConsole.vue",
+      "line": 860,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#a8b2803881a9f5ba.1",
+      "file": "apps/web/src/components/CostRuleConsole.vue",
+      "line": 867,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#6162438a51ad9c44.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
       "line": 558,
@@ -70309,6 +70312,12 @@
       "candidateId": "apps/web/src/components/PlatformAccountCenter.vue#4eb362af5381776f.1",
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
       "line": 811,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/PlatformAccountDialogs.vue#f76649b0950ec968.1",
+      "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+      "line": 66,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
@@ -71365,6 +71374,12 @@
       "candidateId": "apps/web/src/components/ConfirmDialog.vue#47b44d75a30b19d9.1",
       "file": "apps/web/src/components/ConfirmDialog.vue",
       "line": 92,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1",
+      "file": "apps/web/src/components/CostRuleConsole.vue",
+      "line": 860,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

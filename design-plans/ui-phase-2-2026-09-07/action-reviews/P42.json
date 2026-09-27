@@ -10,7 +10,7 @@
   "sourceHashes": {
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
     "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43",
-    "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+    "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
   },
   "actions": [
     {
@@ -250,7 +250,7 @@
       "actionId": "PA42-EXCLUDED-DIALOGS",
       "label": "共享账号新建和密码重置弹窗不属于P42",
       "kind": "excluded",
-      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDialogs.vue#96a5d8f14ce43590.1", "apps/web/src/components/PlatformAccountDialogs.vue#9e8b9d6531d0203d.1", "apps/web/src/components/PlatformAccountDialogs.vue#f76649b0950ec968.1", "apps/web/src/components/PlatformAccountDialogs.vue#c3a13fcf7d0fc151.1", "apps/web/src/components/PlatformAccountDialogs.vue#472f3632b99eae63.1", "apps/web/src/components/PlatformAccountDialogs.vue#0a0c76ebc577d650.1", "apps/web/src/components/PlatformAccountDialogs.vue#04769fc3148b559f.1", "apps/web/src/components/PlatformAccountDialogs.vue#22727b212f0b7505.1", "apps/web/src/components/PlatformAccountDialogs.vue#0fbdc8b9a1396e9c.1", "apps/web/src/components/PlatformAccountDialogs.vue#9ad3d7837ab53f7c.1"],
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDialogs.vue#96a5d8f14ce43590.1", "apps/web/src/components/PlatformAccountDialogs.vue#9e8b9d6531d0203d.1", "apps/web/src/components/PlatformAccountDialogs.vue#b5ddf69abc7e87e3.1", "apps/web/src/components/PlatformAccountDialogs.vue#c3a13fcf7d0fc151.1", "apps/web/src/components/PlatformAccountDialogs.vue#472f3632b99eae63.1", "apps/web/src/components/PlatformAccountDialogs.vue#0a0c76ebc577d650.1", "apps/web/src/components/PlatformAccountDialogs.vue#04769fc3148b559f.1", "apps/web/src/components/PlatformAccountDialogs.vue#22727b212f0b7505.1", "apps/web/src/components/PlatformAccountDialogs.vue#0fbdc8b9a1396e9c.1", "apps/web/src/components/PlatformAccountDialogs.vue#9ad3d7837ab53f7c.1"],
       "sourceContractKeys": ["PA43-CREATE 原生dialog定义", "PA43-CREATE Escape取消", "PA43-CREATE form提交", "PA43-CREATE 按钮取消", "PA43-CREATE 按钮提交", "PA43-PASSWORD 原生dialog定义", "PA43-PASSWORD Escape取消", "PA43-PASSWORD form提交到原因窗", "PA43-PASSWORD 按钮取消", "PA43-PASSWORD 按钮进入原因窗"],
       "contractAliasReason": "用户创建与密码重置入口、form和按钮均明确属于P43，P42只记录其为共享模板中的排除项。",
       "condition": "共享AccountDialogs中用户创建或密码重置分支出现",
@@ -270,7 +270,7 @@
     "dependencyHashes": {
       "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
       "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43",
-      "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+      "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
     },
     "includeStructuralContainers": true,
     "inputScope": "reviewed-subset-of-shared-source",

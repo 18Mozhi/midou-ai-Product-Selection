@@ -47,7 +47,7 @@
 | apps/web/src/components/PlatformOrganizationRecords.vue | 1c008f867673db60.1 | PA-ORG-TECH · 原生details展开组织UUID，不发请求 |
 | apps/web/src/components/PlatformAccountDialogs.vue | 96a5d8f14ce43590.1 | PA40-USER-DIALOG-WIRING · P40页头打开的新建用户原生dialog |
 | apps/web/src/components/PlatformAccountDialogs.vue | 9e8b9d6531d0203d.1 | PA40-USER-DIALOG-WIRING · 新建用户dialog原生cancel事件 |
-| apps/web/src/components/PlatformAccountDialogs.vue | f76649b0950ec968.1 | PA-USER-CREATE · 新建用户表单提交至父级现有POST处理 |
+| apps/web/src/components/PlatformAccountDialogs.vue | b5ddf69abc7e87e3.1 | PA-USER-CREATE · 新建用户表单提交至父级现有POST处理 |
 | apps/web/src/components/PlatformAccountDialogs.vue | c3a13fcf7d0fc151.1 | PA40-USER-CREATE-CANCEL · 关闭用户创建窗，不提交 |
 | apps/web/src/components/PlatformAccountDialogs.vue | 472f3632b99eae63.1 | PA-USER-CREATE · 忙碌时禁用的表单确认提交 |
 | apps/web/src/components/PlatformAccountDialogs.vue | 0a0c76ebc577d650.1 | PA40-PASSWORD-OUT · 密码窗属于P43用户/管理员详情 |

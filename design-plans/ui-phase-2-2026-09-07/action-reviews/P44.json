@@ -15,7 +15,7 @@
     "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
     "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
-    "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+    "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
   },
   "actions": [
     {
@@ -1941,7 +1941,7 @@
       "label": "提交新建用户",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDialogs.vue#f76649b0950ec968.1",
+        "apps/web/src/components/PlatformAccountDialogs.vue#b5ddf69abc7e87e3.1",
         "apps/web/src/components/PlatformAccountDialogs.vue#472f3632b99eae63.1"
       ],
       "sourceContractKeys": [
@@ -2799,7 +2799,7 @@
       "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
       "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
       "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
-      "apps/web/src/components/PlatformAccountDialogs.vue": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+      "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
     },
     "includeStructuralContainers": true,
     "inputScope": "reviewed-subset-of-shared-source",
