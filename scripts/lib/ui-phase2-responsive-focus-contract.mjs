@@ -34,6 +34,8 @@ export const responsiveFocusRevision = Object.freeze({
       "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922",
     "apps/web/src/styles/platform-dashboard.css":
       "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be",
+    "apps/web/src/design/tokens.css":
+      "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38",
   }),
 });
 const hash = (value) => createHash("sha256").update(value).digest("hex");

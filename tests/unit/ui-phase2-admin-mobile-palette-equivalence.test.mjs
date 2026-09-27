@@ -9,10 +9,11 @@ const palette = read("apps/web/src/design/platform-admin-mobile-tokens.css");
 const prefix = '@import "../design/platform-admin-mobile-tokens.css";\n\n';
 const scope =
   'html[data-design="signal-ledger"] #app .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])';
-// Exact LF source fingerprints at bbde542c, before the local color extraction.
+// Exact LF source fingerprints: Comparison at bbde542c; Directory after the reviewed P44
+// mobile selector correction and before the local color extraction.
 const originals = {
   Comparison: "9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde",
-  Directory: "4c66844583a8a9711e29b0aa40d40b87ebd7409f53b64933d441b0c8bf46c82c",
+  Directory: "2931d012c5c3abca6e099f7a9b43147cd4df761805f69bbab2bcf50a01afba91",
 };
 
 function values(source) {
@@ -63,8 +64,9 @@ test("P44 colors are restricted to the original mobile C admins scope", () => {
     assert.ok(parent.includes(`<style src="./PlatformAdmin${name}Mobile.css"></style>`));
 });
 
-for (const name of Object.keys(originals))
-  test(`P44 ${name} expansion preserves every original style byte`, () => verify(name));
+test("P44 Comparison expansion preserves every original style byte", () => verify("Comparison"));
+test("P44 Directory expansion preserves the reviewed mobile selector correction", () =>
+  verify("Directory"));
 
 test("equivalence gate rejects color drift, scope expansion, layout changes and unresolved colors", () => {
   assert.throws(() => verify("Comparison", palette.replace("#294caf", "#294cae")));

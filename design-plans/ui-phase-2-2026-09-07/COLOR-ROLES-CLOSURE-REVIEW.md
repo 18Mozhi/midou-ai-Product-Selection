@@ -82,3 +82,30 @@ API、OpenAPI、后端/Worker/Python 消费方、权限、数据库、探针与�
 正式 PNG/JSON 保留供审核；测试临时 last-run 文件与自建服务在收尾清理。
 本记录的当前验证结果取代先前配色报告中“全局颜色门禁仍失败”的进度描述，
 不改写旧批次的历史验证结果、像素比较或用户批准范围。
+
+## 2026-09-27 · 当前证据版本与主题角色复核
+
+本节补记后续源码演进后的可复现证据，不覆盖上文 2026-09-12 的采集记录及图片。P44
+当前目录证据以 `current-r3` 为准（134 项、30 张 PNG、51 个源码指纹）；比较控件、
+权限结果和角色资料分别以 `current-r4` 为准（110/16、234/48、352/24，均为
+51 个源码指纹）。四组均由实际 Vue 隔离挂载生成，验证进程关闭；它们是局部组合证据，
+不替代整页、真实权限或生产验收。P46 `current` 两包是采集时源码的历史证据：测试锁定
+原始证据 JSON 与图片 SHA，并验证其中历史源码指纹格式；不再把它们和当前源码比较，
+也不声称旧图匹配今天的源码。
+
+本次最终图包为 `current-r4`。为保留已有审核材料并采集后续修订，P44 比较控件与结果验证器支持新的独占后缀；以下以未使用的 `r5` 举例，重拍时每次递增并先确认对应目录不存在：
+
+```powershell
+node scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs --capture --revision r5
+node scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs --capture --revision r5
+node scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs --capture --role-facts --revision r5
+```
+
+`--revision rN` 只能与 `--capture` 一起使用，要求 r2 或更新编号；目标目录须不存在，
+因此重复采集必须提升编号，不会覆盖已留存的图片或证据。当前色板/图证据定向测试
+80/80 通过，响应式详情焦点合同对当前依赖完成80项检查；本轮没有改生产 UI 或既有
+颜色值。P16 的共享白色表面通过 `--so-panel` 角色适配现有主题，其余23个颜色值保持
+原批准值，布局、状态与密度不变。
+
+这只更新局部图证据与复现流程。真实 RBAC、数据库/探针行为、整站 M07-03 生产证据仍
+不由本地浏览器、样式合同或离线截图证明；相关部署验收边界保持不变。

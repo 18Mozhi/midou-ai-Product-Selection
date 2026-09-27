@@ -13,14 +13,21 @@ import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs
 const capture = process.argv.includes("--capture");
 const baseline = process.argv.includes("--baseline");
 const roleFacts = process.argv.includes("--role-facts");
+const args = process.argv.slice(2);
+const revisionIndex = args.indexOf("--revision");
+const revision = revisionIndex >= 0 ? args[revisionIndex + 1] : undefined;
+if (revisionIndex >= 0) args.splice(revisionIndex, 2);
+assert.ok(args.every((arg) => ["--capture", "--baseline", "--role-facts"].includes(arg)));
 assert.ok(
-  process.argv.slice(2).every((arg) => ["--capture", "--baseline", "--role-facts"].includes(arg)),
+  revisionIndex < 0 || (revision && capture && /^r(?:[2-9]|[1-9]\d+)$/.test(revision)),
+  "--revision requires --capture and a fresh rN suffix",
 );
 const baselineCommit = roleFacts ? "66ea2f60" : "67cb00f3";
 const output =
   "output/playwright/" +
   (roleFacts ? "p44-mobile-role-facts-implementation/" : "p44-mobile-results-implementation/") +
-  (baseline ? "baseline" : "current");
+  (baseline ? "baseline" : "current") +
+  (revision ? `-${revision}` : "");
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";
@@ -145,7 +152,10 @@ try {
   const origin = "http://127.0.0.1:" + port;
   console.log("p44_results_implementation_host " + origin + " baseline=" + baseline);
   browser = await chromium.launch();
-  if (capture) await mkdir(output, { recursive: true });
+  if (capture) {
+    await mkdir(path.dirname(output), { recursive: true });
+    await mkdir(output);
+  }
   for (const width of [390, 760, 761, 1440])
     for (const routeName of ["admins", "permissions"]) {
       const context = await browser.newContext({
