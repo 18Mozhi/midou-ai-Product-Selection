@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "4950f30807851cde1c21358839ec99880087dcde324bffd49a53598a31bd3644",
+    "apps/web/src/components/TrendDashboard.vue": "78a03c587faa5a3449d330e051d70785fbd4b997d109b6f39315e2e4ad4d7afb",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -951,7 +951,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "E2E covers local intercepted failure/retry and busy controls; modal focus trap/Escape/focus return and real RBAC/database/production remain unverified."
+      "remaining": "E2E covers local intercepted failure/retry, busy close protection, and modal keyboard lifecycle; post-success focus after the triggering action is replaced remains unverified."
     },
     {
       "actionId": "TR-RELEVANCE-CLOSE",
@@ -968,7 +968,7 @@
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "两变体叉号/取消在busy时禁用，避免误将进行中的写入当作已取消",
-      "handler": "relevanceDialog=null；此处不清原因，下次openRelevance清空",
+      "handler": "relevanceDialog=null；useModalDialog closes native modal and restores focus; reason is cleared by next openRelevance",
       "variants": [
         "cross",
         "cancel",
@@ -1009,7 +1009,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "Busy close protection is covered locally; the role=dialog div still lacks complete initial-focus, Tab/Escape, and focus-return handling."
+      "remaining": "Busy close protection, Escape guard, and focus return are covered locally; post-success focus after the trigger is replaced remains unverified."
     },
     {
       "actionId": "TR-FILTER-APPLY",
@@ -2650,19 +2650,27 @@
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#2c66311e20c0f709.1"
+        "apps/web/src/components/TrendDashboard.vue#029d267ba5289a36.1",
+        "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1"
       ],
       "sourceContractKeys": [
-        "同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；失败保留弹窗与原因，成功才关闭清空；busy期间叉号/取消/提交禁用"
+        "同定义两变体；原生模态；原因2–500；status/reason.trim/expected_version；失败保留弹窗与原因，成功才关闭清空；busy期间叉号/取消/提交/Escape禁用；原因初始获焦、正反向Tab首尾循环，Escape/取消后焦点归还打开按钮",
+        "原生cancel转handleRelevanceCancel；仅非busy允许Escape关闭，busy保持；映射到TR-RELEVANCE-CLOSE"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
-      "handler": "结构与动作分别登记；原role=dialog div不自动拥有原生dialog行为",
+      "handler": "dialog由useModalDialog以showModal管理；理由字段autofocus；keydown显式处理正反向Tab首尾循环；cancel事件交由handleRelevanceCancel守卫busy并关闭；关闭后归还打开按钮焦点",
       "variants": [
         "listed-consumer-variants"
       ],
       "scenes": [],
-      "testReferences": [],
+      "testReferences": [
+        {
+          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "UI2-TR02 checks native modal, autofocus, forward/reverse Tab wrapping, Escape close, focus return, and Escape guard while writing on desktop Chromium and 390px mobile; no real production acceptance."
+        }
+      ],
       "visualStates": {
         "default": "not-applicable-wiring",
         "hover": "not-applicable-wiring",
@@ -2671,14 +2679,31 @@
         "disabled": "not-applicable-wiring",
         "busy": "not-applicable-wiring"
       },
-      "remaining": "失败保留与busy关闭保护由局部Vue E2E覆盖；完整模态初焦点/Tab/Escape/焦点归还、跨主题结果归属和真实运行验收仍待完成。",
+      "remaining": "失败保留、busy关闭保护与键盘生命周期由局部Vue E2E覆盖；跨主题结果归属、触发按钮替换后的成功焦点目的地和真实运行验收仍待完成。",
       "forwardsTo": [
         "TR-RELEVANCE-OPEN.irrelevant",
         "TR-RELEVANCE-OPEN.active",
         "TR-RELEVANCE-SUBMIT",
         "TR-RELEVANCE-CLOSE"
       ],
-      "forwardBindings": []
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
+          "event": "@cancel",
+          "handler": "handleRelevanceCancel",
+          "targets": [
+            "TR-RELEVANCE-CLOSE"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
+          "event": "@keydown",
+          "handler": "handleRelevanceKeydown",
+          "targets": [
+            "TR-RELEVANCE-CLOSE"
+          ]
+        }
+      ]
     },
     {
       "actionId": "TR-FILTER-CALLER",
@@ -2801,6 +2826,7 @@
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "includeStructuralContainers": true,
+    "containerScope": "reviewed-subset-of-shared-source",
     "files": [
       "apps/web/src/components/TrendDashboard.vue",
       "apps/web/src/components/TrendFilterPanel.vue",
@@ -2810,7 +2836,7 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "4950f30807851cde1c21358839ec99880087dcde324bffd49a53598a31bd3644",
+      "apps/web/src/components/TrendDashboard.vue": "78a03c587faa5a3449d330e051d70785fbd4b997d109b6f39315e2e4ad4d7afb",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -2983,8 +3009,8 @@
         "tag": "form",
         "ordinal": 2,
         "shape": "form-container",
-        "sourceBehavior": "相关性role=dialog div内form，同一结构两业务变体；当前失败也清空原因。",
-        "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。",
+        "sourceBehavior": "原生dialog内相关性form，同一结构两业务变体；失败保留原因，成功后关闭清空。",
+        "remaining": "局部Vue E2E验证失败重试与状态写入；真实RBAC、数据库及生产行为未验证。",
         "variants": [
           {
             "name": "irrelevant-open",
@@ -2995,7 +3021,7 @@
                 "scene": "irrelevant-open"
               }
             ],
-            "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。"
+            "remaining": "局部Vue E2E验证失败重试与状态写入；真实RBAC、数据库及生产行为未验证。"
           },
           {
             "name": "restore-open",
@@ -3006,7 +3032,39 @@
                 "scene": "restore-open"
               }
             ],
-            "remaining": "外层role div已由action定义关联，结构扫描此处仅form/aside，不能以容器数推算模态数；原型原生dialog保护待迁入。"
+            "remaining": "局部Vue E2E验证失败重试与状态写入；真实RBAC、数据库及生产行为未验证。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "相关性确认原生模态；理由初始获焦，Tab/Shift+Tab首尾循环；Escape仅非busy关闭，关闭归还打开按钮焦点。",
+        "remaining": "本地桌面/390px Vue E2E覆盖键盘生命周期；成功变更后原触发按钮替换时的焦点目的地仍待处理。",
+        "variants": [
+          {
+            "name": "irrelevant-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "irrelevant-open"
+              }
+            ],
+            "remaining": "成功变更后原触发按钮替换时的焦点目的地仍待处理。"
+          },
+          {
+            "name": "restore-open",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              {
+                "package": "trend-direction-c",
+                "scene": "restore-open"
+              }
+            ],
+            "remaining": "成功变更后原触发按钮替换时的焦点目的地仍待处理。"
           }
         ]
       },

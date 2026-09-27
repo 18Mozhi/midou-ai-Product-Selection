@@ -275,6 +275,37 @@ test("UI2-TR02 relevance cancel writes nothing and restore uses the refreshed ve
   });
 });
 
+test("UI2-TR02 relevance dialog traps focus, Escape closes, and focus returns to its opener", async ({
+  page,
+}) => {
+  await ready(page);
+  await openDetail(page);
+  const trigger = page.getByRole("button", { name: "标记无关", exact: true });
+  await trigger.click();
+  const modal = page.getByRole("dialog", { name: "标记为无关" });
+  const reason = modal.getByLabel("变更原因");
+  await reason.fill("与当前研究范围无关");
+
+  expect(await modal.evaluate((element) => element.matches(":modal"))).toBe(true);
+  await expect(reason).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(modal.getByRole("button", { name: "取消", exact: true })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(modal.getByRole("button", { name: "确认并记录" })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(modal.getByRole("button", { name: "关闭相关性变更" })).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(reason).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(modal.getByRole("button", { name: "关闭相关性变更" })).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(modal.getByRole("button", { name: "确认并记录" })).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(modal).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
 test("UI2-TR02 relevance failure retains the draft and prevents dismissal while saving", async ({
   page,
 }) => {
@@ -325,6 +356,8 @@ test("UI2-TR02 relevance failure retains the draft and prevents dismissal while 
   await expect(modal.getByRole("button", { name: "关闭相关性变更" })).toBeDisabled();
   await expect(modal.getByRole("button", { name: "取消", exact: true })).toBeDisabled();
   await expect(modal.getByRole("button", { name: "提交中…" })).toBeDisabled();
+  await page.keyboard.press("Escape");
+  await expect(modal).toBeVisible();
 
   releaseFailure();
   await expect(modal).toBeVisible();

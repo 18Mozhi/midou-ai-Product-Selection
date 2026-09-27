@@ -2,6 +2,7 @@
 import { computed, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import UiStatePanel from "./UiStatePanel.vue";
 import MonitoringReadinessStrip from "./shared/MonitoringReadinessStrip.vue";
 import { buildTrendMonitoringReadiness } from "./shared/monitoring-readiness";
@@ -110,6 +111,13 @@ const canManageTrends = computed(() => props.capabilities.includes("trend:manage
       (left, right) => right.heat.value - left.heat.value || right.source_count - left.source_count,
     );
   });
+const { dialogElement: relevanceDialogElement, handleCancel: handleRelevanceCancel } =
+  useModalDialog(
+    () => Boolean(relevanceDialog.value && canManageTrends.value),
+    () => {
+      if (!busy.value) relevanceDialog.value = null;
+    },
+  );
 const opportunityRoute = computed(() => {
   const topic = selected.value;
   if (!topic) return "/opportunities";
@@ -319,6 +327,29 @@ function openRelevance(status: "active" | "irrelevant") {
   if (!requireTrendManage()) return;
   relevanceReason.value = "";
   relevanceDialog.value = status;
+}
+function handleRelevanceKeydown(event: KeyboardEvent) {
+  if (event.key !== "Tab" || !relevanceDialogElement.value) return;
+  const focusable = Array.from(
+    relevanceDialogElement.value.querySelectorAll<HTMLElement>(
+      'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((element) => !element.hidden && element.getAttribute("aria-hidden") !== "true");
+  if (!focusable.length) {
+    event.preventDefault();
+    return;
+  }
+  const first = focusable[0],
+    last = focusable.at(-1),
+    active = document.activeElement;
+  if (!first || !last) return;
+  if (event.shiftKey && active === first) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && active === last) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 function openAnomaly(item: Detail["evidence"][number]) {
   if (!requireTrendManage()) return;
@@ -709,12 +740,14 @@ onMounted(() => {
         </footer>
       </form>
     </div>
-    <div
+    <dialog
       v-if="relevanceDialog && canManageTrends"
-      class="trend-modal"
-      role="dialog"
+      ref="relevanceDialogElement"
+      class="trend-modal trend-relevance-dialog"
       aria-modal="true"
       aria-labelledby="trend-relevance-title"
+      @cancel="handleRelevanceCancel"
+      @keydown="handleRelevanceKeydown"
     >
       <form @submit.prevent="markIrrelevant">
         <header>
@@ -742,6 +775,7 @@ onMounted(() => {
             maxlength="500"
             rows="4"
             placeholder="说明判定依据，便于后续复核"
+            autofocus
           ></textarea>
         </label>
         <footer>
@@ -752,6 +786,6 @@ onMounted(() => {
           </button>
         </footer>
       </form>
-    </div>
+    </dialog>
   </section>
 </template>
