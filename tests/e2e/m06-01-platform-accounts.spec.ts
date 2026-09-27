@@ -1477,7 +1477,9 @@ test("P44 admin workspace composes the approved C directory and read-only compar
   };
 
   await expect(shell.getByRole("heading", { name: "账号与组织" })).toBeVisible();
-  await expect(shell.getByRole("heading", { name: "可授权账号" })).toBeVisible();
+  const directoryHeading = shell.getByRole("heading", { name: "可授权账号" });
+  if ((page.viewportSize()?.width ?? 0) <= 760) await expect(directoryHeading).toBeVisible();
+  else await expect(directoryHeading).not.toBeVisible();
   await expect(rail.locator(".account-metrics article")).toHaveCount(3);
   await expect(rail.locator(".account-metrics article:last-child strong")).toHaveText("2");
   await expect(main.locator(".platform-admin-role-comparison")).toBeVisible();
@@ -1485,7 +1487,13 @@ test("P44 admin workspace composes the approved C directory and read-only compar
 
   await page.setViewportSize({ width: 1200, height: 900 });
   await assertColumns(false);
+  await expect(directoryHeading).not.toBeVisible();
+  await page.setViewportSize({ width: 761, height: 900 });
+  await expect(directoryHeading).not.toBeVisible();
+  await page.setViewportSize({ width: 760, height: 900 });
+  await expect(directoryHeading).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
+  await expect(directoryHeading).toBeVisible();
   await assertColumns(false);
   await expect
     .poll(() => shell.evaluate((element) => element.scrollWidth <= element.clientWidth))
