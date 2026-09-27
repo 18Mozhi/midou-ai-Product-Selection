@@ -327,6 +327,41 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await expect(page.getByRole("heading", { name: "AI 驱动的个性化护肤机会" })).toBeVisible();
 });
 
+test("opportunity list distinguishes a failed product image from one not yet collected", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify(
+        envelope(
+          [
+            { ...recommendedBase, image_url: "/fixtures/opportunity-image-error.png" },
+            {
+              ...recommendedBase,
+              id: "00000000-0000-4000-8000-000000000432",
+              name: "尚未采集主图的机会",
+              image_url: null,
+            },
+          ],
+          { page: 1, page_size: 20, total: 2 },
+        ),
+      ),
+    }),
+  );
+  await page.route("**/fixtures/opportunity-image-error.png", (route) =>
+    route.fulfill({ status: 404, contentType: "image/png", body: "" }),
+  );
+
+  await page.goto("/opportunities");
+
+  await expect(page.getByRole("img", { name: "商品主图加载失败" })).toBeVisible();
+  await expect(page.getByRole("img", { name: "商品主图待采集" })).toBeVisible();
+  await expect(page.getByRole("img", { name: `${recommendedBase.name} 商品图` })).toHaveCount(0);
+});
+
 test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision preserve missing states", async ({
   page,
 }) => {

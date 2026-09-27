@@ -1063,7 +1063,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OpportunityListPanel.vue / filters.blocking_reason | evidence_insufficient/recommendation_insufficient或空；不新增其他阻断规则。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
 | OpportunityListPanel.vue / filters.lifecycle_status | candidate/validating/ready/adopted/observing/rejected/archived或空；归档可筛查不等于恢复写入。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
 | OpportunityListPanel.vue / filters.owner_id | memberOptions实际id或空；名单失败清空并提示，不宣称零成员。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
-| OpportunityListPanel.vue / filters.q | 关键词maxlength200草稿；apply重建URL，reset清空；activeFilterCount当前读草稿。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
+| OpportunityListPanel.vue / filters.q | 关键词maxlength200草稿；apply重建URL，reset清空；抽屉已选数现在读URL已应用筛选，空态清除同时识别草稿。 | 字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。 |
 
 ### 弹窗与详情消费者（有图不自动等价）
 
@@ -1110,7 +1110,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - 27页面动作组的162个代表视觉槽未逐selector映射；现126PNG为60双端主场景+6长窗下部，不是全部控件/动态行/主题覆盖。
 - 确认源记忆两ID但仅提交当前items一条；原型有效范围提示与隐藏选择保护待批准和实现，不新增跨页批量规则。
 - 本轮实际confirmBatch惰性VM：向A提交review后关闭，重开archive并选B；旧结果返回仍关新窗并清B选择，原POST的A/action/reason保持稳定。与P13逐项body变更不同，非挂载Vue或真实事务证据。
-- 非all深链decision_status仍写入filters且load遍历所有非空筛选；字段隐藏不等于条件清空。activeFilterCount读草稿、图片无error handler等提案差异保持未修。
+- 非all深链decision_status仍写入filters且load遍历所有非空筛选；字段隐藏不等于条件清空。筛选已选数已改为URL来源；列表图区分无图片地址与图片加载失败并保留占位，具体状态仅由隔离Vue测试验证。
 - ERP浏览器/JSON导入、手工添加与P16创建选品不可合并；实际服务、请求结果核对、真实权限/事务/幂等以及完整具体图审仍待办。
 - 四组件67源位置包含P18正常入口排除，父/Dialogs和P18共50源位置不得重复加到全站独立分母；只有List13/Readiness4为本轮新增全局源位置。
 - 20个v-model位置包含5个父forward和P18原因，不是20个独立用户字段；checkbox/file input/details由动作另审。17结构容器/多场景关联不等于业务弹窗数量。

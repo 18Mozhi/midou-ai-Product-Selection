@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, reactive, watch } from "vue";
 import { useRoute } from "vue-router";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import AutomaticSelectionReadinessPanel from "./AutomaticSelectionReadinessPanel.vue";
@@ -50,6 +50,19 @@ const props = defineProps<{
     canDecide: boolean;
     automationReadiness: AutomaticSelectionReadiness | null;
   }>(),
+  failedImageSources = reactive(new Map<string, string>()),
+  imageFailureResetSources = computed(() =>
+    props.items.map((item) => [item.id, item.image_url] as const),
+  ),
+  imageFallbackLabel = (item: Opportunity) => {
+    if (!item.image_url) return "商品主图待采集";
+    return failedImageSources.get(item.id) === item.image_url ? "商品主图加载失败" : undefined;
+  },
+  hasUsableImage = (item: Opportunity) =>
+    Boolean(item.image_url && failedImageSources.get(item.id) !== item.image_url),
+  onImageError = (item: Opportunity) => {
+    if (item.image_url) failedImageSources.set(item.id, item.image_url);
+  },
   emit = defineEmits<{
     apply: [];
     page: [value: number];
@@ -187,6 +200,13 @@ const opportunityStatus = (value: string) =>
     else if (props.selectionView === "all") emit("apply");
     else emit("view", "all");
   };
+
+watch(imageFailureResetSources, (items) => {
+  const currentImageSources = new Map(items);
+  for (const [id, failedUrl] of failedImageSources) {
+    if (currentImageSources.get(id) !== failedUrl) failedImageSources.delete(id);
+  }
+});
 </script>
 
 <template>
@@ -361,13 +381,15 @@ const opportunityStatus = (value: string) =>
       <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }"
         ><span
           class="opportunity-picture"
-          :aria-label="item.image_url ? undefined : '商品主图待采集'"
+          :role="imageFallbackLabel(item) ? 'img' : undefined"
+          :aria-label="imageFallbackLabel(item)"
           ><img
-            v-if="item.image_url"
-            :src="item.image_url"
+            v-if="hasUsableImage(item)"
+            :src="item.image_url ?? undefined"
             :alt="`${item.name} 商品图`"
             loading="lazy"
             referrerpolicy="no-referrer"
+            @error="onImageError(item)"
           /><span v-else aria-hidden="true">图</span></span
         ><span
           ><strong>{{ item.name }}</strong
