@@ -705,6 +705,157 @@ test("UI2-TR10 route topic reads discard stale success and failure responses", a
   expect(data.writes).toHaveLength(0);
 });
 
+test("UI2-TR10 stale rule and governance reads cannot replace the current view", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  const staleRule = { ...data.rule, name: "迟到规则" },
+    currentRule = { ...data.rule, name: "当前规则" },
+    staleRequest = { ...change(data), id: id(427), new_title: "迟到队列" },
+    currentSuccessRequest = { ...change(data), id: id(428), new_title: "当前成功队列" },
+    currentFailureRequest = { ...change(data), id: id(429), new_title: "失败后当前队列" };
+  const deferred = () => {
+    let release!: () => void, markStarted!: () => void;
+    return {
+      wait: new Promise<void>((resolve) => (release = resolve)),
+      started: new Promise<void>((resolve) => (markStarted = resolve)),
+      release: () => release(),
+      markStarted: () => markStarted(),
+    };
+  };
+  let race:
+    | {
+        outcome: "success" | "failure";
+        rules: ReturnType<typeof deferred>;
+        governance: ReturnType<typeof deferred>;
+        ruleCalls: number;
+        governanceCalls: number;
+      }
+    | undefined;
+  const failure = (requestId: string) => ({
+    status: 503,
+    json: {
+      error: {
+        code: "service_unavailable",
+        message: "旧范围读取失败",
+        action_hint: "旧范围读取失败。",
+      },
+      request_id: requestId,
+      trace_id: requestId,
+    },
+  });
+
+  await page.route("**/api/v1/trends**", async (route) => {
+    const request = route.request(),
+      url = new URL(request.url());
+    if (request.method() !== "GET")
+      return route.fulfill({ status: 500, json: { error: { code: "unexpected_test_write" } } });
+    if (url.pathname === "/api/v1/trends")
+      return route.fulfill({
+        json: envelope([data.detail], { page: 1, page_size: 20, total: 1 }),
+      });
+    if (url.pathname.endsWith("/monitoring-rules")) {
+      if (!race) return route.fulfill({ json: envelope([data.rule]) });
+      if (++race.ruleCalls === 1) {
+        race.rules.markStarted();
+        await race.rules.wait;
+        return race.outcome === "success"
+          ? route.fulfill({ json: envelope([staleRule]) })
+          : route.fulfill(failure("ui2-stale-rule-read"));
+      }
+      return route.fulfill({ json: envelope([currentRule]) });
+    }
+    if (url.pathname.endsWith("/change-requests")) {
+      if (!race) return route.fulfill({ json: envelope(data.changes) });
+      if (++race.governanceCalls === 1) {
+        race.governance.markStarted();
+        await race.governance.wait;
+        return race.outcome === "success"
+          ? route.fulfill({ json: envelope([staleRequest]) })
+          : route.fulfill(failure("ui2-stale-governance-read"));
+      }
+      const request =
+        new URL(page.url()).searchParams.get("category") === "current-success"
+          ? currentSuccessRequest
+          : currentFailureRequest;
+      return route.fulfill({ json: envelope([request]) });
+    }
+    const detailId = url.pathname.match(/^\/api\/v1\/trends\/([^/]+)$/)?.[1];
+    if (detailId === data.detail.id) return route.fulfill({ json: envelope(data.detail) });
+    return route.fallback();
+  });
+
+  await page.goto("/trends");
+  await expect(page.locator("#trend-list > button").first()).toContainText(data.detail.title);
+  await page.waitForLoadState("networkidle");
+  const mobile = (page.viewportSize()?.width ?? 1440) <= 760;
+  const applyCategory = async (category: string) => {
+    if (mobile) await page.getByRole("button", { name: /筛选趋势/ }).click();
+    const panel = mobile
+      ? page.getByRole("dialog", { name: "筛选趋势" })
+      : page.locator(".trend-filters");
+    await panel.getByRole("textbox", { name: "分类" }).fill(category);
+    await panel.getByRole("button", { name: "筛选", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`category=${category}`));
+  };
+  const expectCurrentView = async (requestTitle: string) => {
+    await page
+      .locator(".trend-tabs")
+      .getByRole("button", { name: /监控规则/ })
+      .click();
+    await expect(page.locator(".trend-rules article h4")).toHaveText("当前规则");
+    await page.getByRole("button", { name: /合并与拆分/ }).click();
+    await expect(page.locator(".trend-change-queue article")).toContainText(requestTitle);
+  };
+  const runRace = async (
+    category: string,
+    nextCategory: string,
+    outcome: "success" | "failure",
+    requestTitle: string,
+  ) => {
+    const oldRules = deferred(),
+      oldGovernance = deferred();
+    race = {
+      outcome,
+      rules: oldRules,
+      governance: oldGovernance,
+      ruleCalls: 0,
+      governanceCalls: 0,
+    };
+    await page.getByRole("button", { name: /趋势主题/ }).click();
+    await applyCategory(category);
+    await Promise.all([oldRules.started, oldGovernance.started]);
+    await applyCategory(nextCategory);
+    await expect(page).toHaveURL(new RegExp(`category=${nextCategory}`));
+    await expect(page.locator("#trend-list > button").first()).toContainText(data.detail.title);
+    await expectCurrentView(requestTitle);
+
+    const oldRuleResponse = page.waitForResponse(
+        (response) =>
+          new URL(response.url()).pathname === "/api/v1/trends/monitoring-rules" &&
+          (outcome === "success" || response.status() === 503),
+      ),
+      oldGovernanceResponse = page.waitForResponse(
+        (response) =>
+          new URL(response.url()).pathname === "/api/v1/trends/change-requests" &&
+          (outcome === "success" || response.status() === 503),
+      );
+    oldRules.release();
+    oldGovernance.release();
+    await Promise.all([oldRuleResponse, oldGovernanceResponse]);
+    await expectCurrentView(requestTitle);
+    if (outcome === "failure") {
+      await expect(page.locator("body")).not.toContainText("旧范围读取失败");
+      await expect(page.locator("body")).not.toContainText("ui2-stale-rule-read");
+      await expect(page.locator("body")).not.toContainText("ui2-stale-governance-read");
+    }
+  };
+
+  await runRace("late-success", "current-success", "success", "当前成功队列");
+  await runRace("late-failure", "current-after-failure", "failure", "失败后当前队列");
+  expect(data.writes).toHaveLength(0);
+});
+
 test("UI2-TR02 relevance failure retains the draft and prevents dismissal while saving", async ({
   page,
 }) => {
