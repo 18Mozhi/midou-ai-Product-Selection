@@ -12,7 +12,7 @@ route-catalog → NavigationShell → surfaceProps：P21 SourcingWorkspace，P22
 | SD | SourcingWorkspaceDialogs.vue | e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8 |
 | SP | SourcingComparisonPanel.vue | 2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406 |
 | SC | SourcingCostConfirmationPanel.vue | bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4 |
-| CR | CostRuleConsole.vue | e758b90453bda8b028798b627c53bbe4c46587c1c1b9b3ccfad1c8ec1c63ef9b |
+| CR | CostRuleConsole.vue | 1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3 |
 | PP | OpportunityProfitPanel.vue | a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f |
 | RQ | OpportunityCostReviewQueue.vue | e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339 |
 
@@ -63,34 +63,35 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | SD | 312 | 9d23c498e72940a2.1 | SC-DELETE-SUBMIT 按钮 |
 | SC | 127 | bb5d5e072948baa9.1 | SC-NAV 机会利润详情 |
 | SC | 134 | e31dcd8852e4566d.1 | 成本提交/复核/重算三个事件转发 |
-| CR | 523 | ae99ecef74f5d4d3.1 | SC-R-BACK 安全from |
-| CR | 524 | 5e3909def7e4baa9.1 | SC-R-CREATE 管理者非ready或active |
-| CR | 536 | b2df3db97280e7e2.1 | SC-R-STATE 首条创建/刷新/返回 |
-| CR | 563 | ed4cdadd71405209.1 | SC-R-CREATE ready且无active |
-| CR | 571 | 6a49826ecb55d1fd.1 | SC-R-BACK 准备度返回 |
-| CR | 575 | e4a92ae55317039d.1 | SC-R-SEARCH 表单只阻止提交导航 |
-| CR | 587 | 0aca31814d8e2a23.1 | SC-R-RESET 清筛选 |
-| CR | 593 | c4344a6ce7acbca8.1 | SC-R-SELECT 本地选择与URL |
-| CR | 612 | 83d11b8719b1c99d.1 | SC-R-PAGE-PREV 页码边界 |
-| CR | 614 | bd43d7b540116c32.1 | SC-R-PAGE-NEXT 页码边界 |
-| CR | 647 | 9e33896b68e8e4fe.1 | SC-R-SOURCE 已保存来源新窗口 |
-| CR | 661 | 55f48a15788735d1.1 | SC-R-SUBMIT draft |
-| CR | 669 | ea3ec6b286c61f0c.1 | SC-R-APPROVE selection_manager |
-| CR | 676 | eac5ef200003454a.1 | SC-R-REJECT selection_manager |
-| CR | 684 | 6ac633aba6b533bd.1 | SC-R-APPROVE organization_admin |
-| CR | 691 | 5d293fdba6594665.1 | SC-R-REJECT organization_admin |
-| CR | 700 | 513ba8c3e39973c0.1 | SC-R-PUBLISH approved |
-| CR | 707 | fab085a093adfa3a.1 | SC-R-ROLLBACK active且有有效目标 |
-| CR | 731 | 8dec9b05190c02c6.1 | SC-R-CREATE-CLOSE 原生cancel |
-| CR | 738 | 1fcf5a2247b2ad3e.1 | SC-R-CREATE-SUBMIT 表单 |
-| CR | 744 | 8695390d77702f3f.1 | SC-R-CREATE-CLOSE X |
-| CR | 853 | 4fa3694ad39564c9.1 | SC-R-CREATE-CLOSE 取消 |
-| CR | 854 | bdb318fcff422d4c.1 | SC-R-CREATE-SUBMIT 按钮 |
-| CR | 860 | 24b49021258ec509.1 | SC-R-ACTION-CLOSE 原生cancel |
-| CR | 867 | a8b2803881a9f5ba.1 | SC-R-ACTION-SUBMIT 表单 |
-| CR | 873 | 9a6cc342b022be3d.1 | SC-R-ACTION-CLOSE X |
-| CR | 897 | ca4f082d1ca76f11.1 | SC-R-ACTION-CLOSE 取消 |
-| CR | 898 | 1b870bc1240e4ab6.1 | SC-R-ACTION-SUBMIT 按钮 |
+| CR | 534 | ae99ecef74f5d4d3.1 | SC-R-BACK 安全from |
+| CR | 535 | 5e3909def7e4baa9.1 | SC-R-CREATE 管理者非ready或active |
+| CR | 547 | b2df3db97280e7e2.1 | SC-R-STATE 首条创建/刷新/返回 |
+| CR | 574 | ed4cdadd71405209.1 | SC-R-CREATE ready且无active |
+| CR | 582 | 6a49826ecb55d1fd.1 | SC-R-BACK 准备度返回 |
+| CR | 586 | e4a92ae55317039d.1 | SC-R-SEARCH 表单只阻止提交导航 |
+| CR | 598 | 0aca31814d8e2a23.1 | SC-R-RESET 清筛选 |
+| CR | 604 | c4344a6ce7acbca8.1 | SC-R-SELECT 本地选择与URL |
+| CR | 623 | 83d11b8719b1c99d.1 | SC-R-PAGE-PREV 页码边界 |
+| CR | 625 | bd43d7b540116c32.1 | SC-R-PAGE-NEXT 页码边界 |
+| CR | 658 | 9e33896b68e8e4fe.1 | SC-R-SOURCE 已保存来源新窗口 |
+| CR | 672 | 55f48a15788735d1.1 | SC-R-SUBMIT draft |
+| CR | 680 | ea3ec6b286c61f0c.1 | SC-R-APPROVE selection_manager |
+| CR | 687 | eac5ef200003454a.1 | SC-R-REJECT selection_manager |
+| CR | 695 | 6ac633aba6b533bd.1 | SC-R-APPROVE organization_admin |
+| CR | 702 | 5d293fdba6594665.1 | SC-R-REJECT organization_admin |
+| CR | 711 | 513ba8c3e39973c0.1 | SC-R-PUBLISH approved |
+| CR | 718 | fab085a093adfa3a.1 | SC-R-ROLLBACK active且有有效目标 |
+| CR | 742 | 8dec9b05190c02c6.1 | SC-R-CREATE-CLOSE 原生cancel |
+| CR | 749 | 1fcf5a2247b2ad3e.1 | SC-R-CREATE-SUBMIT 表单 |
+| CR | 755 | 8695390d77702f3f.1 | SC-R-CREATE-CLOSE X |
+| CR | 864 | 4fa3694ad39564c9.1 | SC-R-CREATE-CLOSE 取消 |
+| CR | 865 | bdb318fcff422d4c.1 | SC-R-CREATE-SUBMIT 按钮 |
+| CR | 871 | 718d705955c5be28.1 | SC-R-ACTION-DIALOG aria-label/actionTitle |
+| CR | 871 | 69fe3471229b26ea.1 | SC-R-ACTION-DIALOG showAction/pendingAction |
+| CR | 878 | 4ed28d61de7ebf6e.1 | SC-R-ACTION-SUBMIT submitAction 表单 |
+| CR | 884 | 9a6cc342b022be3d.1 | SC-R-ACTION-CLOSE X |
+| CR | 908 | ca4f082d1ca76f11.1 | SC-R-ACTION-CLOSE 取消 |
+| CR | 909 | 1b870bc1240e4ab6.1 | SC-R-ACTION-SUBMIT 按钮 |
 | PP | 54 | 2bab3ff056a52675.1 | SC-NAV 管理费用规则 |
 | PP | 121 | fbf7d2a587c0931b.1 | SC-COST-REVIEW 转发 |
 | PP | 126 | fcdcabfef1ea3474.1 | SC-COST-SUBMIT 表单 |
@@ -111,8 +112,8 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | SD | 139 | aa8a9b645036fe7e.1 | 报价证据确认 |
 | SD | 211 | f21fd23c2e4b9d60.1 | 采购MOQ/原因 |
 | SD | 280 | d0e8a832293a76e5.1 | 记录原因软删 |
-| CR | 731 | 0cffdbc28160492d.1 | 新建草稿、人工/自动成本可选字段 |
-| CR | 860 | 777ba93e8ff0f331.1 | submit、两角色approve/reject、publish、rollback共七操作变体 |
+| CR | 742 | 0cffdbc28160492d.1 | 新建草稿、人工/自动成本可选字段 |
+| CR | 871 | 69fe3471229b26ea.1 | 操作确认弹窗定义；各操作变体另由独立状态与角色行映射 |
 
 44处v-model：SW query(423)；SD searchForm.input_type/input_ref(114/123)，quote.specification/moq/lead_time_days/location/confidence_value/stability_status/risk_level/observed_at/evidence_id(160/162/164/166/169/176/183/190/194)，purchaseForm.quantity/reason(250/258)，deleteReasonModel(304)；CR search/statusFilter(577/580)，form.market/platform/version_code/name/effective_from(747/748/752/756/757)，platform_fee/payment_fee/tax/fulfillment/currency/logistics(762/771/780/789/797/805)，automatic_product_family/conversion_rate/conversion_effective_on/conversion_source_url(816/823/832/838)，rollbackTargetId/actionReason(881/890)；PP costForm.platform/input_type/amount_value/currency/source_type/source_ref_id/evidence_id/observed_at/reviewer_id(128/130/138/144/145/146/147/148/150)；RQ review.reason(82)。字段分支不是新增持久化字段；只读文本与progress不算按钮。
 
