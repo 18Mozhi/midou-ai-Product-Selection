@@ -108,6 +108,12 @@ const {
   cancel: cancelAiReviewReason,
 } = useAuditedReason();
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
+const currentPageSelectedItems = computed(() =>
+  items.value.filter((item) => selectedOpportunityIds.value.includes(item.id)),
+);
+const outsideCurrentPageSelectedCount = computed(() =>
+  Math.max(0, selectedOpportunityIds.value.length - currentPageSelectedItems.value.length),
+);
 const canDecide = computed(() => props.capabilities?.includes("opportunity:decide") ?? false);
 const canManageCompetitors = computed(
   () => props.capabilities?.includes("competitor:manage") ?? false,
@@ -454,15 +460,14 @@ async function createEvidenceTask() {
   }
 }
 function openBatch(action: "assign" | "archive" | "review") {
+  if (!currentPageSelectedItems.value.length) return;
   batchAction.value = action;
   batchReason.value = "";
   batchAssigneeId.value = "";
   showBatch.value = true;
 }
 async function confirmBatch() {
-  const selectedItems = items.value.filter((item) =>
-    selectedOpportunityIds.value.includes(item.id),
-  );
+  const selectedItems = currentPageSelectedItems.value;
   if (!selectedItems.length || !batchReason.value.trim()) return;
   const result = await write("/opportunities/batch", {
     action: batchAction.value,
@@ -773,6 +778,8 @@ onBeforeUnmount(() => {
       :filters="filters"
       :member-options="memberOptions"
       :selected-ids="selectedOpportunityIds"
+      :current-page-selected-count="currentPageSelectedItems.length"
+      :outside-current-page-selected-count="outsideCurrentPageSelectedCount"
       :page="page"
       :can-decide="canDecide"
       :automation-readiness="automationReadiness"
@@ -982,7 +989,11 @@ onBeforeUnmount(() => {
           </h3>
         </header>
         <p>
-          将处理当前已选的 {{ selectedOpportunityIds.length }} 个机会；任一版本变化都会整批回滚。
+          本次仅处理当前结果中已选的
+          {{ currentPageSelectedItems.length }} 个机会；任一版本变化都会整批回滚。
+        </p>
+        <p v-if="outsideCurrentPageSelectedCount" class="opportunity-batch-scope-note">
+          另有 {{ outsideCurrentPageSelectedCount }} 个已选机会不在当前结果中，不会随本次操作提交。
         </p>
         <label v-if="batchAction === 'assign'">
           负责人

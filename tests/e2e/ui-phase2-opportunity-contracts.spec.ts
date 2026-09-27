@@ -82,6 +82,7 @@ async function ready(page: Page, canDecide = true) {
   const data = {
     detail,
     rows: [detail, { ...detail, id: id(426), name: "第二个隔离候选", version: 7 }],
+    queryRows: null as OpportunityDetail[] | null,
     writes: [] as Request[],
     detailReads: 0,
     listReads: 0,
@@ -131,8 +132,10 @@ async function ready(page: Page, canDecide = true) {
     }
     if (path === "/api/v1/opportunities") {
       data.listReads += 1;
+      const url = new URL(request.url());
+      const rows = url.searchParams.has("q") && data.queryRows ? data.queryRows : data.rows;
       return route.fulfill({
-        json: envelope(data.rows, { total: data.rows.length, page: 1, page_size: 20 }),
+        json: envelope(rows, { total: rows.length, page: 1, page_size: 20 }),
       });
     }
     return route.fulfill({ status: 404, json: { error: { code: "unexpected_test_read" } } });
@@ -209,7 +212,7 @@ for (const [action, label] of [
     const trigger = page.getByRole("button", { name: label, exact: true });
     await trigger.click();
     const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
-    await expect(modal).toContainText("当前已选的 2 个机会");
+    await expect(modal).toContainText("本次仅处理当前结果中已选的 2 个机会");
     await modal.getByLabel("操作原因").fill("取消草稿");
     if (action === "assign")
       await modal.getByRole("combobox", { name: /^负责人/ }).selectOption(memberId);
@@ -246,6 +249,53 @@ for (const [action, label] of [
     });
   });
 }
+
+test("UI2-OP04 filtered selections disclose the exact current-result batch scope", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  const first = data.rows[0];
+  const second = data.rows[1];
+  data.queryRows = [second];
+  await page.route("**/api/v1/opportunities/batch", (route) =>
+    route.fulfill({ json: envelope({ affected_count: 1 }) }),
+  );
+  await page.goto("/opportunities?view=all");
+  await page.getByRole("checkbox", { name: `选择机会：${first.name}`, exact: true }).check();
+
+  const advancedFilterTrigger = page.getByRole("button", { name: /高级筛选/ });
+  if (await advancedFilterTrigger.count()) await advancedFilterTrigger.click();
+  const search = page.getByPlaceholder("搜索机会", { exact: true });
+  await search.fill(second.name);
+  await page.getByRole("button", { name: "筛选", exact: true }).click();
+  await expect(page).toHaveURL(/q=/);
+  const closeFilter = page.getByRole("button", { name: "关闭筛选条件", exact: true });
+  if (await closeFilter.isVisible()) await closeFilter.click();
+
+  const batchBar = page.getByRole("navigation", { name: "机会批量操作", exact: true });
+  await expect(batchBar).toContainText("已选 1 项");
+  await expect(batchBar).toContainText("当前结果中没有已选机会");
+  await expect(batchBar.getByRole("button", { name: "批量归档" })).toBeDisabled();
+  await page.getByRole("checkbox", { name: `选择机会：${second.name}`, exact: true }).check();
+  await expect(batchBar).toContainText("本次仅处理当前页已选的 1 项");
+  await expect(batchBar).toContainText("另有 1 项不在当前结果中");
+
+  await batchBar.getByRole("button", { name: "批量归档", exact: true }).click();
+  const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  await expect(modal).toContainText("本次仅处理当前结果中已选的 1 个机会");
+  await expect(modal).toContainText("另有 1 个已选机会不在当前结果中，不会随本次操作提交");
+  await modal.getByLabel("操作原因").fill("仅处理当前结果中的选中项");
+  await modal.getByRole("button", { name: "确认执行", exact: true }).click();
+
+  await expect(modal).toBeHidden();
+  expect(data.writes).toHaveLength(1);
+  assertWrite(data.writes[0], "/opportunities/batch", {
+    action: "archive",
+    items: [{ id: second.id, expected_version: second.version }],
+    reason: "仅处理当前结果中的选中项",
+    assignee_id: null,
+  });
+});
 
 for (const [action, label] of [
   ["observe", "继续观察"],

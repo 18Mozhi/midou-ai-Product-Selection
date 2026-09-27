@@ -35,6 +35,8 @@ const props = defineProps<{
     selectionView: SelectionView;
     memberOptions: Array<{ id: string; label: string }>;
     selectedIds: string[];
+    currentPageSelectedCount: number;
+    outsideCurrentPageSelectedCount: number;
     page: number;
     canDecide: boolean;
     automationReadiness: AutomaticSelectionReadiness | null;
@@ -285,10 +287,38 @@ const opportunityStatus = (value: string) =>
       class="opportunity-batch-bar"
       aria-label="机会批量操作"
     >
-      <span>已选 {{ selectedIds.length }} 项</span>
-      <button type="button" @click="emit('batch', 'assign')">批量指派</button>
-      <button type="button" @click="emit('batch', 'review')">批量复核</button>
-      <button type="button" class="danger" @click="emit('batch', 'archive')">批量归档</button>
+      <div class="opportunity-batch-summary" aria-live="polite">
+        <strong>已选 {{ selectedIds.length }} 项</strong>
+        <small v-if="currentPageSelectedCount">
+          本次仅处理当前页已选的 {{ currentPageSelectedCount }} 项
+          <template v-if="outsideCurrentPageSelectedCount">
+            · 另有 {{ outsideCurrentPageSelectedCount }} 项不在当前结果中
+          </template>
+        </small>
+        <small v-else>当前结果中没有已选机会，切换筛选或清除选择后再操作。</small>
+      </div>
+      <button
+        type="button"
+        :disabled="currentPageSelectedCount === 0"
+        @click="emit('batch', 'assign')"
+      >
+        批量指派
+      </button>
+      <button
+        type="button"
+        :disabled="currentPageSelectedCount === 0"
+        @click="emit('batch', 'review')"
+      >
+        批量复核
+      </button>
+      <button
+        type="button"
+        class="danger"
+        :disabled="currentPageSelectedCount === 0"
+        @click="emit('batch', 'archive')"
+      >
+        批量归档
+      </button>
     </nav>
     <article
       v-for="item in items"

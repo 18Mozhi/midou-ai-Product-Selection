@@ -1,6 +1,8 @@
 # P15/P18 机会列表与详情 · 源码合同复核
 
-2026-09-08 P15图稿接续：[OPPORTUNITY-C-r1](design/opportunity-direction-c/README.md)126图待审；本批不覆盖P18。永久助手实际执行confirmBatch复现selectedIds两项、当前items一项时body只含一项，OP06进入“已隔离复现、未修Vue/未真实验收”；提案分别展示有效范围和本页外选择。原activeFilterCount使用可变草稿、列表图片无error handler亦保留待修边界。创建/三批量/URL/ERP文件输入及rowFacts已与源执行结果核对，不等于后端事务/权限/ERP服务通过。
+2026-09-28 P15 UI2-OP04续记：真实Vue列表已将总selectedIds与本次当前items交集分开呈现；筛选后隐藏的已选项有明确说明，零当前项时三个批量动作禁用，弹窗文案与POST items共享同一currentPageSelectedItems派生值。当前隔离fixture下桌面Chromium、390px移动各1/1，覆盖筛选保留A、结果仅B、先禁用再选B并仅提交B。OP06由“UI范围未披露”局部收窄为“跨页/筛选后选择策略未定”；不宣称跨页全部提交，不改变API、后端或服务端事务/RBAC。
+
+2026-09-08 P15图稿接续：[OPPORTUNITY-C-r1](design/opportunity-direction-c/README.md)126图待审；本批不覆盖P18。源confirmBatch曾复现selectedIds两项、当前items一项时body只含一项；当时OP06记为“已隔离复现、未修Vue/未真实验收”，提案建议展示有效范围和本页外选择。现由上方2026-09-28续记更新其UI缺口状态；原activeFilterCount使用可变草稿、列表图片无error handler亦保留待修边界。创建/三批量/URL/ERP文件输入及rowFacts已与源执行结果核对，不等于后端事务/权限/ERP服务通过。
 
 日期：2026-09-07；N02；复核起点main/a329cfd。产品源码指纹仍为c4c1cd7f5470ab3896d355c7e16e49f7b5e291e48809e18eeabbf18198766183，inventory --check通过。既有候选草稿经当前源码/清单核对后纳入本批，不改生成清单或全站通过计数。
 
@@ -89,7 +91,7 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 | UI2-OP03.observe/reject | 非推荐不能采纳→提前处理→取消→重开清原因→空提交零写→503保留原因且不自动重放→显式重试→准确原始原因/version及独立幂等键→历史显示返回事实 | 新永久测试2例；用原生dialog定位，未认证重复ID的名称正确 |
 | UI2-OP04 | 只读直达tab=ai→连续503耗尽客户端重试→独立error不是empty，主体可见→显式重试200[]才显示尚无分析，全程零业务写入 | 新永久测试；不证明真实RBAC |
 | UI2-OP05 | all→ERP→取消零写→重开→选择内存JSON list样例即发一次导入，精确items/source_url/captured_at→关闭并显示返回计数，仍在列表 | 新永久测试；无真实助手/ERP/持久化，不产生本地JSON文件 |
-| OP06 列表范围与批量边界 | page1选A→page2选B→打开确认→比较文案计数和POST实际items；再筛选隐藏A或全部、取消/重试；应先明确当前有效范围，不笼统承诺所有选中对象。准确复现后按现有业务边界最小修复，若需新增跨页选择规则先确认 | 待复现/修复/回归，不算跨页通过 |
+| OP06 列表范围与批量边界 | page1选A→page2选B→打开确认→比较文案计数和POST实际items；再筛选隐藏A或全部、取消/重试；应先明确当前有效范围，不笼统承诺所有选中对象。准确复现后按现有业务边界最小修复，若需新增跨页选择规则先确认 | UI当前结果范围披露及零目标禁用已由UI2-OP04桌面/390px通过；跨页选择策略仍未定，不算跨页写入或生产通过 |
 | OP07 竞态与缓存 | 延迟旧详情/AI/下游→切新ID/组织/工作区/离开→释放响应；写入延迟期间关闭再打开/连点；失败重读前后核对版本/关联对象。旧范围不得覆盖新页，也不能把已提交任务视为被Esc撤销 | 待真实状态模拟与必要修复 |
 | OP08 弹窗与无障碍 | 各11变体按键盘打开、Tab/ShiftTab、Esc、归还；唯一标题ID，字段错误关联aria-describedby/invalid、忙碌理由、错误在弹窗内可达；200%缩放/软键盘/长原因不遮挡 | 待全变体；本批仅局部焦点/required/取消证据 |
 | OP09 利润/复核/AI状态 | profit失败与reviewer失败分别重试；双人复核、过期、他人/自己、旧version；跨时区输入；AI复核失败原因恢复及旧记录归属；redecision锚点存在性 | 待验；不新增费用、复核资格或AI权限规则 |
