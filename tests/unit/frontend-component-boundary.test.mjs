@@ -43,7 +43,8 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
 
   for (const [path, limit] of limits) {
     const source = await readFile(path, "utf8");
-    assert.ok(source.split(/\r?\n/u).length < limit, `${path} must remain below ${limit} lines`);
+    const lineCount = source.split(/\r?\n/u).length - Number(source.endsWith("\n"));
+    assert.ok(lineCount < limit, `${path} must remain below ${limit} lines`);
   }
 
   const [

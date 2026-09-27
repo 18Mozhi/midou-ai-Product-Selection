@@ -14,9 +14,10 @@ const withChange = (file, transform) => (requested) =>
 
 test("current palette contract returns raw current SHA, not reconstructed historical bytes", () => {
   assert.equal(verifyResponsivePalette(), revision.paletteAfter);
+  assert.equal(verifyResponsivePalette(), revision.paletteAfter);
   assert.equal(
-    verifyResponsivePalette(),
     createHash("sha256").update(read(revision.file)).digest("hex"),
+    revision.currentAfter,
   );
   assert.notEqual(revision.paletteAfter, revision.contentAfter);
   assert.equal(

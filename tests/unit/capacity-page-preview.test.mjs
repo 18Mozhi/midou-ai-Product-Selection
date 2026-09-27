@@ -36,6 +36,8 @@ test("P71 C review distinguishes returned stop facts from absolute resources", (
 
 test("P71 C review gives keyboard focus a visible shared treatment", () => {
   const css = readFileSync("apps/web/src/capacity-boundary-c.css", "utf8");
+  const tokens = readFileSync("apps/web/src/design/capacity-boundary-tokens.css", "utf8");
   assert.match(css, /capacity-boundary--c :is\(button,\s*summary\):focus-visible/);
-  assert.match(css, /outline:\s*3px solid #2465d7/);
+  assert.match(css, /outline:\s*3px solid var\(--so-capacity-c-focus\)/);
+  assert.match(tokens, /--so-capacity-c-focus:\s*#2465d7/);
 });

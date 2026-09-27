@@ -42,7 +42,7 @@ for (const state of [
     if (state === "ready") return assert.equal(html.includes("platform-dashboard-state"), false);
     assert.ok(html.includes(`aria-busy="${state === "loading"}"`));
     assert.ok(html.includes('aria-labelledby="security-read-state-title"'));
-    assert.ok(html.includes('<h3 id="security-read-state-title">本地状态标题</h3>'));
+    assert.ok(html.includes('<h2 id="security-read-state-title">本地状态标题</h2>'));
     assert.ok(html.includes('<p role="status">'));
     assert.equal(html.includes("正在读取安全运营数据，请稍候。"), state === "loading");
     assert.equal(html.includes("检查 API 与 MySQL"), false);

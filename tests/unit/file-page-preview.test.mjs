@@ -36,6 +36,8 @@ test("P69 C review separates filesystem watermarks from indexes and recovery evi
 
 test("P69 C review exposes the same visible focus treatment for native actions", () => {
   const css = readFileSync("apps/web/src/file-resilience.css", "utf8");
+  const tokens = readFileSync("apps/web/src/design/file-resilience-tokens.css", "utf8");
   assert.match(css, /#app .file-resilience--c :is\(button,\s*a,\s*summary\):focus-visible/);
-  assert.match(css, /outline:\s*3px solid #2465d7/);
+  assert.match(css, /outline:\s*3px solid var\(--file-focus\)/);
+  assert.match(tokens, /--file-focus:\s*#2465d7/);
 });
