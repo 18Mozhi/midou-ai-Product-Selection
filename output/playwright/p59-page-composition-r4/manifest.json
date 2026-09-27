@@ -1,0 +1,369 @@
+{
+  "page": "P59",
+  "revision": "r4",
+  "readStates": false,
+  "sourceCommit": "4ee47751cb62c39d9c15ed72694f6e1baae44161",
+  "capturedAt": "2026-09-27T02:11:59.556Z",
+  "scope": "actual Vue C review transform; page visuals auto-approved under user authorization; source business scripts unchanged; original E2E aggregate/row counts are synthetic, not production metrics; no permission, audit, or production acceptance",
+  "sources": {
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/capacity-boundary-c.css": "7279164c4b6e4aa7b385035c61a2c7b2425a71994e006db07a45d715e44c5314",
+    "apps/web/src/components/AccountShell.vue": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+    "apps/web/src/components/ApiFoundation.vue": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ApprovalWorkspace.vue": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+    "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
+    "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
+    "apps/web/src/components/AutomationRuleCenter.vue": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f",
+    "apps/web/src/components/BackupRecoveryCenter.vue": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
+    "apps/web/src/components/CapacityBoundaryCenter.vue": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8",
+    "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
+    "apps/web/src/components/CommercialOperationsCenter.vue": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec",
+    "apps/web/src/components/CompetitorMonitor.vue": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0",
+    "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
+    "apps/web/src/components/CostRuleConsole.vue": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72",
+    "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
+    "apps/web/src/components/DiscoveryOverlay.vue": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977",
+    "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
+    "apps/web/src/components/FileResilienceCenter.vue": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9",
+    "apps/web/src/components/HomeDashboard.vue": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
+    "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
+    "apps/web/src/components/LocalIdentity.vue": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a",
+    "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
+    "apps/web/src/components/MySqlResilienceCenter.vue": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c",
+    "apps/web/src/components/NavigationAccessPanel.vue": "3d2cb2dca56e68dbdbad880b4879b9739b5f86537c4e119495a1324f558c7338",
+    "apps/web/src/components/NavigationShell.vue": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9",
+    "apps/web/src/components/NotFoundPage.vue": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d",
+    "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+    "apps/web/src/components/OnboardingGuide.vue": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed",
+    "apps/web/src/components/OpenPlatformCenter.vue": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa",
+    "apps/web/src/components/OpportunityWorkspace.vue": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+    "apps/web/src/components/PersonalCenter.vue": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+    "apps/web/src/components/PlatformDashboard.vue": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e",
+    "apps/web/src/components/PlatformDataCenter.vue": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
+    "apps/web/src/components/PlatformGovernanceCenter.vue": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9",
+    "apps/web/src/components/PlatformLogCenter.vue": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518",
+    "apps/web/src/components/PlatformManagementCenter.vue": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
+    "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
+    "apps/web/src/components/RedisResilienceCenter.vue": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081",
+    "apps/web/src/components/ReleaseRolloutCenter.vue": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+    "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f",
+    "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
+    "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
+    "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
+    "apps/web/src/components/ScoreRuleConsole.vue": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723",
+    "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
+    "apps/web/src/components/SelectionJourney.vue": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f",
+    "apps/web/src/components/SourcingWorkspace.vue": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219",
+    "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+    "apps/web/src/components/TaskWorkspace.vue": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d",
+    "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
+    "apps/web/src/components/TenancyChooser.vue": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8",
+    "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
+    "apps/web/src/components/TrendDashboard.vue": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a",
+    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+    "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
+    "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
+    "apps/web/src/components/navigation-surface-registry.ts": "e0f1161dd5da43df09b2710972ac431d746eb32fc7020c55502d020ef501486d",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/crawler-scheduler-c.css": "999d22ba96d4dcc4473a2d3f68394fa45a3ef4b8b2d2cabea46173b3e01aed54",
+    "apps/web/src/design/capacity-boundary-tokens.css": "e03a845308e5d3408d64f0b0e9140984c51f570c0ad8bdc7a4455c3d1ac1f9bb",
+    "apps/web/src/design/collection-ops-tokens.css": "8ffb4b6c580216a748e3d541722a08e8d17d3c98bd0c9888a20bab25675b34f6",
+    "apps/web/src/design/commercial-review-tokens.css": "e7e2ddbbb6a157c71950e133fc430976b5201760e2270684369ef4455ed14a95",
+    "apps/web/src/design/crawler-scheduler-tokens.css": "d3d73deb0fff9cc2d9cf5c8bdbb919b6f02a093f9c222434a4a41c3800982a1b",
+    "apps/web/src/design/mysql-resilience-tokens.css": "35ea642cb163c8b6deb61953915950c9abd05c3b22427979aa25760a0ae3578d",
+    "apps/web/src/design/not-found-tokens.css": "a046ab84923d643da70d7da148a5a39c51d8c9e34f23dc439d28e23ffc392fc6",
+    "apps/web/src/design/platform-data-tokens.css": "add319c74e7ffd01bcf2ff247168e5717aa08b271ffc4cd65ad1dfb6acc1a039",
+    "apps/web/src/design/platform-overlay-tokens.css": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5",
+    "apps/web/src/design/security-operations-tokens.css": "06d87acc5f74de55a104632af60cec935df79a80021df925d591576e75d4fc0b",
+    "apps/web/src/design/tenancy-tokens.css": "a2b9fe8a0326dd7a7b5a9ac519703e30e9fed716d083c0ed709bed6d63833b63",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38",
+    "apps/web/src/main.ts": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/mysql-resilience-c.css": "9d51865f41fccf84627556bb46acd59689f56446de1a9689e3567e8e75a44cd7",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
+    "apps/web/src/navigation-shell-scoped.css": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/security-operations-c.css": "6c251358b8d377da104931e0c7b20017ad27cb22ff80dc3e89dea22404e573c6",
+    "apps/web/src/security-operations.css": "ff85443766c380cdae33bc8f41578f608f0866d789c3193aea3442a4de440655",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+    "apps/web/src/styles.css": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
+    "apps/web/src/styles/platform-operations.css": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/platform-security-page-preview.css": "f82b39e3bdfc56940bfd3f3384370c83f45362ffe2f37bc83d0183594b771ade",
+    "design-plans/ui-phase-2-2026-09-07/implementation/shell-review-navigation.ts": "f829add727648e35a044dd413a16c65dbede4c75f0def5dc471ebc6f8607d49d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/shell-vue-c-preview.css": "7607f918eef47cd5670be727928f7fa5fcca5129a8a7ce37c6ba1f2ca1e1d4be",
+    "scripts/lib/platform-security-page-preview.mjs": "0cd92aecba13a73cb7523e6ee8378874809ac1e3c8f7cc6d4f03a383b0d0bb86",
+    "scripts/lib/security-read-state-preview.mjs": "63bb033d9441980e462fe7f456ee0335d7460010a48278067ef89543a7c5784f",
+    "scripts/lib/security-review-fixtures.mjs": "a2bcabde59a0dcb59662ecd0c8ccec04fceda0d1a52690494a987890fad7ac6c",
+    "scripts/lib/ui-imported-style-sources.mjs": "1ac8c9075a445b2cfb3963c1464de63cce567331eec6cfa14f197ce7929d2f84",
+    "scripts/lib/ui-phase2-shell-vue-preview.mjs": "03a5317adb62d291b7127e65a6c67f04eff4d34b340a8bb7e6c1245cf43781c1",
+    "scripts/verify-security-page-preview.mjs": "b1752a310d935b24dabfec8cd8ccb3a5cff210776a17c89010d5294924b9d48f",
+    "tests/e2e/m06-04-security-operations.spec.ts": "9877b4015190fc0ba595c7a9defd06b8a2c2d87ce8916bb77b2282b41bcb5633"
+  },
+  "images": [
+    {
+      "file": "1440-events-page.png",
+      "sha256": "a22707ff355052937da1500bb1a18f8d595f5184ec00f5255625dd859710914e",
+      "width": 1440,
+      "pixelWidth": 1440,
+      "pixelHeight": 1357,
+      "view": "events",
+      "frame": "page",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "1440-sessions-page.png",
+      "sha256": "0ae4ffee8a3a07c757c4b958f502a0649266e4f451d49e7f69b9a2b7a95c07f3",
+      "width": 1440,
+      "pixelWidth": 1440,
+      "pixelHeight": 1353,
+      "view": "sessions",
+      "frame": "page",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "1440-credentials-page.png",
+      "sha256": "fe8cbc35bdc1860954b45480655f0b99c9dec8e12315de040e0884400344ff26",
+      "width": 1440,
+      "pixelWidth": 1440,
+      "pixelHeight": 1707,
+      "view": "credentials",
+      "frame": "page",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "1440-audit-page.png",
+      "sha256": "818c561afaee071403144d6e43c3f207bb63c470229ffd0a012cdb45cb37caa4",
+      "width": 1440,
+      "pixelWidth": 1440,
+      "pixelHeight": 1353,
+      "view": "audit",
+      "frame": "page",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-events-top.png",
+      "sha256": "faf41807c4499f62bc02f5779a79b7dd2bef455f46a60567929ba975bbfa5aad",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "events",
+      "frame": "top",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-events-summary.png",
+      "sha256": "5642d7eba1af3c166d2630eac4e69805d85f3b2616980f9278e2bc8db93aa350",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "events",
+      "frame": "summary",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-events-results.png",
+      "sha256": "0ffc575fd80bd83611b87b463dce557f26735386fbd6fabff9efa41c91324713",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "events",
+      "frame": "results",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-sessions-top.png",
+      "sha256": "9da7ef4e150fc873d0189baac1126bf08640200ce57b161c00325b315c8d17cc",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "sessions",
+      "frame": "top",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-sessions-summary.png",
+      "sha256": "b35b09bcdd3c0dfdddb5a35c6be35939aa899d28bc41c939b31e8597699488d8",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "sessions",
+      "frame": "summary",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-sessions-results.png",
+      "sha256": "2b99214f7396735434a8a400dc832d9aea636acee722d3372a7bcca18ad7acfa",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "sessions",
+      "frame": "results",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-credentials-top.png",
+      "sha256": "c447e75dfe5d14b1b61e729faf2fc890744ce8ca7cbb7f734e2e8fc4e54fc2f4",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "credentials",
+      "frame": "top",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-credentials-summary.png",
+      "sha256": "6c6b13b920c151e501ba6cb7ff441eb3b618dcd5b97ca93dcbc8a9a6214f3200",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "credentials",
+      "frame": "summary",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-credentials-results.png",
+      "sha256": "58bacf5de0f21cad629b51ef6603b389b437e4cc1d1d6f5790eccf7d1f876493",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "credentials",
+      "frame": "results",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-credentials-tokens.png",
+      "sha256": "a17f79c27e9e9f0e89cd15eb9e7709849c48210ead0625895223488edd90d50d",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "credentials",
+      "frame": "tokens",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-audit-top.png",
+      "sha256": "5e6b7052c8e7025c0a9a64377c73f2608da6d17cc77ad74fce749ee00e458e7c",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "audit",
+      "frame": "top",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-audit-summary.png",
+      "sha256": "05585d22d55aad8648fe0a74867deb9799fa44f526711893d220e54957a5c2c3",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "audit",
+      "frame": "summary",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    },
+    {
+      "file": "390-audit-results.png",
+      "sha256": "bff54ce6fbf3c9139ab7b4612ead05e6be120631f5fdbf6ed1266b7f2cc3f3c8",
+      "width": 390,
+      "pixelWidth": 390,
+      "pixelHeight": 844,
+      "view": "audit",
+      "frame": "results",
+      "scope": "page structure visuals auto-approved under user authorization; local E2E fixtures; no permission, audit, or production acceptance"
+    }
+  ],
+  "results": [
+    {
+      "width": 1440,
+      "checks": 51,
+      "requests": [
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=events&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=sessions&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=credentials&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=audit&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=audit&page=1&page_size=20&token_page=1&token_page_size=20&query=no-match",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=audit&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "checks": 47,
+      "requests": [
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=events&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=sessions&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=credentials&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=audit&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=audit&page=1&page_size=20&token_page=1&token_page_size=20&query=no-match",
+          "body": null
+        },
+        {
+          "key": "GET /api/v1/platform/security/operations",
+          "search": "?window=24h&view=audit&page=1&page_size=20&token_page=1&token_page_size=20",
+          "body": null
+        }
+      ]
+    }
+  ]
+}
