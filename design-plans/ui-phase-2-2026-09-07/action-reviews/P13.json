@@ -2022,7 +2022,7 @@
       "apps/web/src/components/TaskWorkspace.vue": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d",
       "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
       "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b",
-      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+      "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
       "apps/web/src/components/NavigationShell.vue": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",

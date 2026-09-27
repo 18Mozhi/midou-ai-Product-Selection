@@ -2445,7 +2445,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
-      "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc"
+      "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d"
     },
     "includeStructuralContainers": true,
     "inputs": [

@@ -2,7 +2,7 @@
 
 2026-09-09增量实施：见[CP-B02/B03结果归属修复](COMPETITOR-BOUNDARY-REVIEW.md)。Vue现在使用读代次拒绝旧列表/详情的成功与失败回调，采集固定提交对象并按对象保存待确认任务，原对象外不展示其反馈或启动轮询；卸载清理读代次/待确认项。API/表单/权限/业务字段及template均未变。以下行号与SHA为首次核对历史位置，稳定候选签名仍可追踪当前源；CP-G04/05仅上述部分已修，其余KeepAlive/history/scope、弹窗并存、删除与规则重入缺口保持待验。
 
-2026-09-07；规格/源码合同与隔离Vue验证，不是正式设计或生产验收。产品核对HEAD ff615e3（最近产品变更060e0b5）；CompetitorMonitor.vue的LF源码SHA256为49653e9dbc80617d96f77ac5c89e8a7580d0e732fbe8e54e17ed58757281c0c7。当前工作树清单绑定060e0b5，全局指纹caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d；其余旧图是否有效需E01校验，不能由本合同推定。
+2026-09-07；规格/源码合同与隔离Vue验证，不是正式设计或生产验收。产品核对HEAD ff615e3（最近产品变更060e0b5）；当前 CompetitorMonitor.vue LF SHA256 为 `f94369cc2a0abfbe5271e66b7ecd70fe2f3abb0e3b304b9b200156a23a60139f`。2026-09-27 CP-G01仅更新三个弹窗的键盘/焦点生命周期并补齐当前源码映射；不代表全部设计、权限或生产通过。当前工作树清单绑定060e0b5，全局指纹caf0574f33b1c91a446e6a7784bc954fc6d926d44ba5b349df538190304eff8d；其余旧图是否有效需E01校验，不能由本合同推定。
 
 ## 1. 真实入口与边界
 
@@ -44,14 +44,22 @@ config/route-catalog.json → NavigationShell.vue → navigation-shell-route-sta
 | 1041 | 76ebcf7c57bc49e4.1 | CP-CREATE-CLOSE / 创建表单 | 第一步取消 |
 | 1043 | 4ae114e438c807d5.1 | CP-CREATE-PREVIOUS / 创建表单 | 第2/3步本地回退 |
 | 1044 | d32ececd9e3b4c22.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | submit按钮，表单handler驱动 |
+| 1051 | 225c721c3e09266a.1 | CP-CREATE / P19 | 三步；无/有机会ID；字段非法、busy、失败/重试；取消归step1但实例字段保留 |
+| 1051 | 0a5942425b87d8da.1 | CP-CREATE-OPEN/CLOSE / P19 | 原生具名dialog；cancel与Tab边界键盘事件 |
 | 1058 | 0effcb12f0e7344b.1 | CP-RULE-SUBMIT / 规则表单 | POST明确阈值 |
 | 1064 | ad5c3e206797e35f.1 | CP-RULE-CLOSE / 规则表单 | 关闭且去competitor query |
 | 1107 | c40c87a6e5ef3e66.1 | CP-RULE-CLOSE / 规则表单 | 取消同合同 |
 | 1108 | 108089b4d17a2d6e.1 | CP-RULE-SUBMIT / 规则表单 | busy禁用的submit |
+| 1141 | 9538d57155059acf.1 | CP-RULE / P20 | 全局/指定对象×数值/库存；方向约束、数值0/小数、错误/busy；取消清query，新打开重置默认 |
+| 1141 | eaaea75753101b7d.1 | CP-RULE-OPEN/CLOSE / P20 | 原生具名dialog；cancel与Tab边界键盘事件 |
 | 1119 | 33765167c1ac37f5.1 | CP-DELETE-SUBMIT / 删除表单 | DELETE + trim原因/revision |
 | 1125 | 8436b1677c6263f6.1 | CP-DELETE-CLOSE / 删除表单 | 删除选择归null，无DELETE |
 | 1147 | a94cde21d7759e06.1 | CP-DELETE-CLOSE / 删除表单 | 取消同合同 |
 | 1148 | 9d23c498e72940a2.1 | CP-DELETE-SUBMIT / 删除表单 | busy禁用的submit |
+| 1204 | 6a4b5c16df993837.1 | CP-DELETE / P19 | 原因空白/有效、当前/冲突revision、失败/重试；取消不写、重开清原因；已用标题关联提供可访问名称 |
+| 1204 | ef60f454df6c8376.1 | CP-DELETE-OPEN/CLOSE / P19 | 原生具名dialog；cancel与Tab边界键盘事件 |
+| 1219 | 9738acdb81108bf8.1 | CP-DELETE-CLOSE / 删除表单 | 删除选择归null，无DELETE |
+| 1241 | 5433acf9dddc7c6a.1 | CP-DELETE-CLOSE / 删除表单 | 取消同合同 |
 
 v-model分别为695 query；954 URL、962 market、970 opportunity_id、978 title；1037规则目标、1044 metric、1051 direction、1061 threshold；1105 deleteReason。全局keydown还支持Escape按删除→规则→创建顺序关闭，不在36个模板候选中；需单独验键盘及缓存生命周期，不能漏计。
 
@@ -63,7 +71,7 @@ UiStatePanel primary：empty+manager打开当前模式创建，expired到/login?
 | --- | --- | --- |
 | CP-CREATE | 929 / de57fe420db167ea.1 | 三步；无/有机会ID；字段非法、busy、失败/重试；取消归step1但实例字段保留 |
 | CP-RULE | 1018 / b3cda3ddc35e3a69.1 | 全局/指定对象×数值/库存；方向约束、数值0/小数、错误/busy；取消清query，新打开重置默认 |
-| CP-DELETE | 1080 / 9d3c873673ab0556.1 | 原因空白/有效、当前/冲突revision、失败/重试；取消不写、重开清原因；现缺可访问名称 |
+| CP-DELETE | 1204 / 6a4b5c16df993837.1 | 原因空白/有效、当前/冲突revision、失败/重试；取消不写、重开清原因；已用标题关联提供可访问名称 |
 
 URL与字段maxlength/pattern见P19/P20。通用post设置busy及notice，finally恢复busy；没有底层early-busy guard，DOM禁用不证明所有竞态已解决。关闭表单不是取消服务器操作，不能把失败文案“未写入”当作网络异常下的事务证明。
 
@@ -97,7 +105,7 @@ fixture响应不模拟持久化写后列表，成功关窗不等于数据库提�
 
 | ID | 当前证据/风险 | 后续退出条件 |
 | --- | --- | --- |
-| CP-G01 | 三个role=dialog没有统一焦点约束/归还；删除窗缺aria-labelledby；步骤推进未安排新字段焦点 | 增加先失败的实际键盘/焦点用例，按已有modal原语最小实现；三窗、步骤、Escape、错误首焦点与所有打开方式通过 |
+| CP-G01 | 已按本批接入项目 `useModalDialog` 原生模态原语；三窗具名、Tab/Shift+Tab 边界循环、Escape/关闭返焦、创建步骤焦点迁移和错误首焦点均有真实 Vue 回归 | 实际 Vue E2E `UI2-CPG01` 覆盖按钮与 query 打开、三类弹窗的错误恢复与关闭；桌面/手机完整 M04-05 结果见 `PROGRESS.md`。仅关闭键盘/焦点子项，不代表全部弹窗视觉组合、读屏、真实写入或生产权限验收 |
 | CP-G02 | applicableRules未筛enabled却标生效；ruleText从selected币种显示所有价格规则；list模式规则GET失败静默置空 | 用混合状态/不同币种/读取失败真实合同夹具复现；只修事实呈现，不新增币种字段或更改阈值算法；规则异常不能伪装无规则 |
 | CP-G03 | API只返回最新100快照，UI末项被标为最早基线；旧蓝图“最早”与窗口边界有差异 | 超过100快照证据确定预期；先明确展示措辞还是需要后端基线合同，不自行扩大查询上限或改持久结构 |
 | CP-G04 | KeepAlive下仅unmounted清timer；load/detail无读版本与abort；query没有路由反向同步 | 复现离开/返回、scope切换、多对象迟到200/404、history；旧读不覆盖当前对象，停用不继续轮询，恢复按当前范围读取 |

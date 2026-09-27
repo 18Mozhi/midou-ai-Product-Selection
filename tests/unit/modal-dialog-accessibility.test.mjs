@@ -45,7 +45,8 @@ test("native business dialogs share modal top-layer and focus-return behavior", 
 
   const modal = await readFile("apps/web/src/use-modal-dialog.ts", "utf8");
   assert.match(modal, /showModal\(\)/);
-  assert.match(modal, /returnFocus\?\.focus\(\)/);
+  assert.match(modal, /target\?\.focus\(\)/);
+  assert.match(modal, /getFallbackFocus\?\.\(\)/);
   assert.match(modal, /event\.preventDefault\(\)/);
   assert.match(modal, /discardReturnFocus/);
 

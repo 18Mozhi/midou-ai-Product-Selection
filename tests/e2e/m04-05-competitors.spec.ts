@@ -447,6 +447,141 @@ const writeFailure = {
   trace_id: "competitor-write-trace",
 };
 
+test("UI2-CPG01 create dialog traps focus, follows each step, and restores its opener", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/competitors");
+  const trigger = page.getByRole("button", { name: "添加竞品监控", exact: true });
+  await trigger.click();
+
+  const dialog = page.getByRole("dialog", { name: "添加竞品监控" });
+  await expect(dialog.getByLabel("商品网址")).toBeFocused();
+  await dialog.getByRole("button", { name: "关闭新建竞品" }).focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(dialog.getByRole("button", { name: "下一步" })).toBeFocused();
+
+  await dialog.getByLabel("商品网址").fill("https://www.amazon.com/dp/B0SCOUTOPS");
+  await dialog.getByRole("button", { name: "下一步" }).click();
+  await expect(dialog.getByLabel("市场")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+
+  await page.goto("/competitors?create=1");
+  const queryDialog = page.getByRole("dialog", { name: "添加竞品监控" });
+  await expect(queryDialog.getByLabel("商品网址")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(queryDialog).toHaveCount(0);
+  await expect(
+    page.locator(".monitoring-readiness button").filter({ hasText: "添加竞品监控" }).first(),
+  ).toBeFocused();
+});
+
+test("UI2-CPG01 rule and delete dialogs name themselves and restore focus on Escape", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/competitors/monitoring-rules");
+  const ruleTrigger = page.getByRole("button", { name: "新建监控规则", exact: true });
+  await ruleTrigger.click();
+  const ruleDialog = page.getByRole("dialog", { name: "新建监控规则" });
+  await expect(ruleDialog.getByLabel("竞品（留空为工作区全局）")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(ruleDialog).toHaveCount(0);
+  await expect(ruleTrigger).toBeFocused();
+
+  await page.goto(`/competitors/monitoring-rules?competitor=${id}`);
+  const queryRuleDialog = page.getByRole("dialog", { name: "新建监控规则" });
+  await expect(queryRuleDialog.getByLabel("竞品（留空为工作区全局）")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(queryRuleDialog).toHaveCount(0);
+  await expect(
+    page.locator(".monitoring-readiness button").filter({ hasText: "新建监控规则" }),
+  ).toBeFocused();
+
+  await page.goto("/competitors");
+  await expect(page.getByRole("heading", { name: item.title })).toBeVisible();
+  const mobileActions = page.locator(".competitor-mobile-actions");
+  const mobileActionsVisible = await mobileActions.isVisible();
+  if (mobileActionsVisible)
+    await mobileActions.evaluate((element: HTMLDetailsElement) => {
+      element.open = true;
+    });
+  const deleteTrigger = mobileActionsVisible
+    ? mobileActions.getByRole("button", { name: "删除竞品监控", exact: true })
+    : page
+        .locator(".competitor-desktop-actions")
+        .getByRole("button", { name: "删除竞品监控", exact: true });
+  await expect(deleteTrigger).toBeVisible();
+  await deleteTrigger.click();
+  const deleteDialog = page.getByRole("dialog", { name: "删除竞品监控" });
+  await expect(deleteDialog.getByLabel("删除原因")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(deleteDialog).toHaveCount(0);
+  await expect(deleteTrigger).toBeFocused();
+});
+
+test("UI2-CPG01 create, rule and delete failures focus the in-dialog recovery message", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/competitors", (route) =>
+    route.request().method() === "GET"
+      ? route.fallback()
+      : route.fulfill({ status: 409, json: writeFailure }),
+  );
+  await page.goto("/competitors");
+  await page.getByRole("button", { name: "添加竞品监控", exact: true }).click();
+  let dialog = page.getByRole("dialog", { name: "添加竞品监控" });
+  await dialog.getByLabel("商品网址").fill("https://www.amazon.com/dp/B0SCOUTOPS");
+  await dialog.getByRole("button", { name: "下一步" }).click();
+  await dialog.getByLabel("市场").fill("US");
+  await dialog.getByLabel("监控名称").fill("键盘焦点回归竞品");
+  await dialog.getByRole("button", { name: "下一步" }).click();
+  await dialog.getByRole("button", { name: "确认并开始采集" }).click();
+  await expect(dialog.getByRole("alert")).toBeFocused();
+  await expect(dialog.getByRole("alert")).toContainText("复核后重试本次操作");
+  await page.keyboard.press("Escape");
+
+  await page.route("**/api/v1/competitor-monitor-rules", (route) =>
+    route.request().method() === "GET"
+      ? route.fallback()
+      : route.fulfill({ status: 409, json: writeFailure }),
+  );
+  await page.goto("/competitors/monitoring-rules");
+  await page.getByRole("button", { name: "新建监控规则", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "新建监控规则" });
+  await dialog.getByRole("button", { name: "启用规则" }).click();
+  await expect(dialog.getByRole("alert")).toBeFocused();
+  await page.keyboard.press("Escape");
+
+  await page.route(`**/api/v1/competitors/${id}`, (route) =>
+    route.request().method() === "DELETE"
+      ? route.fulfill({ status: 409, json: writeFailure })
+      : route.fallback(),
+  );
+  await page.goto("/competitors");
+  await expect(page.getByRole("heading", { name: item.title })).toBeVisible();
+  const mobileActions = page.locator(".competitor-mobile-actions");
+  const mobileActionsVisible = await mobileActions.isVisible();
+  if (mobileActionsVisible)
+    await mobileActions.evaluate((element: HTMLDetailsElement) => {
+      element.open = true;
+    });
+  const deleteTrigger = mobileActionsVisible
+    ? mobileActions.getByRole("button", { name: "删除竞品监控", exact: true })
+    : page
+        .locator(".competitor-desktop-actions")
+        .getByRole("button", { name: "删除竞品监控", exact: true });
+  await expect(deleteTrigger).toBeVisible();
+  await deleteTrigger.click();
+  dialog = page.getByRole("dialog", { name: "删除竞品监控" });
+  await dialog.getByLabel("删除原因").fill("仍需保留观察证据");
+  await dialog.getByRole("button", { name: "确认删除" }).click();
+  await expect(dialog.getByRole("alert")).toBeFocused();
+});
+
 test("UI2-CP01 creation cancellation keeps local fields and failed submission retries the exact contract", async ({
   page,
 }) => {

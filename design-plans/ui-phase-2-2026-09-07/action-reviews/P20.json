@@ -5,27 +5,27 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+    "apps/web/src/components/CompetitorMonitor.vue": "f94369cc2a0abfbe5271e66b7ecd70fe2f3abb0e3b304b9b200156a23a60139f"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
-    "reason": "共享源有三个自定义role=dialog，不是三个原生dialog；本页可达/排除分别记录，内嵌form/aside不重复计数。",
+    "reason": "共享源有三个具名原生模态dialog；本页可达/排除分别记录，内嵌form/aside不重复计数。",
     "definitions": [
       {
         "dialogId": "CP-CREATE",
-        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1",
+        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#225c721c3e09266a.1",
         "applicability": "initial-create-query-only",
         "remaining": "现创建图是P19背景，仅相关参考；双query背景/层叠专图缺失"
       },
       {
         "dialogId": "CP-RULE",
-        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1",
+        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#9538d57155059acf.1",
         "applicability": "normal-entry-and-competitor-query",
         "remaining": "工作区/对象×数值/库存×错误/busy/权限/主题组合并非现图全覆盖"
       },
       {
         "dialogId": "CP-DELETE",
-        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
+        "sourceCandidateId": "apps/web/src/components/CompetitorMonitor.vue#6a4b5c16df993837.1",
         "applicability": "excluded-in-fixed-rules-mode",
         "remaining": "原因/版本/关闭/重开/失败与回调归属需分开验证"
       }
@@ -635,14 +635,14 @@
       "kind": "wiring",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
       "sourceCandidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1"
+        "apps/web/src/components/CompetitorMonitor.vue#225c721c3e09266a.1"
       ],
       "sourceContractKeys": [
         "三步；无/有机会ID；字段非法、busy、失败/重试；取消归step1但实例字段保留"
       ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "showCreate && canManage；无mode条件",
-      "handler": "role=dialog自定义div，包含三步form，不新增一次业务动作",
+      "handler": "具名原生模态dialog，包含三步form，不新增一次业务动作",
       "variants": [
         "步骤1链接",
         "步骤2市场/机会/名称",
@@ -885,11 +885,13 @@
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
       "sourceCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
-        "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1"
+        "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1",
+        "apps/web/src/components/CompetitorMonitor.vue#0a5942425b87d8da.1"
       ],
       "sourceContractKeys": [
         "关闭、step归1、去create query",
-        "第一步取消"
+        "第一步取消",
+        "原生具名dialog；cancel与Tab边界键盘事件"
       ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "创建窗可见；取消只在第1步，右上关闭各步可见，原源不禁busy",
@@ -1145,14 +1147,14 @@
       "kind": "wiring",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
       "sourceCandidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1"
+        "apps/web/src/components/CompetitorMonitor.vue#9538d57155059acf.1"
       ],
       "sourceContractKeys": [
         "全局/指定对象×数值/库存；方向约束、数值0/小数、错误/busy；取消清query，新打开重置默认"
       ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "showRule&&canManage；P20入口或首次competitor字符串query",
-      "handler": "role=dialog自定义div，包含规则form，不另增写入",
+      "handler": "具名原生模态dialog，包含规则form，不另增写入",
       "variants": [
         "工作区数值",
         "对象数值",
@@ -1331,11 +1333,13 @@
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
       "sourceCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
-        "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1"
+        "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1",
+        "apps/web/src/components/CompetitorMonitor.vue#eaaea75753101b7d.1"
       ],
       "sourceContractKeys": [
         "关闭且去competitor query",
-        "取消同合同"
+        "取消同合同",
+        "原生具名dialog；cancel与Tab边界键盘事件"
       ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "规则窗可见；原源busy仍可关闭",
@@ -1479,14 +1483,16 @@
       "kind": "excluded",
       "routeApplicability": "P20 fixed rules route; create dialog only via explicit create=1 initial query",
       "sourceCandidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
+        "apps/web/src/components/CompetitorMonitor.vue#6a4b5c16df993837.1",
+        "apps/web/src/components/CompetitorMonitor.vue#ef60f454df6c8376.1",
         "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
-        "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1",
-        "apps/web/src/components/CompetitorMonitor.vue#a94cde21d7759e06.1",
+        "apps/web/src/components/CompetitorMonitor.vue#9738acdb81108bf8.1",
+        "apps/web/src/components/CompetitorMonitor.vue#5433acf9dddc7c6a.1",
         "apps/web/src/components/CompetitorMonitor.vue#9d23c498e72940a2.1"
       ],
       "sourceContractKeys": [
-        "原因空白/有效、当前/冲突revision、失败/重试；取消不写、重开清原因；现缺可访问名称",
+        "原因空白/有效、当前/冲突revision、失败/重试；取消不写、重开清原因；已用标题关联提供可访问名称",
+        "原生具名dialog；cancel与Tab边界键盘事件",
         "DELETE + trim原因/revision",
         "删除选择归null，无DELETE",
         "取消同合同",
@@ -1494,7 +1500,7 @@
       ],
       "contractAliasReason": "既有竞品合同将语义ID与页面并列，最后一列为具体行为；按人工核对后的完整原单元格精确绑定。组键仅供路由归属，不新增业务动作或规则；事件对与form/submit不重复计数。",
       "condition": "P20没有openDelete可达UI，query不设deleting",
-      "handler": "角色div和删除form仍在共享源，但本页无启用路径",
+      "handler": "具名原生模态角色与删除form仍在共享源，但本页无启用路径",
       "variants": [
         "删除定义",
         "提交与submit",
@@ -1535,7 +1541,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/CompetitorMonitor.vue": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0",
+      "apps/web/src/components/CompetitorMonitor.vue": "f94369cc2a0abfbe5271e66b7ecd70fe2f3abb0e3b304b9b200156a23a60139f",
       "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
       "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
       "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
@@ -1648,6 +1654,22 @@
               }
             ],
             "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "创建窗为具名原生模态dialog；P20仅由首次create=1 query可达。",
+        "remaining": "P20该query焦点路径未单独实测；图稿不证明写入、读屏或整页生产验收。",
+        "variants": [
+          {
+            "name": "create-link",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [{ "package": "competitor-direction-c", "scene": "create-link" }],
+            "remaining": "仅为离线布局参考，不代表query组合或生产通过。"
           }
         ]
       },
@@ -1771,6 +1793,22 @@
       },
       {
         "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "规则窗为具名原生模态dialog；P20可由页内入口与competitor query打开。",
+        "remaining": "图稿仅覆盖代表布局，不覆盖所有目标/指标、失败或生产权限。",
+        "variants": [
+          {
+            "name": "rule-global",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [{ "package": "competitor-direction-c", "scene": "rule-global" }],
+            "remaining": "仅为离线布局参考，不代表全状态或生产通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
         "tag": "form",
         "ordinal": 2,
         "shape": "form-container",
@@ -1868,10 +1906,27 @@
       },
       {
         "file": "apps/web/src/components/CompetitorMonitor.vue",
+        "tag": "dialog",
+        "ordinal": 3,
+        "shape": "native-dialog",
+        "sourceBehavior": "删除确认窗为具名原生模态dialog；固定rules模式没有打开入口。",
+        "remaining": "P20本页排除，不计删除交互通过。",
+        "variants": [
+          {
+            "name": "delete",
+            "evidenceScope": "route-excluded-reference",
+            "exclusionReason": "父mode=rules没有该容器的打开路径",
+            "scenes": [{ "package": "competitor-direction-c", "scene": "delete" }],
+            "remaining": "仅引用P19来源布局，不计P20通过。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/CompetitorMonitor.vue",
         "tag": "form",
         "ordinal": 3,
         "shape": "form-container",
-        "sourceBehavior": "删除form，trim原因与expected_revision；所在role=dialog无可访问标题，旧回调/新草稿问题仍在。",
+        "sourceBehavior": "删除form，trim原因与expected_revision；具名模态层的旧回调/新草稿问题仍待单独验证。",
         "remaining": "本页固定mode排除，仅保留来源与他页图引用；不计本页弹窗/行为通过。",
         "variants": [
           {

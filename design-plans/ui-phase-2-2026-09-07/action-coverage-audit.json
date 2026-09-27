@@ -34,7 +34,7 @@
     "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
     "apps/web/src/components/CollectionTaskCenter.vue": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de",
     "apps/web/src/components/CommercialOperationsCenter.vue": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec",
-    "apps/web/src/components/CompetitorMonitor.vue": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0",
+    "apps/web/src/components/CompetitorMonitor.vue": "f94369cc2a0abfbe5271e66b7ecd70fe2f3abb0e3b304b9b200156a23a60139f",
     "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/CostRuleConsole.vue": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3",
@@ -232,7 +232,7 @@
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/web/src/ui/status-labels.ts": "650924068bf52de808067527033710a711e851717a1bc14f55dea7e2767ef13a",
     "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
-    "apps/web/src/use-modal-dialog.ts": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+    "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",
     "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
     "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
     "apps/web/src/use-platform-organization-actions.ts": "233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae",
@@ -247,7 +247,7 @@
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "ab4b381f48cc74f4d2a71d863fa221e989ca29a7a176674d97b429d5ef6159a8",
-    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "776fc3abc9b2c95b0441f701f1623eb18972e88482177b7b51cfb06f82408ed8",
+    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "5b2e35ffae17f8baf56dcc9681748baa80bd4bceef1390919ad8b2431715e2dc",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "b2fd4e487f62373cd0cc33b086f965a816758eede8f0036cc79a912ce7ce4db7",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b8c7eed0c5b6b1ea3bfcb4df1febb5a1b47ab98d0d8a4fa3c914739d10c6a47f",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "2a6c6dd60fa660ff2758463c2b85cb51ff3868eefc9860f376d1e7b982ccc750",
@@ -407,21 +407,21 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "2e21b6acaebdd342038a257bcd665a3c68962a2c25062ae5115bf27c52def19f",
     "scripts/lib/ui-phase2-home-design-data.mjs": "bb65ad359313f8e5351351195bf809a6ba49e3c8d52d7ceaa2ef24e89d7980c7",
     "scripts/verify-ui-phase2-home-c.mjs": "e7800a15baf9ac7ca02291e31cbd75466fa9f7eb50a0b722b09730a9c8f2af4e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "e8dca5101872cc85e3ed62f6e06897c71de8a2e8f20337884843ea0b882d4b84",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "be24b8ad7ec2cbcabecee9ebb06e86b6cfb92e001dcb1f64fc449337b57f2a3d",
     "scripts/lib/ui-phase2-work-design-data.mjs": "5a15eb532e64f186f5be90c2a036cbb55e37a2be897489ec971ce981040ece34",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "13a426a71198a7d70a7431497fd8696951ab5692943da5396b68eefc0da3d1d6",
     "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
     "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
     "tests/e2e/ui-phase2-trend-contracts.spec.ts": "c9b3be8f0656b2c4f008bcfa5741ac8185e75787b871eba310a8b6baad1db01f",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "8137b10c464be044fe21c6d646f3ce08ba8458194262c57e24c7bc27000d0b19",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "77d2d25d32aadbac583779684cb0f3735241cf2c1dfb8479ea39992a2cdd3f1d",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "93ebb1504c08352084de44f476df8a24b1e43b0893e87be8ed68fed95b8a4da7",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "139fab098a118a767d9d59dd1949989308809115e80af8ae0dcc0e9d86568eea",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "79b6a0986ce36c1f6f3cfc93fc871b4650cff9f686b5a3f389e5f697b3d00e53",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "f49c765de948e3dac4a74a1ae3462777b4468f338922a23fd95d9cc2a9c0ed36",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "f8de513f0376eaf4afe3d5fe3330d11ae35ee280c8477ddcf52a7db99cf31724",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "ce8bbbe088cb08566b3deeb4ef2fce6dd539a30f6e8c3bb1afb9b5af27c8413e",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -429,20 +429,20 @@
     "scripts/verify-ui-phase2-detail-cost-context-c.mjs": "9083d39ac582b9220f261d5b96ffc3a4a4ca987836c2e29b0fefe107de2c4260",
     "scripts/verify-ui-phase2-opportunity-detail-c.mjs": "e22ab61ee8b7caec58e8758a9ed2b0b598d4e340f47797f59a15e56d569876a5",
     "scripts/verify-ui-phase2-insights-c.mjs": "44840b3be73b1f8b754ec258b82f8d6d97ed2edc4bd7ed060ccfa90239319712",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "aa6a606bcddb6d25544abaaf9f8b29d2a13f22483ee1cfee349f154e9eb25935",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "bca07f388f1197a86d188adc9b4fef1643f743e1f4c7cbca780baa0b0f8fadb8",
     "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "3e8cd8ea912b2feba4c88ab94751555a8e076479ea1f1c6edec7be0a0c4e7640",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "2c04f047f68a9d6440f48eab45c35763029ef56ae9974956d8d2b9ded4d3ba62",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "566ae260fee4d577175ae19eff60fbdb5a33a64a722200a797a8d4267267c018",
     "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
     "tests/e2e/m04-06-sourcing.spec.ts": "0f7e499b05670cdf3da924afccb804a3f5cbc46be13bf5dd33f990b7830f1af1",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "f8157fcc926e5a39461ca83f4563a05fc4290de81769bcd80d584a324ec671a4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "b1fa43b6df3c7a37986aa59ef813e6f15fd5f1da8a95f23f8bcb95535b92c2a2",
     "scripts/verify-ui-phase2-cost-rules-review.mjs": "e4998bfed38926c3c747bebe9325ec54b3ca9462969ccc6c64d2defda8d59c99",
     "scripts/verify-ui-phase2-cost-rules-c.mjs": "d96873a753a246b28fc4eb3442e80f95756da1aef4eab8bf4ee8b5a5ccd3f94b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "8f3b9d1adb6c6d8700e5735a55f3064cf61abbea3400acde2a51e072a0ab35fc",
     "scripts/verify-ui-phase2-task-list-review.mjs": "b49bfb8bf6e4f72bf9b684b41f872f3387e93f9dadac9e5172e8b758cd211151",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "331d0817401c3e1d93fb044bc0b71f0eb395d46482495a395fc4316c4d374ef4",
     "scripts/verify-ui-phase2-task-detail-review.mjs": "2246b8b70f2d7c1d2e34aab6290da4adb85ff55fde6985befbb860c39249c6b0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "6f4037cb4fc448430e5b3ae7c7e21c9accb458a10ea373f26f0c2e3cf29b33ae",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "a227ea1f84594ae128b98abde1210debe53cbb208a2b2f2318e3aadff35c4fd6",
     "scripts/verify-ui-phase2-approval-review.mjs": "3943d8f26a3de728e8fea5d2925f3d803e4360dcdd2244310814de341984b486",
     "scripts/verify-ui-phase2-approval-c.mjs": "0448699f0aedb6b4e6851146b00382ecaca7ddf57b05f59fdefeb881fb107917",
     "scripts/verify-ui-phase2-approval-navigation-c.mjs": "637d2f5a34787039a475a3b610a39be52c9ad917e66ef6a8597c7a48b14913d7",
@@ -450,7 +450,7 @@
     "scripts/verify-ui-phase2-approval-lifecycle-c.mjs": "59bfecbccdd956a2031d80e1b92b77430bb3728cfade05441b22eb3e405dbfb3",
     "scripts/verify-ui-phase2-approval-forms-c.mjs": "1aba43d70ecd0d52490c6922c3e681c38b004d8c5d98175bafad956b9333c1c3",
     "scripts/verify-ui-phase2-approval-controls-c.mjs": "237c54b6368df9feab55fbc8039f5e89c589c18651d9a93109ee3ce9419c7fe0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "76424e2566b3f0022197c02ea7c27fbec4ea13f04d20bbd19d1be05951a07a5f",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "89e3cec913849e59671587613ba1a35934e7e9f06f7624f28c687903293f4d45",
     "tests/unit/ui-phase2-notification-ownership.test.mjs": "937184c6f0ebc8a8a369e35c868526689a3ed61c5e80456d53bf26a8409ed838",
     "scripts/verify-ui-phase2-notification-controls-c.mjs": "0d8a2b48d22f6ca05636264641d9f13a083559987b430d0b5e802c086b8d5b3e",
     "scripts/verify-ui-phase2-notification-navigation-c.mjs": "34eb1fc201f8faf92a88ad80713512358cf1e9fb4d7f375c265b3145a164290b",
@@ -465,10 +465,10 @@
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "d60dc0965f2d2b0168db22468715f3d47f6c27c30a26f37b23d0c4196a4795cc",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "801966f372a3ce0a19b067d4e4fbbb9f4f606e5089c54fa2312c2054407d09e2",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "f571cc871255e33a48bcf9caacd4996c47ef7d9171a21a66ad4a486074a39458",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "28d4f5d3e0ce583df9a315bda8873cc868fbfdcca9ec21c1a0664c63fa0fc732",
     "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
     "scripts/verify-ui-phase2-roles-controls-c.mjs": "a7a318f327d2a7cb95bf439f21e36d006531abca5f3a194eb2cfd50b3b203bdd",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "69c28e7ed93a13e9e2ced56e3c8e97cd16c0ea9c867477580eebb02ff1beaf85",
@@ -482,7 +482,7 @@
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "06067bea5bed7e0ec8729467a1778db2c7602cd226991e86edc8d82b1575ad53",
     "scripts/verify-ui-phase2-org-data-controls.mjs": "32652c1547b4998316b79625d87662a3035959d9ae372aa3bf9fcd0785a9838e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "1199ffcabf48dafd7ee46a87386f621e6859bfa35c1bbcb06b6f60481d1d7569",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "bec9925193829778f0778a1898287c5861799912d785efd46e72bc961f76ff9a",
     "scripts/verify-ui-phase2-org-token-controls.mjs": "80210a2d4d289a83eaa260e29aeb1e2eb54e5953fa9238b6eac1feb2c9c7b205",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P37.json": "4c166c5479780ca8690ed49dbd0002806bc86be4f45e43bc7a56f002acdb2ea2",
     "scripts/verify-ui-phase2-org-audit-controls.mjs": "97846b5e70b74a6a2246c0b96d9e6afee4ab8691febdfe0c6fb7685b5335e9eb",
@@ -522,7 +522,7 @@
     "tests/unit/ui-phase2-p52-action-map.test.mjs": "77d94e9e75405de5557e9f2861d447132c43a6aa7224e4f68f630e920f6f4e41",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P53.json": "8349657b306ee7456507f17a37200c49e8a0102d46e68f58ec8eced401d6df08",
     "tests/unit/ui-phase2-p53-action-map.test.mjs": "4b1fc426854abe19387e7cee017d0f64a207c37e80955cfddc0ec113f39bca3d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "8397e1829d5a874b1471fa138c3d52886a29388314378bd4c82ba10d71b091e9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "549d9e31e7f0795bde98a8d10f4f6f428a1abf89ec0ec3b978674c1f15c3958a",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
     "scripts/verify-ui-phase2-data-controls-c.mjs": "789526ced8ddf184e6fd21ae12e00d17f8f0b58675c269d6abfa154011388a06",
@@ -647,12 +647,12 @@
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1707,
+    "currentSourceCandidates": 1710,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 636,
-    "oldOnlyIdentities": 406,
+    "newSourceIdentities": 644,
+    "oldOnlyIdentities": 411,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1547,
+    "explicitlyGroupedSourceSites": 1550,
     "semanticGroups": 1272,
     "routeActions": 1050,
     "wiringGroups": 118,
@@ -1450,12 +1450,12 @@
       "id": "P19",
       "path": "/competitors",
       "title": "竞品监控",
-      "oldStaticAssociatedCandidates": 72,
+      "oldStaticAssociatedCandidates": 67,
       "review": {
         "pageId": "P19",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 39,
+        "sourceSites": 42,
         "semanticGroups": 22,
         "routeActions": 18,
         "wiringGroups": 2,
@@ -1471,9 +1471,9 @@
           "callerFiles": 1,
           "localModelBindings": 10,
           "reviewedInputBindings": 10,
-          "sourceCallerContainers": 7,
-          "callerContainers": 7,
-          "consumerVariants": 22,
+          "sourceCallerContainers": 10,
+          "callerContainers": 10,
+          "consumerVariants": 25,
           "runtimeAcceptance": "unproven"
         }
       },
@@ -1493,12 +1493,12 @@
       "id": "P20",
       "path": "/competitors/monitoring-rules",
       "title": "竞品监控规则",
-      "oldStaticAssociatedCandidates": 72,
+      "oldStaticAssociatedCandidates": 67,
       "review": {
         "pageId": "P20",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 39,
+        "sourceSites": 42,
         "semanticGroups": 12,
         "routeActions": 8,
         "wiringGroups": 2,
@@ -1514,9 +1514,9 @@
           "callerFiles": 1,
           "localModelBindings": 10,
           "reviewedInputBindings": 10,
-          "sourceCallerContainers": 7,
-          "callerContainers": 7,
-          "consumerVariants": 22,
+          "sourceCallerContainers": 10,
+          "callerContainers": 10,
+          "consumerVariants": 25,
           "runtimeAcceptance": "unproven"
         }
       },
@@ -4296,7 +4296,7 @@
       "pageId": "P19",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 39,
+      "sourceSites": 42,
       "semanticGroups": 22,
       "routeActions": 18,
       "wiringGroups": 2,
@@ -4312,9 +4312,9 @@
         "callerFiles": 1,
         "localModelBindings": 10,
         "reviewedInputBindings": 10,
-        "sourceCallerContainers": 7,
-        "callerContainers": 7,
-        "consumerVariants": 22,
+        "sourceCallerContainers": 10,
+        "callerContainers": 10,
+        "consumerVariants": 25,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -4322,7 +4322,7 @@
       "pageId": "P20",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 39,
+      "sourceSites": 42,
       "semanticGroups": 12,
       "routeActions": 8,
       "wiringGroups": 2,
@@ -4338,9 +4338,9 @@
         "callerFiles": 1,
         "localModelBindings": 10,
         "reviewedInputBindings": 10,
-        "sourceCallerContainers": 7,
-        "callerContainers": 7,
-        "consumerVariants": 22,
+        "sourceCallerContainers": 10,
+        "callerContainers": 10,
+        "consumerVariants": 25,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -13455,7 +13455,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 651,
+      "line": 733,
       "kind": "control",
       "label": "{{ enabledRules.length ? \"新建监控规则\" : \"配置第一条阈值\" }}",
       "conditions": [
@@ -13497,7 +13497,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 654,
+      "line": 736,
       "kind": "control",
       "label": "返回竞品列表",
       "conditions": [
@@ -13535,7 +13535,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 657,
+      "line": 739,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -13577,7 +13577,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 688,
+      "line": 770,
       "kind": "control",
       "label": "创建第一条规则",
       "conditions": [
@@ -13627,7 +13627,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#056cc0832d94cfb3.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 701,
+      "line": 783,
       "kind": "control",
       "label": "配置监控阈值",
       "conditions": [
@@ -13669,7 +13669,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#4fe322a77ae77170.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 709,
+      "line": 791,
       "kind": "control",
       "label": "添加竞品监控",
       "conditions": [
@@ -13711,7 +13711,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9e3339029c06290e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 712,
+      "line": 794,
       "kind": "control",
       "label": "添加竞品",
       "conditions": [
@@ -13753,7 +13753,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#908bdb9143e5350e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 715,
+      "line": 797,
       "kind": "control",
       "label": "查看监控规则",
       "conditions": [
@@ -13791,7 +13791,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8d078d22d63338ea.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 732,
+      "line": 814,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -13833,7 +13833,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ec3b988601b97577.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 741,
+      "line": 823,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -13875,7 +13875,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0832ce1b3b353933.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 753,
+      "line": 835,
       "kind": "control",
       "label": "{{ item.title }} {{ item.source_site }} · {{ item.market }} {{ snapshotPrice(item.latest_snapshot) }} 等待首次采集 {{ statusTe",
       "conditions": [
@@ -13921,7 +13921,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e39ead97fb52b914.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 773,
+      "line": 855,
       "kind": "control",
       "label": "打开外部来源商品（新窗口）",
       "conditions": [
@@ -13967,7 +13967,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3d04d80f54cd9d35.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 778,
+      "line": 860,
       "kind": "control",
       "label": "{{ selected.status !== \"active\" ? \"恢复后可采集\" : collectionPending ? \"采集中…\" : latest ? \"立即采集\" : \"重新尝试首次采集\" }}",
       "conditions": [
@@ -14017,7 +14017,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#301ee04052a2735e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 793,
+      "line": 875,
       "kind": "control",
       "label": "当前竞品规则",
       "conditions": [
@@ -14063,7 +14063,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 795,
+      "line": 877,
       "kind": "control",
       "label": "{{ selected.status === \"active\" ? \"暂停监控\" : \"恢复监控\" }}",
       "conditions": [
@@ -14113,7 +14113,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 797,
+      "line": 879,
       "kind": "control",
       "label": "删除竞品监控",
       "conditions": [
@@ -14163,7 +14163,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6bc70845bac2b99a.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 802,
+      "line": 884,
       "kind": "control",
       "label": "更多操作",
       "conditions": [
@@ -14213,7 +14213,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.2",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 803,
+      "line": 885,
       "kind": "control",
       "label": "{{ selected.status === \"active\" ? \"暂停监控\" : \"恢复监控\" }}",
       "conditions": [
@@ -14263,7 +14263,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.2",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 805,
+      "line": 887,
       "kind": "control",
       "label": "删除竞品监控",
       "conditions": [
@@ -14313,7 +14313,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c14a7d89545c4bbd.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 858,
+      "line": 940,
       "kind": "control",
       "label": "打开外部 Amazon 商品页（新窗口）",
       "conditions": [
@@ -14363,7 +14363,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3edcc1c1730d78dd.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 917,
+      "line": 999,
       "kind": "control",
       "label": "打开验证任务",
       "conditions": [
@@ -14417,7 +14417,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9f03a53fb65e7c6b.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 921,
+      "line": 1003,
       "kind": "control",
       "label": "生成验证任务",
       "conditions": [
@@ -14471,7 +14471,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9deedc4f8d67733e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 952,
+      "line": 1034,
       "kind": "control",
       "label": "帮助：竞品监控如何工作",
       "conditions": [
@@ -14507,9 +14507,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#225c721c3e09266a.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 961,
+      "line": 1043,
       "kind": "dialog-definition",
       "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
       "conditions": [
@@ -14518,16 +14518,13 @@
           "expression": "showCreate && canManage"
         }
       ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 64,
+          "line": 47,
           "jsonPointer": null
         }
       ],
@@ -14545,9 +14542,44 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0a5942425b87d8da.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1043,
+      "kind": "event-binding",
+      "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 48,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-CREATE-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-CREATE-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e6be6aad71e6c32f.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 969,
+      "line": 1052,
       "kind": "form-event",
       "label": "链接 · 市场 · 确认 添加竞品监控 × 1 商品链接 2 市场信息 3 确认采集 商品网址 填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。 市场 关联机会编号（可选） 监控名称 商品链接 {{ form.pr",
       "conditions": [
@@ -14585,7 +14617,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 975,
+      "line": 1058,
       "kind": "control",
       "label": "关闭新建竞品",
       "conditions": [
@@ -14623,7 +14655,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1041,
+      "line": 1124,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -14665,7 +14697,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#4ae114e438c807d5.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1043,
+      "line": 1126,
       "kind": "control",
       "label": "上一步",
       "conditions": [
@@ -14707,7 +14739,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d32ececd9e3b4c22.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1044,
+      "line": 1127,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : createStep === 3 ? \"确认并开始采集\" : \"下一步\" }}",
       "conditions": [
@@ -14743,9 +14775,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9538d57155059acf.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1050,
+      "line": 1133,
       "kind": "dialog-definition",
       "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
       "conditions": [
@@ -14754,16 +14786,13 @@
           "expression": "showRule && canManage"
         }
       ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 65,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -14781,10 +14810,10 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#eaaea75753101b7d.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1058,
-      "kind": "form-event",
+      "line": 1133,
+      "kind": "event-binding",
       "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
       "conditions": [
         {
@@ -14792,54 +14821,13 @@
           "expression": "showRule && canManage"
         }
       ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 47,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P19",
-          "actionId": "CP-RULE-DIALOG-EXCLUDED",
-          "kind": "excluded"
-        },
-        {
-          "pageId": "P20",
-          "actionId": "CP-RULE-SUBMIT",
-          "kind": "write"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1064,
-      "kind": "control",
-      "label": "关闭告警规则",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "showRule && canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 48,
+          "line": 54,
           "jsonPointer": null
         }
       ],
@@ -14857,11 +14845,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1107,
-      "kind": "control",
-      "label": "取消",
+      "line": 1142,
+      "kind": "form-event",
+      "label": "明确阈值 新建监控规则 × 竞品（留空为工作区全局） 全部竞品 {{ item.title }} 指标 价格 排名 评论数 库存 方向 增加 减少 任意变化 变为缺货 阈值 当前已启用 {{ enabledRules.length }} 条",
       "conditions": [
         {
           "directive": "v-if",
@@ -14889,17 +14877,17 @@
         },
         {
           "pageId": "P20",
-          "actionId": "CP-RULE-CLOSE",
-          "kind": "local"
+          "actionId": "CP-RULE-SUBMIT",
+          "kind": "write"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1108,
+      "line": 1148,
       "kind": "control",
-      "label": "启用规则",
+      "label": "关闭告警规则",
       "conditions": [
         {
           "directive": "v-if",
@@ -14927,59 +14915,21 @@
         },
         {
           "pageId": "P20",
-          "actionId": "CP-RULE-SUBMIT",
-          "kind": "write"
+          "actionId": "CP-RULE-CLOSE",
+          "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1112,
-      "kind": "dialog-definition",
-      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
+      "line": 1191,
+      "kind": "control",
+      "label": "取消",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "deleting && canManage"
-        }
-      ],
-      "staticRouteIds": [
-        "P19",
-        "P20"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 66,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P19",
-          "actionId": "CP-DELETE-CONTAINER",
-          "kind": "wiring"
-        },
-        {
-          "pageId": "P20",
-          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
-      "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1119,
-      "kind": "form-event",
-      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "deleting && canManage"
+          "expression": "showRule && canManage"
         }
       ],
       "staticRouteIds": [
@@ -14998,26 +14948,26 @@
       "semanticReviews": [
         {
           "pageId": "P19",
-          "actionId": "CP-DELETE-SUBMIT",
-          "kind": "write"
+          "actionId": "CP-RULE-DIALOG-EXCLUDED",
+          "kind": "excluded"
         },
         {
           "pageId": "P20",
-          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
-          "kind": "excluded"
+          "actionId": "CP-RULE-CLOSE",
+          "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1125,
+      "line": 1192,
       "kind": "control",
-      "label": "关闭删除确认",
+      "label": "启用规则",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "deleting && canManage"
+          "expression": "showRule && canManage"
         }
       ],
       "staticRouteIds": [
@@ -15036,6 +14986,81 @@
       "semanticReviews": [
         {
           "pageId": "P19",
+          "actionId": "CP-RULE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-RULE-SUBMIT",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6a4b5c16df993837.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1196,
+      "kind": "dialog-definition",
+      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 59,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 74,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-CONTAINER",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ef60f454df6c8376.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1196,
+      "kind": "event-binding",
+      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 60,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P19",
           "actionId": "CP-DELETE-CLOSE",
           "kind": "local"
         },
@@ -15047,11 +15072,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#a94cde21d7759e06.1",
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1147,
-      "kind": "control",
-      "label": "取消",
+      "line": 1205,
+      "kind": "form-event",
+      "label": "保留审计记录 删除竞品监控 × 删除“ {{ deleting.title }} ”后不再继续监控，已有快照与审计记录仍保留。 删除原因 {{ notice }} {{ requestId }} 取消 确认删除",
       "conditions": [
         {
           "directive": "v-if",
@@ -15067,7 +15092,77 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 53,
+          "line": 55,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-SUBMIT",
+          "kind": "write"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9738acdb81108bf8.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1211,
+      "kind": "control",
+      "label": "关闭删除确认",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 61,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P19",
+          "actionId": "CP-DELETE-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P20",
+          "actionId": "CP-DELETE-DIALOG-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#5433acf9dddc7c6a.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1228,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "deleting && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -15087,7 +15182,7 @@
     {
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d23c498e72940a2.1",
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "line": 1148,
+      "line": 1229,
       "kind": "control",
       "label": "确认删除",
       "conditions": [
@@ -15105,7 +15200,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
-          "line": 54,
+          "line": 58,
           "jsonPointer": null
         }
       ],
@@ -69361,7 +69456,7 @@
     {
       "candidateId": "apps/web/src/use-modal-dialog.ts#524dddb64d598a2e.1",
       "file": "apps/web/src/use-modal-dialog.ts",
-      "line": 14,
+      "line": 20,
       "kind": "dialog-script-call",
       "label": "dialogElement.value.showModal()",
       "conditions": [],
@@ -69732,6 +69827,18 @@
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#a4c5a912e246ba93.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
       "line": 1006,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1093,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#a94cde21d7759e06.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1115,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
@@ -71640,6 +71747,24 @@
       "candidateId": "apps/web/src/components/CommercialOperationsCenter.vue#6d27a406542824e4.1",
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
       "line": 951,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 929,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1018,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1",
+      "file": "apps/web/src/components/CompetitorMonitor.vue",
+      "line": 1080,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

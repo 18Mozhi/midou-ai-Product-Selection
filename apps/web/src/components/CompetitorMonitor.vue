@@ -2,6 +2,7 @@
 import { computed, nextTick, onMounted, onUnmounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import { useModalDialog } from "../use-modal-dialog";
 import UiStatePanel from "./UiStatePanel.vue";
 import MonitoringReadinessStrip from "./shared/MonitoringReadinessStrip.vue";
 import { buildCompetitionMonitoringReadiness } from "./shared/monitoring-readiness";
@@ -97,9 +98,6 @@ const props = withDefaults(
   query = ref(typeof route.query.q === "string" ? route.query.q : ""),
   deleting = ref<Competitor | null>(null),
   deleteReason = ref(""),
-  createDialog = ref<HTMLElement | null>(null),
-  ruleDialog = ref<HTMLElement | null>(null),
-  deleteDialog = ref<HTMLElement | null>(null),
   validationTasks = ref<Record<string, string>>({});
 let collectionRefreshTimer: ReturnType<typeof setTimeout> | null = null;
 const pendingCollections = new Map<string, CollectionAttempt>();
@@ -118,6 +116,32 @@ const form = reactive({
     direction: "decrease",
     threshold_value: 1,
   });
+const focusPageAction = () =>
+    document.querySelector<HTMLButtonElement>(
+      ".competitor-monitor--review .monitoring-readiness button:not(:disabled)",
+    ),
+  {
+    dialogElement: createDialog,
+    handleCancel: handleCreateCancel,
+    discardReturnFocus: discardCreateReturnFocus,
+  } = useModalDialog(() => showCreate.value && canManage.value, closeCreate, focusPageAction),
+  {
+    dialogElement: ruleDialog,
+    handleCancel: handleRuleCancel,
+    discardReturnFocus: discardRuleReturnFocus,
+  } = useModalDialog(() => showRule.value && canManage.value, closeRule, focusPageAction),
+  {
+    dialogElement: deleteDialog,
+    handleCancel: handleDeleteCancel,
+    discardReturnFocus: discardDeleteReturnFocus,
+  } = useModalDialog(
+    () => Boolean(deleting.value && canManage.value),
+    closeDelete,
+    () =>
+      document.querySelector<HTMLButtonElement>(
+        '.competitor-monitor--review button[aria-label="删除竞品监控"]',
+      ),
+  );
 const rulesPage = computed(() => props.mode === "rules"),
   canManage = computed(() => props.capabilities.includes("competitor:manage")),
   enabledRules = computed(() => rules.value.filter((item) => item.status === "enabled")),
@@ -421,7 +445,7 @@ async function create() {
     closeCreate();
     await load();
     notice.value = "竞品已建立，商品页公开数据采集已排队。";
-  }
+  } else focusDialogAlert(createDialog.value);
 }
 function openCreate() {
   if (!canManage.value) return;
@@ -430,7 +454,6 @@ function openCreate() {
   createStep.value = 1;
   showCreate.value = true;
   void router.replace({ query: { ...route.query, create: "1" } });
-  void nextTick(() => createDialog.value?.querySelector<HTMLInputElement>("input")?.focus());
 }
 function closeCreate() {
   createStep.value = 1;
@@ -438,8 +461,10 @@ function closeCreate() {
   void router.replace({ query: { ...route.query, create: undefined } });
 }
 async function submitCreateStep() {
-  if (createStep.value < 3) createStep.value += 1;
-  else await create();
+  if (createStep.value < 3) {
+    createStep.value += 1;
+    void nextTick(() => focusCreateStep());
+  } else await create();
 }
 async function openRule(item?: Competitor) {
   if (!rulesPage.value) {
@@ -457,7 +482,6 @@ async function openRule(item?: Competitor) {
   rule.direction = "decrease";
   rule.threshold_value = 1;
   showRule.value = true;
-  void nextTick(() => ruleDialog.value?.querySelector<HTMLSelectElement>("select")?.focus());
 }
 function closeRule() {
   showRule.value = false;
@@ -534,6 +558,7 @@ async function remove() {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
     } else notice.value = "依赖暂不可用，删除未完成。";
+    focusDialogAlert(deleteDialog.value);
   } finally {
     busy.value = false;
   }
@@ -550,7 +575,7 @@ async function createRule() {
     closeRule();
     await load();
     notice.value = "监控阈值已启用。";
-  }
+  } else focusDialogAlert(ruleDialog.value);
 }
 async function toggle() {
   if (!selected.value || !canManage.value) return;
@@ -569,7 +594,47 @@ function openDelete() {
   deleting.value = selected.value;
   deleteReason.value = "";
   notice.value = "";
-  void nextTick(() => deleteDialog.value?.querySelector<HTMLTextAreaElement>("textarea")?.focus());
+}
+function closeDelete() {
+  deleting.value = null;
+}
+function focusCreateStep() {
+  const selector =
+    createStep.value === 1
+      ? 'input[type="url"]'
+      : createStep.value === 2
+        ? "input"
+        : 'button[type="submit"]';
+  createDialog.value?.querySelector<HTMLElement>(selector)?.focus();
+}
+function focusDialogAlert(dialog: HTMLDialogElement | null) {
+  void nextTick(() => {
+    if (dialog?.open) dialog.querySelector<HTMLElement>('[role="alert"]')?.focus();
+  });
+}
+function trapDialogTab(event: KeyboardEvent, dialog: HTMLDialogElement | null) {
+  if (event.key !== "Tab" || !dialog) return;
+  const focusable = Array.from(
+    dialog.querySelectorAll<HTMLElement>(
+      'a[href], button:not(:disabled), input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])',
+    ),
+  ).filter((element) => element.getClientRects().length > 0);
+  if (!focusable.length) {
+    event.preventDefault();
+    dialog.focus();
+    return;
+  }
+  const first = focusable[0];
+  const last = focusable[focusable.length - 1];
+  if (!first || !last) return;
+  const active = document.activeElement;
+  if (event.shiftKey && (active === first || !dialog.contains(active))) {
+    event.preventDefault();
+    last.focus();
+  } else if (!event.shiftKey && (active === last || !dialog.contains(active))) {
+    event.preventDefault();
+    first.focus();
+  }
 }
 function handleStatePrimary() {
   if (state.value === "empty" && canManage.value) {
@@ -590,19 +655,12 @@ function handleStateSecondary() {
 function clearSearch() {
   query.value = "";
 }
-function handleEscape(event: KeyboardEvent) {
-  if (event.key !== "Escape") return;
-  if (deleting.value) deleting.value = null;
-  else if (showRule.value) closeRule();
-  else if (showCreate.value) closeCreate();
-}
 onMounted(() => {
   showCreate.value = route.query.create === "1" && canManage.value;
   if (rulesPage.value && typeof route.query.competitor === "string") {
     rule.competitor_id = route.query.competitor;
     showRule.value = canManage.value;
   }
-  window.addEventListener("keydown", handleEscape);
   void load();
 });
 onUnmounted(() => {
@@ -610,8 +668,29 @@ onUnmounted(() => {
   readVersion += 1;
   pendingCollections.clear();
   clearCollectionRefresh();
-  window.removeEventListener("keydown", handleEscape);
 });
+watch(
+  [showCreate, createStep],
+  ([open]) => {
+    if (open) void nextTick(() => focusCreateStep());
+  },
+  { flush: "post" },
+);
+watch(
+  showRule,
+  (open) => {
+    if (open) void nextTick(() => ruleDialog.value?.querySelector<HTMLElement>("select")?.focus());
+  },
+  { flush: "post" },
+);
+watch(
+  () => Boolean(deleting.value),
+  (open) => {
+    if (open)
+      void nextTick(() => deleteDialog.value?.querySelector<HTMLElement>("textarea")?.focus());
+  },
+  { flush: "post" },
+);
 watch(query, (value) => {
   void router.replace({
     query: {
@@ -624,6 +703,9 @@ watch(query, (value) => {
 });
 watch(canManage, (allowed) => {
   if (allowed) return;
+  discardCreateReturnFocus();
+  discardRuleReturnFocus();
+  discardDeleteReturnFocus();
   showCreate.value = false;
   showRule.value = false;
   deleting.value = null;
@@ -958,13 +1040,14 @@ watch(
         </ol>
       </details>
     </template>
-    <div
+    <dialog
       v-if="showCreate && canManage"
       ref="createDialog"
       class="competitor-modal"
-      role="dialog"
       aria-modal="true"
       aria-labelledby="new-competitor"
+      @cancel="handleCreateCancel"
+      @keydown="trapDialogTab($event, createDialog)"
     >
       <form @submit.prevent="submitCreateStep">
         <header>
@@ -1034,7 +1117,7 @@ watch(
           </dl>
           <aside>确认后读取公开商品页并建立首个证据快照；页面未披露的数据继续显示为未采到。</aside>
         </section>
-        <p v-if="notice" class="competitor-dialog-notice" role="alert">
+        <p v-if="notice" class="competitor-dialog-notice" role="alert" tabindex="-1">
           {{ notice }} <code v-if="requestId">{{ requestId }}</code>
         </p>
         <footer>
@@ -1046,14 +1129,15 @@ watch(
           </button>
         </footer>
       </form>
-    </div>
-    <div
+    </dialog>
+    <dialog
       v-if="showRule && canManage"
       ref="ruleDialog"
       class="competitor-modal"
-      role="dialog"
       aria-modal="true"
       aria-labelledby="new-rule"
+      @cancel="handleRuleCancel"
+      @keydown="trapDialogTab($event, ruleDialog)"
     >
       <form class="rule-form" @submit.prevent="createRule">
         <header>
@@ -1100,7 +1184,7 @@ watch(
           当前已启用
           {{ enabledRules.length }} 条规则；只有达到显式阈值的变化才排队通知与任务。
         </aside>
-        <p v-if="notice" class="competitor-dialog-notice" role="alert">
+        <p v-if="notice" class="competitor-dialog-notice" role="alert" tabindex="-1">
           {{ notice }} <code v-if="requestId">{{ requestId }}</code>
         </p>
         <footer>
@@ -1108,26 +1192,23 @@ watch(
           ><button type="submit" :disabled="busy">启用规则</button>
         </footer>
       </form>
-    </div>
-    <div
+    </dialog>
+    <dialog
       v-if="deleting && canManage"
       ref="deleteDialog"
       class="competitor-modal"
-      role="dialog"
       aria-modal="true"
+      aria-labelledby="delete-competitor-title"
+      @cancel="handleDeleteCancel"
+      @keydown="trapDialogTab($event, deleteDialog)"
     >
       <form class="rule-form" @submit.prevent="remove">
         <header>
           <div>
             <p>保留审计记录</p>
-            <h3>删除竞品监控</h3>
+            <h3 id="delete-competitor-title">删除竞品监控</h3>
           </div>
-          <button
-            type="button"
-            aria-label="关闭删除确认"
-            title="关闭删除确认"
-            @click="deleting = null"
-          >
+          <button type="button" aria-label="关闭删除确认" title="关闭删除确认" @click="closeDelete">
             ×
           </button>
         </header>
@@ -1140,14 +1221,14 @@ watch(
             placeholder="请填写删除原因"
           ></textarea>
         </label>
-        <p v-if="notice" class="competitor-dialog-notice" role="alert">
+        <p v-if="notice" class="competitor-dialog-notice" role="alert" tabindex="-1">
           {{ notice }} <code v-if="requestId">{{ requestId }}</code>
         </p>
         <footer>
-          <button type="button" class="ghost" @click="deleting = null">取消</button
+          <button type="button" class="ghost" @click="closeDelete">取消</button
           ><button type="submit" class="danger" :disabled="busy">确认删除</button>
         </footer>
       </form>
-    </div>
+    </dialog>
   </section>
 </template>

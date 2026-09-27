@@ -462,7 +462,16 @@
   display: grid;
   place-items: center;
   padding: 20px;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  border: 0;
   background: var(--so-scrim);
+}
+.competitor-modal::backdrop {
+  background: transparent;
 }
 .competitor-modal form {
   width: min(740px, 100%);
