@@ -196,7 +196,7 @@
     "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
     "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
     "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
-    "apps/web/src/components/TrendDashboard.vue": "2acf7409ff761e9918bb6421a2295ec6ff5d4a82e7c97c7b72126a3f5f30b1e1",
+    "apps/web/src/components/TrendDashboard.vue": "fb48f74ac862b4a62a6d4a39f63594d42ded627548d0575ef353f3e3e9c30d87",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
@@ -272,7 +272,7 @@
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "c81dcd0bb2c2ca22a5a777b7e1aa96fd44e8b23c31ce8c0d415622e63d744bec",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "af93117972cab0cd3a69985cda8e8b487a7eac7c94f45e6cfd6972e556c04b70",
     "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "34d9faf49a0d92979430bb29a2dea5d28c1ffec5e380d3146a92deff9b11c3cc",
-    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "487752bf1c89be503ed0ff9343c5b6d20d73b803f45d2869e58697021b73dabb",
+    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "b056b397b2ec933183baba72a8a909f55887af06648c6b5db0e987f15cf27060",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "a9b294e2f83d2f8283901af7ca9fc067eb3e111ce36fa7fe0cf5cd0233cc329d",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
@@ -410,10 +410,10 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "e8dca5101872cc85e3ed62f6e06897c71de8a2e8f20337884843ea0b882d4b84",
     "scripts/lib/ui-phase2-work-design-data.mjs": "5a15eb532e64f186f5be90c2a036cbb55e37a2be897489ec971ce981040ece34",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "53cd7a6daab1303c3e52e903993f5817dbf017106926cdd47e246831d3b71626",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "2670d666e4769631fc7603a65e6e8b8069c22414c345c4421022ba5aefc0cb8e",
     "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
     "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
-    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "e57e65774152c9fcedfe3cf38a6948f95e0a7826a6b3505100ac601ce5556d6b",
+    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "2f0e3ed56393512cd917cca242dd2601208b689c2a218e9ca127c756b2f1bf06",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "9816a223c16d16d621b50ddbe00ec01e1ac26cb9947bba7657537df508684d98",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
@@ -577,7 +577,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "1b73dc9bf3ae8ede7d3b94faba9d6b480d2265437f4f9b9b4fdc12f9c39343c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "682add91925a79ee3dd98493cc141bed7d98c29b52c5c77c0de9d1ef985fe98f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "7fbacb6b0b1e2a3cf5d33dda101e9941f5e86c8c94d39fe950f61d30f05117ce",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "2cf8d783a0b2980569c8a60f45e4a0c85fedf1b9ca74339d45c0886221385c0a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "e7f2249edb0605d1658252d4ae8a0b7fb134b89b49f5232ef1d765a7fef76670",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "1477d73750991d2c8834f3648215871ce1348a3704e65a38120966d5e6f48fa0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "b4d5fab5992f1fe9473a23b0b955051492a0da7a1e7ede4d8330777b99902526",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "3883e11aba472a573a05f1518208579fb691e080ef6700a69404121f74884605",
@@ -67064,7 +67064,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e8d58f837015480a.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 491,
+      "line": 502,
       "kind": "control",
       "label": "{{ enabledRules.length ? \"创建趋势监控\" : \"创建第一条监控规则\" }}",
       "conditions": [
@@ -67096,7 +67096,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5abb2c07be024e83.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 499,
+      "line": 510,
       "kind": "control",
       "label": "{{ busy === \"/provider-sources/refresh\" ? \"正在启动…\" : \"立即刷新来源\" }}",
       "conditions": [],
@@ -67123,7 +67123,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#2bfafa5dccf5b5ae.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 502,
+      "line": 513,
       "kind": "control",
       "label": "管理监控规则",
       "conditions": [],
@@ -67150,7 +67150,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#c0646bdf3263a017.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 505,
+      "line": 516,
       "kind": "control",
       "label": "趋势主题",
       "conditions": [],
@@ -67177,7 +67177,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#aef07f12388401cc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 507,
+      "line": 518,
       "kind": "control",
       "label": "监控规则 {{ rules.length }}",
       "conditions": [],
@@ -67204,7 +67204,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#83125cc8b9f30181.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 509,
+      "line": 520,
       "kind": "control",
       "label": "合并与拆分 {{ changeRequests.filter((item) => item.status === \"pending\").length }}",
       "conditions": [
@@ -67236,7 +67236,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 521,
+      "line": 532,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67268,7 +67268,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 531,
+      "line": 542,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67304,7 +67304,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 546,
+      "line": 557,
       "kind": "control",
       "label": "{{ topic.title }} {{ topic.market }} · {{ topic.category || \"未分类\" }} · {{ statusLabel(topic.status) }} {{ topic.source_c",
       "conditions": [
@@ -67344,7 +67344,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 572,
+      "line": 583,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -67380,7 +67380,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 574,
+      "line": 585,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -67416,7 +67416,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 579,
+      "line": 590,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67456,7 +67456,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 594,
+      "line": 605,
       "kind": "control",
       "label": "帮助：热点趋势怎么看",
       "conditions": [
@@ -67488,7 +67488,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 619,
+      "line": 630,
       "kind": "control",
       "label": "＋ 创建规则",
       "conditions": [
@@ -67524,7 +67524,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 621,
+      "line": 632,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67560,7 +67560,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 631,
+      "line": 642,
       "kind": "control",
       "label": "创建监控规则",
       "conditions": [
@@ -67600,7 +67600,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 679,
+      "line": 690,
       "kind": "control",
       "label": "{{ item.status === \"enabled\" ? \"暂停\" : \"启用\" }}",
       "conditions": [
@@ -67640,7 +67640,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 682,
+      "line": 693,
       "kind": "control",
       "label": "查看趋势结果",
       "conditions": [
@@ -67676,7 +67676,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 685,
+      "line": 696,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -67708,7 +67708,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#1c84e99801374a43.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 694,
+      "line": 705,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -67743,7 +67743,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e2a4499152c0f457.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 694,
+      "line": 705,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -67773,7 +67773,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#70140152f0bfc00c.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 700,
+      "line": 711,
       "kind": "dialog-definition",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -67803,7 +67803,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 700,
+      "line": 711,
       "kind": "event-binding",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -67833,7 +67833,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#c6ce42d1e09856fa.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 707,
+      "line": 718,
       "kind": "form-event",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -67858,7 +67858,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#b5cb028d61878491.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 713,
+      "line": 724,
       "kind": "control",
       "label": "关闭异常报告",
       "conditions": [],
@@ -67883,7 +67883,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#79e6f49e70b53776.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 741,
+      "line": 752,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -67908,7 +67908,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 743,
+      "line": 754,
       "kind": "control",
       "label": "{{ busy.includes(\"quality-issues\") ? \"创建中…\" : \"创建质量工单\" }}",
       "conditions": [],
@@ -67935,7 +67935,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#029d267ba5289a36.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 749,
+      "line": 760,
       "kind": "dialog-definition",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -67965,7 +67965,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 749,
+      "line": 760,
       "kind": "event-binding",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -67995,7 +67995,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#60103acec5bdf33b.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 758,
+      "line": 769,
       "kind": "form-event",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -68025,7 +68025,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#74456cadd4fd8246.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 766,
+      "line": 777,
       "kind": "control",
       "label": "关闭相关性变更",
       "conditions": [
@@ -68055,7 +68055,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#90cb939f09706fb5.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 788,
+      "line": 799,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -68085,7 +68085,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#288abda590fb34b7.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 790,
+      "line": 801,
       "kind": "control",
       "label": "{{ busy.includes(\"/relevance\") ? \"提交中…\" : \"确认并记录\" }}",
       "conditions": [

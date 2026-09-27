@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "2acf7409ff761e9918bb6421a2295ec6ff5d4a82e7c97c7b72126a3f5f30b1e1",
+    "apps/web/src/components/TrendDashboard.vue": "fb48f74ac862b4a62a6d4a39f63594d42ded627548d0575ef353f3e3e9c30d87",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -1067,7 +1067,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "UI2-TR08验证全部状态以status=保留在URL且重载后仍为空值；列表GET省略空status并清除按钮恢复默认状态。筛选结果仍需真实API验收。"
+      "remaining": "UI2-TR08验证全部状态以status=保留在URL且重载后仍为空值；列表GET省略空status并清除按钮恢复默认状态。列表读取代次会丢弃迟到成功/失败；真实API筛选结果仍待验收。"
     },
     {
       "actionId": "TR-FILTER-EDIT.market",
@@ -2749,7 +2749,7 @@
         {
           "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
           "evidenceType": "actual-vue-isolated-browser",
-          "claim": "UI2-TR08覆盖桌面分组、手机五字段和焦点关闭周期，及状态/URL/排序/分页/剪贴板回退合同。"
+          "claim": "UI2-TR08覆盖桌面分组、手机五字段和焦点关闭周期，及状态/URL/排序/分页/剪贴板回退合同；UI2-TR10验证列表迟到成功/失败不覆盖当前结果。"
         }
       ],
       "visualStates": {
@@ -2879,7 +2879,7 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "2acf7409ff761e9918bb6421a2295ec6ff5d4a82e7c97c7b72126a3f5f30b1e1",
+      "apps/web/src/components/TrendDashboard.vue": "fb48f74ac862b4a62a6d4a39f63594d42ded627548d0575ef353f3e3e9c30d87",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -3349,7 +3349,7 @@
       "局部65候选包括60控件/事件、3role定义与2共享/规则调用；source scan与结构scan统计对象不同，不能合并为业务弹窗总数。",
       "MonitoringReadinessStrip只展示事实；外层NavigationShell另审。UiStatePanel两个primary消费者已列，secondary未监听，不能宣称恢复链接真实可用。",
       "ResponsiveFilterDrawer的共享行为已有P14实际Vue桌面/390px测试；其他调用方仍须结合各自字段单独核验，不能由P14结果推及全站。",
-      "父/trends为reset_on_scope且提供组织/工作区；局部read/watch没有任务页active/代次保护不等于父无scope隔离。晚到读写结果和缓存激活仍需真实Vue/范围测试。"
+      "父/trends为reset_on_scope且提供组织/工作区，缓存键变更卸载旧范围实例；TrendDashboard列表代次与卸载失效保护已覆盖筛选迟到成功/失败。topic detail watcher、治理/规则迟到读取、写入归属及完整组织/工作区E2E仍待核验。"
     ]
   },
   "compositionGaps": [

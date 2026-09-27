@@ -446,7 +446,9 @@ test("UI2-TR08 preserves all-status URLs, current-page sorting, paging, and copy
 
   const mobile = (page.viewportSize()?.width ?? 1440) <= 760;
   if (mobile) await page.getByRole("button", { name: /筛选趋势/ }).click();
-  const filters = mobile ? page.getByRole("dialog", { name: "筛选趋势" }) : page.locator(".trend-filters");
+  const filters = mobile
+    ? page.getByRole("dialog", { name: "筛选趋势" })
+    : page.locator(".trend-filters");
   await filters.getByRole("combobox", { name: "排序" }).selectOption("followed");
   await expect(topicButtons.nth(0)).toContainText("低热关注主题");
   await filters.getByRole("button", { name: "筛选", exact: true }).click();
@@ -494,6 +496,105 @@ test("UI2-TR08 preserves all-status URLs, current-page sorting, paging, and copy
   await expect(reloadedFilters.getByRole("combobox", { name: "状态" })).toHaveValue("active");
   await reloadedFilters.getByRole("button", { name: "保存视图链接" }).click();
   await expect(page.getByRole("status")).toContainText("当前视图已同步到地址栏，可复制地址保存。");
+  expect(data.writes).toHaveLength(0);
+});
+
+test("UI2-TR10 late filter reads cannot replace or block the current topic list", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  const staleSuccess = { ...data.detail, id: id(422), title: "迟到的旧主题" },
+    currentSuccess = { ...data.detail, id: id(423), title: "当前筛选主题" },
+    currentAfterFailure = { ...data.detail, id: id(424), title: "失败后当前主题" };
+  let releaseSuccess!: () => void,
+    markSuccessStarted!: () => void,
+    releaseFailure!: () => void,
+    markFailureStarted!: () => void;
+  const successGate = new Promise<void>((resolve) => (releaseSuccess = resolve));
+  const successStarted = new Promise<void>((resolve) => (markSuccessStarted = resolve));
+  const failureGate = new Promise<void>((resolve) => (releaseFailure = resolve));
+  const failureStarted = new Promise<void>((resolve) => (markFailureStarted = resolve));
+  await page.route("**/api/v1/trends**", async (route) => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (request.method() !== "GET")
+      return route.fulfill({ status: 500, json: { error: { code: "unexpected_test_write" } } });
+    if (url.pathname === "/api/v1/trends") {
+      const category = url.searchParams.get("category");
+      if (category === "late-success") {
+        markSuccessStarted();
+        await successGate;
+        return route.fulfill({
+          json: envelope([staleSuccess], { page: 1, page_size: 20, total: 1 }),
+        });
+      }
+      if (category === "late-failure") {
+        markFailureStarted();
+        await failureGate;
+        return route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "service_unavailable",
+              message: "旧范围暂不可用",
+              action_hint: "旧范围读取失败。",
+            },
+            request_id: "ui2-stale-filter-read",
+            trace_id: "ui2-stale-filter-read",
+          },
+        });
+      }
+      const topic =
+        category === "current-success"
+          ? currentSuccess
+          : category === "current-after-failure"
+            ? currentAfterFailure
+            : data.detail;
+      return route.fulfill({ json: envelope([topic], { page: 1, page_size: 20, total: 1 }) });
+    }
+    const detailId = url.pathname.match(/^\/api\/v1\/trends\/([^/]+)$/)?.[1];
+    const matchingTopic = [staleSuccess, currentSuccess, currentAfterFailure].find(
+      (topic) => topic.id === detailId,
+    );
+    if (matchingTopic) return route.fulfill({ json: envelope(matchingTopic) });
+    return route.fallback();
+  });
+
+  await page.goto("/trends");
+  await expect(page.locator("#trend-list > button").first()).toContainText(data.detail.title);
+  const mobile = (page.viewportSize()?.width ?? 1440) <= 760;
+  const applyCategory = async (category: string) => {
+    if (mobile) await page.getByRole("button", { name: /筛选趋势/ }).click();
+    const panel = mobile
+      ? page.getByRole("dialog", { name: "筛选趋势" })
+      : page.locator(".trend-filters");
+    await panel.getByRole("textbox", { name: "分类" }).fill(category);
+    await panel.getByRole("button", { name: "筛选", exact: true }).click();
+    await expect(page).toHaveURL(new RegExp(`category=${category}`));
+  };
+
+  await applyCategory("late-success");
+  await successStarted;
+  await applyCategory("current-success");
+  await expect(page.locator("#trend-list > button").first()).toContainText("当前筛选主题");
+  const staleSuccessResponse = page.waitForResponse(
+    (response) => new URL(response.url()).searchParams.get("category") === "late-success",
+  );
+  releaseSuccess();
+  await staleSuccessResponse;
+  await expect(page.locator("#trend-list > button").first()).toContainText("当前筛选主题");
+
+  await applyCategory("late-failure");
+  await failureStarted;
+  await applyCategory("current-after-failure");
+  await expect(page.locator("#trend-list > button").first()).toContainText("失败后当前主题");
+  const staleFailureResponse = page.waitForResponse(
+    (response) => new URL(response.url()).searchParams.get("category") === "late-failure",
+  );
+  releaseFailure();
+  await staleFailureResponse;
+  await expect(page.locator("#trend-list > button").first()).toContainText("失败后当前主题");
+  await expect(page.locator("#trend-list")).toBeVisible();
   expect(data.writes).toHaveLength(0);
 });
 

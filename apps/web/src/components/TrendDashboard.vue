@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, reactive, ref, watch } from "vue";
+import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
@@ -53,6 +53,7 @@ const props = defineProps<{
   page = ref(1),
   sort = ref<TrendSort>("impact"),
   filters = reactive<TrendFilters>({ q: "", market: "", category: "", status: "active" });
+let listReadGeneration = 0;
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -140,12 +141,14 @@ const opportunityRoute = computed(() => {
     `&category=${encodeURIComponent(topic.category || "")}`
   );
 });
-async function read<T = any>(path: string) {
+async function read<T = any>(path: string, isCurrent: () => boolean = () => true) {
   try {
     const response = await request<T>(path);
+    if (!isCurrent()) throw new Error("trend_read_superseded");
     requestId.value = response.request_id;
     return response;
   } catch (error) {
+    if (!isCurrent()) throw error;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       message.value = error.actionHint;
@@ -155,6 +158,8 @@ async function read<T = any>(path: string) {
   }
 }
 async function load() {
+  const generation = ++listReadGeneration;
+  const isCurrent = () => generation === listReadGeneration;
   state.value = "loading";
   message.value = "";
   try {
@@ -162,13 +167,14 @@ async function load() {
     for (const [key, value] of Object.entries(filters))
       if (value) params.set(key === "q" ? "q" : key, value);
     const governanceRequest = canManageTrends.value
-      ? read("/trends/change-requests")
+      ? read("/trends/change-requests", isCurrent)
       : Promise.resolve({ data: [] });
     const [list, ruleList, governanceList] = await Promise.all([
-      read(`/trends?${params}`),
-      read("/trends/monitoring-rules"),
+      read(`/trends?${params}`, isCurrent),
+      read("/trends/monitoring-rules", isCurrent),
       governanceRequest,
     ]);
+    if (!isCurrent()) return;
     topics.value = list.data;
     rules.value = ruleList.data.map((item: Rule) => ({
       ...item,
@@ -185,7 +191,8 @@ async function load() {
       state.value = "empty";
       return;
     }
-    const topicDetail = (await read(`/trends/${currentId}`)).data as Detail;
+    const topicDetail = (await read(`/trends/${currentId}`, isCurrent)).data as Detail;
+    if (!isCurrent()) return;
     selected.value = {
       ...topicDetail,
       relevance_history: topicDetail.relevance_history ?? [],
@@ -194,6 +201,7 @@ async function load() {
     if (requestedTopic !== currentId)
       await router.replace({ query: { ...route.query, topic: currentId } });
   } catch (error) {
+    if (!isCurrent()) return;
     if (!(error instanceof ApiClientError)) state.value = "blocked";
   }
 }
@@ -475,6 +483,9 @@ watch(canManageTrends, (allowed) => {
 onMounted(() => {
   syncFromRoute();
   void load();
+});
+onBeforeUnmount(() => {
+  listReadGeneration += 1;
 });
 </script>
 
