@@ -478,6 +478,7 @@ export function buildWorkspacesReview(sources, evidence, controlsEvidence) {
       "创建成功会清除等待期间后续编辑；归档原因等待与当前组织/目标版本归属仍需具体决策与真实验证。",
     ],
     approval: "pending-user-review",
+    visualApproval: "user-approved-remaining-pages-auto",
     limits: [remaining, "P31局部控件批准不自动外推P32整页；没有部署或更改权限/API。"],
   };
   const controlsPackage = "workspaces-controls-direction-c";

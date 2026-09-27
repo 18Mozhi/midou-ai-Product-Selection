@@ -135,7 +135,7 @@ test("P32 source and review preserve explicit inherited proposal differences", (
   assert.equal(review().approval, "pending-user-review");
   assert.match(review().compositionGaps.at(-1), /字段锁定/);
 });
-test("P32 explicitly covers 28 source sites and 18 actions without granting approval", () => {
+test("P32 maps 28 source sites and 18 actions while keeping action review pending", () => {
   const r = review(),
     result = validateActionReview(r, context);
   assert.equal(result.sourceSites, 30);
@@ -146,6 +146,7 @@ test("P32 explicitly covers 28 source sites and 18 actions without granting appr
   assert.equal(result.wiringGroups, 0);
   assert.equal(result.unmappedVisualSlots, 28);
   assert.equal(r.approval, "pending-user-review");
+  assert.equal(r.visualApproval, "user-approved-remaining-pages-auto");
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P32.json`, "utf8")), r);
 });
 test("P32 rejects omitted source, invented approval and a missing mobile scene", () => {
