@@ -306,15 +306,14 @@ async function markIrrelevant() {
     reason: relevanceReason.value.trim(),
     expected_version: selected.value.version,
   });
+  if (!result) return;
   relevanceDialog.value = null;
   relevanceReason.value = "";
-  if (result) {
-    message.value =
-      targetStatus === "active"
-        ? "已恢复为相关主题；历史原因完整保留。"
-        : "已标记无关；原始证据与原因保留。";
-    await load();
-  }
+  message.value =
+    targetStatus === "active"
+      ? "已恢复为相关主题；历史原因完整保留。"
+      : "已标记无关；原始证据与原因保留。";
+  await load();
 }
 function openRelevance(status: "active" | "irrelevant") {
   if (!requireTrendManage()) return;
@@ -725,7 +724,12 @@ onMounted(() => {
               {{ relevanceDialog === "irrelevant" ? "标记为无关" : "恢复为相关" }}
             </h3>
           </div>
-          <button type="button" aria-label="关闭相关性变更" @click="relevanceDialog = null">
+          <button
+            type="button"
+            aria-label="关闭相关性变更"
+            :disabled="Boolean(busy)"
+            @click="relevanceDialog = null"
+          >
             ×
           </button>
         </header>
@@ -741,9 +745,10 @@ onMounted(() => {
           ></textarea>
         </label>
         <footer>
-          <button type="button" @click="relevanceDialog = null">取消</button
+          <button type="button" :disabled="Boolean(busy)" @click="relevanceDialog = null">
+            取消</button
           ><button type="submit" :disabled="relevanceReason.trim().length < 2 || Boolean(busy)">
-            确认并记录
+            {{ busy.includes("/relevance") ? "提交中…" : "确认并记录" }}
           </button>
         </footer>
       </form>

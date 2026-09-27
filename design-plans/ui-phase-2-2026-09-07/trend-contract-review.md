@@ -44,10 +44,10 @@
 | W:685 | 7d73f8399a9950b5.1 | TR-ANOMALY-CLOSE：叉号 |
 | W:705 | a13a34f2af9d90ee.1 | TR-ANOMALY-CLOSE：取消 |
 | W:706 | 3ca40e4dc9ea598c.1 | TR-ANOMALY-SUBMIT按钮 |
-| W:719 | eefb1c65886b1a81.1 | TR-RELEVANCE-SUBMIT表单 |
-| W:727 | 690d51553ff51b5d.1 | TR-RELEVANCE-CLOSE：叉号 |
-| W:743 | 51e4bb1af788a0bf.1 | TR-RELEVANCE-CLOSE：取消 |
-| W:744 | 5ddc6be7e1b242d6.1 | TR-RELEVANCE-SUBMIT按钮 |
+| W:719 | 60103acec5bdf33b.1 | TR-RELEVANCE-SUBMIT表单 |
+| W:727 | 74456cadd4fd8246.1 | TR-RELEVANCE-CLOSE：叉号 |
+| W:748 | 90cb939f09706fb5.1 | TR-RELEVANCE-CLOSE：取消 |
+| W:750 | 288abda590fb34b7.1 | TR-RELEVANCE-SUBMIT按钮 |
 | F:22 | 5dfd077f141d48f4.1 | TR-FILTER-APPLY表单 |
 | F:24 | be2b881b65e1cc00.1 | TR-FILTER-EDIT.market |
 | F:29 | 49faf4c9e9529254.1 | TR-FILTER-EDIT.category |
@@ -89,10 +89,10 @@
 | --- | --- | --- |
 | W:666 #14e2daa05c9f34c8.1 → R:52 #ee0ee052b72fc674.1 | TR-D-RULE | 一个调用/一个role定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消销毁后重开默认US/en-US/60/1 |
 | W:672 #2b5e528bd9cb343d.1 | TR-D-ANOMALY | warning/critical、原因2–500；提交severity/reason，证据/来源身份由URL和服务端关联；失败保留；created=false显示已有工单，当前实例按钮禁用 |
-| W:712 #75e0cda23916c7c2.1 | TR-D-IRRELEVANT / TR-D-RESTORE | 同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；当前失败也关闭清空，需修复验证，不认可为最终体验 |
+| W:712 #2c66311e20c0f709.1 | TR-D-IRRELEVANT / TR-D-RESTORE | 同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；失败保留弹窗与原因，成功才关闭清空；busy期间叉号/取消/提交禁用 |
 | F:21 #574e84bbfac61d8b.1 | TR-D-FILTER（共享） | 760px及以下role=dialog，桌面group；打开焦点关闭键、Tab首尾/Escape/遮罩/叉号、关闭归还；submit.capture关闭，清除/复制不触发表单提交 |
 
-三个本地role定义、四业务变体加一个共享筛选实例。合并/拆分以及确认/驳回是四种内联表单态，不新建dialogId。规则/异常/相关性均未使用useModalDialog，无初焦点/循环/Escape/归还控制；提交中取消仍可达，外层全局message不是弹窗内字段错误。须按最终设计补齐并验证，而非自动登记无障碍通过。
+三个本地role定义、四业务变体加一个共享筛选实例。合并/拆分以及确认/驳回是四种内联表单态，不新建dialogId。规则/异常/相关性均未使用useModalDialog，无初焦点/循环/Escape/归还控制；相关性提交中叉号/取消现已禁用，规则/异常忙碌期间的关闭保护与所有弹窗键盘生命周期仍待补齐。外层全局message不是弹窗内字段错误；不自动登记无障碍通过。
 
 ## 4. 请求与结果合同
 

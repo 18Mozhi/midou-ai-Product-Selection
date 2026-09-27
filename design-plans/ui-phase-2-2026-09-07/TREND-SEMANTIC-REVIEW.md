@@ -42,7 +42,7 @@
 
 ## 本轮实际函数复验与新增风险
 
-复用既有buildTrendDesignData执行当前源码：八字段规则body、七周期/三来源选项、merge/split payload、四排序和机会目标；真实validateMonitoringRuleInput对BEAUTY/beauty报trend_rule_keywords_duplicate。再次确认全部status往返回active、相关性失败清空关窗，源未修。
+复用既有buildTrendDesignData执行当前源码：八字段规则body、七周期/三来源选项、merge/split payload、四排序和机会目标；真实validateMonitoringRuleInput对BEAUTY/beauty报trend_rule_keywords_duplicate。全部status往返现由URL E2E证明。相关性失败已补真实Vue浏览器回归：延迟写入期间关闭/取消/提交禁用，失败后保留弹窗与原因并展示错误提示，重试成功才关闭；旧行为先以E2E复现失败。该场景不证明真实数据库/RBAC或失去权限后的并发结果。
 
 另外直接提取当前setTab/syncFromRoute/follow函数到隔离VM，以惰性router/write替身执行：
 

@@ -275,6 +275,68 @@ test("UI2-TR02 relevance cancel writes nothing and restore uses the refreshed ve
   });
 });
 
+test("UI2-TR02 relevance failure retains the draft and prevents dismissal while saving", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  let attempts = 0,
+    releaseFailure!: () => void,
+    markRequestStarted!: () => void;
+  const failureGate = new Promise<void>((resolve) => (releaseFailure = resolve));
+  const requestStarted = new Promise<void>((resolve) => (markRequestStarted = resolve));
+  await page.route(`**/api/v1/trends/${topicId}/relevance`, async (route) => {
+    attempts += 1;
+    if (attempts === 1) {
+      markRequestStarted();
+      await failureGate;
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "service_unavailable",
+            message: "暂不可用",
+            action_hint: "稍后重试相关性变更。",
+          },
+          request_id: "ui2-relevance-failure",
+          trace_id: "ui2-relevance-failure",
+        },
+      });
+    }
+    const body = route.request().postDataJSON();
+    data.detail.status = body.status;
+    data.detail.version += 1;
+    data.detail.relevance_history.push({
+      status: body.status,
+      reason: body.reason,
+      actor_id: id(415),
+      version: data.detail.version,
+      occurred_at: at,
+    });
+    return route.fulfill({ json: envelope(data.detail) });
+  });
+
+  await openDetail(page);
+  await page.getByRole("button", { name: "标记无关", exact: true }).click();
+  const modal = page.getByRole("dialog", { name: "标记为无关" });
+  const reason = "该主题与当前研究范围无关";
+  await modal.getByLabel("变更原因").fill(reason);
+  await modal.getByRole("button", { name: "确认并记录" }).click();
+  await requestStarted;
+  await expect(modal.getByRole("button", { name: "关闭相关性变更" })).toBeDisabled();
+  await expect(modal.getByRole("button", { name: "取消", exact: true })).toBeDisabled();
+  await expect(modal.getByRole("button", { name: "提交中…" })).toBeDisabled();
+
+  releaseFailure();
+  await expect(modal).toBeVisible();
+  await expect(modal.getByLabel("变更原因")).toHaveValue(reason);
+  await expect(page.getByRole("status")).toContainText("稍后重试相关性变更。");
+
+  await modal.getByRole("button", { name: "确认并记录" }).click();
+  await expect(modal).toBeHidden();
+  await expect(page.getByRole("button", { name: "恢复为相关", exact: true })).toBeVisible();
+  expect(attempts).toBe(2);
+});
+
 test("UI2-TR03 anomaly failure preserves input and explicit retry reuses returned issue", async ({
   page,
 }) => {

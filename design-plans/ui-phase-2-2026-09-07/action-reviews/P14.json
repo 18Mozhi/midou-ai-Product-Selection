@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "18494c587cf522f99ba868df92d4441c99b3af54fa52ddd6835746413290462b",
+    "apps/web/src/components/TrendDashboard.vue": "4950f30807851cde1c21358839ec99880087dcde324bffd49a53598a31bd3644",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -879,8 +879,8 @@
       "kind": "write",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#eefb1c65886b1a81.1",
-        "apps/web/src/components/TrendDashboard.vue#5ddc6be7e1b242d6.1"
+        "apps/web/src/components/TrendDashboard.vue#60103acec5bdf33b.1",
+        "apps/web/src/components/TrendDashboard.vue#288abda590fb34b7.1"
       ],
       "sourceContractKeys": [
         "TR-RELEVANCE-SUBMIT表单",
@@ -888,7 +888,7 @@
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "有selected/relevanceDialog/管理权限；按钮trim原因>=2且非busy，HTML2..500",
-      "handler": "POST /trends/id/relevance：status、trim reason、expected_version；await后不论成功都清dialog/reason，成功load",
+      "handler": "POST /trends/id/relevance：status、trim reason、expected_version；失败保留dialog/reason并显示错误和request id；成功才清空/关闭并load",
       "variants": [
         "irrelevant",
         "restore",
@@ -928,6 +928,11 @@
       ],
       "testReferences": [
         {
+          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "UI2-TR02 cancellation/version contract and delayed 503 failure preservation, busy close protection, and retry success run on desktop Chromium and 390px mobile. No real session/RBAC/database/production proof."
+        },
+        {
           "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
@@ -946,7 +951,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "源失败关闭丢原因已隔离复现，C稿失败保留未修Vue；不能用正常成功图抵扣失败。"
+      "remaining": "E2E covers local intercepted failure/retry and busy controls; modal focus trap/Escape/focus return and real RBAC/database/production remain unverified."
     },
     {
       "actionId": "TR-RELEVANCE-CLOSE",
@@ -954,20 +959,20 @@
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#690d51553ff51b5d.1",
-        "apps/web/src/components/TrendDashboard.vue#51e4bb1af788a0bf.1"
+        "apps/web/src/components/TrendDashboard.vue#74456cadd4fd8246.1",
+        "apps/web/src/components/TrendDashboard.vue#90cb939f09706fb5.1"
       ],
       "sourceContractKeys": [
         "TR-RELEVANCE-CLOSE：叉号",
         "TR-RELEVANCE-CLOSE：取消"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
-      "condition": "两变体叉号/取消无busy禁用",
+      "condition": "两变体叉号/取消在busy时禁用，避免误将进行中的写入当作已取消",
       "handler": "relevanceDialog=null；此处不清原因，下次openRelevance清空",
       "variants": [
         "cross",
         "cancel",
-        "busy-close"
+        "busy-disabled"
       ],
       "scenes": [
         {
@@ -981,6 +986,11 @@
       ],
       "testReferences": [
         {
+          "file": "tests/e2e/ui-phase2-trend-contracts.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "UI2-TR02 delays the write and verifies both close controls are disabled while busy on desktop Chromium and 390px mobile."
+        },
+        {
           "file": "scripts/lib/ui-phase2-trend-design-data.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "既有源函数/后端校验隔离助手；当次运行见PROGRESS，非实际Vue/服务/用户批准。"
@@ -999,7 +1009,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "与提交函数失败清空不同；原div没有统一键盘/返焦处理。"
+      "remaining": "Busy close protection is covered locally; the role=dialog div still lacks complete initial-focus, Tab/Escape, and focus-return handling."
     },
     {
       "actionId": "TR-FILTER-APPLY",
@@ -2640,10 +2650,10 @@
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1"
+        "apps/web/src/components/TrendDashboard.vue#2c66311e20c0f709.1"
       ],
       "sourceContractKeys": [
-        "同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；当前失败也关闭清空，需修复验证，不认可为最终体验"
+        "同定义两变体，原因2–500；status/reason.trim/expected_version；原始证据不删除；失败保留弹窗与原因，成功才关闭清空；busy期间叉号/取消/提交禁用"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
@@ -2661,7 +2671,7 @@
         "disabled": "not-applicable-wiring",
         "busy": "not-applicable-wiring"
       },
-      "remaining": "完整模态初焦点、所有共享入口/主题、忙碌关闭和跨主题结果归属仍待实际Vue验收。",
+      "remaining": "失败保留与busy关闭保护由局部Vue E2E覆盖；完整模态初焦点/Tab/Escape/焦点归还、跨主题结果归属和真实运行验收仍待完成。",
       "forwardsTo": [
         "TR-RELEVANCE-OPEN.irrelevant",
         "TR-RELEVANCE-OPEN.active",
@@ -2800,7 +2810,7 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "18494c587cf522f99ba868df92d4441c99b3af54fa52ddd6835746413290462b",
+      "apps/web/src/components/TrendDashboard.vue": "4950f30807851cde1c21358839ec99880087dcde324bffd49a53598a31bd3644",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
