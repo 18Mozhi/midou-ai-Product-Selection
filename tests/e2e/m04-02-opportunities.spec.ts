@@ -396,6 +396,99 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   }
 });
 
+test("opportunity list ignores an older successful read after a newer filter read", async ({
+  page,
+}) => {
+  await ready(page);
+  let releaseOlder!: () => void;
+  let markOlderStarted!: () => void;
+  const olderGate = new Promise<void>((resolve) => (releaseOlder = resolve));
+  const olderStarted = new Promise<void>((resolve) => (markOlderStarted = resolve));
+  await page.route("**/api/v1/opportunities?*", async (route) => {
+    const query = new URL(route.request().url()).searchParams.get("q");
+    if (query === "older-read") {
+      markOlderStarted();
+      await olderGate;
+      await route.fulfill({
+        json: envelope([{ ...recommendedBase, id: "older-opportunity", name: "过期筛选结果" }], {
+          page: 1,
+          page_size: 20,
+          total: 1,
+        }),
+      });
+      return;
+    }
+    if (query === "newer-read") {
+      await route.fulfill({
+        json: envelope([{ ...recommendedBase, id: "newer-opportunity", name: "当前筛选结果" }], {
+          page: 1,
+          page_size: 20,
+          total: 1,
+        }),
+      });
+      return;
+    }
+    await route.fallback();
+  });
+
+  await page.goto("/opportunities");
+  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  const openFilters = async () => {
+    if (mobile) await page.getByRole("button", { name: "高级筛选" }).click();
+    return mobile
+      ? page.getByRole("dialog", { name: "高级筛选" })
+      : page.locator(".opportunity-filters");
+  };
+  const applyQuery = async (value: string) => {
+    const filters = await openFilters();
+    await filters.getByLabel("机会名称").fill(value);
+    await filters.getByRole("button", { name: "筛选", exact: true }).click();
+  };
+
+  const olderResponse = page.waitForResponse((response) => response.url().includes("q=older-read"));
+  await applyQuery("older-read");
+  await olderStarted;
+  await expect(page).toHaveURL(/q=older-read/);
+  await applyQuery("newer-read");
+  await expect(page.getByRole("link", { name: "当前筛选结果" })).toBeVisible();
+  releaseOlder();
+  await olderResponse;
+  await expect(page.getByRole("link", { name: "当前筛选结果" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "过期筛选结果" })).toHaveCount(0);
+});
+
+test("opportunity detail failure cannot replace the list after navigating away", async ({
+  page,
+}) => {
+  await ready(page);
+  let releaseDetail!: () => void;
+  let markDetailStarted!: () => void;
+  const detailGate = new Promise<void>((resolve) => (releaseDetail = resolve));
+  const detailStarted = new Promise<void>((resolve) => (markDetailStarted = resolve));
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
+    markDetailStarted();
+    await detailGate;
+    await route.fulfill({
+      status: 503,
+      json: { error: { code: "temporarily_unavailable", message: "暂时不可用" } },
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await detailStarted;
+  await page.getByRole("link", { name: "← 返回来源列表" }).click();
+  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  const delayedFailure = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/opportunities/${opportunityId}`) && response.status() === 503,
+  );
+  releaseDetail();
+  await delayedFailure;
+  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "暂时不可用" })).toHaveCount(0);
+});
+
 test("mobile opportunity filters preserve selected adoption blocker inside the drawer", async ({
   page,
 }) => {

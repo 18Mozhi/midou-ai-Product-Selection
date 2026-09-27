@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityWorkspace.vue": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502",
+    "apps/web/src/components/OpportunityWorkspace.vue": "3db6475ec7226b25e62ba813a23c1c20b3341bb7d374aab53906d661c77d99c9",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
     "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
@@ -42,21 +42,12 @@
       "label": "创建选品入口",
       "kind": "navigation",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1"
-      ],
-      "sourceContractKeys": [
-        "OP-JOURNEY-NAV"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1"],
+      "sourceContractKeys": ["OP-JOURNEY-NAV"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "无opportunityId且canDecide，四视图均可见",
       "handler": "RouterLink /opportunities/start；只是P16导航，不执行手工create",
-      "variants": [
-        "recommended",
-        "rule_candidates",
-        "evidence_pending",
-        "all"
-      ],
+      "variants": ["recommended", "rule_candidates", "evidence_pending", "all"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -94,19 +85,12 @@
       "label": "管理选品规则",
       "kind": "navigation",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1"
-      ],
-      "sourceContractKeys": [
-        "OP-TREND-RULES-NAV"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1"],
+      "sourceContractKeys": ["OP-TREND-RULES-NAV"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "列表且canDecide",
       "handler": "RouterLink /trends?section=rules，非本页建规则或触发采集",
-      "variants": [
-        "all",
-        "non-all"
-      ],
+      "variants": ["all", "non-all"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -144,20 +128,12 @@
       "label": "打开ERP导入",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1"
-      ],
-      "sourceContractKeys": [
-        "OP-ERP-OPEN"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1"],
+      "sourceContractKeys": ["OP-ERP-OPEN"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "列表all且canDecide；无busy禁用",
       "handler": "showErpImport=true；不清limit，默认200",
-      "variants": [
-        "first-open",
-        "reopen",
-        "readonly-hidden"
-      ],
+      "variants": ["first-open", "reopen", "readonly-hidden"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -199,21 +175,12 @@
       "label": "打开手工添加",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1"
-      ],
-      "sourceContractKeys": [
-        "OP-CREATE-OPEN"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1"],
+      "sourceContractKeys": ["OP-CREATE-OPEN"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "可见入口列表all且canDecide；挂载create=1或source_topic_id也可打开",
       "handler": "showCreate=true；父form取消保留；挂载预填name/market/category/source_topic_id，后续query不重新执行预填",
-      "variants": [
-        "button",
-        "initial-create-query",
-        "initial-topic-query",
-        "reopen"
-      ],
+      "variants": ["button", "initial-create-query", "initial-topic-query", "reopen"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -255,21 +222,12 @@
       "label": "切换四队列",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#1f137eb293b286d0.1"
-      ],
-      "sourceContractKeys": [
-        "OP-VIEW：四实例"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#1f137eb293b286d0.1"],
+      "sourceContractKeys": ["OP-VIEW：四实例"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "四实例；相同view早退；切换不以busy禁用",
       "handler": "setSelectionView清selectedIds，保留其他query，清scope/page；离开all清decision_status，默认recommended省略view",
-      "variants": [
-        "recommended",
-        "rule_candidates",
-        "evidence_pending",
-        "all"
-      ],
+      "variants": ["recommended", "rule_candidates", "evidence_pending", "all"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -319,18 +277,11 @@
         "apps/web/src/components/OpportunityListPanel.vue#ebed9d735d2650ea.1",
         "apps/web/src/components/OpportunityListPanel.vue#3cacb9b51913365b.1"
       ],
-      "sourceContractKeys": [
-        "OP-FILTER-APPLY"
-      ],
+      "sourceContractKeys": ["OP-FILTER-APPLY"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "form提交；七字段非空才入query，不受busy统一锁定",
       "handler": "applyListFilters重建query，保留非默认view，清page和其他query；相同fullPath直接load；保留selectedIds",
-      "variants": [
-        "draft",
-        "same-query-reload",
-        "changed-query",
-        "non-all-hidden-decision"
-      ],
+      "variants": ["draft", "same-query-reload", "changed-query", "non-all-hidden-decision"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -376,20 +327,12 @@
       "label": "重置筛选",
       "kind": "read",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#55d7dcd38e3f0b22.1"
-      ],
-      "sourceContractKeys": [
-        "OP-FILTER-RESET"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#55d7dcd38e3f0b22.1"],
+      "sourceContractKeys": ["OP-FILTER-RESET"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "type=button，四视图可用",
       "handler": "七字段置空，query仅非默认view；同URL直接load；selectedIds不清",
-      "variants": [
-        "filtered",
-        "already-empty",
-        "hidden-selection"
-      ],
+      "variants": ["filtered", "already-empty", "hidden-selection"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -431,9 +374,7 @@
       "label": "状态面板主次行动",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#35fbcba5eab1163b.1"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#35fbcba5eab1163b.1"],
       "sourceContractKeys": [
         "OP-RECOVER/OP-EMPTY-CREATE/OP-SETUP-NEXT/OP-VIEW/OP-FILTER-RESET转发"
       ],
@@ -521,21 +462,12 @@
       "label": "逐行选择",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#bf27afc54dc87ac9.1"
-      ],
-      "sourceContractKeys": [
-        "OP-SELECT"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#bf27afc54dc87ac9.1"],
+      "sourceContractKeys": ["OP-SELECT"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready all且canDecide；没有全选按钮",
       "handler": "按selectedIds是否含id切换新数组，非读取event.checked；只内存，翻页/筛选保留，切view清空",
-      "variants": [
-        "checked",
-        "unchecked",
-        "cross-page",
-        "hidden-selection"
-      ],
+      "variants": ["checked", "unchecked", "cross-page", "hidden-selection"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -581,22 +513,12 @@
       "label": "查看机会详情",
       "kind": "navigation",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#e16bf068f58122c0.1"
-      ],
-      "sourceContractKeys": [
-        "OP-DETAIL-NAV"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#e16bf068f58122c0.1"],
+      "sourceContractKeys": ["OP-DETAIL-NAV"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "每个可读行；按钮文案依view变化",
       "handler": "/opportunities/{item.id}?from=route.fullPath；即使文案审阅并采纳也不直接POST",
-      "variants": [
-        "recommended",
-        "rule_candidates",
-        "evidence_pending",
-        "all",
-        "readonly"
-      ],
+      "variants": ["recommended", "rule_candidates", "evidence_pending", "all", "readonly"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -646,19 +568,12 @@
       "label": "上一页",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#30387aeecee66240.1"
-      ],
-      "sourceContractKeys": [
-        "OP-PAGE-PREV"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#30387aeecee66240.1"],
+      "sourceContractKeys": ["OP-PAGE-PREV"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready列表；page<=1禁用",
       "handler": "goListPage检查1..pageCount；保留query，第一页省略page；不清selectedIds",
-      "variants": [
-        "first-disabled",
-        "later-page"
-      ],
+      "variants": ["first-disabled", "later-page"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -696,19 +611,12 @@
       "label": "下一页",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#7090c56fb876cebe.1"
-      ],
-      "sourceContractKeys": [
-        "OP-PAGE-NEXT"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#7090c56fb876cebe.1"],
+      "sourceContractKeys": ["OP-PAGE-NEXT"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready列表；page>=pageCount禁用",
       "handler": "goListPage边界检查并保留query；page_size20，total来自API，不是当前行数",
-      "variants": [
-        "last-disabled",
-        "next-page"
-      ],
+      "variants": ["last-disabled", "next-page"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -749,17 +657,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/AutomaticSelectionReadinessPanel.vue#0d20f52ad0f021a6.1"
       ],
-      "sourceContractKeys": [
-        "OP-SETUP-NEXT"
-      ],
+      "sourceContractKeys": ["OP-SETUP-NEXT"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅recommended/rule_candidates显示面板；available且!allReady且nextStep",
       "handler": "第一项!ready的step.route；是配置缺项，不是单机会质量门",
-      "variants": [
-        "missing-step",
-        "all-ready-hidden",
-        "unavailable-hidden"
-      ],
+      "variants": ["missing-step", "all-ready-hidden", "unavailable-hidden"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -804,15 +706,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/AutomaticSelectionReadinessPanel.vue#859c5c25e4210185.1"
       ],
-      "sourceContractKeys": [
-        "OP-SCORE-RULES"
-      ],
+      "sourceContractKeys": ["OP-SCORE-RULES"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "配置available=false",
       "handler": "RouterLink /opportunities/scoring-rules，不写规则或重算评分",
-      "variants": [
-        "unavailable"
-      ],
+      "variants": ["unavailable"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -849,17 +747,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/AutomaticSelectionReadinessPanel.vue#1581dd93c745443c.1"
       ],
-      "sourceContractKeys": [
-        "OP-SETUP-DETAILS"
-      ],
+      "sourceContractKeys": ["OP-SETUP-DETAILS"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "available时原生details",
       "handler": "只展开readiness.steps，不触发新GET或modal",
-      "variants": [
-        "collapsed",
-        "expanded",
-        "all-ready"
-      ],
+      "variants": ["collapsed", "expanded", "all-ready"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -904,16 +796,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/AutomaticSelectionReadinessPanel.vue#a21355b49f292586.1"
       ],
-      "sourceContractKeys": [
-        "OP-SETUP-STEP"
-      ],
+      "sourceContractKeys": ["OP-SETUP-STEP"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "available展开且当前step !ready",
       "handler": "RouterLink step.route，已ready项无该链接",
-      "variants": [
-        "each-missing-step",
-        "ready-no-link"
-      ],
+      "variants": ["each-missing-step", "ready-no-link"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -947,21 +834,12 @@
       "label": "打开批量指派",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#e4d77eb7a4a580f1.1"
-      ],
-      "sourceContractKeys": [
-        "OP-BATCH-OPEN.assign"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#e4d77eb7a4a580f1.1"],
+      "sourceContractKeys": ["OP-BATCH-OPEN.assign"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
       "handler": "openBatch('assign')清reason/assignee并showBatch=true",
-      "variants": [
-        "open",
-        "reopen",
-        "cross-page",
-        "busy-reopen"
-      ],
+      "variants": ["open", "reopen", "cross-page", "busy-reopen"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1003,21 +881,12 @@
       "label": "打开批量复核",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#08f90a95059f6dac.1"
-      ],
-      "sourceContractKeys": [
-        "OP-BATCH-OPEN.review"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#08f90a95059f6dac.1"],
+      "sourceContractKeys": ["OP-BATCH-OPEN.review"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
       "handler": "openBatch('review')清reason/assignee并showBatch=true",
-      "variants": [
-        "open",
-        "reopen",
-        "cross-page",
-        "busy-reopen"
-      ],
+      "variants": ["open", "reopen", "cross-page", "busy-reopen"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1059,21 +928,12 @@
       "label": "打开批量归档",
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#120a674bf7e0ed5a.1"
-      ],
-      "sourceContractKeys": [
-        "OP-BATCH-OPEN.archive"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#120a674bf7e0ed5a.1"],
+      "sourceContractKeys": ["OP-BATCH-OPEN.archive"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ready all且canDecide且selectedIds.length>0，按钮没有busy锁",
       "handler": "openBatch('archive')清reason/assignee并showBatch=true",
-      "variants": [
-        "open",
-        "reopen",
-        "cross-page",
-        "busy-reopen"
-      ],
+      "variants": ["open", "reopen", "cross-page", "busy-reopen"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1119,20 +979,11 @@
         "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
         "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1"
       ],
-      "sourceContractKeys": [
-        "OP-BATCH-CANCEL：Escape",
-        "OP-BATCH-CANCEL"
-      ],
+      "sourceContractKeys": ["OP-BATCH-CANCEL：Escape", "OP-BATCH-CANCEL"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "canDecide原生dialog；取消/Escape无busy阻止",
       "handler": "handleBatchCancel→showBatch=false；取消按钮同样关闭，不清选择，不撤销write",
-      "variants": [
-        "assign",
-        "review",
-        "archive",
-        "escape",
-        "busy-close"
-      ],
+      "variants": ["assign", "review", "archive", "escape", "busy-close"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1182,9 +1033,7 @@
         "apps/web/src/components/OpportunityWorkspace.vue#44686188d9948fca.1",
         "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1"
       ],
-      "sourceContractKeys": [
-        "OP-BATCH-SUBMIT"
-      ],
+      "sourceContractKeys": ["OP-BATCH-SUBMIT"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "JS当前items交集非空且trim原因非空；assign HTMLrequired负责人；按钮busy禁用但handler无busy早退",
       "handler": "POST /opportunities/batch，一次构建action/items{id,expected_version}/trim reason/assignee_id(assign为ID否则null)；成功关窗清选择load并显示affected_count",
@@ -1262,19 +1111,11 @@
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1"
       ],
-      "sourceContractKeys": [
-        "OP-ERP-CLOSE：Escape",
-        "OP-ERP-CLOSE"
-      ],
+      "sourceContractKeys": ["OP-ERP-CLOSE：Escape", "OP-ERP-CLOSE"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "标题关闭/取消/Escape均未busy禁用",
       "handler": "erpImportOpen=false，limit仍保留；不终止120秒bridge监听或已发POST",
-      "variants": [
-        "close",
-        "cancel",
-        "escape",
-        "busy-close"
-      ],
+      "variants": ["close", "cancel", "escape", "busy-close"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1316,9 +1157,7 @@
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1"
       ],
-      "sourceContractKeys": [
-        "OP-ERP-BROWSER"
-      ],
+      "sourceContractKeys": ["OP-ERP-BROWSER"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "数量native required1–500；提交按钮busy禁用；函数无busy早退",
       "handler": "browserBridge('erp.products.read',{limit:Number(erpImportLimit)})，同window/type/requestId匹配，120000ms超时；再POST /imports/erp-products items/source_url/captured_at/可选total；成功关窗load及返回计数",
@@ -1392,20 +1231,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1"
       ],
-      "sourceContractKeys": [
-        "OP-ERP-FILE"
-      ],
+      "sourceContractKeys": ["OP-ERP-FILE"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "accept JSON文件；有首个file即执行；不依赖form数量required或浏览器读取按钮",
       "handler": "解析数组或parsed.list，persistErpProducts；固定source_url=https://medou.medouai.com/#/ProductList及当前ISO，不带total；无file返回",
-      "variants": [
-        "array",
-        "list",
-        "cancel-file-picker",
-        "invalid",
-        "failed",
-        "saved"
-      ],
+      "variants": ["array", "list", "cancel-file-picker", "invalid", "failed", "saved"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1454,15 +1284,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1"
       ],
-      "sourceContractKeys": [
-        "OP-HELPER-DOWNLOAD"
-      ],
+      "sourceContractKeys": ["OP-HELPER-DOWNLOAD"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ERP窗中的独立a；不是submit",
       "handler": "href /browser-helper/scoutops-browser-helper.zip，无target或download属性",
-      "variants": [
-        "link-only"
-      ],
+      "variants": ["link-only"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1505,19 +1331,11 @@
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1"
       ],
-      "sourceContractKeys": [
-        "OP-CREATE-CLOSE：Escape",
-        "OP-CREATE-CLOSE"
-      ],
+      "sourceContractKeys": ["OP-CREATE-CLOSE：Escape", "OP-CREATE-CLOSE"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "关闭/取消/Escape无busy禁用",
       "handler": "createOpen=false，父form不清；取消不发POST但不取消已经发送的请求",
-      "variants": [
-        "close",
-        "cancel",
-        "escape",
-        "busy-close"
-      ],
+      "variants": ["close", "cancel", "escape", "busy-close"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1563,19 +1381,11 @@
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#781b6e8e908ba7ac.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ff7a5f3105576981.1"
       ],
-      "sourceContractKeys": [
-        "OP-CREATE-SUBMIT"
-      ],
+      "sourceContractKeys": ["OP-CREATE-SUBMIT"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "native name/market required，按钮busy禁用；函数无busy/capability早退",
       "handler": "POST /opportunities {name,market,category:空转null,source_topic_id:空转null}；201成功close并push返回id详情；不清form，失败保留",
-      "variants": [
-        "empty-required",
-        "edited",
-        "busy",
-        "failed",
-        "saved"
-      ],
+      "variants": ["empty-required", "edited", "busy", "failed", "saved"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1668,11 +1478,7 @@
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "正常P15无opportunityId，不装配详情；AI原因来自P18复核",
       "handler": "返回/详情load/决策补数/采集/评分入口/十分区/成本利润/反馈/AI事件与helper另见P18，不继承为P15按钮",
-      "variants": [
-        "detail",
-        "analysis-tabs",
-        "AI-reason"
-      ],
+      "variants": ["detail", "analysis-tabs", "AI-reason"],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1723,11 +1529,7 @@
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "useModalDialog requires decisionOpen && hasDetail；列表无详情",
       "handler": "adopt/observe/reject的原因/submit/cancel仅P18；P15手工创建不等于采纳",
-      "variants": [
-        "adopt",
-        "observe",
-        "reject"
-      ],
+      "variants": ["adopt", "observe", "reject"],
       "scenes": [
         {
           "package": "opportunity-detail-direction-c",
@@ -1769,18 +1571,12 @@
       "label": "消费者/容器关联",
       "kind": "wiring",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1"
-      ],
-      "sourceContractKeys": [
-        "列表apply/batch/create/setup/page/reset/view/selectedIds转发"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1"],
+      "sourceContractKeys": ["列表apply/batch/create/setup/page/reset/view/selectedIds转发"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
       "handler": "List八事件逐一转发；manageSetup路径来自子组件，selectionView/page由父URL管理。",
-      "variants": [
-        "source-forwarding"
-      ],
+      "variants": ["source-forwarding"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1830,68 +1626,49 @@
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
           "event": "@apply",
           "handler": "applyListFilters",
-          "targets": [
-            "OP-FILTER-APPLY"
-          ]
+          "targets": ["OP-FILTER-APPLY"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
           "event": "@batch",
           "handler": "openBatch",
-          "targets": [
-            "OP-BATCH-OPEN.assign",
-            "OP-BATCH-OPEN.review",
-            "OP-BATCH-OPEN.archive"
-          ]
+          "targets": ["OP-BATCH-OPEN.assign", "OP-BATCH-OPEN.review", "OP-BATCH-OPEN.archive"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
           "event": "@create",
           "handler": "showCreate = true",
-          "targets": [
-            "OP-CREATE-OPEN"
-          ]
+          "targets": ["OP-CREATE-OPEN"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
           "event": "@manage-setup",
           "handler": "router.push($event)",
-          "targets": [
-            "OP-SETUP-NEXT"
-          ]
+          "targets": ["OP-SETUP-NEXT"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
           "event": "@page",
           "handler": "goListPage",
-          "targets": [
-            "OP-PAGE-PREV",
-            "OP-PAGE-NEXT"
-          ]
+          "targets": ["OP-PAGE-PREV", "OP-PAGE-NEXT"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
           "event": "@reset",
           "handler": "resetListFilters",
-          "targets": [
-            "OP-FILTER-RESET"
-          ]
+          "targets": ["OP-FILTER-RESET"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
           "event": "@view",
           "handler": "setSelectionView",
-          "targets": [
-            "OP-VIEW"
-          ]
+          "targets": ["OP-VIEW"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0951033614435a4e.1",
           "event": "@update:selected-ids",
           "handler": "selectedOpportunityIds = $event",
-          "targets": [
-            "OP-SELECT"
-          ]
+          "targets": ["OP-SELECT"]
         }
       ]
     },
@@ -1904,16 +1681,11 @@
         "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
         "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1"
       ],
-      "sourceContractKeys": [
-        "创建/决定/ERP浏览器/文件导入转发",
-        "三类业务弹窗集合调用"
-      ],
+      "sourceContractKeys": ["创建/决定/ERP浏览器/文件导入转发", "三类业务弹窗集合调用"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
       "handler": "同一集合两候选保留四事件；decide显式映射排除，model另列。",
-      "variants": [
-        "source-forwarding"
-      ],
+      "variants": ["source-forwarding"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -1945,76 +1717,55 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
-      "forwardsTo": [
-        "OP-CREATE-SUBMIT",
-        "OP-DECISION-EXCLUDED",
-        "OP-ERP-BROWSER",
-        "OP-ERP-FILE"
-      ],
+      "forwardsTo": ["OP-CREATE-SUBMIT", "OP-DECISION-EXCLUDED", "OP-ERP-BROWSER", "OP-ERP-FILE"],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
           "event": "@create",
           "handler": "create",
-          "targets": [
-            "OP-CREATE-SUBMIT"
-          ]
+          "targets": ["OP-CREATE-SUBMIT"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
           "event": "@decide",
           "handler": "decide",
-          "targets": [
-            "OP-DECISION-EXCLUDED"
-          ]
+          "targets": ["OP-DECISION-EXCLUDED"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
-          "targets": [
-            "OP-ERP-BROWSER"
-          ]
+          "targets": ["OP-ERP-BROWSER"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ebc2bd495e3582f5.1",
           "event": "@import-file",
           "handler": "importErpFile",
-          "targets": [
-            "OP-ERP-FILE"
-          ]
+          "targets": ["OP-ERP-FILE"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
           "event": "@create",
           "handler": "create",
-          "targets": [
-            "OP-CREATE-SUBMIT"
-          ]
+          "targets": ["OP-CREATE-SUBMIT"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
           "event": "@decide",
           "handler": "decide",
-          "targets": [
-            "OP-DECISION-EXCLUDED"
-          ]
+          "targets": ["OP-DECISION-EXCLUDED"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
-          "targets": [
-            "OP-ERP-BROWSER"
-          ]
+          "targets": ["OP-ERP-BROWSER"]
         },
         {
           "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#4f1225f6705d3e1d.1",
           "event": "@import-file",
           "handler": "importErpFile",
-          "targets": [
-            "OP-ERP-FILE"
-          ]
+          "targets": ["OP-ERP-FILE"]
         }
       ]
     },
@@ -2023,18 +1774,12 @@
       "label": "消费者/容器关联",
       "kind": "wiring",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1"
-      ],
-      "sourceContractKeys": [
-        "本地批量原生dialog；三变体"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1"],
+      "sourceContractKeys": ["本地批量原生dialog；三变体"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
       "handler": "一个原生定义展开三业务变体，不重复算cancel事件/form/aside。",
-      "variants": [
-        "source-forwarding"
-      ],
+      "variants": ["source-forwarding"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -2070,10 +1815,7 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
-      "forwardsTo": [
-        "OP-BATCH-CANCEL",
-        "OP-BATCH-SUBMIT"
-      ],
+      "forwardsTo": ["OP-BATCH-CANCEL", "OP-BATCH-SUBMIT"],
       "forwardBindings": []
     },
     {
@@ -2084,15 +1826,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1"
       ],
-      "sourceContractKeys": [
-        "ERP导入原生dialog"
-      ],
+      "sourceContractKeys": ["ERP导入原生dialog"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
       "handler": "ERP原生dialog消费者；文件与浏览器读取两不同写入触发。",
-      "variants": [
-        "source-forwarding"
-      ],
+      "variants": ["source-forwarding"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -2120,12 +1858,7 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
-      "forwardsTo": [
-        "OP-ERP-CLOSE",
-        "OP-ERP-BROWSER",
-        "OP-ERP-FILE",
-        "OP-HELPER-DOWNLOAD"
-      ],
+      "forwardsTo": ["OP-ERP-CLOSE", "OP-ERP-BROWSER", "OP-ERP-FILE", "OP-HELPER-DOWNLOAD"],
       "forwardBindings": []
     },
     {
@@ -2136,15 +1869,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1"
       ],
-      "sourceContractKeys": [
-        "机会创建原生dialog"
-      ],
+      "sourceContractKeys": ["机会创建原生dialog"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
       "handler": "手工原生dialog消费者；父模型取消保留，不替代P16向导。",
-      "variants": [
-        "source-forwarding"
-      ],
+      "variants": ["source-forwarding"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -2172,10 +1901,7 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
-      "forwardsTo": [
-        "OP-CREATE-CLOSE",
-        "OP-CREATE-SUBMIT"
-      ],
+      "forwardsTo": ["OP-CREATE-CLOSE", "OP-CREATE-SUBMIT"],
       "forwardBindings": []
     },
     {
@@ -2183,18 +1909,12 @@
       "label": "消费者/容器关联",
       "kind": "wiring",
       "routeApplicability": "P15-list-four-local-callers-only",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#3b502c874c5bc655.1"
-      ],
-      "sourceContractKeys": [
-        "共享筛选抽屉"
-      ],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityListPanel.vue#3b502c874c5bc655.1"],
+      "sourceContractKeys": ["共享筛选抽屉"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
       "handler": "ResponsiveFilterDrawer一个调用；760px及以下overlay，桌面group；原型桌面也modal是待审形态差异。",
-      "variants": [
-        "source-forwarding"
-      ],
+      "variants": ["source-forwarding"],
       "scenes": [
         {
           "package": "opportunity-direction-c",
@@ -2226,10 +1946,7 @@
         "busy": "not-applicable-wiring"
       },
       "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
-      "forwardsTo": [
-        "OP-FILTER-APPLY",
-        "OP-FILTER-RESET"
-      ],
+      "forwardsTo": ["OP-FILTER-APPLY", "OP-FILTER-RESET"],
       "forwardBindings": []
     }
   ],
@@ -2243,7 +1960,7 @@
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502",
+      "apps/web/src/components/OpportunityWorkspace.vue": "3db6475ec7226b25e62ba813a23c1c20b3341bb7d374aab53906d661c77d99c9",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
       "apps/web/src/components/OpportunityListPanel.vue": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",

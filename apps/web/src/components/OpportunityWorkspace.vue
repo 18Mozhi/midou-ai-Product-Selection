@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, defineAsyncComponent, onMounted, ref, watch } from "vue";
+import {
+  computed,
+  defineAsyncComponent,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  ref,
+  watch,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityListPanel.vue"));
@@ -125,13 +134,14 @@ const stateFrom = (kind: ApiFailureKind): OpportunityTypes.OpportunityWorkspaceS
     : kind === "blocked" || kind === "rate_limited"
       ? "blocked"
       : "error";
-async function read(path: string) {
+let readGeneration = 0;
+async function read(path: string, isCurrent: () => boolean = () => true) {
   try {
     const response = await request<any>(path);
-    requestId.value = response.request_id;
+    if (isCurrent()) requestId.value = response.request_id;
     return response;
   } catch (error) {
-    if (error instanceof ApiClientError) {
+    if (isCurrent() && error instanceof ApiClientError) {
       requestId.value = error.requestId;
       message.value = error.actionHint;
       state.value = stateFrom(error.kind);
@@ -139,18 +149,24 @@ async function read(path: string) {
     throw error;
   }
 }
-async function loadAi() {
+async function loadAi(opportunityId = props.opportunityId, isCurrent?: () => boolean) {
+  const generation = readGeneration;
+  const ownsRead = isCurrent ?? (() => generation === readGeneration);
   aiLoadState.value = "loading";
   try {
-    const response = await request<any[]>(`/opportunities/${props.opportunityId}/ai-analyses`);
+    const response = await request<any[]>(`/opportunities/${opportunityId}/ai-analyses`);
+    if (!ownsRead()) return;
     aiAnalyses.value = Array.isArray(response.data) ? response.data : [];
     aiLoadState.value = "ready";
   } catch (error) {
+    if (!ownsRead()) return;
     aiLoadState.value = "error";
     if (error instanceof ApiClientError) requestId.value = error.requestId;
   }
 }
-async function loadDownstream() {
+async function loadDownstream(opportunityId = props.opportunityId, isCurrent?: () => boolean) {
+  const generation = readGeneration;
+  const ownsRead = isCurrent ?? (() => generation === readGeneration);
   downstreamLoadState.value = "loading";
   try {
     const [competitorsResponse, sourcingResponse] = await Promise.all([
@@ -162,11 +178,12 @@ async function loadDownstream() {
           : Promise.resolve({ data: [] as any[] }),
       ]),
       competitors = competitorsResponse.data.filter(
-        (item) => item.opportunity_id === props.opportunityId,
+        (item) => item.opportunity_id === opportunityId,
       ),
       searches = sourcingResponse.data.filter(
-        (item: any) => item.input_type === "opportunity" && item.input_ref === props.opportunityId,
+        (item: any) => item.input_type === "opportunity" && item.input_ref === opportunityId,
       );
+    if (!ownsRead()) return;
     competitorItems.value = competitors;
     downstream.value = {
       competitors: competitors.length,
@@ -179,33 +196,51 @@ async function loadDownstream() {
     };
     downstreamLoadState.value = "ready";
   } catch (error) {
+    if (!ownsRead()) return;
     downstreamLoadState.value = "error";
     if (error instanceof ApiClientError) requestId.value = error.requestId;
   }
 }
-async function loadAutomationReadiness() {
+async function loadAutomationReadiness(isCurrent: () => boolean = () => true) {
   automationReadiness.value = null;
-  automationReadiness.value = await loadAutomaticSelectionReadiness(request);
+  const readiness = await loadAutomaticSelectionReadiness(request);
+  if (isCurrent()) automationReadiness.value = readiness;
 }
 async function load() {
+  const generation = ++readGeneration;
+  const opportunityId = props.opportunityId;
+  const isCurrent = () => generation === readGeneration;
   state.value = "loading";
   message.value = "";
   try {
-    if (props.opportunityId) {
-      detail.value = (await read(`/opportunities/${props.opportunityId}`)).data;
-      profit.value = (await read(`/opportunities/${props.opportunityId}/profit-analysis`)).data;
+    if (opportunityId) {
+      const detailResponse = await read(`/opportunities/${opportunityId}`, isCurrent);
+      if (!isCurrent()) return;
+      detail.value = detailResponse.data;
+      const profitResponse = await read(
+        `/opportunities/${opportunityId}/profit-analysis`,
+        isCurrent,
+      );
+      if (!isCurrent()) return;
+      profit.value = profitResponse.data;
       if (canConfirmCost.value) {
         try {
-          costReviewerOptions.value = (
-            await request<Array<{ id: string; label: string }>>("/cost-input-reviewers")
-          ).data;
+          const reviewers =
+            await request<Array<{ id: string; label: string }>>("/cost-input-reviewers");
+          if (!isCurrent()) return;
+          costReviewerOptions.value = reviewers.data;
         } catch {
-          costReviewerOptions.value = [];
+          if (isCurrent()) costReviewerOptions.value = [];
         }
       } else {
         costReviewerOptions.value = [];
       }
-      await Promise.all([loadAi(), loadDownstream()]);
+      if (!isCurrent()) return;
+      await Promise.all([
+        loadAi(opportunityId, isCurrent),
+        loadDownstream(opportunityId, isCurrent),
+      ]);
+      if (!isCurrent()) return;
       state.value = "ready";
       return;
     }
@@ -215,22 +250,25 @@ async function load() {
       selection_view: selectionView.value,
     });
     for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
-    const result = await read(`/opportunities?${params}`);
+    const result = await read(`/opportunities?${params}`, isCurrent);
+    if (!isCurrent()) return;
     items.value = result.data;
-    const readinessPromise = loadAutomationReadiness();
+    const readinessPromise = loadAutomationReadiness(isCurrent);
     try {
       memberOptions.value = (await request<any[]>("/opportunities/member-options")).data;
     } catch (error) {
+      if (!isCurrent()) return;
       if (!(error instanceof ApiClientError)) throw error;
       memberOptions.value = [];
       requestId.value = error.requestId;
       message.value = "机会已加载；组织成员选项暂不可用，批量指派需稍后重试。";
     }
     await readinessPromise;
+    if (!isCurrent()) return;
     total.value = (result.meta as { total: number }).total;
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
-    if (!(error instanceof ApiClientError)) state.value = "blocked";
+    if (isCurrent() && !(error instanceof ApiClientError)) state.value = "blocked";
   }
 }
 async function discoverCompetitors() {
@@ -589,6 +627,7 @@ function syncTabFromRoute() {
   tab.value = resolveOpportunityTab(route.query.tab);
 }
 let loadQueued = false;
+let wasDeactivated = false;
 function queueLoad() {
   if (loadQueued) return;
   loadQueued = true;
@@ -597,6 +636,15 @@ function queueLoad() {
     void load();
   });
 }
+onDeactivated(() => {
+  readGeneration += 1;
+  wasDeactivated = true;
+});
+onActivated(() => {
+  if (!wasDeactivated) return;
+  wasDeactivated = false;
+  queueLoad();
+});
 onMounted(() => {
   syncTabFromRoute();
   syncListRoute();
@@ -617,10 +665,12 @@ onMounted(() => {
 watch(
   () => props.opportunityId,
   () => {
+    readGeneration += 1;
     detail.value = null;
     syncTabFromRoute();
     queueLoad();
   },
+  { flush: "sync" },
 );
 watch(
   () => route.query.tab,
@@ -641,10 +691,15 @@ watch(
   ],
   () => {
     if (props.opportunityId || route.path !== "/opportunities") return;
+    readGeneration += 1;
     syncListRoute();
     queueLoad();
   },
+  { flush: "sync" },
 );
+onBeforeUnmount(() => {
+  readGeneration += 1;
+});
 </script>
 <template>
   <section class="opportunity-workspace opportunity-workspace--review">
