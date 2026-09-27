@@ -143,7 +143,7 @@ for (const boundary of ["close", "route-return", "deactivate", "unmount"]) {
     h.resolve(false);
     await pending;
     assert.equal(h.box.createUserError.value, "");
-    assert.equal(h.box.userForm.temporary_password, "FixtureOnly-123");
+    assert.equal(h.box.userForm.temporary_password, boundary === "close" ? "" : "FixtureOnly-123");
   });
 }
 test("creation ownership remains on the current account layout and preserves the request contract", () => {
@@ -165,5 +165,5 @@ test("creation ownership remains on the current account layout and preserves the
     (node) => ts.isFunctionDeclaration(node) && node.name.text === "createUser",
   );
   assert.ok(createUser);
-  assert.match(createUser.getText(ast), /if \(isCurrent\(\)\) createUserOpen\.value = false/);
+  assert.match(createUser.getText(ast), /if \(isCurrent\(\)\) closeCreateUser\(\)/);
 });
