@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "b8d07f2fa4d4fc67ce403ee5763d8b0bb743d097e0121af77261d2f5c07f2f5a"
+    "apps/web/src/components/CompetitorMonitor.vue": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",

@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1714；旧登记1477；新身份675，旧表独有身份438。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1554源位置/1276组；其中路由动作1053组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1723；旧登记1477；新身份706，旧表独有身份460。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1559源位置/1280组；其中路由动作1056组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -14,7 +14,7 @@
 
 | 页 | 旧静态关联候选（非运行分母） | 语义审阅 | 下一步 |
 | --- | --- | --- | --- |
-| [P01 正在进入](page-specs/P01.md) | 2 | [1组](action-reviews/P01.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P01 正在进入](page-specs/P01.md) | 1 | [1组](action-reviews/P01.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P02 登录](page-specs/P02.md) | 7 | [15组](action-reviews/P02.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P03 注册](page-specs/P03.md) | 7 | [15组](action-reviews/P03.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P04 找回密码](page-specs/P04.md) | 7 | [15组](action-reviews/P04.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -25,67 +25,67 @@
 | [P09 快速引导](page-specs/P09.md) | 1 | [6组](action-reviews/P09.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P10 外观偏好](page-specs/P10.md) | 4 | [13组](action-reviews/P10.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P11 个人中心](page-specs/P11.md) | 2 | [28组](action-reviews/P11.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P12 今日行动](page-specs/P12.md) | 47 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P13 今日工作](page-specs/P13.md) | 73 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P14 热点趋势](page-specs/P14.md) | 91 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P15 选品机会](page-specs/P15.md) | 127 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P16 创建选品](page-specs/P16.md) | 41 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P17 评分规则](page-specs/P17.md) | 61 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P18 机会详情](page-specs/P18.md) | 127 | [54组](action-reviews/P18.json) | 270个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P19 竞品监控](page-specs/P19.md) | 63 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P20 竞品监控规则](page-specs/P20.md) | 63 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P21 供应链与利润](page-specs/P21.md) | 81 | [40组](action-reviews/P21.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P22 费用与利润规则](page-specs/P22.md) | 60 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P23 全部任务](page-specs/P23.md) | 73 | [40组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P24 任务详情](page-specs/P24.md) | 73 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P25 审批中心](page-specs/P25.md) | 75 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P26 通知中心](page-specs/P26.md) | 56 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P27 自动化规则](page-specs/P27.md) | 52 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P28 报表与导出](page-specs/P28.md) | 47 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 155 | [8组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P30 成员与邀请](page-specs/P30.md) | 155 | [24组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P31 角色与权限](page-specs/P31.md) | 155 | [25组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P32 工作区管理](page-specs/P32.md) | 155 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P33 团队管理](page-specs/P33.md) | 155 | [17组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P34 审批模板](page-specs/P34.md) | 155 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P35 组织数据](page-specs/P35.md) | 155 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P36 组织令牌](page-specs/P36.md) | 155 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P37 组织审计](page-specs/P37.md) | 155 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P38 平台概览](page-specs/P38.md) | 60 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P39 账号与组织](page-specs/P39.md) | 96 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P40 组织管理](page-specs/P40.md) | 96 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P41 创建组织](page-specs/P41.md) | 96 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P42 组织详情](page-specs/P42.md) | 96 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P43 用户管理](page-specs/P43.md) | 96 | [39组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P44 管理员管理](page-specs/P44.md) | 96 | [44组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P45 角色权限](page-specs/P45.md) | 96 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P46 来源设置](page-specs/P46.md) | 78 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P47 采集程序](page-specs/P47.md) | 78 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P48 热点来源](page-specs/P48.md) | 78 | [25组](action-reviews/P48.json) | 150个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P49 1688 启用检查](page-specs/P49.md) | 78 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P50 凭证与档案](page-specs/P50.md) | 78 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P51 采集任务](page-specs/P51.md) | 81 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P52 采集总览](page-specs/P52.md) | 81 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P53 网页登录采集](page-specs/P53.md) | 81 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P54 数据中心](page-specs/P54.md) | 58 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P55 质量与规则](page-specs/P55.md) | 59 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P56 内容管理](page-specs/P56.md) | 75 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P57 通知管理](page-specs/P57.md) | 75 | [21组](action-reviews/P57.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P58 配额管理](page-specs/P58.md) | 71 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P59 安全中心](page-specs/P59.md) | 69 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P60 开放平台](page-specs/P60.md) | 72 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P61 系统状态](page-specs/P61.md) | 75 | [6组](action-reviews/P61.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P62 链路日志](page-specs/P62.md) | 58 | [12组](action-reviews/P62.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P63 接口覆盖证据](page-specs/P63.md) | 75 | [2组](action-reviews/P63.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P64 备份与恢复](page-specs/P64.md) | 44 | [5组](action-reviews/P64.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P65 发布管理](page-specs/P65.md) | 45 | [7组](action-reviews/P65.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P66 服务拓扑](page-specs/P66.md) | 43 | [12组](action-reviews/P66.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P67 Redis 运行](page-specs/P67.md) | 36 | [3组](action-reviews/P67.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P68 MySQL 运行](page-specs/P68.md) | 39 | [3组](action-reviews/P68.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P69 文件存储](page-specs/P69.md) | 39 | [3组](action-reviews/P69.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P70 采集调度](page-specs/P70.md) | 49 | [9组](action-reviews/P70.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P71 容量边界](page-specs/P71.md) | 41 | [3组](action-reviews/P71.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P72 界面状态](page-specs/P72.md) | 7 | [4组](action-reviews/P72.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P12 今日行动](page-specs/P12.md) | 46 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P13 今日工作](page-specs/P13.md) | 72 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P14 热点趋势](page-specs/P14.md) | 90 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P15 选品机会](page-specs/P15.md) | 121 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P16 创建选品](page-specs/P16.md) | 40 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P17 评分规则](page-specs/P17.md) | 60 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P18 机会详情](page-specs/P18.md) | 121 | [56组](action-reviews/P18.json) | 276个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P19 竞品监控](page-specs/P19.md) | 62 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P20 竞品监控规则](page-specs/P20.md) | 62 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P21 供应链与利润](page-specs/P21.md) | 63 | [41组](action-reviews/P21.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P22 费用与利润规则](page-specs/P22.md) | 59 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P23 全部任务](page-specs/P23.md) | 72 | [40组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P24 任务详情](page-specs/P24.md) | 72 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P25 审批中心](page-specs/P25.md) | 74 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P26 通知中心](page-specs/P26.md) | 55 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P27 自动化规则](page-specs/P27.md) | 51 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P28 报表与导出](page-specs/P28.md) | 46 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P29 治理概览](page-specs/P29.md) | 154 | [8组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P30 成员与邀请](page-specs/P30.md) | 154 | [24组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P31 角色与权限](page-specs/P31.md) | 154 | [25组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P32 工作区管理](page-specs/P32.md) | 154 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P33 团队管理](page-specs/P33.md) | 154 | [17组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P34 审批模板](page-specs/P34.md) | 154 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P35 组织数据](page-specs/P35.md) | 154 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P36 组织令牌](page-specs/P36.md) | 154 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P37 组织审计](page-specs/P37.md) | 154 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P38 平台概览](page-specs/P38.md) | 59 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P39 账号与组织](page-specs/P39.md) | 95 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P40 组织管理](page-specs/P40.md) | 95 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P41 创建组织](page-specs/P41.md) | 95 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P42 组织详情](page-specs/P42.md) | 95 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P43 用户管理](page-specs/P43.md) | 95 | [39组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P44 管理员管理](page-specs/P44.md) | 95 | [44组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P45 角色权限](page-specs/P45.md) | 95 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P46 来源设置](page-specs/P46.md) | 77 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P47 采集程序](page-specs/P47.md) | 77 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P48 热点来源](page-specs/P48.md) | 77 | [26组](action-reviews/P48.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P49 1688 启用检查](page-specs/P49.md) | 77 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P50 凭证与档案](page-specs/P50.md) | 77 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P51 采集任务](page-specs/P51.md) | 80 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P52 采集总览](page-specs/P52.md) | 80 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P53 网页登录采集](page-specs/P53.md) | 80 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P54 数据中心](page-specs/P54.md) | 57 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P55 质量与规则](page-specs/P55.md) | 58 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P56 内容管理](page-specs/P56.md) | 74 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P57 通知管理](page-specs/P57.md) | 74 | [21组](action-reviews/P57.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P58 配额管理](page-specs/P58.md) | 70 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P59 安全中心](page-specs/P59.md) | 68 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P60 开放平台](page-specs/P60.md) | 71 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P61 系统状态](page-specs/P61.md) | 74 | [6组](action-reviews/P61.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P62 链路日志](page-specs/P62.md) | 57 | [12组](action-reviews/P62.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P63 接口覆盖证据](page-specs/P63.md) | 74 | [2组](action-reviews/P63.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P64 备份与恢复](page-specs/P64.md) | 43 | [5组](action-reviews/P64.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P65 发布管理](page-specs/P65.md) | 44 | [7组](action-reviews/P65.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P66 服务拓扑](page-specs/P66.md) | 42 | [12组](action-reviews/P66.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P67 Redis 运行](page-specs/P67.md) | 35 | [3组](action-reviews/P67.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P68 MySQL 运行](page-specs/P68.md) | 38 | [3组](action-reviews/P68.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P69 文件存储](page-specs/P69.md) | 38 | [3组](action-reviews/P69.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P70 采集调度](page-specs/P70.md) | 48 | [9组](action-reviews/P70.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P71 容量边界](page-specs/P71.md) | 40 | [3组](action-reviews/P71.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P72 界面状态](page-specs/P72.md) | 6 | [4组](action-reviews/P72.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P73 页面不存在](page-specs/P73.md) | 3 | [3组](action-reviews/P73.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 
 ## P11具体结论
@@ -768,7 +768,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | 关系键 | 源事件 / handler | 目标合同组 |
 | --- | --- | --- |
 | work.batch.forward | @start / previewBatch | task.batch.pause.open、task.batch.resume.open、task.batch.delay.open、task.batch.transfer.open、task.batch.cancel.open |
-| work.batch.forward | @close / showBatchImpact = false | task.batch.close |
+| work.batch.forward | @close / closeBatch | task.batch.close |
 | work.batch.forward | @confirm / confirmBatch | task.batch.submit |
 | work.batch.forward | @update:reason / batchReason = $event | task.batch.reason.change |
 | work.batch.forward | @update:due-at / batchDueAt = $event | task.batch.delay.due.change |
@@ -973,7 +973,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P15 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P15.json)：70个局部源位置 → 36组；4类写入，28组路由动作，6组转发/容器关联不重复计动作。已映射20/20个源码字段位置，18/18处调用/内嵌容器，36个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P15.json)：68个局部源位置 → 36组；4类写入，28组路由动作，6组转发/容器关联不重复计动作。已映射20/20个源码字段位置，18/18处调用/内嵌容器，36个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有168个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1007,7 +1007,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-HELPER-DOWNLOAD 下载浏览器助手 / navigation | 1处；link-only | [erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)、[erp-helper-missing · 1440](design/opportunity-direction-c/1440-erp-helper-missing.png) / [erp-helper-missing · 390](design/opportunity-direction-c/390-erp-helper-missing.png)；其余见JSON | 本轮无真实下载或扩展安装；不能把链接点击当助手已连接。 |
 | OP-CREATE-CLOSE 关闭手工添加 / local | 3处；close、cancel、escape、busy-close | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[create-edited · 1440](design/opportunity-direction-c/1440-create-edited.png) / [create-edited · 390](design/opportunity-direction-c/390-create-edited.png)；其余见JSON | 初焦点是关闭按钮；取消返回与请求后成功导航需实际Vue验证。 |
 | OP-CREATE-SUBMIT 保存手工候选 / write | 2处；empty-required、edited、busy、failed、saved | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[create-edited · 1440](design/opportunity-direction-c/1440-create-edited.png) / [create-edited · 390](design/opportunity-direction-c/390-create-edited.png)；其余见JSON | 客户端不trim四字段；后端规范化/UUID/scope另验；未知write文案未写入任何状态不是事务证据。 |
-| OP-P18-EXCLUDED 详情读取、十分区与AI操作排除 / excluded | 19处；detail、analysis-tabs、AI-reason | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)；其余见JSON | 共享父组件仍需真实缓存/跨路由残留测试；排除指正常入口，不宣称任何show ref均按路由清空。 |
+| OP-P18-EXCLUDED 详情读取、十分区与AI操作排除 / excluded | 17处；detail、analysis-tabs、AI-reason | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)；其余见JSON | 共享父组件仍需真实缓存/跨路由残留测试；排除指正常入口，不宣称任何show ref均按路由清空。 |
 | OP-DECISION-EXCLUDED 三种人工决定原因排除 / excluded | 6处；adopt、observe、reject | [adopt-empty · 1440](design/opportunity-detail-direction-c/1440-adopt-empty.png) / [adopt-empty · 390](design/opportunity-detail-direction-c/390-adopt-empty.png)、[observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)；其余见JSON | 正常路由排除，不抵扣P18具体图审/权限/五质量门验收。 |
 | OP-LIST-WIRING 消费者/容器关联 / wiring | 1处；source-forwarding | [all · 1440](design/opportunity-direction-c/1440-all.png) / [all · 390](design/opportunity-direction-c/390-all.png)、[recommended · 1440](design/opportunity-direction-c/1440-recommended.png) / [recommended · 390](design/opportunity-direction-c/390-recommended.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
 | OP-DIALOGS-WIRING 消费者/容器关联 / wiring | 2处；source-forwarding | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)；其余见JSON | 关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。 |
@@ -1283,9 +1283,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P18 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P18.json)：104个局部源位置 → 54组；12类写入，45组路由动作，8组转发/容器关联不重复计动作。已映射35/35个源码字段位置，26/26处调用/内嵌容器，42个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P18.json)：106个局部源位置 → 56组；12类写入，46组路由动作，9组转发/容器关联不重复计动作。已映射35/35个源码字段位置，29/29处调用/内嵌容器，46个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有270个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有276个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -1326,15 +1326,16 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-COST-SUBMIT 提交成本双人复核 / write | 2处；sale、purchase、logistics | [sale · 1440](design/profit-direction-c/1440-sale.png) / [sale · 390](design/profit-direction-c/390-sale.png)、[purchase · 1440](design/profit-direction-c/1440-purchase.png) / [purchase · 390](design/profit-direction-c/390-purchase.png)；其余见JSON | 默认UTC截断与本地解析存在偏移；提交未生效，另一人服务端资格需验。 |
 | OP-PROFIT-QUEUE 利润重算排队 / write | 1处；valid、no-rule、failure | [queue-busy · 1440](design/profit-direction-c/1440-queue-busy.png) / [queue-busy · 390](design/profit-direction-c/390-queue-busy.png)、[queue-no-rule · 1440](design/profit-direction-c/1440-queue-no-rule.png) / [queue-no-rule · 390](design/profit-direction-c/390-queue-no-rule.png)；其余见JSON | 不能以成本表单必填项阻止现行重算；同一701完整权限成本链仍缺。 |
 | OP-RETURN 返回来源 / navigation | 1处；from、fallback | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[control-return-focus · 1440](design/detail-adaptive-direction-c/1440-control-return-focus.png) / [control-return-focus · 390](design/detail-adaptive-direction-c/390-control-return-focus.png)；其余见JSON | 不是完整路由白名单/鉴权证明，history与跨ID范围仍需验证。 |
-| OP-DETAIL-RETRY 详情状态主行动 / read | 1处；empty、error、forbidden、expired、blocked | [error · 1440](design/opportunity-detail-direction-c/1440-error.png) / [error · 390](design/opportunity-detail-direction-c/390-error.png)、[forbidden · 1440](design/opportunity-detail-direction-c/1440-forbidden.png) / [forbidden · 390](design/opportunity-detail-direction-c/390-forbidden.png)；其余见JSON | 源文案开始创建/返回工作台/重新登录但实际均重读；次按钮可能可见却无处理器。不得宣称导航已实现。 |
+| OP-DETAIL-RETRY 机会详情状态恢复动作 / navigation | 1处；empty、error、forbidden、expired、blocked | [error · 1440](design/opportunity-detail-direction-c/1440-error.png) / [error · 390](design/opportunity-detail-direction-c/390-error.png)、[forbidden · 1440](design/opportunity-detail-direction-c/1440-forbidden.png) / [forbidden · 390](design/opportunity-detail-direction-c/390-forbidden.png)；其余见JSON | 本地隔离响应证明路由与重试绑定，不证明真实认证/RBAC或M07-03；页面其它业务读写和所有适用状态仍按各自合同验收。 |
 | OP-RUNTIME-DETAILS 展开运行信息 / local | 1处；known、unknown | [technical · 1440](design/opportunity-detail-direction-c/1440-technical.png) / [technical · 390](design/opportunity-detail-direction-c/390-technical.png)、[technical-open · 1440](design/detail-adaptive-direction-c/1440-technical-open.png) / [technical-open · 390](design/detail-adaptive-direction-c/390-technical-open.png)；其余见JSON | 源格式化与原型展开形态不同；无新读请求。 |
 | OP-MANUAL-COLLECTION-DETAILS 补证异常手工工具 / local | 1处；candidate、readonly | [candidate · 1440](design/opportunity-detail-direction-c/1440-candidate.png) / [candidate · 390](design/opportunity-detail-direction-c/390-candidate.png)、[overview · 1440](design/insights-direction-c/1440-overview.png) / [overview · 390](design/insights-direction-c/390-overview.png)；其余见JSON | 部分内容在核心图和分析稿分开，完整连续有数据链未证明。 |
 | OP-TAB 机会十分区 / navigation | 2处；overview、evidence、profit、risk、market、competition、ai、lineage、feedback、decisions | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[profit · 1440](design/detail-adaptive-direction-c/1440-profit.png) / [profit · 390](design/detail-adaptive-direction-c/390-profit.png)；其余见JSON | 真实v-if卸载子区局部状态，父form仍存；原型全部保留不可当源生命周期已修复。 |
+| OP-WIRING-TAB 详情分区选择事件转发 / wiring | 1处；OP-TAB | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[profit · 1440](design/detail-adaptive-direction-c/1440-profit.png) / [profit · 390](design/detail-adaptive-direction-c/390-profit.png)；其余见JSON | 此父子事件映射不证明真实router.replace、焦点返还或全部十个分区已逐一操作验收。 |
 | OP-MORE-ANALYSIS 展开更多分区 / local | 1处；primary、secondary | [directory-open · 1440](design/opportunity-detail-direction-c/1440-directory-open.png) / [directory-open · 390](design/opportunity-detail-direction-c/390-directory-open.png)、[directory-open · 1440](design/detail-adaptive-direction-c/1440-directory-open.png) / [directory-open · 390](design/detail-adaptive-direction-c/390-directory-open.png)；其余见JSON | 新目录形态取代源更多折叠属提案；六态和实际焦点未全验。 |
 | OP-DECISION-CLOSE 关闭人工原因窗 / local | 3处；adopt、observe、reject、Escape、header、footer | [observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)、[reject-dialog · 1440](design/detail-adaptive-direction-c/1440-reject-dialog.png) / [reject-dialog · 390](design/detail-adaptive-direction-c/390-reject-dialog.png)；其余见JSON | 弹窗名称已绑定独立标题；完整键盘/读屏、忙碌期间关闭与服务端写入归属仍需独立验证。 |
 | OP-DECISION-SUBMIT 提交人工决定 / write | 2处；adopt、observe、reject | [adopt-failed · 1440](design/opportunity-detail-direction-c/1440-adopt-failed.png) / [adopt-failed · 390](design/opportunity-detail-direction-c/390-adopt-failed.png)、[decision-unknown · 1440](design/opportunity-detail-direction-c/1440-decision-unknown.png) / [decision-unknown · 390](design/opportunity-detail-direction-c/390-decision-unknown.png)；其余见JSON | 业务原因服务端trim；关闭/重开和当前ID/版本晚到竞态、完整采纳链仍未验证。 |
 | OP-P15-EXCLUDED 共享文件中的P15列表入口与弹窗 / excluded | 25处；list-actions、create、ERP、batch-assign、batch-review、batch-archive | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)；其余见JSON | 只排除P18业务动作计数，不证明运行不可达：ID切换未清showCreate/showErpImport/showBatch，缓存页残留需真实生命周期验收。P15全页另审。 |
-| OP-WIRING-COST 组件事件/容器关联：COST / wiring | 2处；OP-COST-REVIEW-SUBMIT、OP-COST-SUBMIT、OP-PROFIT-QUEUE、OP-COST-REVIEWER-RETRY | [form · 1440](design/profit-direction-c/1440-form.png) / [form · 390](design/profit-direction-c/390-form.png)、[approved-empty · 1440](design/profit-direction-c/1440-approved-empty.png) / [approved-empty · 390](design/profit-direction-c/390-approved-empty.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
+| OP-WIRING-COST 组件事件/容器关联：COST / wiring | 2处；OP-COST-REVIEW-SUBMIT、OP-COST-SUBMIT、OP-PROFIT-QUEUE、OP-COST-REVIEWER-RETRY、OP-PROFIT-RETRY | [form · 1440](design/profit-direction-c/1440-form.png) / [form · 390](design/profit-direction-c/390-form.png)、[approved-empty · 1440](design/profit-direction-c/1440-approved-empty.png) / [approved-empty · 390](design/profit-direction-c/390-approved-empty.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-DECISION-PANEL 组件事件/容器关联：DECISION-PANEL / wiring | 1处；OP-DECISION-OPEN.adopt、OP-DECISION-OPEN.observe、OP-DECISION-OPEN.reject、OP-EVIDENCE-TASK | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-INSIGHTS 组件事件/容器关联：INSIGHTS / wiring | 1处；OP-COMPETITOR-DISCOVER、OP-SUPPLIER-DISCOVER、OP-SCORE-QUEUE、OP-DOWNSTREAM-RETRY | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-FEEDBACK 组件事件/容器关联：FEEDBACK / wiring | 1处；OP-FEEDBACK-SUBMIT | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
@@ -1343,14 +1344,17 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-AI-REASON-DIALOG AI抽检原因填写与失败恢复窗 / local | 6处；AI.approved、AI.rejected、failure-restored、cancel | ；其余见JSON | 当前仅本地受控响应证明前端呈现与显式重试；不证明未知服务端commit、真实幂等/RBAC或其他调用页生命周期。 |
 | OP-WIRING-REASON 组件事件/容器关联：REASON / wiring | 4处；OP-AI-REVIEW.approved、OP-AI-REVIEW.rejected | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-DECISION-CONTAINER 组件事件/容器关联：DECISION-CONTAINER / wiring | 1处；OP-DECISION-OPEN.adopt、OP-DECISION-OPEN.observe、OP-DECISION-OPEN.reject、OP-DECISION-CLOSE、OP-DECISION-SUBMIT | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
+| OP-PROFIT-RETRY 利润数据失败重读 / read | 1处；利润数据读取失败后显式重试 | ；其余见JSON | 当前源码候选与GET读取语义已映射；未在此处新增按钮级视觉/真实API/RBAC验收。 |
 
 ### 事件转发关系（不增加业务动作）
 
 | 关系键 | 源事件 / handler | 目标合同组 |
 | --- | --- | --- |
+| OP-WIRING-TAB | @select / setTab | OP-TAB |
 | OP-WIRING-COST | @review-cost / $emit('reviewCost', $event) | OP-COST-REVIEW-SUBMIT |
 | OP-WIRING-COST | @confirm-cost / confirmCost | OP-COST-SUBMIT |
 | OP-WIRING-COST | @retry-reviewers / retryCostReviewers | OP-COST-REVIEWER-RETRY |
+| OP-WIRING-COST | @retry-profit / retryProfitAnalysis | OP-PROFIT-RETRY |
 | OP-WIRING-COST | @review-cost / reviewCost | OP-COST-REVIEW-SUBMIT |
 | OP-WIRING-COST | @queue-profit / queueProfit | OP-PROFIT-QUEUE |
 | OP-WIRING-DECISION-PANEL | @decide / startDecision | OP-DECISION-OPEN.adopt、OP-DECISION-OPEN.observe、OP-DECISION-OPEN.reject |
@@ -1428,14 +1432,18 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OpportunityCostReviewQueue.vue / form.1 / approved | form-container / matching-inline-form-scene | [approved-edited · 1440](design/profit-direction-c/1440-approved-edited.png) / [approved-edited · 390](design/profit-direction-c/390-approved-edited.png) | 源资格变化与旧review.id未清，不能依赖展示或单元验证替代服务端复核。 |
 | OpportunityCostReviewQueue.vue / form.1 / rejected | form-container / matching-inline-form-scene | [rejected-edited · 1440](design/profit-direction-c/1440-rejected-edited.png) / [rejected-edited · 390](design/profit-direction-c/390-rejected-edited.png) | 源资格变化与旧review.id未清，不能依赖展示或单元验证替代服务端复核。 |
 | OpportunityDetailInsights.vue / aside.1 / score-missing | inline-aside / related-scene-only | [score-missing · 1440](design/insights-direction-c/1440-score-missing.png) / [score-missing · 390](design/insights-direction-c/390-score-missing.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
+| OpportunityDetailNavigation.vue / aside.1 / directory-open | inline-aside / related-scene-only | [directory-open · 1440](design/opportunity-detail-direction-c/1440-directory-open.png) / [directory-open · 390](design/opportunity-detail-direction-c/390-directory-open.png) | 代表性双端目录场景，不覆盖每个分区目标、所有键盘状态或真实Vue/API验收。 |
 | OpportunityFeedbackPanel.vue / form.1 / operating-feedback | form-container / matching-inline-form-scene | [form-filled · 1440](design/review-direction-c/1440-form-filled.png) / [form-filled · 390](design/review-direction-c/390-form-filled.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
 | OpportunityFeedbackPanel.vue / aside.1 / feedback-readonly | inline-aside / related-scene-only | [feedback-readonly · 1440](design/review-direction-c/1440-feedback-readonly.png) / [feedback-readonly · 390](design/review-direction-c/390-feedback-readonly.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
-| OpportunityProfitPanel.vue / aside.1 / profit-missing | inline-aside / related-scene-only | [missing · 1440](design/profit-direction-c/1440-missing.png) / [missing · 390](design/profit-direction-c/390-missing.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
-| OpportunityProfitPanel.vue / aside.1 / no-run | inline-aside / related-scene-only | [no-run · 1440](design/profit-direction-c/1440-no-run.png) / [no-run · 390](design/profit-direction-c/390-no-run.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
+| OpportunityProfitPanel.vue / aside.1 / profit-loading | inline-aside / related-scene-only | [loading · 1440](design/profit-direction-c/1440-loading.png) / [loading · 390](design/profit-direction-c/390-loading.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
+| OpportunityProfitPanel.vue / aside.1 / profit-read-error | inline-aside / related-scene-only | [read-error · 1440](design/profit-direction-c/1440-read-error.png) / [read-error · 390](design/profit-direction-c/390-read-error.png) | 读取失败与上次快照保留的组合图；不证明真实API或权限验收。 |
+| OpportunityProfitPanel.vue / aside.2 / profit-missing | inline-aside / related-scene-only | [missing · 1440](design/profit-direction-c/1440-missing.png) / [missing · 390](design/profit-direction-c/390-missing.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
+| OpportunityProfitPanel.vue / aside.2 / no-run | inline-aside / related-scene-only | [no-run · 1440](design/profit-direction-c/1440-no-run.png) / [no-run · 390](design/profit-direction-c/390-no-run.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
+| OpportunityProfitPanel.vue / aside.3 / cost-readonly | inline-aside / related-scene-only | [readonly · 1440](design/profit-direction-c/1440-readonly.png) / [readonly · 390](design/profit-direction-c/390-readonly.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
 | OpportunityProfitPanel.vue / form.1 / sale | form-container / matching-inline-form-scene | [sale · 1440](design/profit-direction-c/1440-sale.png) / [sale · 390](design/profit-direction-c/390-sale.png) | 三类型原型分开；该机会701无完整成本权限/有数据链，时区/资格/实际POST未验。 |
 | OpportunityProfitPanel.vue / form.1 / purchase | form-container / matching-inline-form-scene | [purchase · 1440](design/profit-direction-c/1440-purchase.png) / [purchase · 390](design/profit-direction-c/390-purchase.png) | 三类型原型分开；该机会701无完整成本权限/有数据链，时区/资格/实际POST未验。 |
 | OpportunityProfitPanel.vue / form.1 / logistics | form-container / matching-inline-form-scene | [logistics · 1440](design/profit-direction-c/1440-logistics.png) / [logistics · 390](design/profit-direction-c/390-logistics.png) | 三类型原型分开；该机会701无完整成本权限/有数据链，时区/资格/实际POST未验。 |
-| OpportunityProfitPanel.vue / aside.2 / cost-readonly | inline-aside / related-scene-only | [readonly · 1440](design/profit-direction-c/1440-readonly.png) / [readonly · 390](design/profit-direction-c/390-readonly.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
+| OpportunityProfitPanel.vue / aside.4 / cost-readonly | inline-aside / related-scene-only | [readonly · 1440](design/profit-direction-c/1440-readonly.png) / [readonly · 390](design/profit-direction-c/390-readonly.png) | 相关离线场景不是全部状态/主题/真实Vue验收。 |
 | OpportunityWorkspace.vue / OpportunityWorkspaceDialogs.1 / adopt | business-dialog-container / related-scene-only | [adopt-empty · 1440](design/opportunity-detail-direction-c/1440-adopt-empty.png) / [adopt-empty · 390](design/opportunity-detail-direction-c/390-adopt-empty.png) | 三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。 |
 | OpportunityWorkspace.vue / OpportunityWorkspaceDialogs.1 / observe | business-dialog-container / related-scene-only | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png) | 三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。 |
 | OpportunityWorkspace.vue / OpportunityWorkspaceDialogs.1 / reject | business-dialog-container / related-scene-only | [reject-empty · 1440](design/opportunity-detail-direction-c/1440-reject-empty.png) / [reject-empty · 390](design/opportunity-detail-direction-c/390-reject-empty.png) | 三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。 |
@@ -1674,9 +1682,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P21 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P21.json)：57个局部源位置 → 40组；9类写入，32组路由动作，7组转发/容器关联不重复计动作。已映射25/25个源码字段位置，12/12处调用/内嵌容器，33个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P21.json)：59个局部源位置 → 41组；9类写入，34组路由动作，7组转发/容器关联不重复计动作。已映射25/25个源码字段位置，18/18处调用/内嵌容器，47个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有6个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有18个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 另有20个disabled/busy槽按逐项源码证据登记为当前控件无此呈现；不计图片或验收通过，不减少语义动作数。原源候选、实际子控件和源文件指纹必须一致；隐藏、父面板loading或函数拒绝不冒充按钮禁用。
 
@@ -1713,16 +1721,16 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | SC-DELETE-CLOSE 删除关闭/Escape/取消 / local | 3处；SC-DELETE-CLOSE Escape、SC-DELETE-CLOSE X、SC-DELETE-CLOSE 取消 | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png)、[delete-error · 1440](design/sourcing-direction-c/1440-delete-error.png) / [delete-error · 390](design/sourcing-direction-c/390-delete-error.png)；其余见JSON | 关闭与取消双端六态已绑定；disabled/busy是父请求在途关闭锁提案，真实Vue仍允许关闭，不是取消网络请求。键盘回到实际入口及搜索/删除保留、报价/采购重开预填已离线验证；具体批准、直达query无入口回焦、真实路由/异步归属和辅助技术仍待。 |
 | SC-DELETE-SUBMIT 删除最终提交 / write | 2处；SC-DELETE-SUBMIT 表单、SC-DELETE-SUBMIT 按钮 | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png)、[delete-error · 1440](design/sourcing-direction-c/1440-delete-error.png) / [delete-error · 390](design/sourcing-direction-c/390-delete-error.png)；其余见JSON | 已绑定双端六态代表图，尚未获审或迁入真实Vue；字段/错误/主题密度/全部变体和实际异步归属未验。disabled和busy均使用当前源busy条件，不新增独立禁用业务规则。 |
 | SC-NAV-OPPORTUNITY 机会利润详情 / navigation | 1处；SC-NAV 机会利润详情 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-calculated · 1440](design/sourcing-direction-c/1440-cost-calculated.png) / [cost-calculated · 390](design/sourcing-direction-c/390-cost-calculated.png)；其余见JSON | 双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。 |
-| SC-COST-WIRING P21机会成本父处理器 / wiring | 1处；成本提交/复核/重算与读取重试事件转发 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)；其余见JSON | 仅确认父子事件接线，不把事件转发重复计为按钮；机会版本、利润与复核人GET的独立状态已由当前SFC传递/处理，真实API/RBAC/生产验收仍不在此证据范围。 |
+| SC-COST-WIRING P21机会成本父处理器 / wiring | 1处；成本提交/复核/重算及读取重试事件转发 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
 | SC-NAV-PROFIT-RULES 利润面板费用规则 / navigation | 1处；SC-NAV 管理费用规则 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[control-nav-profit-rules-default · 1440](design/sourcing-direction-c/1440-control-nav-profit-rules-default.png) / [control-nav-profit-rules-default · 390](design/sourcing-direction-c/390-control-nav-profit-rules-default.png)；其余见JSON | 双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。 |
 | SC-COST-REVIEW-WIRING 共享复核事件上送 / wiring | 1处；SC-COST-REVIEW 转发 | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
-| SC-COST-REVIEWER-RETRY P21成本复核人名单失败重试 / read | 1处；指定复核人名单重试 | ；其余见JSON | 当前父组件已传 reviewerLoadState/error/requestId 并连接 retry-reviewers；本轮只校准源码归属，没有为该按钮单独补制六态图或宣称真实GET/RBAC验收。 |
-| SC-COST-READ-RETRY P21机会成本数据失败重读 / read | 2处；机会版本重读、利润数据重读 | ；其余见JSON | 当前源码分别在对应读取失败时触发原 GET 重试；本轮只映射真实候选与父子处理器，未改变接口、权限或读取策略，也未将页面级样图当作按钮级交互验收。 |
+| SC-COST-REVIEWER-RETRY P21成本复核人名单失败重试 / read | 1处；复核人名单读取失败后显式重试 | ；其余见JSON | 当前源码候选与P21事件链已映射；此轮不重新审核该按钮的独立视觉状态、真实GET/RBAC或生产行为。 |
 | SC-COST-SUBMIT 提交双人成本复核 / write | 2处；SC-COST-SUBMIT 表单、SC-COST-SUBMIT 指定复核人且非busy | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-reviewers-empty · 1440](design/sourcing-direction-c/1440-cost-reviewers-empty.png) / [cost-reviewers-empty · 390](design/sourcing-direction-c/390-cost-reviewers-empty.png)；其余见JSON | 双端六态代表图已绑定；成本区busy独立于找货，自身请求与同区其他写请求禁用分开。精确机会/复核版本、0金额/时间、字段有效性/禁用、不可变意图及重复提交守卫仅离线验证，非真实Vue函数守卫或实际审批/计算。SC-G01–08、成本读取在途/全部字段对象主题/具体批准与生产验收仍待。 |
 | SC-COST-RECALCULATE 利润重算排队 / write | 1处；SC-COST-RECALCULATE 排队 | [cost-recalculating · 1440](design/sourcing-direction-c/1440-cost-recalculating.png) / [cost-recalculating · 390](design/sourcing-direction-c/390-cost-recalculating.png)、[cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)；其余见JSON | 双端六态代表图已绑定；成本区busy独立于找货，自身请求与同区其他写请求禁用分开。精确机会/复核版本、0金额/时间、字段有效性/禁用、不可变意图及重复提交守卫仅离线验证，非真实Vue函数守卫或实际审批/计算。SC-G01–08、成本读取在途/全部字段对象主题/具体批准与生产验收仍待。 |
 | SC-COST-REVIEW-OPEN 通过/驳回内联表单 / local | 2处；SC-COST-REVIEW rejected打开、SC-COST-REVIEW approved打开 | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON | 四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。 |
 | SC-COST-REVIEW-SUBMIT 提交复核结论 / write | 2处；SC-COST-REVIEW 表单提交、SC-COST-REVIEW 提交按钮 | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON | 双端六态代表图已绑定；成本区busy独立于找货，自身请求与同区其他写请求禁用分开。精确机会/复核版本、0金额/时间、字段有效性/禁用、不可变意图及重复提交守卫仅离线验证，非真实Vue函数守卫或实际审批/计算。SC-G01–08、成本读取在途/全部字段对象主题/具体批准与生产验收仍待。 |
 | SC-COST-REVIEW-CANCEL 取消内联复核 / local | 1处；SC-COST-REVIEW-CANCEL | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON | 四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。 |
+| SC-COST-READ-RETRY P21机会成本数据失败重读 / read | 2处；机会版本失败重读、利润数据失败重读 | ；其余见JSON | 当前源码候选归属已映射；现有页面/错误状态图未在本次逐控件复核，真实Vue/API/权限与生产行为仍需独立验收。 |
 
 ### 事件转发关系（不增加业务动作）
 
@@ -1730,20 +1738,20 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | --- | --- | --- |
 | SC-DIALOG-WIRING | @close-search / closeSearch | SC-S-CLOSE |
 | SC-DIALOG-WIRING | @create / create | SC-S-SUBMIT |
-| SC-DIALOG-WIRING | @close-quote / quoteCandidate = null | SC-QUOTE-CLOSE |
+| SC-DIALOG-WIRING | @close-quote / closeQuote | SC-QUOTE-CLOSE |
 | SC-DIALOG-WIRING | @confirm-quote / confirm | SC-QUOTE-SUBMIT |
-| SC-DIALOG-WIRING | @close-purchase / purchaseCandidate = null | SC-PURCHASE-CLOSE |
+| SC-DIALOG-WIRING | @close-purchase / closePurchase | SC-PURCHASE-CLOSE |
 | SC-DIALOG-WIRING | @purchase / purchase | SC-PURCHASE-SUBMIT |
-| SC-DIALOG-WIRING | @close-delete / deleting = null | SC-DELETE-CLOSE |
+| SC-DIALOG-WIRING | @close-delete / closeDelete | SC-DELETE-CLOSE |
 | SC-DIALOG-WIRING | @remove-search / removeSearch | SC-DELETE-SUBMIT |
 | SC-DIALOG-WIRING | @update-delete-reason / deleteReason = $event | SC-DELETE-SUBMIT |
 | SC-DIALOG-WIRING | @close-search / closeSearch | SC-S-CLOSE |
 | SC-DIALOG-WIRING | @create / create | SC-S-SUBMIT |
-| SC-DIALOG-WIRING | @close-quote / quoteCandidate = null | SC-QUOTE-CLOSE |
+| SC-DIALOG-WIRING | @close-quote / closeQuote | SC-QUOTE-CLOSE |
 | SC-DIALOG-WIRING | @confirm-quote / confirm | SC-QUOTE-SUBMIT |
-| SC-DIALOG-WIRING | @close-purchase / purchaseCandidate = null | SC-PURCHASE-CLOSE |
+| SC-DIALOG-WIRING | @close-purchase / closePurchase | SC-PURCHASE-CLOSE |
 | SC-DIALOG-WIRING | @purchase / purchase | SC-PURCHASE-SUBMIT |
-| SC-DIALOG-WIRING | @close-delete / deleting = null | SC-DELETE-CLOSE |
+| SC-DIALOG-WIRING | @close-delete / closeDelete | SC-DELETE-CLOSE |
 | SC-DIALOG-WIRING | @remove-search / removeSearch | SC-DELETE-SUBMIT |
 | SC-DIALOG-WIRING | @update-delete-reason / deleteReason = $event | SC-DELETE-SUBMIT |
 | SC-S-DIALOG | 容器定义，无额外事件 | SC-S-CLOSE、SC-S-SUBMIT |
@@ -1796,6 +1804,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | SourcingWorkspace.vue / aside.2 / select-one | inline-aside / related-scene-only | [select-one · 1440](design/sourcing-direction-c/1440-select-one.png) / [select-one · 390](design/sourcing-direction-c/390-select-one.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspace.vue / aside.2 / select-two | inline-aside / related-scene-only | [select-two · 1440](design/sourcing-direction-c/1440-select-two.png) / [select-two · 390](design/sourcing-direction-c/390-select-two.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspace.vue / aside.2 / select-five | inline-aside / related-scene-only | [select-five · 1440](design/sourcing-direction-c/1440-select-five.png) / [select-five · 390](design/sourcing-direction-c/390-select-five.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / dialog.1 / search-keyword | native-dialog / matching-dialog-scene | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png) | 已关联弹窗主场景；全部输入态、主题和真实键盘交互仍待验 |
+| SourcingWorkspaceDialogs.vue / dialog.1 / search-error | native-dialog / matching-dialog-scene | [search-error · 1440](design/sourcing-direction-c/1440-search-error.png) / [search-error · 390](design/sourcing-direction-c/390-search-error.png) | 已关联弹窗错误态；真实错误回焦与读屏仍待验 |
+| SourcingWorkspaceDialogs.vue / dialog.1 / search-busy | native-dialog / matching-dialog-scene | [search-busy · 1440](design/sourcing-direction-c/1440-search-busy.png) / [search-busy · 390](design/sourcing-direction-c/390-search-busy.png) | 已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验 |
 | SourcingWorkspaceDialogs.vue / form.1 / search-keyword | form-container / matching-dialog-scene | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.1 / search-image | form-container / matching-dialog-scene | [search-image · 1440](design/sourcing-direction-c/1440-search-image.png) / [search-image · 390](design/sourcing-direction-c/390-search-image.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.1 / search-opportunity | form-container / matching-dialog-scene | [search-opportunity · 1440](design/sourcing-direction-c/1440-search-opportunity.png) / [search-opportunity · 390](design/sourcing-direction-c/390-search-opportunity.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
@@ -1803,25 +1814,36 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | SourcingWorkspaceDialogs.vue / form.1 / search-error | form-container / matching-dialog-scene | [search-error · 1440](design/sourcing-direction-c/1440-search-error.png) / [search-error · 390](design/sourcing-direction-c/390-search-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.1 / search-busy | form-container / matching-dialog-scene | [search-busy · 1440](design/sourcing-direction-c/1440-search-busy.png) / [search-busy · 390](design/sourcing-direction-c/390-search-busy.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / aside.1 / search-keyword | inline-aside / related-scene-only | [search-keyword · 1440](design/sourcing-direction-c/1440-search-keyword.png) / [search-keyword · 390](design/sourcing-direction-c/390-search-keyword.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / dialog.2 / quote | native-dialog / matching-dialog-scene | [quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png) | 已关联弹窗主场景；完整字段约束及真实键盘交互仍待验 |
+| SourcingWorkspaceDialogs.vue / dialog.2 / quote-error | native-dialog / matching-dialog-scene | [quote-error · 1440](design/sourcing-direction-c/1440-quote-error.png) / [quote-error · 390](design/sourcing-direction-c/390-quote-error.png) | 已关联弹窗错误态；真实错误回焦与读屏仍待验 |
+| SourcingWorkspaceDialogs.vue / dialog.2 / quote-busy | native-dialog / matching-dialog-scene | [quote-busy · 1440](design/sourcing-direction-c/1440-quote-busy.png) / [quote-busy · 390](design/sourcing-direction-c/390-quote-busy.png) | 已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验 |
 | SourcingWorkspaceDialogs.vue / form.2 / quote | form-container / matching-dialog-scene | [quote · 1440](design/sourcing-direction-c/1440-quote.png) / [quote · 390](design/sourcing-direction-c/390-quote.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.2 / quote-defaults | form-container / matching-dialog-scene | [quote-defaults · 1440](design/sourcing-direction-c/1440-quote-defaults.png) / [quote-defaults · 390](design/sourcing-direction-c/390-quote-defaults.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.2 / quote-error | form-container / matching-dialog-scene | [quote-error · 1440](design/sourcing-direction-c/1440-quote-error.png) / [quote-error · 390](design/sourcing-direction-c/390-quote-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.2 / quote-busy | form-container / matching-dialog-scene | [quote-busy · 1440](design/sourcing-direction-c/1440-quote-busy.png) / [quote-busy · 390](design/sourcing-direction-c/390-quote-busy.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / dialog.3 / purchase | native-dialog / matching-dialog-scene | [purchase · 1440](design/sourcing-direction-c/1440-purchase.png) / [purchase · 390](design/sourcing-direction-c/390-purchase.png) | 已关联弹窗主场景；真实数量边界与键盘交互仍待验 |
+| SourcingWorkspaceDialogs.vue / dialog.3 / purchase-error | native-dialog / matching-dialog-scene | [purchase-error · 1440](design/sourcing-direction-c/1440-purchase-error.png) / [purchase-error · 390](design/sourcing-direction-c/390-purchase-error.png) | 已关联弹窗错误态；真实错误回焦与读屏仍待验 |
+| SourcingWorkspaceDialogs.vue / dialog.3 / purchase-busy | native-dialog / matching-dialog-scene | [purchase-busy · 1440](design/sourcing-direction-c/1440-purchase-busy.png) / [purchase-busy · 390](design/sourcing-direction-c/390-purchase-busy.png) | 已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验 |
 | SourcingWorkspaceDialogs.vue / form.3 / purchase | form-container / matching-dialog-scene | [purchase · 1440](design/sourcing-direction-c/1440-purchase.png) / [purchase · 390](design/sourcing-direction-c/390-purchase.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.3 / purchase-error | form-container / matching-dialog-scene | [purchase-error · 1440](design/sourcing-direction-c/1440-purchase-error.png) / [purchase-error · 390](design/sourcing-direction-c/390-purchase-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.3 / purchase-busy | form-container / matching-dialog-scene | [purchase-busy · 1440](design/sourcing-direction-c/1440-purchase-busy.png) / [purchase-busy · 390](design/sourcing-direction-c/390-purchase-busy.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| SourcingWorkspaceDialogs.vue / dialog.4 / delete | native-dialog / matching-dialog-scene | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png) | 已关联弹窗主场景；原因校验及真实键盘交互仍待验 |
+| SourcingWorkspaceDialogs.vue / dialog.4 / delete-error | native-dialog / matching-dialog-scene | [delete-error · 1440](design/sourcing-direction-c/1440-delete-error.png) / [delete-error · 390](design/sourcing-direction-c/390-delete-error.png) | 已关联弹窗错误态；真实错误回焦与读屏仍待验 |
+| SourcingWorkspaceDialogs.vue / dialog.4 / delete-busy | native-dialog / matching-dialog-scene | [delete-busy · 1440](design/sourcing-direction-c/1440-delete-busy.png) / [delete-busy · 390](design/sourcing-direction-c/390-delete-busy.png) | 已关联弹窗忙碌态；真实软删副作用仍待验 |
 | SourcingWorkspaceDialogs.vue / form.4 / delete | form-container / matching-dialog-scene | [delete · 1440](design/sourcing-direction-c/1440-delete.png) / [delete · 390](design/sourcing-direction-c/390-delete.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.4 / delete-error | form-container / matching-dialog-scene | [delete-error · 1440](design/sourcing-direction-c/1440-delete-error.png) / [delete-error · 390](design/sourcing-direction-c/390-delete-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingWorkspaceDialogs.vue / form.4 / delete-busy | form-container / matching-dialog-scene | [delete-busy · 1440](design/sourcing-direction-c/1440-delete-busy.png) / [delete-busy · 390](design/sourcing-direction-c/390-delete-busy.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingComparisonPanel.vue / aside.1 / comparison | inline-aside / related-scene-only | [comparison · 1440](design/sourcing-direction-c/1440-comparison.png) / [comparison · 390](design/sourcing-direction-c/390-comparison.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingComparisonPanel.vue / aside.1 / spec-format | inline-aside / related-scene-only | [spec-format · 1440](design/sourcing-direction-c/1440-spec-format.png) / [spec-format · 390](design/sourcing-direction-c/390-spec-format.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | SourcingComparisonPanel.vue / aside.1 / spec-different | inline-aside / related-scene-only | [spec-different · 1440](design/sourcing-direction-c/1440-spec-different.png) / [spec-different · 390](design/sourcing-direction-c/390-spec-different.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
-| OpportunityProfitPanel.vue / aside.1 / cost-missing | inline-aside / related-scene-only | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityProfitPanel.vue / aside.1 / profit-loading | inline-aside / related-scene-only | [loading · 1440](design/sourcing-direction-c/1440-loading.png) / [loading · 390](design/sourcing-direction-c/390-loading.png) | 仅关联加载类参考场景；利润专属实际状态仍未正式验收 |
+| OpportunityProfitPanel.vue / aside.2 / profit-error | inline-aside / related-scene-only | [cost-error · 1440](design/sourcing-direction-c/1440-cost-error.png) / [cost-error · 390](design/sourcing-direction-c/390-cost-error.png) | 已关联错误提示参考；真实保留快照、重读和权限仍待验 |
+| OpportunityProfitPanel.vue / aside.3 / cost-missing | inline-aside / related-scene-only | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | OpportunityProfitPanel.vue / form.1 / cost-missing | form-container / matching-inline-form-scene | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | OpportunityProfitPanel.vue / form.1 / cost-reviewers-empty | form-container / matching-inline-form-scene | [cost-reviewers-empty · 1440](design/sourcing-direction-c/1440-cost-reviewers-empty.png) / [cost-reviewers-empty · 390](design/sourcing-direction-c/390-cost-reviewers-empty.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | OpportunityProfitPanel.vue / form.1 / cost-submit-error | form-container / matching-inline-form-scene | [cost-submit-error · 1440](design/sourcing-direction-c/1440-cost-submit-error.png) / [cost-submit-error · 390](design/sourcing-direction-c/390-cost-submit-error.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | OpportunityProfitPanel.vue / form.1 / cost-recalculating | form-container / matching-inline-form-scene | [cost-recalculating · 1440](design/sourcing-direction-c/1440-cost-recalculating.png) / [cost-recalculating · 390](design/sourcing-direction-c/390-cost-recalculating.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
-| OpportunityProfitPanel.vue / aside.2 / cost-readonly | inline-aside / related-scene-only | [cost-readonly · 1440](design/sourcing-direction-c/1440-cost-readonly.png) / [cost-readonly · 390](design/sourcing-direction-c/390-cost-readonly.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
+| OpportunityProfitPanel.vue / aside.4 / cost-readonly | inline-aside / related-scene-only | [cost-readonly · 1440](design/sourcing-direction-c/1440-cost-readonly.png) / [cost-readonly · 390](design/sourcing-direction-c/390-cost-readonly.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | OpportunityCostReviewQueue.vue / form.1 / cost-review-approved | form-container / matching-inline-form-scene | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 | OpportunityCostReviewQueue.vue / form.1 / cost-review-rejected | form-container / matching-inline-form-scene | [cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png) | 主场景或表单对应，不抵扣全部控件适用态/主题/角色 |
 
@@ -2006,7 +2028,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | 关系键 | 源事件 / handler | 目标合同组 |
 | --- | --- | --- |
 | task.all.batch.forward | @start / previewBatch | task.batch.pause.open、task.batch.resume.open、task.batch.delay.open、task.batch.transfer.open、task.batch.cancel.open |
-| task.all.batch.forward | @close / showBatchImpact = false | task.batch.close |
+| task.all.batch.forward | @close / closeBatch | task.batch.close |
 | task.all.batch.forward | @confirm / confirmBatch | task.batch.submit |
 | task.all.batch.forward | @update:reason / batchReason = $event | task.batch.reason.change |
 | task.all.batch.forward | @update:due-at / batchDueAt = $event | task.batch.delay.due.change |
@@ -3927,7 +3949,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P47 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P47.json)：31个局部源位置 → 23组；1类写入，21组路由动作，1组转发/容器关联不重复计动作。已映射0/7个源码字段位置，2/2处调用/内嵌容器，2个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P47.json)：33个局部源位置 → 23组；1类写入，21组路由动作，1组转发/容器关联不重复计动作。已映射0/7个源码字段位置，2/2处调用/内嵌容器，2个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有90个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3938,15 +3960,15 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | PR47-NAV-SOURCES 来源频道导航 / navigation | 1处；source-channel | ；其余见JSON | 本地链接不证明来源频道角色授权。 |
 | PR47-NAV-1688 1688来源检查二级入口 / navigation | 1处；superadmin-visible、otherwise-hidden | ；其余见JSON | 前端v-if不是服务端授权证据。 |
 | PR47-NAV-CREDENTIALS 凭证目录二级入口 / navigation | 1处；superadmin-visible、otherwise-hidden | ；其余见JSON | 本地能力条件不证明真实服务端RBAC或凭证访问授权。 |
-| PR47-LOAD 读取或重读适配器状态目录 / read | 2处；initial、manual-refresh、retained-snapshot-retry、loading、error | ；其余见JSON | 本地映射不证明真实来源目录、provider:configure授权或服务端过期会话处理。 |
-| PR47-LOAD-WIRING 状态面板primary重读事件转发 / wiring | 1处；error-retry、retained-snapshot-retry | ；其余见JSON | 转发接线不证明状态面板完整文案、会话导航或真实权限。 |
+| PR47-LOAD 读取或重读适配器状态目录 / read | 3处；initial、manual-refresh、retained-snapshot-retry、loading、error | ；其余见JSON | 本地映射不证明真实来源目录、provider:configure授权或服务端过期会话处理。 |
+| PR47-LOAD-WIRING 状态面板primary重读事件转发 / wiring | 1处；error-retry、expired-login、forbidden-retry、blocked-retry | ；其余见JSON | 接线映射覆盖父处理器的过期登录与受阻重读分支，不证明真实会话、服务端权限或目标页授权。 |
 | PR47-SECONDARY-UNBOUND 未绑定父处理器的状态面板secondary / excluded | 1处；error、forbidden、blocked、expired | ；其余见JSON | 真实登录恢复目标属于安全/产品行为，本映射不擅自接入。 |
 | PR47-RESET 清除全部筛选与排序 / local | 2处；toolbar、empty-query、empty-status、empty-registration、combined-filter | ；其余见JSON | 仅描述客户端视图状态，不是服务端筛选或持久化偏好。 |
 | PR47-FILTER-DISCLOSURE 展开筛选与排序字段 / local | 1处；collapsed、expanded | ；其余见JSON | 原生details操作与完整读屏验收仍需运行时覆盖。 |
 | PR47-RECOVER-NAV 前往采集调度查看恢复入口 / navigation | 2处；desktop-row、mobile-detail、recovery-gate-closed-no-link | ；其余见JSON | 导航可见不等于恢复请求已提交、熔断已解除或拥有相应真实授权。 |
 | PR47-PROBE 对当前来源执行健康检查 / write | 2处；desktop、mobile-detail、pending、success、rejected | ；其余见JSON | POST会触达外部来源并记录健康事实；真实授权、外发、幂等、未知结果及MySQL未由静态映射证明。 |
 | PR47-PROBE-TRACE 展开当前来源检查追踪编号 / local | 1处；collapsed、expanded | ；其余见JSON | 展示编号不代表服务端动作成功或可对外复制。 |
-| PR47-READ-TRACE 展开目录读取追踪编号 / local | 1处；collapsed、expanded | ；其余见JSON | 读取request标识与探针request标识不可混为一条回执。 |
+| PR47-READ-TRACE 展开目录读取追踪编号 / local | 2处；collapsed、expanded | ；其余见JSON | 读取request标识与探针request标识不可混为一条回执。 |
 | PR47-TECH-DETAIL 展开移动来源技术详情 / local | 1处；collapsed、expanded、long-technical-value | ；其余见JSON | 技术披露不替代真实数据库事实、授权检查或完整屏幕阅读器验收。 |
 | PR47-PAGE-PREV 适配器目录上一页 / local | 1处；first-page-disabled、later-page-enabled | ；其余见JSON | 不是服务端分页或跨刷新位置。 |
 | PR47-PAGE-NEXT 适配器目录下一页 / local | 1处；last-page-disabled、later-page-enabled、filter-shrinks-page-count | ；其余见JSON | 客户端分页结果不证明服务端结果总数或数据完整性。 |
@@ -3961,7 +3983,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 关系键 | 源事件 / handler | 目标合同组 |
 | --- | --- | --- |
-| PR47-LOAD-WIRING | @primary / load | PR47-LOAD |
+| PR47-LOAD-WIRING | @primary / ['expired', 'forbidden', 'blocked'].includes(state) ? handleAccessPrimary() : load() | PR47-LOAD |
 
 ### 字段绑定（不重复计算为提交动作）
 
@@ -3985,9 +4007,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P48 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P48.json)：83个局部源位置 → 25组；4类写入，23组路由动作，2组转发/容器关联不重复计动作。已映射0/1个源码字段位置，0/1处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P48.json)：83个局部源位置 → 26组；4类写入，23组路由动作，3组转发/容器关联不重复计动作。已映射0/1个源码字段位置，0/1处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有150个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有156个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -4009,7 +4031,8 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | SC48-CONFIG 编辑来源采集配置及读取回执 / write | 18处；current-route-source-contract | ；其余见JSON | 本地用例不证明真实 provider:configure、MySQL版本竞争、外部烟测或审计持久化。 |
 | SC48-CONFIG-VERSION-DIALOG-WIRING 配置编辑与版本窗父子事件接线 / wiring | 2处；current-route-source-contract | ；其余见JSON | 事件接线映射不证明真实写入或角色权限。 |
 | SC48-VERSIONS 查看配置历史并按版本回滚 / write | 11处；current-route-source-contract | ；其余见JSON | 隔离用例不证明生产并发冲突、RBAC或MySQL审计结果。 |
-| SC48-COMPAT 只读查看来源解析兼容矩阵 / read | 9处；current-route-source-contract | ；其余见JSON | 读取失败、真实外部页面和保留策略仍需真实环境验证；矩阵不触发采集或自动启用。 |
+| SC48-COMPAT 只读查看来源解析兼容矩阵 / read | 7处；current-route-source-contract | ；其余见JSON | 读取失败、真实外部页面和保留策略仍需真实环境验证；矩阵不触发采集或自动启用。 |
+| SC48-COMPAT-DIALOG-WIRING 来源兼容矩阵弹窗父级接线 / wiring | 2处；current-route-source-contract | ；其余见JSON | 父级调用和关闭事件的静态映射不代表真实矩阵服务、权限或生产证据读取验收。 |
 | SC48-LOGIN 进入指定来源网页登录凭证 / navigation | 1处；current-route-source-contract | ；其余见JSON | 不在P48读取、展示或生成Cookie与凭证秘密。 |
 | SC48-SAMPLES 固定样本、快照回放与独立复核 / write | 17处；current-route-source-contract | ；其余见JSON | 本地合成响应不证明真实browser_job_id、独立管理员身份、权限、存储或外部浏览器执行。 |
 | SC48-ACCEPT 进入1688登录准备检查 / navigation | 1处；current-route-source-contract | ；其余见JSON | 真实门禁证据及资格由P49和服务端合同判定。 |
@@ -4037,6 +4060,8 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | SC48-CONFIG-VERSION-DIALOG-WIRING | @rollback / rollbackConfiguration | SC48-CONFIG、SC48-VERSIONS |
 | SC48-CONFIG-VERSION-DIALOG-WIRING | @update:form / Object.assign(form, $event) | SC48-CONFIG、SC48-VERSIONS |
 | SC48-CONFIG-VERSION-DIALOG-WIRING | @update:rollback-reason / rollbackReason = $event | SC48-CONFIG、SC48-VERSIONS |
+| SC48-COMPAT-DIALOG-WIRING | @close / closeCompatibility | SC48-COMPAT |
+| SC48-COMPAT-DIALOG-WIRING | @close / closeCompatibility | SC48-COMPAT |
 | SC48-DIRECTORY-EVENT-WIRING | @page-change / changePage | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |
 | SC48-DIRECTORY-EVENT-WIRING | @test / testSource | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |
 | SC48-DIRECTORY-EVENT-WIRING | @edit / beginEdit | SC48-PAGE、SC48-PROBE、SC48-CONFIG、SC48-COMPAT、SC48-VERSIONS、SC48-LOGIN、SC48-SAMPLES |

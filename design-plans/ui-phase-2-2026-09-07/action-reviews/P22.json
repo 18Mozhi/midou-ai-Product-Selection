@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CostRuleConsole.vue": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+    "apps/web/src/components/CostRuleConsole.vue": "dce38bc1513e2aeec91b42f0ac85e21f6363a5fd21786bafe956590051ae23bf"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",

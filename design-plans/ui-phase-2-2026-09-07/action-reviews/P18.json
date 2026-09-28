@@ -3124,6 +3124,27 @@
         ]
       },
       {
+        "file": "apps/web/src/components/OpportunityDetailNavigation.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "桌面十区侧栏目录与手机折叠目录共享当前分区，点击只切换现有详情tab",
+        "remaining": "目录结构与双端场景已关联；不代表十区全部动作、焦点/读屏或真实详情读取验收。",
+        "variants": [
+          {
+            "name": "directory-open",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "opportunity-detail-direction-c",
+                "scene": "directory-open"
+              }
+            ],
+            "remaining": "代表性双端目录场景，不覆盖每个分区目标、所有键盘状态或真实Vue/API验收。"
+          }
+        ]
+      },
+      {
         "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
         "tag": "form",
         "ordinal": 1,
@@ -3170,7 +3191,39 @@
         "tag": "aside",
         "ordinal": 1,
         "shape": "inline-aside",
-        "sourceBehavior": "无latest_run或insufficient_data时缺失说明",
+        "sourceBehavior": "利润GET进行中时显示读取提示；读取失败时显示错误、追踪号及GET-only重试",
+        "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
+        "variants": [
+          {
+            "name": "profit-loading",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "profit-direction-c",
+                "scene": "loading"
+              }
+            ],
+            "remaining": "相关离线场景不是全部状态/主题/真实Vue验收。"
+          },
+          {
+            "name": "profit-read-error",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "profit-direction-c",
+                "scene": "read-error"
+              }
+            ],
+            "remaining": "读取失败与上次快照保留的组合图；不证明真实API或权限验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "读取成功但没有latest_run或运行状态insufficient_data时说明缺失项，不生成ROI",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
         "variants": [
           {
@@ -3191,6 +3244,27 @@
               {
                 "package": "profit-direction-c",
                 "scene": "no-run"
+              }
+            ],
+            "remaining": "相关离线场景不是全部状态/主题/真实Vue验收。"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "tag": "aside",
+        "ordinal": 3,
+        "shape": "inline-aside",
+        "sourceBehavior": "canConfirmCost=false时显示成本只读说明，复核队列仍按item.can_review独立渲染",
+        "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
+        "variants": [
+          {
+            "name": "cost-readonly",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "profit-direction-c",
+                "scene": "readonly"
               }
             ],
             "remaining": "相关离线场景不是全部状态/主题/真实Vue验收。"
@@ -3243,9 +3317,9 @@
       {
         "file": "apps/web/src/components/OpportunityProfitPanel.vue",
         "tag": "aside",
-        "ordinal": 2,
+        "ordinal": 4,
         "shape": "inline-aside",
-        "sourceBehavior": "无canConfirmCost时只读说明，复核队列仍按item.can_review独立渲染",
+        "sourceBehavior": "canConfirmCost=false时显示成本只读说明，复核队列仍按item.can_review独立渲染",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
         "variants": [
           {
