@@ -125,10 +125,11 @@ export async function verifyCostRulesReview() {
     s.search.value = "B";
     await nextTick();
     assert.equal(s.selected.value.id, "B");
-    assert.equal(s.route.query.rule, "A");
+    assert.equal(s.route.query.rule, "B");
+    assert.equal(s.route.query.search, undefined);
     assert.equal(s.calls.length, 1);
     checks.push(
-      "Actual filtered auto-selection changes selected to B but leaves rule=A query and sends no HTTP",
+      "Filtered auto-selection synchronizes only the selected rule ID to the query and sends no HTTP",
     );
 
     s = setup();
@@ -137,13 +138,13 @@ export async function verifyCostRulesReview() {
     await nextTick();
     s.route.query = { rule: "B" };
     await nextTick();
-    assert.equal(s.selected.value.id, "A");
+    assert.equal(s.selected.value.id, "B");
     s.replies.push(ok([rule("A"), rule("B")]));
     await s.load();
     await nextTick();
-    assert.equal(s.selected.value.id, "A");
+    assert.equal(s.selected.value.id, "B");
     checks.push(
-      "Actual query-only change has no local watcher; load prefers existing A over query B; parent/history integration not inferred",
+      "Query-only selection changes follow the requested rule and subsequent reads preserve it",
     );
     return { existingChecks: existing.checks.length, checks, limits: existing.limits };
   } finally {

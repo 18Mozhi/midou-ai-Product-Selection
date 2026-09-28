@@ -32,15 +32,19 @@
 | 操作关闭/取消/Escape | 同closeAction；busy拒绝关闭，不撤销已发请求 | 七变体；右上X与底部取消的disabled差异仍在 |
 | 确认操作 | reason trim至少2，版本取提交时selected；按操作附role/target；post单飞 | 七confirm/busy/conflict；原生maxlength与函数校验分层 |
 
-## 本轮新增可执行证据
+## 历史缺口复现证据（2026-09-27；已于2026-09-28修复）
 
 新增永久`node scripts/verify-ui-phase2-cost-rules-review.mjs`。复用原9组源码检查，再执行3组真实setup隔离检查；无浏览器DOM、真实HTTP、数据库或审批写入。
 
-1. **确认目标归属缺口已复现**：选A并打开提交审批，输入“A的依据”；另一次load只返回B后，窗口仍开、原因仍属于A，但selected已变B；确认发送`/cost-rules/B/actions`及B的revision=11。原beginAction只存action/role，不存规则ID/版本。此证据证明setup组合可发生目标漂移；尚未证明正常鼠标路径下如何触发该读取，不夸大为生产误审批事件。
-2. **本地筛选与URL不同步**：初始rule=A，筛选B后selected自动变B，但query.rule仍A，过程没有新增HTTP。不能把自动选择和显式selectRule的URL行为视为相同。
-3. **query变化不自动换规则**：仅将query.rule改B不触发本地load或换选中；随后load仍优先保留存在的A。尚未覆盖父路由复用/history集成，不据此直接宣称浏览器后退失效。
+1. **确认目标归属缺口曾复现**：选A并打开提交审批，输入“A的依据”；另一次load只返回B后，窗口仍开、原因仍属于A，但selected曾变B；旧隔离脚本观察到操作会漂到B。已由操作快照固定规则 ID、显示上下文和 `expected_revision` 修复；桌面/390px真实挂载回归现验证路由选择切至B后确认仍只向A提交。
+2. **本地筛选与URL曾不同步**：初始rule=A，筛选B曾令selected变B但query.rule仍A。现在筛选/分页自动选择与显式选择统一写入 rule ID；搜索/状态筛选本身仍为本地状态且不进入 query。挂载 Vue 双端回归覆盖。
+3. **query变化曾不更新已挂载选择**：query.rule改为B曾不会换选中。现在 query-only history/popstate 变更会选择目标；若目标被本地筛选隐藏则清除本地筛选；后续load也优先按有效 query 恢复。挂载 Vue 双端回归覆盖。
 
 原9组同时继续验证四项空值阻止提交/显式0、可选物流和CNY→表单币种、权限加真实角色、同范围回滚、七个准确payload、POST单飞/关闭、初始第2页选择、草稿成功仍draft及SC-G05晚GET覆盖。所有样例ID、原因、响应为隔离数据。新脚本若源行为变化会失败，需根据实际修复更新预期，不能把当前缺陷永远作为正确产品合同。
+
+## 2026-09-28 · 选择 query 与确认操作目标闭环
+
+`CostRuleConsole`现将有效 `route.query.rule` 作为加载/刷新优先选择；本地筛选或分页导致自动换选中时只同步 `rule` ID，不持久化筛选字段；已挂载页面接到 query-only 路由变化时同步选中项，并确保该规则可见。确认窗目标仍取 `beginAction` 打开时快照。新增桌面 Chromium 与390px手机的三项 mounted Vue 场景：筛选/分页 URL 对齐、history/popstate选择恢复、操作确认期间切换规则仍精确提交A及A的revision；完整 M04-04 桌面与390px套件各13/13通过。旧 P22 页面图稿快照与现行 C 实际 Vue 存在旧布局差异，只更新对应成本规则页面桌面/手机快照，其余截图未变。原隔离 setup 检查现有9项加修复核验4项通过。上述本地测试不证明真实角色、数据库、审批服务或浏览器辅助技术。
 
 ## 实施时必须保持的边界
 

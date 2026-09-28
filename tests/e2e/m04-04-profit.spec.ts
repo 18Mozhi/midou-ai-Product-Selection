@@ -336,6 +336,107 @@ test("M04-04 cost rule console paginates accumulated versions", async ({ page })
   await expect(page.locator(".cost-rule-list > button")).toHaveCount(2);
   await expect(page.getByText("第 2 / 2 页", { exact: true })).toBeVisible();
   await expect(page.getByRole("heading", { name: "历史规则 11", level: 3 })).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`rule=${accumulated[10].id}`));
+});
+
+test("M04-04 selected cost rule stays aligned with the route query", async ({ page }) => {
+  await navigation(page, { roles: ["auditor"], capabilities: ["opportunity:read"] });
+  const rules = ["A", "B"].map((id) => ({
+    id: `00000000-0000-4000-8000-${id === "A" ? "000000000461" : "000000000462"}`,
+    market: "US",
+    platform: "amazon",
+    version_code: `route-${id}`,
+    name: `${id}规则`,
+    status: "retired",
+    fee_lines: [],
+    conversion_rates: [],
+    automatic_scope: null,
+    effective_from: "2026-08-25",
+    revision: 4,
+    approvals: ["selection_manager", "organization_admin"],
+    published_at: "2026-08-25T01:00:00.000Z",
+    updated_at: "2026-08-25T01:00:00.000Z",
+  }));
+  await page.route("**/api/v1/cost-rules", (route) => route.fulfill({ json: envelope(rules) }));
+  await page.goto(`/sourcing/cost-rules?rule=${rules[0].id}`);
+  await expect(page.getByRole("heading", { name: "A规则", level: 3 })).toBeVisible();
+
+  const search = page.getByRole("searchbox", { name: "搜索规则" });
+  await search.fill("B规则");
+  await expect(page.getByRole("heading", { name: "B规则", level: 3 })).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`rule=${rules[1].id}`));
+  expect(new URL(page.url()).searchParams.has("search")).toBe(false);
+
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/sourcing/cost-rules?rule=${id}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, rules[0].id);
+  await expect(page.getByRole("heading", { name: "A规则", level: 3 })).toBeVisible();
+  await expect(search).toHaveValue("");
+
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/sourcing/cost-rules?rule=${id}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, rules[1].id);
+  await expect(page.getByRole("heading", { name: "B规则", level: 3 })).toBeVisible();
+});
+
+test("M04-04 open action stays bound to its rule when the route selection changes", async ({
+  page,
+}) => {
+  await navigation(page, { roles: ["selection_manager"] });
+  const makeRule = (id: string, name: string) => ({
+    id,
+    market: "US",
+    platform: "amazon",
+    version_code: name,
+    name,
+    status: "draft",
+    fee_lines: [],
+    conversion_rates: [],
+    automatic_scope: null,
+    effective_from: "2026-08-25",
+    revision: 4,
+    approvals: [],
+    published_at: null,
+    updated_at: "2026-08-25T01:00:00.000Z",
+  });
+  const ruleA = makeRule("00000000-0000-4000-8000-000000000471", "A费用规则"),
+    ruleB = makeRule("00000000-0000-4000-8000-000000000472", "B费用规则");
+  let currentRules = [ruleA, ruleB];
+  let submitted: { id: string; body: Record<string, unknown> } | null = null;
+  await page.route("**/api/v1/cost-rules", (route) =>
+    route.fulfill({ json: envelope(currentRules) }),
+  );
+  await page.route("**/api/v1/cost-rules/*/actions", async (route) => {
+    const id = new URL(route.request().url()).pathname.split("/").at(-2)!;
+    submitted = { id, body: route.request().postDataJSON() as Record<string, unknown> };
+    currentRules = [{ ...ruleA, status: "pending_approval", revision: 5 }, ruleB];
+    await route.fulfill({
+      json: envelope({ ...ruleA, status: "pending_approval", revision: 5 }),
+    });
+  });
+  await page.goto(`/sourcing/cost-rules?rule=${ruleA.id}`);
+  await expect(page.getByRole("heading", { name: "A费用规则", level: 3 })).toBeVisible();
+  await page.getByRole("button", { name: "提交审批" }).click();
+  const dialog = page.getByRole("dialog", { name: "提交费用规则审批" });
+  await dialog.getByLabel("操作原因（至少 2 个字）").fill("提交 A 规则审议");
+
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/sourcing/cost-rules?rule=${id}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, ruleB.id);
+  await expect(page.getByRole("heading", { name: "B费用规则", level: 3 })).toBeVisible();
+  await dialog.getByRole("button", { name: "确认提交审批" }).click();
+  await expect.poll(() => submitted).not.toBeNull();
+  expect(submitted).toEqual({
+    id: ruleA.id,
+    body: {
+      action: "submit",
+      reason: "提交 A 规则审议",
+      expected_revision: 4,
+    },
+  });
 });
 
 test("M04-04 cost rule console exposes audited reject and rollback", async ({ page }) => {

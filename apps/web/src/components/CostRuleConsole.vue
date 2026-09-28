@@ -316,8 +316,8 @@ async function load() {
     rules.value = response.data.map(normalizeRule);
     const routeRuleId = typeof route.query.rule === "string" ? route.query.rule : "";
     selected.value =
-      rules.value.find((item) => item.id === selected.value?.id) ??
       rules.value.find((item) => item.id === routeRuleId) ??
+      rules.value.find((item) => item.id === selected.value?.id) ??
       rules.value[0] ??
       null;
     const selectedIndex = filteredRules.value.findIndex((item) => item.id === selected.value?.id);
@@ -514,10 +514,37 @@ watch(pageCount, (count) => {
 watch(pagedRules, (items) => {
   if (!items.length) {
     selected.value = null;
+    if (typeof route.query.rule === "string") {
+      const { rule: _rule, ...query } = route.query;
+      void router.replace({ query });
+    }
     return;
   }
-  if (!items.some((item) => item.id === selected.value?.id)) selected.value = items[0] ?? null;
+  if (!items.some((item) => item.id === selected.value?.id) && items[0]) selectRule(items[0]);
 });
+watch(
+  () => route.query.rule,
+  (value) => {
+    const id = typeof value === "string" ? value : "";
+    if (!id) {
+      const firstVisible = pagedRules.value[0];
+      if (firstVisible && firstVisible.id !== selected.value?.id) selectRule(firstVisible, false);
+      return;
+    }
+    const target = rules.value.find((item) => item.id === id);
+    if (!target) {
+      if (state.value === "ready" || state.value === "empty") void load();
+      return;
+    }
+    if (!filteredRules.value.some((item) => item.id === target.id)) {
+      search.value = "";
+      statusFilter.value = "all";
+    }
+    selected.value = target;
+    const targetIndex = filteredRules.value.findIndex((item) => item.id === target.id);
+    if (targetIndex >= 0) page.value = Math.floor(targetIndex / pageSize) + 1;
+  },
+);
 
 onMounted(load);
 </script>
