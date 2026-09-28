@@ -861,7 +861,12 @@ html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-
   background: #f5f8fc;
   color: #182d4a;
 }
-html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure > :not(button) {
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  > :not(button) {
   grid-column: 1;
 }
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure > small {
@@ -876,7 +881,12 @@ html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-
   font-size: 18px;
   line-height: 1.5;
 }
-html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure :is(p, span) {
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  :is(p, span) {
   margin: 0;
   color: #52647a;
   font-size: 14px;
@@ -895,7 +905,9 @@ html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-
   display: block;
   padding: 8px 0;
   color: #52647a;
-  font: 13px/1.6 Consolas, monospace;
+  font:
+    13px/1.6 Consolas,
+    monospace;
   overflow-wrap: anywhere;
 }
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure button {
@@ -910,7 +922,12 @@ html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-
   color: white;
   font-size: 14px;
 }
-html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure :is(summary, button):focus-visible,
+html
+  body:has(#app .adapter-center--c)
+  #app
+  .adapter-center--c
+  .adapter-refresh-failure
+  :is(summary, button):focus-visible,
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-heading:focus {
   outline: 3px solid #185adb;
   outline-offset: 3px;

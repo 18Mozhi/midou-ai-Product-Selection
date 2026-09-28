@@ -68,13 +68,17 @@ test("P47 production refresh failure UI and archived proposal preserve request/f
     "window.setTimeout(() => controller.abort(), 12_000)",
     'method: "POST"',
     "probeRevision += 1",
-  ]) assert.ok(production.includes(preserved), preserved);
+  ])
+    assert.ok(production.includes(preserved), preserved);
   assert.ok(production.includes('refreshNotice.value = "failure"'));
   assert.ok(production.includes('refreshNotice.value = "success"'));
   assert.ok(production.includes('refreshNotice.value = "none"'));
   assert.ok(production.includes("function retryRefresh(event: MouseEvent)"));
-  assert.ok(production.indexOf('class="adapter-refresh-failure"') < production.indexOf("<ResponsiveDataView"));
-  assert.ok(production.includes('message && refreshNotice !== \'failure\''));
+  assert.ok(
+    production.indexOf('class="adapter-refresh-failure"') <
+      production.indexOf("<ResponsiveDataView"),
+  );
+  assert.ok(production.includes("message && refreshNotice !== 'failure'"));
   assert.equal(review.split("retryRefresh").length, 3);
   assert.equal(review.split('refreshNotice.value = "none"').length, 3);
   assert.equal(review.split('refreshNotice.value = "success"').length, 2);
@@ -118,11 +122,12 @@ test("P47 inline retry wrapper targets only a live local persistent heading", ()
 });
 
 test("P47 production refresh failure CSS stays scoped to the active adapter page", () => {
-  const css = postcss.parse(
-    read("apps/web/src/provider-adapters-c-page.css"),
-  );
+  const css = postcss.parse(read("apps/web/src/provider-adapters-c-page.css"));
   css.walkRules((rule) => {
-    if (!rule.selector.includes(".adapter-refresh-failure") && !rule.selector.includes(".adapter-heading:focus"))
+    if (
+      !rule.selector.includes(".adapter-refresh-failure") &&
+      !rule.selector.includes(".adapter-heading:focus")
+    )
       return;
     for (const selector of rule.selectors) {
       assert.ok(selector.includes(".adapter-center--c"));

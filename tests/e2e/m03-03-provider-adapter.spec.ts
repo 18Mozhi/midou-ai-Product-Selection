@@ -167,14 +167,22 @@ test("P47 refresh failure keeps the prior snapshot and explicit retry returns su
       return route.fulfill({
         status: 200,
         contentType: "application/json",
-        body: JSON.stringify({ data: items, request_id: "p47-refresh-old", trace_id: "p47-refresh-old" }),
+        body: JSON.stringify({
+          data: items,
+          request_id: "p47-refresh-old",
+          trace_id: "p47-refresh-old",
+        }),
       });
     if (reads === 2)
       return route.fulfill({
         status: 409,
         contentType: "application/json",
         body: JSON.stringify({
-          error: { code: "snapshot_conflict", message: "请求失败", action_hint: "当前服务暂不可读取" },
+          error: {
+            code: "snapshot_conflict",
+            message: "请求失败",
+            action_hint: "当前服务暂不可读取",
+          },
           request_id: "p47-refresh-failed",
           trace_id: "p47-refresh-failed",
         }),
@@ -184,7 +192,9 @@ test("P47 refresh failure keeps the prior snapshot and explicit retry returns su
       status: 200,
       contentType: "application/json",
       body: JSON.stringify({
-        data: items.map((item, index) => (index ? item : { ...item, name: "公开趋势 RSS（已更新）" })),
+        data: items.map((item, index) =>
+          index ? item : { ...item, name: "公开趋势 RSS（已更新）" },
+        ),
         request_id: "p47-refresh-recovered",
         trace_id: "p47-refresh-recovered",
       }),
@@ -196,9 +206,13 @@ test("P47 refresh failure keeps the prior snapshot and explicit retry returns su
     await page.getByLabel("搜索来源", { exact: true }).fill("公开趋势");
     await expect(page.getByText("1 个结果", { exact: true })).toBeVisible();
     await page.getByRole("button", { name: "刷新状态", exact: true }).click();
-    const notice = page.getByRole("status").filter({ has: page.getByRole("heading", { name: "最新状态暂未更新" }) });
+    const notice = page
+      .getByRole("status")
+      .filter({ has: page.getByRole("heading", { name: "最新状态暂未更新" }) });
     await expect(notice).toBeVisible();
-    await expect(notice.getByText("当前仍显示上一次成功读取的数据，可以继续查看。", { exact: true })).toBeVisible();
+    await expect(
+      notice.getByText("当前仍显示上一次成功读取的数据，可以继续查看。", { exact: true }),
+    ).toBeVisible();
     await expect(notice.getByText("当前服务暂不可读取", { exact: true })).toBeVisible();
     await expect(notice.getByText("2 个结果", { exact: true })).toHaveCount(0);
     await expect(page.getByText("1 个结果", { exact: true })).toBeVisible();
@@ -215,7 +229,9 @@ test("P47 refresh failure keeps the prior snapshot and explicit retry returns su
     expect(reads).toBe(3);
     releaseRetry();
     if (testInfo.project.name === "mobile-390")
-      await expect(page.getByRole("button", { name: /公开趋势 RSS（已更新）.*查看详情/ })).toBeVisible();
+      await expect(
+        page.getByRole("button", { name: /公开趋势 RSS（已更新）.*查看详情/ }),
+      ).toBeVisible();
     else await expect(page.getByText("公开趋势 RSS（已更新）", { exact: true })).toBeVisible();
     await expect(page.getByText("已刷新 2 个来源适配器状态", { exact: true })).toBeVisible();
     expect(reads).toBe(3);
