@@ -1543,8 +1543,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-    "apps/web/src/components/CompetitorMonitor.vue": "b8d07f2fa4d4fc67ce403ee5763d8b0bb743d097e0121af77261d2f5c07f2f5a",
-      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/components/CompetitorMonitor.vue": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
       "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
       "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",

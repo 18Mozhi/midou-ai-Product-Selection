@@ -340,7 +340,7 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 
 ## 10. P48 来源目录当前源码身份复核（2026-09-24）
 
-P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、分页、写入及弹窗编排，目录事实与详情交互拆在 `ProviderSourceDirectory.vue`。本节为拆分后P48的当前源位置与既有SC48合同做静态归属；不新增API、业务动作、授权或来源启用规则。ProviderSourceCenter共16个候选，其中15个身份变化；ProviderSourceDirectory有12个候选。详情开合与父子emit属于本地展示/转发，不另算外部或持久化动作。
+P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、分页、写入及弹窗编排，目录事实与详情交互拆在 `ProviderSourceDirectory.vue`。本节为拆分后P48的当前源位置与既有SC48合同做静态归属；不新增API、业务动作、授权或来源启用规则。ProviderSourceCenter共18个候选，其中17个身份变化；ProviderSourceDirectory有12个候选。详情开合与父子emit属于本地展示/转发，不另算外部或持久化动作。
 
 ### S
 
@@ -360,8 +360,8 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | S:7f36e42eb80bca2d.1 | dialog-component-call / 902 | SC48-CONFIG/VERSIONS / 配置与版本弹窗调用 |
 | S:aebc04fe71463aa3.1 | event-binding / 930 | SC48-SAMPLES / 样本弹窗读写、复核与恢复事件转发 |
 | S:e86a06afbe712ab0.1 | dialog-component-call / 930 | SC48-SAMPLES / 固定样本弹窗调用 |
-| S:8665cbf979729f72.1 | event-binding / 951 | SC48-COMPAT / 兼容矩阵关闭事件转发 |
-| S:1c8002dd18f07872.1 | dialog-component-call / 951 | SC48-COMPAT / 兼容矩阵弹窗调用 |
+| S:26dd5da19bf14533.1 | event-binding / 965 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗关闭事件转发 |
+| S:db583a9e271b4426.1 | dialog-component-call / 965 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗调用 |
 
 ### D
 
@@ -380,7 +380,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | D:6f7e71d427cb36b9.1 | control / 227 | SC48-PAGE / 上一页 |
 | D:f3f3456654086e7b.1 | control / 239 | SC48-PAGE / 下一页 |
 
-| apps/web/src/components/ProviderSourceCenter.vue | 26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a |
+| apps/web/src/components/ProviderSourceCenter.vue | 048976204d5d9abd9010d64f79d50aa56a9b5206890a1596e509cbd23a694d50 |
 | apps/web/src/components/ProviderSourceDirectory.vue | ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34 |
 
 两文件身份和当前LF归一指纹可由定向审计与单测复验。此处不代表真实API、来源权限、匿名外发烟测、数据库写入或M07-03生产签收通过。

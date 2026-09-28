@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityWorkspace.vue": "5184f942a04f8efcab902e5eeeb2a7b727cac6d2a678c2b15e085384ab26a8e1",
+    "apps/web/src/components/OpportunityWorkspace.vue": "b426305a36996b5b76c8f836be5ebc0cec3476f2447e3fe60c23780181c20781",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
@@ -1469,19 +1469,17 @@
       "routeApplicability": "P18-normal-entry-excluded-from-P15",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#7219811dcc02cc91.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1",
         "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
         "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
         "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
         "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
         "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
         "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#8dfb1ee903d0b053.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#badd0afd80b50ce6.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#1aef42d09991a143.1",
         "apps/web/src/components/OpportunityWorkspace.vue#65bed8657e147596.1",
         "apps/web/src/components/OpportunityWorkspace.vue#3e5dca6610ac19d8.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
         "apps/web/src/components/OpportunityWorkspace.vue#76ae53c237c00264.1",
         "apps/web/src/components/OpportunityWorkspace.vue#b413cc394b21a4ed.1",
         "apps/web/src/components/OpportunityWorkspace.vue#3d03bfde11490c97.1",
@@ -1490,16 +1488,14 @@
       ],
       "sourceContractKeys": [
         "OP-RETURN",
-        "OP-DETAIL-RETRY",
+        "OP-DETAIL-RETRY；secondary继续既有OP-RETURN行为",
         "OP-RUNTIME-DETAILS",
         "OP-DECISION-OPEN/OP-EVIDENCE-TASK转发",
         "OP-MANUAL-COLLECTION-DETAILS",
         "OP-COMPETITOR-DISCOVER",
         "OP-SUPPLIER-DISCOVER",
         "OP-SCORE-RULES",
-        "OP-TAB：四主分区",
-        "OP-MORE-ANALYSIS",
-        "OP-TAB：六辅助分区",
+        "OP-TAB select事件转发到setTab",
         "竞品/供应采集、评分、下游重读转发",
         "OP-FEEDBACK-SUBMIT转发",
         "成本提交/复核/利润重算/复核人GET重试转发",
@@ -1711,8 +1707,8 @@
       "kind": "wiring",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1"
+        "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1"
       ],
       "sourceContractKeys": ["创建/决定/ERP浏览器/文件导入转发", "三类业务弹窗集合调用"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
@@ -1753,49 +1749,49 @@
       "forwardsTo": ["OP-CREATE-SUBMIT", "OP-DECISION-EXCLUDED", "OP-ERP-BROWSER", "OP-ERP-FILE"],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
           "event": "@create",
           "handler": "create",
           "targets": ["OP-CREATE-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
           "event": "@decide",
           "handler": "decide",
           "targets": ["OP-DECISION-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
           "targets": ["OP-ERP-BROWSER"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
           "event": "@import-file",
           "handler": "importErpFile",
           "targets": ["OP-ERP-FILE"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
           "event": "@create",
           "handler": "create",
           "targets": ["OP-CREATE-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
           "event": "@decide",
           "handler": "decide",
           "targets": ["OP-DECISION-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
           "targets": ["OP-ERP-BROWSER"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
           "event": "@import-file",
           "handler": "importErpFile",
           "targets": ["OP-ERP-FILE"]
@@ -1993,13 +1989,13 @@
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "5184f942a04f8efcab902e5eeeb2a7b727cac6d2a678c2b15e085384ab26a8e1",
+      "apps/web/src/components/OpportunityWorkspace.vue": "b426305a36996b5b76c8f836be5ebc0cec3476f2447e3fe60c23780181c20781",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
-      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
-      "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",
+      "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
+      "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/components/opportunity-workspace-forms.ts": "1ddc4c6c122c42d05d8a47648b0ea2ab121218d9ff12e8d81c8cc6706785e6dd",
       "apps/web/src/automatic-selection-readiness.ts": "8ee0c2efad0138393a5071a7798560477db812a3463a0f9312c5a4a753b99487",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",

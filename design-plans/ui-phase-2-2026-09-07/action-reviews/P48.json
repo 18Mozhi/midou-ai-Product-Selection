@@ -11,7 +11,7 @@
     "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9",
     "apps/web/src/components/ProviderParserSampleDialog.vue": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6",
     "apps/web/src/components/ProviderParserSampleReview.vue": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8",
-    "apps/web/src/components/ProviderSourceCenter.vue": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a",
+    "apps/web/src/components/ProviderSourceCenter.vue": "048976204d5d9abd9010d64f79d50aa56a9b5206890a1596e509cbd23a694d50",
     "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f",
     "apps/web/src/components/ProviderSourceDirectory.vue": "ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34",
     "apps/web/src/components/ProviderSourceEditDialog.vue": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
@@ -846,8 +846,6 @@
         "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#4e008aa9606a1b01.1",
         "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#de2e72710c0578f2.1",
         "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#e0fca0e8a134dc18.1",
-        "apps/web/src/components/ProviderSourceCenter.vue#1c8002dd18f07872.1",
-        "apps/web/src/components/ProviderSourceCenter.vue#8665cbf979729f72.1",
         "apps/web/src/components/ProviderSourceDirectory.vue#e6b03d1f68d67db6.1"
       ],
       "condition": "指定来源存在兼容矩阵入口。",
@@ -877,11 +875,65 @@
         "SC48-COMPAT / 弹窗焦点键盘事件",
         "SC48-COMPAT / 展开完整页面SHA-256指纹",
         "SC48-COMPAT / 页面版本兼容观测弹窗定义",
-        "SC48-COMPAT / 兼容矩阵弹窗调用",
-        "SC48-COMPAT / 兼容矩阵关闭事件转发",
         "SC48-COMPAT / 打开解析兼容矩阵"
       ],
       "contractAliasReason": "现有合同对SC48-COMPAT的源位置分别说明；此组仅按相同业务语义归并，不扩大动作范围。"
+    },
+    {
+      "actionId": "SC48-COMPAT-DIALOG-WIRING",
+      "label": "来源兼容矩阵弹窗父级接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/ProviderSourceCenter.vue#26dd5da19bf14533.1",
+        "apps/web/src/components/ProviderSourceCenter.vue#db583a9e271b4426.1"
+      ],
+      "condition": "P48来源目录设置了当前兼容矩阵目标。",
+      "handler": "ProviderSourceCenter仅调用loadCompatibility并响应子窗close；资格与读取仍由既有SC48-COMPAT处理。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p48-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "父级调用和关闭事件的静态映射不代表真实矩阵服务、权限或生产证据读取验收。",
+      "sourceContractKeys": [
+        "SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗关闭事件转发",
+        "SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗调用"
+      ],
+      "contractAliasReason": "父级只按已有compatibilitySource打开只读矩阵并转发close，不增加读取动作或来源能力。",
+      "forwardsTo": [
+        "SC48-COMPAT"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#26dd5da19bf14533.1",
+          "event": "@close",
+          "handler": "closeCompatibility",
+          "targets": [
+            "SC48-COMPAT"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#db583a9e271b4426.1",
+          "event": "@close",
+          "handler": "closeCompatibility",
+          "targets": [
+            "SC48-COMPAT"
+          ]
+        }
+      ]
     },
     {
       "actionId": "SC48-LOGIN",
@@ -1229,7 +1281,7 @@
       "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9",
       "apps/web/src/components/ProviderParserSampleDialog.vue": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6",
       "apps/web/src/components/ProviderParserSampleReview.vue": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8",
-      "apps/web/src/components/ProviderSourceCenter.vue": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a",
+      "apps/web/src/components/ProviderSourceCenter.vue": "048976204d5d9abd9010d64f79d50aa56a9b5206890a1596e509cbd23a694d50",
       "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f",
       "apps/web/src/components/ProviderSourceDirectory.vue": "ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34",
       "apps/web/src/components/ProviderSourceEditDialog.vue": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",

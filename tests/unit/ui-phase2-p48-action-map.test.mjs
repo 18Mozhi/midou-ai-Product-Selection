@@ -22,8 +22,8 @@ const sourceHashes = Object.fromEntries(
     createHash("sha256").update(source).digest("hex"),
   ]),
 );
-const candidates = Object.entries(sources).flatMap(([file, source]) =>
-  scanSource(source, file).candidates,
+const candidates = Object.entries(sources).flatMap(
+  ([file, source]) => scanSource(source, file).candidates,
 );
 const files = new Set(
   review.actions.flatMap((action) => action.testReferences.map((reference) => reference.file)),
@@ -51,6 +51,10 @@ test("P48 maps all current local source candidates to existing SC48 semantics", 
     review.actions.find((action) => action.actionId === "SC48-CONFIG-VERSION-DIALOG-WIRING")
       .forwardsTo,
     ["SC48-CONFIG", "SC48-VERSIONS"],
+  );
+  assert.deepEqual(
+    review.actions.find((action) => action.actionId === "SC48-COMPAT-DIALOG-WIRING").forwardsTo,
+    ["SC48-COMPAT"],
   );
   assert.equal(review.actions.find((action) => action.actionId === "SC48-PROBE").kind, "write");
   assert.equal(review.actions.find((action) => action.actionId === "SC48-SAMPLES").kind, "write");

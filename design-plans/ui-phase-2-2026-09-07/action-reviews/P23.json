@@ -1507,7 +1507,7 @@
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1",
           "event": "@close",
-          "handler": "showBatchImpact = false",
+          "handler": "closeBatch",
           "targets": [
             "task.batch.close"
           ]

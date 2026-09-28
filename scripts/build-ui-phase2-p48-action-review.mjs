@@ -37,7 +37,8 @@ const definitions = {
     actionId: "SC48-LOAD-OR-LOGIN",
     label: "按目录失败状态重新读取或重新登录",
     kind: "local",
-    contractAliasReason: "同一条件按钮依据当前失败状态选择现有目录重读或登录导航，不合并为服务端写入。",
+    contractAliasReason:
+      "同一条件按钮依据当前失败状态选择现有目录重读或登录导航，不合并为服务端写入。",
     condition: "目录失败反馈可见且非读取中。",
     handler: "按现有状态调用目录 GET，或导航至登录页；不重发任何来源配置或采集请求。",
     remaining: "真实会话失效、平台角色与服务端授权仍需独立验证。",
@@ -55,7 +56,8 @@ const definitions = {
     label: "展开筛选与更新本地筛选条件",
     kind: "local",
     condition: "来源筛选区可见。",
-    handler: "受控表单阻止原生提交；筛选展开状态和七类查询值交由既有父组件本地过滤/排序，不构造外部采集请求。",
+    handler:
+      "受控表单阻止原生提交；筛选展开状态和七类查询值交由既有父组件本地过滤/排序，不构造外部采集请求。",
     remaining: "本映射确认源码边界，不代表所有字段组合、URL后退前进或真实浏览器全状态均已验收。",
   },
   "SC48-QUERY": {
@@ -183,6 +185,18 @@ const definitions = {
       "打开并读取当前适配器版本与保留期内的页面 DOM/HTML 版本证据；只披露摘要、状态和指纹，不读取或展示页面正文。",
     remaining: "读取失败、真实外部页面和保留策略仍需真实环境验证；矩阵不触发采集或自动启用。",
   },
+  "SC48-COMPAT-DIALOG-WIRING": {
+    actionId: "SC48-COMPAT-DIALOG-WIRING",
+    label: "来源兼容矩阵弹窗父级接线",
+    kind: "wiring",
+    contractAliasReason:
+      "父级只按已有compatibilitySource打开只读矩阵并转发close，不增加读取动作或来源能力。",
+    condition: "P48来源目录设置了当前兼容矩阵目标。",
+    handler:
+      "ProviderSourceCenter仅调用loadCompatibility并响应子窗close；资格与读取仍由既有SC48-COMPAT处理。",
+    forwardsTo: ["SC48-COMPAT"],
+    remaining: "父级调用和关闭事件的静态映射不代表真实矩阵服务、权限或生产证据读取验收。",
+  },
   "SC48-LOGIN": {
     actionId: "SC48-LOGIN",
     label: "进入指定来源网页登录凭证",
@@ -212,7 +226,8 @@ const definitions = {
     actionId: "SC48-DIRECTORY-EVENT-WIRING",
     label: "目录行操作父级事件转发",
     kind: "wiring",
-    contractAliasReason: "ProviderSourceDirectory 只转发目录、探针、配置、矩阵、版本、凭证与样本事件至各自现有处理器，不新增来源业务动作。",
+    contractAliasReason:
+      "ProviderSourceDirectory 只转发目录、探针、配置、矩阵、版本、凭证与样本事件至各自现有处理器，不新增来源业务动作。",
     condition: "来源行详情按状态展示对应现有操作。",
     handler: "逐项转发当前行 provider_id 与已有操作意图；资格检查仍由现有组件/API执行。",
     forwardsTo: [
@@ -268,6 +283,7 @@ const groupOrder = [
   "SC48-CONFIG/VERSIONS",
   "SC48-VERSIONS",
   "SC48-COMPAT",
+  "SC48-COMPAT-DIALOG-WIRING",
   "SC48-LOGIN",
   "SC48-SAMPLES",
   "SC48-ACCEPT",
@@ -277,161 +293,176 @@ const groupOrder = [
 ];
 
 export function buildP48ActionReview() {
-const sourceText = Object.fromEntries(
-  sourceFiles.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
-);
-const sourceHashes = Object.fromEntries(
-  Object.entries(sourceText).map(([file, source]) => [
-    file,
-    createHash("sha256").update(source).digest("hex"),
-  ]),
-);
-const candidates = Object.entries(sourceText).flatMap(([file, source]) =>
-  scanSource(source, file).candidates,
-);
-const candidateById = new Map(candidates.map((candidate) => [candidate.candidateId, candidate]));
-const localDetailKeys = new Map([
-  ["目录本地详情展开；无API或持久化副作用", "SC48-DETAIL-OPEN"],
-  ["目录本地详情收起并返回触发点", "SC48-DETAIL-CLOSE"],
-]);
-const rawP48Records = runContractAudit().records.filter(
-  (record) =>
-    record.document === contract &&
-    sourceFiles.includes(record.sourceFile) &&
-    record.temporalScope !== "historical" &&
-    ["identity-current", "line-moved"].includes(record.status),
-);
-const recordsByCandidate = new Map();
-for (const record of rawP48Records) {
-  const previous = recordsByCandidate.get(record.candidateId);
-  if (previous)
-    assert.equal(
-      previous.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1),
-      record.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1),
-      `conflicting current P48 contract claims for ${record.candidateId}`,
-    );
-  else recordsByCandidate.set(record.candidateId, record);
-}
-const p48Records = [...recordsByCandidate.values()];
-assert.equal(p48Records.length, candidates.length, "P48 source scope requires one current contract per candidate");
-assert.deepEqual(
-  p48Records.map((record) => record.candidateId).sort(),
-  candidates.map((candidate) => candidate.candidateId).sort(),
-  "P48 mapping source set differs from current Vue candidates",
-);
-
-const groups = new Map(groupOrder.map((key) => [key, []]));
-const claimByCandidate = new Map();
-for (const record of p48Records) {
-  const claim = record.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1);
-  const match = claim.match(/^(SC48-[A-Z]+(?:-[A-Z]+)*(?:\/[A-Z]+(?:-[A-Z]+)*)*)\s*\//u);
-  const key = match?.[1] ?? localDetailKeys.get(claim);
-  assert.ok(key && groups.has(key), `unclassified P48 source contract: ${claim}`);
-  groups.get(key).push(record.candidateId);
-  claimByCandidate.set(record.candidateId, claim);
-}
-for (const [key, ids] of groups) {
-  assert.ok(ids.length, `empty P48 semantic group ${key}`);
-  ids.sort();
-}
-
-const visualStates = Object.fromEntries(
-  ["default", "hover", "focus", "pressed", "disabled", "busy"].map((state) => [
-    state,
-    "not-mapped",
-  ]),
-);
-const targetForGroup = (key) => {
-  const definition = definitions[key];
-  assert.ok(definition, `missing P48 action definition ${key}`);
-  return definition.actionId;
-};
-const actions = groupOrder.map((key) => {
-  const definition = definitions[key];
-  const action = {
-    actionId: definition.actionId,
-    label: definition.label,
-    kind: definition.kind,
-    sourceCandidateIds: groups.get(key),
-    condition: definition.condition,
-    handler: definition.handler,
-    variants: ["current-route-source-contract"],
-    scenes: [],
-    visualStates,
-    testReferences: [{ file: testFile, evidenceType: "actual-vue-review-fixture" }],
-    remaining: definition.remaining,
-  };
-  action.sourceContractKeys = [
-    ...new Set(groups.get(key).map((candidateId) => claimByCandidate.get(candidateId))),
-  ];
-  action.contractAliasReason =
-    definition.contractAliasReason ??
-    `现有合同对${definition.actionId}的源位置分别说明；此组仅按相同业务语义归并，不扩大动作范围。`;
-  if (definition.forwardsTo) {
-    action.forwardsTo = definition.forwardsTo.map((target) =>
-      definitions[target] ? targetForGroup(target) : target,
-    );
-    action.forwardBindings = groups.get(key).flatMap((candidateId) => {
-      const candidate = candidateById.get(candidateId);
-      return Object.entries(candidate.events ?? {}).map(([event, handler]) => ({
-        candidateId,
-        event,
-        handler,
-        targets: action.forwardsTo,
-      }));
-    });
+  const sourceText = Object.fromEntries(
+    sourceFiles.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+  );
+  const sourceHashes = Object.fromEntries(
+    Object.entries(sourceText).map(([file, source]) => [
+      file,
+      createHash("sha256").update(source).digest("hex"),
+    ]),
+  );
+  const candidates = Object.entries(sourceText).flatMap(
+    ([file, source]) => scanSource(source, file).candidates,
+  );
+  const candidateById = new Map(candidates.map((candidate) => [candidate.candidateId, candidate]));
+  const localDetailKeys = new Map([
+    ["目录本地详情展开；无API或持久化副作用", "SC48-DETAIL-OPEN"],
+    ["目录本地详情收起并返回触发点", "SC48-DETAIL-CLOSE"],
+  ]);
+  const rawP48Records = runContractAudit().records.filter(
+    (record) =>
+      record.document === contract &&
+      sourceFiles.includes(record.sourceFile) &&
+      record.temporalScope !== "historical" &&
+      ["identity-current", "line-moved"].includes(record.status),
+  );
+  const recordsByCandidate = new Map();
+  for (const record of rawP48Records) {
+    const previous = recordsByCandidate.get(record.candidateId);
+    if (previous)
+      assert.equal(
+        previous.claim
+          .split("|")
+          .map((cell) => cell.trim())
+          .filter(Boolean)
+          .at(-1),
+        record.claim
+          .split("|")
+          .map((cell) => cell.trim())
+          .filter(Boolean)
+          .at(-1),
+        `conflicting current P48 contract claims for ${record.candidateId}`,
+      );
+    else recordsByCandidate.set(record.candidateId, record);
   }
-  return action;
-});
+  const p48Records = [...recordsByCandidate.values()];
+  assert.equal(
+    p48Records.length,
+    candidates.length,
+    "P48 source scope requires one current contract per candidate",
+  );
+  assert.deepEqual(
+    p48Records.map((record) => record.candidateId).sort(),
+    candidates.map((candidate) => candidate.candidateId).sort(),
+    "P48 mapping source set differs from current Vue candidates",
+  );
 
-const inputs = {};
-for (const file of sourceFiles) {
-  const surfaces = scanReviewSurfaces(sourceText[file], file);
-  if (surfaces.inputs.length)
-    inputs[file] = surfaces.inputs.map((input) => input.binding);
-}
-const review = {
-  schemaVersion: 1,
-  pageId: "P48",
-  route: "/platform-admin/providers/sources",
-  status: "source-reviewed-not-runtime-accepted",
-  approval: "pending-user-review",
-  actionApproval: "pending-user-review",
-  visualApproval: "user-approved-remaining-pages-auto",
-  contract,
-  sourceHashes,
-  inputs,
-  actions,
-  dialogs: {
-    kind: "local-callers-and-listed-shared-only",
-    remaining:
-      "四个本地业务 role=dialog 为配置编辑、配置历史、固定样本和兼容矩阵；固定样本窗内另含独立复核子窗。来源行详情是页内展开，不另算弹窗。映射不代表所有字段、错误、焦点及角色组合均已运行验收。",
-  },
-  surfaceReview: {
+  const groups = new Map(groupOrder.map((key) => [key, []]));
+  const claimByCandidate = new Map();
+  for (const record of p48Records) {
+    const claim = record.claim
+      .split("|")
+      .map((cell) => cell.trim())
+      .filter(Boolean)
+      .at(-1);
+    const match = claim.match(/^(SC48-[A-Z]+(?:-[A-Z]+)*(?:\/[A-Z]+(?:-[A-Z]+)*)*)\s*\//u);
+    const key = match?.[1] ?? localDetailKeys.get(claim);
+    assert.ok(key && groups.has(key), `unclassified P48 source contract: ${claim}`);
+    groups.get(key).push(record.candidateId);
+    claimByCandidate.set(record.candidateId, claim);
+  }
+  for (const [key, ids] of groups) {
+    assert.ok(ids.length, `empty P48 semantic group ${key}`);
+    ids.sort();
+  }
+
+  const visualStates = Object.fromEntries(
+    ["default", "hover", "focus", "pressed", "disabled", "busy"].map((state) => [
+      state,
+      "not-mapped",
+    ]),
+  );
+  const targetForGroup = (key) => {
+    const definition = definitions[key];
+    assert.ok(definition, `missing P48 action definition ${key}`);
+    return definition.actionId;
+  };
+  const actions = groupOrder.map((key) => {
+    const definition = definitions[key];
+    const action = {
+      actionId: definition.actionId,
+      label: definition.label,
+      kind: definition.kind,
+      sourceCandidateIds: groups.get(key),
+      condition: definition.condition,
+      handler: definition.handler,
+      variants: ["current-route-source-contract"],
+      scenes: [],
+      visualStates,
+      testReferences: [{ file: testFile, evidenceType: "actual-vue-review-fixture" }],
+      remaining: definition.remaining,
+    };
+    action.sourceContractKeys = [
+      ...new Set(groups.get(key).map((candidateId) => claimByCandidate.get(candidateId))),
+    ];
+    action.contractAliasReason =
+      definition.contractAliasReason ??
+      `现有合同对${definition.actionId}的源位置分别说明；此组仅按相同业务语义归并，不扩大动作范围。`;
+    if (definition.forwardsTo) {
+      action.forwardsTo = definition.forwardsTo.map((target) =>
+        definitions[target] ? targetForGroup(target) : target,
+      );
+      action.forwardBindings = groups.get(key).flatMap((candidateId) => {
+        const candidate = candidateById.get(candidateId);
+        return Object.entries(candidate.events ?? {}).map(([event, handler]) => ({
+          candidateId,
+          event,
+          handler,
+          targets: action.forwardsTo,
+        }));
+      });
+    }
+    return action;
+  });
+
+  const inputs = {};
+  for (const file of sourceFiles) {
+    const surfaces = scanReviewSurfaces(sourceText[file], file);
+    if (surfaces.inputs.length) inputs[file] = surfaces.inputs.map((input) => input.binding);
+  }
+  const review = {
+    schemaVersion: 1,
+    pageId: "P48",
+    route: "/platform-admin/providers/sources",
     status: "source-reviewed-not-runtime-accepted",
-    files: sourceFiles,
-    dependencyHashes: sourceHashes,
-    inputScope: "reviewed-subset-of-shared-source",
-    inputs: [],
-    containerScope: "reviewed-subset-of-shared-source",
-    containers: [],
-    sharedRemaining: [
-      "此合同只纳入P48路由的九个本地Vue组件；不扩大到ProviderRuntimeSurface、NavigationShell或P49/P50共享路由消费者。",
+    approval: "pending-user-review",
+    actionApproval: "pending-user-review",
+    visualApproval: "user-approved-remaining-pages-auto",
+    contract,
+    sourceHashes,
+    inputs,
+    actions,
+    dialogs: {
+      kind: "local-callers-and-listed-shared-only",
+      remaining:
+        "四个本地业务 role=dialog 为配置编辑、配置历史、固定样本和兼容矩阵；固定样本窗内另含独立复核子窗。来源行详情是页内展开，不另算弹窗。映射不代表所有字段、错误、焦点及角色组合均已运行验收。",
+    },
+    surfaceReview: {
+      status: "source-reviewed-not-runtime-accepted",
+      files: sourceFiles,
+      dependencyHashes: sourceHashes,
+      inputScope: "reviewed-subset-of-shared-source",
+      inputs: [],
+      containerScope: "reviewed-subset-of-shared-source",
+      containers: [],
+      sharedRemaining: [
+        "此合同只纳入P48路由的九个本地Vue组件；不扩大到ProviderRuntimeSurface、NavigationShell或P49/P50共享路由消费者。",
+      ],
+      remaining:
+        "自建弹窗的DOM焦点、Tab/Escape及父级事件转发需以各自实际Vue用例验证；此源映射不代替无障碍、浏览器历史、KeepAlive或服务端角色验收。",
+    },
+    compositionGaps: [
+      "本登记逐项覆盖九个P48本地Vue源文件的当前83个扫描候选；候选归组依据现有SC48合同，不把候选数当作独立按钮或业务动作总数。",
+      "来源规则登记、即时采集、关闭来源、绕过1688门禁均不是P48入口，不因API或其他页面能力而新增。",
+      "烟测可能触达外部来源；固定样本创建、快照回放、另一管理员复核是不同写入阶段；本次未执行真实请求。",
+      "用户全局视觉授权仅记录在visualApproval；actionApproval、全状态交互、真实RBAC/MySQL/外部来源和正式M07-03生产验收仍未通过。",
     ],
-    remaining:
-      "自建弹窗的DOM焦点、Tab/Escape及父级事件转发需以各自实际Vue用例验证；此源映射不代替无障碍、浏览器历史、KeepAlive或服务端角色验收。",
-  },
-  compositionGaps: [
-    "本登记逐项覆盖九个P48本地Vue源文件的当前83个扫描候选；候选归组依据现有SC48合同，不把候选数当作独立按钮或业务动作总数。",
-    "来源规则登记、即时采集、关闭来源、绕过1688门禁均不是P48入口，不因API或其他页面能力而新增。",
-    "烟测可能触达外部来源；固定样本创建、快照回放、另一管理员复核是不同写入阶段；本次未执行真实请求。",
-    "用户全局视觉授权仅记录在visualApproval；actionApproval、全状态交互、真实RBAC/MySQL/外部来源和正式M07-03生产验收仍未通过。",
-  ],
-};
+  };
 
-assert.equal(candidates.length, 83, "unexpected P48 local source-candidate count");
-assert.equal(new Set(actions.map((action) => action.actionId)).size, actions.length);
-return review;
+  assert.equal(candidates.length, 83, "unexpected P48 local source-candidate count");
+  assert.equal(new Set(actions.map((action) => action.actionId)).size, actions.length);
+  return review;
 }
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

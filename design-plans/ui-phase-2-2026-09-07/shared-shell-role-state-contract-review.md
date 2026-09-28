@@ -93,6 +93,10 @@ LF归一SHA256。七个交互候选文件完整扫描；辅助文件只沿相关
 | apps/web/src/components/NavigationShell.vue#f8690b21af426414.1 | 594 | control | shell.theme.settings | 导航/settings/theme；此链接本身没有关闭themeOpen处理 | UI2-SH01–SH06 |
 | apps/web/src/components/NavigationShell.vue#c5cd954168e369ca.1 | 599 | event-binding | discovery.close | DiscoveryOverlay的close事件转closeDiscovery()，清discoveryMode | UI2-SH01–SH06 |
 | apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1 | 599 | dialog-component-call | discovery.dialog | DiscoveryOverlay组件调用；搜索/创建两变体，与定义非重复业务弹窗 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#34b7254ab249a203.1 | 357 | dialog-definition | shell.menu.toggle | 移动原生导航dialog，由showModal打开；不新增业务弹窗或写入 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#ac4098542a6fc500.1 | 357 | event-binding | shell.menu.toggle | Escape、dialog关闭及背景点击统一设menuOpen=false；Tab由containTab处理 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#f21698ff0cf909b4.1 | 366 | control | shell.menu.toggle | 紧凑导航中的显式关闭入口，仅设置menuOpen=false | UI2-SH01–SH06 |
+| apps/web/src/use-navigation-shell-drawer.ts#90a3ed569be8deb0.1 | 59 | dialog-script-call | shell.menu.open | 仅在目标dialog未打开时调用showModal；不重复改变业务数据 | UI2-SH01–SH06 |
 
 ### apps/web/src/components/NavigationAccessPanel.vue
 

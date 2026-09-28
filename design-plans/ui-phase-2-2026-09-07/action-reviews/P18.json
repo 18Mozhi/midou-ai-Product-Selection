@@ -1682,6 +1682,8 @@
       ],
       "remaining": "本地隔离响应证明路由与重试绑定，不证明真实认证/RBAC或M07-03；页面其它业务读写和所有适用状态仍按各自合同验收。",
       "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1"],
+      "sourceContractKeys": ["OP-DETAIL-RETRY；secondary继续既有OP-RETURN行为"],
+      "contractAliasReason": "按当前机会候选表完整末单元格精确绑定；同一子组件两事件在该源候选中合并记录。",
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -1693,7 +1695,7 @@
       "testReferences": [
         {
           "file": "tests/e2e/m04-02-opportunities.spec.ts",
-          "evidenceType": "actual-vue-isolated-response-browser-e2e",
+      "evidenceType": "actual-vue-isolated-browser",
           "claim": "覆盖401登录返回地址、403不重试并返回列表、503安全GET自动重试耗尽后显式重试；不证明真实认证/RBAC或M07-03。"
         }
       ]
@@ -1815,10 +1817,10 @@
       ],
       "remaining": "真实v-if卸载子区局部状态，父form仍存；原型全部保留不可当源生命周期已修复。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#8dfb1ee903d0b053.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#1aef42d09991a143.1"
+        "apps/web/src/components/OpportunityDetailNavigation.vue#7d9ee3ad6dce3b52.1",
+        "apps/web/src/components/OpportunityDetailNavigation.vue#7d9ee3ad6dce3b52.2"
       ],
-      "sourceContractKeys": ["OP-TAB：四主分区", "OP-TAB：六辅助分区"],
+      "sourceContractKeys": ["OP-TAB：动态分区选择；桌面列表按钮", "OP-TAB：动态分区选择；移动列表按钮"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-mapped",
@@ -1833,6 +1835,53 @@
           "file": "scripts/verify-ui-phase2-detail-adaptive-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+        }
+      ]
+    },
+    {
+      "actionId": "OP-WIRING-TAB",
+      "label": "详情分区选择事件转发",
+      "kind": "wiring",
+      "routeApplicability": "not-an-additional-business-action",
+      "condition": "OpportunityDetailNavigation已挂载于可读详情页",
+      "handler": "将子目录的select事件转发给setTab；不单独改变URL或新增读取/写入动作",
+      "variants": ["OP-TAB"],
+      "forwardsTo": ["OP-TAB"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1",
+          "event": "@select",
+          "handler": "setTab",
+          "targets": ["OP-TAB"]
+        }
+      ],
+      "scenes": [
+        {
+          "package": "detail-adaptive-direction-c",
+          "scene": "overview"
+        },
+        {
+          "package": "detail-adaptive-direction-c",
+          "scene": "profit"
+        }
+      ],
+      "remaining": "此父子事件映射不证明真实router.replace、焦点返还或全部十个分区已逐一操作验收。",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1"],
+      "sourceContractKeys": ["OP-TAB select事件转发到setTab"],
+      "contractAliasReason": "精确对应当前候选表的select转发行；关系键不替代OP-TAB交互组，也不创造业务动作。",
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-detail-adaptive-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "已有离线稿验证引用，不代表本轮重跑、挂载Vue或生产路由验收。"
         }
       ]
     },
@@ -1855,7 +1904,9 @@
         }
       ],
       "remaining": "新目录形态取代源更多折叠属提案；六态和实际焦点未全验。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#badd0afd80b50ce6.1"],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityDetailNavigation.vue#ca5e938b0c51ecf6.1"],
+      "sourceContractKeys": ["OP-MORE-ANALYSIS；移动分区目录展开，不选中或改写tab"],
+      "contractAliasReason": "按机会候选表完整末单元格精确绑定；仅记录移动目录展开，不将其视为分区选择。",
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -2075,8 +2126,8 @@
       "routeApplicability": "not-an-additional-business-action",
       "condition": "相应父组件v-if和子组件事件条件均保留，不能按模板候选重复计业务动作",
       "handler": "逐事件/handler见forwardBindings；容器定义或helper调用指向既有操作链，不直接增加一次POST",
-      "variants": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE", "OP-COST-REVIEWER-RETRY"],
-      "forwardsTo": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE", "OP-COST-REVIEWER-RETRY"],
+      "variants": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE", "OP-COST-REVIEWER-RETRY", "OP-PROFIT-RETRY"],
+      "forwardsTo": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE", "OP-COST-REVIEWER-RETRY", "OP-PROFIT-RETRY"],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
@@ -2085,25 +2136,31 @@
           "targets": ["OP-COST-REVIEW-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
           "event": "@confirm-cost",
           "handler": "confirmCost",
           "targets": ["OP-COST-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
           "event": "@retry-reviewers",
           "handler": "retryCostReviewers",
           "targets": ["OP-COST-REVIEWER-RETRY"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
+          "event": "@retry-profit",
+          "handler": "retryProfitAnalysis",
+          "targets": ["OP-PROFIT-RETRY"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
           "event": "@review-cost",
           "handler": "reviewCost",
           "targets": ["OP-COST-REVIEW-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
           "event": "@queue-profit",
           "handler": "queueProfit",
           "targets": ["OP-PROFIT-QUEUE"]
@@ -2122,7 +2179,7 @@
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1"
+        "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1"
       ],
       "sourceContractKeys": ["OP-COST-REVIEW-SUBMIT转发", "成本提交/复核/利润重算/复核人GET重试转发"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
@@ -2421,49 +2478,49 @@
       "forwardsTo": ["OP-P15-EXCLUDED", "OP-DECISION-SUBMIT"],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
           "event": "@create",
           "handler": "create",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
           "event": "@decide",
           "handler": "decide",
           "targets": ["OP-DECISION-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
           "event": "@import-file",
           "handler": "importErpFile",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
           "event": "@create",
           "handler": "create",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
           "event": "@decide",
           "handler": "decide",
           "targets": ["OP-DECISION-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
           "event": "@import-browser",
           "handler": "importFromErpBrowser",
           "targets": ["OP-P15-EXCLUDED"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
           "event": "@import-file",
           "handler": "importErpFile",
           "targets": ["OP-P15-EXCLUDED"]
@@ -2481,8 +2538,8 @@
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#c46fc24a5bfcc314.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#67266c4b90185a39.1"
+        "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1"
       ],
       "sourceContractKeys": ["创建/决定/ERP浏览器/文件导入转发", "三类业务弹窗集合调用"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
@@ -2686,8 +2743,12 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityProfitPanel.vue#aa3f50e6ccf98cb4.1"
       ],
-      "sourceContractKeys": [
-        "利润读取失败重试"
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-profit-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "已有利润区离线验证器引用，不代表真实Vue、API或生产读取验收。"
+        }
       ],
       "visualStates": {
         "default": "not-mapped",
@@ -2708,6 +2769,7 @@
       "apps/web/src/components/OpportunityCostReviewQueue.vue",
       "apps/web/src/components/OpportunityDecisionPanel.vue",
       "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/components/OpportunityDetailNavigation.vue",
       "apps/web/src/components/OpportunityEvidencePanel.vue",
       "apps/web/src/components/OpportunityFeedbackPanel.vue",
       "apps/web/src/components/OpportunityLineagePanel.vue",
@@ -2720,6 +2782,7 @@
       "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47",
       "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
       "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+      "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
       "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
@@ -2727,12 +2790,12 @@
       "apps/web/src/components/OpportunityWorkspace.vue": "b426305a36996b5b76c8f836be5ebc0cec3476f2447e3fe60c23780181c20781",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
-      "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",
+      "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
       "apps/web/src/components/opportunity-workspace-forms.ts": "1ddc4c6c122c42d05d8a47648b0ea2ab121218d9ff12e8d81c8cc6706785e6dd",
       "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
       "apps/web/src/components/opportunity-decision-presentation.ts": "5db9df1a291feb7a5b2d0dba0fa2e27160c19389fb141bfcf92c6e28dab0dc4d",
-      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+      "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },
     "inputs": [

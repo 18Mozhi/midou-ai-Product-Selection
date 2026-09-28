@@ -124,6 +124,21 @@
 | OpportunityWorkspaceDialogs:167 | ced3effe8f7058f1.1 | OP-DECISION-SUBMIT |
 | OpportunityWorkspaceDialogs:150 | 2f7a15b104750d49.1 | OP-DETAIL-NAV |
 
+### P18 当前详情目录与父子事件接线
+
+以下条目核对机会详情分区目录拆分后的实际 Vue 渲染点；桌面和移动按钮由同一 `items` 集驱动并调用 `setTab`，移动 `summary` 只展开分区入口；父子接线、弹窗组合与状态恢复是既有动作关系，不增加写入或权限语义。
+
+| 当前candidateId | 行 | 类型 | 既有语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1 | 1088 | event-binding | OP-DETAIL-RETRY；secondary继续既有OP-RETURN行为 |
+| apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1 | 1099 | event-binding | OP-TAB select事件转发到setTab |
+| apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1 | 1184 | event-binding | 成本提交/复核/利润重算/复核人GET重试转发 |
+| apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1 | 1243 | event-binding | 创建/决定/ERP浏览器/文件导入转发 |
+| apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1 | 1243 | dialog-component-call | 三类业务弹窗集合调用 |
+| apps/web/src/components/OpportunityDetailNavigation.vue#7d9ee3ad6dce3b52.1 | 27 | control | OP-TAB：动态分区选择；桌面列表按钮 |
+| apps/web/src/components/OpportunityDetailNavigation.vue#ca5e938b0c51ecf6.1 | 41 | control | OP-MORE-ANALYSIS；移动分区目录展开，不选中或改写tab |
+| apps/web/src/components/OpportunityDetailNavigation.vue#7d9ee3ad6dce3b52.2 | 46 | control | OP-TAB：动态分区选择；移动列表按钮 |
+
 ## 八个弹窗定义/调用候选
 
 以下混合真实定义、组件调用及原因helper调用，不可按8个独立弹窗计数。四个本地原生dialog展开ERP1、创建1、决策3、批量3；另有共享原因框AI两变体及共享高级筛选，合计11个调用方业务变体。成本复核是内联表单。
