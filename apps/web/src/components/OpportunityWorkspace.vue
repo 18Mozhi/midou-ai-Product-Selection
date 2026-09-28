@@ -26,6 +26,9 @@ const OpportunityEvidencePanel = defineAsyncComponent(
 const OpportunityDetailInsights = defineAsyncComponent(
   () => import("./OpportunityDetailInsights.vue"),
 );
+const OpportunityDetailNavigation = defineAsyncComponent(
+  () => import("./OpportunityDetailNavigation.vue"),
+);
 const OpportunityAiPanel = defineAsyncComponent(() => import("./OpportunityAiPanel.vue"));
 const OpportunityWorkspaceDialogs = defineAsyncComponent(
   () => import("./OpportunityWorkspaceDialogs.vue"),
@@ -43,8 +46,7 @@ import {
 import {
   formatOpportunityTime as freshness,
   opportunityStatusLabel,
-  opportunityPrimaryTabs as primaryTabs,
-  opportunitySecondaryTabs as secondaryTabs,
+  opportunityTabs as detailTabs,
   resolveOpportunityTab,
   safeOpportunityReturnPath,
 } from "./opportunity-workspace-presentation";
@@ -999,18 +1001,19 @@ onBeforeUnmount(() => {
         @primary="handleStatePrimary"
         @secondary="returnToOpportunityList"
       />
-      <article v-else class="opportunity-detail">
-        <header>
-          <div>
-            <p>
+      <article v-else class="opportunity-detail opportunity-detail--c">
+        <OpportunityDetailNavigation :active-tab="tab" :items="detailTabs" @select="setTab" />
+        <main class="opportunity-detail-main">
+          <header class="opportunity-detail-heading">
+            <p class="opportunity-detail-heading__eyebrow">
               {{ statusLabel(detail.lifecycle_status) }} · {{ detail.market }} ·
               {{ detail.category || "未分类" }}
             </p>
-            <h3>{{ detail.name }}</h3>
-            <span
-              >更新 {{ freshness(detail.updated_at) }} · 来源
-              {{ opportunityStatusLabel(detail.source_type) }}</span
-            >
+            <h1>{{ detail.name }}</h1>
+            <div class="opportunity-detail-heading__meta">
+              <span>更新 {{ freshness(detail.updated_at) }}</span>
+              <span>来源 {{ opportunityStatusLabel(detail.source_type) }}</span>
+            </div>
             <details class="opportunity-technical-details">
               <summary>运行信息</summary>
               <small
@@ -1020,144 +1023,123 @@ onBeforeUnmount(() => {
                 · 评分规则 {{ detail.score_rule_version ?? "尚未计算" }}</small
               >
             </details>
-          </div>
-        </header>
-        <OpportunityDecisionPanel
-          :detail="detail"
-          :busy="busy"
-          :can-decide="canDecide"
-          @decide="startDecision"
-          @create-evidence-task="createEvidenceTask"
-        />
-        <section
-          v-if="detail.selection_stage !== 'recommended'"
-          class="opportunity-next-steps opportunity-collection-tools"
-        >
-          <details>
-            <summary>补证异常时手动处理</summary>
-            <p>系统会持续自动补证；只有需要立即重试时才使用下面的操作。</p>
-            <div>
-              <button
-                v-if="canManageCompetitors"
-                type="button"
-                :disabled="busy"
-                @click="discoverCompetitors"
-              >
-                采集 Amazon 竞品</button
-              ><button
-                v-if="canManageSuppliers"
-                type="button"
-                :disabled="busy"
-                @click="discoverSuppliers"
-              >
-                采集公开供应商</button
-              ><RouterLink to="/opportunities/scoring-rules">检查评分规则</RouterLink>
-            </div>
-          </details>
-        </section>
-        <nav class="opportunity-tabs" aria-label="机会详情分区">
-          <button
-            v-for="item in primaryTabs"
-            :key="item[0]"
-            type="button"
-            :aria-current="tab === item[0] ? 'page' : undefined"
-            @click="setTab(item[0])"
-          >
-            {{ item[1] }}
-          </button>
-          <details :open="secondaryTabs.some(([key]) => key === tab)">
-            <summary>更多分析</summary>
-            <div>
-              <button
-                v-for="item in secondaryTabs"
-                :key="item[0]"
-                type="button"
-                :aria-current="tab === item[0] ? 'page' : undefined"
-                @click="setTab(item[0])"
-              >
-                {{ item[1] }}
-              </button>
-            </div>
-          </details>
-        </nav>
-        <OpportunityDetailInsights
-          v-if="['overview', 'market', 'competition', 'risk'].includes(tab)"
-          :tab="tab"
-          :detail="detail"
-          :profit="profit"
-          :downstream="downstream"
-          :downstream-state="downstreamLoadState"
-          :competitor-items="competitorItems"
-          :busy="busy"
-          :can-decide="canDecide"
-          :can-manage-competitors="canManageCompetitors"
-          :can-manage-suppliers="canManageSuppliers"
-          :can-read-competitors="canReadCompetitors"
-          :can-read-sourcing="canReadSourcing"
-          @discover-competitors="discoverCompetitors"
-          @discover-suppliers="discoverSuppliers"
-          @queue-score="queueScore"
-          @retry-downstream="loadDownstream"
-        />
-        <OpportunityLineagePanel v-else-if="tab === 'lineage'" :lineage="detail.lineage" />
-        <OpportunityFeedbackPanel
-          v-else-if="tab === 'feedback'"
-          :feedback="detail.operating_feedback"
-          :form="feedbackForm"
-          :busy="busy"
-          :can-write="canDecide"
-          @submit="submitOperatingFeedback"
-        />
-        <OpportunityProfitPanel
-          v-else-if="tab === 'profit'"
-          :profit="profit"
-          :cost-form="costForm"
-          :reviewer-options="costReviewerOptions"
-          :reviewer-load-state="costReviewerLoadState"
-          :reviewer-error-message="costReviewerErrorMessage"
-          :reviewer-request-id="costReviewerRequestId"
-          :can-confirm-cost="canConfirmCost"
-          :busy="busy"
-          @confirm-cost="confirmCost"
-          @retry-reviewers="retryCostReviewers"
-          @review-cost="reviewCost"
-          @queue-profit="queueProfit"
-        />
-        <OpportunityAiPanel
-          v-else-if="tab === 'ai'"
-          :analyses="aiAnalyses"
-          :load-state="aiLoadState"
-          :busy="busy"
-          :can-decide="canDecide"
-          @queue="queueAi"
-          @retry="loadAi"
-          @review="reviewAi"
-        />
-        <OpportunityEvidencePanel
-          v-else-if="tab === 'evidence'"
-          :evidence="detail.evidence"
-          :opportunity-id="detail.id"
-        />
-        <section v-else class="opportunity-decisions">
-          <header>
-            <div>
-              <p>决策历史</p>
-              <h4>决策历史</h4>
-            </div>
-            <span>{{ detail.decisions.length }} 条</span>
           </header>
-          <p v-if="!detail.decisions.length" class="opportunity-empty-copy">尚无决策记录。</p>
-          <article v-for="item in detail.decisions" :key="item.id">
-            <b>{{ opportunityStatusLabel(item.action) }}</b>
-            <div>
-              <strong>{{ item.reason }}</strong
-              ><small
-                >{{ freshness(item.created_at) }} · 版本 v{{ item.opportunity_version }} · 操作者
-                {{ item.actor_id.slice(0, 8) }}…</small
-              >
+          <div class="opportunity-detail-workface">
+            <OpportunityDecisionPanel
+              :detail="detail"
+              :busy="busy"
+              :can-decide="canDecide"
+              @decide="startDecision"
+              @create-evidence-task="createEvidenceTask"
+            />
+            <section
+              v-if="detail.selection_stage !== 'recommended'"
+              class="opportunity-next-steps opportunity-collection-tools"
+            >
+              <details>
+                <summary>补证异常时手动处理</summary>
+                <p>系统会持续自动补证；只有需要立即重试时才使用下面的操作。</p>
+                <div>
+                  <button
+                    v-if="canManageCompetitors"
+                    type="button"
+                    :disabled="busy"
+                    @click="discoverCompetitors"
+                  >
+                    采集 Amazon 竞品</button
+                  ><button
+                    v-if="canManageSuppliers"
+                    type="button"
+                    :disabled="busy"
+                    @click="discoverSuppliers"
+                  >
+                    采集公开供应商</button
+                  ><RouterLink to="/opportunities/scoring-rules">检查评分规则</RouterLink>
+                </div>
+              </details>
+            </section>
+            <div class="opportunity-detail-section-content">
+              <OpportunityDetailInsights
+                v-if="['overview', 'market', 'competition', 'risk'].includes(tab)"
+                :tab="tab"
+                :detail="detail"
+                :profit="profit"
+                :downstream="downstream"
+                :downstream-state="downstreamLoadState"
+                :competitor-items="competitorItems"
+                :busy="busy"
+                :can-decide="canDecide"
+                :can-manage-competitors="canManageCompetitors"
+                :can-manage-suppliers="canManageSuppliers"
+                :can-read-competitors="canReadCompetitors"
+                :can-read-sourcing="canReadSourcing"
+                @discover-competitors="discoverCompetitors"
+                @discover-suppliers="discoverSuppliers"
+                @queue-score="queueScore"
+                @retry-downstream="loadDownstream"
+              />
+              <OpportunityLineagePanel v-else-if="tab === 'lineage'" :lineage="detail.lineage" />
+              <OpportunityFeedbackPanel
+                v-else-if="tab === 'feedback'"
+                :feedback="detail.operating_feedback"
+                :form="feedbackForm"
+                :busy="busy"
+                :can-write="canDecide"
+                @submit="submitOperatingFeedback"
+              />
+              <OpportunityProfitPanel
+                v-else-if="tab === 'profit'"
+                :profit="profit"
+                :cost-form="costForm"
+                :reviewer-options="costReviewerOptions"
+                :reviewer-load-state="costReviewerLoadState"
+                :reviewer-error-message="costReviewerErrorMessage"
+                :reviewer-request-id="costReviewerRequestId"
+                :can-confirm-cost="canConfirmCost"
+                :busy="busy"
+                @confirm-cost="confirmCost"
+                @retry-reviewers="retryCostReviewers"
+                @review-cost="reviewCost"
+                @queue-profit="queueProfit"
+              />
+              <OpportunityAiPanel
+                v-else-if="tab === 'ai'"
+                :analyses="aiAnalyses"
+                :load-state="aiLoadState"
+                :busy="busy"
+                :can-decide="canDecide"
+                @queue="queueAi"
+                @retry="loadAi"
+                @review="reviewAi"
+              />
+              <OpportunityEvidencePanel
+                v-else-if="tab === 'evidence'"
+                :evidence="detail.evidence"
+                :opportunity-id="detail.id"
+              />
+              <section v-else class="opportunity-decisions">
+                <header>
+                  <div>
+                    <p>决策历史</p>
+                    <h4>决策历史</h4>
+                  </div>
+                  <span>{{ detail.decisions.length }} 条</span>
+                </header>
+                <p v-if="!detail.decisions.length" class="opportunity-empty-copy">尚无决策记录。</p>
+                <article v-for="item in detail.decisions" :key="item.id">
+                  <b>{{ opportunityStatusLabel(item.action) }}</b>
+                  <div>
+                    <strong>{{ item.reason }}</strong
+                    ><small
+                      >{{ freshness(item.created_at) }} · 版本 v{{ item.opportunity_version }} ·
+                      操作者 {{ item.actor_id.slice(0, 8) }}…</small
+                    >
+                  </div>
+                </article>
+              </section>
             </div>
-          </article>
-        </section>
+          </div>
+        </main>
       </article></template
     >
     <OpportunityWorkspaceDialogs

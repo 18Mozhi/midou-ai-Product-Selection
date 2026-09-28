@@ -323,7 +323,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
   await expect(page.getByRole("heading", { name: "1 个商品建议采纳" })).toBeVisible();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
-  const dialog = page.getByRole("dialog");
+  const dialog = page.getByRole("dialog", { name: "创建机会候选" });
   await expect(dialog).toBeVisible();
   const createClose = dialog.getByRole("button", { name: "关闭" });
   const createSubmit = dialog.getByRole("button", { name: "创建机会", exact: true });
@@ -409,7 +409,7 @@ test("a late create success does not close or navigate away from a reopened crea
   });
 
   await page.goto("/opportunities?view=all&create=1");
-  const dialog = page.getByRole("dialog");
+  const dialog = page.getByRole("dialog", { name: "创建机会候选" });
   await expect(dialog).toBeVisible();
   await dialog.getByLabel("机会名称").fill("第一个草稿");
   await dialog.getByRole("button", { name: "创建机会", exact: true }).click();
@@ -473,7 +473,7 @@ test("opportunity list distinguishes a failed product image from one not yet col
   await expect(page.getByRole("img", { name: `${recommendedBase.name} 商品图` })).toHaveCount(0);
 });
 
-test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision preserve missing states", async ({
+test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decision preserve missing states", async ({
   page,
 }) => {
   await ready(page);
@@ -481,16 +481,34 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.getByRole("heading", { name: "AI 驱动的个性化护肤机会" })).toBeVisible();
   await expect(page.getByText("机会详情", { exact: true })).toHaveCount(1);
   await expect(page.getByText("来源 热点自动发现")).toBeVisible();
+  const decisionSurface = page.locator(".opportunity-decision-summary");
+  await expect(decisionSurface).toHaveCSS("border-radius", "0px");
+  await expect(decisionSurface).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
+  if ((page.viewportSize()?.width ?? 0) <= 900) {
+    await expect(mobileDirectory).toBeVisible();
+    await expect(mobileDirectory).not.toHaveAttribute("open", "");
+    await mobileDirectory.locator("summary").click();
+  } else {
+    await expect(page.locator(".opportunity-detail-directory")).toBeVisible();
+    await expect(page.locator(".opportunity-detail-directory-mobile")).toBeHidden();
+  }
   await expect(page.locator("body")).not.toContainText(
     /trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
-  await expect(page.locator(".opportunity-tabs > button")).toHaveText([
-    "结论",
-    "证据",
-    "利润与成本",
-    "风险",
+  await expect(page.locator(".opportunity-detail-directory nav button")).toHaveText([
+    "01 结论",
+    "02 证据",
+    "03 利润与成本",
+    "04 风险",
+    "05 市场",
+    "06 竞争",
+    "07 AI 辅助",
+    "08 业务血缘",
+    "09 经营复盘",
+    "10 决策历史",
   ]);
-  await expect(page.locator(".opportunity-tabs details > summary")).toHaveText("更多分析");
+  await expect(page.locator(".opportunity-detail-directory-mobile nav button")).toHaveCount(10);
   await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
   await expect(page.getByText("0/5 已通过", { exact: true })).toBeVisible();
   await expect(page.getByText("当前无需你处理", { exact: true })).toBeVisible();
@@ -505,7 +523,6 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
       { exact: true },
     ),
   ).toBeVisible();
-  await page.locator(".opportunity-tabs details > summary").click();
   await page.getByRole("button", { name: "业务血缘" }).click();
   await expect(page.getByRole("heading", { name: "业务血缘追踪" })).toBeVisible();
   await expect(page.getByText("部分环节降级", { exact: true })).toBeVisible();
@@ -518,12 +535,17 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.getByText("Example News")).toBeVisible();
   await page.getByText("提前人工处理", { exact: true }).click();
   await page.getByRole("button", { name: "继续观察", exact: true }).click();
-  const dialog = page.getByRole("dialog");
+  const dialog = page.getByRole("dialog", { name: "记录继续观察决定" });
   await expect(dialog).toBeVisible();
   await dialog.getByLabel("原因（必填）").fill("补齐成本与竞品后再判断");
   await dialog.getByRole("button", { name: "确认记录" }).click();
   await expect(page.getByText("决策已记录；原始评分与证据未被改写。")).toBeVisible();
-  await page.locator(".opportunity-tabs details > summary").click();
+  if (
+    (await mobileDirectory.isVisible()) &&
+    !(await mobileDirectory.evaluate((element) => (element as HTMLDetailsElement).open))
+  ) {
+    await mobileDirectory.locator("summary").click();
+  }
   await page.getByRole("button", { name: "决策历史" }).click();
   await expect(page.getByText("补齐成本与竞品后再判断")).toBeVisible();
   await expect(
@@ -532,6 +554,7 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page.locator("body")).not.toContainText(
     /\bobserve\b|trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
+  if (await mobileDirectory.isVisible()) await mobileDirectory.locator("summary").click();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
@@ -1006,7 +1029,7 @@ test("a delayed decision receipt cannot close a newer decision dialog", async ({
   await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
   await page.getByText("提前人工处理", { exact: true }).click();
   await page.getByRole("button", { name: "继续观察", exact: true }).click();
-  const dialog = page.getByRole("dialog");
+  const dialog = page.getByRole("dialog", { name: "记录继续观察决定" });
   await dialog.getByLabel("原因（必填）").fill("离页前已提交的决定");
   await dialog.getByRole("button", { name: "确认记录" }).click();
   await decisionStarted;
@@ -1014,15 +1037,16 @@ test("a delayed decision receipt cannot close a newer decision dialog", async ({
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
   await page.getByRole("button", { name: "驳回", exact: true }).last().click();
-  await expect(dialog).toBeVisible();
+  const rejectedDialog = page.getByRole("dialog", { name: "记录驳回决定" });
+  await expect(rejectedDialog).toBeVisible();
   const decisionResponse = page.waitForResponse((response) =>
     response.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`),
   );
   releaseDecision();
   await decisionResponse;
   await page.waitForLoadState("networkidle");
-  await expect(dialog).toBeVisible();
-  await expect(dialog.getByLabel("原因（必填）")).toHaveValue("");
+  await expect(rejectedDialog).toBeVisible();
+  await expect(rejectedDialog.getByLabel("原因（必填）")).toHaveValue("");
 });
 
 test("mobile opportunity filters preserve selected adoption blocker inside the drawer", async ({
@@ -1113,7 +1137,13 @@ test("opportunity URL state and source return path survive list-detail navigatio
 test("opportunity detail tab supports a direct URL", async ({ page }) => {
   await ready(page);
   await page.goto(`/opportunities/${opportunityId}?tab=evidence`);
-  await expect(page.getByRole("button", { name: "证据", exact: true })).toHaveAttribute(
+  const directory = page.locator(
+    (page.viewportSize()?.width ?? 0) <= 900
+      ? ".opportunity-detail-directory-mobile"
+      : ".opportunity-detail-directory",
+  );
+  if ((page.viewportSize()?.width ?? 0) <= 900) await directory.locator("summary").click();
+  await expect(directory.getByRole("button", { name: "证据", exact: true })).toHaveAttribute(
     "aria-current",
     "page",
   );
