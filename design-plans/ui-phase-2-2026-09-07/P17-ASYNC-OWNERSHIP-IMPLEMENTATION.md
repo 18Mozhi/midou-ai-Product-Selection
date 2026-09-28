@@ -11,7 +11,7 @@
 
 ## 验证
 
-`node scripts/run-playwright-projects.mjs tests/e2e/ui-phase2-scoring-contracts.spec.ts --workers=1`：桌面 Chromium 与390px手机各16/16通过；`npm run typecheck:web`、`npm run format:check`、`npm run verify:docs`（153项）、`npm run verify:plans`、`npm run verify:runtime-docs`及`npm run verify:release-matrix`通过。相邻 `m04-03-scoring.spec.ts` 综合复验为18/20：评分规则截图与当前内容尺寸不匹配，以及机会详情样例找不到规则覆盖说明；两处均不在本次改动文件中，尚未作为本批修复或通过。浏览器夹具为本地隔离响应，不代表真实服务端验收。
+`node scripts/run-playwright-projects.mjs tests/e2e/ui-phase2-scoring-contracts.spec.ts tests/e2e/m04-03-scoring.spec.ts --workers=1`：桌面 Chromium 与390px手机各20/20通过（P17合同16项、M04-03页面4项）。同步更新了获准C方向的规则页桌面/手机快照，并将规则身份/覆盖率与版本入口断言对齐实际DOM。创建迟到成功/失败、非空预览缺失字段及空缺列表均有实际 Vue 回归。`npm run typecheck:web`、`npm run format:check`、`npm run verify:docs`（153项）、`npm run verify:plans`、`npm run verify:runtime-docs`及`npm run verify:release-matrix`通过。浏览器夹具为本地隔离响应，不代表真实服务端验收。
 
 ## 未覆盖
 

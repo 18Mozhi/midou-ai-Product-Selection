@@ -691,6 +691,11 @@
   margin-top: 16px;
   margin-bottom: 18px;
 }
+.score-rules--review .score-preview-table .score-preview-missing {
+  color: var(--p17-warning);
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
 .score-rules--review .score-preview-modal footer {
   margin: 0;
   padding: 14px 26px;

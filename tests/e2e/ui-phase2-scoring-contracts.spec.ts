@@ -385,6 +385,9 @@ test("UI2-S04 preview retries and paginates by server totals without any write",
   await expect(dialog.getByRole("alert")).toContainText("稍后重试预览");
   await dialog.getByRole("button", { name: "重试预览" }).click();
   await expect(dialog.locator(".score-preview-table article")).toHaveCount(20);
+  await expect(dialog.locator(".score-preview-table article").first()).toContainText(
+    "缺失字段：market_demand",
+  );
   await expect(dialog.getByRole("button", { name: "上一页" })).toBeDisabled();
   await dialog.getByRole("button", { name: "下一页" }).click();
   await expect(dialog.getByText("第2页机会1", { exact: true })).toBeVisible();

@@ -685,6 +685,9 @@ onMounted(() => void load());
                   >{{ lifecycleLabels[item.lifecycle_status] ?? item.lifecycle_status }} · 当前规则
                   {{ item.current_rule_version ?? "未评分" }}</small
                 >
+                <small v-if="item.missing_fields.length" class="score-preview-missing">
+                  缺失字段：{{ item.missing_fields.join("、") }}
+                </small>
               </div>
               <div>
                 <small>当前</small><b>{{ scoreText(item.current_score) }}</b>

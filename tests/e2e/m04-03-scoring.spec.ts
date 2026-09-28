@@ -166,6 +166,7 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
   await expect(previewDialog).toBeVisible();
   await expect(previewDialog).toHaveJSProperty("open", true);
   await expect(previewDialog.getByText("便携式智能净水杯机会")).toBeVisible();
+  await expect(previewDialog.getByText(/缺失字段：/)).toHaveCount(0);
   await expect(previewDialog.getByText("-1.80")).toBeVisible();
   await capturePhase2Evidence(page, testInfo, "P17", "preview", [
     "read-only-preview",
@@ -348,8 +349,9 @@ test("M04-03.A07/A08/A15 opportunity score explanation exposes inputs evidence m
   );
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: "便携式智能净水杯机会" })).toBeVisible();
-  await expect(page.getByText("规则 org-v1 · 覆盖 100%")).toBeVisible();
+  await expect(page.getByText("规则 org-v1", { exact: true })).toBeVisible();
+  await expect(page.getByText(/覆盖 100%/)).toBeVisible();
   await expect(page.getByText("market_demand · 40%")).toBeVisible();
-  await expect(page.getByRole("link", { name: "管理规则版本" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "规则版本" })).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
 });
