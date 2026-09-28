@@ -115,6 +115,7 @@ let batchSelectionGeneration = 0;
 let decisionDialogGeneration = 0;
 let writeScopeGeneration = 0;
 let activeWriteCount = 0;
+let tabIntentGeneration = 0;
 watch(
   showCreate,
   () => {
@@ -654,12 +655,17 @@ async function queueProfit() {
 }
 async function queueAi() {
   if (!detail.value) return;
-  const result = await write(`/opportunities/${detail.value.id}/ai-analyses`, {
+  const opportunityId = detail.value.id;
+  const routePath = route.path;
+  const tabGeneration = tabIntentGeneration;
+  const result = await write(`/opportunities/${opportunityId}/ai-analyses`, {
     expected_version: detail.value.version,
   });
   if (result) {
+    if (detail.value?.id !== opportunityId || route.path !== routePath) return;
     await load();
-    await setTab("ai");
+    if (detail.value?.id !== opportunityId || route.path !== routePath) return;
+    if (tabIntentGeneration === tabGeneration) await setTab("ai");
     message.value = "AI 辅助分析已进入宝塔 Node Worker 队列；不会自动修改评分或决策。";
   }
 }
@@ -755,13 +761,16 @@ async function goListPage(nextPage: number) {
   await router.push({ query: { ...route.query, page: nextPage === 1 ? undefined : nextPage } });
 }
 async function setTab(nextTab: OpportunityTypes.OpportunityTab) {
+  if (tab.value !== nextTab) tabIntentGeneration += 1;
   tab.value = nextTab;
   await router.replace({
     query: { ...route.query, tab: nextTab === "overview" ? undefined : nextTab },
   });
 }
 function syncTabFromRoute() {
-  tab.value = resolveOpportunityTab(route.query.tab);
+  const nextTab = resolveOpportunityTab(route.query.tab);
+  if (tab.value !== nextTab) tabIntentGeneration += 1;
+  tab.value = nextTab;
 }
 function syncCreateRouteIntent() {
   if (

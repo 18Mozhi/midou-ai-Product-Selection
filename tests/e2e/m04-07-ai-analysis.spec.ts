@@ -105,6 +105,40 @@ async function setup(page: Page) {
     r.fulfill({ json: envelope(detail) }),
   );
 }
+
+test("a delayed AI enqueue receipt does not override a newer tab choice", async ({ page }) => {
+  let releaseQueue!: () => void;
+  let markQueueStarted!: () => void;
+  const queueGate = new Promise<void>((resolve) => (releaseQueue = resolve));
+  const queueStarted = new Promise<void>((resolve) => (markQueueStarted = resolve));
+  await setup(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    markQueueStarted();
+    await queueGate;
+    await route.fulfill({ status: 202, json: envelope({ id: "queued-ai-analysis" }) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await page.locator(".opportunity-tabs details > summary").click();
+  await page.getByRole("button", { name: "AI 辅助" }).click();
+  await page.getByRole("button", { name: "生成新分析" }).click();
+  await queueStarted;
+
+  const overviewTab = page.getByRole("button", { name: "结论", exact: true });
+  await overviewTab.click();
+  await expect(overviewTab).toHaveAttribute("aria-current", "page");
+  const queueResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
+      response.request().method() === "POST",
+  );
+  releaseQueue();
+  await queueResponse;
+  await page.waitForLoadState("networkidle");
+  await expect(overviewTab).toHaveAttribute("aria-current", "page");
+});
+
 test("M04-07.A07/A08/A15 shows AI boundary evidence references and human sampling on desktop and 390", async ({
   page,
 }) => {
