@@ -20,3 +20,11 @@
 - 本地 fixture 仅验证浏览器展示和既有请求行为，不证明真实来源权限/健康探针、MySQL/RBAC 或正式 M07-03。
 
 归档刷新失败审核图仍为独立历史材料，没有重写或把图包检查当作生产验收。部署结果、提交与线上 SHA 在本节下方续记。
+
+## 提交与部署
+
+- 功能提交：`77f8746614f3dacdbb8e232d6235f1a2a9a5f8b8`；样式/测试格式提交：`58f228f58e8877728a967d9fcbc72803c32be5ce`。两者均已推送至 `origin/main`。
+- 固定宝塔部署脚本成功，build SHA `58f228f58e8877728a967d9fcbc72803c32be5ce`；脚本按现有发布流程完成 Node 生命周期及迁移检查/应用后启动服务，部署包临时文件已删除。没有为本功能新增迁移或改动 API/运行配置。
+- 线上 `/api/v1/health/ready` 与 `/api/v1/health/available` 均通过；ready 返回 `ready`，MySQL、Redis、supervisor 为 available；`/api/v1/health/version` 的 build SHA 匹配。
+- `/platform-admin/providers/adapters` 返回 HTTP 200；P47 lazy JS/CSS 均 HTTP 200，逐字节 SHA-256 与本地构建一致。部署器另核验 `/login` 200、未知路由 404 和 browser-helper 包。
+- M07-03 preflight 通过不等于正式业务验收；本次线上 smoke 不证明真实来源权限/健康探针或客户数据结果。
