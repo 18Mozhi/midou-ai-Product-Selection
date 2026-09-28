@@ -5,9 +5,9 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TaskWorkspace.vue": "e47d772b5a6e22bebdf7d9ab10f785f0963e81f8d6953d4768bcfa8e66b06016",
-    "apps/web/src/components/TaskDetailPanel.vue": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48",
-    "apps/web/src/components/TaskActionDialog.vue": "18a2061a0e9de82d8e700d0ce7b6919c56cf3ff30564f72efde4526cdc0b1be6"
+    "apps/web/src/components/TaskWorkspace.vue": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25",
+    "apps/web/src/components/TaskDetailPanel.vue": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985",
+    "apps/web/src/components/TaskActionDialog.vue": "3b46e617a01c51ccc8610d7226c9fe40bb605791636458cff150ba23deaaab1d"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -1060,8 +1060,8 @@
         "hover": "not-mapped",
         "focus": "not-mapped",
         "pressed": "not-mapped",
-        "disabled": "pending form fields and close/return controls covered in actual Vue E2E",
-        "busy": "progress action screenshot and Escape/field-lock assertions on desktop and 390px mobile"
+        "disabled": "all five field variants and close/return controls are locked in the mounted Vue pending-write test",
+        "busy": "progress delayed-success and all five delayed-failure/retry variants are covered by desktop/390px mounted Vue tests and retained state screenshots"
       },
       "testReferences": [
         {
@@ -1072,9 +1072,14 @@
           "file": "tests/e2e/m05-01-business-tasks.spec.ts",
           "testName": "P24 action dialog locks fields and dismissal while its write is pending",
           "evidenceType": "mounted-Vue-E2E-local-delayed-action-response-desktop-and-mobile"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "testName": "P24 action variants keep failed drafts in the dialog and require an explicit retry",
+          "evidenceType": "mounted-Vue-E2E-local-409-explicit-retry-all-five-variants-desktop-and-mobile"
         }
       ],
-      "remaining": "原因trim、期限ISO、转交真实成员、进度Number/说明trim合同不变。2026-09-29起父级busy会禁用活动表单字段、关闭与返回控件，并阻止Escape关闭；实际Vue延迟progress POST测试断言精确已发送body、忙碌锁、Escape不关闭、成功后关闭，桌面/390px截图各1。失败保留草稿、其余四种变体的挂载Vue忙碌流、按钮全部交互态、长内容、主题/密度与真实Vue/服务验收仍未完成。"
+      "remaining": "原因trim、期限ISO、转交真实成员、进度Number/说明trim合同不变。五种变体的字段/关闭/返回在途锁、Escape保护、409就地提示与请求编号、原草稿保留及同body显式重试均有桌面/390px实际Vue本地证据和逐态失败截图；progress另有延迟成功闭窗覆盖。逐控件hover/focus/pressed、长内容、主题/密度、真实会话/RBAC/数据库冲突及M07-03验收仍未完成。"
     },
     {
       "actionId": "detail.transfer.assignee.change",
@@ -1413,7 +1418,7 @@
       "label": "详情父级事件转发",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1"
+        "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1"
       ],
       "sourceContractKeys": [
         "task.detail.events：接收详情动作/编辑/删除/评论及表单模型变化"
@@ -1463,7 +1468,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@action",
           "handler": "action",
           "targets": [
@@ -1478,7 +1483,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@edit",
           "handler": "editTask",
           "targets": [
@@ -1486,7 +1491,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@remove",
           "handler": "askRemove",
           "targets": [
@@ -1494,7 +1499,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@submit-action",
           "handler": "submitTaskAction",
           "targets": [
@@ -1502,7 +1507,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@close-action",
           "handler": "taskActionEditor = null",
           "targets": [
@@ -1510,7 +1515,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@add-comment",
           "handler": "addComment",
           "targets": [
@@ -1518,7 +1523,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@update:comment",
           "handler": "comment = $event",
           "targets": [
@@ -1526,7 +1531,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#cbfab60ce6b6b514.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@update:action-form",
           "handler": "taskActionForm = $event",
           "targets": [
@@ -1648,9 +1653,9 @@
       "apps/web/src/components/TaskActionDialog.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TaskWorkspace.vue": "e47d772b5a6e22bebdf7d9ab10f785f0963e81f8d6953d4768bcfa8e66b06016",
-      "apps/web/src/components/TaskDetailPanel.vue": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48",
-      "apps/web/src/components/TaskActionDialog.vue": "18a2061a0e9de82d8e700d0ce7b6919c56cf3ff30564f72efde4526cdc0b1be6"
+      "apps/web/src/components/TaskWorkspace.vue": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25",
+      "apps/web/src/components/TaskDetailPanel.vue": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985",
+      "apps/web/src/components/TaskActionDialog.vue": "3b46e617a01c51ccc8610d7226c9fe40bb605791636458cff150ba23deaaab1d"
     },
     "inputs": [
       {

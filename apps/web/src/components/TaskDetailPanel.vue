@@ -16,6 +16,7 @@ const props = defineProps<{
   activity: TaskActivity[];
   actionEditor: TaskActionEditor | null;
   actionForm: TaskActionForm;
+  actionFeedback: { message: string; requestId: string } | null;
   members: MemberOption[];
   comment: string;
   assigneeLabel: string;
@@ -259,6 +260,7 @@ const emit = defineEmits<{
     :task-version="task.version"
     :action-editor="actionEditor"
     :action-form="actionForm"
+    :action-feedback="actionFeedback"
     :members="members"
     :busy="busy"
     @submit="emit('submitAction')"

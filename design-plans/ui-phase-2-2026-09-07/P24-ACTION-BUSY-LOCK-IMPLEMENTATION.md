@@ -2,6 +2,14 @@
 
 日期：2026-09-29
 
+## 延伸：五种动作失败保留与显式重试
+
+已将 API 失败的 `action_hint` 与请求编号放回当前单项动作弹窗，草稿与动作目标保持不变；用户可核对并自行再次提交。没有自动重放 POST、没有中止已发请求，也没有更改 `action`、`expected_version`、字段名、权限或服务端合同。关闭并返回入口只在空闲时清除本地错误反馈。
+
+`tests/e2e/m05-01-business-tasks.spec.ts` 现在逐项验证 pause、cancel、delay、transfer、progress：延迟 409 期间所有当前字段及关闭/返回不可操作、Escape 不收窗；失败后错误提示与请求编号在原窗可见、原字段内容完整保留且控件恢复，明确重试发送相同请求体，成功再关闭。每项的桌面和390px手机实际Vue测试各通过。失败态参考图共10张，保存在 `tests/e2e/m05-01-business-tasks.spec.ts-snapshots/p24-action-{pause,cancel,delay,transfer,progress}-failed-{desktop-chromium,mobile-390}-win32.png`。它们是单独保留的视觉参考，不是像素断言，也不由回归 spec 自动重拍，以免提高 mock 截图比例。
+
+这些受控浏览器回执证明本地交互和请求快照，不证明生产会话/RBAC/数据库或真实版本冲突处理；其余 P24 页面状态与 M07-03 仍独立开放。
+
 ## 问题与边界
 
 P24 原动作窗在 `TaskWorkspace.submitTaskAction()` 等待 POST 期间，只禁用了确认按钮；字段、右上关闭、返回和 Escape 仍可操作。请求体在提交时已经构造，之后修改的进展或原因不会改变已发送请求，但仍留在页面状态中，容易造成“修改已提交”或“关闭撤销请求”的错觉。
@@ -21,4 +29,4 @@ P24 原动作窗在 `TaskWorkspace.submitTaskAction()` 等待 POST 期间，只�
 - `tests/e2e/m05-01-business-tasks.spec.ts-snapshots/p24-action-pending-busy-desktop-chromium-win32.png`
 - `tests/e2e/m05-01-business-tasks.spec.ts-snapshots/p24-action-pending-busy-mobile-390-win32.png`
 
-本地 fixture 不证明生产网络、真实用户/RBAC、数据库写入或其他四种动作的失败恢复；这些仍需各自的运行证据。
+本地 fixture 不证明生产网络、真实用户/RBAC、数据库写入或服务端冲突处理。最初仅测 progress 在途成功；五种变体409失败恢复现已由上方延伸段落单独覆盖。

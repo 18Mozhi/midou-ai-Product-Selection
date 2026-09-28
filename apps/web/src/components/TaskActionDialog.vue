@@ -8,6 +8,7 @@ const props = defineProps<{
   taskVersion: number;
   actionEditor: TaskActionEditor | null;
   actionForm: TaskActionForm;
+  actionFeedback: { message: string; requestId: string } | null;
   members: MemberOption[];
   busy: boolean;
 }>();
@@ -78,6 +79,12 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
           <strong>{{ taskTitle }}</strong>
           <p>提交后会写入任务活动与审计记录，并使用当前任务版本进行冲突校验。</p>
         </section>
+
+        <div v-if="actionFeedback" class="task-action-feedback" role="alert" aria-live="assertive">
+          <strong>本次操作未能提交</strong>
+          <p>{{ actionFeedback.message }}</p>
+          <small v-if="actionFeedback.requestId">请求编号：{{ actionFeedback.requestId }}</small>
+        </div>
 
         <label v-if="actionEditor === 'transfer'" for="task-action-assignee">
           <span>接收成员 <b>必填</b></span>

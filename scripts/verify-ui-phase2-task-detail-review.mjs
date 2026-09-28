@@ -7,6 +7,13 @@ import { scanSource } from "./lib/ui-phase2-inventory.mjs";
 // Real source functions at inert boundaries. No mounted Vue, HTTP, SQL or production claim.
 const plain = (value) => JSON.parse(JSON.stringify(value));
 const ref = (value) => ({ value });
+class ApiClientError extends Error {
+  constructor(actionHint, requestId) {
+    super(actionHint);
+    this.actionHint = actionHint;
+    this.requestId = requestId;
+  }
+}
 export async function verifyTaskDetailReview() {
   const source = await readFile("apps/web/src/components/TaskWorkspace.vue", "utf8");
   const script = source.split('<script setup lang="ts">')[1].split("</script>")[0];
@@ -90,6 +97,8 @@ export async function verifyTaskDetailReview() {
   const bindings = {
     busy,
     notice,
+    taskActionFeedback: ref(null),
+    ApiClientError,
     selected: ref(task),
     canUpdate: ref(true),
     canAssign: ref(true),
@@ -102,7 +111,7 @@ export async function verifyTaskDetailReview() {
     },
     openActionEditor: (name) => opened.push(name),
     rethrowUnexpectedError: (error) => {
-      throw error;
+      if (!(error instanceof ApiClientError)) throw error;
     },
   };
   for (const name of ["start", "resume", "complete"]) {
@@ -179,12 +188,14 @@ export async function verifyTaskDetailReview() {
     "Five exact form bodies/version, independent single-transfer capability; no inferred terminal-state change or backend authorization proof",
   );
 
-  // Inputs and Return remain active in source during this request; newer typing is not this body.
+  // The API owns the submitted snapshot; the original dialog draft remains recoverable on failure.
   for (const outcome of ["success", "failure"]) {
     let release;
     const deferred = new Promise((resolve, reject) => {
       release = () =>
-        outcome === "success" ? resolve({}) : reject(new Error("isolated conflict"));
+        outcome === "success"
+          ? resolve({})
+          : reject(new ApiClientError("请核对当前任务信息后，再明确提交一次。", "task-retry-1"));
     });
     const editor = ref("progress"),
       form = ref({ ...fields }),
@@ -205,15 +216,19 @@ export async function verifyTaskDetailReview() {
       await promise;
       assert.equal(editor.value, null);
     } else {
-      await assert.rejects(promise, /isolated conflict/);
+      await promise;
       assert.equal(editor.value, "progress");
+      assert.deepEqual(plain(bindings.taskActionFeedback.value), {
+        message: "请核对当前任务信息后，再明确提交一次。",
+        requestId: "task-retry-1",
+      });
     }
     assert.equal(captured[0].progress_note, "已核对事实");
     assert.equal(form.value.progress_note, "等待期间新增的说明");
     assert.equal(busy.value, false);
   }
   checks.push(
-    "UNFIXED draft/result distinction: in-flight edited note is not sent; success closes editor while newer note is only local, failure leaves current draft open. Source refs, not a browser typing proof",
+    "In-flight edited note is not sent; success closes editor while the newer note is local, API failure preserves the editor draft and captures the action hint/request ID. Mounted Vue E2E covers typing lock and retry behavior",
   );
 
   const editForm = { title: "事实复核", description: "已有说明", priority: "high", due_at: "" };
@@ -325,13 +340,18 @@ export async function verifyTaskDetailReview() {
   assert.equal(closeButtons.length, 2);
   for (const button of closeButtons) assert.equal(button.attributes[":disabled"], "busy");
   assert.match(actionDialog, /if \(!props\.busy\) emit\("close"\)/);
+  assert.match(actionDialog, /actionFeedback\.message/);
+  assert.match(actionDialog, /actionFeedback\.requestId/);
+  assert.match(actionDialog, /role="alert"/);
+  const taskWorkspace = await readFile("apps/web/src/components/TaskWorkspace.vue", "utf8");
+  assert.match(taskWorkspace, /error\.actionHint, requestId: error\.requestId/);
   const css = await readFile("apps/web/src/task-workspace-enhancements.css", "utf8");
   assert.match(
     css,
     /\.task-detail-route\s*>\s*:not\(\.task-dossier\):not\(\.task-title\):not\(dialog\):not\(\.task-detail-state\):not\(\.task-notice\)\s*\{\s*display: none;/,
   );
   checks.push(
-    "Source presentation: transfer has no terminal predicate; five form fields, close and return lock on busy and Escape is guarded; detail CSS hides list/tabs/title/exports but keeps dialogs/status/notice; mounted Vue E2E separately covers list-only URL queries and progress pending lock",
+    "Source presentation: transfer has no terminal predicate; five form fields, close and return lock on busy and Escape is guarded; action API failures retain action hint/request ID in the dialog for explicit retry; detail CSS hides list/tabs/title/exports but keeps dialogs/status/notice; mounted Vue E2E separately covers list-only URL queries, pending lock and all five failure/retry variants",
   );
   return {
     checks,

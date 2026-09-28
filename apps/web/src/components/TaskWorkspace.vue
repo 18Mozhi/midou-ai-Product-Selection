@@ -122,6 +122,7 @@ function assertCurrentRead(read: TaskRead) {
     throw new SupersededTaskRead();
 }
 const taskActionEditor = ref<TaskActionEditor | null>(null),
+  taskActionFeedback = ref<{ message: string; requestId: string } | null>(null),
   taskActionForm = ref({
     reason: "",
     due_at: "",
@@ -535,6 +536,7 @@ function openActionEditor(name: TaskActionEditor) {
   if (!selected.value || busy.value || (name === "transfer" ? !canAssign.value : !canUpdate.value))
     return;
   taskActionEditor.value = name;
+  taskActionFeedback.value = null;
   taskActionForm.value = {
     reason: "",
     due_at: toLocalDateTime(selected.value.due_at),
@@ -542,6 +544,11 @@ function openActionEditor(name: TaskActionEditor) {
     progress_percent: selected.value.progress_percent ?? 0,
     progress_note: selected.value.progress_note ?? "",
   };
+}
+function closeActionEditor() {
+  if (busy.value) return;
+  taskActionEditor.value = null;
+  taskActionFeedback.value = null;
 }
 function askRemove(task: Task) {
   if (!canUpdate.value) return;
@@ -624,6 +631,7 @@ async function submitTaskAction() {
     body.progress_percent = Number(taskActionForm.value.progress_percent);
     body.progress_note = taskActionForm.value.progress_note.trim();
   }
+  taskActionFeedback.value = null;
   busy.value = true;
   try {
     const taskId = selected.value.id;
@@ -632,6 +640,9 @@ async function submitTaskAction() {
     taskActionEditor.value = null;
     await openById(taskId, true);
   } catch (error) {
+    if (error instanceof ApiClientError) {
+      taskActionFeedback.value = { message: error.actionHint, requestId: error.requestId };
+    }
     rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
@@ -1007,6 +1018,7 @@ watch(
       :activity="activity"
       :action-editor="taskActionEditor"
       :action-form="taskActionForm"
+      :action-feedback="taskActionFeedback"
       :members="memberOptions"
       :comment="comment"
       :assignee-label="assigneeLabel"
@@ -1021,7 +1033,7 @@ watch(
       @edit="editTask"
       @remove="askRemove"
       @submit-action="submitTaskAction"
-      @close-action="taskActionEditor = null"
+      @close-action="closeActionEditor"
       @add-comment="addComment"
       @update:comment="comment = $event"
       @update:action-form="taskActionForm = $event"

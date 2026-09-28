@@ -260,6 +260,152 @@ test("P24 action dialog locks fields and dismissal while its write is pending", 
   await expect(dialog).toBeHidden();
 });
 
+test("P24 action variants keep failed drafts in the dialog and require an explicit retry", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseFailure!: () => void;
+  let failureGate = new Promise<void>((resolve) => {
+    releaseFailure = resolve;
+  });
+  let actionRequests = 0;
+  const submittedBodies: Record<string, unknown>[] = [];
+  await page.route(`**/api/v1/tasks/${taskId}/actions`, async (route) => {
+    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    actionRequests += 1;
+    if (actionRequests % 2 === 1) {
+      await failureGate;
+      await route.fulfill({
+        status: 409,
+        json: {
+          error: {
+            code: "task_version_conflict",
+            message: "任务信息已更新。",
+            action_hint: "请核对当前任务信息后，再明确提交一次。",
+          },
+          request_id: `m05-01-action-failure-${actionRequests}`,
+          trace_id: `m05-01-action-failure-${actionRequests}`,
+        },
+      });
+      return;
+    }
+    await route.fulfill({ json: env({ ...task, version: task.version + 1 }) });
+  });
+
+  await page.goto(`/tasks/${taskId}`);
+  const dateValue = "2026-10-02T09:30";
+  const dateIso = await page.evaluate((value) => new Date(value).toISOString(), dateValue);
+  const scenarios = [
+    {
+      action: "progress",
+      trigger: "更新进度",
+      title: "更新任务进度",
+      fields: [
+        { label: "完成进度（0–100）", value: "48" },
+        { label: "本次进展说明", value: "已完成样品核验，等待交期确认" },
+      ],
+      body: {
+        action: "progress",
+        expected_version: task.version,
+        progress_percent: 48,
+        progress_note: "已完成样品核验，等待交期确认",
+      },
+    },
+    {
+      action: "pause",
+      trigger: "暂停",
+      title: "暂停任务",
+      fields: [{ label: "操作原因", value: "等待供应商补交证明" }],
+      body: { action: "pause", expected_version: task.version, reason: "等待供应商补交证明" },
+    },
+    {
+      action: "delay",
+      trigger: "调整期限",
+      title: "调整任务期限",
+      fields: [
+        { label: "新截止时间", value: dateValue },
+        { label: "操作原因", value: "供应商交期需要复核" },
+      ],
+      body: {
+        action: "delay",
+        expected_version: task.version,
+        reason: "供应商交期需要复核",
+        due_at: dateIso,
+      },
+    },
+    {
+      action: "transfer",
+      trigger: "转交负责人",
+      title: "转交任务",
+      fields: [
+        { label: "接收成员", value: actor },
+        { label: "操作原因", value: "交由当前工作区负责人继续核对" },
+      ],
+      body: {
+        action: "transfer",
+        expected_version: task.version,
+        reason: "交由当前工作区负责人继续核对",
+        assignee_id: actor,
+      },
+    },
+    {
+      action: "cancel",
+      trigger: "取消任务",
+      title: "取消任务",
+      fields: [{ label: "操作原因", value: "来源需求已撤回" }],
+      body: { action: "cancel", expected_version: task.version, reason: "来源需求已撤回" },
+    },
+  ];
+
+  const more = page.locator(".task-detail-more");
+  for (const scenario of scenarios) {
+    failureGate = new Promise<void>((resolve) => {
+      releaseFailure = resolve;
+    });
+    if (
+      scenario.action !== "progress" &&
+      !(await more.evaluate((element) => (element as HTMLDetailsElement).open))
+    )
+      await more.locator("summary").click();
+    const trigger =
+      scenario.action === "progress"
+        ? page.getByRole("button", { name: scenario.trigger, exact: true })
+        : more.getByRole("button", { name: scenario.trigger, exact: true });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: scenario.title });
+    for (const field of scenario.fields) {
+      const control = dialog.getByLabel(field.label);
+      if (field.label === "接收成员") await control.selectOption(field.value);
+      else await control.fill(field.value);
+    }
+
+    await dialog.getByRole("button", { name: "确认提交" }).click();
+    await expect(dialog).toHaveAttribute("aria-busy", "true");
+    await expect(dialog.getByRole("button", { name: "关闭任务操作窗口" })).toBeDisabled();
+    await expect(dialog.getByRole("button", { name: "返回" })).toBeDisabled();
+    for (const field of scenario.fields)
+      await expect(dialog.getByLabel(field.label)).toBeDisabled();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeVisible();
+    expect(actionRequests).toBe(scenarios.indexOf(scenario) * 2 + 1);
+    expect(submittedBodies.at(-1)).toEqual(scenario.body);
+
+    releaseFailure();
+    const feedback = dialog.getByRole("alert");
+    await expect(feedback).toContainText("请核对当前任务信息后，再明确提交一次。");
+    await expect(feedback).toContainText(`m05-01-action-failure-${actionRequests}`);
+    for (const field of scenario.fields) {
+      await expect(dialog.getByLabel(field.label)).toBeEnabled();
+      await expect(dialog.getByLabel(field.label)).toHaveValue(field.value);
+    }
+    await expect(dialog.getByRole("button", { name: "确认提交" })).toBeEnabled();
+    await dialog.getByRole("button", { name: "确认提交" }).click();
+    await expect(dialog).toBeHidden();
+    expect(actionRequests).toBe(scenarios.indexOf(scenario) * 2 + 2);
+    expect(submittedBodies.slice(-2)).toEqual([scenario.body, scenario.body]);
+  }
+});
+
 test("task center previews batch transfer and delay with scoped inputs", async ({ page }) => {
   await setup(page);
   await page.goto("/tasks");

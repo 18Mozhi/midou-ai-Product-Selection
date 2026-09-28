@@ -2446,6 +2446,26 @@
   line-height: 1.5;
 }
 
+.task-detail-route .task-action-feedback {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border-left: 4px solid var(--tw-danger);
+  background: var(--tw-danger-soft);
+  color: var(--tw-danger-ink);
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.task-detail-route .task-action-feedback p,
+.task-detail-route .task-action-feedback small {
+  margin: 0;
+}
+
+.task-detail-route .task-action-feedback small {
+  overflow-wrap: anywhere;
+}
+
 .task-detail-route .task-action-body label {
   display: grid;
   gap: 7px;
