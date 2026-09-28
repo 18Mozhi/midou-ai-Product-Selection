@@ -82,6 +82,7 @@ const props = defineProps<{
   page = ref(1),
   requestId = ref(""),
   message = ref(""),
+  erpBridgeBusy = ref(false),
   automationReadiness = ref<AutomaticSelectionReadiness | null>(null),
   busy = ref(false),
   selectionView = ref<"recommended" | "rule_candidates" | "evidence_pending" | "all">(
@@ -118,6 +119,8 @@ let batchDialogGeneration = 0;
 let batchIntentGeneration = 0;
 let batchSelectionGeneration = 0;
 let decisionDialogGeneration = 0;
+let erpDialogGeneration = 0;
+let erpBridgeGeneration = 0;
 let writeScopeGeneration = 0;
 let activeWriteCount = 0;
 let tabIntentGeneration = 0;
@@ -133,6 +136,13 @@ watch(
   showDecision,
   () => {
     decisionDialogGeneration += 1;
+  },
+  { flush: "sync" },
+);
+watch(
+  showErpImport,
+  () => {
+    erpDialogGeneration += 1;
   },
   { flush: "sync" },
 );
@@ -523,23 +533,33 @@ function browserBridge<T>(action: string, payload: Record<string, unknown>) {
     );
   });
 }
-async function persistErpProducts(data: {
-  items: unknown[];
-  source_url: string;
-  captured_at: string;
-  total?: number;
-}) {
+async function persistErpProducts(
+  data: {
+    items: unknown[];
+    source_url: string;
+    captured_at: string;
+    total?: number;
+  },
+  ownsIntent: () => boolean,
+  ownsPage: () => boolean,
+) {
   const result = await write("/imports/erp-products", data);
   if (!result) return;
-  showErpImport.value = false;
+  if (ownsIntent()) showErpImport.value = false;
+  if (!ownsPage()) return;
   await load();
+  if (!ownsPage()) return;
   message.value =
     `ERP 已读取 ${result.received_count} 条：新增 ${result.opportunity_count} 个机会、` +
     `${result.competitor_count} 个亚马逊待采集竞品、` +
     `${result.sourcing_search_count} 个货源匹配任务；原始记录已保存为证据。`;
 }
 async function importFromErpBrowser() {
-  busy.value = true;
+  if (busy.value || erpBridgeBusy.value) return;
+  const bridgeGeneration = ++erpBridgeGeneration;
+  const ownership = captureErpImportOwnership();
+  const ownsBridge = () => bridgeGeneration === erpBridgeGeneration && ownership.ownsPage();
+  erpBridgeBusy.value = true;
   message.value = "正在从已登录的 ERP 商品列表读取数据…";
   try {
     const data = await browserBridge<{
@@ -548,10 +568,10 @@ async function importFromErpBrowser() {
       captured_at: string;
       total: number;
     }>("erp.products.read", { limit: Number(erpImportLimit.value) });
-    busy.value = false;
-    await persistErpProducts(data);
+    if (!ownsBridge() || !ownership.ownsIntent()) return;
+    await persistErpProducts(data, ownership.ownsIntent, ownership.ownsPage);
   } catch (error) {
-    busy.value = false;
+    if (!ownsBridge() || !ownership.ownsIntent()) return;
     const code = error instanceof Error ? error.message : "";
     message.value =
       code === "erp_login_page_opened"
@@ -559,22 +579,44 @@ async function importFromErpBrowser() {
         : code === "erp_login_required"
           ? "ERP 登录状态无效，请在 ERP 页面重新登录。"
           : "未检测到浏览器助手或 ERP 权限未授予。请先下载并加载浏览器助手。";
+  } finally {
+    if (bridgeGeneration === erpBridgeGeneration) erpBridgeBusy.value = false;
   }
 }
 async function importErpFile(event: Event) {
   const file = (event.target as HTMLInputElement).files?.[0];
   if (!file) return;
+  const ownership = captureErpImportOwnership();
   try {
     const parsed = JSON.parse(await file.text());
+    if (!ownership.ownsIntent()) return;
     const items = Array.isArray(parsed) ? parsed : parsed?.list;
-    await persistErpProducts({
-      items,
-      source_url: "https://medou.medouai.com/#/ProductList",
-      captured_at: new Date().toISOString(),
-    });
+    await persistErpProducts(
+      {
+        items,
+        source_url: "https://medou.medouai.com/#/ProductList",
+        captured_at: new Date().toISOString(),
+      },
+      ownership.ownsIntent,
+      ownership.ownsPage,
+    );
   } catch {
-    message.value = "ERP JSON 文件格式无效；应为接口返回的 list 数组或商品数组。";
+    if (ownership.ownsIntent())
+      message.value = "ERP JSON 文件格式无效；应为接口返回的 list 数组或商品数组。";
   }
+}
+function captureErpImportOwnership() {
+  const dialogGeneration = erpDialogGeneration;
+  const scopeGeneration = writeScopeGeneration;
+  const routePath = route.fullPath;
+  const ownsPage = () =>
+    scopeGeneration === writeScopeGeneration &&
+    route.fullPath === routePath &&
+    route.path === "/opportunities" &&
+    !props.opportunityId;
+  const ownsIntent = () =>
+    ownsPage() && showErpImport.value && dialogGeneration === erpDialogGeneration;
+  return { ownsIntent, ownsPage };
 }
 function startDecision(action: "adopt" | "observe" | "reject") {
   decisionAction.value = action;
@@ -857,6 +899,8 @@ function queueLoad() {
 }
 onDeactivated(() => {
   readGeneration += 1;
+  erpBridgeGeneration += 1;
+  erpBridgeBusy.value = false;
   writeScopeGeneration += 1;
   activeWriteCount = 0;
   busy.value = false;
@@ -878,6 +922,8 @@ watch(
   () => props.opportunityId,
   () => {
     readGeneration += 1;
+    erpBridgeGeneration += 1;
+    erpBridgeBusy.value = false;
     writeScopeGeneration += 1;
     activeWriteCount = 0;
     busy.value = false;
@@ -914,6 +960,8 @@ watch(
 );
 onBeforeUnmount(() => {
   readGeneration += 1;
+  erpBridgeGeneration += 1;
+  erpBridgeBusy.value = false;
   writeScopeGeneration += 1;
   activeWriteCount = 0;
 });
@@ -1149,7 +1197,7 @@ onBeforeUnmount(() => {
       v-model:decision-open="showDecision"
       v-model:erp-import-limit="erpImportLimit"
       v-model:decision-reason="decisionReason"
-      :busy="busy"
+      :busy="busy || erpBridgeBusy"
       :form="form"
       :create-feedback="createFeedback"
       :decision-action="decisionAction"

@@ -160,6 +160,15 @@ async function navigateSpa(page: Page, href: string) {
   }, href);
 }
 
+async function openOpportunitySection(page: Page, label: string) {
+  const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
+  if (await mobileDirectory.isVisible()) await mobileDirectory.locator("summary").click();
+  await page
+    .getByRole("navigation", { name: "机会详情分区" })
+    .getByRole("button", { name: label, exact: true })
+    .click();
+}
+
 test("UI2-OP01 manual creation validates, preserves canceled draft and follows returned ID", async ({
   page,
 }) => {
@@ -193,7 +202,7 @@ test("UI2-OP01 manual creation validates, preserves canceled draft and follows r
   await expect(modal.getByLabel("市场", { exact: true })).toHaveValue("CA");
   await modal.getByRole("button", { name: "创建机会", exact: true }).click();
   await expect(page).toHaveURL(new RegExp(`/opportunities/${opportunityId}$`));
-  await expect(page.locator(".opportunity-detail h3").first()).toHaveText("新候选草稿");
+  await expect(page.locator(".opportunity-detail h1")).toHaveText("新候选草稿");
   expect(data.writes).toHaveLength(1);
   assertWrite(data.writes[0], "/opportunities", {
     name: "新候选草稿",
@@ -542,8 +551,7 @@ for (const [action, label] of [
     expect(data.writes[0].headers()["idempotency-key"]).not.toBe(
       data.writes[1].headers()["idempotency-key"],
     );
-    await page.locator("summary").filter({ hasText: "更多分析" }).click();
-    await page.getByRole("button", { name: "决策历史", exact: true }).click();
+    await openOpportunitySection(page, "决策历史");
     await expect(page.locator(".opportunity-detail")).toContainText(reason.trim());
   });
 }
@@ -627,4 +635,94 @@ test("UI2-OP05 ERP file selection imports immediately without browser bridge or 
     captured_at: body.captured_at,
   });
   await expect(page).toHaveURL(/\/opportunities\?view=all$/);
+});
+
+async function captureErpBridgeRequest(page: Page) {
+  await page.addInitScript(() => {
+    window.addEventListener("message", (event) => {
+      if (
+        event.data?.type === "SCOUTOPS_BROWSER_BRIDGE_REQUEST" &&
+        event.data?.action === "erp.products.read"
+      )
+        (
+          window as typeof window & { __erpBridgeRequest?: { request_id: string } }
+        ).__erpBridgeRequest = event.data;
+    });
+  });
+}
+
+async function readErpBridgeRequestId(page: Page) {
+  return page.evaluate(
+    () =>
+      (window as typeof window & { __erpBridgeRequest?: { request_id: string } }).__erpBridgeRequest
+        ?.request_id ?? "",
+  );
+}
+
+async function resolveErpBridgeRequest(page: Page, requestId: string) {
+  await page.evaluate(
+    ({ requestId, at }) => {
+      window.postMessage(
+        {
+          type: "SCOUTOPS_BROWSER_BRIDGE_RESULT",
+          request_id: requestId,
+          ok: true,
+          data: {
+            items: [{ spu: "UI2-STALE-ERP", product: { title: "过期导入意图" } }],
+            source_url: "https://medou.medouai.com/#/ProductList",
+            captured_at: at,
+            total: 1,
+          },
+        },
+        location.origin,
+      );
+    },
+    { requestId, at },
+  );
+}
+
+test("UI2-OP07 ignores an ERP bridge result after its dialog intent is replaced", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  await captureErpBridgeRequest(page);
+  await page.goto("/opportunities?view=all");
+  await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();
+  let modal = page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" });
+  await modal.getByRole("button", { name: "从当前浏览器读取", exact: true }).click();
+  await expect.poll(() => readErpBridgeRequestId(page)).toMatch(/^[0-9a-f-]{36}$/u);
+  const oldRequestId = await readErpBridgeRequestId(page);
+
+  await modal.getByRole("button", { name: "关闭 ERP 导入" }).click();
+  await expect(modal).toBeHidden();
+  await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();
+  modal = page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" });
+  await expect(modal).toBeVisible();
+  await resolveErpBridgeRequest(page, oldRequestId);
+
+  await expect(modal).toBeVisible();
+  await expect(modal.getByRole("button", { name: "从当前浏览器读取", exact: true })).toBeEnabled();
+  expect(data.writes).toHaveLength(0);
+});
+
+test("UI2-OP07 does not persist ERP bridge data after the opportunity page is deactivated", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  await captureErpBridgeRequest(page);
+  await page.goto("/opportunities?view=all");
+  await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();
+  const modal = page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" });
+  await modal.getByRole("button", { name: "从当前浏览器读取", exact: true }).click();
+  await expect.poll(() => readErpBridgeRequestId(page)).toMatch(/^[0-9a-f-]{36}$/u);
+  const oldRequestId = await readErpBridgeRequestId(page);
+
+  await navigateSpa(page, "/home");
+  await expect(page).toHaveURL(/\/home$/u);
+  await navigateSpa(page, "/opportunities?view=all");
+  await expect(page.locator(".opportunity-workspace--review")).toBeVisible();
+  await resolveErpBridgeRequest(page, oldRequestId);
+
+  await expect(page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" })).toBeHidden();
+  expect(data.writes).toHaveLength(0);
 });
