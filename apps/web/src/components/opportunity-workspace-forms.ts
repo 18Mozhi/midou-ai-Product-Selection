@@ -1,5 +1,8 @@
 import { reactive } from "vue";
 
+const localDateTimeInputValue = (date = new Date()) =>
+  new Date(date.getTime() - date.getTimezoneOffset() * 60_000).toISOString().slice(0, 16);
+
 export function createOpportunityWorkspaceForms() {
   return {
     filters: reactive({
@@ -20,7 +23,7 @@ export function createOpportunityWorkspaceForms() {
       source_type: "manual_confirmation",
       source_ref_id: "",
       evidence_id: "",
-      observed_at: new Date().toISOString().slice(0, 16),
+      observed_at: localDateTimeInputValue(),
       reviewer_id: "",
     }),
     feedbackForm: reactive({

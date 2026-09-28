@@ -613,3 +613,91 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   await expect(reviewQueue.locator("form")).toHaveCount(0);
   await expect(reviewQueue.getByRole("button", { name: "通过", exact: true })).toHaveCount(0);
 });
+
+test("P18 cost observed_at defaults to local time and serializes the same instant", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: `http://127.0.0.1:${process.env.PLAYWRIGHT_WEB_PORT ?? 5173}`,
+    timezoneId: "Asia/Tokyo",
+  });
+  try {
+    const page = await context.newPage();
+    await navigation(page);
+    const reviewerId = "00000000-0000-4000-8000-000000000452";
+    let submitted: Record<string, unknown> | null = null;
+    await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
+      route.fulfill({
+        json: envelope({
+          id: opportunityId,
+          name: "成本时间测试机会",
+          market: "US",
+          category: "outdoor",
+          source_type: "manual",
+          source_ref_id: null,
+          owner_id: null,
+          lifecycle_status: "ready",
+          recommendation_status: "observe",
+          overall_score: 72,
+          trend_score: 80,
+          competition_score: 65,
+          profit_status: "insufficient_data",
+          risk_level: "unknown",
+          confidence: { status: "measured", score: 80 },
+          evidence_count: 0,
+          source_count: 0,
+          coverage_status: "partial",
+          decision_status: "pending",
+          version: 8,
+          updated_at: "2026-08-08T12:00:00.000Z",
+          score_rule_version: "v1",
+          scored_at: "2026-08-08T11:00:00.000Z",
+          latest_score_run: null,
+          score_components: [],
+          evidence: [],
+          decisions: [],
+          section_status: {
+            market: "covered",
+            competition: "covered",
+            profit: "insufficient_data",
+            risk: "insufficient_data",
+            execution: "not_available",
+          },
+        }),
+      }),
+    );
+    await page.route("**/api/v1/cost-input-reviewers", (route) =>
+      route.fulfill({ json: envelope([{ id: reviewerId, label: "成本复核人" }]) }),
+    );
+    await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+      route.fulfill({
+        json: envelope({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
+      }),
+    );
+    await page.route(`**/api/v1/opportunities/${opportunityId}/cost-inputs`, async (route) => {
+      submitted = route.request().postDataJSON() as Record<string, unknown>;
+      await route.fulfill({ status: 201, json: envelope({ id: ruleId }) });
+    });
+
+    await page.goto(`/opportunities/${opportunityId}`);
+    await page.getByRole("button", { name: "利润与成本" }).click();
+    const observedAt = page.getByLabel("观测时间");
+    await expect(observedAt).toHaveValue(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/);
+    const localValue = await observedAt.inputValue();
+    const expectedInstant = await page.evaluate(
+      (value) => new Date(value).toISOString(),
+      localValue,
+    );
+    const localEpoch = await page.evaluate((value) => new Date(value).getTime(), localValue);
+    expect(Math.abs(Date.now() - localEpoch)).toBeLessThan(120_000);
+
+    await page.getByLabel("来源标识").fill("source:local-time-check");
+    await page.getByLabel("证据 ID").fill("00000000-0000-4000-8000-000000000453");
+    await page.getByLabel("指定复核人").selectOption(reviewerId);
+    await page.getByRole("button", { name: "提交双人复核" }).click();
+    await expect.poll(() => submitted).not.toBeNull();
+    expect(submitted).toMatchObject({ observed_at: expectedInstant });
+  } finally {
+    await context.close();
+  }
+});

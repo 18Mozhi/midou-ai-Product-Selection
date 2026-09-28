@@ -90,7 +90,7 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 - 详情tab用replace、返回携带from；safeOpportunityReturnPath只检查字符串单斜杠开头且非双斜杠，不是完整路由白名单或权限保证。直达、不存在、无权和异常from需补验。
 - 初次挂载才处理create=1/source_topic_id预填；复用缓存页的后续query变化不一定重新打开创建框。watch ID会清detail并load，query watch仅当前列表路径生效；未见请求归属token/Abort或明确组织/工作区watch，迟到响应与范围切换需复现，不宣称已有TaskWorkspace同级保护。
 - AI与下游失败保留各自旧数组；AI articles在error分支外仍可渲染旧记录。详情profit是必需读取，reviewer选项失败静默空。未知错误文案“未写入任何状态”不是后端无写的证据，网络丢响应时必须核对结果/幂等，不根据文案判断事务。
-- 成本默认时间取UTC ISO截断后交datetime-local，再按本地时间解析成ISO；存在时区偏移风险，OP09需跨时区定向验证。无业务授权不改变历史金额或时间。
+- 成本默认时间由当前本地时区格式化为datetime-local，再由现有提交逻辑转换为ISO；Asia/Tokyo Vue E2E 检查默认值接近当前时刻且提交保留其对应绝对时刻。未改历史金额或时间；服务端范围/时区业务校验仍属独立验收。
 - 只读模式无创建/批量/决定/AI写入，但UI仍读取成员选项和AI；可见、禁用、服务端拒绝要分层验证。成本、竞品、供应三域能力不能用opportunity:decide一项替代。
 
 ## 5. 可执行验收卡与未覆盖项

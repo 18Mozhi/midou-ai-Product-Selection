@@ -1645,7 +1645,7 @@
     },
     "profitCost": {
       "module": "M04-04",
-      "uiPhase2ProfitCProposal": "design-plans/ui-phase-2-2026-09-07/design/profit-direction-c/README.md provides PROFIT-C-r1 pending-review P18 profit proposal: 50 scenes at two widths, 100 PNGs, four internal workfaces, nine cost fields and two inline review reason variants, zero dialogs. scripts/lib/ui-phase2-profit-design-data.mjs executes source payloads, service self-review rejection and overdue pending review through an inert repository adapter; scripts/verify-ui-phase2-profit-c.mjs verifies snapshots unchanged by submission/review/queue, amount-zero distinction, time conversion, drafts, role projection and recovery without HTTP/storage. Live Vue separates reviewer-directory loading, failure and successful empty data, permits current-read GET-only retry with request tracking, and clears a cost-review form when its record is no longer reviewable or its version changes; no eligibility, write, permission, API or schema contract changes. Source UTC-default offset and historical fixture identity conflict remain documented; other six P18 sections and outstanding actions, real SQL/RBAC/races and full production acceptance remain pending.",
+      "uiPhase2ProfitCProposal": "design-plans/ui-phase-2-2026-09-07/design/profit-direction-c/README.md provides PROFIT-C-r1 pending-review P18 profit proposal: 50 scenes at two widths, 100 PNGs, four internal workfaces, nine cost fields and two inline review reason variants, zero dialogs. scripts/lib/ui-phase2-profit-design-data.mjs executes source payloads, service self-review rejection and overdue pending review through an inert repository adapter; scripts/verify-ui-phase2-profit-c.mjs verifies snapshots unchanged by submission/review/queue, amount-zero distinction, time conversion, drafts, role projection and recovery without HTTP/storage. Live Vue separates reviewer-directory loading, failure and successful empty data, permits current-read GET-only retry with request tracking, clears a cost-review form when its record is no longer reviewable or its version changes, and formats cost observed_at defaults in local datetime-local time while preserving the existing ISO request contract; no eligibility, write, permission, API or schema contract changes. Historical fixture identity conflict remains documented; other six P18 sections and outstanding actions, real SQL/RBAC/races and full production acceptance remain pending.",
       "entrypoints": [
         "../apps/api/src/profit-service.ts",
         "../apps/api/src/mysql-profit-repository.ts",
@@ -1655,6 +1655,7 @@
         "../apps/web/src/components/CostRuleConsole.vue",
         "../apps/web/src/components/shared/QualityGateSetupSummary.vue",
         "../apps/web/src/components/OpportunityWorkspace.vue",
+        "../apps/web/src/components/opportunity-workspace-forms.ts",
         "../apps/web/src/components/OpportunityProfitPanel.vue",
         "../apps/web/src/components/OpportunityCostReviewQueue.vue",
         "../apps/web/src/components/SourcingCostConfirmationPanel.vue",
