@@ -21,16 +21,19 @@ const captured = (file) =>
 
 test("P47 loading proposal adds only two loading-specific props without changing runtime", () => {
   const original = read(component),
-    review = previewAdapterLoading(original);
+    review = previewAdapterLoading(original),
+    historical = captured(component),
+    historicalReview = previewAdapterLoading(historical);
   const additions =
     `      :title="state === 'loading' ? '${loadingTitle}' : ''"\n` +
     `      :description="state === 'loading' ? '${loadingDescription}' : ''"\n`;
-  assert.equal(review.replace(additions, ""), original);
-  const parsed = parse(review);
+  assert.equal(review, original);
+  assert.equal(historicalReview.replace(additions, ""), historical);
+  const parsed = parse(historicalReview);
   assert.deepEqual(parsed.errors, []);
   assert.equal(
     parsed.descriptor.scriptSetup.content,
-    parse(original).descriptor.scriptSetup.content,
+    parse(historical).descriptor.scriptSetup.content,
   );
   assert.deepEqual(
     compileTemplate({
@@ -42,7 +45,18 @@ test("P47 loading proposal adds only two loading-specific props without changing
   );
   assert.throws(() => previewAdapterLoading(original.replace(':kind="state"', ':kind="other"')));
   assert.throws(() => previewAdapterLoading(original + '\n      :kind="state"\n'));
-  assert.ok(!original.includes(loadingTitle));
+  const production = parse(original);
+  assert.deepEqual(production.errors, []);
+  assert.deepEqual(
+    compileTemplate({
+      source: production.descriptor.template.content,
+      filename: component,
+      id: "p47-loading-production",
+    }).errors,
+    [],
+  );
+  assert.ok(original.includes(loadingTitle));
+  assert.ok(original.includes(loadingDescription));
 });
 
 test("P47 loading rules remain scoped to review body, active P47 and loading only", () => {

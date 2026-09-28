@@ -97,6 +97,63 @@ async function nav(page: any) {
     }),
   );
 }
+test("P47 initial loading state uses its approved copy and compact skeleton without sample data", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  let releaseRead!: () => void;
+  const readGate = new Promise<void>((resolve) => (releaseRead = resolve));
+  await page.route("**/api/v1/platform/provider-adapters", async (route) => {
+    await readGate;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ data: items, request_id: "p47-loading", trace_id: "p47-loading" }),
+    });
+  });
+
+  try {
+    await page.goto("/platform-admin/providers/adapters");
+    const panel = page.locator('.adapter-center--c .ui-state-panel[data-kind="loading"]');
+    await expect(panel).toBeVisible();
+    await expect(panel.getByRole("heading", { name: "正在读取采集状态" })).toBeVisible();
+    await expect(
+      panel.getByText("正在获取来源目录与运行状态，请稍候。", { exact: true }),
+    ).toBeVisible();
+    await expect(panel.locator(".ui-state-skeleton i")).toHaveCount(3);
+    await expect(panel).toHaveAttribute("aria-busy", "true");
+    await expect(panel).toHaveAttribute("aria-live", "polite");
+    await expect(panel.getByRole("button")).toHaveCount(0);
+    await expect(page.getByText("公开趋势 RSS", { exact: true })).toHaveCount(0);
+    const loadingStyle = await panel.evaluate((element) => {
+      const style = getComputedStyle(element),
+        eyebrow = element.querySelector(":scope > p"),
+        skeleton = element.querySelector(".ui-state-skeleton i");
+      return {
+        background: style.backgroundColor,
+        borderRadius: style.borderRadius,
+        minHeight: style.minHeight,
+        eyebrow: eyebrow ? getComputedStyle(eyebrow).display : null,
+        skeletonAnimation: skeleton ? getComputedStyle(skeleton).animationName : null,
+      };
+    });
+    expect(loadingStyle).toEqual({
+      background: "rgb(255, 255, 255)",
+      borderRadius: "8px",
+      minHeight: "0px",
+      eyebrow: "none",
+      skeletonAnimation: "none",
+    });
+
+    releaseRead();
+    if (testInfo.project.name === "mobile-390")
+      await expect(page.getByRole("button", { name: /公开趋势 RSS.*查看详情/ })).toBeVisible();
+    else await expect(page.getByText("公开趋势 RSS", { exact: true })).toBeVisible();
+    await expect(panel).toHaveCount(0);
+  } finally {
+    releaseRead();
+  }
+});
 test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visual", async ({
   page,
 }, testInfo) => {

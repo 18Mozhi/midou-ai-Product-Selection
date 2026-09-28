@@ -314,8 +314,16 @@ onMounted(load);
     <UiStatePanel
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
-      :title="state === 'error' ? '暂时未能读取采集状态' : ''"
-      :description="state === 'error' ? '这次读取未完成。你可以重新读取，获取最新状态。' : ''"
+      :title="
+        state === 'loading' ? '正在读取采集状态' : state === 'error' ? '暂时未能读取采集状态' : ''
+      "
+      :description="
+        state === 'loading'
+          ? '正在获取来源目录与运行状态，请稍候。'
+          : state === 'error'
+            ? '这次读取未完成。你可以重新读取，获取最新状态。'
+            : ''
+      "
       :primary-label="state === 'loading' ? '' : '重新读取状态'"
       :request-id="requestId"
       @primary="load"
