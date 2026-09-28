@@ -74,6 +74,9 @@ const props = defineProps<{
   selectedOpportunityIds = ref<string[]>([]),
   detail = ref<OpportunityTypes.OpportunityDetail | null>(null),
   profit = ref<OpportunityTypes.OpportunityProfitAnalysis | null>(null),
+  profitLoadState = ref<"loading" | "ready" | "error">("loading"),
+  profitErrorMessage = ref(""),
+  profitRequestId = ref(""),
   aiAnalyses = ref<any[]>([]),
   aiLoadState = ref<OpportunityTypes.OpportunityPartialLoadState>("loading"),
   downstreamLoadState = ref<OpportunityTypes.OpportunityPartialLoadState>("loading"),
@@ -350,6 +353,45 @@ async function retryCostReviewers() {
     () => generation === readGeneration && props.opportunityId === opportunityId,
   );
 }
+async function loadProfitAnalysis(opportunityId: string, isCurrent: () => boolean) {
+  profitLoadState.value = "loading";
+  profitErrorMessage.value = "";
+  profitRequestId.value = "";
+  try {
+    const response = await request<OpportunityTypes.OpportunityProfitAnalysis>(
+      `/opportunities/${opportunityId}/profit-analysis`,
+    );
+    if (!isCurrent()) return false;
+    profit.value = response.data;
+    profitLoadState.value = "ready";
+    return true;
+  } catch (error) {
+    if (!isCurrent()) return false;
+    profitLoadState.value = "error";
+    if (error instanceof ApiClientError) {
+      profitErrorMessage.value = error.actionHint;
+      profitRequestId.value = error.requestId;
+      if (error.kind === "expired") {
+        requestId.value = error.requestId;
+        message.value = error.actionHint;
+        state.value = stateFrom(error.kind);
+        return false;
+      }
+    } else {
+      profitErrorMessage.value = "暂时无法读取利润与成本，请稍后重试。";
+    }
+    return true;
+  }
+}
+async function retryProfitAnalysis() {
+  const generation = readGeneration;
+  const opportunityId = props.opportunityId;
+  if (!opportunityId || profitLoadState.value === "loading") return;
+  await loadProfitAnalysis(
+    opportunityId,
+    () => generation === readGeneration && props.opportunityId === opportunityId,
+  );
+}
 async function load() {
   const generation = ++readGeneration;
   const opportunityId = props.opportunityId;
@@ -358,15 +400,15 @@ async function load() {
   message.value = "";
   try {
     if (opportunityId) {
+      detail.value = null;
+      profit.value = null;
+      profitLoadState.value = "loading";
+      profitErrorMessage.value = "";
+      profitRequestId.value = "";
       const detailResponse = await read(`/opportunities/${opportunityId}`, isCurrent);
       if (!isCurrent()) return;
       detail.value = detailResponse.data;
-      const profitResponse = await read(
-        `/opportunities/${opportunityId}/profit-analysis`,
-        isCurrent,
-      );
-      if (!isCurrent()) return;
-      profit.value = profitResponse.data;
+      if (!(await loadProfitAnalysis(opportunityId, isCurrent)) || !isCurrent()) return;
       if (canConfirmCost.value) {
         await loadCostReviewers(isCurrent);
       } else {
@@ -928,6 +970,10 @@ watch(
     activeWriteCount = 0;
     busy.value = false;
     detail.value = null;
+    profit.value = null;
+    profitLoadState.value = "loading";
+    profitErrorMessage.value = "";
+    profitRequestId.value = "";
     syncTabFromRoute();
     queueLoad();
   },
@@ -1138,6 +1184,9 @@ onBeforeUnmount(() => {
               <OpportunityProfitPanel
                 v-else-if="tab === 'profit'"
                 :profit="profit"
+                :profit-load-state="profitLoadState"
+                :profit-error-message="profitErrorMessage"
+                :profit-request-id="profitRequestId"
                 :cost-form="costForm"
                 :reviewer-options="costReviewerOptions"
                 :reviewer-load-state="costReviewerLoadState"
@@ -1147,6 +1196,7 @@ onBeforeUnmount(() => {
                 :busy="busy"
                 @confirm-cost="confirmCost"
                 @retry-reviewers="retryCostReviewers"
+                @retry-profit="retryProfitAnalysis"
                 @review-cost="reviewCost"
                 @queue-profit="queueProfit"
               />

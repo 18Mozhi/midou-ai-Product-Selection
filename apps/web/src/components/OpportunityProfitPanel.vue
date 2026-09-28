@@ -9,6 +9,9 @@ import {
 withDefaults(
   defineProps<{
     profit: ProfitAnalysis | null;
+    profitLoadState?: "loading" | "ready" | "error";
+    profitErrorMessage?: string;
+    profitRequestId?: string;
     costForm: {
       platform: string;
       input_type: "sale_price" | "purchase_price" | "logistics";
@@ -32,11 +35,15 @@ withDefaults(
     reviewerLoadState: "unknown",
     reviewerErrorMessage: "",
     reviewerRequestId: "",
+    profitLoadState: "ready",
+    profitErrorMessage: "",
+    profitRequestId: "",
   },
 );
 
 defineEmits<{
   confirmCost: [];
+  retryProfit: [];
   retryReviewers: [];
   queueProfit: [];
   reviewCost: [
@@ -62,6 +69,18 @@ const inputLabel = (value: string) =>
       </div>
       <RouterLink to="/sourcing/cost-rules">管理费用规则</RouterLink>
     </header>
+    <aside v-if="profitLoadState === 'loading'" class="profit-missing" role="status">
+      <strong>正在读取利润与成本</strong>
+      <span>机会详情仍可继续查看。</span>
+    </aside>
+    <aside v-else-if="profitLoadState === 'error'" class="profit-missing" role="alert">
+      <strong>利润与成本暂不可用</strong>
+      <span>{{ profitErrorMessage || "暂时无法读取利润与成本，请稍后重试。" }}</span>
+      <span v-if="profitRequestId">追踪编号：{{ profitRequestId }}</span>
+      <span v-if="profit">已保留上次成功读取的利润结果。</span>
+      <span v-else>机会详情仍可查看；利润数据尚未成功读取。</span>
+      <button type="button" :disabled="busy" @click="$emit('retryProfit')">重新读取利润数据</button>
+    </aside>
     <div
       v-if="profit?.latest_run?.status === 'calculated'"
       class="profit-summary"
@@ -91,7 +110,10 @@ const inputLabel = (value: string) =>
       </article>
     </div>
     <aside
-      v-if="!profit?.latest_run || profit.latest_run.status === 'insufficient_data'"
+      v-if="
+        profitLoadState === 'ready' &&
+        (!profit?.latest_run || profit.latest_run.status === 'insufficient_data')
+      "
       class="profit-missing"
     >
       <strong>数据不足，不能生成可靠 ROI</strong

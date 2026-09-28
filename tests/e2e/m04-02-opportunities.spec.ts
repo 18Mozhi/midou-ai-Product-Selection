@@ -885,6 +885,79 @@ test("a late profit analysis failure cannot replace the current opportunity afte
   await expect(page.getByText("旧机会利润读取失败", { exact: true })).toHaveCount(0);
 });
 
+test("profit analysis failure stays local and retries only the profit read", async ({ page }) => {
+  await ready(page);
+  let profitUnavailable = true;
+  let profitReads = 0;
+  let detailReads = 0;
+  await page.on("request", (request) => {
+    if (
+      request.method() === "GET" &&
+      request.url().includes(`/api/v1/opportunities/${opportunityId}/profit-analysis`)
+    )
+      profitReads += 1;
+    if (
+      request.method() === "GET" &&
+      new URL(request.url()).pathname === `/api/v1/opportunities/${opportunityId}`
+    )
+      detailReads += 1;
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+    profitUnavailable
+      ? route.fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "temporarily_unavailable",
+              message: "利润数据暂不可用",
+              action_hint: "请稍后重新读取利润与成本。",
+            },
+            request_id: "profit-read-failed-request",
+            trace_id: "profit-read-failed-trace",
+          },
+        })
+      : route.fulfill({ json: envelope({ latest_run: null, current_inputs: [] }) }),
+  );
+
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  await expect(page.getByRole("heading", { name: base.name, level: 1 })).toBeVisible();
+  const panel = page.locator(".opportunity-profit");
+  await expect(panel.getByRole("alert")).toContainText("利润与成本暂不可用");
+  await expect(panel.getByRole("alert")).toContainText("请稍后重新读取利润与成本。");
+  await expect(panel.getByRole("alert")).toContainText("profit-read-failed-request");
+  const detailReadsBeforeRetry = detailReads;
+  const profitReadsBeforeRetry = profitReads;
+
+  profitUnavailable = false;
+  await panel.getByRole("button", { name: "重新读取利润数据", exact: true }).click();
+  await expect(panel).toContainText("数据不足，不能生成可靠 ROI");
+  expect(profitReads).toBe(profitReadsBeforeRetry + 1);
+  expect(detailReads).toBe(detailReadsBeforeRetry);
+});
+
+test("expired profit analysis response still restores the page-level login state", async ({ page }) => {
+  await ready(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+    route.fulfill({
+      status: 401,
+      json: {
+        error: {
+          code: "session_expired",
+          message: "登录已过期",
+          action_hint: "请重新登录后继续。",
+        },
+        request_id: "expired-profit-request",
+        trace_id: "expired-profit-trace",
+      },
+    }),
+  );
+
+  await page.goto(`/opportunities/${opportunityId}?tab=profit`);
+  await expect(page.locator(".opportunity-detail")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "重新登录", exact: true })).toBeVisible();
+  await expect(page.locator(".ui-state-panel")).toContainText("expired-profit-request");
+});
+
 test("a late AI analysis success remains scoped to the opportunity that requested it", async ({
   page,
 }) => {

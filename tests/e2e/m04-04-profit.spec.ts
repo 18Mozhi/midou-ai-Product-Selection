@@ -34,6 +34,18 @@ async function navigation(
   );
 }
 
+async function openProfitSection(page: Page) {
+  const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
+  if ((page.viewportSize()?.width ?? 0) <= 900) {
+    if (!(await mobileDirectory.evaluate((element) => (element as HTMLDetailsElement).open))) {
+      await mobileDirectory.locator("summary").click();
+    }
+    await mobileDirectory.getByRole("button", { name: "利润与成本" }).click();
+    return;
+  }
+  await page.getByRole("button", { name: "利润与成本" }).click();
+}
+
 const phase2CostRule = (status = "active") => ({
   id: ruleId,
   market: "US",
@@ -578,7 +590,7 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
     }),
   );
   await page.goto(`/opportunities/${opportunityId}`);
-  await page.getByRole("button", { name: "利润与成本" }).click();
+  await openProfitSection(page);
   const reviewerStatus = page.locator(".profit-reviewer-status");
   await expect(reviewerStatus).toHaveAttribute("data-state", "error");
   await expect(reviewerStatus).toContainText("暂时无法读取成本复核人名单，请稍后重试。");
@@ -681,7 +693,7 @@ test("P18 cost observed_at defaults to local time and serializes the same instan
     });
 
     await page.goto(`/opportunities/${opportunityId}`);
-    await page.getByRole("button", { name: "利润与成本" }).click();
+    await openProfitSection(page);
     const observedAt = page.getByLabel("观测时间");
     await expect(observedAt).toHaveValue(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/);
     const localValue = await observedAt.inputValue();
@@ -826,7 +838,7 @@ test("a late reviewer-directory failure cannot replace the current opportunity r
   }, nextOpportunityId);
   await currentDetailRequest;
   await expect(page.getByRole("heading", { name: "当前机会成本复核", exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "利润与成本" }).click();
+  await openProfitSection(page);
   await expect(page.getByLabel("指定复核人")).toContainText("当前机会复核人");
 
   releaseOldReviewers();
