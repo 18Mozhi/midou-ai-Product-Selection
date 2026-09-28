@@ -207,9 +207,9 @@ export async function buildAutomationDesignData(repo) {
   close.api.busy.value = true;
   close.api.editReason.value = "草稿";
   close.api.closeEditor();
-  assert.equal(close.api.showCreate.value, false);
+  assert.equal(close.api.showCreate.value, true);
   assert.equal(close.api.busy.value, true);
-  assert.equal(close.api.editReason.value, "");
+  assert.equal(close.api.editReason.value, "草稿");
   const serviceSource = await read("apps/api/src/automation-service.ts"),
     service = run(
       serviceSource.replace(

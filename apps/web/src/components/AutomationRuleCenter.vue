@@ -62,6 +62,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   previewing = ref(false),
   preview = ref<AutomationPreview | null>(null),
   editReason = ref(""),
+  pageHeading = ref<HTMLElement | null>(null),
   editorFormElement = ref<HTMLFormElement | null>(null),
   emptyForm = () => ({
     name: "",
@@ -100,10 +101,12 @@ watch(
 const { dialogElement: createDialogElement, handleCancel: handleCreateCancel } = useModalDialog(
     () => showCreate.value,
     closeEditor,
+    () => pageHeading.value,
   ),
   { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
     () => Boolean(selected.value),
     closeDetail,
+    () => pageHeading.value,
   );
 const templates: Array<RuleTemplate & { description: string }> = [
   {
@@ -287,6 +290,7 @@ function edit(rule: Rule, syncRoute = true) {
   showCreate.value = true;
 }
 function closeEditor() {
+  if (busy.value) return;
   viewGeneration++;
   showCreate.value = false;
   editing.value = null;
@@ -481,7 +485,7 @@ watch(
     <header>
       <div>
         <p>团队自动化</p>
-        <h1>自动化规则</h1>
+        <h1 ref="pageHeading" tabindex="-1">自动化规则</h1>
         <span>配置“发生什么情况、通知谁或创建什么任务”，并查看每次执行结果。</span>
       </div>
       <button :disabled="busy" @click="openCreator">创建规则</button>

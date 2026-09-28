@@ -342,3 +342,79 @@ test("UI2-AR04 pause and resume use the returned version and existing audit reas
     { action: "resume", expected_version: 2, reason: "由规则管理页人工恢复" },
   ]);
 });
+
+test("P27 create and edit dialogs cannot close while a save is in flight", async ({ page }) => {
+  await setup(page);
+  let releaseCreate = () => {};
+  let releaseEdit = () => {};
+  const createPending = new Promise<void>((resolve) => (releaseCreate = resolve));
+  const editPending = new Promise<void>((resolve) => (releaseEdit = resolve));
+  const writes: string[] = [];
+  await page.route("**/api/v1/automations", async (route) => {
+    if (route.request().method() === "POST") {
+      writes.push("POST");
+      await createPending;
+      await route.fulfill({ status: 201, json: envelope(rule) });
+      return;
+    }
+    await route.fulfill({ json: envelope([rule]) });
+  });
+  await page.route(`**/api/v1/automations/${ruleId}`, async (route) => {
+    if (route.request().method() === "PATCH") {
+      writes.push("PATCH");
+      await editPending;
+      await route.fulfill({ json: envelope(rule) });
+      return;
+    }
+    await route.fulfill({ json: envelope({ ...rule, executions: [] }) });
+  });
+
+  await page.goto("/automations");
+  await readyCreator(page);
+  const createDialog = page.getByRole("dialog", { name: "创建自动化规则" });
+  const createRequest = page.waitForRequest(
+    (request) => request.url().includes("/api/v1/automations") && request.method() === "POST",
+  );
+  await createDialog.getByRole("button", { name: "创建并启用" }).click();
+  await createRequest;
+  await createDialog.getByRole("button", { name: "取消" }).click();
+  await expect(createDialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(createDialog).toBeVisible();
+  releaseCreate();
+  await expect(createDialog).toBeHidden();
+
+  await page.getByRole("button", { name: "编辑", exact: true }).click();
+  const editDialog = page.getByRole("dialog", { name: "编辑自动化规则" });
+  await editDialog.getByLabel("修改原因").fill("更新规则说明");
+  const editRequest = page.waitForRequest(
+    (request) =>
+      request.url().includes(`/api/v1/automations/${ruleId}`) && request.method() === "PATCH",
+  );
+  await editDialog.getByRole("button", { name: "保存修改" }).click();
+  await editRequest;
+  await editDialog.getByRole("button", { name: "取消" }).click();
+  await expect(editDialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(editDialog).toBeVisible();
+  releaseEdit();
+  await expect(editDialog).toBeHidden();
+  expect(writes).toEqual(["POST", "PATCH"]);
+});
+
+test("P27 direct-linked detail and editor return focus to the page heading", async ({ page }) => {
+  await setup(page);
+  const heading = page.locator(".automation-center > header h1");
+  await page.goto(`/automations?rule=${ruleId}`);
+  await expect(page.getByRole("dialog", { name: `${rule.name}执行记录` })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page).not.toHaveURL(/rule=/);
+  await expect(heading).toBeFocused();
+
+  await page.goto(`/automations?rule=${ruleId}&action=edit`);
+  const editor = page.getByRole("dialog", { name: "编辑自动化规则" });
+  await expect(editor).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page).not.toHaveURL(/rule=/);
+  await expect(heading).toBeFocused();
+});
