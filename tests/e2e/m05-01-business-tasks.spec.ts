@@ -97,6 +97,33 @@ test("direct task detail loads only its required APIs and rejects nested return 
   expect(observed.summaryRequests).toBe(0);
 });
 
+test("P24 detail route ignores the list-only export view query", async ({ page }) => {
+  const observed = await setup(page);
+  let exportRequests = 0;
+  await page.route("**/api/v1/report-exports", (route) => {
+    exportRequests += 1;
+    return route.fulfill({ json: env([]) });
+  });
+
+  await page.goto(`/tasks/${taskId}?view=exports`);
+
+  await expect(page.getByRole("heading", { name: task.title, level: 3 })).toBeVisible();
+  expect(observed.detailRequests).toBe(1);
+  expect(observed.listRequests).toBe(0);
+  expect(observed.summaryRequests).toBe(0);
+  expect(exportRequests).toBe(0);
+});
+
+test("P24 detail route ignores the list-only quick-create query", async ({ page }) => {
+  const observed = await setup(page);
+  await page.goto(`/tasks/${taskId}?create=1&title=不应打开新建窗`);
+
+  await expect(page.getByRole("heading", { name: task.title, level: 3 })).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "新建任务", exact: true })).toHaveCount(0);
+  expect(observed.detailRequests).toBe(1);
+  expect(observed.createRequests).toBe(0);
+});
+
 test("direct task detail exposes a recoverable not-found state", async ({ page }) => {
   await setup(page);
   await page.route(`**/api/v1/tasks/${taskId}`, (route) =>

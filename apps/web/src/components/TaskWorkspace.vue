@@ -38,7 +38,9 @@ const props = defineProps<{
   memberOptions = ref<MemberOption[]>([]),
   exportTasks = ref<TaskExport[]>([]),
   activeView = ref<"business" | "exports">(
-    props.mode === "all" && route.query.view === "exports" ? "exports" : "business",
+    !props.taskId && props.mode === "all" && route.query.view === "exports"
+      ? "exports"
+      : "business",
   ),
   summary = ref<TaskSummary>({
     todo: 0,
@@ -360,7 +362,7 @@ async function load() {
   const read = beginRead();
   state.value = "loading";
   try {
-    if (activeView.value === "exports") {
+    if (!props.taskId && activeView.value === "exports") {
       if (!canReadExports.value) {
         activeView.value = "business";
         await setView("business");
@@ -411,6 +413,7 @@ async function load() {
   }
 }
 async function setView(value: "business" | "exports") {
+  if (props.taskId) return;
   if (value === "exports" && !canReadExports.value) return;
   await router.replace({
     query: {
@@ -730,7 +733,7 @@ async function addComment() {
 }
 onMounted(() => {
   const query = new URLSearchParams(window.location.search);
-  showCreate.value = canCreate.value && query.get("create") === "1";
+  showCreate.value = !props.taskId && canCreate.value && query.get("create") === "1";
   if (showCreate.value) {
     form.value.title = query.get("title")?.slice(0, 200) ?? "";
     form.value.description = query.get("description")?.slice(0, 5000) ?? "";
@@ -771,9 +774,14 @@ watch(
     )
       ? String(nextSort)
       : "priority_due";
-    activeView.value = props.mode === "all" && nextView === "exports" ? "exports" : "business";
+    activeView.value =
+      !props.taskId && props.mode === "all" && nextView === "exports" ? "exports" : "business";
     selectedIds.value = [];
-    if (!props.taskId) selected.value = null;
+    if (props.taskId) {
+      showCreate.value = false;
+    } else {
+      selected.value = null;
+    }
     void load();
   },
   { flush: "post" },
@@ -805,7 +813,7 @@ watch(
     <div v-if="notice" class="task-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </div>
-    <nav v-if="mode === 'all'" class="task-view-tabs" aria-label="任务类型">
+    <nav v-if="mode === 'all' && !taskId" class="task-view-tabs" aria-label="任务类型">
       <button :aria-pressed="activeView === 'business'" @click="setView('business')">
         业务任务
       </button>
