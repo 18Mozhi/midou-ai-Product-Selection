@@ -5168,6 +5168,40 @@
       },
       {
         "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "dialog",
+        "ordinal": 1,
+        "shape": "native-dialog",
+        "sourceBehavior": "由showSearch控制的原生找货弹窗；焦点管理由useModalDialog完成",
+        "remaining": "图稿关联不代替真实Vue焦点圈、Escape与可达性验收",
+        "variants": [
+          {
+            "name": "search-keyword",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "search-keyword" }
+            ],
+            "remaining": "已关联弹窗主场景；全部输入态、主题和真实键盘交互仍待验"
+          },
+          {
+            "name": "search-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "search-error" }
+            ],
+            "remaining": "已关联弹窗错误态；真实错误回焦与读屏仍待验"
+          },
+          {
+            "name": "search-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "search-busy" }
+            ],
+            "remaining": "已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",
@@ -5265,6 +5299,40 @@
       },
       {
         "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "dialog",
+        "ordinal": 2,
+        "shape": "native-dialog",
+        "sourceBehavior": "由quoteCandidate控制的原生报价确认弹窗；关闭时回焦页标题",
+        "remaining": "图稿关联不代替真实Vue焦点圈、Escape与可达性验收",
+        "variants": [
+          {
+            "name": "quote",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "quote" }
+            ],
+            "remaining": "已关联弹窗主场景；完整字段约束及真实键盘交互仍待验"
+          },
+          {
+            "name": "quote-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "quote-error" }
+            ],
+            "remaining": "已关联弹窗错误态；真实错误回焦与读屏仍待验"
+          },
+          {
+            "name": "quote-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "quote-busy" }
+            ],
+            "remaining": "已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
         "tag": "form",
         "ordinal": 2,
         "shape": "form-container",
@@ -5319,6 +5387,40 @@
       },
       {
         "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "dialog",
+        "ordinal": 3,
+        "shape": "native-dialog",
+        "sourceBehavior": "由purchaseCandidate控制的原生采购任务弹窗；锁定报价/MOQ",
+        "remaining": "图稿关联不代替真实Vue焦点圈、Escape与可达性验收",
+        "variants": [
+          {
+            "name": "purchase",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "purchase" }
+            ],
+            "remaining": "已关联弹窗主场景；真实数量边界与键盘交互仍待验"
+          },
+          {
+            "name": "purchase-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "purchase-error" }
+            ],
+            "remaining": "已关联弹窗错误态；真实错误回焦与读屏仍待验"
+          },
+          {
+            "name": "purchase-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "purchase-busy" }
+            ],
+            "remaining": "已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
         "tag": "form",
         "ordinal": 3,
         "shape": "form-container",
@@ -5357,6 +5459,40 @@
               }
             ],
             "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+        "tag": "dialog",
+        "ordinal": 4,
+        "shape": "native-dialog",
+        "sourceBehavior": "由deleting控制的原生原因软删确认弹窗；保留候选证据与审计记录",
+        "remaining": "图稿关联不代替真实Vue焦点圈、Escape与软删运行验收",
+        "variants": [
+          {
+            "name": "delete",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "delete" }
+            ],
+            "remaining": "已关联弹窗主场景；原因校验及真实键盘交互仍待验"
+          },
+          {
+            "name": "delete-error",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "delete-error" }
+            ],
+            "remaining": "已关联弹窗错误态；真实错误回焦与读屏仍待验"
+          },
+          {
+            "name": "delete-busy",
+            "evidenceScope": "matching-dialog-scene",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "delete-busy" }
+            ],
+            "remaining": "已关联弹窗忙碌态；真实软删副作用仍待验"
           }
         ]
       },
@@ -5451,17 +5587,50 @@
         "tag": "aside",
         "ordinal": 1,
         "shape": "inline-aside",
-        "sourceBehavior": "缺利润运行/insufficient_data事实提示，不能按0呈现ROI",
+        "sourceBehavior": "利润读取中的状态提示，不隐藏机会详情其他区域",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "profit-loading",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "loading" }
+            ],
+            "remaining": "仅关联加载类参考场景；利润专属实际状态仍未正式验收"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "tag": "aside",
+        "ordinal": 2,
+        "shape": "inline-aside",
+        "sourceBehavior": "利润读取失败说明及重试入口，保留已有成功快照",
+        "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
+        "variants": [
+          {
+            "name": "profit-error",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              { "package": "sourcing-direction-c", "scene": "cost-error" }
+            ],
+            "remaining": "已关联错误提示参考；真实保留快照、重读和权限仍待验"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+        "tag": "aside",
+        "ordinal": 3,
+        "shape": "inline-aside",
+        "sourceBehavior": "无利润运行或insufficient_data时提示缺失事实，不按0呈现ROI",
         "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
         "variants": [
           {
             "name": "cost-missing",
             "evidenceScope": "related-scene-only",
             "scenes": [
-              {
-                "package": "sourcing-direction-c",
-                "scene": "cost-missing"
-              }
+              { "package": "sourcing-direction-c", "scene": "cost-missing" }
             ],
             "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
           }
@@ -5524,7 +5693,7 @@
       {
         "file": "apps/web/src/components/OpportunityProfitPanel.vue",
         "tag": "aside",
-        "ordinal": 2,
+        "ordinal": 4,
         "shape": "inline-aside",
         "sourceBehavior": "无canConfirmCost的只读解释，不隐藏can_review复核队列",
         "remaining": "现稿为相关结构提案，不是完整运行验收或全站分母",
