@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TaskWorkspace.vue": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d",
+    "apps/web/src/components/TaskWorkspace.vue": "9b740ecaa7e4a7bb18baddc894582909fc2fb01c51f3081ec195267c1f147eff",
     "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
     "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
   },
@@ -1705,7 +1705,7 @@
       "kind": "wiring",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1"
+        "apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1"
       ],
       "sourceContractKeys": [
         "task.batch.events：转发批量操作、关闭、确认及字段变化，不新增写路径"
@@ -1746,7 +1746,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1",
           "event": "@start",
           "handler": "previewBatch",
           "targets": [
@@ -1758,7 +1758,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1",
           "event": "@close",
           "handler": "showBatchImpact = false",
           "targets": [
@@ -1766,7 +1766,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1",
           "event": "@confirm",
           "handler": "confirmBatch",
           "targets": [
@@ -1774,7 +1774,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1",
           "event": "@update:reason",
           "handler": "batchReason = $event",
           "targets": [
@@ -1782,7 +1782,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1",
           "event": "@update:due-at",
           "handler": "batchDueAt = $event",
           "targets": [
@@ -1790,7 +1790,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1",
+          "candidateId": "apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1",
           "event": "@update:assignee-id",
           "handler": "batchAssigneeId = $event",
           "targets": [
@@ -2019,7 +2019,7 @@
       "apps/web/src/components/TaskBatchActions.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TaskWorkspace.vue": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d",
+      "apps/web/src/components/TaskWorkspace.vue": "9b740ecaa7e4a7bb18baddc894582909fc2fb01c51f3081ec195267c1f147eff",
       "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
       "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b",
       "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",

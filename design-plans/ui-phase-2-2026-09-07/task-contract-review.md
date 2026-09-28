@@ -238,7 +238,7 @@ detail的x为progress/pause/cancel/delay/transfer；batch的x为pause/resume/del
 
 | 文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/TaskWorkspace.vue | 22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d |
+| apps/web/src/components/TaskWorkspace.vue | 9b740ecaa7e4a7bb18baddc894582909fc2fb01c51f3081ec195267c1f147eff |
 | apps/web/src/components/TaskListPanel.vue | b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f |
 | apps/web/src/components/TaskDetailPanel.vue | 2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48 |
 | apps/web/src/components/TaskBatchActions.vue | cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b |
@@ -253,7 +253,7 @@ detail的x为progress/pause/cancel/delay/transfer；batch的x为pause/resume/del
 | apps/web/src/components/TaskWorkspace.vue#833987c8ccb75906.1 | 795 | control | task.view.business：切回业务任务并保留合同规定的搜索/排序状态 |
 | apps/web/src/components/TaskWorkspace.vue#3bec3ec2402b1420.1 | 798 | control | task.view.exports：all模式且具备report:read时读取导出任务 |
 | apps/web/src/components/TaskWorkspace.vue#6a22c249121aeb4d.1 | 833 | control | task.read.retry：按当前列表/详情/导出分支重新读取 |
-| apps/web/src/components/TaskWorkspace.vue#5d6aeb93e4e72ae9.1 | 861 | event-binding | task.batch.events：转发批量操作、关闭、确认及字段变化，不新增写路径 |
+| apps/web/src/components/TaskWorkspace.vue#e0d116e4a9502e30.1 | 875 | event-binding | task.batch.events：转发批量操作、关闭、确认及字段变化，不新增写路径 |
 | apps/web/src/components/TaskWorkspace.vue#1673cf0154d40da1.1 | 880 | event-binding | task.list.events：转发列表筛选、选择、新建、删除意图 |
 | apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1 | 906 | control | task.list.page.previous：上一页；按现有分页规则更新路由并清选择 |
 | apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1 | 908 | control | task.list.page.next：下一页；按现有分页规则更新路由并清选择 |
