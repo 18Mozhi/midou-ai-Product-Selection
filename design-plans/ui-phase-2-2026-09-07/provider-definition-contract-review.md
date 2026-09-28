@@ -178,7 +178,9 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | --- | --- | --- | --- |
 | A:308 | 4d3ea4004d92534e.1 | control / 308 | PR47-CURRENT-LOAD 页头刷新状态 |
 | A:311 | 3d1c1781d275b76d.1 | control / 311 | PR47-CURRENT-NAV 返回来源定义页 |
-| A:314 | 76057c3353557f12.1 | event-binding / 314 | PR47-CURRENT-LOAD UiStatePanel主操作转发到load |
+| A:341 | 96e8b9fd90114a83.1 | event-binding / 341 | PR47-CURRENT-ACCESS-PRIMARY 状态主操作条件接线：expired导航登录，其余受阻态沿用GET |
+| A:469 | 8dbb02bd869e9eab.1 | control / 469 | PR47-CURRENT-TRACE 展开保留快照刷新失败的读取关联编号 |
+| A:472 | d5aef91ff7434dd6.1 | control / 472 | PR47-CURRENT-LOAD 保留快照失败后重新执行当前GET |
 | A:352 | 0da6a9c39b0f685c.1 | control / 352 | PR47-CURRENT-RESET 工具栏重置全部本地筛选/排序 |
 | A:354 | 17cbcae80442585d.1 | control / 354 | PR47-CURRENT-FILTER 展开本地筛选与排序 |
 | A:417 | d1614ad8db6bddf9.1 | control / 417 | PR47-CURRENT-DEFINE 空目录跳转来源定义页 |
@@ -195,7 +197,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderAdapterCenter.vue | 4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746 |
+| apps/web/src/components/ProviderAdapterCenter.vue | 9df7d8a37fb4fe3b0829f84644505e69997baae652f2d4425d07642c28260ada |
 
 本节只登记当前源码身份及已有事实合同归属，不代表运行时全状态、真实 `provider:configure` 探针授权、采集执行、停用恢复或生产验收已通过。
 
@@ -266,7 +268,7 @@ P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT
 | T | 921f4be18a3fe814.1 | PR47-CURRENT-COLUMN-TOGGLE · P47显示列切换，至少保留一列 |
 | T | d09cd5524db7bee5.1 | PR47-CURRENT-FREEZE · P47首个可见列冻结本地偏好 |
 | U | 589e8eedc7c9c864.1 | PR47-CURRENT-LOAD · P47状态面板primary读取按钮 |
-| U | 3eebdb6b72e10446.1 | PR47-CURRENT-SECONDARY-UNBOUND · P47没有绑定secondary父处理器 |
+| U | e75816bb76644822.1 | PR47-CURRENT-SECONDARY-UNBOUND · P47没有绑定secondary父处理器 |
 
 动作审核使用以下精确候选别名；末列为合同键，不是行为描述：
 
@@ -281,8 +283,10 @@ P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT
 | S | 23ee0a87fa977a0d.1 | — | PR47-CURRENT-NAV-CREDENTIALS |
 | A:308 | 4d3ea4004d92534e.1 | control / 308 | PR47-CURRENT-LOAD |
 | U | 589e8eedc7c9c864.1 | — | PR47-CURRENT-LOAD |
-| A:314 | 76057c3353557f12.1 | event-binding / 314 | PR47-CURRENT-LOAD |
-| U | 3eebdb6b72e10446.1 | — | PR47-CURRENT-SECONDARY-UNBOUND |
+| A:341 | 96e8b9fd90114a83.1 | event-binding / 341 | PR47-CURRENT-ACCESS-PRIMARY |
+| A:469 | 8dbb02bd869e9eab.1 | control / 469 | PR47-CURRENT-TRACE |
+| A:472 | d5aef91ff7434dd6.1 | control / 472 | PR47-CURRENT-LOAD |
+| U | e75816bb76644822.1 | — | PR47-CURRENT-SECONDARY-UNBOUND |
 | A:352 | 0da6a9c39b0f685c.1 | control / 352 | PR47-CURRENT-RESET |
 | A:430 | ccc2aafd70f9653e.1 | control / 430 | PR47-CURRENT-RESET |
 | A:354 | 17cbcae80442585d.1 | control / 354 | PR47-CURRENT-FILTER |

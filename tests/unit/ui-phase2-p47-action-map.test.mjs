@@ -44,7 +44,7 @@ const context = {
 
 test("P47 maps current page and listed shared candidates without approving actions", () => {
   const result = validateActionReview(review, context);
-  assert.equal(result.sourceSites, 31);
+  assert.equal(result.sourceSites, 33);
   assert.equal(review.route, "/platform-admin/providers/adapters");
   assert.equal(review.visualApproval, "user-approved-remaining-pages-auto");
   assert.equal(review.actionApproval, "pending-user-review");
@@ -57,7 +57,7 @@ test("P47 maps current page and listed shared candidates without approving actio
     ["PR47-LOAD"],
   );
   const coveredCandidates = review.actions.flatMap((action) => action.sourceCandidateIds);
-  assert.equal(new Set(coveredCandidates).size, 31);
+  assert.equal(new Set(coveredCandidates).size, 33);
   assert.equal(review.actions.filter((action) => action.kind === "write").length, 1);
   assert.match(review.actions.find((action) => action.actionId === "PR47-PROBE").handler, /POST/u);
 });
