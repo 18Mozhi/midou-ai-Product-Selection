@@ -383,12 +383,26 @@
   z-index: 30;
   display: grid;
   place-items: center;
+  box-sizing: border-box;
+  width: 100vw;
+  max-width: none;
+  height: 100vh;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
   padding: 20px;
+  overflow: auto;
+  border: 0;
+  background: transparent;
+}
+.sourcing-modal::backdrop {
   background: var(--so-scrim);
 }
 .sourcing-modal form {
   width: min(600px, 100%);
-  max-height: 90vh;
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  margin: 0;
   overflow: auto;
   padding: 24px;
   border-radius: 14px;
@@ -434,6 +448,21 @@
   background: var(--so-panel);
   color: var(--so-text);
   border: 1px solid var(--so-border-strong);
+}
+.sourcing-dialog-error {
+  margin: 16px 0 0;
+  padding: 11px 13px;
+  border: 1px solid color-mix(in srgb, var(--so-danger) 42%, var(--so-border));
+  border-left: 3px solid var(--so-danger);
+  color: var(--so-danger);
+  background: var(--so-danger-soft);
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+.sourcing-dialog-error code {
+  display: block;
+  margin-top: 5px;
+  color: inherit;
 }
 .sourcing-comparisons {
   margin-top: 20px;
@@ -847,12 +876,25 @@
   box-shadow: 0 10px 24px var(--so-sourcing-review-shadow);
 }
 #app .sourcing-workspace--review .sourcing-modal {
+  background: transparent;
+}
+#app .sourcing-workspace--review .sourcing-modal::backdrop {
   background: var(--so-sourcing-review-scrim);
 }
 #app .sourcing-workspace--review .sourcing-modal form {
   border-radius: 0;
   background: var(--so-sourcing-review-white);
   box-shadow: none;
+}
+#app .sourcing-workspace--review .sourcing-dialog-error {
+  border-color: color-mix(
+    in srgb,
+    var(--so-sourcing-review-danger) 42%,
+    var(--so-sourcing-review-border)
+  );
+  border-left-color: var(--so-sourcing-review-danger);
+  color: var(--so-sourcing-review-danger);
+  background: var(--so-sourcing-review-soft);
 }
 .form-grid {
   display: grid;
@@ -1036,6 +1078,9 @@
   }
   #app .sourcing-workspace--review .sourcing-modal {
     padding: 12px;
+  }
+  #app .sourcing-workspace--review .sourcing-modal form {
+    max-height: calc(100dvh - 24px);
   }
   #app .sourcing-workspace--review .sourcing-modal form {
     padding: 20px 16px;

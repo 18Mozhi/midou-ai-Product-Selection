@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Locator, type Page } from "@playwright/test";
 
 const searchId = "00000000-0000-4000-8000-000000000601";
 const envelope = (data: unknown) => ({
@@ -153,6 +153,76 @@ async function setup(
   );
 }
 
+async function verifyDialogFocusCycle(
+  page: Page,
+  trigger: Locator,
+  title: string,
+  closeLabel: string,
+  submitLabel: string,
+) {
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: title });
+  const close = dialog.getByRole("button", { name: closeLabel });
+  const submit = dialog.getByRole("button", { name: submitLabel, exact: true });
+  await expect(dialog).toBeVisible();
+  const viewport = page.viewportSize();
+  const geometry = await dialog.evaluate((element) => {
+    const dialogBounds = element.getBoundingClientRect();
+    const formBounds = element.querySelector("form")?.getBoundingClientRect();
+    return {
+      nativeModal: element instanceof HTMLDialogElement && element.open,
+      dialog: {
+        left: dialogBounds.left,
+        top: dialogBounds.top,
+        right: dialogBounds.right,
+        bottom: dialogBounds.bottom,
+      },
+      form: formBounds
+        ? {
+            left: formBounds.left,
+            top: formBounds.top,
+            right: formBounds.right,
+            bottom: formBounds.bottom,
+          }
+        : null,
+    };
+  });
+  expect(geometry.nativeModal).toBe(true);
+  expect(geometry.form).not.toBeNull();
+  expect(geometry.dialog.left).toBeGreaterThanOrEqual(0);
+  expect(geometry.dialog.top).toBeGreaterThanOrEqual(0);
+  expect(geometry.dialog.right).toBeLessThanOrEqual(viewport!.width);
+  expect(geometry.dialog.bottom).toBeLessThanOrEqual(viewport!.height);
+  expect(geometry.form!.left).toBeGreaterThanOrEqual(geometry.dialog.left);
+  expect(geometry.form!.right).toBeLessThanOrEqual(geometry.dialog.right);
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(submit).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+}
+
+async function rejectSourcingRequest(page: Page, path: string, method: string, requestId: string) {
+  await page.route(`**${path}`, async (route) => {
+    if (route.request().method() !== method) return route.fallback();
+    await route.fulfill({
+      status: 503,
+      json: {
+        error: {
+          code: "sourcing_dependency_unavailable",
+          message: "sourcing dependency unavailable",
+          action_hint: "服务暂时无法完成这项操作，请检查后重试。",
+        },
+        request_id: requestId,
+        trace_id: `${requestId}-trace`,
+      },
+    });
+  });
+}
+
 test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and responsive actions", async ({
   page,
 }) => {
@@ -298,6 +368,103 @@ test("empty state opens the real sourcing form", async ({ page }) => {
   await expect(page.getByRole("button", { name: "关闭供应商搜索" })).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(dialog).toHaveCount(0);
+});
+
+test("four sourcing dialogs contain keyboard focus and return it to their opener", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/sourcing");
+  await verifyDialogFocusCycle(
+    page,
+    page.getByRole("button", { name: "发起供应商找货", exact: true }),
+    "发起供应商找货",
+    "关闭供应商搜索",
+    "开始公开网页采集",
+  );
+  await verifyDialogFocusCycle(
+    page,
+    page.getByRole("button", { name: "确认报价", exact: true }),
+    "确认完整供应商报价",
+    "关闭报价编辑",
+    "确认新版本",
+  );
+  await verifyDialogFocusCycle(
+    page,
+    page.getByRole("button", { name: "创建采购任务", exact: true }),
+    "创建采购任务",
+    "关闭采购任务创建",
+    "确认创建",
+  );
+  await verifyDialogFocusCycle(
+    page,
+    page.getByRole("button", { name: "删除找货记录", exact: true }),
+    "删除找货记录",
+    "关闭删除确认",
+    "确认删除",
+  );
+});
+
+test("query-opened sourcing dialog returns focus to the page heading without an opener", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/sourcing?create=1");
+  const dialog = page.getByRole("dialog", { name: "发起供应商找货" });
+  await expect(dialog).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await expect(page.getByRole("heading", { name: "供应链找货", level: 1 })).toBeFocused();
+});
+
+test("four sourcing write failures stay visible with their request IDs inside each dialog", async ({
+  page,
+}) => {
+  await setup(page);
+  await rejectSourcingRequest(page, "/api/v1/sourcing/searches", "POST", "p21-search-fail-503");
+  await rejectSourcingRequest(page, "/api/v1/sourcing/quotes", "POST", "p21-quote-fail-503");
+  await rejectSourcingRequest(
+    page,
+    "/api/v1/sourcing/purchase-tasks",
+    "POST",
+    "p21-purchase-fail-503",
+  );
+  await rejectSourcingRequest(
+    page,
+    `/api/v1/sourcing/searches/${searchId}`,
+    "DELETE",
+    "p21-delete-fail-503",
+  );
+  await page.goto("/sourcing");
+
+  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
+  let dialog = page.getByRole("dialog", { name: "发起供应商找货" });
+  await dialog.getByLabel("商品关键词").fill("折叠收纳箱");
+  await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("服务暂时无法完成这项操作，请检查后重试。");
+  await expect(dialog.getByRole("alert")).toContainText("p21-search-fail-503");
+  await dialog.getByRole("button", { name: "取消" }).click();
+
+  await page.getByRole("button", { name: "确认报价", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+  await dialog.getByLabel("规格").fill("420ml / 黑色 / 单只盒装");
+  await dialog.getByLabel("所在地").fill("浙江宁波");
+  await dialog.getByRole("button", { name: "确认新版本" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("p21-quote-fail-503");
+  await dialog.getByRole("button", { name: "取消" }).click();
+
+  await page.getByRole("button", { name: "创建采购任务", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "创建采购任务" });
+  await dialog.getByRole("button", { name: "确认创建" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("p21-purchase-fail-503");
+  await dialog.getByRole("button", { name: "取消" }).click();
+
+  await page.getByRole("button", { name: "删除找货记录", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "删除找货记录" });
+  await dialog.getByLabel("删除原因").fill("来源内容需要重新核对");
+  await dialog.getByRole("button", { name: "确认删除" }).click();
+  await expect(dialog.getByRole("alert")).toContainText("p21-delete-fail-503");
+  await expect(dialog.getByLabel("删除原因")).toHaveValue("来源内容需要重新核对");
 });
 
 test("loading and blocked dependency remain explicit and retryable", async ({ page }) => {

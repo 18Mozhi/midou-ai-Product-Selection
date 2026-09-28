@@ -14,6 +14,11 @@ import type {
   SourcingState as State,
 } from "./sourcing-workspace-types";
 import "../sourcing.css";
+type SourcingDialogFailure = {
+  dialog: "search" | "quote" | "purchase" | "delete";
+  message: string;
+  requestId: string;
+};
 const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(), {
     capabilities: () => [],
   }),
@@ -24,6 +29,7 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: stri
   items = ref<Search[]>([]),
   selected = ref<Search | null>(null),
   requestId = ref(""),
+  dialogFailure = ref<SourcingDialogFailure | null>(null),
   notice = ref(""),
   busy = ref(false),
   showSearch = ref(false),
@@ -202,9 +208,10 @@ async function detail(item: Search, syncRoute = true) {
     } else notice.value = "详情暂不可用，列表状态未被覆盖。";
   }
 }
-async function post(path: string, body: unknown) {
+async function post(path: string, body: unknown, dialog?: SourcingDialogFailure["dialog"]) {
   busy.value = true;
   notice.value = "";
+  dialogFailure.value = null;
   try {
     const response = await request<any>(path, { method: "POST", body });
     requestId.value = response.request_id;
@@ -213,14 +220,24 @@ async function post(path: string, body: unknown) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
-    } else notice.value = "依赖暂不可用，未写入状态。";
+      if (dialog)
+        dialogFailure.value = { dialog, message: error.actionHint, requestId: error.requestId };
+    } else {
+      notice.value = "依赖暂不可用，未写入状态。";
+      if (dialog)
+        dialogFailure.value = {
+          dialog,
+          message: "依赖暂不可用，未写入状态。",
+          requestId: "",
+        };
+    }
     return null;
   } finally {
     busy.value = false;
   }
 }
 async function create() {
-  if (await post("/sourcing/searches", form)) {
+  if (await post("/sourcing/searches", form, "search")) {
     closeSearch();
     await load();
     notice.value = "公开供应商网页采集已排队，候选与原始证据会自动回填。";
@@ -228,12 +245,30 @@ async function create() {
 }
 function openSearch() {
   if (!canManage.value) return;
+  if (dialogFailure.value?.dialog === "search") dialogFailure.value = null;
   showSearch.value = true;
   void router.replace({ query: { ...route.query, create: "1" } });
 }
 function closeSearch() {
   showSearch.value = false;
+  if (dialogFailure.value?.dialog === "search") dialogFailure.value = null;
   void router.replace({ query: { ...route.query, create: undefined } });
+}
+function closeQuote() {
+  quoteCandidate.value = null;
+  if (dialogFailure.value?.dialog === "quote") dialogFailure.value = null;
+}
+function closePurchase() {
+  purchaseCandidate.value = null;
+  if (dialogFailure.value?.dialog === "purchase") dialogFailure.value = null;
+}
+function openDelete() {
+  if (dialogFailure.value?.dialog === "delete") dialogFailure.value = null;
+  deleting.value = selected.value;
+}
+function closeDelete() {
+  deleting.value = null;
+  if (dialogFailure.value?.dialog === "delete") dialogFailure.value = null;
 }
 function resetQuery() {
   query.value = "";
@@ -249,11 +284,15 @@ function handleStateSecondary() {
 async function confirm() {
   if (!quoteCandidate.value) return;
   if (
-    await post("/sourcing/quotes", {
-      candidate_id: quoteCandidate.value.id,
-      ...quote,
-      observed_at: new Date(quote.observed_at).toISOString(),
-    })
+    await post(
+      "/sourcing/quotes",
+      {
+        candidate_id: quoteCandidate.value.id,
+        ...quote,
+        observed_at: new Date(quote.observed_at).toISOString(),
+      },
+      "quote",
+    )
   ) {
     quoteCandidate.value = null;
     await load();
@@ -271,6 +310,7 @@ function choose(candidate: Candidate, event: Event) {
   if (checkbox instanceof HTMLInputElement) checkbox.checked = selectedQuotes.value.includes(id);
 }
 function openQuote(candidate: Candidate) {
+  if (dialogFailure.value?.dialog === "quote") dialogFailure.value = null;
   quoteCandidate.value = candidate;
   quote.moq = candidate.moq ?? 1;
   quote.specification = candidate.specification ?? "";
@@ -297,6 +337,7 @@ async function compare() {
 }
 function openPurchase(candidate: Candidate) {
   if (!candidate.quote) return;
+  if (dialogFailure.value?.dialog === "purchase") dialogFailure.value = null;
   purchaseCandidate.value = candidate;
   purchaseForm.quantity = candidate.moq ?? 1;
   purchaseForm.reason = "从供应链找货页面创建采购任务";
@@ -305,11 +346,15 @@ async function purchase() {
   const candidate = purchaseCandidate.value;
   if (!candidate?.quote) return;
   if (
-    await post("/sourcing/purchase-tasks", {
-      quote_id: candidate.quote.id,
-      quantity: Number(purchaseForm.quantity),
-      reason: purchaseForm.reason.trim(),
-    })
+    await post(
+      "/sourcing/purchase-tasks",
+      {
+        quote_id: candidate.quote.id,
+        quantity: Number(purchaseForm.quantity),
+        reason: purchaseForm.reason.trim(),
+      },
+      "purchase",
+    )
   ) {
     purchaseCandidate.value = null;
     notice.value = "采购任务已进入任务中心待消费队列。";
@@ -326,6 +371,7 @@ async function refreshSearch() {
 async function removeSearch() {
   if (!deleting.value || !deleteReason.value.trim()) return;
   busy.value = true;
+  dialogFailure.value = null;
   try {
     const response = await request(`/sourcing/searches/${deleting.value.id}`, {
       method: "DELETE",
@@ -341,7 +387,19 @@ async function removeSearch() {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
-    } else notice.value = "依赖暂不可用，删除未完成。";
+      dialogFailure.value = {
+        dialog: "delete",
+        message: error.actionHint,
+        requestId: error.requestId,
+      };
+    } else {
+      notice.value = "依赖暂不可用，删除未完成。";
+      dialogFailure.value = {
+        dialog: "delete",
+        message: "依赖暂不可用，删除未完成。",
+        requestId: "",
+      };
+    }
   } finally {
     busy.value = false;
   }
@@ -397,7 +455,7 @@ watch(
     <header class="sourcing-head">
       <div>
         <p>供应商发现</p>
-        <h1>供应链找货</h1>
+        <h1 id="sourcing-page-title" tabindex="-1">供应链找货</h1>
         <span>采集事实先投影为候选；缺失规格、交期、地点、可信度与风险时禁止进入可靠对比。</span>
       </div>
       <button v-if="canManage" type="button" @click="openSearch">发起供应商找货</button>
@@ -477,12 +535,7 @@ watch(
               class="sourcing-cost-link"
               :to="{ path: '/sourcing/cost-rules', query: { from: route.fullPath } }"
               >费用与利润规则</RouterLink
-            ><button
-              v-if="canManage"
-              type="button"
-              class="danger ghost"
-              @click="deleting = selected"
-            >
+            ><button v-if="canManage" type="button" class="danger ghost" @click="openDelete">
               删除找货记录
             </button>
           </div>
@@ -670,13 +723,14 @@ watch(
       :deleting="deleting"
       :delete-reason="deleteReason"
       :busy="busy"
+      :failure="dialogFailure"
       @close-search="closeSearch"
       @create="create"
-      @close-quote="quoteCandidate = null"
+      @close-quote="closeQuote"
       @confirm-quote="confirm"
-      @close-purchase="purchaseCandidate = null"
+      @close-purchase="closePurchase"
       @purchase="purchase"
-      @close-delete="deleting = null"
+      @close-delete="closeDelete"
       @remove-search="removeSearch"
       @update-delete-reason="deleteReason = $event"
     />

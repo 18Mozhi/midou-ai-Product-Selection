@@ -1,6 +1,14 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from "vue";
+import { computed, nextTick, watch } from "vue";
+import { useModalDialog } from "../use-modal-dialog";
+import { sanitizeCorrelationId } from "../ui/state-contract";
 import type { SourcingCandidate, SourcingSearch } from "./sourcing-workspace-types";
+
+type DialogFailure = {
+  dialog: "search" | "quote" | "purchase" | "delete";
+  message: string;
+  requestId: string;
+};
 
 const props = defineProps<{
   showSearch: boolean;
@@ -23,6 +31,7 @@ const props = defineProps<{
   deleting: SourcingSearch | null;
   deleteReason: string;
   busy: boolean;
+  failure: DialogFailure | null;
 }>();
 const emit = defineEmits<{
   closeSearch: [];
@@ -39,10 +48,35 @@ const deleteReasonModel = computed({
   get: () => props.deleteReason,
   set: (value: string) => emit("updateDeleteReason", value),
 });
-const searchDialog = ref<HTMLElement | null>(null),
-  quoteDialog = ref<HTMLElement | null>(null),
-  purchaseDialog = ref<HTMLElement | null>(null),
-  deleteDialog = ref<HTMLElement | null>(null),
+const failureFor = (dialog: DialogFailure["dialog"]) =>
+  props.failure?.dialog === dialog ? props.failure : null;
+const pageHeading = () => document.querySelector<HTMLElement>("#sourcing-page-title"),
+  { dialogElement: searchDialog, handleCancel: handleSearchCancel } = useModalDialog(
+    () => props.showSearch,
+    () => emit("closeSearch"),
+    pageHeading,
+    {
+      trapFocus: true,
+    },
+  ),
+  { dialogElement: quoteDialog, handleCancel: handleQuoteCancel } = useModalDialog(
+    () => Boolean(props.quoteCandidate),
+    () => emit("closeQuote"),
+    pageHeading,
+    { trapFocus: true },
+  ),
+  { dialogElement: purchaseDialog, handleCancel: handlePurchaseCancel } = useModalDialog(
+    () => Boolean(props.purchaseCandidate),
+    () => emit("closePurchase"),
+    pageHeading,
+    { trapFocus: true },
+  ),
+  { dialogElement: deleteDialog, handleCancel: handleDeleteCancel } = useModalDialog(
+    () => Boolean(props.deleting),
+    () => emit("closeDelete"),
+    pageHeading,
+    { trapFocus: true },
+  ),
   inputLabel = computed(
     () =>
       ({
@@ -61,11 +95,13 @@ const searchDialog = ref<HTMLElement | null>(null),
         product_url: "输入需要查找同类货源的商品链接",
       })[props.searchForm.input_type] ?? "请输入查找内容",
   );
-function focusFirst(dialog: () => HTMLElement | null) {
+function focusFirst(dialog: () => HTMLDialogElement | null) {
   void nextTick(() =>
-    window.requestAnimationFrame(() =>
-      dialog()?.querySelector<HTMLElement>("select, input, textarea, button")?.focus(),
-    ),
+    window.requestAnimationFrame(() => {
+      const element = dialog();
+      if (element?.open)
+        element.querySelector<HTMLElement>("select, input, textarea, button")?.focus();
+    }),
   );
 }
 watch(
@@ -89,16 +125,17 @@ const searchName = (item: SourcingSearch | null) =>
 </script>
 
 <template>
-  <div
+  <dialog
     v-if="showSearch"
     ref="searchDialog"
     class="sourcing-modal"
-    role="dialog"
-    aria-modal="true"
     aria-labelledby="sourcing-search-title"
-    @keydown.esc="emit('closeSearch')"
+    @cancel="handleSearchCancel"
   >
-    <form @submit.prevent="emit('create')">
+    <form
+      :aria-describedby="failureFor('search') ? 'sourcing-search-error' : undefined"
+      @submit.prevent="emit('create')"
+    >
       <header>
         <h3 id="sourcing-search-title">发起供应商找货</h3>
         <button
@@ -130,22 +167,34 @@ const searchName = (item: SourcingSearch | null) =>
         系统会直接爬取公开供应商商品页，保存供应商、商品、价格、图片、网址与采集时间；网页没有披露的
         MOQ、规格和交期会明确标为待确认。
       </aside>
+      <p
+        v-if="failureFor('search')"
+        id="sourcing-search-error"
+        class="sourcing-dialog-error"
+        role="alert"
+      >
+        {{ failureFor("search")?.message }}
+        <code v-if="sanitizeCorrelationId(failureFor('search')?.requestId)">
+          请求编号 {{ sanitizeCorrelationId(failureFor("search")?.requestId) }}
+        </code>
+      </p>
       <footer>
         <button type="button" class="ghost" @click="emit('closeSearch')">取消</button
         ><button type="submit" :disabled="busy">开始公开网页采集</button>
       </footer>
     </form>
-  </div>
-  <div
+  </dialog>
+  <dialog
     v-if="quoteCandidate"
     ref="quoteDialog"
     class="sourcing-modal"
-    role="dialog"
-    aria-modal="true"
     aria-labelledby="sourcing-quote-title"
-    @keydown.esc="emit('closeQuote')"
+    @cancel="handleQuoteCancel"
   >
-    <form @submit.prevent="emit('confirmQuote')">
+    <form
+      :aria-describedby="failureFor('quote') ? 'sourcing-quote-error' : undefined"
+      @submit.prevent="emit('confirmQuote')"
+    >
       <header>
         <h3 id="sourcing-quote-title">确认完整供应商报价</h3>
         <button
@@ -202,22 +251,34 @@ const searchName = (item: SourcingSearch | null) =>
           {{ option.label }}
         </option>
       </datalist>
+      <p
+        v-if="failureFor('quote')"
+        id="sourcing-quote-error"
+        class="sourcing-dialog-error"
+        role="alert"
+      >
+        {{ failureFor("quote")?.message }}
+        <code v-if="sanitizeCorrelationId(failureFor('quote')?.requestId)">
+          请求编号 {{ sanitizeCorrelationId(failureFor("quote")?.requestId) }}
+        </code>
+      </p>
       <footer>
         <button type="button" class="ghost" @click="emit('closeQuote')">取消</button
         ><button type="submit" :disabled="busy">确认新版本</button>
       </footer>
     </form>
-  </div>
-  <div
+  </dialog>
+  <dialog
     v-if="purchaseCandidate"
     ref="purchaseDialog"
     class="sourcing-modal"
-    role="dialog"
-    aria-modal="true"
     aria-labelledby="purchase-task-title"
-    @keydown.esc="emit('closePurchase')"
+    @cancel="handlePurchaseCancel"
   >
-    <form @submit.prevent="emit('purchase')">
+    <form
+      :aria-describedby="failureFor('purchase') ? 'sourcing-purchase-error' : undefined"
+      @submit.prevent="emit('purchase')"
+    >
       <header>
         <div>
           <small>结构化采购创建</small>
@@ -262,6 +323,17 @@ const searchName = (item: SourcingSearch | null) =>
           required
         ></textarea>
       </label>
+      <p
+        v-if="failureFor('purchase')"
+        id="sourcing-purchase-error"
+        class="sourcing-dialog-error"
+        role="alert"
+      >
+        {{ failureFor("purchase")?.message }}
+        <code v-if="sanitizeCorrelationId(failureFor('purchase')?.requestId)">
+          请求编号 {{ sanitizeCorrelationId(failureFor("purchase")?.requestId) }}
+        </code>
+      </p>
       <footer>
         <button type="button" class="ghost" @click="emit('closePurchase')">取消</button
         ><button
@@ -276,17 +348,18 @@ const searchName = (item: SourcingSearch | null) =>
         </button>
       </footer>
     </form>
-  </div>
-  <div
+  </dialog>
+  <dialog
     v-if="deleting"
     ref="deleteDialog"
     class="sourcing-modal"
-    role="dialog"
-    aria-modal="true"
     aria-labelledby="sourcing-delete-title"
-    @keydown.esc="emit('closeDelete')"
+    @cancel="handleDeleteCancel"
   >
-    <form @submit.prevent="emit('removeSearch')">
+    <form
+      :aria-describedby="failureFor('delete') ? 'sourcing-delete-error' : undefined"
+      @submit.prevent="emit('removeSearch')"
+    >
       <header>
         <h3 id="sourcing-delete-title">删除找货记录</h3>
         <button
@@ -307,10 +380,21 @@ const searchName = (item: SourcingSearch | null) =>
           placeholder="请填写删除原因"
         ></textarea>
       </label>
+      <p
+        v-if="failureFor('delete')"
+        id="sourcing-delete-error"
+        class="sourcing-dialog-error"
+        role="alert"
+      >
+        {{ failureFor("delete")?.message }}
+        <code v-if="sanitizeCorrelationId(failureFor('delete')?.requestId)">
+          请求编号 {{ sanitizeCorrelationId(failureFor("delete")?.requestId) }}
+        </code>
+      </p>
       <footer>
         <button type="button" class="ghost" @click="emit('closeDelete')">取消</button
         ><button type="submit" class="danger" :disabled="busy">确认删除</button>
       </footer>
     </form>
-  </div>
+  </dialog>
 </template>
