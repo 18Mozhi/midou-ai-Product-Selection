@@ -19,9 +19,9 @@ P23是`/tasks`、mode=all、无taskId；与P13共享TaskWorkspace/TaskListPanel/
 | 本页/单行/清除选择 | task:update；本页tasks.map(id)，不是全部搜索结果 | list；混合任务、多页选择还缺图 |
 | 查看任务/行菜单 | 查看通过/tasks/id并保留完整from；菜单才是删除入口 | list；详情不是P23本地弹窗 |
 | 上一页/下一页 | total>10显示，边界disabled；清选择并replace页码 | 源存在，C稿尚无真实多页布局 |
-| 删除确认/取消/Escape | 原因trim且必填，DELETE带目标版本；取消按钮busy禁用，但原生cancel无busy保护 | delete；成功晚到缺口见下文 |
+| 删除确认/取消/Escape | 原因trim且必填，DELETE带目标版本；请求中取消与Escape均阻止关闭 | delete；实际Vue E2E覆盖请求中Escape、成功回包和列表刷新 |
 | 五批量入口 | pause仅进行中、resume仅已暂停，delay/transfer/cancel排除终态；transfer另需task:assign | 五个batch-*图；单样本继续可执行0，不能改图为可执行1 |
-| 批量字段/确认/返回 | resume无原因；其余原因，delay时间，transfer真实成员；逐任务POST/版本/审计，不增加批量接口 | 原型不是真实冻结操作快照、部分失败或重入保护 |
+| 批量字段/确认/返回 | resume无原因；其余原因，delay时间，transfer真实成员；逐任务POST/版本/审计，不增加批量接口 | 确认时冻结目标/资格快照；在途筛选变化不改影响计数，函数级busy守卫阻止重入 |
 | 重新加载 | 根据当前列表/导出分支重读；不是登录/申请权限 | error/forbidden/expired/rate_limited；not_found仅P24详情404 |
 | 创建或管理导出 | 链接/reports，不在此页POST | 缺P23对应图 |
 | 查看导出任务 | 链接/reports?report=report_type，不是文件下载，也不是按export id定位 | 排队位置/ETA未知保留null，不编造进度 |
@@ -35,9 +35,9 @@ P23是`/tasks`、mode=all、无taskId；与P13共享TaskWorkspace/TaskListPanel/
 1. all模式列表准确带page/page_size/status/query/sort，不带mine；并行summary和后续成员目录仍独立。夹具列表、summary及meta.total并非一致数据库快照，不合并解释。
 2. 有report:read时导出只读/report-exports；无权限直接返回业务视图且零API；空队列位置/ETA不补值。
 3. 当前api函数对404在无taskId时置error，有taskId才置not_found。因此共享不存在图属于P24，不是P23适用状态。
-4. **未修复删除晚到**：真实removeTask发出A/version2的DELETE并等待；执行真实closeDeleteDialog清空deleting/原因；成功返回后读`deleting.value.id`抛TypeError，未调用load，busy最终解除。当前选中详情为空也不能避免右侧空引用。仅证明函数组合；尚未实测原生Escape与真实持久化，不声称线上已误删或删除失败。
+4. 删除请求现在在发出前固定目标/版本/原因；原生Escape在busy时被阻止，成功回包仅关闭仍由本请求拥有的弹窗并刷新来源列表。P23真实Vue E2E覆盖在途Escape与回包闭环；本地夹具不证明持久化删除或生产权限。
 
-后续实施应验证“删除A→等待→Escape/取消→成功或失败→页面刷新与焦点”，以原请求目标处理结果，并让关闭策略、忙碌呈现和草稿保留一致。原批量函数每项重读action/字段、没有busy重入守卫的既有问题仍待处理，不能因图中写着“范围已固定”就宣称实际已冻结。是否允许在途关闭及如何呈现，按具体获审交互落实，不改状态资格、API或幂等/版本合同。
+批量逐项请求始终使用同一份动作、原因、期限、负责人和目标版本快照；此次补齐了真实Vue在途路由变化和重复form submit测试，并让弹窗的所选/可执行/跳过计数保持该快照。逐项部分失败仍按原有反馈处理，不改变状态资格、API或幂等/版本合同。
 
 既有读取已有active、路由归属、read key与Abort保护；本轮不把写入风险泛化为读取无隔离。P22的读取问题不套到TaskWorkspace。跨组织作用域、缓存返回、真实权限/SQL及后台任务行为继续按原测试边界验证。
 

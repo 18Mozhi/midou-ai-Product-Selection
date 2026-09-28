@@ -326,6 +326,58 @@ test("P23 batch dialog variants preserve scope, eligibility and a reachable foot
   expect(actionRequests).toBe(0);
 });
 
+test("P23 keeps the submitted batch impact visible while route changes clear live selection", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseAction!: () => void;
+  const actionPending = new Promise<void>((resolve) => {
+    releaseAction = resolve;
+  });
+  const requests: Array<{ url: string; body: unknown }> = [];
+  await page.route("**/api/v1/tasks/*/actions", async (route) => {
+    requests.push({
+      url: new URL(route.request().url()).pathname,
+      body: route.request().postDataJSON(),
+    });
+    await actionPending;
+    await route.fulfill({ json: env({ ...task, version: task.version + 1 }) });
+  });
+
+  await page.goto("/tasks");
+  await page.getByRole("checkbox", { name: "选择任务：核验便携净水杯供应商报价" }).check();
+  await page.getByRole("checkbox", { name: "选择任务：补齐竞品价格证据" }).check();
+  await page.getByRole("button", { name: "批量暂停", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "确认批量暂停" });
+  await dialog.getByLabel("操作原因").fill("等待供应商补充材料");
+  await dialog.getByRole("button", { name: "确认执行" }).click();
+  await expect(dialog).toHaveAttribute("aria-busy", "true");
+  await expect(dialog.locator(".task-batch-summary > div").nth(0)).toContainText("2 项");
+  await expect(dialog.locator(".task-batch-summary > div").nth(1)).toContainText("1 项");
+  await expect(dialog.locator(".task-batch-summary > div").nth(2)).toContainText("1 项");
+
+  await dialog.locator("form").evaluate((form: HTMLFormElement) => form.requestSubmit());
+  expect(requests).toHaveLength(1);
+
+  await page.evaluate(() => {
+    history.pushState({}, "", "/tasks?status=paused");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page).toHaveURL(/status=paused/);
+  await expect(dialog.locator(".task-batch-summary > div").nth(0)).toContainText("2 项");
+  await expect(dialog.locator(".task-batch-summary > div").nth(1)).toContainText("1 项");
+  await expect(dialog.locator(".task-batch-summary > div").nth(2)).toContainText("1 项");
+
+  releaseAction();
+  await expect(dialog).toBeHidden();
+  expect(requests).toEqual([
+    {
+      url: `/api/v1/tasks/${taskId}/actions`,
+      body: { action: "pause", expected_version: task.version, reason: "等待供应商补充材料" },
+    },
+  ]);
+});
+
 test("P23 export view separates async status records and links to the report center", async ({
   page,
 }) => {

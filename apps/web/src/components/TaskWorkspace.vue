@@ -74,6 +74,7 @@ const props = defineProps<{
   deleteReason = ref(""),
   editing = ref<Task | null>(null),
   selectedIds = ref<string[]>([]),
+  batchExecutionTargets = ref<Task[] | null>(null),
   batchAction = ref<BatchTaskAction>("pause"),
   batchReason = ref(""),
   batchDueAt = ref(""),
@@ -210,7 +211,11 @@ const pageSize = 10,
         critical: "紧急",
       }) as any
     )[v] ?? v,
-  batchTargets = computed(() => tasks.value.filter((task) => selectedIds.value.includes(task.id))),
+  batchTargets = computed(
+    () =>
+      batchExecutionTargets.value ??
+      tasks.value.filter((task) => selectedIds.value.includes(task.id)),
+  ),
   batchEligible = computed(() =>
     batchTargets.value.filter((task) =>
       batchAction.value === "pause"
@@ -642,8 +647,10 @@ async function confirmBatch() {
     return;
 
   const actionName = batchAction.value,
-    targetCount = batchTargets.value.length,
-    targets = batchEligible.value.map(({ id, version }) => ({ id, version })),
+    targetSnapshot = batchTargets.value.map((task) => ({ ...task })),
+    eligibleSnapshot = batchEligible.value.map(({ id, version }) => ({ id, version })),
+    targetCount = targetSnapshot.length,
+    targets = eligibleSnapshot,
     reason = batchReason.value.trim(),
     dueAt = batchDueAt.value,
     assigneeId = batchAssigneeId.value;
@@ -655,6 +662,7 @@ async function confirmBatch() {
   )
     return;
 
+  batchExecutionTargets.value = targetSnapshot;
   busy.value = true;
   let completed = 0,
     failed = 0;
@@ -688,7 +696,13 @@ async function confirmBatch() {
     await load();
   } finally {
     busy.value = false;
+    if (!showBatchImpact.value) batchExecutionTargets.value = null;
   }
+}
+function closeBatch() {
+  if (busy.value) return;
+  showBatchImpact.value = false;
+  batchExecutionTargets.value = null;
 }
 async function clearQuickCreate() {
   if (!("create" in route.query) && !("title" in route.query) && !("description" in route.query))
@@ -872,7 +886,7 @@ watch(
         :can-assign="canAssign"
         :directory-presentation="mode === 'all' && !taskId"
         @start="previewBatch"
-        @close="showBatchImpact = false"
+        @close="closeBatch"
         @confirm="confirmBatch"
         @update:reason="batchReason = $event"
         @update:due-at="batchDueAt = $event"
