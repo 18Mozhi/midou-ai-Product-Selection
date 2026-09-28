@@ -578,6 +578,44 @@ test("opportunity detail failure cannot replace the list after navigating away",
   await expect(page.getByRole("heading", { name: "暂时不可用" })).toHaveCount(0);
 });
 
+test("a delayed decision receipt cannot close a newer decision dialog", async ({ page }) => {
+  await ready(page);
+  let releaseDecision!: () => void;
+  let markDecisionStarted!: () => void;
+  const decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
+  const decisionStarted = new Promise<void>((resolve) => (markDecisionStarted = resolve));
+  await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, async (route) => {
+    markDecisionStarted();
+    await decisionGate;
+    await route.fulfill({
+      status: 201,
+      json: envelope({ opportunity_id: opportunityId, decision_status: "observing", version: 2 }),
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await page.getByText("提前人工处理", { exact: true }).click();
+  await page.getByRole("button", { name: "继续观察", exact: true }).click();
+  const dialog = page.getByRole("dialog");
+  await dialog.getByLabel("原因（必填）").fill("离页前已提交的决定");
+  await dialog.getByRole("button", { name: "确认记录" }).click();
+  await decisionStarted;
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await page.getByRole("button", { name: "驳回", exact: true }).last().click();
+  await expect(dialog).toBeVisible();
+  const decisionResponse = page.waitForResponse((response) =>
+    response.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`),
+  );
+  releaseDecision();
+  await decisionResponse;
+  await page.waitForLoadState("networkidle");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("原因（必填）")).toHaveValue("");
+});
+
 test("mobile opportunity filters preserve selected adoption blocker inside the drawer", async ({
   page,
 }) => {

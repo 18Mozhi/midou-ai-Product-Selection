@@ -112,11 +112,21 @@ let createDialogGeneration = 0;
 let batchDialogGeneration = 0;
 let batchIntentGeneration = 0;
 let batchSelectionGeneration = 0;
+let decisionDialogGeneration = 0;
+let writeScopeGeneration = 0;
+let activeWriteCount = 0;
 watch(
   showCreate,
   () => {
     createDialogGeneration += 1;
     createFeedback.value = null;
+  },
+  { flush: "sync" },
+);
+watch(
+  showDecision,
+  () => {
+    decisionDialogGeneration += 1;
   },
   { flush: "sync" },
 );
@@ -360,20 +370,30 @@ async function submitOperatingFeedback() {
   message.value = "经营复盘事实已写入；规则和人工决策均未自动变更。";
 }
 async function write(path: string, body: unknown) {
-  busy.value = true;
-  message.value = "";
+  const generation = writeScopeGeneration;
+  const ownsScope = () => generation === writeScopeGeneration;
+  if (ownsScope()) {
+    activeWriteCount += 1;
+    busy.value = true;
+    message.value = "";
+  }
   try {
     const response = await request<any>(path, { method: "POST", body });
+    if (!ownsScope()) return null;
     requestId.value = response.request_id;
     return response.data;
   } catch (error) {
+    if (!ownsScope()) return null;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       message.value = error.actionHint;
     } else message.value = "依赖暂不可用，未写入任何状态。";
     return null;
   } finally {
-    busy.value = false;
+    if (ownsScope()) {
+      activeWriteCount = Math.max(0, activeWriteCount - 1);
+      busy.value = activeWriteCount > 0;
+    }
   }
 }
 async function create() {
@@ -504,13 +524,16 @@ function startDecision(action: "adopt" | "observe" | "reject") {
 }
 async function decide() {
   if (!detail.value) return;
+  const opportunityId = detail.value.id;
+  const dialogGeneration = decisionDialogGeneration;
   const result = await write(`/opportunities/${detail.value.id}/decisions`, {
     action: decisionAction.value,
     reason: decisionReason.value,
     expected_version: detail.value.version,
   });
   if (result) {
-    showDecision.value = false;
+    if (detail.value?.id !== opportunityId) return;
+    if (decisionDialogGeneration === dialogGeneration) showDecision.value = false;
     await load();
     message.value = "决策已记录；原始评分与证据未被改写。";
   }
@@ -767,6 +790,9 @@ function queueLoad() {
 }
 onDeactivated(() => {
   readGeneration += 1;
+  writeScopeGeneration += 1;
+  activeWriteCount = 0;
+  busy.value = false;
   wasDeactivated = true;
 });
 onActivated(() => {
@@ -785,6 +811,9 @@ watch(
   () => props.opportunityId,
   () => {
     readGeneration += 1;
+    writeScopeGeneration += 1;
+    activeWriteCount = 0;
+    busy.value = false;
     detail.value = null;
     syncTabFromRoute();
     queueLoad();
@@ -818,6 +847,8 @@ watch(
 );
 onBeforeUnmount(() => {
   readGeneration += 1;
+  writeScopeGeneration += 1;
+  activeWriteCount = 0;
 });
 </script>
 <template>
