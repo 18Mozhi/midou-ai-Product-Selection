@@ -135,6 +135,7 @@ export async function buildWorkDesignData(repo) {
       busy,
       canCreate: { value: true },
       canUpdate: { value: true },
+      canAssign: { value: true },
       editing: { value: null },
       form: {
         value: {
@@ -149,8 +150,10 @@ export async function buildWorkDesignData(repo) {
       selected: { value: null },
       props: {},
       notice: { value: "" },
+      editorFeedback: { value: null },
       selectedIds: { value: [task.id] },
       showBatchImpact: { value: true },
+      batchExecutionTargets: { value: null },
       batchAction: { value: name },
       batchReason: { value: ` ${reason} ` },
       batchDueAt: { value: due },

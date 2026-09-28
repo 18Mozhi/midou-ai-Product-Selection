@@ -543,6 +543,111 @@ test("task status and pagination restore from the URL", async ({ page }) => {
   await expect.poll(() => new URL(page.url()).searchParams.get("page")).toBe("2");
 });
 
+test("P23 pagination preserves applied filters, clears page selection and exposes both boundaries", async ({
+  page,
+}) => {
+  const viewport =
+    page.viewportSize()?.width === 390
+      ? { width: 390, height: 844 }
+      : { width: 1440, height: 1000 };
+  await page.setViewportSize(viewport);
+  await setup(page);
+  await page.route("**/api/v1/tasks?*", async (route) => {
+    const url = new URL(route.request().url());
+    const currentPage = Number(url.searchParams.get("page") ?? 1);
+    const tasks = Array.from({ length: currentPage === 1 ? 10 : 2 }, (_, index) => {
+      const ordinal = (currentPage - 1) * 10 + index + 1;
+      return {
+        ...task,
+        id: `00000000-0000-4000-8000-${String(900 + ordinal).padStart(12, "0")}`,
+        title: `跨页验证任务 ${ordinal}`,
+        status: "in_progress",
+      };
+    });
+    await route.fulfill({
+      json: {
+        ...env(tasks),
+        meta: { page: currentPage, page_size: 10, total: 12 },
+      },
+    });
+  });
+
+  await page.goto(
+    "/tasks?status=in_progress&query=%E8%B7%A8%E9%A1%B5%E9%AA%8C%E8%AF%81&sort=due_asc",
+  );
+  const pagination = page.getByRole("navigation", { name: "任务分页" });
+  const previous = pagination.getByRole("button", { name: "上一页" });
+  const next = pagination.getByRole("button", { name: "下一页" });
+  await expect(page.getByText("跨页验证任务 1", { exact: true })).toBeVisible();
+  await expect(page.getByText("第 1 / 2 页 · 共 12 项")).toBeVisible();
+  await expect(previous).toBeDisabled();
+  await expect(next).toBeEnabled();
+  const firstPageStyle = await pagination.evaluate((element) => {
+    const bounds = element.getBoundingClientRect();
+    const buttons = [...element.querySelectorAll("button")].map((button) => ({
+      height: button.getBoundingClientRect().height,
+      radius: getComputedStyle(button).borderRadius,
+    }));
+    return {
+      width: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      buttons,
+      boundsWidth: bounds.width,
+    };
+  });
+  expect(firstPageStyle.scrollWidth).toBeLessThanOrEqual(firstPageStyle.width);
+  expect(
+    firstPageStyle.buttons.every((button) => button.height >= 44 && button.radius === "0px"),
+  ).toBe(true);
+  await page.screenshot({
+    path: `design-plans/ui-phase-2-2026-09-07/design/tasks/${viewport.width}-P23-pagination-first.png`,
+    fullPage: true,
+    animations: "disabled",
+  });
+
+  await page.getByRole("checkbox", { name: "选择本页 10 项" }).check();
+  await expect(page.getByRole("button", { name: "批量暂停" })).toBeVisible();
+  const secondPageResponse = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return url.pathname.endsWith("/api/v1/tasks") && url.searchParams.get("page") === "2";
+  });
+  await next.click();
+  const secondPageResult = await secondPageResponse;
+  const secondPageRequest = new URL(secondPageResult.url());
+  expect(secondPageRequest.searchParams.get("status")).toBe("in_progress");
+  expect(secondPageRequest.searchParams.get("query")).toBe("跨页验证");
+  expect(secondPageRequest.searchParams.get("sort")).toBe("due_asc");
+  await expect(page).toHaveURL(
+    /status=in_progress.*query=%E8%B7%A8%E9%A1%B5%E9%AA%8C%E8%AF%81.*sort=due_asc.*page=2/,
+  );
+  await expect(page.getByText("跨页验证任务 11", { exact: true })).toBeVisible();
+  await expect(page.getByText("跨页验证任务 1", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("第 2 / 2 页 · 共 12 项")).toBeVisible();
+  await expect(page.getByRole("checkbox", { name: "选择本页 2 项" })).not.toBeChecked();
+  await expect(page.getByRole("button", { name: "批量暂停" })).toHaveCount(0);
+  await expect(previous).toBeEnabled();
+  await expect(next).toBeDisabled();
+  await page.screenshot({
+    path: `design-plans/ui-phase-2-2026-09-07/design/tasks/${viewport.width}-P23-pagination-last.png`,
+    fullPage: true,
+    animations: "disabled",
+  });
+
+  const firstPageAgain = page.waitForResponse((response) => {
+    const url = new URL(response.url());
+    return (
+      url.pathname.endsWith("/api/v1/tasks") &&
+      (!url.searchParams.has("page") || url.searchParams.get("page") === "1")
+    );
+  });
+  await previous.click();
+  await firstPageAgain;
+  await expect(page).toHaveURL(
+    /status=in_progress.*query=%E8%B7%A8%E9%A1%B5%E9%AA%8C%E8%AF%81.*sort=due_asc/,
+  );
+  await expect(page.getByText("第 1 / 2 页 · 共 12 项")).toBeVisible();
+});
+
 test("task list sends paused, search and sort to the API and reset clears URL state", async ({
   page,
 }) => {

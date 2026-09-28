@@ -142,22 +142,29 @@
         "later-page",
         "loading-old-total"
       ],
-      "scenes": [],
+      "scenes": [
+        "P23-pagination-first-page",
+        "P23-pagination-last-page"
+      ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-task-list-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "evidenceType": "playwright-real-vue-desktop-mobile-pagination"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "user-approved-remaining-pages-auto",
+        "hover": "user-approved-remaining-pages-auto",
+        "focus": "user-approved-remaining-pages-auto",
+        "pressed": "user-approved-remaining-pages-auto",
+        "disabled": "user-approved-remaining-pages-auto",
+        "busy": "not-applicable-navigation-only"
       },
-      "remaining": "本页源有真实多页按钮，当前两批C稿只有单条任务，尚无P23分页图，不以P13两条样本或默认目录图抵扣。"
+      "remaining": "已补真实Vue多页及首末边界截图/交互核验；保留loading-old-total异步中间帧与读屏器独立验收边界。"
     },
     {
       "actionId": "task.list.page.next",
@@ -177,22 +184,29 @@
         "next",
         "last-disabled"
       ],
-      "scenes": [],
+      "scenes": [
+        "P23-pagination-first-page",
+        "P23-pagination-last-page"
+      ],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-task-list-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "evidenceType": "playwright-real-vue-desktop-mobile-pagination"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "user-approved-remaining-pages-auto",
+        "hover": "user-approved-remaining-pages-auto",
+        "focus": "user-approved-remaining-pages-auto",
+        "pressed": "user-approved-remaining-pages-auto",
+        "disabled": "user-approved-remaining-pages-auto",
+        "busy": "not-applicable-navigation-only"
       },
-      "remaining": "本页源有真实多页按钮，当前两批C稿只有单条任务，尚无P23分页图，不以P13两条样本或默认目录图抵扣。"
+      "remaining": "已补真实Vue多页及首末边界截图/交互核验；保留loading-old-total异步中间帧与读屏器独立验收边界。"
     },
     {
       "actionId": "task.editor.close",

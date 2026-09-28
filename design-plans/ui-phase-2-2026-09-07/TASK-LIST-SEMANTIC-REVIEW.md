@@ -18,7 +18,7 @@ P23是`/tasks`、mode=all、无taskId；与P13共享TaskWorkspace/TaskListPanel/
 | 状态/搜索/排序/重置 | 六状态、四sort；排序change立即带当前trim搜索草稿；重置清筛选及选择 | list/empty仅单条样本，不证明多页排序 |
 | 本页/单行/清除选择 | task:update；本页tasks.map(id)，不是全部搜索结果 | list；混合任务、多页选择还缺图 |
 | 查看任务/行菜单 | 查看通过/tasks/id并保留完整from；菜单才是删除入口 | list；详情不是P23本地弹窗 |
-| 上一页/下一页 | total>10显示，边界disabled；清选择并replace页码 | 源存在，C稿尚无真实多页布局 |
+| 上一页/下一页 | total>10显示，边界disabled；清选择并replace页码 | 2026-09-29新增真实 Vue 12项/两页样例，1440/390验证筛选保留、跨页清选、边界禁用、44px方角触控控件及四张P23实际页图；仅关闭多页基准缺口，不代表其他状态或读屏验收 |
 | 删除确认/取消/Escape | 原因trim且必填，DELETE带目标版本；请求中取消与Escape均阻止关闭 | delete；实际Vue E2E覆盖请求中Escape、成功回包和列表刷新 |
 | 五批量入口 | pause仅进行中、resume仅已暂停，delay/transfer/cancel排除终态；transfer另需task:assign | 五个batch-*图；单样本继续可执行0，不能改图为可执行1 |
 | 批量字段/确认/返回 | resume无原因；其余原因，delay时间，transfer真实成员；逐任务POST/版本/审计，不增加批量接口 | 确认时冻结目标/资格快照；在途筛选变化不改影响计数，函数级busy守卫阻止重入 |

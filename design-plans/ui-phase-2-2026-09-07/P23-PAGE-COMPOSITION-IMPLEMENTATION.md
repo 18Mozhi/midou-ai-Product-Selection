@@ -1,5 +1,9 @@
 # P23 全部任务目录 C 方向生产实施
 
+## 2026-09-29 · 多页目录分页实际 Vue 闭环
+
+真实 `/tasks` 目录新增12项/两页独立样例，桌面1440与手机390实测：第一页“上一页”禁用、末页“下一页”禁用；翻页保留状态/搜索/排序参数并清空旧页选择；当前任务标题随页切换、列表元数据总数显示12。分页控件确认方角、最小44px且无横向溢出。实际视口图：`design/tasks/1440-P23-pagination-first.png`、`design/tasks/1440-P23-pagination-last.png`、`design/tasks/390-P23-pagination-first.png`、`design/tasks/390-P23-pagination-last.png`。本批只补测试与证据，因为生产路由分页已满足合同；没有改变API、权限或运行行为。同步修正离线合同夹具漏传 `editorFeedback`、`canAssign` 与 `batchExecutionTargets` 的问题，验证器不再因当前 Vue 函数状态未注入而提前失败。真实RBAC/SQL、读屏与正式M07-03不在本地夹具证明范围。
+
 ## 范围
 
 本批将蓝白“工作区目录 → 本人优先摘要 → 状态/搜索/排序 → 任务记录与分页”迁移到真实 `/tasks` 的 `TaskWorkspace(mode=all)` 与 `TaskListPanel`。
