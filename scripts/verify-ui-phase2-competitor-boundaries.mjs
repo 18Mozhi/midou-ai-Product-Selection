@@ -298,7 +298,7 @@ export async function verifyCompetitorBoundaries() {
       id: "CP-B05",
       status: "fixed-source-regression",
       result:
-        "Direct createRule re-entry while busy emits only one POST intent; actual DOM/keyboard submission and server idempotency are covered separately or remain unproven.",
+        "Direct createRule re-entry while busy emits one POST intent; actual Vue desktop/mobile covers duplicate create and P20 rule form submissions; server idempotency remains unproven.",
     });
 
     return {

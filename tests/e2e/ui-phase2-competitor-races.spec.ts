@@ -334,6 +334,79 @@ test("UI2-CP-G05 ignores duplicate create submits and keeps a reopened form afte
   }
 });
 
+test("UI2-CP-G05 ignores duplicate P20 rule submits while the first POST is pending", async ({
+  page,
+}) => {
+  await setup(page);
+  const started = gate(),
+    release = gate();
+  const posts: Array<{ body: unknown; key: string | undefined }> = [];
+  await page.route("**/api/v1/competitor-monitor-rules", async (route) => {
+    if (route.request().method() === "GET") return route.fallback();
+    posts.push({
+      body: route.request().postDataJSON(),
+      key: route.request().headers()["idempotency-key"],
+    });
+    started.release();
+    await release.wait;
+    await route.fulfill({
+      status: 201,
+      json: envelope({
+        id: "00000000-0000-4000-8000-000000000595",
+        competitor_id: null,
+        metric: "price",
+        direction: "decrease",
+        threshold_value: 1,
+        status: "enabled",
+        revision: 1,
+      }),
+    });
+  });
+
+  try {
+    await page.goto("/competitors/monitoring-rules");
+    await page.getByRole("button", { name: "配置第一条阈值", exact: true }).click();
+    const dialog = page.getByRole("dialog", { name: "新建监控规则" });
+    const submit = dialog.getByRole("button", { name: "启用规则" });
+    await submit.click();
+    await started.wait;
+
+    await expect(submit).toBeDisabled();
+    await expect(dialog).toBeVisible();
+    await dialog.getByLabel("阈值", { exact: true }).focus();
+    await page.keyboard.press("Enter");
+    await dialog.locator("form").evaluate((form) => {
+      (form as HTMLFormElement).requestSubmit();
+      (form as HTMLFormElement).requestSubmit();
+    });
+    await expect.poll(() => posts).toHaveLength(1);
+
+    const response = page.waitForResponse(
+      (candidate) =>
+        candidate.url().endsWith("/api/v1/competitor-monitor-rules") &&
+        candidate.request().method() === "POST",
+    );
+    release.release();
+    await (await response).finished();
+    await settleResponse(page);
+
+    await expect(dialog).toHaveCount(0);
+    await expect(page.getByRole("status")).toContainText("监控阈值已启用");
+    expect(posts).toHaveLength(1);
+    expect(posts[0]).toEqual({
+      body: {
+        competitor_id: null,
+        metric: "price",
+        direction: "decrease",
+        threshold_value: 1,
+      },
+      key: expect.any(String),
+    });
+  } finally {
+    release.release();
+  }
+});
+
 test("UI2-CP-G05 late delete for A cannot clear B's selected detail", async ({ page }) => {
   await setup(page);
   const started = gate(),
