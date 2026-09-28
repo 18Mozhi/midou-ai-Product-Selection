@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -54,7 +55,8 @@ interface AdapterSummary {
   version: number;
   updated_at: string;
 }
-const props = defineProps<{ apiBaseUrl: string }>(),
+const router = useRouter(),
+  props = defineProps<{ apiBaseUrl: string }>(),
   request = createApiClient(props.apiBaseUrl),
   state = ref<State>("loading"),
   items = ref<AdapterSummary[]>([]),
@@ -284,6 +286,17 @@ function refreshFromButton(event: MouseEvent) {
   }
   void load();
 }
+function handleAccessPrimary() {
+  if (state.value === "expired") {
+    void router.push("/login");
+    return;
+  }
+  const heading = document.activeElement
+    ?.closest(".adapter-center")
+    ?.querySelector<HTMLElement>(".adapter-heading");
+  if (heading?.isConnected) heading.focus({ preventScroll: true });
+  void load();
+}
 function retryRefresh(event: MouseEvent) {
   const heading = (event.currentTarget as HTMLElement)
     .closest(".adapter-center")
@@ -329,18 +342,36 @@ onMounted(load);
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
       :title="
-        state === 'loading' ? '正在读取采集状态' : state === 'error' ? '暂时未能读取采集状态' : ''
+        state === 'loading'
+          ? '正在读取采集状态'
+          : state === 'error'
+            ? '暂时未能读取采集状态'
+            : state === 'expired'
+              ? '请重新登录后继续'
+              : state === 'forbidden'
+                ? '当前无法查看采集状态'
+                : state === 'blocked'
+                  ? '暂时无法读取最新状态'
+                  : ''
       "
       :description="
         state === 'loading'
           ? '正在获取来源目录与运行状态，请稍候。'
           : state === 'error'
             ? '这次读取未完成。你可以重新读取，获取最新状态。'
-            : ''
+            : state === 'expired'
+              ? '为保护账号，当前页面未展示采集状态。重新登录后可以继续。'
+              : state === 'forbidden'
+                ? '当前权限还不能读取这些内容。权限调整后，可以重新读取。'
+                : state === 'blocked'
+                  ? '读取已安全停止，没有显示推测数据。服务恢复后可以重新读取。'
+                  : ''
       "
-      :primary-label="state === 'loading' ? '' : '重新读取状态'"
+      :primary-label="state === 'loading' ? '' : state === 'expired' ? '重新登录' : '重新读取状态'"
       :request-id="requestId"
-      @primary="load"
+      @primary="
+        ['expired', 'forbidden', 'blocked'].includes(state) ? handleAccessPrimary() : load()
+      "
     />
     <section v-else>
       <div class="adapter-metrics">

@@ -154,6 +154,135 @@ test("P47 initial loading state uses its approved copy and compact skeleton with
     releaseRead();
   }
 });
+test("P47 expired session action routes to login without rereading adapters", async ({ page }) => {
+  await nav(page);
+  let reads = 0;
+  await page.route("**/api/v1/platform/provider-adapters", (route) => {
+    reads += 1;
+    return route.fulfill({
+      status: 401,
+      contentType: "application/json",
+      body: JSON.stringify({
+        error: { code: "session_expired", message: "请求失败", action_hint: "请重新登录" },
+        request_id: "p47-expired-session",
+        trace_id: "p47-expired-session",
+      }),
+    });
+  });
+  await page.goto("/platform-admin/providers/adapters");
+  const panel = page.locator('.adapter-center--c .ui-state-panel[data-kind="expired"]');
+  await expect(panel.getByRole("heading", { name: "请重新登录后继续" })).toBeVisible();
+  await expect(
+    panel.getByText("为保护账号，当前页面未展示采集状态。重新登录后可以继续。", { exact: true }),
+  ).toBeVisible();
+  await expect(panel.getByText("p47-expired-session", { exact: true })).toBeVisible();
+  await expect(panel.getByRole("button")).toHaveCount(1);
+  await expect(panel.getByRole("button", { name: "重新登录", exact: true })).toBeVisible();
+  expect(reads).toBe(1);
+  await panel.getByRole("button", { name: "重新登录", exact: true }).click();
+  await expect(page).toHaveURL(/\/login$/);
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
+  expect(reads).toBe(1);
+});
+for (const status of [403, 429, 503] as const) {
+  test(`P47 ${status} access state preserves read retry and returns focus to the heading`, async ({
+    page,
+  }) => {
+    await nav(page);
+    let reads = 0,
+      recovered = false;
+    const attempts = status === 403 ? 1 : 3;
+    await page.route("**/api/v1/platform/provider-adapters", (route) => {
+      reads += 1;
+      if (recovered)
+        return route.fulfill({
+          status: 200,
+          contentType: "application/json",
+          body: JSON.stringify({
+            data: items,
+            request_id: `p47-${status}-recovered`,
+            trace_id: `p47-${status}-recovered`,
+          }),
+        });
+      return route.fulfill({
+        status,
+        contentType: "application/json",
+        body: JSON.stringify({
+          error: {
+            code: status === 403 ? "authorization_denied" : "dependency_unavailable",
+            message: "请求失败",
+            action_hint: "按状态恢复",
+          },
+          request_id: `p47-${status}-blocked`,
+          trace_id: `p47-${status}-blocked`,
+        }),
+      });
+    });
+    await page.goto("/platform-admin/providers/adapters");
+    const state = status === 403 ? "forbidden" : "blocked",
+      title = status === 403 ? "当前无法查看采集状态" : "暂时无法读取最新状态",
+      description =
+        status === 403
+          ? "当前权限还不能读取这些内容。权限调整后，可以重新读取。"
+          : "读取已安全停止，没有显示推测数据。服务恢复后可以重新读取。",
+      panel = page.locator(`.adapter-center--c .ui-state-panel[data-kind="${state}"]`);
+    await expect(panel.getByRole("heading", { name: title })).toBeVisible();
+    await expect(panel.getByText(description, { exact: true })).toBeVisible();
+    await expect(panel.getByText(`p47-${status}-blocked`, { exact: true })).toBeVisible();
+    await expect(panel.getByRole("button")).toHaveCount(1);
+    await expect(panel.getByRole("button", { name: "重新读取状态", exact: true })).toBeVisible();
+    expect(reads).toBe(attempts);
+
+    recovered = true;
+    await panel.getByRole("button", { name: "重新读取状态", exact: true }).click();
+    await expect(page.locator(".adapter-heading")).toBeFocused();
+    if (test.info().project.name === "mobile-390")
+      await expect(page.getByRole("button", { name: /公开趋势 RSS.*查看详情/ })).toBeVisible();
+    else await expect(page.getByText("公开趋势 RSS", { exact: true })).toBeVisible();
+    expect(reads).toBe(attempts + 1);
+  });
+}
+test("P47 ordinary 500 keeps its existing error copy and read retry", async ({ page }) => {
+  await nav(page);
+  let reads = 0,
+    recovered = false;
+  await page.route("**/api/v1/platform/provider-adapters", (route) => {
+    reads += 1;
+    if (recovered)
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: items,
+          request_id: "p47-500-recovered",
+          trace_id: "p47-500-recovered",
+        }),
+      });
+    return route.fulfill({
+      status: 500,
+      contentType: "application/json",
+      body: JSON.stringify({
+        error: { code: "internal_error", message: "请求失败", action_hint: "稍后重试" },
+        request_id: "p47-500-error",
+        trace_id: "p47-500-error",
+      }),
+    });
+  });
+  await page.goto("/platform-admin/providers/adapters");
+  const panel = page.locator('.adapter-center--c .ui-state-panel[data-kind="error"]');
+  await expect(panel.getByRole("heading", { name: "暂时未能读取采集状态" })).toBeVisible();
+  await expect(
+    panel.getByText("这次读取未完成。你可以重新读取，获取最新状态。", { exact: true }),
+  ).toBeVisible();
+  await expect(panel.getByRole("button", { name: "重新读取状态", exact: true })).toBeVisible();
+  expect(reads).toBe(1);
+  recovered = true;
+  await panel.getByRole("button", { name: "重新读取状态", exact: true }).click();
+  if (test.info().project.name === "mobile-390")
+    await expect(page.getByRole("button", { name: /公开趋势 RSS.*查看详情/ })).toBeVisible();
+  else await expect(page.getByText("公开趋势 RSS", { exact: true })).toBeVisible();
+  expect(reads).toBe(2);
+});
 test("P47 refresh failure keeps the prior snapshot and explicit retry returns success", async ({
   page,
 }, testInfo) => {
@@ -546,8 +675,8 @@ test("M03-03.A08/A09/A16 empty forbidden and dependency states stay actionable",
   ).toBeVisible();
   status = 403;
   await page.reload();
-  await expect(page.getByRole("heading", { name: "你没有此项权限" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "当前无法查看采集状态" })).toBeVisible();
   status = 503;
   await page.reload();
-  await expect(page.getByRole("heading", { name: "依赖暂时受阻" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "暂时无法读取最新状态" })).toBeVisible();
 });
