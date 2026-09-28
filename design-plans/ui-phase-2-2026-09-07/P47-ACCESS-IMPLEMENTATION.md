@@ -20,3 +20,11 @@
 ## 边界
 
 这不是身份认证、真实 RBAC、真实限流/依赖故障、外部来源健康或 M07-03 生产验收。登录后 return-to 行为保持路由现状；没有添加新策略。全站 73 页交付目标仍在进行。
+
+## 提交与部署
+
+- 代码提交：`ca9a939f2af1695dd6dff2f2e3e76d41cc39a4fc`（`完成P47访问状态交互闭环`），已推送至 `origin/main`。
+- `python scripts/deploy-baota.py` 成功：22 个工作区构建通过，M07-03 preflight 通过，固定宝塔站点/Node/Python 对象部署完成；临时部署包由脚本清理。没有新增迁移或服务配置。
+- 线上 `/api/v1/health/ready` 为 `ready`，MySQL/Redis 为 `available`；`/api/v1/health/available` 为 `available`；`/api/v1/health/version` build SHA 与提交一致。
+- `/platform-admin/providers/adapters` 返回 HTTP 200。`ProviderAdapterCenter-BDJR-94k.js` 与 `ProviderAdapterCenter-DLTEsj8P.css` 均 HTTP 200，线上字节 SHA-256 与本地生产构建一致。
+- M07-03 preflight 和静态/UI fixture smoke 不等于正式 M07-03业务验收，亦不证明真实 RBAC、会话过期路径中的外部身份提供方、限流策略、来源权限或健康探针。
