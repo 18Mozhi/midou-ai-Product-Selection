@@ -109,6 +109,9 @@ const createFeedback = ref<
   | null
 >(null);
 let createDialogGeneration = 0;
+let batchDialogGeneration = 0;
+let batchIntentGeneration = 0;
+let batchSelectionGeneration = 0;
 watch(
   showCreate,
   () => {
@@ -116,6 +119,27 @@ watch(
     createFeedback.value = null;
   },
   { flush: "sync" },
+);
+watch(
+  () => [showBatch.value, route.fullPath, props.opportunityId],
+  () => {
+    batchDialogGeneration += 1;
+  },
+  { flush: "sync" },
+);
+watch(
+  showBatch,
+  (open) => {
+    if (open) batchIntentGeneration += 1;
+  },
+  { flush: "sync" },
+);
+watch(
+  selectedOpportunityIds,
+  () => {
+    batchSelectionGeneration += 1;
+  },
+  { deep: true, flush: "sync" },
 );
 watch(
   () => [route.fullPath, props.opportunityId],
@@ -524,18 +548,34 @@ function openBatch(action: "assign" | "archive" | "review") {
 async function confirmBatch() {
   const selectedItems = currentPageSelectedItems.value;
   if (!selectedItems.length || !batchReason.value.trim()) return;
+  const dialogGeneration = batchDialogGeneration,
+    intentGeneration = batchIntentGeneration,
+    selectionGeneration = batchSelectionGeneration,
+    routePath = route.fullPath,
+    opportunityId = props.opportunityId;
   const result = await write("/opportunities/batch", {
     action: batchAction.value,
     items: selectedItems.map((item) => ({ id: item.id, expected_version: item.version })),
     reason: batchReason.value.trim(),
     assignee_id: batchAction.value === "assign" ? batchAssigneeId.value : null,
   });
-  if (result) {
-    showBatch.value = false;
+  if (!result || route.fullPath !== routePath || props.opportunityId !== opportunityId) return;
+
+  if (batchDialogGeneration === dialogGeneration) showBatch.value = false;
+  if (
+    batchIntentGeneration === intentGeneration &&
+    batchSelectionGeneration === selectionGeneration
+  )
     selectedOpportunityIds.value = [];
-    await load();
+  const completionGeneration = batchDialogGeneration;
+  await load();
+  if (
+    route.fullPath === routePath &&
+    props.opportunityId === opportunityId &&
+    batchDialogGeneration === completionGeneration &&
+    !showBatch.value
+  )
     message.value = `批量操作已完成 ${result.affected_count} 项，每个机会均保留独立事件。`;
-  }
 }
 async function confirmCost() {
   if (!detail.value) return;

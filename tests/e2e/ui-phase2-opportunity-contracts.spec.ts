@@ -364,6 +364,99 @@ test("UI2-OP04 filtered selections disclose the exact current-result batch scope
   });
 });
 
+test("UI2-OP07 a delayed batch receipt cannot close or clear a newer batch intent", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  let releaseBatch!: () => void;
+  let markBatchStarted!: () => void;
+  const batchGate = new Promise<void>((resolve) => (releaseBatch = resolve));
+  const batchStarted = new Promise<void>((resolve) => (markBatchStarted = resolve));
+  await page.route("**/api/v1/opportunities/batch", async (route) => {
+    markBatchStarted();
+    await batchGate;
+    await route.fulfill({ json: envelope({ affected_count: 1 }) });
+  });
+  await page.goto("/opportunities?view=all");
+
+  const first = data.rows[0];
+  const second = data.rows[1];
+  const firstCheckbox = page.getByRole("checkbox", {
+    name: `选择机会：${first.name}`,
+    exact: true,
+  });
+  const secondCheckbox = page.getByRole("checkbox", {
+    name: `选择机会：${second.name}`,
+    exact: true,
+  });
+  await firstCheckbox.check();
+  await page.getByRole("button", { name: "批量归档", exact: true }).click();
+  const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  await modal.getByLabel("操作原因").fill("旧批量意图");
+  await modal.getByRole("button", { name: "确认执行", exact: true }).click();
+  await batchStarted;
+
+  await modal.getByRole("button", { name: "返回", exact: true }).click();
+  await expect(modal).toBeHidden();
+  await secondCheckbox.check();
+  await page.getByRole("button", { name: "批量归档", exact: true }).click();
+  await expect(modal).toBeVisible();
+  await expect(modal.getByLabel("操作原因")).toHaveValue("");
+  await modal.getByLabel("操作原因").fill("新批量意图");
+
+  releaseBatch();
+  await expect(modal).toBeVisible();
+  await expect(modal.getByLabel("操作原因")).toHaveValue("新批量意图");
+  await expect(secondCheckbox).toBeChecked();
+  expect(data.writes).toHaveLength(1);
+  assertWrite(data.writes[0], "/opportunities/batch", {
+    action: "archive",
+    items: [{ id: first.id, expected_version: first.version }],
+    reason: "旧批量意图",
+    assignee_id: null,
+  });
+});
+
+test("UI2-OP07 a delayed batch receipt preserves a reopened intent with the same selection", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  let releaseBatch!: () => void;
+  let markBatchStarted!: () => void;
+  const batchGate = new Promise<void>((resolve) => (releaseBatch = resolve));
+  const batchStarted = new Promise<void>((resolve) => (markBatchStarted = resolve));
+  await page.route("**/api/v1/opportunities/batch", async (route) => {
+    markBatchStarted();
+    await batchGate;
+    await route.fulfill({ json: envelope({ affected_count: 1 }) });
+  });
+  await page.goto("/opportunities?view=all");
+
+  const first = data.rows[0];
+  const checkbox = page.getByRole("checkbox", {
+    name: `选择机会：${first.name}`,
+    exact: true,
+  });
+  await checkbox.check();
+  await page.getByRole("button", { name: "批量归档", exact: true }).click();
+  const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  await modal.getByLabel("操作原因").fill("旧批量意图");
+  await modal.getByRole("button", { name: "确认执行", exact: true }).click();
+  await batchStarted;
+
+  await modal.getByRole("button", { name: "返回", exact: true }).click();
+  await expect(modal).toBeHidden();
+  await page.getByRole("button", { name: "批量归档", exact: true }).click();
+  await expect(modal).toBeVisible();
+  await modal.getByLabel("操作原因").fill("同一选择的新批量意图");
+
+  releaseBatch();
+  await expect(modal).toBeVisible();
+  await expect(modal.getByLabel("操作原因")).toHaveValue("同一选择的新批量意图");
+  await expect(checkbox).toBeChecked();
+  expect(data.writes).toHaveLength(1);
+});
+
 for (const [action, label] of [
   ["observe", "继续观察"],
   ["reject", "驳回"],
