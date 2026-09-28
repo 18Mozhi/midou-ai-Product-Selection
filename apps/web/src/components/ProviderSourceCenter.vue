@@ -71,6 +71,7 @@ const configurationReturnSourceName = ref("");
 let configurationOperation = 0;
 let configurationReturnOperation = 0;
 let catalogLoadOperation = 0;
+let compatibilityOperation = 0;
 const testing = ref<string | null>(null);
 const {
   sampleSource,
@@ -609,6 +610,7 @@ onBeforeUnmount(() => {
   configurationOperation += 1;
   configurationReturnOperation += 1;
   catalogLoadOperation += 1;
+  compatibilityOperation += 1;
 });
 async function testSource(item: SourceItem) {
   if (!item.provisioned || testing.value) return;
@@ -630,8 +632,19 @@ async function testSource(item: SourceItem) {
   }
 }
 
+function closeCompatibility() {
+  compatibilityOperation += 1;
+  compatibilitySource.value = null;
+  compatibilityLoading.value = false;
+}
+
 async function loadCompatibility(item: SourceItem) {
   if (!item.provisioned) return;
+  const sourceId = item.provisioned.id;
+  const operation = ++compatibilityOperation;
+  const isCurrent = () =>
+    compatibilityOperation === operation &&
+    compatibilitySource.value?.provisioned?.id === sourceId;
   requestId.value = "";
   compatibilitySource.value = item;
   compatibilityLoading.value = true;
@@ -640,8 +653,9 @@ async function loadCompatibility(item: SourceItem) {
   compatibilityRows.value = [];
   try {
     const response = await request<ProviderCompatibilitySummary[]>("/platform/provider-adapters");
+    if (!isCurrent()) return;
     requestId.value = response.request_id;
-    const summary = response.data.find((candidate) => candidate.id === item.provisioned?.id);
+    const summary = response.data.find((candidate) => candidate.id === sourceId);
     if (!summary) {
       compatibilityError.value = "当前来源没有对应的采集程序观测。";
       return;
@@ -649,11 +663,12 @@ async function loadCompatibility(item: SourceItem) {
     compatibilityAdapterVersion.value = summary.adapter_version;
     compatibilityRows.value = summary.compatibility_matrix ?? [];
   } catch (error) {
+    if (!isCurrent()) return;
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? requestId.value;
     compatibilityError.value = failure?.actionHint ?? "解析兼容矩阵暂不可用，请稍后重试。";
   } finally {
-    compatibilityLoading.value = false;
+    if (isCurrent()) compatibilityLoading.value = false;
   }
 }
 onMounted(load);
@@ -956,7 +971,7 @@ onMounted(load);
       :error="compatibilityError"
       :request-id="requestId"
       :rows="compatibilityRows"
-      @close="compatibilitySource = null"
+      @close="closeCompatibility"
     />
   </section>
 </template>

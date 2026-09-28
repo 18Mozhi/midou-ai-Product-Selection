@@ -612,6 +612,192 @@ test("source detail shows parser and observed page-version compatibility", async
     .toBe(true);
 });
 
+test("late compatibility reads cannot replace the matrix opened for a newer source", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  await catalog(page);
+  const first = automatic[136],
+    second = automatic[137],
+    firstHash = "a".repeat(64),
+    secondHash = "b".repeat(64);
+  let releaseFirst!: () => void;
+  const firstReadPending = new Promise<void>((resolve) => {
+    releaseFirst = resolve;
+  });
+  let adapterReads = 0;
+  await page.route("**/api/v1/platform/provider-adapters", async (route) => {
+    adapterReads += 1;
+    if (adapterReads === 1) {
+      await firstReadPending;
+      await route.fulfill({
+        json: {
+          ...envelope([
+            {
+              id: first.provisioned.id,
+              adapter_version: "adapter-for-first-source",
+              compatibility_matrix: [
+                {
+                  parser_version: "parser-for-first-source",
+                  page_version_sha256: firstHash,
+                  status: "compatible",
+                  observation_count: 1,
+                  succeeded_count: 1,
+                  parser_failure_count: 0,
+                  last_observed_at: "2026-08-21T08:00:00.000Z",
+                },
+              ],
+            },
+          ]),
+          request_id: "compatibility-first-source",
+        },
+      });
+      return;
+    }
+    await route.fulfill({
+      json: {
+        ...envelope([
+          {
+            id: second.provisioned.id,
+            adapter_version: "adapter-for-second-source",
+            compatibility_matrix: [
+              {
+                parser_version: "parser-for-second-source",
+                page_version_sha256: secondHash,
+                status: "compatible",
+                observation_count: 2,
+                succeeded_count: 2,
+                parser_failure_count: 0,
+                last_observed_at: "2026-08-22T08:00:00.000Z",
+              },
+            ],
+          },
+        ]),
+        request_id: "compatibility-second-source",
+      },
+    });
+  });
+
+  try {
+    await page.goto("/platform-admin/providers/sources");
+    const search = page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址");
+    await search.fill(first.name);
+    await openMobileSourceDetails(page, first.name);
+    await page.getByRole("button", { name: "解析兼容矩阵" }).first().click();
+    await expect.poll(() => adapterReads).toBe(1);
+    await page.getByRole("button", { name: "关闭解析兼容矩阵" }).click();
+    if ((page.viewportSize()?.width ?? 0) <= 760) {
+      await page
+        .locator(".source-list article")
+        .filter({ hasText: first.name })
+        .getByRole("button", { name: "返回来源目录" })
+        .click();
+    }
+
+    await search.fill(second.name);
+    await openMobileSourceDetails(page, second.name);
+    await page.getByRole("button", { name: "解析兼容矩阵" }).first().click();
+    const secondDialog = page.getByRole("dialog", {
+      name: `解析器与页面版本 · ${second.name}`,
+    });
+    await expect(secondDialog).toBeVisible();
+    await expect(
+      secondDialog.getByText("adapter-for-second-source", { exact: true }),
+    ).toBeVisible();
+    await expect(secondDialog.getByText("sha256:bbbbbbbbbbbb", { exact: true })).toBeVisible();
+
+    releaseFirst();
+    await expect(secondDialog.getByText("sha256:bbbbbbbbbbbb", { exact: true })).toBeVisible();
+    await expect(
+      secondDialog.getByText("parser-for-first-source", { exact: true }),
+    ).toHaveCount(0);
+    await expect(secondDialog.getByText("sha256:aaaaaaaaaaaa", { exact: true })).toHaveCount(0);
+  } finally {
+    releaseFirst();
+  }
+});
+
+test("late compatibility failures cannot replace the current source request trace", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  await catalog(page);
+  const first = automatic[136],
+    second = automatic[137];
+  let releaseFirst!: () => void;
+  const firstReadPending = new Promise<void>((resolve) => {
+    releaseFirst = resolve;
+  });
+  let adapterReads = 0;
+  await page.route("**/api/v1/platform/provider-adapters", async (route) => {
+    adapterReads += 1;
+    if (adapterReads === 1) {
+      await firstReadPending;
+      await route.fulfill({
+        json: {
+          ...envelope([
+            {
+              id: first.provisioned.id,
+              adapter_version: "adapter-for-first-source",
+              compatibility_matrix: [],
+            },
+          ]),
+          request_id: "compatibility-first-source",
+        },
+      });
+      return;
+    }
+    await route.fulfill({
+      status: 409,
+      contentType: "application/json",
+      body: JSON.stringify({
+        error: {
+          code: "compatibility_read_conflict",
+          message: "兼容观测暂时无法读取。",
+          action_hint: "请重新读取兼容观测。",
+        },
+        request_id: "compatibility-second-source-failure",
+        trace_id: "compatibility-second-source-failure",
+      }),
+    });
+  });
+
+  try {
+    await page.goto("/platform-admin/providers/sources");
+    const search = page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址");
+    await search.fill(first.name);
+    await openMobileSourceDetails(page, first.name);
+    await page.getByRole("button", { name: "解析兼容矩阵" }).first().click();
+    await expect.poll(() => adapterReads).toBe(1);
+    await page.getByRole("button", { name: "关闭解析兼容矩阵" }).click();
+    if ((page.viewportSize()?.width ?? 0) <= 760) {
+      await page
+        .locator(".source-list article")
+        .filter({ hasText: first.name })
+        .getByRole("button", { name: "返回来源目录" })
+        .click();
+    }
+
+    await search.fill(second.name);
+    await openMobileSourceDetails(page, second.name);
+    await page.getByRole("button", { name: "解析兼容矩阵" }).first().click();
+    const secondDialog = page.getByRole("dialog", {
+      name: `解析器与页面版本 · ${second.name}`,
+    });
+    await expect(secondDialog).toBeVisible();
+    await secondDialog.getByText("技术详情").click();
+    await expect(secondDialog.getByText("compatibility-second-source-failure")).toBeVisible();
+
+    releaseFirst();
+    await expect(secondDialog.getByText("compatibility-second-source-failure")).toBeVisible();
+    await expect(secondDialog.getByText("compatibility-first-source", { exact: true })).toHaveCount(
+      0,
+    );
+  } finally {
+    releaseFirst();
+  }
+});
+
 test("public source is staged disabled, smoke-tested on the real page, then enabled", async ({
   page,
 }) => {
