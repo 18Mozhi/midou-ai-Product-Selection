@@ -12,7 +12,7 @@
     "apps/web/src/components/ProviderRegistry.vue": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
-    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+    "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
   },
   "inputs": {
     "apps/web/src/components/ProviderRegistry.vue": [
@@ -104,7 +104,7 @@
       "actionId": "PR46-PANEL-SECONDARY-UNBOUND",
       "label": "状态面板secondary当前无父级处理器",
       "kind": "excluded",
-      "sourceCandidateIds": ["apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1"],
+      "sourceCandidateIds": ["apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1"],
       "sourceContractKeys": ["PR46-SECONDARY-UNBOUND"],
       "contractAliasReason": "精确记录共享状态面板在P46消费者处未绑定secondary的事实；不把显示出的默认文案伪装成已生效导航。",
       "condition": "由UiStatePanel kind对应的secondary默认文案条件渲染。",
@@ -400,7 +400,7 @@
       "apps/web/src/components/ProviderRegistry.vue": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
-      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+      "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
     },
     "includeStructuralContainers": true,
     "inputScope": "reviewed-subset-of-shared-source",

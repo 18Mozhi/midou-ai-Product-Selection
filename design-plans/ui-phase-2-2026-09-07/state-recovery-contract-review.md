@@ -11,7 +11,7 @@ P72=/ui-states为internal，P73为fallback；两者都无shell与会话前置。
 | 文件（apps/web/src/components/） | SHA256 |
 | --- | --- |
 | UiStateShowcase.vue | c4a94d839ff7d4e1e3a10f6458facb150e2b499fbcc84cf411fdd8daecba3e30 |
-| UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
+| UiStatePanel.vue | 54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de |
 | ConfirmDialog.vue | fc593274463c1ced2eebe1094402d8b3aef5649d8502b78f04e65fdadb9c1a0f |
 | NotFoundPage.vue | 2629b1167336513955c9a1af7459d8e18d357f7e1fb03f240629f97b0501bf7b |
 
@@ -27,7 +27,7 @@ candidateId前缀为apps/web/src/components/加文件名及#。共14个控件/�
 | UiStateShowcase.vue:126 | b2a9d9fdd632dd45.1 | ST-PRIMARY.{kind}/ST-SECONDARY.{kind}，按下表 |
 | UiStateShowcase.vue:151 | 5cb580b48eea94d3.1 | ST-CANCEL/ST-CONFIRM，关闭；确认额外confirmed=true |
 | UiStatePanel.vue:71 | 589e8eedc7c9c864.1 | ST-PRIMARY，非loading发primary |
-| UiStatePanel.vue:73 | 3eebdb6b72e10446.1 | ST-SECONDARY，有文案且非loading才显示并发secondary |
+| UiStatePanel.vue:75 | e75816bb76644822.1 | ST-SECONDARY，有文案且非loading才显示并发secondary |
 | ConfirmDialog.vue:91 | 4505a8c2bbf9389c.1 | ST-CANCEL.backdrop，mousedown.self |
 | ConfirmDialog.vue:92 | 30a3b6ddc206839e.1 | ST-FOCUS/TRAP和ST-CANCEL.escape，keydown不是业务提交 |
 | ConfirmDialog.vue:123 | d1b7ac74d4f4ffc3.1 | ST-CANCEL.button |

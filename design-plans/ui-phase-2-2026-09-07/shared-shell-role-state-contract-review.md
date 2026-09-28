@@ -202,7 +202,7 @@ P72八态行为沿用原ST表，loading不显示操作；error/blocked重试是�
 | 当前子组件candidateId | 行 | 类型 | 稳定语义归属 | 本页边界 |
 | --- | ---: | --- | --- | --- |
 | apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1 | 71 | control | ST-PRIMARY | 仅P72状态卡片调用上下文；非loading时emit primary，由父级既有八态逻辑决定本地示例或导航 |
-| apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1 | 73 | control | ST-SECONDARY | 仅存在文案且非loading时emit secondary；不推断该共享组件其他消费者 |
+| apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1 | 75 | control | ST-SECONDARY | 仅存在文案且非loading时emit secondary；不推断该共享组件其他消费者 |
 
 App仅DEV条件导入UiStateShowcase/VerificationFramework，NavigationShell glob显式排除二者；本批不构建、不检生产bundle，因此不声称当前生产不可达已验证。P72使用具体URL和DEV query分开验收，P73用实际未知路径，不请求字面量通配路由。
 

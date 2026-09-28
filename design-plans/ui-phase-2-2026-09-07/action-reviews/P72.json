@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
-    "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+    "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
   },
   "inputs": {},
   "actions": [
@@ -84,8 +84,8 @@
       "kind": "local",
       "label": "触发当前状态卡片的演示主/次动作",
       "sourceCandidateIds": [
-        "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1",
         "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
+        "apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1",
         "apps/web/src/components/UiStateShowcase.vue#b2a9d9fdd632dd45.1"
       ],
       "sourceContractKeys": [
@@ -177,7 +177,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
-      "apps/web/src/components/UiStatePanel.vue": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164"
+      "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

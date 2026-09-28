@@ -39,7 +39,7 @@ const definitions = [
     "ST72-ACTIONS",
     "local",
     "触发当前状态卡片的演示主/次动作",
-    ["b2a9d9fdd632dd45.1", "589e8eedc7c9c864.1", "3eebdb6b72e10446.1"],
+    ["b2a9d9fdd632dd45.1", "589e8eedc7c9c864.1", "e75816bb76644822.1"],
     "当前状态卡片展示主动作，或其已有次动作可用且非loading时。",
     "UiStatePanel只emit primary/secondary；父级依八态表执行本地actionResult、既有导航或恢复示例；loading不展示动作。",
     "“重新尝试/申请权限”等演示文案不代表真实重试、权限申请、网络或业务写入。",

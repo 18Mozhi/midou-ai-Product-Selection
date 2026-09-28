@@ -246,7 +246,7 @@ P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT
 | D | a3c9be2acacfd788.1 | PR46-CURRENT-PREVIEW-SURFACE · 移动来源详情容器定义 |
 | D | 847801b2ac6e7a17.1 | PR46-CURRENT-PREVIEW-CLOSE · 移动详情标题关闭与焦点返回 |
 | U | 589e8eedc7c9c864.1 | PR46-LOAD · P46的primary读取按钮事件 |
-| U | 3eebdb6b72e10446.1 | PR46-SECONDARY-UNBOUND · secondary事件在P46无父级监听，不能算作已实现恢复 |
+| U | e75816bb76644822.1 | PR46-SECONDARY-UNBOUND · secondary事件在P46无父级监听，不能算作已实现恢复 |
 
 ## P47 页面动作映射与共享控件当前调用归属（2026-09-25）
 
