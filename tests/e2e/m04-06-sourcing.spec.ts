@@ -223,6 +223,23 @@ async function rejectSourcingRequest(page: Page, path: string, method: string, r
   });
 }
 
+async function navigateMemberMenu(page: Page, label: "全部任务" | "供应链与利润") {
+  const toggle = page.getByRole("button", { name: "打开导航菜单" });
+  if (await toggle.isVisible()) await toggle.click();
+  const navigation = page.getByRole("navigation", { name: "成员工作台导航" }),
+    target = navigation.getByRole("link", { name: label, exact: true });
+  if (!(await target.isVisible()))
+    await navigation
+      .getByText(label === "全部任务" ? "工作台" : "洞察与选品", { exact: true })
+      .click();
+  await navigation
+    .getByRole("link", {
+      name: label === "全部任务" ? "任务中心" : label,
+      exact: true,
+    })
+    .click();
+}
+
 test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and responsive actions", async ({
   page,
 }) => {
@@ -1160,4 +1177,122 @@ test("SC-G02 comparison history failure preserves the sourcing list and retries 
   await expect(page.getByText("宁波澄净户外用品厂")).toBeVisible();
   expect(attempts).toBe(2);
   expect(writes).toEqual([]);
+});
+
+test("P21 stale detail responses cannot replace the record selected while they are pending", async ({
+  page,
+}) => {
+  await setup(page);
+  const firstId = searchId,
+    secondId = "00000000-0000-4000-8000-000000000652",
+    first = {
+      id: firstId,
+      display_name: "第一条找货记录",
+      input_type: "keyword",
+      input_ref: "第一条找货记录",
+      status: "completed",
+      candidate_count: 0,
+      missing_fields: [],
+      created_at: "2026-08-08T12:00:00.000Z",
+    },
+    second = {
+      ...first,
+      id: secondId,
+      display_name: "第二条找货记录",
+      input_ref: "第二条找货记录",
+    };
+  let releaseFirst!: () => void, markFirstStarted!: () => void;
+  const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve)),
+    firstStarted = new Promise<void>((resolve) => (markFirstStarted = resolve));
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope([first, second]) }),
+  );
+  await page.route("**/api/v1/sourcing/searches/*", async (route) => {
+    if (route.request().method() !== "GET") return route.fallback();
+    const id = new URL(route.request().url()).pathname.split("/").at(-1);
+    if (id === firstId) {
+      markFirstStarted();
+      await firstGate;
+      await route.fulfill({ json: envelope({ ...first, candidates: [] }) });
+      return;
+    }
+    await route.fulfill({ json: envelope({ ...second, candidates: [] }) });
+  });
+
+  await page.goto("/sourcing");
+  await firstStarted;
+  await page.getByRole("button", { name: /第二条找货记录/ }).click();
+  await expect(page.locator(".sourcing-detail h3")).toHaveText("第二条找货记录");
+  releaseFirst();
+  await expect(page.locator(".sourcing-detail h3")).toHaveText("第二条找货记录");
+  await expect(page).toHaveURL(new RegExp(`record=${secondId}`));
+  await page.evaluate((id) => {
+    window.history.pushState(null, "", `/sourcing?record=${id}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, firstId);
+  await expect(page.locator(".sourcing-detail h3")).toHaveText("第一条找货记录");
+});
+
+test("P21 KeepAlive return reloads list, detail and comparisons and ignores pre-deactivation reads", async ({
+  page,
+}) => {
+  await setup(page);
+  let listReads = 0,
+    comparisonReads = 0,
+    releaseFirstComparison!: () => void,
+    markFirstComparisonStarted!: () => void;
+  const firstComparisonGate = new Promise<void>((resolve) => (releaseFirstComparison = resolve)),
+    firstComparisonStarted = new Promise<void>((resolve) => (markFirstComparisonStarted = resolve));
+  const record = {
+    id: searchId,
+    input_type: "keyword",
+    input_ref: "离开前找货快照",
+    status: "completed",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-08-08T12:00:00.000Z",
+  };
+  await page.route("**/api/v1/sourcing/searches", (route) => {
+    listReads += 1;
+    const current = {
+      ...record,
+      input_ref: listReads === 1 ? "离开前找货快照" : "返回后的找货快照",
+    };
+    return route.fulfill({ json: envelope([current]) });
+  });
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) => {
+    const current = {
+      ...record,
+      input_ref: listReads === 1 ? "离开前找货快照" : "返回后的找货快照",
+    };
+    return route.fulfill({ json: envelope({ ...current, candidates: [] }) });
+  });
+  await page.route("**/api/v1/sourcing/comparisons", async (route) => {
+    comparisonReads += 1;
+    if (comparisonReads === 1) {
+      markFirstComparisonStarted();
+      await firstComparisonGate;
+      await route.fulfill({
+        json: envelope([{ id: "old", name: "离页前的对比快照", quotes: [] }]),
+      });
+      return;
+    }
+    await route.fulfill({
+      json: envelope([{ id: "fresh", name: "返回后重新读取的对比", quotes: [] }]),
+    });
+  });
+
+  await page.goto("/sourcing");
+  await firstComparisonStarted;
+  await expect(page.locator(".sourcing-detail h3")).toHaveText("离开前找货快照");
+  await navigateMemberMenu(page, "全部任务");
+  await expect(page).toHaveURL(/\/tasks/);
+  releaseFirstComparison();
+
+  await navigateMemberMenu(page, "供应链与利润");
+  await expect(page.locator(".sourcing-detail h3")).toHaveText("返回后的找货快照");
+  await expect(page.getByText("返回后重新读取的对比")).toBeVisible();
+  expect(listReads).toBe(2);
+  expect(comparisonReads).toBe(2);
+  await expect(page.getByText("离页前的对比快照")).toHaveCount(0);
 });

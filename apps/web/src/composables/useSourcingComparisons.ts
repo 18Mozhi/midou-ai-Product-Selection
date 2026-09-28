@@ -13,17 +13,22 @@ export function useSourcingComparisons(request: ReturnType<typeof createApiClien
   const comparisons = ref<SourcingComparison[]>([]),
     comparisonLoading = ref(false),
     comparisonFailure = ref<SourcingComparisonFailure | null>(null);
-  let hasSnapshot = false;
+  let hasSnapshot = false,
+    active = true,
+    readGeneration = 0;
 
   async function loadComparisons() {
-    if (comparisonLoading.value) return;
+    if (!active) return;
+    const generation = ++readGeneration;
     comparisonLoading.value = true;
     comparisonFailure.value = null;
     try {
       const response = await request<SourcingComparison[]>("/sourcing/comparisons");
+      if (!active || generation !== readGeneration) return;
       comparisons.value = response.data;
       hasSnapshot = true;
     } catch (error) {
+      if (!active || generation !== readGeneration) return;
       const apiError = error instanceof ApiClientError ? error : null;
       comparisonFailure.value = {
         actionHint: apiError?.actionHint ?? "对比历史暂不可用，请稍后重试。",
@@ -32,9 +37,16 @@ export function useSourcingComparisons(request: ReturnType<typeof createApiClien
         retainedSnapshot: hasSnapshot,
       };
     } finally {
-      comparisonLoading.value = false;
+      if (active && generation === readGeneration) comparisonLoading.value = false;
     }
   }
 
-  return { comparisons, comparisonFailure, comparisonLoading, loadComparisons };
+  function setActive(value: boolean) {
+    if (active === value) return;
+    active = value;
+    readGeneration += 1;
+    comparisonLoading.value = false;
+  }
+
+  return { comparisons, comparisonFailure, comparisonLoading, loadComparisons, setActive };
 }

@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref, watch } from "vue";
+import {
+  computed,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useSourcingComparisons } from "../composables/useSourcingComparisons";
@@ -49,8 +58,13 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: stri
     delete: 0,
   }),
   routeGeneration = ref(0),
-  { comparisons, comparisonFailure, comparisonLoading, loadComparisons } =
-    useSourcingComparisons(request),
+  {
+    comparisons,
+    comparisonFailure,
+    comparisonLoading,
+    loadComparisons,
+    setActive: setComparisonsActive,
+  } = useSourcingComparisons(request),
   quoteCandidate = ref<Candidate | null>(null),
   purchaseCandidate = ref<Candidate | null>(null),
   selectedQuotes = ref<string[]>([]),
@@ -73,6 +87,13 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: stri
     quantity: 1,
     reason: "从供应链找货页面创建采购任务",
   });
+let listReadGeneration = 0,
+  detailReadGeneration = 0,
+  lifecycleGeneration = 0,
+  listReadPending = false,
+  pageActive = false,
+  mounted = false,
+  refreshOnActivation = false;
 const missingLabels: Record<string, string> = {
     moq: "最小起订量",
     specification: "规格",
@@ -177,49 +198,85 @@ const missingLabels: Record<string, string> = {
         ? "blocked"
         : "error";
 async function load() {
+  if (!pageActive) return;
+  const generation = ++listReadGeneration,
+    lifecycle = lifecycleGeneration,
+    detailGenerationAtStart = detailReadGeneration;
+  listReadPending = true;
   state.value = "loading";
   notice.value = "";
   selectedQuotes.value = [];
   try {
     const response = await request<Search[]>("/sourcing/searches");
+    if (!ownsListRead(generation, lifecycle)) return;
     requestId.value = response.request_id;
     items.value = response.data;
+    state.value = items.value.length ? "ready" : "empty";
+    void loadComparisons();
+    if (detailReadGeneration !== detailGenerationAtStart) {
+      if (!items.value.some((item) => item.id === selected.value?.id)) selected.value = null;
+      return;
+    }
     const requestedRecord = typeof route.query.record === "string" ? route.query.record : "";
     selected.value =
       items.value.find((x) => x.id === requestedRecord) ??
       items.value.find((x) => x.id === selected.value?.id) ??
       items.value[0] ??
       null;
-    state.value = items.value.length ? "ready" : "empty";
-    void loadComparisons();
     if (selected.value) {
+      const selectedId = selected.value.id;
       await detail(selected.value, false);
-      if (route.query.record !== selected.value.id)
-        await router.replace({ query: { ...route.query, record: selected.value.id } });
+      if (
+        ownsListRead(generation, lifecycle) &&
+        selected.value?.id === selectedId &&
+        route.query.record !== selectedId
+      )
+        await router.replace({ query: { ...route.query, record: selectedId } });
     }
   } catch (error) {
+    if (!ownsListRead(generation, lifecycle)) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
       state.value = stateFrom(error.kind);
     } else state.value = "blocked";
+  } finally {
+    if (generation === listReadGeneration && lifecycle === lifecycleGeneration)
+      listReadPending = false;
   }
 }
+function ownsListRead(generation: number, lifecycle: number) {
+  return pageActive && lifecycle === lifecycleGeneration && generation === listReadGeneration;
+}
 async function detail(item: Search, syncRoute = true) {
+  if (!pageActive) return;
+  const generation = ++detailReadGeneration,
+    lifecycle = lifecycleGeneration;
   if (selected.value?.id !== item.id) selectedQuotes.value = [];
   selected.value = item;
   try {
     const response = await request<Search>(`/sourcing/searches/${item.id}`);
+    if (!ownsDetailRead(generation, lifecycle)) return;
     requestId.value = response.request_id;
     selected.value = response.data;
-    if (syncRoute)
+    if (syncRoute && route.query.record !== item.id)
       await router.replace({ query: { ...route.query, record: item.id, create: undefined } });
   } catch (error) {
+    if (!ownsDetailRead(generation, lifecycle)) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
     } else notice.value = "详情暂不可用，列表状态未被覆盖。";
   }
+}
+function ownsDetailRead(generation: number, lifecycle: number) {
+  return pageActive && lifecycle === lifecycleGeneration && generation === detailReadGeneration;
+}
+function invalidatePageReads() {
+  lifecycleGeneration += 1;
+  listReadGeneration += 1;
+  detailReadGeneration += 1;
+  listReadPending = false;
 }
 function isCurrentDialogAttempt(attempt: SourcingDialogAttempt) {
   return (
@@ -513,6 +570,8 @@ async function removeSearch() {
   }
 }
 onMounted(() => {
+  mounted = true;
+  pageActive = true;
   showSearch.value = route.query.create === "1";
   query.value = typeof route.query.q === "string" ? route.query.q : "";
   const opportunityId =
@@ -523,11 +582,46 @@ onMounted(() => {
   }
   void load();
 });
+onActivated(() => {
+  if (!mounted || !refreshOnActivation) return;
+  refreshOnActivation = false;
+  pageActive = true;
+  setComparisonsActive(true);
+  void load();
+});
+onDeactivated(() => {
+  pageActive = false;
+  refreshOnActivation = true;
+  invalidatePageReads();
+  setComparisonsActive(false);
+});
+onBeforeUnmount(() => {
+  mounted = false;
+  pageActive = false;
+  refreshOnActivation = false;
+  invalidatePageReads();
+  setComparisonsActive(false);
+});
 watch(
   () => route.fullPath,
   () => {
     routeGeneration.value += 1;
   },
+);
+watch(
+  () => route.query.record,
+  (value) => {
+    if (!pageActive || listReadPending) return;
+    const requestedRecord = typeof value === "string" ? value : "",
+      next =
+        items.value.find((item) => item.id === requestedRecord) ??
+        (!requestedRecord ? items.value[0] : null);
+    if (next?.id === selected.value?.id) return;
+    if (next) void detail(next, !requestedRecord);
+    else if (requestedRecord) void load();
+    else selected.value = null;
+  },
+  { flush: "sync" },
 );
 watch(query, (value) => {
   void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
