@@ -102,11 +102,13 @@ const { dialogElement: createDialogElement, handleCancel: handleCreateCancel } =
     () => showCreate.value,
     closeEditor,
     () => pageHeading.value,
+    { trapFocus: true },
   ),
   { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
     () => Boolean(selected.value),
     closeDetail,
     () => pageHeading.value,
+    { trapFocus: true },
   );
 const templates: Array<RuleTemplate & { description: string }> = [
   {

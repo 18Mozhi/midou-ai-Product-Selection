@@ -418,3 +418,64 @@ test("P27 direct-linked detail and editor return focus to the page heading", asy
   await expect(page).not.toHaveURL(/rule=/);
   await expect(heading).toBeFocused();
 });
+
+test("P27 native dialogs contain keyboard focus and preserve required-field validation", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/automations");
+
+  const focusable =
+    'button:not(:disabled), a[href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), summary, [tabindex]:not([tabindex="-1"])';
+  const expectDialogTabBoundary = async (dialog: ReturnType<typeof page.getByRole>) => {
+    await expect
+      .poll(() => dialog.evaluate((element) => element.contains(document.activeElement)))
+      .toBe(true);
+    const stops = dialog.locator(focusable);
+    const count = await stops.count();
+    expect(count).toBeGreaterThan(1);
+    const first = stops.first();
+    const last = stops.nth(count - 1);
+    await first.focus();
+    await page.keyboard.press("Shift+Tab");
+    await expect(last).toBeFocused();
+    await page.keyboard.press("Tab");
+    await expect(first).toBeFocused();
+    await last.focus();
+    await page.keyboard.press("Tab");
+    await expect(first).toBeFocused();
+    await page.keyboard.press("Shift+Tab");
+    await expect(last).toBeFocused();
+  };
+
+  const creatorTrigger = page.getByRole("button", { name: "创建规则", exact: true });
+  await creatorTrigger.click();
+  const createDialog = page.getByRole("dialog", { name: "创建自动化规则" });
+  await expectDialogTabBoundary(createDialog);
+  await createDialog.getByRole("button", { name: /审批超时提醒/ }).click();
+  await page.getByLabel("规则负责人").selectOption(user);
+  const ruleName = page.getByLabel("规则名称");
+  await ruleName.fill("");
+  await createDialog.getByRole("button", { name: "创建并启用" }).click();
+  expect(await ruleName.evaluate((element) => !(element as HTMLInputElement).validity.valid)).toBe(
+    true,
+  );
+  await expect(ruleName).toBeFocused();
+  await expect(createDialog).toBeVisible();
+  await createDialog.getByRole("button", { name: "取消" }).click();
+  await expect(creatorTrigger).toBeFocused();
+
+  const detailTrigger = page.getByRole("button", { name: "查看详情" });
+  await detailTrigger.click();
+  const detailDialog = page.getByRole("dialog", { name: `${rule.name}执行记录` });
+  await expectDialogTabBoundary(detailDialog);
+  await page.keyboard.press("Escape");
+  await expect(detailTrigger).toBeFocused();
+
+  const editTrigger = page.getByRole("button", { name: "编辑", exact: true });
+  await editTrigger.click();
+  const editDialog = page.getByRole("dialog", { name: "编辑自动化规则" });
+  await expectDialogTabBoundary(editDialog);
+  await page.keyboard.press("Escape");
+  await expect(editTrigger).toBeFocused();
+});

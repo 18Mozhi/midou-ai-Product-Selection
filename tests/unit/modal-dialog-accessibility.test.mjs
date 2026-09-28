@@ -19,6 +19,14 @@ test("native business dialogs share modal top-layer and focus-return behavior", 
     assert.doesNotMatch(source, /<dialog[^>]*\s:open=/, path);
     if (/useModalDialog/.test(source)) {
       assert.match(source, /useModalDialog/, path);
+    } else if (path.endsWith("/NavigationShell.vue")) {
+      const drawer = await readFile("apps/web/src/use-navigation-shell-drawer.ts", "utf8");
+      assert.match(source, /useNavigationShellDrawer/, path);
+      assert.match(source, /containTab/, path);
+      assert.match(drawer, /showModal\(\)/);
+      assert.match(drawer, /dialog\.close\(\)/);
+      assert.match(drawer, /restoreFocus/);
+      assert.match(drawer, /event\.key !== "Tab"/);
     } else if (path.endsWith("/PlatformMessageWorkbench.vue")) {
       const reader = await readFile(
         "apps/web/src/components/use-platform-notification-reader.ts",
@@ -48,6 +56,15 @@ test("native business dialogs share modal top-layer and focus-return behavior", 
   assert.match(modal, /target\?\.focus\(\)/);
   assert.match(modal, /getFallbackFocus\?\.\(\)/);
   assert.match(modal, /event\.preventDefault\(\)/);
+  assert.match(modal, /options: \{ trapFocus\?: boolean \} = \{\}/);
+  assert.match(modal, /if \(options\.trapFocus\)/);
+  assert.match(modal, /event\.key !== "Tab"/);
+  assert.match(modal, /document\.activeElement === first/);
+  assert.match(modal, /document\.activeElement === last/);
+  assert.match(modal, /tabTrappedDialog: HTMLDialogElement \| null/);
+  assert.match(modal, /function setTabTrap\(dialog: HTMLDialogElement \| null\)/);
+  assert.match(modal, /addEventListener\("keydown"/);
+  assert.match(modal, /removeEventListener\("keydown"/);
   assert.match(modal, /discardReturnFocus/);
 
   const opaqueDialogStyles = await Promise.all(
