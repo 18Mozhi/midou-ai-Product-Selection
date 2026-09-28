@@ -71,6 +71,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   refreshing = ref(false),
   lastUpdatedAt = ref<string | null>(null),
   message = ref(""),
+  refreshNotice = ref<"none" | "success" | "failure">("none"),
   probeFeedback = ref<{ providerId: string; message: string; requestId: string } | null>(null);
 const failure = (status: number): State =>
   status === 401
@@ -190,6 +191,7 @@ async function load() {
   if (!preserve) state.value = "loading";
   refreshing.value = true;
   message.value = "";
+  refreshNotice.value = "none";
   const controller = new AbortController(),
     timer = window.setTimeout(() => controller.abort(), 12_000);
   try {
@@ -201,13 +203,17 @@ async function load() {
     items.value = response.data;
     lastUpdatedAt.value = new Date().toISOString();
     state.value = items.value.length ? "ready" : "empty";
-    if (preserve) message.value = `已刷新 ${items.value.length} 个来源适配器状态`;
+    if (preserve) {
+      message.value = `已刷新 ${items.value.length} 个来源适配器状态`;
+      refreshNotice.value = "success";
+    }
   } catch (error) {
     if (!ownsRead()) return;
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
     if (preserve) {
       state.value = "ready";
+      refreshNotice.value = "failure";
       message.value =
         error instanceof DOMException && error.name === "AbortError"
           ? "刷新超时，已保留上一次成功数据"
@@ -229,6 +235,7 @@ async function probe(item: AdapterSummary, event?: MouseEvent) {
   probing.value = item.id;
   probeFeedback.value = null;
   message.value = "";
+  refreshNotice.value = "none";
   try {
     const response = await request<AdapterSummary>(
       `/platform/provider-adapters/${item.id}/health-check`,
@@ -275,6 +282,13 @@ function refreshFromButton(event: MouseEvent) {
     const heading = trigger.closest<HTMLElement>(".adapter-heading");
     if (heading?.isConnected && !heading.closest("[inert]")) heading.focus({ preventScroll: true });
   }
+  void load();
+}
+function retryRefresh(event: MouseEvent) {
+  const heading = (event.currentTarget as HTMLElement)
+    .closest(".adapter-center")
+    ?.querySelector<HTMLElement>(".adapter-heading");
+  if (heading?.isConnected) heading.focus({ preventScroll: true });
   void load();
 }
 async function resetEmptyFilters(event: MouseEvent) {
@@ -410,6 +424,22 @@ onMounted(load);
         </details>
         <span>{{ filtered.length }} 个结果</span>
       </div>
+      <section
+        v-if="message && refreshNotice === 'failure'"
+        class="adapter-refresh-failure"
+        role="status"
+        aria-atomic="true"
+      >
+        <small>更新未完成</small>
+        <h3>最新状态暂未更新</h3>
+        <p>当前仍显示上一次成功读取的数据，可以继续查看。</p>
+        <span>{{ message }}</span>
+        <details v-if="requestId">
+          <summary>本次刷新追踪</summary>
+          <code>{{ requestId }}</code>
+        </details>
+        <button type="button" :disabled="refreshing" @click="retryRefresh">重新刷新</button>
+      </section>
       <section v-if="state === 'empty'" class="adapter-empty adapter-empty--approved-mobile">
         <h3>
           <span class="adapter-empty-copy-wide">还没有来源可绑定适配器</span
@@ -704,7 +734,7 @@ onMounted(load);
           下一页
         </button>
       </nav>
-      <div v-if="message" class="adapter-message" role="status">
+      <div v-if="message && refreshNotice !== 'failure'" class="adapter-message" role="status">
         <span>{{ message }}</span>
         <details v-if="requestId">
           <summary>技术详情</summary>

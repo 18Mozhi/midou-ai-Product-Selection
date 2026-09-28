@@ -29,6 +29,10 @@
 
 复验：`node --test tests/unit/ui-phase2-provider-adapter-refresh-failure.test.mjs`。重建图包：`node scripts/verify-ui-phase2-provider-adapter-refresh-failure.mjs --capture`。
 
+## 后续接入（2026-09-28）
+
+用户随后授权剩余视觉状态通过并要求继续。刷新失败稿已接入生产 `ProviderAdapterCenter`；实际代码与部署状态见 [P47 刷新失败实施](P47-REFRESH-FAILURE-IMPLEMENTATION.md)。本节不把先前“手机组合待审”的历史记录改写为当时已批准，也不扩大为真实权限/探针验收。
+
 本地返回仅验证 UI 与请求合同，不是实网权限/依赖/探针/数据库结果；没有覆盖 AbortController 12 秒真实超时、离页中止或全部读屏。本轮 Vite/Chromium 端口 51038/51127 已关闭；早期失败验证端口 50872 也由 finally 关闭。正式审核图包保留，无临时测试文件、日志或进程。
 
 ## 待审

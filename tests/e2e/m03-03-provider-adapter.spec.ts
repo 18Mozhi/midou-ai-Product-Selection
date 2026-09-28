@@ -154,6 +154,75 @@ test("P47 initial loading state uses its approved copy and compact skeleton with
     releaseRead();
   }
 });
+test("P47 refresh failure keeps the prior snapshot and explicit retry returns success", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  let reads = 0,
+    releaseRetry!: () => void;
+  const retryGate = new Promise<void>((resolve) => (releaseRetry = resolve));
+  await page.route("**/api/v1/platform/provider-adapters", async (route) => {
+    reads += 1;
+    if (reads === 1)
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({ data: items, request_id: "p47-refresh-old", trace_id: "p47-refresh-old" }),
+      });
+    if (reads === 2)
+      return route.fulfill({
+        status: 409,
+        contentType: "application/json",
+        body: JSON.stringify({
+          error: { code: "snapshot_conflict", message: "请求失败", action_hint: "当前服务暂不可读取" },
+          request_id: "p47-refresh-failed",
+          trace_id: "p47-refresh-failed",
+        }),
+      });
+    await retryGate;
+    return route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({
+        data: items.map((item, index) => (index ? item : { ...item, name: "公开趋势 RSS（已更新）" })),
+        request_id: "p47-refresh-recovered",
+        trace_id: "p47-refresh-recovered",
+      }),
+    });
+  });
+  try {
+    await page.goto("/platform-admin/providers/adapters");
+    await expect(page.getByText("2 个结果", { exact: true })).toBeVisible();
+    await page.getByLabel("搜索来源", { exact: true }).fill("公开趋势");
+    await expect(page.getByText("1 个结果", { exact: true })).toBeVisible();
+    await page.getByRole("button", { name: "刷新状态", exact: true }).click();
+    const notice = page.getByRole("status").filter({ has: page.getByRole("heading", { name: "最新状态暂未更新" }) });
+    await expect(notice).toBeVisible();
+    await expect(notice.getByText("当前仍显示上一次成功读取的数据，可以继续查看。", { exact: true })).toBeVisible();
+    await expect(notice.getByText("当前服务暂不可读取", { exact: true })).toBeVisible();
+    await expect(notice.getByText("2 个结果", { exact: true })).toHaveCount(0);
+    await expect(page.getByText("1 个结果", { exact: true })).toBeVisible();
+    if (testInfo.project.name === "mobile-390")
+      await expect(page.getByRole("button", { name: /公开趋势 RSS.*查看详情/ })).toBeVisible();
+    else await expect(page.getByText("公开趋势 RSS", { exact: true })).toBeVisible();
+    await notice.getByText("本次刷新追踪", { exact: true }).click();
+    await expect(notice.getByText("p47-refresh-failed", { exact: true })).toBeVisible();
+
+    await notice.getByRole("button", { name: "重新刷新" }).click();
+    await expect(notice).toHaveCount(0);
+    await expect(page.locator(".adapter-heading")).toBeFocused();
+    await expect(page.getByRole("button", { name: "刷新中…", exact: true })).toBeDisabled();
+    expect(reads).toBe(3);
+    releaseRetry();
+    if (testInfo.project.name === "mobile-390")
+      await expect(page.getByRole("button", { name: /公开趋势 RSS（已更新）.*查看详情/ })).toBeVisible();
+    else await expect(page.getByText("公开趋势 RSS（已更新）", { exact: true })).toBeVisible();
+    await expect(page.getByText("已刷新 2 个来源适配器状态", { exact: true })).toBeVisible();
+    expect(reads).toBe(3);
+  } finally {
+    releaseRetry();
+  }
+});
 test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visual", async ({
   page,
 }, testInfo) => {

@@ -22,8 +22,8 @@ const captured = (file) =>
     encoding: "utf8",
   }).replaceAll("\r\n", "\n");
 
-test("P47 refresh failure proposal compiles and preserves original request/filter contracts", () => {
-  const original = read(component),
+test("P47 production refresh failure UI and archived proposal preserve request/filter contracts", () => {
+  const original = captured(component),
     review = previewAdapterRefreshFailure(original),
     parsed = parse(review);
   assert.deepEqual(parsed.errors, []);
@@ -50,6 +50,31 @@ test("P47 refresh failure proposal compiles and preserves original request/filte
     "probing.value === null",
   ])
     assert.equal(review.split(preserved).length, original.split(preserved).length, preserved);
+  const production = read(component),
+    productionParsed = parse(production);
+  assert.deepEqual(productionParsed.errors, []);
+  compileScript(productionParsed.descriptor, { id: "p47-refresh-failure-production" });
+  assert.deepEqual(
+    compileTemplate({
+      source: productionParsed.descriptor.template.content,
+      filename: component,
+      id: "p47-refresh-failure-production",
+    }).errors,
+    [],
+  );
+  for (const value of Object.values(refreshFailureCopy)) assert.ok(production.includes(value));
+  for (const preserved of [
+    'request<AdapterSummary[]>("/platform/provider-adapters"',
+    "window.setTimeout(() => controller.abort(), 12_000)",
+    'method: "POST"',
+    "probeRevision += 1",
+  ]) assert.ok(production.includes(preserved), preserved);
+  assert.ok(production.includes('refreshNotice.value = "failure"'));
+  assert.ok(production.includes('refreshNotice.value = "success"'));
+  assert.ok(production.includes('refreshNotice.value = "none"'));
+  assert.ok(production.includes("function retryRefresh(event: MouseEvent)"));
+  assert.ok(production.indexOf('class="adapter-refresh-failure"') < production.indexOf("<ResponsiveDataView"));
+  assert.ok(production.includes('message && refreshNotice !== \'failure\''));
   assert.equal(review.split("retryRefresh").length, 3);
   assert.equal(review.split('refreshNotice.value = "none"').length, 3);
   assert.equal(review.split('refreshNotice.value = "success"').length, 2);
@@ -92,15 +117,14 @@ test("P47 inline retry wrapper targets only a live local persistent heading", ()
   }
 });
 
-test("P47 refresh failure CSS cannot leak beyond review P47", () => {
+test("P47 production refresh failure CSS stays scoped to the active adapter page", () => {
   const css = postcss.parse(
-    read(
-      "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-refresh-failure-preview.css",
-    ),
+    read("apps/web/src/provider-adapters-c-page.css"),
   );
   css.walkRules((rule) => {
+    if (!rule.selector.includes(".adapter-refresh-failure") && !rule.selector.includes(".adapter-heading:focus"))
+      return;
     for (const selector of rule.selectors) {
-      assert.ok(selector.includes("body.p47-refresh-failure-review"));
       assert.ok(selector.includes(".adapter-center--c"));
       assert.ok(
         selector.includes(".adapter-refresh-failure") ||
