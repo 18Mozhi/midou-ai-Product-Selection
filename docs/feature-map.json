@@ -1519,6 +1519,7 @@
       "uiPhase2FilterCount": "P15 OpportunityListPanel derives the advanced-filter trigger count from the seven URL-applied query keys; mutable v-model drafts do not appear as applied. Empty-state clearing still recognizes unapplied drafts. The mobile M04-02 E2E covers edit, close/reopen, pre-apply count, and post-apply count. No API/filter semantics changed; non-all deep-link decision_status handling remains as-is.",
       "uiPhase2ImageFallback": "P15 OpportunityListPanel distinguishes a missing image URL (accessible label 商品主图待采集) from an image request failure (商品主图加载失败), retaining the existing same-size placeholder. Failed state is keyed by opportunity ID and image URL, and obsolete failures are cleared when the current list image source changes. Isolated actual-Vue E2E returns 404 for the image and verifies both states in desktop Chromium and mobile-390, 1/1 each. No business retry, API, or data contract changed.",
       "uiPhase2CreateRouteReactivate": "P15 UI2-OP07: when the member NavigationShell keeps OpportunityWorkspace alive, reactivating /opportunities with create=1 or source_topic_id now applies the route's existing name/market/category/source prefill and opens the create dialog only when opportunity:decide is available. Controlled actual-Vue E2E verifies same-scope draft retention, source-prefill replacement, and the no-decision-capability path; desktop Chromium and mobile-390 pass 2/2 each. No API, route shape, permission rule, or automatic creation/adoption changed. Other OP07 stale async/write lifecycle cases and real RBAC/production acceptance remain open.",
+      "uiPhase2ReviewCImplementation": "P18 REVIEW-C actual Vue implementation: OpportunityAiPanel now separates returned-record navigation from the selected immutable output, preserves stale snapshots on read/malformed-response errors, blocks review while stale, separates accepted queue feedback from its follow-up GET, and retains full request/hash/prompt/model/review provenance. OpportunityLineagePanel groups only by returned kind, preserves raw status suffixes and null age, and exposes returned routes/correlation IDs without inferred edges. OpportunityFeedbackPanel separates current server calibration, immutable facts and the eleven-field entry form; unknown POST outcomes retain the exact body/idempotency key and require an explicit same-key retry. AI review reason maximum follows the existing 1000-character backend contract. Actual Vue regressions cover malformed AI response and stale recovery, raw lineage/unknown age, ratio-vs-delta formatting, audit details, and same-key feedback recovery. No API/OpenAPI/DB/schema/permission/dependency contract change; locally controlled browser responses do not prove production RBAC, real writes or M07-03. Remaining opportunity actions, full P18 access/async lifecycle, 200% zoom/screen-reader/real-device verification, and 73-page closure remain open.",
       "entrypoints": [
         "../apps/api/src/opportunity-service.ts",
         "../apps/api/src/mysql-opportunity-repository.ts",
@@ -1530,12 +1531,17 @@
         "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/OpportunityWorkspace.vue",
         "../apps/web/src/components/OpportunityWorkspace.css",
+        "../apps/web/src/components/opportunity-workspace-types.ts",
+        "../apps/web/src/components/OpportunityAiPanel.vue",
         "../apps/web/src/components/OpportunityEvidencePanel.vue",
         "../apps/web/src/components/OpportunityDecisionPanel.vue",
         "../apps/web/src/components/opportunity-decision-presentation.ts",
         "../apps/web/src/components/OpportunityFeedbackPanel.vue",
         "../apps/web/src/components/OpportunityLineagePanel.vue",
         "../apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "../apps/web/src/opportunity-ai.css",
+        "../apps/web/src/opportunity-p18-workfaces.css",
+        "../apps/web/src/use-audited-reason.ts",
         "../apps/web/src/components/OpportunityListPanel.vue",
         "../apps/web/src/components/AutomaticSelectionReadinessPanel.vue",
         "../apps/api/src/opportunity-selection-policy.ts",
@@ -1559,7 +1565,9 @@
         "../tests/unit/automatic-selection-evaluation.test.mjs",
         "../tests/unit/automatic-selection-readiness.test.mjs",
         "../tests/unit/opportunity-selection-policy.test.mjs",
-        "../tests/m04-02/operating-feedback.test.mjs"
+        "../tests/m04-02/operating-feedback.test.mjs",
+        "../tests/e2e/m04-02-opportunities.spec.ts",
+        "../tests/e2e/m04-07-ai-analysis.spec.ts"
       ],
       "routes": [
         "/opportunities",

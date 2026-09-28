@@ -55,6 +55,7 @@ import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
 import "../opportunity-ai.css";
+import "../opportunity-p18-workfaces.css";
 import "../automatic-selection.css";
 const route = useRoute(),
   router = useRouter();
@@ -77,8 +78,16 @@ const props = defineProps<{
   profitLoadState = ref<"loading" | "ready" | "error">("loading"),
   profitErrorMessage = ref(""),
   profitRequestId = ref(""),
-  aiAnalyses = ref<any[]>([]),
+  aiAnalyses = ref<OpportunityTypes.OpportunityAiAnalysis[]>([]),
   aiLoadState = ref<OpportunityTypes.OpportunityPartialLoadState>("loading"),
+  aiLoadErrorMessage = ref(""),
+  aiRequestId = ref(""),
+  pendingFeedbackWrites = ref<
+    Record<string, { idempotencyKey: string; body: Record<string, unknown> }>
+  >({}),
+  feedbackWriteStates = ref<
+    Record<string, { unknown: boolean; message: string; requestId: string }>
+  >({}),
   downstreamLoadState = ref<OpportunityDownstreamStates>({
     competitors: "loading",
     sourcing: "loading",
@@ -130,6 +139,8 @@ let erpBridgeGeneration = 0;
 let writeScopeGeneration = 0;
 let activeWriteCount = 0;
 let tabIntentGeneration = 0;
+let aiRequestGeneration = 0;
+let aiSnapshotOpportunityId = "";
 watch(
   showCreate,
   () => {
@@ -277,17 +288,32 @@ async function read(path: string, isCurrent: () => boolean = () => true) {
 }
 async function loadAi(opportunityId = props.opportunityId, isCurrent?: () => boolean) {
   const generation = readGeneration;
+  const requestGeneration = ++aiRequestGeneration;
   const ownsRead = isCurrent ?? (() => generation === readGeneration);
   aiLoadState.value = "loading";
+  aiLoadErrorMessage.value = "";
+  aiRequestId.value = "";
   try {
-    const response = await request<any[]>(`/opportunities/${opportunityId}/ai-analyses`);
-    if (!ownsRead()) return;
-    aiAnalyses.value = Array.isArray(response.data) ? response.data : [];
+    const response = await request<unknown>(`/opportunities/${opportunityId}/ai-analyses`);
+    if (!ownsRead() || requestGeneration !== aiRequestGeneration) return;
+    if (!Array.isArray(response.data))
+      throw new Error("AI 分析接口返回格式异常，不能将其解释为没有分析记录。");
+    aiAnalyses.value = response.data as OpportunityTypes.OpportunityAiAnalysis[];
+    aiSnapshotOpportunityId = opportunityId ?? "";
     aiLoadState.value = "ready";
   } catch (error) {
-    if (!ownsRead()) return;
+    if (!ownsRead() || requestGeneration !== aiRequestGeneration) return;
     aiLoadState.value = "error";
-    if (error instanceof ApiClientError) requestId.value = error.requestId;
+    if (error instanceof ApiClientError) {
+      aiRequestId.value = error.requestId;
+      aiLoadErrorMessage.value = error.actionHint;
+    } else {
+      aiLoadErrorMessage.value =
+        error instanceof Error
+          ? error.message
+          : "AI 分析记录读取失败；当前数据保留为上次成功快照。";
+    }
+    if (aiRequestId.value) requestId.value = aiRequestId.value;
   }
 }
 async function loadDownstream(
@@ -434,6 +460,15 @@ async function load() {
   const generation = ++readGeneration;
   const opportunityId = props.opportunityId;
   const isCurrent = () => generation === readGeneration;
+  const nextAiOwner = opportunityId ?? "";
+  if (aiSnapshotOpportunityId !== nextAiOwner) {
+    aiAnalyses.value = [];
+    aiSnapshotOpportunityId = nextAiOwner;
+  }
+  aiRequestGeneration += 1;
+  aiLoadState.value = "loading";
+  aiLoadErrorMessage.value = "";
+  aiRequestId.value = "";
   state.value = "loading";
   message.value = "";
   try {
@@ -506,17 +541,99 @@ async function discoverSuppliers() {
 }
 async function submitOperatingFeedback() {
   if (!detail.value) return;
-  feedbackForm.observed_at = new Date().toISOString();
-  const result = await write("/opportunities/" + detail.value.id + "/operating-feedback", {
-    ...feedbackForm,
-    currency: feedbackForm.currency.toUpperCase(),
-    expected_version: detail.value.version,
-  });
-  if (!result) return;
-  detail.value.operating_feedback = result;
-  feedbackForm.source_ref = "";
-  feedbackForm.notes = "";
-  message.value = "经营复盘事实已写入；规则和人工决策均未自动变更。";
+  const opportunityId = detail.value.id;
+  let pending = pendingFeedbackWrites.value[opportunityId];
+  if (!pending) {
+    feedbackForm.observed_at = new Date().toISOString();
+    pending = {
+      idempotencyKey: crypto.randomUUID(),
+      body: {
+        ...feedbackForm,
+        currency: feedbackForm.currency.toUpperCase(),
+        expected_version: detail.value.version,
+      },
+    };
+    pendingFeedbackWrites.value = {
+      ...pendingFeedbackWrites.value,
+      [opportunityId]: pending,
+    };
+  }
+  await sendOperatingFeedback(opportunityId, pending);
+}
+async function retryUnknownOperatingFeedback() {
+  const opportunityId = detail.value?.id;
+  const pending = opportunityId ? pendingFeedbackWrites.value[opportunityId] : undefined;
+  if (!opportunityId || !pending || !feedbackWriteStates.value[opportunityId]?.unknown) return;
+  await sendOperatingFeedback(opportunityId, pending);
+}
+function markPendingFeedbackWritesUnknown() {
+  const next = { ...feedbackWriteStates.value };
+  let changed = false;
+  for (const opportunityId of Object.keys(pendingFeedbackWrites.value)) {
+    const current = next[opportunityId];
+    if (current?.unknown) continue;
+    next[opportunityId] = {
+      unknown: true,
+      message: "页面切换前未能确认本次提交结果；请返回该机会并用同一请求标识恢复核对。",
+      requestId: current?.requestId ?? "",
+    };
+    changed = true;
+  }
+  if (changed) feedbackWriteStates.value = next;
+}
+async function sendOperatingFeedback(
+  opportunityId: string,
+  pending: { idempotencyKey: string; body: Record<string, unknown> },
+) {
+  const generation = writeScopeGeneration;
+  const ownsScope = () => generation === writeScopeGeneration;
+  activeWriteCount += 1;
+  busy.value = true;
+  message.value = "";
+  feedbackWriteStates.value = {
+    ...feedbackWriteStates.value,
+    [opportunityId]: { unknown: false, message: "", requestId: "" },
+  };
+  try {
+    const response = await request<OpportunityTypes.OpportunityDetail["operating_feedback"]>(
+      `/opportunities/${opportunityId}/operating-feedback`,
+      { method: "POST", body: pending.body, idempotencyKey: pending.idempotencyKey },
+    );
+    if (!ownsScope()) return;
+    const result = response.data;
+    if (!result || !Array.isArray(result.facts) || !("calibration" in result))
+      throw new Error("服务端已响应，但返回内容不完整；请使用原请求标识恢复核对。");
+    requestId.value = response.request_id;
+    delete pendingFeedbackWrites.value[opportunityId];
+    delete feedbackWriteStates.value[opportunityId];
+    if (detail.value?.id !== opportunityId) return;
+    detail.value.operating_feedback = result;
+    feedbackForm.source_ref = "";
+    feedbackForm.notes = "";
+    message.value = "经营复盘事实已写入；规则和人工决策均未自动变更。";
+  } catch (error) {
+    if (!ownsScope()) return;
+    const apiError = error instanceof ApiClientError ? error : null;
+    const unknown = !apiError || apiError.status === 0 || apiError.status >= 500;
+    const nextState = {
+      unknown,
+      message:
+        apiError?.actionHint ?? (error instanceof Error ? error.message : "提交结果暂未确认。"),
+      requestId: apiError?.requestId ?? "",
+    };
+    if (!unknown) delete pendingFeedbackWrites.value[opportunityId];
+    feedbackWriteStates.value = {
+      ...feedbackWriteStates.value,
+      [opportunityId]: nextState,
+    };
+    if (nextState.requestId) requestId.value = nextState.requestId;
+    message.value = nextState.message;
+  } finally {
+    if (ownsScope()) {
+      activeWriteCount = Math.max(0, activeWriteCount - 1);
+      busy.value = activeWriteCount > 0;
+    }
+  }
 }
 async function write(path: string, body: unknown) {
   const generation = writeScopeGeneration;
@@ -843,10 +960,12 @@ async function queueAi() {
   });
   if (result) {
     if (detail.value?.id !== opportunityId || route.path !== routePath) return;
-    await load();
-    if (detail.value?.id !== opportunityId || route.path !== routePath) return;
     if (tabIntentGeneration === tabGeneration) await setTab("ai");
     message.value = "AI 辅助分析已进入宝塔 Node Worker 队列；不会自动修改评分或决策。";
+    await loadAi(
+      opportunityId,
+      () => detail.value?.id === opportunityId && route.path === routePath,
+    );
   }
 }
 async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
@@ -855,6 +974,8 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
   const reasonRequest = {
     title: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
     description: "说明会写入 AI 分析人工复核记录，原始输出不会被改写。",
+    minimumLength: 2,
+    maximumLength: 1000,
   };
   aiReviewError.value = "";
   let notes = await askAiReviewReason(reasonRequest);
@@ -863,9 +984,8 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
     const result = await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes });
     if (result) {
       if (detail.value?.id !== opportunityId) return;
-      await load();
-      if (tab.value === "ai") await setTab("ai");
       message.value = "人工抽检已记录，AI 原始输出未被改写。";
+      await loadAi(opportunityId, () => detail.value?.id === opportunityId);
       return;
     }
     if (detail.value?.id !== opportunityId || tab.value !== "ai") return;
@@ -981,6 +1101,7 @@ onDeactivated(() => {
   readGeneration += 1;
   erpBridgeGeneration += 1;
   erpBridgeBusy.value = false;
+  markPendingFeedbackWritesUnknown();
   writeScopeGeneration += 1;
   activeWriteCount = 0;
   busy.value = false;
@@ -1004,6 +1125,7 @@ watch(
     readGeneration += 1;
     erpBridgeGeneration += 1;
     erpBridgeBusy.value = false;
+    markPendingFeedbackWritesUnknown();
     writeScopeGeneration += 1;
     activeWriteCount = 0;
     busy.value = false;
@@ -1218,7 +1340,11 @@ onBeforeUnmount(() => {
                 :form="feedbackForm"
                 :busy="busy"
                 :can-write="canDecide"
+                :error-message="feedbackWriteStates[detail.id]?.message || ''"
+                :request-id="feedbackWriteStates[detail.id]?.requestId || ''"
+                :unknown-write="Boolean(feedbackWriteStates[detail.id]?.unknown)"
                 @submit="submitOperatingFeedback"
+                @retry-unknown="retryUnknownOperatingFeedback"
               />
               <OpportunityProfitPanel
                 v-else-if="tab === 'profit'"
@@ -1243,6 +1369,8 @@ onBeforeUnmount(() => {
                 v-else-if="tab === 'ai'"
                 :analyses="aiAnalyses"
                 :load-state="aiLoadState"
+                :load-error-message="aiLoadErrorMessage"
+                :request-id="aiRequestId"
                 :busy="busy"
                 :can-decide="canDecide"
                 @queue="queueAi"
@@ -1351,6 +1479,7 @@ onBeforeUnmount(() => {
       :initial-value="aiReviewReasonRequest?.initialValue"
       :error="aiReviewError"
       :minimum-length="aiReviewReasonRequest?.minimumLength"
+      :maximum-length="aiReviewReasonRequest?.maximumLength"
       @submit="submitAiReviewReason"
       @cancel="cancelAiReviewReason"
     />

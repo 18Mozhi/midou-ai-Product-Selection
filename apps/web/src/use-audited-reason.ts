@@ -11,6 +11,7 @@ interface ReasonRequest {
   description: string;
   initialValue: string;
   minimumLength: number;
+  maximumLength?: number;
   workspaceRestore?: WorkspaceRestoreReasonContext;
 }
 
@@ -25,6 +26,7 @@ export function useAuditedReason() {
     description?: string;
     initialValue?: string;
     minimumLength?: number;
+    maximumLength?: number;
     workspaceRestore?: WorkspaceRestoreReasonContext;
   }) {
     if (resolveRequest) resolveRequest(null);
@@ -33,6 +35,7 @@ export function useAuditedReason() {
       description: input.description ?? "原因会写入审计记录。",
       initialValue: input.initialValue ?? "",
       minimumLength: input.minimumLength ?? 2,
+      ...(input.maximumLength ? { maximumLength: input.maximumLength } : {}),
       ...(input.workspaceRestore ? { workspaceRestore: { ...input.workspaceRestore } } : {}),
     };
     return new Promise<string | null>((resolve) => {

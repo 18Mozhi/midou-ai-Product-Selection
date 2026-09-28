@@ -1,0 +1,435 @@
+.opportunity-lineage--c,
+.opportunity-feedback--c {
+  display: grid;
+  gap: 18px;
+  color: var(--so-text, #202c3d);
+  background: #edf1f6;
+}
+.opportunity-lineage--c :is(a, summary):focus-visible,
+.opportunity-feedback--c :is(button, input, textarea, summary):focus-visible {
+  outline: 3px solid var(--so-primary, #254a9c);
+  outline-offset: 3px;
+}
+.opportunity-lineage--c > header,
+.opportunity-feedback--c > .opportunity-feedback-heading {
+  align-items: flex-start;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--so-border, #d6dde6);
+}
+.opportunity-lineage--c > header p,
+.opportunity-feedback--c > .opportunity-feedback-heading p,
+.opportunity-feedback--c .opportunity-feedback-form > header p,
+.opportunity-feedback--c .opportunity-feedback-calibration > header p {
+  margin: 0 0 5px;
+  color: var(--so-primary, #254a9c);
+  font-size: 13px;
+  font-weight: 700;
+}
+.opportunity-lineage--c > header h4,
+.opportunity-feedback--c > .opportunity-feedback-heading h4 {
+  margin: 0 0 6px;
+  color: #202c3d;
+  font-size: 23px;
+  line-height: 1.4;
+}
+.opportunity-lineage--c > header span,
+.opportunity-feedback--c > .opportunity-feedback-heading span {
+  display: block;
+  max-width: 760px;
+  color: #58677b;
+  line-height: 1.6;
+}
+.opportunity-lineage--c > header > b {
+  padding: 8px 11px;
+  border: 1px solid var(--so-border, #d6dde6);
+  background: #fff;
+  color: #35445a;
+}
+.opportunity-lineage--c > header > b[data-impact="blocked"] {
+  border-color: #e2b8b4;
+  background: #fff8f7;
+  color: #842f29;
+}
+.opportunity-lineage--c > header > b[data-impact="degraded"] {
+  border-color: #e5d0a5;
+  background: #fffaf0;
+  color: #765315;
+}
+.opportunity-lineage--c .opportunity-lineage-summary {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+.opportunity-lineage--c .opportunity-lineage-summary > div {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--so-border, #d6dde6);
+  border-radius: 5px;
+  background: #fff;
+}
+.opportunity-lineage--c .opportunity-lineage-summary dt,
+.opportunity-feedback--c dt {
+  color: #58677b;
+  font-size: 13px;
+}
+.opportunity-lineage--c .opportunity-lineage-summary dd,
+.opportunity-feedback--c dd {
+  margin: 5px 0 0;
+  color: #202c3d;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+.opportunity-lineage--c .opportunity-lineage-impact {
+  margin: 0;
+  padding: 13px;
+  border-left: 3px solid #9b342e;
+  background: #fff8f7;
+  color: #762f2b;
+}
+.opportunity-lineage--c .opportunity-lineage-impact ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+.opportunity-lineage--c .opportunity-lineage-groups,
+.opportunity-lineage--c .opportunity-lineage-groups > li > ol {
+  display: grid;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.opportunity-lineage--c .opportunity-lineage-groups > li {
+  min-width: 0;
+  padding: 13px;
+  border: 1px solid var(--so-border, #d6dde6);
+  background: #fff;
+}
+.opportunity-lineage--c .opportunity-lineage-groups > li > header,
+.opportunity-lineage--c .opportunity-lineage-node-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+}
+.opportunity-lineage--c .opportunity-lineage-groups > li > header {
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--so-border, #d6dde6);
+}
+.opportunity-lineage--c .opportunity-lineage-groups > li > header span,
+.opportunity-lineage--c .opportunity-lineage-node-heading > span {
+  color: #58677b;
+  font-size: 13px;
+}
+.opportunity-lineage--c .opportunity-lineage-groups > li > ol {
+  padding-top: 10px;
+}
+.opportunity-lineage--c .opportunity-lineage-groups > li > ol > li {
+  min-width: 0;
+  padding: 12px;
+  border: 1px solid #e0e5eb;
+  background: #f9fafc;
+}
+.opportunity-lineage--c .opportunity-lineage-groups p {
+  margin: 6px 0;
+  color: #58677b;
+  font-size: 13px;
+}
+.opportunity-lineage--c details > summary,
+.opportunity-feedback--c details > summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--so-primary, #254a9c);
+  font-weight: 700;
+  cursor: pointer;
+}
+.opportunity-lineage--c details dl,
+.opportunity-feedback--c details dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 10px 0;
+}
+.opportunity-lineage--c details dl > div,
+.opportunity-feedback--c details dl > div {
+  display: grid;
+  grid-template-columns: minmax(125px, 0.3fr) minmax(0, 1fr);
+  gap: 10px;
+}
+.opportunity-lineage--c details dd,
+.opportunity-feedback--c details dd {
+  min-width: 0;
+}
+.opportunity-lineage--c code,
+.opportunity-feedback--c code {
+  overflow-wrap: anywhere;
+  color: #35445a;
+  font-size: 13px;
+}
+.opportunity-lineage--c details a {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--so-primary, #254a9c);
+  font-weight: 700;
+}
+.opportunity-lineage--c .opportunity-lineage-correlation {
+  padding-top: 9px;
+  border-top: 1px solid var(--so-border, #d6dde6);
+}
+.opportunity-lineage--c .opportunity-lineage-correlation > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.opportunity-lineage--c .opportunity-lineage-correlation section {
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.opportunity-feedback--c > .opportunity-feedback-heading > strong {
+  flex: 0 0 auto;
+  color: #35445a;
+}
+.opportunity-feedback--c .opportunity-feedback-calibration {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 11px;
+  margin: 0;
+  padding: 15px;
+  border: 1px solid var(--so-border, #d6dde6);
+  background: #fff;
+}
+.opportunity-feedback--c .opportunity-feedback-calibration > header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+.opportunity-feedback--c .opportunity-feedback-calibration > header h5,
+.opportunity-feedback--c .opportunity-feedback-form > header h5 {
+  margin: 0;
+  font-size: 18px;
+}
+.opportunity-feedback--c .opportunity-feedback-calibration > header > span,
+.opportunity-feedback--c .opportunity-feedback-calibration footer {
+  color: #58677b;
+  font-size: 13px;
+}
+.opportunity-feedback--c .opportunity-feedback-calibration dl,
+.opportunity-feedback--c .opportunity-feedback-facts > li > dl {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 9px;
+  margin: 0;
+}
+.opportunity-feedback--c .opportunity-feedback-calibration dl > div,
+.opportunity-feedback--c .opportunity-feedback-facts > li > dl > div {
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #e0e5eb;
+  background: #f9fafc;
+}
+.opportunity-feedback--c .opportunity-feedback-calibration dd {
+  font-size: 18px;
+  font-weight: 700;
+}
+.opportunity-feedback--c .opportunity-feedback-calibration footer {
+  padding-top: 9px;
+  border-top: 1px solid var(--so-border, #d6dde6);
+}
+.opportunity-feedback--c .opportunity-feedback-no-calibration,
+.opportunity-feedback--c .opportunity-feedback-readonly {
+  margin: 0;
+  padding: 12px;
+  border-left: 3px solid var(--so-primary, #254a9c);
+  background: #edf3ff;
+  color: #263b5c;
+  line-height: 1.6;
+}
+.opportunity-feedback--c .opportunity-feedback-actions button,
+.opportunity-feedback--c .opportunity-feedback-form > footer button,
+.opportunity-feedback--c .opportunity-feedback-unknown button {
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--so-primary, #254a9c);
+  border-radius: 5px;
+  background: var(--so-primary, #254a9c);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.opportunity-feedback--c .opportunity-feedback-actions button:disabled,
+.opportunity-feedback--c button:disabled {
+  border-color: #aeb8c5;
+  background: #e7ebf0;
+  color: #667386;
+  cursor: not-allowed;
+}
+.opportunity-feedback--c .opportunity-feedback-form {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 16px;
+  border: 1px solid var(--so-border, #d6dde6);
+  background: #fff;
+}
+.opportunity-feedback--c .opportunity-feedback-form > header {
+  padding-bottom: 11px;
+  border-bottom: 1px solid var(--so-border, #d6dde6);
+}
+.opportunity-feedback--c .opportunity-feedback-form fieldset {
+  min-width: 0;
+  margin: 0;
+  padding: 13px;
+  border: 1px solid #dbe1e8;
+}
+.opportunity-feedback--c .opportunity-feedback-form fieldset:disabled {
+  opacity: 0.78;
+}
+.opportunity-feedback--c .opportunity-feedback-form legend {
+  padding: 0 5px;
+  color: #35445a;
+  font-weight: 700;
+}
+.opportunity-feedback--c .opportunity-feedback-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.opportunity-feedback--c .opportunity-feedback-fields label {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+  color: #202c3d;
+  font-size: 15px;
+  font-weight: 600;
+}
+.opportunity-feedback--c .opportunity-feedback-fields input,
+.opportunity-feedback--c .opportunity-feedback-fields textarea {
+  width: 100%;
+  min-height: 44px;
+  padding: 9px 10px;
+  border: 1px solid #aeb8c5;
+  border-radius: 4px;
+  background: #fff;
+  color: #202c3d;
+  font: inherit;
+}
+.opportunity-feedback--c .opportunity-feedback-fields textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+.opportunity-feedback--c .opportunity-feedback-fields small,
+.opportunity-feedback--c .opportunity-feedback-observed-at {
+  color: #58677b;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+.opportunity-feedback--c .opportunity-feedback-fields .wide {
+  grid-column: 1 / -1;
+}
+.opportunity-feedback--c .opportunity-feedback-validation {
+  margin: 0;
+  color: #842f29;
+}
+.opportunity-feedback--c .opportunity-feedback-write-error,
+.opportunity-feedback--c .opportunity-feedback-unknown {
+  padding: 12px;
+  border: 1px solid #e2b8b4;
+  background: #fff8f7;
+  color: #762f2b;
+}
+.opportunity-feedback--c .opportunity-feedback-write-error p,
+.opportunity-feedback--c .opportunity-feedback-unknown p {
+  margin: 5px 0;
+  line-height: 1.6;
+}
+.opportunity-feedback--c .opportunity-feedback-unknown button {
+  margin-top: 6px;
+}
+.opportunity-feedback--c .opportunity-feedback-observed-at {
+  margin: 0;
+}
+.opportunity-feedback--c .opportunity-feedback-empty {
+  margin: 0;
+  padding: 22px;
+  border: 1px solid var(--so-border, #d6dde6);
+  background: #fff;
+  color: #58677b;
+  text-align: center;
+}
+.opportunity-feedback--c .opportunity-feedback-facts {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.opportunity-feedback--c .opportunity-feedback-facts > li {
+  display: grid;
+  gap: 11px;
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--so-border, #d6dde6);
+  background: #fff;
+}
+.opportunity-feedback--c .opportunity-feedback-facts > li > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--so-border, #d6dde6);
+}
+.opportunity-feedback--c .opportunity-feedback-facts > li > header small {
+  display: block;
+  margin-top: 5px;
+  color: #58677b;
+  line-height: 1.5;
+}
+.opportunity-feedback--c .opportunity-feedback-facts > li > header > span {
+  color: var(--so-primary, #254a9c);
+  font-size: 13px;
+}
+.opportunity-feedback--c .opportunity-feedback-facts > li > p {
+  margin: 0;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+@media (max-width: 700px) {
+  .opportunity-lineage--c > header,
+  .opportunity-feedback--c > .opportunity-feedback-heading,
+  .opportunity-feedback--c .opportunity-feedback-calibration > header,
+  .opportunity-feedback--c .opportunity-feedback-facts > li > header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .opportunity-lineage--c .opportunity-lineage-summary,
+  .opportunity-feedback--c .opportunity-feedback-calibration dl,
+  .opportunity-feedback--c .opportunity-feedback-facts > li > dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .opportunity-lineage--c .opportunity-lineage-correlation > div,
+  .opportunity-feedback--c .opportunity-feedback-fields {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .opportunity-feedback--c .opportunity-feedback-fields .wide {
+    grid-column: auto;
+  }
+  .opportunity-lineage--c details dl > div,
+  .opportunity-feedback--c details dl > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3px;
+  }
+  .opportunity-feedback--c .opportunity-feedback-actions button,
+  .opportunity-feedback--c .opportunity-feedback-form > footer button,
+  .opportunity-feedback--c .opportunity-feedback-unknown button {
+    width: 100%;
+  }
+}

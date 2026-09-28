@@ -3,6 +3,34 @@ export type OpportunityWorkspaceState =
 
 export type OpportunityPartialLoadState = "loading" | "ready" | "error";
 
+export interface OpportunityAiAnalysis {
+  id: string;
+  status: string;
+  attempt_count: number;
+  last_error_code: string | null;
+  input_sha256: string;
+  prompt_contract_version: string | null;
+  created_at: string;
+  result: null | {
+    id: string;
+    content: {
+      summary: string;
+      classifications: Array<{ label: string; rationale: string; source_refs: string[] }>;
+      missing_fields: Array<{ field: string; reason: string; source_refs: string[] }>;
+    };
+    ai_generated: boolean;
+    model_name: string;
+    provider_request_id: string | null;
+    review_status: string;
+    review: null | {
+      outcome: "approved" | "rejected";
+      notes: string;
+      reviewed_by: string;
+      reviewed_at: string;
+    };
+  };
+}
+
 export interface OpportunityCompetitorSummary {
   id: string;
   opportunity_id: string | null;

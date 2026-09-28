@@ -80,7 +80,11 @@ const envelope = (data: unknown, meta?: unknown) => ({
   trace_id: "m04-02-e2e-trace",
 });
 
-async function ready(page: Page, detailEvidence = evidence) {
+async function ready(
+  page: Page,
+  detailEvidence = evidence,
+  detailOverrides: Record<string, unknown> = {},
+) {
   let decided = false;
   await page.route("**/api/v1/me/navigation?shell=member", (route) =>
     route.fulfill({
@@ -242,6 +246,7 @@ async function ready(page: Page, detailEvidence = evidence) {
             risk: "insufficient_data",
             execution: "not_available",
           },
+          ...detailOverrides,
         }),
       ),
     }),
@@ -313,6 +318,17 @@ async function switchOpportunityInPlace(page: Page, id: string, query = "") {
     },
     `${id}${query ? `?${query.replace(/^\?/, "")}` : ""}`,
   );
+}
+
+async function openDetailTab(page: Page, label: string) {
+  const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
+  if ((page.viewportSize()?.width ?? 0) <= 900) {
+    const isOpen = await mobileDirectory.evaluate(
+      (element) => (element as HTMLDetailsElement).open,
+    );
+    if (!isOpen) await mobileDirectory.locator("summary").click();
+  }
+  await page.getByRole("button", { name: label }).click();
 }
 
 test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthful", async ({
@@ -528,7 +544,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await expect(page.getByText("部分环节降级", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "经营复盘" }).click();
   await expect(page.getByRole("heading", { name: "决策后反馈" })).toBeVisible();
-  await expect(page.getByText("尚无经营复盘事实。")).toBeVisible();
+  await expect(page.getByText("尚无已返回的经营复盘记录。", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "利润与成本" }).click();
   await expect(page.getByText("数据不足，不能生成可靠 ROI")).toBeVisible();
   await page.getByRole("button", { name: "证据", exact: true }).click();
@@ -563,6 +579,142 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   if ((page.viewportSize()?.width ?? 0) <= 640) {
     await expect(page.locator(".opportunity-decision-waiting")).toHaveCSS("position", "static");
   }
+});
+
+test("P18 lineage preserves raw status and unknown age while feedback uses the same idempotency key after an unknown write", async ({
+  page,
+}) => {
+  const fact = {
+    id: "00000000-0000-4000-8000-000000000433",
+    period_start: "2026-08-01",
+    period_end: "2026-08-07",
+    sales_units: 8,
+    revenue_amount: 120,
+    ad_spend_amount: 30,
+    returned_units: 0,
+    purchase_lead_time_days: 12,
+    actual_profit_amount: -8,
+    currency: "USD",
+    source_ref: "ERP-REPORT-28",
+    notes: "扣除额外履约成本后为负值。",
+    score_rule_version_snapshot: "score-v6",
+    profit_rule_version_snapshot: "profit-v4",
+    decision_status_snapshot: "observing",
+    predicted_profit_amount: null,
+    predicted_currency: null,
+    quoted_lead_time_days: null,
+    observed_at: "2026-08-08T02:00:00.000Z",
+    request_id: "feedback-request-old",
+    trace_id: "feedback-trace-old",
+    created_at: "2026-08-08T02:01:00.000Z",
+  };
+  const initialFeedback = {
+    facts: [fact],
+    calibration: {
+      fact_id: fact.id,
+      return_rate_percent: 0,
+      ad_spend_ratio_percent: 25.5,
+      profit_variance_amount: -8,
+      profit_variance_currency: "USD",
+      lead_time_variance_days: 0,
+      score_rule_version: "score-v6",
+      profit_rule_version: "profit-v4",
+      decision_status_snapshot: "observing",
+      human_review_required: true,
+      automatic_rule_update: false,
+      automatic_decision: false,
+    },
+  };
+  await ready(page, evidence, {
+    lineage: {
+      freshness: { observed_at: evidence[0].observed_at, age_seconds: null },
+      failure_impact: {
+        level: "blocked",
+        codes: ["failed_terminal:parser_failed"],
+        affected_stages: ["collection_task"],
+      },
+      request_ids: [],
+      trace_ids: [],
+      nodes: [
+        {
+          kind: "collection_task",
+          id: "00000000-0000-4000-8000-000000000432",
+          label: "供应来源采集",
+          status: "failed_terminal:parser_failed",
+          occurred_at: "2026-08-08T02:00:00.000Z",
+          request_id: null,
+          trace_id: null,
+          route: "/collection-tasks?task_id=00000000-0000-4000-8000-000000000432",
+        },
+      ],
+    },
+    operating_feedback: initialFeedback,
+  });
+
+  const idempotencyKeys: string[] = [];
+  const submittedBodies: Array<Record<string, unknown>> = [];
+  await page.route(`**/api/v1/opportunities/${opportunityId}/operating-feedback`, async (route) => {
+    idempotencyKeys.push(route.request().headers()["idempotency-key"] ?? "");
+    submittedBodies.push(route.request().postDataJSON());
+    if (idempotencyKeys.length === 1)
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "service_unavailable",
+            message: "暂不可用",
+            action_hint: "服务端提交结果尚未确认。",
+          },
+          request_id: "feedback-write-unknown",
+          trace_id: "feedback-write-unknown",
+        },
+      });
+    return route.fulfill({
+      status: 201,
+      json: envelope({
+        facts: [
+          fact,
+          { ...fact, id: "00000000-0000-4000-8000-000000000434", source_ref: "ERP-NEW-29" },
+        ],
+        calibration: null,
+      }),
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openDetailTab(page, "业务血缘");
+  await expect(page.getByText("距今时间未提供")).toBeVisible();
+  await expect(page.getByText("failed_terminal:parser_failed", { exact: true })).toHaveCount(2);
+  await openDetailTab(page, "经营复盘");
+  await expect(page.getByText("0%", { exact: true })).toBeVisible();
+  await expect(page.getByText("25.5%", { exact: true })).toBeVisible();
+  await expect(page.getByText("-8 USD", { exact: true })).toHaveCount(2);
+  await expect(page.getByText("0 天", { exact: true })).toBeVisible();
+  await page.getByText("不可变快照与审计链路", { exact: true }).click();
+  await expect(page.getByText("score-v6", { exact: true })).toBeVisible();
+  await expect(page.getByText("feedback-trace-old", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "录入经营复盘" }).click();
+  await page.getByLabel("周期开始").fill("2026-08-08");
+  await page.getByLabel("周期结束").fill("2026-08-14");
+  await page.getByRole("spinbutton", { name: "实际销量 按本周期实际销售件数填写。" }).fill("5");
+  await page.getByLabel("实际销售额").fill("95");
+  await page.getByLabel("实际广告花费").fill("12");
+  await page.getByRole("spinbutton", { name: "实际退货量 不能高于实际销量。" }).fill("1");
+  await page.getByLabel("实际采购交期（天）").fill("14");
+  await page.getByLabel("实际利润").fill("-3");
+  await page.getByRole("textbox", { name: "币种 提交时按接口合同转为大写。" }).fill("USD");
+  await page.getByLabel("事实来源").fill("ERP-NEW-29");
+  await page.getByRole("button", { name: "提交新的经营事实" }).click();
+  await expect(page.getByRole("alert")).toContainText("提交结果暂未确认");
+  await expect(page.getByLabel("事实来源")).toBeDisabled();
+  await page.getByRole("button", { name: "使用同一请求标识恢复提交" }).click();
+  await expect(page.locator(".opportunity-message")).toContainText("经营复盘事实已写入");
+  await expect(page.locator(".opportunity-feedback-facts")).toContainText("ERP-NEW-29");
+  expect(idempotencyKeys).toHaveLength(2);
+  expect(idempotencyKeys[0]).toBeTruthy();
+  expect(idempotencyKeys[1]).toBe(idempotencyKeys[0]);
+  expect(submittedBodies[1]).toEqual(submittedBodies[0]);
 });
 
 test("P18 expired detail state routes to login with the current opportunity as a safe return target", async ({
@@ -1078,15 +1230,25 @@ test("a late AI analysis success remains scoped to the opportunity that requeste
 }) => {
   const analysis = (id: string, summary: string) => ({
     id,
-    status: "completed",
+    status: "succeeded",
+    attempt_count: 1,
+    last_error_code: null,
     created_at: "2026-08-08T00:00:00.000Z",
     input_sha256: "0123456789abcdef0123456789abcdef",
+    prompt_contract_version: "v1",
     result: {
       id: `${id}-result`,
       review_status: "approved",
       content: { summary, classifications: [], missing_fields: [] },
+      ai_generated: true,
       model_name: "isolated-e2e-model",
-      review: { notes: "" },
+      provider_request_id: null,
+      review: {
+        outcome: "approved",
+        notes: "本地测试抽检",
+        reviewed_by: "00000000-0000-4000-8000-000000000421",
+        reviewed_at: "2026-08-08T01:00:00.000Z",
+      },
     },
   });
   await ready(page);
@@ -1106,8 +1268,17 @@ test("a late AI analysis success remains scoped to the opportunity that requeste
   const currentDetailRequest = page.waitForRequest((request) =>
     request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
   );
+  const currentAnalysisResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/api/v1/opportunities/${nextOpportunityId}/ai-analyses`) &&
+      response.status() === 200,
+  );
   await switchOpportunityInPlace(page, nextOpportunityId, "tab=ai");
   await currentDetailRequest;
+  await currentAnalysisResponse;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name, level: 1 })).toBeVisible();
+  await openDetailTab(page, "AI 辅助");
+  await expect(page.locator(".opportunity-ai")).toBeVisible();
   await expect(page.getByText("当前机会的 AI 摘要", { exact: true })).toBeVisible();
 
   const oldAnalysisResponse = page.waitForResponse(

@@ -106,6 +106,17 @@ async function setup(page: Page) {
   );
 }
 
+async function openTab(page: Page, label: string) {
+  const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
+  if ((page.viewportSize()?.width ?? 0) <= 900) {
+    const isOpen = await mobileDirectory.evaluate(
+      (element) => (element as HTMLDetailsElement).open,
+    );
+    if (!isOpen) await mobileDirectory.locator("summary").click();
+  }
+  await page.getByRole("button", { name: label }).click();
+}
+
 test("a delayed AI enqueue receipt does not override a newer tab choice", async ({ page }) => {
   let releaseQueue!: () => void;
   let markQueueStarted!: () => void;
@@ -120,8 +131,7 @@ test("a delayed AI enqueue receipt does not override a newer tab choice", async 
   });
 
   await page.goto(`/opportunities/${opportunityId}`);
-  await page.locator(".opportunity-tabs details > summary").click();
-  await page.getByRole("button", { name: "AI 辅助" }).click();
+  await openTab(page, "AI 辅助");
   await page.getByRole("button", { name: "生成新分析" }).click();
   await queueStarted;
 
@@ -144,13 +154,12 @@ test("M04-07.A07/A08/A15 shows AI boundary evidence references and human samplin
 }) => {
   await setup(page);
   await page.goto(`/opportunities/${opportunityId}`);
-  await page.locator(".opportunity-tabs details > summary").click();
-  await page.getByRole("button", { name: "AI 辅助" }).click();
+  await openTab(page, "AI 辅助");
   await expect(page.getByRole("heading", { name: "AI 辅助分析" })).toBeVisible();
-  await expect(page.getByText("智能分析 · 待复核")).toBeVisible();
+  await expect(page.getByText("抽检 待复核")).toBeVisible();
   await expect(page.getByText(`opportunity:${opportunityId}`)).toHaveCount(2);
   await expect(page.getByRole("button", { name: "抽检通过" })).toBeVisible();
-  await expect(page.getByText("输出不能替代事实、评分、利润或人工决策。")).toBeVisible();
+  await expect(page.getByText(/评分、利润、风险和决定仍以持久化事实与人工判断为准/)).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
@@ -165,8 +174,7 @@ for (const outcome of ["approved", "rejected"] as const) {
     });
     await setup(page);
     await page.goto(`/opportunities/${opportunityId}`);
-    await page.locator(".opportunity-tabs details > summary").click();
-    await page.getByRole("button", { name: "AI 辅助" }).click();
+    await openTab(page, "AI 辅助");
     const trigger = page.getByRole("button", {
       name: outcome === "approved" ? "抽检通过" : "抽检驳回",
       exact: true,
@@ -208,8 +216,7 @@ for (const outcome of ["approved", "rejected"] as const) {
       });
     });
     await page.goto(`/opportunities/${opportunityId}`);
-    await page.locator(".opportunity-tabs details > summary").click();
-    await page.getByRole("button", { name: "AI 辅助" }).click();
+    await openTab(page, "AI 辅助");
     await page
       .getByRole("button", {
         name: outcome === "approved" ? "抽检通过" : "抽检驳回",
@@ -219,6 +226,10 @@ for (const outcome of ["approved", "rejected"] as const) {
     const dialog = page.getByRole("dialog", {
       name: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
     });
+    await expect(dialog.getByRole("textbox", { name: /原因/ })).toHaveAttribute(
+      "maxlength",
+      "1000",
+    );
     const reason = "核对来源后作出的人工抽检判断";
     await dialog.getByRole("textbox", { name: /原因/ }).fill(reason);
     await dialog.getByRole("button", { name: "确认提交" }).click();
@@ -236,3 +247,36 @@ for (const outcome of ["approved", "rejected"] as const) {
     ]);
   });
 }
+
+test("P18 keeps the previous AI snapshot visible after malformed refresh and separates enqueue acceptance", async ({
+  page,
+}) => {
+  let reads = 0;
+  await setup(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
+    if (route.request().method() === "POST")
+      return route.fulfill({ status: 202, json: envelope({ id: "queued-ai-analysis" }) });
+    reads += 1;
+    if (reads === 2) return route.fulfill({ json: envelope({ invalid: true }) });
+    return route.fallback();
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openTab(page, "AI 辅助");
+  await expect(
+    page.getByText("当前机会已有市场方向，但评分、利润和风险证据仍不足。"),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "生成新分析" }).click();
+
+  await expect(page.locator(".opportunity-message")).toContainText("已进入宝塔 Node Worker 队列");
+  await expect(page.getByRole("alert")).toContainText("不能将其解释为没有分析记录");
+  await expect(
+    page.getByText("当前机会已有市场方向，但评分、利润和风险证据仍不足。"),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "抽检通过" })).toBeDisabled();
+
+  await page.getByRole("button", { name: "重新读取" }).click();
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "抽检通过" })).toBeEnabled();
+  expect(reads).toBe(3);
+});
