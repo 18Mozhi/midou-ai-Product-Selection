@@ -752,6 +752,44 @@ test("a late opportunity detail failure cannot replace the current opportunity a
   await expect(page.getByText("旧机会读取失败", { exact: true })).toHaveCount(0);
 });
 
+test("a late profit analysis failure cannot replace the current opportunity after the ID changes", async ({
+  page,
+}) => {
+  await ready(page);
+  await readyForNextOpportunity(page);
+  let releaseOldProfit!: () => void;
+  let markOldProfitStarted!: () => void;
+  const oldProfitGate = new Promise<void>((resolve) => (releaseOldProfit = resolve));
+  const oldProfitStarted = new Promise<void>((resolve) => (markOldProfitStarted = resolve));
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, async (route) => {
+    markOldProfitStarted();
+    await oldProfitGate;
+    await route.fulfill({
+      status: 503,
+      json: { error: { code: "temporarily_unavailable", message: "旧机会利润读取失败" } },
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await oldProfitStarted;
+  const currentDetailRequest = page.waitForRequest((request) =>
+    request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
+  );
+  await switchOpportunityInPlace(page, nextOpportunityId);
+  await currentDetailRequest;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+
+  const oldProfitResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/api/v1/opportunities/${opportunityId}/profit-analysis`) &&
+      response.status() === 503,
+  );
+  releaseOldProfit();
+  await oldProfitResponse;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  await expect(page.getByText("旧机会利润读取失败", { exact: true })).toHaveCount(0);
+});
+
 test("a delayed decision receipt cannot close a newer decision dialog", async ({ page }) => {
   await ready(page);
   let releaseDecision!: () => void;
