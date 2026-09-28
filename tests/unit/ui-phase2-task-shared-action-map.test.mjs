@@ -29,7 +29,7 @@ test("TaskWorkspace batch event candidate is current and accounted for across ro
   const candidates = scanSource(source, file).candidates;
   const candidate = candidates.find((item) => item.candidateId === candidateId);
   assert.ok(candidate);
-  assert.equal(candidate.line, 875);
+  assert.equal(candidate.line, 883);
   assert.equal(candidate.kind, "event-binding");
 
   for (const review of Object.values(reviews)) {

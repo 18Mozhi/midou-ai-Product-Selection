@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TaskWorkspace.vue": "9b740ecaa7e4a7bb18baddc894582909fc2fb01c51f3081ec195267c1f147eff",
+    "apps/web/src/components/TaskWorkspace.vue": "e47d772b5a6e22bebdf7d9ab10f785f0963e81f8d6953d4768bcfa8e66b06016",
     "apps/web/src/components/TaskDetailPanel.vue": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48",
     "apps/web/src/components/TaskActionDialog.vue": "cb2b008db7e06be3a4b998c67fe2f98f087732ef458ed43dfe3647b165cccf7e"
   },
@@ -70,9 +70,19 @@
         {
           "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "testName": "P24 detail route ignores the list-only export view query",
+          "evidenceType": "mounted-Vue-E2E-local-api-fixture-desktop-and-mobile"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "testName": "P24 detail route ignores the list-only quick-create query",
+          "evidenceType": "mounted-Vue-E2E-local-api-fixture-desktop-and-mobile"
         }
       ],
-      "remaining": "原合同说头部入口可在详情存在，指共享DOM；当前CSS排除实际可见性。?create=1仍可开新建窗；?view=exports仍可触发读取优先分支，此异常不可按按钮可达归属，待获审实施修复。"
+      "remaining": "原合同说头部入口可在详情存在，指共享DOM；当前CSS排除实际可见性。详情现在忽略列表专用create=1与view=exports参数，始终读取任务及成员目录、不弹新建窗；桌面/390px实际Vue回归各2/2通过。其他详情动作的六态、长内容、主题/密度及真实RBAC/服务验收仍未完成。"
     },
     {
       "actionId": "read.retry",
@@ -86,7 +96,7 @@
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "loading之外五错误状态可见",
-      "handler": "load；普通taskId读详情与成员，exports query异常分支另见报告",
+      "handler": "load；taskId始终读取详情与成员目录，列表导出只在普通/tasks路由分支读取",
       "variants": [
         "error",
         "not_found",
@@ -224,7 +234,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "普通详情无可见新建按钮，但首次create=1可开窗。四字段无busy禁用，Escape可关闭；成功清form并load当前分支。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+      "remaining": "详情路由已忽略列表专用create=1；真实Vue E2E桌面/390px通过且create请求为0。四字段无busy禁用，Escape可关闭；成功清form并load当前分支。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
     },
     {
       "actionId": "delete.close",
@@ -1633,7 +1643,7 @@
       "apps/web/src/components/TaskActionDialog.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TaskWorkspace.vue": "9b740ecaa7e4a7bb18baddc894582909fc2fb01c51f3081ec195267c1f147eff",
+      "apps/web/src/components/TaskWorkspace.vue": "e47d772b5a6e22bebdf7d9ab10f785f0963e81f8d6953d4768bcfa8e66b06016",
       "apps/web/src/components/TaskDetailPanel.vue": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48",
       "apps/web/src/components/TaskActionDialog.vue": "cb2b008db7e06be3a4b998c67fe2f98f087732ef458ed43dfe3647b165cccf7e"
     },
@@ -1929,15 +1939,15 @@
       }
     ],
     "sharedRemaining": [
-      "P13/P23列表/批量消费者不计本页可见控件；CSS隐藏不等于卸载，原生dialog和quick-create query仍需单独归属。",
+      "P13/P23列表/批量消费者不计本页可见控件；CSS隐藏不等于卸载，原生dialog仍需单独归属；quick-create query已限定在列表路由。",
       "读取已有active/route/read-key/Abort保护；本批隔离边界不重复证明完整GET生命周期，写请求不随切页取消。",
       "既有60PNG是P23/P24/board共享总数，没有新增或重拍，图存在不表示真实Vue/服务或用户批准。"
     ]
   },
   "compositionGaps": [
     "普通P24隐藏头部/列表/批量/导出/分页；原合同关于头部可在详情存在只反映共享DOM，不是当前可见入口。",
-    "UNFIXED: ?view=exports有report:read时优先读取导出，初次详情selected为空且导出区被CSS隐藏；无权限回business只改变路由意图。需真实浏览器确认呈现。",
-    "?create=1允许首次详情快捷新建，虽无可见头部按钮；正式设计需涵盖此真实入口而非凭空新增按钮。",
+    "RESOLVED 2026-09-29: taskId现在优先于列表专用view=exports，详情只读任务与成员目录并持续呈现卷宗；桌面/390px实际Vue E2E通过。",
+    "RESOLVED 2026-09-29: create=1只在列表路由打开快捷新建；详情忽略该参数且不会发起创建；桌面/390px实际Vue E2E通过。",
     "开始/继续/完成直接写入，不新增原因/确认弹窗。转交独立task:assign，无本地终态限制，不套用批量资格。",
     "在途可编辑五字段与返回；请求body已捕获，成功关窗/失败留当前草稿；提交快照、错误可发现性、关闭焦点与晚到风险待具体交互批准。",
     "主题/密度/长任务名/多活动/关联与无关联/只分配权/终态/版本冲突/成员目录失败/全部按钮六态缺完整图；不能用固定in_progress样本抵扣。"
@@ -1945,7 +1955,7 @@
   "approval": "pending-user-review",
   "limits": [
     "仅源码语义与现有提案关联；7写入组不是7个API端点或完整状态机证明。",
-    "测试由实际函数提取到VM，传输/权限/数据库/路由监听等边界用桩；已知问题断言不等于已修复。",
+    "语义脚本只将实际函数提取到VM，传输/权限/数据库仍用桩；两项路由冲突另由挂载Vue的桌面/移动E2E覆盖，不证明真实会话、RBAC或数据库写入。",
     "P16布局通过不迁移为P24或全站批准，不改生产或部署。"
   ],
   "visualApproval": "user-approved-remaining-pages-auto"

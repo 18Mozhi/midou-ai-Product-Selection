@@ -2,6 +2,8 @@
 
 2026-09-10，基线main/87369638。沿已选C方向，使用ui-skills-root/frontend-design核对真实路由、职责和控件行为；不是重新选风格，也不把P16布局批准迁移到本页。
 
+2026-09-29跟进：详情页曾错误继承列表专用 `view=exports` 和 `create=1` 参数。现已修复：详情路由始终读取任务与成员目录，不切出卷宗、不请求导出，也不打开新建窗；两个挂载Vue回归在桌面与390px移动各2/2通过。提交 `9de0ccd278d7344ec82c9140547789813e550c79` 已部署，线上 health/version 与该 SHA 一致。下方 2026-09-10发现记录保留为历史，其两项路由缺陷已由本次跟进覆盖；其他动作和状态缺口仍按各自证据核验。
+
 [详情与更多操作图](design/task-direction-c/README.md) · [五操作及编辑/删除图](design/task-direction-c-forms/README.md) · [逐项清单](action-reviews/P24.json)
 
 ## 实际页面范围
@@ -36,7 +38,7 @@
 
 `node scripts/verify-ui-phase2-task-detail-review.mjs`提取真实函数到隔离VM并用惰性边界执行8组检查：
 
-1. 普通详情准确读取任务→成员，不读列表/summary；有权限exports query优先分支偏离详情；无权限零API转business意图，未模拟后续watch。
+1. 详情无论残留activeView为何都仅读任务与成员目录；列表专用 view=exports/create=1 隔离另由挂载Vue桌面/390px E2E覆盖，不触发导出或创建；列表无权限分支仍按原权限合同处理。
 2. 开始/继续/完成三个body、五个只开表单入口、完成的两种auto_score_status文案。
 3. 五表单精确字段与expected_version；单项转交独立分配权限。
 4. 在途修改进展说明不会进入已发送body：成功仍关闭表单，新说明只留本地；失败保留当前草稿。这是源ref组合，不冒称浏览器输入或服务器冲突证明。需补明确提交状态，而非暗示新输入已保存。

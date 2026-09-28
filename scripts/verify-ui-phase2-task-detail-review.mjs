@@ -73,21 +73,13 @@ export async function verifyTaskDetailReview() {
       [],
       ["openById"],
     );
-    if (view === "business") {
-      assert.deepEqual(calls, ["/tasks/A", "/tasks/member-options"]);
-      assert.equal(selected.value.id, "A");
-      assert.equal(state.value, "ready");
-    } else if (allowed) {
-      assert.deepEqual(calls, ["/report-exports"]);
-      assert.equal(selected.value, null);
-      assert.equal(state.value, "empty");
-    } else {
-      assert.deepEqual(calls, []);
-      assert.deepEqual(changedViews, ["business"]);
-    }
+    assert.deepEqual(calls, ["/tasks/A", "/tasks/member-options"]);
+    assert.equal(selected.value.id, "A");
+    assert.equal(state.value, "ready");
+    assert.deepEqual(changedViews, []);
   }
   checks.push(
-    "Business deep link reads detail then members only; UNFIXED permitted view=exports precedes taskId and returns no task; denied exports restores business intent, follow-up watcher not simulated",
+    "Detail routes always read the task and member directory, even if a stale active view says exports; taskId prevents export requests and permission-driven route changes",
   );
 
   const calls = [],
@@ -232,6 +224,7 @@ export async function verifyTaskDetailReview() {
     ...bindings,
     canCreate: ref(false),
     editing: ref(task),
+    editorFeedback: ref(null),
     form: ref({ ...editForm }),
     closeTaskEditor: () => {
       editorClosed += 1;
@@ -311,9 +304,17 @@ export async function verifyTaskDetailReview() {
     candidates = scanSource(detail, file).candidates;
   const transfer = candidates.find((c) => c.events?.["@click"] === "$emit('action', 'transfer')");
   assert.equal(transfer.attributes["v-if"], "canAssign");
-  const ret = candidates.find((c) => c.events?.["@click"] === "$emit('closeAction')");
+  const ret = candidates.find(
+    (c) => c.tag === "RouterLink" && c.attributes[":to"] === "returnPath",
+  );
+  assert.ok(ret);
   assert.equal(ret.attributes[":disabled"], undefined);
-  const mutableFields = candidates.filter((c) =>
+  const actionDialog = await readFile("apps/web/src/components/TaskActionDialog.vue", "utf8"),
+    dialogCandidates = scanSource(
+      actionDialog,
+      "apps/web/src/components/TaskActionDialog.vue",
+    ).candidates;
+  const mutableFields = dialogCandidates.filter((c) =>
     Object.values(c.events ?? {}).some((handler) => handler.includes("updateActionForm(")),
   );
   assert.equal(mutableFields.length, 5);
@@ -321,10 +322,10 @@ export async function verifyTaskDetailReview() {
   const css = await readFile("apps/web/src/task-workspace-enhancements.css", "utf8");
   assert.match(
     css,
-    /\.task-detail-route > :not\(\.task-detail\):not\(dialog\):not\(\.task-detail-state\):not\(\.task-notice\)\s*\{\s*display: none;/,
+    /\.task-detail-route\s*>\s*:not\(\.task-dossier\):not\(\.task-title\):not\(dialog\):not\(\.task-detail-state\):not\(\.task-notice\)\s*\{\s*display: none;/,
   );
   checks.push(
-    "Source-only presentation: transfer has no terminal predicate, five form fields/Return lack busy disabling, detail CSS hides list/tabs/title/exports but keeps dialogs/status/notice",
+    "Source-only presentation: transfer has no terminal predicate, five form fields/Return lack busy disabling, detail CSS hides list/tabs/title/exports but keeps dialogs/status/notice; mounted Vue E2E separately covers list-only URL queries",
   );
   return {
     checks,
