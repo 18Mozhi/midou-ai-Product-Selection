@@ -292,7 +292,7 @@ const nextOpportunity = {
   },
 };
 
-async function readyForNextOpportunity(page: Page) {
+async function readyForNextOpportunity(page: Page, analyses: any[] = []) {
   await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) =>
     route.fulfill({ json: envelope(nextOpportunity) }),
   );
@@ -300,15 +300,19 @@ async function readyForNextOpportunity(page: Page) {
     route.fulfill({ json: envelope({ latest_run: null, current_inputs: [] }) }),
   );
   await page.route(`**/api/v1/opportunities/${nextOpportunityId}/ai-analyses`, (route) =>
-    route.fulfill({ json: envelope([]) }),
+    route.fulfill({ json: envelope(analyses) }),
   );
 }
 
-async function switchOpportunityInPlace(page: Page, id: string) {
-  await page.evaluate((opportunityId) => {
-    window.history.pushState({}, "", `/opportunities/${opportunityId}`);
-    window.dispatchEvent(new PopStateEvent("popstate"));
-  }, id);
+async function switchOpportunityInPlace(page: Page, id: string, query = "") {
+  await page.evaluate(
+    (opportunityId) => {
+      const [id, query = ""] = opportunityId.split("?");
+      window.history.pushState({}, "", `/opportunities/${id}${query ? `?${query}` : ""}`);
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    },
+    `${id}${query ? `?${query.replace(/^\?/, "")}` : ""}`,
+  );
 }
 
 test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthful", async ({
@@ -788,6 +792,131 @@ test("a late profit analysis failure cannot replace the current opportunity afte
   await oldProfitResponse;
   await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
   await expect(page.getByText("旧机会利润读取失败", { exact: true })).toHaveCount(0);
+});
+
+test("a late AI analysis success remains scoped to the opportunity that requested it", async ({
+  page,
+}) => {
+  const analysis = (id: string, summary: string) => ({
+    id,
+    status: "completed",
+    created_at: "2026-08-08T00:00:00.000Z",
+    input_sha256: "0123456789abcdef0123456789abcdef",
+    result: {
+      id: `${id}-result`,
+      review_status: "approved",
+      content: { summary, classifications: [], missing_fields: [] },
+      model_name: "isolated-e2e-model",
+      review: { notes: "" },
+    },
+  });
+  await ready(page);
+  await readyForNextOpportunity(page, [analysis("current-analysis", "当前机会的 AI 摘要")]);
+  let releaseOldAnalysis!: () => void;
+  let markOldAnalysisStarted!: () => void;
+  const oldAnalysisGate = new Promise<void>((resolve) => (releaseOldAnalysis = resolve));
+  const oldAnalysisStarted = new Promise<void>((resolve) => (markOldAnalysisStarted = resolve));
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
+    markOldAnalysisStarted();
+    await oldAnalysisGate;
+    await route.fulfill({ json: envelope([analysis("old-analysis", "旧机会的迟到 AI 摘要")]) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}?tab=ai`);
+  await oldAnalysisStarted;
+  const currentDetailRequest = page.waitForRequest((request) =>
+    request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
+  );
+  await switchOpportunityInPlace(page, nextOpportunityId, "tab=ai");
+  await currentDetailRequest;
+  await expect(page.getByText("当前机会的 AI 摘要", { exact: true })).toBeVisible();
+
+  const oldAnalysisResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
+      response.status() === 200,
+  );
+  releaseOldAnalysis();
+  await oldAnalysisResponse;
+  await expect(page.getByText("当前机会的 AI 摘要", { exact: true })).toBeVisible();
+  await expect(page.getByText("旧机会的迟到 AI 摘要", { exact: true })).toHaveCount(0);
+});
+
+test("late competitor data stays scoped to the opportunity that requested it", async ({ page }) => {
+  const oldCompetitor = {
+      id: "old-competitor",
+      opportunity_id: opportunityId,
+      market: "US",
+      source_site: "amazon",
+      external_id: "OLD-ASIN",
+      title: "旧机会关联竞品",
+      snapshot_count: 0,
+      latest_snapshot: null,
+    },
+    currentCompetitor = {
+      ...oldCompetitor,
+      id: "current-competitor",
+      opportunity_id: nextOpportunityId,
+      external_id: "CURRENT-ASIN",
+      title: "当前机会关联竞品",
+    };
+  await ready(page);
+  await readyForNextOpportunity(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_id: "00000000-0000-4000-8000-000000000421",
+        workspace_id: "00000000-0000-4000-8000-000000000422",
+        roles: ["member"],
+        capabilities: [
+          "task:read",
+          "trend:read",
+          "trend:manage",
+          "opportunity:read",
+          "opportunity:decide",
+          "competitor:read",
+        ],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_member_allowed",
+      }),
+    }),
+  );
+  let releaseOldCompetitors!: () => void;
+  let markOldCompetitorsStarted!: () => void;
+  let competitorReadCount = 0;
+  const oldCompetitorsGate = new Promise<void>((resolve) => (releaseOldCompetitors = resolve));
+  const oldCompetitorsStarted = new Promise<void>(
+    (resolve) => (markOldCompetitorsStarted = resolve),
+  );
+  await page.route("**/api/v1/competitors", async (route) => {
+    competitorReadCount += 1;
+    if (competitorReadCount === 1) {
+      markOldCompetitorsStarted();
+      await oldCompetitorsGate;
+      await route.fulfill({ json: envelope([oldCompetitor]) });
+      return;
+    }
+    await route.fulfill({ json: envelope([currentCompetitor]) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}?tab=competition`);
+  await oldCompetitorsStarted;
+  const currentDetailRequest = page.waitForRequest((request) =>
+    request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
+  );
+  await switchOpportunityInPlace(page, nextOpportunityId, "tab=competition");
+  await currentDetailRequest;
+  await expect(page.getByText("当前机会关联竞品", { exact: true })).toBeVisible();
+
+  const oldCompetitorsResponse = page.waitForResponse(
+    (response) => response.url().includes("/api/v1/competitors") && response.status() === 200,
+  );
+  releaseOldCompetitors();
+  await oldCompetitorsResponse;
+  await expect(page.getByText("当前机会关联竞品", { exact: true })).toBeVisible();
+  await expect(page.getByText("旧机会关联竞品", { exact: true })).toHaveCount(0);
 });
 
 test("a delayed decision receipt cannot close a newer decision dialog", async ({ page }) => {
