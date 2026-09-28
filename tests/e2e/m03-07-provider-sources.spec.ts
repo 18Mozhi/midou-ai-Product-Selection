@@ -708,9 +708,7 @@ test("late compatibility reads cannot replace the matrix opened for a newer sour
 
     releaseFirst();
     await expect(secondDialog.getByText("sha256:bbbbbbbbbbbb", { exact: true })).toBeVisible();
-    await expect(
-      secondDialog.getByText("parser-for-first-source", { exact: true }),
-    ).toHaveCount(0);
+    await expect(secondDialog.getByText("parser-for-first-source", { exact: true })).toHaveCount(0);
     await expect(secondDialog.getByText("sha256:aaaaaaaaaaaa", { exact: true })).toHaveCount(0);
   } finally {
     releaseFirst();

@@ -643,8 +643,7 @@ async function loadCompatibility(item: SourceItem) {
   const sourceId = item.provisioned.id;
   const operation = ++compatibilityOperation;
   const isCurrent = () =>
-    compatibilityOperation === operation &&
-    compatibilitySource.value?.provisioned?.id === sourceId;
+    compatibilityOperation === operation && compatibilitySource.value?.provisioned?.id === sourceId;
   requestId.value = "";
   compatibilitySource.value = item;
   compatibilityLoading.value = true;
