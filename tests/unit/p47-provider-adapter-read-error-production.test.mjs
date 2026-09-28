@@ -20,13 +20,21 @@ test("P47 initial GET error uses the approved read-only copy and keeps the exist
     }).errors,
     [],
   );
-  assert.match(component, /state === 'error' \? '暂时未能读取采集状态' : ''/);
+  const title = component.split(':title="')[1]?.split('"\n      :description=')[0] ?? "";
+  const description =
+    component.split(':description="')[1]?.split('"\n      :primary-label=')[0] ?? "";
+  assert.match(title, /state === 'error'/);
+  assert.match(title, /'暂时未能读取采集状态'/);
+  assert.match(description, /state === 'error'/);
+  assert.match(description, /'这次读取未完成。你可以重新读取，获取最新状态。'/);
   assert.match(
     component,
-    /state === 'error' \? '这次读取未完成。你可以重新读取，获取最新状态。' : ''/,
+    /:primary-label="state === 'loading' \? '' : state === 'expired' \? '重新登录' : '重新读取状态'"/,
   );
-  assert.match(component, /:primary-label="state === 'loading' \? '' : '重新读取状态'"/);
-  assert.match(component, /@primary="load"/);
+  assert.match(
+    component,
+    /@primary="\s*\['expired', 'forbidden', 'blocked'\]\.includes\(state\) \? handleAccessPrimary\(\) : load\(\)\s*"/,
+  );
   assert.match(component, /:request-id="requestId"/);
 });
 

@@ -38,10 +38,10 @@ export function previewCredentialLoginMaterial(source) {
   review = once(
     review,
     `          <footer>
-            <button type="button" :disabled="saving" @click="closeEditor()">取消</button`,
+            <button type="button" :disabled="writeBusy" @click="closeEditor()">取消</button`,
     `          </div>
           <footer>
-            <button type="button" :disabled="saving" @click="closeEditor()">取消</button`,
+            <button type="button" :disabled="writeBusy" @click="closeEditor()">取消</button`,
     "login scroll end must be unique",
   );
   return review;

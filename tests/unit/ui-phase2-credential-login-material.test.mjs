@@ -32,7 +32,7 @@ test("P50 material review wraps and compiles the lifecycle-safe login editor", (
   for (const marker of [
     "loginMaterialBusy",
     "p50-login-material-scroll",
-    ':aria-busy="saving || loginMaterialBusy"',
+    ':aria-busy="writeBusy || loginMaterialBusy"',
     '{{ loginMaterialBusy ? "读取中…" : "从当前浏览器读取 Cookie" }}',
     "loginSaveStage === 'unknown'",
     ':data-tone="',
