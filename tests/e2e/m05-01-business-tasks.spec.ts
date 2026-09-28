@@ -1,5 +1,6 @@
 import { test, expect, type Page } from "@playwright/test";
 import { setupBusinessTasks as setup, taskId, actor, env, task } from "./helpers/business-tasks";
+import { saveP23PaginationReviewImage } from "./helpers/p23-pagination-review-images";
 
 test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on desktop and 390", async ({
   page,
@@ -599,11 +600,7 @@ test("P23 pagination preserves applied filters, clears page selection and expose
   expect(
     firstPageStyle.buttons.every((button) => button.height >= 44 && button.radius === "0px"),
   ).toBe(true);
-  await page.screenshot({
-    path: `design-plans/ui-phase-2-2026-09-07/design/tasks/${viewport.width}-P23-pagination-first.png`,
-    fullPage: true,
-    animations: "disabled",
-  });
+  await saveP23PaginationReviewImage(page, viewport.width, "first");
 
   await page.getByRole("checkbox", { name: "选择本页 10 项" }).check();
   await expect(page.getByRole("button", { name: "批量暂停" })).toBeVisible();
@@ -627,11 +624,7 @@ test("P23 pagination preserves applied filters, clears page selection and expose
   await expect(page.getByRole("button", { name: "批量暂停" })).toHaveCount(0);
   await expect(previous).toBeEnabled();
   await expect(next).toBeDisabled();
-  await page.screenshot({
-    path: `design-plans/ui-phase-2-2026-09-07/design/tasks/${viewport.width}-P23-pagination-last.png`,
-    fullPage: true,
-    animations: "disabled",
-  });
+  await saveP23PaginationReviewImage(page, viewport.width, "last");
 
   const firstPageAgain = page.waitForResponse((response) => {
     const url = new URL(response.url());
