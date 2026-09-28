@@ -752,6 +752,13 @@ test("UI2-CPG01 rule and delete dialogs name themselves and restore focus on Esc
   await ruleTrigger.click();
   const ruleDialog = page.getByRole("dialog", { name: "新建监控规则" });
   await expect(ruleDialog.getByLabel("竞品（留空为工作区全局）")).toBeFocused();
+  const closeRule = ruleDialog.getByRole("button", { name: "关闭告警规则" });
+  const submitRule = ruleDialog.getByRole("button", { name: "启用规则" });
+  await closeRule.focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(submitRule).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(closeRule).toBeFocused();
   await page.keyboard.press("Escape");
   await expect(ruleDialog).toHaveCount(0);
   await expect(ruleTrigger).toBeFocused();
