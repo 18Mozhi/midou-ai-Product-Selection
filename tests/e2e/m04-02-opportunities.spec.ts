@@ -542,6 +542,74 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   }
 });
 
+test("P18 expired detail state routes to login with the current opportunity as a safe return target", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
+    route.fulfill({
+      status: 401,
+      json: { error: { code: "authentication_required", message: "登录已失效" } },
+    }),
+  );
+
+  await page.goto(`/opportunities/${opportunityId}?tab=overview`);
+  await expect(page.getByRole("heading", { name: "登录已失效" })).toBeVisible();
+  await page.getByRole("button", { name: "重新登录" }).click();
+  await expect(page).toHaveURL(/\/login\?/);
+  const loginUrl = new URL(page.url());
+  expect(loginUrl.searchParams.get("reason")).toBe("authentication_required");
+  expect(loginUrl.searchParams.get("redirect")).toBe(
+    `/opportunities/${opportunityId}?tab=overview`,
+  );
+});
+
+test("P18 forbidden detail state returns to the opportunity list without retrying the denied request", async ({
+  page,
+}) => {
+  await ready(page);
+  let detailReads = 0;
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) => {
+    detailReads += 1;
+    return route.fulfill({
+      status: 403,
+      json: { error: { code: "forbidden", message: "当前账号不能查看这条机会" } },
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: "你没有此项权限" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "申请权限" })).toHaveCount(0);
+  await page.getByRole("button", { name: "返回机会列表" }).click();
+  await expect(page).toHaveURL(/\/opportunities$/);
+  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  expect(detailReads).toBe(1);
+});
+
+test("P18 blocked detail state offers a real retry and a separate list return", async ({
+  page,
+}) => {
+  await ready(page);
+  let detailReads = 0;
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) => {
+    detailReads += 1;
+    if (detailReads <= 3)
+      return route.fulfill({
+        status: 503,
+        json: { error: { code: "temporarily_unavailable", message: "依赖暂时不可用" } },
+      });
+    return route.fallback();
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: "依赖暂时受阻" })).toBeVisible();
+  expect(detailReads).toBe(3);
+  await expect(page.getByRole("button", { name: "返回机会列表" })).toBeVisible();
+  await page.getByRole("button", { name: "稍后重试" }).click();
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  expect(detailReads).toBe(4);
+});
+
 test("P18 observe and reject dialogs contain keyboard focus and return it on Escape", async ({
   page,
 }) => {

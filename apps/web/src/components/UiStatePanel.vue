@@ -9,6 +9,7 @@ const props = withDefaults(
     actionHint?: string;
     primaryLabel?: string;
     secondaryLabel?: string;
+    hideSecondary?: boolean;
     requestId?: string;
     traceId?: string;
     compact?: boolean;
@@ -19,6 +20,7 @@ const props = withDefaults(
     actionHint: "",
     primaryLabel: "",
     secondaryLabel: "",
+    hideSecondary: false,
     requestId: "",
     traceId: "",
     compact: false,
@@ -70,7 +72,11 @@ const symbol = computed(
     <footer v-if="kind !== 'loading'">
       <button class="primary" type="button" @click="emit('primary')">
         {{ primaryLabel || copy.primary }}</button
-      ><button v-if="secondaryLabel || copy.secondary" type="button" @click="emit('secondary')">
+      ><button
+        v-if="!hideSecondary && (secondaryLabel || copy.secondary)"
+        type="button"
+        @click="emit('secondary')"
+      >
         {{ secondaryLabel || copy.secondary }}
       </button>
     </footer>

@@ -56,3 +56,9 @@ AI 分析 POST 在途期间若用户主动切换到“结论”等其他分区�
 ## 2026-09-28 · 成本观测时间本地时区
 
 成本 `observed_at` 默认值现在用浏览器当前 `getTimezoneOffset()` 转为本地 `datetime-local` 文本，保留到分钟；既有提交转换 `new Date(value).toISOString()` 仍保留原 API 语义。Asia/Tokyo 实际 Vue E2E 检查默认值距当前时刻小于两分钟，并断言 POST 的 `observed_at` 等于该输入所代表的 ISO 时刻。未改业务时间范围、其他日期字段、历史数据或 API；服务端跨时区规则与真实提交验收仍待。
+
+## 2026-09-28 · 状态恢复按钮归属
+
+机会详情状态面板不再让所有主按钮统一触发 `load`。`expired` 的“重新登录”进入既有 `/login`，携带 `authentication_required` 和当前详情完整路径；`empty`、`forbidden`、`not_found` 使用明确的“返回机会列表”；`error`/`blocked` 保留主重试，并把次动作绑定为返回机会列表。无权态不再显示没有对应工作流的“申请权限”。共享 `UiStatePanel` 仅增加可选 `hideSecondary` 显示参数，默认消费者行为不变；未新增路由、API、权限或业务申请流程。
+
+新增 3 条实际 Vue Playwright：401 登录重定向、403 单次读取后返回列表、503 安全 GET 自动重试耗尽后显式重试。`M04-02` 桌面 Chromium 与 390px 手机全套各 21/21，`npm run typecheck:web` 通过。夹具不证明真实认证、权限、数据库或 M07-03；P18 的决定/成本/AI真实写入、跨组织权限和其他全站验收仍待。

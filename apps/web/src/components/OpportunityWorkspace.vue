@@ -209,6 +209,34 @@ const stateFrom = (kind: ApiFailureKind): OpportunityTypes.OpportunityWorkspaceS
     : kind === "blocked" || kind === "rate_limited"
       ? "blocked"
       : "error";
+const statePanelKind = computed(() => (state.value === "ready" ? "empty" : state.value));
+const statePanelPrimaryLabel = computed(() =>
+  statePanelKind.value === "expired"
+    ? "重新登录"
+    : ["empty", "forbidden", "not_found"].includes(statePanelKind.value)
+      ? "返回机会列表"
+      : "",
+);
+const statePanelSecondaryLabel = computed(() =>
+  ["error", "blocked"].includes(statePanelKind.value) ? "返回机会列表" : "",
+);
+function returnToOpportunityList() {
+  void router.push("/opportunities");
+}
+function handleStatePrimary() {
+  if (statePanelKind.value === "expired") {
+    void router.push({
+      path: "/login",
+      query: { reason: "authentication_required", redirect: route.fullPath },
+    });
+    return;
+  }
+  if (["empty", "forbidden", "not_found"].includes(statePanelKind.value)) {
+    returnToOpportunityList();
+    return;
+  }
+  void load();
+}
 let readGeneration = 0;
 async function read(path: string, isCurrent: () => boolean = () => true) {
   try {
@@ -963,9 +991,13 @@ onBeforeUnmount(() => {
     <template v-else
       ><UiStatePanel
         v-if="state !== 'ready' || !detail"
-        :kind="state === 'ready' ? 'empty' : state"
+        :kind="statePanelKind"
         :request-id="requestId"
-        @primary="load"
+        :primary-label="statePanelPrimaryLabel"
+        :secondary-label="statePanelSecondaryLabel"
+        :hide-secondary="!statePanelSecondaryLabel"
+        @primary="handleStatePrimary"
+        @secondary="returnToOpportunityList"
       />
       <article v-else class="opportunity-detail">
         <header>

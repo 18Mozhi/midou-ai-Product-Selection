@@ -13,7 +13,7 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
-    "apps/web/src/components/OpportunityWorkspace.vue": "5184f942a04f8efcab902e5eeeb2a7b727cac6d2a678c2b15e085384ab26a8e1",
+    "apps/web/src/components/OpportunityWorkspace.vue": "272814e5fbc5925d2e6fd2f45133adde53c52cb7e2f72290c9a289551f5dd7f7",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
@@ -1659,11 +1659,11 @@
     },
     {
       "actionId": "OP-DETAIL-RETRY",
-      "label": "详情状态主行动",
-      "kind": "read",
+      "label": "机会详情状态恢复动作",
+      "kind": "navigation",
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "UiStatePanel state!=ready或detail为空；非loading显示按钮",
-      "handler": "所有@primary都load；没有@secondary处理器",
+      "handler": "401主行动进入现有登录路由并保留安全返回地址；403/空/未找到返回机会列表；error/blocked主行动重试读取，次行动返回列表；不提供未实现的权限申请",
       "variants": ["empty", "error", "forbidden", "expired", "blocked"],
       "scenes": [
         {
@@ -1679,8 +1679,8 @@
           "scene": "expired"
         }
       ],
-      "remaining": "源文案开始创建/返回工作台/重新登录但实际均重读；次按钮可能可见却无处理器。不得宣称导航已实现。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#7219811dcc02cc91.1"],
+      "remaining": "本地隔离响应证明路由与重试绑定，不证明真实认证/RBAC或M07-03；页面其它业务读写和所有适用状态仍按各自合同验收。",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1"],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -1691,9 +1691,9 @@
       },
       "testReferences": [
         {
-          "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
-          "evidenceType": "offline-proposal-check-not-Vue",
-          "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-isolated-response-browser-e2e",
+          "claim": "覆盖401登录返回地址、403不重试并返回列表、503安全GET自动重试耗尽后显式重试；不证明真实认证/RBAC或M07-03。"
         }
       ]
     },
