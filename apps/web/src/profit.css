@@ -738,10 +738,220 @@
 }
 
 .cost-console--review .cost-modal form {
+  display: flex;
+  flex-direction: column;
+  max-height: min(88dvh, 820px);
+  overflow: hidden;
+  padding: 0;
+  border: 1px solid var(--review-line);
+  border-radius: 12px;
+  background: var(--p22-white);
+  box-shadow: 0 18px 56px rgb(13 35 72 / 22%);
+}
+
+.cost-console--review .cost-create-modal {
+  width: min(760px, calc(100vw - 32px));
+}
+
+.cost-console--review .cost-dialog-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 22px 24px 18px;
+  border-bottom: 1px solid var(--review-line);
+  background: var(--p22-white);
+}
+
+.cost-console--review .cost-dialog-header p {
+  margin: 0 0 4px;
+  color: var(--review-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.cost-console--review .cost-dialog-header h3 {
+  margin: 0;
+  color: var(--review-ink);
+  font-size: 22px;
+  line-height: 1.4;
+}
+
+.cost-console--review .cost-dialog-header .cost-dialog-intro {
+  max-width: 620px;
+  margin-top: 8px;
+  color: var(--review-muted);
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.cost-console--review .cost-dialog-header > button {
+  flex: 0 0 auto;
+  min-width: 72px;
+  min-height: 44px;
   border: 1px solid var(--review-line);
   border-radius: 0;
   background: var(--p22-white);
-  box-shadow: none;
+  color: var(--review-ink);
+}
+
+.cost-console--review .cost-dialog-body {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  padding: 20px 24px;
+  overscroll-behavior: contain;
+}
+
+.cost-console--review .cost-dialog-input-lock,
+.cost-console--review .cost-dialog-group {
+  display: block;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.cost-console--review .cost-dialog-group {
+  margin-bottom: 18px;
+  padding: 16px;
+  border: 1px solid var(--review-line);
+  background: var(--p22-white);
+}
+
+.cost-console--review .cost-dialog-group > legend {
+  padding: 0 6px;
+  color: var(--review-ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.cost-console--review .cost-dialog-fields {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 16px;
+}
+
+.cost-console--review .cost-dialog-fields label,
+.cost-console--review .cost-dialog-field {
+  min-width: 0;
+  margin: 8px 0;
+  color: var(--review-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.cost-console--review .cost-dialog-help {
+  margin: 0 0 8px;
+  color: var(--review-muted);
+  font-size: 13px;
+}
+
+.cost-console--review .cost-dialog-notice {
+  margin-top: 14px;
+  padding: 12px 14px;
+  border: 1px solid var(--p22-notice-line, var(--review-line));
+  background: var(--review-pale);
+  color: var(--review-ink);
+  font-size: 14px;
+}
+
+.cost-console--review .cost-dialog-footer {
+  position: sticky;
+  z-index: 1;
+  bottom: 0;
+  display: flex;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  gap: 10px;
+  margin: 0;
+  padding: 14px 24px;
+  border-top: 1px solid var(--review-line);
+  background: var(--p22-white);
+}
+
+.cost-console--review .cost-dialog-footer button {
+  min-width: 96px;
+  min-height: 44px;
+  border: 1px solid var(--review-blue-strong);
+  border-radius: 0;
+  background: var(--review-blue-strong);
+  color: var(--p22-white);
+}
+
+.cost-console--review .cost-dialog-footer button:first-child {
+  border-color: var(--review-line);
+  background: var(--p22-white);
+  color: var(--review-ink);
+}
+
+.cost-console--review .cost-dialog-footer button:disabled,
+.cost-console--review .cost-dialog-header > button:disabled {
+  cursor: not-allowed;
+  opacity: 0.56;
+}
+
+.cost-console--review .cost-dialog-footer button:focus-visible,
+.cost-console--review .cost-dialog-header > button:focus-visible,
+.cost-console--review .cost-dialog-body input:focus-visible,
+.cost-console--review .cost-dialog-body select:focus-visible,
+.cost-console--review .cost-dialog-body textarea:focus-visible {
+  outline: 3px solid var(--p22-focus, #2f6de0);
+  outline-offset: 2px;
+}
+
+.cost-console--review .cost-dialog-primary-danger {
+  border-color: var(--p22-danger);
+  background: var(--p22-danger);
+}
+
+.cost-console--review .cost-dialog-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  clip-path: inset(50%);
+}
+
+.cost-console--review .cost-dialog-input-lock:disabled {
+  opacity: 0.7;
+}
+
+.cost-console--review .cost-dialog-input-lock:disabled input,
+.cost-console--review .cost-dialog-input-lock:disabled select,
+.cost-console--review .cost-dialog-input-lock:disabled textarea {
+  cursor: progress;
+}
+
+.cost-console--review .cost-action-context {
+  display: grid;
+  gap: 3px;
+  margin: 0 0 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--review-line);
+  border-radius: 0;
+  background: var(--review-pale);
+  color: var(--review-ink);
+}
+
+.cost-console--review .cost-action-context span {
+  color: var(--review-muted);
+  font-size: 14px;
+}
+
+.cost-console--review .cost-action-modal .cost-dialog-body {
+  padding-top: 18px;
+}
+
+.cost-console--review .cost-modal .cost-dialog-error {
+  margin: 8px 0;
+  border-left: 3px solid var(--p22-danger);
+  border-radius: 0;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 760px) {
@@ -802,5 +1012,45 @@
 
   .cost-console--review .cost-rule-actions button {
     width: 100%;
+  }
+
+  .cost-console--review .cost-modal {
+    width: calc(100vw - 20px);
+    max-height: calc(100dvh - 16px);
+    margin: auto;
+  }
+
+  .cost-console--review .cost-modal form {
+    max-height: calc(100dvh - 18px);
+    border-radius: 8px;
+  }
+
+  .cost-console--review .cost-dialog-header {
+    gap: 12px;
+    padding: 16px;
+  }
+
+  .cost-console--review .cost-dialog-header h3 {
+    font-size: 19px;
+  }
+
+  .cost-console--review .cost-dialog-header > button {
+    min-width: 64px;
+  }
+
+  .cost-console--review .cost-dialog-body {
+    padding: 14px 16px;
+  }
+
+  .cost-console--review .cost-dialog-fields {
+    grid-template-columns: 1fr;
+  }
+
+  .cost-console--review .cost-dialog-footer {
+    padding: 12px 16px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .cost-console--review .cost-dialog-footer button {
+    flex: 1 1 0;
   }
 }

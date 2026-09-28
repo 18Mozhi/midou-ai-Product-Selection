@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CostRuleConsole.vue": "dce38bc1513e2aeec91b42f0ac85e21f6363a5fd21786bafe956590051ae23bf"
+    "apps/web/src/components/CostRuleConsole.vue": "781049f4236f3e11f8a83473b7cac6e22d063c47ccd7fe8b78457302c66e5f24"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -776,7 +776,7 @@
       "kind": "wiring",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1"
+        "apps/web/src/components/CostRuleConsole.vue#f7f89c631a4cfd69.1"
       ],
       "sourceContractKeys": [
         "新建草稿、人工/自动成本可选字段"
@@ -828,8 +828,8 @@
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#8dec9b05190c02c6.1",
-        "apps/web/src/components/CostRuleConsole.vue#8695390d77702f3f.1",
+        "apps/web/src/components/CostRuleConsole.vue#5db2d0d00a28d18b.1",
+        "apps/web/src/components/CostRuleConsole.vue#f2cd423a0267e8bf.1",
         "apps/web/src/components/CostRuleConsole.vue#4fa3694ad39564c9.1"
       ],
       "sourceContractKeys": [
@@ -839,7 +839,7 @@
       ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showCreate；无自身disabled属性 / showCreate；无自身disabled属性 / showCreate；disabled=busy",
-      "handler": "cancelCreate经useModalDialog preventDefault后closeCreate；busy处理器拒绝关闭，底部取消disabled而右上X无disabled。重开重置",
+      "handler": "cancelCreate经useModalDialog preventDefault后closeCreate；busy期间字段、底部取消和右上X均disabled，Escape关闭也被拒绝。重开重置",
       "variants": [
         "create-blank",
         "create-busy",
@@ -885,7 +885,7 @@
       "kind": "write",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#1fcf5a2247b2ad3e.1",
+        "apps/web/src/components/CostRuleConsole.vue#c099eb06e95d2212.1",
         "apps/web/src/components/CostRuleConsole.vue#bdb318fcff422d4c.1"
       ],
       "sourceContractKeys": [
@@ -955,14 +955,14 @@
       "kind": "wiring",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#69fe3471229b26ea.1"
+        "apps/web/src/components/CostRuleConsole.vue#5de98ef30653ebcb.1"
       ],
       "sourceContractKeys": [
         "SC-R-ACTION-DIALOG showAction/pendingAction"
       ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showAction && pendingAction；无自身disabled属性",
-      "handler": "showAction&&pendingAction一原生dialog展开七变体；上下文来自打开时target快照，form/aside不重复计窗",
+      "handler": "showAction&&pendingAction一原生dialog展开七变体；上下文来自打开时target快照，form/aside不重复计窗；busy期间锁定字段和关闭入口",
       "variants": [
         "submit-confirm",
         "selection-approve-confirm",
@@ -1032,8 +1032,8 @@
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#718d705955c5be28.1",
-        "apps/web/src/components/CostRuleConsole.vue#9a6cc342b022be3d.1",
+        "apps/web/src/components/CostRuleConsole.vue#6c29bff30f6c9e9d.1",
+        "apps/web/src/components/CostRuleConsole.vue#89388d2e7acd060d.1",
         "apps/web/src/components/CostRuleConsole.vue#ca4f082d1ca76f11.1"
       ],
       "sourceContractKeys": [
@@ -1043,7 +1043,7 @@
       ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showAction && pendingAction；无自身disabled属性 / showAction && pendingAction；无自身disabled属性 / showAction && pendingAction；disabled=busy",
-      "handler": "原生cancel先preventDefault，再closeAction；busy禁止实际关闭但右上X未disabled；不撤回请求，不自动重放",
+      "handler": "原生cancel先preventDefault，再closeAction；busy期间字段、底部取消和右上X均disabled，Escape关闭也被拒绝；不撤回请求，不自动重放",
       "variants": [
         "submit-confirm",
         "rollback-confirm",
@@ -1089,7 +1089,7 @@
       "kind": "write",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#4ed28d61de7ebf6e.1",
+        "apps/web/src/components/CostRuleConsole.vue#b65ab0647ba3d0fd.1",
         "apps/web/src/components/CostRuleConsole.vue#1b870bc1240e4ab6.1"
       ],
       "sourceContractKeys": [
@@ -1176,7 +1176,7 @@
       "apps/web/src/components/CostRuleConsole.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CostRuleConsole.vue": "dce38bc1513e2aeec91b42f0ac85e21f6363a5fd21786bafe956590051ae23bf",
+      "apps/web/src/components/CostRuleConsole.vue": "781049f4236f3e11f8a83473b7cac6e22d063c47ccd7fe8b78457302c66e5f24",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
@@ -1726,7 +1726,7 @@
     "sharedRemaining": [
       "QualityGateSetupSummary纯展示父投影与slot；首active不等于所有市场或所有机会准备好。",
       "UiStatePanel的两个按钮显隐来自共享组件；主动作空目录创建/其他重读，副动作返回，不伪造权限申请。",
-      "useModalDialog原生焦点回收与cancel转发已追源码，当前测试不挂载DOM，不能证明完整键盘圈。",
+      "P22两窗的实际Vue键盘圈/返焦由局部E2E覆盖；P21共享消费者和真实读屏/辅助技术行为仍未验收。",
       "父reset_on_scope缓存key含组织/工作区，不能把局部无GET代次判为服务跨租户泄漏。",
       "SC-G05并发读取与操作目标快照已有setup隔离测试及源码修复；实际Vue鼠标触发链和URL/history集成仍待确认。"
     ]
@@ -1735,7 +1735,7 @@
     "30源位置/20语义组/19模型/7结构；166旧图的关联不等于每控件六态或19字段验收。",
     "局部修复已将操作目标及revision绑定到打开时快照，并以最后发起读取胜出；隔离setup测试覆盖乱序读取和A窗中读取返回B。实际Vue鼠标触发链、URL/history集成及真实服务审批仍待验收。",
     "筛选自动选B可保留query.rule=A；query单独变B无本地watch且load仍优先已选A，父history行为待测。",
-    "关闭X无disabled但busy函数拒绝关闭；草稿字段无统一busy禁用，原型锁定是提案不是现状。",
+    "P22两窗现在均在busy时禁用字段和关闭入口；完整全站焦点/读屏、真实服务审批仍待验收。",
     "仅关联现有离线图；控件逐态、字段错误关联、全部动态行/主题、真实Vue生命周期与用户审核仍待，不代表生产验收。"
   ],
   "approval": "pending-user-review",

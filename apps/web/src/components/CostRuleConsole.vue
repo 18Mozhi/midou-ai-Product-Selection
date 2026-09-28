@@ -67,6 +67,7 @@ const route = useRoute(),
 
 const pageSize = 10;
 let loadSequence = 0;
+const pageHeading = ref<HTMLElement | null>(null);
 
 const localDay = () =>
   new Intl.DateTimeFormat("en-CA", {
@@ -281,10 +282,14 @@ const statusLabels: Record<string, string> = {
 const { dialogElement: createDialogElement, handleCancel: cancelCreate } = useModalDialog(
     () => showCreate.value,
     () => closeCreate(),
+    () => pageHeading.value,
+    { trapFocus: true },
   ),
   { dialogElement: actionDialogElement, handleCancel: cancelAction } = useModalDialog(
     () => showAction.value,
     () => closeAction(),
+    () => pageHeading.value,
+    { trapFocus: true },
   );
 
 const stateFrom = (kind: ApiFailureKind): State =>
@@ -554,7 +559,7 @@ onMounted(load);
     <header>
       <div>
         <p>自动推荐 · 成本与利润</p>
-        <h1 id="cost-rule-title">成本质量门</h1>
+        <h1 id="cost-rule-title" ref="pageHeading" tabindex="-1">成本质量门</h1>
         <span>费用规则生效后，双人复核或高置信爬虫证据可触发利润计算与成本质量门。</span>
       </div>
       <div class="cost-head-actions">
@@ -769,125 +774,168 @@ onMounted(load);
     <dialog
       v-if="showCreate"
       ref="createDialogElement"
-      class="cost-modal"
+      class="cost-modal cost-create-modal"
       aria-labelledby="new-cost-rule"
+      aria-describedby="cost-create-description"
+      :aria-busy="busy"
       @cancel="cancelCreate"
     >
-      <form @submit.prevent="create">
-        <header>
+      <form
+        @submit.prevent="create"
+        :aria-describedby="createError ? 'cost-create-error' : 'cost-create-description'"
+      >
+        <header class="cost-dialog-header">
           <div>
-            <p>不使用默认费用</p>
+            <p>新建版本 / 显式成本依据</p>
             <h3 id="new-cost-rule">新建费用规则草稿</h3>
+            <p id="cost-create-description" class="cost-dialog-intro">
+              四项必需费用需要逐项填写；明确填写 0 表示该项确认为零，不会沿用或推断其他版本费率。
+            </p>
           </div>
-          <button type="button" aria-label="关闭" @click="closeCreate">×</button>
+          <button type="button" aria-label="关闭新建规则" :disabled="busy" @click="closeCreate">
+            关闭
+          </button>
         </header>
-        <div>
-          <label>市场<input v-model="form.market" required maxlength="40" /></label
-          ><label>平台<input v-model="form.platform" required maxlength="80" /></label>
+        <div class="cost-dialog-body">
+          <fieldset class="cost-dialog-input-lock" :disabled="busy">
+            <legend class="cost-dialog-sr-only">费用规则表单</legend>
+            <fieldset class="cost-dialog-group">
+              <legend>版本身份</legend>
+              <div class="cost-dialog-fields">
+                <label>市场<input v-model="form.market" required maxlength="40" /></label>
+                <label>平台<input v-model="form.platform" required maxlength="80" /></label>
+                <label>
+                  版本号<input
+                    v-model="form.version_code"
+                    required
+                    maxlength="64"
+                    placeholder="例如 US-AMZ-2026-01"
+                  />
+                </label>
+                <label>规则名称<input v-model="form.name" required maxlength="160" /></label>
+                <label>生效日期<input v-model="form.effective_from" required type="date" /></label>
+              </div>
+            </fieldset>
+            <fieldset class="cost-dialog-group">
+              <legend>四项必需费用</legend>
+              <p class="cost-dialog-help">逐项填写规则依据；空值不会被当作 0，也不会继承旧版本。</p>
+              <div class="cost-dialog-fields">
+                <label>
+                  平台费 %<input
+                    v-model="form.platform_fee"
+                    required
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.000001"
+                    placeholder="必须填写"
+                  />
+                </label>
+                <label>
+                  支付手续费 %<input
+                    v-model="form.payment_fee"
+                    required
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.000001"
+                    placeholder="必须填写"
+                  />
+                </label>
+                <label>
+                  税费 %<input
+                    v-model="form.tax"
+                    required
+                    type="number"
+                    min="0"
+                    max="100"
+                    step="0.000001"
+                    placeholder="必须填写"
+                  />
+                </label>
+                <label>
+                  履约成本<input
+                    v-model="form.fulfillment"
+                    required
+                    type="number"
+                    min="0"
+                    step="0.000001"
+                    placeholder="必须填写"
+                  />
+                </label>
+                <label>
+                  履约币种<input
+                    v-model="form.currency"
+                    required
+                    maxlength="3"
+                    pattern="[A-Za-z]{3}"
+                    autocomplete="off"
+                  />
+                </label>
+                <label>
+                  入仓物流（可选固定金额）<input
+                    v-model="form.logistics"
+                    :required="form.automatic_product_family === 'phone_case'"
+                    type="number"
+                    min="0"
+                    step="0.000001"
+                    placeholder="例如 1.00"
+                  />
+                </label>
+              </div>
+            </fieldset>
+            <fieldset class="cost-dialog-group">
+              <legend>1688 采购价换算（可选）</legend>
+              <p class="cost-dialog-help">
+                仅配置自动成本适用范围时需要完整提供汇率数值、日期和 HTTPS 来源。
+              </p>
+              <div class="cost-dialog-fields">
+                <label>
+                  自动成本适用品类<select v-model="form.automatic_product_family">
+                    <option value="">仅人工复核成本</option>
+                    <option value="phone_case">手机壳（Amazon + 1688 高置信匹配）</option>
+                  </select>
+                </label>
+                <label>
+                  1 CNY = 目标币种<input
+                    v-model="form.conversion_rate"
+                    :required="form.automatic_product_family === 'phone_case'"
+                    type="number"
+                    min="0.000001"
+                    step="0.000001"
+                    placeholder="例如 0.149014"
+                  />
+                </label>
+                <label>
+                  汇率日期<input
+                    v-model="form.conversion_effective_on"
+                    :required="form.automatic_product_family === 'phone_case'"
+                    type="date"
+                  />
+                </label>
+                <label>
+                  官方来源页面<input
+                    v-model="form.conversion_source_url"
+                    :required="form.automatic_product_family === 'phone_case'"
+                    type="url"
+                    maxlength="2048"
+                    placeholder="https://…"
+                  />
+                </label>
+              </div>
+            </fieldset>
+            <p class="cost-form-summary" :data-valid="!createValidation" role="status">
+              {{ createValidation || "费用与可选换算依据已显式填写，可以保存草稿。" }}
+            </p>
+            <p v-if="createError" id="cost-create-error" class="cost-dialog-error" role="alert">
+              {{ createError }} <code v-if="requestId">{{ requestId }}</code>
+            </p>
+            <aside class="cost-dialog-notice">
+              保存仅创建草稿；必须完成两类真实角色审批后才能发布。
+            </aside>
+          </fieldset>
         </div>
-        <label
-          >版本号<input
-            v-model="form.version_code"
-            required
-            maxlength="64"
-            placeholder="例如 US-AMZ-2026-01" /></label
-        ><label>规则名称<input v-model="form.name" required maxlength="160" /></label
-        ><label>生效日期<input v-model="form.effective_from" required type="date" /></label>
-        <fieldset>
-          <legend>显式费用</legend>
-          <label
-            >平台费 %<input
-              v-model="form.platform_fee"
-              required
-              type="number"
-              min="0"
-              max="100"
-              step="0.000001"
-              placeholder="必须填写" /></label
-          ><label
-            >支付手续费 %<input
-              v-model="form.payment_fee"
-              required
-              type="number"
-              min="0"
-              max="100"
-              step="0.000001"
-              placeholder="必须填写" /></label
-          ><label
-            >税费 %<input
-              v-model="form.tax"
-              required
-              type="number"
-              min="0"
-              max="100"
-              step="0.000001"
-              placeholder="必须填写" /></label
-          ><label
-            >履约成本<input
-              v-model="form.fulfillment"
-              required
-              type="number"
-              min="0"
-              step="0.000001"
-              placeholder="必须填写" /></label
-          ><label
-            >履约币种<input
-              v-model="form.currency"
-              required
-              maxlength="3"
-              pattern="[A-Za-z]{3}"
-              autocomplete="off"
-          /></label>
-          <label
-            >入仓物流（可选固定金额）<input
-              v-model="form.logistics"
-              :required="form.automatic_product_family === 'phone_case'"
-              type="number"
-              min="0"
-              step="0.000001"
-              placeholder="例如 1.00"
-          /></label>
-        </fieldset>
-        <fieldset>
-          <legend>1688 采购价换算（可选）</legend>
-          <label
-            >自动成本适用品类<select v-model="form.automatic_product_family">
-              <option value="">仅人工复核成本</option>
-              <option value="phone_case">手机壳（Amazon + 1688 高置信匹配）</option>
-            </select></label
-          >
-          <label
-            >1 CNY = 目标币种<input
-              v-model="form.conversion_rate"
-              :required="form.automatic_product_family === 'phone_case'"
-              type="number"
-              min="0.000001"
-              step="0.000001"
-              placeholder="例如 0.149014"
-          /></label>
-          <label
-            >汇率日期<input
-              v-model="form.conversion_effective_on"
-              :required="form.automatic_product_family === 'phone_case'"
-              type="date"
-          /></label>
-          <label
-            >官方来源页面<input
-              v-model="form.conversion_source_url"
-              :required="form.automatic_product_family === 'phone_case'"
-              type="url"
-              maxlength="2048"
-              placeholder="https://…"
-          /></label>
-        </fieldset>
-        <p class="cost-form-summary" :data-valid="!createValidation" role="status">
-          {{ createValidation || "费用与可选换算依据已显式填写，可以保存草稿。" }}
-        </p>
-        <p v-if="createError" class="cost-dialog-error" role="alert">
-          {{ createError }} <code v-if="requestId">{{ requestId }}</code>
-        </p>
-        <aside>保存仅创建草稿；必须完成两类真实角色审批后才能发布。</aside>
-        <footer>
+        <footer class="cost-dialog-footer">
           <button type="button" :disabled="busy" @click="closeCreate">取消</button
           ><button type="submit" :disabled="busy || Boolean(createValidation)">
             {{ busy ? "保存中…" : "保存草稿" }}
@@ -899,41 +947,74 @@ onMounted(load);
       v-if="showAction && pendingAction"
       ref="actionDialogElement"
       class="cost-modal cost-action-modal"
-      :aria-label="actionTitle"
+      aria-labelledby="cost-action-title"
+      :aria-describedby="
+        ['cost-action-context', actionError ? 'cost-action-error' : 'cost-action-guidance'].join(
+          ' ',
+        )
+      "
+      :aria-busy="busy"
       @cancel="cancelAction"
     >
-      <form @submit.prevent="submitAction">
-        <header>
+      <form
+        @submit.prevent="submitAction"
+        :aria-describedby="actionError ? 'cost-action-error' : 'cost-action-guidance'"
+      >
+        <header class="cost-dialog-header">
           <div>
-            <p>审计操作</p>
-            <h3>{{ actionTitle }}</h3>
+            <p>版本操作 / {{ pendingAction.approvalRole ?? "规则生命周期" }}</p>
+            <h3 id="cost-action-title">{{ actionTitle }}</h3>
           </div>
-          <button type="button" aria-label="关闭操作确认" @click="closeAction">×</button>
+          <button type="button" aria-label="关闭操作确认" :disabled="busy" @click="closeAction">
+            关闭
+          </button>
         </header>
-        <p class="cost-action-context">
-          {{ pendingAction.target.name }} · {{ pendingAction.target.market }} /
-          {{ pendingAction.target.platform }} · {{ pendingAction.target.version_code }}
-        </p>
-        <label v-if="pendingAction.action === 'rollback'">
-          恢复目标
-          <select v-model="rollbackTargetId" required>
-            <option v-for="target in rollbackTargets" :key="target.id" :value="target.id">
-              {{ target.name }} · {{ target.version_code }} ·
-              {{ statusLabels[target.status] ?? target.status }}
-            </option>
-          </select>
-        </label>
-        <label>
-          操作原因（至少 2 个字）
-          <textarea v-model="actionReason" required minlength="2" maxlength="1000" rows="4" />
-        </label>
-        <p v-if="actionError" class="cost-dialog-error" role="alert">
-          {{ actionError }} <code v-if="requestId">{{ requestId }}</code>
-        </p>
-        <aside>原因会与操作者、角色、规则版本和请求链路一起保留。</aside>
-        <footer>
+        <div class="cost-dialog-body">
+          <div class="cost-action-context" id="cost-action-context">
+            <b>{{ pendingAction.target.name }}</b>
+            <span>{{ pendingAction.target.market }} / {{ pendingAction.target.platform }}</span>
+            <span
+              >{{ pendingAction.target.version_code }} · 修订
+              {{ pendingAction.target.revision }}</span
+            >
+          </div>
+          <fieldset class="cost-dialog-input-lock" :disabled="busy">
+            <legend class="cost-dialog-sr-only">操作内容</legend>
+            <label v-if="pendingAction.action === 'rollback'" class="cost-dialog-field">
+              恢复目标
+              <select v-model="rollbackTargetId" required>
+                <option v-for="target in rollbackTargets" :key="target.id" :value="target.id">
+                  {{ target.name }} · {{ target.version_code }} ·
+                  {{ statusLabels[target.status] ?? target.status }}
+                </option>
+              </select>
+            </label>
+            <label class="cost-dialog-field">
+              操作原因（至少 2 个字）
+              <textarea
+                v-model="actionReason"
+                required
+                minlength="2"
+                maxlength="1000"
+                rows="4"
+                aria-describedby="cost-action-guidance"
+              />
+            </label>
+            <p v-if="actionError" id="cost-action-error" class="cost-dialog-error" role="alert">
+              {{ actionError }} <code v-if="requestId">{{ requestId }}</code>
+            </p>
+          </fieldset>
+          <aside id="cost-action-guidance" class="cost-dialog-notice">
+            原因会与操作者、角色、规则版本和请求链路一起保留；取消不会提交操作。
+          </aside>
+        </div>
+        <footer class="cost-dialog-footer">
           <button type="button" :disabled="busy" @click="closeAction">取消</button
-          ><button type="submit" :disabled="busy || actionReason.trim().length < 2">
+          ><button
+            type="submit"
+            :class="{ 'cost-dialog-primary-danger': pendingAction.action === 'reject' }"
+            :disabled="busy || actionReason.trim().length < 2"
+          >
             {{ busy ? "提交中…" : `确认${actionLabels[pendingAction.action]}` }}
           </button>
         </footer>

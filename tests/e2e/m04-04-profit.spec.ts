@@ -305,6 +305,164 @@ test("M04-04 cost rule console uses capabilities, explicit entry and keyboard-sa
   await expect(createButton).toBeFocused();
 });
 
+test("P22 draft dialog locks pending writes, preserves conflicts, and allows only explicit retry", async ({
+  page,
+}) => {
+  await navigation(page);
+  const active = phase2CostRule();
+  let created: Record<string, unknown> | null = null;
+  let postCount = 0;
+  let releaseFirst!: () => void;
+  let markFirstArrived!: () => void;
+  const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve));
+  const firstArrived = new Promise<void>((resolve) => (markFirstArrived = resolve));
+  const submittedBodies: Record<string, unknown>[] = [];
+  await page.route("**/api/v1/cost-rules", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.fulfill({ json: envelope(created ? [created, active] : [active]) });
+      return;
+    }
+    postCount += 1;
+    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    if (postCount === 1) {
+      markFirstArrived();
+      await firstGate;
+      await route.fulfill({
+        status: 409,
+        json: {
+          error: {
+            code: "cost_rule_version_conflict",
+            message: "版本冲突",
+            action_hint: "请修改版本号后重试。",
+          },
+          request_id: "p22-create-conflict",
+          trace_id: "p22-create-conflict-trace",
+        },
+      });
+      return;
+    }
+    created = {
+      ...phase2CostRule("draft"),
+      ...(route.request().postDataJSON() as Record<string, unknown>),
+      id: "00000000-0000-4000-8000-000000000447",
+      revision: 1,
+    };
+    await route.fulfill({ status: 201, json: envelope(created) });
+  });
+  await page.goto("/sourcing/cost-rules");
+  const trigger = page.getByRole("button", { name: "新建规则版本", exact: true });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "新建费用规则草稿" });
+  await dialog.getByLabel("版本号", { exact: true }).fill("US-AMZ-P22");
+  await dialog.getByLabel("规则名称", { exact: true }).fill("P22 草稿生命周期测试");
+  await dialog.getByLabel("平台费 %", { exact: true }).fill("0");
+  await dialog.getByLabel("支付手续费 %", { exact: true }).fill("0");
+  await dialog.getByLabel("税费 %", { exact: true }).fill("0");
+  await dialog.getByLabel("履约成本", { exact: true }).fill("0");
+
+  const save = dialog.getByRole("button", { name: "保存草稿", exact: true });
+  await save.click();
+  await firstArrived;
+  await expect(dialog).toHaveAttribute("aria-busy", "true");
+  await expect(dialog.getByRole("button", { name: "关闭新建规则" })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "取消", exact: true })).toBeDisabled();
+  await expect(dialog.locator(".cost-dialog-input-lock input")).toHaveCount(14);
+  expect(
+    await dialog
+      .locator(".cost-dialog-input-lock input, .cost-dialog-input-lock select")
+      .evaluateAll((elements) => elements.every((element) => element.matches(":disabled"))),
+  ).toBe(true);
+  const footer = dialog.locator(".cost-dialog-footer");
+  await expect(footer).toBeVisible();
+  const footerBox = await footer.boundingBox();
+  expect(footerBox).not.toBeNull();
+  expect(footerBox!.y + footerBox!.height).toBeLessThanOrEqual(page.viewportSize()!.height);
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeVisible();
+  await dialog.locator("form").evaluate((form) => (form as HTMLFormElement).requestSubmit());
+  expect(postCount).toBe(1);
+
+  releaseFirst();
+  const conflict = dialog.getByRole("alert");
+  await expect(conflict).toContainText("同一市场和平台下的版本号已存在。");
+  await expect(conflict).toContainText("p22-create-conflict");
+  await expect(dialog.getByLabel("版本号", { exact: true })).toHaveValue("US-AMZ-P22");
+  await expect(dialog.getByRole("button", { name: "保存草稿", exact: true })).toBeEnabled();
+  expect(postCount).toBe(1);
+
+  await dialog.getByRole("button", { name: "保存草稿", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(postCount).toBe(2);
+  expect(submittedBodies[0]).toEqual(submittedBodies[1]);
+  await expect(
+    page.getByRole("heading", { name: "P22 草稿生命周期测试", exact: true }),
+  ).toBeVisible();
+  await expect(page.locator(".cost-rule-detail > header > b")).toHaveText("草稿");
+});
+
+test("P22 action dialog traps focus, locks a pending conflict, and restores its trigger", async ({
+  page,
+}) => {
+  await navigation(page, { roles: ["selection_manager"] });
+  const pending = phase2CostRule("pending_approval");
+  await page.route("**/api/v1/cost-rules", (route) => route.fulfill({ json: envelope([pending]) }));
+  let postCount = 0;
+  let releasePost!: () => void;
+  let markPostArrived!: () => void;
+  const postGate = new Promise<void>((resolve) => (releasePost = resolve));
+  const postArrived = new Promise<void>((resolve) => (markPostArrived = resolve));
+  await page.route(`**/api/v1/cost-rules/${ruleId}/actions`, async (route) => {
+    postCount += 1;
+    markPostArrived();
+    await postGate;
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "cost_rule_revision_conflict",
+          message: "规则版本冲突",
+          action_hint: "刷新规则并使用最新 revision。",
+        },
+        request_id: "p22-action-conflict",
+        trace_id: "p22-action-conflict-trace",
+      },
+    });
+  });
+  await page.goto("/sourcing/cost-rules");
+  const trigger = page.getByRole("button", { name: "选品经理批准", exact: true });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "选品经理审批" });
+  const confirm = dialog.getByRole("button", { name: "确认批准", exact: true });
+  await dialog.getByLabel("操作原因（至少 2 个字）").fill("已核对费用来源和适用范围");
+  await dialog.getByRole("button", { name: "关闭操作确认" }).focus();
+  await page.keyboard.press("Shift+Tab");
+  await expect(confirm).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(dialog.getByRole("button", { name: "关闭操作确认" })).toBeFocused();
+
+  await confirm.click();
+  await postArrived;
+  await expect(dialog).toHaveAttribute("aria-busy", "true");
+  await expect(dialog.getByRole("button", { name: "关闭操作确认" })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "取消", exact: true })).toBeDisabled();
+  await expect(dialog.getByLabel("操作原因（至少 2 个字）")).toBeDisabled();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeVisible();
+  await dialog.locator("form").evaluate((form) => (form as HTMLFormElement).requestSubmit());
+  expect(postCount).toBe(1);
+
+  releasePost();
+  await expect(dialog.getByRole("alert")).toContainText("p22-action-conflict");
+  await expect(dialog.getByLabel("操作原因（至少 2 个字）")).toHaveValue(
+    "已核对费用来源和适用范围",
+  );
+  await expect(dialog.getByLabel("操作原因（至少 2 个字）")).toBeEnabled();
+  expect(postCount).toBe(1);
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(dialog).toHaveCount(0);
+  await expect(trigger).toBeFocused();
+});
+
 test("M04-04 cost rule console paginates accumulated versions", async ({ page }) => {
   await navigation(page, { roles: ["auditor"], capabilities: ["opportunity:read"] });
   const accumulated = Array.from({ length: 12 }, (_, index) => ({
@@ -538,6 +696,35 @@ test("M04-04 cost rule console records a real-role rejection reason", async ({ p
     approval_role: "selection_manager",
     reason: "费用证据不足",
     expected_revision: 2,
+  });
+  await expect(page.locator(".cost-rule-detail > header > b")).toHaveText("已拒绝");
+});
+
+test("M04-04 organization administrator rejection uses its own approval role", async ({ page }) => {
+  await navigation(page, { roles: ["organization_admin"] });
+  let current = {
+    ...phase2CostRule("pending_approval"),
+    approvals: ["selection_manager"],
+  };
+  let submitted: Record<string, unknown> | null = null;
+  await page.route("**/api/v1/cost-rules", (route) => route.fulfill({ json: envelope([current]) }));
+  await page.route(`**/api/v1/cost-rules/${ruleId}/actions`, async (route) => {
+    submitted = route.request().postDataJSON() as Record<string, unknown>;
+    current = { ...current, status: "rejected", revision: current.revision + 1 };
+    await route.fulfill({ json: envelope(current) });
+  });
+  await page.goto("/sourcing/cost-rules");
+  await expect(page.getByRole("button", { name: "选品经理拒绝" })).toHaveCount(0);
+  await page.getByRole("button", { name: "组织管理员拒绝" }).click();
+  const dialog = page.getByRole("dialog", { name: "拒绝费用规则" });
+  await dialog.getByLabel("操作原因（至少 2 个字）").fill("履约成本来源还需核实");
+  await dialog.getByRole("button", { name: "确认拒绝" }).click();
+  await expect.poll(() => submitted).not.toBeNull();
+  expect(submitted).toEqual({
+    action: "reject",
+    reason: "履约成本来源还需核实",
+    expected_revision: 7,
+    approval_role: "organization_admin",
   });
   await expect(page.locator(".cost-rule-detail > header > b")).toHaveText("已拒绝");
 });

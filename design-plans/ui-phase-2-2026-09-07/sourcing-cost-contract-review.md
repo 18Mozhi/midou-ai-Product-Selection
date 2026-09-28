@@ -18,6 +18,8 @@ route-catalog → NavigationShell → surfaceProps：P21 SourcingWorkspace，P22
 
 2026-09-29源码续记：当前 `SourcingCostConfirmationPanel` 已向共享 `OpportunityProfitPanel` 传入复核人加载/错误/追踪状态，并转发 `retry-reviewers` 到 `loadReviewers(currentScope())`；因此 P21 的复核人失败重试入口可达，不再作为 P18 专属排除。同步映射机会版本重读、利润数据重读、双人复核提交与利润重算控件；仅确认当前源码归属，不代表真实 API、RBAC 或生产验收。
 
+2026-09-29 P22续记：CostRuleConsole 两个弹窗现均通过 `useModalDialog` 开启焦点环绕，触发器卸载时回到页面标题；写入期间字段与关闭入口锁定，拒绝响应留在弹窗并需显式重试。新建表单错误与动作错误分别就近关联；P22 当前 Vue 键盘/409/单飞状态有桌面及手机 E2E 覆盖。此处只更新源码与局部浏览器证据，P21四窗、RQ、完整读屏、真实权限/生产审批仍未验收。
+
 局部共80个控件/事件候选、7个弹窗定义/调用候选、44处v-model。SP与QualityGateSetupSummary只有呈现/slot，无本地交互候选；共享UiStatePanel和useModalDialog行为按实际调用方检查，不在此重复全站盘点。PP/RQ与P18共享，以下仅记录P21调用合同，不重复加算全站分母。
 
 ## 2. 全部控件与事件候选
@@ -87,15 +89,16 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | CR  | 702 | 5d293fdba6594665.1 | SC-R-REJECT organization_admin              |
 | CR  | 711 | 513ba8c3e39973c0.1 | SC-R-PUBLISH approved                       |
 | CR  | 718 | fab085a093adfa3a.1 | SC-R-ROLLBACK active且有有效目标            |
-| CR  | 742 | 8dec9b05190c02c6.1 | SC-R-CREATE-CLOSE 原生cancel                |
-| CR  | 749 | 1fcf5a2247b2ad3e.1 | SC-R-CREATE-SUBMIT 表单                     |
-| CR  | 755 | 8695390d77702f3f.1 | SC-R-CREATE-CLOSE X                         |
+| CR  | 774 | f7f89c631a4cfd69.1 | SC-R-CREATE-DEFINITION 新建草稿弹窗          |
+| CR  | 774 | 5db2d0d00a28d18b.1 | SC-R-CREATE-CLOSE 原生cancel                |
+| CR  | 783 | c099eb06e95d2212.1 | SC-R-CREATE-SUBMIT 表单                     |
+| CR  | 795 | f2cd423a0267e8bf.1 | SC-R-CREATE-CLOSE X                         |
 | CR  | 864 | 4fa3694ad39564c9.1 | SC-R-CREATE-CLOSE 取消                      |
 | CR  | 865 | bdb318fcff422d4c.1 | SC-R-CREATE-SUBMIT 按钮                     |
-| CR  | 871 | 718d705955c5be28.1 | SC-R-ACTION-DIALOG aria-label/actionTitle   |
-| CR  | 871 | 69fe3471229b26ea.1 | SC-R-ACTION-DIALOG showAction/pendingAction |
-| CR  | 878 | 4ed28d61de7ebf6e.1 | SC-R-ACTION-SUBMIT submitAction 表单        |
-| CR  | 884 | 9a6cc342b022be3d.1 | SC-R-ACTION-CLOSE X                         |
+| CR  | 946 | 5de98ef30653ebcb.1 | SC-R-ACTION-DEFINITION 七类动作弹窗          |
+| CR  | 946 | 6c29bff30f6c9e9d.1 | SC-R-ACTION-CLOSE 原生cancel                |
+| CR  | 959 | b65ab0647ba3d0fd.1 | SC-R-ACTION-SUBMIT submitAction 表单        |
+| CR  | 968 | 89388d2e7acd060d.1 | SC-R-ACTION-CLOSE X                         |
 | CR  | 908 | ca4f082d1ca76f11.1 | SC-R-ACTION-CLOSE 取消                      |
 | CR  | 909 | 1b870bc1240e4ab6.1 | SC-R-ACTION-SUBMIT 按钮                     |
 | PP  | 54  | 2bab3ff056a52675.1 | SC-NAV 管理费用规则                         |
@@ -153,7 +156,7 @@ UI2-SC04四实例核对四类输入required、取消清query但保留当前草�
 | SC-G01 | 当前缺失报价预填1/7/80；稳定性选项/API为variable，但SW标签字典为volatile                                                                                                                                                                                                                                                                  | 核实预填是否符合业务期望；先复现真实variable展示，按确认范围处理，不用历史默认充当证据                                   |
 | SC-G02 | 比较历史读取已独立降级：失败不阻断找货列表/详情；可重试错误仅重试GET，401/403不提供重试，刷新失败保留既有成功历史。桌面/手机 E2E 各16项通过；详情失败及其他恢复边界仍未解决                                                                                                                                                               | 保持历史可选读取合同；后续独立验证详情失败、读代次/迟到响应及恢复，不扩大到写入或权限行为                                |
 | SC-G03 | 2026-09-28：SW 找货/报价/采购/删除及比较/重采集写入口增加函数级 busy 守卫；四弹窗提交以弹窗代次与路由代次隔离迟到成功/失败，关闭重开和重复 `requestSubmit` 双端回归通过。2026-09-29：成本面板三类 POST 按机会范围同步互斥；换机会后的迟到回执不污染当前状态；写成功回执与随后 GET 失败分开显示。成本表单重复提交仅一条请求，已由双端实 Vue 测试验证。已发请求不会被关窗/换机会撤回。 | 剩余 SW/SC 父层读取与 KeepAlive/scope、真实后端/RBAC及操作后数据事实；不把客户端关闭或代次保护当成服务端撤销/幂等证据 |
-| SC-G04 | SD四窗无完整焦点圈/归还，错误在父层；CR字段错误缺字段关联；RQ内联表单取消/成功归属未全验                                                                                                                                                                                                                                                  | 四窗和七操作变体逐项键盘、焦点、错误可达、移动键盘及辅助技术验证                                                         |
+| SC-G04 | P22 两窗已加入焦点环绕/返焦、写入中锁定、就近错误说明与忙碌反馈，桌面及手机 E2E 覆盖草稿和动作窗局部路径；P21 的 SD 四窗、RQ 内联表单取消/成功归属未全验                                                                                                                                                                                              | 完成 P21 四窗、RQ 键盘/错误可达/移动键盘及辅助技术验证；P22 仍需完整读屏与真实审批环境验证                              |
 | SC-G05 | 成本子面板机会版本/利润/复核人 GET 现按机会 ID 与请求代次归属；同机会保留已成功利润快照，切换机会清旧快照，并可独立重读。父层搜索列表/详情/比较、CR，以及路由反向同步、KeepAlive、范围与多标签仍未全验                                                                                                                                 | 对父层迟到200/404、离开返回、scope切换和history按实际对象归属处理；不以成本子面板测试或壳层缓存配置替代证据               |
 | SC-G06 | 对比历史“现行报价”标签可能指向旧报价版本；费用规则准备度可能取首active而非当前市场。刷新/删除及成本写入成功回执现保留在后续读取之外；成本刷新失败另列读错误                                                                                                                                                                | 核对历史报价版本语义及多市场展示；不改历史数据或算法                                                                    |
 | SC-G07 | 成本观测时间默认UTC截断供datetime-local；P21表单复核人空/切机会草稿/错误权限可见待验                                                                                                                                                                                                                                                      | 测非UTC初始值与新输入，另一名活动复核人、字段隔离和真实鉴权；不以原报价时间测试覆盖成本时间                              |
