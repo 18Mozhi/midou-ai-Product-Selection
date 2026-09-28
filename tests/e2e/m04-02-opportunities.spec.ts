@@ -935,7 +935,9 @@ test("profit analysis failure stays local and retries only the profit read", asy
   expect(detailReads).toBe(detailReadsBeforeRetry);
 });
 
-test("expired profit analysis response still restores the page-level login state", async ({ page }) => {
+test("expired profit analysis response still restores the page-level login state", async ({
+  page,
+}) => {
   await ready(page);
   await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
     route.fulfill({
