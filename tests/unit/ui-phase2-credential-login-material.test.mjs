@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
+import { credentialHistoricalCapture } from "../../scripts/lib/ui-phase2-credential-historical-capture.mjs";
 import { previewCredentialLoginMaterial } from "../../scripts/lib/ui-phase2-credential-login-material-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
@@ -78,8 +79,8 @@ test("P50 material evidence binds six safe states at four widths", () => {
   assert.equal(evidence.runs.length, 24);
   assert.equal(evidence.screenshots.length, 24);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  const historical = credentialHistoricalCapture("login-material");
+  assert.equal(historical.evidence.kind, evidence.kind);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

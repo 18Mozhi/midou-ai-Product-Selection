@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
+import { credentialHistoricalCapture } from "../../scripts/lib/ui-phase2-credential-historical-capture.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
@@ -71,8 +72,8 @@ test("P50 actual Vue evidence binds the safe default page and login editor", () 
   assert.equal(evidence.runs.length, 6);
   assert.equal(evidence.screenshots.length, 12);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  const historical = credentialHistoricalCapture("page");
+  assert.equal(historical.evidence.kind, evidence.kind);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

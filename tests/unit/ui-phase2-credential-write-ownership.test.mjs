@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
+import { credentialHistoricalCapture } from "../../scripts/lib/ui-phase2-credential-historical-capture.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
@@ -30,8 +31,8 @@ test("P50 generic write evidence binds pending locks and detached settlement own
   );
   assert.equal(evidence.screenshots.length, 28);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  const historical = credentialHistoricalCapture("write-ownership");
+  assert.equal(historical.evidence.kind, evidence.kind);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

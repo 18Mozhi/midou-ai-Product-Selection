@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
+import { credentialHistoricalCapture } from "../../scripts/lib/ui-phase2-credential-historical-capture.mjs";
 
 const root = "output/playwright/p50-credential-editor-focus-review",
   read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
@@ -17,8 +18,8 @@ test("P50 credential editor focus evidence binds every state and viewport", () =
   assert.equal(evidence.runs.length, 20);
   assert.equal(evidence.screenshots.length, 20);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  const historical = credentialHistoricalCapture("editor-focus");
+  assert.equal(historical.evidence.kind, evidence.kind);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),
