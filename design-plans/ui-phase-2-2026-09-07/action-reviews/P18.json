@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
     "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
-    "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47",
     "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
     "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
@@ -300,7 +300,7 @@
       ],
       "remaining": "未因新reviews或can_review变化清review.id，旧表单可能残留。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1"
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#9e1d20d4dd860bdc.1"
       ],
       "visualStates": {
         "default": "not-mapped",
@@ -351,7 +351,7 @@
       ],
       "remaining": "未验动态资格变化/忙碌重复打开；不可把已超时直接等同源按钮禁用。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#8cc90a8748defa76.1"
       ],
       "visualStates": {
         "default": "not-mapped",
@@ -410,7 +410,7 @@
       ],
       "remaining": "源表单可独立于item.can_review存在；提交函数只查原因不查busy；服务端资格和版本待实库验收。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#dcb42c2584efb46b.1",
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#3fe574c620a554f9.1",
         "apps/web/src/components/OpportunityCostReviewQueue.vue#8c06fd5c1d000db0.1"
       ],
       "visualStates": {
@@ -458,7 +458,7 @@
       ],
       "remaining": "内联关闭返焦/新行替换及所有主题待验。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#7c728ed5ba0c7cd7.1"
       ],
       "visualStates": {
         "default": "not-mapped",
@@ -2689,7 +2689,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
-      "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+      "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47",
       "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
       "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
       "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",

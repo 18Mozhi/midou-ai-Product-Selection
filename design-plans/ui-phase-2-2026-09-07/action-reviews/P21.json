@@ -10,7 +10,7 @@
     "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
     "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
-    "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -4438,25 +4438,25 @@
           "busy"
         ],
         "reason": "两个入口由item.can_review控制可见，均无disabled/aria-busy；beginReview清原因并切换结论，不立即审批。",
-        "handlerBoundary": "item.can_review控制两个入口；beginReview写id/decision并清reason，不立即审批",
+        "handlerBoundary": "item.can_review控制两个入口；beginReview绑定id/version并清reason，不立即审批",
         "sourceCandidateIds": [
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1",
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#9e1d20d4dd860bdc.1",
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#8cc90a8748defa76.1"
         ],
         "renderedControlIds": [
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1",
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#9e1d20d4dd860bdc.1",
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#8cc90a8748defa76.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47"
         }
       },
       "label": "通过/驳回内联表单",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1",
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#9e1d20d4dd860bdc.1",
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#8cc90a8748defa76.1"
       ],
       "sourceContractKeys": [
         "SC-COST-REVIEW rejected打开",
@@ -4579,7 +4579,7 @@
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#dcb42c2584efb46b.1",
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#3fe574c620a554f9.1",
         "apps/web/src/components/OpportunityCostReviewQueue.vue#8c06fd5c1d000db0.1"
       ],
       "sourceContractKeys": [
@@ -4732,22 +4732,22 @@
           "busy"
         ],
         "reason": "只按review.id显示并清空该ID，无disabled/aria-busy；取消不撤销在途请求。",
-        "handlerBoundary": "只清review.id，不发请求，不保证旧在途响应不会影响新表单",
+        "handlerBoundary": "清除review id/version/reason，不发请求；刷新变更id可复核状态或版本也会清除旧草稿",
         "sourceCandidateIds": [
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#7c728ed5ba0c7cd7.1"
         ],
         "renderedControlIds": [
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#7c728ed5ba0c7cd7.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47"
         }
       },
       "label": "取消内联复核",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#7c728ed5ba0c7cd7.1"
       ],
       "sourceContractKeys": [
         "SC-COST-REVIEW-CANCEL"
@@ -4876,7 +4876,7 @@
       "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
       "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
       "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
-      "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
+      "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47"
     },
     "inputs": [
       {

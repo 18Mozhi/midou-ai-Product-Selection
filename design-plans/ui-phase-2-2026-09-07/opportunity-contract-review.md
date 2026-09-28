@@ -60,7 +60,7 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 | OP-SCORE-QUEUE | canDecide且非busy | POST /opportunities/:id/score-runs `{expected_version}`；重读并提示排队，需后续刷新读取实际结果 |
 | OP-COST-RULES / OP-COST-SUBMIT / OP-PROFIT-QUEUE | 费用规则链接；cost:confirm可填成本/重算 | POST /opportunities/:id/cost-inputs，见字段表；提交只是双人复核申请。利润POST /opportunities/:id/profit-runs `{platform,expected_version}`；不保证立即生成可靠利润 |
 | OP-COST-REVIEWER-RETRY | cost:confirm且复核人GET失败 | 仅重新GET `/cost-input-reviewers`；不重发任何成本、复核或利润写入；机会ID或读取代次变化后忽略迟到结果 |
-| OP-COST-REVIEW-OPEN.approved/rejected / CANCEL / SUBMIT | 条目item.can_review决定是否出现；提交要求trim原因≥2且非busy | 内联表单；POST /opportunities/:id/cost-input-reviews/:reviewId/actions `{decision,reason,expected_version:条目version}`；成功load，批准才可能生效并触发计算，驳回保留原输入 |
+| OP-COST-REVIEW-OPEN.approved/rejected / CANCEL / SUBMIT | 条目item.can_review决定是否出现；提交要求trim原因≥2且非busy；刷新后记录仍可复核且version未变化才保留表单，否则关闭并清空原因 | 内联表单；POST /opportunities/:id/cost-input-reviews/:reviewId/actions `{decision,reason,expected_version:打开表单时的条目version}`；成功load，批准才可能生效并触发计算，驳回保留原输入 |
 | OP-AI-QUEUE / RETRY / REVIEW.approved/rejected / REASON-SUBMIT/CANCEL | 生成/复核canDecide；待复核result可审；重读不需写权限 | 生成POST /opportunities/:id/ai-analyses `{expected_version}`，load后切ai；复核先共享原因框，POST /ai-analyses/:resultId/reviews `{outcome,notes}`，成功load并切ai |
 | OP-EVIDENCE-ORIGINAL / MORE / COLLAPSE | 有证据则原文，超过20条可渐进展开 | API原顺序slice；每次+20，收起20；id或证据引用变化重置。外链target=_blank、noopener noreferrer；不新建后台分页 |
 | OP-FEEDBACK-SUBMIT / AUDIT | canDecide可见表单；事实/校准只读 | POST /opportunities/:id/operating-feedback，见字段表；只更新detail.operating_feedback、清source_ref/notes，不自动更新规则或决定；审计details只展开 |

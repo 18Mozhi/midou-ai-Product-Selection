@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { reactive } from "vue";
+import { reactive, watch } from "vue";
 import type { OpportunityProfitAnalysis as ProfitAnalysis } from "./opportunity-workspace-types";
 
-defineProps<{
+const props = defineProps<{
   reviews: ProfitAnalysis["cost_input_reviews"];
   busy: boolean;
 }>();
@@ -16,21 +16,52 @@ const emit = defineEmits<{
     },
   ];
 }>();
-const review = reactive({ id: "", decision: "approved" as "approved" | "rejected", reason: "" });
+const review = reactive({
+  id: "",
+  version: null as number | null,
+  decision: "approved" as "approved" | "rejected",
+  reason: "",
+});
+function cancelReview() {
+  review.id = "";
+  review.version = null;
+  review.reason = "";
+}
+watch(
+  () => props.reviews,
+  (reviews) => {
+    if (!review.id) return;
+    const current = reviews.find((item) => item.id === review.id);
+    if (!current?.can_review || current.version !== review.version) cancelReview();
+  },
+  { flush: "sync" },
+);
 const inputLabel = (value: string) =>
   ({ sale_price: "含税售价", purchase_price: "采购价", logistics: "物流" })[value] ?? value;
-function beginReview(id: string, decision: "approved" | "rejected") {
-  review.id = id;
+function beginReview(
+  item: ProfitAnalysis["cost_input_reviews"][number],
+  decision: "approved" | "rejected",
+) {
+  review.id = item.id;
+  review.version = item.version;
   review.decision = decision;
   review.reason = "";
 }
 function submitReview(item: ProfitAnalysis["cost_input_reviews"][number]) {
-  if (review.reason.trim().length < 2) return;
+  const expectedVersion = review.version;
+  if (
+    !item.can_review ||
+    review.id !== item.id ||
+    expectedVersion === null ||
+    expectedVersion !== item.version ||
+    review.reason.trim().length < 2
+  )
+    return;
   emit("reviewCost", {
     reviewId: item.id,
     decision: review.decision,
     reason: review.reason.trim(),
-    expectedVersion: item.version,
+    expectedVersion,
   });
 }
 </script>
@@ -73,16 +104,19 @@ function submitReview(item: ProfitAnalysis["cost_input_reviews"][number]) {
       >
       <p v-if="item.decision_reason">处理说明：{{ item.decision_reason }}</p>
       <footer v-if="item.can_review">
-        <button type="button" @click="beginReview(item.id, 'rejected')">驳回</button>
-        <button type="button" @click="beginReview(item.id, 'approved')">通过</button>
+        <button type="button" @click="beginReview(item, 'rejected')">驳回</button>
+        <button type="button" @click="beginReview(item, 'approved')">通过</button>
       </footer>
-      <form v-if="review.id === item.id" @submit.prevent="submitReview(item)">
+      <form
+        v-if="review.id === item.id && item.can_review && review.version === item.version"
+        @submit.prevent="submitReview(item)"
+      >
         <label>
           {{ review.decision === "approved" ? "复核说明" : "驳回原因" }}
           <textarea v-model="review.reason" required minlength="2" maxlength="1000"></textarea>
         </label>
         <div>
-          <button type="button" @click="review.id = ''">取消</button>
+          <button type="button" @click="cancelReview">取消</button>
           <button type="submit" :disabled="busy || review.reason.trim().length < 2">提交</button>
         </div>
       </form>
