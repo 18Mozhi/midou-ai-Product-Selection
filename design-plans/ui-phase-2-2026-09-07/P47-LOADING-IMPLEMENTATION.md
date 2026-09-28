@@ -15,6 +15,10 @@
 - 完整 `m03-03-provider-adapter.spec.ts` 桌面/390px 共20/20通过；`npm run build:web`（含Web类型检查及浏览器helper构建）、`npm run verify:frontend-budget`（202资源）、`npm run verify:static-analysis`、`npm run format:check`、`npm run verify:docs`、`npm run verify:plans` 与 `git diff --check` 通过。
 - 本批之前启动的全量 `npm run verify:functional` 仍在 Node 单测阶段失败，含与本次无关的历史源码指纹失配。本页归档 loading 转换重复属性缺陷已由本批单测修正；全量总门未在本批完成后重跑，不据此宣称全项目总门通过。
 
+## 发布记录
+
+功能提交 `c06c8187351d083f9dcc8992369b09b3304cd1c5` 已推送并通过固定 `python scripts/deploy-baota.py` 发布；部署脚本返回 `deployed`，build SHA 与该提交一致，脚本内公网版本/健康和路由验证通过，上传临时包已删除。仅 P47 前端样式/文案与本页测试/文档变化，无数据库迁移、配置变更或服务运行参数变化。
+
 ## 未覆盖
 
 隔离本地响应不证明真实登录、P47权限、供应商目录、健康探针、跨页在途检查锁或 M07-03 正式生产验收；不新增 API、OpenAPI、数据库、环境变量、依赖、写入行为或后台服务。生产发布继续遵守项目宝塔部署流程。

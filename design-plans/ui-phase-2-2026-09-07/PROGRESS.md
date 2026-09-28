@@ -4,7 +4,9 @@
 
 将已通过授权的首次读取稿接入实际 `ProviderAdapterCenter`：定制 loading 标题/说明，采用紧凑白底、静态三条骨架；首次 GET 无来源行、假进度或 ETA，刷新期间不影响原目录/搜索/筛选快照。保留共享 `UiStatePanel`、ARIA、错误提示/关联号/只重试 GET、12 秒读取边界、权限和 API。兼容历史预览 helper：历史版本仍按原规则注入两属性，当前正式源码识别为幂等并保持不变；原归档图包/源指纹不改。
 
-loading 合同单测 3/3、P47 实际 Vue 桌面/390px 回归各 1/1 通过；完整 `m03-03-provider-adapter.spec.ts` 双端 20/20。`build:web`、202 资源前端预算、459 文件静态分析、格式、153 份文档/73 路由及计划结构门通过。隔离响应不证明真实 provider 权限、健康探针或正式 M07-03。全项目 `verify:functional` 在本批前的运行仍于 Node 测试阶段失败（包含历史源码指纹问题）；本批局部 helper 问题已修正，但未重跑全量门。无 API/OpenAPI/DB/env/dependency/RBAC 变化；提交和固定宝塔部署待发布步骤。
+loading 合同单测 3/3、P47 实际 Vue 桌面/390px 回归各 1/1 通过；完整 `m03-03-provider-adapter.spec.ts` 双端 20/20。`build:web`、202 资源前端预算、459 文件静态分析、格式、153 份文档/73 路由及计划结构门通过。隔离响应不证明真实 provider 权限、健康探针或正式 M07-03。全项目 `verify:functional` 在本批前的运行仍于 Node 测试阶段失败（包含历史源码指纹问题）；本批局部 helper 问题已修正，但未重跑全量门。无 API/OpenAPI/DB/env/dependency/RBAC 变化。
+
+P47 首次读取功能提交 `c06c8187351d083f9dcc8992369b09b3304cd1c5` 已推送并经固定宝塔脚本成功部署；线上 build SHA 与该提交一致，部署器内公网健康/版本及路由核验通过，临时包已删除。
 
 ## 2026-09-28 · P19 CP-G03 截断快照窗口的事实标签
 
