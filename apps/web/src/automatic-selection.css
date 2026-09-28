@@ -1666,3 +1666,21 @@
     color: var(--so-opportunity-list-blue);
   }
 }
+
+@media (min-width: 761px) and (max-width: 1440px) {
+  .opportunity-workspace--review .opportunity-view-bar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .opportunity-workspace--review .opportunity-view-bar > nav {
+    flex-wrap: wrap;
+  }
+
+  .opportunity-workspace--review .opportunity-view-bar .responsive-filter-drawer {
+    min-width: 0;
+  }
+
+  .opportunity-workspace--review .opportunity-view-bar .opportunity-filters {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

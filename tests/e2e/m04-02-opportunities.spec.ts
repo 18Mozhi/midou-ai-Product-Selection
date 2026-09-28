@@ -1095,6 +1095,24 @@ test("selection views send explicit truthful recommendation filters", async ({ p
     "aria-current",
     "page",
   );
+  const queueButtons = page.locator(".opportunity-view-bar > nav button");
+  await expect(queueButtons).toHaveCount(4);
+  if ((page.viewportSize()?.width ?? 0) > 760) {
+    await expect
+      .poll(() =>
+        queueButtons.evaluateAll((buttons) =>
+          buttons.every((button) => {
+            const bounds = button.getBoundingClientRect();
+            const target = document.elementFromPoint(
+              bounds.left + bounds.width / 2,
+              bounds.top + bounds.height / 2,
+            );
+            return Boolean(target && (button === target || button.contains(target)));
+          }),
+        ),
+      )
+      .toBe(true);
+  }
 
   const ruleCandidates = page.waitForRequest((request) =>
     request.url().includes("selection_view=rule_candidates"),
