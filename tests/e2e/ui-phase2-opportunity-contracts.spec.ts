@@ -599,6 +599,13 @@ test("UI2-OP05 ERP file selection imports immediately without browser bridge or 
   await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();
   const modal = page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" });
   await expect(modal.getByLabel("本次导入数量")).toHaveValue("200");
+  const close = modal.getByRole("button", { name: "关闭 ERP 导入" });
+  const read = modal.getByRole("button", { name: "从当前浏览器读取" });
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(read).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
   await modal.getByRole("button", { name: "取消", exact: true }).click();
   expect(data.writes).toHaveLength(0);
   await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();

@@ -3,6 +3,7 @@
 2026-09-28 P15批量回执续记：批量POST提交时快照路由、弹窗与选择代次。延迟成功返回若遇到关闭重开或用户已更改选择，不再关闭新弹窗/清空新选择；仅原路由仍活动时刷新。受控真实Vue E2E桌面/390px各1/1，旧实现先复现失败。原API/body及关闭不撤销已提交写入语义不变；其他OP07子面板读写归属、真实RBAC与生产验收仍待。
 
 2026-09-28无障碍续记：P18 `OpportunityDecisionPanel` 的系统建议标题与决定弹窗标题原先复用 `opportunity-decision-title`，导致 document 中重复 ID，弹窗的 `aria-labelledby` 无法可靠命名。现在摘要和弹窗分别使用独立ID，E2E 按 `记录继续观察决定` / `记录驳回决定` 的 dialog accessible name 定位。无 API、请求、权限或业务行为变化；未以自动化断言替代真实读屏器验收。
+2026-09-28 P18 OP08键盘续记：真实 Chromium 先复现决策弹窗从首个“关闭”按钮 Shift+Tab 未回到末尾控件。`OpportunityWorkspaceDialogs` 为ERP导入、手工创建、决定三个调用增加本地边界循环；创建/ERP/观察/驳回四种实际调用在桌面与390px均通过Tab/Shift+Tab，决策 Escape 返回原触发按钮且不发POST。API、校验、角色规则及提交行为不变；仍未覆盖读屏器、采纳五门可达场景及真实生产/RBAC。
 2026-09-28 P15当前候选复核：动作候选表与P15 source review 已更新到 `OpportunityListPanel` 和 `OpportunityWorkspace` 当前签名，归入空态事件、三种批量入口、图片失败回退、列表父子事件转发与批量表单提交。静态归属与实际 Vue E2E 分开记录；图片错误仅为本地显示回退，不触发业务请求。
 
 2026-09-28 P15 UI2-OP04续记：真实Vue列表已将总selectedIds与本次当前items交集分开呈现；筛选后隐藏的已选项有明确说明，零当前项时三个批量动作禁用，弹窗文案与POST items共享同一currentPageSelectedItems派生值。当前隔离fixture下桌面Chromium、390px移动各1/1，覆盖筛选保留A、结果仅B、先禁用再选B并仅提交B。OP06由“UI范围未披露”局部收窄为“跨页/筛选后选择策略未定”；不宣称跨页全部提交，不改变API、后端或服务端事务/RBAC。

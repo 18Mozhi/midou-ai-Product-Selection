@@ -275,6 +275,13 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   await expect(page.locator(".opportunity-row-select")).toHaveCount(0);
   const dialog = page.getByRole("dialog");
   await expect(dialog).toBeVisible();
+  const createClose = dialog.getByRole("button", { name: "关闭" });
+  const createSubmit = dialog.getByRole("button", { name: "创建机会", exact: true });
+  await expect(createClose).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(createSubmit).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(createClose).toBeFocused();
   await dialog.getByRole("button", { name: "关闭" }).click();
   await expect(page.getByRole("heading", { name: "自动推荐配置已就绪" })).toBeVisible();
   await expect(page.getByRole("progressbar", { name: "自动推荐规则配置进度" })).toHaveAttribute(
@@ -482,6 +489,54 @@ test("M04-02.A07/A08/A15 opportunity detail tabs and reason-required decision pr
   await expect(page).toHaveScreenshot("m04-02-opportunity-detail.png", { fullPage: true });
   if ((page.viewportSize()?.width ?? 0) <= 640) {
     await expect(page.locator(".opportunity-decision-waiting")).toHaveCSS("position", "static");
+  }
+});
+
+test("P18 observe and reject dialogs contain keyboard focus and return it on Escape", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.goto(`/opportunities/${opportunityId}`);
+  await page.getByText("提前人工处理", { exact: true }).click();
+
+  const decisionWrites: string[] = [];
+  const onRequest = (request: import("@playwright/test").Request) => {
+    if (
+      request.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`) &&
+      request.method() === "POST"
+    ) {
+      decisionWrites.push(request.method());
+    }
+  };
+  page.on("request", onRequest);
+
+  try {
+    for (const action of [
+      { trigger: "继续观察", dialog: "记录继续观察决定" },
+      { trigger: "驳回", dialog: "记录驳回决定" },
+    ]) {
+      const trigger = page.getByRole("button", { name: action.trigger, exact: true });
+      await trigger.focus();
+      await page.keyboard.press("Enter");
+
+      const dialog = page.getByRole("dialog", { name: action.dialog });
+      await expect(dialog).toBeVisible();
+      const close = dialog.getByRole("button", { name: "关闭" });
+      const submit = dialog.getByRole("button", { name: "确认记录" });
+      await expect(close).toBeFocused();
+
+      await page.keyboard.press("Shift+Tab");
+      await expect(submit).toBeFocused();
+      await page.keyboard.press("Tab");
+      await expect(close).toBeFocused();
+      await page.keyboard.press("Escape");
+
+      await expect(dialog).toBeHidden();
+      await expect(trigger).toBeFocused();
+    }
+    expect(decisionWrites).toEqual([]);
+  } finally {
+    page.off("request", onRequest);
   }
 });
 

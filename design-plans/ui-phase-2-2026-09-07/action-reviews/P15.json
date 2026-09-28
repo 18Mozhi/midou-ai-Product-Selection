@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
     "apps/web/src/components/OpportunityWorkspace.vue": "5640835d3e13800c13f906424027d846c8ba3b8c94db3ad2b41dbcf80a2ce229",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "fc8184fa5c8962d79e58c988f80d76ff414491079f6223e27f8852b63a85790f",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
   },
@@ -1139,7 +1139,7 @@
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f9352d9bba967662.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#56857391914c319d.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1"
       ],
@@ -1359,7 +1359,7 @@
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#cb6531d91ea2d929.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#67aec29022637161.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1"
       ],
@@ -1546,8 +1546,8 @@
       "kind": "excluded",
       "routeApplicability": "P18-normal-entry-excluded-from-P15",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#21d6397072095d87.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#e6463826c649de97.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#9b17e07a48f24205.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674ff3412f0b8645.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#10c891f118c2001b.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1",
@@ -1857,7 +1857,7 @@
       "kind": "wiring",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1"
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#196c12d0f18ac5ee.1"
       ],
       "sourceContractKeys": ["ERP导入原生dialog"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
@@ -1900,7 +1900,7 @@
       "kind": "wiring",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-      "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c36983c07beb5b75.1"
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#304e73ffea549836.1"
       ],
       "sourceContractKeys": ["机会创建原生dialog"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
@@ -1994,7 +1994,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/OpportunityWorkspace.vue": "5640835d3e13800c13f906424027d846c8ba3b8c94db3ad2b41dbcf80a2ce229",
-      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "fc8184fa5c8962d79e58c988f80d76ff414491079f6223e27f8852b63a85790f",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",

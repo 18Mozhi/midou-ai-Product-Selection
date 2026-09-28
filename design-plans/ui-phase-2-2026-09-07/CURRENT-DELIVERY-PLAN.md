@@ -1681,3 +1681,7 @@ P03 `/register` 已接入独立蓝色注册边界、白色三字段表单、错�
 # P02 登录 C 方向生产 Vue 接入 · 本轮实施
 
 P02 `/login` 的普通登录、MFA challenge 和种子安全设置已按用户授权接入实际 Vue，桌面/390px 定向回归各 7/7。保留现有 auth/password/MFA 请求体、服务端分流和会话边界，不修改 API、权限、数据或配置。完整代码/build SHA、宝塔过程、线上健康版本/页面/资源只读验证见[P02实施记录](P02-PAGE-COMPOSITION-IMPLEMENTATION.md)；合成账号测试不证明真实 MFA、Cookie、RBAC 或正式 M07-03。全73页目标继续，下一页 P01。
+
+# 本轮交付接续 · P18 决策弹窗键盘边界
+
+2026-09-28：P18/P15 共用 `OpportunityWorkspaceDialogs` 的 ERP 导入、手工创建、人工决定窗已补显式 Tab/Shift+Tab 边界循环。真实 Chromium 初测复现决策窗 Shift+Tab 离开末端控件；修复后创建、ERP、观察、驳回局部 E2E 在 desktop-chromium 与 mobile-390 共12项通过，覆盖决定窗 Escape 焦点归还与取消零 POST。未改变业务/API/RBAC；页面规格、读屏器、采纳态、其他分区和全73页仍继续。

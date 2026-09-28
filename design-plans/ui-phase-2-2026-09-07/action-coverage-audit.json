@@ -83,7 +83,7 @@
     "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
     "apps/web/src/components/OpportunityWorkspace.vue": "5640835d3e13800c13f906424027d846c8ba3b8c94db3ad2b41dbcf80a2ce229",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "fc8184fa5c8962d79e58c988f80d76ff414491079f6223e27f8852b63a85790f",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
@@ -252,8 +252,8 @@
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b8c7eed0c5b6b1ea3bfcb4df1febb5a1b47ab98d0d8a4fa3c914739d10c6a47f",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "2a6c6dd60fa660ff2758463c2b85cb51ff3868eefc9860f376d1e7b982ccc750",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "02c8b8a8a8bbad5738e5674d655908d4436fe3b2e26ef1ed9213d02e97a1d302",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "48ee7d2bfb4b6c4974f4d3484c68217905dc5ae2a410deb63083c35345ef1fce",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "ce719ad8ac03f75ac509dac62d0d7a152e006e85a42c83d526d50bba826ebd4b",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "3ef41db0140d057cbd59d9cd866c51e8373b6f9ee4b59ac36a8e6164ab9b97f1",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "deea09a6d8d4bbf7222884b378bf8218e78022d5d3cf6948adad8a1d84395615",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "11dc7f844e20c19e2bbcd068da11b72a0c8bd9b69b5fa7da2bd91985e31ef4a1",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
@@ -414,15 +414,15 @@
     "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
     "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
     "tests/e2e/ui-phase2-trend-contracts.spec.ts": "c9b3be8f0656b2c4f008bcfa5741ac8185e75787b871eba310a8b6baad1db01f",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "bcc3617791da3fc4119653acaefbc749b9cf73e2bbc74ee2f1a6b2ba705b80da",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "41196ded6f5b83dd5d401dcf790973963eed326ae37bd846ed1f38315f84edb0",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "tests/e2e/m04-02-opportunities.spec.ts": "f45558865e22e1b16e05dc7e85d9bb18b84000fed7b4dda99b0c951167bf1939",
+    "tests/e2e/m04-02-opportunities.spec.ts": "7cf152ea2b91f3b21fb14af1dd68628a12981e46bf0a08ff1f5b5337d2558ad3",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "93ebb1504c08352084de44f476df8a24b1e43b0893e87be8ed68fed95b8a4da7",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "79b6a0986ce36c1f6f3cfc93fc871b4650cff9f686b5a3f389e5f697b3d00e53",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "da6ed467c3c50c4cd61553fccd665d461844bf68f00b1eef0c5324e94ceca7e1",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "7cf494e5456c42fc4ab6c5bf772d19fbe9b26148450b619c2d3ec1c980f56f0a",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "f82e557b72015297d1f3199778cc998c42f08b2442a9941553003ee5623cff0d",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -651,8 +651,8 @@
     "routes": 73,
     "currentSourceCandidates": 1713,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 665,
-    "oldOnlyIdentities": 429,
+    "newSourceIdentities": 667,
+    "oldOnlyIdentities": 431,
     "reviewedPages": 73,
     "explicitlyGroupedSourceSites": 1553,
     "semanticGroups": 1274,
@@ -1263,7 +1263,7 @@
       "id": "P15",
       "path": "/opportunities",
       "title": "选品机会",
-      "oldStaticAssociatedCandidates": 136,
+      "oldStaticAssociatedCandidates": 134,
       "review": {
         "pageId": "P15",
         "actionApproval": "pending-user-review",
@@ -1401,7 +1401,7 @@
       "id": "P18",
       "path": "/opportunities/:opportunityId",
       "title": "机会详情",
-      "oldStaticAssociatedCandidates": 136,
+      "oldStaticAssociatedCandidates": 134,
       "review": {
         "pageId": "P18",
         "actionApproval": "pending-user-review",
@@ -7609,7 +7609,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 141,
+          "line": 146,
           "jsonPointer": null
         }
       ],
@@ -7644,7 +7644,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 142,
+          "line": 147,
           "jsonPointer": null
         }
       ],
@@ -7679,7 +7679,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 143,
+          "line": 148,
           "jsonPointer": null
         }
       ],
@@ -7732,7 +7732,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 144,
+          "line": 149,
           "jsonPointer": null
         }
       ],
@@ -7785,7 +7785,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 145,
+          "line": 150,
           "jsonPointer": null
         }
       ],
@@ -7838,7 +7838,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 146,
+          "line": 151,
           "jsonPointer": null
         }
       ],
@@ -8334,7 +8334,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 9,
+          "line": 11,
           "jsonPointer": null
         }
       ],
@@ -8367,7 +8367,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 10,
+          "line": 12,
           "jsonPointer": null
         }
       ],
@@ -8400,7 +8400,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 11,
+          "line": 13,
           "jsonPointer": null
         }
       ],
@@ -8441,7 +8441,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 12,
+          "line": 14,
           "jsonPointer": null
         }
       ],
@@ -29642,7 +29642,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 13,
+          "line": 15,
           "jsonPointer": null
         }
       ],
@@ -29675,7 +29675,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 14,
+          "line": 16,
           "jsonPointer": null
         }
       ],
@@ -29716,7 +29716,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 15,
+          "line": 17,
           "jsonPointer": null
         }
       ],
@@ -29757,7 +29757,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 16,
+          "line": 18,
           "jsonPointer": null
         }
       ],
@@ -29795,7 +29795,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 17,
+          "line": 19,
           "jsonPointer": null
         },
         {
@@ -29843,7 +29843,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 18,
+          "line": 20,
           "jsonPointer": null
         },
         {
@@ -29891,7 +29891,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 19,
+          "line": 21,
           "jsonPointer": null
         },
         {
@@ -29939,7 +29939,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 20,
+          "line": 22,
           "jsonPointer": null
         },
         {
@@ -29987,7 +29987,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 21,
+          "line": 23,
           "jsonPointer": null
         },
         {
@@ -30030,7 +30030,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 22,
+          "line": 24,
           "jsonPointer": null
         }
       ],
@@ -30058,7 +30058,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 23,
+          "line": 25,
           "jsonPointer": null
         }
       ],
@@ -30091,7 +30091,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 24,
+          "line": 26,
           "jsonPointer": null
         }
       ],
@@ -30124,7 +30124,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 25,
+          "line": 27,
           "jsonPointer": null
         }
       ],
@@ -30157,7 +30157,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 26,
+          "line": 28,
           "jsonPointer": null
         }
       ],
@@ -30190,7 +30190,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 27,
+          "line": 29,
           "jsonPointer": null
         }
       ],
@@ -30223,7 +30223,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 28,
+          "line": 30,
           "jsonPointer": null
         }
       ],
@@ -30256,7 +30256,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 29,
+          "line": 31,
           "jsonPointer": null
         }
       ],
@@ -30293,7 +30293,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 30,
+          "line": 32,
           "jsonPointer": null
         }
       ],
@@ -30330,7 +30330,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 31,
+          "line": 33,
           "jsonPointer": null
         }
       ],
@@ -30363,7 +30363,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 32,
+          "line": 34,
           "jsonPointer": null
         }
       ],
@@ -30404,7 +30404,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 33,
+          "line": 35,
           "jsonPointer": null
         }
       ],
@@ -30441,7 +30441,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 34,
+          "line": 36,
           "jsonPointer": null
         }
       ],
@@ -30478,7 +30478,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 35,
+          "line": 37,
           "jsonPointer": null
         }
       ],
@@ -30515,7 +30515,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 36,
+          "line": 38,
           "jsonPointer": null
         }
       ],
@@ -30548,7 +30548,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 37,
+          "line": 39,
           "jsonPointer": null
         }
       ],
@@ -30581,7 +30581,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 38,
+          "line": 40,
           "jsonPointer": null
         }
       ],
@@ -30614,7 +30614,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 39,
+          "line": 41,
           "jsonPointer": null
         }
       ],
@@ -30651,7 +30651,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 40,
+          "line": 42,
           "jsonPointer": null
         }
       ],
@@ -30688,7 +30688,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 41,
+          "line": 43,
           "jsonPointer": null
         }
       ],
@@ -30725,7 +30725,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 42,
+          "line": 44,
           "jsonPointer": null
         }
       ],
@@ -30758,7 +30758,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 43,
+          "line": 45,
           "jsonPointer": null
         }
       ],
@@ -30791,7 +30791,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 44,
+          "line": 46,
           "jsonPointer": null
         }
       ],
@@ -30828,7 +30828,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 45,
+          "line": 47,
           "jsonPointer": null
         }
       ],
@@ -30865,7 +30865,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 46,
+          "line": 48,
           "jsonPointer": null
         }
       ],
@@ -30898,7 +30898,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 47,
+          "line": 49,
           "jsonPointer": null
         }
       ],
@@ -30931,7 +30931,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 48,
+          "line": 50,
           "jsonPointer": null
         }
       ],
@@ -30968,7 +30968,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 49,
+          "line": 51,
           "jsonPointer": null
         }
       ],
@@ -31005,7 +31005,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 50,
+          "line": 52,
           "jsonPointer": null
         }
       ],
@@ -31042,7 +31042,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 51,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -31075,7 +31075,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 52,
+          "line": 54,
           "jsonPointer": null
         }
       ],
@@ -31108,7 +31108,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 53,
+          "line": 55,
           "jsonPointer": null
         }
       ],
@@ -31136,7 +31136,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 126,
+          "line": 131,
           "jsonPointer": null
         }
       ],
@@ -31164,7 +31164,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 54,
+          "line": 56,
           "jsonPointer": null
         }
       ],
@@ -31192,7 +31192,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 55,
+          "line": 57,
           "jsonPointer": null
         }
       ],
@@ -31220,7 +31220,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 56,
+          "line": 58,
           "jsonPointer": null
         }
       ],
@@ -31250,7 +31250,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 57,
+          "line": 59,
           "jsonPointer": null
         }
       ],
@@ -31284,7 +31284,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 58,
+          "line": 60,
           "jsonPointer": null
         }
       ],
@@ -31318,7 +31318,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 59,
+          "line": 61,
           "jsonPointer": null
         }
       ],
@@ -31352,7 +31352,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 60,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -31393,7 +31393,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 61,
+          "line": 63,
           "jsonPointer": null
         }
       ],
@@ -31430,7 +31430,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 62,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -31468,7 +31468,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 65,
+          "line": 67,
           "jsonPointer": null
         }
       ],
@@ -31501,7 +31501,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 63,
+          "line": 65,
           "jsonPointer": null
         }
       ],
@@ -31534,7 +31534,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 64,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -31677,7 +31677,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 66,
+          "line": 68,
           "jsonPointer": null
         },
         {
@@ -31716,7 +31716,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 67,
+          "line": 69,
           "jsonPointer": null
         },
         {
@@ -31760,7 +31760,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 68,
+          "line": 70,
           "jsonPointer": null
         },
         {
@@ -31804,7 +31804,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 69,
+          "line": 71,
           "jsonPointer": null
         },
         {
@@ -31848,7 +31848,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 70,
+          "line": 72,
           "jsonPointer": null
         },
         {
@@ -31895,7 +31895,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 71,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -31937,7 +31937,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 72,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -31983,7 +31983,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 73,
+          "line": 75,
           "jsonPointer": null
         }
       ],
@@ -32029,7 +32029,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 74,
+          "line": 76,
           "jsonPointer": null
         }
       ],
@@ -32067,7 +32067,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 75,
+          "line": 77,
           "jsonPointer": null
         }
       ],
@@ -32102,7 +32102,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 76,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -32144,7 +32144,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 77,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -32186,7 +32186,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 78,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -32228,7 +32228,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 79,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -32274,7 +32274,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 80,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -32324,7 +32324,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 81,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -32374,7 +32374,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 82,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -32420,7 +32420,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 83,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -32466,7 +32466,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 84,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -32508,7 +32508,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 85,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -32554,7 +32554,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 86,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -32600,7 +32600,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 87,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -32646,7 +32646,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 88,
+          "line": 90,
           "jsonPointer": null
         }
       ],
@@ -32692,7 +32692,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 89,
+          "line": 91,
           "jsonPointer": null
         }
       ],
@@ -32738,7 +32738,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 90,
+          "line": 92,
           "jsonPointer": null
         }
       ],
@@ -32773,7 +32773,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 91,
+          "line": 99,
           "jsonPointer": null
         }
       ],
@@ -32808,7 +32808,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 127,
+          "line": 132,
           "jsonPointer": null
         }
       ],
@@ -32846,7 +32846,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 128,
+          "line": 133,
           "jsonPointer": null
         }
       ],
@@ -32884,12 +32884,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 92,
+          "line": 100,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 93,
+          "line": 101,
           "jsonPointer": null
         }
       ],
@@ -32924,12 +32924,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 95,
+          "line": 103,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 97,
+          "line": 105,
           "jsonPointer": null
         }
       ],
@@ -32967,7 +32967,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 94,
+          "line": 102,
           "jsonPointer": null
         }
       ],
@@ -33005,7 +33005,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 96,
+          "line": 104,
           "jsonPointer": null
         }
       ],
@@ -33035,7 +33035,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 149,
+          "line": 154,
           "jsonPointer": null
         }
       ],
@@ -33065,7 +33065,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 150,
+          "line": 155,
           "jsonPointer": null
         }
       ],
@@ -33095,7 +33095,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 147,
+          "line": 152,
           "jsonPointer": null
         }
       ],
@@ -33125,7 +33125,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 148,
+          "line": 153,
           "jsonPointer": null
         }
       ],
@@ -33143,9 +33143,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#196c12d0f18ac5ee.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 65,
+      "line": 90,
       "kind": "dialog-definition",
       "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
       "conditions": [
@@ -33154,16 +33154,13 @@
           "expression": "erpImportOpen"
         }
       ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 131,
+          "line": 136,
           "jsonPointer": null
         }
       ],
@@ -33181,9 +33178,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f9352d9bba967662.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#56857391914c319d.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 65,
+      "line": 90,
       "kind": "event-binding",
       "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
       "conditions": [
@@ -33192,16 +33189,18 @@
           "expression": "erpImportOpen"
         }
       ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 99,
+          "line": 93,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 96,
           "jsonPointer": null
         }
       ],
@@ -33221,199 +33220,9 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 72,
+      "line": 98,
       "kind": "form-event",
       "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 100,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-BROWSER",
-          "kind": "write"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 78,
-      "kind": "control",
-      "label": "关闭 ERP 导入",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 103,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-CLOSE",
-          "kind": "local"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 103,
-      "kind": "event-binding",
-      "label": "",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 104,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-FILE",
-          "kind": "write"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 110,
-      "kind": "control",
-      "label": "下载浏览器助手",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 105,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-HELPER-DOWNLOAD",
-          "kind": "navigation"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 111,
-      "kind": "control",
-      "label": "取消",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 106,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-CLOSE",
-          "kind": "local"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 114,
-      "kind": "control",
-      "label": "{{ busy ? \"读取并导入中…\" : \"从当前浏览器读取\" }}",
       "conditions": [
         {
           "directive": "v-if",
@@ -33447,9 +33256,199 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c36983c07beb5b75.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 121,
+      "line": 104,
+      "kind": "control",
+      "label": "关闭 ERP 导入",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "erpImportOpen"
+        }
+      ],
+      "staticRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 110,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 129,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "erpImportOpen"
+        }
+      ],
+      "staticRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 111,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-FILE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 136,
+      "kind": "control",
+      "label": "下载浏览器助手",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "erpImportOpen"
+        }
+      ],
+      "staticRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 112,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-HELPER-DOWNLOAD",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 137,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "erpImportOpen"
+        }
+      ],
+      "staticRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 113,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 140,
+      "kind": "control",
+      "label": "{{ busy ? \"读取并导入中…\" : \"从当前浏览器读取\" }}",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "erpImportOpen"
+        }
+      ],
+      "staticRouteIds": [
+        "P15",
+        "P18"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 114,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-BROWSER",
+          "kind": "write"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#304e73ffea549836.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 147,
       "kind": "dialog-definition",
       "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
@@ -33464,7 +33463,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 132,
+          "line": 137,
           "jsonPointer": null
         }
       ],
@@ -33482,9 +33481,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#cb6531d91ea2d929.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#67aec29022637161.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 121,
+      "line": 147,
       "kind": "event-binding",
       "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
@@ -33499,7 +33498,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 108,
+          "line": 94,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 97,
           "jsonPointer": null
         }
       ],
@@ -33519,7 +33523,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#92c0e7988ecb5b9b.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 128,
+      "line": 155,
       "kind": "form-event",
       "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
@@ -33534,7 +33538,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 109,
+          "line": 115,
           "jsonPointer": null
         }
       ],
@@ -33554,7 +33558,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 134,
+      "line": 161,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -33572,7 +33576,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 110,
+          "line": 116,
           "jsonPointer": null
         }
       ],
@@ -33592,7 +33596,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#2f7a15b104750d49.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 150,
+      "line": 177,
       "kind": "control",
       "label": "查看已创建机会",
       "conditions": [
@@ -33611,7 +33615,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 118,
+          "line": 123,
           "jsonPointer": null
         }
       ],
@@ -33631,7 +33635,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 157,
+      "line": 184,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -33649,7 +33653,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 111,
+          "line": 117,
           "jsonPointer": null
         }
       ],
@@ -33669,7 +33673,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#439b2aeecca24b47.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 158,
+      "line": 185,
       "kind": "control",
       "label": "{{ busy ? \"创建中…\" : createFeedbackMatchesForm ? \"内容已创建，请修改后再提交\" : \"创建机会\" }}",
       "conditions": [
@@ -33684,7 +33688,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 112,
+          "line": 118,
           "jsonPointer": null
         }
       ],
@@ -33702,9 +33706,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#21d6397072095d87.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#9b17e07a48f24205.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 171,
+      "line": 198,
       "kind": "dialog-definition",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 {{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -33719,12 +33723,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 101,
+          "line": 108,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 133,
+          "line": 138,
           "jsonPointer": null
         }
       ],
@@ -33742,9 +33746,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#e6463826c649de97.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674ff3412f0b8645.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 171,
+      "line": 198,
       "kind": "event-binding",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 {{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -33759,12 +33763,17 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 102,
+          "line": 95,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 113,
+          "line": 98,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 109,
           "jsonPointer": null
         }
       ],
@@ -33784,7 +33793,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#10c891f118c2001b.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 178,
+      "line": 206,
       "kind": "form-event",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 {{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -33802,7 +33811,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 114,
+          "line": 119,
           "jsonPointer": null
         }
       ],
@@ -33822,7 +33831,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 186,
+      "line": 214,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -33840,7 +33849,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 115,
+          "line": 120,
           "jsonPointer": null
         }
       ],
@@ -33860,7 +33869,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 200,
+      "line": 228,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -33878,7 +33887,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 116,
+          "line": 121,
           "jsonPointer": null
         }
       ],
@@ -33898,7 +33907,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ced3effe8f7058f1.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 203,
+      "line": 231,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -33916,7 +33925,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 117,
+          "line": 122,
           "jsonPointer": null
         }
       ],
@@ -70548,6 +70557,12 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f9352d9bba967662.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 44,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#364dc8e63849b27f.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 100,
@@ -72015,6 +72030,12 @@
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#36cdbd1cb98185c2.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
       "line": 495,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 44,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

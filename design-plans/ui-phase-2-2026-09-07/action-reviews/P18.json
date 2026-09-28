@@ -14,7 +14,7 @@
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
     "apps/web/src/components/OpportunityWorkspace.vue": "5640835d3e13800c13f906424027d846c8ba3b8c94db3ad2b41dbcf80a2ce229",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "fc8184fa5c8962d79e58c988f80d76ff414491079f6223e27f8852b63a85790f",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
   "dialogs": {
@@ -1867,7 +1867,7 @@
       ],
       "remaining": "弹窗名称已绑定独立标题；完整键盘/读屏、忙碌期间关闭与服务端写入归属仍需独立验证。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#e6463826c649de97.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674ff3412f0b8645.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1"
       ],
@@ -1983,16 +1983,16 @@
         "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
         "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
         "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f9352d9bba967662.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#196c12d0f18ac5ee.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#56857391914c319d.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c36983c07beb5b75.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#cb6531d91ea2d929.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#304e73ffea549836.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#67aec29022637161.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#92c0e7988ecb5b9b.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1",
@@ -2615,7 +2615,7 @@
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#21d6397072095d87.1"
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#9b17e07a48f24205.1"
       ],
       "sourceContractKeys": ["人工决策原生dialog；三变体"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
@@ -2662,7 +2662,7 @@
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
       "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
       "apps/web/src/components/OpportunityWorkspace.vue": "5640835d3e13800c13f906424027d846c8ba3b8c94db3ad2b41dbcf80a2ce229",
-      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "fc8184fa5c8962d79e58c988f80d76ff414491079f6223e27f8852b63a85790f",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
