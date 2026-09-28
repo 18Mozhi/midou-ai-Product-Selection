@@ -702,3 +702,136 @@ test("P18 cost observed_at defaults to local time and serializes the same instan
     await context.close();
   }
 });
+
+test("a late reviewer-directory failure cannot replace the current opportunity reviewers", async ({
+  page,
+}) => {
+  const nextOpportunityId = "00000000-0000-4000-8000-000000000454";
+  await navigation(page);
+  const detailFor = (id: string, name: string) => ({
+    id,
+    name,
+    market: "US",
+    category: "outdoor",
+    source_type: "manual",
+    source_ref_id: null,
+    owner_id: null,
+    lifecycle_status: "ready",
+    lifecycle_entered_at: "2026-08-08T00:00:00.000Z",
+    lifecycle_dwell_seconds: 120,
+    recommendation_status: "observe",
+    overall_score: 72,
+    trend_score: 80,
+    competition_score: 65,
+    profit_status: "calculated",
+    risk_level: "unknown",
+    confidence: { status: "measured", score: 80 },
+    evidence_count: 0,
+    source_count: 0,
+    coverage_status: "partial",
+    blocking_reasons: [],
+    decision_status: "pending",
+    version: 1,
+    updated_at: "2026-08-08T00:00:00.000Z",
+    selection_stage: "rule_candidate",
+    quality_gates: {
+      score: false,
+      market: false,
+      competition: false,
+      cost: false,
+      risk: false,
+      all_passed: false,
+    },
+    score_rule_version: null,
+    scored_at: null,
+    latest_score_run: null,
+    score_components: [],
+    lineage: {
+      freshness: { observed_at: "2026-08-08T00:00:00.000Z", age_seconds: 120 },
+      failure_impact: { level: "healthy", codes: [], affected_stages: [] },
+      request_ids: [],
+      trace_ids: [],
+      nodes: [],
+    },
+    operating_feedback: { facts: [], calibration: null },
+    adoption_blockers: [],
+    redecision_ready: false,
+    evidence: [],
+    decisions: [],
+    section_status: {
+      market: "covered",
+      competition: "covered",
+      profit: "calculated",
+      risk: "insufficient_data",
+      execution: "not_available",
+    },
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
+    route.fulfill({ json: envelope(detailFor(opportunityId, "旧机会成本复核")) }),
+  );
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) =>
+    route.fulfill({ json: envelope(detailFor(nextOpportunityId, "当前机会成本复核")) }),
+  );
+  for (const id of [opportunityId, nextOpportunityId]) {
+    await page.route(`**/api/v1/opportunities/${id}/profit-analysis`, (route) =>
+      route.fulfill({
+        json: envelope({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
+      }),
+    );
+    await page.route(`**/api/v1/opportunities/${id}/ai-analyses`, (route) =>
+      route.fulfill({ json: envelope([]) }),
+    );
+  }
+  await page.route("**/api/v1/sourcing/searches", (route) => route.fulfill({ json: envelope([]) }));
+  let reviewerReadCount = 0;
+  let releaseOldReviewers!: () => void;
+  let markOldReviewerReadStarted!: () => void;
+  let markOldReviewerReadResolved!: () => void;
+  const oldReviewersGate = new Promise<void>((resolve) => (releaseOldReviewers = resolve));
+  const oldReviewerReadStarted = new Promise<void>(
+    (resolve) => (markOldReviewerReadStarted = resolve),
+  );
+  const oldReviewerReadResolved = new Promise<void>(
+    (resolve) => (markOldReviewerReadResolved = resolve),
+  );
+  await page.route("**/api/v1/cost-input-reviewers", async (route) => {
+    reviewerReadCount += 1;
+    if (reviewerReadCount === 1) {
+      markOldReviewerReadStarted();
+      await oldReviewersGate;
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "reviewer_directory_unavailable",
+            message: "旧机会复核人读取失败",
+            action_hint: "旧机会复核人读取失败。",
+          },
+        },
+      });
+      markOldReviewerReadResolved();
+      return;
+    }
+    await route.fulfill({ json: envelope([{ id: "current-reviewer", label: "当前机会复核人" }]) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await oldReviewerReadStarted;
+  const currentDetailRequest = page.waitForRequest((request) =>
+    request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
+  );
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/opportunities/${id}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, nextOpportunityId);
+  await currentDetailRequest;
+  await expect(page.getByRole("heading", { name: "当前机会成本复核", exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "利润与成本" }).click();
+  await expect(page.getByLabel("指定复核人")).toContainText("当前机会复核人");
+
+  releaseOldReviewers();
+  await oldReviewerReadResolved;
+  await expect(page.getByLabel("指定复核人")).toContainText("当前机会复核人");
+  await expect(page.getByText("旧机会复核人读取失败", { exact: true })).toHaveCount(0);
+  expect(reviewerReadCount).toBe(2);
+});
