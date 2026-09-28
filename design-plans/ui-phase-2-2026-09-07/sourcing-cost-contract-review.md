@@ -9,7 +9,7 @@ route-catalog → NavigationShell → surfaceProps：P21 SourcingWorkspace，P22
 | 源码简称 | 文件（apps/web/src/components/下） | 本批LF SHA256                                                    |
 | -------- | ---------------------------------- | ---------------------------------------------------------------- |
 | SW       | SourcingWorkspace.vue              | 2f7e0f7183d6e909fd884845136a24084d03285c02f685f8aca97d64e3c5b9db |
-| SD       | SourcingWorkspaceDialogs.vue       | e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8 |
+| SD       | SourcingWorkspaceDialogs.vue       | 291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0 |
 | SP       | SourcingComparisonPanel.vue        | 5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd |
 | SC       | SourcingCostConfirmationPanel.vue  | bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4 |
 | CR       | CostRuleConsole.vue                | 1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3 |
@@ -45,23 +45,23 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | SW  | 654 | c63aa5ea813e730c.1 | SD九个事件转发、删除原因更新                |
 | SW  | 642 | e60a87b8bebccb4b.1 | SC-G02 独立读取对比历史失败及重试事件转发   |
 | SP  | 61  | 49464ad9054e6202.1 | SC-G02 重试对比历史 GET 按钮                |
-| SD  | 92  | 0a19bece849d5a46.1 | SC-S-CLOSE Escape                           |
-| SD  | 101 | d3c4c7748af92501.1 | SC-S-SUBMIT 表单                            |
+| SD  | 128 | e761df41504fce67.1 | SC-S-CLOSE Escape                           |
+| SD  | 135 | 2cd14710e221241b.1 | SC-S-SUBMIT 表单                            |
 | SD  | 104 | e3badf15ec2af147.1 | SC-S-CLOSE X                                |
 | SD  | 134 | 62730beed005a395.1 | SC-S-CLOSE 取消                             |
 | SD  | 135 | 7a0fba6035dcdf87.1 | SC-S-SUBMIT 按钮                            |
-| SD  | 139 | 97f60206694e3a7d.1 | SC-QUOTE-CLOSE Escape                       |
-| SD  | 148 | eaa2e41b5101f1f5.1 | SC-QUOTE-SUBMIT 表单                        |
+| SD  | 187 | 0a2fd5d5c73aa500.1 | SC-QUOTE-CLOSE Escape                       |
+| SD  | 194 | 00dca39bee5ea478.1 | SC-QUOTE-SUBMIT 表单                        |
 | SD  | 151 | bbe2d6bcbbb332dc.1 | SC-QUOTE-CLOSE X                            |
 | SD  | 206 | 830881852f5cf052.1 | SC-QUOTE-CLOSE 取消                         |
 | SD  | 207 | 6d422d5b42df032c.1 | SC-QUOTE-SUBMIT 按钮                        |
-| SD  | 211 | a203a4a623d55db8.1 | SC-PURCHASE-CLOSE Escape                    |
-| SD  | 220 | 986c3be67ec5d768.1 | SC-PURCHASE-SUBMIT 表单                     |
+| SD  | 271 | 33659286562fda16.1 | SC-PURCHASE-CLOSE Escape                    |
+| SD  | 278 | d990de8d6f06fa26.1 | SC-PURCHASE-SUBMIT 表单                     |
 | SD  | 226 | 9ce7604ffb1d3c16.1 | SC-PURCHASE-CLOSE X                         |
 | SD  | 266 | 23fa0ead54c8b92d.1 | SC-PURCHASE-CLOSE 取消                      |
 | SD  | 267 | bead229bf1acdb7a.1 | SC-PURCHASE-SUBMIT 按钮                     |
-| SD  | 280 | 18d830ea30c66eed.1 | SC-DELETE-CLOSE Escape                      |
-| SD  | 289 | c5ce1f450e932172.1 | SC-DELETE-SUBMIT 表单                       |
+| SD  | 352 | 6f31ea2421d022b2.1 | SC-DELETE-CLOSE Escape                      |
+| SD  | 359 | 8a8ef03aa897476d.1 | SC-DELETE-SUBMIT 表单                       |
 | SD  | 292 | c748a332b4a8b069.1 | SC-DELETE-CLOSE X                           |
 | SD  | 311 | 0a71f3799436c08c.1 | SC-DELETE-CLOSE 取消                        |
 | SD  | 312 | 9d23c498e72940a2.1 | SC-DELETE-SUBMIT 按钮                       |
@@ -113,16 +113,16 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | 源  | 行  | dialog候选后缀     | 变体                                                 |
 | --- | --- | ------------------ | ---------------------------------------------------- |
 | SW  | 654 | fca0d2d5d8880776.1 | 四窗共享调用，不另外计为第五个业务窗                 |
-| SD  | 92  | 73d110263ae493f0.1 | 搜索四类输入，字段标签随类型变                       |
-| SD  | 139 | aa8a9b645036fe7e.1 | 报价证据确认                                         |
-| SD  | 211 | f21fd23c2e4b9d60.1 | 采购MOQ/原因                                         |
-| SD  | 280 | d0e8a832293a76e5.1 | 记录原因软删                                         |
+| SD  | 128 | d6b978b68b9e050e.1 | 搜索四类输入，字段标签随类型变                       |
+| SD  | 187 | d730100a2a0668bc.1 | 报价证据确认                                         |
+| SD  | 271 | 3bc48926013530b0.1 | 采购MOQ/原因                                         |
+| SD  | 352 | 7532644429232b14.1 | 记录原因软删                                         |
 | CR  | 742 | 0cffdbc28160492d.1 | 新建草稿、人工/自动成本可选字段                      |
 | CR  | 871 | 69fe3471229b26ea.1 | 操作确认弹窗定义；各操作变体另由独立状态与角色行映射 |
 
 44处v-model：SW query(423)；SD searchForm.input_type/input_ref(114/123)，quote.specification/moq/lead_time_days/location/confidence_value/stability_status/risk_level/observed_at/evidence_id(160/162/164/166/169/176/183/190/194)，purchaseForm.quantity/reason(250/258)，deleteReasonModel(304)；CR search/statusFilter(577/580)，form.market/platform/version_code/name/effective_from(747/748/752/756/757)，platform_fee/payment_fee/tax/fulfillment/currency/logistics(762/771/780/789/797/805)，automatic_product_family/conversion_rate/conversion_effective_on/conversion_source_url(816/823/832/838)，rollbackTargetId/actionReason(881/890)；PP costForm.platform/input_type/amount_value/currency/source_type/source_ref_id/evidence_id/observed_at/reviewer_id(128/130/138/144/145/146/147/148/150)；RQ review.reason(82)。字段分支不是新增持久化字段；只读文本与progress不算按钮。
 
-SD以watch→nextTick→requestAnimationFrame聚焦首个控件，Escape只在各自div内处理；没有原生modal背景隔离或完整焦点圈/归还。CR复用useModalDialog，native showModal和cancel preventDefault，busy时拒绝关闭；不能据此推断所有复杂变体已通过辅助技术验证。
+SD四个原生dialog均通过useModalDialog调用showModal，首次打开聚焦首个控件，Tab/Shift+Tab保持在弹窗内，Escape与显式关闭沿父级既有处理并将焦点返还页面标题；关闭不取消已发送写入。P21双端E2E覆盖四窗键盘边界、关闭返焦及busy防重复请求；这不等同于完整读屏或生产权限验收。CR同样复用useModalDialog；复杂变体仍需辅助技术验收。
 
 ## 4. 请求与持久化事实
 

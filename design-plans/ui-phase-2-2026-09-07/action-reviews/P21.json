@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/SourcingWorkspace.vue": "2f7e0f7183d6e909fd884845136a24084d03285c02f685f8aca97d64e3c5b9db",
-    "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+    "apps/web/src/components/SourcingWorkspaceDialogs.vue": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0",
     "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
     "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
@@ -14,31 +14,31 @@
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
-    "reason": "SW仅调用一套SD四个div role=dialog；四个form不重算弹窗，成本与复核为内联。不是原生模态实现或已验辅助技术。",
+    "reason": "SW仅调用一套SD四个原生dialog；四个form不重算弹窗，成本与复核为内联。useModalDialog管理键盘焦点与关闭，不代表完整读屏或生产验收。",
     "definitions": [
       {
         "dialogId": "SC-S",
-        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1",
+        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#d6b978b68b9e050e.1",
         "applicability": "parent-canManage-and-corresponding-flag",
-        "remaining": "局部Escape/初焦点来自源；完整焦点圈/归还/在途关闭/目标归属未验"
+        "remaining": "关闭不取消已发送写入；完整读屏与真实服务/权限验收仍待"
       },
       {
         "dialogId": "SC-QUOTE",
-        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1",
+        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#d730100a2a0668bc.1",
         "applicability": "parent-canManage-and-corresponding-flag",
-        "remaining": "局部Escape/初焦点来自源；完整焦点圈/归还/在途关闭/目标归属未验"
+        "remaining": "关闭不取消已发送写入；完整读屏与真实服务/权限验收仍待"
       },
       {
         "dialogId": "SC-PURCHASE",
-        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1",
+        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#3bc48926013530b0.1",
         "applicability": "parent-canManage-and-corresponding-flag",
-        "remaining": "局部Escape/初焦点来自源；完整焦点圈/归还/在途关闭/目标归属未验"
+        "remaining": "关闭不取消已发送写入；完整读屏与真实服务/权限验收仍待"
       },
       {
         "dialogId": "SC-DELETE",
-        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1",
+        "sourceCandidateId": "apps/web/src/components/SourcingWorkspaceDialogs.vue#7532644429232b14.1",
         "applicability": "parent-canManage-and-corresponding-flag",
-        "remaining": "局部Escape/初焦点来自源；完整焦点圈/归还/在途关闭/目标归属未验"
+        "remaining": "关闭不取消已发送写入；完整读屏与真实服务/权限验收仍待"
       }
     ]
   },
@@ -2549,14 +2549,14 @@
       "kind": "wiring",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1"
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#d6b978b68b9e050e.1"
       ],
       "sourceContractKeys": [
         "搜索四类输入，字段标签随类型变"
       ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:showSearch",
-      "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
+      "handler": "原生dialog由useModalDialog管理showModal、焦点圈、Escape与返焦；父SW canManage才挂载；定义关联至现有关闭/提交，不新增写入",
       "variants": [
         "搜索四类输入，字段标签随类型变"
       ],
@@ -2614,7 +2614,7 @@
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#0a19bece849d5a46.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#e761df41504fce67.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#e3badf15ec2af147.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#62730beed005a395.1"
       ],
@@ -2625,7 +2625,7 @@
       ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:showSearch；v-if:showSearch；v-if:showSearch",
-      "handler": "closeSearch隐藏并清create；草稿保留；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
+      "handler": "closeSearch隐藏并清create；草稿保留；useModalDialog维持弹窗焦点并在关闭后返焦，不取消已发送请求",
       "variants": [
         "SC-S-CLOSE Escape",
         "SC-S-CLOSE X",
@@ -2782,7 +2782,7 @@
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#d3c4c7748af92501.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#2cd14710e221241b.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#7a0fba6035dcdf87.1"
       ],
       "sourceContractKeys": [
@@ -2907,14 +2907,14 @@
       "kind": "wiring",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1"
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#d730100a2a0668bc.1"
       ],
       "sourceContractKeys": [
         "报价证据确认"
       ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:quoteCandidate",
-      "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
+      "handler": "原生dialog由useModalDialog管理showModal、焦点圈、Escape与返焦；父SW canManage才挂载；定义关联至现有关闭/提交，不新增写入",
       "variants": [
         "报价证据确认"
       ],
@@ -2964,7 +2964,7 @@
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#97f60206694e3a7d.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#0a2fd5d5c73aa500.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#bbe2d6bcbbb332dc.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#830881852f5cf052.1"
       ],
@@ -2975,7 +2975,7 @@
       ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:quoteCandidate；v-if:quoteCandidate；v-if:quoteCandidate",
-      "handler": "quoteCandidate=null；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
+      "handler": "quoteCandidate=null；useModalDialog维持弹窗焦点并在关闭后返焦，不取消已发送请求",
       "variants": [
         "SC-QUOTE-CLOSE Escape",
         "SC-QUOTE-CLOSE X",
@@ -3124,7 +3124,7 @@
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#eaa2e41b5101f1f5.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#00dca39bee5ea478.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#6d422d5b42df032c.1"
       ],
       "sourceContractKeys": [
@@ -3241,14 +3241,14 @@
       "kind": "wiring",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1"
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#3bc48926013530b0.1"
       ],
       "sourceContractKeys": [
         "采购MOQ/原因"
       ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:purchaseCandidate",
-      "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
+      "handler": "原生dialog由useModalDialog管理showModal、焦点圈、Escape与返焦；父SW canManage才挂载；定义关联至现有关闭/提交，不新增写入",
       "variants": [
         "采购MOQ/原因"
       ],
@@ -3294,7 +3294,7 @@
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#a203a4a623d55db8.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#33659286562fda16.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#9ce7604ffb1d3c16.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#23fa0ead54c8b92d.1"
       ],
@@ -3305,7 +3305,7 @@
       ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:purchaseCandidate；v-if:purchaseCandidate；v-if:purchaseCandidate",
-      "handler": "purchaseCandidate=null；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
+      "handler": "purchaseCandidate=null；useModalDialog维持弹窗焦点并在关闭后返焦，不取消已发送请求",
       "variants": [
         "SC-PURCHASE-CLOSE Escape",
         "SC-PURCHASE-CLOSE X",
@@ -3450,7 +3450,7 @@
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#986c3be67ec5d768.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#d990de8d6f06fa26.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#bead229bf1acdb7a.1"
       ],
       "sourceContractKeys": [
@@ -3563,14 +3563,14 @@
       "kind": "wiring",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1"
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#7532644429232b14.1"
       ],
       "sourceContractKeys": [
         "记录原因软删"
       ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:deleting",
-      "handler": "自定义div role=dialog；父SW canManage才挂载；定义关联至现有关闭/提交，不是额外写入",
+      "handler": "原生dialog由useModalDialog管理showModal、焦点圈、Escape与返焦；父SW canManage才挂载；定义关联至现有关闭/提交，不新增写入",
       "variants": [
         "记录原因软删"
       ],
@@ -3616,7 +3616,7 @@
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#18d830ea30c66eed.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#6f31ea2421d022b2.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#c748a332b4a8b069.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#0a71f3799436c08c.1"
       ],
@@ -3627,7 +3627,7 @@
       ],
       "contractAliasReason": "按当前已人工核对的来源分组，精确绑定原合同最后一列；不从标签推测动作，不改变原请求或权限。",
       "condition": "v-if:deleting；v-if:deleting；v-if:deleting",
-      "handler": "deleting=null，原因未清空；源忙碌仍可关，焦点仅局部Escape，不证明取消服务端请求",
+      "handler": "deleting=null，原因未清空；useModalDialog维持弹窗焦点并在关闭后返焦，不取消已发送请求",
       "variants": [
         "SC-DELETE-CLOSE Escape",
         "SC-DELETE-CLOSE X",
@@ -3772,7 +3772,7 @@
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#c5ce1f450e932172.1",
+        "apps/web/src/components/SourcingWorkspaceDialogs.vue#8a8ef03aa897476d.1",
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#9d23c498e72940a2.1"
       ],
       "sourceContractKeys": [
@@ -4872,7 +4872,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/SourcingWorkspace.vue": "2f7e0f7183d6e909fd884845136a24084d03285c02f685f8aca97d64e3c5b9db",
-      "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+      "apps/web/src/components/SourcingWorkspaceDialogs.vue": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0",
       "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
       "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
       "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
