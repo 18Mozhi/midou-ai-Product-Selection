@@ -9,7 +9,7 @@
     "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
     "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
-    "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
   },
   "dialogs": {
@@ -4180,13 +4180,44 @@
       ]
     },
     {
+      "actionId": "SC-P18-REVIEWER-RETRY-P21-EXCLUDED",
+      "label": "P18 专属复核人重试控件（P21未装配）",
+      "kind": "excluded",
+      "routeApplicability": "P21；SourcingCostConfirmationPanel未传 reviewerLoadState，子组件默认unknown，因此错误专属入口不可达",
+      "condition": "P21父调用不提供P18详情页复核人错误状态或重试事件",
+      "handler": "不作为P21动作；当前只有P18 OpportunityWorkspace接入此GET重试链",
+      "variants": ["not-applicable-in-P21"],
+      "scenes": [],
+      "remaining": "排除只依据P21当前调用props/事件；若未来复用错误态需重新纳入P21交互审查。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityProfitPanel.vue#1dfebd67b12367cb.1"
+      ],
+      "sourceContractKeys": ["SC-P18-REVIEWER-RETRY-P21-EXCLUDED"],
+      "contractAliasReason": "按P21共享组件调用边界将仅由P18传入错误态的按钮从P21运行动作中排除，不代表全局禁用。",
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-sourcing-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue",
+          "claim": "既有P21成本界面合同；此排除来自当前P21父调用未传入P18专用错误状态/重试事件的源码事实，不宣称P21实际Vue拒绝该动作。"
+        }
+      ]
+    },
+    {
       "actionId": "SC-COST-SUBMIT",
       "label": "提交双人成本复核",
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityProfitPanel.vue#fcdcabfef1ea3474.1",
-        "apps/web/src/components/OpportunityProfitPanel.vue#b2258379fb999070.1"
+        "apps/web/src/components/OpportunityProfitPanel.vue#21c282e197f8be16.1",
+        "apps/web/src/components/OpportunityProfitPanel.vue#4f926cf8b6f57c2a.1"
       ],
       "sourceContractKeys": [
         "SC-COST-SUBMIT 表单",
@@ -4844,7 +4875,7 @@
       "apps/web/src/components/SourcingWorkspaceDialogs.vue": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
       "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
       "apps/web/src/components/SourcingCostConfirmationPanel.vue": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
-      "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+      "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
       "apps/web/src/components/OpportunityCostReviewQueue.vue": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339"
     },
     "inputs": [

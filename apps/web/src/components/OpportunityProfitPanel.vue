@@ -21,14 +21,23 @@ withDefaults(
       reviewer_id: string;
     };
     reviewerOptions: Array<{ id: string; label: string }>;
+    reviewerLoadState?: "unknown" | "loading" | "ready" | "error";
+    reviewerErrorMessage?: string;
+    reviewerRequestId?: string;
     busy: boolean;
     canConfirmCost?: boolean;
   }>(),
-  { canConfirmCost: true },
+  {
+    canConfirmCost: true,
+    reviewerLoadState: "unknown",
+    reviewerErrorMessage: "",
+    reviewerRequestId: "",
+  },
 );
 
 defineEmits<{
   confirmCost: [];
+  retryReviewers: [];
   queueProfit: [];
   reviewCost: [
     payload: {
@@ -147,15 +156,67 @@ const inputLabel = (value: string) =>
       <label>证据 ID<input v-model="costForm.evidence_id" required maxlength="36" /></label>
       <label>观测时间<input v-model="costForm.observed_at" required type="datetime-local" /></label>
       <label
-        >指定复核人<select v-model="costForm.reviewer_id" required>
-          <option value="" disabled>请选择另一名成本确认人</option>
+        >指定复核人<select
+          v-model="costForm.reviewer_id"
+          required
+          :disabled="
+            reviewerLoadState === 'loading' ||
+            reviewerLoadState === 'error' ||
+            !reviewerOptions.length
+          "
+        >
+          <option value="" disabled>
+            {{
+              reviewerLoadState === "loading"
+                ? "正在读取成本复核人…"
+                : reviewerLoadState === "error"
+                  ? "复核人列表暂不可用"
+                  : reviewerOptions.length
+                    ? "请选择另一名成本确认人"
+                    : "当前没有可选复核人"
+            }}
+          </option>
           <option v-for="item in reviewerOptions" :key="item.id" :value="item.id">
             {{ item.label }}
           </option>
         </select></label
       >
+      <div
+        v-if="
+          reviewerLoadState === 'loading' ||
+          reviewerLoadState === 'error' ||
+          (reviewerLoadState === 'ready' && !reviewerOptions.length)
+        "
+        class="profit-reviewer-status"
+        :data-state="reviewerLoadState"
+      >
+        <p v-if="reviewerLoadState === 'loading'" role="status">正在读取可选成本复核人…</p>
+        <p v-else-if="reviewerLoadState === 'error'" role="alert">
+          {{ reviewerErrorMessage || "暂时无法读取成本复核人名单。" }}
+          <span v-if="reviewerRequestId">追踪编号：{{ reviewerRequestId }}</span>
+        </p>
+        <p v-else role="status">当前没有可选成本复核人；这与名单读取失败不同。</p>
+        <button
+          v-if="reviewerLoadState === 'error'"
+          type="button"
+          :disabled="busy"
+          @click="$emit('retryReviewers')"
+        >
+          重新加载复核人
+        </button>
+      </div>
       <footer>
-        <button type="submit" :disabled="busy || !costForm.reviewer_id">提交双人复核</button
+        <button
+          type="submit"
+          :disabled="
+            busy ||
+            reviewerLoadState === 'loading' ||
+            reviewerLoadState === 'error' ||
+            (reviewerLoadState === 'ready' && !reviewerOptions.length) ||
+            !costForm.reviewer_id
+          "
+        >
+          提交双人复核</button
         ><button type="button" :disabled="busy" @click="$emit('queueProfit')">重新计算</button>
       </footer>
     </form>

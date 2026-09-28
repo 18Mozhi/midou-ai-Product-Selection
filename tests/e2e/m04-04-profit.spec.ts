@@ -435,6 +435,8 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   await navigation(page);
   const reviewerId = "00000000-0000-4000-8000-000000000448";
   const reviewId = "00000000-0000-4000-8000-000000000449";
+  const reviewerReadMethods: string[] = [];
+  let reviewerReadAttempts = 0;
   let reviewStatus: "pending" | "approved" = "pending",
     reviewBody: any = null;
   const detail = {
@@ -505,9 +507,24 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
     route.fulfill({ json: envelope(detail) }),
   );
-  await page.route("**/api/v1/cost-input-reviewers", (route) =>
-    route.fulfill({ json: envelope([{ id: reviewerId, label: "成本复核人" }]) }),
-  );
+  await page.route("**/api/v1/cost-input-reviewers", (route) => {
+    reviewerReadAttempts += 1;
+    reviewerReadMethods.push(route.request().method());
+    if (reviewerReadAttempts <= 3)
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "reviewer_directory_unavailable",
+            message: "复核人名单暂不可用",
+            action_hint: "暂时无法读取成本复核人名单，请稍后重试。",
+          },
+          request_id: "m04-04-reviewer-read-failure",
+          trace_id: "m04-04-reviewer-read-failure-trace",
+        },
+      });
+    return route.fulfill({ json: envelope([{ id: reviewerId, label: "成本复核人" }]) });
+  });
   await page.route(
     `**/api/v1/opportunities/${opportunityId}/cost-input-reviews/${reviewId}/actions`,
     async (route) => {
@@ -562,6 +579,17 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   );
   await page.goto(`/opportunities/${opportunityId}`);
   await page.getByRole("button", { name: "利润与成本" }).click();
+  const reviewerStatus = page.locator(".profit-reviewer-status");
+  await expect(reviewerStatus).toHaveAttribute("data-state", "error");
+  await expect(reviewerStatus).toContainText("暂时无法读取成本复核人名单，请稍后重试。");
+  await expect(reviewerStatus).toContainText("m04-04-reviewer-read-failure");
+  await expect(page.getByLabel("指定复核人")).toBeDisabled();
+  await expect(page.getByRole("button", { name: "提交双人复核" })).toBeDisabled();
+  await reviewerStatus.getByRole("button", { name: "重新加载复核人" }).click();
+  await expect(reviewerStatus).toHaveCount(0);
+  await expect(page.getByLabel("指定复核人")).toContainText("成本复核人");
+  expect(reviewerReadAttempts).toBe(4);
+  expect(reviewerReadMethods).toEqual(["GET", "GET", "GET", "GET"]);
   await page.getByLabel("观测时间").fill("2026-08-08T12:00");
   await expect(page.getByText("69.4 USD", { exact: false }).first()).toBeVisible();
   await expect(page.getByText("汇率快照 00000000-0000-4000-8000-000000000446")).toBeVisible();

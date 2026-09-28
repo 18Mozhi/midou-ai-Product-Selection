@@ -66,6 +66,9 @@ const props = defineProps<{
   items = ref<OpportunityTypes.OpportunitySummary[]>([]),
   memberOptions = ref<Array<{ id: string; label: string }>>([]),
   costReviewerOptions = ref<Array<{ id: string; label: string }>>([]),
+  costReviewerLoadState = ref<"loading" | "ready" | "error">("loading"),
+  costReviewerErrorMessage = ref(""),
+  costReviewerRequestId = ref(""),
   selectedOpportunityIds = ref<string[]>([]),
   detail = ref<OpportunityTypes.OpportunityDetail | null>(null),
   profit = ref<OpportunityTypes.OpportunityProfitAnalysis | null>(null),
@@ -278,6 +281,35 @@ async function loadAutomationReadiness(isCurrent: () => boolean = () => true) {
   const readiness = await loadAutomaticSelectionReadiness(request);
   if (isCurrent()) automationReadiness.value = readiness;
 }
+async function loadCostReviewers(isCurrent: () => boolean = () => true) {
+  costReviewerLoadState.value = "loading";
+  costReviewerErrorMessage.value = "";
+  costReviewerRequestId.value = "";
+  try {
+    const reviewers = await request<Array<{ id: string; label: string }>>("/cost-input-reviewers");
+    if (!isCurrent()) return;
+    costReviewerOptions.value = reviewers.data;
+    costReviewerLoadState.value = "ready";
+  } catch (error) {
+    if (!isCurrent()) return;
+    costReviewerOptions.value = [];
+    costReviewerLoadState.value = "error";
+    if (error instanceof ApiClientError) {
+      costReviewerRequestId.value = error.requestId;
+      costReviewerErrorMessage.value = error.actionHint;
+    } else {
+      costReviewerErrorMessage.value = "暂时无法读取成本复核人名单，请稍后重试。";
+    }
+  }
+}
+async function retryCostReviewers() {
+  const generation = readGeneration;
+  const opportunityId = props.opportunityId;
+  if (!opportunityId || !canConfirmCost.value || costReviewerLoadState.value === "loading") return;
+  await loadCostReviewers(
+    () => generation === readGeneration && props.opportunityId === opportunityId,
+  );
+}
 async function load() {
   const generation = ++readGeneration;
   const opportunityId = props.opportunityId;
@@ -296,16 +328,12 @@ async function load() {
       if (!isCurrent()) return;
       profit.value = profitResponse.data;
       if (canConfirmCost.value) {
-        try {
-          const reviewers =
-            await request<Array<{ id: string; label: string }>>("/cost-input-reviewers");
-          if (!isCurrent()) return;
-          costReviewerOptions.value = reviewers.data;
-        } catch {
-          if (isCurrent()) costReviewerOptions.value = [];
-        }
+        await loadCostReviewers(isCurrent);
       } else {
         costReviewerOptions.value = [];
+        costReviewerLoadState.value = "ready";
+        costReviewerErrorMessage.value = "";
+        costReviewerRequestId.value = "";
       }
       if (!isCurrent()) return;
       await Promise.all([
@@ -1053,9 +1081,13 @@ onBeforeUnmount(() => {
           :profit="profit"
           :cost-form="costForm"
           :reviewer-options="costReviewerOptions"
+          :reviewer-load-state="costReviewerLoadState"
+          :reviewer-error-message="costReviewerErrorMessage"
+          :reviewer-request-id="costReviewerRequestId"
           :can-confirm-cost="canConfirmCost"
           :busy="busy"
           @confirm-cost="confirmCost"
+          @retry-reviewers="retryCostReviewers"
           @review-cost="reviewCost"
           @queue-profit="queueProfit"
         />

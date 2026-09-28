@@ -13,10 +13,12 @@ route-catalog → NavigationShell → surfaceProps：P21 SourcingWorkspace，P22
 | SP | SourcingComparisonPanel.vue | 5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd |
 | SC | SourcingCostConfirmationPanel.vue | bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4 |
 | CR | CostRuleConsole.vue | 1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3 |
-| PP | OpportunityProfitPanel.vue | a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f |
+| PP | OpportunityProfitPanel.vue | 83997ee3e754d5279db52b6e619adb34b90771f54a9a0f1f5a1cf309f9e28b23 |
 | RQ | OpportunityCostReviewQueue.vue | e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339 |
 
-局部共79个控件/事件候选、7个弹窗定义/调用候选、44处v-model。SP与QualityGateSetupSummary只有呈现/slot，无本地交互候选；共享UiStatePanel和useModalDialog行为按实际调用方检查，不在此重复全站盘点。PP/RQ与P18共享，以下仅记录P21调用合同，不重复加算全站分母。
+2026-09-28共享组件续记：`OpportunityProfitPanel` 增加的复核人失败态仅由 P18 显式传入；P21 调用未传 `reviewerLoadState`，因此P18专属重试按钮在P21不呈现。共享面板未获读取状态时不声称“成功但无可选复核人”，并继续阻止空名单下提交。此项更新P21源清单，不代表P21 reviewer GET现有错误提示或真实API验收。
+
+局部共80个控件/事件候选、7个弹窗定义/调用候选、44处v-model。SP与QualityGateSetupSummary只有呈现/slot，无本地交互候选；共享UiStatePanel和useModalDialog行为按实际调用方检查，不在此重复全站盘点。PP/RQ与P18共享，以下仅记录P21调用合同，不重复加算全站分母。
 
 ## 2. 全部控件与事件候选
 
@@ -96,9 +98,10 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | CR | 909 | 1b870bc1240e4ab6.1 | SC-R-ACTION-SUBMIT 按钮 |
 | PP | 54 | 2bab3ff056a52675.1 | SC-NAV 管理费用规则 |
 | PP | 121 | fbf7d2a587c0931b.1 | SC-COST-REVIEW 转发 |
-| PP | 126 | fcdcabfef1ea3474.1 | SC-COST-SUBMIT 表单 |
-| PP | 158 | b2258379fb999070.1 | SC-COST-SUBMIT 指定复核人且非busy |
+| PP | 135 | 21c282e197f8be16.1 | SC-COST-SUBMIT 表单 |
+| PP | 209 | 4f926cf8b6f57c2a.1 | SC-COST-SUBMIT 指定复核人且非busy |
 | PP | 159 | aff5d679009764bc.1 | SC-COST-RECALCULATE 排队 |
+| PP | 191 | 1dfebd67b12367cb.1 | SC-P18-REVIEWER-RETRY-P21-EXCLUDED |
 | RQ | 76 | aa698411d908f10b.1 | SC-COST-REVIEW rejected打开 |
 | RQ | 77 | 2ad8a0f45b085121.1 | SC-COST-REVIEW approved打开 |
 | RQ | 79 | dcb42c2584efb46b.1 | SC-COST-REVIEW 表单提交 |

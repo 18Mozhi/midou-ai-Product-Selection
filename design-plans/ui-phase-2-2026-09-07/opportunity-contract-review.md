@@ -2,6 +2,7 @@
 
 2026-09-28 P15批量回执续记：批量POST提交时快照路由、弹窗与选择代次。延迟成功返回若遇到关闭重开或用户已更改选择，不再关闭新弹窗/清空新选择；仅原路由仍活动时刷新。受控真实Vue E2E桌面/390px各1/1，旧实现先复现失败。原API/body及关闭不撤销已提交写入语义不变；其他OP07子面板读写归属、真实RBAC与生产验收仍待。
 
+2026-09-28 P18 OP09续记：成本复核人目录失败不再静默成为空名单。实际Vue明确呈现独立读取失败、服务端操作提示及追踪编号，按当前读取代次提供仅GET的显式重试；成功空列表另行说明，不发成本或复核写入。桌面/390px验证初始安全GET重试耗尽后的失败和手动恢复；真实复核资格、RBAC/SQL不在此证据范围。
 2026-09-28无障碍续记：P18 `OpportunityDecisionPanel` 的系统建议标题与决定弹窗标题原先复用 `opportunity-decision-title`，导致 document 中重复 ID，弹窗的 `aria-labelledby` 无法可靠命名。现在摘要和弹窗分别使用独立ID，E2E 按 `记录继续观察决定` / `记录驳回决定` 的 dialog accessible name 定位。无 API、请求、权限或业务行为变化；未以自动化断言替代真实读屏器验收。
 2026-09-28 P18 OP08键盘续记：真实 Chromium 先复现决策弹窗从首个“关闭”按钮 Shift+Tab 未回到末尾控件。`OpportunityWorkspaceDialogs` 为ERP导入、手工创建、决定三个调用增加本地边界循环；创建/ERP/观察/驳回四种实际调用在桌面与390px均通过Tab/Shift+Tab，决策 Escape 返回原触发按钮且不发POST。API、校验、角色规则及提交行为不变；仍未覆盖读屏器、采纳五门可达场景及真实生产/RBAC。
 2026-09-28 P15当前候选复核：动作候选表与P15 source review 已更新到 `OpportunityListPanel` 和 `OpportunityWorkspace` 当前签名，归入空态事件、三种批量入口、图片失败回退、列表父子事件转发与批量表单提交。静态归属与实际 Vue E2E 分开记录；图片错误仅为本地显示回退，不触发业务请求。
@@ -30,7 +31,7 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 | 成员 | 列表后GET /opportunities/member-options，即使只读也读取 | API错误保留机会，选项清空并显示批量指派不可用；不代表真的没有成员 |
 | 配置就绪 | GET /opportunity-score-rules、/cost-rules、/competitor-monitor-rules | allSettled投影五步；依赖失败available=false，不伪装五步为0个配置，也不证明单个商品质量门已通过 |
 | 详情/利润 | GET /opportunities/:id，随后GET /opportunities/:id/profit-analysis | 两者都是主加载必需项；利润失败当前会阻断整个详情，不应误写成独立降级已完成 |
-| 成本复核人 | cost:confirm时GET /cost-input-reviewers | 失败回退空选项，当前缺独立错误/重试；OP09待验 |
+| 成本复核人 | cost:confirm时GET /cost-input-reviewers | loading/ready/error独立呈现；失败显示服务端操作提示和追踪编号，仅提供GET重试；成功空数组明确显示“当前没有可选复核人”，不冒充读取失败。重试按读取代次归属；不改变资格或提交合同 |
 | AI | GET /opportunities/:id/ai-analyses | 独立loading/ready/error；失败与尚无分析有不同文案，可重试 |
 | 下游 | 按读/管理能力GET /competitors及/sourcing/searches，再在浏览器按opportunity_id或input_type/input_ref过滤返回数组 | 独立loading/ready/error；当前计数只来自返回数组，不能另称全库精确总量；任一已请求依赖失败使本区error |
 
@@ -58,6 +59,7 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 | OP-DOWNSTREAM-RETRY / OP-COMPETITORS-NAV / OP-SOURCING-NAV | 下游失败可重读；按读/管理能力展示链接 | loadDownstream；导航/competitors或/sourcing，当前不带本机会筛选参数 |
 | OP-SCORE-QUEUE | canDecide且非busy | POST /opportunities/:id/score-runs `{expected_version}`；重读并提示排队，需后续刷新读取实际结果 |
 | OP-COST-RULES / OP-COST-SUBMIT / OP-PROFIT-QUEUE | 费用规则链接；cost:confirm可填成本/重算 | POST /opportunities/:id/cost-inputs，见字段表；提交只是双人复核申请。利润POST /opportunities/:id/profit-runs `{platform,expected_version}`；不保证立即生成可靠利润 |
+| OP-COST-REVIEWER-RETRY | cost:confirm且复核人GET失败 | 仅重新GET `/cost-input-reviewers`；不重发任何成本、复核或利润写入；机会ID或读取代次变化后忽略迟到结果 |
 | OP-COST-REVIEW-OPEN.approved/rejected / CANCEL / SUBMIT | 条目item.can_review决定是否出现；提交要求trim原因≥2且非busy | 内联表单；POST /opportunities/:id/cost-input-reviews/:reviewId/actions `{decision,reason,expected_version:条目version}`；成功load，批准才可能生效并触发计算，驳回保留原输入 |
 | OP-AI-QUEUE / RETRY / REVIEW.approved/rejected / REASON-SUBMIT/CANCEL | 生成/复核canDecide；待复核result可审；重读不需写权限 | 生成POST /opportunities/:id/ai-analyses `{expected_version}`，load后切ai；复核先共享原因框，POST /ai-analyses/:resultId/reviews `{outcome,notes}`，成功load并切ai |
 | OP-EVIDENCE-ORIGINAL / MORE / COLLAPSE | 有证据则原文，超过20条可渐进展开 | API原顺序slice；每次+20，收起20；id或证据引用变化重置。外链target=_blank、noopener noreferrer；不新建后台分页 |
@@ -105,7 +107,7 @@ route-catalog/App → OpportunityWorkspace（无opportunityId为P15，有ID为P1
 | OP06 列表范围与批量边界 | page1选A→page2选B→打开确认→比较文案计数和POST实际items；再筛选隐藏A或全部、取消/重试；应先明确当前有效范围，不笼统承诺所有选中对象。准确复现后按现有业务边界最小修复，若需新增跨页选择规则先确认 | UI当前结果范围披露及零目标禁用已由UI2-OP04桌面/390px通过；跨页选择策略仍未定，不算跨页写入或生产通过 |
 | OP07 竞态与缓存 | 延迟旧详情/AI/下游→切新ID/组织/工作区/离开→释放响应；写入延迟期间关闭再打开/连点；失败重读前后核对版本/关联对象。旧范围不得覆盖新页，也不能把已提交任务视为被Esc撤销 | 缓存激活后 `create=1`/`source_topic_id`、创建POST关闭重开、决定POST旧回执不得关闭后来重开的决定窗，以及 AI 排队迟到回执不得覆盖新页签选择，已有桌面/390px受控 Vue E2E；其余 P18 子面板、真实组织/工作区隔离、RBAC 与生产验收仍待 |
 | OP08 弹窗与无障碍 | 各11变体按键盘打开、Tab/ShiftTab、Esc、归还；唯一标题ID，字段错误关联aria-describedby/invalid、忙碌理由、错误在弹窗内可达；200%缩放/软键盘/长原因不遮挡 | 待全变体；本批仅局部焦点/required/取消证据 |
-| OP09 利润/复核/AI状态 | profit失败与reviewer失败分别重试；双人复核、过期、他人/自己、旧version；跨时区输入；AI复核失败原因恢复及旧记录归属；redecision锚点存在性 | 待验；不新增费用、复核资格或AI权限规则 |
+| OP09 利润/复核/AI状态 | profit失败与reviewer失败分别重试；双人复核、过期、他人/自己、旧version；跨时区输入；AI复核失败原因恢复及旧记录归属；redecision锚点存在性 | reviewer GET失败/成功空集区分、只读GET重试已由 M04-04 桌面/390px真实Vue局部回归覆盖；其他 OP09 项待验，不新增费用、复核资格或AI权限规则 |
 | OP10 全动作真实链与图审 | 采纳质量门允许/拒绝、补数新建/复用、评分/利润/AI排队、竞品/供应采集、经营反馈与血缘、ERP桥接和错误、真实DB/RBAC、同版本双视口/主题/密度及生产隔离清理 | 后续按域复用现有测试再补缺，最终图和用户审核均待完成 |
 
 ## 6. 本批交付边界

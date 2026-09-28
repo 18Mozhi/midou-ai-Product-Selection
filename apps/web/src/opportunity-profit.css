@@ -142,6 +142,32 @@
 .profit-input footer {
   grid-column: 1/-1;
 }
+.profit-reviewer-status {
+  grid-column: 1/-1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 8px;
+  color: var(--so-text-muted);
+  background: var(--so-panel);
+}
+.profit-reviewer-status p {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+}
+.profit-reviewer-status[data-state="error"] {
+  border-color: color-mix(in srgb, var(--so-danger) 35%, var(--so-border));
+}
+.profit-reviewer-status[data-state="error"] p {
+  color: var(--so-danger);
+}
+.profit-reviewer-status button {
+  flex: 0 0 auto;
+}
 .profit-input label {
   display: grid;
   gap: 5px;
@@ -172,6 +198,11 @@
 .profit-input button:last-child {
   background: var(--so-text);
 }
+.profit-input button:disabled,
+.profit-input select:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+}
 @media (max-width: 1100px) {
   .profit-summary,
   .profit-input {
@@ -185,6 +216,10 @@
   .profit-review-queue > header,
   .profit-review-queue > article > header {
     display: grid;
+  }
+  .profit-reviewer-status {
+    align-items: stretch;
+    flex-direction: column;
   }
   .profit-summary,
   .profit-components,

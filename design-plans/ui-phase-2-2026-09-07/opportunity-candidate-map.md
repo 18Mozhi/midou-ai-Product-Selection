@@ -67,9 +67,10 @@
 | OpportunityListPanel:392 | 18a777cbd9195919.1 | OP-IMAGE-LOAD-FAILURE |
 | OpportunityProfitPanel:54 | 2bab3ff056a52675.1 | OP-COST-RULES |
 | OpportunityProfitPanel:121 | fbf7d2a587c0931b.1 | OP-COST-REVIEW-SUBMIT转发 |
-| OpportunityProfitPanel:126 | fcdcabfef1ea3474.1 | OP-COST-SUBMIT |
-| OpportunityProfitPanel:158 | b2258379fb999070.1 | OP-COST-SUBMIT |
+| OpportunityProfitPanel:135 | 21c282e197f8be16.1 | OP-COST-SUBMIT |
+| OpportunityProfitPanel:209 | 4f926cf8b6f57c2a.1 | OP-COST-SUBMIT |
 | OpportunityProfitPanel:159 | aff5d679009764bc.1 | OP-PROFIT-QUEUE |
+| OpportunityProfitPanel:199 | 1dfebd67b12367cb.1 | OP-COST-REVIEWER-RETRY |
 | OpportunityWorkspace:668| 169dd3f4eac94585.1 | OP-JOURNEY-NAV |
 | OpportunityWorkspace:670| bbd1b04e367f3e80.1 | OP-TREND-RULES-NAV |
 | OpportunityWorkspace:672| 98ee78e079ff2f4c.1 | OP-ERP-OPEN |
@@ -88,7 +89,7 @@
 | OpportunityWorkspace:795| 1aef42d09991a143.1 | OP-TAB：六辅助分区 |
 | OpportunityWorkspace:807| 65bed8657e147596.1 | 竞品/供应采集、评分、下游重读转发 |
 | OpportunityWorkspace:827| 3e5dca6610ac19d8.1 | OP-FEEDBACK-SUBMIT转发 |
-| OpportunityWorkspace:835| a91f12f030c2fe66.1 | 成本提交/复核/利润重算转发 |
+| OpportunityWorkspace:1081 | 2e0effa3fc3ac854.1 | 成本提交/复核/利润重算/复核人GET重试转发 |
 | OpportunityWorkspace:846| 76ae53c237c00264.1 | AI排队/重读/复核转发 |
 | OpportunityWorkspaceDialogs:90 | 56857391914c319d.1 | OP-ERP-CLOSE：Escape |
 | OpportunityWorkspaceDialogs:147 | 67aec29022637161.1 | OP-CREATE-CLOSE：Escape |

@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1713；旧登记1477；新身份667，旧表独有身份431。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1553源位置/1274组；其中路由动作1052组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1714；旧登记1477；新身份671，旧表独有身份434。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1554源位置/1276组；其中路由动作1053组，转发/容器关联118组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -28,13 +28,13 @@
 | [P12 今日行动](page-specs/P12.md) | 47 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P13 今日工作](page-specs/P13.md) | 73 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P14 热点趋势](page-specs/P14.md) | 91 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P15 选品机会](page-specs/P15.md) | 134 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P15 选品机会](page-specs/P15.md) | 131 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P16 创建选品](page-specs/P16.md) | 41 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 61 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P18 机会详情](page-specs/P18.md) | 134 | [53组](action-reviews/P18.json) | 264个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P18 机会详情](page-specs/P18.md) | 131 | [54组](action-reviews/P18.json) | 270个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 63 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 63 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P21 供应链与利润](page-specs/P21.md) | 87 | [39组](action-reviews/P21.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P21 供应链与利润](page-specs/P21.md) | 85 | [40组](action-reviews/P21.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P22 费用与利润规则](page-specs/P22.md) | 60 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P23 全部任务](page-specs/P23.md) | 73 | [40组](action-reviews/P23.json) | 194个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P24 任务详情](page-specs/P24.md) | 73 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -1283,9 +1283,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P18 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P18.json)：103个局部源位置 → 53组；12类写入，44组路由动作，8组转发/容器关联不重复计动作。已映射35/35个源码字段位置，26/26处调用/内嵌容器，42个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P18.json)：104个局部源位置 → 54组；12类写入，45组路由动作，8组转发/容器关联不重复计动作。已映射35/35个源码字段位置，26/26处调用/内嵌容器，42个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有264个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有270个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -1322,6 +1322,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-LINEAGE-NAV 打开血缘节点 / navigation | 1处；present、empty | [lineage · 1440](design/review-direction-c/1440-lineage.png) / [lineage · 390](design/review-direction-c/390-lineage.png)、[lineage-empty · 1440](design/review-direction-c/1440-lineage-empty.png) / [lineage-empty · 390](design/review-direction-c/390-lineage-empty.png)；其余见JSON | 真实路由授权/节点来源及全部类型需端到端证据。 |
 | OP-LINEAGE-FAILURES 展开失败代码 / local | 1处；blocked、degraded、none | [lineage · 1440](design/review-direction-c/1440-lineage.png) / [lineage · 390](design/review-direction-c/390-lineage.png)、[lineage-degraded · 1440](design/review-direction-c/1440-lineage-degraded.png) / [lineage-degraded · 390](design/review-direction-c/390-lineage-degraded.png)；其余见JSON | 所有失败状态及未知age不冒充健康，原型不证明运行事实。 |
 | OP-COST-RULES 管理费用规则 / navigation | 1处；allowed、readonly | [snapshot · 1440](design/profit-direction-c/1440-snapshot.png) / [snapshot · 390](design/profit-direction-c/390-snapshot.png)、[readonly · 1440](design/profit-direction-c/1440-readonly.png) / [readonly · 390](design/profit-direction-c/390-readonly.png)；其余见JSON | canConfirmCost不控制此链接，目标页能力独立。 |
+| OP-COST-REVIEWER-RETRY 重新加载成本复核人 / read | 1处；error、retrying、loaded、empty | ；其余见JSON | 隔离真实Vue E2E证明服务端夹具失败/恢复和GET-only；不证明真实RBAC、目录资格或跨组织SQL范围。 |
 | OP-COST-SUBMIT 提交成本双人复核 / write | 2处；sale、purchase、logistics | [sale · 1440](design/profit-direction-c/1440-sale.png) / [sale · 390](design/profit-direction-c/390-sale.png)、[purchase · 1440](design/profit-direction-c/1440-purchase.png) / [purchase · 390](design/profit-direction-c/390-purchase.png)；其余见JSON | 默认UTC截断与本地解析存在偏移；提交未生效，另一人服务端资格需验。 |
 | OP-PROFIT-QUEUE 利润重算排队 / write | 1处；valid、no-rule、failure | [queue-busy · 1440](design/profit-direction-c/1440-queue-busy.png) / [queue-busy · 390](design/profit-direction-c/390-queue-busy.png)、[queue-no-rule · 1440](design/profit-direction-c/1440-queue-no-rule.png) / [queue-no-rule · 390](design/profit-direction-c/390-queue-no-rule.png)；其余见JSON | 不能以成本表单必填项阻止现行重算；同一701完整权限成本链仍缺。 |
 | OP-RETURN 返回来源 / navigation | 1处；from、fallback | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[control-return-focus · 1440](design/detail-adaptive-direction-c/1440-control-return-focus.png) / [control-return-focus · 390](design/detail-adaptive-direction-c/390-control-return-focus.png)；其余见JSON | 不是完整路由白名单/鉴权证明，history与跨ID范围仍需验证。 |
@@ -1333,7 +1334,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-DECISION-CLOSE 关闭人工原因窗 / local | 3处；adopt、observe、reject、Escape、header、footer | [observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)、[reject-dialog · 1440](design/detail-adaptive-direction-c/1440-reject-dialog.png) / [reject-dialog · 390](design/detail-adaptive-direction-c/390-reject-dialog.png)；其余见JSON | 弹窗名称已绑定独立标题；完整键盘/读屏、忙碌期间关闭与服务端写入归属仍需独立验证。 |
 | OP-DECISION-SUBMIT 提交人工决定 / write | 2处；adopt、observe、reject | [adopt-failed · 1440](design/opportunity-detail-direction-c/1440-adopt-failed.png) / [adopt-failed · 390](design/opportunity-detail-direction-c/390-adopt-failed.png)、[decision-unknown · 1440](design/opportunity-detail-direction-c/1440-decision-unknown.png) / [decision-unknown · 390](design/opportunity-detail-direction-c/390-decision-unknown.png)；其余见JSON | 业务原因服务端trim；关闭/重开和当前ID/版本晚到竞态、完整采纳链仍未验证。 |
 | OP-P15-EXCLUDED 共享文件中的P15列表入口与弹窗 / excluded | 25处；list-actions、create、ERP、batch-assign、batch-review、batch-archive | [create-open · 1440](design/opportunity-direction-c/1440-create-open.png) / [create-open · 390](design/opportunity-direction-c/390-create-open.png)、[erp-open · 1440](design/opportunity-direction-c/1440-erp-open.png) / [erp-open · 390](design/opportunity-direction-c/390-erp-open.png)；其余见JSON | 只排除P18业务动作计数，不证明运行不可达：ID切换未清showCreate/showErpImport/showBatch，缓存页残留需真实生命周期验收。P15全页另审。 |
-| OP-WIRING-COST 组件事件/容器关联：COST / wiring | 2处；OP-COST-REVIEW-SUBMIT、OP-COST-SUBMIT、OP-PROFIT-QUEUE | [form · 1440](design/profit-direction-c/1440-form.png) / [form · 390](design/profit-direction-c/390-form.png)、[approved-empty · 1440](design/profit-direction-c/1440-approved-empty.png) / [approved-empty · 390](design/profit-direction-c/390-approved-empty.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
+| OP-WIRING-COST 组件事件/容器关联：COST / wiring | 2处；OP-COST-REVIEW-SUBMIT、OP-COST-SUBMIT、OP-PROFIT-QUEUE、OP-COST-REVIEWER-RETRY | [form · 1440](design/profit-direction-c/1440-form.png) / [form · 390](design/profit-direction-c/390-form.png)、[approved-empty · 1440](design/profit-direction-c/1440-approved-empty.png) / [approved-empty · 390](design/profit-direction-c/390-approved-empty.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-DECISION-PANEL 组件事件/容器关联：DECISION-PANEL / wiring | 1处；OP-DECISION-OPEN.adopt、OP-DECISION-OPEN.observe、OP-DECISION-OPEN.reject、OP-EVIDENCE-TASK | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-INSIGHTS 组件事件/容器关联：INSIGHTS / wiring | 1处；OP-COMPETITOR-DISCOVER、OP-SUPPLIER-DISCOVER、OP-SCORE-QUEUE、OP-DOWNSTREAM-RETRY | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-FEEDBACK 组件事件/容器关联：FEEDBACK / wiring | 1处；OP-FEEDBACK-SUBMIT | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
@@ -1349,6 +1350,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | --- | --- | --- |
 | OP-WIRING-COST | @review-cost / $emit('reviewCost', $event) | OP-COST-REVIEW-SUBMIT |
 | OP-WIRING-COST | @confirm-cost / confirmCost | OP-COST-SUBMIT |
+| OP-WIRING-COST | @retry-reviewers / retryCostReviewers | OP-COST-REVIEWER-RETRY |
 | OP-WIRING-COST | @review-cost / reviewCost | OP-COST-REVIEW-SUBMIT |
 | OP-WIRING-COST | @queue-profit / queueProfit | OP-PROFIT-QUEUE |
 | OP-WIRING-DECISION-PANEL | @decide / startDecision | OP-DECISION-OPEN.adopt、OP-DECISION-OPEN.observe、OP-DECISION-OPEN.reject |
@@ -1672,7 +1674,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P21 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P21.json)：56个局部源位置 → 39组；9类写入，32组路由动作，7组转发/容器关联不重复计动作。已映射25/25个源码字段位置，12/12处调用/内嵌容器，33个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P21.json)：57个局部源位置 → 40组；9类写入，32组路由动作，7组转发/容器关联不重复计动作。已映射25/25个源码字段位置，12/12处调用/内嵌容器，33个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有6个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1714,6 +1716,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | SC-COST-WIRING P21机会成本父处理器 / wiring | 1处；成本提交/复核/重算三个事件转发 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
 | SC-NAV-PROFIT-RULES 利润面板费用规则 / navigation | 1处；SC-NAV 管理费用规则 | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[control-nav-profit-rules-default · 1440](design/sourcing-direction-c/1440-control-nav-profit-rules-default.png) / [control-nav-profit-rules-default · 390](design/sourcing-direction-c/390-control-nav-profit-rules-default.png)；其余见JSON | 双端四态代表图及精确目标/target/rel已绑定；合成路径和导航意图不是实际router/外站/权限验收。主题密度/全部对象/来源和具体批准仍待；导航无disabled/busy，不变更原行为。 |
 | SC-COST-REVIEW-WIRING 共享复核事件上送 / wiring | 1处；SC-COST-REVIEW 转发 | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON |  仅有相关整页/弹窗场景，尚无本动作逐selector适用六态及完整主题/密度/真实Vue验收；用户未批准。 |
+| SC-P18-REVIEWER-RETRY-P21-EXCLUDED P18 专属复核人重试控件（P21未装配） / excluded | 1处；not-applicable-in-P21 | ；其余见JSON | 排除只依据P21当前调用props/事件；若未来复用错误态需重新纳入P21交互审查。 |
 | SC-COST-SUBMIT 提交双人成本复核 / write | 2处；SC-COST-SUBMIT 表单、SC-COST-SUBMIT 指定复核人且非busy | [cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)、[cost-reviewers-empty · 1440](design/sourcing-direction-c/1440-cost-reviewers-empty.png) / [cost-reviewers-empty · 390](design/sourcing-direction-c/390-cost-reviewers-empty.png)；其余见JSON | 双端六态代表图已绑定；成本区busy独立于找货，自身请求与同区其他写请求禁用分开。精确机会/复核版本、0金额/时间、字段有效性/禁用、不可变意图及重复提交守卫仅离线验证，非真实Vue函数守卫或实际审批/计算。SC-G01–08、成本读取在途/全部字段对象主题/具体批准与生产验收仍待。 |
 | SC-COST-RECALCULATE 利润重算排队 / write | 1处；SC-COST-RECALCULATE 排队 | [cost-recalculating · 1440](design/sourcing-direction-c/1440-cost-recalculating.png) / [cost-recalculating · 390](design/sourcing-direction-c/390-cost-recalculating.png)、[cost-missing · 1440](design/sourcing-direction-c/1440-cost-missing.png) / [cost-missing · 390](design/sourcing-direction-c/390-cost-missing.png)；其余见JSON | 双端六态代表图已绑定；成本区busy独立于找货，自身请求与同区其他写请求禁用分开。精确机会/复核版本、0金额/时间、字段有效性/禁用、不可变意图及重复提交守卫仅离线验证，非真实Vue函数守卫或实际审批/计算。SC-G01–08、成本读取在途/全部字段对象主题/具体批准与生产验收仍待。 |
 | SC-COST-REVIEW-OPEN 通过/驳回内联表单 / local | 2处；SC-COST-REVIEW rejected打开、SC-COST-REVIEW approved打开 | [cost-review-approved · 1440](design/sourcing-direction-c/1440-cost-review-approved.png) / [cost-review-approved · 390](design/sourcing-direction-c/390-cost-review-approved.png)、[cost-review-rejected · 1440](design/sourcing-direction-c/1440-cost-review-rejected.png) / [cost-review-rejected · 390](design/sourcing-direction-c/390-cost-review-rejected.png)；其余见JSON | 四态代表图已绑定；disabled/busy依据sourceStateApplicability登记为当前源码无此控件呈现，不增加图片数或通过数。权限隐藏、选择上限、读取在途、全部变体/字段/主题密度、具体批准和真实Vue生命周期仍需核对。 |

@@ -12,8 +12,8 @@
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
-    "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-    "apps/web/src/components/OpportunityWorkspace.vue": "5640835d3e13800c13f906424027d846c8ba3b8c94db3ad2b41dbcf80a2ce229",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
+    "apps/web/src/components/OpportunityWorkspace.vue": "5184f942a04f8efcab902e5eeeb2a7b727cac6d2a678c2b15e085384ab26a8e1",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
@@ -1470,11 +1470,40 @@
       ]
     },
     {
+      "actionId": "OP-COST-REVIEWER-RETRY",
+      "label": "重新加载成本复核人",
+      "kind": "read",
+      "routeApplicability": "P18-local-caller-and-listed-panels",
+      "condition": "cost:confirm且复核人目录GET失败；loading时按钮不可用",
+      "handler": "仅GET /cost-input-reviewers；绑定当前机会与readGeneration，不重发成本/复核/利润写入",
+      "variants": ["error", "retrying", "loaded", "empty"],
+      "scenes": [],
+      "remaining": "隔离真实Vue E2E证明服务端夹具失败/恢复和GET-only；不证明真实RBAC、目录资格或跨组织SQL范围。",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityProfitPanel.vue#1dfebd67b12367cb.1"
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m04-04-profit.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "验证自动安全GET重试耗尽后错误/追踪/禁用成本提交，显式重试仅发送GET并恢复候选；不证明真实权限、SQL或成本写入。"
+        }
+      ]
+    },
+    {
       "actionId": "OP-COST-SUBMIT",
       "label": "提交成本双人复核",
       "kind": "write",
       "routeApplicability": "P18-local-caller-and-listed-panels",
-      "condition": "cost:confirm；busy或无reviewer禁用提交",
+      "condition": "cost:confirm；busy、复核人目录未就绪/失败/空集或未选择时禁用提交",
       "handler": "九字段+expected_version；amount Number、observed_at转ISO；成功load",
       "variants": ["sale", "purchase", "logistics"],
       "scenes": [
@@ -1513,8 +1542,8 @@
       ],
       "remaining": "默认UTC截断与本地解析存在偏移；提交未生效，另一人服务端资格需验。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityProfitPanel.vue#fcdcabfef1ea3474.1",
-        "apps/web/src/components/OpportunityProfitPanel.vue#b2258379fb999070.1"
+        "apps/web/src/components/OpportunityProfitPanel.vue#21c282e197f8be16.1",
+        "apps/web/src/components/OpportunityProfitPanel.vue#4f926cf8b6f57c2a.1"
       ],
       "visualStates": {
         "default": "not-mapped",
@@ -2045,8 +2074,8 @@
       "routeApplicability": "not-an-additional-business-action",
       "condition": "相应父组件v-if和子组件事件条件均保留，不能按模板候选重复计业务动作",
       "handler": "逐事件/handler见forwardBindings；容器定义或helper调用指向既有操作链，不直接增加一次POST",
-      "variants": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE"],
-      "forwardsTo": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE"],
+      "variants": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE", "OP-COST-REVIEWER-RETRY"],
+      "forwardsTo": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE", "OP-COST-REVIEWER-RETRY"],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
@@ -2055,19 +2084,25 @@
           "targets": ["OP-COST-REVIEW-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
           "event": "@confirm-cost",
           "handler": "confirmCost",
           "targets": ["OP-COST-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
+          "event": "@retry-reviewers",
+          "handler": "retryCostReviewers",
+          "targets": ["OP-COST-REVIEWER-RETRY"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
           "event": "@review-cost",
           "handler": "reviewCost",
           "targets": ["OP-COST-REVIEW-SUBMIT"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1",
           "event": "@queue-profit",
           "handler": "queueProfit",
           "targets": ["OP-PROFIT-QUEUE"]
@@ -2086,9 +2121,9 @@
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#a91f12f030c2fe66.1"
+        "apps/web/src/components/OpportunityWorkspace.vue#2e0effa3fc3ac854.1"
       ],
-      "sourceContractKeys": ["OP-COST-REVIEW-SUBMIT转发", "成本提交/复核/利润重算转发"],
+      "sourceContractKeys": ["OP-COST-REVIEW-SUBMIT转发", "成本提交/复核/利润重算/复核人GET重试转发"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2660,8 +2695,8 @@
       "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
-      "apps/web/src/components/OpportunityProfitPanel.vue": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
-      "apps/web/src/components/OpportunityWorkspace.vue": "5640835d3e13800c13f906424027d846c8ba3b8c94db3ad2b41dbcf80a2ce229",
+      "apps/web/src/components/OpportunityProfitPanel.vue": "117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc",
+      "apps/web/src/components/OpportunityWorkspace.vue": "5184f942a04f8efcab902e5eeeb2a7b727cac6d2a678c2b15e085384ab26a8e1",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d",
