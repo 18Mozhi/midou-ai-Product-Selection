@@ -214,6 +214,52 @@ test("P24 action dialogs keep target, fields and footer readable on desktop and 
   expect(observed.actionRequests).toBe(0);
 });
 
+test("P24 action dialog locks fields and dismissal while its write is pending", async ({
+  page,
+}) => {
+  const observed = await setup(page);
+  let resolveAction!: () => void,
+    actionRequests = 0,
+    submittedBody: Record<string, unknown> | undefined;
+  const pendingAction = new Promise<void>((resolve) => {
+    resolveAction = resolve;
+  });
+  await page.route(`**/api/v1/tasks/${taskId}/actions`, async (route) => {
+    actionRequests += 1;
+    submittedBody = route.request().postDataJSON() as Record<string, unknown>;
+    await pendingAction;
+    await route.fulfill({ json: env({ ...task, progress_percent: 45, version: 3 }) });
+  });
+
+  await page.goto(`/tasks/${taskId}`);
+  await page.getByRole("button", { name: "更新进度", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "更新任务进度" });
+  await dialog.getByLabel("完成进度（0–100）").fill("45");
+  await dialog.getByLabel("本次进展说明").fill("待供应商确认交期");
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+
+  await expect(dialog).toHaveAttribute("aria-busy", "true");
+  await expect(dialog.getByLabel("完成进度（0–100）")).toBeDisabled();
+  await expect(dialog.getByLabel("本次进展说明")).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "关闭任务操作窗口" })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "返回" })).toBeDisabled();
+  await expect(dialog.getByRole("button", { name: "正在提交…" })).toBeDisabled();
+  expect(submittedBody).toEqual({
+    action: "progress",
+    expected_version: task.version,
+    progress_percent: 45,
+    progress_note: "待供应商确认交期",
+  });
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeVisible();
+  expect(actionRequests).toBe(1);
+  expect(observed.actionRequests).toBe(0);
+
+  resolveAction();
+  await expect(dialog).toBeHidden();
+});
+
 test("task center previews batch transfer and delay with scoped inputs", async ({ page }) => {
   await setup(page);
   await page.goto("/tasks");

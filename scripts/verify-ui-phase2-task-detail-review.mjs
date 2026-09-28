@@ -318,14 +318,20 @@ export async function verifyTaskDetailReview() {
     Object.values(c.events ?? {}).some((handler) => handler.includes("updateActionForm(")),
   );
   assert.equal(mutableFields.length, 5);
-  for (const field of mutableFields) assert.equal(field.attributes[":disabled"], undefined);
+  for (const field of mutableFields) assert.equal(field.attributes[":disabled"], "busy");
+  const closeButtons = dialogCandidates.filter((candidate) =>
+    ["task-action-close", "task-action-return"].includes(candidate.attributes.class),
+  );
+  assert.equal(closeButtons.length, 2);
+  for (const button of closeButtons) assert.equal(button.attributes[":disabled"], "busy");
+  assert.match(actionDialog, /if \(!props\.busy\) emit\("close"\)/);
   const css = await readFile("apps/web/src/task-workspace-enhancements.css", "utf8");
   assert.match(
     css,
     /\.task-detail-route\s*>\s*:not\(\.task-dossier\):not\(\.task-title\):not\(dialog\):not\(\.task-detail-state\):not\(\.task-notice\)\s*\{\s*display: none;/,
   );
   checks.push(
-    "Source-only presentation: transfer has no terminal predicate, five form fields/Return lack busy disabling, detail CSS hides list/tabs/title/exports but keeps dialogs/status/notice; mounted Vue E2E separately covers list-only URL queries",
+    "Source presentation: transfer has no terminal predicate; five form fields, close and return lock on busy and Escape is guarded; detail CSS hides list/tabs/title/exports but keeps dialogs/status/notice; mounted Vue E2E separately covers list-only URL queries and progress pending lock",
   );
   return {
     checks,

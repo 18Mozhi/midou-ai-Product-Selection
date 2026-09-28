@@ -37,7 +37,9 @@ const dialogTitle = computed(() => {
 
 const { dialogElement, handleCancel } = useModalDialog(
   () => Boolean(props.actionEditor),
-  () => emit("close"),
+  () => {
+    if (!props.busy) emit("close");
+  },
 );
 
 const updateActionForm = (field: keyof TaskActionForm, value: string | number) =>
@@ -63,6 +65,7 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
           type="button"
           class="task-action-close"
           aria-label="关闭任务操作窗口"
+          :disabled="busy"
           @click="emit('close')"
         >
           ×
@@ -82,6 +85,7 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
             id="task-action-assignee"
             :value="actionForm.assignee_id"
             required
+            :disabled="busy"
             aria-describedby="task-action-assignee-help"
             @change="updateActionForm('assignee_id', ($event.target as HTMLSelectElement).value)"
           >
@@ -100,6 +104,7 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
             :value="actionForm.due_at"
             type="datetime-local"
             required
+            :disabled="busy"
             aria-describedby="task-action-due-help"
             @input="updateActionForm('due_at', ($event.target as HTMLInputElement).value)"
           />
@@ -117,6 +122,7 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
               max="100"
               step="1"
               required
+              :disabled="busy"
               aria-describedby="task-action-progress-help"
               @input="
                 updateActionForm(
@@ -134,6 +140,7 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
               :value="actionForm.progress_note"
               maxlength="500"
               required
+              :disabled="busy"
               placeholder="说明已完成内容、当前阻塞和下一步"
               aria-describedby="task-action-progress-note-help"
               @input="
@@ -151,6 +158,7 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
             :value="actionForm.reason"
             maxlength="500"
             required
+            :disabled="busy"
             placeholder="请填写可审计的操作原因"
             aria-describedby="task-action-reason-help"
             @input="updateActionForm('reason', ($event.target as HTMLTextAreaElement).value)"
@@ -160,7 +168,9 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
       </div>
 
       <footer class="task-action-footer">
-        <button type="button" class="task-action-return" @click="emit('close')">返回</button>
+        <button type="button" class="task-action-return" :disabled="busy" @click="emit('close')">
+          返回
+        </button>
         <button
           type="submit"
           class="task-action-submit"
