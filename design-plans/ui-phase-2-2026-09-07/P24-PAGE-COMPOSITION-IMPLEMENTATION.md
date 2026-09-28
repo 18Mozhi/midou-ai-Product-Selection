@@ -37,3 +37,7 @@ M05-01 的两项真实 Vue 回归分别覆盖导出视图参数与快捷新建�
 P24 代码提交 `382b34470e7485315a1e867bd93ee35905f33caf` 已推送并通过固定 `python scripts/deploy-baota.py` 流程部署。线上 `/api/v1/health/live` 与 `/ready` 返回 `ok` / `ready`，MySQL、Redis、supervisor 均为 `available`；`/api/v1/health/version` 的 build SHA 与该提交一致。`/tasks/{taskId}` 未登录深链返回 SPA 文档 HTTP 200；任务页 JS 与 CSS 均 HTTP 200，远端 SHA-256 分别与本地构建一致。部署器确认临时上传包已删除。
 
 以上是发布与静态资源证据，不是已登录真实会话或 RBAC/数据库读写验收；真实业务任务操作、审计、并发版本冲突及 M07-03 正式验收仍待其各自证据。
+
+## 2026-09-29 五类单项动作成功 pending 回归补齐
+
+此前提交中锁定回归仅以 progress 的成功响应验证自动收窗；本次将真实 Vue 延迟响应场景扩展到 progress、pause、cancel、delay、transfer 五类动作。每种动作均逐项断言当前字段、关闭/返回/提交按钮在途禁用、Escape 不关闭、精确既有 POST body、无重复请求及成功后收窗。定向回归桌面 Chromium 与390px移动各1/1通过；完整 M05-01 桌面 Chromium 与390px移动各30/30通过。仅更新永久 E2E 与实施证据，不改生产运行代码、API、权限、字段、版本或业务行为。受控本地响应不证明真实会话、RBAC、数据库写入或 M07-03。

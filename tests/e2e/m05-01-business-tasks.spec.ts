@@ -214,50 +214,127 @@ test("P24 action dialogs keep target, fields and footer readable on desktop and 
   expect(observed.actionRequests).toBe(0);
 });
 
-test("P24 action dialog locks fields and dismissal while its write is pending", async ({
+test("P24 all five action dialogs lock while pending and close only after success", async ({
   page,
 }) => {
   const observed = await setup(page);
-  let resolveAction!: () => void,
-    actionRequests = 0,
-    submittedBody: Record<string, unknown> | undefined;
-  const pendingAction = new Promise<void>((resolve) => {
+  let resolveAction!: () => void;
+  let pendingAction = new Promise<void>((resolve) => {
     resolveAction = resolve;
   });
+  let actionRequests = 0;
+  const submittedBodies: Record<string, unknown>[] = [];
   await page.route(`**/api/v1/tasks/${taskId}/actions`, async (route) => {
     actionRequests += 1;
-    submittedBody = route.request().postDataJSON() as Record<string, unknown>;
+    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
     await pendingAction;
-    await route.fulfill({ json: env({ ...task, progress_percent: 45, version: 3 }) });
+    await route.fulfill({ json: env({ ...task, version: task.version + 1 }) });
   });
 
   await page.goto(`/tasks/${taskId}`);
-  await page.getByRole("button", { name: "更新进度", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "更新任务进度" });
-  await dialog.getByLabel("完成进度（0–100）").fill("45");
-  await dialog.getByLabel("本次进展说明").fill("待供应商确认交期");
-  await dialog.getByRole("button", { name: "确认提交" }).click();
+  const dateValue = "2026-10-02T09:30";
+  const dateIso = await page.evaluate((value) => new Date(value).toISOString(), dateValue);
+  const scenarios = [
+    {
+      action: "progress",
+      trigger: "更新进度",
+      title: "更新任务进度",
+      fields: [
+        { label: "完成进度（0–100）", value: "45" },
+        { label: "本次进展说明", value: "待供应商确认交期" },
+      ],
+      body: {
+        action: "progress",
+        expected_version: task.version,
+        progress_percent: 45,
+        progress_note: "待供应商确认交期",
+      },
+    },
+    {
+      action: "pause",
+      trigger: "暂停",
+      title: "暂停任务",
+      fields: [{ label: "操作原因", value: "等待供应商补交证明" }],
+      body: { action: "pause", expected_version: task.version, reason: "等待供应商补交证明" },
+    },
+    {
+      action: "cancel",
+      trigger: "取消任务",
+      title: "取消任务",
+      fields: [{ label: "操作原因", value: "来源需求已撤回" }],
+      body: { action: "cancel", expected_version: task.version, reason: "来源需求已撤回" },
+    },
+    {
+      action: "delay",
+      trigger: "调整期限",
+      title: "调整任务期限",
+      fields: [
+        { label: "新截止时间", value: dateValue },
+        { label: "操作原因", value: "供应商交期需要复核" },
+      ],
+      body: {
+        action: "delay",
+        expected_version: task.version,
+        reason: "供应商交期需要复核",
+        due_at: dateIso,
+      },
+    },
+    {
+      action: "transfer",
+      trigger: "转交负责人",
+      title: "转交任务",
+      fields: [
+        { label: "接收成员", value: actor },
+        { label: "操作原因", value: "交由当前工作区负责人继续核对" },
+      ],
+      body: {
+        action: "transfer",
+        expected_version: task.version,
+        reason: "交由当前工作区负责人继续核对",
+        assignee_id: actor,
+      },
+    },
+  ];
+  const more = page.locator(".task-detail-more");
 
-  await expect(dialog).toHaveAttribute("aria-busy", "true");
-  await expect(dialog.getByLabel("完成进度（0–100）")).toBeDisabled();
-  await expect(dialog.getByLabel("本次进展说明")).toBeDisabled();
-  await expect(dialog.getByRole("button", { name: "关闭任务操作窗口" })).toBeDisabled();
-  await expect(dialog.getByRole("button", { name: "返回" })).toBeDisabled();
-  await expect(dialog.getByRole("button", { name: "正在提交…" })).toBeDisabled();
-  expect(submittedBody).toEqual({
-    action: "progress",
-    expected_version: task.version,
-    progress_percent: 45,
-    progress_note: "待供应商确认交期",
-  });
+  for (const [index, scenario] of scenarios.entries()) {
+    pendingAction = new Promise<void>((resolve) => {
+      resolveAction = resolve;
+    });
+    if (
+      scenario.action !== "progress" &&
+      !(await more.evaluate((element) => (element as HTMLDetailsElement).open))
+    )
+      await more.locator("summary").click();
+    const trigger =
+      scenario.action === "progress"
+        ? page.getByRole("button", { name: scenario.trigger, exact: true })
+        : more.getByRole("button", { name: scenario.trigger, exact: true });
+    await trigger.click();
+    const dialog = page.getByRole("dialog", { name: scenario.title });
+    for (const field of scenario.fields) {
+      const control = dialog.getByLabel(field.label);
+      if (field.label === "接收成员") await control.selectOption(field.value);
+      else await control.fill(field.value);
+    }
+    await dialog.getByRole("button", { name: "确认提交" }).click();
 
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeVisible();
-  expect(actionRequests).toBe(1);
-  expect(observed.actionRequests).toBe(0);
+    await expect(dialog).toHaveAttribute("aria-busy", "true");
+    await expect(dialog.getByRole("button", { name: "关闭任务操作窗口" })).toBeDisabled();
+    await expect(dialog.getByRole("button", { name: "返回" })).toBeDisabled();
+    await expect(dialog.getByRole("button", { name: "正在提交…" })).toBeDisabled();
+    for (const field of scenario.fields)
+      await expect(dialog.getByLabel(field.label)).toBeDisabled();
+    await page.keyboard.press("Escape");
+    await expect(dialog).toBeVisible();
+    expect(actionRequests).toBe(index + 1);
+    expect(submittedBodies.at(-1)).toEqual(scenario.body);
+    expect(observed.actionRequests).toBe(0);
 
-  resolveAction();
-  await expect(dialog).toBeHidden();
+    resolveAction();
+    await expect(dialog).toBeHidden();
+    expect(actionRequests).toBe(index + 1);
+  }
 });
 
 test("P24 action variants keep failed drafts in the dialog and require an explicit retry", async ({
