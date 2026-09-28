@@ -774,6 +774,28 @@
   border-top: 1px solid var(--review-line);
 }
 
+.automation-center--review .automation-editor-error {
+  display: grid;
+  gap: 6px;
+  padding: 12px 14px;
+  border: 1px solid var(--so-automation-rule-danger);
+  border-left-width: 4px;
+  background: var(--so-automation-rule-on-primary);
+  color: var(--so-automation-rule-danger);
+  overflow-wrap: anywhere;
+}
+
+.automation-center--review .automation-editor-error p {
+  margin: 0;
+  color: var(--review-ink);
+}
+
+.automation-center--review .automation-editor-error code {
+  color: var(--review-muted);
+  font: inherit;
+  font-size: 13px;
+}
+
 @media (max-width: 900px) {
   .automation-center--review .automation-grid article {
     grid-template-columns: minmax(180px, 1fr) minmax(250px, 1.3fr) auto;

@@ -54,6 +54,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   selected = ref<any>(null),
   notice = ref(""),
   requestId = ref(""),
+  editorFailure = ref<{ message: string; requestId: string } | null>(null),
   showCreate = ref(false),
   editing = ref<Rule | null>(null),
   routeSyncReady = ref(false),
@@ -91,6 +92,7 @@ watch(
     previewSequence++;
     preview.value = null;
     previewing.value = false;
+    editorFailure.value = null;
     if (notice.value === previewSuccessNotice) notice.value = "";
   },
   { deep: true, flush: "sync" },
@@ -213,6 +215,7 @@ async function open(rule: Rule, syncRoute = true) {
 }
 async function create() {
   if (disposed || busy.value) return;
+  editorFailure.value = null;
   const view = viewGeneration;
   const ownerPath = route.fullPath;
   const owner = {
@@ -248,6 +251,11 @@ async function create() {
     // Close only the submitting view before navigation; no late continuation may close a new one.
     await Promise.all([clearRuleQuery(true), load(false)]);
   } catch (error) {
+    if (owner.current())
+      editorFailure.value = {
+        message: notice.value || "本次操作未完成，请核对后重试。",
+        requestId: requestId.value,
+      };
     rethrowUnexpectedError(error);
   } finally {
     if (!disposed) busy.value = false;
@@ -275,6 +283,7 @@ function edit(rule: Rule, syncRoute = true) {
   };
   editReason.value = "";
   preview.value = null;
+  editorFailure.value = null;
   showCreate.value = true;
 }
 function closeEditor() {
@@ -283,6 +292,7 @@ function closeEditor() {
   editing.value = null;
   editReason.value = "";
   preview.value = null;
+  editorFailure.value = null;
   if (route.query.rule) void clearRuleQuery();
 }
 function closeDetail() {
@@ -333,6 +343,7 @@ async function openCreator() {
   editReason.value = "";
   form.value = emptyForm();
   preview.value = null;
+  editorFailure.value = null;
   showCreate.value = true;
 }
 function applyTemplate(template: RuleTemplate) {
@@ -344,6 +355,7 @@ function applyTemplate(template: RuleTemplate) {
 }
 async function runPreview() {
   if (disposed || previewing.value || !editorFormElement.value?.reportValidity()) return;
+  editorFailure.value = null;
   const sequence = ++previewSequence;
   const ownerPath = route.fullPath;
   const isCurrent = () =>
@@ -368,6 +380,7 @@ async function runPreview() {
     requestId.value = failure?.requestId ?? "";
     state.value = failure?.kind === "conflict" ? "version_conflict" : (failure?.kind ?? "error");
     notice.value = failure?.actionHint ?? "稍后重试。";
+    editorFailure.value = { message: notice.value, requestId: requestId.value };
     rethrowUnexpectedError(error);
   } finally {
     if (isCurrent()) previewing.value = false;
@@ -595,6 +608,11 @@ watch(
       :aria-label="editing ? '编辑自动化规则' : '创建自动化规则'"
       @cancel="handleCreateCancel"
     >
+      <div v-if="editorFailure" class="automation-editor-error" role="alert">
+        <b>本次操作未完成</b>
+        <p>{{ editorFailure.message }}</p>
+        <code v-if="editorFailure.requestId">请求编号：{{ editorFailure.requestId }}</code>
+      </div>
       <form ref="editorFormElement" @submit.prevent="create">
         <h3>{{ editing ? "编辑自动化规则" : "创建自动化规则" }}</h3>
         <section v-if="!editing" class="automation-templates">

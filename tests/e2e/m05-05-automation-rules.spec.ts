@@ -224,6 +224,95 @@ test("UI2-AR03 template cycle guard and creation preserve the exact rule contrac
   ]);
 });
 
+test("P27 create failure stays in the editor with its request id and can be retried", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes: unknown[] = [];
+  await page.route("**/api/v1/automations", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.fulfill({ json: envelope([rule]) });
+      return;
+    }
+    writes.push(route.request().postDataJSON());
+    if (writes.length === 1) {
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "dependency_unavailable",
+            message: "请求失败",
+            action_hint: "规则尚未创建；请稍后重试。",
+          },
+          request_id: "ar-create-retry-503",
+          trace_id: "ar-create-retry-trace",
+        },
+      });
+      return;
+    }
+    await route.fulfill({ status: 201, json: envelope(rule) });
+  });
+  await page.goto("/automations");
+  await readyCreator(page);
+  const editor = page.getByRole("dialog", { name: "创建自动化规则" });
+  const name = editor.getByLabel("规则名称");
+  await name.fill("稍后创建的规则");
+  await editor.getByRole("button", { name: "创建并启用" }).click();
+  const feedback = editor.getByRole("alert");
+  await expect(feedback).toContainText("本次操作未完成");
+  await expect(feedback).toContainText("规则尚未创建；请稍后重试。");
+  await expect(feedback).toContainText("ar-create-retry-503");
+  await expect(name).toHaveValue("稍后创建的规则");
+  await expect(editor.getByRole("button", { name: "创建并启用" })).toBeEnabled();
+  expect(writes).toHaveLength(1);
+  await editor.getByRole("button", { name: "创建并启用" }).click();
+  await expect(editor).not.toBeVisible();
+  expect(writes).toHaveLength(2);
+});
+
+test("P27 edit conflict stays in the editor with the current draft and request id", async ({
+  page,
+}) => {
+  await setup(page);
+  const writes: unknown[] = [];
+  await page.route(`**/api/v1/automations/${ruleId}`, async (route) => {
+    if (route.request().method() !== "PATCH") {
+      await route.fulfill({
+        json: envelope({
+          ...rule,
+          executions: [],
+        }),
+      });
+      return;
+    }
+    writes.push(route.request().postDataJSON());
+    await route.fulfill({
+      status: 409,
+      json: {
+        error: {
+          code: "version_conflict",
+          message: "规则版本已变化",
+          action_hint: "当前规则已有更新；请重新读取后再保存。",
+        },
+        request_id: "ar-edit-conflict-409",
+        trace_id: "ar-edit-conflict-trace",
+      },
+    });
+  });
+  await page.goto("/automations");
+  await page.getByRole("button", { name: "编辑", exact: true }).click();
+  const editor = page.getByRole("dialog", { name: "编辑自动化规则" });
+  await editor.getByLabel("规则名称").fill("保留在窗内的编辑草稿");
+  await editor.getByLabel("修改原因").fill("更正负责人说明");
+  await editor.getByRole("button", { name: "保存修改" }).click();
+  const feedback = editor.getByRole("alert");
+  await expect(feedback).toContainText("当前规则已有更新；请重新读取后再保存。");
+  await expect(feedback).toContainText("ar-edit-conflict-409");
+  await expect(editor.getByLabel("规则名称")).toHaveValue("保留在窗内的编辑草稿");
+  await expect(editor.getByLabel("修改原因")).toHaveValue("更正负责人说明");
+  expect(writes).toHaveLength(1);
+});
+
 test("UI2-AR04 pause and resume use the returned version and existing audit reasons", async ({
   page,
 }) => {

@@ -100,7 +100,7 @@ test("P27 stale source and pretend approval fail closed", () => {
   assert.throws(() => validateActionReview(stale, context), /reviewed source drift/);
   const approved = review();
   approved.approval = "approved";
-  assert.throws(() => validateActionReview(approved, context), /cannot grant approval/);
+  assert.throws(() => validateActionReview(approved, context), /cannot grant action approval/);
 });
 
 test("P27 ten explicit variants preserve action counts and bind both viewport images", () => {
