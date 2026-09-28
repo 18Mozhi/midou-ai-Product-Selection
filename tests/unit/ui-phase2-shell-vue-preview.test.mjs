@@ -3,63 +3,52 @@ import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import test from "node:test";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
-import {
-  previewShellVue,
-  shellReviewImport,
-  shellReviewSetup,
-  shellReviewCss,
-} from "../../scripts/lib/ui-phase2-shell-vue-preview.mjs";
+import { previewShellVue, shellReviewCss } from "../../scripts/lib/ui-phase2-shell-vue-preview.mjs";
 
 const file = "apps/web/src/components/NavigationShell.vue";
 const source = (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 
-test("C shell preview retains every production script statement except two explicit preview additions", () => {
+test("production C shell SFC compiles with one responsive navigation dialog", () => {
   const actual = parse(source).descriptor;
-  const review = parse(previewShellVue(source)).descriptor;
-  assert.equal(
-    review.scriptSetup.content.replace(shellReviewImport, "").replace(shellReviewSetup, ""),
-    actual.scriptSetup.content,
-  );
-  const styles = (descriptor) => descriptor.styles.map(({ loc, ...style }) => style);
-  assert.deepEqual(styles(review), styles(actual));
-  const script = compileScript(review, { id: "shell-preview" });
+  assert.equal(actual.template.content.match(/id="role-navigation"/g)?.length, 1);
+  assert.match(actual.template.content, /<dialog[\s\S]*?ref="navigationDialog"/);
+  assert.match(source, /useNavigationShellDrawer\(menuOpen\)/);
+  assert.match(source, /class="role-shell role-shell--c"/);
+  assert.ok(source.includes('<style src="../navigation-shell-c.css"></style>'));
+  assert.ok(!source.includes("navigation-shell-scoped.css"));
+  assert.ok(!source.includes("shell-review-navigation"));
+  assert.ok(!source.includes("SIGNAL LEDGER"));
+  assert.ok(!source.includes("已连接 · 可复核"));
+  const script = compileScript(actual, { id: "shell-production-c" });
   assert.deepEqual(
     compileTemplate({
-      source: review.template.content,
+      source: actual.template.content,
       filename: file,
-      id: "shell-preview",
+      id: "shell-production-c",
       compilerOptions: { bindingMetadata: script.bindings },
     }).errors,
     [],
   );
 });
 
-test("C shell preview does not grant capabilities, replace page surfaces or rename action targets", () => {
-  const review = previewShellVue(source);
-  for (const expression of [
-    /:to="[\s\S]*?"/g,
-    /\bto="[^"\n]+"/g,
-    /v-(?:if|else-if|show)="[^"\n]+"/g,
-  ]) {
-    const before = source.match(expression) ?? [];
-    const after = review.match(expression) ?? [];
-    if (expression.source.includes("else-if")) {
-      assert.deepEqual(
-        after.filter((item) => item !== 'v-if="reviewCompact"'),
-        before,
-      );
-    } else assert.deepEqual(after, before);
-  }
-  assert.equal(review.match(/<KeepAlive/g)?.length, 1);
-  assert.equal(review.match(/id="role-navigation"/g)?.length, 1);
-  assert.ok(!review.includes("SIGNAL LEDGER"));
-  assert.ok(!review.includes("已连接 · 可复核"));
-  assert.ok(review.includes('@cancel.prevent="menuOpen = false"'));
+test("production C shell preserves authorization, surface routing and primary action targets", () => {
+  for (const contract of [
+    "authorizedNavigation(props.shell, allCapabilities.value, guard.value?.roles ?? [])",
+    "canOpenRoute(",
+    "const routeAllowed = computed(",
+    "const selectedSurfaceComponent = computed(",
+    '<KeepAlive :max="12">',
+    'to="/platform-admin/organizations/new"',
+    'to="/org-admin/members"',
+    'to="/notifications"',
+    'to="/me"',
+  ])
+    assert.ok(source.includes(contract), `Missing shell contract: ${contract}`);
+  assert.equal(source.match(/id="role-navigation"/g)?.length, 1);
 });
 
-test("C shell review fails closed on anchor drift and is never loaded by production", async () => {
-  assert.throws(() => previewShellVue(source.replace('class="role-shell"', 'class="renamed"')));
-  assert.throws(() => previewShellVue(previewShellVue(source)));
+test("historical shell review stays isolated and is no longer the production transform", async () => {
+  assert.throws(() => previewShellVue(source));
   assert.ok(!source.includes("shell-review-navigation"));
   assert.ok(!source.includes("shell-vue-c-preview"));
   const css = await readFile(shellReviewCss, "utf8");
@@ -69,7 +58,7 @@ test("C shell review fails closed on anchor drift and is never loaded by product
   assert.ok(!css.includes("!important"));
 });
 
-test("platform C r2 proof binds current sources, all images and baseline menu parity without approval", async () => {
+test("platform C r2 remains immutable historical evidence after production implementation", async () => {
   const root = "output/playwright/shell-vue-c-platform-r2";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -84,9 +73,11 @@ test("platform C r2 proof binds current sources, all images and baseline menu pa
   );
   assert.equal(evidence.screenshots.length, 18);
   assert.equal(Object.keys(evidence.sourceHashes).length, 177);
-  for (const [file, sha] of Object.entries(evidence.sourceHashes)) {
-    assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
-  }
+  assert.notEqual(
+    evidence.sourceHashes[file],
+    hash(source.replaceAll("\r\n", "\n")),
+    "historical preview source hash must not be presented as the current production source",
+  );
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

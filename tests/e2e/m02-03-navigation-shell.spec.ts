@@ -184,8 +184,7 @@ for (const item of [
     await page.goto(item.path);
     await expect(page.getByRole("heading", { name: item.heading }).first()).toBeVisible();
     await expect(page.locator(".role-shell")).toHaveAttribute("data-state", "ready");
-    await expect(page.locator(".role-nav-groups details[open]")).toHaveCount(0);
-    await expect(page.locator(".role-nav-menu").first()).toBeHidden();
+    await expect(page.locator(".role-nav-groups details[open]")).not.toHaveCount(0);
     await expect(page.locator(".role-topbar .role-context")).toHaveCount(0);
     if (testInfo.project.name === "mobile-390") {
       await expect(page.locator(".role-context-rail")).toBeHidden();
@@ -210,7 +209,22 @@ for (const item of [
         : item.shell === "organization_admin"
           ? "组织管理员"
           : "平台超级管理员";
-    await expect(page.locator(".role-sidebar").getByText(roleLabel)).toBeVisible();
+    await expect(page.locator(".role-shell")).not.toContainText(/已连接\s*·\s*可复核/);
+    if (testInfo.project.name === "mobile-390") {
+      const toggle = page.getByRole("button", { name: "打开导航菜单" });
+      await toggle.click();
+      await expect(page.locator(".role-navigation-frame")).toBeVisible();
+      await expect(page.locator(".role-nav-groups details[open]").first()).toBeVisible();
+      await expect(page.locator(".role-nav-menu").first()).toBeVisible();
+      await expect(page.locator(".role-sidebar").getByText(roleLabel)).toBeVisible();
+      await page.keyboard.press("Escape");
+      await expect(toggle).toBeFocused();
+      await toggle.evaluate((element: HTMLButtonElement) => element.blur());
+    } else {
+      await expect(page.locator(".role-nav-groups details[open]").first()).toBeVisible();
+      await expect(page.locator(".role-nav-menu").first()).toBeVisible();
+      await expect(page.locator(".role-sidebar").getByText(roleLabel)).toBeVisible();
+    }
     await expect(
       page
         .locator(".role-sidebar")
@@ -226,6 +240,8 @@ test("platform navigation searches grouped business and advanced operations menu
 }) => {
   await allow(page, "platform_admin");
   await page.goto("/platform-admin");
+  if ((page.viewportSize()?.width ?? 1000) <= 840)
+    await page.getByRole("button", { name: "打开导航菜单" }).click();
   const sidebar = page.locator(".role-sidebar");
   const search = sidebar.getByRole("searchbox", { name: "搜索导航菜单" });
   await search.fill("高级运维");
@@ -245,8 +261,35 @@ test("M02-03.A08 mobile drawer is keyboard operable", async ({ page }) => {
   await page.keyboard.press("Enter");
   await expect(toggle).toHaveAttribute("aria-expanded", "true");
   const drawer = page.locator("#role-navigation");
-  await expect(drawer).toHaveClass(/is-open/);
+  const dialog = page.locator(".role-navigation-frame");
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toHaveJSProperty("open", true);
+  await expect(dialog.locator(".role-navigation-close")).toBeFocused();
   await expect(drawer.getByRole("link", { name: "今日工作" })).toBeVisible();
+  await page.keyboard.press("Shift+Tab");
+  const lastControl = dialog
+    .locator("a[href]:visible, button:visible, input:visible, summary:visible, [tabindex]:visible")
+    .last();
+  await expect(lastControl).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(dialog.locator(".role-navigation-close")).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(toggle).toBeFocused();
+});
+
+test("mobile navigation closes and restores focus when crossing to desktop", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await allow(page, "member");
+  await page.goto("/home");
+  const toggle = page.getByRole("button", { name: "打开导航菜单" });
+  await toggle.click();
+  await expect(page.locator(".role-navigation-frame")).toBeVisible();
+  await page.setViewportSize({ width: 1000, height: 900 });
+  await expect(page.locator(".role-navigation-frame")).toBeVisible();
+  await expect(page.locator(".role-navigation-frame")).toHaveJSProperty("open", true);
+  await expect(toggle).toBeHidden();
+  await expect(page.getByRole("link", { name: "SCOUTOPS 智能选品" })).toBeFocused();
 });
 
 for (const item of [
@@ -271,7 +314,7 @@ for (const item of [
     await contextDrawer.locator("summary").click();
     await expect(contextDrawer).toHaveAttribute("open", "");
     await expect(contextDrawer.getByText("任务域", { exact: true })).toBeVisible();
-    await expect(contextDrawer.getByText("信号状态", { exact: true })).toBeVisible();
+    await expect(contextDrawer.getByText("信号状态", { exact: true })).toHaveCount(0);
     await expect(contextDrawer.getByText("当前角色", { exact: true })).toBeVisible();
     await expect(navigation.locator(":scope > *")).toHaveCount(5);
     await expect(navigation.getByRole("link")).toHaveCount(4);
@@ -283,7 +326,7 @@ for (const item of [
       .toBe(true);
     await more.click();
     await expect(more).toHaveAttribute("aria-expanded", "true");
-    await expect(page.locator("#role-navigation")).toHaveClass(/is-open/);
+    await expect(page.locator(".role-navigation-frame")).toHaveJSProperty("open", true);
   });
 
 for (const item of [
@@ -301,7 +344,8 @@ for (const item of [
       .evaluateAll((elements) =>
         elements.flatMap((element) => {
           const size = Number.parseFloat(getComputedStyle(element).fontSize);
-          return size < 16
+          const metadata = element.tagName === "P" && Boolean(element.closest(".role-page-title"));
+          return size < 16 && !(metadata && size >= 13)
             ? [{ tag: element.tagName, text: element.textContent?.trim().slice(0, 40) ?? "", size }]
             : [];
         }),
@@ -384,7 +428,11 @@ test("M02-03 platform shell exposes management navigation without member-only sh
   const sidebar = page.locator(".role-sidebar");
   if ((page.viewportSize()?.width ?? 1000) <= 840)
     await page.getByRole("button", { name: "更多" }).click();
-  else await sidebar.getByText("业务运营", { exact: true }).click();
+  else {
+    const summary = sidebar.getByText("业务运营", { exact: true });
+    const isOpen = await summary.evaluate((node) => node.closest("details")?.hasAttribute("open"));
+    if (!isOpen) await summary.click();
+  }
   await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
   await expect(sidebar.getByRole("link", { name: /通知运营/ })).toHaveAttribute(
@@ -422,8 +470,11 @@ test("M02-03 explicit routes keep internal navigation reactive and unknown route
   await allow(page, "member");
   await page.goto("/home");
   await page.evaluate(() => ((window as any).__scoutopsRouteMarker = "kept"));
-  if ((page.viewportSize()?.width ?? 1000) > 840)
-    await page.locator(".role-sidebar").getByText("工作台", { exact: true }).click();
+  if ((page.viewportSize()?.width ?? 1000) > 840) {
+    const summary = page.locator(".role-sidebar").getByText("工作台", { exact: true });
+    const isOpen = await summary.evaluate((node) => node.closest("details")?.hasAttribute("open"));
+    if (!isOpen) await summary.click();
+  }
   const routeLink =
     (page.viewportSize()?.width ?? 1000) <= 840
       ? page
@@ -457,6 +508,8 @@ test("M02-03 platform return requires a target context and preserves the member 
     await page.getByRole("button", { name: "更多" }).click();
   await page.getByRole("link", { name: "进入管理后台" }).click();
   await expect(page).toHaveURL(/\/platform-admin$/);
+  if ((page.viewportSize()?.width ?? 1000) <= 840)
+    await page.getByRole("button", { name: "更多" }).click();
   const switchLink = page.getByRole("link", { name: "选择组织与工作区后进入用户工作台" });
   const href = await switchLink.getAttribute("href");
   expect(href).toContain("/select-context");
@@ -469,6 +522,8 @@ test("organization administration returns to the persisted member workspace", as
   );
   await allow(page, "organization_admin");
   await page.goto("/org-admin");
+  if ((page.viewportSize()?.width ?? 1000) <= 840)
+    await page.getByRole("button", { name: "更多" }).click();
   await expect(page.getByRole("link", { name: "返回成员工作台" })).toHaveAttribute(
     "href",
     "/trends?market=US&page=2",
