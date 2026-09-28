@@ -107,6 +107,7 @@ const form = reactive({
   dimensions: blankDimensions(),
 });
 let actionDialogGeneration = 0;
+let createDialogGeneration = 0;
 let previewReadGeneration = 0;
 let pendingPreviewRead: { rule: Rule; page: number; generation: number } | null = null;
 const capabilities = computed(() => new Set(props.capabilities)),
@@ -298,6 +299,7 @@ function resetForm() {
   form.dimensions.splice(0, form.dimensions.length, ...blankDimensions());
 }
 function openCreate() {
+  createDialogGeneration += 1;
   createError.value = "";
   showCreate.value = true;
 }
@@ -319,6 +321,7 @@ function closeAction() {
 }
 async function create() {
   if (!canDecide.value || createValidation.value) return;
+  const generation = createDialogGeneration;
   const dimensions = form.dimensions.filter((item) => item.weight > 0),
     result = await post(
       "/opportunity-score-rules",
@@ -332,10 +335,13 @@ async function create() {
         },
       },
       (value) => (createError.value = value),
+      () => generation === createDialogGeneration && showCreate.value,
     );
   if (result) {
-    closeCreate();
-    resetForm();
+    if (generation === createDialogGeneration) {
+      closeCreate();
+      resetForm();
+    }
     await load();
     message.value = "草稿已创建；发布前仍需提交、审批和启用。";
   }

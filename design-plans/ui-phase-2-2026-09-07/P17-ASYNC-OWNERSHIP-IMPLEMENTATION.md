@@ -7,11 +7,12 @@
 - 生命周期动作提交时捕获规则、动作、原因、回滚目标和弹窗代次。关闭后打开另一版本，不会被旧成功回执关闭或改写新弹窗；旧失败不覆盖新弹窗错误/请求编号。旧写入仍可能由服务端完成，成功后仍重读版本目录并以原动作名反馈。
 - 预览保持最多一个物理 GET 在途。A 请求未结束时选择 B，B 进入可见等待状态并排队；A 的迟到结果被丢弃，随后只读取当前最新的 B。关闭排队中的目标会撤销该待发意图，旧请求完成后不会意外打开或读取已关闭的预览。
 - 预览失败、分页、生命周期动作 body 和错误恢复合同不变；这里不声称隔离夹具证明真实审批、数据库或审计。
+- 创建草稿 POST 绑定打开弹窗的代次。旧请求仍按原合同写入并重读目录；如果用户在请求期间关闭并重新打开创建窗，迟到成功不会关闭或清空新草稿，迟到失败不会覆盖新窗错误/请求编号。
 
 ## 验证
 
-`tests/e2e/ui-phase2-scoring-contracts.spec.ts` 新增受控实际 Vue 场景：旧批准成功晚回、A/B预览串行归属、关闭时丢弃排队预览；桌面 Chromium 与390px手机共36/36通过。`typecheck:web`、`format:check`、`verify:docs`（153项）、`verify:runtime-docs`、`verify:static-analysis`、`verify:frontend-budget`、`verify:release-matrix -- --validate`及22工作区生产构建全部通过。浏览器夹具为本地隔离响应，不代表真实服务端验收。
+`node scripts/run-playwright-projects.mjs tests/e2e/ui-phase2-scoring-contracts.spec.ts --workers=1`：桌面 Chromium 与390px手机各16/16通过；`npm run typecheck:web`、`npm run format:check`、`npm run verify:docs`（153项）、`npm run verify:plans`、`npm run verify:runtime-docs`及`npm run verify:release-matrix`通过。相邻 `m04-03-scoring.spec.ts` 综合复验为18/20：评分规则截图与当前内容尺寸不匹配，以及机会详情样例找不到规则覆盖说明；两处均不在本次改动文件中，尚未作为本批修复或通过。浏览器夹具为本地隔离响应，不代表真实服务端验收。
 
 ## 未覆盖
 
-创建表单旧 POST 清理新草稿、版本目录自身 KeepAlive 读生命周期、真实审批/审计/M07-03 与读屏/全局全状态门不由本批关闭。未增加自动取消或服务端重试，不改变用户已提交操作的服务器结果。
+版本目录自身 KeepAlive 读生命周期、真实审批/审计/M07-03 与读屏/全局全状态门不由本批关闭。未增加自动取消或服务端重试，不改变用户已提交操作的服务器结果。

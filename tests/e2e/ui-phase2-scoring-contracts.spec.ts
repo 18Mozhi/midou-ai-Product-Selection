@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Locator, type Page } from "@playwright/test";
 
 // Same reviewed facts as m04-03-scoring, isolated here so its capture source stays unchanged.
 const ruleId = "00000000-0000-4000-8000-000000000435";
@@ -62,6 +62,16 @@ async function setup(
     }),
   );
   return writes;
+}
+
+async function fillValidCreateDraft(dialog: Locator, version: string, name: string) {
+  await dialog.getByLabel("版本代码", { exact: true }).fill(version);
+  await dialog.getByLabel("规则名称", { exact: true }).fill(name);
+  await dialog.getByLabel("推荐阈值", { exact: true }).fill("70");
+  await dialog.getByLabel("观察阈值", { exact: true }).fill("50");
+  await dialog.getByLabel("市场需求权重", { exact: true }).fill("60");
+  await dialog.getByLabel("市场需求必填", { exact: true }).check();
+  await dialog.getByLabel("竞争权重", { exact: true }).fill("40");
 }
 
 for (const [action, status, opener, label, result] of [
@@ -192,6 +202,93 @@ test("UI2-S02 create validates weights, preserves cancelled draft, sends only en
   await expect(dialog.getByLabel("版本代码", { exact: true })).toHaveValue("");
   await expect(dialog.getByLabel("推荐阈值", { exact: true })).toHaveValue("");
   await expect(dialog.getByLabel("市场需求权重", { exact: true })).toHaveValue("0");
+});
+
+test("late create success refreshes rules without closing or clearing a newer draft", async ({
+  page,
+}) => {
+  const writes = await setup(page);
+  let releaseFirst!: () => void;
+  let markFirstStarted!: () => void;
+  const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve));
+  const firstStarted = new Promise<void>((resolve) => (markFirstStarted = resolve));
+  let postCount = 0;
+  await page.route("**/api/v1/opportunity-score-rules", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.fulfill({ json: envelope([rule("active")]) });
+      return;
+    }
+    postCount += 1;
+    if (postCount === 1) {
+      markFirstStarted();
+      await firstGate;
+    }
+    await route.fulfill({ status: 201, json: envelope(rule("draft", targetId, postCount)) });
+  });
+
+  await page.goto("/opportunities/scoring-rules");
+  const trigger = page.getByRole("button", { name: "创建新版本补齐配置" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
+  await fillValidCreateDraft(dialog, "org-v3", "原始提交");
+  await dialog.getByRole("button", { name: "保存草稿", exact: true }).click();
+  await firstStarted;
+
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await trigger.click();
+  await fillValidCreateDraft(dialog, "org-v4", "新草稿");
+  releaseFirst();
+
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("版本代码", { exact: true })).toHaveValue("org-v4");
+  await expect(dialog.getByLabel("规则名称", { exact: true })).toHaveValue("新草稿");
+  await expect(page.locator(".opportunity-message")).toContainText("草稿已创建");
+  await dialog.getByRole("button", { name: "保存草稿", exact: true }).click();
+  await expect(dialog).toBeHidden();
+  expect(writes).toHaveLength(2);
+  expect(writes.map((write) => write.body)).toMatchObject([
+    { version_code: "org-v3", name: "原始提交" },
+    { version_code: "org-v4", name: "新草稿" },
+  ]);
+});
+
+test("late create failure does not replace errors or request details in a newer draft", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseFirst!: () => void;
+  let markFirstStarted!: () => void;
+  const firstGate = new Promise<void>((resolve) => (releaseFirst = resolve));
+  const firstStarted = new Promise<void>((resolve) => (markFirstStarted = resolve));
+  await page.route("**/api/v1/opportunity-score-rules", async (route) => {
+    if (route.request().method() !== "POST") {
+      await route.fulfill({ json: envelope([rule("active")]) });
+      return;
+    }
+    markFirstStarted();
+    await firstGate;
+    await route.fulfill({
+      status: 409,
+      json: failure("score_rule_version_conflict", "旧版本冲突追踪"),
+    });
+  });
+
+  await page.goto("/opportunities/scoring-rules");
+  const trigger = page.getByRole("button", { name: "创建新版本补齐配置" });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
+  await fillValidCreateDraft(dialog, "org-v3", "旧提交");
+  await dialog.getByRole("button", { name: "保存草稿", exact: true }).click();
+  await firstStarted;
+
+  await dialog.getByRole("button", { name: "取消", exact: true }).click();
+  await trigger.click();
+  await fillValidCreateDraft(dialog, "org-v4", "新草稿");
+  releaseFirst();
+
+  await expect(dialog.getByLabel("版本代码", { exact: true })).toHaveValue("org-v4");
+  await expect(dialog.getByLabel("规则名称", { exact: true })).toHaveValue("新草稿");
+  await expect(dialog.getByRole("alert")).toHaveCount(0);
 });
 
 test("UI2-S03 revision conflict stays in the dialog and a reloaded version is required", async ({
@@ -480,7 +577,7 @@ test("closing a queued scoring preview drops that unopened request", async ({ pa
     .getByRole("button", { name: "关闭" })
     .click();
   releaseFirst();
-  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: "发布影响预览 · org-v2" })).toHaveCount(0);
   await expect.poll(() => reads).toEqual([`/api/v1/opportunity-score-rules/${ruleId}/preview`]);
 });
 
