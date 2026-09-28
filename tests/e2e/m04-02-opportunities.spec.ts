@@ -265,6 +265,52 @@ async function ready(page: Page, detailEvidence = evidence) {
   );
 }
 
+const nextOpportunityId = "00000000-0000-4000-8000-000000000432";
+const nextOpportunity = {
+  ...recommendedBase,
+  id: nextOpportunityId,
+  name: "当前机会：防晒产品趋势",
+  source_ref_id: "00000000-0000-4000-8000-000000000433",
+  lineage: {
+    freshness: { observed_at: "2026-08-08T00:00:00.000Z", age_seconds: 60 },
+    failure_impact: { level: "healthy", codes: [], affected_stages: [] },
+    request_ids: ["current-opportunity-request"],
+    trace_ids: ["current-opportunity-trace"],
+    nodes: [],
+  },
+  operating_feedback: { facts: [], calibration: null },
+  adoption_blockers: [],
+  redecision_ready: false,
+  evidence: [],
+  decisions: [],
+  section_status: {
+    market: "covered",
+    competition: "covered",
+    profit: "covered",
+    risk: "covered",
+    execution: "not_available",
+  },
+};
+
+async function readyForNextOpportunity(page: Page) {
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) =>
+    route.fulfill({ json: envelope(nextOpportunity) }),
+  );
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}/profit-analysis`, (route) =>
+    route.fulfill({ json: envelope({ latest_run: null, current_inputs: [] }) }),
+  );
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}/ai-analyses`, (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
+}
+
+async function switchOpportunityInPlace(page: Page, id: string) {
+  await page.evaluate((opportunityId) => {
+    window.history.pushState({}, "", `/opportunities/${opportunityId}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, id);
+}
+
 test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthful", async ({
   page,
 }) => {
@@ -631,6 +677,79 @@ test("opportunity detail failure cannot replace the list after navigating away",
   await delayedFailure;
   await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
   await expect(page.getByRole("heading", { name: "暂时不可用" })).toHaveCount(0);
+});
+
+test("a late opportunity detail success cannot replace the current opportunity after the ID changes", async ({
+  page,
+}) => {
+  await ready(page);
+  await readyForNextOpportunity(page);
+  let releaseOldDetail!: () => void;
+  let markOldDetailStarted!: () => void;
+  const oldDetailGate = new Promise<void>((resolve) => (releaseOldDetail = resolve));
+  const oldDetailStarted = new Promise<void>((resolve) => (markOldDetailStarted = resolve));
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
+    markOldDetailStarted();
+    await oldDetailGate;
+    await route.fallback();
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await oldDetailStarted;
+  const currentDetailRequest = page.waitForRequest((request) =>
+    request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
+  );
+  await switchOpportunityInPlace(page, nextOpportunityId);
+  await currentDetailRequest;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+
+  const oldDetailResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/api/v1/opportunities/${opportunityId}`) &&
+      response.request().method() === "GET",
+  );
+  releaseOldDetail();
+  await oldDetailResponse;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  await expect(page.getByRole("heading", { name: base.name, exact: true })).toHaveCount(0);
+});
+
+test("a late opportunity detail failure cannot replace the current opportunity after the ID changes", async ({
+  page,
+}) => {
+  await ready(page);
+  await readyForNextOpportunity(page);
+  let releaseOldDetail!: () => void;
+  let markOldDetailStarted!: () => void;
+  const oldDetailGate = new Promise<void>((resolve) => (releaseOldDetail = resolve));
+  const oldDetailStarted = new Promise<void>((resolve) => (markOldDetailStarted = resolve));
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
+    markOldDetailStarted();
+    await oldDetailGate;
+    await route.fulfill({
+      status: 503,
+      json: { error: { code: "temporarily_unavailable", message: "旧机会读取失败" } },
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await oldDetailStarted;
+  const currentDetailRequest = page.waitForRequest((request) =>
+    request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
+  );
+  await switchOpportunityInPlace(page, nextOpportunityId);
+  await currentDetailRequest;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+
+  const oldDetailResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/api/v1/opportunities/${opportunityId}`) &&
+      response.status() === 503,
+  );
+  releaseOldDetail();
+  await oldDetailResponse;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  await expect(page.getByText("旧机会读取失败", { exact: true })).toHaveCount(0);
 });
 
 test("a delayed decision receipt cannot close a newer decision dialog", async ({ page }) => {
