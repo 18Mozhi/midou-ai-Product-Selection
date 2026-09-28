@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, reactive, ref, watch } from "vue";
+import { computed, onBeforeUnmount, reactive, ref, watch } from "vue";
 import { ApiClientError, createApiClient } from "../api-client";
 import OpportunityProfitPanel from "./OpportunityProfitPanel.vue";
 import type { OpportunityProfitAnalysis } from "./opportunity-workspace-types";
@@ -9,12 +9,25 @@ const props = withDefaults(
     { canConfirmCost: false },
   ),
   request = createApiClient(props.apiBaseUrl),
+  scopeGeneration = ref(0),
+  writeScopes = reactive(new Set<string>()),
+  scopeKey = computed(() => `${scopeGeneration.value}:${props.opportunityId}`),
+  busy = computed(() => writeScopes.has(scopeKey.value)),
   profit = ref<OpportunityProfitAnalysis | null>(null),
   opportunityVersion = ref(0),
+  versionReady = ref(false),
+  versionLoadState = ref<"loading" | "ready" | "error">("loading"),
+  versionErrorMessage = ref(""),
+  versionRequestId = ref(""),
   reviewers = ref<Array<{ id: string; label: string }>>([]),
-  busy = ref(false),
-  message = ref(""),
-  requestId = ref(""),
+  profitLoadState = ref<"loading" | "ready" | "error">("loading"),
+  profitErrorMessage = ref(""),
+  profitRequestId = ref(""),
+  reviewerLoadState = ref<"unknown" | "loading" | "ready" | "error">("unknown"),
+  reviewerErrorMessage = ref(""),
+  reviewerRequestId = ref(""),
+  writeMessage = ref(""),
+  writeRequestId = ref(""),
   costForm = reactive({
     platform: "amazon",
     input_type: "purchase_price" as "sale_price" | "purchase_price" | "logistics",
@@ -27,61 +40,145 @@ const props = withDefaults(
     reviewer_id: "",
   });
 
-async function load() {
-  busy.value = true;
-  message.value = "";
+type OpportunityScope = { generation: number; id: string; key: string };
+const readGeneration = { version: 0, profit: 0, reviewers: 0 };
+let mounted = true;
+
+function currentScope(): OpportunityScope {
+  return {
+    generation: scopeGeneration.value,
+    id: props.opportunityId,
+    key: scopeKey.value,
+  };
+}
+
+function isCurrent(scope: OpportunityScope) {
+  return mounted && scope.generation === scopeGeneration.value && scope.id === props.opportunityId;
+}
+
+function failureDetails(error: unknown, fallback: string) {
+  return error instanceof ApiClientError
+    ? { message: error.actionHint, requestId: error.requestId }
+    : { message: fallback, requestId: "" };
+}
+
+async function loadOpportunityVersion(scope: OpportunityScope) {
+  const generation = ++readGeneration.version;
+  versionLoadState.value = "loading";
+  versionReady.value = false;
+  versionErrorMessage.value = "";
+  versionRequestId.value = "";
   try {
-    const [opportunity, analysis, reviewerList] = await Promise.all([
-      request<any>(`/opportunities/${props.opportunityId}`),
-      request<OpportunityProfitAnalysis>(`/opportunities/${props.opportunityId}/profit-analysis`),
-      props.canConfirmCost
-        ? request<Array<{ id: string; label: string }>>("/cost-input-reviewers")
-        : Promise.resolve({ data: [] as Array<{ id: string; label: string }> }),
-    ]);
-    opportunityVersion.value = Number(opportunity.data.version);
-    profit.value = analysis.data;
-    reviewers.value = reviewerList.data;
-    requestId.value = analysis.request_id;
+    const response = await request<any>(`/opportunities/${scope.id}`);
+    if (!isCurrent(scope) || generation !== readGeneration.version) return;
+    const version = Number(response.data.version);
+    if (!Number.isFinite(version)) {
+      versionLoadState.value = "error";
+      versionErrorMessage.value = "暂时无法确认当前机会版本，成本写入已暂停。";
+      return;
+    }
+    opportunityVersion.value = version;
+    versionReady.value = true;
+    versionLoadState.value = "ready";
   } catch (error) {
-    if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      message.value = error.actionHint;
-    } else message.value = "成本复核依赖暂不可用。";
-  } finally {
-    busy.value = false;
+    if (!isCurrent(scope) || generation !== readGeneration.version) return;
+    const failure = failureDetails(error, "暂时无法确认当前机会版本，成本写入已暂停。");
+    versionErrorMessage.value = failure.message;
+    versionRequestId.value = failure.requestId;
+    versionLoadState.value = "error";
   }
 }
 
-async function write(path: string, body: unknown) {
-  busy.value = true;
-  message.value = "";
+async function loadProfit(scope: OpportunityScope) {
+  const generation = ++readGeneration.profit;
+  profitLoadState.value = "loading";
+  profitErrorMessage.value = "";
+  profitRequestId.value = "";
+  try {
+    const response = await request<OpportunityProfitAnalysis>(
+      `/opportunities/${scope.id}/profit-analysis`,
+    );
+    if (!isCurrent(scope) || generation !== readGeneration.profit) return;
+    profit.value = response.data;
+    profitRequestId.value = response.request_id;
+    profitLoadState.value = "ready";
+  } catch (error) {
+    if (!isCurrent(scope) || generation !== readGeneration.profit) return;
+    const failure = failureDetails(error, "暂时无法读取利润与成本，请稍后重试。");
+    profitErrorMessage.value = failure.message;
+    profitRequestId.value = failure.requestId;
+    profitLoadState.value = "error";
+  }
+}
+
+async function loadReviewers(scope: OpportunityScope) {
+  if (!props.canConfirmCost) {
+    reviewers.value = [];
+    reviewerLoadState.value = "unknown";
+    reviewerErrorMessage.value = "";
+    reviewerRequestId.value = "";
+    return;
+  }
+  const generation = ++readGeneration.reviewers;
+  reviewerLoadState.value = "loading";
+  reviewerErrorMessage.value = "";
+  reviewerRequestId.value = "";
+  try {
+    const response = await request<Array<{ id: string; label: string }>>("/cost-input-reviewers");
+    if (!isCurrent(scope) || generation !== readGeneration.reviewers) return;
+    reviewers.value = response.data;
+    reviewerRequestId.value = response.request_id;
+    reviewerLoadState.value = "ready";
+  } catch (error) {
+    if (!isCurrent(scope) || generation !== readGeneration.reviewers) return;
+    const failure = failureDetails(error, "暂时无法读取成本复核人名单。");
+    reviewerErrorMessage.value = failure.message;
+    reviewerRequestId.value = failure.requestId;
+    reviewerLoadState.value = "error";
+  }
+}
+
+function loadScope(scope: OpportunityScope) {
+  return Promise.all([loadOpportunityVersion(scope), loadProfit(scope), loadReviewers(scope)]);
+}
+
+async function write(path: string, body: unknown, successMessage: string, scope = currentScope()) {
+  if (!isCurrent(scope) || writeScopes.has(scope.key)) return false;
+  writeScopes.add(scope.key);
+  writeMessage.value = "";
+  writeRequestId.value = "";
   try {
     const response = await request<any>(path, { method: "POST", body });
-    requestId.value = response.request_id;
-    return response.data;
+    if (!isCurrent(scope)) return false;
+    writeMessage.value = successMessage;
+    writeRequestId.value = response.request_id;
+    await loadScope(scope);
+    return true;
   } catch (error) {
-    if (error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      message.value = error.actionHint;
-      return null;
-    }
-    message.value = "成本复核依赖暂不可用。";
-    return null;
+    if (!isCurrent(scope)) return false;
+    const failure = failureDetails(error, "成本复核依赖暂不可用。");
+    writeMessage.value = failure.message;
+    writeRequestId.value = failure.requestId;
+    return false;
   } finally {
-    busy.value = false;
+    writeScopes.delete(scope.key);
   }
 }
 
 async function submitCost() {
-  const result = await write(`/opportunities/${props.opportunityId}/cost-inputs`, {
-    ...costForm,
-    amount_value: Number(costForm.amount_value),
-    observed_at: new Date(costForm.observed_at).toISOString(),
-    expected_version: opportunityVersion.value,
-  });
-  if (!result) return;
-  message.value = "成本已提交给指定复核人；通过前不会影响利润。";
-  await load();
+  if (!versionReady.value) return;
+  const scope = currentScope();
+  await write(
+    `/opportunities/${scope.id}/cost-inputs`,
+    {
+      ...costForm,
+      amount_value: Number(costForm.amount_value),
+      observed_at: new Date(costForm.observed_at).toISOString(),
+      expected_version: opportunityVersion.value,
+    },
+    "成本已提交给指定复核人；通过前不会影响利润。",
+    scope,
+  );
 }
 
 async function reviewCost(payload: {
@@ -90,31 +187,76 @@ async function reviewCost(payload: {
   reason: string;
   expectedVersion: number;
 }) {
-  const result = await write(
-    `/opportunities/${props.opportunityId}/cost-input-reviews/${payload.reviewId}/actions`,
+  const scope = currentScope();
+  await write(
+    `/opportunities/${scope.id}/cost-input-reviews/${payload.reviewId}/actions`,
     {
       decision: payload.decision,
       reason: payload.reason,
       expected_version: payload.expectedVersion,
     },
+    payload.decision === "approved" ? "成本复核已通过并生效。" : "成本复核已驳回。",
+    scope,
   );
-  if (!result) return;
-  message.value = payload.decision === "approved" ? "成本复核已通过并生效。" : "成本复核已驳回。";
-  await load();
 }
 
 async function queueProfit() {
-  const result = await write(`/opportunities/${props.opportunityId}/profit-runs`, {
-    platform: costForm.platform,
-    expected_version: opportunityVersion.value,
-  });
-  if (!result) return;
-  message.value = "利润重算已进入 Worker 队列。";
-  await load();
+  if (!versionReady.value) return;
+  const scope = currentScope();
+  await write(
+    `/opportunities/${scope.id}/profit-runs`,
+    { platform: costForm.platform, expected_version: opportunityVersion.value },
+    "利润重算已进入 Worker 队列。",
+    scope,
+  );
 }
 
-watch(() => props.opportunityId, load);
-onMounted(load);
+function resetScope() {
+  scopeGeneration.value += 1;
+  readGeneration.version += 1;
+  readGeneration.profit += 1;
+  readGeneration.reviewers += 1;
+  opportunityVersion.value = 0;
+  versionReady.value = false;
+  versionLoadState.value = "loading";
+  versionErrorMessage.value = "";
+  versionRequestId.value = "";
+  profit.value = null;
+  profitLoadState.value = "loading";
+  profitErrorMessage.value = "";
+  profitRequestId.value = "";
+  reviewers.value = [];
+  reviewerLoadState.value = props.canConfirmCost ? "loading" : "unknown";
+  reviewerErrorMessage.value = "";
+  reviewerRequestId.value = "";
+  writeMessage.value = "";
+  writeRequestId.value = "";
+  void loadScope(currentScope());
+}
+
+watch(() => props.opportunityId, resetScope, {
+  immediate: true,
+  flush: "sync",
+});
+watch(
+  () => props.canConfirmCost,
+  () => {
+    readGeneration.reviewers += 1;
+    reviewers.value = [];
+    reviewerLoadState.value = props.canConfirmCost ? "loading" : "unknown";
+    reviewerErrorMessage.value = "";
+    reviewerRequestId.value = "";
+    if (props.canConfirmCost) void loadReviewers(currentScope());
+  },
+  { flush: "sync" },
+);
+onBeforeUnmount(() => {
+  mounted = false;
+  scopeGeneration.value += 1;
+  readGeneration.version += 1;
+  readGeneration.profit += 1;
+  readGeneration.reviewers += 1;
+});
 </script>
 
 <template>
@@ -128,18 +270,37 @@ onMounted(load);
         >打开机会详情</RouterLink
       >
     </header>
-    <p v-if="message" role="status">
-      {{ message }} <code v-if="requestId">{{ requestId }}</code>
+    <p v-if="versionLoadState === 'loading'" role="status">
+      正在读取当前机会版本；读取完成前暂不能提交成本或重新计算。
+    </p>
+    <p v-else-if="versionLoadState === 'error'" role="alert">
+      {{ versionErrorMessage }}
+      <code v-if="versionRequestId">{{ versionRequestId }}</code>
+      <button type="button" :disabled="busy" @click="loadOpportunityVersion(currentScope())">
+        重新读取机会版本
+      </button>
+    </p>
+    <p v-if="writeMessage" role="status">
+      {{ writeMessage }} <code v-if="writeRequestId">{{ writeRequestId }}</code>
     </p>
     <OpportunityProfitPanel
       :profit="profit"
+      :profit-load-state="profitLoadState"
+      :profit-error-message="profitErrorMessage"
+      :profit-request-id="profitRequestId"
       :cost-form="costForm"
       :reviewer-options="reviewers"
+      :reviewer-load-state="reviewerLoadState"
+      :reviewer-error-message="reviewerErrorMessage"
+      :reviewer-request-id="reviewerRequestId"
+      :cost-version-ready="versionReady"
       :can-confirm-cost="canConfirmCost"
       :busy="busy"
       @confirm-cost="submitCost"
       @review-cost="reviewCost"
       @queue-profit="queueProfit"
+      @retry-profit="loadProfit(currentScope())"
+      @retry-reviewers="loadReviewers(currentScope())"
     />
   </section>
 </template>

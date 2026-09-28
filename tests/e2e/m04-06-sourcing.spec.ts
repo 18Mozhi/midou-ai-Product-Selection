@@ -339,6 +339,275 @@ test("opportunity sourcing detail exposes designated dual-person cost review", a
   );
 });
 
+test("late opportunity-cost reads cannot replace the currently selected opportunity", async ({
+  page,
+}) => {
+  await setup(page);
+  const firstOpportunityId = "00000000-0000-4000-8000-000000000612";
+  const secondOpportunityId = "00000000-0000-4000-8000-000000000614";
+  const secondSearchId = "00000000-0000-4000-8000-000000000615";
+  const firstSearch = {
+    id: searchId,
+    input_type: "opportunity",
+    input_ref: firstOpportunityId,
+    status: "completed",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-08-08T12:00:00.000Z",
+  };
+  const secondSearch = { ...firstSearch, id: secondSearchId, input_ref: secondOpportunityId };
+  const profitFor = (ruleVersion: string) => ({
+    latest_run: {
+      id: ruleVersion,
+      status: "calculated",
+      rule_version_code: ruleVersion,
+      platform: "amazon",
+      market: "US",
+      currency: "USD",
+      sale_price: 100,
+      total_cost: 20,
+      net_profit: 80,
+      net_margin_percent: 80,
+      missing_fields: [],
+      calculated_at: "2026-08-08T12:00:00.000Z",
+      components: [],
+    },
+    current_inputs: [],
+    cost_input_reviews: [],
+  });
+  await page.unroute(`**/api/v1/sourcing/searches/${searchId}`);
+  await page.unroute("**/api/v1/sourcing/searches");
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...firstSearch, candidates: [] }) }),
+  );
+  await page.route(`**/api/v1/sourcing/searches/${secondSearchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...secondSearch, candidates: [] }) }),
+  );
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope([firstSearch, secondSearch]) }),
+  );
+  await page.route(`**/api/v1/opportunities/${firstOpportunityId}`, async (route) => {
+    firstVersionStarted = true;
+    await firstVersionGate;
+    await route.fulfill({ json: envelope({ id: firstOpportunityId, version: 8 }) });
+  });
+  await page.route(
+    `**/api/v1/opportunities/${firstOpportunityId}/profit-analysis`,
+    async (route) => {
+      firstProfitStarted = true;
+      await firstProfitGate;
+      await route.fulfill({ json: envelope(profitFor("OLD-A")) });
+    },
+  );
+  await page.route(`**/api/v1/opportunities/${secondOpportunityId}`, (route) =>
+    route.fulfill({ json: envelope({ id: secondOpportunityId, version: 9 }) }),
+  );
+  let secondProfitReads = 0;
+  await page.route(`**/api/v1/opportunities/${secondOpportunityId}/profit-analysis`, (route) => {
+    secondProfitReads += 1;
+    return route.fulfill({ json: envelope(profitFor("CURRENT-B")) });
+  });
+  let releaseFirstVersion!: () => void;
+  let releaseFirstProfit!: () => void;
+  let releaseFirstReviewers!: () => void;
+  let firstVersionStarted = false;
+  let firstProfitStarted = false;
+  let firstReviewersStarted = false;
+  const firstVersionGate = new Promise<void>((resolve) => (releaseFirstVersion = resolve));
+  const firstProfitGate = new Promise<void>((resolve) => (releaseFirstProfit = resolve));
+  const firstReviewersGate = new Promise<void>((resolve) => (releaseFirstReviewers = resolve));
+  let reviewerReads = 0;
+  await page.route("**/api/v1/cost-input-reviewers", async (route) => {
+    reviewerReads += 1;
+    if (reviewerReads === 1) {
+      firstReviewersStarted = true;
+      await firstReviewersGate;
+      await route.fulfill({ json: envelope([{ id: "reviewer-a", label: "旧机会复核人" }]) });
+      return;
+    }
+    await route.fulfill({ json: envelope([{ id: "reviewer-b", label: "当前机会复核人" }]) });
+  });
+  const submittedBodies: Record<string, unknown>[] = [];
+  let releaseSecondWrite!: () => void;
+  let secondWriteCompleted = false;
+  const secondWriteGate = new Promise<void>((resolve) => (releaseSecondWrite = resolve));
+  await page.route(`**/api/v1/opportunities/${secondOpportunityId}/cost-inputs`, async (route) => {
+    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    await secondWriteGate;
+    await route.fulfill({ status: 201, json: envelope({ id: "current-cost-input" }) });
+    secondWriteCompleted = true;
+  });
+
+  await page.goto("/sourcing");
+  await expect.poll(() => firstVersionStarted).toBe(true);
+  await expect.poll(() => firstProfitStarted).toBe(true);
+  await expect.poll(() => firstReviewersStarted).toBe(true);
+  await page.locator(".sourcing-layout > aside > button").nth(1).click();
+  await expect(page.getByText(`机会编号 ${secondOpportunityId}`, { exact: true })).toBeVisible();
+  await expect(page.locator(".profit-summary")).toContainText("CURRENT-B");
+  await expect(page.getByLabel("指定复核人")).toContainText("当前机会复核人");
+
+  releaseFirstVersion();
+  releaseFirstProfit();
+  releaseFirstReviewers();
+  await expect(page.locator(".profit-summary")).toContainText("CURRENT-B");
+  await expect(page.locator(".profit-summary")).not.toContainText("OLD-A");
+  await expect(page.getByLabel("指定复核人")).toContainText("当前机会复核人");
+  await expect(page.getByLabel("指定复核人")).not.toContainText("旧机会复核人");
+
+  await page.getByLabel("来源标识").fill("source:current-opportunity");
+  await page.getByLabel("证据 ID").fill("00000000-0000-4000-8000-000000000616");
+  await page.getByLabel("指定复核人").selectOption("reviewer-b");
+  await page.locator("form.profit-input").evaluate((form: HTMLFormElement) => form.requestSubmit());
+  await expect.poll(() => submittedBodies.length).toBe(1);
+  expect(submittedBodies[0]).toMatchObject({ expected_version: 9, reviewer_id: "reviewer-b" });
+  await page.locator(".sourcing-layout > aside > button").nth(0).click();
+  await expect(page.getByText(`机会编号 ${firstOpportunityId}`, { exact: true })).toBeVisible();
+  releaseSecondWrite();
+  await expect.poll(() => secondWriteCompleted).toBe(true);
+  await expect(page.locator(".sourcing-cost-confirmation")).not.toContainText(
+    "成本已提交给指定复核人；通过前不会影响利润。",
+  );
+  expect(secondProfitReads).toBe(1);
+});
+
+test("cost write re-entry is blocked and its receipt survives a failed profit refresh", async ({
+  page,
+}) => {
+  await setup(page);
+  const opportunityId = "00000000-0000-4000-8000-000000000612";
+  const opportunitySearch = {
+    id: searchId,
+    input_type: "opportunity",
+    input_ref: opportunityId,
+    status: "completed",
+    candidate_count: 0,
+    missing_fields: [],
+    created_at: "2026-08-08T12:00:00.000Z",
+  };
+  await page.unroute(`**/api/v1/sourcing/searches/${searchId}`);
+  await page.unroute("**/api/v1/sourcing/searches");
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({ json: envelope({ ...opportunitySearch, candidates: [] }) }),
+  );
+  await page.route("**/api/v1/sourcing/searches", (route) =>
+    route.fulfill({ json: envelope([opportunitySearch]) }),
+  );
+  let versionReads = 0;
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
+    versionReads += 1;
+    if (versionReads <= 3) {
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "opportunity_version_unavailable",
+            message: "机会版本读取失败。",
+            action_hint: "当前机会版本暂时无法读取。",
+          },
+          request_id: "m04-06-opportunity-version-failure",
+          trace_id: "m04-06-opportunity-version-trace",
+        },
+      });
+      return;
+    }
+    await route.fulfill({ json: envelope({ id: opportunityId, version: 8 }) });
+  });
+  let profitReads = 0;
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, async (route) => {
+    profitReads += 1;
+    if (profitReads > 1) {
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "profit_refresh_unavailable",
+            message: "利润读取失败。",
+            action_hint: "利润数据暂时无法更新，请稍后重试。",
+          },
+          request_id: "m04-06-profit-refresh-failure",
+          trace_id: "m04-06-profit-refresh-trace",
+        },
+      });
+      return;
+    }
+    await route.fulfill({
+      json: envelope({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
+    });
+  });
+  let reviewerReads = 0;
+  await page.route("**/api/v1/cost-input-reviewers", async (route) => {
+    reviewerReads += 1;
+    if (reviewerReads <= 3) {
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "reviewer_directory_unavailable",
+            message: "复核人目录读取失败。",
+            action_hint: "成本复核人名单暂时无法读取。",
+          },
+          request_id: "m04-06-reviewer-directory-failure",
+          trace_id: "m04-06-reviewer-directory-trace",
+        },
+      });
+      return;
+    }
+    await route.fulfill({ json: envelope([{ id: "reviewer-a", label: "指定成本复核人" }]) });
+  });
+  let releaseWrite!: () => void;
+  const writeGate = new Promise<void>((resolve) => (releaseWrite = resolve));
+  const submittedBodies: Record<string, unknown>[] = [];
+  await page.route(`**/api/v1/opportunities/${opportunityId}/cost-inputs`, async (route) => {
+    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    await writeGate;
+    await route.fulfill({ status: 201, json: envelope({ id: "new-cost-input" }) });
+  });
+
+  await page.goto("/sourcing");
+  await expect.poll(() => versionReads).toBe(3);
+  await expect.poll(() => reviewerReads).toBe(3);
+  await expect(page.getByRole("button", { name: "提交双人复核" })).toBeDisabled();
+  const versionError = page
+    .locator(".sourcing-cost-confirmation > p[role='alert']")
+    .filter({ hasText: "当前机会版本暂时无法读取。" });
+  await expect(versionError).toContainText("m04-06-opportunity-version-failure");
+  await expect(page.locator(".profit-reviewer-status")).toContainText(
+    "成本复核人名单暂时无法读取。",
+  );
+  await page.getByRole("button", { name: "重新读取机会版本" }).click();
+  await page
+    .locator(".profit-reviewer-status")
+    .getByRole("button", { name: "重新加载复核人" })
+    .click();
+  await expect.poll(() => versionReads).toBe(4);
+  await expect.poll(() => reviewerReads).toBe(4);
+  await expect(page.getByLabel("指定复核人")).toContainText("指定成本复核人");
+  await page.getByLabel("来源标识").fill("source:cost-write-lock");
+  await page.getByLabel("证据 ID").fill("00000000-0000-4000-8000-000000000617");
+  await page.getByLabel("指定复核人").selectOption("reviewer-a");
+  await page.locator("form.profit-input").evaluate((form: HTMLFormElement) => {
+    form.requestSubmit();
+    form.requestSubmit();
+  });
+  await expect.poll(() => submittedBodies.length).toBe(1);
+  await expect(page.getByRole("button", { name: "提交双人复核" })).toBeDisabled();
+  releaseWrite();
+  await expect(
+    page
+      .locator(".sourcing-cost-confirmation > p[role='status']")
+      .filter({ hasText: "成本已提交给指定复核人" }),
+  ).toContainText("成本已提交给指定复核人；通过前不会影响利润。");
+  await expect(page.getByRole("alert")).toContainText("利润数据暂时无法更新，请稍后重试。");
+  await expect(page.getByRole("alert")).toContainText("m04-06-profit-refresh-failure");
+  expect(submittedBodies).toHaveLength(1);
+  expect(submittedBodies[0]).toMatchObject({
+    expected_version: 8,
+    reviewer_id: "reviewer-a",
+    source_ref_id: "source:cost-write-lock",
+  });
+});
+
 test("供应链详情完整跟随档案纸与净页白主题", async ({ page }) => {
   await setup(page);
   await page.goto("/sourcing");

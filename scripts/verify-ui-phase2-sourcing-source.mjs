@@ -15,7 +15,7 @@ export async function verifySourcingSource() {
   class Input {
     checked = false;
   }
-  async function setup(file, expose, overrides = {}) {
+  async function setup(file, expose, overrides = {}, { disableWatch = false } = {}) {
     const source = await readFile("apps/web/src/components/" + file + ".vue", "utf8");
     let script = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)[1];
     const ast = ts.createSourceFile("setup.ts", script, ts.ScriptTarget.Latest, true);
@@ -25,23 +25,25 @@ export async function verifySourcingSource() {
       events = [],
       replies = [],
       routes = [],
-      scope = effectScope();
+      scope = effectScope(),
+      componentProps = reactive({
+        apiBaseUrl: "inert",
+        capabilities: ["supplier_quote:manage", "cost:confirm"],
+        opportunityId: "opp",
+        canConfirmCost: true,
+        ...overrides,
+      });
     scopes.push(scope);
     const route = { query: {}, fullPath: "/sourcing" };
     const env = {
       ref,
       reactive,
       computed,
-      watch,
+      watch: disableWatch ? () => {} : watch,
+      onBeforeUnmount: () => {},
       ApiClientError,
       HTMLInputElement: Input,
-      defineProps: () => ({
-        apiBaseUrl: "inert",
-        capabilities: ["supplier_quote:manage", "cost:confirm"],
-        opportunityId: "opp",
-        canConfirmCost: true,
-        ...overrides,
-      }),
+      defineProps: () => componentProps,
       defineEmits: () => (name, payload) =>
         events.push({ name, payload: structuredClone(payload) }),
       withDefaults: (v) => v,
@@ -93,6 +95,7 @@ export async function verifySourcingSource() {
     }).outputText;
     return {
       ...scope.run(() => new Function(...Object.keys(env), js)(...Object.values(env))),
+      props: componentProps,
       calls,
       events,
       replies,
@@ -108,8 +111,9 @@ export async function verifySourcingSource() {
   const sc = (props) =>
     setup(
       "SourcingCostConfirmationPanel",
-      "load,profit,reviewers,opportunityVersion,costForm,message,submitCost,reviewCost,queueProfit,busy",
+      "currentScope,resetScope,loadScope,loadOpportunityVersion,loadProfit,loadReviewers,profit,profitLoadState,reviewers,reviewerLoadState,opportunityVersion,versionReady,versionLoadState,costForm,writeMessage,writeRequestId,submitCost,reviewCost,queueProfit,busy,writeScopes",
       props,
+      { disableWatch: true },
     );
   const ok = (data) => ({ data, request_id: "synthetic-response" });
   const item = { id: "s1", display_name: "隔离找货", input_ref: "测试", candidates: [] };
@@ -359,13 +363,93 @@ export async function verifySourcingSource() {
     checks.push("actual comparison normalizes formatting only, not units/semantic equivalence");
     s = await sc();
     s.replies.push(ok({ version: 7 }), ok({ latest_run: null }), new ApiClientError("error"));
-    await s.load();
-    assert.equal(s.profit.value, null);
-    assert.equal(s.opportunityVersion.value, 0);
-    assert.match(s.message.value, /隔离失败/);
+    await s.loadScope(s.currentScope());
+    assert.equal(s.profitLoadState.value, "ready");
+    assert.equal(s.profit.value.latest_run, null);
+    assert.equal(s.opportunityVersion.value, 7);
+    assert.equal(s.versionReady.value, true);
+    assert.equal(s.reviewerLoadState.value, "error");
     checks.push(
-      "SC cost read Promise.all fails atomically on reviewer error; no invented ready snapshot/reviewer count",
+      "SC cost opportunity version, profit and reviewer reads fail independently; a reviewer failure does not discard the current profit snapshot or usable version",
     );
+
+    s.replies.push(ok([{ id: "reviewer-1", label: "新复核人" }]));
+    await s.loadReviewers(s.currentScope());
+    assert.equal(s.reviewerLoadState.value, "ready");
+    assert.equal(s.reviewers.value[0].id, "reviewer-1");
+    checks.push(
+      "SC cost reviewer retry performs an independent read and recovers its directory state",
+    );
+
+    s = await sc();
+    s.replies.push(
+      ok({ version: 8 }),
+      ok({
+        latest_run: { rule_version_code: "CURRENT" },
+        current_inputs: [],
+        cost_input_reviews: [],
+      }),
+      ok([{ id: "reviewer-current", label: "当前复核人" }]),
+    );
+    await s.loadScope(s.currentScope());
+    let settleOldProfit;
+    s.replies.push(new Promise((resolve) => (settleOldProfit = resolve)));
+    const oldScope = s.currentScope();
+    const oldRead = s.loadProfit(oldScope);
+    s.props.opportunityId = "opp-next";
+    s.replies.push(
+      ok({ version: 9 }),
+      ok({ latest_run: { rule_version_code: "NEXT" }, current_inputs: [], cost_input_reviews: [] }),
+      ok([{ id: "reviewer-next", label: "新机会复核人" }]),
+    );
+    s.resetScope();
+    await new Promise(setImmediate);
+    assert.equal(s.opportunityVersion.value, 9);
+    assert.equal(s.profit.value.latest_run.rule_version_code, "NEXT");
+    assert.equal(s.reviewers.value[0].id, "reviewer-next");
+    settleOldProfit(
+      ok({ latest_run: { rule_version_code: "OLD" }, current_inputs: [], cost_input_reviews: [] }),
+    );
+    await oldRead;
+    assert.equal(s.profit.value.latest_run.rule_version_code, "NEXT");
+    checks.push(
+      "SC cost opportunity-generation guard discards an old profit response after a target switch",
+    );
+
+    s = await sc();
+    s.opportunityVersion.value = 7;
+    s.versionReady.value = true;
+    Object.assign(s.costForm, {
+      amount_value: 0,
+      source_ref_id: "quote",
+      evidence_id: "e1",
+      reviewer_id: "other",
+      observed_at: "2026-09-09T08:00",
+    });
+    let settleWrite;
+    s.replies.push(new Promise((resolve) => (settleWrite = resolve)));
+    const firstSubmit = s.submitCost();
+    const duplicateSubmit = s.submitCost();
+    assert.equal(s.calls.filter((call) => call.url.endsWith("/cost-inputs")).length, 1);
+    assert.equal(s.busy.value, true);
+    s.replies.push(
+      ok({ version: 8 }),
+      ok({ latest_run: null, current_inputs: [], cost_input_reviews: [] }),
+      ok([{ id: "reviewer-2", label: "复核人" }]),
+    );
+    settleWrite(ok({ id: "cost-input-1" }));
+    await Promise.all([firstSubmit, duplicateSubmit]);
+    assert.equal(s.busy.value, false);
+    assert.match(s.writeMessage.value, /成本已提交给指定复核人/);
+    assert.equal(s.profitLoadState.value, "ready");
+    assert.equal(s.calls[0].url, "/opportunities/opp/cost-inputs");
+    assert.equal(s.calls[0].options.body.expected_version, 7);
+    assert.equal(s.calls[0].options.body.amount_value, 0);
+    assert.equal(s.calls[0].options.body.reviewer_id, "other");
+    checks.push(
+      "SC cost write entry guard sends one POST and preserves its receipt while refreshing the independent snapshot",
+    );
+
     s = await sc();
     s.opportunityVersion.value = 7;
     Object.assign(s.costForm, {
@@ -377,10 +461,18 @@ export async function verifySourcingSource() {
     });
     s.replies.push(new ApiClientError("conflict"));
     await s.submitCost();
-    assert.equal(s.calls[0].url, "/opportunities/opp/cost-inputs");
-    assert.equal(s.calls[0].options.body.expected_version, 7);
-    assert.equal(s.calls[0].options.body.amount_value, 0);
-    assert.equal(s.calls[0].options.body.reviewer_id, "other");
+    assert.equal(
+      s.calls.length,
+      0,
+      "a failed/unavailable opportunity version must prevent cost writes",
+    );
+    checks.push(
+      "SC cost expected_version writes stay unavailable until the opportunity version has loaded",
+    );
+
+    s = await sc();
+    s.opportunityVersion.value = 7;
+    s.versionReady.value = true;
     s.replies.push(new ApiClientError("conflict"));
     await s.reviewCost({
       reviewId: "review",
@@ -426,6 +518,7 @@ export async function verifySourcingSource() {
     );
     const costOwner = await sc();
     const sourcingOwner = await sw();
+    costOwner.versionReady.value = true;
     let settle;
     costOwner.replies.push(new Promise((resolve) => (settle = resolve)));
     const pendingCost = costOwner.queueProfit();
@@ -435,12 +528,12 @@ export async function verifySourcingSource() {
     await pendingCost;
     assert.equal(costOwner.busy.value, false);
     checks.push(
-      "cost and sourcing owners have independent busy refs; failed cost write releases only cost owner, not a production async ownership or successful reload proof",
+      "cost and sourcing owners have independent busy scopes; a pending cost write disables its active opportunity only and releases that lock on failure",
     );
     return {
       checks,
       limits:
-        "Actual setup functions with inert transport/router and checkbox class; synthetic busy/generation checks are not mounted DOM proof; no SQL, RBAC, worker, quote validity, read/KeepAlive scope ownership or timezone matrix proof.",
+        "Actual setup functions with inert transport/router and checkbox class; synthetic busy/generation checks are not mounted DOM proof; no SQL, RBAC, worker, quote validity, parent-page reads, full KeepAlive or timezone matrix proof.",
     };
   } finally {
     scopes.forEach((scope) => scope.stop());

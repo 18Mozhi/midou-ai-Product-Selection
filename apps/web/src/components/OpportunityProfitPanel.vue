@@ -28,6 +28,7 @@ withDefaults(
     reviewerErrorMessage?: string;
     reviewerRequestId?: string;
     busy: boolean;
+    costVersionReady?: boolean;
     canConfirmCost?: boolean;
   }>(),
   {
@@ -35,6 +36,7 @@ withDefaults(
     reviewerLoadState: "unknown",
     reviewerErrorMessage: "",
     reviewerRequestId: "",
+    costVersionReady: true,
     profitLoadState: "ready",
     profitErrorMessage: "",
     profitRequestId: "",
@@ -232,6 +234,7 @@ const inputLabel = (value: string) =>
           type="submit"
           :disabled="
             busy ||
+            !costVersionReady ||
             reviewerLoadState === 'loading' ||
             reviewerLoadState === 'error' ||
             (reviewerLoadState === 'ready' && !reviewerOptions.length) ||
@@ -239,7 +242,9 @@ const inputLabel = (value: string) =>
           "
         >
           提交双人复核</button
-        ><button type="button" :disabled="busy" @click="$emit('queueProfit')">重新计算</button>
+        ><button type="button" :disabled="busy || !costVersionReady" @click="$emit('queueProfit')">
+          重新计算
+        </button>
       </footer>
     </form>
     <aside v-else class="profit-missing">
