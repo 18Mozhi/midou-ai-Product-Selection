@@ -633,6 +633,119 @@ test("P18 blocked detail state offers a real retry and a separate list return", 
   expect(detailReads).toBe(4);
 });
 
+test("P18 insight reads fail and recover independently without hiding competitor facts", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_id: "00000000-0000-4000-8000-000000000421",
+        workspace_id: "00000000-0000-4000-8000-000000000422",
+        roles: ["member"],
+        capabilities: [
+          "task:read",
+          "trend:read",
+          "trend:manage",
+          "opportunity:read",
+          "opportunity:decide",
+          "competitor:read",
+          "sourcing:read",
+        ],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_member_allowed",
+      }),
+    }),
+  );
+
+  const competitor = {
+    id: "00000000-0000-4000-8000-000000000440",
+    opportunity_id: opportunityId,
+    market: "US",
+    source_site: "amazon",
+    external_id: "B000000440",
+    title: "当前机会关联竞品",
+    snapshot_count: 1,
+    latest_snapshot: {
+      current_price: 0,
+      currency: "USD",
+      review_count: 0,
+      rating_value: 0,
+      captured_at: "2026-08-08T00:00:00.000Z",
+      freshness: "fresh",
+    },
+  };
+  let competitorReads = 0;
+  let sourcingReads = 0;
+  let allowSourcingRecovery = false;
+  await page.route("**/api/v1/competitors", (route) => {
+    competitorReads += 1;
+    return route.fulfill({ json: envelope([competitor]) });
+  });
+  await page.route("**/api/v1/sourcing/searches*", (route) => {
+    sourcingReads += 1;
+    return route.fulfill(
+      !allowSourcingRecovery
+        ? { status: 503, json: { error: { code: "temporarily_unavailable" } } }
+        : { json: envelope([]) },
+    );
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByText("1 个关联竞品", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText("供应链读取未完成；已成功读取的竞品事实会继续单独显示。", { exact: true }),
+  ).toBeVisible();
+  const competitorReadsBeforeRetry = competitorReads;
+  allowSourcingRecovery = true;
+  await page.getByRole("button", { name: "重试读取供应候选" }).click();
+  await expect(page.getByText(/0 个关联搜索 · 0 个候选/)).toBeVisible();
+  expect(sourcingReads).toBeGreaterThanOrEqual(2);
+  expect(competitorReads).toBe(competitorReadsBeforeRetry);
+  await page.goto(`/opportunities/${opportunityId}?tab=competition`);
+  await expect(page.getByText("当前机会关联竞品", { exact: true })).toBeVisible();
+  await expect(page.getByText("USD 0", { exact: true })).toBeVisible();
+});
+
+test("P18 insight sections distinguish unavailable permissions from empty facts", async ({
+  page,
+}) => {
+  await ready(page);
+  let competitorReads = 0;
+  let sourcingReads = 0;
+  await page.route("**/api/v1/competitors", (route) => {
+    competitorReads += 1;
+    return route.fulfill({ json: envelope([]) });
+  });
+  await page.route("**/api/v1/sourcing/searches*", (route) => {
+    sourcingReads += 1;
+    return route.fulfill({ json: envelope([]) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(
+    page.getByText("当前角色没有竞品读取权限；页面不请求或展示竞品明细。", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("当前角色没有供应链读取权限；页面不请求或展示供应搜索数据。", { exact: true }),
+  ).toBeVisible();
+  expect(competitorReads).toBe(0);
+  expect(sourcingReads).toBe(0);
+
+  await page.goto(`/opportunities/${opportunityId}?tab=market`);
+  await expect(page.getByRole("heading", { name: "先看证据，再判断市场" })).toBeVisible();
+  await expect(
+    page.getByText("不能据此断定全部证据都是趋势信号，或需求已验证、市场规模/增长率已知。", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await page.goto(`/opportunities/${opportunityId}?tab=risk`);
+  await expect(page.getByRole("heading", { name: "风险等级，不等于完整评估" })).toBeVisible();
+  await expect(page.getByText("当前响应没有提供逐项风险评估事实", { exact: true })).toBeVisible();
+});
+
 test("P18 observe and reject dialogs contain keyboard focus and return it on Escape", async ({
   page,
 }) => {

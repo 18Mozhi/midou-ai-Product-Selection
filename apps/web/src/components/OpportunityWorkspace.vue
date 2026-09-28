@@ -79,7 +79,10 @@ const props = defineProps<{
   profitRequestId = ref(""),
   aiAnalyses = ref<any[]>([]),
   aiLoadState = ref<OpportunityTypes.OpportunityPartialLoadState>("loading"),
-  downstreamLoadState = ref<OpportunityTypes.OpportunityPartialLoadState>("loading"),
+  downstreamLoadState = ref<OpportunityDownstreamStates>({
+    competitors: "loading",
+    sourcing: "loading",
+  }),
   competitorItems = ref<OpportunityTypes.OpportunityCompetitorSummary[]>([]),
   total = ref(0),
   page = ref(1),
@@ -190,6 +193,11 @@ const {
   submit: submitAiReviewReason,
   cancel: cancelAiReviewReason,
 } = useAuditedReason();
+type OpportunityDownstreamSource = "competitors" | "sourcing";
+type OpportunityDownstreamStates = Record<
+  OpportunityDownstreamSource,
+  OpportunityTypes.OpportunityPartialLoadState
+>;
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
 const currentPageSelectedItems = computed(() =>
   items.value.filter((item) => selectedOpportunityIds.value.includes(item.id)),
@@ -282,42 +290,72 @@ async function loadAi(opportunityId = props.opportunityId, isCurrent?: () => boo
     if (error instanceof ApiClientError) requestId.value = error.requestId;
   }
 }
-async function loadDownstream(opportunityId = props.opportunityId, isCurrent?: () => boolean) {
+async function loadDownstream(
+  opportunityId = props.opportunityId,
+  isCurrent?: () => boolean,
+  onlySource?: OpportunityDownstreamSource,
+) {
   const generation = readGeneration;
   const ownsRead = isCurrent ?? (() => generation === readGeneration);
-  downstreamLoadState.value = "loading";
-  try {
-    const [competitorsResponse, sourcingResponse] = await Promise.all([
-        canReadCompetitors.value
-          ? request<OpportunityTypes.OpportunityCompetitorSummary[]>("/competitors")
-          : Promise.resolve({ data: [] as OpportunityTypes.OpportunityCompetitorSummary[] }),
-        canReadSourcing.value
-          ? request<any[]>("/sourcing/searches")
-          : Promise.resolve({ data: [] as any[] }),
-      ]),
-      competitors = competitorsResponse.data.filter(
-        (item) => item.opportunity_id === opportunityId,
-      ),
-      searches = sourcingResponse.data.filter(
-        (item: any) => item.input_type === "opportunity" && item.input_ref === opportunityId,
-      );
-    if (!ownsRead()) return;
-    competitorItems.value = competitors;
-    downstream.value = {
-      competitors: competitors.length,
-      snapshots: competitors.reduce((sum, item) => sum + Number(item.snapshot_count ?? 0), 0),
-      searches: searches.length,
-      suppliers: searches.reduce(
-        (sum: number, item: any) => sum + Number(item.candidate_count ?? 0),
-        0,
-      ),
-    };
-    downstreamLoadState.value = "ready";
-  } catch (error) {
-    if (!ownsRead()) return;
-    downstreamLoadState.value = "error";
-    if (error instanceof ApiClientError) requestId.value = error.requestId;
+  const sources: OpportunityDownstreamSource[] = onlySource
+    ? [onlySource]
+    : ["competitors", "sourcing"];
+
+  for (const source of sources) {
+    downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "loading" };
+    if (source === "competitors") {
+      competitorItems.value = [];
+      downstream.value = { ...downstream.value, competitors: 0, snapshots: 0 };
+    } else {
+      downstream.value = { ...downstream.value, searches: 0, suppliers: 0 };
+    }
   }
+
+  await Promise.all(
+    sources.map(async (source) => {
+      const hasAccess = source === "competitors" ? canReadCompetitors.value : canReadSourcing.value;
+      if (!hasAccess || !opportunityId) {
+        if (!ownsRead()) return;
+        downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "ready" };
+        return;
+      }
+
+      try {
+        if (source === "competitors") {
+          const response =
+            await request<OpportunityTypes.OpportunityCompetitorSummary[]>("/competitors");
+          if (!ownsRead()) return;
+          const competitors = response.data.filter((item) => item.opportunity_id === opportunityId);
+          competitorItems.value = competitors;
+          downstream.value = {
+            ...downstream.value,
+            competitors: competitors.length,
+            snapshots: competitors.reduce((sum, item) => sum + Number(item.snapshot_count ?? 0), 0),
+          };
+        } else {
+          const response = await request<any[]>("/sourcing/searches");
+          if (!ownsRead()) return;
+          const searches = response.data.filter(
+            (item: any) => item.input_type === "opportunity" && item.input_ref === opportunityId,
+          );
+          downstream.value = {
+            ...downstream.value,
+            searches: searches.length,
+            suppliers: searches.reduce(
+              (sum: number, item: any) => sum + Number(item.candidate_count ?? 0),
+              0,
+            ),
+          };
+        }
+        downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "ready" };
+      } catch (error) {
+        if (!ownsRead()) return;
+        if (source === "competitors") competitorItems.value = [];
+        downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "error" };
+        if (error instanceof ApiClientError) requestId.value = error.requestId;
+      }
+    }),
+  );
 }
 async function loadAutomationReadiness(isCurrent: () => boolean = () => true) {
   automationReadiness.value = null;
@@ -1170,7 +1208,8 @@ onBeforeUnmount(() => {
                 @discover-competitors="discoverCompetitors"
                 @discover-suppliers="discoverSuppliers"
                 @queue-score="queueScore"
-                @retry-downstream="loadDownstream"
+                @retry-downstream="loadDownstream(detail?.id, undefined, $event)"
+                @select-tab="setTab"
               />
               <OpportunityLineagePanel v-else-if="tab === 'lineage'" :lineage="detail.lineage" />
               <OpportunityFeedbackPanel
