@@ -8,15 +8,15 @@ route-catalog → NavigationShell → surfaceProps：P21 SourcingWorkspace，P22
 
 | 源码简称 | 文件（apps/web/src/components/下） | 本批LF SHA256                                                    |
 | -------- | ---------------------------------- | ---------------------------------------------------------------- |
-| SW       | SourcingWorkspace.vue              | 2f7e0f7183d6e909fd884845136a24084d03285c02f685f8aca97d64e3c5b9db |
+| SW       | SourcingWorkspace.vue              | cf43c75418e76ffc758811796243e8924fbbe6af7cf25a26bff163dda0559d25 |
 | SD       | SourcingWorkspaceDialogs.vue       | 291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0 |
 | SP       | SourcingComparisonPanel.vue        | 5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd |
-| SC       | SourcingCostConfirmationPanel.vue  | bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4 |
+| SC       | SourcingCostConfirmationPanel.vue  | 99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6 |
 | CR       | CostRuleConsole.vue                | 1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3 |
-| PP       | OpportunityProfitPanel.vue         | 117c9ccdf60b8bdd16f6105508dc8fb12d88033019ccb17569a1b1474618c0bc |
+| PP       | OpportunityProfitPanel.vue         | c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6 |
 | RQ       | OpportunityCostReviewQueue.vue     | 9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47 |
 
-2026-09-28共享组件续记：`OpportunityProfitPanel` 增加的复核人失败态仅由 P18 显式传入；P21 调用未传 `reviewerLoadState`，因此P18专属重试按钮在P21不呈现。共享面板未获读取状态时不声称“成功但无可选复核人”，并继续阻止空名单下提交。此项更新P21源清单，不代表P21 reviewer GET现有错误提示或真实API验收。
+2026-09-29源码续记：当前 `SourcingCostConfirmationPanel` 已向共享 `OpportunityProfitPanel` 传入复核人加载/错误/追踪状态，并转发 `retry-reviewers` 到 `loadReviewers(currentScope())`；因此 P21 的复核人失败重试入口可达，不再作为 P18 专属排除。同步映射机会版本重读、利润数据重读、双人复核提交与利润重算控件；仅确认当前源码归属，不代表真实 API、RBAC 或生产验收。
 
 局部共80个控件/事件候选、7个弹窗定义/调用候选、44处v-model。SP与QualityGateSetupSummary只有呈现/slot，无本地交互候选；共享UiStatePanel和useModalDialog行为按实际调用方检查，不在此重复全站盘点。PP/RQ与P18共享，以下仅记录P21调用合同，不重复加算全站分母。
 
@@ -34,7 +34,7 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | SW  | 449 | 95c07db60d43a586.1 | SC-DETAIL 读对象并同步record                |
 | SW  | 471 | 100e00b6d8cb9e4a.1 | SC-REFRESH 管理者POST当前对象               |
 | SW  | 474 | dd2297ed2ff6c2a5.1 | SC-NAV cost-rules含from                     |
-| SW  | 478 | 0d91434c5f2ca144.1 | SC-DELETE-OPEN 管理者选中目标               |
+| SW  | 652 | 1e3fc27654fc0776.1 | SC-DELETE-OPEN 管理者选中目标               |
 | SW  | 538 | a9d2be84fdbc9665.1 | SC-NAV 受权采集明细                         |
 | SW  | 559 | 46efe1c7f3d39475.1 | SC-ERP 原始ERP新窗口                        |
 | SW  | 576 | 8fb00fc320cdc059.1 | SC-SELECT 勾选与实际最多五项同步            |
@@ -42,7 +42,8 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | SW  | 632 | 1a57994baa2329f6.1 | SC-QUOTE-OPEN 管理者无quote                 |
 | SW  | 634 | 6ec48a1f9259ef0d.1 | SC-PURCHASE-OPEN 管理者已有quote            |
 | SW  | 650 | 658745acd55fced2.1 | SC-COMPARE 至少2项且非busy                  |
-| SW  | 654 | c63aa5ea813e730c.1 | SD九个事件转发、删除原因更新                |
+| SW  | 828 | 0e42b816192eb48e.1 | SD九个事件转发、删除原因更新                |
+| SW  | 828 | 5aab87e8ea0ee176.1 | 四窗共享调用，不另外计为第五个业务窗         |
 | SW  | 642 | e60a87b8bebccb4b.1 | SC-G02 独立读取对比历史失败及重试事件转发   |
 | SP  | 61  | 49464ad9054e6202.1 | SC-G02 重试对比历史 GET 按钮                |
 | SD  | 128 | e761df41504fce67.1 | SC-S-CLOSE Escape                           |
@@ -66,7 +67,8 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | SD  | 311 | 0a71f3799436c08c.1 | SC-DELETE-CLOSE 取消                        |
 | SD  | 312 | 9d23c498e72940a2.1 | SC-DELETE-SUBMIT 按钮                       |
 | SC  | 127 | bb5d5e072948baa9.1 | SC-NAV 机会利润详情                         |
-| SC  | 134 | e31dcd8852e4566d.1 | 成本提交/复核/重算三个事件转发              |
+| SC  | 286 | 857740e31a8963ec.1 | 成本提交/复核/重算及读取重试事件转发        |
+| SC  | 279 | 289c8e971f49889b.1 | SC-COST-READ-RETRY 机会版本重读              |
 | CR  | 534 | ae99ecef74f5d4d3.1 | SC-R-BACK 安全from                          |
 | CR  | 535 | 5e3909def7e4baa9.1 | SC-R-CREATE 管理者非ready或active           |
 | CR  | 547 | b2df3db97280e7e2.1 | SC-R-STATE 首条创建/刷新/返回               |
@@ -99,9 +101,10 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | PP  | 54  | 2bab3ff056a52675.1 | SC-NAV 管理费用规则                         |
 | PP  | 121 | fbf7d2a587c0931b.1 | SC-COST-REVIEW 转发                         |
 | PP  | 135 | 21c282e197f8be16.1 | SC-COST-SUBMIT 表单                         |
-| PP  | 209 | 4f926cf8b6f57c2a.1 | SC-COST-SUBMIT 指定复核人且非busy           |
-| PP  | 159 | aff5d679009764bc.1 | SC-COST-RECALCULATE 排队                    |
-| PP  | 191 | 1dfebd67b12367cb.1 | SC-P18-REVIEWER-RETRY-P21-EXCLUDED          |
+| PP  | 84  | aa3f50e6ccf98cb4.1 | SC-COST-READ-RETRY 利润数据重读              |
+| PP  | 233 | d25bbd68583e5a3d.1 | SC-COST-SUBMIT 指定复核人且非busy           |
+| PP  | 245 | f8671d189e947071.1 | SC-COST-RECALCULATE 排队                    |
+| PP  | 223 | 1dfebd67b12367cb.1 | SC-COST-REVIEWER-RETRY 指定复核人名单重试    |
 | RQ  | 107 | 9e1d20d4dd860bdc.1 | SC-COST-REVIEW rejected打开                 |
 | RQ  | 108 | 8cc90a8748defa76.1 | SC-COST-REVIEW approved打开                 |
 | RQ  | 110 | 3fe574c620a554f9.1 | SC-COST-REVIEW 表单提交                     |
