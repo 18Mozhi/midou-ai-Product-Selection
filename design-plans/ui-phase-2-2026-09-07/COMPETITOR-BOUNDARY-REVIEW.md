@@ -44,13 +44,13 @@ UiStatePanel在loading时不渲染动作footer，其余状态按父primary/secon
 
 | ID / 原缺口 | 可重复结果 | 后续实现与验收条件 |
 | --- | --- | --- |
-| CP-B01 / CP-G05 | list与rules分别执行真实onMounted；P20管理者双query令创建/规则同时打开；Escape逐层关闭并删除对应query。只读与P19对照不同 | 先明确异常query优先级，再用真实路由挂载/键盘验证单一活动弹窗、焦点归还、history和权限撤销；不得自行决定丢弃哪个草稿 |
+| CP-B01 / CP-G05 | list与rules分别执行真实onMounted；改前P20管理者双query令创建/规则同时打开，按Escape时规则窗位于顶层。只读不打开写窗 | **本地已修复**：双query时先显示预选目标规则，保留`create=1`及创建草稿；规则关闭并移除`competitor`后再显示创建窗；仅关闭创建窗才移除`create`。实际Vue桌面/390px用例验证单一活动弹窗、Escape、焦点及query保留；隔离夹具不证明真实RBAC/服务端权限撤销 |
 | CP-B02 / CP-G04 | A详情请求先发、B后发先回；A晚回把selected和URL重新设成A | GET采用明确读代次/结果对象归属；真实Vue A→B慢响应及失败均不覆盖B；离开/返回、范围切换另验 |
 | CP-B03 / CP-G05 | POST目标始终A且body={}；等待中读B，A的queued结果却挂到B的latest_collection并安排B轮询 | 提交时捕获对象ID与当前范围；响应只更新所属对象，不能取消已经排队的服务端任务。真Vue切对象与两对象task_id断言；不新增API字段 |
 | CP-B04 / CP-G05/06 | 原始隔离复现为删除A等待中更换到B后，A的回执清空B窗/草稿；现已按弹窗代次与对象ID隔离。桌面/390px实际Vue证明关闭A、切B后，A成功仍保留B详情；源码验证器直接设置B草稿并证明不被旧回执清除。因删除入口仍按原合同在busy时禁用，B弹窗可达性不冒充真实DOM路径 | CP-G05局部回执归属已修；CP-G06本地Vue已区分删除确认后的列表刷新失败与写入无响应，真实服务端状态/审计仍待验 |
 | CP-B05 / CP-G05 | 原始复现为busy=true时直接重入createRule可发第二个POST；现公共POST及createRule均同步早退，隔离setup回归只观察到1个POST意图 | 真实Vue创建窗桌面/390px使用`requestSubmit()`在待提交时重复触发表单事件，仅一次创建请求；规则窗真实键盘/鼠标重入、服务端幂等及生产写入未验 |
 
-五组最初运行记录的是问题复现，不应视作通过。2026-09-28实施后CP-B04/05已改为`fixed-source-regression`，另有实际Vue桌面/390px延迟回执用例；CP-B01双query语义仍未决。数据均来自隔离夹具，不证明真实浏览器会话、HTTP幂等、SQL、采集或生产权限。
+五组最初运行记录的是问题复现，不应视作通过。2026-09-28实施后CP-B04/05已改为`fixed-source-regression`，另有实际Vue桌面/390px延迟回执用例；本轮CP-B01也已改为本地行为修复并新增实际Vue路由/键盘用例。数据均来自隔离夹具，不证明真实浏览器会话、HTTP幂等、SQL、采集或生产权限。
 
 ## 2026-09-28 · CP-G05 写入重入与回执归属（局部）
 

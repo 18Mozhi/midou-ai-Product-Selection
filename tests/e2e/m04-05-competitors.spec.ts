@@ -449,6 +449,58 @@ test("competitor monitoring rules use an independent route and retain the source
   await expect(page.getByText("监控阈值已启用。")).toBeVisible();
 });
 
+test("P20 deep links serialize rule and competitor dialogs without dropping either query", async ({
+  page,
+}) => {
+  await setup(page);
+  let writeRequests = 0;
+  page.on("request", (request) => {
+    if (request.method() !== "GET" && request.url().includes("/api/v1/competitor"))
+      writeRequests += 1;
+  });
+
+  await page.goto(`/competitors/monitoring-rules?create=1&competitor=${id}`);
+  const competitorWorkspace = page.locator(".competitor-monitor");
+  const ruleDialog = page.getByRole("dialog", { name: "新建监控规则" });
+  const createDialog = page.getByRole("dialog", { name: "添加竞品监控" });
+  await expect(competitorWorkspace.getByRole("dialog")).toHaveCount(1);
+  await expect(ruleDialog).toBeVisible();
+  await expect(page.getByLabel("竞品（留空为工作区全局）")).toHaveValue(id);
+
+  await page.keyboard.press("Escape");
+  await expect(ruleDialog).toHaveCount(0);
+  await expect(createDialog).toBeVisible();
+  await expect(competitorWorkspace.getByRole("dialog")).toHaveCount(1);
+  await expect(page.getByLabel("商品网址")).toBeFocused();
+  await expect
+    .poll(() => page.evaluate(() => new URL(location.href).searchParams.toString()))
+    .toBe("create=1");
+
+  await page.keyboard.press("Escape");
+  await expect(createDialog).toHaveCount(0);
+  await expect
+    .poll(() => page.evaluate(() => new URL(location.href).searchParams.toString()))
+    .toBe("");
+  expect(writeRequests).toBe(0);
+});
+
+test("P20 read-only dual-query deep link keeps both dialogs closed", async ({ page }) => {
+  await setup(page, ["competitor:read"]);
+  let writeRequests = 0;
+  page.on("request", (request) => {
+    if (request.method() !== "GET" && request.url().includes("/api/v1/competitor"))
+      writeRequests += 1;
+  });
+
+  await page.goto(`/competitors/monitoring-rules?create=1&competitor=${id}`);
+  const competitorWorkspace = page.locator(".competitor-monitor");
+  await expect(page.getByRole("heading", { name: "监控规则", level: 2 })).toBeVisible();
+  await expect(competitorWorkspace.getByRole("dialog")).toHaveCount(0);
+  await expect(page.getByLabel("竞品（留空为工作区全局）")).toHaveCount(0);
+  await expect(page).toHaveURL(`/competitors/monitoring-rules?create=1&competitor=${id}`);
+  expect(writeRequests).toBe(0);
+});
+
 test("monitoring rule form only offers directions accepted by the selected metric", async ({
   page,
 }) => {

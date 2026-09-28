@@ -145,7 +145,7 @@ export async function verifyCompetitorBoundaries() {
       s.replies.push(response([]), response([]));
       s.mounts.forEach((fn) => fn());
       await new Promise(setImmediate);
-      assert.equal(s.showCreate.value, true);
+      assert.equal(s.showCreate.value, mode === "list");
       assert.equal(s.showRule.value, mode === "rules");
       assert.equal(s.state.value, mode === "rules" ? "ready" : "empty");
       assert.equal(s.calls.filter((call) => call.options?.method).length, 0);
@@ -153,11 +153,14 @@ export async function verifyCompetitorBoundaries() {
         assert.equal(s.rule.competitor_id, a.id);
         s.handleRuleCancel({ preventDefault() {} });
         assert.equal(s.showRule.value, false);
-        assert.equal(s.showCreate.value, true);
+        assert.equal(s.showCreate.value, false);
         assert.equal(s.route.query.competitor, undefined);
+        assert.equal(s.route.query.create, "1");
+      } else {
         s.handleCreateCancel({ preventDefault() {} });
         assert.equal(s.showCreate.value, false);
         assert.equal(s.route.query.create, undefined);
+        assert.equal(s.route.query.competitor, a.id);
       }
     }
     const reader = setup({
@@ -172,9 +175,9 @@ export async function verifyCompetitorBoundaries() {
     assert.equal(reader.showRule.value, false);
     checks.push({
       id: "CP-B01",
-      status: "UNFIXED-reproduced",
+      status: "fixed-source-regression",
       result:
-        "P20 manager create+competitor query opens both flags; Escape closes rule then create. P19 only create. Read-only opens neither; no writes.",
+        "P20 manager create+competitor query opens the targeted rule first and queues create without dropping either query; P19 create remains available. Read-only opens neither; no writes.",
     });
 
     let s = setup(),

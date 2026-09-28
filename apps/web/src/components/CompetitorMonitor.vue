@@ -818,8 +818,11 @@ function syncCreateFromRoute(value: unknown, force = false) {
   if (!force && !changed) return;
   const shouldOpen = requested && canManage.value;
   if (shouldOpen === showCreate.value) return;
+  // Keep P20's targeted rule dialog as the active layer when both deep-link
+  // intents are present; the create dialog is opened after the rule closes.
+  if (shouldOpen && rulesPage.value && typeof route.query.competitor === "string") return;
   createDialogGeneration += 1;
-  createStep.value = 1;
+  if (changed) createStep.value = 1;
   if (shouldOpen) {
     notice.value = "";
     requestId.value = "";
@@ -833,6 +836,10 @@ function syncCompetitorFromRoute(value: unknown, force = false) {
   if (!force && next === previous) return;
   if (rulesPage.value) {
     if (next && canManage.value) {
+      if (showCreate.value) {
+        createDialogGeneration += 1;
+        showCreate.value = false;
+      }
       if (showRule.value && rule.competitor_id === next) return;
       ruleDialogGeneration += 1;
       notice.value = "";
@@ -930,7 +937,9 @@ watch(
 watch(
   () => route.query.competitor,
   (value) => {
-    if (pageActive()) syncCompetitorFromRoute(value);
+    if (!pageActive()) return;
+    syncCompetitorFromRoute(value);
+    if (!value && route.query.create === "1") syncCreateFromRoute(route.query.create, true);
   },
 );
 watch(canManage, (allowed) => {
