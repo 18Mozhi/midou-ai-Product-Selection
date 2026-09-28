@@ -467,6 +467,146 @@ test("four sourcing write failures stay visible with their request IDs inside ea
   await expect(dialog.getByLabel("删除原因")).toHaveValue("来源内容需要重新核对");
 });
 
+test("pending sourcing writes do not close or overwrite a reopened dialog", async ({ page }) => {
+  await setup(page);
+  let releaseWrite: (() => void) | undefined;
+  let markWriteStarted: (() => void) | undefined;
+  let requestCount = 0;
+  await page.route("**/api/v1/sourcing/**", async (route) => {
+    const method = route.request().method();
+    if (!(
+      (method === "POST" && !route.request().url().endsWith("/comparisons")) ||
+      method === "DELETE"
+    ))
+      return route.fallback();
+    requestCount += 1;
+    markWriteStarted?.();
+    await new Promise<void>((resolve) => {
+      releaseWrite = resolve;
+    });
+    return route.fulfill({ json: envelope({ id: `late-sourcing-write-${requestCount}` }) });
+  });
+  await page.goto("/sourcing");
+
+  async function beginWrite() {
+    let markStarted!: () => void;
+    const started = new Promise<void>((resolve) => {
+      markStarted = resolve;
+    });
+    markWriteStarted = markStarted;
+    releaseWrite = undefined;
+    return { started, release: () => releaseWrite?.() };
+  }
+  async function duplicateSubmit(dialog: Locator) {
+    await dialog.locator("form").evaluate((form) => (form as HTMLFormElement).requestSubmit());
+    await expect.poll(() => requestCount).toBeGreaterThan(0);
+  }
+
+  let pending = await beginWrite();
+  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
+  let dialog = page.getByRole("dialog", { name: "发起供应商找货" });
+  await dialog.getByLabel("商品关键词").fill("旧找货草稿");
+  await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
+  await pending.started;
+  await duplicateSubmit(dialog);
+  await dialog.getByRole("button", { name: "取消" }).click();
+  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "发起供应商找货" });
+  await dialog.getByLabel("商品关键词").fill("新找货草稿");
+  pending.release();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("商品关键词")).toHaveValue("新找货草稿");
+  await dialog.getByRole("button", { name: "取消" }).click();
+
+  pending = await beginWrite();
+  await page.getByRole("button", { name: "确认报价", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+  await dialog.getByLabel("规格").fill("旧报价草稿");
+  await dialog.getByLabel("所在地").fill("浙江宁波");
+  await dialog.getByRole("button", { name: "确认新版本" }).click();
+  await pending.started;
+  await duplicateSubmit(dialog);
+  await dialog.getByRole("button", { name: "关闭报价编辑" }).click();
+  await page.getByRole("button", { name: "确认报价", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "确认完整供应商报价" });
+  await dialog.getByLabel("规格").fill("新报价草稿");
+  await dialog.getByLabel("所在地").fill("广东广州");
+  pending.release();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("规格")).toHaveValue("新报价草稿");
+  await dialog.getByRole("button", { name: "取消" }).click();
+
+  pending = await beginWrite();
+  await page.getByRole("button", { name: "创建采购任务", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "创建采购任务" });
+  await dialog.getByLabel("创建原因").fill("旧采购草稿原因");
+  await dialog.getByRole("button", { name: "确认创建" }).click();
+  await pending.started;
+  await duplicateSubmit(dialog);
+  await dialog.getByRole("button", { name: "取消" }).click();
+  await page.getByRole("button", { name: "创建采购任务", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "创建采购任务" });
+  await dialog.getByLabel("创建原因").fill("新采购草稿原因");
+  pending.release();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("创建原因")).toHaveValue("新采购草稿原因");
+  await dialog.getByRole("button", { name: "取消" }).click();
+
+  pending = await beginWrite();
+  await page.getByRole("button", { name: "删除找货记录", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "删除找货记录" });
+  await dialog.getByLabel("删除原因").fill("旧删除原因草稿");
+  await dialog.getByRole("button", { name: "确认删除" }).click();
+  await pending.started;
+  await duplicateSubmit(dialog);
+  await dialog.getByRole("button", { name: "取消" }).click();
+  await page.getByRole("button", { name: "删除找货记录", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "删除找货记录" });
+  await dialog.getByLabel("删除原因").fill("新删除原因草稿");
+  pending.release();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("删除原因")).toHaveValue("新删除原因草稿");
+  expect(requestCount).toBe(4);
+});
+
+test("a delayed sourcing failure is not attached to a newly opened draft", async ({ page }) => {
+  await setup(page);
+  let releaseFailure!: () => void;
+  let markFailureStarted!: () => void;
+  const started = new Promise<void>((resolve) => {
+    markFailureStarted = resolve;
+  });
+  const failureGate = new Promise<void>((resolve) => {
+    releaseFailure = resolve;
+  });
+  await page.route("**/api/v1/sourcing/searches", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    markFailureStarted();
+    await failureGate;
+    return route.fulfill({
+      status: 503,
+      json: {
+        error: { code: "sourcing_unavailable", action_hint: "旧请求暂时不可用。" },
+        request_id: "p21-stale-search-failure",
+        trace_id: "p21-stale-search-failure-trace",
+      },
+    });
+  });
+  await page.goto("/sourcing");
+  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
+  let dialog = page.getByRole("dialog", { name: "发起供应商找货" });
+  await dialog.getByLabel("商品关键词").fill("旧失败请求");
+  await dialog.getByRole("button", { name: "开始公开网页采集" }).click();
+  await started;
+  await dialog.getByRole("button", { name: "取消" }).click();
+  await page.getByRole("button", { name: "发起供应商找货", exact: true }).click();
+  dialog = page.getByRole("dialog", { name: "发起供应商找货" });
+  await dialog.getByLabel("商品关键词").fill("新草稿保持");
+  releaseFailure();
+  await expect(dialog.getByLabel("商品关键词")).toHaveValue("新草稿保持");
+  await expect(dialog.getByRole("alert")).toHaveCount(0);
+});
+
 test("loading and blocked dependency remain explicit and retryable", async ({ page }) => {
   await setup(page);
   await page.unroute("**/api/v1/sourcing/searches");

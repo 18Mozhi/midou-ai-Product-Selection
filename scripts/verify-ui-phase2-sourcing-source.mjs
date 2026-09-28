@@ -47,6 +47,33 @@ export async function verifySourcingSource() {
       withDefaults: (v) => v,
       onMounted: () => {},
       useRoute: () => route,
+      useSourcingComparisons: (request) => {
+        const comparisons = ref([]),
+          comparisonFailure = ref(null),
+          comparisonLoading = ref(false);
+        return {
+          comparisons,
+          comparisonFailure,
+          comparisonLoading,
+          loadComparisons: async () => {
+            comparisonLoading.value = true;
+            comparisonFailure.value = null;
+            try {
+              const response = await request("/sourcing/comparisons");
+              comparisons.value = response.data;
+            } catch (error) {
+              comparisonFailure.value = {
+                actionHint: error.actionHint ?? "对比历史暂不可用，请稍后重试。",
+                requestId: error.requestId ?? "",
+                retryable: error.kind !== "expired" && error.kind !== "forbidden",
+                retainedSnapshot: false,
+              };
+            } finally {
+              comparisonLoading.value = false;
+            }
+          },
+        };
+      },
       useRouter: () => ({
         replace: (v) => {
           routes.push(v);
@@ -75,7 +102,7 @@ export async function verifySourcingSource() {
   const sw = (props) =>
     setup(
       "SourcingWorkspace",
-      "load,detail,items,selected,state,notice,form,showSearch,openSearch,closeSearch,create,quote,quoteCandidate,openQuote,confirm,selectedQuotes,choose,compare,purchaseCandidate,purchaseForm,openPurchase,purchase,deleting,deleteReason,removeSearch,refreshSearch,stabilityText,canManage,canConfirmCost,busy,handleStatePrimary,handleStateSecondary,resetQuery,query,filteredItems",
+      "load,detail,items,selected,state,notice,form,showSearch,openSearch,closeSearch,create,quote,quoteCandidate,openQuote,confirm,selectedQuotes,choose,compare,purchaseCandidate,purchaseForm,openPurchase,purchase,deleting,deleteReason,removeSearch,refreshSearch,stabilityText,canManage,canConfirmCost,busy,handleStatePrimary,handleStateSecondary,resetQuery,query,filteredItems,comparisonFailure,dialogGeneration,dialogFailure",
       props,
     );
   const sc = (props) =>
@@ -148,12 +175,14 @@ export async function verifySourcingSource() {
       "source empty primary is capability-scoped create or load; empty secondary and search reset only clear query; filtering uses trim/lowercase name/input_ref/status without HTTP",
     );
     let s = await sw();
-    s.replies.push(ok([item]), new ApiClientError("error"));
+    s.replies.push(ok([item]), new ApiClientError("error"), ok(item));
     await s.load();
-    assert.equal(s.state.value, "error");
+    await new Promise(setImmediate);
+    assert.equal(s.state.value, "ready");
     assert.equal(s.items.value.length, 1);
+    assert.equal(s.comparisonFailure.value.retryable, true);
     checks.push(
-      "UNFIXED SC-G02: comparison-history failure blocks otherwise loaded list; no optional degradation in actual setup",
+      "SC-G02: comparison-history 503 is isolated from the list/detail load and remains retryable in its own panel",
     );
     for (const input_type of ["keyword", "image", "opportunity", "product_url"]) {
       s = await sw();
@@ -252,9 +281,71 @@ export async function verifySourcingSource() {
     s.selected.value = item;
     s.replies.push(ok({ task_id: "t1" }), ok([]), ok([]));
     await s.refreshSearch();
-    assert.equal(s.notice.value, "");
+    assert.equal(s.notice.value, "重新采集已排队，任务编号 t1。");
     checks.push(
-      "delete only trimmed reason, no invented revision; refresh success notice erased by reload remains UNFIXED",
+      "delete only trimmed reason, no invented revision; refresh success is shown after its read refresh",
+    );
+    s = await sw();
+    s.busy.value = true;
+    s.showSearch.value = true;
+    s.form.input_ref = "duplicate guard";
+    s.quoteCandidate.value = candidate;
+    s.purchaseCandidate.value = candidate;
+    s.selected.value = item;
+    s.selectedQuotes.value = ["q1", "q2"];
+    s.deleting.value = item;
+    s.deleteReason.value = "归档测试";
+    await s.create();
+    await s.confirm();
+    await s.purchase();
+    await s.compare();
+    await s.refreshSearch();
+    await s.removeSearch();
+    assert.equal(s.calls.length, 0);
+    checks.push(
+      "all six sourcing write entry points short-circuit while the shared sourcing write is busy",
+    );
+
+    s = await sw();
+    let resolveLateSuccess;
+    s.replies.push(
+      new Promise((resolve) => {
+        resolveLateSuccess = resolve;
+      }),
+    );
+    s.showSearch.value = true;
+    s.form.input_ref = "旧窗口请求";
+    const lateCreate = s.create();
+    await new Promise(setImmediate);
+    assert.equal(s.calls.length, 1);
+    s.closeSearch();
+    s.openSearch();
+    s.form.input_ref = "新草稿保留";
+    resolveLateSuccess(ok({ id: "created-late" }));
+    await lateCreate;
+    assert.equal(s.showSearch.value, true);
+    assert.equal(s.form.input_ref, "新草稿保留");
+    assert.match(s.notice.value, /当前打开的窗口与页面选择保持不变/);
+
+    s = await sw();
+    let resolveLateFailure;
+    s.replies.push(
+      new Promise((resolve) => {
+        resolveLateFailure = resolve;
+      }),
+    );
+    s.showSearch.value = true;
+    const staleFailure = s.create();
+    await new Promise(setImmediate);
+    s.closeSearch();
+    s.openSearch();
+    s.form.input_ref = "失败不污染新草稿";
+    resolveLateFailure(new ApiClientError("error"));
+    await staleFailure;
+    assert.equal(s.dialogFailure.value, null);
+    assert.equal(s.form.input_ref, "失败不污染新草稿");
+    checks.push(
+      "dialog generation preserves reopened draft on late success and prevents late failure from attaching to a new dialog; sent request is not canceled",
     );
     const p = await setup("SourcingComparisonPanel", "specificationHint");
     assert.equal(
@@ -313,17 +404,18 @@ export async function verifySourcingSource() {
       "review,beginReview,submitReview",
       { busy: true },
     );
+    const reviewItem = { id: "review-1", version: 3, can_review: true };
     for (const decision of ["approved", "rejected"]) {
       reviewQueue.review.reason = "旧原因";
-      reviewQueue.beginReview("review-1", decision);
+      reviewQueue.beginReview(reviewItem, decision);
       assert.equal(reviewQueue.review.reason, "");
       assert.equal(reviewQueue.review.id, "review-1");
       reviewQueue.review.reason = " x ";
       const n = reviewQueue.events.length;
-      reviewQueue.submitReview({ id: "review-1", version: 3 });
+      reviewQueue.submitReview(reviewItem);
       assert.equal(reviewQueue.events.length, n);
       reviewQueue.review.reason = "  原始证据已核对  ";
-      reviewQueue.submitReview({ id: "review-1", version: 3 });
+      reviewQueue.submitReview(reviewItem);
       assert.deepEqual(reviewQueue.events.at(-1), {
         name: "reviewCost",
         payload: { reviewId: "review-1", decision, reason: "原始证据已核对", expectedVersion: 3 },
@@ -348,7 +440,7 @@ export async function verifySourcingSource() {
     return {
       checks,
       limits:
-        "Actual setup functions with inert transport/router and checkbox class; no DOM mount, SQL, RBAC, worker, quote validity, asynchronous ownership or actual timezone matrix proof.",
+        "Actual setup functions with inert transport/router and checkbox class; synthetic busy/generation checks are not mounted DOM proof; no SQL, RBAC, worker, quote validity, read/KeepAlive scope ownership or timezone matrix proof.",
     };
   } finally {
     scopes.forEach((scope) => scope.stop());

@@ -19,6 +19,12 @@ type SourcingDialogFailure = {
   message: string;
   requestId: string;
 };
+type SourcingDialogName = SourcingDialogFailure["dialog"];
+type SourcingDialogAttempt = {
+  dialog: SourcingDialogName;
+  generation: number;
+  routeGeneration: number;
+};
 const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(), {
     capabilities: () => [],
   }),
@@ -36,6 +42,13 @@ const props = withDefaults(defineProps<{ apiBaseUrl: string; capabilities?: stri
   query = ref(""),
   deleting = ref<Search | null>(null),
   deleteReason = ref(""),
+  dialogGeneration = reactive<Record<SourcingDialogName, number>>({
+    search: 0,
+    quote: 0,
+    purchase: 0,
+    delete: 0,
+  }),
+  routeGeneration = ref(0),
   { comparisons, comparisonFailure, comparisonLoading, loadComparisons } =
     useSourcingComparisons(request),
   quoteCandidate = ref<Candidate | null>(null),
@@ -208,7 +221,20 @@ async function detail(item: Search, syncRoute = true) {
     } else notice.value = "详情暂不可用，列表状态未被覆盖。";
   }
 }
-async function post(path: string, body: unknown, dialog?: SourcingDialogFailure["dialog"]) {
+function isCurrentDialogAttempt(attempt: SourcingDialogAttempt) {
+  return (
+    dialogGeneration[attempt.dialog] === attempt.generation &&
+    routeGeneration.value === attempt.routeGeneration
+  );
+}
+function startDialogAttempt(dialog: SourcingDialogName): SourcingDialogAttempt {
+  return {
+    dialog,
+    generation: dialogGeneration[dialog],
+    routeGeneration: routeGeneration.value,
+  };
+}
+async function post(path: string, body: unknown, attempt?: SourcingDialogAttempt) {
   busy.value = true;
   notice.value = "";
   dialogFailure.value = null;
@@ -220,13 +246,17 @@ async function post(path: string, body: unknown, dialog?: SourcingDialogFailure[
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
-      if (dialog)
-        dialogFailure.value = { dialog, message: error.actionHint, requestId: error.requestId };
+      if (attempt && isCurrentDialogAttempt(attempt))
+        dialogFailure.value = {
+          dialog: attempt.dialog,
+          message: error.actionHint,
+          requestId: error.requestId,
+        };
     } else {
       notice.value = "依赖暂不可用，未写入状态。";
-      if (dialog)
+      if (attempt && isCurrentDialogAttempt(attempt))
         dialogFailure.value = {
-          dialog,
+          dialog: attempt.dialog,
           message: "依赖暂不可用，未写入状态。",
           requestId: "",
         };
@@ -237,36 +267,51 @@ async function post(path: string, body: unknown, dialog?: SourcingDialogFailure[
   }
 }
 async function create() {
-  if (await post("/sourcing/searches", form, "search")) {
+  if (busy.value) return;
+  const attempt = startDialogAttempt("search"),
+    routeAtSubmit = route.fullPath;
+  if (await post("/sourcing/searches", form, attempt)) {
+    if (!isCurrentDialogAttempt(attempt) || route.fullPath !== routeAtSubmit) {
+      notice.value = "先前的找货请求已排队；当前打开的窗口与页面选择保持不变。";
+      return;
+    }
     closeSearch();
     await load();
     notice.value = "公开供应商网页采集已排队，候选与原始证据会自动回填。";
+  } else if (!isCurrentDialogAttempt(attempt)) {
+    notice.value = "先前的找货请求未完成；当前打开的窗口与页面选择保持不变。";
   }
 }
 function openSearch() {
   if (!canManage.value) return;
+  dialogGeneration.search += 1;
   if (dialogFailure.value?.dialog === "search") dialogFailure.value = null;
   showSearch.value = true;
   void router.replace({ query: { ...route.query, create: "1" } });
 }
 function closeSearch() {
+  dialogGeneration.search += 1;
   showSearch.value = false;
   if (dialogFailure.value?.dialog === "search") dialogFailure.value = null;
   void router.replace({ query: { ...route.query, create: undefined } });
 }
 function closeQuote() {
+  dialogGeneration.quote += 1;
   quoteCandidate.value = null;
   if (dialogFailure.value?.dialog === "quote") dialogFailure.value = null;
 }
 function closePurchase() {
+  dialogGeneration.purchase += 1;
   purchaseCandidate.value = null;
   if (dialogFailure.value?.dialog === "purchase") dialogFailure.value = null;
 }
 function openDelete() {
+  dialogGeneration.delete += 1;
   if (dialogFailure.value?.dialog === "delete") dialogFailure.value = null;
   deleting.value = selected.value;
 }
 function closeDelete() {
+  dialogGeneration.delete += 1;
   deleting.value = null;
   if (dialogFailure.value?.dialog === "delete") dialogFailure.value = null;
 }
@@ -282,7 +327,10 @@ function handleStateSecondary() {
   else void load();
 }
 async function confirm() {
-  if (!quoteCandidate.value) return;
+  if (!quoteCandidate.value || busy.value) return;
+  const attempt = startDialogAttempt("quote"),
+    candidateId = quoteCandidate.value.id,
+    routeAtSubmit = route.fullPath;
   if (
     await post(
       "/sourcing/quotes",
@@ -291,12 +339,22 @@ async function confirm() {
         ...quote,
         observed_at: new Date(quote.observed_at).toISOString(),
       },
-      "quote",
+      attempt,
     )
   ) {
+    if (
+      !isCurrentDialogAttempt(attempt) ||
+      route.fullPath !== routeAtSubmit ||
+      quoteCandidate.value?.id !== candidateId
+    ) {
+      notice.value = "先前的报价确认已完成；当前打开的窗口与页面选择保持不变。";
+      return;
+    }
     quoteCandidate.value = null;
     await load();
     notice.value = "报价已按新版本确认，原始候选和证据未改写。";
+  } else if (!isCurrentDialogAttempt(attempt)) {
+    notice.value = "先前的报价确认未完成；当前打开的窗口与页面选择保持不变。";
   }
 }
 function choose(candidate: Candidate, event: Event) {
@@ -310,6 +368,7 @@ function choose(candidate: Candidate, event: Event) {
   if (checkbox instanceof HTMLInputElement) checkbox.checked = selectedQuotes.value.includes(id);
 }
 function openQuote(candidate: Candidate) {
+  dialogGeneration.quote += 1;
   if (dialogFailure.value?.dialog === "quote") dialogFailure.value = null;
   quoteCandidate.value = candidate;
   quote.moq = candidate.moq ?? 1;
@@ -323,13 +382,25 @@ function openQuote(candidate: Candidate) {
   quote.evidence_id = candidate.evidence_id;
 }
 async function compare() {
+  if (busy.value) return;
   const selectedCount = selectedQuotes.value.length;
+  const selectedIds = [...selectedQuotes.value],
+    searchIdAtSubmit = selected.value?.id,
+    routeGenerationAtSubmit = routeGeneration.value;
   if (
     await post("/sourcing/comparisons", {
       name: `${searchName(selected.value)} 报价对比`,
-      quote_ids: selectedQuotes.value,
+      quote_ids: selectedIds,
     })
   ) {
+    if (
+      routeGeneration.value !== routeGenerationAtSubmit ||
+      selected.value?.id !== searchIdAtSubmit ||
+      selectedQuotes.value.join("\u0000") !== selectedIds.join("\u0000")
+    ) {
+      notice.value = `已保存 ${selectedCount} 家报价对比；当前页面选择保持不变。`;
+      return;
+    }
     selectedQuotes.value = [];
     await load();
     notice.value = `已保存 ${selectedCount} 家报价对比。`;
@@ -337,6 +408,7 @@ async function compare() {
 }
 function openPurchase(candidate: Candidate) {
   if (!candidate.quote) return;
+  dialogGeneration.purchase += 1;
   if (dialogFailure.value?.dialog === "purchase") dialogFailure.value = null;
   purchaseCandidate.value = candidate;
   purchaseForm.quantity = candidate.moq ?? 1;
@@ -344,7 +416,10 @@ function openPurchase(candidate: Candidate) {
 }
 async function purchase() {
   const candidate = purchaseCandidate.value;
-  if (!candidate?.quote) return;
+  if (!candidate?.quote || busy.value) return;
+  const attempt = startDialogAttempt("purchase"),
+    candidateId = candidate.id,
+    routeAtSubmit = route.fullPath;
   if (
     await post(
       "/sourcing/purchase-tasks",
@@ -353,23 +428,45 @@ async function purchase() {
         quantity: Number(purchaseForm.quantity),
         reason: purchaseForm.reason.trim(),
       },
-      "purchase",
+      attempt,
     )
   ) {
+    if (
+      !isCurrentDialogAttempt(attempt) ||
+      route.fullPath !== routeAtSubmit ||
+      purchaseCandidate.value?.id !== candidateId
+    ) {
+      notice.value = "先前的采购任务已排队；当前打开的窗口与页面选择保持不变。";
+      return;
+    }
     purchaseCandidate.value = null;
     notice.value = "采购任务已进入任务中心待消费队列。";
+  } else if (!isCurrentDialogAttempt(attempt)) {
+    notice.value = "先前的采购任务未完成；当前打开的窗口与页面选择保持不变。";
   }
 }
 async function refreshSearch() {
-  if (!selected.value) return;
-  const result = await post(`/sourcing/searches/${selected.value.id}/refresh`, {});
+  if (!selected.value || busy.value) return;
+  const searchIdAtSubmit = selected.value.id,
+    routeGenerationAtSubmit = routeGeneration.value,
+    result = await post(`/sourcing/searches/${searchIdAtSubmit}/refresh`, {});
   if (result) {
-    notice.value = `重新采集已排队，任务编号 ${result.task_id}。`;
+    if (
+      routeGeneration.value !== routeGenerationAtSubmit ||
+      selected.value?.id !== searchIdAtSubmit
+    ) {
+      notice.value = `先前记录的重新采集已排队，任务编号 ${result.task_id}；当前页面选择保持不变。`;
+      return;
+    }
     await load();
+    notice.value = `重新采集已排队，任务编号 ${result.task_id}。`;
   }
 }
 async function removeSearch() {
-  if (!deleting.value || !deleteReason.value.trim()) return;
+  if (!deleting.value || !deleteReason.value.trim() || busy.value) return;
+  const attempt = startDialogAttempt("delete"),
+    deletedSearchId = deleting.value.id,
+    routeAtSubmit = route.fullPath;
   busy.value = true;
   dialogFailure.value = null;
   try {
@@ -378,27 +475,38 @@ async function removeSearch() {
       body: { reason: deleteReason.value.trim() },
     });
     requestId.value = response.request_id;
-    notice.value = "找货记录已删除，候选证据与审计仍保留。";
-    selected.value = null;
-    deleting.value = null;
-    deleteReason.value = "";
-    await load();
+    if (
+      isCurrentDialogAttempt(attempt) &&
+      route.fullPath === routeAtSubmit &&
+      deleting.value?.id === deletedSearchId &&
+      selected.value?.id === deletedSearchId
+    ) {
+      closeDelete();
+      selected.value = null;
+      deleteReason.value = "";
+      await load();
+      notice.value = "找货记录已删除，候选证据与审计仍保留。";
+    } else {
+      notice.value = "先前的找货记录删除已完成；当前打开的窗口与页面选择保持不变。";
+    }
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       notice.value = error.actionHint;
-      dialogFailure.value = {
-        dialog: "delete",
-        message: error.actionHint,
-        requestId: error.requestId,
-      };
+      if (isCurrentDialogAttempt(attempt))
+        dialogFailure.value = {
+          dialog: "delete",
+          message: error.actionHint,
+          requestId: error.requestId,
+        };
     } else {
       notice.value = "依赖暂不可用，删除未完成。";
-      dialogFailure.value = {
-        dialog: "delete",
-        message: "依赖暂不可用，删除未完成。",
-        requestId: "",
-      };
+      if (isCurrentDialogAttempt(attempt))
+        dialogFailure.value = {
+          dialog: "delete",
+          message: "依赖暂不可用，删除未完成。",
+          requestId: "",
+        };
     }
   } finally {
     busy.value = false;
@@ -415,6 +523,12 @@ onMounted(() => {
   }
   void load();
 });
+watch(
+  () => route.fullPath,
+  () => {
+    routeGeneration.value += 1;
+  },
+);
 watch(query, (value) => {
   void router.replace({ query: { ...route.query, q: value || undefined, create: undefined } });
 });
