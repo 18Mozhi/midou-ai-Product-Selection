@@ -611,6 +611,7 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
     page.getByText("成本复核已通过并生效；如有活动费用规则，利润重算已排队。"),
   ).toBeVisible();
   await expect(reviewQueue.locator("form")).toHaveCount(0);
+  await expect(reviewQueue.locator("article")).toHaveAttribute("data-status", "approved");
   await expect(reviewQueue.getByRole("button", { name: "通过", exact: true })).toHaveCount(0);
 });
 
