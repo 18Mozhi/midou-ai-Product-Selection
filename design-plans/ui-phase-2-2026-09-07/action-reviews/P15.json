@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityWorkspace.vue": "c11103e30119b85b82f3c21f46f66c508fc29fa838b40fe4819858b3397b6c62",
+    "apps/web/src/components/OpportunityWorkspace.vue": "ca869f9db2037505543cc771932ef391f09846646332aeccd058883ccad6486f",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
@@ -1989,7 +1989,7 @@
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "c11103e30119b85b82f3c21f46f66c508fc29fa838b40fe4819858b3397b6c62",
+      "apps/web/src/components/OpportunityWorkspace.vue": "ca869f9db2037505543cc771932ef391f09846646332aeccd058883ccad6486f",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",

@@ -915,7 +915,7 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   await expect(reviewQueue.getByRole("button", { name: "通过", exact: true })).toHaveCount(0);
 });
 
-test("P18 cost observed_at defaults to local time and serializes the same instant", async ({
+test("P18 cost submission preserves local time and rejects duplicate in-flight POSTs", async ({
   browser,
 }) => {
   const context = await browser.newContext({
@@ -926,7 +926,11 @@ test("P18 cost observed_at defaults to local time and serializes the same instan
     const page = await context.newPage();
     await navigation(page);
     const reviewerId = "00000000-0000-4000-8000-000000000452";
-    let submitted: Record<string, unknown> | null = null;
+    let releaseCostPost!: () => void;
+    let markCostPostStarted!: () => void;
+    const costPostGate = new Promise<void>((resolve) => (releaseCostPost = resolve));
+    const costPostStarted = new Promise<void>((resolve) => (markCostPostStarted = resolve));
+    const submissions: Record<string, unknown>[] = [];
     await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
       route.fulfill({
         json: envelope({
@@ -976,7 +980,9 @@ test("P18 cost observed_at defaults to local time and serializes the same instan
       }),
     );
     await page.route(`**/api/v1/opportunities/${opportunityId}/cost-inputs`, async (route) => {
-      submitted = route.request().postDataJSON() as Record<string, unknown>;
+      submissions.push(route.request().postDataJSON() as Record<string, unknown>);
+      markCostPostStarted();
+      await costPostGate;
       await route.fulfill({ status: 201, json: envelope({ id: ruleId }) });
     });
 
@@ -995,12 +1001,148 @@ test("P18 cost observed_at defaults to local time and serializes the same instan
     await page.getByLabel("来源标识").fill("source:local-time-check");
     await page.getByLabel("证据 ID").fill("00000000-0000-4000-8000-000000000453");
     await page.getByLabel("指定复核人").selectOption(reviewerId);
-    await page.getByRole("button", { name: "提交双人复核" }).click();
-    await expect.poll(() => submitted).not.toBeNull();
-    expect(submitted).toMatchObject({ observed_at: expectedInstant });
+    const form = page.locator("form.profit-input");
+    await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
+    await costPostStarted;
+    await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
+    await page.waitForTimeout(100);
+    expect(submissions).toHaveLength(1);
+    const response = page.waitForResponse(
+      (candidate) =>
+        candidate.url().includes(`/api/v1/opportunities/${opportunityId}/cost-inputs`) &&
+        candidate.status() === 201,
+    );
+    releaseCostPost();
+    await response;
+    expect(submissions[0]).toMatchObject({ observed_at: expectedInstant });
   } finally {
     await context.close();
   }
+});
+
+test("P18 cost review rejects a duplicate requestSubmit while approval is pending", async ({
+  page,
+}) => {
+  await navigation(page);
+  const reviewId = "00000000-0000-4000-8000-000000000459";
+  let reviewStatus: "pending" | "approved" = "pending";
+  let releaseReviewPost!: () => void;
+  let markReviewPostStarted!: () => void;
+  const reviewPostGate = new Promise<void>((resolve) => (releaseReviewPost = resolve));
+  const reviewPostStarted = new Promise<void>((resolve) => (markReviewPostStarted = resolve));
+  const reviewBodies: Record<string, unknown>[] = [];
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
+    route.fulfill({
+      json: envelope({
+        id: opportunityId,
+        name: "待复核成本机会",
+        market: "US",
+        category: "outdoor",
+        source_type: "manual",
+        source_ref_id: null,
+        owner_id: null,
+        lifecycle_status: "ready",
+        recommendation_status: "observe",
+        overall_score: 72,
+        trend_score: 80,
+        competition_score: 65,
+        profit_status: "insufficient_data",
+        risk_level: "unknown",
+        confidence: { status: "measured", score: 80 },
+        evidence_count: 0,
+        source_count: 0,
+        coverage_status: "partial",
+        decision_status: "pending",
+        version: 8,
+        updated_at: "2026-08-08T12:00:00.000Z",
+        score_rule_version: "v1",
+        scored_at: "2026-08-08T11:00:00.000Z",
+        latest_score_run: null,
+        score_components: [],
+        evidence: [],
+        decisions: [],
+        section_status: {
+          market: "covered",
+          competition: "covered",
+          profit: "insufficient_data",
+          risk: "insufficient_data",
+          execution: "not_available",
+        },
+      }),
+    }),
+  );
+  await page.route("**/api/v1/cost-input-reviewers", (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) =>
+    route.fulfill({
+      json: envelope({
+        latest_run: null,
+        current_inputs: [],
+        cost_input_reviews: [
+          {
+            id: reviewId,
+            cost_input_id: "00000000-0000-4000-8000-000000000460",
+            input_type: "purchase_price",
+            amount_value: 40,
+            currency: "CNY",
+            platform: "amazon",
+            input_version: 1,
+            evidence_id: "00000000-0000-4000-8000-000000000461",
+            submitter_id: "00000000-0000-4000-8000-000000000462",
+            submitter_label: "成本提交人",
+            reviewer_id: "00000000-0000-4000-8000-000000000463",
+            reviewer_label: "当前复核人",
+            status: reviewStatus,
+            due_at: "2026-10-01T12:00:00.000Z",
+            overdue: false,
+            can_review: reviewStatus === "pending",
+            decision_reason: reviewStatus === "approved" ? "核验来源与币种" : null,
+            version: reviewStatus === "approved" ? 2 : 1,
+          },
+        ],
+      }),
+    }),
+  );
+  await page.route(
+    `**/api/v1/opportunities/${opportunityId}/cost-input-reviews/${reviewId}/actions`,
+    async (route) => {
+      reviewBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+      markReviewPostStarted();
+      await reviewPostGate;
+      reviewStatus = "approved";
+      await route.fulfill({ json: envelope({ status: "approved", version: 2 }) });
+    },
+  );
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openProfitSection(page);
+  const queue = page.locator(".profit-review-queue");
+  await queue.getByRole("button", { name: "通过", exact: true }).click();
+  const form = queue.locator("form");
+  await form.getByLabel("复核说明").fill("核验来源与币种");
+  await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
+  await reviewPostStarted;
+  await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
+  await page.waitForTimeout(100);
+  expect(reviewBodies).toHaveLength(1);
+  expect(reviewBodies[0]).toEqual({
+    decision: "approved",
+    reason: "核验来源与币种",
+    expected_version: 1,
+  });
+
+  const response = page.waitForResponse(
+    (candidate) =>
+      candidate.url().includes(`/cost-input-reviews/${reviewId}/actions`) &&
+      candidate.status() === 200,
+  );
+  releaseReviewPost();
+  await response;
+  await expect(
+    page.getByText("成本复核已通过并生效；如有活动费用规则，利润重算已排队。"),
+  ).toBeVisible();
+  expect(reviewBodies).toHaveLength(1);
 });
 
 test("a late reviewer-directory failure cannot replace the current opportunity reviewers", async ({

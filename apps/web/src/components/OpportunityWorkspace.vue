@@ -904,22 +904,30 @@ async function confirmBatch() {
     message.value = `批量操作已完成 ${result.affected_count} 项，每个机会均保留独立事件。`;
 }
 async function confirmCost() {
-  if (!detail.value) return;
-  const result = await write(`/opportunities/${detail.value.id}/cost-inputs`, {
-    platform: costForm.platform,
-    input_type: costForm.input_type,
-    amount_value: Number(costForm.amount_value),
-    currency: costForm.currency,
-    source_type: costForm.source_type,
-    source_ref_id: costForm.source_ref_id,
-    evidence_id: costForm.evidence_id,
-    observed_at: new Date(costForm.observed_at).toISOString(),
-    reviewer_id: costForm.reviewer_id,
-    expected_version: detail.value.version,
-  });
+  if (busy.value || !detail.value) return;
+  const submitted = {
+    opportunityId: detail.value.id,
+    inputType: costForm.input_type,
+    body: {
+      platform: costForm.platform,
+      input_type: costForm.input_type,
+      amount_value: Number(costForm.amount_value),
+      currency: costForm.currency,
+      source_type: costForm.source_type,
+      source_ref_id: costForm.source_ref_id,
+      evidence_id: costForm.evidence_id,
+      observed_at: new Date(costForm.observed_at).toISOString(),
+      reviewer_id: costForm.reviewer_id,
+      expected_version: detail.value.version,
+    },
+  };
+  const result = await write(
+    `/opportunities/${submitted.opportunityId}/cost-inputs`,
+    submitted.body,
+  );
   if (result) {
     await load();
-    message.value = `${costForm.input_type} 已提交双人复核；通过前不会影响利润。`;
+    message.value = `${submitted.inputType} 已提交双人复核；通过前不会影响利润。`;
   }
 }
 async function reviewCost(payload: {
@@ -928,19 +936,26 @@ async function reviewCost(payload: {
   reason: string;
   expectedVersion: number;
 }) {
-  if (!detail.value) return;
+  if (busy.value || !detail.value) return;
+  const submitted = {
+    opportunityId: detail.value.id,
+    reviewId: payload.reviewId,
+    decision: payload.decision,
+    reason: payload.reason,
+    expectedVersion: payload.expectedVersion,
+  };
   const result = await write(
-    `/opportunities/${detail.value.id}/cost-input-reviews/${payload.reviewId}/actions`,
+    `/opportunities/${submitted.opportunityId}/cost-input-reviews/${submitted.reviewId}/actions`,
     {
-      decision: payload.decision,
-      reason: payload.reason,
-      expected_version: payload.expectedVersion,
+      decision: submitted.decision,
+      reason: submitted.reason,
+      expected_version: submitted.expectedVersion,
     },
   );
   if (!result) return;
   await load();
   message.value =
-    payload.decision === "approved"
+    submitted.decision === "approved"
       ? "成本复核已通过并生效；如有活动费用规则，利润重算已排队。"
       : "成本复核已驳回；原提交保留但不会进入利润计算。";
 }

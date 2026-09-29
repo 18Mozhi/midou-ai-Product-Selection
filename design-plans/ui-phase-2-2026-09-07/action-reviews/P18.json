@@ -14,7 +14,7 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "c11103e30119b85b82f3c21f46f66c508fc29fa838b40fe4819858b3397b6c62",
+    "apps/web/src/components/OpportunityWorkspace.vue": "ca869f9db2037505543cc771932ef391f09846646332aeccd058883ccad6486f",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
@@ -409,7 +409,7 @@
           "scene": "continuity-review-footer"
         }
       ],
-      "remaining": "源表单可独立于item.can_review存在；提交函数只查原因不查busy；服务端资格和版本待实库验收。",
+      "remaining": "本轮已补提交函数busy守卫，并以真实Vue本地拦截E2E覆盖原生requestSubmit重复触发；服务端资格、真实RBAC/版本与数据库写入仍待独立验收。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#3fe574c620a554f9.1",
         "apps/web/src/components/OpportunityCostReviewQueue.vue#8c06fd5c1d000db0.1"
@@ -1541,7 +1541,7 @@
           "scene": "continuity-cost-footer"
         }
       ],
-      "remaining": "默认UTC截断与本地解析存在偏移；提交未生效，另一人服务端资格需验。",
+      "remaining": "本轮已修复原生requestSubmit重复触发的客户端重入，并固定本次输入和expected_version；另一复核人资格、真实RBAC、数据库事务及生产写入仍需独立验收。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityProfitPanel.vue#21c282e197f8be16.1",
         "apps/web/src/components/OpportunityProfitPanel.vue#d25bbd68583e5a3d.1"
@@ -2787,7 +2787,7 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-      "apps/web/src/components/OpportunityWorkspace.vue": "c11103e30119b85b82f3c21f46f66c508fc29fa838b40fe4819858b3397b6c62",
+        "apps/web/src/components/OpportunityWorkspace.vue": "ca869f9db2037505543cc771932ef391f09846646332aeccd058883ccad6486f",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
@@ -2922,13 +2922,13 @@
       {
         "file": "apps/web/src/components/OpportunityProfitPanel.vue",
         "binding": "costForm.observed_at",
-        "meaning": "观测时间required datetime-local，默认UTC截断再按本地解析，存在偏移风险",
+        "meaning": "观测时间required datetime-local，默认值按浏览器本地时区生成，提交转换为同一绝对时刻的ISO字符串",
         "remaining": "仅核对绑定/现行约束，不证明全部输入组合、读屏、错误关联和真实后端；父model与用户字段不重复计数。"
       },
       {
         "file": "apps/web/src/components/OpportunityProfitPanel.vue",
         "binding": "costForm.reviewer_id",
-        "meaning": "指定另一复核人required；选项失败静默空，不等于无人",
+        "meaning": "指定另一复核人required；区分加载中、读取失败与成功空列表，错误保留提示/追踪并允许GET-only重试",
         "remaining": "仅核对绑定/现行约束，不证明全部输入组合、读屏、错误关联和真实后端；父model与用户字段不重复计数。"
       },
       {
@@ -3819,7 +3819,7 @@
     "701十分区已组合且有主题密度代表图，但无完整采纳质量门/成本输入复核链，不能借其他夹具填当前机会事实。",
     "概览竞品/供应目录链接当前无能力v-if；旧合同按能力展示描述与真实源不同，待明确审核，未擅自修权限或路由。",
     "P18主状态页各文案都走load且次按钮无handler；原型恢复入口与实际消费者必须逐态对齐。",
-    "AI抽检和成本复核入口的在途禁用/归属仍需逐项核验；决策提交已增加局部同步单飞守卫，通用 write 仍允许不同动作并行，旧失败文案不能证明服务端事务结果。",
+    "决策、成本录入和成本复核提交已分别增加局部同步单飞守卫，并由真实Vue本地拦截E2E覆盖重复requestSubmit；AI抽检及各动作回执归属仍需逐项核验，客户端保护不证明服务端事务结果。",
     "成本初始时间UTC截断/本地解析偏移、reviewer失败置空、复核id残留、AI先关原因再写差异继续保留OP07–OP10。",
     "43个路由动作的六態仍需逐一判断/selector绑定；已有代表控件图不自动等于全动作、所有行/主题/权限状态已验。"
   ],
