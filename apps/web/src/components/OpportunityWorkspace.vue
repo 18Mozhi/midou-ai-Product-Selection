@@ -142,11 +142,28 @@ let decisionDialogGeneration = 0;
 let erpDialogGeneration = 0;
 let erpBridgeGeneration = 0;
 let writeScopeGeneration = 0;
-let activeWriteCount = 0;
+let activeWriteCounts = new Map<string, number>();
+let workspaceActive = true;
 let tabIntentGeneration = 0;
 let aiRequestGeneration = 0;
 let aiReviewIntentGeneration = 0;
 let aiSnapshotOpportunityId = "";
+function writeScopeKey(opportunityId = props.opportunityId) {
+  return opportunityId ? `opportunity:${opportunityId}` : "opportunity-list";
+}
+function beginScopedWrite(scopeKey: string) {
+  activeWriteCounts.set(scopeKey, (activeWriteCounts.get(scopeKey) ?? 0) + 1);
+  if (workspaceActive && scopeKey === writeScopeKey()) busy.value = true;
+}
+function finishScopedWrite(scopeKey: string) {
+  const remaining = Math.max(0, (activeWriteCounts.get(scopeKey) ?? 0) - 1);
+  if (remaining) activeWriteCounts.set(scopeKey, remaining);
+  else activeWriteCounts.delete(scopeKey);
+  if (workspaceActive && scopeKey === writeScopeKey()) busy.value = remaining > 0;
+}
+function pendingWriteCount(scopeKey = writeScopeKey()) {
+  return activeWriteCounts.get(scopeKey) ?? 0;
+}
 watch(
   showCreate,
   () => {
@@ -593,9 +610,9 @@ async function sendOperatingFeedback(
 ) {
   if (busy.value) return;
   const generation = writeScopeGeneration;
+  const scopeKey = writeScopeKey(opportunityId);
   const ownsScope = () => generation === writeScopeGeneration;
-  activeWriteCount += 1;
-  busy.value = true;
+  beginScopedWrite(scopeKey);
   message.value = "";
   feedbackWriteStates.value = {
     ...feedbackWriteStates.value,
@@ -636,38 +653,51 @@ async function sendOperatingFeedback(
     if (nextState.requestId) requestId.value = nextState.requestId;
     message.value = nextState.message;
   } finally {
-    if (ownsScope()) {
-      activeWriteCount = Math.max(0, activeWriteCount - 1);
-      busy.value = activeWriteCount > 0;
-    }
+    finishScopedWrite(scopeKey);
   }
 }
-async function write(path: string, body: unknown) {
+async function write(path: string, body: unknown, refreshOnStaleReceipt = true) {
   if (busy.value) return null;
   const generation = writeScopeGeneration;
+  const scopeKey = writeScopeKey();
   const ownsScope = () => generation === writeScopeGeneration;
-  if (ownsScope()) {
-    activeWriteCount += 1;
-    busy.value = true;
-    message.value = "";
-  }
+  beginScopedWrite(scopeKey);
+  message.value = "";
   try {
     const response = await request<any>(path, { method: "POST", body });
-    if (!ownsScope()) return null;
+    if (!ownsScope()) {
+      if (workspaceActive && scopeKey === writeScopeKey()) {
+        requestId.value = response.request_id;
+        if (refreshOnStaleReceipt) {
+          await load();
+          message.value = "页面切换期间写入回执已到达；已刷新当前工作区，请核对最新状态。";
+        }
+      }
+      return null;
+    }
     requestId.value = response.request_id;
     return response.data;
   } catch (error) {
-    if (!ownsScope()) return null;
+    if (!ownsScope()) {
+      if (workspaceActive && scopeKey === writeScopeKey()) {
+        const apiError = error instanceof ApiClientError ? error : null;
+        await load();
+        if (apiError) {
+          requestId.value = apiError.requestId;
+          message.value = `页面切换期间未能确认写入结果；已重新读取当前工作区。${apiError.actionHint}`;
+        } else {
+          message.value = "页面切换期间未能确认写入结果；已重新读取当前工作区，且不会自动重试。";
+        }
+      }
+      return null;
+    }
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       message.value = error.actionHint;
     } else message.value = "依赖暂不可用，未写入任何状态。";
     return null;
   } finally {
-    if (ownsScope()) {
-      activeWriteCount = Math.max(0, activeWriteCount - 1);
-      busy.value = activeWriteCount > 0;
-    }
+    finishScopedWrite(scopeKey);
   }
 }
 async function create() {
@@ -1017,7 +1047,7 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
       if (busy.value || aiReviewSubmission.value) return;
       aiReviewError.value = "";
       aiReviewSubmission.value = { resultId, stage: "submitting" };
-      const result = await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes });
+      const result = await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes }, false);
       if (detail.value?.id !== opportunityId) return;
       if (intentGeneration !== aiReviewIntentGeneration) {
         if (route.path === `/opportunities/${opportunityId}`) {
@@ -1155,6 +1185,7 @@ function queueLoad() {
   });
 }
 onDeactivated(() => {
+  workspaceActive = false;
   closeTransientDialogs();
   if (aiReviewSubmission.value) aiReviewIntentGeneration += 1;
   readGeneration += 1;
@@ -1162,11 +1193,12 @@ onDeactivated(() => {
   erpBridgeBusy.value = false;
   markPendingFeedbackWritesUnknown();
   writeScopeGeneration += 1;
-  activeWriteCount = 0;
   busy.value = false;
   wasDeactivated = true;
 });
 onActivated(() => {
+  workspaceActive = true;
+  busy.value = pendingWriteCount() > 0;
   if (!wasDeactivated) return;
   wasDeactivated = false;
   syncCreateRouteIntent();
@@ -1192,8 +1224,7 @@ watch(
     erpBridgeBusy.value = false;
     markPendingFeedbackWritesUnknown();
     writeScopeGeneration += 1;
-    activeWriteCount = 0;
-    busy.value = false;
+    busy.value = pendingWriteCount() > 0;
     aiReviewSubmission.value = null;
     detail.value = null;
     profit.value = null;
@@ -1235,7 +1266,6 @@ onBeforeUnmount(() => {
   erpBridgeGeneration += 1;
   erpBridgeBusy.value = false;
   writeScopeGeneration += 1;
-  activeWriteCount = 0;
   aiReviewSubmission.value = null;
 });
 </script>

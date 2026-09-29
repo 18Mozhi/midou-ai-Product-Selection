@@ -1227,6 +1227,63 @@ test("changing between the opportunity list and detail closes open list dialogs"
   await expect(batchDialog).toBeHidden();
 });
 
+test("P18 keeps a shared write locked across cached route deactivation and refreshes its receipt", async ({
+  page,
+}) => {
+  let scoreWriteCount = 0;
+  let releaseScoreWrite!: () => void;
+  let markScoreWriteStarted!: () => void;
+  const scoreWriteGate = new Promise<void>((resolve) => (releaseScoreWrite = resolve));
+  const scoreWriteStarted = new Promise<void>((resolve) => (markScoreWriteStarted = resolve));
+  let detailReadCount = 0;
+  await ready(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) => {
+    detailReadCount += 1;
+    return route.fallback();
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/score-runs`, async (route) => {
+    scoreWriteCount += 1;
+    markScoreWriteStarted();
+    await scoreWriteGate;
+    await route.fulfill({ status: 202, json: envelope({ id: "queued-score-run" }) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await page.getByRole("button", { name: "重新评分", exact: true }).click();
+  await scoreWriteStarted;
+
+  await page.evaluate(() => {
+    window.history.pushState({}, "", "/home");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page).toHaveURL(/\/home$/);
+  await expect(page.getByRole("heading", { name: "今日行动" })).toBeVisible();
+
+  const detailRequest = page.waitForRequest(
+    (request) => new URL(request.url()).pathname === `/api/v1/opportunities/${opportunityId}`,
+  );
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/opportunities/${id}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, opportunityId);
+  await detailRequest;
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  const scoreButton = page.getByRole("button", { name: "重新评分", exact: true });
+  await expect(scoreButton).toBeDisabled();
+  await scoreButton.dispatchEvent("click");
+  expect(scoreWriteCount).toBe(1);
+
+  const previousReadCount = detailReadCount;
+  releaseScoreWrite();
+  await expect(
+    page.getByText("页面切换期间写入回执已到达；已刷新当前工作区，请核对最新状态。"),
+  ).toBeVisible();
+  expect(detailReadCount).toBeGreaterThan(previousReadCount);
+  await expect(scoreButton).toBeEnabled();
+  expect(scoreWriteCount).toBe(1);
+});
+
 test("a late opportunity detail failure cannot replace the current opportunity after the ID changes", async ({
   page,
 }) => {
