@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
     "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415"
   },
   "actions": [
@@ -50,6 +50,47 @@
         }
       ],
       "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
+    },
+    {
+      "actionId": "EX-P34-READ-RECOVERY",
+      "label": "P34审批读取恢复状态父级接线（非本页）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
+      ],
+      "sourceContractKeys": [
+        "EX-P34-READ-RECOVERY"
+      ],
+      "priorContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "P34审批恢复反馈的reload事件复用现有load()；P31 roles路由不渲染审批分支，故明确排除。",
+      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P31",
+      "handler": "P31不渲染此分支；P34将reload转发至现有load()，不计入本页动作",
+      "variants": [
+        "roles"
+      ],
+      "scenes": [
+        {
+          "package": "roles-direction-c",
+          "scene": "roles"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-roles-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由P31证据证明。"
     },
     {
       "actionId": "OG-REFRESH",
@@ -2830,7 +2871,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
       "apps/web/src/components/OrganizationRolePanel.vue": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
       "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",

@@ -97,7 +97,7 @@
           "scene": "ai"
         }
       ],
-      "remaining": "排队不代表模型成功；跨ID晚到结果、真实权限与完整生命周期未验。",
+      "remaining": "排队不代表模型成功；桌面/390px真实Vue已验证跨机会ID迟到回执隔离。真实权限、Worker完成及完整生命周期仍未验。",
       "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#8ff0dc0eb124658f.1"],
       "visualStates": {
         "default": "not-mapped",
@@ -108,6 +108,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "AI队列POST挂起期间切换至另一机会，旧202回执不覆盖新机会页签、不显示旧成功提示且不触发新机会AI GET；桌面Chromium与390px各1/1。本地回包不证明服务端任务已接受或完成。"
+        },
         {
           "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
           "evidenceType": "actual-vue-local-interception",

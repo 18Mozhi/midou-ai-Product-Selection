@@ -150,6 +150,70 @@ test("a delayed AI enqueue receipt does not override a newer tab choice", async 
   await expect(overviewTab).toHaveAttribute("aria-current", "page");
 });
 
+test("a delayed AI enqueue receipt cannot leak across opportunity IDs", async ({ page }) => {
+  const nextOpportunityId = "00000000-0000-4000-8000-000000000706";
+  let releaseQueue!: () => void;
+  let markQueueStarted!: () => void;
+  let nextAiReads = 0;
+  const queueGate = new Promise<void>((resolve) => (releaseQueue = resolve));
+  const queueStarted = new Promise<void>((resolve) => (markQueueStarted = resolve));
+  const firstDetail = await setup(page);
+  const nextDetail = {
+    ...firstDetail,
+    id: nextOpportunityId,
+    name: "另一条隔离机会",
+    version: 4,
+  };
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    markQueueStarted();
+    await queueGate;
+    return route.fulfill({ status: 202, json: envelope({ id: "queued-ai-analysis" }) });
+  });
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) =>
+    route.fulfill({ json: envelope(nextDetail) }),
+  );
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}/profit-analysis`, (route) =>
+    route.fulfill({ json: envelope({ latest_run: null, current_inputs: [] }) }),
+  );
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}/ai-analyses`, (route) => {
+    nextAiReads += 1;
+    return route.fulfill({ json: envelope([]) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openTab(page, "AI 辅助");
+  await page.getByRole("button", { name: "生成新分析" }).click();
+  await queueStarted;
+
+  const nextDetailRequest = page.waitForRequest(
+    (request) => new URL(request.url()).pathname === `/api/v1/opportunities/${nextOpportunityId}`,
+  );
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/opportunities/${id}`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, nextOpportunityId);
+  await nextDetailRequest;
+  await expect(page.getByRole("heading", { name: "另一条隔离机会" })).toBeVisible();
+  await openTab(page, "结论");
+  const overviewTab = page.getByRole("button", { name: "结论", exact: true });
+  await expect(overviewTab).toHaveAttribute("aria-current", "page");
+
+  const queueResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
+      response.request().method() === "POST",
+  );
+  releaseQueue();
+  await queueResponse;
+  await page.waitForLoadState("networkidle");
+
+  await expect(page.getByRole("heading", { name: "另一条隔离机会" })).toBeVisible();
+  await expect(overviewTab).toHaveAttribute("aria-current", "page");
+  await expect(page.getByText("AI 辅助分析已进入宝塔 Node Worker 队列")).toHaveCount(0);
+  expect(nextAiReads).toBe(1);
+});
+
 test("P18 shared write lock rejects immediate repeated AI enqueue events", async ({ page }) => {
   let enqueueRequests = 0;
   let releaseEnqueue!: () => void;
