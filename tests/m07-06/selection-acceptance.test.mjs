@@ -85,7 +85,7 @@ test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synch
     "回滚",
   ])
     assert.match(all, new RegExp(token));
-  assert.match(files[1], /max-width:\s*390px/);
+  assert.match(files[1], /max-width:\s*520px/);
   assert.match(files[0], /真实来源/);
   assert.match(files[0], /journey\.task_status === "succeeded_empty"/);
   assert.match(files[0], /真实来源没有返回可用结果/);
