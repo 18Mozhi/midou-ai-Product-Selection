@@ -938,12 +938,20 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
   await expect(recovery).toContainText("团队已创建，列表暂未更新");
   await expect(recovery).toContainText("team-create-write-201");
   await expect(recovery.locator("dd").nth(1)).toHaveText(/^[0-9a-f-]{36}$/i);
+  const requestDetails = recovery.locator("details"),
+    retryButton = recovery.getByRole("button", { name: "重新读取团队列表" });
+  await expect(requestDetails).toBeVisible();
+  await expect(requestDetails.locator("summary")).toHaveText("查看本次请求编号");
+  await requestDetails.locator("summary").click();
+  await expect(recovery.getByText("创建请求")).toBeVisible();
+  await expect(recovery.getByText("读取失败请求")).toBeVisible();
+  await expect(requestDetails.locator("dd").first()).toHaveText("team-create-write-201");
   await expect(page.locator(".org-admin-notice")).toContainText("团队已创建并写入审计");
   expect(createRequests).toBe(1);
   expect(teamReads).toBeGreaterThan(1);
 
   allowRead = true;
-  await recovery.getByRole("button", { name: "重新读取团队列表" }).click();
+  await retryButton.click();
   await expect(recovery).toBeHidden();
   await expect(page.getByRole("listitem", { name: "选择团队 只创建一次的协作组" })).toBeVisible();
   await expect(page.locator(".org-admin-notice")).toContainText("创建操作未重复提交");
