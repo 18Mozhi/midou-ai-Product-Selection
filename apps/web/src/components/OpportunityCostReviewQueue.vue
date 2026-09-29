@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { reactive, watch } from "vue";
+import { nextTick, reactive, ref, watch } from "vue";
 import type { OpportunityProfitAnalysis as ProfitAnalysis } from "./opportunity-workspace-types";
 
 const props = defineProps<{
@@ -22,10 +22,30 @@ const review = reactive({
   decision: "approved" as "approved" | "rejected",
   reason: "",
 });
-function cancelReview() {
+const reviewTriggers = new Map<string, HTMLButtonElement>();
+const reviewQueue = ref<HTMLElement | null>(null);
+function reviewTriggerKey(reviewId: string, decision: "approved" | "rejected") {
+  return `${reviewId}:${decision}`;
+}
+function rememberReviewTrigger(
+  reviewId: string,
+  decision: "approved" | "rejected",
+  element: unknown,
+) {
+  const key = reviewTriggerKey(reviewId, decision);
+  if (element instanceof HTMLButtonElement) reviewTriggers.set(key, element);
+  else reviewTriggers.delete(key);
+}
+function cancelReview(restoreFocus = false) {
+  const trigger = reviewTriggers.get(reviewTriggerKey(review.id, review.decision));
   review.id = "";
   review.version = null;
   review.reason = "";
+  if (restoreFocus)
+    void nextTick(() => {
+      if (trigger?.isConnected) trigger.focus();
+      else reviewQueue.value?.focus();
+    });
 }
 watch(
   () => props.reviews,
@@ -67,7 +87,7 @@ function submitReview(item: ProfitAnalysis["cost_input_reviews"][number]) {
 </script>
 
 <template>
-  <section class="profit-review-queue">
+  <section ref="reviewQueue" class="profit-review-queue" tabindex="-1">
     <header>
       <div>
         <p>双人复核</p>
@@ -104,8 +124,20 @@ function submitReview(item: ProfitAnalysis["cost_input_reviews"][number]) {
       >
       <p v-if="item.decision_reason">处理说明：{{ item.decision_reason }}</p>
       <footer v-if="item.can_review">
-        <button type="button" @click="beginReview(item, 'rejected')">驳回</button>
-        <button type="button" @click="beginReview(item, 'approved')">通过</button>
+        <button
+          :ref="(element) => rememberReviewTrigger(item.id, 'rejected', element)"
+          type="button"
+          @click="beginReview(item, 'rejected')"
+        >
+          驳回
+        </button>
+        <button
+          :ref="(element) => rememberReviewTrigger(item.id, 'approved', element)"
+          type="button"
+          @click="beginReview(item, 'approved')"
+        >
+          通过
+        </button>
       </footer>
       <form
         v-if="review.id === item.id && item.can_review && review.version === item.version"
@@ -116,7 +148,7 @@ function submitReview(item: ProfitAnalysis["cost_input_reviews"][number]) {
           <textarea v-model="review.reason" required minlength="2" maxlength="1000"></textarea>
         </label>
         <div>
-          <button type="button" @click="cancelReview">取消</button>
+          <button type="button" @click="cancelReview(true)">取消</button>
           <button type="submit" :disabled="busy || review.reason.trim().length < 2">提交</button>
         </div>
       </form>

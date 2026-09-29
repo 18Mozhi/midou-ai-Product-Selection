@@ -14,11 +14,13 @@ route-catalog → NavigationShell → surfaceProps：P21 SourcingWorkspace，P22
 | SC       | SourcingCostConfirmationPanel.vue  | 99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6 |
 | CR       | CostRuleConsole.vue                | 1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3 |
 | PP       | OpportunityProfitPanel.vue         | c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6 |
-| RQ       | OpportunityCostReviewQueue.vue     | 9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47 |
+| RQ       | OpportunityCostReviewQueue.vue     | 1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a |
 
 2026-09-29源码续记：当前 `SourcingCostConfirmationPanel` 已向共享 `OpportunityProfitPanel` 传入复核人加载/错误/追踪状态，并转发 `retry-reviewers` 到 `loadReviewers(currentScope())`；因此 P21 的复核人失败重试入口可达，不再作为 P18 专属排除。同步映射机会版本重读、利润数据重读、双人复核提交与利润重算控件；仅确认当前源码归属，不代表真实 API、RBAC 或生产验收。
 
 2026-09-29 P22续记：CostRuleConsole 两个弹窗现均通过 `useModalDialog` 开启焦点环绕，触发器卸载时回到页面标题；写入期间字段与关闭入口锁定，拒绝响应留在弹窗并需显式重试。新建表单错误与动作错误分别就近关联；P22 当前 Vue 键盘/409/单飞状态有桌面及手机 E2E 覆盖。此处只更新源码与局部浏览器证据，P21四窗、RQ、完整读屏、真实权限/生产审批仍未验收。
+
+2026-09-30 P18续记：取消成本复核内联表单会清空草稿且不发写请求，并在桌面/390px E2E 返回对应“驳回”或“通过”触发器焦点；触发器已卸载时回到队列区域。此为本地Vue交互证据，不代表读屏、真实权限或生产审批验收。
 
 局部共80个控件/事件候选、7个弹窗定义/调用候选、44处v-model。SP与QualityGateSetupSummary只有呈现/slot，无本地交互候选；共享UiStatePanel和useModalDialog行为按实际调用方检查，不在此重复全站盘点。PP/RQ与P18共享，以下仅记录P21调用合同，不重复加算全站分母。
 
@@ -108,10 +110,10 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 | PP  | 233 | d25bbd68583e5a3d.1 | SC-COST-SUBMIT 指定复核人且非busy           |
 | PP  | 245 | f8671d189e947071.1 | SC-COST-RECALCULATE 排队                    |
 | PP  | 223 | 1dfebd67b12367cb.1 | SC-COST-REVIEWER-RETRY 指定复核人名单重试    |
-| RQ  | 107 | 9e1d20d4dd860bdc.1 | SC-COST-REVIEW rejected打开                 |
-| RQ  | 108 | 8cc90a8748defa76.1 | SC-COST-REVIEW approved打开                 |
+| RQ  | 127 | fa1b671cb5e1bc8c.1 | SC-COST-REVIEW rejected打开                 |
+| RQ  | 134 | 224f4955ed7d6f48.1 | SC-COST-REVIEW approved打开                 |
 | RQ  | 110 | 3fe574c620a554f9.1 | SC-COST-REVIEW 表单提交                     |
-| RQ  | 119 | 7c728ed5ba0c7cd7.1 | SC-COST-REVIEW-CANCEL                       |
+| RQ  | 151 | 66ceb3eced93eb5b.1 | SC-COST-REVIEW-CANCEL                       |
 | RQ  | 120 | 8c06fd5c1d000db0.1 | SC-COST-REVIEW 提交按钮                     |
 
 ## 3. 弹窗与输入分母
