@@ -285,6 +285,63 @@ for (const outcome of ["approved", "rejected"] as const) {
   });
 }
 
+test("UI2-SM03 AI reason remains keyboard-reachable at a 200-percent-equivalent viewport", async ({
+  page,
+}) => {
+  const viewport = page.viewportSize();
+  if (!viewport) throw new Error("The browser viewport must be configured for this test.");
+  await page.setViewportSize({
+    width: Math.floor(viewport.width / 2),
+    height: Math.floor(viewport.height / 2),
+  });
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+      writes.push(request.method());
+  });
+  await setup(page);
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openTab(page, "AI 辅助");
+  await page.getByRole("button", { name: "抽检通过", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "填写抽检通过说明" });
+  const input = dialog.getByRole("textbox", { name: /原因/ });
+  const cancel = dialog.getByRole("button", { name: "取消", exact: true });
+  const submit = dialog.getByRole("button", { name: "确认提交" });
+  await input.fill("已核对来源和事实引用".repeat(80));
+  await page.keyboard.press("Tab");
+  await expect(cancel).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(submit).toBeFocused();
+  const geometry = await dialog.evaluate((element) => {
+    const dialogRect = element.getBoundingClientRect();
+    const submitButton = element.querySelector('button[type="submit"]');
+    if (!submitButton) throw new Error("Missing reason submit button.");
+    const submitRect = submitButton.getBoundingClientRect();
+    return {
+      dialogLeft: dialogRect.left,
+      dialogRight: dialogRect.right,
+      dialogTop: dialogRect.top,
+      dialogBottom: dialogRect.bottom,
+      submitTop: submitRect.top,
+      submitBottom: submitRect.bottom,
+      viewportWidth: window.innerWidth,
+      viewportHeight: window.innerHeight,
+      dialogScrollWidth: element.scrollWidth,
+      dialogClientWidth: element.clientWidth,
+    };
+  });
+  expect(geometry.dialogLeft).toBeGreaterThanOrEqual(0);
+  expect(geometry.dialogRight).toBeLessThanOrEqual(geometry.viewportWidth);
+  expect(geometry.dialogTop).toBeGreaterThanOrEqual(0);
+  expect(geometry.dialogBottom).toBeLessThanOrEqual(geometry.viewportHeight);
+  expect(geometry.submitTop).toBeGreaterThanOrEqual(0);
+  expect(geometry.submitBottom).toBeLessThanOrEqual(geometry.viewportHeight);
+  expect(geometry.dialogScrollWidth).toBeLessThanOrEqual(geometry.dialogClientWidth);
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  expect(writes).toEqual([]);
+});
+
 test("P18 keeps the unsent AI review reason scoped across cached route deactivation", async ({
   page,
 }) => {
