@@ -126,7 +126,7 @@
     {
       "actionId": "task.list.page.previous",
       "label": "上一页",
-      "kind": "local",
+      "kind": "navigation",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
       "sourceCandidateIds": [
         "apps/web/src/components/TaskWorkspace.vue#c4a35037858480fb.1"
@@ -143,8 +143,6 @@
         "loading-old-total"
       ],
       "scenes": [
-        "P23-pagination-first-page",
-        "P23-pagination-last-page"
       ],
       "testReferences": [
         {
@@ -153,15 +151,15 @@
         },
         {
           "file": "tests/e2e/m05-01-business-tasks.spec.ts",
-          "evidenceType": "playwright-real-vue-desktop-mobile-pagination"
+          "evidenceType": "actual-vue-isolated-browser"
         }
       ],
       "visualStates": {
-        "default": "user-approved-remaining-pages-auto",
-        "hover": "user-approved-remaining-pages-auto",
-        "focus": "user-approved-remaining-pages-auto",
-        "pressed": "user-approved-remaining-pages-auto",
-        "disabled": "user-approved-remaining-pages-auto",
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
         "busy": "not-applicable-navigation-only"
       },
       "remaining": "已补真实Vue多页及首末边界截图/交互核验；保留loading-old-total异步中间帧与读屏器独立验收边界。"
@@ -169,7 +167,7 @@
     {
       "actionId": "task.list.page.next",
       "label": "下一页",
-      "kind": "local",
+      "kind": "navigation",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
       "sourceCandidateIds": [
         "apps/web/src/components/TaskWorkspace.vue#a0fa8a0a8fe3a4f1.1"
@@ -185,8 +183,6 @@
         "last-disabled"
       ],
       "scenes": [
-        "P23-pagination-first-page",
-        "P23-pagination-last-page"
       ],
       "testReferences": [
         {
@@ -195,15 +191,15 @@
         },
         {
           "file": "tests/e2e/m05-01-business-tasks.spec.ts",
-          "evidenceType": "playwright-real-vue-desktop-mobile-pagination"
+          "evidenceType": "actual-vue-isolated-browser"
         }
       ],
       "visualStates": {
-        "default": "user-approved-remaining-pages-auto",
-        "hover": "user-approved-remaining-pages-auto",
-        "focus": "user-approved-remaining-pages-auto",
-        "pressed": "user-approved-remaining-pages-auto",
-        "disabled": "user-approved-remaining-pages-auto",
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
         "busy": "not-applicable-navigation-only"
       },
       "remaining": "已补真实Vue多页及首末边界截图/交互核验；保留loading-old-total异步中间帧与读屏器独立验收边界。"

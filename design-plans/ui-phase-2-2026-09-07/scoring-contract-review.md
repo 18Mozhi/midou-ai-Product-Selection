@@ -12,45 +12,45 @@
 
 语义ID前缀统一为 `scoring.`；`{action}`只指submit/approve/reject/activate/rollback。表单事件与submit按钮是同一业务动作的不同源码位置，不能重复计算行为。
 
-| 组件行 | 语义ID | 现有入口与结果 |
-| --- | --- | --- |
-| S396 | create.open | canDecide且非ready时顶部入口；不等于已加载可创建 |
-| S404 | list.retry | UiStatePanel primary→load；读取目录，无业务写入 |
-| S413 | create.open | empty且canDecide，创建首个草稿 |
-| S430 | create.open | ready覆盖说明内入口；是否缺项不影响canDecide门 |
-| S459 | preview.open | canApprove，draft/pending_approval/approved；GET第1页 |
-| S466 | action.submit.open | canDecide且draft，begin清原因/目标/错误 |
-| S468 | action.approve.open | canApprove且pending_approval |
-| S473 | action.reject.open | canApprove且pending_approval |
-| S478 | action.activate.open | canApprove且approved |
-| S480 | action.rollback.open | canApprove且active |
-| S491 | create.close | cancelCreate→closeCreate，关闭并清错误，不清草稿 |
-| S498 | create.submit | createValidation无错且canDecide；正权重维度POST |
-| S504 | create.close | 标题关闭按钮，现有busy期间仍可关闭 |
-| S567 | create.close | 取消按钮，与标题关闭同合同 |
-| S568 | create.submit | 同表单提交；busy或createValidation禁用 |
-| S574 | preview.close | cancelPreview→closePreview，清错误，不取消GET |
-| S587 | preview.close | 标题关闭按钮 |
-| S594 | preview.retry | loadPreview(previewRule)，明确重试第1页而非失败页 |
-| S657 | preview.previous | page≤1或previewing禁用；GET上一页 |
-| S664 | preview.next | page×page_size≥total或previewing禁用；GET下一页 |
-| S675 | action.{action}.close | cancelAction→closeAction；关闭清错误，重开清原因/目标 |
-| S682 | action.{action}.submit | runAction→POST actions；expected_revision来自选中快照 |
-| S690 | action.{action}.close | 标题关闭按钮；busy期间未锁定 |
-| S710 | action.{action}.close | 取消按钮；不提交、不改变规则 |
-| S711 | action.{action}.submit | 同表单提交；busy禁用；原生required仍生效 |
+| 组件行 | 语义ID                 | 现有入口与结果                                        |
+| ------ | ---------------------- | ----------------------------------------------------- |
+| S396   | create.open            | canDecide且非ready时顶部入口；不等于已加载可创建      |
+| S404   | list.retry             | UiStatePanel primary→load；读取目录，无业务写入       |
+| S413   | create.open            | empty且canDecide，创建首个草稿                        |
+| S430   | create.open            | ready覆盖说明内入口；是否缺项不影响canDecide门        |
+| S459   | preview.open           | canApprove，draft/pending_approval/approved；GET第1页 |
+| S466   | action.submit.open     | canDecide且draft，begin清原因/目标/错误               |
+| S468   | action.approve.open    | canApprove且pending_approval                          |
+| S473   | action.reject.open     | canApprove且pending_approval                          |
+| S478   | action.activate.open   | canApprove且approved                                  |
+| S480   | action.rollback.open   | canApprove且active                                    |
+| S491   | create.close           | cancelCreate→closeCreate，关闭并清错误，不清草稿      |
+| S498   | create.submit          | createValidation无错且canDecide；正权重维度POST       |
+| S504   | create.close           | 标题关闭按钮，现有busy期间仍可关闭                    |
+| S567   | create.close           | 取消按钮，与标题关闭同合同                            |
+| S568   | create.submit          | 同表单提交；busy或createValidation禁用                |
+| S574   | preview.close          | cancelPreview→closePreview，清错误，不取消GET         |
+| S587   | preview.close          | 标题关闭按钮                                          |
+| S594   | preview.retry          | loadPreview(previewRule)，明确重试第1页而非失败页     |
+| S657   | preview.previous       | page≤1或previewing禁用；GET上一页                     |
+| S664   | preview.next           | page×page_size≥total或previewing禁用；GET下一页       |
+| S675   | action.{action}.close  | cancelAction→closeAction；关闭清错误，重开清原因/目标 |
+| S682   | action.{action}.submit | runAction→POST actions；expected_revision来自选中快照 |
+| S690   | action.{action}.close  | 标题关闭按钮；busy期间未锁定                          |
+| S710   | action.{action}.close  | 取消按钮；不提交、不改变规则                          |
+| S711   | action.{action}.submit | 同表单提交；busy禁用；原生required仍生效              |
 
 ## 3. 7个业务弹窗变体与请求
 
-| dialogId | 定义 | 请求和允许状态 | 成功结果与风险边界 |
-| --- | --- | --- | --- |
-| scoring.create | S491 | POST /opportunity-score-rules，decide；字段version_code/name/dimensions/thresholds | 关闭、清空表单、重读目录；不是直接生效 |
-| scoring.preview | S574 | GET /opportunity-score-rules/{id}/preview?page=N&page_size=20，approve；draft/pending_approval/approved | 只读预览；不创建运行/队列或更新历史；本地测试不能证明数据库无写入 |
-| scoring.action.submit | S675 | POST /opportunity-score-rules/{id}/actions；draft→pending_approval | reason、action、expected_revision；成功重读 |
-| scoring.action.approve | S675 | 同端点；pending_approval→approved | 仅批准，不等于当前生效 |
-| scoring.action.reject | S675 | 同端点；pending_approval→rejected | 必填原因；无前端重提入口 |
-| scoring.action.activate | S675 | 同端点；approved→active | 真实仓库将旧active停用并queueAll；不能当普通只读操作 |
-| scoring.action.rollback | S675 | 同端点；active，加target_rule_id | 原规则rolled_back、当前工作区approved/retired目标转active并queueAll；返回目标规则，不是返回原规则 |
+| dialogId                | 定义 | 请求和允许状态                                                                                          | 成功结果与风险边界                                                                                |
+| ----------------------- | ---- | ------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| scoring.create          | S491 | POST /opportunity-score-rules，decide；字段version_code/name/dimensions/thresholds                      | 关闭、清空表单、重读目录；不是直接生效                                                            |
+| scoring.preview         | S574 | GET /opportunity-score-rules/{id}/preview?page=N&page_size=20，approve；draft/pending_approval/approved | 只读预览；不创建运行/队列或更新历史；本地测试不能证明数据库无写入                                 |
+| scoring.action.submit   | S675 | POST /opportunity-score-rules/{id}/actions；draft→pending_approval                                      | reason、action、expected_revision；成功重读                                                       |
+| scoring.action.approve  | S675 | 同端点；pending_approval→approved                                                                       | 仅批准，不等于当前生效                                                                            |
+| scoring.action.reject   | S675 | 同端点；pending_approval→rejected                                                                       | 必填原因；无前端重提入口                                                                          |
+| scoring.action.activate | S675 | 同端点；approved→active                                                                                 | 真实仓库将旧active停用并queueAll；不能当普通只读操作                                              |
+| scoring.action.rollback | S675 | 同端点；active，加target_rule_id                                                                        | 原规则rolled_back、当前工作区approved/retired目标转active并queueAll；返回目标规则，不是返回原规则 |
 
 所有POST经共享客户端附加幂等键，后端要求同源、权限和版本；事务审计及Outbox由后端执行。页面没有独立“停用”动作，retired由启用替代时产生，不能因蓝图出现“停用”就编造按钮或API。
 
@@ -58,15 +58,15 @@
 
 actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们。9个v-model源码位置在展开8维表单后共有30个输入实例：版本代码、名称、两个阈值，加8×权重/证据组/必填，再加生命周期原因及回滚目标。回滚目标只在对应变体出现。
 
-| 输入 | 实际校验/取值 | 设计与验收边界 |
-| --- | --- | --- |
-| version_code/name | required，长度64/160；服务端版本代码限制A–Z/a–z/0–9/点/下划线/短横线，服务端trim | 浏览器没有同等pattern；不能写成前端已拦全部格式 |
-| recommend_min/observe_min | 初始null；0–100、step0.01；推荐必须大于观察 | 不提供默认业务值；小数/边界完整矩阵仍待补 |
-| dimension.weight | 八个既有代码；0–100、step0.01；仅正权重提交；至少两维，总计四舍五入两位后100 | 不为了“配置已覆盖”自行给风险权重或重新分配权重 |
-| dimension.evidence_group | market/competition/cost/other，初始other | 名称和实际枚举对应，不推测来源证据 |
-| dimension.required | 初始false，至少一个已启用维度必填 | 零权重必填项不满足正权重维度要求 |
-| reason | 所有生命周期动作required、最长1000；服务端trim并拒绝空白 | 原生required不等于纯空白字符串有效性已验证 |
-| target_rule_id | rollback独有required；下拉来自当前目录approved/retired | 后端再次限制同工作区；UI选项测试不证明真实隔离 |
+| 输入                      | 实际校验/取值                                                                    | 设计与验收边界                                  |
+| ------------------------- | -------------------------------------------------------------------------------- | ----------------------------------------------- |
+| version_code/name         | required，长度64/160；服务端版本代码限制A–Z/a–z/0–9/点/下划线/短横线，服务端trim | 浏览器没有同等pattern；不能写成前端已拦全部格式 |
+| recommend_min/observe_min | 初始null；0–100、step0.01；推荐必须大于观察                                      | 不提供默认业务值；小数/边界完整矩阵仍待补       |
+| dimension.weight          | 八个既有代码；0–100、step0.01；仅正权重提交；至少两维，总计四舍五入两位后100     | 不为了“配置已覆盖”自行给风险权重或重新分配权重  |
+| dimension.evidence_group  | market/competition/cost/other，初始other                                         | 名称和实际枚举对应，不推测来源证据              |
+| dimension.required        | 初始false，至少一个已启用维度必填                                                | 零权重必填项不满足正权重维度要求                |
+| reason                    | 所有生命周期动作required、最长1000；服务端trim并拒绝空白                         | 原生required不等于纯空白字符串有效性已验证      |
+| target_rule_id            | rollback独有required；下拉来自当前目录approved/retired                           | 后端再次限制同工作区；UI选项测试不证明真实隔离  |
 
 取消创建保留草稿，成功才resetForm；生命周期每次begin清空原因和目标，不能为“统一弹窗”擅自改成相同草稿规则。
 
@@ -83,13 +83,13 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 
 新增 `tests/e2e/ui-phase2-scoring-contracts.spec.ts`，保留原m04-03-scoring及图源不动；11项参数化真实Vue隔离响应测试：
 
-| caseId | 本地验证内容 | 仍未证明 |
-| --- | --- | --- |
-| UI2-S01 ×5 | 各动作的必填、初焦点、取消无写入/焦点归还、重开清原因、精确路径/字段/revision/幂等键、成功重读；回滚只选允许目标 | 真实事务、审计、queueAll和其他租户拒绝 |
-| UI2-S02 | 创建阈值关系、两维、权重总计、必填提示、取消保留、正权重精确POST、成功重置 | 所有边界值、失败恢复、真正持久化 |
-| UI2-S03 | 409错误留在弹窗且保留原因；整页刷新后使用新revision，不静默覆盖 | 并发真实客户端、成功重试与幂等重放 |
-| UI2-S04 | 三次503耗尽后可见错误、手动重试、20/1分页与total21、首末页禁用、非空missing_fields逐项可读、空缺列表不显示伪提示、全过程零POST、关闭焦点归还 | 后端无写事务、失败页重试、关闭竞态 |
-| UI2-S05 ×3 | read/decide/approve三组合×七状态的全部入口数量与无操作状态 | 真实用户角色、服务端鉴权和能力动态撤销 |
+| caseId     | 本地验证内容                                                                                                                                 | 仍未证明                               |
+| ---------- | -------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| UI2-S01 ×5 | 各动作的必填、初焦点、取消无写入/焦点归还、重开清原因、精确路径/字段/revision/幂等键、成功重读；回滚只选允许目标                             | 真实事务、审计、queueAll和其他租户拒绝 |
+| UI2-S02    | 创建阈值关系、两维、权重总计、必填提示、取消保留、正权重精确POST、成功重置                                                                   | 所有边界值、失败恢复、真正持久化       |
+| UI2-S03    | 409错误留在弹窗且保留原因；整页刷新后使用新revision，不静默覆盖                                                                              | 并发真实客户端、成功重试与幂等重放     |
+| UI2-S04    | 三次503耗尽后可见错误、手动重试、20/1分页与total21、首末页禁用、非空missing_fields逐项可读、空缺列表不显示伪提示、全过程零POST、关闭焦点归还 | 后端无写事务、失败页重试、关闭竞态     |
+| UI2-S05 ×3 | read/decide/approve三组合×七状态的全部入口数量与无操作状态                                                                                   | 真实用户角色、服务端鉴权和能力动态撤销 |
 
 既有m04-03测试提供目录覆盖、缺风险未就绪、空态及机会评分解释等其他证据。还需处理全键盘循环、错误字段关联、长内容、三主题/两密度、所有断点、版本与网络竞态、真实后端/生产以及用户设计审核。局部25候选的源码对应不等于完整P17运行时分母冻结。
 
@@ -97,46 +97,55 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 
 日期2026-09-08；本次从main/01adf4d核对。五个关联组件的完整LF归一内容均与原合同引用的e1f7a9272b5017307754fa60aa691a8bb43b8329一致；以下1个文件在本合同范围内。先比较完整文件hash，再核对原表所在精确位置的事件/属性及候选类型；不是按最近行号或全局相同标签猜配。原行号表作为历史来源保留，本表给出可复核candidateId及旧行号/语义，不改变旧业务规则或审核结论。
 
-| 文件 | 当前LF SHA-256 |
-| --- | --- |
+| 文件                                         | 当前LF SHA-256                                                   |
+| -------------------------------------------- | ---------------------------------------------------------------- |
 | apps/web/src/components/ScoreRuleConsole.vue | d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723 |
 
 共28个源候选：25个控件/事件、3个原生dialog定义。同一个dialog位置可分别有cancel事件候选和dialog-definition，二者不是重复业务；定义不能代替各变体的提交/关闭/焦点验收。下表业务前缀沿用scoring.；原语义中的{x}/{action}严格只代表前述显式变体，不扩展成任意动作。
 
-| 源candidateId | 当前行 | 类型 | 原行号记录 | 既有语义 / 实际入口 |
-| --- | --- | --- | --- | --- |
-| apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1 | 396 | control | S396 | create.open：canDecide且非ready时顶部入口；不等于已加载可创建 |
-| apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1 | 404 | event-binding | S404 | list.retry：UiStatePanel primary→load；读取目录，无业务写入 |
-| apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1 | 413 | control | S413 | create.open：empty且canDecide，创建首个草稿 |
-| apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1 | 430 | control | S430 | create.open：ready覆盖说明内入口；是否缺项不影响canDecide门 |
-| apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1 | 459 | control | S459 | preview.open：canApprove，draft/pending_approval/approved；GET第1页 |
-| apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1 | 466 | control | S466 | action.submit.open：canDecide且draft，begin清原因/目标/错误 |
-| apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1 | 468 | control | S468 | action.approve.open：canApprove且pending_approval |
-| apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1 | 473 | control | S473 | action.reject.open：canApprove且pending_approval |
-| apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1 | 478 | control | S478 | action.activate.open：canApprove且approved |
-| apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1 | 480 | control | S480 | action.rollback.open：canApprove且active |
-| apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1 | 491 | event-binding | S491 | create.close：cancelCreate→closeCreate，关闭并清错误，不清草稿 |
-| apps/web/src/components/ScoreRuleConsole.vue#70aafc461ecafc80.1 | 498 | form-event | S498 | create.submit：createValidation无错且canDecide；正权重维度POST |
-| apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1 | 504 | control | S504 | create.close：标题关闭按钮，现有busy期间仍可关闭 |
-| apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1 | 567 | control | S567 | create.close：取消按钮，与标题关闭同合同 |
-| apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1 | 568 | control | S568 | create.submit：同表单提交；busy或createValidation禁用 |
-| apps/web/src/components/ScoreRuleConsole.vue#10a68914020a0888.1 | 574 | event-binding | S574 | preview.close：cancelPreview→closePreview，清错误，不取消GET |
-| apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1 | 587 | control | S587 | preview.close：标题关闭按钮 |
-| apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1 | 594 | control | S594 | preview.retry：loadPreview(previewRule)，明确重试第1页而非失败页 |
-| apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1 | 657 | control | S657 | preview.previous：page≤1或previewing禁用；GET上一页 |
-| apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1 | 664 | control | S664 | preview.next：page×page_size≥total或previewing禁用；GET下一页 |
-| apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1 | 675 | event-binding | S675 | action.{action}.close：cancelAction→closeAction；关闭清错误，重开清原因/目标 |
-| apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1 | 682 | form-event | S682 | action.{action}.submit：runAction→POST actions；expected_revision来自选中快照 |
-| apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1 | 690 | control | S690 | action.{action}.close：标题关闭按钮；busy期间未锁定 |
-| apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1 | 710 | control | S710 | action.{action}.close：取消按钮；不提交、不改变规则 |
-| apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1 | 711 | control | S711 | action.{action}.submit：同表单提交；busy禁用；原生required仍生效 |
+| 源candidateId                                                   | 当前行 | 类型          | 原行号记录 | 既有语义 / 实际入口                                                           |
+| --------------------------------------------------------------- | ------ | ------------- | ---------- | ----------------------------------------------------------------------------- |
+| apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1 | 396    | control       | S396       | create.open：canDecide且非ready时顶部入口；不等于已加载可创建                 |
+| apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1 | 404    | event-binding | S404       | list.retry：UiStatePanel primary→load；读取目录，无业务写入                   |
+| apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1 | 413    | control       | S413       | create.open：empty且canDecide，创建首个草稿                                   |
+| apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1 | 430    | control       | S430       | create.open：ready覆盖说明内入口；是否缺项不影响canDecide门                   |
+| apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1 | 459    | control       | S459       | preview.open：canApprove，draft/pending_approval/approved；GET第1页           |
+| apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1 | 466    | control       | S466       | action.submit.open：canDecide且draft，begin清原因/目标/错误                   |
+| apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1 | 468    | control       | S468       | action.approve.open：canApprove且pending_approval                             |
+| apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1 | 473    | control       | S473       | action.reject.open：canApprove且pending_approval                              |
+| apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1 | 478    | control       | S478       | action.activate.open：canApprove且approved                                    |
+| apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1 | 480    | control       | S480       | action.rollback.open：canApprove且active                                      |
+| apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1 | 491    | event-binding | S491       | create.close：cancelCreate→closeCreate，关闭并清错误，不清草稿                |
+| apps/web/src/components/ScoreRuleConsole.vue#70aafc461ecafc80.1 | 498    | form-event    | S498       | create.submit：createValidation无错且canDecide；正权重维度POST                |
+| apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1 | 504    | control       | S504       | create.close：标题关闭按钮，现有busy期间仍可关闭                              |
+| apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1 | 567    | control       | S567       | create.close：取消按钮，与标题关闭同合同                                      |
+| apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1 | 568    | control       | S568       | create.submit：同表单提交；busy或createValidation禁用                         |
+| apps/web/src/components/ScoreRuleConsole.vue#234e4413d96b5e41.1 | 631    | event-binding | S574       | preview.close：cancelPreview→closePreview，清错误，不取消GET                  |
+| apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1 | 587    | control       | S587       | preview.close：标题关闭按钮                                                   |
+| apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1 | 594    | control       | S594       | preview.retry：loadPreview(previewRule)，明确重试第1页而非失败页              |
+| apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1 | 657    | control       | S657       | preview.previous：page≤1或previewing禁用；GET上一页                           |
+| apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1 | 664    | control       | S664       | preview.next：page×page_size≥total或previewing禁用；GET下一页                 |
+| apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1 | 675    | event-binding | S675       | action.{action}.close：cancelAction→closeAction；关闭清错误，重开清原因/目标  |
+| apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1 | 682    | form-event    | S682       | action.{action}.submit：runAction→POST actions；expected_revision来自选中快照 |
+| apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1 | 690    | control       | S690       | action.{action}.close：标题关闭按钮；busy期间未锁定                           |
+| apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1 | 710    | control       | S710       | action.{action}.close：取消按钮；不提交、不改变规则                           |
+| apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1 | 711    | control       | S711       | action.{action}.submit：同表单提交；busy禁用；原生required仍生效              |
 
-| 源candidateId | 当前行 | 类型 | 业务dialogId / 变体 |
-| --- | --- | --- | --- |
-| apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1 | 491 | dialog-definition | scoring.create（1变体） |
-| apps/web/src/components/ScoreRuleConsole.vue#23f0c5ed2b2a7243.1 | 574 | dialog-definition | scoring.preview（1变体） |
-| apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1 | 675 | dialog-definition | scoring.action.submit / approve / reject / activate / rollback（5变体） |
+| 源candidateId                                                   | 当前行 | 类型              | 业务dialogId / 变体                                                     |
+| --------------------------------------------------------------- | ------ | ----------------- | ----------------------------------------------------------------------- |
+| apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1 | 491    | dialog-definition | scoring.create（1变体）                                                 |
+| apps/web/src/components/ScoreRuleConsole.vue#231a7828f8d8d02d.1 | 631    | dialog-definition | scoring.preview（1变体）                                                |
+| apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1 | 675    | dialog-definition | scoring.action.submit / approve / reject / activate / rollback（5变体） |
 
 本次只完善源码归属：本文件全部28个现行候选有精确ID、行、类型和源hash；测试保证它们与当前扫描集合相等，而不是只验证计数。原表语义/现有请求仍为依据，不用源码签名声称真实后端、权限、幂等或全状态已运行。7个弹窗变体、30个展开输入实例、missing_fields展示与字段错误关联缺口继续按前述合同逐项验证，未覆盖项不因映射补齐注销。
 
 运行node scripts/audit-ui-phase2-contracts.mjs --json可查看records/sourceClaims/unreferenced；新增永久断言核对本范围全部候选、源hash、历史行号表与新表的对应，退出成功仅代表静态对账。本次不重复未变化的产品构建/业务E2E，不出正式新图、不连接生产，不刷新旧清单/图hash或用户审核状态；F00方向仍待审，正式设计和F04b运行时覆盖继续。
+
+## ScoreRuleConsole
+
+2026-09-29当前预览窗源候选补充：同一原生只读试算窗分别登记 `dialog-definition` 与 `@cancel` 事件；二者不是两项业务能力，取消仍只关闭当前预览，不会撤销已经完成的 GET。
+
+| 文件:行              | 候选尾键           | 源类型 / 语义                                          |
+| -------------------- | ------------------ | ------------------------------------------------------ |
+| ScoreRuleConsole:631 | 231a7828f8d8d02d.1 | dialog-definition / scoring.preview                    |
+| ScoreRuleConsole:631 | 234e4413d96b5e41.1 | event-binding / scoring.preview.cancel → cancelPreview |

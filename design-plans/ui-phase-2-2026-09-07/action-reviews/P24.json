@@ -74,12 +74,12 @@
         {
           "file": "tests/e2e/m05-01-business-tasks.spec.ts",
           "testName": "P24 detail route ignores the list-only export view query",
-          "evidenceType": "mounted-Vue-E2E-local-api-fixture-desktop-and-mobile"
+          "evidenceType": "actual-vue-isolated-browser"
         },
         {
           "file": "tests/e2e/m05-01-business-tasks.spec.ts",
           "testName": "P24 detail route ignores the list-only quick-create query",
-          "evidenceType": "mounted-Vue-E2E-local-api-fixture-desktop-and-mobile"
+          "evidenceType": "actual-vue-isolated-browser"
         }
       ],
       "remaining": "原合同说头部入口可在详情存在，指共享DOM；当前CSS排除实际可见性。详情现在忽略列表专用create=1与view=exports参数，始终读取任务及成员目录、不弹新建窗；桌面/390px实际Vue回归各2/2通过。其他详情动作的六态、长内容、主题/密度及真实RBAC/服务验收仍未完成。"
@@ -954,14 +954,14 @@
       "label": "返回或Escape关闭单项表单",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskActionDialog.vue#1f7b4a3946e7b521.1",
-        "apps/web/src/components/TaskActionDialog.vue#4250ff53e6ced813.1",
-        "apps/web/src/components/TaskActionDialog.vue#165bdfdc450806aa.1"
+        "apps/web/src/components/TaskActionDialog.vue#65c895da7f3058ae.1",
+        "apps/web/src/components/TaskActionDialog.vue#81fbb9b42a6c13a2.1",
+        "apps/web/src/components/TaskActionDialog.vue#8492a6b5fe23be23.1"
       ],
       "sourceContractKeys": [
-        "task.action.close：原生cancel事件通过useModalDialog转发close",
-        "task.action.close：标题关闭，发出close意图",
-        "task.action.close：返回并发出close意图，不提交"
+        "task.action.close：原生cancel事件经useModalDialog转发close",
+        "task.action.close：关闭动作弹窗，busy时禁用",
+        "task.action.close：返回关闭动作弹窗，不提交"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "五变体共用；返回无disabled，原生cancel无busy守卫",
@@ -1016,11 +1016,11 @@
       "label": "确认单项操作",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskActionDialog.vue#49e39fae6c4761e0.1",
+        "apps/web/src/components/TaskActionDialog.vue#7ddd9f833a8bb1ed.1",
         "apps/web/src/components/TaskActionDialog.vue#b13fdf83b41280a4.1"
       ],
       "sourceContractKeys": [
-        "task.action.{x}.submit：阻止原生导航并发出既有submit意图",
+        "task.action.{x}.submit：保留既有提交事件；失败反馈不改变请求体",
         "task.action.submit：busy时禁用，其他校验沿用既有原生表单规则"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
@@ -1060,8 +1060,8 @@
         "hover": "not-mapped",
         "focus": "not-mapped",
         "pressed": "not-mapped",
-        "disabled": "all five field variants and close/return controls are locked in the mounted Vue pending-write test",
-        "busy": "progress delayed-success and all five delayed-failure/retry variants are covered by desktop/390px mounted Vue tests and retained state screenshots"
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
       },
       "testReferences": [
         {
@@ -1071,12 +1071,12 @@
         {
           "file": "tests/e2e/m05-01-business-tasks.spec.ts",
           "testName": "P24 action dialog locks fields and dismissal while its write is pending",
-          "evidenceType": "mounted-Vue-E2E-local-delayed-action-response-desktop-and-mobile"
+          "evidenceType": "actual-vue-isolated-browser"
         },
         {
           "file": "tests/e2e/m05-01-business-tasks.spec.ts",
           "testName": "P24 action variants keep failed drafts in the dialog and require an explicit retry",
-          "evidenceType": "mounted-Vue-E2E-local-409-explicit-retry-all-five-variants-desktop-and-mobile"
+          "evidenceType": "actual-vue-isolated-browser"
         }
       ],
       "remaining": "原因trim、期限ISO、转交真实成员、进度Number/说明trim合同不变。五种变体的字段/关闭/返回在途锁、Escape保护、409就地提示与请求编号、原草稿保留及同body显式重试均有桌面/390px实际Vue本地证据和逐态失败截图；progress另有延迟成功闭窗覆盖。逐控件hover/focus/pressed、长内容、主题/密度、真实会话/RBAC/数据库冲突及M07-03验收仍未完成。"
@@ -1086,10 +1086,10 @@
       "label": "接收成员",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskActionDialog.vue#b98ee0914d5c9a2b.1"
+        "apps/web/src/components/TaskActionDialog.vue#041bf650dbdb76e1.1"
       ],
       "sourceContractKeys": [
-        "task.action.transfer.assignee.change：受控更新assignee_id"
+        "task.action.transfer.assignee.change：既有受控成员字段更新"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "transfer",
@@ -1125,10 +1125,10 @@
       "label": "新截止时间",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskActionDialog.vue#a9adc9267c5c27c8.1"
+        "apps/web/src/components/TaskActionDialog.vue#a59e3c8a3dfaf232.1"
       ],
       "sourceContractKeys": [
-        "task.action.delay.due.change：受控更新due_at"
+        "task.action.delay.due.change：既有受控截止时间字段更新"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "delay",
@@ -1164,10 +1164,10 @@
       "label": "完成进度",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskActionDialog.vue#df38c979691f23fa.1"
+        "apps/web/src/components/TaskActionDialog.vue#b347f1893d5cb0e9.1"
       ],
       "sourceContractKeys": [
-        "task.action.progress.percent.change：受控更新整数进度字段"
+        "task.action.progress.percent.change：既有受控进度字段更新"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "progress",
@@ -1208,10 +1208,10 @@
       "label": "进展说明",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskActionDialog.vue#14febafe1696c7dc.1"
+        "apps/web/src/components/TaskActionDialog.vue#1948ce70c7371a89.1"
       ],
       "sourceContractKeys": [
-        "task.action.progress.note.change：受控更新进展说明"
+        "task.action.progress.note.change：既有受控进展说明字段更新"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "progress",
@@ -1251,10 +1251,10 @@
       "label": "操作原因",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskActionDialog.vue#9cc07b04486546f0.1"
+        "apps/web/src/components/TaskActionDialog.vue#ce870910b9fd0f3e.1"
       ],
       "sourceContractKeys": [
-        "task.action.reason.change：非progress变体更新原因"
+        "task.action.reason.change：既有受控原因字段更新"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "pause/cancel/delay/transfer",
@@ -1380,10 +1380,10 @@
       "label": "五单项表单定义",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskActionDialog.vue#dfe715d92a013343.1"
+        "apps/web/src/components/TaskActionDialog.vue#cbdfed9c2f942fc1.1"
       ],
       "sourceContractKeys": [
-        "task.action.{progress,pause,cancel,delay,transfer}：详情共享动作表单"
+        "task.action.feedback：在既有详情动作弹窗中展示失败提示与请求编号，不新增动作或写路径"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
       "condition": "共享定义/事件转发，不计新业务动作",
@@ -1509,7 +1509,7 @@
         {
           "candidateId": "apps/web/src/components/TaskWorkspace.vue#c862e9172e64672c.1",
           "event": "@close-action",
-          "handler": "taskActionEditor = null",
+          "handler": "closeActionEditor",
           "targets": [
             "detail.action.close"
           ]
@@ -1549,12 +1549,12 @@
       "label": "详情动作弹窗事件转发",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#0579ef0b6730d28e.1",
-        "apps/web/src/components/TaskDetailPanel.vue#8ca0441eaf16df40.1"
+        "apps/web/src/components/TaskDetailPanel.vue#59dd2ebc93f7514c.1",
+        "apps/web/src/components/TaskDetailPanel.vue#bf99c36074059b3e.1"
       ],
       "sourceContractKeys": [
-        "task.action-dialog.events：将关闭/提交/字段更新转发给父级所有者",
-        "task.action.dialog.render：渲染独立TaskActionDialog，不由本组件发请求"
+        "task.action-dialog.events：仅转发既有submitAction事件给父级所有者",
+        "task.action.dialog.render：既有TaskActionDialog实例呈现，不发请求"
       ],
       "contractAliasReason": "对应TaskDetailPanel当前组件事件绑定与独立弹窗渲染调用；两种扫描候选均产生同一组现有事件。",
       "condition": "详情动作变体挂载TaskActionDialog",
@@ -1570,7 +1570,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#0579ef0b6730d28e.1",
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#59dd2ebc93f7514c.1",
           "event": "@submit",
           "handler": "emit('submitAction')",
           "targets": [
@@ -1578,7 +1578,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#0579ef0b6730d28e.1",
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#59dd2ebc93f7514c.1",
           "event": "@close",
           "handler": "emit('closeAction')",
           "targets": [
@@ -1586,7 +1586,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#0579ef0b6730d28e.1",
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#59dd2ebc93f7514c.1",
           "event": "@update:action-form",
           "handler": "emit('update:actionForm', $event)",
           "targets": [
@@ -1598,7 +1598,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#8ca0441eaf16df40.1",
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#bf99c36074059b3e.1",
           "event": "@submit",
           "handler": "emit('submitAction')",
           "targets": [
@@ -1606,7 +1606,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#8ca0441eaf16df40.1",
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#bf99c36074059b3e.1",
           "event": "@close",
           "handler": "emit('closeAction')",
           "targets": [
@@ -1614,7 +1614,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#8ca0441eaf16df40.1",
+          "candidateId": "apps/web/src/components/TaskDetailPanel.vue#bf99c36074059b3e.1",
           "event": "@update:action-form",
           "handler": "emit('update:actionForm', $event)",
           "targets": [

@@ -779,7 +779,7 @@
         "apps/web/src/components/CostRuleConsole.vue#f7f89c631a4cfd69.1"
       ],
       "sourceContractKeys": [
-        "新建草稿、人工/自动成本可选字段"
+        "SC-R-CREATE-DEFINITION 新建草稿弹窗"
       ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showCreate；无自身disabled属性",
@@ -958,7 +958,7 @@
         "apps/web/src/components/CostRuleConsole.vue#5de98ef30653ebcb.1"
       ],
       "sourceContractKeys": [
-        "SC-R-ACTION-DIALOG showAction/pendingAction"
+        "SC-R-ACTION-DEFINITION 七类动作弹窗"
       ],
       "contractAliasReason": "人工逐项核对真实handler后分组，精确原合同最后一列；表单与提交按钮去重，保留角色和调用位置差异。",
       "condition": "showAction && pendingAction；无自身disabled属性",
@@ -1037,7 +1037,7 @@
         "apps/web/src/components/CostRuleConsole.vue#ca4f082d1ca76f11.1"
       ],
       "sourceContractKeys": [
-        "SC-R-ACTION-DIALOG aria-label/actionTitle",
+        "SC-R-ACTION-CLOSE 原生cancel",
         "SC-R-ACTION-CLOSE X",
         "SC-R-ACTION-CLOSE 取消"
       ],

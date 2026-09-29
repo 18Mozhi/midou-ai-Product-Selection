@@ -329,7 +329,7 @@ detail的x为progress/pause/cancel/delay/transfer；batch的x为pause/resume/del
 | apps/web/src/components/TaskActionDialog.vue#165bdfdc450806aa.1 | 163 | control | task.action.close：返回并发出close意图，不提交 |
 | apps/web/src/components/TaskActionDialog.vue#b13fdf83b41280a4.1 | 164 | control | task.action.submit：busy时禁用，其他校验沿用既有原生表单规则 |
 | apps/web/src/components/TaskActionDialog.vue#cbdfed9c2f942fc1.1 | 51 | dialog-definition | task.action.feedback：在既有详情动作弹窗中展示失败提示与请求编号，不新增动作或写路径 |
-| apps/web/src/components/TaskActionDialog.vue#65c895da7f3058ae.1 | 51 | event-binding | task.action.{x}.submit：既有表单提交事件绑定，保留既有submit语义 |
+| apps/web/src/components/TaskActionDialog.vue#65c895da7f3058ae.1 | 51 | event-binding | task.action.close：原生cancel事件经useModalDialog转发close |
 | apps/web/src/components/TaskActionDialog.vue#7ddd9f833a8bb1ed.1 | 59 | form-event | task.action.{x}.submit：保留既有提交事件；失败反馈不改变请求体 |
 | apps/web/src/components/TaskActionDialog.vue#81fbb9b42a6c13a2.1 | 65 | control | task.action.close：关闭动作弹窗，busy时禁用 |
 | apps/web/src/components/TaskActionDialog.vue#041bf650dbdb76e1.1 | 91 | event-binding | task.action.transfer.assignee.change：既有受控成员字段更新 |
