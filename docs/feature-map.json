@@ -452,6 +452,8 @@
       "guard": "../apps/api/src/api-foundation.ts",
       "readinessEndpoint": "/api/v1/health/ready",
       "dependencies": ["configuration", "mysql", "redis"],
+      "readinessCheckTimeoutMs": 5000,
+      "readinessConcurrency": "single_flight_per_dependency",
       "publicReadinessFields": [
         "status",
         "dependency category",

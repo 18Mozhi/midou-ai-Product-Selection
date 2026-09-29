@@ -41,6 +41,43 @@ test("M00-05 dependency failure returns sanitized 503 envelope", async () => {
   assert.equal(r.json().trace_id, "dependency-failure");
   await app.close();
 });
+test("M00-05 readiness bounds a hanging dependency and shares its in-flight check", async () => {
+  let redisChecks = 0;
+  let finishFirstRedisCheck;
+  const app = buildApp({
+    readinessCheckTimeoutMs: 15,
+    readinessChecks: [
+      { name: "mysql", check: async () => "available" },
+      {
+        name: "redis",
+        check: () => {
+          redisChecks += 1;
+          if (redisChecks > 1) return Promise.resolve("available");
+          return new Promise((resolve) => {
+            finishFirstRedisCheck = resolve;
+          });
+        },
+      },
+    ],
+  });
+
+  const first = await app.inject({ method: "GET", url: "/api/v1/health/ready" });
+  assert.equal(first.statusCode, 503);
+  assert.equal(first.json().error.code, "dependency_unavailable");
+  assert.equal(redisChecks, 1);
+
+  const second = await app.inject({ method: "GET", url: "/api/v1/health/ready" });
+  assert.equal(second.statusCode, 503);
+  assert.equal(redisChecks, 1);
+
+  finishFirstRedisCheck("available");
+  await new Promise((resolve) => setImmediate(resolve));
+  const recovered = await app.inject({ method: "GET", url: "/api/v1/health/ready" });
+  assert.equal(recovered.statusCode, 200);
+  assert.equal(recovered.json().data.dependencies.redis, "available");
+  assert.equal(redisChecks, 2);
+  await app.close();
+});
 test("M00-05 correlation IDs reject unsafe input and retain safe upstream IDs", () => {
   assert.equal(
     normalizeCorrelationId("safe-id", () => "new"),

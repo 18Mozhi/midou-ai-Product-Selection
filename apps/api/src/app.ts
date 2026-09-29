@@ -168,6 +168,8 @@ import {
   type SelectionJourneyRouteOptions,
 } from "./selection-journey-routes.js";
 
+const DEFAULT_READINESS_CHECK_TIMEOUT_MS = 5_000;
+
 export interface BuildAppOptions {
   version?: string;
   buildSha?: string;
@@ -175,6 +177,8 @@ export interface BuildAppOptions {
   logger?: boolean;
   configFingerprint?: string;
   readinessChecks?: ReadinessCheck[];
+  /** Test seam; production readiness checks use the fixed default deadline. */
+  readinessCheckTimeoutMs?: number;
   localAuth?: LocalAuthRouteOptions;
   tenancy?: TenancyRouteOptions;
   authorization?: AuthorizationRouteOptions;
@@ -228,6 +232,15 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
   const version = options.version ?? process.env.APP_VERSION ?? "0.1.0";
   const buildSha = options.buildSha ?? process.env.BUILD_SHA ?? "development";
   const configFingerprint = options.configFingerprint ?? "not-loaded";
+  const readinessCheckTimeoutMs =
+    Number.isSafeInteger(options.readinessCheckTimeoutMs) &&
+    (options.readinessCheckTimeoutMs ?? 0) > 0
+      ? options.readinessCheckTimeoutMs!
+      : DEFAULT_READINESS_CHECK_TIMEOUT_MS;
+  const readinessChecksInFlight = new Map<
+    ReadinessCheck["name"],
+    Promise<"available" | "unavailable">
+  >();
 
   app.addHook("onRequest", async (request, reply) => {
     const requestId = normalizeCorrelationId(request.headers["x-request-id"], randomUUID);
@@ -302,7 +315,43 @@ export function buildApp(options: BuildAppOptions = {}): FastifyInstance {
       const traceId = request.headers["x-trace-id"]!.toString();
       const checks = options.readinessChecks ?? [];
       const results = await Promise.all(
-        checks.map(async (item) => [item.name, await item.check(requestId, traceId)] as const),
+        checks.map(async (item) => {
+          let checkPromise = readinessChecksInFlight.get(item.name);
+          if (!checkPromise) {
+            checkPromise = Promise.resolve()
+              .then(() => item.check(requestId, traceId))
+              .catch(() => {
+                request.log.warn(
+                  { readiness_dependency: item.name },
+                  "API readiness dependency check failed",
+                );
+                return "unavailable" as const;
+              });
+            readinessChecksInFlight.set(item.name, checkPromise);
+            void checkPromise.then(() => {
+              if (readinessChecksInFlight.get(item.name) === checkPromise)
+                readinessChecksInFlight.delete(item.name);
+            });
+          }
+
+          let timer: ReturnType<typeof setTimeout> | undefined;
+          try {
+            const status = await Promise.race([
+              checkPromise,
+              new Promise<undefined>((resolve) => {
+                timer = setTimeout(() => resolve(undefined), readinessCheckTimeoutMs);
+              }),
+            ]);
+            if (status === undefined)
+              request.log.warn(
+                { readiness_dependency: item.name, timeout_ms: readinessCheckTimeoutMs },
+                "API readiness dependency check timed out",
+              );
+            return [item.name, status ?? "unavailable"] as const;
+          } finally {
+            if (timer) clearTimeout(timer);
+          }
+        }),
       );
       const dependencies = Object.fromEntries(results) as Record<
         string,
