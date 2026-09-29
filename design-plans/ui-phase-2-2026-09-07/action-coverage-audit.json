@@ -175,7 +175,7 @@
     "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
     "apps/web/src/components/ScoreRuleConsole.vue": "ecf4651bb5ca45285f1456e6ff1504535b8a9cb60dc4981eafbcfcfb2bc77253",
     "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
-    "apps/web/src/components/SelectionJourney.vue": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f",
+    "apps/web/src/components/SelectionJourney.vue": "a4a30f7df9fddd4678fed6764cc690bbf85f3862573055a404d373b9b1852c3c",
     "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
     "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
     "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
@@ -268,7 +268,7 @@
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "d187326a8319209cef7b060b48b43f1b0c5c0942365e6cdf4e2000ad681d827b",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "6991d90e412b26183238fec9c1f98bba88476e520539fb1543c0144f9ef251f8",
-    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "76a24081b3dc1566b2564cdbbfed07e22c563e57163540e5e4e477674f6f5b22",
+    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "c739c31ec3c7123e4554c3d5d6a4ea6ff74d5243e1306fe484ebfa5e58056ffa",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "4b0e1bfd472db950711eea33d642fd081ea33c5eda5834911e5108027b0ca5f7",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "f00e287ca234882e0371a5ab38d0f477441c9a3f8ef2639f67c78f6c649109e1",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fdbde9fa24ab1d8a5d3f19c23a6bef5b9745b5326d281efcb58b61115061c63f",
@@ -421,8 +421,9 @@
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
     "tests/e2e/m04-02-opportunities.spec.ts": "49d51100e2621e4f4ffd630d147b8248797f9f06e8352fb5ff40756242d90638",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "5742f36a4a93cb3f5176750f7094416580b860664821409f212e9dd2acead194",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "f94c9df962e6a947c5aabda7a056aab47f69a7a70cee49ef1909177a1726172e",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
+    "tests/e2e/m07-06-selection-acceptance.spec.ts": "a8193d635897bba0b28860849e6f34a4ede9ef21be664e65828d88a617deace4",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2c0c7b55c99aadfadd47d2d27d9100bf0f6a9331a97e3c53db5a30e48d466df6",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "69c53904296d55769989a921d4d35c8d42a1ac18826bdf118ad2ddcffaac0586",
@@ -593,7 +594,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "7fbacb6b0b1e2a3cf5d33dda101e9941f5e86c8c94d39fe950f61d30f05117ce",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "3f33f8b6ea141279ef057d12e2ec98bcade0d10ccd35ade7e45e4e7fe681894e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "728bf0bc631016cba563a4c8ad95889a99f7128ba33fb4a05f7f951e70a5c9fa",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "b4d5fab5992f1fe9473a23b0b955051492a0da7a1e7ede4d8330777b99902526",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "554d26710d2d698a2b4f451bb943a4a72111c7cdd151781a3d47c70bdb5114a3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "404c1ec0fcb82d867064a41793c58431f01a8b56f9ec7e4f9147fbdee6d4d2d4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "6fdfbd253424bba451d61f929a7e86c91c43ccb0defdd8024f88ccda9178410b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
@@ -660,12 +661,12 @@
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1742,
+    "currentSourceCandidates": 1743,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 757,
+    "newSourceIdentities": 758,
     "oldOnlyIdentities": 492,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1578,
+    "explicitlyGroupedSourceSites": 1579,
     "semanticGroups": 1302,
     "routeActions": 1069,
     "wiringGroups": 120,
@@ -1324,7 +1325,7 @@
         "pageId": "P16",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 11,
+        "sourceSites": 12,
         "semanticGroups": 9,
         "routeActions": 9,
         "wiringGroups": 0,
@@ -1333,6 +1334,7 @@
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 2,
         "testEvidenceTypes": [
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 4,
@@ -4238,7 +4240,7 @@
       "pageId": "P16",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 11,
+      "sourceSites": 12,
       "semanticGroups": 9,
       "routeActions": 9,
       "wiringGroups": 0,
@@ -4247,6 +4249,7 @@
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 2,
       "testEvidenceTypes": [
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 4,
@@ -61730,7 +61733,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 404,
+      "line": 425,
       "kind": "control",
       "label": "返回机会列表",
       "conditions": [],
@@ -61757,7 +61760,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 406,
+      "line": 427,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -61789,7 +61792,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 415,
+      "line": 436,
       "kind": "form-event",
       "label": "{{ item.label }} {{ form.input_kind === \"keyword\" ? \"商品关键词\" : form.input_kind === \"asin\" ? \"10 位 ASIN\" : \"HTTPS 商品链接\" }}",
       "conditions": [
@@ -61821,7 +61824,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 458,
+      "line": 479,
       "kind": "control",
       "label": "{{ busy ? \"正在创建真实任务…\" : reading ? \"正在恢复进度…\" : \"创建真实选品任务\" }}",
       "conditions": [
@@ -61853,7 +61856,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 472,
+      "line": 493,
       "kind": "control",
       "label": "查看处理时间轴",
       "conditions": [
@@ -61883,7 +61886,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 537,
+      "line": 558,
       "kind": "control",
       "label": "查看来源原文 ↗",
       "conditions": [
@@ -61921,9 +61924,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#5d5700a54ddffff7.1",
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#ec0ddd60475ad5dd.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 575,
+      "line": 596,
       "kind": "form-event",
       "label": "留痕决策 对本次真实结果作出决策 决策不会改写原始证据 采纳质量门 {{ selectedCandidate?.quality_gates ? `${passedGateCount} / 5` : \"待核对\" }} {{ label }} ",
       "conditions": [
@@ -61942,7 +61945,41 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 171,
+          "line": 173,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-DECIDE",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#a0b1d77731a8a57b.1",
+      "file": "apps/web/src/components/SelectionJourney.vue",
+      "line": 659,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "terminal && journey.state !== 'decided'"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
+          "line": 174,
           "jsonPointer": null
         }
       ],
@@ -61957,7 +61994,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 644,
+      "line": 680,
       "kind": "control",
       "label": "{{ busy ? \"正在保存…\" : \"保存审计决策\" }}",
       "conditions": [
@@ -61991,7 +62028,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 655,
+      "line": 691,
       "kind": "control",
       "label": "查看机会、证据与决策历史 ↗",
       "conditions": [
@@ -62016,7 +62053,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 173,
+          "line": 175,
           "jsonPointer": null
         }
       ],
@@ -62031,7 +62068,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 660,
+      "line": 696,
       "kind": "control",
       "label": "打开自动生成的验证任务 ↗",
       "conditions": [
@@ -62056,7 +62093,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 174,
+          "line": 176,
           "jsonPointer": null
         }
       ],
@@ -62071,7 +62108,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 670,
+      "line": 706,
       "kind": "control",
       "label": "开始下一次",
       "conditions": [
@@ -62088,7 +62125,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 175,
+          "line": 177,
           "jsonPointer": null
         }
       ],

@@ -73,6 +73,7 @@ async function render({ started = true, qualified = false } = {}) {
         : null,
       form: { input_kind: "keyword", input_value: "" },
       decision: { action: "observe", reason: "" },
+      decisionReasonError: "",
       stateTitle: "首个可验证结果已到达",
       seconds: 1,
       terminal: true,

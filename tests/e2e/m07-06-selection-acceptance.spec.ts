@@ -134,6 +134,73 @@ test("M07-06.A07/A08/A15 member completes real result decision and evidence view
     el.closest("article")?.scrollIntoView({ block: "center", behavior: "instant" }),
   );
 });
+test("P16 decision reason exposes an associated inline error and keeps native required blocking", async ({
+  page,
+}) => {
+  const result = {
+    ...base,
+    task_status: "succeeded",
+    state: "result_ready",
+    terminal_at: "2026-08-10T12:00:12.000Z",
+    first_result: {
+      raw_evidence_id: "55555555-5555-4555-8555-555555555555",
+      title: "Portable blender market update",
+      publisher: "Example News",
+      canonical_url: "https://example.com/portable-blender",
+      observed_at: "2026-08-10T12:00:12.000Z",
+      topic_id: null,
+    },
+  };
+  let decisionBody: any = null;
+  await page.addInitScript(({ key, id }) => localStorage.setItem(key, id), {
+    key: "scoutops.selection-journey.active-id",
+    id: base.id,
+  });
+  await page.route(`**/api/v1/selection-journeys/${base.id}`, (route) =>
+    route.fulfill({ json: env(result) }),
+  );
+  await page.route(`**/api/v1/selection-journeys/${base.id}/decisions`, async (route) => {
+    decisionBody = route.request().postDataJSON();
+    await route.fulfill({
+      status: 201,
+      json: env({
+        ...result,
+        state: "decided",
+        decision: {
+          action: "observe",
+          reason: "保留来源事实后继续观察",
+          selected_raw_evidence_id: null,
+          created_at: "2026-08-10T12:00:20.000Z",
+        },
+        decided_at: "2026-08-10T12:00:20.000Z",
+      }),
+    });
+  });
+
+  await page.goto("/opportunities/start");
+  await expect(page.getByText("首个可验证结果已到达")).toBeVisible();
+  const reason = page.getByLabel("决策原因");
+  await page.getByRole("button", { name: "保存审计决策" }).click();
+  await expect(page.getByRole("alert")).toHaveText("请填写决策原因后再保存。");
+  await expect(reason).toHaveAttribute("aria-invalid", "true");
+  await expect(reason).toHaveAttribute(
+    "aria-describedby",
+    "journey-decision-reason-help journey-decision-reason-error",
+  );
+  await expect(reason).toBeFocused();
+  expect(decisionBody).toBeNull();
+
+  await reason.fill("保留来源事实后继续观察");
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(reason).not.toHaveAttribute("aria-invalid", "true");
+  await page.getByRole("button", { name: "保存审计决策" }).click();
+  await expect(page.getByText("决策已保存 · 继续观察")).toBeVisible();
+  expect(decisionBody).toEqual({
+    action: "observe",
+    reason: "保留来源事实后继续观察",
+    selected_raw_evidence_id: null,
+  });
+});
 test("selection journey resumes and adopts only the compared candidate", async ({ page }) => {
   const first = {
       raw_evidence_id: "55555555-5555-4555-8555-555555555551",

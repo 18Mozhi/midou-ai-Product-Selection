@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import { computed, onActivated, onDeactivated, onMounted, onUnmounted, reactive, ref } from "vue";
+import {
+  computed,
+  onActivated,
+  onDeactivated,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import { statusLabel } from "../ui/status-labels";
 import { ApiClientError, createApiClient } from "../api-client";
 import "../selection-journey.css";
+import "../selection-journey-validation.css";
 type Kind = "keyword" | "asin" | "product_url";
 type JourneyState =
   "accepted" | "running" | "result_ready" | "succeeded_empty" | "blocked" | "failed" | "decided";
@@ -85,6 +95,17 @@ let active = false,
 let readController: AbortController | undefined;
 const progressStorageWarning =
   "浏览器暂不能同步本地恢复标记；服务器状态不受影响，当前页面仍可继续，离开后可能无法自动恢复。";
+const decisionReasonError = ref("");
+watch(
+  () => decision.reason,
+  () => {
+    decisionReasonError.value = "";
+  },
+);
+function showDecisionReasonError(event: Event) {
+  decisionReasonError.value = "请填写决策原因后再保存。";
+  (event.currentTarget as HTMLTextAreaElement | null)?.focus();
+}
 function readProgressId() {
   try {
     return { available: true, id: localStorage.getItem(progressStorageKey) };
@@ -634,13 +655,28 @@ onUnmounted(() => {
                 /><span>{{ item.label }}</span></label
               >
             </div>
-            <label
+            <label class="selection-decision-reason"
               >决策原因<textarea
                 v-model="decision.reason"
                 required
                 maxlength="1000"
                 rows="4"
-              ></textarea></label
+                :aria-invalid="decisionReasonError ? 'true' : undefined"
+                :aria-describedby="
+                  decisionReasonError
+                    ? 'journey-decision-reason-help journey-decision-reason-error'
+                    : 'journey-decision-reason-help'
+                "
+                @invalid.prevent="showDecisionReasonError"
+              ></textarea>
+              <small id="journey-decision-reason-help">提交原因最多1000字。</small>
+              <span
+                v-if="decisionReasonError"
+                id="journey-decision-reason-error"
+                class="selection-field-error"
+                role="alert"
+                >{{ decisionReasonError }}</span
+              ></label
             ><button
               type="submit"
               :disabled="busy || reading || (decision.action === 'adopt' && !canAdopt)"

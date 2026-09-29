@@ -158,7 +158,7 @@ r2图中五项核对区整体布局已通过；原因错误关联、busy期间�
 
 ## 10. 2026-09-10批准布局落地后的当前映射
 
-SelectionJourney.vue LF SHA-256：e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfcc9355938e70c5ab6de。当前11源位置/9组/5模型/4内联结构（2 aside、2 form），零业务弹窗。前缀 apps/web/src/components/SelectionJourney.vue#。原候选表单签名变化来自质量门说明，不是API变化。
+SelectionJourney.vue LF SHA-256：a4a30f7df9fddd4678fed6764cc690bbf85f3862573055a404d373b9b1852c3c。当前12源位置/9组/5模型/4内联结构（2 aside、2 form），零业务弹窗。前缀 apps/web/src/components/SelectionJourney.vue#。原候选表单签名变化来自质量门说明，不是API变化。
 
 | 当前行 | 当前候选尾键       | 核对边界                                                   | 稳定语义ID        |
 | ------ | ------------------ | ---------------------------------------------------------- | ----------------- |
@@ -170,11 +170,15 @@ SelectionJourney.vue LF SHA-256：e3af3805ebaaa5c5d9c3eae15d1a72c8a03bfeb05b1bfc
 | 537 | ffaf47bf1a32fcaf.1 | 原文外链属性与click.stop保持                               | J-SOURCE          |
 | 575 | 5d5700a54ddffff7.1 | 质量门只读说明进入原form；decide处理器不变                 | J-DECIDE          |
 | 644 | 56c9199d58a1af94.1 | 保存禁用与五门规则保持                                     | J-DECIDE          |
+| 595 | ec0ddd60475ad5dd.1 | 保存表单提交及原生必填错误处理                             | J-DECIDE          |
+| 658 | a0b1d77731a8a57b.1 | 空原因就地错误事件，填入后清除                             | J-DECIDE          |
 | 655 | 2982f925c629be51.1 | 机会链接按原返回ID                                         | J-NAV-OPPORTUNITY |
 | 660 | d3e6b84b6df72d56.1 | 任务链接按原返回ID                                         | J-NAV-TASK        |
 | 670 | 283a41d530253e0d.1 | reset草稿/活动ID/读取失效语义保持                          | J-RESET           |
 
 阶段栏是只读aside，输入→处理→终态审阅→已决定，不以本地时间假装进度。五项质量门未选中/对象未返回显示“待核对/未返回”，严格true才“已通过”；5/5仍由原canAdopt核对topic/opportunity/recommended/all_passed，服务器保存时再验。候选报告总数与本页返回数分别展示。时间轴默认收起，Enter展开/Space收起无新增旅程HTTP；不新增关闭弹窗、取消任务、输入冻结或重置原因逻辑。
+
+2026-09-30：决定原因空提交仍由原生`required`拦截，不发送POST；额外展示`role=alert`就地错误，以`aria-invalid`/`aria-describedby`关联帮助与错误并将焦点留在原因框，开始输入即清错。`maxlength=1000`、前端原值、服务端trim、保存payload及质量门合同均不变。实际Vue桌面/390px本地响应夹具验证，不代表真实RBAC、MySQL或生产验收。
 
 真实Vue图证据位于output/playwright/p16-c-r2-review，接口均拦截为既有service夹具，不能据此证明来源、MySQL或线上状态。42项原业务/读取回归与70项布局检查通过；具体图与未覆盖项见新审核说明。原型382图按当前源函数重新capture，未修改批准字段。
 

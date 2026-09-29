@@ -1,0 +1,9 @@
+html #app .selection-journey .selection-decision textarea[aria-invalid="true"] {
+  border-color: var(--so-danger);
+}
+
+html #app .selection-journey .selection-field-error {
+  color: var(--so-danger);
+  font-size: 14px;
+  font-weight: 600;
+}
