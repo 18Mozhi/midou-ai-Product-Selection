@@ -602,3 +602,53 @@ test("P18 keeps the previous AI snapshot visible after malformed refresh and sep
   await expect(page.getByRole("button", { name: "抽检通过" })).toBeEnabled();
   expect(reads).toBe(3);
 });
+
+test("P18 keeps a stale AI snapshot on read failure and retries only the directory GET", async ({
+  page,
+}) => {
+  let reads = 0;
+  let queuePosts = 0;
+  await setup(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
+    if (route.request().method() === "POST") {
+      queuePosts += 1;
+      return route.fulfill({ status: 202, json: envelope({ id: "queued-ai-analysis" }) });
+    }
+    reads += 1;
+    if (reads >= 2 && reads <= 4)
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "dependency_unavailable",
+            message: "AI 分析记录暂不可用。",
+            action_hint: "稍后重新读取分析记录。",
+          },
+          request_id: "p18-ai-read-failure",
+          trace_id: "p18-ai-read-failure",
+        },
+      });
+    return route.fallback();
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openTab(page, "AI 辅助");
+  const previousOutput = page.getByText("当前机会已有市场方向，但评分、利润和风险证据仍不足。");
+  await expect(previousOutput).toBeVisible();
+  await page.getByRole("button", { name: "生成新分析" }).click();
+
+  await expect(page.locator(".opportunity-message")).toContainText("已进入宝塔 Node Worker 队列");
+  const readError = page.getByRole("alert");
+  await expect(readError).toContainText("稍后重新读取分析记录。");
+  await expect(readError).toContainText("p18-ai-read-failure");
+  await expect(previousOutput).toBeVisible();
+  await expect(page.locator(".opportunity-ai-result")).toHaveClass(/is-stale/);
+  await expect(page.getByRole("button", { name: "抽检通过" })).toBeDisabled();
+
+  await page.getByRole("button", { name: "重新读取" }).click();
+  await expect(readError).toHaveCount(0);
+  await expect(previousOutput).toBeVisible();
+  await expect(page.getByRole("button", { name: "抽检通过" })).toBeEnabled();
+  expect(reads).toBe(5);
+  expect(queuePosts).toBe(1);
+});

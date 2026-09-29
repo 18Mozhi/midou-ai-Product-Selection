@@ -131,7 +131,7 @@
       "kind": "read",
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "AI区error，busy禁用",
-      "handler": "loadAi独立GET；失败保留旧数组，非数组响应置空并ready",
+      "handler": "loadAi独立GET；读取失败或非数组响应保留最近成功数组并标记error/stale；显式重试仍只发起GET",
       "variants": ["error", "stale-error", "malformed"],
       "scenes": [
         {
@@ -147,7 +147,7 @@
           "scene": "ai-malformed"
         }
       ],
-      "remaining": "失败后旧articles仍渲染；具体恢复策略待审。",
+      "remaining": "本地 Vue 已验证 503/格式异常时保留并标记旧快照、禁用抽检及显式 GET 恢复；真实 API/RBAC 与生产依赖验收仍待。",
       "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#fb635cc3de2bd568.1"],
       "visualStates": {
         "default": "not-mapped",
@@ -158,6 +158,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "入队成功后的目录GET连续3次503时保留最近成功AI快照并标记陈旧、显示action_hint/request_id、禁用抽检；显式重读只恢复目录GET，排队POST仍仅一次。M04-07桌面Chromium和390px全套各14/14；不证明真实API/RBAC/生产可用性。"
+        },
         {
           "file": "scripts/verify-ui-phase2-review-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
