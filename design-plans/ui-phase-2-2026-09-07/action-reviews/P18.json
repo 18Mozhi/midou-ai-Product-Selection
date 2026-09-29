@@ -603,7 +603,7 @@
           "scene": "missing-cost"
         }
       ],
-      "remaining": "同一701组合稿无采纳质量门，尚未串通完整采纳链。",
+      "remaining": "已由真实Vue双端场景贯通建议采纳、原因窗与成功刷新；真实API/RBAC与数据库最终采纳资格仍待生产证据。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#1755c866489f4c76.1"
       ],
@@ -616,6 +616,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "五项质量门全部通过时可打开采纳原因窗并完成成功回执；详细提交合同、原始评分/证据保持断言见同文件P18采纳闭环用例。桌面Chromium与390px各1/1；不证明真实RBAC、SQL或生产采纳资格。"
+        },
         {
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -816,7 +821,7 @@
           "scene": "progress"
         }
       ],
-    "remaining": "真实 Vue 双端覆盖创建/复用、唯一在途 POST、expected_version与返回任务/来源路径，也覆盖409提示/追踪且留在当前机会；真实 API、RBAC、任务审计关联、Worker采集/自动评分仍待环境验收。",
+      "remaining": "真实 Vue 双端覆盖创建/复用、唯一在途 POST、expected_version与返回任务/来源路径，也覆盖409提示/追踪且留在当前机会；真实 API、RBAC、任务审计关联、Worker采集/自动评分仍待环境验收。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#91b42518b9942791.1"
       ],
@@ -833,16 +838,16 @@
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
-      },
-      {
-        "file": "tests/e2e/m04-02-opportunities.spec.ts",
-        "evidenceType": "actual-vue-local-interception",
-        "claim": "创建201与复用200均只发一次含expected_version的POST，在途按钮禁用，并导航到准确任务及原机会来源；桌面/390px均通过。本地回包不证明真实服务端审计。"
-      },
-      {
-        "file": "tests/e2e/m04-02-opportunities.spec.ts",
-        "evidenceType": "actual-vue-local-interception",
-        "claim": "409只显示服务端action_hint/request_id、保留在机会页并恢复入口，未自动重试；桌面/390px均通过。本地回包不证明真实RBAC/数据库。"
+        },
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "创建201与复用200均只发一次含expected_version的POST，在途按钮禁用，并导航到准确任务及原机会来源；桌面/390px均通过。本地回包不证明真实服务端审计。"
+        },
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "409只显示服务端action_hint/request_id、保留在机会页并恢复入口，未自动重试；桌面/390px均通过。本地回包不证明真实RBAC/数据库。"
         }
       ]
     },
@@ -2051,8 +2056,8 @@
       "label": "提交人工决定",
       "kind": "write",
       "routeApplicability": "P18-local-caller-and-listed-panels",
-      "condition": "required textarea≤1000；按钮busy禁用，表单handler无单飞守卫",
-      "handler": "POST decisions action/reason原输入/expected_version；成功关闭再load，失败保留",
+      "condition": "required textarea≤1000；按钮busy禁用，handler同步busy早退并快照机会ID/动作/原因/version",
+      "handler": "POST decisions action/reason/expected_version；成功只关闭其所属原因窗并重读当前机会，失败保留",
       "variants": ["adopt", "observe", "reject"],
       "scenes": [
         {
@@ -2068,7 +2073,7 @@
           "scene": "decision-failure"
         }
       ],
-      "remaining": "业务原因服务端trim；关闭/重开和当前ID/版本晚到竞态、完整采纳链仍未验证。",
+      "remaining": "本地Vue已覆盖采纳成功、准确请求体、单飞及原因窗迟到回执；业务原因仍由服务端trim，真实API/RBAC/审计及跨ID迟到写回执仍待。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#10c891f118c2001b.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ced3effe8f7058f1.1"
@@ -2082,6 +2087,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "推荐且五门通过后提交adopt，断言只发送一次{action,reason,expected_version}、关闭原因窗、成功刷新后保持评分/证据事实。桌面Chromium与390px各1/1；本地受控响应不证明真实服务端写入、RBAC或数据库审计。"
+        },
         {
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -2866,7 +2876,7 @@
       "handler": "只切换当前展示的 AI 分析记录，不写入或改变抽检结果",
       "variants": ["切换记录"],
       "scenes": [{ "package": "review-direction-c", "scene": "ai-multiple" }],
-    "remaining": "双端真实Vue验证两条历史记录切换只更新当前内容与选中态，不产生额外GET/POST；未覆盖全部记录状态、长内容、读屏或真实权限/数据读取。",
+      "remaining": "双端真实Vue验证两条历史记录切换只更新当前内容与选中态，不产生额外GET/POST；未覆盖全部记录状态、长内容、读屏或真实权限/数据读取。",
       "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#cc97e6c5522bd2f4.1"],
       "visualStates": {
         "default": "not-mapped",
@@ -2876,13 +2886,13 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-    "testReferences": [
-      {
-        "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
-        "evidenceType": "actual-vue-local-interception",
-        "claim": "两条分析记录间切换更新对应摘要/选中态，且不会重读或写入；桌面Chromium与390px各1/1。本地响应不证明真实权限/数据库。"
-      }
-    ]
+      "testReferences": [
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "两条分析记录间切换更新对应摘要/选中态，且不会重读或写入；桌面Chromium与390px各1/1。本地响应不证明真实权限/数据库。"
+        }
+      ]
     },
     {
       "actionId": "OP-AI-PROVENANCE",
@@ -2893,7 +2903,7 @@
       "handler": "展开或折叠既有只读输入快照，不发请求或写入",
       "variants": ["来源快照折叠/展开"],
       "scenes": [{ "package": "review-direction-c", "scene": "ai-details" }],
-    "remaining": "双端真实Vue验证选中记录的输入哈希、请求/结果ID按记录切换且展开不发请求；未覆盖所有快照长度、完整读屏或真实来源引用。",
+      "remaining": "双端真实Vue验证选中记录的输入哈希、请求/结果ID按记录切换且展开不发请求；未覆盖所有快照长度、完整读屏或真实来源引用。",
       "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#0b2e20b6822ebc67.1"],
       "visualStates": {
         "default": "not-mapped",
@@ -2903,13 +2913,13 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-    "testReferences": [
-      {
-        "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
-        "evidenceType": "actual-vue-local-interception",
-        "claim": "展开所选记录的只读出处时展示该记录请求ID、结果ID和输入哈希，不产生额外GET/POST；桌面Chromium与390px各1/1。本地响应不证明真实权限/数据库。"
-      }
-    ]
+      "testReferences": [
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "展开所选记录的只读出处时展示该记录请求ID、结果ID和输入哈希，不产生额外GET/POST；桌面Chromium与390px各1/1。本地响应不证明真实权限/数据库。"
+        }
+      ]
     },
     {
       "actionId": "OP-INSIGHT-EVIDENCE-NAV",

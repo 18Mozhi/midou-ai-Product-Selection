@@ -746,6 +746,66 @@ test("P18 adoption entry requires each quality gate even when the aggregate clai
   await expect(page.getByRole("dialog", { name: "记录采纳决定" })).toBeVisible();
 });
 
+test("P18 eligible recommendation completes the audited adoption flow without changing score facts", async ({
+  page,
+}) => {
+  const detailOverrides: Record<string, unknown> = {
+    ...recommendedBase,
+    id: opportunityId,
+    version: 7,
+    evidence,
+  };
+  await ready(page, evidence, detailOverrides);
+
+  const submittedBodies: Record<string, unknown>[] = [];
+  await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, async (route) => {
+    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    await route.fulfill({
+      status: 200,
+      json: envelope({
+        opportunity_id: opportunityId,
+        decision_status: "adopted",
+        version: 8,
+        decision_id: "00000000-0000-4000-8000-000000000434",
+      }),
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: "建议采纳" })).toBeVisible();
+  await expect(page.getByText("5/5 已通过", { exact: true })).toBeVisible();
+  await expect(page.getByLabel("推荐判断摘要").getByText("86", { exact: true })).toBeVisible();
+  await expect(page.getByText("8 条 · 3 源", { exact: true })).toBeVisible();
+
+  await page.getByRole("button", { name: "采纳建议" }).click();
+  const dialog = page.getByRole("dialog", { name: "记录采纳决定" });
+  await dialog.getByLabel("原因（必填）").fill("已核对评分、证据与五项质量门，按建议采纳");
+  const response = page.waitForResponse(
+    (candidate) =>
+      candidate.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`) &&
+      candidate.request().method() === "POST" &&
+      candidate.status() === 200,
+  );
+  await dialog.getByRole("button", { name: "确认记录" }).click();
+  await response;
+  await expect(dialog).toBeHidden();
+
+  expect(submittedBodies).toEqual([
+    {
+      action: "adopt",
+      reason: "已核对评分、证据与五项质量门，按建议采纳",
+      expected_version: 7,
+    },
+  ]);
+  await expect(page.locator(".opportunity-message")).toContainText(
+    "决策已记录；原始评分与证据未被改写。",
+  );
+  await expect(page.getByRole("heading", { name: base.name, level: 1 })).toBeVisible();
+  await expect(page.getByLabel("推荐判断摘要").getByText("86", { exact: true })).toBeVisible();
+  await expect(page.getByText("8 条 · 3 源", { exact: true })).toBeVisible();
+  await expect(page.getByText("5/5 已通过", { exact: true })).toBeVisible();
+});
+
 test("P18 lineage preserves raw status and unknown age while feedback uses the same idempotency key after an unknown write", async ({
   page,
 }) => {
