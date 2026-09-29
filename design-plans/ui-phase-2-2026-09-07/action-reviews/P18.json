@@ -1124,7 +1124,7 @@
       "kind": "write",
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "canDecide && !busy",
-      "handler": "POST score-runs expected_version；load后显示排队",
+      "handler": "POST score-runs expected_version；分别保留队列接受回执与后续详情读取结果",
       "variants": ["allowed", "readonly", "failure"],
       "scenes": [
         {
@@ -1136,7 +1136,7 @@
           "scene": "score-reload-error"
         }
       ],
-      "remaining": "读取失败后的成功文案可能盖反馈；评分事实仍等真实运行。",
+      "remaining": "真实评分 Worker 运行结果、RBAC 与数据库持久化仍待；本地双端验证只证明队列接受和详情读取失败被分别呈现。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#9fdf677303995f04.1"
       ],
@@ -1149,6 +1149,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "评分 POST 返回202后详情 GET 耗尽三次503，页面同时保留“已进入队列”、读取 action_hint 和 request_id；桌面/390px验证队列POST恰好一次。真实 Worker/SQL/RBAC未由夹具证明。"
+        },
         {
           "file": "scripts/verify-ui-phase2-insights-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",

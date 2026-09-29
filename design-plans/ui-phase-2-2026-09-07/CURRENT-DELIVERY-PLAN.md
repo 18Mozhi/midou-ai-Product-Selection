@@ -1,3 +1,7 @@
+# 2026-09-30 · P18 评分入队回执保留刷新失败
+
+M04-02 `queueScore()` 此前在评分 POST 返回接受后，详情重读若失败会把读取 `action_hint` 覆盖为队列成功文案。现同时保留“已进入队列”和“工作区刷新失败”以及服务端提示/request_id。先由真实 Vue 双端回归复现，再完成定向桌面/390px各1/1；不改变评分 API、权限或 Worker 规则。真实 SQL/RBAC/评分运行仍未由本地夹具验收；生产 readiness 仍需检查，P18与全73页收官继续。
+
 # 2026-09-30 · P18 AI 目录 503 陈旧快照显式恢复
 
 关闭 OP-AI-RETRY 审阅记录与实际 Vue 行为不一致：目录 GET 连续 3 次 503 后保留并标记最近成功快照、展示服务端 action_hint/request_id、禁用抽检；显式重读只发 GET，不重复已接受的入队 POST。新增 `tests/e2e/m04-07-ai-analysis.spec.ts` 实际 Vue 回归，并同步 P18 action review、Feature Map 与实施记录。完整 M04-07 桌面 Chromium 和390px手机各14/14通过。仅为 E2E/审计文档变更；未改 API、权限、数据库、Worker 或业务行为，不代表真实服务端/生产依赖验收。P18 其他动作与全73页收官仍继续。

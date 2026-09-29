@@ -892,7 +892,13 @@ async function queueScore() {
   });
   if (result) {
     await load();
-    message.value = "评分任务已进入宝塔 Node Worker 队列；完成后刷新可见新运行记录。";
+    const queueReceipt = "评分任务已进入宝塔 Node Worker 队列；完成后刷新可见新运行记录。";
+    if (state.value !== "ready") {
+      const refreshFailure = message.value || "工作区暂时无法刷新。";
+      message.value = `${queueReceipt} 工作区刷新失败：${refreshFailure}`;
+      return;
+    }
+    message.value = queueReceipt;
   }
 }
 async function createEvidenceTask() {

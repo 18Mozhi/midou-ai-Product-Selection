@@ -1344,6 +1344,45 @@ test("P18 keeps a shared write locked across cached route deactivation and refre
   expect(scoreWriteCount).toBe(1);
 });
 
+test("P18 preserves score queue acceptance alongside a failed detail refresh", async ({ page }) => {
+  let detailReads = 0;
+  let scoreQueuePosts = 0;
+  await ready(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
+    detailReads += 1;
+    if (detailReads >= 2 && detailReads <= 4)
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "dependency_unavailable",
+            message: "机会详情暂不可用。",
+            action_hint: "稍后重新读取机会详情。",
+          },
+          request_id: "p18-score-followup-read",
+          trace_id: "p18-score-followup-read",
+        },
+      });
+    return route.fallback();
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/score-runs`, async (route) => {
+    scoreQueuePosts += 1;
+    return route.fulfill({ status: 202, json: envelope({ id: "queued-score-run" }) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await page.getByRole("button", { name: "重新评分", exact: true }).click();
+
+  const feedback = page.locator(".opportunity-message");
+  await expect(feedback).toContainText("评分任务已进入宝塔 Node Worker 队列");
+  await expect(feedback).toContainText("工作区刷新失败");
+  await expect(feedback).toContainText("稍后重新读取机会详情。");
+  await expect(feedback).toContainText("p18-score-followup-read");
+  await expect(page.locator('.ui-state-panel[data-kind="blocked"]')).toBeVisible();
+  expect(scoreQueuePosts).toBe(1);
+});
+
 test("a late opportunity detail failure cannot replace the current opportunity after the ID changes", async ({
   page,
 }) => {
