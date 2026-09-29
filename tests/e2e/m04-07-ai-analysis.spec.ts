@@ -285,6 +285,41 @@ for (const outcome of ["approved", "rejected"] as const) {
   });
 }
 
+test("P18 keeps the unsent AI review reason scoped across cached route deactivation", async ({
+  page,
+}) => {
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+      writes.push(request.method());
+  });
+  await setup(page);
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openTab(page, "AI 辅助");
+  await page.getByRole("button", { name: "抽检通过", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "填写抽检通过说明" });
+  await dialog.getByRole("textbox", { name: /原因/ }).fill("尚未提交的抽检草稿");
+
+  await page.evaluate(() => {
+    window.history.pushState({}, "", "/home");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+
+  await expect(page).toHaveURL(/\/home$/);
+  await expect(page.getByRole("heading", { name: "今日行动" })).toBeVisible();
+  await expect(dialog).toBeHidden();
+  await expect(page.locator("dialog:modal")).toHaveCount(0);
+
+  await page.evaluate((target) => {
+    window.history.pushState({}, "", target);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, `/opportunities/${opportunityId}`);
+  await expect(page).toHaveURL(new RegExp(`/opportunities/${opportunityId}$`));
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole("textbox", { name: /原因/ })).toHaveValue("尚未提交的抽检草稿");
+  expect(writes).toEqual([]);
+});
+
 test("P18 AI review exposes its pending state and ignores a second action until the receipt", async ({
   page,
 }) => {
