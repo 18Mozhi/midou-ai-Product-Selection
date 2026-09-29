@@ -426,6 +426,51 @@ test("UI2-OP07 a delayed batch receipt cannot close or clear a newer batch inten
   });
 });
 
+test("UI2-OP07 batch confirmation rejects form re-entry while the first POST is pending", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  let releaseBatch!: () => void;
+  let markBatchStarted!: () => void;
+  let batchRequests = 0;
+  const batchGate = new Promise<void>((resolve) => (releaseBatch = resolve));
+  const batchStarted = new Promise<void>((resolve) => (markBatchStarted = resolve));
+  await page.route("**/api/v1/opportunities/batch", async (route) => {
+    batchRequests += 1;
+    markBatchStarted();
+    await batchGate;
+    await route.fulfill({ json: envelope({ affected_count: 1 }) });
+  });
+  await page.goto("/opportunities?view=all");
+
+  const first = data.rows[0];
+  await page.getByRole("checkbox", { name: `选择机会：${first.name}`, exact: true }).check();
+  await page.getByRole("button", { name: "批量归档", exact: true }).click();
+  const modal = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  await modal.getByLabel("操作原因").fill("确认批量归档");
+  const form = modal.locator("form");
+
+  await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
+  await batchStarted;
+  await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
+
+  expect(batchRequests).toBe(1);
+  expect(data.writes).toHaveLength(1);
+  assertWrite(data.writes[0], "/opportunities/batch", {
+    action: "archive",
+    items: [{ id: first.id, expected_version: first.version }],
+    reason: "确认批量归档",
+    assignee_id: null,
+  });
+
+  const response = page.waitForResponse((candidate) =>
+    new URL(candidate.url()).pathname.endsWith("/api/v1/opportunities/batch"),
+  );
+  releaseBatch();
+  await response;
+  await expect(modal).toBeHidden();
+});
+
 test("UI2-OP07 a delayed batch receipt preserves a reopened intent with the same selection", async ({
   page,
 }) => {
@@ -576,13 +621,13 @@ test("UI2-OP04 read-only AI failure stays distinct from empty and retries withou
   await page.goto(`/opportunities/${opportunityId}?tab=ai`);
   await expect(page.locator(".opportunity-detail")).toBeVisible();
   const panel = page.locator(".opportunity-ai");
-  await expect(panel.getByRole("alert")).toContainText("AI 分析读取失败");
-  await expect(panel.getByText("尚无 AI 分析；当前机会事实未被修改。")).toHaveCount(0);
+  await expect(panel.getByRole("alert")).toContainText("AI 分析记录暂时无法读取");
+  await expect(panel.getByText("尚无 AI 分析记录。", { exact: true })).toHaveCount(0);
   await expect(panel.getByRole("button", { name: "生成新分析" })).toHaveCount(0);
   const readsBefore = reads;
   unavailable = false;
-  await panel.getByRole("button", { name: "重试读取" }).click();
-  await expect(panel).toContainText("尚无 AI 分析；当前机会事实未被修改。");
+  await panel.getByRole("button", { name: "重新读取" }).click();
+  await expect(panel.getByText("尚无 AI 分析记录。", { exact: true })).toBeVisible();
   await expect(panel.getByRole("alert")).toHaveCount(0);
   expect(reads).toBeGreaterThan(readsBefore);
   expect(data.writes).toHaveLength(0);

@@ -877,6 +877,7 @@ function openBatch(action: "assign" | "archive" | "review") {
   showBatch.value = true;
 }
 async function confirmBatch() {
+  if (busy.value) return;
   const selectedItems = currentPageSelectedItems.value;
   if (!selectedItems.length || !batchReason.value.trim()) return;
   const dialogGeneration = batchDialogGeneration,
