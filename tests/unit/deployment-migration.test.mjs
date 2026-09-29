@@ -70,6 +70,10 @@ test("fixed-layout deployment packages and applies only allowlisted migrations b
     deploy,
     /permitted_entries = allowed \| \{\{stage\.name, rollback\.name, upload\.name\}\}/,
   );
+  assert.match(deploy, /stale_rollbacks = \{\{/);
+  assert.match(deploy, /deploy-rollback-" \+ match\.group\(1\)/);
+  assert.match(deploy, /source\.rename\(destination\)/);
+  assert.match(deploy, /rollback archive destination already exists/);
   assert.ok(
     deploy.lastIndexOf("verify_release_change_ownership(repo)") <
       deploy.lastIndexOf("read_windows_credential()"),

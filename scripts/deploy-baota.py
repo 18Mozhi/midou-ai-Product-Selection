@@ -450,7 +450,12 @@ try:
     if not chromium_executable.is_file() or not os.access(chromium_executable, os.X_OK):
         raise RuntimeError("configured production Chromium is unavailable")
 
-    permitted_entries = allowed | {{stage.name, rollback.name, upload.name}}
+    stale_rollbacks = {{
+        child for child in root.iterdir()
+        if re.fullmatch(r"\\.deploy-rollback-([0-9a-f]{{40}})", child.name)
+        and child.name != rollback.name
+    }}
+    permitted_entries = allowed | {{stage.name, rollback.name, upload.name}} | {{child.name for child in stale_rollbacks}}
     if v["initialize"]:
         permitted_entries.add("shared")
     unsupported_entries = {{child.name for child in root.iterdir()}} - permitted_entries
@@ -477,6 +482,25 @@ try:
         for name in allowed:
             if not (root / name).exists():
                 raise RuntimeError("fixed layout is incomplete; run --initialize-layout")
+
+    if stale_rollbacks:
+        backups = root / "backups"
+        ensure_inside(backups)
+        if backups.is_symlink() or not backups.is_dir():
+            raise RuntimeError("fixed backups directory is unavailable")
+        archive_pairs = []
+        for source in sorted(stale_rollbacks, key=lambda child: child.name):
+            ensure_inside(source)
+            match = re.fullmatch(r"\\.deploy-rollback-([0-9a-f]{{40}})", source.name)
+            if source.is_symlink() or not source.is_dir() or not match:
+                raise RuntimeError("stale rollback entry is not a regular directory: " + source.name)
+            destination = backups / ("deploy-rollback-" + match.group(1))
+            ensure_inside(destination)
+            if destination.exists() or destination.is_symlink():
+                raise RuntimeError("rollback archive destination already exists: " + destination.name)
+            archive_pairs.append((source, destination))
+        for source, destination in archive_pairs:
+            source.rename(destination)
 
     node = NodeModel()
     python_model = PythonModel()
