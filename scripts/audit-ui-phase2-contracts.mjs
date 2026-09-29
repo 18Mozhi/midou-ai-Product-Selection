@@ -40,6 +40,7 @@ const aliases = {
     T: "OrganizationTeamPanel",
     A: "OrganizationApprovalPanel",
     F: "OrganizationApprovalFirstFailure",
+    R: "OrganizationApprovalReadFeedback",
     D: "OrganizationDataPanel",
     K: "OrganizationTokenPanel",
     U: "OrganizationAuditPanel",

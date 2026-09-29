@@ -1,0 +1,136 @@
+.org-admin-center[data-approval-read-feedback="true"] > .org-admin-notice {
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+}
+
+.org-admin-center[data-approval-read-feedback="true"] > .org-admin-state {
+  display: none;
+}
+
+.org-approval-read-feedback-c {
+  --approval-read-ink: #202c3d;
+  --approval-read-muted: #58677b;
+  --approval-read-blue: #254a9c;
+  --approval-read-deep: #193b80;
+  --approval-read-paper: #fff;
+  --approval-read-soft: #edf2fa;
+  --approval-read-line: #dbe1e9;
+  display: grid;
+  gap: 16px;
+  width: 100%;
+  max-width: 960px;
+  padding: 28px 32px;
+  border: 1px solid var(--approval-read-line);
+  border-radius: 4px;
+  background: var(--approval-read-paper);
+  color: var(--approval-read-ink);
+  font:
+    16px/1.65 "Microsoft YaHei",
+    sans-serif;
+  overflow-wrap: anywhere;
+}
+
+.org-approval-read-feedback-c--retained {
+  border-left: 3px solid var(--approval-read-blue);
+  background: var(--approval-read-soft);
+}
+
+.org-approval-read-feedback-c :is(p, h3) {
+  margin: 0;
+  font-family: inherit;
+  letter-spacing: normal;
+}
+
+.org-approval-read-feedback-c__kicker {
+  color: var(--approval-read-blue);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.org-approval-read-feedback-c h3 {
+  color: var(--approval-read-ink);
+  font:
+    700 28px/1.4 "Microsoft YaHei",
+    sans-serif;
+}
+
+.org-approval-read-feedback-c__copy {
+  color: var(--approval-read-ink);
+}
+
+.org-approval-read-feedback-c__boundary {
+  padding: 14px 16px;
+  border-left: 3px solid var(--approval-read-blue);
+  background: var(--approval-read-soft);
+  color: var(--approval-read-muted);
+  font-size: 14px;
+}
+
+.org-approval-read-feedback-c__details {
+  border-top: 1px solid var(--approval-read-line);
+  border-bottom: 1px solid var(--approval-read-line);
+  padding: 8px 0;
+  color: var(--approval-read-muted);
+}
+
+.org-approval-read-feedback-c__details summary {
+  min-height: 44px;
+  padding: 10px 4px;
+  color: var(--approval-read-blue);
+  cursor: pointer;
+}
+
+.org-approval-read-feedback-c__details :is(p, code) {
+  display: block;
+  padding: 8px 4px;
+  color: var(--approval-read-muted);
+  overflow-wrap: anywhere;
+  font-size: 14px;
+}
+
+.org-approval-read-feedback-c button {
+  justify-self: start;
+  min-height: 44px;
+  padding: 10px 24px;
+  border: 1px solid var(--approval-read-blue);
+  border-radius: 4px;
+  background: var(--approval-read-blue);
+  color: var(--approval-read-paper);
+  font:
+    700 16px/1.5 "Microsoft YaHei",
+    sans-serif;
+  cursor: pointer;
+}
+
+.org-approval-read-feedback-c button:hover {
+  background: var(--approval-read-deep);
+}
+
+.org-approval-read-feedback-c :is(button, summary):focus-visible {
+  outline: 3px solid #4d79ff;
+  outline-offset: 3px;
+}
+
+.org-admin-center[data-approval-read-feedback="true"] :is(button, summary):focus-visible {
+  scroll-margin-block: 100px;
+}
+
+@media (max-width: 760px) {
+  .org-approval-read-feedback-c {
+    gap: 18px;
+    padding: 24px 20px;
+  }
+
+  .org-approval-read-feedback-c h3 {
+    font-size: 24px;
+  }
+
+  .org-approval-read-feedback-c button {
+    justify-self: stretch;
+    width: 100%;
+  }
+}

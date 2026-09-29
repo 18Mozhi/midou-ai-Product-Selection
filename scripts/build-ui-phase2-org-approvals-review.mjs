@@ -9,7 +9,9 @@ export const base = "design-plans/ui-phase-2-2026-09-07";
 export const parentFile = "apps/web/src/components/OrganizationAdminCenter.vue";
 export const childFile = "apps/web/src/components/OrganizationApprovalPanel.vue";
 export const failureFile = "apps/web/src/components/OrganizationApprovalFirstFailure.vue";
-export const dependencies = [parentFile, childFile, failureFile];
+export const readFeedbackFile = "apps/web/src/components/OrganizationApprovalReadFeedback.vue";
+export const historicalDependencies = [parentFile, childFile, failureFile];
+export const dependencies = [...historicalDependencies, readFeedbackFile];
 export const packageNames = [
   "org-approvals-direction-c",
   "org-approvals-controls-direction-c",
@@ -19,9 +21,12 @@ export const packageNames = [
 // The old visual packages keep their own immutable source identity. Current
 // action/prop bindings below are checked independently against actual sources.
 export const proposalSourceCommit = "7398aa8a6c38d498f888c64451c4345d4c726706";
-export const currentRouteEvidence = "output/playwright/p34-route-lifecycle-vue-c-r1/evidence.json";
+export const currentRouteEvidence =
+  "design-plans/ui-phase-2-2026-09-07/P34-READ-FEEDBACK-IMPLEMENTATION.json";
+export const routeLifecycleEvidence =
+  "output/playwright/p34-route-lifecycle-vue-c-r1/evidence.json";
 const proposalSources = Object.fromEntries(
-  dependencies.map((file) => [
+  historicalDependencies.map((file) => [
     file,
     execFileSync("git", ["show", `${proposalSourceCommit}:${file}`], { encoding: "utf8" }),
   ]),
@@ -30,18 +35,24 @@ const hash = (s) => createHash("sha256").update(s.replaceAll("\r\n", "\n")).dige
 const ids = (file, values) => values.map((v) => `${file}#${v}`);
 const C = (...v) => ids(parentFile, v),
   A = (...v) => ids(childFile, v),
-  F = (...v) => ids(failureFile, v);
+  F = (...v) => ids(failureFile, v),
+  R = (...v) => ids(readFeedbackFile, v);
+const currentApprovalPanelSignature = (signature) =>
+  ({
+    "184674807c82ee93.1": "95030381fd924d2b.1",
+    "3169b6613d3ce948.1": "87f27ee40744d069.1",
+    "0b242741fe22e1a9.1": "25d2be8fec5c35cd.1",
+    "0ab42724896b9cf9.1": "62fcf758cc715685.1",
+  })[signature] ?? signature;
 const remaining =
   "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。";
-const templateKey =
-  "OG-A-TEMPLATE-FILTER重置/分页/已批准手机空结果清除；清除后焦点回搜索，不写业务数据";
 // Explicit source identities and meanings, never inferred from rendered labels.
 const definitions = [
   [
     "OG-REFRESH",
     "刷新组织审批",
     "read",
-    C("b11692c0597885e3.1"),
+    C("a1fb5dc1b30f9733.1"),
     ["OG-REFRESH"],
     "loading或refreshing禁用",
     "load({background:true})并行summary与approvals；普通后台失败保留两份旧数据，401/403替换内容",
@@ -51,7 +62,7 @@ const definitions = [
     "OG-RETRY",
     "错误后重新加载",
     "read",
-    [...C("97ed4772fb320d6c.1"), ...F("54b14787946c2f69.1")],
+    [...C("97ed4772fb320d6c.1"), ...F("54b14787946c2f69.1"), ...R("969a4885430cb5be.1")],
     ["OG-RETRY", "OG-RETRY 手机首次500/429恢复按钮"],
     "父错误分支；F仅首次无data/HTTP500或429/手机可见，桌面保留原按钮",
     "新F仅emit reload；父原load()，没有新的请求策略、权限或自动倒计时",
@@ -61,8 +72,8 @@ const definitions = [
     "WIRE-P34-RETRY",
     "失败区域重试转发",
     "wiring",
-    C("5ae31bc55551b1dc.1", "08a59be6f793cde6.1"),
-    ["OG-RETRY"],
+    C("5ae31bc55551b1dc.1", "08a59be6f793cde6.1", "ca4fa7a0220842a9.1"),
+    undefined,
     "仅P34无data，error/HTTP500或rate_limited/HTTP429分支",
     "@reload原样转发load()；不是第三个业务读取动作",
     null,
@@ -126,8 +137,12 @@ const definitions = [
     "OG-A-REQUEST-FILTER",
     "审批重置与分页",
     "local",
-    A("f376017b5e1818c0.1", "184674807c82ee93.1", "3169b6613d3ce948.1"),
-    ["OG-A-REQUEST-FILTER重置/分页"],
+    A("f376017b5e1818c0.1", "95030381fd924d2b.1", "87f27ee40744d069.1"),
+    [
+      "OG-A-REQUEST-FILTER重置",
+      "OG-A-CURRENT-PAGINATION / 审批记录上一页及边界焦点交接",
+      "OG-A-CURRENT-PAGINATION / 审批记录下一页及边界焦点交接",
+    ],
     "筛选字段无busy禁用；分页按边界禁用，8行一页",
     "resetRequests只清本视图五条件；翻页仅本地列表及URL，不扩最近100条读取上限",
     "request-reset",
@@ -136,8 +151,12 @@ const definitions = [
     "OG-A-TEMPLATE-FILTER",
     "模板重置、清除与分页",
     "local",
-    A("2a3781fdd41e7df6.1", "0b242741fe22e1a9.1", "0ab42724896b9cf9.1", "97e57c58af0dc63f.1"),
-    [templateKey],
+    A("2a3781fdd41e7df6.1", "25d2be8fec5c35cd.1", "62fcf758cc715685.1", "97e57c58af0dc63f.1"),
+    [
+      "OG-A-TEMPLATE-FILTER重置/已批准手机空结果清除；清除后焦点回搜索，不写业务数据",
+      "OG-A-CURRENT-PAGINATION / 模板上一页",
+      "OG-A-CURRENT-PAGINATION / 模板下一页",
+    ],
     "6行一页；新清除仅模板非空且无匹配、手机可见",
     "resetTemplates保留记录条件；已实施空结果清除回焦搜索，不扩大为桌面新增动作",
     "template-reset",
@@ -156,8 +175,12 @@ const definitions = [
     "OG-TECH",
     "折叠技术详情与请求追踪",
     "local",
-    [...A("1c008f867673db60.1", "1c008f867673db60.2"), ...F("479570dac45574ea.1")],
-    ["OG-TECH审批/模板", "OG-TECH 真实请求追踪展开/折叠，无API"],
+    [
+      ...A("1c008f867673db60.1", "1c008f867673db60.2"),
+      ...F("479570dac45574ea.1"),
+      ...R("80a9a04eee3d9d46.1"),
+    ],
+    ["OG-TECH审批/模板", "OG-TECH 真实请求追踪展开/折叠，无API", "OG-TECH"],
     "审批/模板details；新F追踪仅真实requestId非空",
     "原生details，本页不复制、不弹窗、不发API；新F不是旧子技术详情图的获批范围",
     "request-technical-closed",
@@ -203,9 +226,8 @@ export function buildOrgApprovalsReview(sources, packages) {
     parent = packages.get(packageNames[3]);
   const dependencyHashes = Object.fromEntries(dependencies.map((f) => [f, hash(sources[f])]));
   const currentEvidence = JSON.parse(readFileSync(currentRouteEvidence, "utf8"));
-  assert.equal(currentEvidence.kind, "P34-ROUTE-LIFECYCLE-VUE-C-r1");
+  assert.equal(currentEvidence.kind, "P34-READ-FEEDBACK-IMPLEMENTATION-r1");
   assert.equal(currentEvidence.reviewOnly, true);
-  assert.equal(currentEvidence.processesClosed, true);
   for (const file of dependencies)
     assert.equal(
       currentEvidence.sourceHashes[file],
@@ -213,7 +235,7 @@ export function buildOrgApprovalsReview(sources, packages) {
       `stale current P34 evidence: ${file}`,
     );
   for (const evidence of packages.values())
-    for (const file of dependencies)
+    for (const file of historicalDependencies)
       if (evidence.sourceHashes[file])
         assert.equal(
           evidence.sourceHashes[file],
@@ -236,7 +258,7 @@ export function buildOrgApprovalsReview(sources, packages) {
         label,
         kind,
         sourceCandidateIds,
-        sourceContractKeys,
+        ...(sourceContractKeys ? { sourceContractKeys } : {}),
         contractAliasReason: "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
         condition,
         handler,
@@ -291,8 +313,8 @@ export function buildOrgApprovalsReview(sources, packages) {
             selector: c.selector,
             widths: c.widths,
             sourceCandidateIds: c.parentControl
-              ? C(actionId === "OG-REFRESH" ? "b11692c0597885e3.1" : "97ed4772fb320d6c.1")
-              : A(...c.signatures),
+              ? C(actionId === "OG-REFRESH" ? "a1fb5dc1b30f9733.1" : "97ed4772fb320d6c.1")
+              : A(...c.signatures.map(currentApprovalPanelSignature)),
             states: Object.fromEntries(c.states.map((s) => [s, `${c.id}-${s}`])),
           }));
         action.scenes.push(
@@ -477,9 +499,16 @@ export function buildOrgApprovalsReview(sources, packages) {
       },
       {
         review: "P34-ROUTE-LIFECYCLE-VUE-C-REVIEW.md",
+        evidence: routeLifecycleEvidence,
+        snapshotKind: "immutable-captured-worktree-not-commit",
+        scope:
+          "3df0386基线源码App/C预览隔离HTTP：56错误组、24返回顺序、24路由组，双端2996检查；不含本次新增读取反馈、真实权限、全断点或生产验收",
+      },
+      {
+        review: "P34-READ-FEEDBACK-IMPLEMENTATION.md",
         evidence: currentRouteEvidence,
         scope:
-          "当前源码App/C预览隔离HTTP：56错误组、24返回顺序、24路由组，双端2996检查；不含真实权限、全断点或生产验收",
+          "当前真实Vue读取反馈源绑定与桌面/390px路由E2E；隔离响应、零写请求，不代表真实登录/RBAC/数据库或生产验收",
       },
     ],
     approvalRecords: [
@@ -491,7 +520,7 @@ export function buildOrgApprovalsReview(sources, packages) {
       "P34-PERMISSION-VUE-C-APPROVAL.md",
     ],
     compositionGaps: [
-      "当前C整合、加载、登录/网络反馈仍有待审区域；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。",
+      "当前C整合其他非本次读取反馈区域仍有待审；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。",
       "其他按钮态、完整父状态适用性、手机返回目录/筛选折叠与生产整合仍未全部实施批准。",
       "同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。",
       "source-reviewed不是整页完成；待审组合不因当前路由验证通过而自动批准。",
@@ -525,8 +554,8 @@ export function validateOrgApprovalsBindings(review, packages) {
       assert.equal(ref.selector, c.selector);
       assert.deepEqual(ref.widths, c.widths);
       const expected = c.parentControl
-        ? C(a.actionId === "OG-REFRESH" ? "b11692c0597885e3.1" : "97ed4772fb320d6c.1")
-        : A(...c.signatures);
+        ? C(a.actionId === "OG-REFRESH" ? "a1fb5dc1b30f9733.1" : "97ed4772fb320d6c.1")
+        : A(...c.signatures.map(currentApprovalPanelSignature));
       assert.deepEqual(ref.sourceCandidateIds, expected);
       for (const id of expected) assert.ok(a.sourceCandidateIds.includes(id));
       assert.deepEqual(Object.keys(ref.states), c.states);
@@ -559,7 +588,9 @@ export function validateOrgApprovalsBindings(review, packages) {
   );
   assert.deepEqual(review.implementedBindings[0].widths, [390]);
   assert.ok(controls.sourceSignatures.includes(review.implementedBindings[0].sourceSignature));
-  const expectedChildIds = controls.sourceSignatures.map((s) => `${childFile}#${s}`).sort();
+  const expectedChildIds = controls.sourceSignatures
+    .map((s) => `${childFile}#${currentApprovalPanelSignature(s)}`)
+    .sort();
   assert.deepEqual(
     review.actions
       .flatMap((a) => a.sourceCandidateIds)

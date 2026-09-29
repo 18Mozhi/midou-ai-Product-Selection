@@ -6,9 +6,10 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
-    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36"
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalReadFeedback.vue": "f20b3891d31459b30e6dfa5621819c4bbbaaa6523130d33f9395804def25bf52"
   },
   "actions": [
     {
@@ -148,7 +149,8 @@
       "kind": "read",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1",
-        "apps/web/src/components/OrganizationApprovalFirstFailure.vue#54b14787946c2f69.1"
+        "apps/web/src/components/OrganizationApprovalFirstFailure.vue#54b14787946c2f69.1",
+        "apps/web/src/components/OrganizationApprovalReadFeedback.vue#969a4885430cb5be.1"
       ],
       "sourceContractKeys": [
         "OG-RETRY",
@@ -353,10 +355,8 @@
       "kind": "wiring",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1"
-      ],
-      "sourceContractKeys": [
-        "OG-RETRY"
+        "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
       ],
       "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
       "condition": "仅P34无data，error/HTTP500或rate_limited/HTTP429分支",
@@ -399,6 +399,14 @@
         },
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1",
+          "event": "@reload",
+          "handler": "load()",
+          "targets": [
+            "OG-RETRY"
+          ]
+        },
+        {
+          "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1",
           "event": "@reload",
           "handler": "load()",
           "targets": [
@@ -774,13 +782,13 @@
       "kind": "local",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationApprovalPanel.vue#f376017b5e1818c0.1",
-      "apps/web/src/components/OrganizationApprovalPanel.vue#95030381fd924d2b.1",
-      "apps/web/src/components/OrganizationApprovalPanel.vue#87f27ee40744d069.1"
+        "apps/web/src/components/OrganizationApprovalPanel.vue#95030381fd924d2b.1",
+        "apps/web/src/components/OrganizationApprovalPanel.vue#87f27ee40744d069.1"
       ],
       "sourceContractKeys": [
-      "OG-A-REQUEST-FILTER重置",
-      "OG-A-CURRENT-PAGINATION / 审批记录上一页及边界焦点交接",
-      "OG-A-CURRENT-PAGINATION / 审批记录下一页及边界焦点交接"
+        "OG-A-REQUEST-FILTER重置",
+        "OG-A-CURRENT-PAGINATION / 审批记录上一页及边界焦点交接",
+        "OG-A-CURRENT-PAGINATION / 审批记录下一页及边界焦点交接"
       ],
       "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
       "condition": "筛选字段无busy禁用；分页按边界禁用，8行一页",
@@ -963,8 +971,8 @@
       ],
       "sourceContractKeys": [
         "OG-A-TEMPLATE-FILTER重置/已批准手机空结果清除；清除后焦点回搜索，不写业务数据",
-        "OG-A-CURRENT-PAGINATION / 模板目录上一页及边界焦点交接",
-        "OG-A-CURRENT-PAGINATION / 模板目录下一页及边界焦点交接"
+        "OG-A-CURRENT-PAGINATION / 模板上一页",
+        "OG-A-CURRENT-PAGINATION / 模板下一页"
       ],
       "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
       "condition": "6行一页；新清除仅模板非空且无匹配、手机可见",
@@ -1307,11 +1315,13 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationApprovalPanel.vue#1c008f867673db60.1",
         "apps/web/src/components/OrganizationApprovalPanel.vue#1c008f867673db60.2",
-        "apps/web/src/components/OrganizationApprovalFirstFailure.vue#479570dac45574ea.1"
+        "apps/web/src/components/OrganizationApprovalFirstFailure.vue#479570dac45574ea.1",
+        "apps/web/src/components/OrganizationApprovalReadFeedback.vue#80a9a04eee3d9d46.1"
       ],
       "sourceContractKeys": [
         "OG-TECH审批/模板",
-        "OG-TECH 真实请求追踪展开/折叠，无API"
+        "OG-TECH 真实请求追踪展开/折叠，无API",
+        "OG-TECH"
       ],
       "contractAliasReason": "复用F04显式合同；同义入口、字段和渲染行数不新增业务动作。",
       "condition": "审批/模板details；新F追踪仅真实requestId非空",
@@ -2031,13 +2041,15 @@
     "files": [
       "apps/web/src/components/OrganizationAdminCenter.vue",
       "apps/web/src/components/OrganizationApprovalPanel.vue",
-      "apps/web/src/components/OrganizationApprovalFirstFailure.vue"
+      "apps/web/src/components/OrganizationApprovalFirstFailure.vue",
+      "apps/web/src/components/OrganizationApprovalReadFeedback.vue"
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
       "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
-      "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36"
+      "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+      "apps/web/src/components/OrganizationApprovalReadFeedback.vue": "f20b3891d31459b30e6dfa5621819c4bbbaaa6523130d33f9395804def25bf52"
     },
     "inputs": [
       {
@@ -2378,7 +2390,13 @@
     {
       "review": "P34-ROUTE-LIFECYCLE-VUE-C-REVIEW.md",
       "evidence": "output/playwright/p34-route-lifecycle-vue-c-r1/evidence.json",
-      "scope": "当前源码App/C预览隔离HTTP：56错误组、24返回顺序、24路由组，双端2996检查；不含真实权限、全断点或生产验收"
+      "snapshotKind": "immutable-captured-worktree-not-commit",
+      "scope": "3df0386基线源码App/C预览隔离HTTP：56错误组、24返回顺序、24路由组，双端2996检查；不含本次新增读取反馈、真实权限、全断点或生产验收"
+    },
+    {
+      "review": "P34-READ-FEEDBACK-IMPLEMENTATION.md",
+      "evidence": "design-plans/ui-phase-2-2026-09-07/P34-READ-FEEDBACK-IMPLEMENTATION.json",
+      "scope": "当前真实Vue读取反馈源绑定与桌面/390px路由E2E；隔离响应、零写请求，不代表真实登录/RBAC/数据库或生产验收"
     }
   ],
   "approvalRecords": [
@@ -2390,7 +2408,7 @@
     "P34-PERMISSION-VUE-C-APPROVAL.md"
   ],
   "compositionGaps": [
-    "当前C整合、加载、登录/网络反馈仍有待审区域；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。",
+    "当前C整合其他非本次读取反馈区域仍有待审；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。",
     "其他按钮态、完整父状态适用性、手机返回目录/筛选折叠与生产整合仍未全部实施批准。",
     "同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。",
     "source-reviewed不是整页完成；待审组合不因当前路由验证通过而自动批准。"
@@ -2399,6 +2417,5 @@
     "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
     "四份旧视觉提案的源基线固定为7398aa8a6c38d498f888c64451c4345d4c726706；当前sourceHashes与路由证据单独核对，不把历史图重标为当前实现。",
     "不修改API/OpenAPI/环境/依赖/数据库或部署；不以图册数量代替完整状态分母。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

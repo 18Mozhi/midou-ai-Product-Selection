@@ -24,6 +24,9 @@ const OrganizationApprovalPanel = defineAsyncComponent(
 const OrganizationApprovalFirstFailure = defineAsyncComponent(
   () => import("./OrganizationApprovalFirstFailure.vue"),
 );
+const OrganizationApprovalReadFeedback = defineAsyncComponent(
+  () => import("./OrganizationApprovalReadFeedback.vue"),
+);
 const OrganizationDataPanel = defineAsyncComponent(() => import("./OrganizationDataPanel.vue"));
 const OrganizationMemberPanel = defineAsyncComponent(() => import("./OrganizationMemberPanel.vue"));
 const OrganizationRolePanel = defineAsyncComponent(() => import("./OrganizationRolePanel.vue"));
@@ -111,6 +114,19 @@ const {
 const view = computed(() =>
     props.routePath === "/org-admin" ? "summary" : props.routePath.split("/").pop() || "summary",
   ),
+  approvalReadFeedbackMode = computed(() => {
+    if (view.value !== "approvals" || noticeKind.value !== "error") return null;
+    if (state.value === "expired") return "expired";
+    if (state.value === "forbidden") return "forbidden";
+    if (data.value && ["ready", "empty"].includes(state.value)) return "retained";
+    if (
+      !data.value &&
+      ["blocked", "conflict", "error", "rate_limited"].includes(state.value) &&
+      ![429, 500].includes(lastReadFailureStatus.value ?? -1)
+    )
+      return "initial";
+    return null;
+  }),
   title = computed(
     () =>
       (
@@ -1076,6 +1092,7 @@ onMounted(() => void load());
       ((state === 'error' && lastReadFailureStatus === 500) ||
         (state === 'rate_limited' && lastReadFailureStatus === 429))
     "
+    :data-approval-read-feedback="approvalReadFeedbackMode !== null"
     :aria-busy="
       state === 'loading' || refreshing || teamRecoveryRefreshing || (view === 'audit' && busy)
     "
@@ -1144,6 +1161,15 @@ onMounted(() => void load());
         <span class="org-approval-first-failure-legacy">
           {{ notice }} <code v-if="requestId">{{ requestId }}</code>
         </span>
+      </template>
+      <template v-else-if="approvalReadFeedbackMode">
+        <OrganizationApprovalReadFeedback
+          :mode="approvalReadFeedbackMode ?? 'initial'"
+          :state="state"
+          :notice="notice"
+          :request-id="requestId"
+          @reload="load()"
+        />
       </template>
       <template v-else
         >{{ notice }} <code v-if="requestId">{{ requestId }}</code></template

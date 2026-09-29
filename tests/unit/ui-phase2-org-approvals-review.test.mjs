@@ -14,7 +14,10 @@ import {
   parentFile,
   childFile,
   failureFile,
+  historicalDependencies,
+  readFeedbackFile,
   dependencies,
+  routeLifecycleEvidence,
   packageNames,
   buildOrgApprovalsReview,
   validateOrgApprovalsBindings,
@@ -33,10 +36,10 @@ const context = {
   files: new Set(build().actions.flatMap((a) => a.testReferences.map((r) => r.file))),
 };
 const copy = (v) => JSON.parse(JSON.stringify(v));
-test("P34 maps all28 source sites into8 read-only page actions,one forwarding and4 exclusions", () => {
+test("P34 maps all32 source sites into8 read-only page actions,one forwarding and4 exclusions", () => {
   const review = build(),
     r = validateActionReview(review, context);
-  assert.equal(r.sourceSites, 29);
+  assert.equal(r.sourceSites, 32);
   assert.equal(r.semanticGroups, 13);
   assert.equal(r.routeActions, 8);
   assert.equal(r.wiringGroups, 1);
@@ -48,7 +51,7 @@ test("P34 maps all28 source sites into8 read-only page actions,one forwarding an
   assert.throws(() => validateActionReview(missing, context));
   const promoted = build();
   promoted.approval = "approved";
-  assert.throws(() => validateActionReview(promoted, context), /cannot grant approval/);
+  assert.throws(() => validateActionReview(promoted, context), /cannot grant action approval/);
   const forward = build();
   forward.actions.find((a) => a.kind === "wiring").forwardBindings[0].handler =
     "load({ background: true })";
@@ -59,7 +62,7 @@ test("P34 distinguishes25 existing control variants,7 historical proposal contro
   assert.deepEqual(validateOrgApprovalsBindings(build(), packages), {
     controls: 25,
     proposalOnlyControls: 7,
-    sourceSites: 29,
+    sourceSites: 32,
     fields: 10,
     fieldStates: 67,
     fieldCompositions: 8,
@@ -93,8 +96,10 @@ test("P34 distinguishes25 existing control variants,7 historical proposal contro
 test("P34 registers16 model sites but excludes6 parent fields and does not invent local dialogs", () => {
   const r = build();
   assert.deepEqual(validateReviewSurfaces(r.surfaceReview, { sources, packages }), {
-    callerFiles: 3,
+    callerFiles: 4,
     localModelBindings: 16,
+    reviewedInputBindings: 16,
+    sourceCallerContainers: 3,
     callerContainers: 3,
     consumerVariants: 3,
     runtimeAcceptance: "unproven",
@@ -151,6 +156,7 @@ test("P34 pass-through props and zero child emits are checked against actual SFC
   );
   assert.doesNotMatch(sources[childFile], /defineEmits|\bfetch\(/);
   assert.match(sources[failureFile], /emit\('reload'\)/);
+  assert.match(sources[readFeedbackFile], /emit\('reload'\)/);
 });
 
 test("P34 implementation evidence and narrow approval records resolve without promoting design packages", () => {
@@ -167,6 +173,11 @@ test("P34 implementation evidence and narrow approval records resolve without pr
       "output/playwright/p34-parent-read-states/evidence.json": proposalSourceCommit,
     };
     assert.equal(ref.asOfCommit, legacy[ref.evidence]);
+    if (ref.snapshotKind === "immutable-captured-worktree-not-commit") {
+      assert.equal(ref.evidence, routeLifecycleEvidence);
+      for (const file of historicalDependencies) assert.ok(e.sourceHashes[file]);
+      continue;
+    }
     if (!ref.asOfCommit) assert.equal(ref.evidence, currentRouteEvidence);
     for (const [f, h] of Object.entries(e.sourceHashes)) {
       const source = ref.asOfCommit
@@ -187,6 +198,13 @@ test("P34 maps current bindings separately from immutable proposal snapshots", (
   assert.ok(
     r.implementationEvidence.some(
       (ref) => ref.evidence === currentRouteEvidence && !ref.asOfCommit,
+    ),
+  );
+  assert.ok(
+    r.implementationEvidence.some(
+      (ref) =>
+        ref.evidence === routeLifecycleEvidence &&
+        ref.snapshotKind === "immutable-captured-worktree-not-commit",
     ),
   );
   assert.ok(r.approvalRecords.includes("P34-PERMISSION-VUE-C-APPROVAL.md"));

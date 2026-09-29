@@ -1211,6 +1211,156 @@ test("organization approvals use the C first-load panel and retain the generic b
   }
 });
 
+test("organization approval first-read failures expose recovery details and reuse the existing GET", async ({
+  page,
+}) => {
+  const cases = [
+      { status: 503, title: "组织数据暂不可用", state: "blocked", retries: 3 },
+      { status: 408, title: "组织数据暂不可用", state: "blocked", retries: 3 },
+      { status: 409, title: "数据版本已变化", state: "conflict", retries: 1 },
+      { status: 0, title: "组织数据暂不可用", state: "blocked", retries: 3 },
+      { status: 401, title: "登录已失效", state: "expired", retries: 1 },
+      { status: 403, title: "当前无法查看审批内容", state: "forbidden", retries: 1 },
+    ] as const,
+    writes: string[] = [];
+  let activeCase = cases[0],
+    failing = true,
+    attempts = 0;
+  await setup(page);
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+      writes.push(request.method());
+  });
+  await page.route("**/api/v1/org/admin/approvals", async (route) => {
+    if (!failing) return route.fallback();
+    attempts += 1;
+    if (activeCase.status === 0) return route.abort("internetdisconnected");
+    return route.fulfill({
+      status: activeCase.status,
+      json: {
+        error: {
+          code: `p34_read_${activeCase.status}`,
+          message: `隔离读取失败 ${activeCase.status}`,
+          action_hint: "检查服务后重试。",
+        },
+        request_id: `p34-first-${activeCase.status}`,
+        trace_id: `p34-first-${activeCase.status}`,
+      },
+    });
+  });
+
+  for (const scenario of cases) {
+    activeCase = scenario;
+    failing = true;
+    attempts = 0;
+    await page.goto("/org-admin/approvals");
+    const center = page.locator(".org-admin-center"),
+      feedback = page.locator(".org-approval-read-feedback-c");
+    await expect(center).toHaveAttribute("data-state", scenario.state);
+    await expect(center).toHaveAttribute("data-approval-read-feedback", "true");
+    await expect(feedback).toHaveAttribute(
+      "data-mode",
+      scenario.state === "expired" || scenario.state === "forbidden" ? scenario.state : "initial",
+    );
+    await expect(feedback.getByRole("heading", { name: scenario.title })).toBeVisible();
+    await expect(feedback).toContainText("审批内容目前未显示，不代表记录或模板为空。");
+    const details = feedback.locator(".org-approval-read-feedback-c__details");
+    await expect(details).toBeVisible();
+    await expect(details).not.toHaveAttribute("open", "");
+    const expectedDetail =
+      scenario.status === 0
+        ? "网络连接暂不可用。 请检查网络后重试；系统已完成安全的读取重试。"
+        : scenario.status === 409
+          ? "数据已被其他操作更新，请先刷新并确认最新内容。 检查服务后重试。"
+          : `隔离读取失败 ${scenario.status} 检查服务后重试。`;
+    await expect(details.locator("p")).toContainText(expectedDetail);
+    if (scenario.status !== 0)
+      await expect(details.locator("code")).toHaveText(`p34-first-${scenario.status}`);
+    else await expect(details.locator("code")).toHaveText(/.+/);
+    await expect.poll(() => attempts).toBe(scenario.retries);
+
+    const readCount = attempts;
+    await details.locator("summary").click();
+    expect(attempts).toBe(readCount);
+    failing = false;
+    await feedback.getByRole("button", { name: "重新加载" }).click();
+    await expect(center).toHaveAttribute("data-state", "ready");
+    await expect(center).toHaveAttribute("data-approval-read-feedback", "false");
+    await expect(page.locator(".org-approval-governance")).toBeVisible();
+    expect(writes).toEqual([]);
+  }
+});
+
+test("organization approval background read failures disclose details and retain the prior snapshot", async ({
+  page,
+}) => {
+  const cases = [503, 409, 429, 500, 0] as const;
+  let activeStatus = cases[0],
+    failing = false,
+    attempts = 0;
+  const writes: string[] = [];
+  await setup(page);
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+      writes.push(request.method());
+  });
+  await page.route("**/api/v1/org/admin/approvals", async (route) => {
+    if (!failing) return route.fallback();
+    attempts += 1;
+    if (activeStatus === 0) return route.abort("internetdisconnected");
+    return route.fulfill({
+      status: activeStatus,
+      json: {
+        error: {
+          code: `p34_refresh_${activeStatus}`,
+          message: `隔离刷新失败 ${activeStatus}`,
+          action_hint: "检查服务后重新刷新。",
+        },
+        request_id: `p34-background-${activeStatus}`,
+        trace_id: `p34-background-${activeStatus}`,
+      },
+    });
+  });
+  await page.goto("/org-admin/approvals");
+  const center = page.locator(".org-admin-center"),
+    approval = page.getByText("厨房收纳机会复核", { exact: true }),
+    refresh = page.getByRole("button", { name: "刷新数据", exact: true });
+  await expect(approval).toBeVisible();
+
+  for (const status of cases) {
+    activeStatus = status;
+    failing = true;
+    attempts = 0;
+    await refresh.click();
+    const feedback = page.locator(".org-approval-read-feedback-c");
+    await expect(center).toHaveAttribute("data-state", "ready");
+    await expect(feedback).toHaveAttribute("data-mode", "retained");
+    await expect(feedback.getByRole("heading", { name: "审批内容未能更新" })).toBeVisible();
+    await expect(feedback).toContainText("仍显示上次成功读取的内容，本次更新尚未完成。");
+    await expect(approval).toBeVisible();
+    await expect(refresh).toBeEnabled();
+    const details = feedback.locator("details");
+    await expect(details).not.toHaveAttribute("open", "");
+    await details.locator("summary").click();
+    const expectedDetail =
+      status === 0
+        ? "网络连接暂不可用。 请检查网络后重试；系统已完成安全的读取重试。"
+        : status === 409
+          ? "数据已被其他操作更新，请先刷新并确认最新内容。 检查服务后重新刷新。"
+          : `隔离刷新失败 ${status} 检查服务后重新刷新。`;
+    await expect(details.locator("p")).toContainText(expectedDetail);
+    if (status !== 0) await expect(details.locator("code")).toHaveText(`p34-background-${status}`);
+    await expect(page.getByRole("button", { name: "重新加载", exact: true })).toHaveCount(0);
+    expect(writes).toEqual([]);
+
+    failing = false;
+    await refresh.click();
+    await expect(feedback).toHaveCount(0);
+    await expect(approval).toBeVisible();
+    await expect(center).toHaveAttribute("data-state", "ready");
+  }
+});
+
 test("organization approval governance filters, paginates and restores URL-backed state", async ({
   page,
 }) => {

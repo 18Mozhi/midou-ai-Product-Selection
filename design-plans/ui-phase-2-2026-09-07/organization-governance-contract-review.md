@@ -1,5 +1,7 @@
 # F04 组织治理八页事实与交互合同
 
+2026-09-30 P34读取反馈真实Vue增量：首读/保留快照/登录失效/权限拒绝反馈由新R组件呈现，首读reload仍转发至父既有load()；详情折叠不发请求。新增源候选进入原OG-RETRY、OG-TECH和父接线合同，不增加业务动作/权限/API写入；实施范围与隔离路由证据见[P34读取反馈实施](P34-READ-FEEDBACK-IMPLEMENTATION.md)及对应SHA绑定JSON。
+
 2026-09-10 P34首次429真实Vue接续：已批准手机限流白区接入，新增C 08a59be6f793cde6.1转发，仍调用原load；共享F支持可选标题且500默认不变。当前P34为29源入口/8本页动作/1接线组/4排除组，原自动重试与业务/权限不改。[176项与52基线对比](P34-RATE-LIMIT-VUE-REVIEW.md)证明四断点及500/后台/相邻页保持；未部署，非整页批准。
 
 2026-09-10 P34首次失败真实Vue增量：手机且首次未取得数据、HTTP500时，将用户已批准的白色恢复区域接入原父notice。真实错误说明/action_hint继续展示，真实requestId折叠；新F组件按钮和父reload转发同属OG-RETRY，只调用原load()两项GET；新增原生summary归OG-TECH。三个新增源位置不新增业务写入/权限/弹窗。详见[P34-FIRST-FAILURE-VUE-REVIEW](P34-FIRST-FAILURE-VUE-REVIEW.md)；原108候选等是历史计数。
@@ -40,8 +42,17 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | C | 97ed4772fb320d6c.1 | OG-RETRY |
 | C | 5ae31bc55551b1dc.1 | OG-RETRY · 父reload转发，复用原load() |
 | C | 08a59be6f793cde6.1 | OG-RETRY · 手机首次429区域父reload转发，复用原load() |
+| C | 5ae31bc55551b1dc.1 | WIRE-P34-RETRY · 父首次失败区域事件转发 |
+| C | 08a59be6f793cde6.1 | WIRE-P34-RETRY · 手机429区域事件转发 |
 | F | 54b14787946c2f69.1 | OG-RETRY 手机首次500/429恢复按钮 |
 | F | 479570dac45574ea.1 | OG-TECH 真实请求追踪展开/折叠，无API |
+| C | ca4fa7a0220842a9.1 | WIRE-P34-RETRY · 新读取反馈事件转发至原load() · OG-RETRY |
+| R | 969a4885430cb5be.1 | OG-RETRY · 读取反馈重新加载，仅emit父级既有事件 |
+| R | 80a9a04eee3d9d46.1 | OG-TECH · 读取详情与追踪原生折叠，无API |
+| A | 95030381fd924d2b.1 | OG-A-REQUEST-FILTER · 当前审批记录上一页 |
+| A | 87f27ee40744d069.1 | OG-A-REQUEST-FILTER · 当前审批记录下一页 |
+| A | 25d2be8fec5c35cd.1 | OG-A-CURRENT-PAGINATION / 模板上一页 |
+| A | 62fcf758cc715685.1 | OG-A-CURRENT-PAGINATION / 模板下一页 |
 | C | d6b520278ab3dd57.1,5878e30377f290ae.1 | OG-PROFILE-SAVE |
 | C | 1cbd108c64b5230c.1 | OG-PROFILE-LOGO浏览器有效性 |
 | C | 6a563eeaa67fea90.1 | P30全部成员事件父转发，复用M语义 |
