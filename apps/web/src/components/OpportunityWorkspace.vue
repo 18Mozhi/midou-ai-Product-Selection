@@ -1126,6 +1126,14 @@ function syncCreateRouteIntent() {
 }
 let loadQueued = false;
 let wasDeactivated = false;
+function closeTransientDialogs() {
+  showCreate.value = false;
+  showErpImport.value = false;
+  showBatch.value = false;
+  showDecision.value = false;
+  decisionAction.value = "observe";
+  decisionReason.value = "";
+}
 function queueLoad() {
   if (loadQueued) return;
   loadQueued = true;
@@ -1135,6 +1143,7 @@ function queueLoad() {
   });
 }
 onDeactivated(() => {
+  closeTransientDialogs();
   readGeneration += 1;
   erpBridgeGeneration += 1;
   erpBridgeBusy.value = false;
@@ -1161,10 +1170,9 @@ watch(
   () => props.opportunityId,
   (opportunityId, previousOpportunityId) => {
     if (opportunityId !== previousOpportunityId) {
-      // Decision intent belongs to the opportunity that opened its form.
-      showDecision.value = false;
-      decisionAction.value = "observe";
-      decisionReason.value = "";
+      closeTransientDialogs();
+      cancelAiReviewReason();
+      aiReviewError.value = "";
     }
     readGeneration += 1;
     erpBridgeGeneration += 1;

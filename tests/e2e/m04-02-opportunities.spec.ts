@@ -1179,6 +1179,54 @@ test("changing opportunities closes and clears an unsubmitted decision draft", a
   expect(submittedDecisions).toEqual([]);
 });
 
+test("changing between the opportunity list and detail closes open list dialogs", async ({
+  page,
+}) => {
+  await ready(page);
+  await readyForNextOpportunity(page);
+  await page.goto("/opportunities?view=all");
+  await expect(page.getByRole("heading", { name: "全部机会", level: 2 })).toBeVisible();
+
+  const switchToDetail = async () => {
+    const request = page.waitForRequest((candidate) => {
+      const url = new URL(candidate.url());
+      return url.pathname === `/api/v1/opportunities/${nextOpportunityId}`;
+    });
+    await switchOpportunityInPlace(page, nextOpportunityId);
+    await request;
+    await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  };
+  const returnToList = async () => {
+    await page.getByRole("link", { name: "← 返回来源列表" }).click();
+    await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
+    await expect(page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" })).toHaveCount(0);
+    await page.getByRole("button", { name: "全部机会" }).click();
+    await expect(page.getByRole("heading", { name: "全部机会", level: 2 })).toBeVisible();
+  };
+
+  await page.getByRole("button", { name: "手工添加", exact: true }).click();
+  const createDialog = page.getByRole("dialog", { name: "创建机会候选" });
+  await expect(createDialog).toBeVisible();
+  await switchToDetail();
+  await expect(createDialog).toHaveCount(0);
+  await returnToList();
+
+  await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();
+  const erpDialog = page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" });
+  await expect(erpDialog).toBeVisible();
+  await switchToDetail();
+  await expect(erpDialog).toHaveCount(0);
+  await returnToList();
+
+  await page.getByRole("checkbox", { name: `选择机会：${recommendedBase.name}` }).check();
+  await page.getByRole("button", { name: "批量归档", exact: true }).click();
+  const batchDialog = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  await expect(batchDialog).toBeVisible();
+  await switchToDetail();
+  await expect(batchDialog).toBeHidden();
+});
+
 test("a late opportunity detail failure cannot replace the current opportunity after the ID changes", async ({
   page,
 }) => {

@@ -104,6 +104,7 @@ async function setup(page: Page) {
   await page.route(`**/api/v1/opportunities/${opportunityId}`, (r) =>
     r.fulfill({ json: envelope(detail) }),
   );
+  return detail;
 }
 
 async function openTab(page: Page, label: string) {
@@ -374,6 +375,56 @@ test("P18 keeps the unsent AI review reason scoped across cached route deactivat
   await expect(page).toHaveURL(new RegExp(`/opportunities/${opportunityId}$`));
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole("textbox", { name: /原因/ })).toHaveValue("尚未提交的抽检草稿");
+  expect(writes).toEqual([]);
+});
+
+test("P18 discards an unsent AI review reason when the opportunity ID changes", async ({
+  page,
+}) => {
+  const nextOpportunityId = "00000000-0000-4000-8000-000000000706";
+  const detail = await setup(page);
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (r) =>
+    r.fulfill({ json: envelope({ ...detail, id: nextOpportunityId, name: "另一条测试机会" }) }),
+  );
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}/profit-analysis`, (r) =>
+    r.fulfill({ json: envelope({ latest_run: null, current_inputs: [] }) }),
+  );
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}/ai-analyses`, (r) =>
+    r.fulfill({ json: envelope([]) }),
+  );
+
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+      writes.push(request.method());
+  });
+  await page.goto(`/opportunities/${opportunityId}?tab=ai`);
+  await openTab(page, "AI 辅助");
+  await page.getByRole("button", { name: "抽检通过", exact: true }).click();
+  const reasonDialog = page.getByRole("dialog", { name: "填写抽检通过说明" });
+  await reasonDialog.getByRole("textbox", { name: /原因/ }).fill("仅属于旧机会的抽检草稿");
+
+  const nextDetailRequest = page.waitForRequest(
+    (request) => new URL(request.url()).pathname === `/api/v1/opportunities/${nextOpportunityId}`,
+  );
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/opportunities/${id}?tab=ai`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, nextOpportunityId);
+  await nextDetailRequest;
+  await expect(page.getByRole("heading", { name: "另一条测试机会" })).toBeVisible();
+  await expect(reasonDialog).toBeHidden();
+
+  const originalDetailRequest = page.waitForRequest(
+    (request) => new URL(request.url()).pathname === `/api/v1/opportunities/${opportunityId}`,
+  );
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/opportunities/${id}?tab=ai`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, opportunityId);
+  await originalDetailRequest;
+  await expect(page.getByRole("heading", { name: "便携净水杯机会" })).toBeVisible();
+  await expect(reasonDialog).toBeHidden();
   expect(writes).toEqual([]);
 });
 
