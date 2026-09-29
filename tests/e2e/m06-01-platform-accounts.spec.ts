@@ -1137,6 +1137,102 @@ test("organization detail exposes missing, inline failure, retry success and tou
   expect(writeRequest?.headers["idempotency-key"]).toBeTruthy();
 });
 
+test("P42 confirmed organization update stays distinct from a failed overview reread", async ({
+  page,
+}) => {
+  await setup(page);
+  let readAttempts = 0;
+  let writeAttempts = 0;
+  let allowSuccessfulRetry = false;
+  let submittedBody: Record<string, unknown> | null = null;
+  const observedRequests: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/platform/accounts"))
+      observedRequests.push(`${request.method()} ${new URL(request.url()).pathname}${new URL(request.url()).search}`);
+  });
+  await page.route("**/api/v1/platform/accounts?**", async (route) => {
+    readAttempts += 1;
+    if (writeAttempts > 0 && !allowSuccessfulRetry) {
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "dependency_unavailable",
+            message: "读取失败。",
+            action_hint: "稍后重新加载核对。",
+          },
+          request_id: "m06-01-p42-refresh-failed",
+          trace_id: "m06-01-p42-refresh-failed",
+        },
+      });
+      return;
+    }
+    const current = structuredClone(overview);
+    if (writeAttempts > 0) current.organizations[0].name = "米豆选品团队已更新";
+    await route.fulfill({ json: env(current) });
+  });
+  await page.route(`**/api/v1/platform/accounts/organizations/${org}`, async (route) => {
+    if (route.request().method() !== "PATCH") {
+      await route.continue();
+      return;
+    }
+    writeAttempts += 1;
+    submittedBody = route.request().postDataJSON() as Record<string, unknown>;
+    await route.fulfill({
+      json: env({
+        id: org,
+        name: "米豆选品团队已更新",
+        timezone: "Asia/Shanghai",
+        data_retention_days: 365,
+      }),
+    });
+  });
+
+  await page.goto(`/platform-admin/organizations/${org}`);
+  await page.waitForLoadState("networkidle");
+  await expect(page.getByRole("button", { name: "刷新数据" })).toBeEnabled();
+  const detail = page.locator("dialog.organization-detail-dialog");
+  await detail.locator('input[aria-describedby="organization-name-help"]').fill("米豆选品团队已更新");
+  await detail.getByRole("button", { name: "保存组织资料" }).click();
+  await page
+    .getByRole("dialog", { name: "保存组织资料" })
+    .getByRole("button", { name: "确认执行" })
+    .click();
+
+  await expect(detail.getByText("组织资料已保存。", { exact: true })).toBeVisible();
+  expect(readAttempts).toBeGreaterThanOrEqual(4);
+  expect(observedRequests.filter((request) => request.startsWith("GET "))).toHaveLength(
+    readAttempts,
+  );
+  await expect(
+    detail.getByText("组织资料已保存，但最新组织资料暂未读取。请重新加载核对。", {
+      exact: true,
+    }),
+  ).toBeVisible();
+  await expect(detail.locator('input[aria-describedby="organization-name-help"]')).toHaveValue(
+    "米豆选品团队已更新",
+  );
+  await expect(detail.getByRole("button", { name: "重新加载组织资料" })).toBeVisible();
+  expect(writeAttempts).toBe(1);
+  expect(submittedBody).toMatchObject({
+    name: "米豆选品团队已更新",
+    timezone: "Asia/Shanghai",
+    data_retention_days: 365,
+    reason: "平台管理员人工操作",
+  });
+
+  allowSuccessfulRetry = true;
+  await detail.getByRole("button", { name: "重新加载组织资料" }).click();
+  await expect(detail.getByText("组织资料已保存，但最新组织资料暂未读取。请重新加载核对。", {
+    exact: true,
+  })).toHaveCount(0);
+  await expect(detail.locator('input[aria-describedby="organization-name-help"]')).toHaveValue(
+    "米豆选品团队已更新",
+  );
+  expect(readAttempts).toBeGreaterThanOrEqual(5);
+  expect(writeAttempts).toBe(1);
+});
+
 test("M06-01.A06/A09 creates organization with audited idempotent request", async ({
   page,
 }, testInfo) => {

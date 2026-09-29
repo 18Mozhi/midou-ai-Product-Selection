@@ -18,6 +18,7 @@
 
 - P42 定向单元测试：32/32 通过，覆盖写入归属、状态/原因请求合同、只读历史截图绑定、C生产结构与回执/重读失败反馈。
 - 更新后的组织详情 E2E 在桌面 Chromium 与390px手机各1项，2/2通过；GET概览、失败/成功PATCH与幂等键均由本地拦截夹具提供，未写入真实组织。
+- 新增“写入成功但概览重读失败”实际 Vue 回归：让整轮安全 GET 自动重试均返回503，断言 PATCH 回执仍显示已保存、刷新警告独立保留；仅用户显式重读后恢复最新资料。桌面 Chromium 与390px手机各1/1通过，夹具本地拦截且没有真实组织写入。
 - `npm run typecheck:web` 通过。
 - `npm run verify:docs`、`npm run format:check`、`npm run verify:static-analysis` 与 `npm run build:web` 通过。`npm run verify:frontend-budget` 未通过：既有全局入口 CSS 为129451 bytes，超过122880 bytes限额；本批没有修改全局CSS或放宽预算。
 - 本轮全量 `npm run test:unit` 执行2281项，1982通过、299失败；已观察到的失败包括历史源码摘要与归档像素证据绑定旧版本。其余失败未逐项归因，因此全量门禁明确记为未通过；本批定向集合32项通过。

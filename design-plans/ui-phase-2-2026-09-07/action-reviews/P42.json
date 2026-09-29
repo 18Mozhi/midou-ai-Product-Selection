@@ -45,7 +45,10 @@
       "variants": ["missing-reload", "post-write-refresh-retry"],
       "scenes": [{ "package": "platform-organizations-direction-c", "scene": "detail_missing" }, { "package": "platform-organizations-direction-c", "scene": "refresh_error" }, { "package": "platform-organizations-direction-c", "scene": "update_success" }],
       "visualStates": { "default": "not-mapped", "hover": "not-mapped", "focus": "not-mapped", "pressed": "not-mapped", "disabled": "not-mapped", "busy": "not-mapped" },
-      "testReferences": [{ "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }],
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception", "claim": "P42 confirmed organization update stays distinct from a failed overview reread: explicit reload clears the refresh warning after recovery on desktop Chromium and 390px mobile. Local interception only; no production RBAC or MySQL proof." }
+      ],
       "remaining": "本地拦截验证不证明服务端权限、真实概览完整性或数据库状态。"
     },
     {
@@ -75,7 +78,10 @@
       "variants": ["valid-submit", "invalid-submit", "busy", "failure", "write-success-refresh-warning", "success-refresh"],
       "scenes": [{ "package": "platform-organizations-direction-c", "scene": "detail_invalid" }, { "package": "platform-organizations-direction-c", "scene": "save_reason" }, { "package": "platform-organizations-direction-c", "scene": "update_busy" }, { "package": "platform-organizations-direction-c", "scene": "update_error" }, { "package": "platform-organizations-direction-c", "scene": "update_success" }],
       "visualStates": { "default": "not-mapped", "hover": "not-mapped", "focus": "not-mapped", "pressed": "not-mapped", "disabled": "not-mapped", "busy": "not-mapped" },
-      "testReferences": [{ "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" }],
+      "testReferences": [
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception" },
+        { "file": "tests/e2e/m06-01-platform-accounts.spec.ts", "evidenceType": "actual-vue-local-interception", "claim": "P42 confirmed organization update stays distinct from a failed overview reread: exactly one PATCH and existing reason/body; confirmed-save feedback and reread warning stay separate after the automatic read retry budget is exhausted. Desktop Chromium and 390px mobile pass; no production write." }
+      ],
       "remaining": "既有隔离请求测试不等于真实MySQL原子性、RBAC、审计或M07-03验收。"
     },
     {
