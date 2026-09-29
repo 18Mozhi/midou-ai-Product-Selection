@@ -581,6 +581,69 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   }
 });
 
+test("P18 adoption entry requires each quality gate even when the aggregate claims success", async ({
+  page,
+}) => {
+  const gates = {
+    score: true,
+    market: true,
+    competition: true,
+    cost: true,
+    risk: true,
+    all_passed: true,
+  };
+  const gateLabels = {
+    score: "评分",
+    market: "市场",
+    competition: "竞争",
+    cost: "成本",
+    risk: "风险",
+  };
+  const detailOverrides: Record<string, unknown> = {
+    recommendation_status: "recommend",
+    overall_score: 86,
+    trend_score: 88,
+    competition_score: 82,
+    profit_status: "calculated",
+    risk_level: "low",
+    matched_rule_count: 1,
+    selection_stage: "recommended",
+    quality_gates: gates,
+    coverage_status: "complete",
+    blocking_reasons: [],
+  };
+  await ready(page, evidence, detailOverrides);
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("button", { name: "采纳建议" })).toBeVisible();
+
+  for (const gate of ["score", "market", "competition", "cost", "risk"] as const) {
+    detailOverrides.quality_gates = { ...gates, [gate]: false, all_passed: true };
+    await page.reload();
+    await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+    await expect(page.getByRole("button", { name: "采纳建议" })).toHaveCount(0);
+    await page.getByText("查看每项判断", { exact: true }).click();
+    await expect(page.getByRole("list", { name: "五项质量门" })).toContainText(
+      `${gateLabels[gate]}待完成`,
+    );
+  }
+
+  detailOverrides.quality_gates = { ...gates, all_passed: false };
+  await page.reload();
+  await expect(page.getByRole("button", { name: "采纳建议" })).toHaveCount(0);
+
+  detailOverrides.quality_gates = gates;
+  detailOverrides.selection_stage = "rule_candidate";
+  await page.reload();
+  await expect(page.getByRole("button", { name: "采纳建议" })).toHaveCount(0);
+
+  detailOverrides.selection_stage = "recommended";
+  await page.reload();
+  const adopt = page.getByRole("button", { name: "采纳建议" });
+  await expect(adopt).toBeVisible();
+  await adopt.click();
+  await expect(page.getByRole("dialog", { name: "记录采纳决定" })).toBeVisible();
+});
+
 test("P18 lineage preserves raw status and unknown age while feedback uses the same idempotency key after an unknown write", async ({
   page,
 }) => {

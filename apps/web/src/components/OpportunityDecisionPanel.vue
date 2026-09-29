@@ -8,6 +8,7 @@ import {
   nextOpportunityQualityGateLabel,
   opportunityBlockerStatusLabel,
   opportunityDecisionCopy,
+  opportunityQualityGatesPassed,
   opportunityQualityGateLabels,
 } from "./opportunity-decision-presentation";
 import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
@@ -40,7 +41,7 @@ const selectionStage = computed(
     (props.detail.matched_rule_count > 0 ? "rule_candidate" : "not_eligible"),
 );
 const canAdopt = computed(
-  () => selectionStage.value === "recommended" && qualityGates.value.all_passed,
+  () => selectionStage.value === "recommended" && opportunityQualityGatesPassed(qualityGates.value),
 );
 const recommendationTitle = computed(() =>
   selectionStage.value === "not_eligible" && Number(props.detail.matched_rule_count ?? 0) === 0

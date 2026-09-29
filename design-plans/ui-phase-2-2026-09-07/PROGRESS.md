@@ -4488,3 +4488,7 @@ CP-G05 原已有 `post()` 与 `createRule()` 同步busy守卫，但规则窗只�
 ## 2026-09-29 · P18 决策提交同步防重
 
 新增长期挂载 Vue 回归先复现了决策表单在第一条 POST 未返回时重复 `requestSubmit()` 会发出两条相同请求。`OpportunityWorkspace.decide()` 增加同步 `busy` 早退并固定机会 ID、动作、原因与 `expected_version` 快照；用户可见的提交禁用不变，现有关闭/重开及迟到回执行为保留。修复后 M04-02 桌面 Chromium 与390px移动完整套件各27/27通过。未改API、权限或业务质量门；本地受控响应不证明真实RBAC、数据库事务、审计或M07-03。P18其他操作与OP07–OP10及全73页收官继续开放。
+
+## 2026-09-29 · P18 采纳入口逐项质量门 fail-closed
+
+实际 `OpportunityDecisionPanel` 原先只检查推荐阶段与汇总 `all_passed`，没有逐项复核五门，汇总字段与单项状态矛盾时会错误显示采纳入口。现在只有 `selection_stage=recommended`、汇总值严格为 `true` 且五项质量门各自严格为 `true` 才可进入；通过数和下一项提示也只接受严格 `true`。新增五个单门分别失败、汇总误报、汇总不通过、非推荐阶段及全通过开窗的实际 Vue 浏览器回归；M04-02 桌面 Chromium 与390px手机完整套件各29/29通过，无决定 POST。未改 API、权限、数据库或业务规则；本地拦截不证明真实 RBAC/SQL/生产采纳。其它 P18 操作和全73页验收继续。

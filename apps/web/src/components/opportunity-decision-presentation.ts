@@ -13,10 +13,13 @@ const opportunityQualityGateKeys = Object.keys(opportunityQualityGateLabels) as 
 >;
 
 export const countPassedOpportunityQualityGates = (gates: OpportunitySummary["quality_gates"]) =>
-  opportunityQualityGateKeys.filter((key) => Boolean(gates[key])).length;
+  opportunityQualityGateKeys.filter((key) => gates[key] === true).length;
+
+export const opportunityQualityGatesPassed = (gates: OpportunitySummary["quality_gates"]) =>
+  gates.all_passed === true && opportunityQualityGateKeys.every((key) => gates[key] === true);
 
 export const nextOpportunityQualityGateLabel = (gates: OpportunitySummary["quality_gates"]) => {
-  const key = opportunityQualityGateKeys.find((candidate) => !gates[candidate]);
+  const key = opportunityQualityGateKeys.find((candidate) => gates[candidate] !== true);
   return key ? opportunityQualityGateLabels[key] : "全部通过";
 };
 
