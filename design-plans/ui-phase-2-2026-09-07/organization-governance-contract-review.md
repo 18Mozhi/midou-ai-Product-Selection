@@ -32,11 +32,11 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 
 文件简称均位于apps/web/src/components：C=OrganizationAdminCenter.vue；M=OrganizationMemberPanel.vue；W=OrganizationWorkspacePanel.vue；T=OrganizationTeamPanel.vue；A=OrganizationApprovalPanel.vue；D=OrganizationDataPanel.vue；K=OrganizationTokenPanel.vue；U=OrganizationAuditPanel.vue；F=OrganizationApprovalFirstFailure.vue。完整候选ID为文件路径#sig；每个sig在下表出现一次，同行逗号表示同一业务动作的多个源码入口，不以渲染记录数扩张分母。
 
-八文件共108候选：105控件/事件、3弹窗调用候选（父层AuditedReasonDialog组件调用及两处askAuditedReason）。本地没有新原生dialog定义，复用共享AuditedReasonDialog/useAuditedReason/useModalDialog。54处v-model另列输入表，扫描候选不包含所有无显式事件的字段。P31的父转发只标复用，不再次计为新动作。全站G0仍未冻结。
+八文件共110候选：107控件/事件、3弹窗调用候选（父层AuditedReasonDialog组件调用及两处askAuditedReason）。本地没有新原生dialog定义，复用共享AuditedReasonDialog/useAuditedReason/useModalDialog。54处v-model另列输入表，扫描候选不包含所有无显式事件的字段。P31的父转发只标复用，不再次计为新动作。全站G0仍未冻结。
 
 | 文件 | sig（逗号分隔） | 语义归属 |
 | --- | --- | --- |
-| C | b11692c0597885e3.1 | OG-REFRESH |
+| C | a1fb5dc1b30f9733.1 | OG-REFRESH |
 | C | 97ed4772fb320d6c.1 | OG-RETRY |
 | C | 5ae31bc55551b1dc.1 | OG-RETRY · 父reload转发，复用原load() |
 | C | 08a59be6f793cde6.1 | OG-RETRY · 手机首次429区域父reload转发，复用原load() |
@@ -74,6 +74,8 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | T | cde0a7cecbbc9a09.1,18ece981bcb15fca.1,56fb9bb2ac849bf0.1,66725db5db9a8fe8.1,83a359c9f404cb11.1 | OG-T-FILTER状态/重置/清除 |
 | T | 95629c96c6d7c41b.1 | OG-T-SELECT |
 | T | 3619d28a163df5ce.1,d56d9b5edd39513e.1 | OG-T-PAGE |
+| T | be579efd97f36382.1 | OG-T-CREATE-RECOVERY-TRACE |
+| T | 8c30506a17605129.1 | OG-T-CREATE-RECOVERY-READ |
 | T | 9fbd42d272c62579.1,917ad4e4a5730305.1 | OG-T-MEMBER分配/移除 |
 | T | 76054446429e86da.1,2db399169624cf8a.1 | OG-T-LINK成员/工作区 |
 | T | 1c008f867673db60.1 | OG-TECH |
@@ -181,10 +183,10 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| `apps/web/src/components/OrganizationAdminCenter.vue` | `0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04` |
+| `apps/web/src/components/OrganizationAdminCenter.vue` | `4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed` |
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
 | `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
-| `apps/web/src/components/OrganizationTeamPanel.vue` | `cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174` |
+| `apps/web/src/components/OrganizationTeamPanel.vue` | `2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee` |
 | `apps/web/src/components/OrganizationDataPanel.vue` | `00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270` |
 | `apps/web/src/components/OrganizationTokenPanel.vue` | `f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c` |
 | `apps/web/src/components/OrganizationAuditPanel.vue` | `e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d` |

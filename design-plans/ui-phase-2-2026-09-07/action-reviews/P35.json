@@ -6,7 +6,7 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
     "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
   },
   "actions": [
@@ -15,7 +15,7 @@
       "label": "刷新组织数据",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
       ],
       "sourceContractKeys": [
         "OG-REFRESH"
@@ -632,7 +632,7 @@
       "proposalOnly": false,
       "actionId": "OG-REFRESH",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
       ],
       "screenshots": [
         {
@@ -701,7 +701,7 @@
       "proposalOnly": false,
       "actionId": "OG-REFRESH",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
       ],
       "screenshots": [
         {
@@ -2320,7 +2320,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
       "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
     },
     "inputs": [

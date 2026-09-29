@@ -887,7 +887,9 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
   let created = false,
     allowRead = false,
     createRequests = 0,
-    teamReads = 0;
+    teamReads = 0,
+    summaryReads = 0,
+    memberReads = 0;
   const createdTeam = {
     id: "00000000-0000-4000-8000-000000000699",
     name: "只创建一次的协作组",
@@ -900,6 +902,11 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
     updated_at: "2026-08-27T00:00:00.000Z",
   };
   await setup(page);
+  page.on("request", (request) => {
+    if (request.method() !== "GET") return;
+    if (request.url().includes("/api/v1/org/admin/summary")) summaryReads += 1;
+    if (request.url().includes("/api/v1/org/admin/members")) memberReads += 1;
+  });
   await page.unroute("**/api/v1/org/admin/teams");
   await page.route("**/api/v1/org/admin/teams", async (route) => {
     if (route.request().method() === "POST") {
@@ -938,10 +945,12 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
   await expect(recovery).toContainText("团队已创建，列表暂未更新");
   await expect(recovery).toContainText("team-create-write-201");
   await expect(recovery.locator("dd").nth(1)).toHaveText(/^[0-9a-f-]{36}$/i);
+  const initialReadRequestId = await recovery.locator("dd").nth(1).innerText();
   const requestDetails = recovery.locator("details"),
-    retryButton = recovery.getByRole("button", { name: "重新读取团队列表" });
+    retryButton = recovery.getByRole("button");
   await expect(requestDetails).toBeVisible();
   await expect(requestDetails.locator("summary")).toHaveText("查看本次请求编号");
+  await expect(retryButton).toHaveText("重新读取团队列表");
   await requestDetails.locator("summary").click();
   await expect(recovery.getByText("创建请求")).toBeVisible();
   await expect(recovery.getByText("读取失败请求")).toBeVisible();
@@ -950,13 +959,39 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
   expect(createRequests).toBe(1);
   expect(teamReads).toBeGreaterThan(1);
 
-  allowRead = true;
+  const summaryReadsBeforeRetry = summaryReads,
+    memberReadsBeforeRetry = memberReads;
+  const retryFailureResponse = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/v1/org/admin/teams") &&
+      response.request().method() === "GET" &&
+      response.status() === 503,
+  );
   await retryButton.click();
+  await retryFailureResponse;
+  await expect(recovery).toBeVisible();
+  await expect(requestDetails.locator("dd").nth(1)).toHaveText(/^[0-9a-f-]{36}$/i);
+  expect(await requestDetails.locator("dd").nth(1).innerText()).not.toBe(initialReadRequestId);
+  await expect(retryButton).toBeEnabled();
+  await expect(retryButton).toHaveText("重新读取团队列表");
+  expect(createRequests).toBe(1);
+
+  allowRead = true;
+  const retrySuccessResponse = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/v1/org/admin/teams") &&
+      response.request().method() === "GET" &&
+      response.status() === 200,
+  );
+  await retryButton.click();
+  await retrySuccessResponse;
   await expect(recovery).toBeHidden();
   await expect(page.getByRole("listitem", { name: "选择团队 只创建一次的协作组" })).toBeVisible();
   await expect(page.locator(".org-admin-notice")).toContainText("创建操作未重复提交");
+  expect(summaryReads).toBe(summaryReadsBeforeRetry);
+  expect(memberReads).toBe(memberReadsBeforeRetry);
   expect(createRequests).toBe(1);
-  expect(teamReads).toBeGreaterThan(2);
+  expect(teamReads).toBeGreaterThan(3);
 });
 
 test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) => {

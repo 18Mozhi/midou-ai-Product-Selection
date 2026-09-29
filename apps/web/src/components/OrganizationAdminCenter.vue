@@ -69,6 +69,7 @@ const props = defineProps<{
   requestId = ref(""),
   busy = ref(false),
   refreshing = ref(false),
+  teamRecoveryRefreshing = ref(false),
   lastReadFailureStatus = ref<number | null>(null),
   teamCreateReadFailure = ref<{ writeRequestId: string; readRequestId: string } | null>(null),
   secret = ref(""),
@@ -97,6 +98,7 @@ const props = defineProps<{
     expires_at: "",
   });
 let loadSequence = 0;
+let teamRecoverySequence = 0;
 let tokenSecretGeneration = 0;
 let surfaceActive = true;
 const {
@@ -292,6 +294,8 @@ async function load(
     onReadFailure?: (error: unknown) => void;
   } = {},
 ) {
+  teamRecoverySequence += 1;
+  teamRecoveryRefreshing.value = false;
   const sequence = ++loadSequence,
     currentView = view.value,
     background = Boolean(
@@ -743,12 +747,55 @@ async function createTeam(value: {
   return Boolean(succeeded);
 }
 async function retryTeamListAfterCreate() {
-  if (!teamCreateReadFailure.value || view.value !== "teams") return;
-  const refreshed = await load({ background: true, preserveNotice: true });
-  if (refreshed) {
+  const recovery = teamCreateReadFailure.value;
+  if (
+    !recovery ||
+    view.value !== "teams" ||
+    busy.value ||
+    refreshing.value ||
+    teamRecoveryRefreshing.value
+  )
+    return;
+  const sequence = ++teamRecoverySequence;
+  teamRecoveryRefreshing.value = true;
+  try {
+    const response = await api("/org/admin/teams");
+    if (
+      sequence !== teamRecoverySequence ||
+      !surfaceActive ||
+      view.value !== "teams" ||
+      teamCreateReadFailure.value !== recovery
+    )
+      return;
+    data.value = { ...data.value, teams: response.data };
     teamCreateReadFailure.value = null;
+    requestId.value = response.request_id;
+    lastReadFailureStatus.value = null;
     noticeKind.value = "success";
     notice.value = "团队列表已更新；创建操作未重复提交。";
+  } catch (error) {
+    if (
+      sequence !== teamRecoverySequence ||
+      !surfaceActive ||
+      view.value !== "teams" ||
+      teamCreateReadFailure.value !== recovery
+    )
+      return;
+    const failure = error instanceof ApiClientError ? error : null;
+    lastReadFailureStatus.value = failure?.status ?? null;
+    if (failure && ["expired", "forbidden"].includes(failure.kind)) {
+      teamCreateReadFailure.value = null;
+      applyFailure(error, true);
+    } else {
+      teamCreateReadFailure.value = {
+        ...recovery,
+        readRequestId: failure?.requestId ?? "",
+      };
+      applyFailure(error, false);
+    }
+    rethrowUnexpectedError(error);
+  } finally {
+    if (sequence === teamRecoverySequence) teamRecoveryRefreshing.value = false;
   }
 }
 async function teamMemberAction(item: any, action: "assign" | "remove", membership_id: string) {
@@ -805,16 +852,28 @@ function dismissTokenSecret() {
   tokenSecretGeneration += 1;
   secret.value = "";
 }
-watch([() => props.routePath, () => props.organizationId], dismissTokenSecret, { flush: "sync" });
+watch(
+  [() => props.routePath, () => props.organizationId],
+  () => {
+    teamRecoverySequence += 1;
+    teamRecoveryRefreshing.value = false;
+    dismissTokenSecret();
+  },
+  { flush: "sync" },
+);
 onActivated(() => {
   surfaceActive = true;
 });
 onDeactivated(() => {
   surfaceActive = false;
+  teamRecoverySequence += 1;
+  teamRecoveryRefreshing.value = false;
   dismissTokenSecret();
 });
 onBeforeUnmount(() => {
   surfaceActive = false;
+  teamRecoverySequence += 1;
+  teamRecoveryRefreshing.value = false;
   dismissTokenSecret();
 });
 const activeMembers = computed(() =>
@@ -1017,7 +1076,9 @@ onMounted(() => void load());
       ((state === 'error' && lastReadFailureStatus === 500) ||
         (state === 'rate_limited' && lastReadFailureStatus === 429))
     "
-    :aria-busy="state === 'loading' || refreshing || (view === 'audit' && busy)"
+    :aria-busy="
+      state === 'loading' || refreshing || teamRecoveryRefreshing || (view === 'audit' && busy)
+    "
   >
     <header class="org-admin-hero">
       <div>
@@ -1034,11 +1095,17 @@ onMounted(() => void load());
       </div>
       <div class="org-admin-refresh">
         <small v-if="summary?.observed_at">
-          {{ refreshing ? "正在刷新当前组织数据…" : `更新于 ${fmt(summary.observed_at)}` }}
+          {{
+            teamRecoveryRefreshing
+              ? "正在重新读取团队列表…"
+              : refreshing
+                ? "正在刷新当前组织数据…"
+                : `更新于 ${fmt(summary.observed_at)}`
+          }}
         </small>
         <button
           type="button"
-          :disabled="state === 'loading' || refreshing"
+          :disabled="state === 'loading' || refreshing || teamRecoveryRefreshing"
           @click="load({ background: true })"
         >
           {{ refreshing ? "正在刷新…" : "刷新数据" }}
@@ -1333,7 +1400,7 @@ onMounted(() => void load());
         :teams="data?.teams ?? []"
         :members="data?.members ?? []"
         :busy="busy"
-        :refreshing="refreshing"
+        :refreshing="refreshing || teamRecoveryRefreshing"
         :create-refresh-failure="teamCreateReadFailure"
         :create-team="createTeam"
         :refresh-team-list="retryTeamListAfterCreate"

@@ -6,8 +6,8 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
-    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
   },
   "actions": [
     {
@@ -62,7 +62,7 @@
       "label": "刷新团队",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
       ],
       "sourceContractKeys": [
         "OG-REFRESH"
@@ -2549,6 +2549,86 @@
           }
         }
       ]
+    },
+    {
+      "actionId": "OG-T-CREATE-RECOVERY-TRACE",
+      "label": "查看本次请求编号",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#be579efd97f36382.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-CREATE-RECOVERY-TRACE"
+      ],
+      "contractAliasReason": "P33此前未单列团队创建后读取失败的本地追踪折叠控件；为其建立独立映射，不与纯技术详情或读请求合并。",
+      "condition": "团队已创建但团队列表未能读取；默认折叠",
+      "handler": "原生details展开或折叠创建/读取请求编号，不发起请求",
+      "variants": [
+        "collapsed",
+        "expanded"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "create_read_failed"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-organization-admin.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        }
+      ],
+      "remaining": "本地模拟覆盖折叠和编号展示；不证明真实后端日志、生产权限或生产验收，完整视觉状态仍待。"
+    },
+    {
+      "actionId": "OG-T-CREATE-RECOVERY-READ",
+      "label": "重新读取团队列表",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#8c30506a17605129.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-CREATE-RECOVERY-READ"
+      ],
+      "contractAliasReason": "P33此前未单列创建成功后的团队列表恢复GET；与创建POST及父级整页刷新区分。",
+      "condition": "团队创建POST已成功而列表读取失败；仅团队视图显示恢复入口",
+      "handler": "只GET /org/admin/teams并更新teams；读取失败更新读取请求编号并保留已创建提示；成功清除恢复提示；不重发创建POST",
+      "variants": [
+        "read_failure",
+        "retry_failure",
+        "retry_success",
+        "retry_in_flight"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "create_read_failed"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-organization-admin.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        }
+      ],
+      "remaining": "真实Vue浏览器测试使用本地拦截数据；覆盖读取失败、重试失败和成功，不证明真实API、RBAC或生产验收；重试中的截图状态未测。"
     }
   ],
   "functionProps": [
@@ -2618,8 +2698,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
-      "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+      "apps/web/src/components/OrganizationTeamPanel.vue": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"
     },

@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1735；旧登记1477；新身份748，旧表独有身份490。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1571源位置/1290组；其中路由动作1065组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1737；旧登记1477；新身份751，旧表独有身份491。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1573源位置/1292组；其中路由动作1067组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -42,15 +42,15 @@
 | [P26 通知中心](page-specs/P26.md) | 55 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P27 自动化规则](page-specs/P27.md) | 51 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P28 报表与导出](page-specs/P28.md) | 46 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 154 | [8组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P30 成员与邀请](page-specs/P30.md) | 154 | [24组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P31 角色与权限](page-specs/P31.md) | 154 | [25组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P32 工作区管理](page-specs/P32.md) | 154 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P33 团队管理](page-specs/P33.md) | 154 | [17组](action-reviews/P33.json) | 17个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P34 审批模板](page-specs/P34.md) | 154 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P35 组织数据](page-specs/P35.md) | 154 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P36 组织令牌](page-specs/P36.md) | 154 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P37 组织审计](page-specs/P37.md) | 154 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P29 治理概览](page-specs/P29.md) | 153 | [8组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P30 成员与邀请](page-specs/P30.md) | 153 | [24组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P31 角色与权限](page-specs/P31.md) | 153 | [25组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P32 工作区管理](page-specs/P32.md) | 153 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P33 团队管理](page-specs/P33.md) | 153 | [19组](action-reviews/P33.json) | 29个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P34 审批模板](page-specs/P34.md) | 153 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P35 组织数据](page-specs/P35.md) | 153 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P36 组织令牌](page-specs/P36.md) | 153 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P37 组织审计](page-specs/P37.md) | 153 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P38 平台概览](page-specs/P38.md) | 59 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P39 账号与组织](page-specs/P39.md) | 95 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P40 组织管理](page-specs/P40.md) | 95 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -2893,9 +2893,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P33 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P33.json)：31个局部源位置 → 17组；2类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射13/13个源码字段位置，3/3处调用/内嵌容器，14个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P33.json)：33个局部源位置 → 19组；2类写入，14组路由动作，0组转发/容器关联不重复计动作。已映射13/13个源码字段位置，3/3处调用/内嵌容器，14个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有17个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有29个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -2916,6 +2916,8 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OG-T-MEMBER 分配与移除成员 / write | 2处；member_missing、locked_member、no_members、archived、member_busy、member_failure、member_success、switched_pending | [member_missing · 1440](design/teams-direction-c/1440-member_missing.png) / [member_missing · 390](design/teams-direction-c/390-member_missing.png)、[locked_member · 1440](design/teams-direction-c/1440-locked_member.png) / [locked_member · 390](design/teams-direction-c/390-locked_member.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
 | OG-T-LINK 成员与工作区入口 / navigation | 2处；selected | [selected · 1440](design/teams-direction-c/1440-selected.png) / [selected · 390](design/teams-direction-c/390-selected.png)、[members-default · 1440](design/teams-controls-direction-c/members-default-1440.png) / [members-default · 390](design/teams-controls-direction-c/members-default-390.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
 | OG-TECH 技术详情 / local | 1处；technical | [technical · 1440](design/teams-direction-c/1440-technical.png) / [technical · 390](design/teams-direction-c/390-technical.png)、[technical-default · 1440](design/teams-controls-direction-c/technical-default-1440.png) / [technical-default · 390](design/teams-controls-direction-c/technical-default-390.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| OG-T-CREATE-RECOVERY-TRACE 查看本次请求编号 / local | 1处；collapsed、expanded | [create_read_failed · 1440](design/teams-direction-c/1440-create_read_failed.png) / [create_read_failed · 390](design/teams-direction-c/390-create_read_failed.png)；其余见JSON | 本地模拟覆盖折叠和编号展示；不证明真实后端日志、生产权限或生产验收，完整视觉状态仍待。 |
+| OG-T-CREATE-RECOVERY-READ 重新读取团队列表 / read | 1处；read_failure、retry_failure、retry_success、retry_in_flight | [create_read_failed · 1440](design/teams-direction-c/1440-create_read_failed.png) / [create_read_failed · 390](design/teams-direction-c/390-create_read_failed.png)；其余见JSON | 真实Vue浏览器测试使用本地拦截数据；覆盖读取失败、重试失败和成功，不证明真实API、RBAC或生产验收；重试中的截图状态未测。 |
 
 ### 字段绑定（不重复计算为提交动作）
 

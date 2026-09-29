@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed"
   },
   "actions": [
     {
@@ -60,7 +60,7 @@
       "label": "刷新组织资料",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
       ],
       "sourceContractKeys": [
         "OG-REFRESH"
@@ -453,7 +453,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed"
         }
       }
     },
@@ -753,7 +753,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed"
         }
       }
     },
@@ -923,7 +923,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed"
     },
     "inputs": [
       {
