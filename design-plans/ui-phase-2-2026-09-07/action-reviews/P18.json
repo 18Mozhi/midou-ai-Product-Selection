@@ -956,7 +956,7 @@
           "scene": "competitor-failed"
         }
       ],
-      "remaining": "只读权限不能替代管理能力；原稿队列结果并非真实采集证明。",
+      "remaining": "本地Vue已验证competitor:read不足以显示采集入口，并验证202/任务编号回执；真实路由RBAC与Worker采集仍待。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#5d78f9c7cf57f959.1",
         "apps/web/src/components/OpportunityDetailInsights.vue#5d78f9c7cf57f959.2",
@@ -971,6 +971,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "只有competitor:manage时显示入口；competitor:read只显示目录入口、不显示采集按钮；采集请求保持空对象body并反馈202返回的task_id。桌面Chromium/390px各1/1；不证明真实RBAC或采集Worker完成。"
+        },
         {
           "file": "scripts/verify-ui-phase2-insights-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -996,7 +1001,7 @@
           "scene": "supplier-queued"
         }
       ],
-      "remaining": "不使用competitor能力兜底；来源和ID晚到隔离待验。",
+      "remaining": "本地Vue验证仅supplier_quote:manage可排队、使用当前机会ID构造准确请求并显示task_id；不以竞品能力代替。真实RBAC/供应采集及跨ID晚到响应仍待。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#0be29a576704bd69.1",
         "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1"
@@ -1010,6 +1015,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "只有supplier_quote:manage时显示采集入口；与竞品权限相互独立；POST /sourcing/searches body为{input_type:opportunity,input_ref:当前机会ID}并显示202返回的task_id。桌面Chromium/390px各1/1；不证明真实RBAC或供应采集Worker完成。"
+        },
         {
           "file": "scripts/verify-ui-phase2-insights-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",

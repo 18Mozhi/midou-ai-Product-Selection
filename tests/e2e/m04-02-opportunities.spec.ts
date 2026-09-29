@@ -1197,6 +1197,98 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
   await expect(page.getByText("当前响应没有提供逐项风险评估事实", { exact: true })).toBeVisible();
 });
 
+test("P18 discovery actions require their matching manage capabilities", async ({ page }) => {
+  await ready(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_id: "00000000-0000-4000-8000-000000000421",
+        workspace_id: "00000000-0000-4000-8000-000000000422",
+        roles: ["member"],
+        capabilities: [
+          "opportunity:read",
+          "opportunity:decide",
+          "competitor:read",
+          "sourcing:read",
+        ],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_member_allowed",
+      }),
+    }),
+  );
+  let discoveryWrites = 0;
+  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route("**/api/v1/sourcing/searches*", (route) => {
+    if (route.request().method() === "POST") discoveryWrites += 1;
+    return route.fulfill({ json: envelope([]) });
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/competitor-discovery`, (route) => {
+    discoveryWrites += 1;
+    return route.fulfill({ status: 202, json: envelope({ task_id: "unexpected-task" }) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await expect(page.getByRole("link", { name: "竞品工作台", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "采集 Amazon 竞品" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "采集公开供应商" })).toHaveCount(0);
+  expect(discoveryWrites).toBe(0);
+});
+
+test("P18 competitor and supplier discovery keep separate request contracts and task receipts", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_id: "00000000-0000-4000-8000-000000000421",
+        workspace_id: "00000000-0000-4000-8000-000000000422",
+        roles: ["member"],
+        capabilities: [
+          "opportunity:read",
+          "opportunity:decide",
+          "competitor:manage",
+          "supplier_quote:manage",
+        ],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_member_allowed",
+      }),
+    }),
+  );
+  const competitorBodies: Record<string, unknown>[] = [];
+  const sourcingBodies: Record<string, unknown>[] = [];
+  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route("**/api/v1/opportunities/*/competitor-discovery", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    competitorBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    return route.fulfill({ status: 202, json: envelope({ task_id: "competitor-task-1" }) });
+  });
+  await page.route("**/api/v1/sourcing/searches*", async (route) => {
+    if (route.request().method() === "GET") return route.fulfill({ json: envelope([]) });
+    sourcingBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    return route.fulfill({ status: 202, json: envelope({ task_id: "supplier-task-1" }) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await page.getByRole("button", { name: "采集 Amazon 竞品" }).click();
+  await expect(page.locator(".opportunity-message")).toContainText(
+    "Amazon 竞品采集已排队，任务编号 competitor-task-1。",
+  );
+  await page.getByRole("button", { name: "采集公开供应商" }).click();
+  await expect(page.locator(".opportunity-message")).toContainText(
+    "公开供应商采集已排队，任务编号 supplier-task-1。",
+  );
+  expect(competitorBodies).toEqual([{}]);
+  expect(sourcingBodies).toEqual([{ input_type: "opportunity", input_ref: opportunityId }]);
+});
+
 test("P18 overview links match the exact read capabilities required by their destination routes", async ({
   page,
 }) => {
