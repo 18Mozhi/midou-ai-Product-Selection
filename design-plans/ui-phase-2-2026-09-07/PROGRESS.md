@@ -4537,6 +4537,10 @@ AI 抽检写入在途期间，KeepAlive 停用不再清除当前结果的提交�
 
 补充 `OP-AI-RETRY` 真实 Vue 覆盖：已接受 AI 入队后，目录 GET 连续3次503耗尽安全读取重试时，保留并标记上次成功快照、展示 action_hint/request_id、禁用抽检；显式重读只发目录 GET，不重复入队 POST。完整 M04-07 E2E 桌面 Chromium 与390px手机各14/14通过。仅改测试与审阅记录，API、权限、数据库、Worker行为不变；本地响应不证明真实API/RBAC或生产依赖可用，P18其他动作与全73页收官仍开放。
 
+# 2026-09-30 · P15/P18/P21 共享源码审阅映射复核
+
+同步共享 `OpportunityWorkspace` 与 `OpportunityCostReviewQueue` 的页面级 action review source hash、依赖 hash及对应候选签名，补正 P18 机会候选合同/P21 复核可用性映射后重生成全局 `ACTION-COVERAGE-REVIEW.md` 与 `action-coverage-audit.json`。只读动作覆盖审计通过：73路由、1,737当前候选、73页已映射审阅、73页用户视觉自动批准；动作语义批准为0，未将视觉批准扩大成业务授权。未改运行时/API/权限/数据库；真实 API/RBAC/生产与全功能验收仍未完成。
+
 ## 2026-09-30 · P18 重新评分队列反馈保留读取失败
 
 `queueScore()` 现在不再用 POST 入队成功消息掩盖后续机会详情 GET 失败；页面同时报告任务已排队、工作区刷新失败及既有 action_hint/request_id。新增真实 Vue 延迟/故障隔离回归：score POST 202 后详情读取连续三次503，桌面 Chromium 与390px手机各1/1通过，并断言评分 POST 仅一次。未改变 API、权限或 Worker规则；本地夹具不证明真实评分执行、数据库/RBAC。生产readiness仍独立阻塞部署。

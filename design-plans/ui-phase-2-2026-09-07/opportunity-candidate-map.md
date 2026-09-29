@@ -4,6 +4,8 @@
 
 2026-09-28更新：人工决定原生 dialog 的标题ID从 `opportunity-decision-title` 独立为 `opportunity-decision-dialog-title` 后，其 `dialog-definition` 与 `@cancel` 当前签名分别更新为 `21d6397072095d87.1`、`e6463826c649de97.1`；对应人工决定 close 与容器合同继续保持原归属。
 
+2026-09-30更新：P18 成本复核取消清空原因草稿并返回对应“驳回/通过”触发器焦点；同步更新 RQ 当前候选签名及行位置。当前实现与双端挂载 Vue 回归见 [P18 action review](action-reviews/P18.json)；触发器替换、读屏与真机验证仍开放。
+
 2026-09-28键盘边界更新：三个原生 dialog 增加 `@keydown="containDialogTab"` 后，其当前 `dialog-definition` / `event-binding` 候选分别更新为 ERP `196c12d0f18ac5ee.1` / `56857391914c319d.1`、创建 `304e73ffea549836.1` / `67aec29022637161.1`、决定 `9b17e07a48f24205.1` / `674ff3412f0b8645.1`。它们仍归属既有容器、关闭/键盘边界，不新增业务动作。
 
 | 文件:行                             | 候选尾键           | 语义归属                                                             |
@@ -16,10 +18,10 @@
 | OpportunityAiPanel:40               | 3fc618c0a253e761.1 | OP-AI-RETRY                                                          |
 | OpportunityAiPanel:86               | 378bcfa62fdb2a15.1 | OP-AI-REVIEW.approved                                                |
 | OpportunityAiPanel:89               | ccfc7a9546285067.1 | OP-AI-REVIEW.rejected                                                |
-| OpportunityCostReviewQueue:107      | 9e1d20d4dd860bdc.1 | OP-COST-REVIEW-OPEN.rejected                                         |
-| OpportunityCostReviewQueue:108      | 8cc90a8748defa76.1 | OP-COST-REVIEW-OPEN.approved                                         |
+| OpportunityCostReviewQueue:127      | fa1b671cb5e1bc8c.1 | OP-COST-REVIEW-OPEN.rejected                                         |
+| OpportunityCostReviewQueue:134      | 224f4955ed7d6f48.1 | OP-COST-REVIEW-OPEN.approved                                         |
 | OpportunityCostReviewQueue:110      | 3fe574c620a554f9.1 | OP-COST-REVIEW-SUBMIT                                                |
-| OpportunityCostReviewQueue:119      | 7c728ed5ba0c7cd7.1 | OP-COST-REVIEW-CANCEL                                                |
+| OpportunityCostReviewQueue:151      | 66ceb3eced93eb5b.1 | OP-COST-REVIEW-CANCEL                                                |
 | OpportunityCostReviewQueue:120      | 8c06fd5c1d000db0.1 | OP-COST-REVIEW-SUBMIT                                                |
 | OpportunityDecisionPanel:62         | 97f09d6274473315.1 | OP-DECISION-ANCHOR                                                   |
 | OpportunityDecisionPanel:96         | 4c415989b6830734.1 | OP-GATES-DETAILS                                                     |

@@ -10,7 +10,7 @@
     "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47"
+    "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -4462,23 +4462,23 @@
         "reason": "两个入口由item.can_review控制可见，均无disabled/aria-busy；beginReview清原因并切换结论，不立即审批。",
         "handlerBoundary": "item.can_review控制两个入口；beginReview绑定id/version并清reason，不立即审批",
         "sourceCandidateIds": [
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#9e1d20d4dd860bdc.1",
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#8cc90a8748defa76.1"
+      "apps/web/src/components/OpportunityCostReviewQueue.vue#fa1b671cb5e1bc8c.1",
+      "apps/web/src/components/OpportunityCostReviewQueue.vue#224f4955ed7d6f48.1"
         ],
         "renderedControlIds": [
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#9e1d20d4dd860bdc.1",
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#8cc90a8748defa76.1"
+      "apps/web/src/components/OpportunityCostReviewQueue.vue#fa1b671cb5e1bc8c.1",
+      "apps/web/src/components/OpportunityCostReviewQueue.vue#224f4955ed7d6f48.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
         }
       },
       "label": "通过/驳回内联表单",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#9e1d20d4dd860bdc.1",
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#8cc90a8748defa76.1"
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#fa1b671cb5e1bc8c.1",
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#224f4955ed7d6f48.1"
       ],
       "sourceContractKeys": [
         "SC-COST-REVIEW rejected打开",
@@ -4754,22 +4754,22 @@
           "busy"
         ],
         "reason": "只按review.id显示并清空该ID，无disabled/aria-busy；取消不撤销在途请求。",
-        "handlerBoundary": "清除review id/version/reason，不发请求；刷新变更id可复核状态或版本也会清除旧草稿",
+    "handlerBoundary": "清除review id/version/reason，不发请求；取消后返回原驳回/通过触发器，触发器卸载则聚焦队列；刷新变更id可复核状态或版本也会清除旧草稿",
         "sourceCandidateIds": [
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#7c728ed5ba0c7cd7.1"
+      "apps/web/src/components/OpportunityCostReviewQueue.vue#66ceb3eced93eb5b.1"
         ],
         "renderedControlIds": [
-          "apps/web/src/components/OpportunityCostReviewQueue.vue#7c728ed5ba0c7cd7.1"
+      "apps/web/src/components/OpportunityCostReviewQueue.vue#66ceb3eced93eb5b.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
         }
       },
       "label": "取消内联复核",
       "kind": "local",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#7c728ed5ba0c7cd7.1"
+        "apps/web/src/components/OpportunityCostReviewQueue.vue#66ceb3eced93eb5b.1"
       ],
       "sourceContractKeys": [
         "SC-COST-REVIEW-CANCEL"
@@ -4936,7 +4936,7 @@
       "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
       "apps/web/src/components/SourcingCostConfirmationPanel.vue": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-      "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47"
+      "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
     },
     "inputs": [
       {

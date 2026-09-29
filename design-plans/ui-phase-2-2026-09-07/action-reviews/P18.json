@@ -3099,7 +3099,7 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
       "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-      "apps/web/src/components/OpportunityWorkspace.vue": "ed401ef523c07fcde10c3fd2ce02a631709765a904794d274fd2499f45592afb",
+      "apps/web/src/components/OpportunityWorkspace.vue": "ec4f9f4e211926e571a07bdba3871ab5c704cc05436e1bd049ce3d581fec4eaf",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
