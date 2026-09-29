@@ -10,7 +10,7 @@
   "sourceHashes": {
     "apps/web/src/components/PlatformLogCenter.vue": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
-    "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
+    "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2"
   },
   "inputs": {
     "apps/web/src/components/PlatformLogCenter.vue": [
@@ -282,7 +282,8 @@
       "kind": "write",
       "label": "提交审计原因并导出当前规范化日志条件CSV",
       "sourceCandidateIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#a9a93b43dd0dda5b.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#87015cbdd947096a.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#c921f4233ae348c6.1",
         "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1",
         "apps/web/src/components/PlatformLogCenter.vue#13b398e8ab4b93d3.1"
       ],
@@ -490,7 +491,7 @@
     "dependencyHashes": {
       "apps/web/src/components/PlatformLogCenter.vue": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
-      "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
+      "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

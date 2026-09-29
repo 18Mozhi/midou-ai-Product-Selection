@@ -16,7 +16,7 @@
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
     "apps/web/src/components/OpportunityWorkspace.vue": "ec4f9f4e211926e571a07bdba3871ab5c704cc05436e1bd049ce3d581fec4eaf",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
-    "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
+    "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -220,6 +220,11 @@
           "claim": "P18挂起POST验证AI抽检提交/刷新反馈、pending按钮禁用及第二次派发被handler守卫拦截；桌面/390px各1/1，不证明真实服务端commit/RBAC。"
         },
         {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "approved/rejected抽检原因各验证输入不足2字时显示关联的aria-invalid提示并禁用提交；补足后清除提示，两端零写入。桌面Chromium与390px各1/1；不证明真实读屏器或服务端写入。"
+        },
+        {
           "file": "scripts/verify-ui-phase2-review-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
@@ -268,6 +273,11 @@
           "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
           "evidenceType": "actual-vue-local-interception",
           "claim": "approved/rejected两变体覆盖503后恢复原原因和操作提示、没有自动重发、显式再次确认才发第二个准确body；桌面/390px共4/4，不证明服务端commit。"
+        },
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "approved/rejected抽检原因各验证输入不足2字时显示关联的aria-invalid提示并禁用提交；补足后清除提示，两端零写入。桌面Chromium与390px各1/1；不证明真实读屏器或服务端写入。"
         },
         {
           "file": "scripts/verify-ui-phase2-review-c.mjs",
@@ -2133,6 +2143,11 @@
           "claim": "推荐且五门通过后提交adopt，断言只发送一次{action,reason,expected_version}、关闭原因窗、成功刷新后保持评分/证据事实。桌面Chromium与390px各1/1；本地受控响应不证明真实服务端写入、RBAC或数据库审计。"
         },
         {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "采纳原因窗空提交由native required拦截且零POST；aria-invalid/aria-describedby关联可见错误并聚焦原因，输入后错误清除。桌面Chromium与390px各1/1；不证明真实读屏器、RBAC/API或审计。"
+        },
+        {
           "file": "tests/e2e/ui-phase2-opportunity-contracts.spec.ts",
           "evidenceType": "actual-vue-local-interception",
           "claim": "空原因提交由native required拦截且零POST；aria-invalid/aria-describedby关联可见提示，输入后错误清除。桌面Chromium与390px各1/1；不证明屏幕阅读器、真实RBAC/API或数据库审计。"
@@ -2728,12 +2743,13 @@
       "handler": "共享AuditedReasonDialog显示原文和action_hint；取消退出；再次确认才由reviewAi发起新POST",
       "variants": ["AI.approved", "AI.rejected", "failure-restored", "cancel"],
       "scenes": [],
-      "remaining": "当前仅本地受控响应证明前端呈现与显式重试；不证明未知服务端commit、真实幂等/RBAC或其他调用页生命周期。",
+      "remaining": "当前仅本地受控响应证明前端呈现与显式重试；P18 AI变体已覆盖本地最短长度错误关联，其他共享调用页生命周期仍待；不证明未知服务端commit、真实幂等/RBAC。",
       "sourceCandidateIds": [
         "apps/web/src/components/AuditedReasonDialog.vue#0a9c82c5c5fb1fd7.1",
         "apps/web/src/components/AuditedReasonDialog.vue#0b86489e495d6b17.1",
-        "apps/web/src/components/AuditedReasonDialog.vue#a9a93b43dd0dda5b.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#87015cbdd947096a.1",
         "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1",
+        "apps/web/src/components/AuditedReasonDialog.vue#c921f4233ae348c6.1",
         "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1",
         "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
       ],
@@ -2752,6 +2768,11 @@
           "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
           "evidenceType": "actual-vue-local-interception",
           "claim": "通过/驳回失败均恢复原原因与操作提示；没有自动重发，用户确认才发第二次请求；桌面/390px共4/4。"
+        },
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "AI通过/驳回原因各验证短于2字时aria-invalid与可见说明关联、提交禁用，补足后错误清除且无POST；桌面Chromium与390px各1/1。"
         }
       ]
     },
@@ -3183,7 +3204,7 @@
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
       "apps/web/src/components/OpportunityWorkspace.vue": "ec4f9f4e211926e571a07bdba3871ab5c704cc05436e1bd049ce3d581fec4eaf",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
-      "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
+      "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
       "apps/web/src/components/opportunity-workspace-forms.ts": "d6b4d5fb34e2e28458551cf0042657e1ab5fd7a543c33a35f92d3bc2b9c94088",

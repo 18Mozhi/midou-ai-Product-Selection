@@ -4056,7 +4056,7 @@
   ],
   "sharedReasonReview": {
     "sourceHashes": {
-      "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
+      "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2",
       "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
       "apps/web/src/use-modal-dialog.ts": "78c120918683745f8070edfa2bb5648ac2dba67692ac8e19d211b6c67063eb8d"
     },
@@ -4078,11 +4078,19 @@
         }
       },
       {
-        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#a9a93b43dd0dda5b.1",
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#87015cbdd947096a.1",
         "tag": "form",
         "kind": "form-event",
         "events": {
           "@submit.prevent": "submit"
+        }
+      },
+      {
+        "candidateId": "apps/web/src/components/AuditedReasonDialog.vue#c921f4233ae348c6.1",
+        "tag": "textarea",
+        "kind": "event-binding",
+        "events": {
+          "@input": "reasonTouched = true"
         }
       },
       {

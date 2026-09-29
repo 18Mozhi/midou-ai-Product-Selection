@@ -746,6 +746,44 @@ test("P18 adoption entry requires each quality gate even when the aggregate clai
   await expect(page.getByRole("dialog", { name: "记录采纳决定" })).toBeVisible();
 });
 
+test("P18 adoption dialog exposes the required-reason error without posting", async ({ page }) => {
+  const detailOverrides: Record<string, unknown> = {
+    ...recommendedBase,
+    id: opportunityId,
+    version: 7,
+    evidence,
+  };
+  await ready(page, evidence, detailOverrides);
+  const decisionRequests: unknown[] = [];
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      request.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`)
+    )
+      decisionRequests.push(request.postDataJSON());
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await page.getByRole("button", { name: "采纳建议" }).click();
+  const dialog = page.getByRole("dialog", { name: "记录采纳决定" });
+  const reason = dialog.getByLabel("原因（必填）");
+  await dialog.getByRole("button", { name: "确认记录" }).click();
+
+  await expect(reason).toHaveAttribute("aria-invalid", "true");
+  await expect(reason).toHaveAttribute(
+    "aria-describedby",
+    "opportunity-decision-reason-help opportunity-decision-reason-error",
+  );
+  await expect(dialog.getByRole("alert")).toHaveText("请填写原因后再记录决定。");
+  await expect(reason).toBeFocused();
+  expect(decisionRequests).toEqual([]);
+
+  await reason.fill("已核对五项质量门与当前证据");
+  await expect(reason).not.toHaveAttribute("aria-invalid", "true");
+  await expect(dialog.getByRole("alert")).toHaveCount(0);
+  expect(decisionRequests).toEqual([]);
+});
+
 test("P18 eligible recommendation completes the audited adoption flow without changing score facts", async ({
   page,
 }) => {

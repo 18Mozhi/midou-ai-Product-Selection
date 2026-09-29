@@ -4,7 +4,11 @@
 
 P18 观察/驳回原因窗在原生必填校验阻止空提交时，现在显示就地错误说明，并通过 `aria-describedby` 关联原因帮助与错误；字段同步暴露 `aria-invalid` 和错误边框。输入有效文本后错误清除，重新打开原因窗会重置本次校验状态。既有 required/maxlength、请求体、权限与决定行为不变。
 
-`tests/e2e/ui-phase2-opportunity-contracts.spec.ts` 中两个真实 Vue 场景在桌面 Chromium 与390px各通过，断言空提交零 POST、错误文本/ARIA关联、输入后恢复及原失败显式重试。受控响应不代表屏幕阅读器、真实 RBAC、数据库或 M07-03 验收；采纳/AI其他原因变体与全站无障碍门仍开放。
+`tests/e2e/ui-phase2-opportunity-contracts.spec.ts` 中两个真实 Vue 场景在桌面 Chromium 与390px各通过，断言空提交零 POST、错误文本/ARIA关联、输入后恢复及原失败显式重试。采纳原因空提交已在 `m04-02-opportunities.spec.ts` 双端验证；共享 AI 复核原因在输入不足2字时显示字段关联的就地错误、保持提交禁用，补足后错误清除，`m04-07-ai-analysis.spec.ts` approved/rejected 两变体双端通过。受控响应不代表真实读屏器、RBAC、数据库或 M07-03；其他共享调用方和全站无障碍门仍开放。
+
+## 2026-09-30 · AI抽检原因最短长度错误关联
+
+共享 `AuditedReasonDialog` 保持 required/minlength 与确认按钮原有禁用行为；用户输入尚未达到最短字数时，原因框现显示就地说明并以 `aria-invalid`、`aria-describedby` 关联该说明，达到有效长度后自动清除。本地 Vue 双端回归分别覆盖 AI 通过/驳回原因，两边均没有发出无效写入。未改抽检 payload、权限、重试和服务端规则；其他共享调用页的同组件错误态与真实屏幕阅读器仍待验收。
 
 ## 2026-09-30 · 驳回成本复核刷新后关闭旧原因表单
 

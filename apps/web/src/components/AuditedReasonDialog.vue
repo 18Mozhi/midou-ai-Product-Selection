@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, ref, watch } from "vue";
+import { computed, nextTick, ref, watch } from "vue";
 import { useModalDialog } from "../use-modal-dialog";
 import type { WorkspaceRestoreReasonContext } from "../use-audited-reason";
 import "../design/workspace-restore-tokens.css";
@@ -16,7 +16,19 @@ const props = defineProps<{
 }>();
 const emit = defineEmits<{ submit: [value: string]; cancel: [] }>();
 const reason = ref("");
+const reasonTouched = ref(false);
 const inputElement = ref<HTMLTextAreaElement | null>(null);
+const minimumCharacters = computed(() => props.minimumLength ?? 2);
+const showReasonValidationError = computed(
+  () => reasonTouched.value && reason.value.trim().length < minimumCharacters.value,
+);
+const reasonDescriptionIds = computed(() =>
+  [
+    "audited-reason-help",
+    ...(props.error ? ["audited-reason-error"] : []),
+    ...(showReasonValidationError.value ? ["audited-reason-validation-error"] : []),
+  ].join(" "),
+);
 const { dialogElement, handleCancel } = useModalDialog(
   () => props.open,
   () => emit("cancel"),
@@ -27,6 +39,7 @@ watch(
   async (open) => {
     if (!open) return;
     reason.value = props.initialValue ?? "";
+    reasonTouched.value = false;
     await nextTick();
     inputElement.value?.focus();
   },
@@ -100,11 +113,19 @@ function handleTab(event: KeyboardEvent) {
           :minlength="minimumLength ?? 2"
           :maxlength="maximumLength"
           rows="4"
-          :aria-describedby="
-            error ? 'audited-reason-help audited-reason-error' : 'audited-reason-help'
-          "
+          :aria-invalid="showReasonValidationError ? 'true' : undefined"
+          :aria-describedby="reasonDescriptionIds"
+          @input="reasonTouched = true"
         ></textarea>
       </label>
+      <p
+        v-if="showReasonValidationError"
+        id="audited-reason-validation-error"
+        class="audited-reason-error"
+        role="alert"
+      >
+        请至少填写 {{ minimumCharacters }} 个字的原因。
+      </p>
       <small id="audited-reason-help"
         >提交后会与操作者、时间和目标对象一起保留。<span v-if="maximumLength"
           >已输入 {{ reason.length }} / {{ maximumLength }} 字。</span

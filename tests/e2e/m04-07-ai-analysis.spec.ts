@@ -201,7 +201,9 @@ test("M04-07.A07/A08/A15 shows AI boundary evidence references and human samplin
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
-test("P18 AI history selection and provenance stay local to the selected record", async ({ page }) => {
+test("P18 AI history selection and provenance stay local to the selected record", async ({
+  page,
+}) => {
   const firstRecordId = "00000000-0000-4000-8000-000000000705";
   const secondRecordId = "00000000-0000-4000-8000-000000000709";
   const firstResultId = resultId;
@@ -308,6 +310,44 @@ for (const outcome of ["approved", "rejected"] as const) {
     await page.keyboard.press("Escape");
     await expect(dialog).toBeHidden();
     await expect(trigger).toBeFocused();
+    expect(writes).toEqual([]);
+  });
+
+  test(`UI2-SM01 AI ${outcome} reason exposes the minimum-length error without a review`, async ({
+    page,
+  }) => {
+    const writes: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+        writes.push(request.method());
+    });
+    await setup(page);
+    await page.goto(`/opportunities/${opportunityId}`);
+    await openTab(page, "AI 辅助");
+    await page
+      .getByRole("button", {
+        name: outcome === "approved" ? "抽检通过" : "抽检驳回",
+        exact: true,
+      })
+      .click();
+    const dialog = page.getByRole("dialog", {
+      name: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
+    });
+    const reason = dialog.getByRole("textbox", { name: /原因/ });
+    await reason.fill("核");
+    await expect(reason).toHaveAttribute("aria-invalid", "true");
+    await expect(reason).toHaveAttribute(
+      "aria-describedby",
+      "audited-reason-help audited-reason-validation-error",
+    );
+    await expect(dialog.getByRole("alert")).toHaveText("请至少填写 2 个字的原因。");
+    await expect(dialog.getByRole("button", { name: "确认提交" })).toBeDisabled();
+    expect(writes).toEqual([]);
+
+    await reason.fill("核对");
+    await expect(reason).not.toHaveAttribute("aria-invalid", "true");
+    await expect(dialog.getByRole("alert")).toHaveCount(0);
+    await expect(dialog.getByRole("button", { name: "确认提交" })).toBeEnabled();
     expect(writes).toEqual([]);
   });
 
