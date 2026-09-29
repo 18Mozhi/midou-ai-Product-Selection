@@ -1720,10 +1720,13 @@ test("organization tokens require explicit scopes and preserve lifecycle filters
   await page.getByRole("button", { name: "重置筛选" }).click();
 
   await page.getByRole("button", { name: "轮换密钥" }).first().click();
-  await expect(page.getByRole("dialog")).toContainText("旧令牌立即失效");
-  await page.getByRole("button", { name: "取消" }).click();
+  const rotateDialog = page.getByRole("dialog", { name: /轮换.*密钥/ });
+  await expect(rotateDialog).toContainText("旧令牌立即失效");
+  await rotateDialog.getByRole("button", { name: "取消" }).click();
   await page.getByRole("button", { name: "撤销访问" }).first().click();
-  await expect(page.getByRole("dialog")).toContainText("立即失效且不能恢复");
+  await expect(page.getByRole("dialog", { name: /撤销.*访问/ })).toContainText(
+    "立即失效且不能恢复",
+  );
 });
 
 test("organization tokens stay readable without mobile overflow", async ({ page }) => {
@@ -1927,7 +1930,7 @@ test("UI2-OG04 token rotation revocation and refused clipboard preserve exact co
   await page.getByRole("button", { name: "我已安全保存" }).click();
   await expect(page.locator(".org-token-secret")).toHaveCount(0);
   await page.getByRole("button", { name: "撤销访问" }).click();
-  dialog = page.getByRole("dialog");
+  dialog = page.getByRole("dialog", { name: /撤销.*访问/ });
   await expect(dialog).toContainText("不能恢复");
   await dialog.getByRole("textbox").fill("结束隔离验收用途");
   await dialog.getByRole("button", { name: "确认提交" }).click();
