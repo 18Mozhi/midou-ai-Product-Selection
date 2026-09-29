@@ -590,6 +590,7 @@ async function sendOperatingFeedback(
   opportunityId: string,
   pending: { idempotencyKey: string; body: Record<string, unknown> },
 ) {
+  if (busy.value) return;
   const generation = writeScopeGeneration;
   const ownsScope = () => generation === writeScopeGeneration;
   activeWriteCount += 1;
@@ -641,6 +642,7 @@ async function sendOperatingFeedback(
   }
 }
 async function write(path: string, body: unknown) {
+  if (busy.value) return null;
   const generation = writeScopeGeneration;
   const ownsScope = () => generation === writeScopeGeneration;
   if (ownsScope()) {

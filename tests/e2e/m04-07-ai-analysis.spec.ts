@@ -149,6 +149,43 @@ test("a delayed AI enqueue receipt does not override a newer tab choice", async 
   await expect(overviewTab).toHaveAttribute("aria-current", "page");
 });
 
+test("P18 shared write lock rejects immediate repeated AI enqueue events", async ({ page }) => {
+  let enqueueRequests = 0;
+  let releaseEnqueue!: () => void;
+  let markEnqueueStarted!: () => void;
+  const enqueueGate = new Promise<void>((resolve) => (releaseEnqueue = resolve));
+  const enqueueStarted = new Promise<void>((resolve) => (markEnqueueStarted = resolve));
+  await setup(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    enqueueRequests += 1;
+    markEnqueueStarted();
+    await enqueueGate;
+    return route.fulfill({ status: 202, json: envelope({ id: "queued-ai-analysis" }) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openTab(page, "AI 辅助");
+  const enqueue = page.getByRole("button", { name: "生成新分析" });
+  await enqueue.evaluate((button) => {
+    (button as HTMLButtonElement).click();
+    (button as HTMLButtonElement).click();
+  });
+  await enqueueStarted;
+  await page.waitForTimeout(100);
+
+  expect(enqueueRequests).toBe(1);
+  await expect(enqueue).toBeDisabled();
+  const response = page.waitForResponse(
+    (candidate) =>
+      candidate.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
+      candidate.request().method() === "POST",
+  );
+  releaseEnqueue();
+  await response;
+  await page.waitForLoadState("networkidle");
+});
+
 test("M04-07.A07/A08/A15 shows AI boundary evidence references and human sampling on desktop and 390", async ({
   page,
 }) => {

@@ -1452,6 +1452,58 @@ test("P18 decision submission rejects a second request while the first POST is p
   await expect(dialog).toBeHidden();
 });
 
+test("P18 operating feedback rejects repeated form submissions while the first POST is pending", async ({
+  page,
+}) => {
+  let feedbackRequests = 0;
+  let releaseFeedback!: () => void;
+  let markFeedbackStarted!: () => void;
+  const feedbackGate = new Promise<void>((resolve) => (releaseFeedback = resolve));
+  const feedbackStarted = new Promise<void>((resolve) => (markFeedbackStarted = resolve));
+  await ready(page);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/operating-feedback`, async (route) => {
+    feedbackRequests += 1;
+    markFeedbackStarted();
+    await feedbackGate;
+    return route.fulfill({
+      status: 201,
+      json: envelope({ facts: [], calibration: null }),
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openDetailTab(page, "经营复盘");
+  await page.getByRole("button", { name: "录入经营复盘" }).click();
+  await page.getByLabel("周期开始").fill("2026-08-08");
+  await page.getByLabel("周期结束").fill("2026-08-14");
+  await page.getByRole("spinbutton", { name: "实际销量 按本周期实际销售件数填写。" }).fill("5");
+  await page.getByLabel("实际销售额").fill("95");
+  await page.getByLabel("实际广告花费").fill("12");
+  await page.getByRole("spinbutton", { name: "实际退货量 不能高于实际销量。" }).fill("1");
+  await page.getByLabel("实际采购交期（天）").fill("14");
+  await page.getByLabel("实际利润").fill("-3");
+  await page.getByRole("textbox", { name: "币种 提交时按接口合同转为大写。" }).fill("USD");
+  await page.getByLabel("事实来源").fill("ERP-REENTRY-01");
+  const form = page.locator(".opportunity-feedback-form");
+  await form.evaluate((element) => {
+    (element as HTMLFormElement).requestSubmit();
+    (element as HTMLFormElement).requestSubmit();
+  });
+  await feedbackStarted;
+  await page.waitForTimeout(100);
+
+  expect(feedbackRequests).toBe(1);
+  await expect(page.getByRole("button", { name: "正在写入…" })).toBeDisabled();
+  const response = page.waitForResponse(
+    (candidate) =>
+      candidate.url().includes(`/api/v1/opportunities/${opportunityId}/operating-feedback`) &&
+      candidate.request().method() === "POST",
+  );
+  releaseFeedback();
+  await response;
+  await expect(page.locator(".opportunity-message")).toContainText("经营复盘事实已写入");
+});
+
 test("mobile opportunity filters preserve selected adoption blocker inside the drawer", async ({
   page,
 }) => {
