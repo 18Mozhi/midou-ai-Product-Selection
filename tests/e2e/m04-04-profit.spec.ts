@@ -1142,6 +1142,8 @@ test("P18 cost review rejects a duplicate requestSubmit while approval is pendin
   await expect(
     page.getByText("成本复核已通过并生效；如有活动费用规则，利润重算已排队。"),
   ).toBeVisible();
+  await expect(form).toHaveCount(0);
+  await expect(queue.locator("article")).toHaveAttribute("data-status", "approved");
   expect(reviewBodies).toHaveLength(1);
 });
 

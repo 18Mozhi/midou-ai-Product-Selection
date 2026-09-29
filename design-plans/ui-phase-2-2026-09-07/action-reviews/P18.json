@@ -306,7 +306,7 @@
           "scene": "rejected-failed"
         }
       ],
-      "remaining": "未因新reviews或can_review变化清review.id，旧表单可能残留。",
+      "remaining": "源码同步watch会在记录不可复核或版本改变时清理共享inline表单；本批只以通过复核后的实际Vue重读验证关闭，驳回原因模式与外部资格变化尚无独立浏览器用例。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#9e1d20d4dd860bdc.1"
       ],
@@ -357,7 +357,7 @@
           "scene": "continuity-review-reason"
         }
       ],
-      "remaining": "未验动态资格变化/忙碌重复打开；不可把已超时直接等同源按钮禁用。",
+      "remaining": "已验证通过复核后读取到新状态与新版本时关闭旧表单；拒绝变体和真实服务端资格仍需独立验收。忙碌时打开按钮仍按当前源码可用，不把已超时等同按钮禁用。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#8cc90a8748defa76.1"
       ],
@@ -370,6 +370,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-04-profit.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "挂起的 approved 复核 POST 返回后重读新复核状态/版本，旧 inline reason form 关闭且唯一 POST 保持；桌面/390px由完整 M04-04 套件覆盖。本地响应不证明真实资格/RBAC/SQL。"
+        },
         {
           "file": "scripts/verify-ui-phase2-profit-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -626,7 +631,7 @@
           "scene": "observe-dialog"
         }
       ],
-      "remaining": "同tick/写入中重开可改action和reason；真实Vue尚未修复。",
+      "remaining": "实际 Vue E2E 已验证提交 observe 后可关闭旧窗并打开 reject 新窗，旧 POST 迟到回执不会关闭新窗；同 tick 人为重入与真实服务端结果仍未验。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#c5f40664f410ee40.1",
         "apps/web/src/components/OpportunityDecisionPanel.vue#690b264d43e01055.1"
@@ -640,6 +645,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "a delayed decision receipt cannot close a newer decision dialog：observe POST 挂起后 Escape 关闭原窗并打开 reject 窗，旧回执抵达后新窗与空原因仍保持；本地响应不证明真实服务端/RBAC。"
+        },
         {
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -670,7 +680,7 @@
           "scene": "reject-dialog"
         }
       ],
-      "remaining": "忙碌关闭/重开和迟到结果归属仍待真实Vue验证。",
+      "remaining": "已验证 observe 提交期间打开的 reject 新窗不受旧回执关闭；键盘忙碌关闭策略与真实服务端结果仍需独立验收。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#6cfe6545a209df42.1",
         "apps/web/src/components/OpportunityDecisionPanel.vue#a2dfed9751073c3d.1"
@@ -684,6 +694,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "a delayed decision receipt cannot close a newer decision dialog：旧 observe POST 挂起期间可打开 reject 窗，旧回执抵达后新窗与空原因仍保持；本地响应不证明真实服务端/RBAC。"
+        },
         {
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
