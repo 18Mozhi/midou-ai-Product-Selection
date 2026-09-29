@@ -2042,7 +2042,7 @@
           "scene": "reject-dialog"
         }
       ],
-      "remaining": "弹窗名称已绑定独立标题；完整键盘/读屏、忙碌期间关闭与服务端写入归属仍需独立验证。",
+      "remaining": "桌面Chromium/390px真实Vue已覆盖采纳、观察、驳回分别在提交中经Escape/标题/底栏关闭，再打开新决定窗；旧迟到回执不关闭新窗，且标题ID唯一。完整读屏、真实服务端写入归属与RBAC仍待验。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674ff3412f0b8645.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
@@ -2059,6 +2059,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "adopt/observe/reject分别与Escape/header/footer组合；挂起一次决定POST后关闭并打开另一窗，旧成功回执不关闭新窗；验证唯一dialog标题ID和单次POST。桌面Chromium/390px共18项，不证明真实服务端commit/RBAC或完整读屏。"
+        },
         {
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -3705,7 +3710,7 @@
                 "scene": "adopt-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           },
           {
             "name": "observe",
@@ -3716,7 +3721,7 @@
                 "scene": "observe-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           },
           {
             "name": "reject",
@@ -3727,7 +3732,7 @@
                 "scene": "reject-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           },
           {
             "name": "P15-create",
@@ -4070,7 +4075,7 @@
                 "scene": "adopt-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           },
           {
             "name": "observe",
@@ -4081,7 +4086,7 @@
                 "scene": "observe-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           },
           {
             "name": "reject",
@@ -4092,7 +4097,7 @@
                 "scene": "reject-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           }
         ]
       },
@@ -4113,7 +4118,7 @@
                 "scene": "adopt-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           },
           {
             "name": "observe",
@@ -4124,7 +4129,7 @@
                 "scene": "observe-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           },
           {
             "name": "reject",
@@ -4135,7 +4140,7 @@
                 "scene": "reject-empty"
               }
             ],
-            "remaining": "三种原因required≤1000；源重复标题ID、忙碌关闭/重复提交与跨ID归属待验。采纳未串入701组合。"
+            "remaining": "required≤1000原因窗已由实际Vue覆盖：三种决定分别在提交中经Escape/标题/底栏关闭，再开另一决定窗后不受旧回执影响，且标题ID唯一。重复提交及跨机会回执有独立observe案例；真实服务端资格/RBAC/SQL与完整读屏仍待验。"
           }
         ]
       },

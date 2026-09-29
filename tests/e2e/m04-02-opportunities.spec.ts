@@ -2101,44 +2101,76 @@ test("late competitor data stays scoped to the opportunity that requested it", a
   await expect(page.getByText("旧机会关联竞品", { exact: true })).toHaveCount(0);
 });
 
-test("a delayed decision receipt cannot close a newer decision dialog", async ({ page }) => {
-  await ready(page);
-  let releaseDecision!: () => void;
-  let markDecisionStarted!: () => void;
-  const decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
-  const decisionStarted = new Promise<void>((resolve) => (markDecisionStarted = resolve));
-  await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, async (route) => {
-    markDecisionStarted();
-    await decisionGate;
-    await route.fulfill({
-      status: 201,
-      json: envelope({ opportunity_id: opportunityId, decision_status: "observing", version: 2 }),
+for (const submittedAction of [
+  { action: "adopt", trigger: "采纳建议", dialog: "记录采纳决定" },
+  { action: "observe", trigger: "继续观察", dialog: "记录继续观察决定" },
+  { action: "reject", trigger: "驳回", dialog: "记录驳回决定" },
+] as const) {
+  for (const closeMethod of ["escape", "header", "footer"] as const) {
+    test(`a delayed ${submittedAction.action} receipt after ${closeMethod} cannot close a newer decision dialog`, async ({
+      page,
+    }) => {
+      await ready(page, evidence, submittedAction.action === "adopt" ? recommendedBase : {});
+      let releaseDecision!: () => void;
+      let markDecisionStarted!: () => void;
+      const decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
+      const decisionStarted = new Promise<void>((resolve) => (markDecisionStarted = resolve));
+      let decisionRequests = 0;
+      await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, async (route) => {
+        decisionRequests += 1;
+        markDecisionStarted();
+        await decisionGate;
+        await route.fulfill({
+          status: 201,
+          json: envelope({
+            opportunity_id: opportunityId,
+            decision_status: "observing",
+            version: 2,
+          }),
+        });
+      });
+
+      await page.goto(`/opportunities/${opportunityId}`);
+      await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+      if (submittedAction.action !== "adopt")
+        await page.getByText("提前人工处理", { exact: true }).click();
+      await page.getByRole("button", { name: submittedAction.trigger, exact: true }).last().click();
+      const dialog = page.getByRole("dialog", { name: submittedAction.dialog });
+      await expect(dialog).toHaveAccessibleName(submittedAction.dialog);
+      await expect(page.locator('[id="opportunity-decision-dialog-title"]')).toHaveCount(1);
+      await dialog.getByLabel("原因（必填）").fill("离页前已提交的决定");
+      await dialog.getByRole("button", { name: "确认记录" }).click();
+      await decisionStarted;
+
+      if (closeMethod === "escape") await page.keyboard.press("Escape");
+      else
+        await dialog
+          .getByRole("button", { name: closeMethod === "header" ? "关闭" : "取消", exact: true })
+          .click();
+      await expect(dialog).toBeHidden();
+      const secondAction = page.getByRole("button", { name: "驳回", exact: true }).last();
+      if (submittedAction.action === "reject")
+        await page.getByRole("button", { name: "继续观察", exact: true }).last().click();
+      else await secondAction.click();
+      const reopenedAction = submittedAction.action === "reject" ? "observe" : "reject";
+      const rejectedDialog = page.getByRole("dialog", {
+        name: reopenedAction === "reject" ? "记录驳回决定" : "记录继续观察决定",
+      });
+      await expect(rejectedDialog).toBeVisible();
+      const decisionResponse = page.waitForResponse(
+        (response) =>
+          response.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`) &&
+          response.status() === 201,
+      );
+      releaseDecision();
+      await decisionResponse;
+      await page.waitForLoadState("networkidle");
+      await expect(rejectedDialog).toBeVisible();
+      await expect(rejectedDialog.getByLabel("原因（必填）")).toHaveValue("");
+      expect(decisionRequests).toBe(1);
     });
-  });
-
-  await page.goto(`/opportunities/${opportunityId}`);
-  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
-  await page.getByText("提前人工处理", { exact: true }).click();
-  await page.getByRole("button", { name: "继续观察", exact: true }).click();
-  const dialog = page.getByRole("dialog", { name: "记录继续观察决定" });
-  await dialog.getByLabel("原因（必填）").fill("离页前已提交的决定");
-  await dialog.getByRole("button", { name: "确认记录" }).click();
-  await decisionStarted;
-
-  await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
-  await page.getByRole("button", { name: "驳回", exact: true }).last().click();
-  const rejectedDialog = page.getByRole("dialog", { name: "记录驳回决定" });
-  await expect(rejectedDialog).toBeVisible();
-  const decisionResponse = page.waitForResponse((response) =>
-    response.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`),
-  );
-  releaseDecision();
-  await decisionResponse;
-  await page.waitForLoadState("networkidle");
-  await expect(rejectedDialog).toBeVisible();
-  await expect(rejectedDialog.getByLabel("原因（必填）")).toHaveValue("");
-});
+  }
+}
 
 test("P18 decision receipt for an old opportunity cannot refresh the current opportunity", async ({
   page,
