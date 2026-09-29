@@ -105,7 +105,8 @@ const definitions = [
       {
         file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
         evidenceType: "actual-vue-local-interception",
-        claim: "日志导出原因窗双端验证短原因就地错误与确认禁用；有效原因触发一次导出并传入既有查询、来源和原因字段。",
+        claim:
+          "日志导出原因窗双端验证短原因就地错误与确认禁用；有效原因触发一次导出并传入既有查询、来源和原因字段。",
       },
     ],
   ],
@@ -121,7 +122,8 @@ const definitions = [
       {
         file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
         evidenceType: "actual-vue-local-interception",
-        claim: "日志导出原因输入x显示aria-invalid/aria-describedby与短原因提示；填写有效原因后错误清除。",
+        claim:
+          "日志导出原因输入x显示aria-invalid/aria-describedby与短原因提示；填写有效原因后错误清除。",
       },
     ],
   ],
@@ -231,22 +233,22 @@ export function buildP62ActionReview() {
   );
   const actions = definitions.map(
     ([actionId, kind, label, , condition, handler, remaining, additionalTestReferences = []]) => ({
-    actionId,
-    kind,
-    label,
-    sourceCandidateIds: groupedIds.get(actionId).sort(),
-    sourceContractKeys: [...new Set(groupedClaims.get(actionId))],
-    contractAliasReason: `沿用P62日志中心合同对${actionId}精确归属，不扩大筛选、导出字段或日志范围。`,
-    condition,
-    handler,
-    variants: ["current-route-source-contract"],
-    scenes: [],
-    visualStates,
-    testReferences: [
-      { file: testFile, evidenceType: "offline-proposal-check-not-Vue" },
-      ...additionalTestReferences,
-    ],
-    remaining,
+      actionId,
+      kind,
+      label,
+      sourceCandidateIds: groupedIds.get(actionId).sort(),
+      sourceContractKeys: [...new Set(groupedClaims.get(actionId))],
+      contractAliasReason: `沿用P62日志中心合同对${actionId}精确归属，不扩大筛选、导出字段或日志范围。`,
+      condition,
+      handler,
+      variants: ["current-route-source-contract"],
+      scenes: [],
+      visualStates,
+      testReferences: [
+        { file: testFile, evidenceType: "offline-proposal-check-not-Vue" },
+        ...additionalTestReferences,
+      ],
+      remaining,
     }),
   );
   const inputs = {};
