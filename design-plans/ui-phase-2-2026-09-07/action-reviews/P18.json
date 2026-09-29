@@ -2851,7 +2851,7 @@
       "handler": "只切换当前展示的 AI 分析记录，不写入或改变抽检结果",
       "variants": ["切换记录"],
       "scenes": [{ "package": "review-direction-c", "scene": "ai-multiple" }],
-      "remaining": "离线场景只作布局参考，不证明实际Vue渲染、权限或数据读取。",
+    "remaining": "双端真实Vue验证两条历史记录切换只更新当前内容与选中态，不产生额外GET/POST；未覆盖全部记录状态、长内容、读屏或真实权限/数据读取。",
       "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#cc97e6c5522bd2f4.1"],
       "visualStates": {
         "default": "not-mapped",
@@ -2861,7 +2861,13 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "testReferences": []
+    "testReferences": [
+      {
+        "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+        "evidenceType": "actual-vue-local-interception",
+        "claim": "两条分析记录间切换更新对应摘要/选中态，且不会重读或写入；桌面Chromium与390px各1/1。本地响应不证明真实权限/数据库。"
+      }
+    ]
     },
     {
       "actionId": "OP-AI-PROVENANCE",
@@ -2872,7 +2878,7 @@
       "handler": "展开或折叠既有只读输入快照，不发请求或写入",
       "variants": ["来源快照折叠/展开"],
       "scenes": [{ "package": "review-direction-c", "scene": "ai-details" }],
-      "remaining": "场景不代表所有快照长度、读屏器或真实来源引用验收。",
+    "remaining": "双端真实Vue验证选中记录的输入哈希、请求/结果ID按记录切换且展开不发请求；未覆盖所有快照长度、完整读屏或真实来源引用。",
       "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#0b2e20b6822ebc67.1"],
       "visualStates": {
         "default": "not-mapped",
@@ -2882,7 +2888,13 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "testReferences": []
+    "testReferences": [
+      {
+        "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+        "evidenceType": "actual-vue-local-interception",
+        "claim": "展开所选记录的只读出处时展示该记录请求ID、结果ID和输入哈希，不产生额外GET/POST；桌面Chromium与390px各1/1。本地响应不证明真实权限/数据库。"
+      }
+    ]
     },
     {
       "actionId": "OP-INSIGHT-EVIDENCE-NAV",

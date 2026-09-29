@@ -201,6 +201,89 @@ test("M04-07.A07/A08/A15 shows AI boundary evidence references and human samplin
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
+test("P18 AI history selection and provenance stay local to the selected record", async ({ page }) => {
+  const firstRecordId = "00000000-0000-4000-8000-000000000705";
+  const secondRecordId = "00000000-0000-4000-8000-000000000709";
+  const firstResultId = resultId;
+  const secondResultId = "00000000-0000-4000-8000-000000000710";
+  const records = [
+    {
+      id: firstRecordId,
+      status: "succeeded",
+      attempt_count: 1,
+      last_error_code: null,
+      input_sha256: "a".repeat(64),
+      prompt_contract_version: "opportunity-assist-v1",
+      created_at: "2026-08-08T12:01:00.000Z",
+      result: {
+        id: firstResultId,
+        content: {
+          summary: "第一条分析记录的摘要。",
+          classifications: [],
+          missing_fields: [],
+        },
+        ai_generated: true,
+        model_name: "Qwen3.5-9B-AWQ-4bit",
+        provider_request_id: "provider-first",
+        review_status: "pending",
+        review: null,
+      },
+    },
+    {
+      id: secondRecordId,
+      status: "succeeded",
+      attempt_count: 2,
+      last_error_code: null,
+      input_sha256: "b".repeat(64),
+      prompt_contract_version: "opportunity-assist-v1",
+      created_at: "2026-08-08T12:02:00.000Z",
+      result: {
+        id: secondResultId,
+        content: {
+          summary: "第二条分析记录的摘要。",
+          classifications: [],
+          missing_fields: [],
+        },
+        ai_generated: true,
+        model_name: "Qwen3.5-9B-AWQ-4bit",
+        provider_request_id: "provider-second",
+        review_status: "pending",
+        review: null,
+      },
+    },
+  ];
+  let directoryReads = 0;
+  const writes: string[] = [];
+  await setup(page);
+  page.on("request", (request) => {
+    if (request.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`)) {
+      if (request.method() === "GET") directoryReads += 1;
+      else writes.push(request.method());
+    }
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, (route) =>
+    route.fulfill({ json: envelope(records) }),
+  );
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openTab(page, "AI 辅助");
+  const directory = page.getByRole("navigation", { name: "AI 分析记录" });
+  const secondRecord = directory.getByRole("button").filter({ hasText: secondRecordId });
+  await secondRecord.click();
+
+  const output = page.locator(".opportunity-ai-result");
+  await expect(output).toContainText("第二条分析记录的摘要。");
+  await expect(output).not.toContainText("第一条分析记录的摘要。");
+  await expect(secondRecord).toHaveAttribute("aria-current", "true");
+  const provenance = output.locator(".opportunity-ai-provenance");
+  await provenance.locator("summary").click();
+  await expect(provenance).toContainText(secondRecordId);
+  await expect(provenance).toContainText(secondResultId);
+  await expect(provenance).toContainText("b".repeat(64));
+  expect(directoryReads).toBe(1);
+  expect(writes).toEqual([]);
+});
+
 for (const outcome of ["approved", "rejected"] as const) {
   test(`UI2-SM01 AI ${outcome} reason keeps keyboard focus and cancels without a review`, async ({
     page,
