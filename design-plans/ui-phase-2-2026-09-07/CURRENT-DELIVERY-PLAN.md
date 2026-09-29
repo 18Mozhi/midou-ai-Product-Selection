@@ -1,3 +1,7 @@
+# 2026-09-30 · P18 采集任务回执跨机会隔离
+
+competitor discovery 与 sourcing search 两种POST在途时切换机会，延迟202回执均不显示旧机会的任务提示、不额外重读当前机会；桌面Chromium与390px各1/1。客户端作用域保护已验证；真实任务是否已被Worker接受、生产RBAC与组织/工作区范围仍待真实环境证据。
+
 # 2026-09-30 · P18 竞品/供应采集权限与队列回执
 
 双端挂载 Vue 覆盖：只读能力只显示目录链接、不显示管理采集按钮；competitor 与 supplier 两种 manage 能力分别启用各自动作。竞品 POST 保持 `{}`，供应 POST 保持当前机会 `{input_type,input_ref}`，202回执显示返回任务编号。桌面Chromium/390px各1/1；真实RBAC与 Worker 采集完成仍需线上证据，未更改 API/schema/权限规则。

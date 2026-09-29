@@ -956,7 +956,7 @@
           "scene": "competitor-failed"
         }
       ],
-      "remaining": "本地Vue已验证competitor:read不足以显示采集入口，并验证202/任务编号回执；真实路由RBAC与Worker采集仍待。",
+      "remaining": "本地Vue已验证只读权限隐藏采集按钮、202任务回执和跨机会迟到回执不污染当前页；真实路由RBAC与Worker采集仍待。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#5d78f9c7cf57f959.1",
         "apps/web/src/components/OpportunityDetailInsights.vue#5d78f9c7cf57f959.2",
@@ -971,6 +971,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "竞品采集POST挂起时切换机会，旧202回执不显示在新机会工作区且不重读新机会；桌面Chromium/390px各1/1。受控回包不证明真实采集Worker或生产状态。"
+        },
         {
           "file": "tests/e2e/m04-02-opportunities.spec.ts",
           "evidenceType": "actual-vue-local-interception",
@@ -1001,7 +1006,7 @@
           "scene": "supplier-queued"
         }
       ],
-      "remaining": "本地Vue验证仅supplier_quote:manage可排队、使用当前机会ID构造准确请求并显示task_id；不以竞品能力代替。真实RBAC/供应采集及跨ID晚到响应仍待。",
+      "remaining": "本地Vue验证独立supplier_quote:manage、准确机会input_ref、202任务回执与跨机会迟到响应隔离；真实RBAC、供应采集Worker与持久化仍待。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#0be29a576704bd69.1",
         "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1"
@@ -1015,6 +1020,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "供应搜索POST挂起时切换机会，旧202回执不显示在新机会工作区且不重读新机会；桌面Chromium/390px各1/1。受控回包不证明真实供应采集Worker或生产持久化。"
+        },
         {
           "file": "tests/e2e/m04-02-opportunities.spec.ts",
           "evidenceType": "actual-vue-local-interception",

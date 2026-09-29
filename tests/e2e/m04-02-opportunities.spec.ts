@@ -1289,6 +1289,111 @@ test("P18 competitor and supplier discovery keep separate request contracts and 
   expect(sourcingBodies).toEqual([{ input_type: "opportunity", input_ref: opportunityId }]);
 });
 
+test("P18 delayed discovery receipts stay scoped to their originating opportunity", async ({
+  page,
+}) => {
+  await ready(page);
+  await readyForNextOpportunity(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_id: "00000000-0000-4000-8000-000000000421",
+        workspace_id: "00000000-0000-4000-8000-000000000422",
+        roles: ["member"],
+        capabilities: [
+          "opportunity:read",
+          "opportunity:decide",
+          "competitor:manage",
+          "supplier_quote:manage",
+        ],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_member_allowed",
+      }),
+    }),
+  );
+  let releaseCompetitor!: () => void;
+  let markCompetitorStarted!: () => void;
+  const competitorGate = new Promise<void>((resolve) => (releaseCompetitor = resolve));
+  const competitorStarted = new Promise<void>((resolve) => (markCompetitorStarted = resolve));
+  let releaseSourcing!: () => void;
+  let markSourcingStarted!: () => void;
+  const sourcingGate = new Promise<void>((resolve) => (releaseSourcing = resolve));
+  const sourcingStarted = new Promise<void>((resolve) => (markSourcingStarted = resolve));
+  let nextDetailReads = 0;
+  await page.route("**/api/v1/opportunities/*/competitor-discovery", async (route) => {
+    markCompetitorStarted();
+    await competitorGate;
+    await route.fulfill({ status: 202, json: envelope({ task_id: "late-competitor-task" }) });
+  });
+  await page.route("**/api/v1/sourcing/searches*", async (route) => {
+    if (route.request().method() === "GET") return route.fulfill({ json: envelope([]) });
+    markSourcingStarted();
+    await sourcingGate;
+    await route.fulfill({ status: 202, json: envelope({ task_id: "late-supplier-task" }) });
+  });
+  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) => {
+    nextDetailReads += 1;
+    return route.fallback();
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await page.getByRole("button", { name: "采集 Amazon 竞品" }).click();
+  await competitorStarted;
+  let currentDetailRequest = page.waitForRequest((request) => {
+    const url = new URL(request.url());
+    return url.pathname === `/api/v1/opportunities/${nextOpportunityId}`;
+  });
+  await switchOpportunityInPlace(page, nextOpportunityId);
+  await currentDetailRequest;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  let currentReads = nextDetailReads;
+  let competitorResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes("/competitor-discovery") &&
+      response.request().method() === "POST" &&
+      response.status() === 202,
+  );
+  releaseCompetitor();
+  await competitorResponse;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  expect(nextDetailReads).toBe(currentReads);
+  await expect(page.locator(".opportunity-message")).toHaveCount(0);
+
+  const returnToOrigin = page.waitForRequest((request) => {
+    const url = new URL(request.url());
+    return url.pathname === `/api/v1/opportunities/${opportunityId}`;
+  });
+  await switchOpportunityInPlace(page, opportunityId);
+  await returnToOrigin;
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await page.getByRole("button", { name: "采集公开供应商" }).click();
+  await sourcingStarted;
+
+  currentDetailRequest = page.waitForRequest((request) => {
+    const url = new URL(request.url());
+    return url.pathname === `/api/v1/opportunities/${nextOpportunityId}`;
+  });
+  await switchOpportunityInPlace(page, nextOpportunityId);
+  await currentDetailRequest;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  currentReads = nextDetailReads;
+  const sourcingResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes("/api/v1/sourcing/searches") &&
+      response.request().method() === "POST" &&
+      response.status() === 202,
+  );
+  releaseSourcing();
+  await sourcingResponse;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  expect(nextDetailReads).toBe(currentReads);
+  await expect(page.locator(".opportunity-message")).toHaveCount(0);
+});
+
 test("P18 overview links match the exact read capabilities required by their destination routes", async ({
   page,
 }) => {
