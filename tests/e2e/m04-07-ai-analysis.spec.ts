@@ -485,6 +485,91 @@ test("P18 AI review exposes its pending state and ignores a second action until 
   expect(attempts).toEqual([{ outcome: "approved", notes: "已核对来源和事实引用" }]);
 });
 
+test("P18 keeps an AI review locked across cached route deactivation until its receipt", async ({
+  page,
+}) => {
+  const attempts: Array<Record<string, unknown>> = [];
+  let reviewed = false;
+  let releaseReview!: () => void;
+  let markReviewStarted!: () => void;
+  const reviewGate = new Promise<void>((resolve) => (releaseReview = resolve));
+  const reviewStarted = new Promise<void>((resolve) => (markReviewStarted = resolve));
+  await setup(page);
+  await page.route(`**/api/v1/ai-analyses/${resultId}/reviews`, async (route) => {
+    attempts.push(route.request().postDataJSON());
+    markReviewStarted();
+    await reviewGate;
+    reviewed = true;
+    await route.fulfill({ status: 201, json: envelope({ id: "saved-review" }) });
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
+    if (route.request().method() !== "GET" || !reviewed) return route.fallback();
+    return route.fulfill({
+      json: envelope([
+        {
+          id: "00000000-0000-4000-8000-000000000705",
+          status: "succeeded",
+          attempt_count: 1,
+          last_error_code: null,
+          input_sha256: "a".repeat(64),
+          prompt_contract_version: "opportunity-assist-v1",
+          created_at: "2026-08-08T12:01:00.000Z",
+          result: {
+            id: resultId,
+            content: {
+              summary: "当前机会已有市场方向，但评分、利润和风险证据仍不足。",
+              classifications: [],
+              missing_fields: [],
+            },
+            ai_generated: true,
+            model_name: "Qwen3.5-9B-AWQ-4bit",
+            provider_request_id: "provider-test",
+            review_status: "approved",
+            review: {
+              outcome: "approved",
+              notes: "已核对来源和事实引用",
+              reviewed_by: "reviewer-test",
+              reviewed_at: "2026-08-08T12:02:00.000Z",
+            },
+          },
+        },
+      ]),
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}?tab=ai`);
+  await openTab(page, "AI 辅助");
+  await page.getByRole("button", { name: "抽检通过", exact: true }).click();
+  const reasonDialog = page.getByRole("dialog", { name: "填写抽检通过说明" });
+  await reasonDialog.getByRole("textbox", { name: /原因/ }).fill("已核对来源和事实引用");
+  await reasonDialog.getByRole("button", { name: "确认提交" }).click();
+  await reviewStarted;
+
+  await page.evaluate(() => {
+    window.history.pushState({}, "", "/home");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page).toHaveURL(/\/home$/);
+  await expect(page.getByRole("heading", { name: "今日行动" })).toBeVisible();
+
+  const detailRequest = page.waitForRequest(
+    (request) => new URL(request.url()).pathname === `/api/v1/opportunities/${opportunityId}`,
+  );
+  await page.evaluate((id) => {
+    window.history.pushState({}, "", `/opportunities/${id}?tab=ai`);
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  }, opportunityId);
+  await detailRequest;
+  await expect(page.getByRole("heading", { name: "便携净水杯机会" })).toBeVisible();
+  const reviewButton = page.getByRole("button", { name: "抽检通过", exact: true });
+  await expect(reviewButton).toBeDisabled();
+
+  releaseReview();
+  await expect(reviewButton).toHaveCount(0);
+  await expect(reasonDialog).toBeHidden();
+  expect(attempts).toEqual([{ outcome: "approved", notes: "已核对来源和事实引用" }]);
+});
+
 test("P18 keeps the previous AI snapshot visible after malformed refresh and separates enqueue acceptance", async ({
   page,
 }) => {

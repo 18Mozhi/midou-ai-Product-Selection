@@ -145,6 +145,7 @@ let writeScopeGeneration = 0;
 let activeWriteCount = 0;
 let tabIntentGeneration = 0;
 let aiRequestGeneration = 0;
+let aiReviewIntentGeneration = 0;
 let aiSnapshotOpportunityId = "";
 watch(
   showCreate,
@@ -1000,6 +1001,7 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
   if (busy.value || aiReviewSubmission.value) return;
   const opportunityId = detail.value?.id;
   if (!opportunityId) return;
+  const intentGeneration = aiReviewIntentGeneration;
   const reasonRequest = {
     title: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
     description: "说明会写入 AI 分析人工复核记录，原始输出不会被改写。",
@@ -1010,12 +1012,22 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
   let notes = await askAiReviewReason(reasonRequest);
   try {
     while (notes) {
+      if (intentGeneration !== aiReviewIntentGeneration || detail.value?.id !== opportunityId)
+        return;
       if (busy.value || aiReviewSubmission.value) return;
       aiReviewError.value = "";
       aiReviewSubmission.value = { resultId, stage: "submitting" };
       const result = await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes });
+      if (detail.value?.id !== opportunityId) return;
+      if (intentGeneration !== aiReviewIntentGeneration) {
+        if (route.path === `/opportunities/${opportunityId}`) {
+          aiReviewSubmission.value = { resultId, stage: "refreshing" };
+          message.value = "页面切换期间抽检回执未在原操作面板确认；正在重新读取最新状态。";
+          await loadAi(opportunityId, () => detail.value?.id === opportunityId);
+        }
+        return;
+      }
       if (result) {
-        if (detail.value?.id !== opportunityId) return;
         aiReviewSubmission.value = { resultId, stage: "refreshing" };
         message.value = "人工抽检已记录，AI 原始输出未被改写。";
         await loadAi(opportunityId, () => detail.value?.id === opportunityId);
@@ -1144,6 +1156,7 @@ function queueLoad() {
 }
 onDeactivated(() => {
   closeTransientDialogs();
+  if (aiReviewSubmission.value) aiReviewIntentGeneration += 1;
   readGeneration += 1;
   erpBridgeGeneration += 1;
   erpBridgeBusy.value = false;
@@ -1151,7 +1164,6 @@ onDeactivated(() => {
   writeScopeGeneration += 1;
   activeWriteCount = 0;
   busy.value = false;
-  aiReviewSubmission.value = null;
   wasDeactivated = true;
 });
 onActivated(() => {
@@ -1170,6 +1182,7 @@ watch(
   () => props.opportunityId,
   (opportunityId, previousOpportunityId) => {
     if (opportunityId !== previousOpportunityId) {
+      aiReviewIntentGeneration += 1;
       closeTransientDialogs();
       cancelAiReviewReason();
       aiReviewError.value = "";

@@ -32,7 +32,7 @@ const selectedAnalysis = computed(
   () => props.analyses.find((analysis) => analysis.id === selectedAnalysisId.value) ?? null,
 );
 const pendingReviewEnabled = computed(
-  () => props.canDecide && props.loadState === "ready" && !props.busy,
+  () => props.canDecide && props.loadState === "ready" && !props.busy && !props.reviewingResultId,
 );
 const reviewProgressMessage = computed(() => {
   if (selectedAnalysis.value?.result?.id !== props.reviewingResultId) return "";
