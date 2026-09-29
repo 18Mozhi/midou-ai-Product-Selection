@@ -948,8 +948,16 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
   await expect(
     page.getByText("当前角色没有供应链读取权限；页面不请求或展示供应搜索数据。", { exact: true }),
   ).toBeVisible();
+  await expect(page.getByRole("link", { name: "竞品工作台", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toHaveCount(0);
   expect(competitorReads).toBe(0);
   expect(sourcingReads).toBe(0);
+
+  await page.goto(`/opportunities/${opportunityId}?tab=competition`);
+  await expect(page.getByRole("link", { name: "竞品工作台 ↗", exact: true })).toHaveCount(0);
+  await expect(
+    page.getByText("当前角色没有竞品读取权限；页面未请求或展示竞品数据。", { exact: true }),
+  ).toBeVisible();
 
   await page.goto(`/opportunities/${opportunityId}?tab=market`);
   await expect(page.getByRole("heading", { name: "先看证据，再判断市场" })).toBeVisible();
@@ -961,6 +969,58 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
   await page.goto(`/opportunities/${opportunityId}?tab=risk`);
   await expect(page.getByRole("heading", { name: "风险等级，不等于完整评估" })).toBeVisible();
   await expect(page.getByText("当前响应没有提供逐项风险评估事实", { exact: true })).toBeVisible();
+});
+
+test("P18 overview links match the exact read capabilities required by their destination routes", async ({
+  page,
+}) => {
+  await ready(page);
+  let capabilities: string[] = [];
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_id: "00000000-0000-4000-8000-000000000421",
+        workspace_id: "00000000-0000-4000-8000-000000000422",
+        roles: ["member"],
+        capabilities: ["opportunity:read", ...capabilities],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_member_allowed",
+      }),
+    }),
+  );
+  await page.route("**/api/v1/competitors", (route) => route.fulfill({ json: envelope([]) }));
+  await page.route("**/api/v1/sourcing/searches*", (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
+
+  for (const scenario of [
+    { capabilities: ["competitor:read"], competitor: true, sourcing: false },
+    { capabilities: ["sourcing:read"], competitor: false, sourcing: true },
+    {
+      capabilities: ["competitor:manage", "supplier_quote:manage"],
+      competitor: false,
+      sourcing: false,
+    },
+    { capabilities: ["competitor:read", "sourcing:read"], competitor: true, sourcing: true },
+  ]) {
+    capabilities = scenario.capabilities;
+    await page.goto(`/opportunities/${opportunityId}`);
+    await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+    await expect(page.getByRole("link", { name: "竞品工作台", exact: true })).toHaveCount(
+      scenario.competitor ? 1 : 0,
+    );
+    await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toHaveCount(
+      scenario.sourcing ? 1 : 0,
+    );
+
+    await page.goto(`/opportunities/${opportunityId}?tab=competition`);
+    await expect(page.getByRole("heading", { name: "可追溯的竞品快照" })).toBeVisible();
+    await expect(page.getByRole("link", { name: "竞品工作台 ↗", exact: true })).toHaveCount(
+      scenario.competitor ? 1 : 0,
+    );
+  }
 });
 
 test("P18 observe and reject dialogs contain keyboard focus and return it on Escape", async ({

@@ -31,6 +31,8 @@ const props = defineProps<{
   canManageSuppliers: boolean;
   canReadCompetitors: boolean;
   canReadSourcing: boolean;
+  canOpenCompetitorWorkspace: boolean;
+  canOpenSourcingWorkspace: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -95,7 +97,9 @@ const emit = defineEmits<{
               >
                 采集 Amazon 竞品
               </button>
-              <RouterLink to="/competitors">竞品工作台</RouterLink>
+              <RouterLink v-if="canOpenCompetitorWorkspace" to="/competitors"
+                >竞品工作台</RouterLink
+              >
             </div>
           </section>
 
@@ -139,7 +143,7 @@ const emit = defineEmits<{
               >
                 采集公开供应商
               </button>
-              <RouterLink to="/sourcing">供应链工作台</RouterLink>
+              <RouterLink v-if="canOpenSourcingWorkspace" to="/sourcing">供应链工作台</RouterLink>
             </div>
           </section>
         </div>
@@ -414,7 +418,7 @@ const emit = defineEmits<{
         >
           采集 Amazon 竞品
         </button>
-        <RouterLink to="/competitors">竞品工作台 ↗</RouterLink>
+        <RouterLink v-if="canOpenCompetitorWorkspace" to="/competitors">竞品工作台 ↗</RouterLink>
       </div>
     </article>
   </section>

@@ -68,14 +68,14 @@
     "apps/web/src/components/OpenActionReasonDialog.vue": "74d65b519372cb12d6741eb348a9b2af46470929eea887d709796dace1db5370",
     "apps/web/src/components/OpenCreateDialog.vue": "165d6b784316b4a9ff88d0e8490d0abc21103c1fe7ec9c03e321d74f892b1261",
     "apps/web/src/components/OpenPlatformCenter.vue": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa",
-    "apps/web/src/components/opportunity-decision-presentation.ts": "5db9df1a291feb7a5b2d0dba0fa2e27160c19389fb141bfcf92c6e28dab0dc4d",
+    "apps/web/src/components/opportunity-decision-presentation.ts": "e090c758b7b0ca14a7bc006e59fceb3fce3575660472164de6f61159becde553",
     "apps/web/src/components/opportunity-workspace-forms.ts": "1ddc4c6c122c42d05d8a47648b0ea2ab121218d9ff12e8d81c8cc6706785e6dd",
     "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
     "apps/web/src/components/opportunity-workspace-types.ts": "805a2fe8ff56913c39a1d13f637ef38b3fcb50a645917f8f4f29343d8539aa6f",
-    "apps/web/src/components/OpportunityAiPanel.vue": "147b7b8e290ca76a3a68b1a85980bc58758593648bde0c41962199b217109cc9",
+    "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47",
-    "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
-    "apps/web/src/components/OpportunityDetailInsights.vue": "359c47510cd9a150a4ab69c026578fcf0b85a8f5f9115b143fdb0a2817970107",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "bef71630c83c049043e89c86b759d9e9ea84199350286730e3189e8b63debdef",
+    "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
     "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
@@ -83,7 +83,7 @@
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "6dcacee763b9f5f1a90eeb9c4334b98b6f15a4f26e178da4d2800b7c9fb1f9bd",
+    "apps/web/src/components/OpportunityWorkspace.vue": "ed401ef523c07fcde10c3fd2ce02a631709765a904794d274fd2499f45592afb",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/OrganizationAdminCenter.vue": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
@@ -254,8 +254,8 @@
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b8c7eed0c5b6b1ea3bfcb4df1febb5a1b47ab98d0d8a4fa3c914739d10c6a47f",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "2a6c6dd60fa660ff2758463c2b85cb51ff3868eefc9860f376d1e7b982ccc750",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "02c8b8a8a8bbad5738e5674d655908d4436fe3b2e26ef1ed9213d02e97a1d302",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "9b215a0562f3903a2b0e9887508b84968d18f41fc0a2fc3d83016f78e830ed2b",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "bb6e4520d7ef9a4626f87072e84be00d0d4633e2b421f96d5b5e659ef774a067",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "002c4a13c3fcc62b4a417ec8e437bcf049154885da85560f725b5a57d4359353",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "f83e869b34933ec3ec375b133f67ee40d2b2c4f18f1996a5fa1edbe2279f006f",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "11dc7f844e20c19e2bbcd068da11b72a0c8bd9b69b5fa7da2bd91985e31ef4a1",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
@@ -416,16 +416,16 @@
     "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
     "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
     "tests/e2e/ui-phase2-trend-contracts.spec.ts": "c9b3be8f0656b2c4f008bcfa5741ac8185e75787b871eba310a8b6baad1db01f",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "508813dc10511423206e21ce020b29bdbd9124191e14367d3281fd94e8c8c7d1",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "c6ae8152e512c12fcb7bfa482d750703f2ee58f8ad5c722eef204f805db43232",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "tests/e2e/m04-02-opportunities.spec.ts": "b7ca804e253aa763adf07d0e84606b487700dad3e8ffe896a423cc4e65d2ae72",
+    "tests/e2e/m04-02-opportunities.spec.ts": "3f0c5a3635aeaacf379c7a5d6902a95f77c318aae54acd0efd2578a44f3abe6a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "5742f36a4a93cb3f5176750f7094416580b860664821409f212e9dd2acead194",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2c0c7b55c99aadfadd47d2d27d9100bf0f6a9331a97e3c53db5a30e48d466df6",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "a5e0b7ba32399b3ca26e14c484591d969ae035db4e63430abb5f2d560a0bb439",
-    "tests/e2e/m04-07-ai-analysis.spec.ts": "f1928568f139d38597a627741741ef7ed3ba240bbcc439edbc575bcbbc5f83fb",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "9af6c07a8fe34d6ed0db469dbb353bce590d46efe9c3673b4eb9a7f063cd4460",
+    "tests/e2e/m04-07-ai-analysis.spec.ts": "5148713464828d41985254a6d658c14da65b7bf8b8bb8902eefcd7983b5a0aa0",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
     "scripts/verify-ui-phase2-profit-c.mjs": "9caf48a5e9a6da643c068d00511083a1cb0e48f55f74d4f08fcd343e72ec562e",
@@ -590,7 +590,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "728bf0bc631016cba563a4c8ad95889a99f7128ba33fb4a05f7f951e70a5c9fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "b4d5fab5992f1fe9473a23b0b955051492a0da7a1e7ede4d8330777b99902526",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "404c1ec0fcb82d867064a41793c58431f01a8b56f9ec7e4f9147fbdee6d4d2d4",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "001238f224d9e8d60b1d97d5a74c830c9d436a6c1fffecb60c33f7e8be0d19f3",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "5d741c1d400da31b9ae29a329b9a8cf481341bf8d17e838e1a63dbf5d3ec3d25",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3c6a60caf2045f07a9a14c89f07cd3c1d9b20851719683f69b02931ce04f730f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "683179d07629a30338b60ab10ab52c96883610215eecb1616931bf55ca66fe18",
@@ -1449,7 +1449,6 @@
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "701十分区已组合且有主题密度代表图，但无完整采纳质量门/成本输入复核链，不能借其他夹具填当前机会事实。",
-        "概览竞品/供应目录链接当前无能力v-if；旧合同按能力展示描述与真实源不同，待明确审核，未擅自修权限或路由。",
         "P18主状态页各文案都走load且次按钮无handler；原型恢复入口与实际消费者必须逐态对齐。",
         "决策、成本录入和成本复核提交已分别增加局部同步单飞守卫，并由真实Vue本地拦截E2E覆盖重复requestSubmit；AI抽检及各动作回执归属仍需逐项核验，客户端保护不证明服务端事务结果。",
         "成本初始时间UTC截断/本地解析偏移、reviewer失败置空、复核id残留、AI先关原因再写差异继续保留OP07–OP10。",
@@ -30114,7 +30113,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#97f09d6274473315.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 62,
+      "line": 63,
       "kind": "control",
       "label": "前往决策",
       "conditions": [
@@ -30147,7 +30146,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#4c415989b6830734.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 99,
+      "line": 100,
       "kind": "control",
       "label": "查看每项判断",
       "conditions": [],
@@ -30175,7 +30174,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#1755c866489f4c76.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 118,
+      "line": 119,
       "kind": "control",
       "label": "采纳建议",
       "conditions": [
@@ -30208,7 +30207,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#c5f40664f410ee40.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 119,
+      "line": 120,
       "kind": "control",
       "label": "继续观察",
       "conditions": [
@@ -30241,7 +30240,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#6cfe6545a209df42.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 120,
+      "line": 121,
       "kind": "control",
       "label": "驳回",
       "conditions": [
@@ -30274,7 +30273,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#e28c61b56c99b993.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 128,
+      "line": 129,
       "kind": "control",
       "label": "提前人工处理",
       "conditions": [
@@ -30307,7 +30306,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#690b264d43e01055.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 130,
+      "line": 131,
       "kind": "control",
       "label": "继续观察",
       "conditions": [
@@ -30340,7 +30339,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#a2dfed9751073c3d.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 131,
+      "line": 132,
       "kind": "control",
       "label": "驳回",
       "conditions": [
@@ -30373,7 +30372,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#7ee1cf6f73d304fe.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 143,
+      "line": 144,
       "kind": "control",
       "label": "查看补采任务",
       "conditions": [
@@ -30410,7 +30409,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#91b42518b9942791.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 147,
+      "line": 148,
       "kind": "control",
       "label": "创建补采任务",
       "conditions": [
@@ -30447,7 +30446,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#b016bc2c6e34bc74.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 157,
+      "line": 158,
       "kind": "control",
       "label": "查看判断条件与补证进度",
       "conditions": [
@@ -30480,7 +30479,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#ad67a1fb638ba1e7.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 174,
+      "line": 175,
       "kind": "control",
       "label": "查看任务",
       "conditions": [
@@ -30521,7 +30520,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#823a2e6e9e462fb3.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 75,
+      "line": 77,
       "kind": "control",
       "label": "重试读取竞品",
       "conditions": [
@@ -30555,7 +30554,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#5d78f9c7cf57f959.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 89,
+      "line": 91,
       "kind": "control",
       "label": "采集 Amazon 竞品",
       "conditions": [
@@ -30587,15 +30586,19 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#adf008aadab44211.1",
+      "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#c53985022ad43912.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 98,
+      "line": 100,
       "kind": "control",
       "label": "竞品工作台",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "tab === 'overview'"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canOpenCompetitorWorkspace"
         }
       ],
       "staticRouteIds": [],
@@ -30619,7 +30622,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#1ad80d71bafd937b.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 114,
+      "line": 118,
       "kind": "control",
       "label": "重试读取供应候选",
       "conditions": [
@@ -30653,7 +30656,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#0be29a576704bd69.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 133,
+      "line": 137,
       "kind": "control",
       "label": "采集公开供应商",
       "conditions": [
@@ -30685,15 +30688,19 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#4a03711a0ec1db41.1",
+      "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#c4c3fd475e0d1c74.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 142,
+      "line": 146,
       "kind": "control",
       "label": "供应链工作台",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "tab === 'overview'"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canOpenSourcingWorkspace"
         }
       ],
       "staticRouteIds": [],
@@ -30717,7 +30724,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#d4469c78907c9fa4.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 184,
+      "line": 188,
       "kind": "control",
       "label": "规则版本",
       "conditions": [
@@ -30747,7 +30754,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#9fdf677303995f04.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 185,
+      "line": 189,
       "kind": "control",
       "label": "重新评分",
       "conditions": [
@@ -30781,7 +30788,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#5342f1a44ac80aa7.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 221,
+      "line": 225,
       "kind": "control",
       "label": "查看机会证据",
       "conditions": [
@@ -30811,7 +30818,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#98182a987b29c689.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 228,
+      "line": 232,
       "kind": "control",
       "label": "核对市场事实",
       "conditions": [
@@ -30841,7 +30848,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#739121b4ce61f692.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 306,
+      "line": 310,
       "kind": "control",
       "label": "查看机会证据 →",
       "conditions": [
@@ -30871,7 +30878,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#f633bc087f211562.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 341,
+      "line": 345,
       "kind": "control",
       "label": "重试读取",
       "conditions": [
@@ -30905,7 +30912,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#fc5eacd76d7e40ea.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 397,
+      "line": 401,
       "kind": "control",
       "label": "展开记录标识",
       "conditions": [
@@ -30947,7 +30954,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#5d78f9c7cf57f959.2",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 408,
+      "line": 412,
       "kind": "control",
       "label": "采集 Amazon 竞品",
       "conditions": [
@@ -30979,15 +30986,19 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#2c67cc2b40bf2f35.1",
+      "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#b80c9168117e53bb.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 417,
+      "line": 421,
       "kind": "control",
       "label": "竞品工作台 ↗",
       "conditions": [
         {
           "directive": "v-else-if",
           "expression": "tab === 'competition'"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canOpenCompetitorWorkspace"
         }
       ],
       "staticRouteIds": [],
@@ -31011,7 +31022,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#739121b4ce61f692.2",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 460,
+      "line": 464,
       "kind": "control",
       "label": "查看机会证据 →",
       "conditions": [
@@ -31041,7 +31052,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#15eee7cac0d36322.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
-      "line": 467,
+      "line": 471,
       "kind": "control",
       "label": "核对利润与成本 →",
       "conditions": [
@@ -32423,7 +32434,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1231,
+      "line": 1297,
       "kind": "control",
       "label": "创建选品 →",
       "conditions": [
@@ -32465,7 +32476,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1233,
+      "line": 1299,
       "kind": "control",
       "label": "管理选品规则",
       "conditions": [
@@ -32507,7 +32518,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1235,
+      "line": 1301,
       "kind": "control",
       "label": "从 ERP 导入",
       "conditions": [
@@ -32553,7 +32564,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1242,
+      "line": 1308,
       "kind": "control",
       "label": "手工添加",
       "conditions": [
@@ -32599,7 +32610,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1254,
+      "line": 1320,
       "kind": "control",
       "label": "← 返回来源列表",
       "conditions": [
@@ -32637,7 +32648,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1260,
+      "line": 1326,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32672,7 +32683,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1285,
+      "line": 1351,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32711,7 +32722,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1296,
+      "line": 1362,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32750,7 +32761,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1309,
+      "line": 1375,
       "kind": "control",
       "label": "运行信息",
       "conditions": [
@@ -32792,7 +32803,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1319,
+      "line": 1385,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32834,7 +32845,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1331,
+      "line": 1397,
       "kind": "control",
       "label": "补证异常时手动处理",
       "conditions": [
@@ -32880,7 +32891,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1334,
+      "line": 1400,
       "kind": "control",
       "label": "采集 Amazon 竞品",
       "conditions": [
@@ -32930,7 +32941,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1341,
+      "line": 1407,
       "kind": "control",
       "label": "采集公开供应商",
       "conditions": [
@@ -32980,7 +32991,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1348,
+      "line": 1414,
       "kind": "control",
       "label": "检查评分规则",
       "conditions": [
@@ -33024,9 +33035,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#da41fa60a8b27db3.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1353,
+      "line": 1419,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33069,7 +33080,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b391bf25870010b2.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1374,
+      "line": 1442,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33112,7 +33123,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1386,
+      "line": 1454,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33155,7 +33166,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2aa4cc1a9f90b8fd.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1405,
+      "line": 1473,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33198,7 +33209,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1449,
+      "line": 1517,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33233,7 +33244,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1449,
+      "line": 1517,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [
@@ -33268,7 +33279,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1466,
+      "line": 1534,
       "kind": "dialog-definition",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -33306,7 +33317,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1466,
+      "line": 1534,
       "kind": "event-binding",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -33349,7 +33360,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1473,
+      "line": 1541,
       "kind": "form-event",
       "label": "影响预览 批量 {{ batchAction === \"assign\" ? \"指派\" : batchAction === \"archive\" ? \"归档\" : \"复核\" }} 本次仅处理当前结果中已选的 {{ currentPageSele",
       "conditions": [
@@ -33389,7 +33400,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1509,
+      "line": 1577,
       "kind": "control",
       "label": "返回",
       "conditions": [
@@ -33427,7 +33438,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1510,
+      "line": 1578,
       "kind": "control",
       "label": "确认执行",
       "conditions": [
@@ -33465,7 +33476,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#557b69e18caa81e6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1514,
+      "line": 1582,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -33495,7 +33506,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#df416310b2ec158b.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1514,
+      "line": 1582,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -33525,7 +33536,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b74012fbdb739187.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1007,
+      "line": 1048,
       "kind": "dialog-script-call",
       "label": "askAiReviewReason(reasonRequest)",
       "conditions": [],
@@ -33555,7 +33566,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca674a075f274bff.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1024,
+      "line": 1075,
       "kind": "dialog-script-call",
       "label": "askAiReviewReason({ ...reasonRequest, initialValue: notes })",
       "conditions": [],

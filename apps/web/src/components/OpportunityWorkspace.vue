@@ -258,6 +258,12 @@ const canReadSourcing = computed(
     props.capabilities?.includes("supplier_quote:manage") ||
     false,
 );
+const canOpenCompetitorWorkspace = computed(
+  () => props.capabilities?.includes("competitor:read") ?? false,
+);
+const canOpenSourcingWorkspace = computed(
+  () => props.capabilities?.includes("sourcing:read") ?? false,
+);
 const canConfirmCost = computed(() => props.capabilities?.includes("cost:confirm") ?? false);
 const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
 const stateFrom = (kind: ApiFailureKind): OpportunityTypes.OpportunityWorkspaceState =>
@@ -1424,6 +1430,8 @@ onBeforeUnmount(() => {
                 :can-manage-suppliers="canManageSuppliers"
                 :can-read-competitors="canReadCompetitors"
                 :can-read-sourcing="canReadSourcing"
+                :can-open-competitor-workspace="canOpenCompetitorWorkspace"
+                :can-open-sourcing-workspace="canOpenSourcingWorkspace"
                 @discover-competitors="discoverCompetitors"
                 @discover-suppliers="discoverSuppliers"
                 @queue-score="queueScore"

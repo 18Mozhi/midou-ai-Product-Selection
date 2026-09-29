@@ -1,5 +1,9 @@
 # 第二阶段实施记录
 
+## 2026-09-29 · P18 概览跨工作区入口遵循目标路由能力
+
+复核 `route-catalog.generated.json` 后，为 P18 概览的竞品、供应链入口及竞争分区的竞品入口增加精确读取能力条件：分别与 `/competitors` 的 `competitor:read`、`/sourcing` 的 `sourcing:read` 元数据一致。真实 Vue Playwright 覆盖无权、单项读取权、manage-only、双读取权四组；双端通过。未改路由/API/后端授权合同，测试夹具不证明生产 RBAC。
+
 ## 2026-09-29 · P18 OP07 共享写入入口防重
 
 真实 Vue 浏览器 E2E 先复现 AI 分析入队按钮在同一事件循环连续触发会发出两条 POST；经营复盘表单则绕过通用 `write()`，重复 `requestSubmit()` 也能同时提交。现为共享写入 helper 和经营复盘专用写入入口增加同步 `busy` 早退，双端定向回归确认两个路径均只发一条请求。M04-02 + M04-07 组合完整套件桌面 Chromium 与390px手机各37/37通过；API、payload、权限、幂等键和服务端合同不变。受控 Vue 响应不证明真实 RBAC、数据库事务/幂等或 M07-03；P18 OP07 其他竞态、OP08–OP10及全73页仍开放。

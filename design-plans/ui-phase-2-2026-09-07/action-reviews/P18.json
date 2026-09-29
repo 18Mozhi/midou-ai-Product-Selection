@@ -5,16 +5,16 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityAiPanel.vue": "147b7b8e290ca76a3a68b1a85980bc58758593648bde0c41962199b217109cc9",
+    "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47",
-    "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "bef71630c83c049043e89c86b759d9e9ea84199350286730e3189e8b63debdef",
     "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
-    "apps/web/src/components/OpportunityDetailInsights.vue": "359c47510cd9a150a4ab69c026578fcf0b85a8f5f9115b143fdb0a2817970107",
+    "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
     "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "6dcacee763b9f5f1a90eeb9c4334b98b6f15a4f26e178da4d2800b7c9fb1f9bd",
+    "apps/web/src/components/OpportunityWorkspace.vue": "ed401ef523c07fcde10c3fd2ce02a631709765a904794d274fd2499f45592afb",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
@@ -977,9 +977,9 @@
       "label": "打开竞品目录",
       "kind": "navigation",
       "routeApplicability": "P18-local-caller-and-listed-panels",
-      "condition": "实际概览与竞争区RouterLink均无v-if能力限制",
-      "handler": "to=/competitors，无本机会参数",
-      "variants": ["overview", "competition", "no-access"],
+      "condition": "仅competitor:read；与/competitors目标路由元数据一致",
+      "handler": "概览与竞争区RouterLink仅在competitor:read时渲染；to=/competitors",
+      "variants": ["overview", "competition", "no-access", "read-authorized"],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -990,10 +990,10 @@
           "scene": "competition-no-access"
         }
       ],
-      "remaining": "旧合同按能力展示与实际无条件链接不同；不擅自隐藏或增筛选。",
+      "remaining": "本地实际Vue回归验证目标路由读取能力匹配；真实服务端路由授权仍独立验收。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityDetailInsights.vue#adf008aadab44211.1",
-        "apps/web/src/components/OpportunityDetailInsights.vue#2c67cc2b40bf2f35.1"
+        "apps/web/src/components/OpportunityDetailInsights.vue#c53985022ad43912.1",
+        "apps/web/src/components/OpportunityDetailInsights.vue#b80c9168117e53bb.1"
       ],
       "visualStates": {
         "default": "not-mapped",
@@ -1004,6 +1004,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "overview和competition两个入口按competitor:read精确显示；无读取权与manage-only均隐藏，read授权显示。桌面/390px回归；不证明服务端RBAC。"
+        },
         {
           "file": "scripts/verify-ui-phase2-insights-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -1016,9 +1021,9 @@
       "label": "打开供应链目录",
       "kind": "navigation",
       "routeApplicability": "P18-local-caller-and-listed-panels",
-      "condition": "实际概览RouterLink无v-if能力限制",
-      "handler": "to=/sourcing，无本机会参数",
-      "variants": ["overview", "no-access"],
+      "condition": "仅sourcing:read；与/sourcing目标路由元数据一致",
+      "handler": "概览RouterLink仅在sourcing:read时渲染；to=/sourcing",
+      "variants": ["overview", "no-access", "read-authorized"],
       "scenes": [
         {
           "package": "insights-direction-c",
@@ -1029,9 +1034,9 @@
           "scene": "overview"
         }
       ],
-      "remaining": "合同能力描述与源链接不一致；目标页鉴权不等于源隐藏。",
+      "remaining": "本地实际Vue回归验证目标路由读取能力匹配；真实服务端路由授权仍独立验收。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityDetailInsights.vue#4a03711a0ec1db41.1"
+        "apps/web/src/components/OpportunityDetailInsights.vue#c4c3fd475e0d1c74.1"
       ],
       "visualStates": {
         "default": "not-mapped",
@@ -1042,6 +1047,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "overview入口仅在sourcing:read时显示；无读取权与supplier_quote:manage-only均隐藏，read授权显示。桌面/390px回归；不证明服务端RBAC。"
+        },
         {
           "file": "scripts/verify-ui-phase2-insights-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -2325,31 +2335,31 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#da41fa60a8b27db3.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
           "event": "@discover-competitors",
           "handler": "discoverCompetitors",
           "targets": ["OP-COMPETITOR-DISCOVER"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#da41fa60a8b27db3.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
           "event": "@discover-suppliers",
           "handler": "discoverSuppliers",
           "targets": ["OP-SUPPLIER-DISCOVER"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#da41fa60a8b27db3.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
           "event": "@queue-score",
           "handler": "queueScore",
           "targets": ["OP-SCORE-QUEUE"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#da41fa60a8b27db3.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
           "event": "@retry-downstream",
           "handler": "loadDownstream(detail?.id, undefined, $event)",
           "targets": ["OP-DOWNSTREAM-RETRY"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#da41fa60a8b27db3.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
           "event": "@select-tab",
           "handler": "setTab",
           "targets": ["OP-TAB"]
@@ -2366,7 +2376,7 @@
         }
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#da41fa60a8b27db3.1"],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1"],
       "sourceContractKeys": ["竞品/供应采集、评分、下游重读、页签选择转发"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
@@ -3050,23 +3060,23 @@
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityAiPanel.vue": "147b7b8e290ca76a3a68b1a85980bc58758593648bde0c41962199b217109cc9",
+      "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
       "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47",
-      "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
-      "apps/web/src/components/OpportunityDetailInsights.vue": "359c47510cd9a150a4ab69c026578fcf0b85a8f5f9115b143fdb0a2817970107",
+      "apps/web/src/components/OpportunityDecisionPanel.vue": "bef71630c83c049043e89c86b759d9e9ea84199350286730e3189e8b63debdef",
+      "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
       "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
       "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
       "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-      "apps/web/src/components/OpportunityWorkspace.vue": "6dcacee763b9f5f1a90eeb9c4334b98b6f15a4f26e178da4d2800b7c9fb1f9bd",
+      "apps/web/src/components/OpportunityWorkspace.vue": "ed401ef523c07fcde10c3fd2ce02a631709765a904794d274fd2499f45592afb",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
       "apps/web/src/components/opportunity-workspace-forms.ts": "1ddc4c6c122c42d05d8a47648b0ea2ab121218d9ff12e8d81c8cc6706785e6dd",
       "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
-      "apps/web/src/components/opportunity-decision-presentation.ts": "5db9df1a291feb7a5b2d0dba0fa2e27160c19389fb141bfcf92c6e28dab0dc4d",
+      "apps/web/src/components/opportunity-decision-presentation.ts": "e090c758b7b0ca14a7bc006e59fceb3fce3575660472164de6f61159becde553",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },
@@ -4068,7 +4078,6 @@
   },
   "compositionGaps": [
     "701十分区已组合且有主题密度代表图，但无完整采纳质量门/成本输入复核链，不能借其他夹具填当前机会事实。",
-    "概览竞品/供应目录链接当前无能力v-if；旧合同按能力展示描述与真实源不同，待明确审核，未擅自修权限或路由。",
     "P18主状态页各文案都走load且次按钮无handler；原型恢复入口与实际消费者必须逐态对齐。",
     "决策、成本录入和成本复核提交已分别增加局部同步单飞守卫，并由真实Vue本地拦截E2E覆盖重复requestSubmit；AI抽检及各动作回执归属仍需逐项核验，客户端保护不证明服务端事务结果。",
     "成本初始时间UTC截断/本地解析偏移、reviewer失败置空、复核id残留、AI先关原因再写差异继续保留OP07–OP10。",
