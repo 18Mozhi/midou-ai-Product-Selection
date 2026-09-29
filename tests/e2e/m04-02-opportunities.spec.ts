@@ -806,6 +806,27 @@ test("P18 eligible recommendation completes the audited adoption flow without ch
   await expect(page.getByText("5/5 已通过", { exact: true })).toBeVisible();
 });
 
+test("operating feedback date defaults use the browser's local calendar day", async ({
+  browser,
+}) => {
+  const context = await browser.newContext({
+    baseURL: `http://127.0.0.1:${process.env.PLAYWRIGHT_WEB_PORT ?? 5173}`,
+    timezoneId: "Asia/Tokyo",
+  });
+  try {
+    const page = await context.newPage();
+    await page.clock.setFixedTime(new Date("2026-08-26T15:30:00.000Z"));
+    await ready(page);
+    await page.goto(`/opportunities/${opportunityId}`);
+    await openDetailTab(page, "经营复盘");
+    await page.getByRole("button", { name: "录入经营复盘" }).click();
+    await expect(page.getByLabel("周期开始")).toHaveValue("2026-08-27");
+    await expect(page.getByLabel("周期结束")).toHaveValue("2026-08-27");
+  } finally {
+    await context.close();
+  }
+});
+
 test("P18 lineage preserves raw status and unknown age while feedback uses the same idempotency key after an unknown write", async ({
   page,
 }) => {
