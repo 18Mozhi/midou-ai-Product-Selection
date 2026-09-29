@@ -12,7 +12,10 @@ const props = defineProps<{
     teams: any[];
     members: any[];
     busy: boolean;
+    refreshing: boolean;
+    createRefreshFailure: { writeRequestId: string; readRequestId: string } | null;
     createTeam: (value: TeamWrite) => Promise<boolean>;
+    refreshTeamList: () => Promise<void>;
     performMemberAction: (
       team: any,
       action: "assign" | "remove",
@@ -177,6 +180,34 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
       </div>
       <button type="button" :disabled="busy" @click="openCreate">新建团队</button>
     </header>
+
+    <section
+      v-if="createRefreshFailure"
+      class="org-team-refresh-warning"
+      role="alert"
+      aria-labelledby="org-team-refresh-warning-title"
+    >
+      <div>
+        <h4 id="org-team-refresh-warning-title">团队已创建，列表暂未更新</h4>
+        <p>创建操作已成功并写入审计；重新读取只会请求团队列表，不会再次提交创建。</p>
+        <details>
+          <summary>查看本次请求编号</summary>
+          <dl>
+            <div>
+              <dt>创建请求</dt>
+              <dd>{{ createRefreshFailure.writeRequestId }}</dd>
+            </div>
+            <div v-if="createRefreshFailure.readRequestId">
+              <dt>读取失败请求</dt>
+              <dd>{{ createRefreshFailure.readRequestId }}</dd>
+            </div>
+          </dl>
+        </details>
+      </div>
+      <button type="button" :disabled="busy || refreshing" @click="refreshTeamList">
+        {{ refreshing ? "正在重新读取…" : "重新读取团队列表" }}
+      </button>
+    </section>
 
     <div class="org-team-metrics" aria-label="团队统计">
       <article>

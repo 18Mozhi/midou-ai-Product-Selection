@@ -1871,6 +1871,57 @@
 .org-team-overview > button {
   min-width: 132px;
 }
+.org-team-refresh-warning {
+  padding: 16px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--so-text);
+  border: 1px solid var(--so-warning-border, var(--so-border));
+  border-radius: 12px;
+  background: var(--so-warning-soft, var(--so-panel));
+}
+.org-team-refresh-warning h4,
+.org-team-refresh-warning p {
+  margin: 0;
+}
+.org-team-refresh-warning h4 {
+  font-size: 16px;
+}
+.org-team-refresh-warning p {
+  margin-top: 4px;
+  color: var(--so-text-muted);
+  line-height: 1.5;
+}
+.org-team-refresh-warning details {
+  margin-top: 8px;
+  color: var(--so-text-muted);
+}
+.org-team-refresh-warning summary {
+  width: fit-content;
+  cursor: pointer;
+}
+.org-team-refresh-warning dl {
+  margin: 8px 0 0;
+  display: grid;
+  gap: 4px;
+  font-size: var(--so-font-meta);
+}
+.org-team-refresh-warning dl div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.org-team-refresh-warning dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--so-font-mono, monospace);
+}
+.org-team-refresh-warning > button {
+  min-height: 44px;
+  flex: 0 0 auto;
+}
 .org-team-metrics {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -3940,6 +3991,7 @@
     grid-template-columns: 1fr;
   }
   .org-team-overview,
+  .org-team-refresh-warning,
   .org-team-create > header,
   .org-team-create > footer {
     align-items: stretch;
@@ -3949,6 +4001,7 @@
     padding: 20px;
   }
   .org-team-overview > button,
+  .org-team-refresh-warning > button,
   .org-team-create > footer button {
     width: 100%;
   }

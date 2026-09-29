@@ -70,6 +70,7 @@ const props = defineProps<{
   busy = ref(false),
   refreshing = ref(false),
   lastReadFailureStatus = ref<number | null>(null),
+  teamCreateReadFailure = ref<{ writeRequestId: string; readRequestId: string } | null>(null),
   secret = ref(""),
   form = ref<any>({ reason: "" }),
   invitationResults = ref<Array<{ email: string; status: "success" | "error"; message: string }>>(
@@ -284,7 +285,13 @@ async function readView(currentView: string) {
   const response = await api(`/org/admin/${currentView}`);
   return { value: response.data, requestId: response.request_id };
 }
-async function load(options: { background?: boolean; preserveNotice?: boolean } = {}) {
+async function load(
+  options: {
+    background?: boolean;
+    preserveNotice?: boolean;
+    onReadFailure?: (error: unknown) => void;
+  } = {},
+) {
   const sequence = ++loadSequence,
     currentView = view.value,
     background = Boolean(
@@ -301,7 +308,7 @@ async function load(options: { background?: boolean; preserveNotice?: boolean } 
       currentView === "audit" ? Promise.resolve(null) : api("/org/admin/summary"),
       readView(currentView),
     ]);
-    if (sequence !== loadSequence) return;
+    if (sequence !== loadSequence) return undefined;
     if (summaryResponse) summary.value = summaryResponse.data;
     data.value = viewResponse.value;
     requestId.value = viewResponse.requestId;
@@ -344,13 +351,16 @@ async function load(options: { background?: boolean; preserveNotice?: boolean } 
     )
       ? "ready"
       : "empty";
+    return true;
   } catch (error) {
-    if (sequence !== loadSequence) return;
+    if (sequence !== loadSequence) return undefined;
     const failure = error instanceof ApiClientError ? error : null,
       mustReplacePage = !background || ["expired", "forbidden"].includes(failure?.kind ?? "");
     applyFailure(error, mustReplacePage);
     lastReadFailureStatus.value = failure?.status ?? null;
+    options.onReadFailure?.(error);
     rethrowUnexpectedError(error);
+    return false;
   } finally {
     if (sequence === loadSequence) refreshing.value = false;
   }
@@ -417,7 +427,10 @@ async function submit(
   path: string,
   value: any,
   method = "POST",
-  options: { preserveForm?: boolean } = {},
+  options: {
+    preserveForm?: boolean;
+    onRefreshFailure?: (error: unknown, writeRequestId: string) => void;
+  } = {},
 ) {
   if (busy.value) return;
   busy.value = true;
@@ -429,7 +442,11 @@ async function submit(
     if (surfaceActive && view.value === "tokens" && secretGeneration === tokenSecretGeneration)
       secret.value = result?.secret ?? "";
     if (!options.preserveForm) form.value = { reason: "" };
-    await load({ background: true, preserveNotice: true });
+    await load({
+      background: true,
+      preserveNotice: true,
+      onReadFailure: (error) => options.onRefreshFailure?.(error, writeRequestId),
+    });
     noticeKind.value = "success";
     notice.value = secret.value
       ? "Token 明文仅显示这一次，请立即保存到受限位置。"
@@ -708,9 +725,31 @@ async function createTeam(value: {
   default_workflow_key: string;
   reason: string;
 }) {
-  const succeeded = await submit("/org/admin/teams", value, "POST", { preserveForm: true });
+  teamCreateReadFailure.value = null;
+  const succeeded = await submit("/org/admin/teams", value, "POST", {
+    preserveForm: true,
+    onRefreshFailure: (error, writeRequestId) => {
+      if (error instanceof ApiClientError && ["expired", "forbidden"].includes(error.kind)) {
+        teamCreateReadFailure.value = null;
+        return;
+      }
+      teamCreateReadFailure.value = {
+        writeRequestId,
+        readRequestId: error instanceof ApiClientError ? error.requestId : "",
+      };
+    },
+  });
   if (succeeded) notice.value = "团队已创建并写入审计。";
   return Boolean(succeeded);
+}
+async function retryTeamListAfterCreate() {
+  if (!teamCreateReadFailure.value || view.value !== "teams") return;
+  const refreshed = await load({ background: true, preserveNotice: true });
+  if (refreshed) {
+    teamCreateReadFailure.value = null;
+    noticeKind.value = "success";
+    notice.value = "团队列表已更新；创建操作未重复提交。";
+  }
 }
 async function teamMemberAction(item: any, action: "assign" | "remove", membership_id: string) {
   const reason = await auditedReason(action === "assign" ? "分配团队成员" : "移除团队成员");
@@ -1278,7 +1317,10 @@ onMounted(() => void load());
         :teams="data?.teams ?? []"
         :members="data?.members ?? []"
         :busy="busy"
+        :refreshing="refreshing"
+        :create-refresh-failure="teamCreateReadFailure"
         :create-team="createTeam"
+        :refresh-team-list="retryTeamListAfterCreate"
         :perform-member-action="teamMemberAction"
       />
       <OrganizationApprovalPanel

@@ -199,6 +199,7 @@ export async function buildTeamsDesignData(repo) {
       },
       auditedReason: async () => answer,
       notice: { value: "" },
+      teamCreateReadFailure: { value: null },
     },
   ).h;
   await actions.createTeam(body);

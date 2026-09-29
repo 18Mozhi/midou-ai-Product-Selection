@@ -881,6 +881,76 @@ test("organization teams show an actionable empty state without invented rows", 
   await expect(page.getByText("创建首个团队后即可设置负责人并分配活动成员。")).toBeVisible();
 });
 
+test("team creation keeps its receipt when list refresh fails and retry only rereads", async ({
+  page,
+}) => {
+  let created = false,
+    allowRead = false,
+    createRequests = 0,
+    teamReads = 0;
+  const createdTeam = {
+    id: "00000000-0000-4000-8000-000000000699",
+    name: "只创建一次的协作组",
+    status: "active",
+    member_count: 0,
+    lead_membership_id: null,
+    default_workflow_key: null,
+    version: 1,
+    created_at: "2026-08-27T00:00:00.000Z",
+    updated_at: "2026-08-27T00:00:00.000Z",
+  };
+  await setup(page);
+  await page.unroute("**/api/v1/org/admin/teams");
+  await page.route("**/api/v1/org/admin/teams", async (route) => {
+    if (route.request().method() === "POST") {
+      createRequests += 1;
+      created = true;
+      return route.fulfill({
+        status: 201,
+        json: { ...env(createdTeam), request_id: "team-create-write-201" },
+      });
+    }
+    teamReads += 1;
+    if (created && !allowRead)
+      return route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "TEMPORARY_UNAVAILABLE",
+            message: "团队列表暂不可用",
+            request_id: `team-list-read-failed-${teamReads}`,
+          },
+        },
+      });
+    return route.fulfill({
+      json: env(created ? [createdTeam] : []),
+    });
+  });
+
+  await page.goto("/org-admin/teams");
+  await page.getByRole("button", { name: "新建团队" }).click();
+  await page.getByLabel("团队名称").fill("只创建一次的协作组");
+  await page.getByLabel("创建原因").fill("建立协作边界并验证列表读取恢复");
+  await page.getByRole("button", { name: "创建并写入审计" }).click();
+
+  const recovery = page.locator(".org-team-refresh-warning");
+  await expect(recovery).toBeVisible();
+  await expect(recovery).toContainText("团队已创建，列表暂未更新");
+  await expect(recovery).toContainText("team-create-write-201");
+  await expect(recovery.locator("dd").nth(1)).toHaveText(/^[0-9a-f-]{36}$/i);
+  await expect(page.locator(".org-admin-notice")).toContainText("团队已创建并写入审计");
+  expect(createRequests).toBe(1);
+  expect(teamReads).toBeGreaterThan(1);
+
+  allowRead = true;
+  await recovery.getByRole("button", { name: "重新读取团队列表" }).click();
+  await expect(recovery).toBeHidden();
+  await expect(page.getByRole("listitem", { name: "选择团队 只创建一次的协作组" })).toBeVisible();
+  await expect(page.locator(".org-admin-notice")).toContainText("创建操作未重复提交");
+  expect(createRequests).toBe(1);
+  expect(teamReads).toBeGreaterThan(2);
+});
+
 test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) => {
   await page.clock.setFixedTime(new Date("2026-08-26T10:00:00.000Z"));
   await setup(page);

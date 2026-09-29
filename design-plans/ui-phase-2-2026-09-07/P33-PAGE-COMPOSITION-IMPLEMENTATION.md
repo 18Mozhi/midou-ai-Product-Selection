@@ -12,9 +12,17 @@
 - `OrganizationTeamPanel`：负责团队筛选、目录选择、创建表单、详情和成员动作的本地呈现与状态。
 - `AuditedReasonDialog`：负责成员动作和创建动作的原因确认，沿用现有 Teleport、焦点和审计合同。
 
+## 创建成功但列表重读失败
+
+- 创建 POST 已成功时仍关闭创建表单并保留创建成功回执；同时在团队台显示独立读取失败提示，分别呈现写入与读取 request ID。
+- “重新读取团队列表”只执行现有组织摘要/团队/成员 GET 链，不重复 POST；读取成功后清除提示，普通读取失败时保留旧列表与恢复入口。
+- 401/403 仍遵从父页面既有失败处理并隐藏团队内容；不把权限拒绝当作可重试的普通读取失败。
+- 当前实现没有更改请求字段、API、权限、审计、幂等或数据结构。
+
 ## 验证
 
 - `node --test tests/unit/ui-phase2-teams-review.test.mjs tests/unit/ui-phase2-teams-fields.test.mjs`：通过。
+- `node scripts/run-playwright-projects.mjs tests/e2e/m06-01-organization-admin.spec.ts --grep "team creation keeps its receipt when list refresh fails and retry only rereads"`：desktop-chromium 与 mobile-390 均通过；故障注入证明创建仅提交一次、失败回执并存、显式恢复后目录更新。
 - `npx playwright test tests/e2e/m06-01-organization-admin.spec.ts --grep "organization teams|member choices" --project=desktop-chromium --project=mobile-390`：验证团队目录、筛选、分页、创建、成员动作和空态。
 - `npm run typecheck:web`、`npm run format:check`、`git diff --check`：通过。
 

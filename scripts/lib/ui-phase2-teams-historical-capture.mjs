@@ -13,9 +13,17 @@ const manifests = Object.freeze({
 });
 const dialog = "apps/web/src/components/AuditedReasonDialog.vue";
 const currentSourceHashes = Object.freeze({
-  [dialog]: "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+  [dialog]: "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
+  "apps/web/src/use-audited-reason.ts":
+    "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
+  "tests/e2e/m06-01-organization-admin.spec.ts":
+    "fe5348960507733781ecae700ca608c959e79cc9ee2bf693c3d290c7e654fb7c",
+  "scripts/lib/ui-phase2-teams-design-data.mjs":
+    "1dd9986c873bf27d1d1e791630330581880843f01635acb836407868eb0271e5",
   "apps/web/src/components/OrganizationAdminCenter.vue":
-    "05c00c7339dd6bbffd2d8bd64b80a50e7222737a60dd60dcbb850ce5e7126c89",
+    "c17f857f915060d16c6dc9173f17a00d84a44b5ba9f01645731f8ee87916b56a",
+  "apps/web/src/components/OrganizationTeamPanel.vue":
+    "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee",
 });
 const normalize = (value) => value.toString("utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
