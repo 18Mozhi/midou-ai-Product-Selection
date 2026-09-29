@@ -351,11 +351,6 @@
         {
           "file": "tests/unit/ui-phase2-p57-action-map.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
-        },
-        {
-          "file": "tests/e2e/platform-message-management.spec.ts",
-          "evidenceType": "actual-vue-local-interception",
-          "claim": "桌面与390px验证短原因即时错误、确认发布禁用、零无效写入及有效原因发布。"
         }
       ],
       "remaining": "发布入口不代表真实受众数量、通知插入或投递完成。"
@@ -391,11 +386,6 @@
         {
           "file": "tests/unit/ui-phase2-p57-action-map.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
-        },
-        {
-          "file": "tests/e2e/platform-message-management.spec.ts",
-          "evidenceType": "actual-vue-local-interception",
-          "claim": "桌面与390px验证短原因即时错误、确认取消禁用、零无效写入及有效原因后的冲突反馈。"
         }
       ],
       "remaining": "取消入口不证明后端版本、权限或审计写入成功。"
@@ -718,11 +708,6 @@
         {
           "file": "tests/unit/ui-phase2-p57-action-map.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
-        },
-        {
-          "file": "tests/e2e/platform-message-management.spec.ts",
-          "evidenceType": "actual-vue-local-interception",
-          "claim": "桌面与390px验证发布及取消原因窗的输入、短原因错误和提交按钮状态。"
         }
       ],
       "remaining": "dialog存在不证明消息动作已提交或用户可以绕过原因要求。"
@@ -732,15 +717,14 @@
       "label": "将发布/取消原因表单提交转发至父动作所有者",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformNotificationActionDialog.vue#610146af9003096b.1",
-        "apps/web/src/components/PlatformNotificationActionDialog.vue#c7068836499b22d2.1"
+        "apps/web/src/components/PlatformNotificationActionDialog.vue#610146af9003096b.1"
       ],
       "sourceContractKeys": [
         "PN57-ACTION-CURRENT-SUBMIT / 表单提交只向父级发出submit事件"
       ],
       "contractAliasReason": "按既有PN57合同对PN57-ACTION-SUBMIT-WIRING精确归属；不增加其他域、受众或投递行为。",
-      "condition": "原因达到当前2–300字规则且submitting=false时；输入不足2字时向字段关联错误反馈且不发submit。",
-      "handler": "阻止原生导航，仅对有效原因发出submit；发布和取消仍复用父级既有action/expected_version/reason API契约。",
+      "condition": "原因达到当前2–300字规则且submitting=false时。",
+      "handler": "阻止原生导航，仅发出submit；发布和取消仍复用父级既有action/expected_version/reason API契约。",
       "variants": [
         "current-route-source-contract"
       ],
@@ -761,7 +745,7 @@
         {
           "file": "tests/e2e/platform-message-management.spec.ts",
           "evidenceType": "actual-vue-local-interception",
-          "claim": "桌面与390px验证输入后短原因错误、aria-describedby关联、角色错误提示与确认按钮禁用。"
+          "claim": "桌面与390px实际Vue验证短原因时阻止提交、输入有效原因后由同一表单提交流程继续。"
         }
       ],
       "remaining": "组件事件不证明真实RBAC、受众去重、事务、审计或投递。",
@@ -778,6 +762,44 @@
           ]
         }
       ]
+    },
+    {
+      "actionId": "PN57-ACTION-CURRENT-REASON-INPUT",
+      "label": "校验发布/取消原因输入并清除字段错误",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformNotificationActionDialog.vue#c7068836499b22d2.1"
+      ],
+      "sourceContractKeys": [
+        "PN57-ACTION-CURRENT-REASON-INPUT / 输入后显示不足2字的就地反馈并关联至字段"
+      ],
+      "contractAliasReason": "按既有PN57合同对PN57-ACTION-CURRENT-REASON-INPUT精确归属；不增加其他域、受众或投递行为。",
+      "condition": "输入少于最短字符时显示关联字段错误；输入有效原因后清除该错误。",
+      "handler": "更新受控reason并标记字段已编辑；不发出submit事件，不执行API写入。",
+      "variants": [
+        "current-route-source-contract"
+      ],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/ui-phase2-p57-action-map.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/platform-message-management.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "桌面与390px验证短原因就地反馈、aria-describedby关联及有效输入后错误清除。"
+        }
+      ],
+      "remaining": "本地Vue输入状态不代表真实RBAC、发布/取消API、审计或通知投递。"
     },
     {
       "actionId": "PN57-ACTION-CLOSE",
@@ -936,7 +958,7 @@
       "apps/web/src/components/PlatformNotificationOperations.vue": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
       "apps/web/src/components/PlatformNotificationPagination.vue": "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
       "apps/web/src/components/PlatformMessageEditor.vue": "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
-    "apps/web/src/components/PlatformNotificationActionDialog.vue": "2dc6d2a4c543b985859ff6f9ddbec8331ab0d8d22a76331efd80b22d0fcc35ca"
+      "apps/web/src/components/PlatformNotificationActionDialog.vue": "2dc6d2a4c543b985859ff6f9ddbec8331ab0d8d22a76331efd80b22d0fcc35ca"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],
@@ -948,7 +970,7 @@
     "remaining": "静态映射不证明真实platform:operate/RBAC、收件人去重、站内通知插入、发布/取消审计、邮件服务、真实投递或正式M07-03验收。"
   },
   "compositionGaps": [
-    "逐项覆盖P57通知域6个专用Vue组件的31个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。",
+    "逐项覆盖P57通知域6个专用Vue组件的32个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。",
     "投递筛选只影响投递记录/摘要；消息草稿目录使用独立message_page，邮件能力保持关闭，不新增邮件入口或自动投递。",
     "草稿保存、发布和取消仍由既有父级API所有者处理；原因窗取消不写入，取消只针对未发布draft，不撤回已发布消息。"
   ]

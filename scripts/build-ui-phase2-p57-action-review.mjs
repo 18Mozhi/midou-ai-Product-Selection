@@ -203,14 +203,37 @@ const definitions = [
   },
   {
     actionId: "PN57-ACTION-SUBMIT-WIRING",
-    candidates: ["11191cd13f827990.1"],
+    candidates: ["610146af9003096b.1"],
     label: "将发布/取消原因表单提交转发至父动作所有者",
     kind: "wiring",
     forwardsTo: ["PN57-ACTION-CONFIRM"],
+    testReferences: [
+      {
+        file: "tests/e2e/platform-message-management.spec.ts",
+        evidenceType: "actual-vue-local-interception",
+        claim: "桌面与390px实际Vue验证短原因时阻止提交、输入有效原因后由同一表单提交流程继续。",
+      },
+    ],
     condition: "原因达到当前2–300字规则且submitting=false时。",
     handler:
       "阻止原生导航，仅发出submit；发布和取消仍复用父级既有action/expected_version/reason API契约。",
     remaining: "组件事件不证明真实RBAC、受众去重、事务、审计或投递。",
+  },
+  {
+    actionId: "PN57-ACTION-CURRENT-REASON-INPUT",
+    candidates: ["c7068836499b22d2.1"],
+    label: "校验发布/取消原因输入并清除字段错误",
+    kind: "local",
+    testReferences: [
+      {
+        file: "tests/e2e/platform-message-management.spec.ts",
+        evidenceType: "actual-vue-local-interception",
+        claim: "桌面与390px验证短原因就地反馈、aria-describedby关联及有效输入后错误清除。",
+      },
+    ],
+    condition: "输入少于最短字符时显示关联字段错误；输入有效原因后清除该错误。",
+    handler: "更新受控reason并标记字段已编辑；不发出submit事件，不执行API写入。",
+    remaining: "本地Vue输入状态不代表真实RBAC、发布/取消API、审计或通知投递。",
   },
   {
     actionId: "PN57-ACTION-CLOSE",
@@ -302,10 +325,10 @@ export function buildP57ActionReview() {
   );
   assert.equal(
     allCandidates.length,
-    31,
+    32,
     "P57 page-component inventory changed; re-scope before mapping",
   );
-  assert.equal(candidates.length, 31, "P57 current page-component source scope changed");
+  assert.equal(candidates.length, 32, "P57 current page-component source scope changed");
   const candidateById = new Map(candidates.map((candidate) => [candidate.candidateId, candidate]));
   const records = runContractAudit().records.filter(
     (record) =>
@@ -338,7 +361,7 @@ export function buildP57ActionReview() {
     ),
   );
   const uniqueScopedIds = new Set(candidates.map((candidate) => candidate.candidateId));
-  assert.equal(ownerBySignature.size, 31, "each in-scope P57 source position must have one owner");
+  assert.equal(ownerBySignature.size, 32, "each in-scope P57 source position must have one owner");
   const groups = new Map(definitions.map((definition) => [definition.actionId, []]));
   const claimsByGroup = new Map(definitions.map((definition) => [definition.actionId, []]));
   for (const record of recordsById.values()) {
@@ -376,7 +399,10 @@ export function buildP57ActionReview() {
       variants: ["current-route-source-contract"],
       scenes: [],
       visualStates,
-      testReferences: [{ file: testFile, evidenceType: "offline-proposal-check-not-Vue" }],
+      testReferences: [
+        { file: testFile, evidenceType: "offline-proposal-check-not-Vue" },
+        ...(definition.testReferences ?? []),
+      ],
       remaining: definition.remaining,
     };
     if (definition.forwardsTo) {
@@ -465,7 +491,7 @@ export function buildP57ActionReview() {
         "静态映射不证明真实platform:operate/RBAC、收件人去重、站内通知插入、发布/取消审计、邮件服务、真实投递或正式M07-03验收。",
     },
     compositionGaps: [
-      "逐项覆盖P57通知域6个专用Vue组件的31个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。",
+      "逐项覆盖P57通知域6个专用Vue组件的32个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。",
       "投递筛选只影响投递记录/摘要；消息草稿目录使用独立message_page，邮件能力保持关闭，不新增邮件入口或自动投递。",
       "草稿保存、发布和取消仍由既有父级API所有者处理；原因窗取消不写入，取消只针对未发布draft，不撤回已发布消息。",
     ],

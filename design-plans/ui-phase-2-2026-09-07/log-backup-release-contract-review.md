@@ -311,7 +311,14 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | --- | --- | ---: |
 | apps/web/src/components/PlatformLogCenter.vue | 029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518 | 20 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f | 6 |
-| apps/web/src/components/AuditedReasonDialog.vue | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a | 6 |
+| apps/web/src/components/AuditedReasonDialog.vue | c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2 | 6 |
+
+P62导出原因窗的当前候选增量（与第6节历史指纹分离）：
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/AuditedReasonDialog.vue#87015cbdd947096a.1 | 83 | form-event | LG62-REASON 表单提交；可选P54上限提示不改变P62默认校验/submit |
+| apps/web/src/components/AuditedReasonDialog.vue#c921f4233ae348c6.1 | 109 | event-binding | LG62-CURRENT-REASON-INPUT / 输入原因后标记已编辑并呈现关联的短原因错误 |
 
 三个文件合计32候选、12动作组。
 

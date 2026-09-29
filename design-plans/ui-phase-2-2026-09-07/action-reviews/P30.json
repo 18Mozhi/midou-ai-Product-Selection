@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
     "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7"
   },
   "actions": [
@@ -47,6 +47,47 @@
         }
       ],
       "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+    },
+    {
+      "actionId": "EX-P34-READ-RECOVERY",
+      "label": "P34审批读取恢复接线（非本页）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
+      ],
+      "sourceContractKeys": [
+        "WIRE-P34-RETRY"
+      ],
+      "priorContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "当前组织治理合同将P34的reload父级接线登记为WIRE-P34-RETRY并指向OG-RETRY；当前页面不渲染approvals分支。",
+      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P30",
+      "handler": "P30不渲染此分支；P34将reload转发至既有load()，不计入本页动作",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "members-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-members-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。"
     },
     {
       "actionId": "OG-REFRESH",
@@ -2832,7 +2873,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
       "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
       "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",

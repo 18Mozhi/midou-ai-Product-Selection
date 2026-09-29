@@ -97,10 +97,33 @@ const definitions = [
     "LG62-EXPORT",
     "write",
     "提交审计原因并导出当前规范化日志条件CSV",
-    ["13b398e8ab4b93d3.1", "7aa809a5cd2d2124.1", "e7e63c4215a43738.1"],
+    ["13b398e8ab4b93d3.1", "87015cbdd947096a.1", "e7e63c4215a43738.1"],
     "原因通过既有最短/最多300字约束且导出不在途时，用户明确提交。",
     "沿用父级当前拥有者提交带审计原因的导出请求；服务按同一条件重新查询最新200条生成CSV，不是DOM快照。取消分支不写入；下载只发生在有效成功响应后。",
     "不证明真实CSV、MySQL审计/RBAC、离页迟到下载归属或失败后可安全重发。",
+    [
+      {
+        file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
+        evidenceType: "actual-vue-local-interception",
+        claim: "日志导出原因窗双端验证短原因就地错误与确认禁用；有效原因触发一次导出并传入既有查询、来源和原因字段。",
+      },
+    ],
+  ],
+  [
+    "LG62-REASON-INPUT",
+    "local",
+    "编辑导出审计原因并展示短原因校验",
+    ["c921f4233ae348c6.1"],
+    "原因输入已编辑且trim后不足minimumLength时显示字段关联错误；达到最短长度后清除错误。",
+    "受控输入更新reason并标记reasonTouched；不发出提交事件、不执行导出请求。",
+    "本地校验证据不证明真实审计、RBAC、CSV生成或生产日志服务。",
+    [
+      {
+        file: "tests/e2e/m06-02-platform-dashboard.spec.ts",
+        evidenceType: "actual-vue-local-interception",
+        claim: "日志导出原因输入x显示aria-invalid/aria-describedby与短原因提示；填写有效原因后错误清除。",
+      },
+    ],
   ],
   [
     "LG62-TRACE",
@@ -206,7 +229,8 @@ export function buildP62ActionReview() {
       "not-mapped",
     ]),
   );
-  const actions = definitions.map(([actionId, kind, label, , condition, handler, remaining]) => ({
+  const actions = definitions.map(
+    ([actionId, kind, label, , condition, handler, remaining, additionalTestReferences = []]) => ({
     actionId,
     kind,
     label,
@@ -218,9 +242,13 @@ export function buildP62ActionReview() {
     variants: ["current-route-source-contract"],
     scenes: [],
     visualStates,
-    testReferences: [{ file: testFile, evidenceType: "offline-proposal-check-not-Vue" }],
+    testReferences: [
+      { file: testFile, evidenceType: "offline-proposal-check-not-Vue" },
+      ...additionalTestReferences,
+    ],
     remaining,
-  }));
+    }),
+  );
   const inputs = {};
   for (const [file, source] of Object.entries(sourceText)) {
     const found = scanReviewSurfaces(source, file).inputs;
@@ -276,7 +304,7 @@ export function buildP62ActionReview() {
         "静态映射不证明真实platform:operate/RBAC、security audit、SQL查询/导出、完整CSV、真实浏览器下载或M06-02/M07-03验收。",
     },
     compositionGaps: [
-      "覆盖三个P62局部源码文件的32个当前候选，包含筛选抽屉与审计原因窗共享组件；共享数据详情/表格控件内部不重复计数。",
+      "覆盖三个P62局部源码文件的33个当前候选，包含筛选抽屉与审计原因窗共享组件；共享数据详情/表格控件内部不重复计数。",
       "日志结果最多为当前规范化条件下最新200条；CSV请求由服务重新查询，不得称为不可变DOM快照。",
       "查询、导出、取消、读/写追踪编号和迟到下载分开；本图不推定离页会取消已提交服务器导出。",
     ],

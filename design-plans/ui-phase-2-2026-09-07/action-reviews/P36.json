@@ -6,7 +6,7 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
     "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
   },
   "actions": [
@@ -124,6 +124,47 @@
         }
       ],
       "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "EX-P34-READ-RECOVERY",
+      "label": "P34审批读取恢复接线（非本页）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
+      ],
+      "sourceContractKeys": [
+        "WIRE-P34-RETRY"
+      ],
+      "priorContractKeys": [
+        "OG-RETRY"
+      ],
+      "contractAliasReason": "当前组织治理合同将P34的reload父级接线登记为WIRE-P34-RETRY并指向OG-RETRY；当前页面不渲染approvals分支。",
+      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P36",
+      "handler": "P36不渲染此分支；P34将reload转发至既有load()，不计入本页动作",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。"
     },
     {
       "actionId": "EX-P29-PROFILE",
@@ -4270,7 +4311,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
       "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
     },
     "inputs": [

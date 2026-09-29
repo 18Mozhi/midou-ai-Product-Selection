@@ -194,7 +194,7 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| `apps/web/src/components/OrganizationAdminCenter.vue` | `4712d0d4e9848e069d7137373be4b1610e132b6ea033f9a71da24b5a15cbd7ed` |
+| `apps/web/src/components/OrganizationAdminCenter.vue` | `2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86` |
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
 | `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
 | `apps/web/src/components/OrganizationTeamPanel.vue` | `2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee` |

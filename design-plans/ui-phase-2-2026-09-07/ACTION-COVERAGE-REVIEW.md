@@ -2,11 +2,11 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1737；旧登记1477；新身份751，旧表独有身份491。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1573源位置/1292组；其中路由动作1067组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1742；旧登记1477；新身份757，旧表独有身份492。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1578源位置/1302组；其中路由动作1069组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
-已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
+已有视觉授权标记72页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
 
 组数按审阅页累计；共享源在多页重复引用，不代表同数量的全站独立业务动作。
 
@@ -28,10 +28,10 @@
 | [P12 今日行动](page-specs/P12.md) | 46 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P13 今日工作](page-specs/P13.md) | 71 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P14 热点趋势](page-specs/P14.md) | 90 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P15 选品机会](page-specs/P15.md) | 99 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P15 选品机会](page-specs/P15.md) | 98 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P16 创建选品](page-specs/P16.md) | 40 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 58 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P18 机会详情](page-specs/P18.md) | 99 | [66组](action-reviews/P18.json) | 332个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P18 机会详情](page-specs/P18.md) | 98 | [66组](action-reviews/P18.json) | 332个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 62 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 62 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P21 供应链与利润](page-specs/P21.md) | 63 | [41组](action-reviews/P21.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -42,15 +42,15 @@
 | [P26 通知中心](page-specs/P26.md) | 55 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P27 自动化规则](page-specs/P27.md) | 51 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P28 报表与导出](page-specs/P28.md) | 46 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 153 | [8组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P30 成员与邀请](page-specs/P30.md) | 153 | [24组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P31 角色与权限](page-specs/P31.md) | 153 | [25组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P32 工作区管理](page-specs/P32.md) | 153 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P33 团队管理](page-specs/P33.md) | 153 | [19组](action-reviews/P33.json) | 29个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P29 治理概览](page-specs/P29.md) | 153 | [9组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P30 成员与邀请](page-specs/P30.md) | 153 | [25组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P31 角色与权限](page-specs/P31.md) | 153 | [26组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P32 工作区管理](page-specs/P32.md) | 153 | [24组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P33 团队管理](page-specs/P33.md) | 153 | [20组](action-reviews/P33.json) | 29个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P34 审批模板](page-specs/P34.md) | 153 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P35 组织数据](page-specs/P35.md) | 153 | [14组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P36 组织令牌](page-specs/P36.md) | 153 | [19组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P37 组织审计](page-specs/P37.md) | 153 | [16组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P35 组织数据](page-specs/P35.md) | 153 | [15组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P36 组织令牌](page-specs/P36.md) | 153 | [20组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P37 组织审计](page-specs/P37.md) | 153 | [17组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P38 平台概览](page-specs/P38.md) | 59 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P39 账号与组织](page-specs/P39.md) | 95 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P40 组织管理](page-specs/P40.md) | 95 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -70,12 +70,12 @@
 | [P54 数据中心](page-specs/P54.md) | 57 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P55 质量与规则](page-specs/P55.md) | 58 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P56 内容管理](page-specs/P56.md) | 74 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P57 通知管理](page-specs/P57.md) | 74 | [21组](action-reviews/P57.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P57 通知管理](page-specs/P57.md) | 74 | [22组](action-reviews/P57.json) | 132个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P58 配额管理](page-specs/P58.md) | 70 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P59 安全中心](page-specs/P59.md) | 68 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P60 开放平台](page-specs/P60.md) | 71 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P61 系统状态](page-specs/P61.md) | 74 | [6组](action-reviews/P61.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P62 链路日志](page-specs/P62.md) | 57 | [12组](action-reviews/P62.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P62 链路日志](page-specs/P62.md) | 57 | [13组](action-reviews/P62.json) | 78个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P63 接口覆盖证据](page-specs/P63.md) | 74 | [2组](action-reviews/P63.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P64 备份与恢复](page-specs/P64.md) | 43 | [5组](action-reviews/P64.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P65 发布管理](page-specs/P65.md) | 44 | [7组](action-reviews/P65.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -1283,13 +1283,13 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P18 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P18.json)：118个局部源位置 → 66组；13类写入，55组路由动作，9组转发/容器关联不重复计动作。已映射35/35个源码字段位置，28/29处调用/内嵌容器，45个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P18.json)：119个局部源位置 → 66组；13类写入，55组路由动作，9组转发/容器关联不重复计动作。已映射35/35个源码字段位置，28/29处调用/内嵌容器，45个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有332个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| OP-AI-QUEUE 生成AI分析 / write | 1处；can-write、readonly、busy、failed | [ai-queue-busy · 1440](design/review-direction-c/1440-ai-queue-busy.png) / [ai-queue-busy · 390](design/review-direction-c/390-ai-queue-busy.png)、[ai-reload-error · 1440](design/review-direction-c/1440-ai-reload-error.png) / [ai-reload-error · 390](design/review-direction-c/390-ai-reload-error.png)；其余见JSON | 排队不代表模型成功；跨ID晚到结果、真实权限与完整生命周期未验。 |
+| OP-AI-QUEUE 生成AI分析 / write | 1处；can-write、readonly、busy、failed | [ai-queue-busy · 1440](design/review-direction-c/1440-ai-queue-busy.png) / [ai-queue-busy · 390](design/review-direction-c/390-ai-queue-busy.png)、[ai-reload-error · 1440](design/review-direction-c/1440-ai-reload-error.png) / [ai-reload-error · 390](design/review-direction-c/390-ai-reload-error.png)；其余见JSON | 排队不代表模型成功；桌面/390px真实Vue已验证跨机会ID迟到回执隔离。真实权限、Worker完成及完整生命周期仍未验。 |
 | OP-AI-RETRY 重读AI记录 / read | 1处；error、stale-error、malformed | [ai-error · 1440](design/review-direction-c/1440-ai-error.png) / [ai-error · 390](design/review-direction-c/390-ai-error.png)、[ai-stale-error · 1440](design/review-direction-c/1440-ai-stale-error.png) / [ai-stale-error · 390](design/review-direction-c/390-ai-stale-error.png)；其余见JSON | 本地 Vue 已验证 503/格式异常时保留并标记旧快照、禁用抽检及显式 GET 恢复；真实 API/RBAC 与生产依赖验收仍待。 |
 | OP-AI-REVIEW.approved AI抽检通过 / write | 1处；pending、already-reviewed、replaced-ask、failure-restored、explicit-retry | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[approved-failed · 1440](design/review-direction-c/1440-approved-failed.png) / [approved-failed · 390](design/review-direction-c/390-approved-failed.png)；其余见JSON | 桌面/390px真实Vue延迟POST验证当前结果显示提交中/刷新中、两种抽检按钮锁定、重复派发不再开第二次原因流程；失败后仍恢复原原因/action_hint且不自动重发。真实服务端结果/RBAC仍未验。 |
 | OP-AI-REVIEW.rejected AI抽检驳回 / write | 1处；pending、rejected、cancel、failure-restored、explicit-retry | [rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)、[review-unknown · 1440](design/review-direction-c/1440-review-unknown.png) / [review-unknown · 390](design/review-direction-c/390-review-unknown.png)；其余见JSON | 桌面/390px真实Vue延迟POST验证当前结果显示提交中/刷新中、两种抽检按钮锁定、重复派发不再开第二次原因流程；失败后仍恢复原原因/action_hint且不自动重发。真实服务端结果/RBAC仍未验。 |
@@ -1341,7 +1341,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-WIRING-FEEDBACK 组件事件/容器关联：FEEDBACK / wiring | 1处；OP-FEEDBACK-SUBMIT、OP-FEEDBACK-RETRY | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-AI 组件事件/容器关联：AI / wiring | 1处；OP-AI-QUEUE、OP-AI-RETRY、OP-AI-REVIEW.approved、OP-AI-REVIEW.rejected | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-DIALOGS 组件事件/容器关联：DIALOGS / wiring | 2处；OP-P15-EXCLUDED、OP-DECISION-SUBMIT | [overview · 1440](design/detail-adaptive-direction-c/1440-overview.png) / [overview · 390](design/detail-adaptive-direction-c/390-overview.png)、[observe-edited · 1440](design/opportunity-detail-direction-c/1440-observe-edited.png) / [observe-edited · 390](design/opportunity-detail-direction-c/390-observe-edited.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
-| OP-AI-REASON-DIALOG AI抽检原因填写与失败恢复窗 / local | 6处；AI.approved、AI.rejected、failure-restored、cancel | ；其余见JSON | 当前仅本地受控响应证明前端呈现与显式重试；不证明未知服务端commit、真实幂等/RBAC或其他调用页生命周期。 |
+| OP-AI-REASON-DIALOG AI抽检原因填写与失败恢复窗 / local | 7处；AI.approved、AI.rejected、failure-restored、cancel | ；其余见JSON | 当前仅本地受控响应证明前端呈现与显式重试；P18 AI变体已覆盖本地最短长度错误关联，其他共享调用页生命周期仍待；不证明未知服务端commit、真实幂等/RBAC。 |
 | OP-WIRING-REASON 组件事件/容器关联：REASON / wiring | 4处；OP-AI-REVIEW.approved、OP-AI-REVIEW.rejected | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-WIRING-DECISION-CONTAINER 组件事件/容器关联：DECISION-CONTAINER / wiring | 1处；OP-DECISION-OPEN.adopt、OP-DECISION-OPEN.observe、OP-DECISION-OPEN.reject、OP-DECISION-CLOSE、OP-DECISION-SUBMIT | [approved-filled · 1440](design/review-direction-c/1440-approved-filled.png) / [approved-filled · 390](design/review-direction-c/390-approved-filled.png)、[rejected-filled · 1440](design/review-direction-c/1440-rejected-filled.png) / [rejected-filled · 390](design/review-direction-c/390-rejected-filled.png)；其余见JSON | 绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。 |
 | OP-PROFIT-RETRY 利润数据失败重读 / read | 1处；利润数据读取失败后显式重试 | ；其余见JSON | 当前源码候选与GET读取语义已映射；未在此处新增按钮级视觉/真实API/RBAC验收。 |
@@ -2545,7 +2545,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P29 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P29.json)：13个局部源位置 → 8组；1类写入，4组路由动作，0组转发/容器关联不重复计动作。已映射6/6个源码字段位置，2/2处调用/内嵌容器，32个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P29.json)：14个局部源位置 → 9组；1类写入，4组路由动作，0组转发/容器关联不重复计动作。已映射6/6个源码字段位置，2/2处调用/内嵌容器，32个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2554,6 +2554,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | EX-P34-FIRST-FAILURE P34首次读取失败转发（非本页） / excluded | 2处；normal | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
+| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；normal | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
 | OG-REFRESH 刷新组织资料 / read | 1处；normal、refreshing、loading、refresh_error、dirty_refresh | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)、[refreshing · 1440](design/organization-profile-direction-c/1440-refreshing.png) / [refreshing · 390](design/organization-profile-direction-c/390-refreshing.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 | OG-RETRY 错误后重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited、conflict_page | [error · 1440](design/organization-profile-direction-c/1440-error.png) / [error · 390](design/organization-profile-direction-c/390-error.png)、[blocked · 1440](design/organization-profile-direction-c/1440-blocked.png) / [blocked · 390](design/organization-profile-direction-c/390-blocked.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 | OG-PROFILE-SAVE 保存并审计 / write | 2处；editing、save_busy、save_error、save_conflict、save_success、write_read_failed、save_timeout | [editing · 1440](design/organization-profile-direction-c/1440-editing.png) / [editing · 390](design/organization-profile-direction-c/390-editing.png)、[save_busy · 1440](design/organization-profile-direction-c/1440-save_busy.png) / [save_busy · 390](design/organization-profile-direction-c/390-save_busy.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
@@ -2619,13 +2620,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P30 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P30.json)：30个局部源位置 → 24组；4类写入，19组路由动作，1组转发/容器关联不重复计动作。已映射9/9个源码字段位置，3/3处调用/内嵌容器，13个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P30.json)：31个局部源位置 → 25组；4类写入，19组路由动作，1组转发/容器关联不重复计动作。已映射9/9个源码字段位置，3/3处调用/内嵌容器，13个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有30个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | EX-P34-FIRST-FAILURE P34首次读取失败转发（非本页） / excluded | 2处；normal | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
+| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；normal | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
 | OG-REFRESH 刷新成员资料 / read | 1处；normal、refreshing、refresh_error | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)、[refreshing · 1440](design/members-direction-c/1440-refreshing.png) / [refreshing · 390](design/members-direction-c/390-refreshing.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
 | OG-RETRY 重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited | [error · 1440](design/members-direction-c/1440-error.png) / [error · 390](design/members-direction-c/390-error.png)、[blocked · 1440](design/members-direction-c/1440-blocked.png) / [blocked · 390](design/members-direction-c/390-blocked.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
 | EX-P29-PROFILE 组织资料分支排除 / excluded | 3处；normal | [normal · 1440](design/members-direction-c/1440-normal.png) / [normal · 390](design/members-direction-c/390-normal.png)；其余见JSON | 当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。 |
@@ -2711,13 +2713,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P31 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P31.json)：32个局部源位置 → 25组；3类写入，20组路由动作，1组转发/容器关联不重复计动作。已映射20/20个源码字段位置，4/4处调用/内嵌容器，20个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P31.json)：33个局部源位置 → 26组；3类写入，20组路由动作，1组转发/容器关联不重复计动作。已映射20/20个源码字段位置，4/4处调用/内嵌容器，20个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有44个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | EX-P34-FIRST-FAILURE P34首次读取失败转发（非本页） / excluded | 2处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
+| EX-P34-READ-RECOVERY P34审批读取恢复状态父级接线（非本页） / excluded | 1处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由P31证据证明。 |
 | OG-REFRESH 刷新角色权限 / read | 1处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
 | OG-RETRY 重新加载 / read | 1处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
 | EX-P29-PROFILE 组织资料分支排除 / excluded | 3处；roles | [roles · 1440](design/roles-direction-c/1440-roles.png) / [roles · 390](design/roles-direction-c/390-roles.png)；其余见JSON | 仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。 |
@@ -2814,13 +2817,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P32 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P32.json)：30个局部源位置 → 23组；2类写入，18组路由动作，0组转发/容器关联不重复计动作。已映射11/11个源码字段位置，3/3处调用/内嵌容器，18个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P32.json)：31个局部源位置 → 24组；2类写入，18组路由动作，0组转发/容器关联不重复计动作。已映射11/11个源码字段位置，3/3处调用/内嵌容器，18个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有28个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | EX-P34-FIRST-FAILURE P34首次读取失败转发（非本页） / excluded | 2处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
+| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
 | OG-REFRESH 刷新工作区 / read | 1处；normal、refreshing、refresh_error | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)、[refreshing · 1440](design/workspaces-direction-c/1440-refreshing.png) / [refreshing · 390](design/workspaces-direction-c/390-refreshing.png)；其余见JSON | 已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。 |
 | OG-RETRY 重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited | [error · 1440](design/workspaces-direction-c/1440-error.png) / [error · 390](design/workspaces-direction-c/390-error.png)、[blocked · 1440](design/workspaces-direction-c/1440-blocked.png) / [blocked · 390](design/workspaces-direction-c/390-blocked.png)；其余见JSON | 已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。 |
 | EX-P29-PROFILE 资料分支排除 / excluded | 3处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
@@ -2893,13 +2897,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P33 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P33.json)：33个局部源位置 → 19组；2类写入，14组路由动作，0组转发/容器关联不重复计动作。已映射13/13个源码字段位置，3/3处调用/内嵌容器，14个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P33.json)：34个局部源位置 → 20组；2类写入，14组路由动作，0组转发/容器关联不重复计动作。已映射13/13个源码字段位置，3/3处调用/内嵌容器，14个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有29个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | EX-P34-FIRST-FAILURE P34首次读取失败转发（非本页） / excluded | 2处；normal | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
+| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；normal | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
 | OG-REFRESH 刷新团队 / read | 1处；normal、refreshing、refresh_error | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)、[refreshing · 1440](design/teams-direction-c/1440-refreshing.png) / [refreshing · 390](design/teams-direction-c/390-refreshing.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
 | OG-RETRY 重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited | [error · 1440](design/teams-direction-c/1440-error.png) / [error · 390](design/teams-direction-c/390-error.png)、[blocked · 1440](design/teams-direction-c/1440-blocked.png) / [blocked · 390](design/teams-direction-c/390-blocked.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
 | EX-P29-PROFILE 资料分支排除 / excluded | 3处；normal | [normal · 1440](design/teams-direction-c/1440-normal.png) / [normal · 390](design/teams-direction-c/390-normal.png)；其余见JSON | 源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。 |
@@ -2966,15 +2971,15 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P34 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P34.json)：29个局部源位置 → 13组；0类写入，8组路由动作，1组转发/容器关联不重复计动作。已映射16/16个源码字段位置，3/3处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P34.json)：32个局部源位置 → 13组；0类写入，8组路由动作，1组转发/容器关联不重复计动作。已映射16/16个源码字段位置，3/3处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有15个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | OG-REFRESH 刷新组织审批 / read | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[refresh-default · 1440](design/org-approvals-controls-direction-c/refresh-default-1440.png) / [refresh-default · 390](design/org-approvals-controls-direction-c/refresh-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
-| OG-RETRY 错误后重新加载 / read | 2处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[retry-error-default · 1440](design/org-approvals-controls-direction-c/retry-error-default-1440.png) / [retry-error-default · 390](design/org-approvals-controls-direction-c/retry-error-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
-| WIRE-P34-RETRY 失败区域重试转发 / wiring | 2处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-RETRY 错误后重新加载 / read | 3处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[retry-error-default · 1440](design/org-approvals-controls-direction-c/retry-error-default-1440.png) / [retry-error-default · 390](design/org-approvals-controls-direction-c/retry-error-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| WIRE-P34-RETRY 失败区域重试转发 / wiring | 3处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
 | EX-P29-PROFILE 组织资料排除 / excluded | 3处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
 | EX-P30-MEMBERS 成员事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
 | EX-P31-ROLES 授权事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
@@ -2983,13 +2988,14 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OG-A-REQUEST-FILTER 审批重置与分页 / local | 3处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[request-reset-default · 1440](design/org-approvals-controls-direction-c/request-reset-default-1440.png) / [request-reset-default · 390](design/org-approvals-controls-direction-c/request-reset-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
 | OG-A-TEMPLATE-FILTER 模板重置、清除与分页 / local | 4处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[template-reset-default · 1440](design/org-approvals-controls-direction-c/template-reset-default-1440.png) / [template-reset-default · 390](design/org-approvals-controls-direction-c/template-reset-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
 | OG-A-SELECT 选择模板版本详情 / local | 1处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[select-default · 1440](design/org-approvals-controls-direction-c/select-default-1440.png) / [select-default · 390](design/org-approvals-controls-direction-c/select-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
-| OG-TECH 折叠技术详情与请求追踪 / local | 3处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[request-technical-closed-default · 1440](design/org-approvals-controls-direction-c/request-technical-closed-default-1440.png) / [request-technical-closed-default · 390](design/org-approvals-controls-direction-c/request-technical-closed-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
+| OG-TECH 折叠技术详情与请求追踪 / local | 4处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[request-technical-closed-default · 1440](design/org-approvals-controls-direction-c/request-technical-closed-default-1440.png) / [request-technical-closed-default · 390](design/org-approvals-controls-direction-c/request-technical-closed-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
 | OG-A-LINK 审批工作台与组织审计 / navigation | 2处；source-current | [normal · 1440](design/org-approvals-direction-c/1440-normal.png) / [normal · 390](design/org-approvals-direction-c/390-normal.png)、[approvals-default · 1440](design/org-approvals-controls-direction-c/approvals-default-1440.png) / [approvals-default · 390](design/org-approvals-controls-direction-c/approvals-default-390.png)；其余见JSON | 源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。 |
 
 ### 事件转发关系（不增加业务动作）
 
 | 关系键 | 源事件 / handler | 目标合同组 |
 | --- | --- | --- |
+| WIRE-P34-RETRY | @reload / load() | OG-RETRY |
 | WIRE-P34-RETRY | @reload / load() | OG-RETRY |
 | WIRE-P34-RETRY | @reload / load() | OG-RETRY |
 
@@ -3024,7 +3030,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ### 明确保留的边界
 
-- 当前C整合、加载、登录/网络反馈仍有待审区域；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。
+- 当前C整合其他非本次读取反馈区域仍有待审；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。
 - 其他按钮态、完整父状态适用性、手机返回目录/筛选折叠与生产整合仍未全部实施批准。
 - 同名工作区、最长内容、200%缩放、主题密度、全角色、组织切换/卸载/多实例时序及真实SQL/RBAC仍待验。
 - source-reviewed不是整页完成；待审组合不因当前路由验证通过而自动批准。
@@ -3033,7 +3039,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P35 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P35.json)：23个局部源位置 → 14组；0类写入，9组路由动作，0组转发/容器关联不重复计动作。已映射14/14个源码字段位置，4/4处调用/内嵌容器，4个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P35.json)：24个局部源位置 → 15组；0类写入，9组路由动作，0组转发/容器关联不重复计动作。已映射14/14个源码字段位置，4/4处调用/内嵌容器，4个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有54个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3042,6 +3048,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OG-REFRESH 刷新组织数据 / read | 1处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
 | OG-RETRY 重新加载 / read | 1处；source-current | [error · 1440](design/org-data-direction-c/1440-error.png) / [error · 390](design/org-data-direction-c/390-error.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
 | EX-P34-RETRY 审批专有重试排除 / excluded | 2处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
+| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
 | EX-P29-PROFILE 组织资料排除 / excluded | 3处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
 | EX-P30-MEMBERS 成员事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
 | EX-P31-ROLES 资源授权事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-data-direction-c/1440-normal.png) / [normal · 390](design/org-data-direction-c/390-normal.png)；其余见JSON | 源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。 |
@@ -3093,7 +3100,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P36 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P36.json)：25个局部源位置 → 19组；3类写入，12组路由动作，2组转发/容器关联不重复计动作。已映射13/13个源码字段位置，6/6处调用/内嵌容器，9个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P36.json)：26个局部源位置 → 20组；3类写入，12组路由动作，2组转发/容器关联不重复计动作。已映射13/13个源码字段位置，6/6处调用/内嵌容器，9个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3102,6 +3109,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OG-REFRESH 刷新令牌数据 / read | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | OG-RETRY 重新读取 / read | 1处；source-current | [error · 1440](design/org-token-direction-c/1440-error.png) / [error · 390](design/org-token-direction-c/390-error.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | EX-P34-RETRY 审批专有转发排除 / excluded | 2处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
+| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
 | EX-P29-PROFILE 资料表单排除 / excluded | 3处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | EX-P30-MEMBERS 成员转发排除 / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | EX-P31-ROLES 资源授权转发排除 / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
@@ -3172,7 +3180,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P37 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P37.json)：23个局部源位置 → 16组；0类写入，11组路由动作，0组转发/容器关联不重复计动作。已映射14/14个源码字段位置，6/6处调用/内嵌容器，9个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P37.json)：24个局部源位置 → 17组；0类写入，11组路由动作，0组转发/容器关联不重复计动作。已映射14/14个源码字段位置，6/6处调用/内嵌容器，9个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3181,6 +3189,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OG-REFRESH 刷新审计第一页 / read | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | OG-RETRY 重新读取 / read | 1处；source-current | [error · 1440](design/org-audit-direction-c/1440-error.png) / [error · 390](design/org-audit-direction-c/390-error.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | EX-P34-RETRY 审批专有恢复排除 / excluded | 2处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
+| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
 | EX-P29-PROFILE 组织资料表单排除 / excluded | 3处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | EX-P30-MEMBERS 成员事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | EX-P31-ROLES 资源授权事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
@@ -4354,7 +4363,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | DG54-VIEW 切换近期记录与证据质量 / navigation | 2处；records、quality | [records:default · 1440](design/data-composed-direction-c/1440-records-default.png) / [records:default · 390](design/data-composed-direction-c/390-records-default.png)、[quality:default · 1440](design/data-composed-direction-c/1440-quality-default.png) / [quality:default · 390](design/data-composed-direction-c/390-quality-default.png)；其余见JSON | 同路由history、质量工作态保留与KeepAlive读取中止已有Vue夹具回归；真实权限、真实API和生产生命周期仍未验证。 |
 | DG54-ENTITY 选择四类近期数据 / read | 1处；trends、opportunities、competitors、suppliers | [records:trends · 1440](design/data-composed-direction-c/1440-records-trends.png) / [records:trends · 390](design/data-composed-direction-c/390-records-trends.png)、[records:opportunities · 1440](design/data-composed-direction-c/1440-records-opportunities.png) / [records:opportunities · 390](design/data-composed-direction-c/390-records-opportunities.png)；其余见JSON | 查询草稿保留与状态清空需跨四类逐项验证；旧快照不改变业务范围，导出等待仍可能漂移。 |
 | DG54-FILTER 应用或重置近期筛选 / read | 5处；drawer-open、drawer-close、form-submit、enter、apply、reset | [records:filter · 1440](design/data-composed-direction-c/1440-records-filter.png) / [records:filter · 390](design/data-composed-direction-c/390-records-filter.png)、[records:query-draft · 1440](design/data-composed-direction-c/1440-records-query-draft.png) / [records:query-draft · 390](design/data-composed-direction-c/390-records-query-draft.png)；其余见JSON | 原生提交与Enter、抽屉submit.capture顺序、SQL LIKE和供应商字段范围尚非实际链验收。 |
-| DG54-EXPORT 受控CSV导出 / write | 5处；open、ask、submit、cancel、download | [records:export · 1440](design/data-composed-direction-c/1440-records-export.png) / [records:export · 390](design/data-composed-direction-c/390-records-export.png)、[records:export-empty · 1440](design/data-composed-direction-c/1440-records-export-empty.png) / [records:export-empty · 390](design/data-composed-direction-c/390-records-export-empty.png)；其余见JSON | 真实客户端原因无最大长度；服务器2–300。请求与文件名使用可变entity；新稿固定条件/未知防重只是提案，未证真实CSV/审计/重复幂等。 |
+| DG54-EXPORT 受控CSV导出 / write | 5处；open、ask、submit、cancel、download | [records:export · 1440](design/data-composed-direction-c/1440-records-export.png) / [records:export · 390](design/data-composed-direction-c/390-records-export.png)、[records:export-empty · 1440](design/data-composed-direction-c/1440-records-export-empty.png) / [records:export-empty · 390](design/data-composed-direction-c/390-records-export-empty.png)；其余见JSON | 本地真实Vue已验证原因输入的最短长度错误与提交禁用；不证明真实CSV/审计/重复幂等。 |
 | DG54-LOAD 读取与状态重试 / read | 1处；first、empty、error、expired、forbidden、blocked、retry、timeout | [records:loading · 1440](design/data-composed-direction-c/1440-records-loading.png) / [records:loading · 390](design/data-composed-direction-c/390-records-loading.png)、[records:empty · 1440](design/data-composed-direction-c/1440-records-empty.png) / [records:empty · 390](design/data-composed-direction-c/390-records-empty.png)；其余见JSON | 15秒abort非完整生命周期代次保护；失败保留仅有旧行时，不把空数据旧状态一概称快照保留。 |
 | DG54-TECH 查看记录与展开技术标识 / local | 3处；desktop-row、mobile-detail | [records:detail · 1440](design/data-composed-direction-c/1440-records-detail.png) / [records:detail · 390](design/data-composed-direction-c/390-records-detail.png)、[records:long-detail · 1440](design/data-composed-direction-c/1440-records-long-detail.png) / [records:long-detail · 390](design/data-composed-direction-c/390-records-long-detail.png)；其余见JSON | 这是行ID展开，不是页尾TechnicalDetails复制；所有类型/长ID状态与共享复制消费者另验。 |
 | DG54-PAGE 近期记录本地分页 / read | 2处；previous、next、first、last | [records:page-21 · 1440](design/data-composed-direction-c/1440-records-page-21.png) / [records:page-21 · 390](design/data-composed-direction-c/390-records-page-21.png)、[records:page-two · 1440](design/data-composed-direction-c/1440-records-page-two.png) / [records:page-two · 390](design/data-composed-direction-c/390-records-page-two.png)；其余见JSON | 同一原型场景图不证明真实浏览器history/滚动/每种实体分页。 |
@@ -4498,9 +4507,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P57 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P57.json)：31个局部源位置 → 21组；0类写入，16组路由动作，5组转发/容器关联不重复计动作。已映射0/13个源码字段位置，0/1处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P57.json)：32个局部源位置 → 22组；0类写入，17组路由动作，5组转发/容器关联不重复计动作。已映射0/13个源码字段位置，0/1处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有126个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有132个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -4523,6 +4532,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | PN57-EDITOR-SAVE 提交新建或更新草稿表单 / local | 1处；current-route-source-contract | ；其余见JSON | 按钮点击不证明父级请求成功、版本冲突或受众引用可用。 |
 | PN57-ACTION-DIALOG 呈现发布/取消专用原因窗并处理键盘关闭 / local | 2处；current-route-source-contract | ；其余见JSON | dialog存在不证明消息动作已提交或用户可以绕过原因要求。 |
 | PN57-ACTION-SUBMIT-WIRING 将发布/取消原因表单提交转发至父动作所有者 / wiring | 1处；current-route-source-contract | ；其余见JSON | 组件事件不证明真实RBAC、受众去重、事务、审计或投递。 |
+| PN57-ACTION-CURRENT-REASON-INPUT 校验发布/取消原因输入并清除字段错误 / local | 1处；current-route-source-contract | ；其余见JSON | 本地Vue输入状态不代表真实RBAC、发布/取消API、审计或通知投递。 |
 | PN57-ACTION-CLOSE 关闭发布/取消原因填写窗口而不提交动作 / local | 2处；current-route-source-contract | ；其余见JSON | 关闭原因窗不代表父服务端动作已取消或回滚。 |
 | PN57-ACTION-CONFIRM 确认发布草稿或取消未发布草稿 / local | 1处；current-route-source-contract | ；其余见JSON | 确认按钮启用不证明服务端校验通过、受众插入或站内消息送达。 |
 
@@ -4549,7 +4559,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ### 明确保留的边界
 
-- 逐项覆盖P57通知域6个专用Vue组件的31个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。
+- 逐项覆盖P57通知域6个专用Vue组件的32个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。
 - 投递筛选只影响投递记录/摘要；消息草稿目录使用独立message_page，邮件能力保持关闭，不新增邮件入口或自动投递。
 - 草稿保存、发布和取消仍由既有父级API所有者处理；原因窗取消不写入，取消只针对未发布draft，不撤回已发布消息。
 - PlatformManagementCenter跨域状态所有者与NavigationShell沿其各自合同复用；PlatformNotificationPagination一个源码按钮由两条独立分页消费者使用，游标仍分开。
@@ -4719,9 +4729,9 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P62 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P62.json)：32个局部源位置 → 12组；1类写入，12组路由动作，0组转发/容器关联不重复计动作。已映射0/3个源码字段位置，0/3处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P62.json)：33个局部源位置 → 13组；1类写入，13组路由动作，0组转发/容器关联不重复计动作。已映射0/3个源码字段位置，0/3处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有72个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有78个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -4733,6 +4743,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | LG62-EXPORT-OPEN 准备当前筛选CSV审计导出原因流程 / local | 2处；current-route-source-contract | ；其余见JSON | 流程打开不证明原因校验、审计写入或CSV生成。 |
 | LG62-EXPORT-DIALOG 呈现日志导出原因窗并允许取消 / local | 5处；current-route-source-contract | ；其余见JSON | 局部定义不证明跨离页/迟到请求的完整浏览器生命周期。 |
 | LG62-EXPORT 提交审计原因并导出当前规范化日志条件CSV / write | 3处；current-route-source-contract | ；其余见JSON | 不证明真实CSV、MySQL审计/RBAC、离页迟到下载归属或失败后可安全重发。 |
+| LG62-REASON-INPUT 编辑导出审计原因并展示短原因校验 / local | 1处；current-route-source-contract | ；其余见JSON | 本地校验证据不证明真实审计、RBAC、CSV生成或生产日志服务。 |
 | LG62-TRACE 披露链路、快照读取、最近失败及最近导出追踪编号 / local | 4处；current-route-source-contract | ；其余见JSON | 显示关联编号不证明关联请求成功或后端日志脱敏正确。 |
 | LG62-TASK 从异常日志跳转到关联采集任务 / navigation | 2处；current-route-source-contract | ；其余见JSON | 存在跳转目标不证明任务当前存在或用户可读取。 |
 | LG62-PROVIDER 从异常日志跳转到关联来源配置 / navigation | 2处；current-route-source-contract | ；其余见JSON | 链接不证明来源配置当前有效或具备编辑权限。 |
@@ -4750,7 +4761,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ### 明确保留的边界
 
-- 覆盖三个P62局部源码文件的32个当前候选，包含筛选抽屉与审计原因窗共享组件；共享数据详情/表格控件内部不重复计数。
+- 覆盖三个P62局部源码文件的33个当前候选，包含筛选抽屉与审计原因窗共享组件；共享数据详情/表格控件内部不重复计数。
 - 日志结果最多为当前规范化条件下最新200条；CSV请求由服务重新查询，不得称为不可变DOM快照。
 - 查询、导出、取消、读/写追踪编号和迟到下载分开；本图不推定离页会取消已提交服务器导出。
 - P62局部来源含PlatformLogCenter、ResponsiveFilterDrawer和AuditedReasonDialog；ResponsiveDataView、TableViewControls及PlatformManagementCenter父所有者仅作为共享消费者/合同交叉引用。

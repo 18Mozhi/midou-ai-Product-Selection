@@ -35,8 +35,8 @@ const context = { candidates, sourceHashes, contracts, packages: new Map(), file
 
 test("P62 maps every current local log/filter/reason-dialog candidate exactly once", () => {
   assert.deepEqual(review, buildP62ActionReview());
-  assert.equal(candidates.length, 32);
-  assert.equal(validateActionReview(review, context).sourceSites, 32);
+  assert.equal(candidates.length, 33);
+  assert.equal(validateActionReview(review, context).sourceSites, 33);
   assert.equal(review.route, "/platform-admin/logs");
   assert.equal(review.visualApproval, "user-approved-remaining-pages-auto");
   assert.equal(review.actionApproval, "pending-user-review");

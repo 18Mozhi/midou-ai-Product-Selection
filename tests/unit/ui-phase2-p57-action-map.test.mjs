@@ -37,10 +37,10 @@ const files = new Set(
 );
 const context = { candidates, sourceHashes, contracts, packages: new Map(), files };
 
-test("P57 maps all 31 notification-component candidates and records shared parent boundaries", () => {
+test("P57 maps all 32 notification-component candidates and records shared parent boundaries", () => {
   assert.deepEqual(review, buildP57ActionReview());
-  assert.equal(candidates.length, 31);
-  assert.equal(validateActionReview(review, context).sourceSites, 31);
+  assert.equal(candidates.length, 32);
+  assert.equal(validateActionReview(review, context).sourceSites, 32);
   assert.equal(review.route, "/platform-admin/notifications");
   assert.equal(review.pageScopeExclusions.excludedCurrentCandidates.length, 11);
   assert.equal(review.pageScopeExclusions.sharedCurrentCandidates.length, 4);
