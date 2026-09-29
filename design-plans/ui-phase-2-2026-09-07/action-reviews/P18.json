@@ -14,7 +14,7 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "b426305a36996b5b76c8f836be5ebc0cec3476f2447e3fe60c23780181c20781",
+    "apps/web/src/components/OpportunityWorkspace.vue": "c11103e30119b85b82f3c21f46f66c508fc29fa838b40fe4819858b3397b6c62",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
@@ -2787,7 +2787,7 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-      "apps/web/src/components/OpportunityWorkspace.vue": "b426305a36996b5b76c8f836be5ebc0cec3476f2447e3fe60c23780181c20781",
+      "apps/web/src/components/OpportunityWorkspace.vue": "c11103e30119b85b82f3c21f46f66c508fc29fa838b40fe4819858b3397b6c62",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
@@ -3819,7 +3819,7 @@
     "701十分区已组合且有主题密度代表图，但无完整采纳质量门/成本输入复核链，不能借其他夹具填当前机会事实。",
     "概览竞品/供应目录链接当前无能力v-if；旧合同按能力展示描述与真实源不同，待明确审核，未擅自修权限或路由。",
     "P18主状态页各文案都走load且次按钮无handler；原型恢复入口与实际消费者必须逐态对齐。",
-    "观察/驳回、AI抽检和复核打开按钮部分不禁busy；write无单飞早退，ID/watch和晚到响应无归属token，未知异常称未写入不是事务证明。",
+    "AI抽检和成本复核入口的在途禁用/归属仍需逐项核验；决策提交已增加局部同步单飞守卫，通用 write 仍允许不同动作并行，旧失败文案不能证明服务端事务结果。",
     "成本初始时间UTC截断/本地解析偏移、reviewer失败置空、复核id残留、AI先关原因再写差异继续保留OP07–OP10。",
     "43个路由动作的六態仍需逐一判断/selector绑定；已有代表控件图不自动等于全动作、所有行/主题/权限状态已验。"
   ],

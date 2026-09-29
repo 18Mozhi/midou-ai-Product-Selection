@@ -821,16 +821,21 @@ function startDecision(action: "adopt" | "observe" | "reject") {
   showDecision.value = true;
 }
 async function decide() {
-  if (!detail.value) return;
-  const opportunityId = detail.value.id;
-  const dialogGeneration = decisionDialogGeneration;
-  const result = await write(`/opportunities/${detail.value.id}/decisions`, {
+  if (busy.value || !detail.value) return;
+  const submitted = {
+    opportunityId: detail.value.id,
     action: decisionAction.value,
     reason: decisionReason.value,
-    expected_version: detail.value.version,
+    expectedVersion: detail.value.version,
+  };
+  const dialogGeneration = decisionDialogGeneration;
+  const result = await write(`/opportunities/${submitted.opportunityId}/decisions`, {
+    action: submitted.action,
+    reason: submitted.reason,
+    expected_version: submitted.expectedVersion,
   });
   if (result) {
-    if (detail.value?.id !== opportunityId) return;
+    if (detail.value?.id !== submitted.opportunityId) return;
     if (decisionDialogGeneration === dialogGeneration) showDecision.value = false;
     await load();
     message.value = "决策已记录；原始评分与证据未被改写。";

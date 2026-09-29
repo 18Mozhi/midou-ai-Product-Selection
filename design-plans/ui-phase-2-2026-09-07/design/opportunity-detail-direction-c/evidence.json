@@ -1,26 +1,26 @@
 {
   "version": "OPPORTUNITY-DETAIL-C-core-r1",
   "approval": "pending",
-  "capturedAt": "2026-09-08T08:36:11.536Z",
+  "capturedAt": "2026-09-29T00:28:55.912Z",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/index.html": "10d549a4447a16ca475cc8394631bde5f188b036af699d63325358cade456010",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/data.js": "24f7fd59f6f6bd6c06335bb9fc1c8310c03a7065b75f9463e4f3cdfe4796646f",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/detail.js": "28a6d1a1a8aa84b467da39089b7d5aa0939f81406d32b29fac667fe947215561",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/detail.css": "b5d4b9eafd233740308a464d2deb7cf86cc603cea5e04123979d4995af08b983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
-    "apps/web/src/components/OpportunityWorkspace.vue": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-    "apps/web/src/components/OpportunityDecisionPanel.vue": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+    "apps/web/src/components/OpportunityWorkspace.vue": "c11103e30119b85b82f3c21f46f66c508fc29fa838b40fe4819858b3397b6c62",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/opportunity-decision-presentation.ts": "5db9df1a291feb7a5b2d0dba0fa2e27160c19389fb141bfcf92c6e28dab0dc4d",
     "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
-    "apps/web/src/components/opportunity-workspace-types.ts": "a426530eb9447c407aa2d5519a9150af3776adbe7ca8405db9ac042e334d67f5",
+    "apps/web/src/components/opportunity-workspace-types.ts": "805a2fe8ff56913c39a1d13f637ef38b3fcb50a645917f8f4f29343d8539aa6f",
     "apps/api/src/opportunity-service.ts": "a43b52911778c4e85a84dd0d25607fab481a358441ad1b5254f770f19cca820e",
     "apps/api/src/opportunity-routes.ts": "d65b60404750432d0290c0e71f22c0d4c09756fed95914063b78ac03a41e5546",
     "apps/api/src/mysql-opportunity-repository.ts": "43929fd67d85b38b6e882d9221e0a657dfc7e99a54b405ffae6d35627037793f",
-    "tests/e2e/ui-phase2-opportunity-contracts.spec.ts": "ad091f9e1bcb2948bdbc43e525af514f6a1d934f5636ea99d4c65a45950f1f6b",
-    "tests/e2e/m04-02-opportunities.spec.ts": "f0f68373124d776ceb3b2887d435ad26386a671030d0be5cbccc78e694704863",
-    "scripts/lib/ui-phase2-opportunity-detail-design-data.mjs": "ddd5d624ac382270f9ea69257e859d5b71df9bc5f1d92b9c5de16239ae2133b4",
+    "tests/e2e/ui-phase2-opportunity-contracts.spec.ts": "f1fc14eab972e29b10ae4bca54c88b9030664c19da1bc670e0cac54337afc14f",
+    "tests/e2e/m04-02-opportunities.spec.ts": "b7ca804e253aa763adf07d0e84606b487700dad3e8ffe896a423cc4e65d2ae72",
+    "scripts/lib/ui-phase2-opportunity-detail-design-data.mjs": "dce9b63f06f88d9d3b7557b8f86d3a4d49596dca8cc8b98f7e8ddec98cc9e483",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-opportunity-detail-c.mjs": "e22ab61ee8b7caec58e8758a9ed2b0b598d4e340f47797f59a15e56d569876a5"
   },
@@ -317,7 +317,7 @@
       "file": "1440-reject-failed.png",
       "scene": "reject-failed",
       "width": 1440,
-      "sha256": "39bcc1ff44aa8a0e901ba7ef2978262a1290ef09be546a892dd5b6253515dbed"
+      "sha256": "7ca1d97e616ebf0780c38c90b33fd754459a012083c9a51e90a83cf9ffc0f2f1"
     },
     {
       "file": "1440-reject-success.png",

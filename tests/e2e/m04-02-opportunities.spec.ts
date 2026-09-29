@@ -1408,6 +1408,50 @@ test("a delayed decision receipt cannot close a newer decision dialog", async ({
   await expect(rejectedDialog.getByLabel("原因（必填）")).toHaveValue("");
 });
 
+test("P18 decision submission rejects a second request while the first POST is pending", async ({
+  page,
+}) => {
+  await ready(page);
+  let releaseDecision!: () => void;
+  let markDecisionStarted!: () => void;
+  const decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
+  const decisionStarted = new Promise<void>((resolve) => (markDecisionStarted = resolve));
+  const submittedBodies: Record<string, unknown>[] = [];
+  await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, async (route) => {
+    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+    markDecisionStarted();
+    await decisionGate;
+    await route.fulfill({
+      status: 201,
+      json: envelope({ opportunity_id: opportunityId, decision_status: "observing", version: 2 }),
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await page.getByText("提前人工处理", { exact: true }).click();
+  const trigger = page.getByRole("button", { name: "继续观察", exact: true });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "记录继续观察决定" });
+  await dialog.getByLabel("原因（必填）").fill("核实趋势后继续观察");
+  const form = dialog.locator("form");
+
+  await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
+  await decisionStarted;
+  await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
+
+  expect(submittedBodies).toEqual([
+    { action: "observe", reason: "核实趋势后继续观察", expected_version: base.version },
+  ]);
+  const response = page.waitForResponse(
+    (candidate) =>
+      candidate.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`) &&
+      candidate.status() === 201,
+  );
+  releaseDecision();
+  await response;
+  await expect(dialog).toBeHidden();
+});
+
 test("mobile opportunity filters preserve selected adoption blocker inside the drawer", async ({
   page,
 }) => {

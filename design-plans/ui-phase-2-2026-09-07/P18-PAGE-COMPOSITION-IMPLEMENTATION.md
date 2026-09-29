@@ -71,7 +71,7 @@ AI 分析 POST 在途期间若用户主动切换到“结论”等其他分区�
 
 将 INSIGHTS-C-r1 的概览关联/评分、市场、竞争、风险工作面接入真实 `OpportunityDetailInsights.vue`。竞品和供应候选的 GET、读取状态、失败恢复分别呈现；单一数据源失败不会遮蔽另一来源，重试只重新读取所选来源，失败时清空该来源旧计数/明细。竞品仅筛选当前机会关联记录，最近快照明确区分零值与缺失值。市场只显示接口已有证据/来源总数与覆盖状态；风险等级与覆盖状态分开，不编造逐项风险事实。
 
-新增挂载 Vue 的 M04-02 回归覆盖供应读取失败但保留竞品事实、供应单源 GET 恢复、竞品/供应无权限时不发请求，以及市场/风险事实边界；定向测试桌面Chromium与390px手机各2/2通过。未改 API/OpenAPI、权限、数据结构、配置、依赖及业务写入。夹具验证不代表真实 SQL/RBAC、外部采集或 M07-03 生产验收；P18 AI、血缘、经营复盘与其余操作状态仍未完成。
+新增挂载 Vue 的 M04-02 回归覆盖供应读取失败但保留竞品事实、供应单源 GET 恢复、竞品/供应无权限时不发请求，以及市场/风险事实边界；定向测试桌面Chromium与390px手机各2/2通过。未改 API/OpenAPI、权限、数据结构、配置、依赖及业务写入。夹具验证不代表真实 SQL/RBAC、外部采集或 M07-03 生产验收；该分析分区批次以外的P18操作与OP07–OP10仍未全部完成。
 
 ## 2026-09-29 · AI、血缘与经营复盘 C 工作面
 
@@ -81,4 +81,10 @@ AI 面板改为记录目录＋单条原始辅助输出；GET 仅接受数组，�
 
 经营反馈提交结果不明时，保留该次原始 body 和 idempotency-key，锁定表单并要求显式以同一 key 恢复；该 key 复用现有 `opportunity_operations` 幂等合同，不改请求字段或业务规则。页面离开时仍未回执的在途写入标为待核对；同一 Vue 实例内返回目标机会可安全重放原请求。浏览器刷新/销毁后内存中的未知状态不持久化，不能据本地测试宣称跨会话防重复。
 
-实际 Vue 回归：`tests/e2e/m04-07-ai-analysis.spec.ts` 桌面 Chromium 7/7、390px 手机 7/7；`tests/e2e/m04-02-opportunities.spec.ts` 桌面 Chromium 26/26、390px 手机 26/26。覆盖 AI 非数组重读保留旧记录、读取错误、禁用陈旧抽检及显式 GET 恢复；血缘错误码后缀与 null 年龄；复盘 0/百分比/负偏差、审计展开、503 未知结果下输入保留及相同幂等键/body 的显式恢复。`npm run typecheck:web`、`npm run format:check`、`npm run verify:runtime-docs` 与 `npm run build:web` 均通过。上述本地隔离响应不等同于生产 SQL/RBAC/Worker、真实审计/幂等、多组织、辅助技术/屏幕阅读器、200%缩放、真机或 M07-03 验收。P18 其他操作、OP07–OP10 与全 73 页收官仍开放。
+实际 Vue 回归：`tests/e2e/m04-07-ai-analysis.spec.ts` 桌面 Chromium 7/7、390px 手机 7/7；`tests/e2e/m04-02-opportunities.spec.ts` 在下方决策防重回归加入后，桌面 Chromium 与390px手机各27/27。覆盖 AI 非数组重读保留旧记录、读取错误、禁用陈旧抽检及显式 GET 恢复；血缘错误码后缀与 null 年龄；复盘 0/百分比/负偏差、审计展开、503 未知结果下输入保留及相同幂等键/body 的显式恢复。`npm run typecheck:web`、`npm run format:check`、`npm run verify:runtime-docs` 与 `npm run build:web` 均通过。上述本地隔离响应不等同于生产 SQL/RBAC/Worker、真实审计/幂等、多组织、辅助技术/屏幕阅读器、200%缩放、真机或 M07-03 验收。P18 其他操作、OP07–OP10 与全 73 页收官仍开放。
+
+## 2026-09-29 · 决策提交同步防重
+
+`OpportunityWorkspace.decide()` 现在在同步入口检查共享 `busy`，并在发起异步写入前固定机会 ID、动作、原因和 `expected_version`。首个 POST 在途时，即使浏览器表单通过原生 `requestSubmit()` 再次触发，父级也会拒绝第二次请求；已提交的 body 不受活动表单状态变化影响。
+
+新增 `tests/e2e/m04-02-opportunities.spec.ts` 挂载 Vue 回归：先以延迟响应复现旧实现发出两条相同 POST，再验证修复后只有一条既有请求体；完整 M04-02 桌面 Chromium 与390px手机各27/27通过。保留现有关闭/重开语义、迟到回执隔离、API、权限和质量门规则。夹具不证明真实 RBAC、数据库事务、审计或 M07-03；P18 其他动作与 OP07–OP10 继续开放。

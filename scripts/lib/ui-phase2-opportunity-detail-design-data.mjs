@@ -85,6 +85,8 @@ export async function buildOpportunityDetailDesignData(repo) {
       let reads = 0;
       await run(`${extract(main, "decide", "function")}\nexport const result=decide();`, {
         detail: { value: sample },
+        busy: { value: false },
+        decisionDialogGeneration: 0,
         decisionReason,
         decisionAction: { value: action },
         showDecision,
@@ -163,14 +165,16 @@ export async function buildOpportunityDetailDesignData(repo) {
   );
   assert.equal(routes.safeOpportunityReturnPath("//example.test"), "/opportunities");
   assert.equal(routes.resolveOpportunityTab("unknown"), "overview");
-  const titleId = 'id="opportunity-decision-title"';
+  const dialogs = await read("apps/web/src/components/OpportunityWorkspaceDialogs.vue");
   assert.ok(
-    panel.includes(titleId) &&
-      (await read("apps/web/src/components/OpportunityWorkspaceDialogs.vue")).includes(titleId),
+    panel.includes('aria-labelledby="opportunity-decision-summary-title"') &&
+      dialogs.includes('id="opportunity-decision-dialog-title"'),
   );
   const message = { value: "" };
   await run(`${extract(main, "write", "function")}\nexport const result=write("/isolated",{});`, {
     busy: { value: false },
+    writeScopeGeneration: 0,
+    activeWriteCount: 0,
     message,
     requestId: { value: "" },
     ApiClientError: class extends Error {},
