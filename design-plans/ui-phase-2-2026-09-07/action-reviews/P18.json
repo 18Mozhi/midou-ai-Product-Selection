@@ -311,7 +311,7 @@
           "scene": "rejected-failed"
         }
       ],
-      "remaining": "源码同步watch会在记录不可复核或版本改变时清理共享inline表单；本批只以通过复核后的实际Vue重读验证关闭，驳回原因模式与外部资格变化尚无独立浏览器用例。",
+      "remaining": "真实Vue双端现已验证驳回复核提交后重读rejected新状态/版本，旧原因表单同步关闭、保留处理说明且不再显示复核入口；真实服务端资格、RBAC与数据库写入仍待独立验收。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#fa1b671cb5e1bc8c.1"
       ],
@@ -333,6 +333,11 @@
           "file": "scripts/verify-ui-phase2-detail-cost-context-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "同一机会444结论/成本连续稿：实际目录点击、九字段/失败/复核原因往返、分项展开和底部命中；不代表全动作六态或真实写入。"
+        },
+        {
+          "file": "tests/e2e/m04-04-profit.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "P18驳回复核提交使用既有decision/reason/expected_version；利润读取返回rejected新状态/版本后旧inline表单关闭、处理说明保留且操作入口消失。M04-04完整桌面与390px套件各19/19通过；不证明真实资格、RBAC或生产写入。"
         }
       ]
     },
@@ -362,7 +367,7 @@
           "scene": "continuity-review-reason"
         }
       ],
-      "remaining": "已验证通过复核后读取到新状态与新版本时关闭旧表单；拒绝变体和真实服务端资格仍需独立验收。忙碌时打开按钮仍按当前源码可用，不把已超时等同按钮禁用。",
+      "remaining": "真实Vue双端已分别验证通过与驳回复核重读新状态/版本后关闭旧表单；真实服务端资格与RBAC仍需独立验收。忙碌时打开按钮仍按当前源码可用，不把已超时等同按钮禁用。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#224f4955ed7d6f48.1"
       ],
@@ -1558,6 +1563,11 @@
           "file": "scripts/verify-ui-phase2-profit-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+        },
+        {
+          "file": "tests/e2e/m04-04-profit.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "P18通过复核成功重读新状态/版本后关闭旧inline表单；同一文件覆盖对应驳回分支。M04-04完整桌面与390px各19/19通过；本地回包不证明服务端资格或RBAC。"
         }
       ]
     },
@@ -3171,7 +3181,7 @@
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
-      "apps/web/src/components/opportunity-workspace-forms.ts": "1ddc4c6c122c42d05d8a47648b0ea2ab121218d9ff12e8d81c8cc6706785e6dd",
+      "apps/web/src/components/opportunity-workspace-forms.ts": "d6b4d5fb34e2e28458551cf0042657e1ab5fd7a543c33a35f92d3bc2b9c94088",
       "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
       "apps/web/src/components/opportunity-decision-presentation.ts": "e090c758b7b0ca14a7bc006e59fceb3fce3575660472164de6f61159becde553",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
@@ -4175,10 +4185,10 @@
   },
   "compositionGaps": [
     "701十分区已组合且有主题密度代表图，但无完整采纳质量门/成本输入复核链，不能借其他夹具填当前机会事实。",
-    "P18主状态页各文案都走load且次按钮无handler；原型恢复入口与实际消费者必须逐态对齐。",
+    "主状态页的expired/forbidden/blocked/failed等恢复动作已接现有登录、回退或GET-only重试并有实际Vue证据；真实会话、RBAC、读屏器及每种服务端恢复条件仍须独立验收。",
     "决策、成本录入和成本复核提交已分别增加局部同步单飞守卫，并由真实Vue本地拦截E2E覆盖重复requestSubmit；AI抽检及各动作回执归属仍需逐项核验，客户端保护不证明服务端事务结果。",
-    "成本初始时间UTC截断/本地解析偏移、reviewer失败置空、复核id残留、AI先关原因再写差异继续保留OP07–OP10。",
-    "43个路由动作的六態仍需逐一判断/selector绑定；已有代表控件图不自动等于全动作、所有行/主题/权限状态已验。"
+    "既有局部缺口已由真实Vue覆盖：经营反馈日期按本地日历日生成、复核人目录失败可GET-only重试、AI抽检失败恢复原因与显式重试；真实API/RBAC/服务端资格和生产依赖仍待。",
+    "用户已授权剩余页面视觉自动通过，无需逐页暂停；动作候选与视觉状态的映射/交互证据仍需按实际控件继续核对，视觉批准不等同运行时、业务规则或生产验收。"
   ],
   "approval": "pending-user-review",
   "limits": [

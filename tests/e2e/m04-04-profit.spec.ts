@@ -915,6 +915,127 @@ test("M04-04.A07/A08/A15 profit detail shows formula components provenance and h
   await expect(reviewQueue.getByRole("button", { name: "通过", exact: true })).toHaveCount(0);
 });
 
+test("P18 rejected cost review closes its stale inline form after the refreshed row", async ({
+  page,
+}) => {
+  await navigation(page);
+  const reviewerId = "00000000-0000-4000-8000-000000000468";
+  const reviewId = "00000000-0000-4000-8000-000000000469";
+  const review = {
+    id: reviewId,
+    cost_input_id: "00000000-0000-4000-8000-000000000470",
+    input_type: "purchase_price",
+    amount_value: 40,
+    currency: "CNY",
+    platform: "amazon",
+    input_version: 1,
+    evidence_id: "00000000-0000-4000-8000-000000000471",
+    submitter_id: "00000000-0000-4000-8000-000000000472",
+    submitter_label: "成本提交人",
+    reviewer_id: reviewerId,
+    reviewer_label: "当前复核人",
+    status: "pending",
+    due_at: "2026-10-01T12:00:00.000Z",
+    overdue: false,
+    can_review: true,
+    decision_reason: null,
+    version: 1,
+  };
+  let submitted: Record<string, unknown> | null = null;
+  let profitReads = 0;
+  await page.route(`**/api/v1/opportunities/${opportunityId}`, (route) =>
+    route.fulfill({
+      json: envelope({
+        id: opportunityId,
+        name: "驳回复核状态测试机会",
+        market: "US",
+        category: "outdoor",
+        source_type: "manual",
+        source_ref_id: null,
+        owner_id: null,
+        lifecycle_status: "ready",
+        recommendation_status: "observe",
+        overall_score: 72,
+        trend_score: 80,
+        competition_score: 65,
+        profit_status: "insufficient_data",
+        risk_level: "unknown",
+        confidence: { status: "measured", score: 80 },
+        evidence_count: 0,
+        source_count: 0,
+        coverage_status: "partial",
+        decision_status: "pending",
+        version: 8,
+        updated_at: "2026-08-08T12:00:00.000Z",
+        score_rule_version: "v1",
+        scored_at: "2026-08-08T11:00:00.000Z",
+        latest_score_run: null,
+        score_components: [],
+        evidence: [],
+        decisions: [],
+        section_status: {
+          market: "covered",
+          competition: "covered",
+          profit: "insufficient_data",
+          risk: "insufficient_data",
+          execution: "not_available",
+        },
+      }),
+    }),
+  );
+  await page.route("**/api/v1/cost-input-reviewers", (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
+  await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, (route) => {
+    profitReads += 1;
+    return route.fulfill({
+      json: envelope({
+        latest_run: null,
+        current_inputs: [],
+        cost_input_reviews: [
+          submitted
+            ? {
+                ...review,
+                status: "rejected",
+                can_review: false,
+                decision_reason: submitted.reason,
+                version: 2,
+              }
+            : review,
+        ],
+      }),
+    });
+  });
+  await page.route(
+    `**/api/v1/opportunities/${opportunityId}/cost-input-reviews/${reviewId}/actions`,
+    async (route) => {
+      submitted = route.request().postDataJSON() as Record<string, unknown>;
+      await route.fulfill({ json: envelope({ status: "rejected" }) });
+    },
+  );
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openProfitSection(page);
+  const queue = page.locator(".profit-review-queue");
+  await queue.getByRole("button", { name: "驳回", exact: true }).click();
+  await queue.getByLabel("驳回原因").fill("采购金额与证据不符");
+  await queue.getByRole("button", { name: "提交", exact: true }).click();
+
+  await expect
+    .poll(() => submitted)
+    .toEqual({
+      decision: "rejected",
+      reason: "采购金额与证据不符",
+      expected_version: 1,
+    });
+  await expect.poll(() => profitReads).toBeGreaterThan(1);
+  await expect(page.getByText("成本复核已驳回；原提交保留但不会进入利润计算。")).toBeVisible();
+  await expect(queue.locator("form")).toHaveCount(0);
+  await expect(queue.locator("article")).toHaveAttribute("data-status", "rejected");
+  await expect(queue.getByText("处理说明：采购金额与证据不符")).toBeVisible();
+  await expect(queue.getByRole("button", { name: "驳回", exact: true })).toHaveCount(0);
+});
+
 test("P18 cost submission preserves local time and rejects duplicate in-flight POSTs", async ({
   browser,
 }) => {
