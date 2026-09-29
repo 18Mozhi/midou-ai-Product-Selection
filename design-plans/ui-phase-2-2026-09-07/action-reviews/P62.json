@@ -53,6 +53,11 @@
         {
           "file": "tests/unit/ui-phase2-p62-action-review.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "桌面与390px验证短原因就地错误及取消/导出原因窗的字段提示反馈。"
         }
       ],
       "remaining": "重读不证明SQL范围/记录完整或拥有真实日志读取权限。"
@@ -88,6 +93,11 @@
         {
           "file": "tests/unit/ui-phase2-p62-action-review.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "桌面与390px验证aria-invalid/aria-describedby与就地错误，原因不足时按钮禁用且不导出，修正后按既有筛选条件导出。"
         }
       ],
       "remaining": "打开抽屉不证明筛选已应用。"

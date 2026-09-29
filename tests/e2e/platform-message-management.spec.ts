@@ -315,7 +315,14 @@ test("platform administrator can create and publish a Chinese notification", asy
   const reasonDialog = page.getByRole("dialog", { name: "填写发布原因" });
   const reasonInput = reasonDialog.getByRole("textbox", { name: "操作原因" });
   await expect(reasonInput).toBeFocused();
+  await reasonInput.fill("x");
+  await expect(reasonInput).toHaveAttribute("aria-invalid", "true");
+  await expect(reasonInput).toHaveAttribute("aria-describedby", /validation-error/);
+  await expect(reasonDialog.getByRole("alert")).toHaveText("请至少填写 2 个字的原因。");
+  await expect(reasonDialog.getByRole("button", { name: "确认发布" })).toBeDisabled();
+  expect(actionBody).toBeNull();
   await reasonInput.fill("发布维护通知");
+  await expect(reasonDialog.getByRole("alert")).toHaveCount(0);
   await capturePhase2Evidence(page, testInfo, "P57", "publish-confirm", [
     "发布确认固定提交消息版本和人工原因",
     "原因限制为去除首尾空白后的 2 至 300 字",
@@ -547,7 +554,14 @@ test("UI2-PN57 keeps cancel conflicts inside the owning confirmation", async ({
   const dialog = page.getByRole("dialog", { name: "填写取消草稿原因" });
   const reason = dialog.getByRole("textbox", { name: "操作原因" });
   await expect(reason).toBeFocused();
+  await reason.fill("x");
+  await expect(reason).toHaveAttribute("aria-invalid", "true");
+  await expect(reason).toHaveAttribute("aria-describedby", /validation-error/);
+  await expect(dialog.getByRole("alert")).toHaveText("请至少填写 2 个字的原因。");
+  await expect(dialog.getByRole("button", { name: "确认取消草稿" })).toBeDisabled();
+  expect(posts).toBe(0);
   await reason.fill("停止本次草稿发布");
+  await expect(dialog.getByRole("alert")).toHaveCount(0);
   await capturePhase2Evidence(page, testInfo, "P57", "cancel-confirm", [
     "取消草稿与发布使用不同确认语义",
     "取消不会撤回已经发布的消息",

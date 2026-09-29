@@ -91,6 +91,11 @@
           "file": "scripts/verify-ui-phase2-data-controls-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "40个列明控件双端原生状态/命中/无意图变化验证；本组仅主控件selector逐态关联，不等于所有变体或源Vue。"
+        },
+        {
+          "file": "tests/e2e/m06-02-platform-dashboard.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "桌面与390px验证短原因即时错误、aria关联、确认按钮禁用和零无效导出请求；有效原因后继续既有导出未知态流程。"
         }
       ],
       "visualStates": {
@@ -458,7 +463,7 @@
         "disabled": "scene-reference-not-acceptance",
         "busy": "scene-reference-not-acceptance"
       },
-      "remaining": "真实客户端原因无最大长度；服务器2–300。请求与文件名使用可变entity；新稿固定条件/未知防重只是提案，未证真实CSV/审计/重复幂等。",
+      "remaining": "本地真实Vue已验证原因输入的最短长度错误与提交禁用；不证明真实CSV/审计/重复幂等。",
       "visualStateReferences": {
         "default": {
           "package": "data-controls-direction-c",

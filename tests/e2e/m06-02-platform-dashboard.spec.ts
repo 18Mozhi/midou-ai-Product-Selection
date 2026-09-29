@@ -445,6 +445,15 @@ test("UI2-P54 locks record scope during export and blocks repeat after an unknow
   const exportButton = page.getByRole("button", { name: "导出表格文件", exact: true });
   await exportButton.click();
   const dialog = page.getByRole("dialog", { name: "填写受控导出原因" });
+  const reason = dialog.getByRole("textbox", { name: /原因/ });
+  await reason.fill("x");
+  await expect(reason).toHaveAttribute("aria-invalid", "true");
+  await expect(reason).toHaveAttribute("aria-describedby", /audited-reason-validation-error/);
+  await expect(dialog.getByRole("alert")).toHaveText("请至少填写 2 个字的原因。");
+  await expect(dialog.getByRole("button", { name: "确认提交" })).toBeDisabled();
+  expect(attempts).toBe(0);
+  await reason.fill("导出当前快照用于报表");
+  await expect(dialog.getByRole("alert")).toHaveCount(0);
   await dialog.getByRole("button", { name: "确认提交" }).click();
   await exportEntered;
   const supplierButton = page
@@ -2088,6 +2097,15 @@ test("chain logs group trace events and deep-link exceptional task and source fa
   const dialog = page.getByRole("dialog", { name: "填写日志导出原因" });
   await expect(dialog).toBeVisible();
   await verifyAuditedReasonFocus(page, dialog);
+  const reason = dialog.getByRole("textbox", { name: /原因/ });
+  await reason.fill("x");
+  await expect(reason).toHaveAttribute("aria-invalid", "true");
+  await expect(reason).toHaveAttribute("aria-describedby", /audited-reason-validation-error/);
+  await expect(dialog.getByRole("alert")).toHaveText("请至少填写 2 个字的原因。");
+  await expect(dialog.getByRole("button", { name: "确认提交" })).toBeDisabled();
+  expect(exportBody).toBeNull();
+  await reason.fill("导出当前链路日志用于故障排查");
+  await expect(dialog.getByRole("alert")).toHaveCount(0);
   const download = page.waitForEvent("download");
   await dialog.getByRole("button", { name: "确认提交" }).click();
   await download;

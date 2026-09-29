@@ -13,7 +13,7 @@
     "apps/web/src/components/PlatformNotificationOperations.vue": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
     "apps/web/src/components/PlatformNotificationPagination.vue": "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
     "apps/web/src/components/PlatformMessageEditor.vue": "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
-    "apps/web/src/components/PlatformNotificationActionDialog.vue": "98d6bfab3dae6b9b091371a241d9096420c4f8e84f1c2b4da969ae9f8c3f9eb6"
+    "apps/web/src/components/PlatformNotificationActionDialog.vue": "2dc6d2a4c543b985859ff6f9ddbec8331ab0d8d22a76331efd80b22d0fcc35ca"
   },
   "inputs": {
     "apps/web/src/components/PlatformNotificationManagement.vue": [
@@ -351,6 +351,11 @@
         {
           "file": "tests/unit/ui-phase2-p57-action-map.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/platform-message-management.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "桌面与390px验证短原因即时错误、确认发布禁用、零无效写入及有效原因发布。"
         }
       ],
       "remaining": "发布入口不代表真实受众数量、通知插入或投递完成。"
@@ -386,6 +391,11 @@
         {
           "file": "tests/unit/ui-phase2-p57-action-map.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/platform-message-management.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "桌面与390px验证短原因即时错误、确认取消禁用、零无效写入及有效原因后的冲突反馈。"
         }
       ],
       "remaining": "取消入口不证明后端版本、权限或审计写入成功。"
@@ -708,6 +718,11 @@
         {
           "file": "tests/unit/ui-phase2-p57-action-map.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/platform-message-management.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "桌面与390px验证发布及取消原因窗的输入、短原因错误和提交按钮状态。"
         }
       ],
       "remaining": "dialog存在不证明消息动作已提交或用户可以绕过原因要求。"
@@ -717,14 +732,15 @@
       "label": "将发布/取消原因表单提交转发至父动作所有者",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformNotificationActionDialog.vue#11191cd13f827990.1"
+        "apps/web/src/components/PlatformNotificationActionDialog.vue#610146af9003096b.1",
+        "apps/web/src/components/PlatformNotificationActionDialog.vue#c7068836499b22d2.1"
       ],
       "sourceContractKeys": [
         "PN57-ACTION-CURRENT-SUBMIT / 表单提交只向父级发出submit事件"
       ],
       "contractAliasReason": "按既有PN57合同对PN57-ACTION-SUBMIT-WIRING精确归属；不增加其他域、受众或投递行为。",
-      "condition": "原因达到当前2–300字规则且submitting=false时。",
-      "handler": "阻止原生导航，仅发出submit；发布和取消仍复用父级既有action/expected_version/reason API契约。",
+      "condition": "原因达到当前2–300字规则且submitting=false时；输入不足2字时向字段关联错误反馈且不发submit。",
+      "handler": "阻止原生导航，仅对有效原因发出submit；发布和取消仍复用父级既有action/expected_version/reason API契约。",
       "variants": [
         "current-route-source-contract"
       ],
@@ -741,6 +757,11 @@
         {
           "file": "tests/unit/ui-phase2-p57-action-map.test.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/platform-message-management.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "桌面与390px验证输入后短原因错误、aria-describedby关联、角色错误提示与确认按钮禁用。"
         }
       ],
       "remaining": "组件事件不证明真实RBAC、受众去重、事务、审计或投递。",
@@ -749,7 +770,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/PlatformNotificationActionDialog.vue#11191cd13f827990.1",
+          "candidateId": "apps/web/src/components/PlatformNotificationActionDialog.vue#610146af9003096b.1",
           "event": "@submit.prevent",
           "handler": "$emit('submit')",
           "targets": [
@@ -915,7 +936,7 @@
       "apps/web/src/components/PlatformNotificationOperations.vue": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
       "apps/web/src/components/PlatformNotificationPagination.vue": "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
       "apps/web/src/components/PlatformMessageEditor.vue": "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
-      "apps/web/src/components/PlatformNotificationActionDialog.vue": "98d6bfab3dae6b9b091371a241d9096420c4f8e84f1c2b4da969ae9f8c3f9eb6"
+    "apps/web/src/components/PlatformNotificationActionDialog.vue": "2dc6d2a4c543b985859ff6f9ddbec8331ab0d8d22a76331efd80b22d0fcc35ca"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

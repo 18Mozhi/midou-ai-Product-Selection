@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, useId } from "vue";
+import { computed, ref, useId, watch } from "vue";
 import { useModalDialog } from "../use-modal-dialog";
 import {
   trapNotificationDialogTab,
@@ -17,7 +17,18 @@ const props = defineProps<{
 const reason = defineModel<string>("reason", { required: true });
 const emit = defineEmits<{ close: []; submit: [] }>();
 const reasonElement = ref<HTMLTextAreaElement | null>(null);
+const reasonTouched = ref(false);
 const fieldId = useId();
+const showReasonValidationError = computed(
+  () => reasonTouched.value && reason.value.trim().length < 2,
+);
+const reasonDescriptionIds = computed(() =>
+  [
+    `${fieldId}-reason-help`,
+    ...(props.error ? [`${fieldId}-error`] : []),
+    ...(showReasonValidationError.value ? [`${fieldId}-validation-error`] : []),
+  ].join(" "),
+);
 const { dialogElement, handleCancel } = useModalDialog(
   () => props.open,
   () => emit("close"),
@@ -26,6 +37,12 @@ useNotificationActionReturnFocus(() => props.open);
 useNotificationInitialFocus(
   () => props.open,
   () => reasonElement.value,
+);
+watch(
+  () => props.open,
+  (open) => {
+    if (open) reasonTouched.value = false;
+  },
 );
 </script>
 
@@ -67,12 +84,22 @@ useNotificationInitialFocus(
           maxlength="300"
           rows="5"
           :disabled="submitting"
-          :aria-describedby="`${fieldId}-reason-help`"
+          :aria-invalid="showReasonValidationError ? 'true' : undefined"
+          :aria-describedby="reasonDescriptionIds"
+          @input="reasonTouched = true"
         ></textarea>
       </label>
       <small :id="`${fieldId}-reason-help`"
         >已输入 {{ reason.length }} / 300 字；至少 2 个字。</small
       >
+      <p
+        v-if="showReasonValidationError"
+        :id="`${fieldId}-validation-error`"
+        class="notification-action-dialog__error"
+        role="alert"
+      >
+        请至少填写 2 个字的原因。
+      </p>
       <p
         v-if="error"
         :id="`${fieldId}-error`"

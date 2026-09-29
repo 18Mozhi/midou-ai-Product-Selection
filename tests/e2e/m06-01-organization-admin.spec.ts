@@ -84,17 +84,32 @@ for (const variant of ["invitation", "grant"] as const) {
   test(`UI2-SM01 ${variant} reason contains both Tab boundaries with disabled and enabled submit`, async ({
     page,
   }) => {
+    const writes: string[] = [];
+    page.on("request", (request) => {
+      if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+        writes.push(request.method());
+    });
     const { dialog } = await openReason(page);
     const first = dialog.getByRole("button", { name: "关闭原因填写" });
     const input = dialog.getByRole("textbox");
     const submit = dialog.getByRole("button", { name: "确认提交" });
-    for (const value of [" ", "有效原因"]) {
+    for (const { value, valid } of [
+      { value: "x", valid: false },
+      { value: "有效原因", valid: true },
+    ]) {
       await input.fill(value);
-      const last = value.trim()
-        ? submit
-        : dialog.getByRole("button", { name: "取消", exact: true });
-      if (value.trim()) await expect(submit).toBeEnabled();
-      else await expect(submit).toBeDisabled();
+      const last = valid ? submit : dialog.getByRole("button", { name: "取消", exact: true });
+      if (valid) {
+        await expect(submit).toBeEnabled();
+        await expect(dialog.getByRole("alert")).toHaveCount(0);
+        await expect(input).not.toHaveAttribute("aria-invalid", "true");
+      } else {
+        await expect(submit).toBeDisabled();
+        await expect(input).toHaveAttribute("aria-invalid", "true");
+        await expect(input).toHaveAttribute("aria-describedby", /audited-reason-validation-error/);
+        await expect(dialog.getByRole("alert")).toHaveText("请至少填写 2 个字的原因。");
+        expect(writes).toEqual([]);
+      }
       await first.focus();
       await page.keyboard.press("Shift+Tab");
       await expect(last).toBeFocused();
