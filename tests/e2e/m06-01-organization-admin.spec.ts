@@ -1081,6 +1081,73 @@ test("organization member choices replace raw ids and approval ids stay technica
   await expect(resourceId).toBeVisible();
 });
 
+test("organization approvals use the C first-load panel and retain the generic busy contract", async ({
+  page,
+}) => {
+  let release!: () => void;
+  const readGate = new Promise<void>((resolve) => (release = resolve));
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.url().includes("/api/v1/") && !["GET", "HEAD"].includes(request.method()))
+      writes.push(request.method());
+  });
+  await setup(page);
+  await page.unroute("**/api/v1/org/admin/approvals");
+  await page.route("**/api/v1/org/admin/approvals", async (route) => {
+    await readGate;
+    await route.fulfill({
+      json: env({
+        summary: { pending: 0, approved: 0, rejected: 0, cancelled: 0 },
+        templates: [],
+        items: [],
+      }),
+    });
+  });
+  try {
+    await page.goto("/org-admin/approvals");
+    const center = page.locator(".org-admin-center"),
+      loading = page.locator(".org-approval-loading-c");
+    await expect(loading).toBeVisible();
+    await expect(center).toHaveAttribute("data-state", "loading");
+    await expect(center).toHaveAttribute("aria-busy", "true");
+    await expect(center).toHaveClass(/org-admin-center--approval-review/);
+    await expect(loading).toHaveAttribute("role", "status");
+    await expect(loading.getByRole("heading", { name: "正在读取当前组织数据…" })).toBeVisible();
+    await expect(loading).toContainText("读取完成后显示审批记录和模板版本。");
+    await expect(loading.locator(".org-approval-loading-placeholder")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+    await expect(loading.locator("i")).toHaveCount(3);
+    await expect(
+      loading.locator("button, a, input, [role='progressbar'], [aria-valuenow]"),
+    ).toHaveCount(0);
+    const layout = await loading.evaluate((node) => {
+      const style = getComputedStyle(node);
+      return {
+        background: style.backgroundColor,
+        minHeight: style.minHeight,
+        columns: style.gridTemplateColumns.split(" ").length,
+      };
+    });
+    expect(layout).toMatchObject({
+      background: "rgb(255, 255, 255)",
+      minHeight: "0px",
+      columns: page.viewportSize()!.width <= 760 ? 1 : 2,
+    });
+    expect(writes).toEqual([]);
+
+    release();
+    await expect(center).toHaveAttribute("data-state", "ready");
+    await expect(center).toHaveAttribute("aria-busy", "false");
+    await expect(loading).toHaveCount(0);
+    await expect(page.locator(".org-approval-governance")).toBeVisible();
+    expect(writes).toEqual([]);
+  } finally {
+    release();
+  }
+});
+
 test("organization approval governance filters, paginates and restores URL-backed state", async ({
   page,
 }) => {

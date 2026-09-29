@@ -1008,6 +1008,7 @@ onMounted(() => void load());
       'org-admin-center--profile-review': view === 'summary',
       'org-admin-center--token-review': view === 'tokens',
       'org-admin-center--audit-review': view === 'audit',
+      'org-admin-center--approval-review': view === 'approvals',
     }"
     :data-state="state"
     :data-approval-first-failure="
@@ -1081,7 +1082,22 @@ onMounted(() => void load());
         >{{ notice }} <code v-if="requestId">{{ requestId }}</code></template
       >
     </div>
-    <section v-if="state === 'loading'" class="org-admin-state">正在读取当前组织数据…</section>
+    <section
+      v-if="state === 'loading'"
+      class="org-admin-state"
+      :class="{ 'org-approval-loading-c': view === 'approvals' }"
+      :role="view === 'approvals' ? 'status' : undefined"
+    >
+      <template v-if="view === 'approvals'">
+        <div class="org-approval-loading-copy">
+          <p class="org-approval-loading-kicker">审批内容</p>
+          <h3>正在读取当前组织数据…</h3>
+          <p>读取完成后显示审批记录和模板版本。</p>
+        </div>
+        <div class="org-approval-loading-placeholder" aria-hidden="true"><i></i><i></i><i></i></div>
+      </template>
+      <template v-else>正在读取当前组织数据…</template>
+    </section>
     <section
       v-else-if="
         ['error', 'blocked', 'expired', 'forbidden', 'rate_limited', 'conflict'].includes(state)

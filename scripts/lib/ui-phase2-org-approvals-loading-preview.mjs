@@ -20,6 +20,11 @@ export const approvalsLoadingReplacement = `    <section v-if="state === 'loadin
 
 export function previewApprovalsLoading(source) {
   const original = source.replaceAll("\r\n", "\n");
+  if (original.includes("'org-approval-loading-c': view === 'approvals'")) {
+    assert.match(original, /<template v-if="view === 'approvals'">/);
+    assert.match(original, /<template v-else>正在读取当前组织数据…<\/template>/);
+    return original;
+  }
   assert.equal(original.split(approvalsLoadingAnchor).length, 2, "One P34 loading branch anchor");
   return original.replace(approvalsLoadingAnchor, approvalsLoadingReplacement);
 }

@@ -39,7 +39,9 @@ const original = previewApprovalsReadFeedback(
 const revised = previewApprovalsLoading(original);
 
 test("loading presentation preserves complete runtime and other views original fallback", () => {
-  assert.equal(revised.replace(approvalsLoadingReplacement, approvalsLoadingAnchor), original);
+  if (original.includes("'org-approval-loading-c': view === 'approvals'"))
+    assert.equal(revised, original);
+  else assert.equal(revised.replace(approvalsLoadingReplacement, approvalsLoadingAnchor), original);
   const before = parse(original).descriptor,
     after = parse(revised).descriptor;
   assert.equal(after.scriptSetup.content, before.scriptSetup.content);

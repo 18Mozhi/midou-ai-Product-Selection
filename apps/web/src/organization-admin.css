@@ -5790,6 +5790,67 @@
   background: var(--oa-pale);
 }
 
+.org-admin-center--approval-review .org-approval-loading-c {
+  min-height: 0;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  align-items: center;
+  gap: 32px;
+  color: var(--oa-ink);
+  border: 1px solid var(--oa-section);
+  border-radius: 4px;
+  background: var(--oa-white);
+  font:
+    16px/1.65 "Microsoft YaHei",
+    sans-serif;
+  text-align: left;
+}
+
+.org-approval-loading-copy {
+  display: grid;
+  gap: 16px;
+}
+
+.org-approval-loading-copy > :is(p, h3) {
+  margin: 0;
+}
+
+.org-approval-loading-copy .org-approval-loading-kicker {
+  color: var(--oa-blue);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.org-approval-loading-copy h3 {
+  font:
+    700 26px/1.45 "Microsoft YaHei",
+    sans-serif;
+}
+
+.org-approval-loading-placeholder {
+  padding: 24px;
+  display: grid;
+  gap: 16px;
+  background: var(--oa-soft);
+}
+
+.org-approval-loading-placeholder i {
+  display: block;
+  height: 12px;
+  background: var(--oa-blue-wash);
+  animation: none;
+  transition: none;
+}
+
+.org-approval-loading-placeholder i:first-child {
+  width: 78%;
+}
+
+.org-approval-loading-placeholder i:last-child {
+  width: 62%;
+}
+
 .org-admin-center:has(.org-approval-governance) .org-admin-notice,
 .org-admin-center:has(.org-approval-governance) .org-admin-state {
   border-radius: 0;
@@ -5803,6 +5864,16 @@
 }
 
 @media (max-width: 760px) {
+  .org-admin-center--approval-review .org-approval-loading-c {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding: 24px 20px;
+  }
+
+  .org-admin-center--approval-review .org-approval-loading-copy h3 {
+    font-size: 24px;
+  }
+
   .org-admin-center:has(.org-approval-governance) {
     margin: 12px -8px 70px;
     padding-bottom: 16px;
