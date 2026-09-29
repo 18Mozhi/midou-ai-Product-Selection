@@ -902,7 +902,7 @@
           "scene": "competition-error"
         }
       ],
-      "remaining": "不把共同失败时被遮蔽的成功响应当无数据；两域独立降级未改源。",
+      "remaining": "本地Vue双端验证竞品失败时保留供应成功事实、竞品单侧GET恢复且不重读供应；真实API/RBAC与跨组织数据范围仍待。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#823a2e6e9e462fb3.1",
         "apps/web/src/components/OpportunityDetailInsights.vue#1ad80d71bafd937b.1",
@@ -917,6 +917,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "反向单侧失败场景验证竞品503时供应候选成功结果仍显示；显式重试只重读竞品、不重读供应。桌面Chromium与390px各1/1；不证明真实API/RBAC或跨组织SQL范围。"
+        },
         {
           "file": "scripts/verify-ui-phase2-insights-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",

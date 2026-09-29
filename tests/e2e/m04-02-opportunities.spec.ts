@@ -1026,6 +1026,72 @@ test("P18 insight reads fail and recover independently without hiding competitor
   await expect(page.getByText("USD 0", { exact: true })).toBeVisible();
 });
 
+test("P18 sourcing facts survive competitor read failure and competitor retry stays scoped", async ({
+  page,
+}) => {
+  await ready(page);
+  await page.route("**/api/v1/me/navigation?shell=member", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "member",
+        organization_id: "00000000-0000-4000-8000-000000000421",
+        workspace_id: "00000000-0000-4000-8000-000000000422",
+        roles: ["member"],
+        capabilities: [
+          "task:read",
+          "trend:read",
+          "trend:manage",
+          "opportunity:read",
+          "opportunity:decide",
+          "competitor:read",
+          "sourcing:read",
+        ],
+        platform_roles: [],
+        platform_capabilities: [],
+        guard_reason: "navigation_member_allowed",
+      }),
+    }),
+  );
+
+  let competitorReads = 0;
+  let sourcingReads = 0;
+  let allowCompetitorRecovery = false;
+  await page.route("**/api/v1/competitors", (route) => {
+    competitorReads += 1;
+    return route.fulfill(
+      !allowCompetitorRecovery
+        ? { status: 503, json: { error: { code: "temporarily_unavailable" } } }
+        : { json: envelope([]) },
+    );
+  });
+  await page.route("**/api/v1/sourcing/searches*", (route) => {
+    sourcingReads += 1;
+    return route.fulfill({
+      json: envelope([
+        {
+          input_type: "opportunity",
+          input_ref: opportunityId,
+          candidate_count: 2,
+        },
+      ]),
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(
+    page.getByText("竞品事实暂不可用；不会把上次数据当成本次结果。", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("1 个关联搜索 · 2 个候选", { exact: true })).toBeVisible();
+  const sourcingReadsBeforeRetry = sourcingReads;
+
+  allowCompetitorRecovery = true;
+  await page.getByRole("button", { name: "重试读取竞品" }).click();
+  await expect(page.getByText(/0 个关联竞品/)).toBeVisible();
+  await expect(page.getByText("1 个关联搜索 · 2 个候选", { exact: true })).toBeVisible();
+  expect(competitorReads).toBeGreaterThanOrEqual(2);
+  expect(sourcingReads).toBe(sourcingReadsBeforeRetry);
+});
+
 test("P18 insight sections distinguish unavailable permissions from empty facts", async ({
   page,
 }) => {
