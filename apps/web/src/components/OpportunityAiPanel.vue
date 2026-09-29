@@ -16,6 +16,8 @@ const props = defineProps<{
   loadErrorMessage: string;
   requestId: string;
   busy: boolean;
+  reviewingResultId: string;
+  reviewStage: "submitting" | "refreshing" | "";
   canDecide: boolean;
 }>();
 
@@ -32,6 +34,11 @@ const selectedAnalysis = computed(
 const pendingReviewEnabled = computed(
   () => props.canDecide && props.loadState === "ready" && !props.busy,
 );
+const reviewProgressMessage = computed(() => {
+  if (selectedAnalysis.value?.result?.id !== props.reviewingResultId) return "";
+  if (props.reviewStage === "refreshing") return "抽检已提交，正在刷新记录…";
+  return props.reviewStage === "submitting" ? "正在提交人工抽检…" : "";
+});
 const attemptLabel = (status: string) =>
   ({
     queued: "等待处理",
@@ -191,6 +198,13 @@ watch(
                 >
                   抽检驳回
                 </button>
+                <p
+                  v-if="reviewProgressMessage"
+                  class="opportunity-ai-review-progress"
+                  role="status"
+                >
+                  {{ reviewProgressMessage }}
+                </p>
                 <b v-if="!canDecide">当前角色只能查看，不能提交人工抽检。</b>
                 <b v-else-if="loadState !== 'ready'">刷新成功后才能对该快照执行抽检。</b>
               </template>

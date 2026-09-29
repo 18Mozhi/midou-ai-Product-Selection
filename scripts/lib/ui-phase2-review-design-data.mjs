@@ -172,12 +172,13 @@ export async function buildReviewDesignData(repo) {
     { period_start: "2026-02-30" },
   ])
     assert.throws(() => validate({ ...valid, ...patch }));
-  const defaults = plain(
-    run(
-      `${extract(await read("apps/web/src/components/opportunity-workspace-forms.ts"), "createOpportunityWorkspaceForms", "function")} export const form=createOpportunityWorkspaceForms().feedbackForm;`,
-      { reactive: (v) => v },
-    ).form,
-  );
+  const workspaceForms = await read("apps/web/src/components/opportunity-workspace-forms.ts"),
+    defaults = plain(
+      run(
+        `${vars(workspaceForms, ["localDateTimeInputValue"])} ${extract(workspaceForms, "createOpportunityWorkspaceForms", "function")} export const form=createOpportunityWorkspaceForms().feedbackForm;`,
+        { reactive: (v) => v },
+      ).form,
+    );
   const { expected_version: ignoredVersion, ...fields } = valid;
   const feedbackForm = { ...fields, currency: "usd" },
     feedbackIntents = {};
@@ -189,10 +190,19 @@ export async function buildReviewDesignData(repo) {
       {
         detail,
         feedbackForm: form,
-        message: { value: "" },
-        write: async (p, body) => {
-          feedbackIntents[success] = plain({ method: "POST", path: p, body });
-          return success ? feedbackSubmission : null;
+        pendingFeedbackWrites: { value: {} },
+        crypto: { randomUUID: () => "review-design-idempotency-key" },
+        sendOperatingFeedback: async (opportunityId, pending) => {
+          feedbackIntents[success] = plain({
+            method: "POST",
+            path: `/opportunities/${opportunityId}/operating-feedback`,
+            body: pending.body,
+          });
+          if (success) {
+            detail.value.operating_feedback = feedbackSubmission;
+            form.source_ref = "";
+            form.notes = "";
+          }
         },
       },
     ).result;
@@ -224,19 +234,28 @@ export async function buildReviewDesignData(repo) {
     for (const success of [true, false]) {
       const ctl = reasonFactory();
       let reads = 0,
-        closedAtWrite = false;
+        closedAtWrite = false,
+        reasonCalls = 0;
       const promise = run(
         `${extract(main, "reviewAi", "function")} export const result=reviewAi(resultId,outcome);`,
         {
           resultId: facts.analyses[0].result.id,
           outcome,
-          askAiReviewReason: ctl.ask,
+          detail: { value: facts.detail },
+          tab: { value: "ai" },
+          busy: { value: false },
+          aiReviewSubmission: { value: null },
+          aiReviewError: { value: "" },
+          askAiReviewReason: (...args) => {
+            reasonCalls++;
+            return reasonCalls === 1 ? ctl.ask(...args) : Promise.resolve(null);
+          },
           write: async (p, body) => {
             closedAtWrite = !ctl.open.value;
             intents[outcome] = plain({ method: "POST", path: p, body });
             return success ? {} : null;
           },
-          load: async () => {
+          loadAi: async () => {
             reads++;
           },
           setTab: async (tab) => assert.equal(tab, "ai"),
@@ -257,12 +276,14 @@ export async function buildReviewDesignData(repo) {
   }
   let queueReads = 0;
   await run(`${extract(main, "queueAi", "function")} export const result=queueAi();`, {
+    route: { path: `/opportunities/${facts.detail.id}` },
+    tabIntentGeneration: 0,
     detail: { value: facts.detail },
     write: async (p, body) => {
       intents.queue = plain({ method: "POST", path: p, body });
       return {};
     },
-    load: async () => {
+    loadAi: async () => {
       queueReads++;
     },
     setTab: async (tab) => assert.equal(tab, "ai"),
@@ -275,6 +296,10 @@ export async function buildReviewDesignData(repo) {
     `${extract(main, "reviewAi", "function")} export const result=reviewAi(resultId,"approved");`,
     {
       resultId: facts.analyses[0].result.id,
+      busy: { value: false },
+      aiReviewSubmission: { value: null },
+      aiReviewError: { value: "" },
+      detail: { value: facts.detail },
       askAiReviewReason: cancelled.ask,
       write: async () => {
         cancelledWrites++;
@@ -286,7 +311,7 @@ export async function buildReviewDesignData(repo) {
   assert.equal(cancelledWrites, 0);
   assert.ok(
     (await read("apps/web/src/components/OpportunityLineagePanel.vue")).includes(
-      "lineage.freshness.age_seconds ?? 0",
+      "lineage.freshness.age_seconds !== null",
     ),
   );
   for (const mode of ["error", "malformed"]) {
@@ -294,8 +319,12 @@ export async function buildReviewDesignData(repo) {
       aiLoadState = { value: "ready" };
     await run(`${extract(main, "loadAi", "function")} export const result=loadAi();`, {
       props: { opportunityId: facts.detail.id },
+      readGeneration: 0,
+      aiRequestGeneration: 0,
       aiAnalyses,
       aiLoadState,
+      aiLoadErrorMessage: { value: "" },
+      aiRequestId: { value: "" },
       ApiClientError: class extends Error {},
       requestId: { value: "" },
       request: async () => {
@@ -303,8 +332,8 @@ export async function buildReviewDesignData(repo) {
         return { data: {} };
       },
     }).result;
-    assert.equal(aiLoadState.value, mode === "error" ? "error" : "ready");
-    assert.equal(aiAnalyses.value.length, mode === "error" ? 1 : 0);
+    assert.equal(aiLoadState.value, "error");
+    assert.equal(aiAnalyses.value.length, 1);
   }
   const aiService = await read("apps/api/src/ai-analysis-service.ts");
   const reviewValidator = run(

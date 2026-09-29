@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+    "apps/web/src/components/OpportunityAiPanel.vue": "147b7b8e290ca76a3a68b1a85980bc58758593648bde0c41962199b217109cc9",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47",
     "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
     "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
@@ -14,7 +14,7 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
     "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "ca869f9db2037505543cc771932ef391f09846646332aeccd058883ccad6486f",
+    "apps/web/src/components/OpportunityWorkspace.vue": "6dcacee763b9f5f1a90eeb9c4334b98b6f15a4f26e178da4d2800b7c9fb1f9bd",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
     "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe"
   },
@@ -170,9 +170,15 @@
       "label": "AI抽检通过",
       "kind": "write",
       "routeApplicability": "P18-local-caller-and-listed-panels",
-      "condition": "canDecide且result.review_status=pending；按钮没有busy禁用",
+      "condition": "canDecide且result.review_status=pending；loadState非ready或任一写入busy时禁用；reviewAi同步拒绝忙碌/重入",
       "handler": "reviewAi(result.id,approved) await共享原因；POST /ai-analyses/:resultId/reviews outcome/notes",
-      "variants": ["pending", "already-reviewed", "replaced-ask", "failure-restored", "explicit-retry"],
+      "variants": [
+        "pending",
+        "already-reviewed",
+        "replaced-ask",
+        "failure-restored",
+        "explicit-retry"
+      ],
       "scenes": [
         {
           "package": "review-direction-c",
@@ -187,10 +193,8 @@
           "scene": "approve-dialog--long-error-footer"
         }
       ],
-      "remaining": "失败后在同机会AI分区恢复原因和action_hint；不自动重发，真实服务端结果/RBAC仍未验。",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1"
-      ],
+      "remaining": "桌面/390px真实Vue延迟POST验证当前结果显示提交中/刷新中、两种抽检按钮锁定、重复派发不再开第二次原因流程；失败后仍恢复原原因/action_hint且不自动重发。真实服务端结果/RBAC仍未验。",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1"],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -204,6 +208,11 @@
           "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
           "evidenceType": "actual-vue-local-interception",
           "claim": "approved/rejected两变体覆盖503后恢复原原因和操作提示、没有自动重发、显式再次确认才发第二个准确body；桌面/390px共4/4，不证明服务端commit。"
+        },
+        {
+          "file": "tests/e2e/m04-07-ai-analysis.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "P18挂起POST验证AI抽检提交/刷新反馈、pending按钮禁用及第二次派发被handler守卫拦截；桌面/390px各1/1，不证明真实服务端commit/RBAC。"
         },
         {
           "file": "scripts/verify-ui-phase2-review-c.mjs",
@@ -222,7 +231,7 @@
       "label": "AI抽检驳回",
       "kind": "write",
       "routeApplicability": "P18-local-caller-and-listed-panels",
-      "condition": "canDecide且pending；非busy禁用缺失",
+      "condition": "canDecide且pending；loadState非ready或任一写入busy时禁用；reviewAi同步拒绝忙碌/重入",
       "handler": "reviewAi(result.id,rejected)；原始输出不改写，成功load/setTab(ai)",
       "variants": ["pending", "rejected", "cancel", "failure-restored", "explicit-retry"],
       "scenes": [
@@ -239,10 +248,8 @@
           "scene": "ai-reject-dialog--long-error-footer"
         }
       ],
-      "remaining": "失败后在同机会AI分区恢复原因和action_hint；不自动重发，真实服务端结果/RBAC仍未验。",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1"
-      ],
+      "remaining": "桌面/390px真实Vue延迟POST验证当前结果显示提交中/刷新中、两种抽检按钮锁定、重复派发不再开第二次原因流程；失败后仍恢复原原因/action_hint且不自动重发。真实服务端结果/RBAC仍未验。",
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1"],
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -1695,7 +1702,7 @@
       "testReferences": [
         {
           "file": "tests/e2e/m04-02-opportunities.spec.ts",
-      "evidenceType": "actual-vue-isolated-browser",
+          "evidenceType": "actual-vue-isolated-browser",
           "claim": "覆盖401登录返回地址、403不重试并返回列表、503安全GET自动重试耗尽后显式重试；不证明真实认证/RBAC或M07-03。"
         }
       ]
@@ -1820,7 +1827,10 @@
         "apps/web/src/components/OpportunityDetailNavigation.vue#7d9ee3ad6dce3b52.1",
         "apps/web/src/components/OpportunityDetailNavigation.vue#7d9ee3ad6dce3b52.2"
       ],
-      "sourceContractKeys": ["OP-TAB：动态分区选择；桌面列表按钮", "OP-TAB：动态分区选择；移动列表按钮"],
+      "sourceContractKeys": [
+        "OP-TAB：动态分区选择；桌面列表按钮",
+        "OP-TAB：动态分区选择；移动列表按钮"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-mapped",
@@ -1874,8 +1884,8 @@
         "hover": "not-applicable-wiring",
         "focus": "not-applicable-wiring",
         "pressed": "not-applicable-wiring",
-        "disabled": "not-applicable-wiring",
-        "busy": "not-applicable-wiring"
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
       },
       "testReferences": [
         {
@@ -1904,7 +1914,9 @@
         }
       ],
       "remaining": "新目录形态取代源更多折叠属提案；六态和实际焦点未全验。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityDetailNavigation.vue#ca5e938b0c51ecf6.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OpportunityDetailNavigation.vue#ca5e938b0c51ecf6.1"
+      ],
       "sourceContractKeys": ["OP-MORE-ANALYSIS；移动分区目录展开，不选中或改写tab"],
       "contractAliasReason": "按机会候选表完整末单元格精确绑定；仅记录移动目录展开，不将其视为分区选择。",
       "visualStates": {
@@ -2126,8 +2138,20 @@
       "routeApplicability": "not-an-additional-business-action",
       "condition": "相应父组件v-if和子组件事件条件均保留，不能按模板候选重复计业务动作",
       "handler": "逐事件/handler见forwardBindings；容器定义或helper调用指向既有操作链，不直接增加一次POST",
-      "variants": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE", "OP-COST-REVIEWER-RETRY", "OP-PROFIT-RETRY"],
-      "forwardsTo": ["OP-COST-REVIEW-SUBMIT", "OP-COST-SUBMIT", "OP-PROFIT-QUEUE", "OP-COST-REVIEWER-RETRY", "OP-PROFIT-RETRY"],
+      "variants": [
+        "OP-COST-REVIEW-SUBMIT",
+        "OP-COST-SUBMIT",
+        "OP-PROFIT-QUEUE",
+        "OP-COST-REVIEWER-RETRY",
+        "OP-PROFIT-RETRY"
+      ],
+      "forwardsTo": [
+        "OP-COST-REVIEW-SUBMIT",
+        "OP-COST-SUBMIT",
+        "OP-PROFIT-QUEUE",
+        "OP-COST-REVIEWER-RETRY",
+        "OP-PROFIT-RETRY"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
@@ -2181,7 +2205,10 @@
         "apps/web/src/components/OpportunityProfitPanel.vue#fbf7d2a587c0931b.1",
         "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1"
       ],
-      "sourceContractKeys": ["OP-COST-REVIEW-SUBMIT转发", "成本提交/复核/利润重算/复核人GET重试转发"],
+      "sourceContractKeys": [
+        "OP-COST-REVIEW-SUBMIT转发",
+        "成本提交/复核/利润重算/复核人GET重试转发"
+      ],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -2735,9 +2762,7 @@
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "profitLoadState=error时显示；busy时禁用",
       "handler": "重新执行当前机会的利润数据GET，不触发写入或重算",
-      "variants": [
-        "利润数据读取失败后显式重试"
-      ],
+      "variants": ["利润数据读取失败后显式重试"],
       "scenes": [],
       "remaining": "当前源码候选与GET读取语义已映射；未在此处新增按钮级视觉/真实API/RBAC验收。",
       "sourceCandidateIds": [
@@ -2778,7 +2803,7 @@
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityAiPanel.vue": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+      "apps/web/src/components/OpportunityAiPanel.vue": "147b7b8e290ca76a3a68b1a85980bc58758593648bde0c41962199b217109cc9",
       "apps/web/src/components/OpportunityCostReviewQueue.vue": "9a3e9de6a888e26f91fa138f5507179d8cea3d97446efe7fdb711831cb581b47",
       "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
       "apps/web/src/components/OpportunityDetailInsights.vue": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
@@ -2787,7 +2812,7 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
       "apps/web/src/components/OpportunityLineagePanel.vue": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-        "apps/web/src/components/OpportunityWorkspace.vue": "ca869f9db2037505543cc771932ef391f09846646332aeccd058883ccad6486f",
+      "apps/web/src/components/OpportunityWorkspace.vue": "6dcacee763b9f5f1a90eeb9c4334b98b6f15a4f26e178da4d2800b7c9fb1f9bd",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
       "apps/web/src/components/AuditedReasonDialog.vue": "72df36080b79e3710771c2d0db60bdee209512f860e284fdc90cfcef22799fbe",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",

@@ -199,6 +199,15 @@
   border-color: #9b342e;
   background: #9b342e;
 }
+.opportunity-ai--c .opportunity-ai-review-progress {
+  flex-basis: 100%;
+  margin: 0;
+  padding: 9px 12px;
+  border-left: 3px solid var(--so-primary, #254a9c);
+  background: #edf3ff;
+  color: #263b5c;
+  line-height: 1.6;
+}
 .opportunity-ai--c .opportunity-ai-request-state {
   display: grid;
   gap: 6px;

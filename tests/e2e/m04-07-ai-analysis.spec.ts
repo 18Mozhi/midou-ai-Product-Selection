@@ -248,6 +248,63 @@ for (const outcome of ["approved", "rejected"] as const) {
   });
 }
 
+test("P18 AI review exposes its pending state and ignores a second action until the receipt", async ({
+  page,
+}) => {
+  const attempts: Array<Record<string, unknown>> = [];
+  let reviewed = false;
+  let releaseReview!: () => void;
+  let markReviewStarted!: () => void;
+  let releaseRefresh!: () => void;
+  let markRefreshStarted!: () => void;
+  const reviewGate = new Promise<void>((resolve) => (releaseReview = resolve));
+  const reviewStarted = new Promise<void>((resolve) => (markReviewStarted = resolve));
+  const refreshGate = new Promise<void>((resolve) => (releaseRefresh = resolve));
+  const refreshStarted = new Promise<void>((resolve) => (markRefreshStarted = resolve));
+  await setup(page);
+  await page.route(`**/api/v1/ai-analyses/${resultId}/reviews`, async (route) => {
+    attempts.push(route.request().postDataJSON());
+    markReviewStarted();
+    await reviewGate;
+    reviewed = true;
+    await route.fulfill({ status: 201, json: envelope({ id: "saved-review" }) });
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
+    if (route.request().method() === "GET" && reviewed) {
+      markRefreshStarted();
+      await refreshGate;
+      return route.fulfill({ json: envelope([]) });
+    }
+    return route.fallback();
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await openTab(page, "AI 辅助");
+  await page.getByRole("button", { name: "抽检通过", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "填写抽检通过说明" });
+  await dialog.getByRole("textbox", { name: /原因/ }).fill("已核对来源和事实引用");
+  await dialog.getByRole("button", { name: "确认提交" }).click();
+  await reviewStarted;
+
+  await expect(page.locator(".opportunity-ai-review-progress")).toContainText("正在提交人工抽检");
+  await expect(page.getByRole("button", { name: "抽检通过", exact: true })).toBeDisabled();
+  const rejectButton = page.getByRole("button", { name: "抽检驳回", exact: true });
+  await expect(rejectButton).toBeDisabled();
+  await rejectButton.dispatchEvent("click");
+  await expect(page.getByRole("dialog", { name: "填写驳回原因" })).toBeHidden();
+  expect(attempts).toEqual([{ outcome: "approved", notes: "已核对来源和事实引用" }]);
+
+  releaseReview();
+  await refreshStarted;
+  await expect(page.locator(".opportunity-ai-review-progress")).toContainText(
+    "抽检已提交，正在刷新记录",
+  );
+  releaseRefresh();
+  await expect(page.locator(".opportunity-message")).toContainText("人工抽检已记录");
+  await expect(page.getByRole("button", { name: "抽检通过", exact: true })).toHaveCount(0);
+  expect(attempts).toEqual([{ outcome: "approved", notes: "已核对来源和事实引用" }]);
+});
+
 test("P18 keeps the previous AI snapshot visible after malformed refresh and separates enqueue acceptance", async ({
   page,
 }) => {

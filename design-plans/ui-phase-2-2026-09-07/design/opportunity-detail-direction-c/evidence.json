@@ -1,14 +1,14 @@
 {
   "version": "OPPORTUNITY-DETAIL-C-core-r1",
   "approval": "pending",
-  "capturedAt": "2026-09-29T01:09:50.995Z",
+  "capturedAt": "2026-09-29T01:39:26.709Z",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/index.html": "10d549a4447a16ca475cc8394631bde5f188b036af699d63325358cade456010",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/data.js": "24f7fd59f6f6bd6c06335bb9fc1c8310c03a7065b75f9463e4f3cdfe4796646f",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/detail.js": "28a6d1a1a8aa84b467da39089b7d5aa0939f81406d32b29fac667fe947215561",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/detail.css": "b5d4b9eafd233740308a464d2deb7cf86cc603cea5e04123979d4995af08b983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
-    "apps/web/src/components/OpportunityWorkspace.vue": "ca869f9db2037505543cc771932ef391f09846646332aeccd058883ccad6486f",
+    "apps/web/src/components/OpportunityWorkspace.vue": "6dcacee763b9f5f1a90eeb9c4334b98b6f15a4f26e178da4d2800b7c9fb1f9bd",
     "apps/web/src/components/OpportunityDecisionPanel.vue": "c97147b17afdfd5141930992bdaea1535023b28cabf976f64273247e95539b01",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "3218f2825c55702c0b04ba627dc43d1724254e0cfef502702d20e72235f1a7a2",
@@ -257,7 +257,7 @@
       "file": "1440-adopt-failed.png",
       "scene": "adopt-failed",
       "width": 1440,
-      "sha256": "b7fcdab59fe0debe1ee5b38caea315695e17a592f83b24f2f86620a19cc115cc"
+      "sha256": "6033eae41ca194af7f09294e25443e0617f7120205c2d5f7f384dcdd34f7183e"
     },
     {
       "file": "1440-adopt-success.png",

@@ -7,6 +7,7 @@ import {
   onDeactivated,
   onMounted,
   ref,
+  shallowRef,
   watch,
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
@@ -116,6 +117,10 @@ const props = defineProps<{
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref("");
 const aiReviewError = ref("");
+const aiReviewSubmission = shallowRef<{
+  resultId: string;
+  stage: "submitting" | "refreshing";
+} | null>(null);
 const createFeedback = ref<
   | {
       type: "error";
@@ -989,6 +994,7 @@ async function queueAi() {
   }
 }
 async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
+  if (busy.value || aiReviewSubmission.value) return;
   const opportunityId = detail.value?.id;
   if (!opportunityId) return;
   const reasonRequest = {
@@ -999,20 +1005,28 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
   };
   aiReviewError.value = "";
   let notes = await askAiReviewReason(reasonRequest);
-  while (notes) {
-    aiReviewError.value = "";
-    const result = await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes });
-    if (result) {
-      if (detail.value?.id !== opportunityId) return;
-      message.value = "人工抽检已记录，AI 原始输出未被改写。";
-      await loadAi(opportunityId, () => detail.value?.id === opportunityId);
-      return;
+  try {
+    while (notes) {
+      if (busy.value || aiReviewSubmission.value) return;
+      aiReviewError.value = "";
+      aiReviewSubmission.value = { resultId, stage: "submitting" };
+      const result = await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes });
+      if (result) {
+        if (detail.value?.id !== opportunityId) return;
+        aiReviewSubmission.value = { resultId, stage: "refreshing" };
+        message.value = "人工抽检已记录，AI 原始输出未被改写。";
+        await loadAi(opportunityId, () => detail.value?.id === opportunityId);
+        return;
+      }
+      aiReviewSubmission.value = null;
+      if (detail.value?.id !== opportunityId || tab.value !== "ai") return;
+      aiReviewError.value = message.value || "本次抽检未能确认，请核对记录后再决定是否重试。";
+      notes = await askAiReviewReason({ ...reasonRequest, initialValue: notes });
     }
-    if (detail.value?.id !== opportunityId || tab.value !== "ai") return;
-    aiReviewError.value = message.value || "本次抽检未能确认，请核对记录后再决定是否重试。";
-    notes = await askAiReviewReason({ ...reasonRequest, initialValue: notes });
+  } finally {
+    aiReviewSubmission.value = null;
+    if (!notes) aiReviewError.value = "";
   }
-  aiReviewError.value = "";
 }
 function syncListRoute() {
   filters.q = typeof route.query.q === "string" ? route.query.q : "";
@@ -1125,6 +1139,7 @@ onDeactivated(() => {
   writeScopeGeneration += 1;
   activeWriteCount = 0;
   busy.value = false;
+  aiReviewSubmission.value = null;
   wasDeactivated = true;
 });
 onActivated(() => {
@@ -1149,6 +1164,7 @@ watch(
     writeScopeGeneration += 1;
     activeWriteCount = 0;
     busy.value = false;
+    aiReviewSubmission.value = null;
     detail.value = null;
     profit.value = null;
     profitLoadState.value = "loading";
@@ -1190,6 +1206,7 @@ onBeforeUnmount(() => {
   erpBridgeBusy.value = false;
   writeScopeGeneration += 1;
   activeWriteCount = 0;
+  aiReviewSubmission.value = null;
 });
 </script>
 <template>
@@ -1392,6 +1409,8 @@ onBeforeUnmount(() => {
                 :load-error-message="aiLoadErrorMessage"
                 :request-id="aiRequestId"
                 :busy="busy"
+                :reviewing-result-id="aiReviewSubmission?.resultId ?? ''"
+                :review-stage="aiReviewSubmission?.stage ?? ''"
                 :can-decide="canDecide"
                 @queue="queueAi"
                 @retry="loadAi"
