@@ -816,7 +816,7 @@
           "scene": "progress"
         }
       ],
-      "remaining": "排队/复用不能替代实库任务与关联审计验收。",
+    "remaining": "真实 Vue 双端覆盖创建/复用、唯一在途 POST、expected_version与返回任务/来源路径，也覆盖409提示/追踪且留在当前机会；真实 API、RBAC、任务审计关联、Worker采集/自动评分仍待环境验收。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#91b42518b9942791.1"
       ],
@@ -833,6 +833,16 @@
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "已有源码隔离/离线原型验证器引用，不代表本轮重跑或真实Vue/服务验收。"
+      },
+      {
+        "file": "tests/e2e/m04-02-opportunities.spec.ts",
+        "evidenceType": "actual-vue-local-interception",
+        "claim": "创建201与复用200均只发一次含expected_version的POST，在途按钮禁用，并导航到准确任务及原机会来源；桌面/390px均通过。本地回包不证明真实服务端审计。"
+      },
+      {
+        "file": "tests/e2e/m04-02-opportunities.spec.ts",
+        "evidenceType": "actual-vue-local-interception",
+        "claim": "409只显示服务端action_hint/request_id、保留在机会页并恢复入口，未自动重试；桌面/390px均通过。本地回包不证明真实RBAC/数据库。"
         }
       ]
     },

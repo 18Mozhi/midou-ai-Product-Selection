@@ -270,6 +270,106 @@ async function ready(
   );
 }
 
+const blockedEvidence = {
+  code: "evidence_insufficient",
+  status: "blocked",
+  progress_percent: 0,
+  next_action: "补充同一机会的证据后重新核对。",
+  task_id: null,
+  task_status: null,
+  score_job_status: null,
+};
+
+for (const created of [true, false]) {
+  test(`P18 evidence completion task navigates to the ${created ? "new" : "reused"} task once`, async ({
+    page,
+  }) => {
+    const taskId = created
+      ? "00000000-0000-4000-8000-000000000434"
+      : "00000000-0000-4000-8000-000000000435";
+    const bodies: Record<string, unknown>[] = [];
+    let releaseResponse!: () => void;
+    let markRequestStarted!: () => void;
+    const responseGate = new Promise<void>((resolve) => (releaseResponse = resolve));
+    const requestStarted = new Promise<void>((resolve) => (markRequestStarted = resolve));
+    await ready(page, evidence, { adoption_blockers: [blockedEvidence] });
+    await page.route(
+      `**/api/v1/opportunities/${opportunityId}/evidence-completion-tasks`,
+      async (route) => {
+        bodies.push(route.request().postDataJSON() as Record<string, unknown>);
+        markRequestStarted();
+        await responseGate;
+        return route.fulfill({
+          status: created ? 201 : 200,
+          json: envelope({ created, task_id: taskId }),
+        });
+      },
+    );
+
+    await page.goto(`/opportunities/${opportunityId}`);
+    const trigger = page.getByRole("button", { name: "创建补采任务", exact: true });
+    await trigger.evaluate((button) => {
+      (button as HTMLButtonElement).click();
+      (button as HTMLButtonElement).click();
+    });
+    await requestStarted;
+    await expect(trigger).toBeDisabled();
+    expect(bodies).toEqual([{ expected_version: base.version }]);
+
+    const response = page.waitForResponse(
+      (candidate) =>
+        candidate
+          .url()
+          .includes(`/api/v1/opportunities/${opportunityId}/evidence-completion-tasks`) &&
+        candidate.request().method() === "POST",
+    );
+    releaseResponse();
+    await response;
+    await page.waitForURL(
+      (url) =>
+        url.pathname === `/tasks/${taskId}` &&
+        url.searchParams.get("from") === `/opportunities/${opportunityId}`,
+    );
+    expect(bodies).toHaveLength(1);
+  });
+}
+
+test("P18 evidence completion task conflict stays on the opportunity and surfaces the hint", async ({
+  page,
+}) => {
+  const bodies: Record<string, unknown>[] = [];
+  await ready(page, evidence, { adoption_blockers: [blockedEvidence] });
+  await page.route(
+    `**/api/v1/opportunities/${opportunityId}/evidence-completion-tasks`,
+    async (route) => {
+      bodies.push(route.request().postDataJSON() as Record<string, unknown>);
+      return route.fulfill({
+        status: 409,
+        json: {
+          error: {
+            code: "version_conflict",
+            message: "机会版本已变化。",
+            action_hint: "机会已变化，请刷新后重新尝试创建补采任务。",
+          },
+          request_id: "p18-evidence-task-conflict",
+          trace_id: "p18-evidence-task-conflict-trace",
+        },
+      });
+    },
+  );
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  const trigger = page.getByRole("button", { name: "创建补采任务", exact: true });
+  await trigger.click();
+  await expect(page.locator(".opportunity-message")).toContainText(
+    "机会已变化，请刷新后重新尝试创建补采任务。",
+  );
+  await expect(page.locator(".opportunity-message")).toContainText("p18-evidence-task-conflict");
+  await expect(trigger).toBeEnabled();
+  expect(bodies).toEqual([{ expected_version: base.version }]);
+  expect(new URL(page.url()).pathname).toBe(`/opportunities/${opportunityId}`);
+});
+
 const nextOpportunityId = "00000000-0000-4000-8000-000000000432";
 const nextOpportunity = {
   ...recommendedBase,
