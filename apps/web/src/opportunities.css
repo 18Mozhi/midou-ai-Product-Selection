@@ -765,6 +765,14 @@
   min-height: 130px;
   resize: vertical;
 }
+.opportunity-modal textarea[aria-invalid="true"] {
+  border-color: var(--so-danger-border);
+}
+.opportunity-modal .opportunity-field-error {
+  margin: 0;
+  color: var(--so-danger);
+  font-size: 13px;
+}
 .opportunity-modal aside {
   padding: 12px;
   border-left: 3px solid var(--so-info);

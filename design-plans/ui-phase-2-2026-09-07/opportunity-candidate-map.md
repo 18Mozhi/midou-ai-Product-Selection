@@ -96,10 +96,10 @@
 | OpportunityWorkspace:846            | 76ae53c237c00264.1 | AI排队/重读/复核转发                                                 |
 | OpportunityWorkspaceDialogs:90      | 56857391914c319d.1 | OP-ERP-CLOSE：Escape                                                 |
 | OpportunityWorkspaceDialogs:147     | 67aec29022637161.1 | OP-CREATE-CLOSE：Escape                                              |
-| OpportunityWorkspaceDialogs:198     | 674ff3412f0b8645.1 | OP-DECISION-CLOSE：Escape                                            |
+| OpportunityWorkspaceDialogs:210     | 377ceb35fb7127cd.1 | OP-DECISION-CLOSE：Escape                                            |
 | OpportunityWorkspaceDialogs:90      | 56857391914c319d.1 | OP-ERP-CLOSE                                                         |
 | OpportunityWorkspaceDialogs:147     | 67aec29022637161.1 | OP-CREATE-CLOSE                                                      |
-| OpportunityWorkspaceDialogs:198     | 674ff3412f0b8645.1 | OP-DECISION-CLOSE                                                    |
+| OpportunityWorkspaceDialogs:210     | 377ceb35fb7127cd.1 | OP-DECISION-CLOSE                                                    |
 | OpportunityWorkspace:1019           | c46fc24a5bfcc314.1 | 创建/决定/ERP浏览器/文件导入转发                                     |
 | OpportunityWorkspace:899            | 2f4e238755b201b9.1 | OP-BATCH-CANCEL：Escape                                              |
 | OpportunityWorkspace:980            | 2f4e238755b201b9.1 | OP-BATCH-CANCEL                                                      |
@@ -109,8 +109,8 @@
 | OpportunityWorkspace:987            | b4d79d3e558083d3.1 | OP-BATCH-SUBMIT                                                      |
 | OpportunityWorkspace:943            | 1fec9eace35dae6b.1 | OP-AI-REASON-SUBMIT/CANCEL转发                                       |
 | OpportunityWorkspaceDialogs:51      | 674fd720e5afc0a1.1 | OP-ERP-BROWSER                                                       |
-| OpportunityWorkspaceDialogs:198     | 9b17e07a48f24205.1 | OP-DECISION-EXCLUDED：P15不适用                                      |
-| OpportunityWorkspaceDialogs:198     | 674ff3412f0b8645.1 | OP-DECISION-EXCLUDED：P15不适用                                      |
+| OpportunityWorkspaceDialogs:210     | 5f89285e7e07f9b4.1 | OP-DECISION-EXCLUDED：P15不适用                                      |
+| OpportunityWorkspaceDialogs:210     | 377ceb35fb7127cd.1 | OP-DECISION-EXCLUDED：P15不适用                                      |
 | OpportunityWorkspaceDialogs:57      | 072a94228fa0ed02.1 | OP-ERP-CLOSE                                                         |
 | OpportunityWorkspaceDialogs:82      | a8109ecf87f0762f.1 | OP-ERP-FILE                                                          |
 | OpportunityWorkspaceDialogs:89      | 598ca963b90371ed.1 | OP-HELPER-DOWNLOAD                                                   |
@@ -120,7 +120,7 @@
 | OpportunityWorkspaceDialogs:113     | 93e4be8029abb2a0.1 | OP-CREATE-CLOSE                                                      |
 | OpportunityWorkspaceDialogs:129     | 87e5a2bcb170606c.1 | OP-CREATE-CLOSE                                                      |
 | OpportunityWorkspaceDialogs:158     | 439b2aeecca24b47.1 | OP-CREATE-SUBMIT                                                     |
-| OpportunityWorkspaceDialogs:144     | 10c891f118c2001b.1 | OP-DECISION-SUBMIT                                                   |
+| OpportunityWorkspaceDialogs:218     | 9e848d25400514bc.1 | OP-DECISION-SUBMIT                                                   |
 | OpportunityWorkspaceDialogs:150     | 5e85f75285d7eb96.1 | OP-DECISION-CLOSE                                                    |
 | OpportunityWorkspaceDialogs:164     | d594d7628cde3706.1 | OP-DECISION-CLOSE                                                    |
 | OpportunityWorkspaceDialogs:167     | ced3effe8f7058f1.1 | OP-DECISION-SUBMIT                                                   |
@@ -154,7 +154,10 @@
 | OpportunityWorkspace.vue:505        | 36cdbd1cb98185c2.1 | AI原因helper调用；通过/驳回 |
 | OpportunityWorkspaceDialogs.vue:90  | 196c12d0f18ac5ee.1 | ERP导入原生dialog           |
 | OpportunityWorkspaceDialogs.vue:147 | 304e73ffea549836.1 | 机会创建原生dialog          |
-| OpportunityWorkspaceDialogs.vue:198 | 9b17e07a48f24205.1 | 人工决策原生dialog；三变体  |
+| OpportunityWorkspaceDialogs.vue:210 | 5f89285e7e07f9b4.1 | 人工决策原生dialog；三变体  |
+| OpportunityWorkspaceDialogs.vue:210 | 377ceb35fb7127cd.1 | 决策dialog字段无效捕获反馈 |
+| OpportunityWorkspaceDialogs.vue:218 | 9e848d25400514bc.1 | OP-DECISION-SUBMIT：决定表单提交及必填校验 |
+| OpportunityWorkspaceDialogs.vue:218 | 9e848d25400514bc.1 | 决策表单无效事件反馈      |
 
 ### P18 AI 原因共享组件源候选
 

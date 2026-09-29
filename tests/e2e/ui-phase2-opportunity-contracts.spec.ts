@@ -575,8 +575,17 @@ for (const [action, label] of [
     await expect(modal.getByLabel("原因（必填）")).toHaveValue("");
     await modal.getByRole("button", { name: "确认记录" }).click();
     expect(data.writes).toHaveLength(0);
+    const reasonField = modal.getByLabel("原因（必填）");
+    await expect(reasonField).toHaveAttribute("aria-invalid", "true");
+    await expect(reasonField).toHaveAttribute(
+      "aria-describedby",
+      "opportunity-decision-reason-help opportunity-decision-reason-error",
+    );
+    await expect(modal.getByRole("alert")).toHaveText("请填写原因后再记录决定。");
     const reason = "  核对证据后人工决定  ";
-    await modal.getByLabel("原因（必填）").fill(reason);
+    await reasonField.fill(reason);
+    await expect(reasonField).not.toHaveAttribute("aria-invalid", "true");
+    await expect(modal.getByRole("alert")).toHaveCount(0);
     await modal.getByRole("button", { name: "确认记录" }).click();
     await expect(page.locator(".opportunity-message")).toContainText("稍后重试记录决定。");
     await expect(modal.getByLabel("原因（必填）")).toHaveValue(reason);
