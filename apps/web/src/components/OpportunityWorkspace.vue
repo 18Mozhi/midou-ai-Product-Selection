@@ -1159,7 +1159,13 @@ onMounted(() => {
 });
 watch(
   () => props.opportunityId,
-  () => {
+  (opportunityId, previousOpportunityId) => {
+    if (opportunityId !== previousOpportunityId) {
+      // Decision intent belongs to the opportunity that opened its form.
+      showDecision.value = false;
+      decisionAction.value = "observe";
+      decisionReason.value = "";
+    }
     readGeneration += 1;
     erpBridgeGeneration += 1;
     erpBridgeBusy.value = false;

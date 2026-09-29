@@ -285,6 +285,8 @@ const nextOpportunity = {
   },
   operating_feedback: { facts: [], calibration: null },
   adoption_blockers: [],
+  score_components: [],
+  latest_score_run: null,
   redecision_ready: false,
   evidence: [],
   decisions: [],
@@ -1135,6 +1137,46 @@ test("a late opportunity detail success cannot replace the current opportunity a
   await oldDetailResponse;
   await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
   await expect(page.getByRole("heading", { name: base.name, exact: true })).toHaveCount(0);
+});
+
+test("changing opportunities closes and clears an unsubmitted decision draft", async ({ page }) => {
+  await ready(page);
+  await readyForNextOpportunity(page);
+  const submittedDecisions: string[] = [];
+  page.on("request", (request) => {
+    if (request.method() === "POST" && request.url().includes("/decisions"))
+      submittedDecisions.push(request.url());
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: base.name, level: 1 })).toBeVisible();
+  await page.getByText("提前人工处理", { exact: true }).click();
+  await page.getByRole("button", { name: "继续观察", exact: true }).click();
+  const oldDialog = page.getByRole("dialog", { name: "记录继续观察决定" });
+  await oldDialog.getByLabel("原因（必填）").fill("仅属于旧机会的未提交草稿");
+
+  const currentDetailRequest = page.waitForRequest((request) => {
+    const url = new URL(request.url());
+    return url.pathname === `/api/v1/opportunities/${nextOpportunityId}`;
+  });
+  await switchOpportunityInPlace(page, nextOpportunityId);
+  await currentDetailRequest;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  await expect(oldDialog).toHaveCount(0);
+
+  const originalDetailRequest = page.waitForRequest((request) => {
+    const url = new URL(request.url());
+    return url.pathname === `/api/v1/opportunities/${opportunityId}`;
+  });
+  await switchOpportunityInPlace(page, opportunityId);
+  await originalDetailRequest;
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await page.getByText("提前人工处理", { exact: true }).click();
+  await page.getByRole("button", { name: "继续观察", exact: true }).click();
+  const currentDialog = page.getByRole("dialog", { name: "记录继续观察决定" });
+  await expect(currentDialog).toBeVisible();
+  await expect(currentDialog.getByLabel("原因（必填）")).toHaveValue("");
+  expect(submittedDecisions).toEqual([]);
 });
 
 test("a late opportunity detail failure cannot replace the current opportunity after the ID changes", async ({
