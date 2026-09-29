@@ -485,7 +485,7 @@
     "scripts/verify-ui-phase2-teams-c.mjs": "32be558307423a0131b146701a7a8c8dbe79f365f5fa306cf2555951a55890eb",
     "scripts/verify-ui-phase2-teams-controls-c.mjs": "c2f015d785ddfff74c1ddaecec3150763fbf29a176e40e71ac4a2d783bcd4ce7",
     "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "3784c05939eb074c58bfc4d66f92bc3d5481d6bc810f7e45ea6456683f6f81d4",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "7d8dc7d1711b1a54b977f80ebd3864bf2a7883efb72ed9211891a0ff61d85ec8",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "53952a95321cdca9e5a363a17ebb5043283837399f3293f65852f033cf1ef1cb",
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "161ac0c51a6a8dc2e16dbf38a3220fbcc8cf68740799b3932b38483c93b9be0d",

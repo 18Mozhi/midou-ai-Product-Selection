@@ -886,10 +886,18 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
 }) => {
   let created = false,
     allowRead = false,
+    holdRetryRead = false,
     createRequests = 0,
     teamReads = 0,
     summaryReads = 0,
     memberReads = 0;
+  let resolveRetryReadStarted!: () => void, releaseRetryRead!: () => void;
+  const retryReadStarted = new Promise<void>((resolve) => {
+      resolveRetryReadStarted = resolve;
+    }),
+    retryReadGate = new Promise<void>((resolve) => {
+      releaseRetryRead = resolve;
+    });
   const createdTeam = {
     id: "00000000-0000-4000-8000-000000000699",
     name: "只创建一次的协作组",
@@ -918,7 +926,12 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
       });
     }
     teamReads += 1;
-    if (created && !allowRead)
+    if (created && !allowRead) {
+      if (holdRetryRead) {
+        holdRetryRead = false;
+        resolveRetryReadStarted();
+        await retryReadGate;
+      }
       return route.fulfill({
         status: 503,
         json: {
@@ -929,6 +942,7 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
           },
         },
       });
+    }
     return route.fulfill({
       json: env(created ? [createdTeam] : []),
     });
@@ -961,6 +975,7 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
 
   const summaryReadsBeforeRetry = summaryReads,
     memberReadsBeforeRetry = memberReads;
+  holdRetryRead = true;
   const retryFailureResponse = page.waitForResponse(
     (response) =>
       response.url().endsWith("/api/v1/org/admin/teams") &&
@@ -968,6 +983,11 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
       response.status() === 503,
   );
   await retryButton.click();
+  await retryReadStarted;
+  await expect(retryButton).toHaveText("正在重新读取…");
+  await expect(retryButton).toBeDisabled();
+  await expect(page.locator(".org-admin-refresh button")).toBeDisabled();
+  releaseRetryRead();
   await retryFailureResponse;
   await expect(recovery).toBeVisible();
   await expect(requestDetails.locator("dd").nth(1)).toHaveText(/^[0-9a-f-]{36}$/i);
