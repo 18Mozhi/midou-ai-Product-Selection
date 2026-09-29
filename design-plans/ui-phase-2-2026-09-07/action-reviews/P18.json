@@ -2073,7 +2073,7 @@
           "scene": "decision-failure"
         }
       ],
-      "remaining": "本地Vue已覆盖采纳成功、准确请求体、单飞及原因窗迟到回执；业务原因仍由服务端trim，真实API/RBAC/审计及跨ID迟到写回执仍待。",
+      "remaining": "本地Vue已覆盖采纳成功、准确请求体、单飞、同ID弹窗代次和跨ID回执隔离；业务原因仍由服务端trim，真实API/RBAC与决策审计落库仍待。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#10c891f118c2001b.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ced3effe8f7058f1.1"
@@ -2087,6 +2087,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "旧机会决策POST延迟期间切换到另一机会后，旧回执不关闭新页、无旧成功提示且不会重读新机会；桌面Chromium与390px各1/1。受控回包不证明真实服务端写入/RBAC/审计。"
+        },
         {
           "file": "tests/e2e/m04-02-opportunities.spec.ts",
           "evidenceType": "actual-vue-local-interception",

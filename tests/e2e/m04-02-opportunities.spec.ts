@@ -1943,6 +1943,62 @@ test("a delayed decision receipt cannot close a newer decision dialog", async ({
   await expect(rejectedDialog.getByLabel("原因（必填）")).toHaveValue("");
 });
 
+test("P18 decision receipt for an old opportunity cannot refresh the current opportunity", async ({
+  page,
+}) => {
+  await ready(page);
+  await readyForNextOpportunity(page);
+  let releaseDecision!: () => void;
+  let markDecisionStarted!: () => void;
+  const decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
+  const decisionStarted = new Promise<void>((resolve) => (markDecisionStarted = resolve));
+  let nextDetailReads = 0;
+  await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) => {
+    nextDetailReads += 1;
+    return route.fallback();
+  });
+  await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, async (route) => {
+    markDecisionStarted();
+    await decisionGate;
+    await route.fulfill({
+      status: 201,
+      json: envelope({ opportunity_id: opportunityId, decision_status: "observing", version: 2 }),
+    });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
+  await page.getByText("提前人工处理", { exact: true }).click();
+  await page.getByRole("button", { name: "继续观察", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "记录继续观察决定" });
+  await dialog.getByLabel("原因（必填）").fill("旧机会已提交的决定");
+  await dialog.getByRole("button", { name: "确认记录" }).click();
+  await decisionStarted;
+
+  const currentDetailRequest = page.waitForRequest((request) => {
+    const url = new URL(request.url());
+    return url.pathname === `/api/v1/opportunities/${nextOpportunityId}`;
+  });
+  await switchOpportunityInPlace(page, nextOpportunityId);
+  await currentDetailRequest;
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  await expect(dialog).toHaveCount(0);
+  const currentDetailReads = nextDetailReads;
+
+  const oldDecisionResponse = page.waitForResponse(
+    (response) =>
+      response.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`) &&
+      response.request().method() === "POST" &&
+      response.status() === 201,
+  );
+  releaseDecision();
+  await oldDecisionResponse;
+
+  await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
+  await expect(page.locator(".opportunity-message")).toHaveCount(0);
+  expect(nextDetailReads).toBe(currentDetailReads);
+});
+
 test("P18 decision submission rejects a second request while the first POST is pending", async ({
   page,
 }) => {
