@@ -94,7 +94,7 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | markets/languages/fields/failure_rules               | 逗号拆分trim去空，服务端再去重后1–100项                                                              | 不新增市场或字段业务默认；新建技术模板不是事实数据                                        |
 | schedule/concurrency/timeout/retry/circuit/retention | 整数范围分别1–10080分钟、1–20、1000–120000ms、0–10、1–20、1–3650天                                   | 本批无阈值、单位、默认值改变                                                              |
 | dedupe/parser/healthcheck                            | dedupe1–255；parser字母数字点下划线横线1–80；healthcheck可空HTTP(S)                                  | 不新增探针目标或凭证                                                                      |
-| terms/status                                         | pending/approved/rejected；draft/disabled/enabled；可空HTTPS参考、版本、ISO到期时间                  | 公开来源enabled要求approved+参考+版本+未来到期；日期切片→本地输入→ISO可能有时区差异，待验 |
+| terms/status                                         | pending/approved/rejected；draft/disabled/enabled；可空HTTPS参考、版本、ISO到期时间                  | 公开来源enabled要求approved+参考+版本+未来到期；UTC ISO现在先格式化为浏览器本地datetime-local，再经既有本地解析回ISO，P46双端测试确认往返不改分钟精度内的瞬间 |
 | 更新锁                                               | 编辑PUT携带当前version为expected_version                                                             | 409保留输入，不自动重放写入                                                               |
 
 R的edit用Object.assign把item展开进form，save再展开form：因此23个可编辑字段不是精确网络body白名单，可能残留id/version/updated_at等只读属性；由编辑转创建的清理与body合同需要PR-G03验证。本批不擅自删除字段或改变请求契约。模板只覆盖共同执行默认与fields/failure_rules，不覆盖code/name/target/owner/terms/status；重复应用会覆盖用户已改策略值。
@@ -211,7 +211,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue | 61023ffed367e6414668e2f3d4d9b1c2c3bb9fb039bea834faf05ea6dc8f77cb |
+| apps/web/src/components/ProviderRegistry.vue | da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0 |
 
 ### PR46/PR47及共享详情旧身份归档
 

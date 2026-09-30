@@ -228,6 +228,13 @@ const admission = (item: Provider): { state: AdmissionState; label: string; deta
   inactiveCount = computed(
     () => items.value.filter((item) => admission(item).state === "inactive").length,
   );
+const toLocalDateTimeInput = (value: string | null) => {
+  if (!value) return "";
+  const instant = new Date(value);
+  if (!Number.isFinite(instant.getTime())) return value.slice(0, 16);
+  const local = new Date(instant.getTime() - instant.getTimezoneOffset() * 60_000);
+  return local.toISOString().slice(0, 16);
+};
 const list = (v: string) =>
     v
       .split(",")
@@ -390,7 +397,7 @@ function edit(item?: Provider, event?: Event) {
           healthcheck_url: item.healthcheck_url ?? "",
           terms_reference_url: item.terms_reference_url ?? "",
           terms_version: item.terms_version ?? "",
-          terms_expires_at: item.terms_expires_at?.slice(0, 16) ?? "",
+          terms_expires_at: toLocalDateTimeInput(item.terms_expires_at),
         }
       : {
           code: "",

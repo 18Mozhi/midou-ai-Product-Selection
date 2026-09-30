@@ -211,6 +211,7 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
     web,
     styles,
     shell,
+    surfaceRegistry,
     openapi,
     env,
     architecture,
@@ -228,6 +229,7 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
       "apps/web/src/components/ProviderRegistry.vue",
       "apps/web/src/provider-registry.css",
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/navigation-surface-registry.ts",
       "docs/openapi.yaml",
       "config/env.example",
       "docs/architecture/m03-01-provider-registry.md",
@@ -260,7 +262,8 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
   );
   assert.match(web, /status\s*:\s*["']disabled["']/);
   assert.match(styles, /@media \(max-width: 640px\)/);
-  assert.match(shell, /provider-runtime-surface/);
+  assert.match(shell, /surfaceComponents/);
+  assert.match(surfaceRegistry, /"provider-runtime-surface":\s*lazy\("ProviderRuntimeSurface"\)/);
   assert.match(web, /基本信息[\s\S]*范围与字段[\s\S]*执行策略[\s\S]*合规与发布/);
   assert.match(web, /应用技术模板/);
   assert.match(web, /visibleItems\.length && !editorOpen/);

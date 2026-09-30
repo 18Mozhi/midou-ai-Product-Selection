@@ -188,6 +188,61 @@ test("M03-01.P46 editor announces required fields without changing validation be
   for (const name of termsFields)
     await expect(field(name)).not.toHaveAttribute("aria-required", "true");
 });
+test.describe("P46 expiration timezone", () => {
+  test.use({ timezoneId: "Asia/Shanghai" });
+  test("preserves the expiry instant when editing", async ({ page }, testInfo) => {
+    await nav(page);
+    await page.route("**/api/v1/platform/providers", (route) =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: definitions,
+          request_id: "m03-01-expiry-read",
+          trace_id: "m03-01-expiry-read",
+        }),
+      }),
+    );
+    let updateBody: Record<string, unknown> | null = null;
+    await page.route("**/api/v1/platform/providers/*", async (route) => {
+      if (route.request().method() !== "PUT") return route.fallback();
+      updateBody = route.request().postDataJSON() as Record<string, unknown>;
+      return route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: { ...definition, version: 2 },
+          request_id: "m03-01-expiry-write",
+          trace_id: "m03-01-expiry-write",
+        }),
+      });
+    });
+
+    await page.goto("/platform-admin/providers");
+    if (testInfo.project.name === "mobile-390") {
+      await page.getByRole("button", { name: /公开趋势 RSS.*未进入调度/ }).click();
+      await page
+        .getByRole("dialog", { name: "公开趋势 RSS" })
+        .getByRole("button", { name: "编辑来源" })
+        .click();
+    } else {
+      await page
+        .getByRole("row", { name: /公开趋势 RSS/ })
+        .getByRole("button", { name: "编辑" })
+        .click();
+    }
+    const editor = page.getByRole("dialog", { name: "编辑来源" }),
+      expiry = editor.locator('[aria-labelledby="provider-field-terms_expires_at-label"]');
+    await editor.getByRole("button", { name: "4 合规与发布" }).click();
+    await expect(expiry).toHaveValue("2027-08-08T01:00");
+    await editor.getByRole("button", { name: "保存新版本" }).click();
+    await expect(page.getByText("公开趋势 RSS已更新", { exact: false })).toBeVisible();
+    expect(updateBody).toMatchObject({
+      terms_expires_at: "2027-08-07T17:00:00.000Z",
+      expected_version: 1,
+    });
+  });
+});
 test("M03-01.A08/A16 empty, forbidden and dependency states stay actionable", async ({ page }) => {
   await nav(page);
   let status = 200;
