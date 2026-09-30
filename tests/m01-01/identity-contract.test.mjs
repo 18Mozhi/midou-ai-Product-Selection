@@ -97,6 +97,7 @@ test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
     schema,
     map,
     architecture,
+    mfaArchitecture,
     runbook,
     registry,
     liveProbe,
@@ -109,6 +110,7 @@ test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
       "config/schema.json",
       "docs/feature-map.json",
       "docs/architecture/m01-01-local-identity.md",
+      "docs/architecture/m01-02-mfa-identity-adapters.md",
       "docs/runbooks/m01-01-local-identity.md",
       "verification/modules/M01-01.json",
       "scripts/verify-local-auth-live.mjs",
@@ -137,12 +139,12 @@ test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
     assert.match(env, new RegExp(key));
   assert.match(schema, /AUTH_ARGON2_MEMORY_KIB/);
   assert.match(map, /localIdentity/);
-  for (const image of [
-    "02_scoutops霓虹科技登录页.png",
-    "03_scoutops_深海蓝注册向导.png",
-    "21_安全设置.jpg",
-  ])
-    assert.match(architecture, new RegExp(image));
+  assert.match(architecture, /page-specs\/P02\.md/);
+  assert.match(architecture, /page-specs\/P07\.md/);
+  assert.doesNotMatch(architecture, /images-html\/|ui-redesign-2026-09-05|信号账页|朱砂主 CTA/);
+  assert.match(mfaArchitecture, /page-specs\/P02\.md/);
+  assert.match(mfaArchitecture, /page-specs\/P07\.md/);
+  assert.doesNotMatch(mfaArchitecture, /霓虹科技登录页\.png|21_安全设置\.jpg/);
   assert.match(runbook, /## 回滚/);
   assert.match(liveProbe, /login_identifiers:\s*["']email_and_username["']/);
   assert.match(deploy, /0067_usernames_login\.up\.sql/);

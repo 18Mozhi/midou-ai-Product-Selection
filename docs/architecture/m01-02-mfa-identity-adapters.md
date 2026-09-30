@@ -2,7 +2,7 @@
 
 ## 范围与图片依据
 
-本模块交付标准 TOTP MFA、一次性恢复码、短时登录挑战、本人启用/停用及企业身份适配接口。页面读取 `images-html/01_72_page_concepts/21_安全设置.jpg` 的安全卡片、状态标签和主操作层级，并复用已读取的 `images-html/02_high_resolution_core_pages/02_scoutops霓虹科技登录页.png` 登录布局实现 MFA 挑战。桌面与 390px 都以文字说明状态，不只依赖颜色。
+本模块交付标准 TOTP MFA、一次性恢复码、短时登录挑战、本人启用/停用及企业身份适配接口。当前登录挑战的活动视觉合同沿用获批并接入真实 Vue 的 [P02 登录规格](../../design-plans/ui-phase-2-2026-09-07/page-specs/P02.md)，MFA 安全设置沿用 [P07 规格](../../design-plans/ui-phase-2-2026-09-07/page-specs/P07.md)。旧版概念图与高保真登录图仅属历史资料，不再定义当前布局或样式。桌面与 390px 都以文字说明状态，不只依赖颜色。
 
 OIDC 接口状态为 `adapter_ready`；SAML 2.0 与 SCIM 2.0 为 `reserved_disabled`。三者调用时均显式返回 `identity_provider_not_configured`，因为当前没有获批 Provider、组织域名、Client ID/Secret、回调地址、属性映射或账号回收合同。本模块不编造这些外部契约，也不提前启用企业 SAML/SCIM。组织级激活须等待 M01-03 的真实租户边界。
 

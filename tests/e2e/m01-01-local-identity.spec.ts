@@ -5,6 +5,7 @@ test("M01-01.A07/A15 local identity login and registration are visually stable",
 }) => {
   await page.goto("/login");
   await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
+  await expect(page.getByText("登录状态最长保留 30 天；可访问范围由服务端校验。")).toBeVisible();
 
   await page.getByRole("button", { name: "创建本地账号" }).click();
   await expect(page.getByRole("heading", { name: /创建账号/ })).toBeVisible();

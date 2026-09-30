@@ -732,7 +732,7 @@ onBeforeUnmount(() => clearMfaMaterial());
               placeholder="输入密码"
             />
             <div class="p02-login-form-row">
-              <span>会话与可访问范围由服务端校验。</span>
+              <span>登录状态最长保留 30 天；可访问范围由服务端校验。</span>
               <button type="button" @click="switchMode('forgot')">忘记密码？</button>
             </div>
             <button class="p02-login-primary" type="submit" :disabled="requestState === 'loading'">
