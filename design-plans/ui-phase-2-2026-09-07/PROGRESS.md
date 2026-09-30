@@ -4735,3 +4735,7 @@ TrendDashboard 筛选徽标改为只统计偏离默认值的筛选字段：默�
 ## 2026-10-01 · P16 空结果审计状态保持
 
 修复 `SelectionJourney.vue` 在空结果任务完成 observe 决策后丢失来源说明：旅程 `state` 会更新为 `decided`，而任务事实仍是 `task_status=succeeded_empty`；展示判断现按任务状态，保留“真实来源没有返回可用结果”与空结果描述。扩展 M07-06 实际 Vue Playwright 回归，分别模拟成功审计回执后确认标题、说明、决策成功仍可见；桌面 Chromium 与 390px 手机各 1/1 通过。无 API/OpenAPI、权限、数据库、任务契约、依赖或配置改变；本地回包不证明生产行为。全量功能门此前仍有 314 项 Node 单测失败，生产 readiness 仍为 503（dependency_unavailable）；未部署，待 readiness 恢复及授权的 Redis 启动操作。
+
+## 2026-10-01 · 首批 Node 回归断言校准
+
+同步 P18 五门断言至现有 `opportunityQualityGatesPassed` helper；同步 M04-02 独立 downstream 状态对象、当前候选数说明与现有 `opportunity-association-grid`；同步 P60 查询键感知的 single-flight guard。仅修正过时静态断言，没有改变运行时行为、质量门或权限。相关目标测试 6/6 通过；首批 165 个测试文件从此前 35 项失败降至 31 项失败（776 项测试），其余失败仍需按实际失败逐一归因；完整功能门尚未通过，生产 readiness 与 M07-03 验收仍未闭合。

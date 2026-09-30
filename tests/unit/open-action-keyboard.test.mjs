@@ -39,7 +39,7 @@ test("P60 recovery alone stays focusable with aria-disabled and native button se
 test("P60 load checks single-flight before any state or request change", () => {
   assert.match(
     descriptor.scriptSetup.content,
-    /async function load\(\) \{\s*if \(refreshing.value\) return;/,
+    /if \(refreshing\.value && \(!options\.force \|\| activeReadQuery === requestKey\)\) return;/,
   );
   assert.deepEqual(
     compileTemplate({
