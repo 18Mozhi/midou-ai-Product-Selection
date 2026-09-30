@@ -68,7 +68,10 @@ let listReadGeneration = 0,
   listReadController: AbortController | null = null,
   topicDetailReadController: AbortController | null = null,
   pageActive = true,
-  wasDeactivated = false;
+  wasDeactivated = false,
+  activeListReadKey: string | null = null,
+  queuedLoadKey: string | null = null,
+  lastAutoLoadKey: string | null = null;
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -182,6 +185,18 @@ async function read<T = any>(
 }
 async function load() {
   if (!pageActive) return;
+  const readKey = JSON.stringify([
+    page.value,
+    filters.q,
+    filters.market,
+    filters.category,
+    filters.status,
+    canManageTrends.value,
+  ]);
+  if (activeListReadKey === readKey && listReadController && !listReadController.signal.aborted)
+    return;
+  lastAutoLoadKey = readKey;
+  activeListReadKey = readKey;
   const generation = ++listReadGeneration;
   listReadController?.abort();
   const controller = new AbortController();
@@ -243,7 +258,31 @@ async function load() {
   } catch (error) {
     if (!isCurrent() || detailGeneration !== topicDetailReadGeneration) return;
     if (!(error instanceof ApiClientError)) state.value = "blocked";
+  } finally {
+    if (generation === listReadGeneration) {
+      activeListReadKey = null;
+      listReadController = null;
+    }
   }
+}
+function queueLoad() {
+  if (!pageActive) return;
+  const key = JSON.stringify([
+    page.value,
+    filters.q,
+    filters.market,
+    filters.category,
+    filters.status,
+    canManageTrends.value,
+  ]);
+  if (queuedLoadKey === key || lastAutoLoadKey === key) return;
+  lastAutoLoadKey = key;
+  queuedLoadKey = key;
+  queueMicrotask(() => {
+    if (queuedLoadKey !== key) return;
+    queuedLoadKey = null;
+    if (pageActive) void load();
+  });
 }
 async function selectTopic(topic: Topic) {
   mobileDetailOpen.value = true;
@@ -486,7 +525,7 @@ watch(
   ],
   () => {
     syncFromRoute();
-    if (pageActive) void load();
+    queueLoad();
   },
 );
 watch(
@@ -531,7 +570,8 @@ watch(
 );
 watch(canManageTrends, (allowed) => {
   if (allowed && pageActive) {
-    void load();
+    lastAutoLoadKey = null;
+    queueLoad();
     return;
   }
   changeRequests.value = [];
@@ -547,6 +587,8 @@ onMounted(() => {
 onDeactivated(() => {
   pageActive = false;
   wasDeactivated = true;
+  queuedLoadKey = null;
+  lastAutoLoadKey = null;
   listReadGeneration += 1;
   topicDetailReadGeneration += 1;
   listReadController?.abort();
@@ -560,7 +602,7 @@ onActivated(() => {
   if (!wasDeactivated) return;
   wasDeactivated = false;
   syncFromRoute();
-  void load();
+  queueLoad();
 });
 onBeforeUnmount(() => {
   pageActive = false;
@@ -570,6 +612,9 @@ onBeforeUnmount(() => {
   topicDetailReadController?.abort();
   listReadController = null;
   topicDetailReadController = null;
+  activeListReadKey = null;
+  queuedLoadKey = null;
+  lastAutoLoadKey = null;
 });
 </script>
 

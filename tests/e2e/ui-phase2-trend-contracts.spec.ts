@@ -919,17 +919,24 @@ test("UI2-TR10 rule and governance reads cancel superseded requests", async ({ p
   expect(data.writes).toHaveLength(0);
 });
 
-test("P14 deactivation cancels the active filter read", async ({ page }) => {
+test("P14 deactivation cancels reads and activation refreshes once", async ({ page }) => {
   const data = await ready(page);
   const failedRequests: Request[] = [];
   page.on("requestfailed", (request) => failedRequests.push(request));
-  let releaseLateRead!: () => void, markLateReadStarted!: () => void;
+  let releaseLateRead!: () => void,
+    markLateReadStarted!: () => void,
+    filterReadCount = 0;
   const lateReadGate = new Promise<void>((resolve) => (releaseLateRead = resolve));
   const lateReadStarted = new Promise<void>((resolve) => (markLateReadStarted = resolve));
   await page.route("**/api/v1/trends**", async (route) => {
     const request = route.request();
     const url = new URL(request.url());
     if (url.pathname === "/api/v1/trends" && url.searchParams.get("category") === "deactivate") {
+      filterReadCount += 1;
+      if (filterReadCount > 1)
+        return route.fulfill({
+          json: envelope([data.detail], { page: 1, page_size: 20, total: 1 }),
+        });
       markLateReadStarted();
       await lateReadGate;
       return route
@@ -950,6 +957,7 @@ test("P14 deactivation cancels the active filter read", async ({ page }) => {
   await filters.getByRole("textbox", { name: "分类" }).fill("deactivate");
   await filters.getByRole("button", { name: "筛选", exact: true }).click();
   await lateReadStarted;
+  expect(filterReadCount).toBe(1);
 
   await page.evaluate(() => {
     window.history.pushState({}, "", "/work");
@@ -965,7 +973,16 @@ test("P14 deactivation cancels the active filter read", async ({ page }) => {
       ),
     )
     .toBe(true);
+  expect(filterReadCount).toBe(1);
   releaseLateRead();
+  const readsBeforeActivation = filterReadCount;
+  await page.evaluate(() => {
+    window.history.pushState({}, "", "/trends?category=deactivate");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page).toHaveURL(/\/trends\?category=deactivate/);
+  await expect.poll(() => filterReadCount).toBe(readsBeforeActivation + 1);
+  await expect(page.locator("#trend-list > button").first()).toContainText(data.detail.title);
   expect(data.writes).toHaveLength(0);
 });
 
