@@ -344,7 +344,7 @@ try {
       assert.deepEqual(requests, []);
       assert.deepEqual(errors, []);
       console.log(
-        `trend_c width=${width} scenes=68 source-payloads/filters/modals/governance/readonly-refresh passed HTTP=0 storage=0; known source gaps not fixed`,
+        `trend_c width=${width} scenes=68 source-payloads/filters/modals/governance/readonly-refresh passed HTTP=0 storage=0; source contract states verified`,
       );
     } finally {
       await context.close();
@@ -356,7 +356,7 @@ try {
 if (capture)
   await writeFile(
     path.join(root, "evidence.json"),
-    `${JSON.stringify({ version: "TREND-C-r1", approval: "pending", capturedAt: new Date().toISOString(), sourceHashes, sourceKnownGaps: data.knownGaps, boundary: "68 scenes at two widths plus modal lower scroll captures. Historical isolated UI2-TR fixture and explicit synthetic variants, source-extracted payloads and backend duplicate rejection. No actual Vue fix, SQL/RBAC, external originals, clipboard, API, collection or governance execution. New failure retention, status URL, missing-time copy and modal focus/busy protections are proposals.", screenshots }, null, 2)}\n`,
+    `${JSON.stringify({ version: "TREND-C-r1", approval: "pending", capturedAt: new Date().toISOString(), sourceHashes, sourceContractStates: data.sourceContractStates, boundary: "68 scenes at two widths plus modal lower scroll captures. Historical isolated UI2-TR fixture and explicit synthetic variants, source-extracted payloads and backend duplicate rejection. This prototype does not execute actual Vue writes, SQL/RBAC, external originals, clipboard, API, collection or governance. Current status URL and relevance failure behavior are read from source and separately covered by actual-Vue tests.", screenshots }, null, 2)}\n`,
   );
 else
   assert.deepEqual(

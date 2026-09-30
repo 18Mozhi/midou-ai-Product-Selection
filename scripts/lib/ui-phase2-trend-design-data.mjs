@@ -56,7 +56,12 @@ export async function buildTrendDesignData(repo) {
     title: "同范围主题 · 隔离合并候选",
     version: 2,
   };
-  const ruleForm = plain(run(`export const value=${extract(rule.script, "form")};`).value);
+  const ruleForm = plain(
+    run(
+      `const emptyForm=${extract(rule.script, "emptyForm")}; export const value=${extract(rule.script, "form")};`,
+      { reactive: (value) => value },
+    ).value,
+  );
   const ruleEdited = {
     ...ruleForm,
     name: "隔离关键词监控",
@@ -135,8 +140,8 @@ export async function buildTrendDesignData(repo) {
     },
   );
   await relevance.markIrrelevant();
-  assert.equal(relevanceDialog.value, null);
-  assert.equal(relevanceReason.value, "");
+  assert.equal(relevanceDialog.value, "irrelevant");
+  assert.equal(relevanceReason.value, "保留这次失败原因");
   const filterRefs = {
     filters: { q: "", market: "", category: "", status: "" },
     sort: { value: "impact" },
@@ -162,7 +167,7 @@ export async function buildTrendDesignData(repo) {
   await filterFns.applyFilters();
   filterRefs.route.query = plain(pushed.query);
   filterFns.syncFromRoute();
-  assert.equal(filterRefs.filters.status, "active");
+  assert.equal(filterRefs.filters.status, "");
   const opportunityRoute = run(`export const value=${extract(main.script, "opportunityRoute")};`, {
     selected: { value: base.sample.detail },
     computed: (fn) => fn(),
@@ -200,10 +205,10 @@ export async function buildTrendDesignData(repo) {
         failedSources: 0,
       }),
     ),
-    knownGaps: {
+    sourceContractStates: {
       allStatusRoundTrip: filterRefs.filters.status,
       relevanceFailure: { dialog: relevanceDialog.value, reason: relevanceReason.value },
-      status: "known-gap-not-fixed",
+      status: "source-verified",
     },
   };
 }

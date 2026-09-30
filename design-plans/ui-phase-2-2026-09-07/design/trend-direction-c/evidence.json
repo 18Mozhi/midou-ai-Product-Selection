@@ -1,42 +1,42 @@
 {
   "version": "TREND-C-r1",
   "approval": "pending",
-  "capturedAt": "2026-09-08T07:08:27.936Z",
+  "capturedAt": "2026-09-30T09:12:51.109Z",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/index.html": "1bdf05bb1756dd8b6128a25bf520bc2ff5d2acf3f58d9de1e73321cb594e976b",
     "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/trend.css": "9bfbf2b10c1d95cc0ce1f2ed4a1bb1f02fa3b02e1fdb43c3c3b2a0a6cfe8b6b6",
     "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/trend.js": "d9c3658317945cea39316219fc8bbaae418a0dd14f76a067a1e8a175ee34546c",
     "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/view.js": "50c3695fd4d67d158b6e882528fb6005b9e972cebd9c95445f33c8b0fc03dcea",
-    "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/data.js": "71d583119ff139d7ed3bebd77b6b35a0196be5c43769f0623c3137626391d0af",
+    "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/data.js": "678f914a21bd1ab5ea17afbd74df8b5034ca5d62ba81dbaafed80fec7a1f92c2",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/study.css": "120e5cc8c4071ff92b044d96d07d354fd41b7f4d0452bcbdb3ada234f62309af",
-    "apps/web/src/components/TrendDashboard.vue": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
+    "apps/web/src/components/TrendDashboard.vue": "e273327dbedd58e57cfebc1a22f0d74060190a42c909d3c14a07bbe1ec6e7025",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
-    "apps/web/src/components/TrendRuleDialog.vue": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+    "apps/web/src/components/TrendRuleDialog.vue": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500",
     "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
-    "apps/web/src/components/ResponsiveFilterDrawer.vue": "daa1cda68e206b85f5cfa687ae9ee70795a20e2a67d79501cc22fbf53c162a39",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
     "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
-    "apps/web/src/components/shared/monitoring-readiness.ts": "8ee888ad3c59407302bfda6bc0ff6eb642fd66d875cdcff9e729989ed8480073",
+    "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
     "apps/api/src/trend-service.ts": "334fbfea3d40830006c4cb543f182ca4236bfda7d68b4da3e4003b0b1ca52434",
     "apps/api/src/trend-routes.ts": "94c382e93d59979a66ca74603a98feeff8692d9c9aac3a87c5560cd1934cc6c5",
     "apps/api/src/mysql-trend-repository.ts": "fcd152efe97ccb798c89d1262fe0316f2211ee5326c29370a4cd35dcbb191401",
     "apps/api/src/data-quality-routes.ts": "b937aae166ac5f0993b967643dc18e68eef8c2422123aa15cf6ea78e3e3d806c",
     "apps/api/src/provider-source-routes.ts": "b8976fbbf6d8400cd167a26bd2e4a349a4e38dfe2cd4511e778cfad8f657afd9",
-    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "9b2bd819325538c26d43ce98a7f1e6856ef465f60eae833ba504d0c3087dbea3",
-    "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
+    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "b2c7cc165feafef3651be3fd04f39d8aede2192e1c3eac7b5ea44b47f9ff218e",
+    "scripts/lib/ui-phase2-trend-design-data.mjs": "3c2c1f0f639200c425d208490e5fc0850bfbfe5bdac737c0120d4153310e2378",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
-    "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39"
+    "scripts/verify-ui-phase2-trend-c.mjs": "7e39683fb2b9d6bcaf86dd190679681e6e4cdfbceaf5aed03cc33ef30884d27c"
   },
-  "sourceKnownGaps": {
-    "allStatusRoundTrip": "active",
+  "sourceContractStates": {
+    "allStatusRoundTrip": "",
     "relevanceFailure": {
-      "dialog": null,
-      "reason": ""
+      "dialog": "irrelevant",
+      "reason": "保留这次失败原因"
     },
-    "status": "known-gap-not-fixed"
+    "status": "source-verified"
   },
-  "boundary": "68 scenes at two widths plus modal lower scroll captures. Historical isolated UI2-TR fixture and explicit synthetic variants, source-extracted payloads and backend duplicate rejection. No actual Vue fix, SQL/RBAC, external originals, clipboard, API, collection or governance execution. New failure retention, status URL, missing-time copy and modal focus/busy protections are proposals.",
+  "boundary": "68 scenes at two widths plus modal lower scroll captures. Historical isolated UI2-TR fixture and explicit synthetic variants, source-extracted payloads and backend duplicate rejection. This prototype does not execute actual Vue writes, SQL/RBAC, external originals, clipboard, API, collection or governance. Current status URL and relevance failure behavior are read from source and separately covered by actual-Vue tests.",
   "screenshots": [
     {
       "file": "1440-topics.png",
@@ -918,7 +918,7 @@
         "minTextFont": 16,
         "violations": []
       },
-      "sha256": "a050f0a1432f0c0f484e0968c594cf859a14a6447ccea50da9b2011be2f0e3bf"
+      "sha256": "ff044e4c434bbf73c369c59e7c56948f1b15b57cd13c2315310b32d33659423a"
     },
     {
       "file": "1440-anomaly-existing.png",
@@ -1008,7 +1008,7 @@
         "minTextFont": 13,
         "violations": []
       },
-      "sha256": "76ef3300110c98c35987861fddf684bb24ba141c6de42856496321ac6de250c8"
+      "sha256": "981be163d68104422c2702da7fe557d80cd1528c57bef2ba5fe1261451d19e2e"
     },
     {
       "file": "1440-irrelevant-saved.png",

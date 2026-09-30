@@ -379,12 +379,12 @@ window.TREND_C_DATA = {
       },
     ],
   },
-  knownGaps: {
-    allStatusRoundTrip: "active",
+  sourceContractStates: {
+    allStatusRoundTrip: "",
     relevanceFailure: {
-      dialog: null,
-      reason: "",
+      dialog: "irrelevant",
+      reason: "保留这次失败原因",
     },
-    status: "known-gap-not-fixed",
+    status: "source-verified",
   },
 };
