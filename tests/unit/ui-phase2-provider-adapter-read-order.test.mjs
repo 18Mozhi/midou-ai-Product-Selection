@@ -44,6 +44,8 @@ function harness(text = currentSource) {
     computed,
     watch: () => {},
     onMounted: () => {},
+    onUnmounted: () => {},
+    useRouter: () => ({ push: async () => {} }),
     defineProps: () => ({ apiBaseUrl: "local" }),
     ApiClientError,
     HTMLElement: class {},

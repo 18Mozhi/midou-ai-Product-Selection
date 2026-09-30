@@ -97,7 +97,7 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 
 | 文件 | SHA256 |
 | --- | --- |
-| apps/web/src/components/CrawlerSchedulerCenter.vue | ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue | ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee |
 | apps/web/src/components/CapacityBoundaryCenter.vue | 2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8 |
 | apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
@@ -148,7 +148,7 @@ P70活动租约区的原生details只按需展示当前已返回的任务UUID、
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1 | 585 | control | SC70-HEALTH-NAV / 导航至已登记适配器路由，不代表健康检查已执行 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1 | 590 | control | SC70-HEALTH-NAV / 导航至已登记适配器路由，不代表健康检查已执行 |
 
 ## 9. 已替代源码身份归档
 
