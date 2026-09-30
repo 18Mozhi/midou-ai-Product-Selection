@@ -574,7 +574,7 @@ function parentHarness(overrides = {}) {
     Date: ReviewDate,
     busy: ref(false),
     refreshing: ref(false),
-    props: { organizationId: "org-a" },
+    props: { organizationId: "org-a", routePath: "/org-admin/roles" },
     resourceGrantPage: ref(3),
     resourceGrantStatus: ref("active"),
     resourceGrantForm: ref({
@@ -711,7 +711,7 @@ test("P31 actual extend and revoke carry versions and cancelled reason causes ze
   await cancelled.h.revokeResourceGrant(grant);
   assert.equal(cancelled.submits.length, 0);
 });
-test("P31 actual revoke reads changed organization and grant version after reason await (unfixed)", async () => {
+test("P31 actual revoke keeps the original organization, target and version across reason entry", async () => {
   let answer;
   const { h, b, submits } = parentHarness({
     auditedReason: () =>
@@ -725,8 +725,36 @@ test("P31 actual revoke reads changed organization and grant version after reaso
   grant.version = 8;
   answer("继续撤销");
   await pending;
-  assert.equal(submits[0][0], "/org/org-b/resource-grants/grant-a/revoke");
-  assert.equal(submits[0][1].expected_version, 8);
+  assert.equal(submits.length, 0, "an organization switch cancels the stale confirmation");
+
+  let routeAnswer;
+  const changedRoute = parentHarness({
+    auditedReason: () =>
+      new Promise((resolve) => {
+        routeAnswer = resolve;
+      }),
+  });
+  const routeGrant = { id: "grant-a", version: 7 },
+    pendingRouteConfirmation = changedRoute.h.revokeResourceGrant(routeGrant);
+  changedRoute.b.props.routePath = "/org-admin/members";
+  routeAnswer("继续撤销");
+  await pendingRouteConfirmation;
+  assert.equal(changedRoute.submits.length, 0, "leaving the page cancels the stale confirmation");
+
+  let confirm;
+  const sameOrganization = parentHarness({
+    auditedReason: () =>
+      new Promise((resolve) => {
+        confirm = resolve;
+      }),
+  });
+  const stillSelected = { id: "grant-a", version: 7 },
+    pendingConfirmation = sameOrganization.h.revokeResourceGrant(stillSelected);
+  stillSelected.version = 8;
+  confirm("继续撤销");
+  await pendingConfirmation;
+  assert.equal(sameOrganization.submits[0][0], "/org/org-a/resource-grants/grant-a/revoke");
+  assert.equal(sameOrganization.submits[0][1].expected_version, 7);
 });
 test("P31 actual status and page readers reset or reject in-flight edits without local paging", async () => {
   const { h, b, loads } = parentHarness();

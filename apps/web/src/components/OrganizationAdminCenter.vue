@@ -697,12 +697,16 @@ async function extendResourceGrant(value: { grant: any; reason: string; expires_
     notice.value = "授权到期时间已更新并写入审计。";
 }
 async function revokeResourceGrant(grant: any) {
+  const organizationId = props.organizationId,
+    routePath = props.routePath,
+    grantId = grant.id,
+    expectedVersion = grant.version;
   const reason = await auditedReason("撤销指定资源授权");
-  if (!reason) return;
+  if (!reason || props.organizationId !== organizationId || props.routePath !== routePath) return;
   if (
     await submit(
-      `/org/${props.organizationId}/resource-grants/${grant.id}/revoke`,
-      { expected_version: grant.version, reason },
+      `/org/${organizationId}/resource-grants/${grantId}/revoke`,
+      { expected_version: expectedVersion, reason },
       "POST",
       { preserveForm: true },
     )

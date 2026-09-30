@@ -6,7 +6,7 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
     "apps/web/src/components/OrganizationAuditPanel.vue": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
   },
   "actions": [
@@ -2111,7 +2111,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
       "apps/web/src/components/OrganizationAuditPanel.vue": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d"
     },
     "inputs": [
