@@ -612,6 +612,28 @@
 .score-rules--review .opportunity-modal form > div {
   gap: 12px;
 }
+.score-rules--review .score-form-fields > .score-field {
+  min-width: 0;
+  display: grid;
+  align-content: start;
+  gap: 6px;
+}
+.score-rules--review .score-field > small:not(.score-field-error) {
+  color: var(--p17-muted);
+  font-size: 13px;
+  line-height: 1.45;
+}
+.score-rules--review .score-field-error {
+  margin: 0;
+  color: var(--so-danger);
+  font-size: 14px;
+  font-weight: 650;
+  line-height: 1.45;
+}
+.score-rules--review .score-form-fields input[aria-invalid="true"],
+.score-rules--review .score-dimension-form input[aria-invalid="true"] {
+  border-color: var(--so-danger);
+}
 .score-rules--review .opportunity-modal label {
   color: var(--p17-muted);
 }
@@ -625,6 +647,12 @@
   border-radius: 0;
   color: var(--p17-ink);
   background: var(--p17-white);
+}
+.score-rules--review .score-dimension-form input[type="checkbox"] {
+  width: 20px;
+  min-height: 20px;
+  padding: 0;
+  justify-self: center;
 }
 .score-rules--review .score-dimension-form {
   margin-top: 18px;

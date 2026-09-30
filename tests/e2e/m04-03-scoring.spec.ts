@@ -191,6 +191,141 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
   ]);
   await page.evaluate(() => window.scrollTo(0, 0));
 });
+test("P17 score-rule create errors are linked to the affected fields without changing the draft payload", async ({
+  page,
+}) => {
+  await navigation(page);
+  let writes = 0,
+    createBody: unknown = null,
+    createdRule: Record<string, unknown> | null = null;
+  await page.route("**/api/v1/opportunity-score-rules", async (route) => {
+    if (route.request().method() === "POST") {
+      writes += 1;
+      createBody = route.request().postDataJSON();
+      createdRule = {
+        id: draftId,
+        version_code: "org-v2",
+        name: "测试规则",
+        status: "draft",
+        dimensions: [
+          {
+            code: "market_demand",
+            label: "市场需求",
+            weight: 20,
+            required: true,
+            evidence_group: "other",
+          },
+          {
+            code: "competition",
+            label: "竞争",
+            weight: 80,
+            required: false,
+            evidence_group: "other",
+          },
+        ],
+        thresholds: { recommend_min: 75, observe_min: 60 },
+        revision: 1,
+        submitted_at: null,
+        approved_at: null,
+        activated_at: null,
+        updated_at: "2026-09-30T00:00:00.000Z",
+      };
+      await route.fulfill({ status: 201, json: envelope(createdRule) });
+      return;
+    }
+    await route.fulfill({ json: envelope(createdRule ? [createdRule] : []) });
+  });
+
+  await page.goto("/opportunities/scoring-rules");
+  await page.getByRole("button", { name: "创建首个草稿" }).click();
+  const dialog = page.getByRole("dialog", { name: "新建评分规则草稿" });
+  const versionCode = dialog.getByLabel("版本代码");
+  await versionCode.focus();
+  await versionCode.blur();
+  await expect(versionCode).toHaveAttribute("aria-invalid", "true");
+  await expect(versionCode).toHaveAttribute(
+    "aria-describedby",
+    "score-rule-version-code-help score-rule-version_code-error",
+  );
+  await expect(dialog.locator("#score-rule-version_code-error")).toHaveText("请输入版本代码。");
+  await expect(dialog.getByRole("button", { name: "保存草稿" })).toBeDisabled();
+  expect(writes).toBe(0);
+
+  await versionCode.fill("org-v2");
+  await versionCode.blur();
+  await expect(versionCode).not.toHaveAttribute("aria-invalid", "true");
+  await expect(dialog.locator("#score-rule-version_code-error")).toHaveCount(0);
+  const ruleName = dialog.getByLabel("规则名称");
+  await ruleName.focus();
+  await ruleName.blur();
+  await expect(ruleName).toHaveAttribute("aria-invalid", "true");
+  await expect(dialog.locator("#score-rule-name-error")).toHaveText("请输入规则名称。");
+  await ruleName.fill("测试规则");
+  await ruleName.blur();
+
+  const recommend = dialog.getByLabel("推荐阈值");
+  const observe = dialog.getByLabel("观察阈值");
+  await recommend.fill("55");
+  await recommend.blur();
+  await observe.fill("60");
+  await observe.blur();
+  await expect(recommend).toHaveAttribute("aria-invalid", "true");
+  await expect(recommend).toHaveAttribute(
+    "aria-describedby",
+    "score-rule-recommend-min-help score-rule-recommend_min-error",
+  );
+  await expect(dialog.locator("#score-rule-recommend_min-error")).toHaveText(
+    "推荐阈值必须大于观察阈值。",
+  );
+  await expect(observe).not.toHaveAttribute("aria-invalid", "true");
+  await recommend.fill("75");
+  await recommend.blur();
+
+  const firstWeight = dialog.getByRole("spinbutton", { name: "市场需求权重" });
+  await firstWeight.fill("20");
+  await firstWeight.blur();
+  await expect(firstWeight).toHaveAttribute("aria-invalid", "true");
+  await expect(firstWeight).toHaveAttribute(
+    "aria-describedby",
+    "score-dimensions-help score-rule-dimensions-error",
+  );
+  await expect(dialog.locator("#score-rule-dimensions-error")).toHaveText(
+    "至少配置 2 个权重大于 0 的评分维度。",
+  );
+  const secondWeight = dialog.getByRole("spinbutton", { name: "竞争权重" });
+  await secondWeight.fill("80");
+  await secondWeight.blur();
+  await dialog.getByRole("checkbox", { name: "市场需求必填" }).check();
+  await expect(dialog.locator("#score-rule-dimensions-error")).toHaveCount(0);
+  await expect(dialog.getByRole("button", { name: "保存草稿" })).toBeEnabled();
+  expect(writes).toBe(0);
+
+  await dialog.getByRole("button", { name: "保存草稿" }).click();
+  await expect(page.getByText("草稿已创建；发布前仍需提交、审批和启用。")).toBeVisible();
+  expect(writes).toBe(1);
+  expect(createBody).toEqual({
+    version_code: "org-v2",
+    name: "测试规则",
+    dimensions: [
+      {
+        code: "market_demand",
+        label: "市场需求",
+        weight: 20,
+        required: true,
+        evidence_group: "other",
+      },
+      {
+        code: "competition",
+        label: "竞争",
+        weight: 80,
+        required: false,
+        evidence_group: "other",
+      },
+    ],
+    thresholds: { recommend_min: 75, observe_min: 60 },
+  });
+});
+
 test("M04-03 score rule approval controls follow real navigation capabilities", async ({
   page,
 }, testInfo) => {

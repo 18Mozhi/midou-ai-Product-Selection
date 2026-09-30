@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1743；旧登记1477；新身份758，旧表独有身份492。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1579源位置/1302组；其中路由动作1069组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1749；旧登记1477；新身份767，旧表独有身份495。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1585源位置/1302组；其中路由动作1069组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记72页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -30,7 +30,7 @@
 | [P14 热点趋势](page-specs/P14.md) | 90 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P15 选品机会](page-specs/P15.md) | 98 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P16 创建选品](page-specs/P16.md) | 40 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P17 评分规则](page-specs/P17.md) | 58 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P17 评分规则](page-specs/P17.md) | 55 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P18 机会详情](page-specs/P18.md) | 98 | [66组](action-reviews/P18.json) | 332个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 62 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 62 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -1185,7 +1185,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P17 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P17.json)：28个局部源位置 → 19组；2类写入，16组路由动作，3组转发/容器关联不重复计动作。已映射9/9个源码字段位置，8/8处调用/内嵌容器，30个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P17.json)：34个局部源位置 → 19组；2类写入，16组路由动作，3组转发/容器关联不重复计动作。已映射9/9个源码字段位置，8/8处调用/内嵌容器，30个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有96个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -1200,7 +1200,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | scoring.action.activate.open 打开启用原因 / local | 1处；allowed-state、denied-hidden、reopen、while-other-write | [activate · 1440](design/scoring-direction-c/1440-activate.png) / [activate · 390](design/scoring-direction-c/390-activate.png)、[action-busy · 1440](design/scoring-direction-c/1440-action-busy.png) / [action-busy · 390](design/scoring-direction-c/390-action-busy.png)；其余见JSON | 不同生命周期需分别审查；打开不执行写入，须required原因及确认。服务端版本/状态/权限另验。 |
 | scoring.action.rollback.open 打开回滚原因 / local | 1处；allowed-state、denied-hidden、reopen、while-other-write | [rollback · 1440](design/scoring-direction-c/1440-rollback.png) / [rollback · 390](design/scoring-direction-c/390-rollback.png)、[action-busy · 1440](design/scoring-direction-c/1440-action-busy.png) / [action-busy · 390](design/scoring-direction-c/390-action-busy.png)；其余见JSON | 不同生命周期需分别审查；目标仅列表approved/retired，旧active变rolled_back，目标active；不是历史评分回退。服务端版本/状态/权限另验。 |
 | scoring.create.close 关闭创建草稿 / local | 3处；close、cancel、escape、busy-close | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png)、[create-risk · 1440](design/scoring-direction-c/1440-create-risk.png) / [create-risk · 390](design/scoring-direction-c/390-create-risk.png)；其余见JSON | 创建取消与生命周期重开清原因不是相同草稿规则；旧成功可能清新编辑，待实例归属验收。 |
-| scoring.create.submit 保存正权重规则草稿 / write | 2处；invalid-threshold、less-than-two、weight-total、missing-required、valid、failed、saved | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png)、[create-market_demand · 1440](design/scoring-direction-c/1440-create-market_demand.png) / [create-market_demand · 390](design/scoring-direction-c/390-create-market_demand.png)；其余见JSON | 源六阶段校验隔离通过，不预填业务值；仅初始八维编辑图，完整有效/失败/提交成功图缺失；维度成员对象引用与成功清理/后续load不在busy内待验。 |
+| scoring.create.submit 保存正权重规则草稿 / write | 8处；invalid-threshold、less-than-two、weight-total、missing-required、valid、failed、saved | [create-basics · 1440](design/scoring-direction-c/1440-create-basics.png) / [create-basics · 390](design/scoring-direction-c/390-create-basics.png)、[create-market_demand · 1440](design/scoring-direction-c/1440-create-market_demand.png) / [create-market_demand · 390](design/scoring-direction-c/390-create-market_demand.png)；其余见JSON | 字段错误关联已由桌面/手机挂载Vue测试验证且不改变POST字段；源六阶段校验隔离通过，不预填业务值；完整有效/失败/提交成功图缺失；维度成员对象引用与成功清理/后续load不在busy内待验。 |
 | scoring.preview.close 关闭影响预览 / local | 2处；close、escape、inflight | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)、[preview-loading · 1440](design/scoring-direction-c/1440-preview-loading.png) / [preview-loading · 390](design/scoring-direction-c/390-preview-loading.png)；其余见JSON | 旧GET仍能写preview；已隔离验证，不等于新目标被污染或真实数据库产生写入。 |
 | scoring.preview.retry 重新试算第1页 / read | 1处；after-error、failed-page-two | [preview-error · 1440](design/scoring-direction-c/1440-preview-error.png) / [preview-error · 390](design/scoring-direction-c/390-preview-error.png)、[preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)；其余见JSON | 仅第1页样本图，不覆盖真实第2页失败；missing_fields与page_summary.unchanged源模板未呈现，图也未穷尽缺失组合。 |
 | scoring.preview.previous 预览上一页 / read | 1处；first-disabled、later-page | [preview · 1440](design/scoring-direction-c/1440-preview.png) / [preview · 390](design/scoring-direction-c/390-preview.png)；其余见JSON | 当前48图只有单页样本，不能用双禁用按钮证明实际第二页导航/返回及内容保持。 |

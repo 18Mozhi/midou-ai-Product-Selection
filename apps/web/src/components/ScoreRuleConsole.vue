@@ -8,6 +8,7 @@ import "../opportunities.css";
 import "../scoring.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type Action = "submit" | "approve" | "reject" | "activate" | "rollback";
+type CreateField = "version_code" | "name" | "recommend_min" | "observe_min" | "dimensions";
 interface Dimension {
   code: string;
   label: string;
@@ -106,6 +107,13 @@ const form = reactive({
   observe_min: null as number | null,
   dimensions: blankDimensions(),
 });
+const createTouched = reactive<Record<CreateField, boolean>>({
+  version_code: false,
+  name: false,
+  recommend_min: false,
+  observe_min: false,
+  dimensions: false,
+});
 let actionDialogGeneration = 0;
 let createDialogGeneration = 0;
 let previewReadGeneration = 0;
@@ -175,6 +183,44 @@ const capabilities = computed(() => new Set(props.capabilities)),
     if (!activeDimensions.value.some((item) => item.required))
       return "至少将 1 个已启用维度标记为必填。";
     return "";
+  }),
+  createFieldErrors = computed<Record<CreateField, string>>(() => {
+    const recommendRangeInvalid =
+        form.recommend_min != null && (form.recommend_min < 0 || form.recommend_min > 100),
+      observeRangeInvalid =
+        form.observe_min != null && (form.observe_min < 0 || form.observe_min > 100),
+      thresholdsComparable =
+        form.recommend_min != null &&
+        form.observe_min != null &&
+        !recommendRangeInvalid &&
+        !observeRangeInvalid,
+      dimensionError =
+        activeDimensions.value.length < 2
+          ? "至少配置 2 个权重大于 0 的评分维度。"
+          : weightTotal.value !== 100
+            ? `当前权重合计 ${weightTotal.value}%，必须为 100%。`
+            : !activeDimensions.value.some((item) => item.required)
+              ? "至少将 1 个已启用维度标记为必填。"
+              : "";
+    return {
+      version_code: form.version_code.trim() ? "" : "请输入版本代码。",
+      name: form.name.trim() ? "" : "请输入规则名称。",
+      recommend_min:
+        form.recommend_min == null
+          ? "请输入推荐阈值。"
+          : recommendRangeInvalid
+            ? "推荐阈值必须在 0 到 100 之间。"
+            : thresholdsComparable && form.recommend_min <= form.observe_min!
+              ? "推荐阈值必须大于观察阈值。"
+              : "",
+      observe_min:
+        form.observe_min == null
+          ? "请输入观察阈值。"
+          : observeRangeInvalid
+            ? "观察阈值必须在 0 到 100 之间。"
+            : "",
+      dimensions: dimensionError,
+    };
   }),
   statusLabels: Record<string, string> = {
     draft: "草稿",
@@ -297,6 +343,21 @@ function resetForm() {
   form.recommend_min = null;
   form.observe_min = null;
   form.dimensions.splice(0, form.dimensions.length, ...blankDimensions());
+  for (const field of Object.keys(createTouched) as CreateField[]) createTouched[field] = false;
+}
+function touchCreateField(field: CreateField) {
+  createTouched[field] = true;
+}
+function createFieldError(field: CreateField) {
+  return createTouched[field] ? createFieldErrors.value[field] : "";
+}
+function createFieldDescribedBy(field: CreateField, helpId: string) {
+  return [helpId, createFieldError(field) ? `score-rule-${field}-error` : ""]
+    .filter(Boolean)
+    .join(" ");
+}
+function createFieldInvalid(field: CreateField) {
+  return Boolean(createFieldError(field));
 }
 function openCreate() {
   createDialogGeneration += 1;
@@ -560,46 +621,121 @@ onMounted(() => void load());
           </div>
           <button type="button" aria-label="关闭" @click="closeCreate">×</button>
         </header>
-        <div>
-          <label
-            >版本代码<input
+        <div class="score-form-fields">
+          <div class="score-field">
+            <label for="score-rule-version-code">版本代码</label>
+            <input
+              id="score-rule-version-code"
               v-model="form.version_code"
               required
               maxlength="64"
-              placeholder="例如 org-v1" /></label
-          ><label>规则名称<input v-model="form.name" required maxlength="160" /></label>
+              placeholder="例如 org-v1"
+              :aria-invalid="createFieldInvalid('version_code') ? 'true' : undefined"
+              :aria-describedby="
+                createFieldDescribedBy('version_code', 'score-rule-version-code-help')
+              "
+              @blur="touchCreateField('version_code')"
+            />
+            <small id="score-rule-version-code-help">必填，最多 64 个字符。</small>
+            <small
+              v-if="createFieldError('version_code')"
+              id="score-rule-version_code-error"
+              class="score-field-error"
+              role="alert"
+              >{{ createFieldError("version_code") }}</small
+            >
+          </div>
+          <div class="score-field">
+            <label for="score-rule-name">规则名称</label>
+            <input
+              id="score-rule-name"
+              v-model="form.name"
+              required
+              maxlength="160"
+              :aria-invalid="createFieldInvalid('name') ? 'true' : undefined"
+              :aria-describedby="createFieldDescribedBy('name', 'score-rule-name-help')"
+              @blur="touchCreateField('name')"
+            />
+            <small id="score-rule-name-help">必填，最多 160 个字符。</small>
+            <small
+              v-if="createFieldError('name')"
+              id="score-rule-name-error"
+              class="score-field-error"
+              role="alert"
+              >{{ createFieldError("name") }}</small
+            >
+          </div>
         </div>
-        <div>
-          <label
-            >推荐阈值<input
+        <div class="score-form-fields">
+          <div class="score-field">
+            <label for="score-rule-recommend-min">推荐阈值</label>
+            <input
+              id="score-rule-recommend-min"
               v-model.number="form.recommend_min"
               required
               type="number"
               min="0"
               max="100"
-              step="0.01" /></label
-          ><label
-            >观察阈值<input
+              step="0.01"
+              :aria-invalid="createFieldInvalid('recommend_min') ? 'true' : undefined"
+              :aria-describedby="
+                createFieldDescribedBy('recommend_min', 'score-rule-recommend-min-help')
+              "
+              @blur="touchCreateField('recommend_min')"
+            />
+            <small id="score-rule-recommend-min-help">0 到 100，且必须高于观察阈值。</small>
+            <small
+              v-if="createFieldError('recommend_min')"
+              id="score-rule-recommend_min-error"
+              class="score-field-error"
+              role="alert"
+              >{{ createFieldError("recommend_min") }}</small
+            >
+          </div>
+          <div class="score-field">
+            <label for="score-rule-observe-min">观察阈值</label>
+            <input
+              id="score-rule-observe-min"
               v-model.number="form.observe_min"
               required
               type="number"
               min="0"
               max="100"
               step="0.01"
-          /></label>
+              :aria-invalid="createFieldInvalid('observe_min') ? 'true' : undefined"
+              :aria-describedby="
+                createFieldDescribedBy('observe_min', 'score-rule-observe-min-help')
+              "
+              @blur="touchCreateField('observe_min')"
+            />
+            <small id="score-rule-observe-min-help">0 到 100。</small>
+            <small
+              v-if="createFieldError('observe_min')"
+              id="score-rule-observe-min-error"
+              class="score-field-error"
+              role="alert"
+              >{{ createFieldError("observe_min") }}</small
+            >
+          </div>
         </div>
-        <section class="score-dimension-form">
-          <header><b>评分维度</b><small>仅权重大于 0 的维度会提交；合计必须为 100。</small></header>
+        <section class="score-dimension-form" aria-labelledby="score-rule-dimensions-title">
+          <header>
+            <b id="score-rule-dimensions-title">评分维度</b>
+            <small id="score-dimensions-help">仅权重大于 0 的维度会提交；合计必须为 100。</small>
+          </header>
           <div v-for="item in form.dimensions" :key="item.code">
             <span>{{ item.label }}</span
             ><label
               >权重<input
                 v-model.number="item.weight"
                 :aria-label="`${item.label}权重`"
+                :aria-invalid="createFieldInvalid('dimensions') ? 'true' : undefined"
+                :aria-describedby="createFieldDescribedBy('dimensions', 'score-dimensions-help')"
                 type="number"
                 min="0"
                 max="100"
-                step="0.01" /></label
+                step="0.01"
+                @blur="touchCreateField('dimensions')" /></label
             ><label
               >证据组<select v-model="item.evidence_group" :aria-label="`${item.label}证据组`">
                 <option value="market">市场</option>
@@ -608,10 +744,25 @@ onMounted(() => void load());
                 <option value="other">其他</option>
               </select></label
             ><label
-              ><input v-model="item.required" type="checkbox" :aria-label="`${item.label}必填`" />
+              ><input
+                v-model="item.required"
+                type="checkbox"
+                :aria-label="`${item.label}必填`"
+                :aria-invalid="createFieldInvalid('dimensions') ? 'true' : undefined"
+                :aria-describedby="createFieldDescribedBy('dimensions', 'score-dimensions-help')"
+                @change="touchCreateField('dimensions')"
+              />
               必填</label
             >
           </div>
+          <p
+            v-if="createFieldError('dimensions')"
+            id="score-rule-dimensions-error"
+            class="score-field-error"
+            role="alert"
+          >
+            {{ createFieldError("dimensions") }}
+          </p>
         </section>
         <p class="score-form-summary" :data-valid="!createValidation" role="status">
           {{ createValidation || `权重合计 ${weightTotal}%，可以保存草稿。` }}

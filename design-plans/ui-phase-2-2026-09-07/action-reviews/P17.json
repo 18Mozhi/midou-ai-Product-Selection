@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ScoreRuleConsole.vue": "ecf4651bb5ca45285f1456e6ff1504535b8a9cb60dc4981eafbcfcfb2bc77253"
+    "apps/web/src/components/ScoreRuleConsole.vue": "c7ccd3020710ffb8d8c52bd276d77573a21b6405d47eb994fe95bf21dd51392f"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -351,7 +351,7 @@
       "kind": "local",
       "routeApplicability": "P17-normal-route-local-source-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#6b37811d77e25f5b.1",
         "apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1",
         "apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1"
       ],
@@ -397,7 +397,13 @@
       "kind": "write",
       "routeApplicability": "P17-normal-route-local-source-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/ScoreRuleConsole.vue#70aafc461ecafc80.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#237b12051c9107cf.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#50a901a0bff021e2.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#03b10c0a1abc2c11.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#4d7c1c802660416a.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#1a58d01072ed8035.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#27f3439531b9b3bc.1",
+        "apps/web/src/components/ScoreRuleConsole.vue#a0c3632c651fc976.1",
         "apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1"
       ],
       "sourceContractKeys": [
@@ -405,8 +411,8 @@
         "create.submit：同表单提交；busy或createValidation禁用"
       ],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
-      "condition": "canDecide且createValidation空；post全局busy守卫；native required/数值范围",
-      "handler": "POST /opportunity-score-rules {version_code,name,dimensions:weight>0,thresholds:{recommend_min,observe_min}}；成功关闭resetForm/load并提示仍需审批启用",
+      "condition": "canDecide且createValidation空；post全局busy守卫；native required/数值范围；已触碰字段按同一createValidation规则显示关联错误",
+      "handler": "表单blur/change只更新触碰态与就地错误，不写入；POST /opportunity-score-rules {version_code,name,dimensions:weight>0,thresholds:{recommend_min,observe_min}}保持不变；成功关闭resetForm/load并提示仍需审批启用",
       "variants": [
         "invalid-threshold",
         "less-than-two",
@@ -449,7 +455,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "源六阶段校验隔离通过，不预填业务值；仅初始八维编辑图，完整有效/失败/提交成功图缺失；维度成员对象引用与成功清理/后续load不在busy内待验。"
+      "remaining": "字段错误关联已由桌面/手机挂载Vue测试验证且不改变POST字段；源六阶段校验隔离通过，不预填业务值；完整有效/失败/提交成功图缺失；维度成员对象引用与成功清理/后续load不在busy内待验。"
     },
     {
       "actionId": "scoring.preview.close",
@@ -745,7 +751,7 @@
       "label": "原生弹窗定义关联",
       "kind": "wiring",
       "routeApplicability": "P17-normal-route-local-source-only",
-      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1"],
+      "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#2cd4ab78b5d44750.1"],
       "sourceContractKeys": ["scoring.create（1变体）"],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "useModalDialog与本地show/目标条件",
@@ -878,7 +884,7 @@
     "includeStructuralContainers": true,
     "files": ["apps/web/src/components/ScoreRuleConsole.vue"],
     "dependencyHashes": {
-      "apps/web/src/components/ScoreRuleConsole.vue": "ecf4651bb5ca45285f1456e6ff1504535b8a9cb60dc4981eafbcfcfb2bc77253",
+      "apps/web/src/components/ScoreRuleConsole.vue": "c7ccd3020710ffb8d8c52bd276d77573a21b6405d47eb994fe95bf21dd51392f",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",

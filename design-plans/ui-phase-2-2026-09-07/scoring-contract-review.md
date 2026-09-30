@@ -99,9 +99,9 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 
 | 文件                                         | 当前LF SHA-256                                                   |
 | -------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/ScoreRuleConsole.vue | d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723 |
+| apps/web/src/components/ScoreRuleConsole.vue | c7ccd3020710ffb8d8c52bd276d77573a21b6405d47eb994fe95bf21dd51392f |
 
-共28个源候选：25个控件/事件、3个原生dialog定义。同一个dialog位置可分别有cancel事件候选和dialog-definition，二者不是重复业务；定义不能代替各变体的提交/关闭/焦点验收。下表业务前缀沿用scoring.；原语义中的{x}/{action}严格只代表前述显式变体，不扩展成任意动作。
+共34个源候选：31个控件/事件、3个原生dialog定义。同一个dialog位置可分别有cancel事件候选和dialog-definition，二者不是重复业务；定义不能代替各变体的提交/关闭/焦点验收。下表业务前缀沿用scoring.；原语义中的{x}/{action}严格只代表前述显式变体，不扩展成任意动作。
 
 | 源candidateId                                                   | 当前行 | 类型          | 原行号记录 | 既有语义 / 实际入口                                                           |
 | --------------------------------------------------------------- | ------ | ------------- | ---------- | ----------------------------------------------------------------------------- |
@@ -115,8 +115,8 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 | apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1 | 473    | control       | S473       | action.reject.open：canApprove且pending_approval                              |
 | apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1 | 478    | control       | S478       | action.activate.open：canApprove且approved                                    |
 | apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1 | 480    | control       | S480       | action.rollback.open：canApprove且active                                      |
-| apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1 | 491    | event-binding | S491       | create.close：cancelCreate→closeCreate，关闭并清错误，不清草稿                |
-| apps/web/src/components/ScoreRuleConsole.vue#70aafc461ecafc80.1 | 498    | form-event    | S498       | create.submit：createValidation无错且canDecide；正权重维度POST                |
+| apps/web/src/components/ScoreRuleConsole.vue#6b37811d77e25f5b.1 | 609    | event-binding | S491       | create.close：cancelCreate→closeCreate，关闭并清错误，不清草稿                |
+| apps/web/src/components/ScoreRuleConsole.vue#237b12051c9107cf.1 | 616    | form-event    | S498       | create.submit：createValidation无错且canDecide；正权重维度POST                |
 | apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1 | 504    | control       | S504       | create.close：标题关闭按钮，现有busy期间仍可关闭                              |
 | apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1 | 567    | control       | S567       | create.close：取消按钮，与标题关闭同合同                                      |
 | apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1 | 568    | control       | S568       | create.submit：同表单提交；busy或createValidation禁用                         |
@@ -130,14 +130,20 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 | apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1 | 690    | control       | S690       | action.{action}.close：标题关闭按钮；busy期间未锁定                           |
 | apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1 | 710    | control       | S710       | action.{action}.close：取消按钮；不提交、不改变规则                           |
 | apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1 | 711    | control       | S711       | action.{action}.submit：同表单提交；busy禁用；原生required仍生效              |
+| apps/web/src/components/ScoreRuleConsole.vue#50a901a0bff021e2.1 | 627    | event-binding | 版本代码错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#03b10c0a1abc2c11.1 | 648    | event-binding | 名称错误就地关联     | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#4d7c1c802660416a.1 | 672    | event-binding | 推荐阈值错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#1a58d01072ed8035.1 | 697    | event-binding | 观察阈值错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#27f3439531b9b3bc.1 | 729    | event-binding | 维度权重错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#a0c3632c651fc976.1 | 747    | event-binding | 必填维度错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
 
 | 源candidateId                                                   | 当前行 | 类型              | 业务dialogId / 变体                                                     |
 | --------------------------------------------------------------- | ------ | ----------------- | ----------------------------------------------------------------------- |
-| apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1 | 491    | dialog-definition | scoring.create（1变体）                                                 |
+| apps/web/src/components/ScoreRuleConsole.vue#2cd4ab78b5d44750.1 | 609    | dialog-definition | scoring.create（1变体）                                                 |
 | apps/web/src/components/ScoreRuleConsole.vue#231a7828f8d8d02d.1 | 631    | dialog-definition | scoring.preview（1变体）                                                |
 | apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1 | 675    | dialog-definition | scoring.action.submit / approve / reject / activate / rollback（5变体） |
 
-本次只完善源码归属：本文件全部28个现行候选有精确ID、行、类型和源hash；测试保证它们与当前扫描集合相等，而不是只验证计数。原表语义/现有请求仍为依据，不用源码签名声称真实后端、权限、幂等或全状态已运行。7个弹窗变体、30个展开输入实例、missing_fields展示与字段错误关联缺口继续按前述合同逐项验证，未覆盖项不因映射补齐注销。
+2026-09-30 P17创建表单字段级校验补充：新增blur/change触碰态和现有validation派生的就地错误，必填、阈值关系/范围、权重总计/维度数量、必填维度仍沿用原规则；`aria-invalid`/`aria-describedby`将错误链接到控件。双端真实Vue用例验证修正清错、无效数据零写入及有效提交仍使用原POST字段。当前源映射/候选ID以最新动作审计生成物为准；页面全部弹窗状态、7个变体、30个展开输入实例、服务端权限和正式生产仍单独验收，未覆盖项不因局部映射补齐注销。
 
 运行node scripts/audit-ui-phase2-contracts.mjs --json可查看records/sourceClaims/unreferenced；新增永久断言核对本范围全部候选、源hash、历史行号表与新表的对应，退出成功仅代表静态对账。本次不重复未变化的产品构建/业务E2E，不出正式新图、不连接生产，不刷新旧清单/图hash或用户审核状态；F00方向仍待审，正式设计和F04b运行时覆盖继续。
 

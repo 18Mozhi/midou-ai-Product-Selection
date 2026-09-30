@@ -173,7 +173,7 @@
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
     "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
-    "apps/web/src/components/ScoreRuleConsole.vue": "ecf4651bb5ca45285f1456e6ff1504535b8a9cb60dc4981eafbcfcfb2bc77253",
+    "apps/web/src/components/ScoreRuleConsole.vue": "c7ccd3020710ffb8d8c52bd276d77573a21b6405d47eb994fe95bf21dd51392f",
     "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
     "apps/web/src/components/SelectionJourney.vue": "a4a30f7df9fddd4678fed6764cc690bbf85f3862573055a404d373b9b1852c3c",
     "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
@@ -267,7 +267,7 @@
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "b999fab96610bd78fd374d27d87fcac2cd2f00ad4eb7d5e96e5c7536bf0f2a50",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "d187326a8319209cef7b060b48b43f1b0c5c0942365e6cdf4e2000ad681d827b",
-    "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "6991d90e412b26183238fec9c1f98bba88476e520539fb1543c0144f9ef251f8",
+    "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "3fb3a2c10e383eae3c6d618dd439f6cadf56cf63bc79e309419c26af5bd07906",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "c739c31ec3c7123e4554c3d5d6a4ea6ff74d5243e1306fe484ebfa5e58056ffa",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "4b0e1bfd472db950711eea33d642fd081ea33c5eda5834911e5108027b0ca5f7",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "f00e287ca234882e0371a5ab38d0f477441c9a3f8ef2639f67c78f6c649109e1",
@@ -424,7 +424,7 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "f94c9df962e6a947c5aabda7a056aab47f69a7a70cee49ef1909177a1726172e",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "tests/e2e/m07-06-selection-acceptance.spec.ts": "a8193d635897bba0b28860849e6f34a4ede9ef21be664e65828d88a617deace4",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2c0c7b55c99aadfadd47d2d27d9100bf0f6a9331a97e3c53db5a30e48d466df6",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "9858dafb38e6cb7cd6ee8515a545f4ce98c636fbb19625adba3b10d639214f9d",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "69c53904296d55769989a921d4d35c8d42a1ac18826bdf118ad2ddcffaac0586",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "6dd4d58c43a2bebe38dd0eacdfa56a51343b1d1ea450806449da298c13b1d49a",
@@ -595,7 +595,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "3f33f8b6ea141279ef057d12e2ec98bcade0d10ccd35ade7e45e4e7fe681894e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "728bf0bc631016cba563a4c8ad95889a99f7128ba33fb4a05f7f951e70a5c9fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "554d26710d2d698a2b4f451bb943a4a72111c7cdd151781a3d47c70bdb5114a3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "404c1ec0fcb82d867064a41793c58431f01a8b56f9ec7e4f9147fbdee6d4d2d4",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "d56f08cd29e0f343c6c984f1f3c3e6e7e2405233957be0617696e4e91a459fa4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "6fdfbd253424bba451d61f929a7e86c91c43ccb0defdd8024f88ccda9178410b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3c6a60caf2045f07a9a14c89f07cd3c1d9b20851719683f69b02931ce04f730f",
@@ -661,12 +661,12 @@
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1743,
+    "currentSourceCandidates": 1749,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 758,
-    "oldOnlyIdentities": 492,
+    "newSourceIdentities": 767,
+    "oldOnlyIdentities": 495,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1579,
+    "explicitlyGroupedSourceSites": 1585,
     "semanticGroups": 1302,
     "routeActions": 1069,
     "wiringGroups": 120,
@@ -1370,12 +1370,12 @@
       "id": "P17",
       "path": "/opportunities/scoring-rules",
       "title": "评分规则",
-      "oldStaticAssociatedCandidates": 58,
+      "oldStaticAssociatedCandidates": 55,
       "review": {
         "pageId": "P17",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 28,
+        "sourceSites": 34,
         "semanticGroups": 19,
         "routeActions": 16,
         "wiringGroups": 3,
@@ -4267,7 +4267,7 @@
       "pageId": "P17",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 28,
+      "sourceSites": 34,
       "semanticGroups": 19,
       "routeActions": 16,
       "wiringGroups": 3,
@@ -59649,7 +59649,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 453,
+      "line": 514,
       "kind": "control",
       "label": "新建规则版本",
       "conditions": [
@@ -59681,7 +59681,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 461,
+      "line": 522,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -59713,7 +59713,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 470,
+      "line": 531,
       "kind": "control",
       "label": "创建首个草稿",
       "conditions": [
@@ -59749,7 +59749,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 487,
+      "line": 548,
       "kind": "control",
       "label": "创建新版本补齐配置",
       "conditions": [
@@ -59785,7 +59785,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 516,
+      "line": 577,
       "kind": "control",
       "label": "预览影响",
       "conditions": [
@@ -59825,7 +59825,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 523,
+      "line": 584,
       "kind": "control",
       "label": "提交",
       "conditions": [
@@ -59865,7 +59865,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 525,
+      "line": 586,
       "kind": "control",
       "label": "批准",
       "conditions": [
@@ -59905,7 +59905,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 530,
+      "line": 591,
       "kind": "control",
       "label": "拒绝",
       "conditions": [
@@ -59945,7 +59945,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 535,
+      "line": 596,
       "kind": "control",
       "label": "启用",
       "conditions": [
@@ -59985,7 +59985,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 537,
+      "line": 598,
       "kind": "control",
       "label": "回滚",
       "conditions": [
@@ -60023,26 +60023,24 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1",
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#2cd4ab78b5d44750.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 548,
+      "line": 609,
       "kind": "dialog-definition",
-      "label": "不使用默认数值 新建评分规则草稿 × 版本代码 规则名称 推荐阈值 观察阈值 评分维度 仅权重大于 0 的维度会提交；合计必须为 100。 {{ item.label }} 权重 证据组 市场 竞争 成本 其他 必填 {{ createVa",
+      "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "showCreate"
         }
       ],
-      "staticRouteIds": [
-        "P17"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
-          "line": 136,
+          "line": 142,
           "jsonPointer": null
         }
       ],
@@ -60055,22 +60053,20 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1",
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6b37811d77e25f5b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 548,
+      "line": 609,
       "kind": "event-binding",
-      "label": "不使用默认数值 新建评分规则草稿 × 版本代码 规则名称 推荐阈值 观察阈值 评分维度 仅权重大于 0 的维度会提交；合计必须为 100。 {{ item.label }} 权重 证据组 市场 竞争 成本 其他 必填 {{ createVa",
+      "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "showCreate"
         }
       ],
-      "staticRouteIds": [
-        "P17"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
@@ -60087,22 +60083,20 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#70aafc461ecafc80.1",
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#237b12051c9107cf.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 555,
+      "line": 616,
       "kind": "form-event",
-      "label": "不使用默认数值 新建评分规则草稿 × 版本代码 规则名称 推荐阈值 观察阈值 评分维度 仅权重大于 0 的维度会提交；合计必须为 100。 {{ item.label }} 权重 证据组 市场 竞争 成本 其他 必填 {{ createVa",
+      "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "showCreate"
         }
       ],
-      "staticRouteIds": [
-        "P17"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
@@ -60121,7 +60115,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 561,
+      "line": 622,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60151,9 +60145,197 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#50a901a0bff021e2.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 627,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
+          "line": 133,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.submit",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#03b10c0a1abc2c11.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 650,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
+          "line": 134,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.submit",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#4d7c1c802660416a.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 672,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
+          "line": 135,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.submit",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#1a58d01072ed8035.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 697,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
+          "line": 136,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.submit",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#27f3439531b9b3bc.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 729,
+      "kind": "event-binding",
+      "label": "`${item.label}权重`",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate"
+        },
+        {
+          "directive": "v-for",
+          "expression": "item in form.dimensions"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
+          "line": 137,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.submit",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#a0c3632c651fc976.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 747,
+      "kind": "event-binding",
+      "label": "`${item.label}必填`",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "showCreate"
+        },
+        {
+          "directive": "v-for",
+          "expression": "item in form.dimensions"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
+          "line": 138,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P17",
+          "actionId": "scoring.create.submit",
+          "kind": "write"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 624,
+      "line": 775,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -60185,7 +60367,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 625,
+      "line": 776,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : \"保存草稿\" }}",
       "conditions": [
@@ -60217,7 +60399,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#231a7828f8d8d02d.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 631,
+      "line": 782,
       "kind": "dialog-definition",
       "label": "只读试算 · 不写入评分运行 发布影响预览 · {{ previewRule.version_code }} × 正在按当前持久化输入试算… {{ previewError }} {{ requestId }} 重试预览 当前页 {{ pr",
       "conditions": [
@@ -60232,12 +60414,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
-          "line": 137,
+          "line": 143,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
-          "line": 150,
+          "line": 156,
           "jsonPointer": null
         }
       ],
@@ -60252,7 +60434,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#234e4413d96b5e41.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 631,
+      "line": 782,
       "kind": "event-binding",
       "label": "只读试算 · 不写入评分运行 发布影响预览 · {{ previewRule.version_code }} × 正在按当前持久化输入试算… {{ previewError }} {{ requestId }} 重试预览 当前页 {{ pr",
       "conditions": [
@@ -60272,7 +60454,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
-          "line": 151,
+          "line": 157,
           "jsonPointer": null
         }
       ],
@@ -60287,7 +60469,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 644,
+      "line": 795,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60319,7 +60501,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 651,
+      "line": 802,
       "kind": "control",
       "label": "重试预览",
       "conditions": [
@@ -60355,7 +60537,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 717,
+      "line": 868,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -60391,7 +60573,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 724,
+      "line": 875,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -60427,7 +60609,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 735,
+      "line": 886,
       "kind": "dialog-definition",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60444,7 +60626,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
-          "line": 138,
+          "line": 144,
           "jsonPointer": null
         }
       ],
@@ -60459,7 +60641,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 735,
+      "line": 886,
       "kind": "event-binding",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60491,7 +60673,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 742,
+      "line": 893,
       "kind": "form-event",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60523,7 +60705,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 750,
+      "line": 901,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60555,7 +60737,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 770,
+      "line": 921,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -60587,7 +60769,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 771,
+      "line": 922,
       "kind": "control",
       "label": "确认 {{ actionLabels[action] }}",
       "conditions": [
@@ -72647,6 +72829,18 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 491,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#70aafc461ecafc80.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 498,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#10a68914020a0888.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
       "line": 574,
@@ -73322,6 +73516,12 @@
       "candidateId": "apps/web/src/components/ResponsiveDataView.vue#e23893d134b1daa1.1",
       "file": "apps/web/src/components/ResponsiveDataView.vue",
       "line": 60,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 491,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
