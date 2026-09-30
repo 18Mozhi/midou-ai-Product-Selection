@@ -554,6 +554,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/CredentialAssetCenter.vue#cb14d6dea1ed210f.1 | 1630 | dialog-component-call | SC50-REVOKE / 调用共享危险确认窗；不另计撤销写动作 |
 | apps/web/src/components/CredentialAssetCenter.vue#d2a64908945092ff.1 | 1546 | event-binding | SC50-LOGIN / 来源选择及材料上下文重置 |
 | apps/web/src/components/CredentialAssetCenter.vue#1430f57a236d6ea1.1 | 1558 | event-binding | SC50-LOGIN / 导入方式切换及材料上下文重置 |
+| apps/web/src/components/CredentialAssetCenter.vue#6a8beb16368d130f.1 | 1572 | event-binding | SC50-LOGIN / 导入方式变化时重置登录材料上下文 |
 | apps/web/src/components/CredentialAssetCenter.vue#7443d228a98eebd4.1 | 1569 | event-binding | SC50-FILE / 受控文件选择 |
 | apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1 | 1593 | control | SC50-EXTERNAL / 打开来源登录页 |
 | apps/web/src/components/CredentialAssetCenter.vue#f176fdb4640192de.1 | 1596 | control | SC50-BRIDGE / 请求助手Cookie |

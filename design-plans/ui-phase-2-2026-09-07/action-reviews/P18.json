@@ -14,7 +14,7 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
     "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "69e2c6afdc0821067117e1e66f39fc10923248d1e6518ff0d8b881faa446c536",
+    "apps/web/src/components/OpportunityWorkspace.vue": "a6afd2967fa266253c4ce21cd703b023ea8d8933ecaa8a0a000645f3a0d2fdc5",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
     "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2"
   },
@@ -769,7 +769,7 @@
           "scene": "candidate"
         }
       ],
-      "remaining": "真实 Vue 双端已验证候选/不具资格状态下的键盘展开、观察/驳回焦点顺序与展开零写入；动态质量门升级时的焦点交接及 hover/pressed 视觉映射仍未验。该披露始终可用，不具有 disabled/busy 变体。",
+      "remaining": "双端真实 Vue 已验证候选状态下展开/收起、Tab顺序、展开零决策写入、summary hover/pressed颜色，以及同一机会从rule_candidate经重新评分刷新变为recommended时保留提前处理焦点并映射到对应驳回按钮。默认/焦点视觉截图映射、读屏器、真实RBAC与生产验收仍待。该披露始终可用，不具有disabled/busy变体。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#e28c61b56c99b993.1"
       ],
@@ -786,6 +786,11 @@
           "file": "tests/e2e/m04-02-opportunities.spec.ts",
           "evidenceType": "actual-vue-local-interception",
           "claim": "P18.A07/A08/A15 详情回归在候选状态用键盘展开提前人工处理，确认只有继续观察/驳回、采纳入口缺席、展开时零决策POST，并验证Tab/Shift+Tab焦点顺序；桌面Chromium与390px各1/1。受控本地响应不证明真实RBAC、读屏器或生产验收。"
+        },
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "同一机会在重新评分接受后刷新为recommended且五门通过时，页面在详情卸载前捕获键盘决策意图，并在重新挂载后将焦点交给对应驳回操作；同用例核验summary hover/pressed反馈及Enter展开闭合。桌面Chromium和390px各1/1，M04-02完整套件各56/56；本地受控API不证明真实RBAC、服务器资格重验、读屏或生产验收。"
         },
         {
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
@@ -3217,7 +3222,7 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
       "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-      "apps/web/src/components/OpportunityWorkspace.vue": "69e2c6afdc0821067117e1e66f39fc10923248d1e6518ff0d8b881faa446c536",
+      "apps/web/src/components/OpportunityWorkspace.vue": "a6afd2967fa266253c4ce21cd703b023ea8d8933ecaa8a0a000645f3a0d2fdc5",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
       "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",

@@ -28,6 +28,14 @@
   outline: 3px solid var(--so-opportunity-review-focus);
   outline-offset: 3px;
 }
+.opportunity-workspace--review .opportunity-decision-waiting summary:hover {
+  color: var(--so-opportunity-review-blue);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.opportunity-workspace--review .opportunity-decision-waiting summary:active {
+  color: var(--so-opportunity-review-ink);
+}
 .opportunity-workspace--review .opportunity-detail-return {
   display: flex;
   align-items: center;

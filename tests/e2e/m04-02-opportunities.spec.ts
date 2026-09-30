@@ -662,8 +662,16 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   });
   const earlyDecision = page.getByText("提前人工处理", { exact: true });
   const earlyDecisionDetails = page.locator(".opportunity-decision-waiting details");
+  await earlyDecision.hover();
+  await expect(earlyDecision).toHaveCSS("color", "rgb(23, 72, 160)");
+  await page.mouse.down();
+  await expect(earlyDecision).toHaveCSS("color", "rgb(24, 45, 74)");
+  await page.mouse.up();
+  await expect(earlyDecisionDetails).toHaveAttribute("open", "");
   await earlyDecision.focus();
   await expect(earlyDecision).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(earlyDecisionDetails).not.toHaveAttribute("open", "");
   await page.keyboard.press("Enter");
   await expect(earlyDecisionDetails).toHaveAttribute("open", "");
   const observeButton = page.getByRole("button", { name: "继续观察", exact: true });
@@ -796,6 +804,69 @@ test("P18 redecision link always lands on the available decision state", async (
   await expect(page.locator("#opportunity-decision-actions")).toContainText(
     "最终决定需要“机会决策”权限",
   );
+});
+
+test("P18 transfers focus from early reject to reject when all quality gates pass", async ({
+  page,
+}) => {
+  const gates = {
+    score: false,
+    market: false,
+    competition: false,
+    cost: false,
+    risk: false,
+    all_passed: false,
+  };
+  const detailOverrides: Record<string, unknown> = {
+    ...recommendedBase,
+    id: opportunityId,
+    version: 7,
+    selection_stage: "rule_candidate",
+    quality_gates: gates,
+    evidence,
+  };
+  let releaseScoreWrite!: () => void;
+  let markScoreWriteStarted!: () => void;
+  const scoreWriteGate = new Promise<void>((resolve) => (releaseScoreWrite = resolve));
+  const scoreWriteStarted = new Promise<void>((resolve) => (markScoreWriteStarted = resolve));
+  await ready(page, evidence, detailOverrides);
+  await page.route(`**/api/v1/opportunities/${opportunityId}/score-runs`, async (route) => {
+    markScoreWriteStarted();
+    await scoreWriteGate;
+    await route.fulfill({ status: 202, json: envelope({ id: "queued-score-run" }) });
+  });
+
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(page.locator(".opportunity-decision-waiting")).toBeVisible();
+  const earlyDecision = page.locator(".opportunity-decision-waiting details summary");
+  await earlyDecision.focus();
+  await page.keyboard.press("Enter");
+  const earlyReject = page
+    .locator(".opportunity-decision-waiting")
+    .getByRole("button", { name: "驳回", exact: true });
+  await expect(earlyReject).toBeVisible();
+
+  await page.getByRole("button", { name: "重新评分", exact: true }).click();
+  await scoreWriteStarted;
+  await earlyReject.focus();
+  detailOverrides.selection_stage = "recommended";
+  detailOverrides.quality_gates = {
+    score: true,
+    market: true,
+    competition: true,
+    cost: true,
+    risk: true,
+    all_passed: true,
+  };
+  releaseScoreWrite();
+
+  await expect(page.getByRole("button", { name: "采纳建议", exact: true })).toBeVisible();
+  await expect(
+    page
+      .locator("#opportunity-decision-actions")
+      .getByRole("button", { name: "驳回", exact: true }),
+  ).toBeFocused();
+  await expect(page.getByRole("dialog", { name: /记录.*决定/ })).toHaveCount(0);
 });
 
 test("P18 adoption dialog exposes the required-reason error without posting", async ({ page }) => {

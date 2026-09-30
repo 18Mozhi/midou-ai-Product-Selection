@@ -6,6 +6,7 @@ import {
   onBeforeUnmount,
   onDeactivated,
   onMounted,
+  nextTick,
   ref,
   shallowRef,
   watch,
@@ -121,6 +122,11 @@ const aiReviewSubmission = shallowRef<{
   resultId: string;
   stage: "submitting" | "refreshing";
 } | null>(null);
+type OpportunityDecisionFocusIntent = {
+  opportunityId: string;
+  action: "adopt" | "observe" | "reject";
+};
+const pendingDecisionFocus = shallowRef<OpportunityDecisionFocusIntent | null>(null);
 const createFeedback = ref<
   | {
       type: "error";
@@ -148,6 +154,48 @@ let tabIntentGeneration = 0;
 let aiRequestGeneration = 0;
 let aiReviewIntentGeneration = 0;
 let aiSnapshotOpportunityId = "";
+function captureDecisionFocus(opportunityId: string | undefined) {
+  if (!opportunityId || typeof document === "undefined") return;
+  const waiting = document.querySelector(".opportunity-decision-waiting");
+  const activeElement = document.activeElement;
+  if (!(waiting instanceof HTMLElement) || !(activeElement instanceof HTMLElement)) return;
+  if (!waiting.contains(activeElement)) return;
+  const label = activeElement
+    .closest<HTMLButtonElement>("button")
+    ?.textContent?.replace(/\s+/g, "");
+  const action = label?.includes("继续观察")
+    ? "observe"
+    : label?.includes("驳回")
+      ? "reject"
+      : "adopt";
+  pendingDecisionFocus.value = { opportunityId, action };
+}
+async function restoreDecisionFocus(opportunityId: string) {
+  const intent = pendingDecisionFocus.value;
+  pendingDecisionFocus.value = null;
+  if (
+    !intent ||
+    intent.opportunityId !== opportunityId ||
+    props.opportunityId !== opportunityId ||
+    !workspaceActive ||
+    typeof document === "undefined"
+  )
+    return;
+  await nextTick();
+  if (props.opportunityId !== opportunityId || !workspaceActive) return;
+  const actionLabel =
+    intent.action === "adopt" ? "采纳建议" : intent.action === "observe" ? "继续观察" : "驳回";
+  const action = Array.from(
+    document.querySelector("#opportunity-decision-actions")?.querySelectorAll("button") ?? [],
+  ).find((button) => button.textContent?.replace(/\s+/g, "").includes(actionLabel));
+  if (action && !action.disabled) {
+    action.focus({ preventScroll: true });
+    return;
+  }
+  document
+    .querySelector<HTMLElement>("#opportunity-decision-actions details summary")
+    ?.focus({ preventScroll: true });
+}
 function writeScopeKey(opportunityId = props.opportunityId) {
   return opportunityId ? `opportunity:${opportunityId}` : "opportunity-list";
 }
@@ -530,6 +578,9 @@ async function load() {
   workspaceReadController = controller;
   readGeneration = generation;
   const opportunityId = props.opportunityId;
+  if (pendingDecisionFocus.value?.opportunityId !== opportunityId)
+    pendingDecisionFocus.value = null;
+  captureDecisionFocus(opportunityId);
   const isCurrent = () => generation === readGeneration && !controller.signal.aborted;
   const nextAiOwner = opportunityId ?? "";
   if (aiSnapshotOpportunityId !== nextAiOwner) {
@@ -573,6 +624,7 @@ async function load() {
       ]);
       if (!isCurrent()) return;
       state.value = "ready";
+      await restoreDecisionFocus(opportunityId);
       return;
     }
     const params = new URLSearchParams({
@@ -601,6 +653,8 @@ async function load() {
     total.value = (result.meta as { total: number }).total;
     state.value = items.value.length ? "ready" : "empty";
   } catch (error) {
+    if (pendingDecisionFocus.value?.opportunityId === opportunityId)
+      pendingDecisionFocus.value = null;
     if (isCurrent() && !(error instanceof ApiClientError)) state.value = "blocked";
   }
 }
