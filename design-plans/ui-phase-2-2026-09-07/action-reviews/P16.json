@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SelectionJourney.vue": "21c2e95ce297a3c6a55e4301f36fdf448659d76173390901dfc01b58f200349b"
+    "apps/web/src/components/SelectionJourney.vue": "380e72a9ff532a588c11ff28b28e8a3efce241945b3bd47c5443f47745cc8811"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -279,7 +279,7 @@
         "J-CREATE"
       ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
-      "condition": "!journey内联form；按钮busy||reading禁用；函数!active/busy/reading早退",
+      "condition": "!journey内联form；类型和值在busy||reading禁用，按钮同条件禁用；函数!active/busy/reading早退",
       "handler": "POST /selection-journeys {input_kind,input_value}原值；stopRead/resumeId清空→busy/loading→202 applyJourney/ready/schedule；只创建旅程，不等于机会",
       "variants": [
         "keyword",
@@ -357,6 +357,11 @@
           "file": "scripts/verify-ui-phase2-journey-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "r2当前来源函数、67场景/102代表控件状态双端隔离验证；包含字段错误、焦点/键盘/草稿保留、200/1000字限制，HTTP/storage=0，非真实Vue/SQL/生产验收。"
+        },
+        {
+          "file": "tests/e2e/ui-phase2-journey-contracts.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "UI2-J11真实Vue桌面/390px验证提交期间锁定创建类型和值、同步重复requestSubmit仅发一条原POST并保留原body；本地拦截不证明真实RBAC/数据库/生产。"
         }
       ],
       "visualStates": {
@@ -449,7 +454,7 @@
           "apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SelectionJourney.vue": "21c2e95ce297a3c6a55e4301f36fdf448659d76173390901dfc01b58f200349b"
+          "apps/web/src/components/SelectionJourney.vue": "380e72a9ff532a588c11ff28b28e8a3efce241945b3bd47c5443f47745cc8811"
         }
       },
       "remaining": "真实Vue已补原生四态、中心命中与零副作用，见actualVueLayoutEvidence；旧离线槽仍不冒称该真实Vue证据或全站审批。"
@@ -556,13 +561,13 @@
       "sourceCandidateIds": [
         "apps/web/src/components/SelectionJourney.vue#ec0ddd60475ad5dd.1",
         "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1",
-        "apps/web/src/components/SelectionJourney.vue#a0b1d77731a8a57b.1"
+        "apps/web/src/components/SelectionJourney.vue#b8d4d47a1d529682.1"
       ],
       "sourceContractKeys": [
         "J-DECIDE"
       ],
       "contractAliasReason": "第10节当前源码逐项对应稳定语义ID；第1至9节保留历史。",
-      "condition": "terminal且未decided；canAdopt要求topic/既有机会ID/recommended及五门和all_passed严格true，adopt radio与submit禁用，函数同级保护；active/旅程/非busy/非reading要求保持；空原因由原生required阻断并显示关联错误、回焦原因框",
+      "condition": "terminal且未decided；canAdopt要求topic/既有机会ID/recommended及五门和all_passed严格true，adopt radio与submit禁用；决策radio/原因在busy||reading禁用，函数同级保护；active/旅程/非busy/非reading要求保持；空原因由原生required阻断并显示关联错误、回焦原因框",
       "handler": "原POST三字段不变：adopt所选ID，observe/reject恒null，无expected_version；空原因零POST，输入后清除就地错误；后端同范围既有机会锁内复核P18五门和规则；成功applyJourney、清reason、state=ready、stop",
       "variants": [
         "adopt-contract-pending",
@@ -689,6 +694,11 @@
           "file": "tests/e2e/m07-06-selection-acceptance.spec.ts",
           "evidenceType": "actual-vue-local-interception",
           "claim": "桌面与390px手机实际挂载Vue验证空原因原生required阻止POST、错误通过aria-describedby关联并回焦，输入后清错，合法observe仍发送既有三字段payload；不证明真实RBAC/数据库/生产。"
+        },
+        {
+          "file": "tests/e2e/ui-phase2-journey-contracts.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "UI2-J12真实Vue桌面/390px验证提交期间锁定决定类型与原因、同步重复requestSubmit仅发一条原POST并保留原body；本地拦截不证明真实RBAC/数据库/生产。"
         }
       ],
       "visualStates": {
@@ -1028,7 +1038,7 @@
       "apps/web/src/components/SelectionJourney.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/SelectionJourney.vue": "21c2e95ce297a3c6a55e4301f36fdf448659d76173390901dfc01b58f200349b",
+      "apps/web/src/components/SelectionJourney.vue": "380e72a9ff532a588c11ff28b28e8a3efce241945b3bd47c5443f47745cc8811",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"

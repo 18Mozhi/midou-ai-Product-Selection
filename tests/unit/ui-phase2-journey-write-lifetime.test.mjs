@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 import vm from "node:vm";
 import test from "node:test";
 import ts from "typescript";
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, watch } from "vue";
 
 // Execute the actual setup with real Vue refs; lifecycle and HTTP are explicit test boundaries.
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "../..");
@@ -53,6 +53,7 @@ function harness() {
     ref,
     reactive,
     computed,
+    watch,
     AbortController,
     ApiClientError,
     statusLabel: (v) => v,

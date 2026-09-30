@@ -307,7 +307,7 @@ test("M07-06.A08/A16 shows succeeded_empty and forbidden without fake evidence",
   await page.getByRole("button", { name: "创建真实选品任务" }).click();
   await expect(page.getByText("真实来源没有返回可用结果")).toBeVisible();
   await expect(
-    page.getByText(/错误码：none。请结合任务状态与事件记录排查阻塞原因。/),
+    page.getByText("任务状态：succeeded_empty。来源处理已完成，但没有返回可用候选。"),
   ).toBeVisible();
   await page.getByRole("button", { name: "开始下一次" }).click();
   status = 403;

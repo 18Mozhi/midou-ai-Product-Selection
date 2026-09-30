@@ -473,6 +473,7 @@ onUnmounted(() => {
               type="radio"
               name="input-kind"
               :value="item.value"
+              :disabled="busy || reading"
             /><span>{{ item.label }}</span></label
           >
         </div>
@@ -490,6 +491,7 @@ onUnmounted(() => {
             maxlength="200"
             :pattern="form.input_kind === 'asin' ? '[A-Za-z0-9]{10}' : undefined"
             :type="form.input_kind === 'product_url' ? 'url' : 'text'"
+            :disabled="busy || reading"
             :placeholder="
               form.input_kind === 'keyword'
                 ? '例如 portable blender'
@@ -669,7 +671,7 @@ onUnmounted(() => {
                   type="radio"
                   name="decision"
                   :value="item.value"
-                  :disabled="item.value === 'adopt' && !canAdopt"
+                  :disabled="busy || reading || (item.value === 'adopt' && !canAdopt)"
                 /><span>{{ item.label }}</span></label
               >
             </div>
@@ -679,6 +681,7 @@ onUnmounted(() => {
                 required
                 maxlength="1000"
                 rows="4"
+                :disabled="busy || reading"
                 :aria-invalid="decisionReasonError ? 'true' : undefined"
                 :aria-describedby="
                   decisionReasonError

@@ -1,5 +1,9 @@
 # P16 创建选品 C 方向生产 Vue 实施
 
+## 2026-09-30 · 创建与决定在途表单锁定
+
+创建请求处于提交/恢复忙碌状态时，输入类型和输入值不可编辑；决定写入或读取期间，决定类型与原因不可编辑，避免用户修改未提交草稿后被先前成功回执清空。原有函数单飞守卫保持不变。实际 Vue 桌面/390px延迟响应回归 UI2-J11/J12 以连续两次 `requestSubmit()` 验证创建、决定各仅发一条既有 POST；失败创建仍解锁并保留原输入，可显式重试。API 路径、字段、质量门、权限和后端事务不变；本地路由拦截不证明真实 RBAC/数据库/生产。
+
 ## 2026-09-30 · 失败、受阻与成功空结果文案分离
 
 修正无候选终态区把所有非空状态都写成“明确受阻”的问题。现在按服务端 `journey.state` 分开说明 `failed`、`blocked`、`succeeded_empty`；失败/受阻保留返回错误码并使用对应原因文案，成功空结果明确说明处理已完成且无可用候选。其他未预期的无候选状态使用中性说明，不推断为失败或受阻。实际 Vue 桌面 Chromium 与 390px 回归各覆盖三态，无写请求、API/状态合同不变。尚不证明真实采集状态、RBAC 或 M07-03。
@@ -19,7 +23,7 @@ P16 已批准的 C 方向真实页面位于 `/opportunities/start`，组件为 `
 
 页面 CSS 已按批准稿作用域实现：阶段导航、输入单选组、候选选择、质量门、时间轴、决定区和 44px 键盘焦点状态均来自真实 `SelectionJourney.vue`，不是独立原型页面。P16 相关行为合同在本次发布后的桌面/390px 双端回归中通过：
 
-- `npx playwright test tests/e2e/ui-phase2-journey-contracts.spec.ts --project=desktop-chromium --project=mobile-390`：当前 38/38；包含终态说明三态与零决策弹窗回归。
+- `npx playwright test tests/e2e/ui-phase2-journey-contracts.spec.ts --project=desktop-chromium --project=mobile-390`：当前 42/42（桌面/390px合计）；新增 UI2-J11/J12 延迟创建/决定字段锁与单POST回归，UI2-J05核对失败解锁/保留输入。与 M07-06 选择旅程集成回归合计 50/50。
 - 线上 `https://midouai.medouai.com/opportunities/start`：HTTP 200；健康、依赖和 API/Worker 状态沿同批 P17 发布检查通过。
 
 ## 未覆盖事项

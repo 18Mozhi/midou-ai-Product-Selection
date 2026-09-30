@@ -419,6 +419,7 @@ test("UI2-J05 create failure retains input and explicit retry uses a fresh idemp
   await form.getByRole("button", { name: "创建真实选品任务" }).click();
   await expect(page.locator(".ui-state-panel")).toContainText("创建未获得成功确认");
   await expect(form.getByLabel("商品关键词", { exact: true })).toHaveValue("portable blender");
+  await expect(form.getByLabel("商品关键词", { exact: true })).toBeEnabled();
   expect(attempts).toBe(1);
   expect(await savedId(page)).toBeNull();
   await form.getByRole("button", { name: "创建真实选品任务" }).click();
@@ -433,6 +434,88 @@ test("UI2-J05 create failure retains input and explicit retry uses a fresh idemp
     data.writes[1].headers()["idempotency-key"],
   );
   // Does not certify duplicate prevention after a server commit with a lost response.
+});
+
+test("UI2-J11 create locks submitted fields and ignores synchronous duplicate submits", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  let release!: () => void;
+  const responseGate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route("**/api/v1/selection-journeys", async (route) => {
+    await responseGate;
+    return route.fulfill({ status: 202, json: envelope(data.journey) });
+  });
+  await page.goto("/opportunities/start");
+  const form = page.locator(".selection-start"),
+    input = form.getByLabel("商品关键词", { exact: true });
+  await input.fill("portable blender");
+  await form.getByRole("button", { name: "创建真实选品任务" }).click();
+  await expect(input).toBeDisabled();
+  await expect(form.getByRole("radio", { name: "关键词" })).toBeDisabled();
+  await form.evaluate((element) => {
+    const formElement = element as HTMLFormElement;
+    formElement.requestSubmit();
+    formElement.requestSubmit();
+  });
+  await expect.poll(() => data.writes.length).toBe(1);
+  assertPost(data.writes[0], "/selection-journeys", {
+    input_kind: "keyword",
+    input_value: "portable blender",
+  });
+  release();
+  await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "result_ready");
+  expect(data.writes).toHaveLength(1);
+});
+
+test("UI2-J12 decision locks its reason and ignores synchronous duplicate submits", async ({
+  page,
+}) => {
+  const data = await ready(page, journeyId);
+  let release!: () => void;
+  const responseGate = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.route(`**/api/v1/selection-journeys/${journeyId}/decisions`, async (route) => {
+    await responseGate;
+    Object.assign(data.journey, {
+      state: "decided",
+      decided_at: at,
+      decision: {
+        action: "observe",
+        reason: "核对后继续观察",
+        selected_raw_evidence_id: null,
+        actor_id: id(7640),
+        created_at: at,
+      },
+    });
+    return route.fulfill({ status: 201, json: envelope(data.journey) });
+  });
+  await page.goto("/opportunities/start");
+  const form = page.locator(".selection-decision"),
+    reasonField = form.getByLabel("决策原因");
+  await form.getByRole("radio", { name: "继续观察" }).check();
+  await reasonField.fill("核对后继续观察");
+  await form.getByRole("button", { name: "保存审计决策" }).click();
+  await expect(reasonField).toBeDisabled();
+  await expect(form.getByRole("radio", { name: "继续观察" })).toBeDisabled();
+  await form.evaluate((element) => {
+    const formElement = element as HTMLFormElement;
+    formElement.requestSubmit();
+    formElement.requestSubmit();
+  });
+  await expect.poll(() => data.writes.length).toBe(1);
+  assertPost(data.writes[0], `/selection-journeys/${journeyId}/decisions`, {
+    action: "observe",
+    reason: "核对后继续观察",
+    selected_raw_evidence_id: null,
+  });
+  release();
+  await expect(page.locator(".selection-status")).toHaveAttribute("data-state", "decided");
+  await expect(page.locator(".selection-complete h3")).toHaveText("核对后继续观察");
+  expect(data.writes).toHaveLength(1);
 });
 
 test("UI2-J06 accepted journey polls existing ID and uses the server terminal result", async ({
