@@ -39,11 +39,18 @@ const fixture = (
   request_id: journeyId,
   trace_id: journeyId,
 });
-async function setup(page: Page) {
+async function setup(page: Page, options: { blockStorageRead?: boolean } = {}) {
   const writes: string[] = [];
   await page.addInitScript(
-    ({ key, value, endpoint }) => {
+    ({ key, value, endpoint, blockStorageRead }) => {
       localStorage.setItem(key, value);
+      if (blockStorageRead) {
+        const originalGetItem = Storage.prototype.getItem;
+        Storage.prototype.getItem = function (storageKey) {
+          if (storageKey === key) throw new DOMException("Storage access denied", "SecurityError");
+          return originalGetItem.call(this, storageKey);
+        };
+      }
       // Keep late reads non-cancellable to prove ownership checks, not only abort().
       const original = window.fetch.bind(window);
       window.fetch = (input, init) => {
@@ -51,7 +58,7 @@ async function setup(page: Page) {
         return original(input, url.endsWith(endpoint) ? { ...init, signal: undefined } : init);
       };
     },
-    { key: storageKey, value: journeyId, endpoint },
+    { key: storageKey, value: journeyId, endpoint, blockStorageRead: options.blockStorageRead ?? false },
   );
   page.on("request", (request) => {
     if (request.url().includes("/api/v1/selection-journeys") && request.method() !== "GET")
@@ -93,6 +100,26 @@ function gate() {
   });
   return { pending, release };
 }
+
+test("UI2-JR05 unavailable storage is explained without blocking a new journey", async ({ page }) => {
+  const writes = await setup(page, { blockStorageRead: true });
+  let reads = 0;
+  await page.route("**/api/v1/selection-journeys", (route) => {
+    if (route.request().method() === "GET") {
+      reads++;
+      return route.fulfill({ json: envelope(fixture("succeeded_empty")) });
+    }
+    return route.fulfill({ status: 202, json: envelope(fixture("running", "仍可创建")) });
+  });
+
+  await page.goto("/opportunities/start");
+  await expect(page.getByRole("status")).toContainText("浏览器暂不能同步本地恢复标记");
+  expect(reads).toBe(0);
+  await page.getByLabel("商品关键词").fill("portable blender");
+  await page.getByRole("button", { name: "创建真实选品任务" }).click();
+  await expect(page.locator(".selection-status")).toContainText("仍可创建");
+  expect(writes.filter((method) => method === "POST")).toHaveLength(1);
+});
 
 test("UI2-JR01 cached running journey pauses polling and refreshes once on return", async ({
   page,

@@ -103,6 +103,8 @@ P16十项规格和合同让N01–N03的P14/P15/P16/P18四份规格均有实际�
 
 当前修复只在SelectionJourney处理读取：mounted/activated通过active标志去重，deactivated/unmounted停止timer并递增读取版本、取消GET；重新激活根据当前旅程或保存ID读服务端。readJourney的成功、错误、404清ID和finally释放reading均检查active及读取版本。reset及新写入使旧读取失效；仅active且非终态才排下一次轮询。恢复失败主按钮明确“重试读取进度”，再次读保存ID而非reset。读取中显示aria-busy，恢复创建按钮显示忙碌原因，create/decide均以reading/busy保护；保存期间reset禁用，不自动取消/重放任何POST。
 
+若首次恢复读取本地 `localStorage` 被浏览器策略拒绝，创建表单现在通过 `role=status` 显示“浏览器暂不能同步本地恢复标记”提示；不会发旅程 GET，也不会阻止用户显式创建。桌面 Chromium 与390px手机实际 Vue 回归各1/1通过。
+
 | caseId              | 直接证明的边界                                                                                   | 不证明的边界                                   |
 | ------------------- | ------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
 | UI2-JR01            | 非终态离开超过2秒无新增旅程GET，缓存返回一次读取获得新终态，零旅程POST                           | 隐藏浏览器标签页省电策略、真实服务器定时副作用 |
@@ -158,13 +160,13 @@ r2图中五项核对区整体布局已通过；原因错误关联已由后续实
 
 ## 10. 2026-09-10批准布局落地后的当前映射
 
-SelectionJourney.vue LF SHA-256：380e72a9ff532a588c11ff28b28e8a3efce241945b3bd47c5443f47745cc8811。当前来源映射与P16动作复核同步到2026-09-30表单忙碌字段锁；当前12源位置/9组/5模型/4内联结构（2 aside、2 form），零业务弹窗。前缀 apps/web/src/components/SelectionJourney.vue#。原候选表单签名变化来自质量门说明，不是API变化。
+SelectionJourney.vue LF SHA-256：8e0103bfda31bed992d91c61b9d84d873f73d29e1564cca51e27d0000ac29e70。当前来源映射与P16动作复核同步到2026-09-30本地恢复存储失败提示；当前12源位置/9组/5模型/4内联结构（2 aside、2 form），零业务弹窗。前缀 apps/web/src/components/SelectionJourney.vue#。原候选表单签名变化来自创建表单内联恢复提示，不是API变化。
 
 | 当前行 | 当前候选尾键       | 核对边界                                                   | 稳定语义ID        |
 | ------ | ------------------ | ---------------------------------------------------------- | ----------------- |
 | 404 | feb47750cbf8d6c2.1 | 返回列表，原路由不变                                       | J-NAV-LIST        |
 | 406 | 8026812b48a68031.1 | 恢复主次事件保持                                           | J-STATE-RECOVERY  |
-| 415 | 8c00555eac0c2a19.1 | 三输入创建form保持                                         | J-CREATE          |
+| 416 | 69918daed1d2ab6a.1 | 三输入创建form与本地存储失败状态提示保持                   | J-CREATE          |
 | 458 | 8471b8c4a13a52ef.1 | 创建busy/reading禁用保持                                   | J-CREATE          |
 | 472 | 702f405d1496d1cd.1 | 原生summary切换details.open，零请求/持久化，不新增业务写入 | J-TIMELINE        |
 | 537 | ffaf47bf1a32fcaf.1 | 原文外链属性与click.stop保持                               | J-SOURCE          |

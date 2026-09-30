@@ -460,6 +460,9 @@ onUnmounted(() => {
         @secondary="handleStateSecondary"
       />
       <form v-if="!journey" class="selection-start" @submit.prevent="create">
+        <p v-if="message && state === 'ready'" class="selection-storage-warning" role="status">
+          {{ message }}
+        </p>
         <div class="selection-kind" role="radiogroup" aria-label="输入类型">
           <label
             v-for="item in [
