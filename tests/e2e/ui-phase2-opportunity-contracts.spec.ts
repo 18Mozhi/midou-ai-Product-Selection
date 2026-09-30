@@ -780,3 +780,49 @@ test("UI2-OP07 does not persist ERP bridge data after the opportunity page is de
   await expect(page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" })).toBeHidden();
   expect(data.writes).toHaveLength(0);
 });
+
+test("UI2-OP07 a delayed ERP import receipt cannot close a reopened import dialog", async ({
+  page,
+}) => {
+  const data = await ready(page);
+  let releaseImport!: () => void;
+  let markImportStarted!: () => void;
+  const importGate = new Promise<void>((resolve) => (releaseImport = resolve));
+  const importStarted = new Promise<void>((resolve) => (markImportStarted = resolve));
+  await page.route("**/api/v1/imports/erp-products", async (route) => {
+    markImportStarted();
+    await importGate;
+    await route.fulfill({
+      status: 201,
+      json: envelope({
+        received_count: 1,
+        opportunity_count: 1,
+        competitor_count: 0,
+        sourcing_search_count: 0,
+      }),
+    });
+  });
+
+  await page.goto("/opportunities?view=all");
+  await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();
+  let modal = page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" });
+  await modal.locator('input[type="file"]').setInputFiles({
+    name: "erp-delayed-receipt.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify([{ spu: "UI2-ERP-RECEIPT" }])),
+  });
+  await importStarted;
+  expect(data.writes).toHaveLength(1);
+
+  await modal.getByRole("button", { name: "关闭 ERP 导入" }).click();
+  await expect(modal).toBeHidden();
+  await page.getByRole("button", { name: "从 ERP 导入", exact: true }).click();
+  modal = page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" });
+  await expect(modal).toBeVisible();
+
+  releaseImport();
+  await expect(page.locator(".opportunity-message")).toContainText("ERP 已读取 1 条");
+  await expect(modal).toBeVisible();
+  await expect(modal.getByRole("button", { name: "从当前浏览器读取", exact: true })).toBeEnabled();
+  expect(data.writes).toHaveLength(1);
+});
