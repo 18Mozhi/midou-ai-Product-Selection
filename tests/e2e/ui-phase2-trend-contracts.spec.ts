@@ -396,6 +396,36 @@ test("UI2-TR08 responsive trend filters preserve desktop grouping and mobile foc
   expect(data.writes).toHaveLength(0);
 });
 
+test("UI2-TR13 trend filter badge counts only non-default filter fields", async ({ page }) => {
+  await ready(page);
+  await page.goto("/trends");
+
+  const mobile = (page.viewportSize()?.width ?? 1440) <= 760;
+  if (mobile) await page.getByRole("button", { name: /筛选趋势/ }).click();
+  const filters = mobile
+    ? page.getByRole("dialog", { name: "筛选趋势" }).locator("form")
+    : page.getByRole("group", { name: "筛选趋势" }).locator("form");
+  const badge = page.locator(".responsive-filter-drawer__trigger b");
+
+  await expect(badge).toHaveCount(0);
+  await filters.getByRole("combobox", { name: "排序" }).selectOption("latest");
+  await expect(badge).toHaveCount(0);
+
+  await filters.getByRole("textbox", { name: "关键词" }).fill("护肤");
+  await expect(badge).toHaveText("1 项已选");
+  await filters.getByRole("combobox", { name: "市场" }).selectOption("US");
+  await expect(badge).toHaveText("2 项已选");
+  await filters.getByRole("textbox", { name: "分类" }).fill("beauty");
+  await expect(badge).toHaveText("3 项已选");
+  await filters.getByRole("combobox", { name: "状态" }).selectOption("irrelevant");
+  await expect(badge).toHaveText("4 项已选");
+  await filters.getByRole("combobox", { name: "状态" }).selectOption("");
+  await expect(badge).toHaveText("4 项已选");
+
+  await filters.getByRole("button", { name: "清除", exact: true }).click();
+  await expect(badge).toHaveCount(0);
+});
+
 test("UI2-TR08 preserves all-status URLs, current-page sorting, paging, and copy fallback", async ({
   page,
 }) => {

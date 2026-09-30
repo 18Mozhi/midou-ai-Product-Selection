@@ -92,7 +92,11 @@ const canManageTrends = computed(() => props.capabilities.includes("trend:manage
       failedSources: failedRuleSources.value.length,
     }),
   ),
-  activeFilterCount = computed(() => Object.values(filters).filter(Boolean).length),
+  activeFilterCount = computed(
+    () =>
+      [filters.q, filters.market, filters.category].filter(Boolean).length +
+      Number(filters.status !== "active"),
+  ),
   pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20))),
   sortedTopics = computed(() => {
     const items = [...topics.value];
