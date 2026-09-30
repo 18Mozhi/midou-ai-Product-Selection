@@ -141,6 +141,57 @@ test("Redis refresh is single-flight and preserves the last verified snapshot on
   await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
 });
 
+test("P67 keyboard retry hands focus to refresh and does not steal it on success", async ({
+  page,
+}) => {
+  let calls = 0;
+  let releaseRetry: (() => void) | undefined;
+  const methods: string[] = [];
+  await page.route("**/api/v1/platform/operations/redis", async (route) => {
+    calls += 1;
+    methods.push(route.request().method());
+    if (calls <= 3) {
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "redis_resilience_dependency_unavailable",
+            message: "Redis 运行事实暂不可用。",
+            action_hint: "在宝塔检查 Node API、MySQL 与 Redis 后重新核验。",
+          },
+          request_id: "m08-02-initial-failure",
+          trace_id: "m08-02-initial-failure",
+        },
+      });
+      return;
+    }
+    await new Promise<void>((resolve) => (releaseRetry = resolve));
+    await route.fulfill({ json: envelope(base) });
+  });
+  await page.goto("/platform-admin/redis");
+
+  const retry = page.getByRole("button", { name: "重新核验" });
+  const refresh = page.getByRole("button", { name: "刷新运行事实" });
+  await expect(page.getByRole("heading", { name: "Redis 运行事实暂不可用" })).toBeVisible();
+  await retry.focus();
+  await page.keyboard.press("Enter");
+
+  const waitingRefresh = page.getByRole("button", { name: "正在刷新…" });
+  try {
+    await expect(retry).toHaveCount(0);
+    await expect(waitingRefresh).toHaveAttribute("aria-disabled", "true");
+    await expect(waitingRefresh).toHaveAttribute("aria-busy", "true");
+    await expect(waitingRefresh).toBeFocused();
+    expect(calls).toBe(4);
+  } finally {
+    releaseRetry?.();
+  }
+
+  await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
+  await expect(refresh).toBeFocused();
+  expect(methods).toEqual(["GET", "GET", "GET", "GET"]);
+});
+
 test("M08-02.A08/A09/A16 warning blocked empty forbidden expired and unavailable states", async ({
   page,
 }) => {
