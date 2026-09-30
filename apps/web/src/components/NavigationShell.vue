@@ -22,6 +22,7 @@ import type { ShellNavigationItem } from "../route-catalog";
 import { useNavigationDiscovery } from "../use-navigation-discovery";
 import { useNavigationShellTheme } from "../use-navigation-shell-theme";
 import { useNavigationShellDrawer } from "../use-navigation-shell-drawer";
+import "../styles/platform-operations.css";
 import AppIcon from "./AppIcon.vue";
 import NavigationAccessPanel from "./NavigationAccessPanel.vue";
 import { DiscoveryOverlay, surfaceComponents } from "./navigation-surface-registry";

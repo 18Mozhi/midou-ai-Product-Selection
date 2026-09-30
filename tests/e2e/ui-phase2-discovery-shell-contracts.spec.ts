@@ -332,6 +332,8 @@ for (const allowed of [true, false]) {
     );
     if (allowed) {
       await expect(page.getByRole("heading", { name: "无权打开此页面" })).toHaveCount(0);
+      if ((page.viewportSize()?.width ?? 1440) <= 840)
+        await page.getByRole("button", { name: "打开导航菜单" }).click();
       await expect(
         page.getByRole("link", { name: "选择组织与工作区后进入用户工作台" }),
       ).toBeAttached();
@@ -764,7 +766,7 @@ for (const mode of ["search", "create"] as const) {
         await dialog.getByRole("textbox", { name: "搜索关键词" }).fill("隔离查询");
         await dialog.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
       } else await page.getByRole("button", { name: "创建选品", exact: true }).click();
-      const dialog = page.getByRole("dialog");
+      const dialog = page.locator("dialog.discovery-backdrop");
       const panel = dialog.locator(".ui-state-panel");
       await expect(panel).toHaveAttribute("data-kind", kind);
       await expect(panel.getByText("ui2-previous-read", { exact: true })).toBeVisible();
@@ -844,7 +846,7 @@ for (const mode of ["search", "create"] as const) {
       await dialog.getByRole("textbox", { name: "搜索关键词" }).fill("没有结果");
       await dialog.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
     } else await page.getByRole("button", { name: "创建选品", exact: true }).click();
-    const dialog = page.getByRole("dialog");
+    const dialog = page.locator("dialog.discovery-backdrop");
     const panel = dialog.locator(".ui-state-panel");
     await expect(panel).toHaveAttribute("data-kind", "empty");
     await expect(panel.getByRole("button", { name: "重新加载", exact: true })).toBeEnabled();
