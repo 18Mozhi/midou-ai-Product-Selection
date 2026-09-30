@@ -64,6 +64,8 @@ function harness() {
     createApiClient: () => (url, options) =>
       new Promise((resolve, reject) => calls.push({ url, options, resolve, reject })),
     window: {
+      addEventListener() {},
+      removeEventListener() {},
       setTimeout(fn, delay) {
         assert.equal(delay, 15000);
         timers.set(++timerId, fn);
@@ -140,13 +142,13 @@ test("P60 retained dependency failure explicitly identifies stale results", asyn
   assert.equal(h.subject.notice.value, "测试读取暂不可用。 当前仍显示上次成功结果。");
   assert.equal(h.subject.hasSnapshot.value, true);
 });
-test("P60 a non-timeout abort is not described as a fifteen-second timeout", async () => {
+test("P60 an unmounted read ignores its late abort response without showing stale feedback", async () => {
   const h = harness(),
     pending = h.subject.load();
   h.box.unmount();
   h.calls[0].reject(new DOMException("aborted", "AbortError"));
   await pending;
-  assert.equal(h.subject.notice.value, "读取失败，请检查网络后重试。");
+  assert.equal(h.subject.notice.value, "");
   assert.equal(h.timers.size, 0);
 });
 test("P60 single-flight and subsequent read recovery remain unchanged", async () => {

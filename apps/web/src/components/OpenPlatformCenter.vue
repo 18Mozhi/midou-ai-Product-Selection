@@ -51,6 +51,8 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     refresh: "unverified" | "pending" | "failed" | "ready";
   } | null>(null),
   hasSnapshot = ref(false),
+  snapshotQuery = ref<string | null>(null),
+  snapshotOrganizationId = ref(""),
   notice = ref(""),
   requestId = ref(""),
   secret = ref<{ value: string; kind: string } | null>(null),
@@ -164,14 +166,17 @@ const viewMeta = {
   );
 
 let loadController: AbortController | null = null;
+let readGeneration = 0;
+let activeReadQuery = "";
 let secretGeneration = 0;
 let surfaceActive = true;
+let wasDeactivated = false;
 function clearSecret() {
   secretGeneration += 1;
   secret.value = null;
 }
 watch(organizationId, clearSecret, { flush: "sync" });
-function syncUrl() {
+function syncUrl(mode: "replace" | "push" = "replace") {
   const query = new URLSearchParams(),
     current = currentFilter.value;
   query.set("view", activeView.value);
@@ -181,7 +186,10 @@ function syncUrl() {
   if (current.sort !== "updated_desc") query.set("sort", current.sort);
   if (current.page !== 1) query.set("page", String(current.page));
   if (current.pageSize !== 20) query.set("page_size", String(current.pageSize));
-  history.replaceState(history.state, "", `${location.pathname}${query.size ? `?${query}` : ""}`);
+  const target = `${location.pathname}${query.size ? `?${query}` : ""}`;
+  if (`${location.pathname}${location.search}` === target) return;
+  if (mode === "push") history.pushState(history.state, "", target);
+  else history.replaceState(history.state, "", target);
 }
 async function revealActiveSummary() {
   await nextTick();
@@ -204,37 +212,59 @@ function apiQuery() {
   }
   return query;
 }
-async function load() {
-  if (refreshing.value) return;
+const snapshotIsStale = computed(
+  () => snapshotQuery.value !== null && snapshotQuery.value !== apiQuery().toString(),
+);
+type LoadOptions = { history?: "replace" | "push"; force?: boolean };
+function load(): Promise<void>;
+function load(options: LoadOptions): Promise<void>;
+function load(event: PointerEvent): Promise<void>;
+async function load(optionsOrEvent: LoadOptions | PointerEvent = {}) {
+  const options: LoadOptions =
+    "history" in optionsOrEvent || "force" in optionsOrEvent ? (optionsOrEvent as LoadOptions) : {};
+  if (!surfaceActive) return;
+  const requestQuery = apiQuery(),
+    requestKey = requestQuery.toString();
+  if (refreshing.value && (!options.force || activeReadQuery === requestKey)) return;
   const readActionResult = actionResult.value;
   if (readActionResult) readActionResult.refresh = "pending";
+  const generation = ++readGeneration,
+    requestOrganizationId = organizationId.value.trim(),
+    controller = new AbortController();
   loadController?.abort();
-  loadController = new AbortController();
-  const timeout = window.setTimeout(() => loadController?.abort("timeout"), 15000);
+  loadController = controller;
+  activeReadQuery = requestKey;
+  const timeout = window.setTimeout(() => controller.abort("timeout"), 15000);
   refreshing.value = true;
   notice.value = "";
   if (!hasSnapshot.value) state.value = "loading";
-  syncUrl();
+  syncUrl(options.history ?? "replace");
   try {
-    const response = await request<any>(`/platform/open?${apiQuery()}`, {
-      signal: loadController.signal,
+    const response = await request<any>(`/platform/open?${requestQuery}`, {
+      signal: controller.signal,
     });
+    if (generation !== readGeneration || !surfaceActive) return;
     requestId.value = response.request_id;
     data.value = response.data;
-    for (const view of views)
-      filters[view].page = response.data.pagination?.[view]?.page ?? filters[view].page;
+    if (apiQuery().toString() === requestKey)
+      for (const view of views)
+        filters[view].page = response.data.pagination?.[view]?.page ?? filters[view].page;
+    if (apiQuery().toString() === requestKey) syncUrl();
     hasSnapshot.value = true;
+    snapshotQuery.value = requestKey;
+    snapshotOrganizationId.value = requestOrganizationId;
     state.value = currentRows.value.length ? "ready" : "empty";
     await revealActiveSummary();
     if (readActionResult && actionResult.value === readActionResult)
       readActionResult.refresh = "ready";
   } catch (error) {
+    if (generation !== readGeneration || !surfaceActive) return;
     if (readActionResult && actionResult.value === readActionResult)
       readActionResult.refresh = "failed";
     const failure = error instanceof ApiClientError ? error : null;
     requestId.value = failure?.requestId ?? "";
     const readHint =
-      loadController.signal.aborted && loadController.signal.reason === "timeout"
+      controller.signal.aborted && controller.signal.reason === "timeout"
         ? "读取超过 15 秒，已停止本次等待。"
         : (failure?.actionHint ?? "读取失败，请检查网络后重试。");
     notice.value = hasSnapshot.value ? `${readHint} 当前仍显示上次成功结果。` : readHint;
@@ -251,20 +281,24 @@ async function load() {
                 : "error";
   } finally {
     window.clearTimeout(timeout);
-    refreshing.value = false;
+    if (generation === readGeneration) {
+      loadController = null;
+      activeReadQuery = "";
+      refreshing.value = false;
+    }
   }
 }
 function switchView(view: ViewKey) {
   if (view !== activeView.value) clearSecret();
   activeView.value = view;
   notice.value = "";
-  syncUrl();
+  syncUrl("push");
   state.value = currentRows.value.length ? "ready" : "empty";
   void revealActiveSummary();
 }
 function applyFilters() {
   currentFilter.value.page = 1;
-  void load();
+  void load({ history: "push", force: true });
 }
 function resetFilters() {
   Object.assign(currentFilter.value, {
@@ -274,12 +308,37 @@ function resetFilters() {
     page: 1,
     pageSize: 20,
   });
-  void load();
+  void load({ history: "push", force: true });
 }
 function goToPage(page: number) {
   if (refreshing.value || page < 1 || page > currentPagination.value.total_pages) return;
   currentFilter.value.page = page;
-  void load();
+  void load({ history: "push", force: true });
+}
+
+function restoreFromUrl() {
+  const current = new URLSearchParams(location.search),
+    requested = current.get("view") as ViewKey | null,
+    view = requested && views.includes(requested) ? requested : "clients",
+    nextOrganizationId = current.get("organization_id") ?? "";
+  if (view !== activeView.value) clearSecret();
+  activeView.value = view;
+  organizationId.value = nextOrganizationId;
+  const filter = filters[view],
+    nextStatus = current.get("status") ?? "all",
+    nextSort = current.get("sort") ?? "updated_desc",
+    nextPage = Number(current.get("page")),
+    nextPageSize = Number(current.get("page_size"));
+  filter.query = current.get("query") ?? "";
+  filter.status = statusOptions.value.some(([value]) => value === nextStatus) ? nextStatus : "all";
+  filter.sort = sortOptions.value.some(([value]) => value === nextSort) ? nextSort : "updated_desc";
+  filter.page = Number.isSafeInteger(nextPage) && nextPage > 0 ? nextPage : 1;
+  filter.pageSize = [10, 20, 50].includes(nextPageSize) ? nextPageSize : 20;
+  notice.value = "";
+  void load({ force: true });
+}
+function handlePopState() {
+  if (surfaceActive) restoreFromUrl();
 }
 
 async function call(path: string, method: "POST" | "PATCH", body: Record<string, unknown>) {
@@ -550,16 +609,32 @@ const statusText = (value: string) =>
 onMounted(load);
 onActivated(() => {
   surfaceActive = true;
+  if (wasDeactivated) {
+    wasDeactivated = false;
+    restoreFromUrl();
+  }
 });
 onDeactivated(() => {
   surfaceActive = false;
+  wasDeactivated = true;
   clearSecret();
+  readGeneration += 1;
+  loadController?.abort();
+  loadController = null;
+  activeReadQuery = "";
+  refreshing.value = false;
 });
 onBeforeUnmount(() => {
   surfaceActive = false;
   clearSecret();
+  readGeneration += 1;
+  window.removeEventListener("popstate", handlePopState);
   loadController?.abort();
+  loadController = null;
+  activeReadQuery = "";
+  refreshing.value = false;
 });
+onMounted(() => window.addEventListener("popstate", handlePopState));
 </script>
 
 <template>
@@ -581,6 +656,14 @@ onBeforeUnmount(() => {
         <button type="submit" :disabled="refreshing">{{ refreshing ? "读取中…" : "读取" }}</button>
       </form>
     </header>
+
+    <aside v-if="snapshotIsStale" class="open-notice open-stale-snapshot" role="status">
+      <strong>当前条件尚未读取</strong>
+      <p>
+        下方仍显示上次成功查询的结果（组织范围：{{ snapshotOrganizationId || "全部组织" }}）。
+        点击“读取”或“应用”后再查看当前条件。
+      </p>
+    </aside>
 
     <aside v-if="secret" class="open-secret" aria-live="assertive">
       <div>

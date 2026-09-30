@@ -484,6 +484,7 @@ onUnmounted(() => {
         <header
           v-if="
             !opportunityId &&
+            routePath !== '/platform-admin/open-platform' &&
             routePath !== '/platform-admin/status' &&
             routePath !== '/platform-admin/operations' &&
             routePath !== '/platform-admin/releases' &&

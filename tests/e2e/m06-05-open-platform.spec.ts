@@ -202,6 +202,71 @@ test("M06-05 form validation and URL-backed workspace filters fail closed", asyn
   await expect(page.getByRole("alertdialog")).toHaveCount(0);
 });
 
+test("M06-05 restores filters through browser history and labels stale scope snapshots", async ({
+  page,
+}) => {
+  const alternateOrgId = "00000000-0000-4000-8000-000000000608";
+  let releaseScopedRead: (() => void) | undefined;
+  await page.route(/\/api\/v1\/platform\/open(?:\?.*)?$/, async (route) => {
+    const requestedOrganization = new URL(route.request().url()).searchParams.get(
+      "organization_id",
+    );
+    if (requestedOrganization === alternateOrgId)
+      await new Promise<void>((resolve) => {
+        releaseScopedRead = resolve;
+      });
+    await route.fulfill({ json: env(data) });
+  });
+
+  await page.goto(`/platform-admin/open-platform?view=clients&organization_id=${orgId}`);
+  const search = page.getByRole("textbox", { name: "搜索", exact: true });
+  await expect(search).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "读取组织内部编号" })).toHaveValue(orgId);
+  await search.fill("报表");
+  await page.getByRole("button", { name: "应用" }).click();
+  await expect(page).toHaveURL(
+    new RegExp(`view=clients.*organization_id=${orgId}.*query=.*%E6%8A%A5%E8%A1%A8`),
+  );
+
+  const backRead = page.waitForResponse(
+    (response) =>
+      response.status() === 200 &&
+      new URL(response.url()).pathname.endsWith("/platform/open") &&
+      !new URL(response.url()).searchParams.has("client_query"),
+  );
+  await page.goBack();
+  await backRead;
+  await expect(search).toHaveValue("");
+  await expect(page).toHaveURL(new RegExp(`view=clients.*organization_id=${orgId}(?:$|&)`));
+
+  const forwardRead = page.waitForResponse(
+    (response) =>
+      response.status() === 200 &&
+      new URL(response.url()).pathname.endsWith("/platform/open") &&
+      new URL(response.url()).searchParams.get("client_query") === "报表",
+  );
+  await page.goForward();
+  await forwardRead;
+  await expect(search).toHaveValue("报表");
+
+  await page.getByRole("textbox", { name: "读取组织内部编号" }).fill(alternateOrgId);
+  const staleSnapshot = page.locator(".open-stale-snapshot");
+  await expect(staleSnapshot).toContainText("当前条件尚未读取");
+  await expect(staleSnapshot).toContainText(orgId);
+  const scopedRead = page.waitForResponse(
+    (response) =>
+      response.status() === 200 &&
+      new URL(response.url()).pathname.endsWith("/platform/open") &&
+      new URL(response.url()).searchParams.get("organization_id") === alternateOrgId,
+  );
+  await page.getByRole("button", { name: "读取", exact: true }).click();
+  await expect(staleSnapshot).toContainText(orgId);
+  releaseScopedRead?.();
+  await scopedRead;
+  await expect(staleSnapshot).toHaveCount(0);
+  await expect(page.getByRole("textbox", { name: "读取组织内部编号" })).toHaveValue(alternateOrgId);
+});
+
 test("M06-05 one-time secrets clear on scope and view changes, and ignore late deactivated responses", async ({
   page,
 }) => {
@@ -249,15 +314,10 @@ test("M06-05 one-time secrets clear on scope and view changes, and ignore late d
   await form.getByRole("textbox", { name: "名称", exact: true }).fill("离开页面中的密钥测试");
   await form.getByRole("button", { name: "创建接口访问账号" }).click();
   const pendingWrite = page.waitForResponse(
-      (response) =>
-        response.request().method() === "POST" &&
-        new URL(response.url()).pathname.endsWith("/platform/open/clients"),
-    ),
-    refreshedRead = page.waitForResponse(
-      (response) =>
-        response.request().method() === "GET" &&
-        new URL(response.url()).pathname.endsWith("/platform/open"),
-    );
+    (response) =>
+      response.request().method() === "POST" &&
+      new URL(response.url()).pathname.endsWith("/platform/open/clients"),
+  );
   const startedWrite = page.waitForRequest(
     (request) =>
       request.method() === "POST" &&
@@ -272,9 +332,14 @@ test("M06-05 one-time secrets clear on scope and view changes, and ignore late d
   await expect(page).toHaveURL(/\/platform-admin\/security$/);
   releaseThirdCreate?.();
   await pendingWrite;
-  await refreshedRead;
+  const refreshedRead = page.waitForResponse(
+    (response) =>
+      response.request().method() === "GET" &&
+      new URL(response.url()).pathname.endsWith("/platform/open"),
+  );
   await page.goBack();
-  await expect(page).toHaveURL(/\/platform-admin\/open-platform$/);
+  await refreshedRead;
+  await expect(page).toHaveURL(/\/platform-admin\/open-platform(?:\?|$)/);
   await expect(page.getByText("synthetic-secret-3", { exact: true })).toHaveCount(0);
 });
 
