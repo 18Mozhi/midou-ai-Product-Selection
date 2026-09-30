@@ -1290,7 +1290,7 @@
       "label": "展开或取消创建",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1"
+        "apps/web/src/components/OrganizationRolePanel.vue#670d77735585203d.1"
       ],
       "sourceContractKeys": [
         "grant.create.form.toggle"
@@ -1408,7 +1408,7 @@
       "label": "创建授权",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationRolePanel.vue#27eeda4bb377f413.1",
+        "apps/web/src/components/OrganizationRolePanel.vue#29016e256374347e.1",
         "apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1"
       ],
       "sourceContractKeys": [
@@ -1664,7 +1664,7 @@
       "label": "选择资源类型",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationRolePanel.vue#f0c0d3b1c8ae684b.1"
+        "apps/web/src/components/OrganizationRolePanel.vue#4aa69073e388c5f4.1"
       ],
       "sourceContractKeys": [
         "grant.create.type.change"

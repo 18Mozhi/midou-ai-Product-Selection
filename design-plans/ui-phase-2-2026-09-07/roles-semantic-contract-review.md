@@ -30,11 +30,8 @@
 | 23a85da051801987.1 | 原生details技术能力 | role.capability.technical.toggle |
 | be3f3fa4fcf2fb2c.1 | 清能力query/group，不清角色查询 | role.capability.filter.reset |
 | 5235116f7947ac74.1 | 清成员范围query/filter | role.scope.filter.reset |
-| 0aac14fac3c56e10.1 | canManage显示/隐藏创建form，不清草稿 | grant.create.form.toggle |
 | 670d77735585203d.1 | 创建授权/取消创建切换表单可见；尝试后错误由现有草稿值即时派生 | grant.create.form.toggle |
-| 27eeda4bb377f413.1、b75d50f1f8f0cc17.1 | form与按钮同一POST；busy或无actions禁按钮 | grant.create.submit |
-| 29016e256374347e.1 | 原生表单无效事件拦截提交、标记尝试态并聚焦首个无效字段；有效提交仍发既有createGrant事件 | grant.create.submit |
-| f0c0d3b1c8ae684b.1 | 受控type，父重置actions为该类型首项 | grant.create.type.change |
+| 29016e256374347e.1、b75d50f1f8f0cc17.1 | 原生表单无效事件拦截提交、标记尝试态并聚焦首个无效字段；有效表单与按钮沿用同一既有createGrant提交路径，busy或无actions禁按钮 | grant.create.submit |
 | 4aa69073e388c5f4.1 | 受控资源类型选择项 | grant.create.type.change |
 | 8bd3f7b2e5dcb44f.1 | 状态筛选重置page1并重读 | grant.status.select.{status} |
 | a162032f86484b89.1 | 当前页本地选择，watch可能重置延期草稿 | grant.select.{grantId} |
@@ -48,7 +45,7 @@
 
 ## 字段、图稿与后续实施
 
-[机器登记](action-reviews/P31.json) · [原48张C稿](design/roles-direction-c/README.md) · [设计入口](design/roles-direction-c/index.html)。20动作（含本地交互）/1接线/3排除，当前合同登记33源位置；P31机器映射仍需按当前真实Vue重新协调候选身份，120代表视觉槽尚未逐控件绑定，不能用整页图代替hover/focus/pressed/disabled/busy证明。
+[机器登记](action-reviews/P31.json) · [原48张C稿](design/roles-direction-c/README.md) · [设计入口](design/roles-direction-c/index.html)。20动作（含本地交互）/1接线/3排除，当前合同登记30源位置；本次将三个旧P31候选ID替换为当前Vue源身份，没有增加动作或源位置。120代表视觉槽尚未逐控件绑定，不能用整页图代替hover/focus/pressed/disabled/busy证明。
 
 14个子组件v-model、1个type受控输入、1个共享撤销reason；父组件另6个summary模型在本页排除。创建7字段、延期2字段，另6个查询/筛选输入；共享原因另算。创建与延期是两内联form，撤销是一个共享窗；父summary form另列排除，不是四个弹窗。
 

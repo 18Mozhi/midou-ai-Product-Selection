@@ -16,7 +16,7 @@
 - M06-01 desktop Chromium：49/49 通过；390px手机：48通过、1跳过；新增创建表单用例双端通过。
 - `npm run typecheck:web`、`npm run format:check`、`npm run verify:docs`、`npm run verify:plans`：通过。
 - `npm run build:web` 与 `npm run verify:frontend-budget`：通过；P31样式拆到异步子组件 scoped CSS，新增样式包约0.89KB。
-- 全站动作映射复验仍失败：P31动作审阅存在过期的 `OrganizationRolePanel.vue` 候选ID（此前源码指纹已落后）；新增三个候选已补充语义合同，但旧图/旧候选未伪造更新。
+- 全站动作映射已按当前 `OrganizationRolePanel.vue` 源码对齐三处P31候选身份；这是既有动作/源位置的身份替换，不增加动作，也未伪造视觉图或提升动作审批状态。
 - 隔离 HTTP fixture 不证明真实服务端、RBAC、MySQL 审计或 M07-03。
 
 ## 部署
