@@ -90,15 +90,15 @@ const context = {
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P31.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
-test("P31 covers 30 sites with 20 actions, six exact forwards and no implied approval", () => {
+test("P31 covers 33 sites with 20 actions, six exact forwards and no implied approval", () => {
   const r = review(),
     result = validateActionReview(r, context);
-  assert.equal(result.sourceSites, 32);
-  assert.equal(result.semanticGroups, 25);
+  assert.equal(result.sourceSites, 33);
+  assert.equal(result.semanticGroups, 26);
   assert.equal(result.routeActions, 20);
   assert.equal(result.writeActions, 3);
   assert.equal(result.wiringGroups, 1);
-  assert.equal(result.excludedGroups, 4);
+  assert.equal(result.excludedGroups, 5);
   assert.equal(result.unmappedVisualSlots, 44);
   const wire = r.actions.find((a) => a.kind === "wiring");
   assert.equal(wire.forwardBindings.length, 6);

@@ -354,6 +354,7 @@ export function buildOrgApprovalsReview(sources, packages) {
     route: "/org-admin/approvals",
     status: "source-reviewed-not-runtime-accepted",
     approval: "pending-user-review",
+    visualApproval: "user-approved-remaining-pages-auto",
     contract: `${base}/organization-governance-contract-review.md`,
     sourceHashes: dependencyHashes,
     actions,

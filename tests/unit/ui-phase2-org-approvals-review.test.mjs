@@ -46,6 +46,8 @@ test("P34 maps all32 source sites into8 read-only page actions,one forwarding an
   assert.equal(r.excludedGroups, 4);
   assert.equal(r.writeActions, 0);
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P34.json`, "utf8")), review);
+  assert.equal(review.visualApproval, "user-approved-remaining-pages-auto");
+  assert.equal(review.approval, "pending-user-review");
   const missing = build();
   missing.actions.find((a) => a.actionId === "OG-TECH").sourceCandidateIds.pop();
   assert.throws(() => validateActionReview(missing, context));

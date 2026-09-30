@@ -264,7 +264,7 @@
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "df6390dce4ac9dc7d7019ad972f3ff57013adc448b6bcd26b56ae3e84ba006a2",
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "135f86d5550c6998174114a8fa326723525379383f390641ddccf40aaf537c42",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
-    "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "16908467cba4ada6b340e431e8adf9731b149daa7ef277e4051e55bd2d30cb3e",
+    "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "4df5cd5f4fff7e32f31a7a0ef71bd54af5ad8a68e09dbec2c8183748108e881e",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "d187326a8319209cef7b060b48b43f1b0c5c0942365e6cdf4e2000ad681d827b",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "3fb3a2c10e383eae3c6d618dd439f6cadf56cf63bc79e309419c26af5bd07906",
@@ -489,7 +489,7 @@
     "scripts/verify-ui-phase2-teams-controls-c.mjs": "c2f015d785ddfff74c1ddaecec3150763fbf29a176e40e71ac4a2d783bcd4ce7",
     "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
     "tests/e2e/m06-01-organization-admin.spec.ts": "516b9130641aab0b09ad0ebe43fe3d8b25140b414700faf4700d93c3ef9bcc5f",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "6b70f199cd4b2907eae22029a5214b1981e2005dede678f161f7bd48f3738f6c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "196aa079431f6e3986bfddf5d476c7541626e10a5cb045f883d1c57178dea00c",
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "4388d1b4cab8c67a4e33ecd9c107cafd1b96430290ce6f58c20dd9af8e01fc7f",
     "scripts/verify-ui-phase2-org-data-controls.mjs": "32652c1547b4998316b79625d87662a3035959d9ae372aa3bf9fcd0785a9838e",
@@ -673,7 +673,7 @@
     "pagesWithoutExplicitSemanticReview": [],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
-    "visualApprovedReviewedPages": 72,
+    "visualApprovedReviewedPages": 73,
     "actionApprovedReviewedPages": 0
   },
   "pages": [
@@ -2147,6 +2147,7 @@
       "review": {
         "pageId": "P34",
         "actionApproval": "pending-user-review",
+        "visualApproval": "user-approved-remaining-pages-auto",
         "sourceSites": 32,
         "semanticGroups": 13,
         "routeActions": 8,
@@ -4715,6 +4716,7 @@
     {
       "pageId": "P34",
       "actionApproval": "pending-user-review",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "sourceSites": 32,
       "semanticGroups": 13,
       "routeActions": 8,

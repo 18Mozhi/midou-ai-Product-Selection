@@ -45,7 +45,7 @@
 
 ## 字段、图稿与后续实施
 
-[机器登记](action-reviews/P31.json) · [原48张C稿](design/roles-direction-c/README.md) · [设计入口](design/roles-direction-c/index.html)。20动作（含本地交互）/1接线/3排除，当前合同登记30源位置；本次将三个旧P31候选ID替换为当前Vue源身份，没有增加动作或源位置。120代表视觉槽尚未逐控件绑定，不能用整页图代替hover/focus/pressed/disabled/busy证明。
+[机器登记](action-reviews/P31.json) · [原48张C稿](design/roles-direction-c/README.md) · [设计入口](design/roles-direction-c/index.html)。20路由动作/1接线/5排除（26语义组），当前登记33个源码位置；本次将三个旧P31候选ID替换为当前Vue源身份，不增加业务动作。120代表视觉槽尚未逐控件绑定，不能用整页图代替hover/focus/pressed/disabled/busy证明。
 
 14个子组件v-model、1个type受控输入、1个共享撤销reason；父组件另6个summary模型在本页排除。创建7字段、延期2字段，另6个查询/筛选输入；共享原因另算。创建与延期是两内联form，撤销是一个共享窗；父summary form另列排除，不是四个弹窗。
 
