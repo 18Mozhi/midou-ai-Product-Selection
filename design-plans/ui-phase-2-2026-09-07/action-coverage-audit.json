@@ -51,7 +51,7 @@
     "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
     "apps/web/src/components/FileResilienceCenter.vue": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9",
     "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
-    "apps/web/src/components/HomeDashboard.vue": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
+    "apps/web/src/components/HomeDashboard.vue": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5",
     "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
     "apps/web/src/components/LandingRedirectSurface.vue": "321c65bae80e602f2403983f6b949ca54a6795cb44fd90704a3c72898203eddb",
     "apps/web/src/components/LocalIdentity.vue": "e1cbfd351ec79c7517f4c069cd3ba6d70ec4a403c72212dd3d195eea95370af8",
@@ -245,7 +245,7 @@
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
     "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "9a37882127bf26c4a26b827a83023b332c3fbe8338ccf7e168c4b62bbfea33e6",
-    "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "ff6b41e79cb7eba143652e3114c1a979379d22bcdf88a4a1de246d9b969fb378",
+    "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "b117737c678b77384f8dbc5422ca2af6f2816336dfd49c5b37f3f53eebee2164",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "ca542ee29760f507481282fa94b9c15ef61369f0982475d06fe614c5cae4e036",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
@@ -407,9 +407,10 @@
     "scripts/verify-ui-phase2-personal-c.mjs": "ecdc30e4efa2ff1d99383dce7f584cd825f77d9e6e57491785a204f196885456",
     "scripts/verify-ui-phase2-personal-composed-c.mjs": "481e7923c0c9a474127b0a2e385f5679a50ed6cf0fd3e9a5240d0e034b917ac1",
     "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "e3087612771eb17a0ed9184de28158341caf3bc48d625ed9733e938cea630a06",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "0412a9a2bfe15401dcc77f2445530e00f7b47b08f1680ba6fff90c198750af98",
     "scripts/lib/ui-phase2-home-design-data.mjs": "bb65ad359313f8e5351351195bf809a6ba49e3c8d52d7ceaa2ef24e89d7980c7",
     "scripts/verify-ui-phase2-home-c.mjs": "e7800a15baf9ac7ca02291e31cbd75466fa9f7eb50a0b722b09730a9c8f2af4e",
+    "tests/e2e/m02-06-home-mobile.spec.ts": "c5bf73d3a6e48c32dd4dd11e1234667b66dd0a4fb18176de1e662061c22eb905",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "a13676fa70a7981eed4603d6dd4699436834f104dc8a5f958beba302ff9ce2ac",
     "scripts/lib/ui-phase2-work-design-data.mjs": "791449e3e7f6619ab8bd618d0bdae6c4cd32042a65606007e51945fedd368b12",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
@@ -591,7 +592,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "a79abe5883d65357d0066e7f2f64c6921179a8da0516ba5eaf47c0bdbd32a835",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "5d19b2cf3d14acc1beb1a6f415b06e887fc09b43f97f4442d368a66b2bf27594",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "1b73dc9bf3ae8ede7d3b94faba9d6b480d2265437f4f9b9b4fdc12f9c39343c5",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "682add91925a79ee3dd98493cc141bed7d98c29b52c5c77c0de9d1ef985fe98f",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "ec432a9be886d13c8141f3784da440c5d1f3552b417b6a7ae2278288556a34cb",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "7fbacb6b0b1e2a3cf5d33dda101e9941f5e86c8c94d39fe950f61d30f05117ce",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "3f33f8b6ea141279ef057d12e2ec98bcade0d10ccd35ade7e45e4e7fe681894e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "728bf0bc631016cba563a4c8ad95889a99f7128ba33fb4a05f7f951e70a5c9fa",
@@ -664,8 +665,8 @@
     "routes": 73,
     "currentSourceCandidates": 1749,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 773,
-    "oldOnlyIdentities": 501,
+    "newSourceIdentities": 774,
+    "oldOnlyIdentities": 502,
     "reviewedPages": 73,
     "explicitlyGroupedSourceSites": 1585,
     "semanticGroups": 1302,
@@ -1146,7 +1147,7 @@
       "id": "P12",
       "path": "/home",
       "title": "今日行动",
-      "oldStaticAssociatedCandidates": 46,
+      "oldStaticAssociatedCandidates": 45,
       "review": {
         "pageId": "P12",
         "actionApproval": "pending-user-review",
@@ -1160,6 +1161,7 @@
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 90,
@@ -4147,6 +4149,7 @@
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 90,
@@ -20328,7 +20331,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1",
+      "candidateId": "apps/web/src/components/HomeDashboard.vue#5a213ad1d3b14030.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
       "line": 270,
       "kind": "event-binding",
@@ -20339,11 +20342,9 @@
           "expression": "state !== 'ready' && state !== 'empty'"
         }
       ],
-      "staticRouteIds": [
-        "P12"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
@@ -20362,7 +20363,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#5d17be0355b745f2.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 297,
+      "line": 298,
       "kind": "control",
       "label": "管理规则",
       "conditions": [
@@ -20394,7 +20395,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#2fdb8b56f02fb5d4.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 300,
+      "line": 301,
       "kind": "control",
       "label": "查看推荐清单",
       "conditions": [
@@ -20426,7 +20427,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#169dd3f4eac94585.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 303,
+      "line": 304,
       "kind": "control",
       "label": "创建选品 →",
       "conditions": [
@@ -20458,7 +20459,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#cb01c1a61d2872cd.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 318,
+      "line": 319,
       "kind": "control",
       "label": "{{ setupBusy ? \"正在恢复…\" : \"恢复自动选品\" }}",
       "conditions": [
@@ -20496,7 +20497,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#094ecf5aedd69025.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 326,
+      "line": 327,
       "kind": "control",
       "label": "{{ setupOpen ? \"收起设置\" : \"开始设置\" }}",
       "conditions": [
@@ -20534,7 +20535,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#473fa4f4d2c5e48b.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 335,
+      "line": 336,
       "kind": "control",
       "label": "重新读取规则",
       "conditions": [
@@ -20572,7 +20573,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#eb4229f8bc621174.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 336,
+      "line": 337,
       "kind": "control",
       "label": "查看规则 →",
       "conditions": [
@@ -20612,7 +20613,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#68febff0d855d919.2",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 340,
+      "line": 341,
       "kind": "control",
       "label": "重新读取",
       "conditions": [
@@ -20646,7 +20647,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#26550e015743f49c.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 346,
+      "line": 347,
       "kind": "form-event",
       "label": "首次设置 创建自动选品规则 推荐由真实商品证据触发，最终采纳始终由你决定。 想找的商品关键词 多个关键词用逗号分隔。 目标市场 美国 英国 德国 法国 日本 韩国 澳大利亚 加拿大 新加坡 全球 采集频率 每 15 分钟 每小时 每 6 小",
       "conditions": [
@@ -20680,7 +20681,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#a3f78d5afc916240.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 435,
+      "line": 436,
       "kind": "control",
       "label": "{{ setupBusy ? \"正在启用…\" : \"保存并开始自动选品\" }}",
       "conditions": [
@@ -20716,7 +20717,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#8386b9138fc27b68.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 448,
+      "line": 449,
       "kind": "control",
       "label": "全部 {{ selection.recommended_count }} 条 →",
       "conditions": [
@@ -20750,7 +20751,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#9a0707498a265485.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 452,
+      "line": 453,
       "kind": "control",
       "label": "{{ item.title }} {{ item.reason }} {{ score(item.value_score) }} 分 查看 →",
       "conditions": [
@@ -20786,7 +20787,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#673c9efc952a0fcb.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 478,
+      "line": 479,
       "kind": "control",
       "label": "查看候选进度",
       "conditions": [
@@ -20824,7 +20825,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#e7ad539389d8518c.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 483,
+      "line": 484,
       "kind": "control",
       "label": "查看采集进度",
       "conditions": [
@@ -20862,7 +20863,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#7a7b103459397eaa.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 504,
+      "line": 505,
       "kind": "control",
       "label": "{{ item.severity === \"critical\" ? \"!\" : \"·\" }} {{ item.title }} {{ item.reason }} {{ priorityLabel(item.priority) }} →",
       "conditions": [
@@ -20902,7 +20903,7 @@
     {
       "candidateId": "apps/web/src/components/HomeDashboard.vue#d033e930df518c8e.1",
       "file": "apps/web/src/components/HomeDashboard.vue",
-      "line": 521,
+      "line": 522,
       "kind": "control",
       "label": "数据说明",
       "conditions": [
@@ -71333,6 +71334,12 @@
       "candidateId": "apps/web/src/components/DiscoveryOverlay.vue#f86ceb84c9007570.1",
       "file": "apps/web/src/components/DiscoveryOverlay.vue",
       "line": 312,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1",
+      "file": "apps/web/src/components/HomeDashboard.vue",
+      "line": 247,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

@@ -435,3 +435,67 @@ test("M02-06.A10/A12 missing selection and failed rule read remain unknown and n
   await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeHidden();
   await expect(page.locator(".home-status-facts")).toHaveCount(0);
 });
+
+test("M02-06 home state errors expose only the wired retry action", async ({ page }) => {
+  await nav(page);
+  let status = 403,
+    reads = 0;
+  await page.route("**/api/v1/me/home-dashboard", (route) => {
+    reads += 1;
+    if (status !== 200)
+      return route.fulfill({
+        status,
+        contentType: "application/json",
+        body: JSON.stringify({
+          error: {
+            code:
+              status === 403
+                ? "forbidden"
+                : status === 503
+                  ? "dependency_unavailable"
+                  : "home_failed",
+            action_hint: "请联系管理员或稍后重试。",
+          },
+          request_id: `m02-06-home-state-${status}`,
+          trace_id: `m02-06-home-state-${status}`,
+        }),
+      });
+    return route.fulfill({
+      json: envelope({
+        actions: [
+          item(
+            "00000000-0000-4000-8000-000000000690",
+            "action",
+            "重新读取后可见",
+            "/opportunities",
+          ),
+        ],
+        changes: [],
+        follows: [],
+        health: [],
+        scope: { organization_id: org, workspace_id: workspace },
+        generated_at: at,
+      }),
+    });
+  });
+
+  for (const [code, label] of [
+    [403, "你没有此项权限"],
+    [503, "依赖暂时受阻"],
+    [500, "操作未完成"],
+  ] as const) {
+    status = code;
+    await page.goto("/home");
+    const panel = page.locator(".ui-state-panel");
+    await expect(panel.getByRole("heading", { name: label })).toBeVisible();
+    await expect(panel.getByRole("button", { name: "重新读取", exact: true })).toBeVisible();
+    for (const unsupported of ["申请权限", "查看影响", "返回上一页"])
+      await expect(panel.getByRole("button", { name: unsupported, exact: true })).toHaveCount(0);
+  }
+
+  status = 200;
+  const readsBeforeRetry = reads;
+  await page.locator(".ui-state-panel").getByRole("button", { name: "重新读取" }).click();
+  await expect(page.getByText("重新读取后可见")).toBeVisible();
+  expect(reads).toBeGreaterThan(readsBeforeRetry);
+});

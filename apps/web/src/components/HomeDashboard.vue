@@ -273,6 +273,7 @@ onBeforeUnmount(() => {
       :request-id="requestId"
       :trace-id="traceId"
       :action-hint="actionHint"
+      :hide-secondary="true"
       primary-label="重新读取"
       @primary="load"
     /><template v-else>

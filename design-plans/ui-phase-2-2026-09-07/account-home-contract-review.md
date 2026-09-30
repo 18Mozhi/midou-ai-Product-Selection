@@ -55,7 +55,7 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | P#d31010912340ba44.1 | 438 | PC-TREND | 关注记录→`/trends?topic={id}` |
 | P#fe2ef7002fcbab8c.1 | 446 | PC-DECISION | 决策记录→`/opportunities/{opportunity_id}` |
 | P#ee2568a050e8c314.1 | 456 | PC-TASK | 任务记录全部→`/tasks`，当前没有详情id或mine筛选 |
-| H#2471b33884e5515b.1 | 247 | HD-LOAD | 非ready/empty→UiStatePanel primary→load |
+| H#5a213ad1d3b14030.1 | 270 | HD-CURRENT-READ | 非ready/empty→UiStatePanel仅呈现已接线primary→load；隐藏本页未接线secondary |
 | H#5d17be0355b745f2.1 | 272 | HD-RULES | →`/trends?section=rules` |
 | H#2fdb8b56f02fb5d4.1 | 275 | HD-OPPORTUNITIES | →`/opportunities`，无view参数 |
 | H#169dd3f4eac94585.1 | 278 | HD-START | →`/opportunities/start`，非本页直接创建 |
@@ -105,7 +105,7 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | 68febff0d855d919.1 | 267 | control | HD-CURRENT-READ / 已有快照读取失败时由用户显式重读 |
-| 2471b33884e5515b.1 | 270 | event-binding | HD-CURRENT-READ / UiStatePanel主操作事件转给首页load |
+| 5a213ad1d3b14030.1 | 270 | event-binding | HD-CURRENT-READ / UiStatePanel仅呈现主操作并转给首页load；`:hide-secondary=true`抑制无监听次操作 |
 | 5d17be0355b745f2.1 | 297 | control | HD-CURRENT-RULES / 打开既有规则页 |
 | 2fdb8b56f02fb5d4.1 | 300 | control | HD-CURRENT-OPPORTUNITIES / 查看完整推荐清单 |
 | 169dd3f4eac94585.1 | 303 | control | HD-CURRENT-START / 导航至独立创建选品流程 |
@@ -125,7 +125,7 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/HomeDashboard.vue | 495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0 |
+| apps/web/src/components/HomeDashboard.vue | e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5 |
 
 ### 2.2 P11 PersonalProfilePanel 当前源码位置（2026-09-24）
 
@@ -268,7 +268,7 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 
 共享反馈组件只定义本地条件按钮；请求归属仍由各面板和PersonalCenter/usePersonalCenter决定。
 
-五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12共享UiStatePanel在部分错误态生成secondary但调用方无监听，属于共享消费者缺口，不加进上述五文件51项分母。
+五文件没有本地dialog定义/确认调用候选；资料、密码、通知、首页规则均为内联form。主题选择使用自定义radio按钮，不是v-model字段。PersonalCenter有15个v-model位置、HomeDashboard有7个，共22个输入位置；另邮箱是disabled展示输入。P12首页现隐藏UiStatePanel在本页无监听的secondary，仅呈现已接线重读；不改变共享组件其他消费者，不加进上述五文件51项分母。
 
 ### 2.9 P10 ThemeStudio 当前源码位置（2026-09-24）
 
@@ -370,7 +370,7 @@ PersonalCenter先请求profile，成功立即ready，再Promise.allSettled等四
 - **分区事实性**：P11的`Promise.allSettled`后失败区赋空/default而没有逐区error，P12规则GET catch赋[]。需先补失败回归，再设计可区分加载/失败/真实空的分区；不更改API或默认业务偏好。
 - **可访问名称（已局部关闭）**：上述 `.account-sidebar` 无名称描述的是旧壳层快照。当前 `AccountShell.vue` 为五个分区链接及外观入口提供明确 `aria-label`；`m02-03-navigation-shell.spec.ts` 现通过桌面与390px真实浏览器的 `getByRole` 验证计算后的六个链接名称。该浏览器语义检查不等于辅助技术实机读屏验收。
 - **交互语义**：ThemeStudio role=radio按钮只有click、无方向键或roving tabindex；获审实现须选原生radio或补完整键盘合同。多个表单错误没有字段关联，PersonalCenter错误也用统一success色notice；不把旧色彩视为新设计约束。
-- **恢复语义**：ThemeStudio把rate_limited和blocked等统一呈现“尚未选择组织与工作区”，不一定符合真实原因；HomeDashboard给所有错误primary“重新读取”，secondary无监听。新稿必须基于真实错误而非假动作提供恢复。
+- **恢复语义**：ThemeStudio把rate_limited和blocked等统一呈现“尚未选择组织与工作区”，不一定符合真实原因；HomeDashboard错误态保留已接线的“重新读取”，未接线secondary现已隐藏。新稿仍需基于真实错误而非假动作提供其他恢复路径。
 - **数据范围与层级**：P11没有申请权限、取消收藏、最近浏览或免打扰实际控件；P12没有逐条变化/关注区，资产任务链接也未指向详情。明确缺口后审核相应现有入口呈现，不凭蓝图添加业务字段/能力。
 
 正式图应分别覆盖P10三主题/两密度、P11五分区及资料成功/部分失败、P12运行/需检查/未配置/暂停/表单/空队列与错误。全部桌面/移动，控件和内联表单状态另计。三个页面的最终图、Vue新布局和生产验证仍待完成；本批只增加规格、合同、测试及索引，不改生产源码、主题令牌、API、数据库、依赖或配置。

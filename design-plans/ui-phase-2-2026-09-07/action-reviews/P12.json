@@ -5,7 +5,7 @@
   "status": "implemented-user-auto-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/HomeDashboard.vue": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
+    "apps/web/src/components/HomeDashboard.vue": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5",
     "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4"
   },
   "dialogs": {
@@ -77,6 +77,11 @@
           "file": "scripts/verify-ui-phase2-home-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "源隔离与既有离线原型检查引用；本轮源码复验见PROGRESS，非真实Vue/服务/批准证明。"
+        },
+        {
+          "file": "tests/e2e/m02-06-home-mobile.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "P12首页403/500/503只显示已接线重读并验证重读恢复；桌面Chromium与390px手机各5/5通过，不证明真实会话、RBAC或生产服务。"
         }
       ],
       "visualStates": {
@@ -87,7 +92,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "所有源primary仍重读、secondary无监听。新稿登录/选择范围等恢复链接和独立规则失败是提案，不按图升格实际链。"
+      "remaining": "当前首页错误UiStatePanel仅显示已接线的重读主操作；共享secondary由本页隐藏，不新增权限申请或影响查看假动作。新稿登录/选择范围等恢复链接和独立规则失败仍是提案，不按图升格实际链。"
     },
     {
       "actionId": "HD-RULES",
@@ -790,12 +795,12 @@
     },
     {
       "actionId": "HD-LOAD-WIRING", "label": "首页读取状态事件转交", "kind": "wiring", "routeApplicability": "P12-home-read-status",
-      "sourceContractKeys": ["HD-CURRENT-READ / UiStatePanel主操作事件转给首页load"],
-      "contractAliasReason": "account-home-contract-review.md第2.1节确认共享读取状态的主操作通过load事件交回首页，不另增按钮动作。",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1"],
+      "sourceContractKeys": ["HD-CURRENT-READ / UiStatePanel仅呈现主操作并转给首页load；:hide-secondary=true抑制无监听次操作"],
+      "contractAliasReason": "account-home-contract-review.md第2.1节确认共享读取状态仅呈现主操作并通过load事件交回首页；本页隐藏未接线secondary，不另增按钮动作。",
+      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#5a213ad1d3b14030.1"],
       "condition": "UiStatePanel呈现读取状态", "handler": "@primary -> load",
       "forwardsTo": ["HD-LOAD"],
-      "forwardBindings": [{"candidateId":"apps/web/src/components/HomeDashboard.vue#2471b33884e5515b.1","event":"@primary","handler":"load","targets":["HD-LOAD"]}],
+      "forwardBindings": [{"candidateId":"apps/web/src/components/HomeDashboard.vue#5a213ad1d3b14030.1","event":"@primary","handler":"load","targets":["HD-LOAD"]}],
       "variants": ["primary-read"], "scenes": [], "testReferences": [],
       "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
       "remaining": "只记录共享组件事件接线，不单独增加按钮数量。"
@@ -819,7 +824,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/HomeDashboard.vue": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
+      "apps/web/src/components/HomeDashboard.vue": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5",
       "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
@@ -907,7 +912,7 @@
     ],
     "sharedRemaining": [
       "NavigationShell实际surfaceProps传capabilities，HomeAutomationOverview接selection；没有把共享导航内部全部控件纳入20个局部候选分母。",
-      "UiStatePanel默认secondary部分状态有标签但本页无监听；过期/无权限新恢复链接为提案，实际调用方未修改。",
+      "P12首页已隐藏UiStatePanel未接线的secondary，仅保留重读主操作；共享组件其他消费者与过期恢复提案未随本页改动。",
       "目录/home为reset_on_scope，父key含组织/工作区且KeepAlive最大12；本页读取代次隔离迟到响应。切换范围、缓存返回与真实权限仍须生产身份场景验收。"
     ]
   },
