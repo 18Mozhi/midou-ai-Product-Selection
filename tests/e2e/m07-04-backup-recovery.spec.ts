@@ -101,6 +101,39 @@ test("M07-04.A07/A08/A15 desktop and 390 recovery truth", async ({ page }) => {
   await page.locator(".blockers summary").click();
   await page.evaluate(() => window.scrollTo(0, 0));
 });
+test("M07-04 mobile asset details contain keyboard focus and restore the trigger", async ({
+  page,
+}) => {
+  test.skip((page.viewportSize()?.width ?? 0) > 760, "the detail drawer is mobile-only");
+  let reads = 0;
+  await page.route("**/api/v1/platform/operations/backup-recovery", (route) => {
+    reads += 1;
+    return route.fulfill({ json: env({ ...base, state: "blocked" }) });
+  });
+  await page.goto("/platform-admin/operations");
+
+  const trigger = page.getByRole("button", { name: /数据库完整备份/ });
+  await trigger.click();
+  const dialog = page.getByRole("dialog", { name: "数据库完整备份" });
+  const close = dialog.getByRole("button", { name: "关闭详情" });
+  const technicalDetails = dialog.getByText("技术详情", { exact: true });
+  const app = page.locator("#app");
+
+  await expect(close).toBeFocused();
+  await expect(app).toHaveAttribute("inert", "");
+  await page.keyboard.press("Tab");
+  await expect(technicalDetails).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(close).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(technicalDetails).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+  await expect(app).not.toHaveAttribute("inert", "");
+  expect(reads).toBe(1);
+});
 test("M07-04.A07/A11 reminds before restore drill evidence expires", async ({ page }) => {
   await page.route("**/api/v1/platform/operations/backup-recovery", (route) =>
     route.fulfill({
