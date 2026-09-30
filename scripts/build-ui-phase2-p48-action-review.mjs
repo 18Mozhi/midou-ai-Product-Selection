@@ -182,7 +182,16 @@ const definitions = {
     kind: "read",
     condition: "指定来源存在兼容矩阵入口。",
     handler:
-      "打开并读取当前适配器版本与保留期内的页面 DOM/HTML 版本证据；只披露摘要、状态和指纹，不读取或展示页面正文。",
+      "打开并读取当前适配器版本与保留期内的页面 DOM/HTML 版本证据；只披露摘要、状态和指纹，不读取或展示页面正文；关闭弹窗即中止进行中的只读矩阵GET。",
+    variants: ["current-route-source-contract", "close-aborts-in-flight-read"],
+    testReferences: [
+      { file: testFile, evidenceType: "actual-vue-review-fixture" },
+      {
+        file: "tests/e2e/m03-07-provider-sources.spec.ts",
+        evidenceType: "actual-vue-local-interception",
+        claim: "关闭解析兼容矩阵后，实际Vue请求收到ERR_ABORTED；桌面Chromium与390px手机各1/1。",
+      },
+    ],
     remaining: "读取失败、真实外部页面和保留策略仍需真实环境验证；矩阵不触发采集或自动启用。",
   },
   "SC48-COMPAT-DIALOG-WIRING": {
@@ -387,10 +396,12 @@ export function buildP48ActionReview() {
       sourceCandidateIds: groups.get(key),
       condition: definition.condition,
       handler: definition.handler,
-      variants: ["current-route-source-contract"],
+      variants: definition.variants ?? ["current-route-source-contract"],
       scenes: [],
       visualStates,
-      testReferences: [{ file: testFile, evidenceType: "actual-vue-review-fixture" }],
+      testReferences: definition.testReferences ?? [
+        { file: testFile, evidenceType: "actual-vue-review-fixture" },
+      ],
       remaining: definition.remaining,
     };
     action.sourceContractKeys = [

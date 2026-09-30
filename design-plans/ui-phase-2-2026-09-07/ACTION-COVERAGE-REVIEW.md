@@ -4053,7 +4053,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | SC48-CONFIG 编辑来源采集配置及读取回执 / write | 18处；current-route-source-contract | ；其余见JSON | 本地用例不证明真实 provider:configure、MySQL版本竞争、外部烟测或审计持久化。 |
 | SC48-CONFIG-VERSION-DIALOG-WIRING 配置编辑与版本窗父子事件接线 / wiring | 2处；current-route-source-contract | ；其余见JSON | 事件接线映射不证明真实写入或角色权限。 |
 | SC48-VERSIONS 查看配置历史并按版本回滚 / write | 11处；current-route-source-contract | ；其余见JSON | 隔离用例不证明生产并发冲突、RBAC或MySQL审计结果。 |
-| SC48-COMPAT 只读查看来源解析兼容矩阵 / read | 7处；current-route-source-contract | ；其余见JSON | 读取失败、真实外部页面和保留策略仍需真实环境验证；矩阵不触发采集或自动启用。 |
+| SC48-COMPAT 只读查看来源解析兼容矩阵 / read | 7处；current-route-source-contract、close-aborts-in-flight-read | ；其余见JSON | 读取失败、真实外部页面和保留策略仍需真实环境验证；矩阵不触发采集或自动启用。 |
 | SC48-COMPAT-DIALOG-WIRING 来源兼容矩阵弹窗父级接线 / wiring | 2处；current-route-source-contract | ；其余见JSON | 父级调用和关闭事件的静态映射不代表真实矩阵服务、权限或生产证据读取验收。 |
 | SC48-LOGIN 进入指定来源网页登录凭证 / navigation | 1处；current-route-source-contract | ；其余见JSON | 不在P48读取、展示或生成Cookie与凭证秘密。 |
 | SC48-SAMPLES 固定样本、快照回放与独立复核 / write | 17处；current-route-source-contract | ；其余见JSON | 本地合成响应不证明真实browser_job_id、独立管理员身份、权限、存储或外部浏览器执行。 |

@@ -156,7 +156,7 @@
     "apps/web/src/components/ProviderParserSampleReview.vue": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8",
     "apps/web/src/components/ProviderRegistry.vue": "61023ffed367e6414668e2f3d4d9b1c2c3bb9fb039bea834faf05ea6dc8f77cb",
     "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-    "apps/web/src/components/ProviderSourceCenter.vue": "21fb023c94b5594e80c015348ff4930e0fe03026a8ee1b11e183f9566b927bca",
+    "apps/web/src/components/ProviderSourceCenter.vue": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0",
     "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f",
     "apps/web/src/components/ProviderSourceDirectory.vue": "ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34",
     "apps/web/src/components/ProviderSourceEditDialog.vue": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
@@ -524,8 +524,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P47.json": "1656a87a74cc63d9cb60a759d77ae47111915954438f1801bd18e88e80129660",
     "tests/unit/ui-phase2-p47-action-map.test.mjs": "4df585b96c7150e6e4078e8e28bc88204adec62597dbd6498d658839a7ed002f",
     "tests/unit/ui-phase2-provider-adapter-access.test.mjs": "f66c9a6098b9b5ac780d68681848b04f2f1e9e358c1e313c4e668aaf299f7c4d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "7e0d68cdf74b5f6cdc51c869593a1a3eeb6f30e1d01200a5c4a97624cbddc154",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "09417abe2f56c49076daa39fbcd4078fa87190b49bb1ac72e76e63cb4c7e52cf",
     "tests/unit/ui-phase2-p48-action-map.test.mjs": "65619c14a1ec77e0de7e35b75eb45258eeac1d4425c4d835c0b5cd5418c9bc0d",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "1568beaca70655ba2984cd450a175f6b91120f3cea60b56cc120f6ba38262a88",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "0a96c4ac83e8bd5041709dcd8767f38fc75c6adfe5e3d94a3b250ca4b08adc8f",
     "tests/unit/ui-phase2-p49-action-map.test.mjs": "e68ae4976a2e7aaa11a201227c2d32139789eb698210448e5dad3382643728ed",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "b40266a3f6561797a1d3eef6f1c50e036ad038a93a9d7510c19f8f9c6c5d02e3",
@@ -629,7 +630,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "6a648fe4dbbff3bb60dd991ffe32af97a6552095613d76ef35c85cdece6ae91c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "79d4020e2d6c74c44545316cc8f6838cf1da4396ca1528d940a11135ce6b207e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "49007854be666b99e204721344df773f50621539b3b977b4779fa04890280ac2",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "0835b0788cb5117b516617fcfe20472a957936a60ad13f840a7ec62b1a522aa7",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "bdd005662a13ea771e2f46ae430040b452d4df48df904838823702428b64dca9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "242f27618e2b314c7ba6aa8b7cc3873a9c037f34fdf99b1a477ef70c8cff19a0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "03ef86da619bd15bca7def3874da6f6b974170d9110ef00a1d615c24c66122e8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "fe30eef2edfe610323d19a8a22724139df273a9d9ce09b26e4f0a12225983461",
@@ -2768,6 +2769,7 @@
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
+          "actual-vue-local-interception",
           "actual-vue-review-fixture"
         ],
         "unmappedVisualSlots": 156,
@@ -5107,6 +5109,7 @@
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
+        "actual-vue-local-interception",
         "actual-vue-review-fixture"
       ],
       "unmappedVisualSlots": 156,
@@ -54854,7 +54857,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#8b5b066073993a3a.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 696,
+      "line": 703,
       "kind": "control",
       "label": "{{ refreshing ? \"刷新中…\" : \"刷新来源\" }}",
       "conditions": [],
@@ -54879,7 +54882,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 699,
+      "line": 706,
       "kind": "control",
       "label": "管理来源规则",
       "conditions": [],
@@ -54915,7 +54918,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#090fa072a224b63e.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 728,
+      "line": 735,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -54945,7 +54948,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 766,
+      "line": 773,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -54979,7 +54982,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#b1a60fde5d6ec9d6.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 769,
+      "line": 776,
       "kind": "control",
       "label": "重新读取来源目录",
       "conditions": [
@@ -55013,7 +55016,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 828,
+      "line": 835,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -55047,7 +55050,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#adb5a27ee7e15104.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 831,
+      "line": 838,
       "kind": "control",
       "label": "{{ state === \"expired\" ? \"重新登录\" : \"重新加载目录\" }}",
       "conditions": [
@@ -55081,7 +55084,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.3",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 890,
+      "line": 897,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -55119,7 +55122,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#22e451664b4ba746.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 893,
+      "line": 900,
       "kind": "control",
       "label": "重新加载目录",
       "conditions": [
@@ -55157,7 +55160,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#52eea605d2c84eb0.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 903,
+      "line": 910,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -55187,7 +55190,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#0d05b40ba4543887.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 926,
+      "line": 933,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -55212,7 +55215,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#7f36e42eb80bca2d.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 926,
+      "line": 933,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -55237,7 +55240,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#aebc04fe71463aa3.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 954,
+      "line": 961,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -55267,7 +55270,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#e86a06afbe712ab0.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 954,
+      "line": 961,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [
@@ -55297,7 +55300,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#26dd5da19bf14533.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 975,
+      "line": 982,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -55327,7 +55330,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderSourceCenter.vue#db583a9e271b4426.1",
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
-      "line": 975,
+      "line": 982,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [

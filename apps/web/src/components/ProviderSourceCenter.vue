@@ -72,6 +72,7 @@ let configurationOperation = 0;
 let configurationReturnOperation = 0;
 let catalogLoadOperation = 0;
 let compatibilityOperation = 0;
+let compatibilityReadController: AbortController | null = null;
 const sourceReadControllers = new Set<AbortController>();
 const testing = ref<string | null>(null);
 const {
@@ -616,6 +617,7 @@ onBeforeUnmount(() => {
   compatibilityOperation += 1;
   for (const controller of sourceReadControllers) controller.abort();
   sourceReadControllers.clear();
+  compatibilityReadController = null;
 });
 async function testSource(item: SourceItem) {
   if (!item.provisioned || testing.value) return;
@@ -639,6 +641,8 @@ async function testSource(item: SourceItem) {
 
 function closeCompatibility() {
   compatibilityOperation += 1;
+  compatibilityReadController?.abort();
+  compatibilityReadController = null;
   compatibilitySource.value = null;
   compatibilityLoading.value = false;
 }
@@ -655,7 +659,9 @@ async function loadCompatibility(item: SourceItem) {
   compatibilityError.value = "";
   compatibilityAdapterVersion.value = null;
   compatibilityRows.value = [];
+  compatibilityReadController?.abort();
   const controller = new AbortController();
+  compatibilityReadController = controller;
   sourceReadControllers.add(controller);
   try {
     const response = await request<ProviderCompatibilitySummary[]>("/platform/provider-adapters", {
@@ -677,6 +683,7 @@ async function loadCompatibility(item: SourceItem) {
     compatibilityError.value = failure?.actionHint ?? "解析兼容矩阵暂不可用，请稍后重试。";
   } finally {
     sourceReadControllers.delete(controller);
+    if (compatibilityReadController === controller) compatibilityReadController = null;
     if (isCurrent()) compatibilityLoading.value = false;
   }
 }

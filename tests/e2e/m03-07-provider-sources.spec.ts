@@ -612,6 +612,54 @@ test("source detail shows parser and observed page-version compatibility", async
     .toBe(true);
 });
 
+test("closing a compatibility dialog aborts its in-flight matrix read", async ({ page }) => {
+  await nav(page, "platform_admin");
+  await catalog(page);
+  const source = automatic[136];
+  let releaseRead!: () => void;
+  let readStarted = false;
+  const holdRead = new Promise<void>((resolve) => {
+    releaseRead = resolve;
+  });
+  const aborted = new Promise<void>((resolve) => {
+    page.on("requestfailed", (request) => {
+      const url = new URL(request.url());
+      if (
+        request.method() === "GET" &&
+        url.pathname === "/api/v1/platform/provider-adapters" &&
+        request.failure()?.errorText?.includes("ERR_ABORTED")
+      )
+        resolve();
+    });
+  });
+  await page.route("**/api/v1/platform/provider-adapters", async (route) => {
+    readStarted = true;
+    await holdRead;
+    try {
+      await route.fulfill({ json: envelope([]) });
+    } catch {
+      // Closing the dialog intentionally aborts this local intercepted read.
+    }
+  });
+
+  try {
+    await page.goto("/platform-admin/providers/sources");
+    await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill(source.name);
+    await openMobileSourceDetails(page, source.name);
+    await page.getByRole("button", { name: "解析兼容矩阵" }).first().click();
+    const dialog = page.getByRole("dialog", {
+      name: `解析器与页面版本 · ${source.name}`,
+    });
+    await expect(dialog).toBeVisible();
+    await expect.poll(() => readStarted).toBe(true);
+    await page.getByRole("button", { name: "关闭解析兼容矩阵" }).click();
+    await expect(dialog).not.toBeVisible();
+    await aborted;
+  } finally {
+    releaseRead();
+  }
+});
+
 test("late compatibility reads cannot replace the matrix opened for a newer source", async ({
   page,
 }) => {
@@ -630,6 +678,7 @@ test("late compatibility reads cannot replace the matrix opened for a newer sour
     adapterReads += 1;
     if (adapterReads === 1) {
       await firstReadPending;
+      if (route.request().failure()) return;
       await route.fulfill({
         json: {
           ...envelope([
@@ -731,6 +780,7 @@ test("late compatibility failures cannot replace the current source request trac
     adapterReads += 1;
     if (adapterReads === 1) {
       await firstReadPending;
+      if (route.request().failure()) return;
       await route.fulfill({
         json: {
           ...envelope([
