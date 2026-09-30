@@ -43,11 +43,12 @@ export const unavailableAutomaticSelectionReadiness = (): AutomaticSelectionRead
 
 export async function loadAutomaticSelectionReadiness(
   request: ReturnType<typeof createApiClient>,
+  signal?: AbortSignal,
 ): Promise<AutomaticSelectionReadiness> {
   const [scoreRules, costRules, competitorRules] = await Promise.allSettled([
-    request<ScoreRuleLike[]>("/opportunity-score-rules"),
-    request<StatusRuleLike[]>("/cost-rules"),
-    request<StatusRuleLike[]>("/competitor-monitor-rules"),
+    request<ScoreRuleLike[]>("/opportunity-score-rules", { signal }),
+    request<StatusRuleLike[]>("/cost-rules", { signal }),
+    request<StatusRuleLike[]>("/competitor-monitor-rules", { signal }),
   ]);
   if (
     scoreRules.status !== "fulfilled" ||

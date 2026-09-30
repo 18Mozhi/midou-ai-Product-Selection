@@ -301,9 +301,15 @@ function handleStatePrimary() {
   void load();
 }
 let readGeneration = 0;
-async function read(path: string, isCurrent: () => boolean = () => true) {
+let workspaceReadController: AbortController | null = null;
+function invalidateReads() {
+  readGeneration += 1;
+  workspaceReadController?.abort();
+  workspaceReadController = null;
+}
+async function read(path: string, isCurrent: () => boolean = () => true, signal?: AbortSignal) {
   try {
-    const response = await request<any>(path);
+    const response = await request<any>(path, { signal });
     if (isCurrent()) requestId.value = response.request_id;
     return response;
   } catch (error) {
@@ -315,15 +321,21 @@ async function read(path: string, isCurrent: () => boolean = () => true) {
     throw error;
   }
 }
-async function loadAi(opportunityId = props.opportunityId, isCurrent?: () => boolean) {
+async function loadAi(
+  opportunityId = props.opportunityId,
+  isCurrent?: () => boolean,
+  signal?: AbortSignal,
+) {
   const generation = readGeneration;
   const requestGeneration = ++aiRequestGeneration;
-  const ownsRead = isCurrent ?? (() => generation === readGeneration);
+  const ownsRead = () => !signal?.aborted && (isCurrent?.() ?? generation === readGeneration);
   aiLoadState.value = "loading";
   aiLoadErrorMessage.value = "";
   aiRequestId.value = "";
   try {
-    const response = await request<unknown>(`/opportunities/${opportunityId}/ai-analyses`);
+    const response = await request<unknown>(`/opportunities/${opportunityId}/ai-analyses`, {
+      signal,
+    });
     if (!ownsRead() || requestGeneration !== aiRequestGeneration) return;
     if (!Array.isArray(response.data))
       throw new Error("AI 分析接口返回格式异常，不能将其解释为没有分析记录。");
@@ -349,9 +361,10 @@ async function loadDownstream(
   opportunityId = props.opportunityId,
   isCurrent?: () => boolean,
   onlySource?: OpportunityDownstreamSource,
+  signal?: AbortSignal,
 ) {
   const generation = readGeneration;
-  const ownsRead = isCurrent ?? (() => generation === readGeneration);
+  const ownsRead = () => !signal?.aborted && (isCurrent?.() ?? generation === readGeneration);
   const sources: OpportunityDownstreamSource[] = onlySource
     ? [onlySource]
     : ["competitors", "sourcing"];
@@ -377,8 +390,12 @@ async function loadDownstream(
 
       try {
         if (source === "competitors") {
-          const response =
-            await request<OpportunityTypes.OpportunityCompetitorSummary[]>("/competitors");
+          const response = await request<OpportunityTypes.OpportunityCompetitorSummary[]>(
+            "/competitors",
+            {
+              signal,
+            },
+          );
           if (!ownsRead()) return;
           const competitors = response.data.filter((item) => item.opportunity_id === opportunityId);
           competitorItems.value = competitors;
@@ -388,7 +405,7 @@ async function loadDownstream(
             snapshots: competitors.reduce((sum, item) => sum + Number(item.snapshot_count ?? 0), 0),
           };
         } else {
-          const response = await request<any[]>("/sourcing/searches");
+          const response = await request<any[]>("/sourcing/searches", { signal });
           if (!ownsRead()) return;
           const searches = response.data.filter(
             (item: any) => item.input_type === "opportunity" && item.input_ref === opportunityId,
@@ -412,17 +429,25 @@ async function loadDownstream(
     }),
   );
 }
-async function loadAutomationReadiness(isCurrent: () => boolean = () => true) {
+function retryDownstream(source: OpportunityDownstreamSource) {
+  void loadDownstream(detail.value?.id, undefined, source, workspaceReadController?.signal);
+}
+async function loadAutomationReadiness(
+  isCurrent: () => boolean = () => true,
+  signal?: AbortSignal,
+) {
   automationReadiness.value = null;
-  const readiness = await loadAutomaticSelectionReadiness(request);
+  const readiness = await loadAutomaticSelectionReadiness(request, signal);
   if (isCurrent()) automationReadiness.value = readiness;
 }
-async function loadCostReviewers(isCurrent: () => boolean = () => true) {
+async function loadCostReviewers(isCurrent: () => boolean = () => true, signal?: AbortSignal) {
   costReviewerLoadState.value = "loading";
   costReviewerErrorMessage.value = "";
   costReviewerRequestId.value = "";
   try {
-    const reviewers = await request<Array<{ id: string; label: string }>>("/cost-input-reviewers");
+    const reviewers = await request<Array<{ id: string; label: string }>>("/cost-input-reviewers", {
+      signal,
+    });
     if (!isCurrent()) return;
     costReviewerOptions.value = reviewers.data;
     costReviewerLoadState.value = "ready";
@@ -443,16 +468,25 @@ async function retryCostReviewers() {
   const opportunityId = props.opportunityId;
   if (!opportunityId || !canConfirmCost.value || costReviewerLoadState.value === "loading") return;
   await loadCostReviewers(
-    () => generation === readGeneration && props.opportunityId === opportunityId,
+    () =>
+      generation === readGeneration &&
+      props.opportunityId === opportunityId &&
+      !workspaceReadController?.signal.aborted,
+    workspaceReadController?.signal,
   );
 }
-async function loadProfitAnalysis(opportunityId: string, isCurrent: () => boolean) {
+async function loadProfitAnalysis(
+  opportunityId: string,
+  isCurrent: () => boolean,
+  signal?: AbortSignal,
+) {
   profitLoadState.value = "loading";
   profitErrorMessage.value = "";
   profitRequestId.value = "";
   try {
     const response = await request<OpportunityTypes.OpportunityProfitAnalysis>(
       `/opportunities/${opportunityId}/profit-analysis`,
+      { signal },
     );
     if (!isCurrent()) return false;
     profit.value = response.data;
@@ -482,13 +516,21 @@ async function retryProfitAnalysis() {
   if (!opportunityId || profitLoadState.value === "loading") return;
   await loadProfitAnalysis(
     opportunityId,
-    () => generation === readGeneration && props.opportunityId === opportunityId,
+    () =>
+      generation === readGeneration &&
+      props.opportunityId === opportunityId &&
+      !workspaceReadController?.signal.aborted,
+    workspaceReadController?.signal,
   );
 }
 async function load() {
-  const generation = ++readGeneration;
+  const generation = readGeneration + 1;
+  workspaceReadController?.abort();
+  const controller = new AbortController();
+  workspaceReadController = controller;
+  readGeneration = generation;
   const opportunityId = props.opportunityId;
-  const isCurrent = () => generation === readGeneration;
+  const isCurrent = () => generation === readGeneration && !controller.signal.aborted;
   const nextAiOwner = opportunityId ?? "";
   if (aiSnapshotOpportunityId !== nextAiOwner) {
     aiAnalyses.value = [];
@@ -507,12 +549,17 @@ async function load() {
       profitLoadState.value = "loading";
       profitErrorMessage.value = "";
       profitRequestId.value = "";
-      const detailResponse = await read(`/opportunities/${opportunityId}`, isCurrent);
+      const detailResponse = await read(
+        `/opportunities/${opportunityId}`,
+        isCurrent,
+        controller.signal,
+      );
       if (!isCurrent()) return;
       detail.value = detailResponse.data;
-      if (!(await loadProfitAnalysis(opportunityId, isCurrent)) || !isCurrent()) return;
+      if (!(await loadProfitAnalysis(opportunityId, isCurrent, controller.signal)) || !isCurrent())
+        return;
       if (canConfirmCost.value) {
-        await loadCostReviewers(isCurrent);
+        await loadCostReviewers(isCurrent, controller.signal);
       } else {
         costReviewerOptions.value = [];
         costReviewerLoadState.value = "ready";
@@ -521,8 +568,8 @@ async function load() {
       }
       if (!isCurrent()) return;
       await Promise.all([
-        loadAi(opportunityId, isCurrent),
-        loadDownstream(opportunityId, isCurrent),
+        loadAi(opportunityId, isCurrent, controller.signal),
+        loadDownstream(opportunityId, isCurrent, undefined, controller.signal),
       ]);
       if (!isCurrent()) return;
       state.value = "ready";
@@ -534,12 +581,14 @@ async function load() {
       selection_view: selectionView.value,
     });
     for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
-    const result = await read(`/opportunities?${params}`, isCurrent);
+    const result = await read(`/opportunities?${params}`, isCurrent, controller.signal);
     if (!isCurrent()) return;
     items.value = result.data;
-    const readinessPromise = loadAutomationReadiness(isCurrent);
+    const readinessPromise = loadAutomationReadiness(isCurrent, controller.signal);
     try {
-      memberOptions.value = (await request<any[]>("/opportunities/member-options")).data;
+      memberOptions.value = (
+        await request<any[]>("/opportunities/member-options", { signal: controller.signal })
+      ).data;
     } catch (error) {
       if (!isCurrent()) return;
       if (!(error instanceof ApiClientError)) throw error;
@@ -1036,6 +1085,7 @@ async function queueAi() {
     await loadAi(
       opportunityId,
       () => detail.value?.id === opportunityId && route.path === routePath,
+      workspaceReadController?.signal,
     );
   }
 }
@@ -1065,14 +1115,22 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
         if (route.path === `/opportunities/${opportunityId}`) {
           aiReviewSubmission.value = { resultId, stage: "refreshing" };
           message.value = "页面切换期间抽检回执未在原操作面板确认；正在重新读取最新状态。";
-          await loadAi(opportunityId, () => detail.value?.id === opportunityId);
+          await loadAi(
+            opportunityId,
+            () => detail.value?.id === opportunityId,
+            workspaceReadController?.signal,
+          );
         }
         return;
       }
       if (result) {
         aiReviewSubmission.value = { resultId, stage: "refreshing" };
         message.value = "人工抽检已记录，AI 原始输出未被改写。";
-        await loadAi(opportunityId, () => detail.value?.id === opportunityId);
+        await loadAi(
+          opportunityId,
+          () => detail.value?.id === opportunityId,
+          workspaceReadController?.signal,
+        );
         return;
       }
       aiReviewSubmission.value = null;
@@ -1200,7 +1258,7 @@ onDeactivated(() => {
   workspaceActive = false;
   closeTransientDialogs();
   if (aiReviewSubmission.value) aiReviewIntentGeneration += 1;
-  readGeneration += 1;
+  invalidateReads();
   erpBridgeGeneration += 1;
   erpBridgeBusy.value = false;
   markPendingFeedbackWritesUnknown();
@@ -1231,7 +1289,7 @@ watch(
       cancelAiReviewReason();
       aiReviewError.value = "";
     }
-    readGeneration += 1;
+    invalidateReads();
     erpBridgeGeneration += 1;
     erpBridgeBusy.value = false;
     markPendingFeedbackWritesUnknown();
@@ -1267,14 +1325,14 @@ watch(
   ],
   () => {
     if (props.opportunityId || route.path !== "/opportunities") return;
-    readGeneration += 1;
+    invalidateReads();
     syncListRoute();
     queueLoad();
   },
   { flush: "sync" },
 );
 onBeforeUnmount(() => {
-  readGeneration += 1;
+  invalidateReads();
   erpBridgeGeneration += 1;
   erpBridgeBusy.value = false;
   writeScopeGeneration += 1;
@@ -1441,7 +1499,7 @@ onBeforeUnmount(() => {
                 @discover-competitors="discoverCompetitors"
                 @discover-suppliers="discoverSuppliers"
                 @queue-score="queueScore"
-                @retry-downstream="loadDownstream(detail?.id, undefined, $event)"
+                @retry-downstream="retryDownstream($event)"
                 @select-tab="setTab"
               />
               <OpportunityLineagePanel v-else-if="tab === 'lineage'" :lineage="detail.lineage" />

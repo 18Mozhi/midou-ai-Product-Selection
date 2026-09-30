@@ -1580,9 +1580,7 @@ test("P18 observe and reject dialogs contain keyboard focus and return it on Esc
   }
 });
 
-test("opportunity list ignores an older successful read after a newer filter read", async ({
-  page,
-}) => {
+test("opportunity list aborts an older read after a newer filter read", async ({ page }) => {
   await ready(page);
   let releaseOlder!: () => void;
   let markOlderStarted!: () => void;
@@ -1593,13 +1591,15 @@ test("opportunity list ignores an older successful read after a newer filter rea
     if (query === "older-read") {
       markOlderStarted();
       await olderGate;
-      await route.fulfill({
-        json: envelope([{ ...recommendedBase, id: "older-opportunity", name: "过期筛选结果" }], {
-          page: 1,
-          page_size: 20,
-          total: 1,
-        }),
-      });
+      await route
+        .fulfill({
+          json: envelope([{ ...recommendedBase, id: "older-opportunity", name: "过期筛选结果" }], {
+            page: 1,
+            page_size: 20,
+            total: 1,
+          }),
+        })
+        .catch(() => {});
       return;
     }
     if (query === "newer-read") {
@@ -1630,16 +1630,61 @@ test("opportunity list ignores an older successful read after a newer filter rea
     await filters.getByRole("button", { name: "筛选", exact: true }).click();
   };
 
-  const olderResponse = page.waitForResponse((response) => response.url().includes("q=older-read"));
+  const olderAbort = page.waitForEvent("requestfailed", (request) =>
+    request.url().includes("q=older-read"),
+  );
   await applyQuery("older-read");
   await olderStarted;
   await expect(page).toHaveURL(/q=older-read/);
   await applyQuery("newer-read");
   await expect(page.getByRole("link", { name: "当前筛选结果" })).toBeVisible();
+  const failedRequest = await olderAbort;
+  expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseOlder();
-  await olderResponse;
   await expect(page.getByRole("link", { name: "当前筛选结果" })).toBeVisible();
   await expect(page.getByRole("link", { name: "过期筛选结果" })).toHaveCount(0);
+});
+
+test("P15 aborts its active list read when the cached workspace is deactivated", async ({
+  page,
+}) => {
+  await ready(page);
+  let releaseRead!: () => void;
+  let markReadStarted!: () => void;
+  const readGate = new Promise<void>((resolve) => (releaseRead = resolve));
+  const readStarted = new Promise<void>((resolve) => (markReadStarted = resolve));
+  await page.route("**/api/v1/opportunities?*", async (route) => {
+    const query = new URL(route.request().url()).searchParams.get("q");
+    if (query !== "deactivate-read") return route.fallback();
+    markReadStarted();
+    await readGate;
+    await route
+      .fulfill({ json: envelope([], { page: 1, page_size: 20, total: 0 }) })
+      .catch(() => {});
+  });
+
+  await page.goto("/opportunities");
+  await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
+  const mobile = (page.viewportSize()?.width ?? 0) <= 760;
+  if (mobile) await page.getByRole("button", { name: "高级筛选" }).click();
+  const filters = mobile
+    ? page.getByRole("dialog", { name: "高级筛选" })
+    : page.locator(".opportunity-filters");
+  await filters.getByLabel("机会名称").fill("deactivate-read");
+  await filters.getByRole("button", { name: "筛选", exact: true }).click();
+  await readStarted;
+
+  const abortedRead = page.waitForEvent(
+    "requestfailed",
+    (request) =>
+      request.url().includes("q=deactivate-read") &&
+      request.failure()?.errorText.includes("ERR_ABORTED"),
+  );
+  await page.getByRole("link", { name: /创建选品/ }).click();
+  await expect(page).toHaveURL(/\/opportunities\/start$/u);
+  const failedRequest = await abortedRead;
+  expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
+  releaseRead();
 });
 
 test("opportunity detail failure cannot replace the list after navigating away", async ({
@@ -1653,22 +1698,27 @@ test("opportunity detail failure cannot replace the list after navigating away",
   await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
     markDetailStarted();
     await detailGate;
-    await route.fulfill({
-      status: 503,
-      json: { error: { code: "temporarily_unavailable", message: "暂时不可用" } },
-    });
+    await route
+      .fulfill({
+        status: 503,
+        json: { error: { code: "temporarily_unavailable", message: "暂时不可用" } },
+      })
+      .catch(() => {});
   });
 
   await page.goto(`/opportunities/${opportunityId}`);
   await detailStarted;
+  const delayedFailure = page.waitForEvent(
+    "requestfailed",
+    (request) =>
+      request.url().includes(`/opportunities/${opportunityId}`) &&
+      request.failure()?.errorText.includes("ERR_ABORTED"),
+  );
   await page.getByRole("link", { name: "← 返回来源列表" }).click();
   await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
-  const delayedFailure = page.waitForResponse(
-    (response) =>
-      response.url().includes(`/opportunities/${opportunityId}`) && response.status() === 503,
-  );
+  const failedRequest = await delayedFailure;
+  expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseDetail();
-  await delayedFailure;
   await expect(page.getByRole("link", { name: new RegExp(base.name) })).toBeVisible();
   await expect(page.getByRole("heading", { name: "暂时不可用" })).toHaveCount(0);
 });
@@ -1685,7 +1735,7 @@ test("a late opportunity detail success cannot replace the current opportunity a
   await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
     markOldDetailStarted();
     await oldDetailGate;
-    await route.fallback();
+    await route.fallback().catch(() => {});
   });
 
   await page.goto(`/opportunities/${opportunityId}`);
@@ -1693,17 +1743,19 @@ test("a late opportunity detail success cannot replace the current opportunity a
   const currentDetailRequest = page.waitForRequest((request) =>
     request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
   );
+  const oldDetailAbort = page.waitForEvent(
+    "requestfailed",
+    (request) =>
+      request.url().includes(`/api/v1/opportunities/${opportunityId}`) &&
+      request.failure()?.errorText.includes("ERR_ABORTED"),
+  );
   await switchOpportunityInPlace(page, nextOpportunityId);
   await currentDetailRequest;
   await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
 
-  const oldDetailResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes(`/api/v1/opportunities/${opportunityId}`) &&
-      response.request().method() === "GET",
-  );
+  const failedRequest = await oldDetailAbort;
+  expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseOldDetail();
-  await oldDetailResponse;
   await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
   await expect(page.getByRole("heading", { name: base.name, exact: true })).toHaveCount(0);
 });
@@ -1904,10 +1956,12 @@ test("a late opportunity detail failure cannot replace the current opportunity a
   await page.route(`**/api/v1/opportunities/${opportunityId}`, async (route) => {
     markOldDetailStarted();
     await oldDetailGate;
-    await route.fulfill({
-      status: 503,
-      json: { error: { code: "temporarily_unavailable", message: "旧机会读取失败" } },
-    });
+    await route
+      .fulfill({
+        status: 503,
+        json: { error: { code: "temporarily_unavailable", message: "旧机会读取失败" } },
+      })
+      .catch(() => {});
   });
 
   await page.goto(`/opportunities/${opportunityId}`);
@@ -1915,17 +1969,19 @@ test("a late opportunity detail failure cannot replace the current opportunity a
   const currentDetailRequest = page.waitForRequest((request) =>
     request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
   );
+  const oldDetailAbort = page.waitForEvent(
+    "requestfailed",
+    (request) =>
+      request.url().includes(`/api/v1/opportunities/${opportunityId}`) &&
+      request.failure()?.errorText.includes("ERR_ABORTED"),
+  );
   await switchOpportunityInPlace(page, nextOpportunityId);
   await currentDetailRequest;
   await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
 
-  const oldDetailResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes(`/api/v1/opportunities/${opportunityId}`) &&
-      response.status() === 503,
-  );
+  const failedRequest = await oldDetailAbort;
+  expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseOldDetail();
-  await oldDetailResponse;
   await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
   await expect(page.getByText("旧机会读取失败", { exact: true })).toHaveCount(0);
 });
@@ -1942,10 +1998,12 @@ test("a late profit analysis failure cannot replace the current opportunity afte
   await page.route(`**/api/v1/opportunities/${opportunityId}/profit-analysis`, async (route) => {
     markOldProfitStarted();
     await oldProfitGate;
-    await route.fulfill({
-      status: 503,
-      json: { error: { code: "temporarily_unavailable", message: "旧机会利润读取失败" } },
-    });
+    await route
+      .fulfill({
+        status: 503,
+        json: { error: { code: "temporarily_unavailable", message: "旧机会利润读取失败" } },
+      })
+      .catch(() => {});
   });
 
   await page.goto(`/opportunities/${opportunityId}`);
@@ -1953,17 +2011,19 @@ test("a late profit analysis failure cannot replace the current opportunity afte
   const currentDetailRequest = page.waitForRequest((request) =>
     request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
   );
+  const oldProfitAbort = page.waitForEvent(
+    "requestfailed",
+    (request) =>
+      request.url().includes(`/api/v1/opportunities/${opportunityId}/profit-analysis`) &&
+      request.failure()?.errorText.includes("ERR_ABORTED"),
+  );
   await switchOpportunityInPlace(page, nextOpportunityId);
   await currentDetailRequest;
   await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
 
-  const oldProfitResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes(`/api/v1/opportunities/${opportunityId}/profit-analysis`) &&
-      response.status() === 503,
-  );
+  const failedRequest = await oldProfitAbort;
+  expect(failedRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseOldProfit();
-  await oldProfitResponse;
   await expect(page.getByRole("heading", { name: nextOpportunity.name })).toBeVisible();
   await expect(page.getByText("旧机会利润读取失败", { exact: true })).toHaveCount(0);
 });
@@ -2078,13 +2138,21 @@ test("a late AI analysis success remains scoped to the opportunity that requeste
   await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
     markOldAnalysisStarted();
     await oldAnalysisGate;
-    await route.fulfill({ json: envelope([analysis("old-analysis", "旧机会的迟到 AI 摘要")]) });
+    await route
+      .fulfill({ json: envelope([analysis("old-analysis", "旧机会的迟到 AI 摘要")]) })
+      .catch(() => {});
   });
 
   await page.goto(`/opportunities/${opportunityId}?tab=ai`);
   await oldAnalysisStarted;
   const currentDetailRequest = page.waitForRequest((request) =>
     request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
+  );
+  const oldAnalysisAbort = page.waitForEvent(
+    "requestfailed",
+    (request) =>
+      request.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
+      request.failure()?.errorText.includes("ERR_ABORTED"),
   );
   const currentAnalysisResponse = page.waitForResponse(
     (response) =>
@@ -2099,13 +2167,9 @@ test("a late AI analysis success remains scoped to the opportunity that requeste
   await expect(page.locator(".opportunity-ai")).toBeVisible();
   await expect(page.getByText("当前机会的 AI 摘要", { exact: true })).toBeVisible();
 
-  const oldAnalysisResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
-      response.status() === 200,
-  );
+  const failedAnalysisRequest = await oldAnalysisAbort;
+  expect(failedAnalysisRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseOldAnalysis();
-  await oldAnalysisResponse;
   await expect(page.getByText("当前机会的 AI 摘要", { exact: true })).toBeVisible();
   await expect(page.getByText("旧机会的迟到 AI 摘要", { exact: true })).toHaveCount(0);
 });
@@ -2163,7 +2227,7 @@ test("late competitor data stays scoped to the opportunity that requested it", a
     if (competitorReadCount === 1) {
       markOldCompetitorsStarted();
       await oldCompetitorsGate;
-      await route.fulfill({ json: envelope([oldCompetitor]) });
+      await route.fulfill({ json: envelope([oldCompetitor]) }).catch(() => {});
       return;
     }
     await route.fulfill({ json: envelope([currentCompetitor]) });
@@ -2174,15 +2238,19 @@ test("late competitor data stays scoped to the opportunity that requested it", a
   const currentDetailRequest = page.waitForRequest((request) =>
     request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
   );
+  const oldCompetitorsAbort = page.waitForEvent(
+    "requestfailed",
+    (request) =>
+      request.url().includes("/api/v1/competitors") &&
+      request.failure()?.errorText.includes("ERR_ABORTED"),
+  );
   await switchOpportunityInPlace(page, nextOpportunityId, "tab=competition");
   await currentDetailRequest;
   await expect(page.getByText("当前机会关联竞品", { exact: true })).toBeVisible();
 
-  const oldCompetitorsResponse = page.waitForResponse(
-    (response) => response.url().includes("/api/v1/competitors") && response.status() === 200,
-  );
+  const failedCompetitorsRequest = await oldCompetitorsAbort;
+  expect(failedCompetitorsRequest.failure()?.errorText).toContain("ERR_ABORTED");
   releaseOldCompetitors();
-  await oldCompetitorsResponse;
   await expect(page.getByText("当前机会关联竞品", { exact: true })).toBeVisible();
   await expect(page.getByText("旧机会关联竞品", { exact: true })).toHaveCount(0);
 });

@@ -98,3 +98,14 @@ test("automatic selection readiness loads all three rule surfaces and fails clos
   });
   assert.equal(unavailable.available, false);
 });
+
+test("automatic selection readiness forwards the page read cancellation signal", async () => {
+  const controller = new AbortController();
+  const signals = [];
+  await loadAutomaticSelectionReadiness(async (_path, options = {}) => {
+    signals.push(options.signal);
+    return { data: [] };
+  }, controller.signal);
+  assert.equal(signals.length, 3);
+  assert.ok(signals.every((signal) => signal === controller.signal));
+});
