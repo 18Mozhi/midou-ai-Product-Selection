@@ -193,7 +193,7 @@
     "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
     "apps/web/src/components/TaskWorkspace.vue": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25",
     "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d",
-    "apps/web/src/components/TenancyChooser.vue": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8",
+    "apps/web/src/components/TenancyChooser.vue": "35bc6ed956fcfc5141d904afaf4ad397bf7c9cfa34e7c27d29360937284af359",
     "apps/web/src/components/theme-studio/PreferenceRadioGroup.vue": "564207b20e57e29aba47737bc41d70f0327a42a58a3e9fafdc9c6356bb9944ad",
     "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
     "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
@@ -253,7 +253,7 @@
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "5f578855f790c5f60874475705bf6035dae05162c5dd1829635390ed08c3149a",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "c8e67dc3a47eda42e9d7f229d43db1dfaf7d30ebacb24cc728883e692e9b90b9",
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b8c7eed0c5b6b1ea3bfcb4df1febb5a1b47ab98d0d8a4fa3c914739d10c6a47f",
-    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "4905e1a1d65199b8e5e46c4906f4dcef51c3ff2d51db9349bd6b6a2be13b7bfd",
+    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "d96827ddf6a0faa21b9d9b9a580b8fc663430d12a83de2addbdfbfc8dfed2524",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "34916053299e841285f8666457a4055a0a6ca845dfc55a45feecfbe5f60d9c77",
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "0877a6a9f024de0fa1671e85c087ebd42ec51c222294d05f1067c7a6190d3bc8",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "c1f16d965095f032e4681b2aedeee9411312c5281e50a484203a5b4d89934662",
@@ -397,7 +397,7 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json": "68141033a0ab1368dbd206e442c814c6f2175b95b3f8c79354a886359c5a5f19",
     "apps/web/src/components/local-identity-reset.css": "44165b011c3b10a2e9d75823aa965b3a8b40837f13ae1322dbc53204ee40b239",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "114ce28c357f9c0c1bbc37a757913bf3e2c07c55cb4685d2fe9ff9016e00977c",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P08.json": "5e9388292892b6ecba631a0cd061b64ef697cb59474eecb491cbc0ab85968348",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P08.json": "2216babc8e0f49b14dcee9ef998e9ef52e4e47c95dd4210c8df75dc04975bf49",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P09.json": "d0db4debe1edc0a13e11cb949446b4fc57ec5f811d9484f97799067384778e08",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P10.json": "f53acf65f0feac1badaea92051d486e6fa0310b85693394c5ba1e43e6d466c7e",
     "scripts/verify-ui-phase2-appearance-source.mjs": "dabf55240d99ee17aa39d757450db54856bf95eac75f23b637fbf1077eac7825",
@@ -586,7 +586,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P05.md": "3bf5ce1459a9d0d489a61865f02196745279af4ac711716939ed655c14bbe742",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P06.md": "051d6fc1260c67a965888162c4b441c874411ef5e23adf733602df7cbfdebe28",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P07.md": "29e870f11baee5d386d6aa04afca8bc6ce63fb72e05da8862fc6366ecd1a101e",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "d05a636ce7eb3227573e7b28c456f25e440140484df0446517af24fdb8c0259a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "c6184c135e79c5fd38b17fd358331e50e53a52de4a8ce150514e93f793ad273b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "a79abe5883d65357d0066e7f2f64c6921179a8da0516ba5eaf47c0bdbd32a835",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "5d19b2cf3d14acc1beb1a6f415b06e887fc09b43f97f4442d368a66b2bf27594",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "1b73dc9bf3ae8ede7d3b94faba9d6b480d2265437f4f9b9b4fdc12f9c39343c5",
@@ -1010,9 +1010,9 @@
           "callerFiles": 1,
           "localModelBindings": 1,
           "reviewedInputBindings": 1,
-          "sourceCallerContainers": 1,
-          "callerContainers": 1,
-          "consumerVariants": 1,
+          "sourceCallerContainers": 2,
+          "callerContainers": 2,
+          "consumerVariants": 2,
           "runtimeAcceptance": "unproven"
         }
       },
@@ -4057,9 +4057,9 @@
         "callerFiles": 1,
         "localModelBindings": 1,
         "reviewedInputBindings": 1,
-        "sourceCallerContainers": 1,
-        "callerContainers": 1,
-        "consumerVariants": 1,
+        "sourceCallerContainers": 2,
+        "callerContainers": 2,
+        "consumerVariants": 2,
         "runtimeAcceptance": "unproven"
       }
     },
@@ -67242,11 +67242,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TenancyChooser.vue#d545c6b53ab2b2a8.1",
+      "candidateId": "apps/web/src/components/TenancyChooser.vue#07db575ab56f90da.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 173,
+      "line": 176,
       "kind": "control",
-      "label": "ScoutOps",
+      "label": "选 智能选品",
       "conditions": [],
       "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
@@ -67269,7 +67269,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#5587941412d5210f.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 216,
+      "line": 235,
       "kind": "control",
       "label": "重新登录",
       "conditions": [
@@ -67305,7 +67305,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#222cadb1072dc1d8.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 219,
+      "line": 238,
       "kind": "control",
       "label": "返回组织列表",
       "conditions": [
@@ -67341,7 +67341,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#9dde30dd57699c01.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 232,
+      "line": 252,
       "kind": "control",
       "label": "返回组织列表",
       "conditions": [
@@ -67377,7 +67377,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#ecd9e9dbd8b34d05.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 241,
+      "line": 261,
       "kind": "control",
       "label": "创建并进入选品空间",
       "conditions": [
@@ -67413,7 +67413,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#d29e9f25fe7a5452.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 244,
+      "line": 264,
       "kind": "control",
       "label": "进入个人中心",
       "conditions": [
@@ -67449,7 +67449,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#df188704ef470c64.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 245,
+      "line": 265,
       "kind": "control",
       "label": "管理 MFA",
       "conditions": [
@@ -67485,7 +67485,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#72a9593314273d39.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 258,
+      "line": 278,
       "kind": "control",
       "label": "{{ safeReturnTo === \"/onboarding\" ? \"继续快速引导\" : \"返回原页面\" }}",
       "conditions": [
@@ -67517,7 +67517,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#04d5594b96977687.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 263,
+      "line": 283,
       "kind": "control",
       "label": "← 返回组织",
       "conditions": [
@@ -67553,7 +67553,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#51f99d2206301d80.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 282,
+      "line": 302,
       "kind": "control",
       "label": "{{ organization.name.slice(0, 1) }} {{ organization.name }} {{ organization.slug }} · {{ organization.timezone }} {{ rec",
       "conditions": [
@@ -67591,7 +67591,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#087b197306ae2192.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 304,
+      "line": 324,
       "kind": "control",
       "label": "清除搜索",
       "conditions": [
@@ -67631,7 +67631,7 @@
     {
       "candidateId": "apps/web/src/components/TenancyChooser.vue#9d6c9b22e4716bb9.1",
       "file": "apps/web/src/components/TenancyChooser.vue",
-      "line": 316,
+      "line": 336,
       "kind": "control",
       "label": "{{ workspace.name }} {{ workspace.status === \"active\" ? \"可进入\" : \"已归档，不能进入\" }} {{ state === \"selecting\" && selectedWorksp",
       "conditions": [

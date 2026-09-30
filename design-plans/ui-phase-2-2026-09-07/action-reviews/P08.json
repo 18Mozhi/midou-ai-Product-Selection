@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TenancyChooser.vue": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+    "apps/web/src/components/TenancyChooser.vue": "35bc6ed956fcfc5141d904afaf4ad397bf7c9cfa34e7c27d29360937284af359"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -27,7 +27,7 @@
       "kind": "navigation",
       "routeApplicability": "P08-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TenancyChooser.vue#d545c6b53ab2b2a8.1"
+        "apps/web/src/components/TenancyChooser.vue#07db575ab56f90da.1"
       ],
       "condition": "所有state固定入口",
       "handler": "RouterLink /",
@@ -599,7 +599,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/TenancyChooser.vue": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8",
+      "apps/web/src/components/TenancyChooser.vue": "35bc6ed956fcfc5141d904afaf4ad397bf7c9cfa34e7c27d29360937284af359",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
@@ -619,6 +619,35 @@
         "file": "apps/web/src/components/TenancyChooser.vue",
         "tag": "aside",
         "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "工作范围的步骤说明栏；只解释组织、工作区与就绪顺序，不执行范围写入",
+        "remaining": "步骤呈现与获批C图对应；currentStep派生与全部状态语义仍由页面交互测试覆盖",
+        "variants": [
+          {
+            "name": "work-context-steps",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p08-empty"
+              },
+              {
+                "package": "identity-direction-c",
+                "scene": "p08-organizations"
+              },
+              {
+                "package": "identity-direction-c",
+                "scene": "p08-workspaces"
+              }
+            ],
+            "remaining": "图稿为视觉方向证据；不证明真实成员资格、范围权限或请求写入"
+          }
+        ]
+      },
+      {
+        "file": "apps/web/src/components/TenancyChooser.vue",
+        "tag": "aside",
+        "ordinal": 2,
         "shape": "inline-aside",
         "sourceBehavior": "组织工作区旁团队数量说明aside，不是业务弹窗",
         "remaining": "结构容器数量不是业务弹窗数量；存在图片不等于所有字段/状态/动态路由验收",

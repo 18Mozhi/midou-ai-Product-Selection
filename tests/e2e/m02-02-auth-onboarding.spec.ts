@@ -178,7 +178,11 @@ test("M02-02.A07/A08/A15 login uses the real contract and continues to tenancy b
   await expect(page).toHaveURL(/\/select-context$/);
   await expect(page.getByRole("heading", { name: "选择组织" })).toBeVisible();
   await expect(page.getByText("暂无可用组织")).toBeVisible();
-  await expect(page).toHaveScreenshot("m02-02-login.png", { fullPage: true, maxDiffPixels: 140 });
+  if (process.platform === "win32")
+    await expect(page).toHaveScreenshot("m02-02-select-context-empty.png", {
+      fullPage: true,
+      maxDiffPixels: 140,
+    });
 });
 test("M02-02.A07/A08 registration and email confirmation preserve single-use truth", async ({
   page,

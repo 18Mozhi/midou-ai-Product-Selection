@@ -62,6 +62,9 @@ const copy = computed(() =>
     ? `进入 ${selectedOrganization.value.name} 前，选择本次会话使用的工作区。`
     : "只显示当前账号仍为活动成员的组织。",
 );
+const currentStep = computed(() =>
+  state.value === "selected" ? 3 : selectedOrganization.value ? 2 : 1,
+);
 async function request<T>(path: string, options?: ApiRequestOptions) {
   try {
     const response = await apiRequest<T>(path, options);
@@ -170,17 +173,33 @@ onMounted(() => {
 <template>
   <main class="tenancy-page" data-testid="tenancy">
     <header class="p08-top">
-      <RouterLink to="/" class="p08-brand"><span>ScoutOps</span></RouterLink>
-      <span class="p08-top-label">组织与工作区</span>
-      <span class="p08-top-hint">先选择组织，再选择工作区</span>
-      <span class="p08-account">当前账号</span>
+      <RouterLink to="/" class="p08-brand"><span class="p08-brand-mark">选</span><b>智能选品</b></RouterLink>
+      <span class="p08-account">账号与工作范围</span>
     </header>
-    <section class="p08-hero" aria-labelledby="tenancy-title">
-      <p>工作范围 · CONTEXT SELECTION</p>
-      <h1 id="tenancy-title">{{ title }}</h1>
-      <span>{{ copy }}</span>
-    </section>
-    <section class="p08-workspace" aria-label="组织与工作区选择">
+    <div class="p08-layout">
+      <aside class="p08-scope" aria-label="工作范围选择步骤">
+        <p class="p08-scope-kicker">WORK CONTEXT</p>
+        <h1>选择本次工作范围</h1>
+        <p class="p08-scope-copy">先确认组织，再选择可进入的工作区。</p>
+        <ol class="p08-steps">
+          <li :class="{ 'is-current': currentStep === 1, 'is-done': currentStep > 1 }">
+            <span>1</span><b>组织</b>
+          </li>
+          <li :class="{ 'is-current': currentStep === 2, 'is-done': currentStep > 2 }">
+            <span>2</span><b>工作区</b>
+          </li>
+          <li :class="{ 'is-current': currentStep === 3 }">
+            <span>3</span><b>范围就绪</b>
+          </li>
+        </ol>
+        <p class="p08-scope-note">这里只显示当前会话可见的范围。选择组织本身不会写入工作区会话。</p>
+      </aside>
+      <section class="p08-workspace" aria-label="组织与工作区选择">
+        <header class="p08-hero" aria-labelledby="tenancy-title">
+          <p>工作范围</p>
+          <h2 id="tenancy-title">{{ title }}</h2>
+          <span>{{ copy }}</span>
+        </header>
       <div v-if="state === 'loading' || state === 'provisioning'" class="p08-notice" role="status">
         <b>{{ state === "provisioning" ? "正在创建个人空间" : "正在读取可用范围" }}</b>
         <p>
@@ -220,13 +239,14 @@ onMounted(() => {
           返回组织列表
         </button>
       </div>
-      <div v-else-if="state === 'empty'" class="p08-notice">
+      <div v-else-if="state === 'empty'" class="p08-notice p08-empty-state">
+        <span class="p08-empty-mark" aria-hidden="true">→</span>
         <b>{{ selectedOrganization ? "该组织暂无可用工作区" : "暂无可用组织" }}</b>
         <p>
           {{
             selectedOrganization
               ? "请联系组织管理员创建或恢复工作区。"
-              : "创建个人选品空间后即可直接开始使用。"
+              : "可以创建仅属于本人的“我的选品空间”和默认工作区，也可以先查看账号安全。"
           }}
         </p>
         <button
@@ -339,10 +359,11 @@ onMounted(() => {
           </aside>
         </section>
       </template>
-    </section>
+      </section>
+    </div>
     <footer class="p08-boundary">
-      <span>组织选择仅读取范围 · 工作区选择才会更新会话范围</span>
-      <span>不显示其他组织数据</span>
+      <span>C方向 · P08 · 工作范围</span>
+      <span>页面不会执行真实创建或会话写入</span>
     </footer>
   </main>
 </template>

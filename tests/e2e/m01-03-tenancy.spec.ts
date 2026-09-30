@@ -73,6 +73,8 @@ test("M01-03.A07/A08/A15 organization and workspace chooser is responsive and ke
   });
   await page.goto("/select-context");
   await expect(page.getByRole("heading", { name: "选择组织" })).toBeVisible();
+  await expect(page.getByRole("complementary", { name: "工作范围选择步骤" })).toBeVisible();
+  await expect(page.getByRole("listitem")).toHaveCount(3);
   const viewportWidth = await page.evaluate(() => window.innerWidth);
   const documentWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(documentWidth).toBeLessThanOrEqual(viewportWidth);
@@ -112,7 +114,12 @@ test("M01-03.A08/A16 empty state gives a next action", async ({ page }) => {
   });
   await page.goto("/select-context");
   await expect(page.getByText("暂无可用组织")).toBeVisible();
-  await expect(page.getByText("创建个人选品空间后即可直接开始使用。")).toBeVisible();
+  await expect(
+    page.getByText("可以创建仅属于本人的“我的选品空间”和默认工作区，也可以先查看账号安全。"),
+  ).toBeVisible();
+  await expect(page.locator(".tenancy-page")).toHaveCSS("background-color", "rgb(234, 240, 246)");
+  await expect(page.locator(".p08-scope")).toHaveCSS("border-radius", "20px");
+  await expect(page.locator(".p08-primary")).toHaveCSS("background-color", "rgb(41, 79, 159)");
   await expect(page.getByRole("link", { name: "进入个人中心" })).toHaveAttribute("href", "/me");
   await expect(page.getByRole("link", { name: "管理 MFA" })).toHaveAttribute(
     "href",

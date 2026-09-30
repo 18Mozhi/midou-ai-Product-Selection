@@ -703,3 +703,37 @@ html[data-design="signal-ledger"] .role-theme-menu button[aria-pressed="true"] {
     transition-duration: 0.01ms;
   }
 }
+
+/* P08's approved C entry screen deliberately uses a cool workspace canvas and soft corners. */
+html[data-design="signal-ledger"] body .tenancy-page {
+  background: #eaf0f6;
+}
+html[data-design="signal-ledger"] body .p08-scope,
+html[data-design="signal-ledger"] body .p08-workspace {
+  border-radius: 20px;
+}
+html[data-design="signal-ledger"] body .p08-brand-mark {
+  border-radius: 11px;
+}
+html[data-design="signal-ledger"] body .p08-empty-mark {
+  border-radius: 16px;
+}
+html[data-design="signal-ledger"] body .p08-steps li > span {
+  border-radius: 50%;
+}
+html[data-design="signal-ledger"] body .tenancy-page .p08-primary,
+html[data-design="signal-ledger"] body .tenancy-page .p08-secondary,
+html[data-design="signal-ledger"] body .tenancy-page .p08-primary-link {
+  border-radius: 8px;
+}
+html[data-design="signal-ledger"] body .p08-scope h1,
+html[data-design="signal-ledger"] body .p08-hero h2 {
+  font-family: var(--so-font-ui);
+  letter-spacing: 0;
+}
+html[data-design="signal-ledger"] body .p08-scope h1 {
+  color: #fff;
+}
+html[data-design="signal-ledger"] body .p08-hero h2 {
+  color: #182d4a;
+}

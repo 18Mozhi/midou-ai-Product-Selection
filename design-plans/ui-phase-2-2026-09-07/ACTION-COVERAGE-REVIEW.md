@@ -545,7 +545,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P08 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P08.json)：12个局部源位置 → 11组；2类写入，10组路由动作，0组转发/容器关联不重复计动作。已映射1/1个源码字段位置，1/1处调用/内嵌容器，1个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P08.json)：12个局部源位置 → 11组；2类写入，10组路由动作，0组转发/容器关联不重复计动作。已映射1/1个源码字段位置，2/2处调用/内嵌容器，2个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有60个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -573,7 +573,8 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 | 来源容器 / 变体 | 源形态 / 图证据性质 | 图册 | 未验事项 |
 | --- | --- | --- | --- |
-| TenancyChooser.vue / aside.1 / team-summary | inline-aside / proposal-shape-differs | [p08-workspaces · 1440](design/identity-direction-c/1440-p08-workspaces.png) / [p08-workspaces · 390](design/identity-direction-c/390-p08-workspaces.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
+| TenancyChooser.vue / aside.1 / work-context-steps | inline-aside / related-scene-only | [p08-empty · 1440](design/identity-direction-c/1440-p08-empty.png) / [p08-empty · 390](design/identity-direction-c/390-p08-empty.png)、[p08-organizations · 1440](design/identity-direction-c/1440-p08-organizations.png) / [p08-organizations · 390](design/identity-direction-c/390-p08-organizations.png)、[p08-workspaces · 1440](design/identity-direction-c/1440-p08-workspaces.png) / [p08-workspaces · 390](design/identity-direction-c/390-p08-workspaces.png) | 图稿为视觉方向证据；不证明真实成员资格、范围权限或请求写入 |
+| TenancyChooser.vue / aside.2 / team-summary | inline-aside / proposal-shape-differs | [p08-workspaces · 1440](design/identity-direction-c/1440-p08-workspaces.png) / [p08-workspaces · 390](design/identity-direction-c/390-p08-workspaces.png) | 现有aside内容在新布局中重新分层；不是弹窗匹配/用户批准 |
 
 ### 明确保留的边界
 

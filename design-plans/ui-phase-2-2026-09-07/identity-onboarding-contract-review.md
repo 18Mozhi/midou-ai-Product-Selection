@@ -102,13 +102,13 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/TenancyChooser.vue#d545c6b53ab2b2a8.1 | 173 | control | P08-CURRENT-ROOT / 品牌链接返回根路径 |
+| apps/web/src/components/TenancyChooser.vue#07db575ab56f90da.1 | 176 | control | P08-CURRENT-ROOT / 品牌链接返回根路径 |
 | apps/web/src/components/TenancyChooser.vue#51f99d2206301d80.1 | 282 | control | P08-CURRENT-ORG-CHOOSE / 选择组织并读取工作区、团队；不写会话范围 |
 | apps/web/src/components/TenancyChooser.vue#9d6c9b22e4716bb9.1 | 316 | control | P08-CURRENT-WORKSPACE-CHOOSE / 仅活动工作区可用；调用既有 `/auth/context` 更新会话范围 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/TenancyChooser.vue | bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8 |
+| apps/web/src/components/TenancyChooser.vue | 35bc6ed956fcfc5141d904afaf4ad397bf7c9cfa34e7c27d29360937284af359 |
 
 本映射只确认当前静态候选与既有局部导航规则，不表示完成记录、持久化进度、真实身份/工作区、完整焦点读屏或生产状态已新增或验收。
 

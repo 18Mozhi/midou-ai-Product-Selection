@@ -81,10 +81,12 @@ test("P08 production Vue uses the reviewed C scope layout and ignores superseded
     read("apps/web/src/components/TenancyChooser.vue"),
     read("apps/web/src/styles.css"),
   ]);
+  assert.match(component, /class="p08-scope"/);
+  assert.match(component, /class="p08-layout"/);
   assert.match(component, /class="p08-hero"/);
   assert.match(component, /class="p08-directory"/);
   assert.match(component, /class="p08-organization"/);
-  assert.match(component, /class="p08-account">当前账号<\/span>/);
+  assert.match(component, /class="p08-account">账号与工作范围<\/span>/);
   assert.match(component, /organizationLoadSequence/);
   assert.match(component, /contextWriteSequence/);
   assert.match(component, /if \(sequence !== organizationLoadSequence\) return/);
