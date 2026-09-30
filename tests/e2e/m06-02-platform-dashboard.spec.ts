@@ -1819,6 +1819,7 @@ test("platform completion exposes data governance notifications and user-panel s
 test("system status aggregates real operations observations and management links", async ({
   page,
 }, testInfo) => {
+  let statusReads = 0;
   await nav(page);
   await page.addInitScript(() =>
     sessionStorage.setItem(
@@ -1835,8 +1836,8 @@ test("system status aggregates real operations observations and management links
       }),
     ),
   );
-  await page.route("**/api/v1/platform/management?**", (route) =>
-    route.fulfill({
+  await page.route("**/api/v1/platform/management?**", (route) => {
+    return route.fulfill({
       json: env({
         domain: "status",
         summary: {
@@ -1900,18 +1901,38 @@ test("system status aggregates real operations observations and management links
         sources: [{ status: "enabled", total: 138 }],
         observed_at: "2026-08-18T12:00:00.000Z",
       }),
-    }),
-  );
+    });
+  });
+  page.on("request", (request) => {
+    const url = new URL(request.url());
+    if (
+      request.method() === "GET" &&
+      url.pathname.endsWith("/api/v1/platform/management") &&
+      url.searchParams.get("domain") === "status"
+    )
+      statusReads += 1;
+  });
   await page.goto("/platform-admin/status");
   await expect(page.getByRole("heading", { name: "系统状态", level: 1 })).toBeVisible();
   await expect(page.locator(".role-page-title")).toHaveCount(0);
+  const sectionGroup = page.getByRole("group", { name: "系统状态分区" });
+  await expect(sectionGroup.getByRole("button")).toHaveCount(4);
+  await expect(sectionGroup.locator('[data-status-view="attention"]')).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await page.locator('[data-status-view="dependencies"]').click();
+  await expect(sectionGroup.locator('[data-status-view="dependencies"]')).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await expect(page.getByRole("heading", { name: "依赖关系与最新观测", level: 3 })).toBeVisible();
   await expect(page.getByText("访问入口", { exact: true })).toBeVisible();
   await expect(page.getByText("共享依赖", { exact: true })).toBeVisible();
   await expect(page.getByText("异步执行", { exact: true })).toBeVisible();
   await expect(page.getByText("Python Crawler", { exact: true })).toBeVisible();
   await expect(page.getByText("1 个实例 · 1 个活动任务")).toBeVisible();
+  expect(statusReads).toBe(1);
   await page.locator('[data-status-view="attention"]').click();
   const propagation = page.locator(".platform-propagation");
   await expect(propagation.getByText("Redis当前警告", { exact: true })).toBeVisible();
@@ -1925,6 +1946,7 @@ test("system status aggregates real operations observations and management links
   await expect(realtime.getByText("降级轮询次数", { exact: true })).toBeVisible();
   await expect(realtime.getByText("2", { exact: true })).toBeVisible();
   await expect(realtime).toContainText("仅统计当前浏览器标签页会话");
+  expect(statusReads).toBe(1);
   await expect(
     page.locator(".platform-topology-node").filter({ hasText: /^Redis/ }),
   ).toHaveAttribute("href", "/platform-admin/redis");
@@ -1939,6 +1961,7 @@ test("system status aggregates real operations observations and management links
   await page.route("**/api/v1/platform/management?**", failRefresh);
   await page.getByRole("button", { name: "刷新数据", exact: true }).click();
   await expect(page.locator(".platform-management-message")).toContainText("已保留上次成功数据");
+  expect(statusReads).toBe(4);
   await page.locator('[data-status-view="activity"]').click();
   const activityPanel = page.locator("#p61-panel-activity");
   await expect(activityPanel.getByRole("heading", { name: "采集任务状态" })).toBeVisible();
@@ -1952,6 +1975,7 @@ test("system status aggregates real operations observations and management links
   await page.unroute("**/api/v1/platform/management?**", failRefresh);
   await page.getByRole("button", { name: "刷新数据", exact: true }).click();
   await expect(page.locator(".platform-management-message")).toHaveCount(0);
+  expect(statusReads).toBe(5);
   await expect(page.getByRole("button", { name: "刷新数据", exact: true })).toBeEnabled();
   await capturePhase2Evidence(page, testInfo, "P61", "refresh-recovered", [
     "refresh-retry-succeeds",

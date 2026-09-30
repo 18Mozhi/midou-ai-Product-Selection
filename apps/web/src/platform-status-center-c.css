@@ -116,7 +116,7 @@
   font-size: 13px;
   overflow-wrap: anywhere;
 }
-.platform-management--status-c .p61-directory nav {
+.platform-management--status-c .p61-section-switcher {
   display: grid;
   gap: 8px;
   margin: 8px 0;
@@ -361,7 +361,7 @@
   .platform-management--status-c .p61-workspace {
     grid-template-columns: minmax(0, 1fr);
   }
-  .platform-management--status-c .p61-directory nav {
+  .platform-management--status-c .p61-section-switcher {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
   .platform-management--status-c .p61-directory button {
@@ -393,7 +393,7 @@
   .platform-management--status-c .p61-directory > :is(p, h2) {
     display: none;
   }
-  .platform-management--status-c .p61-directory nav {
+  .platform-management--status-c .p61-section-switcher {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     margin: 0;
   }

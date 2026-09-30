@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/PlatformStatusCenterView.vue": "6ce3255def9689fd88051da43680d5eb53b50699c4f229901871b267cacab9c7",
-    "apps/web/src/components/PlatformStatusWorkspace.vue": "775769a187d18e8440f6e0ccef08a13b305620cf29747eb0aad35766059b01f8"
+    "apps/web/src/components/PlatformStatusWorkspace.vue": "9293190d91518c2c6875c56a10cdb0c0f76133890140024ae57942996f2cd8e1"
   },
   "inputs": {},
   "actions": [
@@ -293,7 +293,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/PlatformStatusCenterView.vue": "6ce3255def9689fd88051da43680d5eb53b50699c4f229901871b267cacab9c7",
-      "apps/web/src/components/PlatformStatusWorkspace.vue": "775769a187d18e8440f6e0ccef08a13b305620cf29747eb0aad35766059b01f8"
+      "apps/web/src/components/PlatformStatusWorkspace.vue": "9293190d91518c2c6875c56a10cdb0c0f76133890140024ae57942996f2cd8e1"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

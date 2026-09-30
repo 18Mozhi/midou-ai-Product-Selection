@@ -80,6 +80,7 @@ test("P61 workspace selection stays local and exposes accessible button and pane
   assert.match(workspaceSource, /defineProps<\{ warningCount: number; observedAt: string \}>/);
   assert.match(workspaceSource, /defineSlots</);
   assert.match(workspaceSource, /const active = ref<ViewKey>\("attention"\)/);
+  assert.match(workspaceSource, /role="group" aria-label="系统状态分区"/);
   assert.match(workspaceSource, /:aria-pressed="active === view.key"/);
   assert.match(workspaceSource, /:aria-controls="`p61-panel-\$\{view.key\}`"/);
   assert.match(workspaceSource, /v-show="active === view.key"/);

@@ -42,7 +42,7 @@ const active = ref<ViewKey>("attention");
       <p>观测范围</p>
       <h2 id="p61-directory-title">系统状态</h2>
       <strong>需核查依赖 {{ warningCount }} 项</strong>
-      <nav aria-label="系统状态分区">
+      <div class="p61-section-switcher" role="group" aria-label="系统状态分区">
         <button
           v-for="view in views"
           :key="view.key"
@@ -54,7 +54,7 @@ const active = ref<ViewKey>("attention");
         >
           {{ view.label }}
         </button>
-      </nav>
+      </div>
       <small>数据观测时间<br />{{ observedAt }}</small>
     </aside>
     <section
