@@ -2024,7 +2024,7 @@
       "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
-      "apps/web/src/components/NavigationShell.vue": "07379964489fbeb6574dfd42e32f770cf5631c363c29168765f5e8ac6d1e3fbb",
+      "apps/web/src/components/NavigationShell.vue": "ce875c8e308bf69743c1b1f4b746e37c303ebfa82f436e502418313742779927",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
       "apps/web/src/components/task-workspace-types.ts": "be914dacd68e7d4c163605082e74b9ee1ac91b07429ab68b6c08139903091b0a"

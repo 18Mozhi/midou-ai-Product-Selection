@@ -143,6 +143,11 @@ const queueSummary = computed(() => {
     ).length,
   };
 });
+const providerRecoveryImpact = computed(() => {
+  const provider = circuitConfirm.value;
+  if (!provider) return "尚未选择来源，请关闭确认窗后重新选择。";
+  return `当前来源：${provider.code}（${provider.id}）。只恢复该来源；其他来源、任务结果和历史证据不会被修改。`;
+});
 const filteredProviders = computed(() => {
   const query = providerQuery.value.trim().toLocaleLowerCase();
   return [...(data.value?.providers ?? [])]
@@ -643,7 +648,7 @@ onBeforeUnmount(() => {
       :open="Boolean(circuitConfirm)"
       title="解除该来源的运行熔断？"
       description="仅当来源启用，且熔断后已完成一次结果正常的来源健康检查时才会恢复。"
-      impact="只恢复当前来源；其他来源、任务结果和历史证据不会被修改。"
+      :impact="providerRecoveryImpact"
       confirm-label="确认解除"
       confirmation-text="确认解除"
       @cancel="circuitConfirm = null"

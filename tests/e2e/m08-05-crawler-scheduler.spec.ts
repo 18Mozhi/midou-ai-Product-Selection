@@ -324,3 +324,55 @@ test("M08-05 recovery success remains visible when the follow-up read fails", as
   await expect(page.getByText("当前采集调度门满足")).toBeVisible();
   expect(recoveryCalls).toBe(1);
 });
+
+test("SC70 provider recovery confirmation identifies the exact source before its existing write", async ({
+  page,
+}) => {
+  const providerId = base.providers[0].id;
+  let recovered = false;
+  const posts: Array<{ body: unknown; idempotencyKey: string | undefined }> = [];
+  await page.route("**/api/v1/platform/operations/crawler-scheduler**", async (route) => {
+    if (route.request().method() === "POST") {
+      posts.push({
+        body: route.request().postDataJSON(),
+        idempotencyKey: route.request().headers()["idempotency-key"],
+      });
+      recovered = true;
+      return route.fulfill({
+        json: envelope({ provider_id: providerId, recovered: true }),
+      });
+    }
+    return route.fulfill({
+      json: envelope({
+        ...base,
+        providers: [
+          {
+            ...base.providers[0],
+            circuit_state: (recovered ? "closed" : "open") as "closed" | "open",
+            consecutive_failures: recovered ? 0 : 5,
+            last_error_code: recovered ? null : "provider_probe_failed",
+          },
+        ],
+      }),
+    });
+  });
+
+  await page.goto("/platform-admin/crawler-scheduler");
+  await page.getByRole("button", { name: "解除熔断" }).click();
+  const dialog = page.getByRole("alertdialog", { name: "解除该来源的运行熔断？" });
+  await expect(dialog).toContainText("来源：google_news_search");
+  await expect(dialog).toContainText(providerId);
+  await page.getByRole("button", { name: "取消" }).click();
+  await expect(dialog).toHaveCount(0);
+  expect(posts).toHaveLength(0);
+
+  await page.getByRole("button", { name: "解除熔断" }).click();
+  const reopenedDialog = page.getByRole("alertdialog", { name: "解除该来源的运行熔断？" });
+  await reopenedDialog.getByRole("textbox", { name: "输入 确认解除 继续" }).fill("确认解除");
+  await reopenedDialog.getByRole("button", { name: "确认解除" }).click();
+  await expect(page.getByText("已解除 google_news_search 的来源级熔断")).toBeVisible();
+  await expect(reopenedDialog).toHaveCount(0);
+  expect(posts).toHaveLength(1);
+  expect(posts[0]).toEqual({ body: {}, idempotencyKey: expect.any(String) });
+  expect(posts[0]?.idempotencyKey).toMatch(/^[0-9a-f-]{36}$/i);
+});

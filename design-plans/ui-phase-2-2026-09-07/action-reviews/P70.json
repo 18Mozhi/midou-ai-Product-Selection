@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CrawlerSchedulerCenter.vue": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
     "apps/web/src/components/CrawlerSchedulerEvidence.vue": "5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2"
   },
   "inputs": {
@@ -198,9 +198,9 @@
       "kind": "write",
       "label": "确认解除指定来源熔断",
       "sourceCandidateIds": [
-        "apps/web/src/components/CrawlerSchedulerCenter.vue#3c382eda5cb1d9ce.1",
-        "apps/web/src/components/CrawlerSchedulerCenter.vue#9e9fa4a77b724507.1",
-        "apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1"
+        "apps/web/src/components/CrawlerSchedulerCenter.vue#25d51725a70103d5.1",
+        "apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1",
+        "apps/web/src/components/CrawlerSchedulerCenter.vue#c30cb3ed5106a082.1"
       ],
       "sourceContractKeys": [
         "SC70-PROVIDER 打开当前来源确认",
@@ -358,7 +358,7 @@
       "apps/web/src/components/CrawlerSchedulerEvidence.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CrawlerSchedulerCenter.vue": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72",
+      "apps/web/src/components/CrawlerSchedulerCenter.vue": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
       "apps/web/src/components/CrawlerSchedulerEvidence.vue": "5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2"
     },
     "inputScope": "reviewed-subset-of-shared-source",
@@ -374,6 +374,6 @@
     "P70当前16个页内源码候选映射至9类语义动作；两个确认调用开窗/取消/提交事件分别归入对应恢复动作。",
     "回收仅处理当前到期调度槽位；来源解除只针对所选provider且不自动发健康检查；不改变任务历史、状态或其他来源。",
     "本地过滤和分页不等同服务端过滤/任务数量；GET可写既有观测/审计，不说成零写入。",
-    "来源确认对象的code/ID显示缺口与未知POST结果待办保留；静态图及单测不替代实际数据库/权限验收。"
+    "来源确认窗显示所选来源code与ID并保留取消零写入；未知POST结果、过期预览空值语义和真实数据库/权限验收仍待。"
   ]
 }

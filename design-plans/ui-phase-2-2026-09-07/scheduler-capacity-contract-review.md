@@ -1,5 +1,7 @@
 # B3c · 调度与容量合同复核
 
+2026-09-30 P70 SC-G03局部关闭：来源熔断确认窗现在同时显示所选来源代码与UUID，桌面/390px真实Vue回归验证取消零POST、确认仍只发送既有 `body={}` 和Idempotency-Key。过期租约无观测时0值文案、生产RBAC/MySQL审计与真实操作仍未验；不将整组SC-G03标为通过。
+
 2026-09-11 共享复制增量：TechnicalDetails 的哈希行已更新为当前实现；其余历史描述不扩大为最新验收。复制拒绝现有就地反馈、重试和迟到结果隔离，见 [共享复制反馈复核](TECHNICAL-COPY-FEEDBACK-REVIEW.md)。无 API、权限或复制内容调整。
 
 ## 2026-09-09 · P71 C方向具体稿补充
@@ -69,8 +71,8 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 | apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1 | 607 | control | SC70-PAGE 本地下一页 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1 | 632 | event-binding | SC70-EXPIRED cancel本地/confirm POST |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1 | 632 | dialog-component-call | SC70-EXPIRED 同一确认调用，不重复算动作 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#3c382eda5cb1d9ce.1 | 642 | event-binding | SC70-PROVIDER cancel本地/confirm POST |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#9e9fa4a77b724507.1 | 642 | dialog-component-call | SC70-PROVIDER 同一确认调用，不重复算动作 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#25d51725a70103d5.1 | 647 | event-binding | SC70-PROVIDER cancel本地/confirm POST |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#c30cb3ed5106a082.1 | 647 | dialog-component-call | SC70-PROVIDER 同一确认调用，不重复算动作 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#d0414c44eef669b6.1 | 235 | control | SC71-LOAD GET（自身有审计） |
 | apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1 | 237 | control | SC71-ATTEST 打开确认 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1 | 263 | control | SC71-LOAD 保留快照重试 |
@@ -167,7 +169,7 @@ P70活动租约区的原生details只按需展示当前已返回的任务UUID、
 
 `action-reviews/P70.json`以当前 `CrawlerSchedulerCenter.vue`/`CrawlerSchedulerEvidence.vue` 源码映射16个候选为9类动作。两类确认动作各包括本页打开控件、确认/取消事件接线及共享确认窗调用点；三个不同候选不是三次服务器写入。筛选/分页仅在客户端对已有来源结果执行。
 
-过期租约回收和来源熔断解除是两条独立 POST 写路径，body 均为空对象，并沿各自既有同源与Idempotency-Key合同；回收不改变任务/档案状态，来源恢复不自动健康检查。现有来源目标标识缺口、网络未知结果及真实SQL锁/审计/权限未验收继续保留。
+过期租约回收和来源熔断解除是两条独立 POST 写路径，body 均为空对象，并沿各自既有同源与Idempotency-Key合同；回收不改变任务/档案状态，来源恢复不自动健康检查。来源确认目标现在显示代码与UUID；网络未知结果、过期预览空值语义及真实SQL锁/审计/权限未验收继续保留。
 
 ## 11. P71 当前容量边界页面动作归组（2026-09-26）
 
