@@ -72,6 +72,7 @@ let configurationOperation = 0;
 let configurationReturnOperation = 0;
 let catalogLoadOperation = 0;
 let compatibilityOperation = 0;
+const sourceReadControllers = new Set<AbortController>();
 const testing = ref<string | null>(null);
 const {
   sampleSource,
@@ -267,6 +268,7 @@ async function load(options: { showFeedback?: boolean } = {}): Promise<boolean> 
   refreshing.value = true;
   message.value = "";
   const controller = new AbortController();
+  sourceReadControllers.add(controller);
   const timer = window.setTimeout(() => controller.abort(), 12_000);
   try {
     const loadedItems =
@@ -303,6 +305,7 @@ async function load(options: { showFeedback?: boolean } = {}): Promise<boolean> 
     return false;
   } finally {
     window.clearTimeout(timer);
+    sourceReadControllers.delete(controller);
     if (operation === catalogLoadOperation) refreshing.value = false;
   }
 }
@@ -611,6 +614,8 @@ onBeforeUnmount(() => {
   configurationReturnOperation += 1;
   catalogLoadOperation += 1;
   compatibilityOperation += 1;
+  for (const controller of sourceReadControllers) controller.abort();
+  sourceReadControllers.clear();
 });
 async function testSource(item: SourceItem) {
   if (!item.provisioned || testing.value) return;
@@ -650,8 +655,12 @@ async function loadCompatibility(item: SourceItem) {
   compatibilityError.value = "";
   compatibilityAdapterVersion.value = null;
   compatibilityRows.value = [];
+  const controller = new AbortController();
+  sourceReadControllers.add(controller);
   try {
-    const response = await request<ProviderCompatibilitySummary[]>("/platform/provider-adapters");
+    const response = await request<ProviderCompatibilitySummary[]>("/platform/provider-adapters", {
+      signal: controller.signal,
+    });
     if (!isCurrent()) return;
     requestId.value = response.request_id;
     const summary = response.data.find((candidate) => candidate.id === sourceId);
@@ -667,6 +676,7 @@ async function loadCompatibility(item: SourceItem) {
     requestId.value = failure?.requestId ?? requestId.value;
     compatibilityError.value = failure?.actionHint ?? "解析兼容矩阵暂不可用，请稍后重试。";
   } finally {
+    sourceReadControllers.delete(controller);
     if (isCurrent()) compatibilityLoading.value = false;
   }
 }

@@ -796,6 +796,101 @@ test("late compatibility failures cannot replace the current source request trac
   }
 });
 
+test("P48 aborts an in-flight source directory read when its actual Vue view is unmounted", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  let readStarted = false,
+    readAborted = false,
+    releaseRead!: () => void;
+  const holdRead = new Promise<void>((resolve) => (releaseRead = resolve));
+  const aborted = new Promise<void>((resolve) => {
+    page.on("requestfailed", (request) => {
+      const url = new URL(request.url());
+      if (
+        request.method() === "GET" &&
+        url.pathname === "/api/v1/platform/provider-sources" &&
+        request.failure()?.errorText?.includes("ERR_ABORTED")
+      ) {
+        readAborted = true;
+        resolve();
+      }
+    });
+  });
+  await page.route("**/api/v1/platform/provider-sources", async (route) => {
+    readStarted = true;
+    const result = await Promise.race([
+      holdRead.then(() => "released" as const),
+      aborted.then(() => "aborted" as const),
+    ]);
+    if (result === "aborted") return;
+    await route.fulfill({ json: envelope(sources) });
+  });
+
+  try {
+    await page.goto("/platform-admin/providers/sources");
+    await expect.poll(() => readStarted).toBe(true);
+    await page.evaluate(async () => {
+      const { router } = await import("/src/router.ts");
+      await router.push("/login");
+    });
+    await expect(page.getByRole("heading", { name: "登录" })).toBeVisible();
+    await expect.poll(() => readAborted).toBe(true);
+  } finally {
+    releaseRead();
+  }
+});
+
+test("P48 aborts an in-flight compatibility read when its actual Vue view is unmounted", async ({
+  page,
+}) => {
+  await nav(page, "platform_admin");
+  await catalog(page);
+  let readStarted = false,
+    readAborted = false,
+    releaseRead!: () => void;
+  const holdRead = new Promise<void>((resolve) => (releaseRead = resolve));
+  const aborted = new Promise<void>((resolve) => {
+    page.on("requestfailed", (request) => {
+      const url = new URL(request.url());
+      if (
+        request.method() === "GET" &&
+        url.pathname === "/api/v1/platform/provider-adapters" &&
+        request.failure()?.errorText?.includes("ERR_ABORTED")
+      ) {
+        readAborted = true;
+        resolve();
+      }
+    });
+  });
+  await page.route("**/api/v1/platform/provider-adapters", async (route) => {
+    readStarted = true;
+    const result = await Promise.race([
+      holdRead.then(() => "released" as const),
+      aborted.then(() => "aborted" as const),
+    ]);
+    if (result === "aborted") return;
+    await route.fulfill({ json: envelope([]) });
+  });
+
+  try {
+    await page.goto("/platform-admin/providers/sources");
+    const source = automatic[136];
+    await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill(source.name);
+    await openMobileSourceDetails(page, source.name);
+    await page.getByRole("button", { name: "解析兼容矩阵" }).first().click();
+    await expect.poll(() => readStarted).toBe(true);
+    await page.evaluate(async () => {
+      const { router } = await import("/src/router.ts");
+      await router.push("/login");
+    });
+    await expect(page.getByRole("heading", { name: "登录" })).toBeVisible();
+    await expect.poll(() => readAborted).toBe(true);
+  } finally {
+    releaseRead();
+  }
+});
+
 test("public source is staged disabled, smoke-tested on the real page, then enabled", async ({
   page,
 }) => {
