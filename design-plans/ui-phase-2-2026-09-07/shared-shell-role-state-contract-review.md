@@ -123,10 +123,10 @@ LF归一SHA256。七个交互候选文件完整扫描；辅助文件只沿相关
 | apps/web/src/components/OrganizationRolePanel.vue#23a85da051801987.1 | 322 | control | role.capability.technical.toggle | 原生details披露所选角色技术能力名称 | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#be3f3fa4fcf2fb2c.1 | 358 | control | role.capability.filter.reset | 清capabilityQuery与capabilityGroup；不改roleQuery | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#5235116f7947ac74.1 | 433 | control | role.scope.filter.reset | 清scopeQuery与scopeFilter | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1 | 468 | control | grant.create.form.toggle | canManage时创建/取消内联表单；隐藏本身不清父级grantForm | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#27eeda4bb377f413.1 | 473 | form-event | grant.create.submit | form submit emit createGrant；父级校验、POST、刷新与审计反馈 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#f0c0d3b1c8ae684b.1 | 493 | event-binding | grant.create.type.change | emit updateGrantType；父级替换类型并将actions设该类型首个动作 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1 | 538 | control | grant.create.submit | 默认submit按钮；busy或actions空时禁用，与表单同一业务提交 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#670d77735585203d.1 | 533 | control | grant.create.form.toggle | canManage时创建/取消内联表单；隐藏本身不清父级grantForm | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#29016e256374347e.1 | 538 | form-event | grant.create.submit | 原生form先做字段有效性拦截，合法submit emit createGrant；父级校验、POST、刷新与审计反馈 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#4aa69073e388c5f4.1 | 574 | event-binding | grant.create.type.change | emit updateGrantType；父级替换类型并将actions设该类型首个动作 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1 | 685 | control | grant.create.submit | 默认submit按钮；busy或actions空时禁用，与表单同一业务提交 | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#8bd3f7b2e5dcb44f.1 | 545 | control | grant.status.select.{status} | all/active/expired/revoked；emit updateGrantStatus，父级页码重置1并读取 | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#a162032f86484b89.1 | 570 | control | grant.select.{grantId} | 本地选中当前页授权；不调用授权修改接口 | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#5f937fb211eb5840.1 | 624 | control | grant.technical.toggle | 披露资源与授权ID，不是打开另一个弹窗 | UI2-RP01–RP05 |

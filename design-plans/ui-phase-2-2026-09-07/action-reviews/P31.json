@@ -53,7 +53,7 @@
     },
     {
       "actionId": "EX-P34-READ-RECOVERY",
-      "label": "P34审批读取恢复状态父级接线（非本页）",
+      "label": "P34审批读取恢复反馈接线（非本页）",
       "kind": "excluded",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
@@ -64,9 +64,9 @@
       "priorContractKeys": [
         "OG-RETRY"
       ],
-      "contractAliasReason": "P34审批恢复反馈的reload事件复用现有load()；P31 roles路由不渲染审批分支，故明确排除。",
-      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P31",
-      "handler": "P31不渲染此分支；P34将reload转发至现有load()，不计入本页动作",
+      "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
+      "condition": "仅approvalReadFeedbackMode非空；审批页面非P31",
+      "handler": "P31不渲染审批恢复分支；P34将reload转发到现有load()，不计本页动作",
       "variants": [
         "roles"
       ],
@@ -90,7 +90,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由P31证据证明。"
+      "remaining": "仅当前源码语义与旧独立C稿上下文关联；精确控件六态、完整组合、真实Vue异步生命周期和用户批准仍待。"
     },
     {
       "actionId": "OG-REFRESH",
@@ -3519,6 +3519,5 @@
   "limits": [
     "P16仅布局通过，不能外推P31或任一按钮状态。",
     "本批登记真实调用链并绑定独立控件图，离线输入演示不修改Vue/API/RBAC/数据库/配置或生产部署。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

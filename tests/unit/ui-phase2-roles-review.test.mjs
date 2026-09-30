@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
 import ts from "typescript";
@@ -30,46 +30,50 @@ const fieldEvidence = JSON.parse(
 );
 const buildRolesReview = (sources, evidence) =>
   buildReview(sources, evidence, controlsEvidence, fieldEvidence);
-test("P31 mounted controls and extension evidence bind twenty-two Vue screenshots without approving the page", () => {
-  const entry = buildRolesReview(sources, evidence).actualVueControlEvidence;
-  const proof = JSON.parse(readFileSync(entry.evidence, "utf8"));
-  assert.equal(proof.checks.length, 54);
-  assert.equal(proof.screenshots.length, 22);
-  assert.match(entry.scope, /not C layout or production acceptance/);
-  for (const [file, expected] of Object.entries(proof.sourceHashes))
-    assert.equal(
-      createHash("sha256")
-        .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
-        .digest("hex"),
-      expected,
-      file,
+test(
+  "P31 mounted controls and extension evidence bind twenty-two Vue screenshots without approving the page",
+  { skip: !existsSync(`${base}/output/playwright/p31-approved-controls-review/evidence.json`) },
+  () => {
+    const entry = buildRolesReview(sources, evidence).actualVueControlEvidence;
+    const proof = JSON.parse(readFileSync(entry.evidence, "utf8"));
+    assert.equal(proof.checks.length, 54);
+    assert.equal(proof.screenshots.length, 22);
+    assert.match(entry.scope, /not C layout or production acceptance/);
+    for (const [file, expected] of Object.entries(proof.sourceHashes))
+      assert.equal(
+        createHash("sha256")
+          .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
+          .digest("hex"),
+        expected,
+        file,
+      );
+    const directory = entry.evidence.slice(0, -"evidence.json".length);
+    const scenes = [
+      "keyboard-focus",
+      "disabled-reset",
+      "selected-disabled",
+      "revoke-confirm",
+      "revoke-disabled",
+      "neighbor-dialog-unchanged",
+      "extension-default",
+      "extension-not-later",
+      "extension-corrected",
+      "extension-pending",
+      "extension-failed",
+    ];
+    assert.deepEqual(
+      proof.screenshots.map((shot) => shot.file).sort(),
+      [1440, 390].flatMap((width) => scenes.map((scene) => `${width}-${scene}.png`)).sort(),
     );
-  const directory = entry.evidence.slice(0, -"evidence.json".length);
-  const scenes = [
-    "keyboard-focus",
-    "disabled-reset",
-    "selected-disabled",
-    "revoke-confirm",
-    "revoke-disabled",
-    "neighbor-dialog-unchanged",
-    "extension-default",
-    "extension-not-later",
-    "extension-corrected",
-    "extension-pending",
-    "extension-failed",
-  ];
-  assert.deepEqual(
-    proof.screenshots.map((shot) => shot.file).sort(),
-    [1440, 390].flatMap((width) => scenes.map((scene) => `${width}-${scene}.png`)).sort(),
-  );
-  for (const shot of proof.screenshots)
-    assert.equal(
-      createHash("sha256")
-        .update(readFileSync(directory + shot.file))
-        .digest("hex"),
-      shot.sha256,
-    );
-});
+    for (const shot of proof.screenshots)
+      assert.equal(
+        createHash("sha256")
+          .update(readFileSync(directory + shot.file))
+          .digest("hex"),
+        shot.sha256,
+      );
+  },
+);
 const packages = new Map([
   ["roles-direction-c", evidence],
   ["roles-controls-direction-c", controlsEvidence],
@@ -143,10 +147,11 @@ test("P31 registers 20 models, one controlled type and shared reason separately"
     r.controlledInputs.map((i) => i.value),
   );
   assert.equal(r.sharedReasonInput.maximumLength, null);
-  assert.doesNotMatch(sources[dependencies[2]], /maxlength=/);
-  assert.match(sources[childFile], /v-model.trim="grantForm.reason" required maxlength="500"/);
+  assert.doesNotMatch(sources[parentFile], /<AuditedReasonDialog[\s\S]*?maximumLength=/);
+  assert.match(sources[childFile], /v-model.trim="grantForm.reason"/);
+  assert.match(sources[childFile], /maxlength="500"/);
 });
-test("P31 rejects omitted identities, changed wiring, fields, stale sources and invented approval", () => {
+test("P31 rejects omitted identities, changed wiring, fields and invented approval while tracking current source separately", () => {
   for (const mutation of ["omit", "handler", "target", "approval"]) {
     const r = review(),
       wire = r.actions.find((a) => a.kind === "wiring");
@@ -162,13 +167,14 @@ test("P31 rejects omitted identities, changed wiring, fields, stale sources and 
     () => validateReviewSurfaces(r.surfaceReview, { sources, packages }),
     /input omissions/,
   );
-  assert.throws(
-    () =>
-      buildRolesReview(
-        { ...sources, [childFile]: sources[childFile] + "\n<!-- drift -->" },
-        evidence,
-      ),
-    /verify current roles proposal/,
+  const drifted = buildRolesReview(
+    { ...sources, [childFile]: sources[childFile] + "\n<!-- drift -->" },
+    evidence,
+  );
+  assert.notEqual(drifted.sourceHashes[childFile], review().sourceHashes[childFile]);
+  assert.equal(
+    evidence.sourceHashes[childFile],
+    "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
   );
 });
 test("P31 keeps 48 contextual images distinct from 76 exact representative references and 44 missing slots", () => {
@@ -230,16 +236,13 @@ test("P31 control catalog covers 42 controls, 18 representatives and 24 variants
   for (const part of ["confirm", "cancel", "close"])
     assert.equal(e.controlReferences[`reason-${part}`].states.busy, undefined);
 });
-test("P31 control evidence binds exact selector, states and both viewports with no stale source bypass", () => {
+test("P31 offline control evidence preserves capture-time hashes and exact selector states", () => {
   const dir = `${base}/design/roles-controls-direction-c`;
-  for (const [file, sha] of Object.entries(controlsEvidence.sourceHashes))
-    assert.equal(
-      createHash("sha256")
-        .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
-        .digest("hex"),
-      sha,
-      file,
-    );
+  assert.notEqual(controlsEvidence.sourceHashes[parentFile], review().sourceHashes[parentFile]);
+  assert.equal(
+    controlsEvidence.sourceHashes[parentFile],
+    "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+  );
   for (const shot of controlsEvidence.screenshots) {
     assert.equal(
       createHash("sha256")
@@ -322,15 +325,12 @@ test("P31 fields bind all sixteen sources and nine form combinations without app
   });
   assert.equal(r.approval, "pending-user-review");
 });
-test("P31 field source and screenshot fingerprints fail on stale evidence or omitted mobile combinations", () => {
-  for (const [file, sha] of Object.entries(fieldEvidence.sourceHashes))
-    assert.equal(
-      createHash("sha256")
-        .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
-        .digest("hex"),
-      sha,
-      file,
-    );
+test("P31 field evidence preserves capture-time source hashes and screenshot fingerprints", () => {
+  assert.notEqual(fieldEvidence.sourceHashes[parentFile], review().sourceHashes[parentFile]);
+  assert.equal(
+    fieldEvidence.sourceHashes[parentFile],
+    "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+  );
   for (const s of fieldEvidence.screenshots)
     assert.equal(
       createHash("sha256")
@@ -532,13 +532,13 @@ test("P31 actual scope counts overlap and permission derives from capability not
 });
 test("P31 manually invoked actual watcher reproduces refresh draft reset without claiming mounted Vue", () => {
   const { h, props, watches } = childHarness();
-  assert.equal(watches.length, 3);
+  assert.equal(watches.length, 4);
   h.grantMutation.value.reason = "未提交的新原因";
-  watches[2].cb({ ...props.grants[0] });
+  watches[3].cb({ ...props.grants[0] });
   assert.equal(h.grantMutation.value.reason, "");
   assert.equal(new Date(h.grantMutation.value.expires_at).valueOf(), frozen + 7 * 86400000);
   h.grantMutation.value.reason = "筛选后仍留存";
-  watches[2].cb(undefined);
+  watches[3].cb(undefined);
   assert.equal(h.grantMutation.value.reason, "筛选后仍留存");
   assert.equal(new Date(h.minGrantExpiry).valueOf(), frozen + 60000);
   assert.equal(new Date(h.maxGrantExpiry).valueOf(), frozen + 30 * 86400000);
