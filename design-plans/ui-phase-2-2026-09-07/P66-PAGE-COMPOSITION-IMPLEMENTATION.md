@@ -16,7 +16,7 @@
 
 - P66 相关定向单元测试：60/60 通过，覆盖转换/模板、状态/追踪归属、焦点、告警、队列事实及 M08-01 单机边界。
 - 实际 Vue 页面检查：1440px 与 390px、reduced/no-preference 两种动效，共 304 项；4 组、181 个来源文件，无生成图片或外部页面请求。
-- `tests/e2e/m08-01-single-server.spec.ts`：desktop-chromium 4/4、mobile-390 4/4；覆盖 19 种实际队列策略可达性、页面分区、手机布局、刷新单飞、空闲队列真实文案，以及空/阻断/过期/未授权/限流/不可用反馈。桌面与手机视觉基线均更新为蓝白生产壳层。
+- `tests/e2e/m08-01-single-server.spec.ts`：desktop-chromium 5/5、mobile-390 5/5；覆盖 19 种实际队列策略可达性、未知队列/阻断码回退身份、页面分区、手机布局、刷新单飞、空闲队列真实文案，以及空/阻断/过期/未授权/限流/不可用反馈。桌面与手机四张视觉基线已同步到用户批准的蓝白 C 壳层；该更新只校正过期截图，不改变页面代码。
 - `npm run typecheck:web` 通过。
 - `npm run build:web`、`npm run format:check`、`npm run verify:docs`、`npm run verify:static-analysis`、`npm run verify:plans`、`npm run verify:release-matrix`、`npm run verify:runtime-docs` 均通过；固定部署脚本完成 22 工作区构建及 M07-03 `preflight_passed`。
 - `python scripts/deploy-baota.py` 已按固定目录完成部署，构建 SHA 为 `00906bf6bafee04f4529fed352a967f6d7391f6d`，部署输出确认临时包已删除。只读线上检查：live/ready/version 与 `/platform-admin/topology` 返回 HTTP 200，ready 的 MySQL/Redis 为 available，version/live SHA 与提交一致；拓扑 JS `RuntimeTopologyCenter-CCBSSOAW.js` 和 CSS `RuntimeTopologyCenter-Hg9INRk3.css` 均 HTTP 200。

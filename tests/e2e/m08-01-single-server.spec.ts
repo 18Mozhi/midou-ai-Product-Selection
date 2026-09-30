@@ -428,6 +428,53 @@ test("M08-01 refresh is single-flight, keeps the snapshot and labels idle queues
   await expect(page.getByText("等待中", { exact: true })).toHaveCount(0);
 });
 
+test("M08-01 preserves unknown queue and blocker identities with truthful fallback labels", async ({
+  page,
+}) => {
+  const unknownQueue = {
+    ...base.worker_scheduler.queues[0],
+    name: "future_queue_kind",
+    running: true,
+    due: false,
+    active_runs: 1,
+    longest_running_ms: 1200,
+  };
+  await page.route("**/api/v1/platform/operations/topology", (route) =>
+    route.fulfill({
+      json: envelope({
+        ...base,
+        state: "blocked",
+        worker_scheduler: {
+          ...base.worker_scheduler,
+          queues: [unknownQueue],
+        },
+        blockers: [
+          { code: "api_unavailable", actionHint: "先核验 Node API。" },
+          { code: "future_blocker_code", actionHint: "按服务返回提示处理。" },
+        ],
+      }),
+    }),
+  );
+
+  await page.goto("/platform-admin/topology");
+  await expect(page.getByText("单机运行条件未满足")).toBeVisible();
+
+  const queue = page.locator(".topology-queue-list article");
+  await expect(queue).toHaveCount(1);
+  await expect(queue.getByText("后台任务", { exact: true })).toBeVisible();
+  await queue.getByText("调度策略", { exact: true }).click();
+  await expect(queue.getByText("future_queue_kind", { exact: true })).toBeVisible();
+
+  const blockers = page.locator(".topology-blockers article");
+  await expect(blockers).toHaveCount(2);
+  await expect(blockers.nth(0)).toContainText("API 尚未就绪");
+  await expect(blockers.nth(0)).toContainText("先核验 Node API。");
+  await expect(blockers.nth(1)).toContainText("运行条件未满足");
+  await expect(blockers.nth(1)).toContainText("按服务返回提示处理。");
+  await blockers.nth(1).getByText("技术详情", { exact: true }).click();
+  await expect(blockers.nth(1).getByText("future_blocker_code", { exact: true })).toBeVisible();
+});
+
 test("M08-01.A08/A09 empty blocked stale forbidden expired and rate limited", async ({ page }) => {
   let status = 200;
   let state = "empty";
