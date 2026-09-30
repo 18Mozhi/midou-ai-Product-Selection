@@ -603,3 +603,68 @@ test("UI2-AN03 notification keeps the pending workflow modal and closes safely a
   await expect(dialog).toHaveCount(0);
   await expect(page).toHaveURL(/category=approval&status=open$/);
 });
+
+test("P26 workflow failure stays inside the detail dialog and receives focus", async ({ page }) => {
+  await setup(page);
+  await page.route(`**/api/v1/notifications/${id}/actions`, (route) =>
+    route.fulfill({
+      status: 409,
+      json: {
+        request_id: "p26-workflow-conflict",
+        error: {
+          code: "notification_version_conflict",
+          action_hint: "这条通知已有更新，请重新读取后再操作。",
+        },
+      },
+    }),
+  );
+  await page.goto(`/notifications?notification=${id}`);
+  const dialog = page.getByRole("dialog", { name: "消息详情" });
+  await dialog.getByRole("button", { name: "开始处理" }).click();
+  const error = dialog.getByRole("alert");
+  await expect(error).toContainText("这条通知已有更新，请重新读取后再操作。");
+  await expect(error).toBeFocused();
+  await expect(dialog).toHaveAttribute("aria-describedby", "notification-detail-error");
+  await expect(error.getByText("查看本次操作编号")).toBeVisible();
+  await expect(page.locator(".notification-notice")).toHaveCount(0);
+  await page.keyboard.press("Shift+Tab");
+  await expect(dialog.getByRole("button", { name: "关闭消息详情" })).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(dialog.locator("summary").filter({ hasText: "技术详情" })).toBeFocused();
+  await error.getByText("查看本次操作编号").click();
+  await expect(error.getByText("p26-workflow-conflict")).toBeVisible();
+});
+
+test("P26 preference failure announces and focuses its modal error without losing edits", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route("**/api/v1/me/notification-preferences", (route) => {
+    if (route.request().method() !== "PUT") return route.fallback();
+    return route.fulfill({
+      status: 409,
+      json: {
+        request_id: "p26-preference-conflict",
+        error: {
+          code: "notification_preference_version_conflict",
+          action_hint: "偏好设置已有更新，请保留当前选择并重试。",
+        },
+      },
+    });
+  });
+  await page.goto("/notifications");
+  await page.getByRole("button", { name: "通知偏好" }).click();
+  const dialog = page.getByRole("dialog", { name: "通知偏好" });
+  const taskPreference = dialog.getByRole("checkbox", { name: "任务事件" });
+  await taskPreference.uncheck();
+  await dialog.getByRole("button", { name: "保存" }).click();
+  const error = dialog.getByRole("alert");
+  await expect(error).toContainText("偏好设置已有更新，请保留当前选择并重试。");
+  await expect(error).toBeFocused();
+  await expect(dialog).toHaveAttribute("aria-describedby", "notification-preferences-error");
+  await expect(error.getByText("查看本次操作编号")).toBeVisible();
+  await expect(taskPreference).not.toBeChecked();
+  await expect(page.locator(".notification-notice")).toHaveCount(0);
+  await error.getByText("查看本次操作编号").click();
+  await expect(error.getByText("p26-preference-conflict")).toBeVisible();
+});

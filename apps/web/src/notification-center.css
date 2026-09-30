@@ -144,6 +144,25 @@
   background: var(--so-bg-elevated);
   color: var(--so-text);
 }
+.notification-center .notification-dialog-error {
+  margin: 16px 0;
+  padding: 12px 14px;
+  border: 1px solid var(--so-danger-border, #d9949b);
+  border-left: 4px solid var(--so-danger, #a52630);
+  background: color-mix(in srgb, var(--so-danger, #a52630) 7%, white);
+  color: var(--so-danger-text, #842f29);
+}
+.notification-dialog-error p {
+  margin: 0;
+}
+.notification-dialog-error details {
+  margin-top: 8px;
+}
+.notification-dialog-error code {
+  display: block;
+  margin-top: 5px;
+  overflow-wrap: anywhere;
+}
 .notification-list > button {
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr) 180px minmax(120px, auto);
@@ -418,7 +437,8 @@
 .notification-center--review button:focus-visible,
 .notification-center--review a:focus-visible,
 .notification-center--review input:focus-visible,
-.notification-center--review summary:focus-visible {
+.notification-center--review summary:focus-visible,
+.notification-center--review .notification-dialog-error:focus {
   outline: 3px solid var(--review-focus);
   outline-offset: 3px;
 }

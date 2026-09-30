@@ -87,6 +87,13 @@
 | NC | 677 | 72947e74a11b9abc.1 | AN-N-PREF-SAVE；PUT expected_version |
 | NC | 688 | 25755513ca77e550.1 | AN-N-PREF-CLOSE；取消保留当前ref |
 | NC | 689 | 0285caea2e8607bf.1 | AN-N-PREF-SAVE；原生submit |
+| NC | 660 | 83c14e43da4a0513.1 | AN-N-DETAIL-WIRING；详情原生dialog定义 |
+| NC | 660 | e6cc1debf33762b0.1 | AN-N-DETAIL-WIRING；详情dialog cancel事件 |
+| NC | 705 | 8cb2961885ab7113.1 | AN-N-TECH-RESOURCE；详情失败追踪编号展开 |
+| NC | 754 | 3f47655822db88ed.1 | AN-N-PREF-WIRING；偏好原生dialog定义 |
+| NC | 754 | e2f8e1803ac77239.1 | AN-N-PREF-WIRING；偏好dialog cancel事件 |
+| NC | 761 | 8aeeea8a550ba999.1 | AN-N-PREF-SAVE；偏好表单原生submit及就地错误反馈 |
+| NC | 782 | 8cb2961885ab7113.2 | AN-N-PREF-SAVE；偏好失败追踪编号展开 |
 
 ## 3. 字段绑定与真实请求
 

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onActivated, onDeactivated, onUnmounted, ref, watch } from "vue";
+import { computed, nextTick, onActivated, onDeactivated, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import {
@@ -68,6 +68,12 @@ const props = defineProps<{ apiBaseUrl: string }>(),
   total = ref(0),
   notice = ref(""),
   requestId = ref(""),
+  detailError = ref(""),
+  detailErrorRequestId = ref(""),
+  detailErrorElement = ref<HTMLElement | null>(null),
+  preferencesError = ref(""),
+  preferencesErrorRequestId = ref(""),
+  preferencesErrorElement = ref<HTMLElement | null>(null),
   showPreferences = ref(false),
   preferences = ref<any>({
     in_app_enabled: true,
@@ -83,10 +89,14 @@ const { dialogElement: preferencesDialogElement, handleCancel: handlePreferences
   useModalDialog(
     () => showPreferences.value,
     () => (showPreferences.value = false),
+    undefined,
+    { trapFocus: true },
   );
 const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
   () => Boolean(selected.value),
   () => void closeDetail(),
+  undefined,
+  { trapFocus: true },
 );
 let stream: EventSource | null = null;
 let loadGeneration = 0;
@@ -97,8 +107,20 @@ let disposed = false;
 let suspended = false;
 watch(
   showPreferences,
-  () => {
+  (open) => {
     preferenceGeneration += 1;
+    preferencesError.value = "";
+    preferencesErrorRequestId.value = "";
+    if (!open) notice.value = "";
+  },
+  { flush: "sync" },
+);
+watch(
+  () => selected.value?.id,
+  () => {
+    detailError.value = "";
+    detailErrorRequestId.value = "";
+    notice.value = "";
   },
   { flush: "sync" },
 );
@@ -160,6 +182,7 @@ async function api<T>(
   affectPageState = true,
   captureMeta?: (meta: unknown) => void,
   owner?: { current: () => boolean; failed?: () => void },
+  errorChannel: "page" | "detail" | "preferences" = "page",
 ) {
   try {
     const response = await request<T>(path, options);
@@ -179,7 +202,18 @@ async function api<T>(
             : failure?.kind === "blocked"
               ? "error"
               : (failure?.kind ?? "error");
-      notice.value = failure?.actionHint ?? "稍后重试。";
+      const actionHint = failure?.actionHint ?? "操作未能完成，请检查后重试。";
+      if (errorChannel === "detail") {
+        detailError.value = actionHint;
+        detailErrorRequestId.value = failure?.requestId ?? "";
+        void nextTick(() => detailErrorElement.value?.focus());
+      } else if (errorChannel === "preferences") {
+        preferencesError.value = actionHint;
+        preferencesErrorRequestId.value = failure?.requestId ?? "";
+        void nextTick(() => preferencesErrorElement.value?.focus());
+      } else {
+        notice.value = failure?.actionHint ?? "稍后重试。";
+      }
       owner?.failed?.();
     }
     throw error;
@@ -333,6 +367,9 @@ async function updateWorkflow(action: "start" | "close" | "reopen") {
   const owner = {
     current: () => !disposed && generation === detailGeneration && selected.value?.id === detail.id,
   };
+  detailError.value = "";
+  detailErrorRequestId.value = "";
+  notice.value = "";
   busy.value = true;
   try {
     const result = await api<Partial<Item>>(
@@ -344,6 +381,7 @@ async function updateWorkflow(action: "start" | "close" | "reopen") {
       false,
       undefined,
       owner,
+      "detail",
     );
     if (!owner.current()) return;
     selected.value = { ...detail, ...result };
@@ -367,6 +405,9 @@ async function savePreferences() {
   const owner = {
     current: () => !disposed && generation === preferenceGeneration && showPreferences.value,
   };
+  preferencesError.value = "";
+  preferencesErrorRequestId.value = "";
+  notice.value = "";
   busy.value = true;
   try {
     const saved = await api<any>(
@@ -382,6 +423,7 @@ async function savePreferences() {
       false,
       undefined,
       owner,
+      "preferences",
     );
     if (!owner.current()) return;
     if (revision !== preferenceRevision) {
@@ -620,6 +662,7 @@ watch(
       ref="detailDialogElement"
       class="notification-detail"
       aria-label="消息详情"
+      :aria-describedby="detailError ? 'notification-detail-error' : undefined"
       @cancel="handleDetailCancel"
     >
       <button :disabled="busy" @click="closeDetail" aria-label="关闭消息详情">×</button>
@@ -648,6 +691,21 @@ watch(
         </div>
       </dl>
       <small>站内消息来自事务消息；页面不显示队列、浏览器凭证或邮件地址。</small>
+      <section
+        v-if="detailError"
+        id="notification-detail-error"
+        ref="detailErrorElement"
+        class="notification-dialog-error"
+        role="alert"
+        aria-live="assertive"
+        tabindex="-1"
+      >
+        <p>{{ detailError }}</p>
+        <details v-if="detailErrorRequestId">
+          <summary>查看本次操作编号</summary>
+          <code>{{ detailErrorRequestId }}</code>
+        </details>
+      </section>
       <footer class="notification-workflow-actions">
         <RouterLink v-if="hasSourceRoute" :to="sourceRoute"
           >返回来源：{{ resourceLabel(selected.resource_type) }}</RouterLink
@@ -697,6 +755,7 @@ watch(
       ref="preferencesDialogElement"
       class="notification-preferences"
       aria-label="通知偏好"
+      :aria-describedby="preferencesError ? 'notification-preferences-error' : undefined"
       @cancel="handlePreferencesCancel"
     >
       <form @submit.prevent="savePreferences">
@@ -709,6 +768,21 @@ watch(
         ><label><input v-model="preferences.approval_enabled" type="checkbox" /> 审批事件</label
         ><label><input v-model="preferences.competitor_enabled" type="checkbox" /> 竞品事件</label>
         <p>邮件渠道固定关闭；接入并验收真实 Provider 前不会产生外部发送。</p>
+        <section
+          v-if="preferencesError"
+          id="notification-preferences-error"
+          ref="preferencesErrorElement"
+          class="notification-dialog-error"
+          role="alert"
+          aria-live="assertive"
+          tabindex="-1"
+        >
+          <p>{{ preferencesError }}</p>
+          <details v-if="preferencesErrorRequestId">
+            <summary>查看本次操作编号</summary>
+            <code>{{ preferencesErrorRequestId }}</code>
+          </details>
+        </section>
         <div>
           <button type="button" class="secondary" @click="showPreferences = false">取消</button
           ><button :disabled="busy">保存</button>

@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/NotificationCenter.vue": "12bc46d8aec1b2b7dbf524175203989b0b5b032ef7ae6d3aadcabdafb0a281d7"
+    "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -2444,7 +2444,7 @@
       "apps/web/src/components/NotificationCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+      "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
     },
     "includeStructuralContainers": true,
@@ -2728,7 +2728,7 @@
     ],
     "sharedRemaining": [
       "useModalDialog提供原生开关/焦点返回；本轮VM测试替身不证明DOM焦点，完整组合仍需真实Vue验收。",
-      "读取meta/error、详情GET、自动已读/workflow和偏好草稿/保存归属已局部修复；全局上下文、markAll及模态内错误可达性仍非本轮完整验收。"
+      "读取meta/error、详情GET、自动已读/workflow和偏好草稿/保存归属已局部修复；详情/偏好错误已在原弹窗中读屏播报并交接焦点；全局上下文与markAll错误定位仍待后续范围内核验。"
     ]
   },
   "compositionGaps": [

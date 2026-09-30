@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 import ts from "typescript";
-import { ref, computed, watch as vueWatch } from "vue";
+import { ref, computed, nextTick, watch as vueWatch } from "vue";
 import { buildNotificationDesignData } from "../../scripts/lib/ui-phase2-notification-design-data.mjs";
 
 // Read-batch regressions plus remaining write/draft characterization, not server acceptance.
@@ -18,7 +18,7 @@ const code = ts.transpileModule(
     .filter((node) => !ts.isImportDeclaration(node))
     .map((node) => node.getText(ast))
     .join("\n") +
-    "\nexport const ui={load,open,openById,closeDetail,updateWorkflow,savePreferences,markAll,items,summary,total,state,notice,requestId,selected,busy,preferences,showPreferences};",
+    "\nexport const ui={load,open,openById,closeDetail,updateWorkflow,savePreferences,markAll,items,summary,total,state,notice,requestId,selected,busy,preferences,showPreferences,detailError,detailErrorRequestId,preferencesError,preferencesErrorRequestId};",
   {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
   },
@@ -52,6 +52,7 @@ function harness(request) {
     exports: {},
     ref,
     computed,
+    nextTick,
     URLSearchParams,
     ApiClientError,
     defineProps: () => ({ apiBaseUrl: "/api/v1" }),
@@ -505,7 +506,9 @@ test("P26 preference failure retains edits and the version for explicit retry", 
   assert.equal(ui.showPreferences.value, true);
   assert.equal(ui.preferences.value.task_enabled, false);
   assert.equal(ui.preferences.value.version, 1);
-  assert.equal(ui.notice.value, "旧请求失败");
+  assert.equal(ui.notice.value, "");
+  assert.equal(ui.preferencesError.value, "旧请求失败");
+  assert.equal(ui.preferencesErrorRequestId.value, "old-failure");
 });
 
 test("P26 destroyed preference save cannot update refs or launch reload", async () => {
