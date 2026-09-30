@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  reactive,
+  ref,
+} from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
 import QualityGateSetupSummary from "./shared/QualityGateSetupSummary.vue";
@@ -117,6 +125,9 @@ const createTouched = reactive<Record<CreateField, boolean>>({
 let actionDialogGeneration = 0;
 let createDialogGeneration = 0;
 let previewReadGeneration = 0;
+let listReadController: AbortController | null = null,
+  pageActive = true,
+  resumeListRead = false;
 let pendingPreviewRead: { rule: Rule; page: number; generation: number } | null = null;
 const capabilities = computed(() => new Set(props.capabilities)),
   canDecide = computed(() => capabilities.value.has("opportunity:decide")),
@@ -283,19 +294,39 @@ const stateFrom = (kind: ApiFailureKind): State =>
         }).format(new Date(value))
       : "—";
 async function load() {
+  if (!pageActive) {
+    resumeListRead = true;
+    return;
+  }
+  listReadController?.abort("superseded");
+  const controller = new AbortController();
+  listReadController = controller;
   state.value = "loading";
   try {
-    const response = await request<Rule[]>("/opportunity-score-rules");
+    const response = await request<Rule[]>("/opportunity-score-rules", {
+      signal: controller.signal,
+    });
+    if (!pageActive || controller !== listReadController) return;
     requestId.value = response.request_id;
     rules.value = response.data;
     state.value = rules.value.length ? "ready" : "empty";
   } catch (error) {
+    if (!pageActive || controller !== listReadController) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       message.value = error.actionHint;
       state.value = stateFrom(error.kind);
     } else state.value = "blocked";
+  } finally {
+    if (listReadController === controller) listReadController = null;
   }
+}
+function suspendListRead(reason: "deactivated" | "unmounted") {
+  const interrupted = Boolean(listReadController);
+  pageActive = false;
+  listReadController?.abort(reason);
+  listReadController = null;
+  resumeListRead ||= reason === "deactivated" && interrupted;
 }
 const scoreRuleErrorLabels: Record<string, string> = {
     score_rule_version_conflict: "版本代码已存在。",
@@ -502,6 +533,14 @@ async function runAction() {
   }
 }
 onMounted(() => void load());
+onDeactivated(() => suspendListRead("deactivated"));
+onBeforeUnmount(() => suspendListRead("unmounted"));
+onActivated(() => {
+  pageActive = true;
+  if (!resumeListRead) return;
+  resumeListRead = false;
+  void load();
+});
 </script>
 <template>
   <section class="score-rules score-rules--review">

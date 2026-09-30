@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ScoreRuleConsole.vue": "a6f164c2527db3c3b50d38db532f013f2b0c95e2d68ec9799d587d85f854f498"
+    "apps/web/src/components/ScoreRuleConsole.vue": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -81,11 +81,11 @@
       "kind": "read",
       "routeApplicability": "P17-normal-route-local-source-only",
       "sourceCandidateIds": ["apps/web/src/components/ScoreRuleConsole.vue#0d9565586dbfab9d.1"],
-      "sourceContractKeys": ["list.retry：UiStatePanel primary→load；读取目录，无业务写入，隐藏未接线secondary"],
+      "sourceContractKeys": ["list.retry：UiStatePanel primary→load；读取目录，无业务写入，隐藏未接线secondary；离页中止并在返回时恢复被中断的目录GET"],
       "contractAliasReason": "绑定当前合同末单元格完整别名；保留历史语义前缀与当前源身份，不按旧行号或按钮文字猜行为。",
       "condition": "state非ready/empty；共享loading无操作，其他错误primary可触发",
-      "handler": "load GET /opportunity-score-rules；primary统一load，未接线secondary隐藏；成功不主动清message，失败不清旧rules",
-      "variants": ["loading", "error", "expired", "forbidden", "blocked"],
+      "handler": "load GET /opportunity-score-rules；primary统一load，未接线secondary隐藏；离页中止活动GET并丢弃迟到回执，返回时仅恢复被中断的读取；成功不主动清message，失败不清旧rules",
+      "variants": ["loading", "error", "expired", "forbidden", "blocked", "deactivated", "return-after-interrupted-read"],
       "scenes": [
         {
           "package": "scoring-direction-c",
@@ -101,6 +101,11 @@
           "file": "scripts/verify-ui-phase2-scoring-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "现有原型证据引用；本轮不重复未变浏览器检查，源校验/请求延迟惰性VM见PROGRESS，非挂载Vue或事务。"
+        },
+        {
+          "file": "tests/e2e/ui-phase2-scoring-contracts.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "导航壳KeepAlive离页取消被中断的目录GET，返回仅补读一次；桌面Chromium与390px手机各1/1。"
         }
       ],
       "visualStates": {
@@ -111,7 +116,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "当前48图无页面级全部错误/恢复图，引用只是相关列表；共享重新登录/返回工作台标签不是实际导航；旧GET结果归属未保护。"
+      "remaining": "当前48图不是完整错误/恢复页截图；登录/返回工作台仍是导航壳通用状态链接而非本页业务动作；真实RBAC、MySQL及M07-03验收仍未覆盖。"
     },
     {
       "actionId": "scoring.preview.open",
@@ -884,7 +889,7 @@
     "includeStructuralContainers": true,
     "files": ["apps/web/src/components/ScoreRuleConsole.vue"],
     "dependencyHashes": {
-      "apps/web/src/components/ScoreRuleConsole.vue": "a6f164c2527db3c3b50d38db532f013f2b0c95e2d68ec9799d587d85f854f498",
+      "apps/web/src/components/ScoreRuleConsole.vue": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",

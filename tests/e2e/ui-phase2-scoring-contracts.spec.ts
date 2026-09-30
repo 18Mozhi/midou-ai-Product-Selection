@@ -64,6 +64,54 @@ async function setup(
   return writes;
 }
 
+test("P17 cancels an interrupted version-directory read and reloads on KeepAlive return", async ({
+  page,
+}) => {
+  await setup(page);
+  let listReads = 0,
+    releaseFirstRead!: () => void,
+    markFirstReadStarted!: () => void;
+  const firstReadGate = new Promise<void>((resolve) => (releaseFirstRead = resolve)),
+    firstReadStarted = new Promise<void>((resolve) => (markFirstReadStarted = resolve)),
+    interruptedRead = page.waitForEvent("requestfailed", (request) =>
+      new URL(request.url()).pathname.endsWith("/api/v1/opportunity-score-rules"),
+    );
+  await page.route("**/api/v1/opportunity-score-rules", async (route) => {
+    listReads += 1;
+    if (listReads === 1) {
+      markFirstReadStarted();
+      await firstReadGate;
+      try {
+        await route.fulfill({ json: envelope([rule("active")]) });
+      } catch {
+        // The actual browser request is expected to be aborted when its cached page deactivates.
+      }
+      return;
+    }
+    await route.fulfill({
+      json: envelope([{ ...rule("active"), version_code: "org-v2", name: "恢复后的评分规则目录" }]),
+    });
+  });
+
+  await page.goto("/opportunities/scoring-rules");
+  await firstReadStarted;
+  try {
+    await page.locator(".role-page-breadcrumb").getByRole("link", { name: "选品机会" }).click();
+    await expect(page).toHaveURL(/\/opportunities$/);
+    await interruptedRead;
+    releaseFirstRead();
+
+    await page.goBack();
+    await expect(page).toHaveURL(/\/opportunities\/scoring-rules$/);
+    await expect.poll(() => listReads).toBe(2);
+    await expect(page.getByText("恢复后的评分规则目录", { exact: true })).toBeVisible();
+    await expect(page.getByText("org-v1", { exact: true })).toHaveCount(0);
+    expect(listReads).toBe(2);
+  } finally {
+    releaseFirstRead();
+  }
+});
+
 async function fillValidCreateDraft(dialog: Locator, version: string, name: string) {
   await dialog.getByLabel("版本代码", { exact: true }).fill(version);
   await dialog.getByLabel("规则名称", { exact: true }).fill(name);

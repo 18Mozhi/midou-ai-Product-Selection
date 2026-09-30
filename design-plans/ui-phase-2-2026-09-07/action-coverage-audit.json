@@ -173,7 +173,7 @@
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
     "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
-    "apps/web/src/components/ScoreRuleConsole.vue": "a6f164c2527db3c3b50d38db532f013f2b0c95e2d68ec9799d587d85f854f498",
+    "apps/web/src/components/ScoreRuleConsole.vue": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d",
     "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
     "apps/web/src/components/SelectionJourney.vue": "21c2e95ce297a3c6a55e4301f36fdf448659d76173390901dfc01b58f200349b",
     "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
@@ -267,7 +267,7 @@
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "4df5cd5f4fff7e32f31a7a0ef71bd54af5ad8a68e09dbec2c8183748108e881e",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "46ad324b09b6a5f011cc39a0a0051c90e4b487087ff5a035eb28c3dc64c30efe",
-    "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "26419d9b450a924ebb5fa2afb4eb4876cb3efe071c093c67e83a2372c0cda95b",
+    "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "6604783f1f631547071a651e4e97532f3d3109f7b21fd2004f367bf2c882337f",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "c739c31ec3c7123e4554c3d5d6a4ea6ff74d5243e1306fe484ebfa5e58056ffa",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "8ec0e6cb51df04480bfc80387554e98b8682880e306efa73052f42825421e028",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "b7170d2bce947478b32967c494c669c632d4daaf563bfbd8c73df933a3396892",
@@ -425,8 +425,9 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "54f916e2e2e330288cd9ffe41edbc7e1bf36e2b9d2cc5c71bf41cbdd9deded1b",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "tests/e2e/m07-06-selection-acceptance.spec.ts": "a8193d635897bba0b28860849e6f34a4ede9ef21be664e65828d88a617deace4",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "36203c9a27d8c22f12907f9972a9692d587bf66cbe8b9b4ab09ed60fd3fcf2ec",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2d387f6cccdac69f797195db1ac79909463483c1a4ae431011b699fefcbd997c",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
+    "tests/e2e/ui-phase2-scoring-contracts.spec.ts": "14d4a1557e9d586c4b74d3598b552b1fa740e151b62616422fc7aa86ed3efd1e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "303c605669e8fef8f1b6bd7a992686a4e3ec8afef7a5182bd6fbdce9e03e73db",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "6dd4d58c43a2bebe38dd0eacdfa56a51343b1d1ea450806449da298c13b1d49a",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
@@ -1388,6 +1389,7 @@
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 96,
@@ -4284,6 +4286,7 @@
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 96,
@@ -59617,7 +59620,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 514,
+      "line": 553,
       "kind": "control",
       "label": "新建规则版本",
       "conditions": [
@@ -59649,7 +59652,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#0d9565586dbfab9d.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 522,
+      "line": 561,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -59679,7 +59682,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 532,
+      "line": 571,
       "kind": "control",
       "label": "创建首个草稿",
       "conditions": [
@@ -59715,7 +59718,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 549,
+      "line": 588,
       "kind": "control",
       "label": "创建新版本补齐配置",
       "conditions": [
@@ -59751,7 +59754,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 578,
+      "line": 617,
       "kind": "control",
       "label": "预览影响",
       "conditions": [
@@ -59791,7 +59794,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 585,
+      "line": 624,
       "kind": "control",
       "label": "提交",
       "conditions": [
@@ -59831,7 +59834,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 587,
+      "line": 626,
       "kind": "control",
       "label": "批准",
       "conditions": [
@@ -59871,7 +59874,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 592,
+      "line": 631,
       "kind": "control",
       "label": "拒绝",
       "conditions": [
@@ -59911,7 +59914,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 597,
+      "line": 636,
       "kind": "control",
       "label": "启用",
       "conditions": [
@@ -59951,7 +59954,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 599,
+      "line": 638,
       "kind": "control",
       "label": "回滚",
       "conditions": [
@@ -59991,7 +59994,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#2cd4ab78b5d44750.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 610,
+      "line": 649,
       "kind": "dialog-definition",
       "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
@@ -60021,7 +60024,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6b37811d77e25f5b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 610,
+      "line": 649,
       "kind": "event-binding",
       "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
@@ -60051,7 +60054,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#237b12051c9107cf.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 617,
+      "line": 656,
       "kind": "form-event",
       "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
@@ -60081,7 +60084,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 623,
+      "line": 662,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60113,7 +60116,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#50a901a0bff021e2.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 628,
+      "line": 667,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -60143,7 +60146,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#03b10c0a1abc2c11.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 651,
+      "line": 690,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -60173,7 +60176,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#4d7c1c802660416a.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 673,
+      "line": 712,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -60203,7 +60206,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#1a58d01072ed8035.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 698,
+      "line": 737,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -60233,7 +60236,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#27f3439531b9b3bc.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 730,
+      "line": 769,
       "kind": "event-binding",
       "label": "`${item.label}权重`",
       "conditions": [
@@ -60267,7 +60270,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#a0c3632c651fc976.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 748,
+      "line": 787,
       "kind": "event-binding",
       "label": "`${item.label}必填`",
       "conditions": [
@@ -60301,7 +60304,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 776,
+      "line": 815,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -60333,7 +60336,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 777,
+      "line": 816,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : \"保存草稿\" }}",
       "conditions": [
@@ -60365,7 +60368,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#231a7828f8d8d02d.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 783,
+      "line": 822,
       "kind": "dialog-definition",
       "label": "只读试算 · 不写入评分运行 发布影响预览 · {{ previewRule.version_code }} × 正在按当前持久化输入试算… {{ previewError }} {{ requestId }} 重试预览 当前页 {{ pr",
       "conditions": [
@@ -60400,7 +60403,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#234e4413d96b5e41.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 783,
+      "line": 822,
       "kind": "event-binding",
       "label": "只读试算 · 不写入评分运行 发布影响预览 · {{ previewRule.version_code }} × 正在按当前持久化输入试算… {{ previewError }} {{ requestId }} 重试预览 当前页 {{ pr",
       "conditions": [
@@ -60435,7 +60438,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 796,
+      "line": 835,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60467,7 +60470,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 803,
+      "line": 842,
       "kind": "control",
       "label": "重试预览",
       "conditions": [
@@ -60503,7 +60506,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 869,
+      "line": 908,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -60539,7 +60542,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 876,
+      "line": 915,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -60575,7 +60578,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 887,
+      "line": 926,
       "kind": "dialog-definition",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60607,7 +60610,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 887,
+      "line": 926,
       "kind": "event-binding",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60639,7 +60642,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 894,
+      "line": 933,
       "kind": "form-event",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60671,7 +60674,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 902,
+      "line": 941,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60703,7 +60706,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 922,
+      "line": 961,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -60735,7 +60738,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 923,
+      "line": 962,
       "kind": "control",
       "label": "确认 {{ actionLabels[action] }}",
       "conditions": [

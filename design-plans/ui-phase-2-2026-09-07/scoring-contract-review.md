@@ -99,14 +99,14 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 
 | 文件                                         | 当前LF SHA-256                                                   |
 | -------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/ScoreRuleConsole.vue | a6f164c2527db3c3b50d38db532f013f2b0c95e2d68ec9799d587d85f854f498 |
+| apps/web/src/components/ScoreRuleConsole.vue | 350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d |
 
 共34个源候选：31个控件/事件、3个原生dialog定义。同一个dialog位置可分别有cancel事件候选和dialog-definition，二者不是重复业务；定义不能代替各变体的提交/关闭/焦点验收。下表业务前缀沿用scoring.；原语义中的{x}/{action}严格只代表前述显式变体，不扩展成任意动作。
 
 | 源candidateId                                                   | 当前行 | 类型          | 原行号记录 | 既有语义 / 实际入口                                                           |
 | --------------------------------------------------------------- | ------ | ------------- | ---------- | ----------------------------------------------------------------------------- |
 | apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1 | 396    | control       | S396       | create.open：canDecide且非ready时顶部入口；不等于已加载可创建                 |
-| apps/web/src/components/ScoreRuleConsole.vue#0d9565586dbfab9d.1 | 404    | event-binding | S404       | list.retry：UiStatePanel primary→load；读取目录，无业务写入，隐藏未接线secondary |
+| apps/web/src/components/ScoreRuleConsole.vue#0d9565586dbfab9d.1 | 566    | event-binding | S404       | list.retry：UiStatePanel primary→load；读取目录，无业务写入，隐藏未接线secondary；离页中止并在返回时恢复被中断的目录GET |
 | apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1 | 413    | control       | S413       | create.open：empty且canDecide，创建首个草稿                                   |
 | apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1 | 430    | control       | S430       | create.open：ready覆盖说明内入口；是否缺项不影响canDecide门                   |
 | apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1 | 459    | control       | S459       | preview.open：canApprove，draft/pending_approval/approved；GET第1页           |
