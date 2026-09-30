@@ -37,9 +37,7 @@ test("M01-02.A07/A15 MFA security center loads through an authenticated session"
   );
 });
 
-test("M01-02 account link switches the reused identity surface into MFA management", async ({
-  page,
-}) => {
+test("P02 login help link opens the session-protected MFA information page", async ({ page }) => {
   await page.route("**/api/v1/auth/session-status", (route) =>
     route.fulfill({
       json: { data: { authenticated: true }, request_id: "status", trace_id: "status" },
@@ -51,7 +49,7 @@ test("M01-02 account link switches the reused identity surface into MFA manageme
     }),
   );
   await page.goto("/login");
-  await page.getByRole("link", { name: "管理 MFA" }).click();
+  await page.getByRole("link", { name: "了解 MFA" }).click();
   await expect(page).toHaveURL(/\/security\/mfa$/);
   await expect(page.getByRole("heading", { name: "为账号启用认证器" })).toBeVisible();
   await expect(page.getByTestId("mfa")).toContainText("认证器当前未启用");
@@ -396,6 +394,75 @@ test("P02 completes the seeded password-change and MFA setup chain without retai
   await expect(page.getByLabel("密码")).toHaveValue("");
   await expect(page.getByText("p02-synthetic-seed-secret", { exact: true })).toHaveCount(0);
   await expect(page.getByText("p02-synthetic-recovery", { exact: true })).toHaveCount(0);
+});
+
+test("P02 seed password change accepts only one submission while the request is pending", async ({
+  page,
+}) => {
+  const writes: Array<{ method: string; body: unknown }> = [];
+  let releasePasswordChange!: () => void;
+  let passwordChangeStarted!: () => void;
+  const passwordChangeHeld = new Promise<void>((resolve) => (releasePasswordChange = resolve));
+  const passwordChangeSeen = new Promise<void>((resolve) => (passwordChangeStarted = resolve));
+
+  await page.route("**/api/v1/auth/login", (route) =>
+    route.fulfill({
+      json: {
+        data: {
+          security_setup: {
+            required: true,
+            must_change_password: true,
+            must_enroll_mfa: true,
+          },
+        },
+        request_id: "p02-pending-login",
+        trace_id: "p02-pending-login",
+      },
+    }),
+  );
+  await page.route("**/api/v1/me/password", async (route) => {
+    writes.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    passwordChangeStarted();
+    await passwordChangeHeld;
+    await route.fulfill({ status: 204 });
+  });
+
+  await page.goto("/login");
+  await page.getByLabel("账号（邮箱或用户名）").fill("seed-pending@example.invalid");
+  await page.getByLabel("密码").fill("synthetic-seed-password");
+  await page.getByRole("button", { name: "登录" }).click();
+
+  const setup = page.getByTestId("security-setup");
+  const currentPassword = page.getByLabel("当前种子密码");
+  const newPassword = page.getByLabel("新的长期密码");
+  const submit = page.getByRole("button", { name: "更新密码并重新登录" });
+  await expect(setup).toBeVisible();
+  await currentPassword.fill("synthetic-seed-password");
+  await newPassword.fill("synthetic-long-term-password-45!");
+  await submit.click();
+  await passwordChangeSeen;
+
+  await expect(setup).toHaveAttribute("aria-busy", "true");
+  await expect(page.getByRole("button", { name: "正在更新…" })).toBeDisabled();
+  await expect(currentPassword).toBeDisabled();
+  await expect(newPassword).toBeDisabled();
+  await setup.locator("form").evaluate((form: HTMLFormElement) => {
+    form.requestSubmit();
+    form.requestSubmit();
+  });
+  await expect.poll(() => writes).toHaveLength(1);
+  expect(writes[0]).toEqual({
+    method: "POST",
+    body: {
+      current_password: "synthetic-seed-password",
+      new_password: "synthetic-long-term-password-45!",
+    },
+  });
+
+  releasePasswordChange();
+  await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
+  await expect(page.getByLabel("密码")).toHaveValue("synthetic-long-term-password-45!");
+  expect(writes).toHaveLength(1);
 });
 
 test("P07 disable stays on the page only after success and requires explicit relogin", async ({

@@ -5,7 +5,7 @@
   "status": "implemented-user-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/LocalIdentity.vue": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+    "apps/web/src/components/LocalIdentity.vue": "36e9f5163e2ea588974b402d6b7098ee6c3ceaa0ba26ed2c7b320c3b1e33a488"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -413,11 +413,11 @@
       "kind": "write",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#15cfc05b46fac8ba.1",
-        "apps/web/src/components/LocalIdentity.vue#361a7d3b3e6c57b1.1"
+        "apps/web/src/components/LocalIdentity.vue#9fb8524110a1038f.1",
+        "apps/web/src/components/LocalIdentity.vue#7d98b83b16e631e4.1"
       ],
-      "condition": "security-setup.must_change_password；form外button，无loading禁用/required",
-      "handler": "changeSeedPassword -> POST /me/password；成功保留新密码在password，清current/new，退login",
+      "condition": "security-setup.must_change_password；原生表单校验；同步单飞且提交期间字段/按钮禁用",
+      "handler": "changeSeedPassword -> POST /me/password；首次 await 前固定密码快照并单飞；成功将已提交的新密码带回登录并清理敏感字段",
       "variants": [
         "security-setup-change",
         "relogin"
@@ -451,6 +451,11 @@
           "file": "scripts/verify-ui-phase2-identity-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
           "claim": "源setup/原型/路由适用性分层核对；不是生产Vue挂载、鉴权、邮件、Cookie、SQL或具体批准。"
+        },
+        {
+          "file": "tests/e2e/m01-02-mfa.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "P02首次安全设置延迟改密POST期间双次requestSubmit仅产生一条准确请求；按钮和字段锁定，成功后按原流程返回登录。桌面与390px手机定向回归通过；本地夹具不证明真实身份服务、Cookie或生产认证。"
         }
       ],
       "visualStates": {
@@ -464,12 +469,12 @@
       "remaining": "真实输入不受普通form原生校验；返回登录不等于敏感ref全清。新稿busy/校验是提案，真实撤销与权限未验。",
       "sourceCandidateApplicability": [
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#15cfc05b46fac8ba.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#9fb8524110a1038f.1",
           "classification": "route-mode-family",
           "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
         },
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#361a7d3b3e6c57b1.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#7d98b83b16e631e4.1",
           "classification": "route-mode-family",
           "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
         }
@@ -1099,7 +1104,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/LocalIdentity.vue": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a",
+      "apps/web/src/components/LocalIdentity.vue": "36e9f5163e2ea588974b402d6b7098ee6c3ceaa0ba26ed2c7b320c3b1e33a488",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",

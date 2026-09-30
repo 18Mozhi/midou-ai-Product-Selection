@@ -80,6 +80,7 @@ const securitySetup = ref({
   must_enroll_mfa: false,
 });
 const newPassword = ref("");
+const seedPasswordBusy = ref(false);
 const title = computed(
   () =>
     ({
@@ -322,17 +323,25 @@ async function disableMfa() {
   }
 }
 async function changeSeedPassword() {
-  const result = await request("/me/password", {
-    current_password: currentPassword.value,
-    new_password: newPassword.value,
-  });
-  if (result === null && requestState.value === "success") {
-    securitySetup.value.must_change_password = false;
-    password.value = newPassword.value;
-    currentPassword.value = "";
-    newPassword.value = "";
-    mode.value = "login";
-    message.value = "密码已修改且旧会话已撤销。请用新密码重新登录并继续绑定 MFA。";
+  if (seedPasswordBusy.value) return;
+  const submittedCurrentPassword = currentPassword.value;
+  const submittedNewPassword = newPassword.value;
+  seedPasswordBusy.value = true;
+  try {
+    const result = await request("/me/password", {
+      current_password: submittedCurrentPassword,
+      new_password: submittedNewPassword,
+    });
+    if (result === null && requestState.value === "success") {
+      securitySetup.value.must_change_password = false;
+      password.value = submittedNewPassword;
+      currentPassword.value = "";
+      newPassword.value = "";
+      mode.value = "login";
+      message.value = "密码已修改且旧会话已撤销。请用新密码重新登录并继续绑定 MFA。";
+    }
+  } finally {
+    seedPasswordBusy.value = false;
   }
 }
 onMounted(() => {
@@ -758,6 +767,7 @@ onBeforeUnmount(() => clearMfaMaterial());
               v-model="currentPassword"
               type="password"
               autocomplete="current-password"
+              :disabled="seedPasswordBusy"
               required
               minlength="12"
               maxlength="128"
@@ -770,14 +780,19 @@ onBeforeUnmount(() => clearMfaMaterial());
               v-model="newPassword"
               type="password"
               autocomplete="new-password"
+              :disabled="seedPasswordBusy"
               required
               minlength="12"
               maxlength="128"
               aria-describedby="p02-seed-new-password-help"
               placeholder="设置新的登录密码"
             />
-            <button class="p02-login-primary" type="submit" :disabled="requestState === 'loading'">
-              {{ requestState === "loading" ? "正在更新…" : "更新密码并重新登录" }}
+            <button
+              class="p02-login-primary"
+              type="submit"
+              :disabled="seedPasswordBusy || requestState === 'loading'"
+            >
+              {{ seedPasswordBusy ? "正在更新…" : "更新密码并重新登录" }}
             </button>
           </form>
           <template v-else-if="securitySetup.must_enroll_mfa">

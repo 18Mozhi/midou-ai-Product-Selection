@@ -71,7 +71,7 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | ID-MFA-DISABLE | L#29abd90f9774564d.1；L#6735871aaf8e0556.1 | MFA 停用表单提交与确认按钮，沿用撤销全部会话边界 |
 | ID-MFA-RETURN-LOGIN | L#e4840b8a830571e2.1 | MFA 管理页返回登录路由 |
 | ID-FORM-SUBMIT | L#b4ef7a9c4f34af7b.1；L#3d0185dcb1b90a38.1；L#55432de3fcde4409.1；L#62294b45ceb45f22.1；L#a8e9d7ee5148dbe5.1；L#be82854e01e5e049.1；L#4b32d082f043e0da.1；L#e448c4ea094171f6.1；L#8cc6c6d54ed246f6.1 | login、MFA challenge、reset、forgot、register 的模式表单及提交按钮；不是一个业务请求 |
-| ID-SEED-PASSWORD | L#15cfc05b46fac8ba.1；L#361a7d3b3e6c57b1.1 | 首次安全设置中的改密提交与按钮 |
+| ID-SEED-PASSWORD | L#9fb8524110a1038f.1；L#7d98b83b16e631e4.1 | 首次安全设置中的改密提交与按钮；提交期间单飞并锁定字段 |
 | ID-SHOW-REGISTER | L#f3edcccf9be30a1b.1；L#f3edcccf9be30a1b.2 | 登录/旧 sessions 模式切换到注册 |
 | ID-ACCOUNT-SECURITY | L#ba3feba8b42af0bf.2；L#ba3feba8b42af0bf.3 | 跳转本人 `/me?section=security`；旧 sessions 入口不等于该组件内会话撤销 |
 | ID-MFA-ROUTE | L#dce7dc58cd80c932.1；L#341395d9a1567247.1；L#e0691d9aef4aa1e2.1；L#e0691d9aef4aa1e2.2；L#393c4351ab80bac7.1 | 跳转 `/security/mfa` 的说明/管理入口，仍受该路由会话守卫约束 |
