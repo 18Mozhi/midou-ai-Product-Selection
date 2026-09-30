@@ -21,7 +21,7 @@ const definitions = [
     "SC71-LOAD",
     "read",
     "读取或刷新容量边界实测事实",
-    ["d0414c44eef669b6.1", "4f73abdd0d99fc21.1", "26fe2d5165472bca.1"],
+    ["ad3f1b8a48927d9d.1", "4f73abdd0d99fc21.1", "26fe2d5165472bca.1"],
     "用户请求刷新，或在保留快照/首次读取失败后主动重读时。",
     "沿用当前GET与既有读取状态/快照归属；页面会写api_view及平台审计，刷新不是零写入，也不执行压测或恢复。",
     "读取成功不证明同提交签名、实际并发容量、生产权限或隔离恢复通过。",
@@ -120,7 +120,13 @@ export function buildP71ActionReview() {
     variants: ["current-route-source-contract"],
     scenes: [],
     visualStates,
-    testReferences: [{ file: testFile, evidenceType: "offline-proposal-check-not-Vue" }],
+    testReferences: [
+      {
+        file: "tests/e2e/m08-06-capacity-boundary.spec.ts",
+        evidenceType: "actual-vue-local-interception",
+      },
+      { file: testFile, evidenceType: "offline-proposal-check-not-Vue" },
+    ],
     remaining,
   }));
   const inputs = {};

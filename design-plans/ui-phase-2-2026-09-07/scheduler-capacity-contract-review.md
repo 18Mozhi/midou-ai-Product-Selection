@@ -73,7 +73,7 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 | apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1 | 632 | dialog-component-call | SC70-EXPIRED 同一确认调用，不重复算动作 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#25d51725a70103d5.1 | 647 | event-binding | SC70-PROVIDER cancel本地/confirm POST |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#c30cb3ed5106a082.1 | 647 | dialog-component-call | SC70-PROVIDER 同一确认调用，不重复算动作 |
-| apps/web/src/components/CapacityBoundaryCenter.vue#d0414c44eef669b6.1 | 235 | control | SC71-LOAD GET（自身有审计） |
+| apps/web/src/components/CapacityBoundaryCenter.vue#ad3f1b8a48927d9d.1 | 237 | control | SC71-LOAD GET；保存中禁用手动刷新，成功后的归属重读仍允许 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1 | 237 | control | SC71-ATTEST 打开确认 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1 | 263 | control | SC71-LOAD 保留快照重试 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#26fe2d5165472bca.1 | 279 | control | SC71-LOAD 首次失败重试 |

@@ -130,8 +130,10 @@ const refreshFailureMessage = computed(() => {
   if (refreshFailure.value === "empty") return "未读取到新的同提交容量基线，当前快照保持不变。";
   return "新鲜容量事实暂不可用，当前快照保持不变。";
 });
-async function load(options: { preserveOperationMessage?: boolean } = {}) {
-  if (refreshing.value) return;
+async function load(
+  options: { preserveOperationMessage?: boolean; allowWhileSaving?: boolean } = {},
+) {
+  if (refreshing.value || (saving.value && !options.allowWhileSaving)) return;
   const hasSnapshot = Boolean(data.value),
     controller = new AbortController(),
     sequence = ++loadSequence;
@@ -200,7 +202,7 @@ async function attest() {
     requestId.value = response.request_id;
     operationMessage.value = "归档与隔离恢复演练已签认。";
     drillIdempotencyKey = crypto.randomUUID();
-    await load({ preserveOperationMessage: true });
+    await load({ preserveOperationMessage: true, allowWhileSaving: true });
   } catch (error) {
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
@@ -232,7 +234,12 @@ onMounted(() => void load());
         >
       </div>
       <div>
-        <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="() => load()">
+        <button
+          type="button"
+          :disabled="refreshing || saving"
+          :aria-busy="refreshing"
+          @click="() => load()"
+        >
           {{ refreshing ? "刷新中…" : "刷新实测事实" }}</button
         ><button
           class="danger"

@@ -1,5 +1,9 @@
 # P71 容量边界 C 方向生产 Vue 实施
 
+## 2026-09-30 · 签认期间隔离手动刷新
+
+恢复演练签认 POST 进行中禁用页头手动刷新，并在 `load()` 增加保存期间保护；签认成功后的程序化 GET 显式允许，仍由当前 POST 的实例拥有，成功回执保持可见。新增实际 Vue 回归验证 POST 在途时 GET 数量不增加、刷新按钮禁用，签认成功后恰好执行归属重读；桌面 Chromium 与 390px 手机各 1/1 通过。保持现有 POST/body/Idempotency-Key、读 API、权限和审计合同不变；本地响应不证明真实签认或生产 M08-06。
+
 ## 范围
 
 已将自动通过的 CAPACITY-C-r1 接入真实 `/platform-admin/capacity`：蓝色单机运行边界与白色容量证据工作区，拆分当前结论、通过档位/停止事实、性能参考、归档恢复签认、资源绝对值与逐项告警处置；手机端单列呈现。`CapacityBoundaryCenter` 继续独占数据读取、状态/错误、确认弹窗与写入；展示区抽为 typed-props `CapacityBoundaryEvidence`。
@@ -11,7 +15,7 @@
 - `node --test tests/unit/capacity-page-preview.test.mjs`：3/3。
 - `node --test tests/m08-06/capacity-boundary-closure.test.mjs tests/m08-06/software-completion-contract.test.mjs`：16/16。
 - `node scripts/verify-capacity-page-preview.mjs`：1440/390px × 两种动效共 144 项、52 次本地 GET，0 次写请求、无截图。
-- `node scripts/run-playwright-projects.mjs tests/e2e/m08-06-capacity-boundary.spec.ts`：桌面 5/5、390px 手机 5/5。
+- `node scripts/run-playwright-projects.mjs tests/e2e/m08-06-capacity-boundary.spec.ts`：桌面 6/6、390px 手机 6/6。
 - `npm run typecheck:web` 通过。
 
 ## 提交与部署

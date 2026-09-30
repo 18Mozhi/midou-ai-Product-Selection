@@ -27,7 +27,7 @@
     "apps/web/src/components/AutomationRuleCenter.vue": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35",
     "apps/web/src/components/BackupRecoveryCenter.vue": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
     "apps/web/src/components/BackupRecoveryDirectory.vue": "0539b4adcbf1793d337dbefff0ccfa36d45295f1d35d8ac0c4f3e8bac1e237b7",
-    "apps/web/src/components/CapacityBoundaryCenter.vue": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8",
+    "apps/web/src/components/CapacityBoundaryCenter.vue": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2",
     "apps/web/src/components/CapacityBoundaryEvidence.vue": "b815e48915ae9a72d1972d7ef7eebda8b91f5299041ca3028b8af65ef933fbd9",
     "apps/web/src/components/CollectionOperationsConsole.vue": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f",
     "apps/web/src/components/CollectionRuntimeCenter.vue": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17",
@@ -266,7 +266,7 @@
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "4df5cd5f4fff7e32f31a7a0ef71bd54af5ad8a68e09dbec2c8183748108e881e",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
-    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "f78aa8025434afd4950fcc5ade232d70434e8015ebb60b409a3a341cb3b2af9d",
+    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "46ad324b09b6a5f011cc39a0a0051c90e4b487087ff5a035eb28c3dc64c30efe",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "3fb3a2c10e383eae3c6d618dd439f6cadf56cf63bc79e309419c26af5bd07906",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "c739c31ec3c7123e4554c3d5d6a4ea6ff74d5243e1306fe484ebfa5e58056ffa",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "8ec0e6cb51df04480bfc80387554e98b8682880e306efa73052f42825421e028",
@@ -573,7 +573,8 @@
     "tests/unit/ui-phase2-p69-action-review.test.mjs": "3e2e539566ebc4c63f5d02cb0245431157db33588672ef74b5653f5461be9fe1",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P70.json": "80de35c6a02777d762c06e14ff1d1d203afcecf00011f12e7da16f6944497e71",
     "tests/unit/ui-phase2-p70-action-review.test.mjs": "3dff08f5329be88ff5468f1b781df2a6dbdd9e48fda4e64e8d92289f7ad55f6d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P71.json": "1fd32a8559d085ce493d68850e818fbb6f5bc26002ec0c12cf2744ff8f8b9a81",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P71.json": "feed8dd95227fb1ed9e66a95838cd44e93cdd82db576c433d3754a86e058f3eb",
+    "tests/e2e/m08-06-capacity-boundary.spec.ts": "bf7dc863ac4a748ec5349f1bcece8a93ff1223a9cc18d08fde2939084181a9c9",
     "tests/unit/ui-phase2-p71-action-review.test.mjs": "e407369ec7d08e30449592866f183973a99328901fe69647ac3e1ac0cd517fe5",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P72.json": "a57b019bd65d4d34875200ca51875a635b02703c9273a3c99f85053adc15bc9d",
     "tests/unit/ui-phase2-p72-action-review.test.mjs": "de5d14b49c8634b5ce568a84ef9e3cbfa0ed957b8a2c2ffc5e53cb3840ea8566",
@@ -649,7 +650,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "a914f1ce2647afdee5215d1d8f777e231d9c2c833c228601973abb1c604effe9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "4401a57c8e8ebefb922ff7d5eeadcf1e1e3b96ea7e0a1a3e219417e6e0f894f7",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "e3fec9d096d754399d217656ec30a51e2a2352ab4dfa43f3323409bd670d3791",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "32822df54c7950e5353cf9e50686f26d364c5b901a6682149f6937b5fe85a30f",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "b58a994a201f5980f8ee68376bf8331cd6ded381d1579621398bbb900f034fc5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "8799c6057f3b537823713df64d67e76ba912331b1253f7ca34ed84fe12eba081",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5e7d02960a5904c118159279d1f9ec7a71dd0d6d235bfae42f92ee42cd7af30a",
     "scripts/audit-ui-phase2-action-coverage.mjs": "dbed9ad7022d527bb6b3897dc51a395fc1b8d2f150219057887650a638c000bf",
@@ -663,8 +664,8 @@
     "routes": 73,
     "currentSourceCandidates": 1749,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 772,
-    "oldOnlyIdentities": 500,
+    "newSourceIdentities": 773,
+    "oldOnlyIdentities": 501,
     "reviewedPages": 73,
     "explicitlyGroupedSourceSites": 1585,
     "semanticGroups": 1302,
@@ -3724,7 +3725,7 @@
       "id": "P71",
       "path": "/platform-admin/capacity",
       "title": "容量边界",
-      "oldStaticAssociatedCandidates": 40,
+      "oldStaticAssociatedCandidates": 39,
       "review": {
         "pageId": "P71",
         "actionApproval": "pending-user-review",
@@ -3738,6 +3739,7 @@
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 18,
@@ -5700,6 +5702,7 @@
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 18,
@@ -9482,17 +9485,15 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#d0414c44eef669b6.1",
+      "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#ad3f1b8a48927d9d.1",
       "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
-      "line": 235,
+      "line": 237,
       "kind": "control",
       "label": "{{ refreshing ? \"刷新中…\" : \"刷新实测事实\" }}",
       "conditions": [],
-      "staticRouteIds": [
-        "P71"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md",
@@ -9511,7 +9512,7 @@
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1",
       "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
-      "line": 237,
+      "line": 244,
       "kind": "control",
       "label": "{{ saving ? \"签认中…\" : \"签认恢复演练\" }}",
       "conditions": [],
@@ -9538,7 +9539,7 @@
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1",
       "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
-      "line": 263,
+      "line": 270,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -9570,7 +9571,7 @@
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#26fe2d5165472bca.1",
       "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
-      "line": 279,
+      "line": 286,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -9606,7 +9607,7 @@
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#bad94329bde0aecb.1",
       "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
-      "line": 297,
+      "line": 304,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -9633,7 +9634,7 @@
     {
       "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#0db1bef96a99927a.1",
       "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
-      "line": 297,
+      "line": 304,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -70702,6 +70703,12 @@
       "candidateId": "apps/web/src/components/BackupRecoveryCenter.vue#227b66d9ec4e0216.1",
       "file": "apps/web/src/components/BackupRecoveryCenter.vue",
       "line": 179,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CapacityBoundaryCenter.vue#d0414c44eef669b6.1",
+      "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
+      "line": 234,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

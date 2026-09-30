@@ -275,3 +275,41 @@ test("M08-06 drill is single-submit and success survives the follow-up read", as
   await expect(page.getByText("刷新未完成")).toBeVisible();
   expect(posts).toBe(1);
 });
+
+test("M08-06 refresh stays locked during drill attestation and its owned follow-up read", async ({
+  page,
+}) => {
+  let reads = 0,
+    releaseWrite!: () => void,
+    markWriteStarted!: () => void;
+  const writeStarted = new Promise<void>((resolve) => (markWriteStarted = resolve));
+  const writeGate = new Promise<void>((resolve) => (releaseWrite = resolve));
+  await page.route("**/api/v1/platform/operations/capacity", (route) => {
+    reads += 1;
+    return route.fulfill({ json: envelope(base) });
+  });
+  await page.route("**/api/v1/platform/operations/capacity/drills", async (route) => {
+    markWriteStarted();
+    await writeGate;
+    return route.fulfill({
+      json: envelope({ status: "verified", observed_at: "2026-08-15T08:00:00.000Z" }),
+    });
+  });
+
+  await page.goto("/platform-admin/capacity");
+  await expect(page.getByText("当前单机容量门满足")).toBeVisible();
+  await page.getByRole("button", { name: "签认恢复演练" }).click();
+  const dialog = page.getByRole("alertdialog", { name: "签认归档与恢复演练？" });
+  await dialog.getByPlaceholder("确认签认").fill("确认签认");
+  await dialog.getByRole("button", { name: "确认签认", exact: true }).click();
+  await writeStarted;
+
+  const refresh = page.getByRole("button", { name: "刷新实测事实", exact: true });
+  await expect(refresh).toBeDisabled();
+  expect(reads).toBe(1);
+  releaseWrite();
+
+  await expect(page.getByText("归档与隔离恢复演练已签认。", { exact: true })).toBeVisible();
+  await expect(refresh).toBeEnabled();
+  expect(reads).toBe(2);
+});
