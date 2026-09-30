@@ -26,7 +26,7 @@ export async function buildNotificationDesignData(repo) {
     return found[0];
   }
   function run(code, bindings = {}) {
-    const box = { exports: {}, URLSearchParams, ...bindings };
+    const box = { exports: {}, URLSearchParams, disposed: false, suspended: false, ...bindings };
     vm.runInNewContext(
       ts.transpileModule(code, {
         compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },

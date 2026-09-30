@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+    "apps/web/src/components/NotificationCenter.vue": "12bc46d8aec1b2b7dbf524175203989b0b5b032ef7ae6d3aadcabdafb0a281d7"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",

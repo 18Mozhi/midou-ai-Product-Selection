@@ -162,6 +162,120 @@ const id = "00000000-0000-4000-8000-000000000931",
     version: 1,
     created_at: "2026-08-08T10:00:00.000Z",
   };
+
+test("P26 KeepAlive suspends notification reads and SSE, then refreshes on return", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseOld!: () => void,
+    markOldStarted!: () => void,
+    listReads = 0;
+  const oldRead = new Promise<void>((resolve) => {
+    releaseOld = resolve;
+  });
+  const oldStarted = new Promise<void>((resolve) => {
+    markOldStarted = resolve;
+  });
+  await page.route("**/api/v1/notifications?*", async (route) => {
+    listReads += 1;
+    if (listReads === 1) {
+      markOldStarted();
+      await oldRead;
+      await route.fulfill({
+        json: { ...env([{ ...item, title: "离页前的旧通知" }]), meta: { total: 99 } },
+      });
+      return;
+    }
+    await route.fulfill({
+      json: { ...env([{ ...item, title: "返回后的最新通知" }]), meta: { total: 1 } },
+    });
+  });
+  await page.addInitScript(() => {
+    class TrackedEventSource {
+      static instances: TrackedEventSource[] = [];
+      readonly url: string;
+      closed = false;
+      onopen: (() => void) | null = null;
+      onerror: (() => void) | null = null;
+
+      constructor(url: string) {
+        this.url = url;
+        TrackedEventSource.instances.push(this);
+      }
+
+      addEventListener() {}
+
+      close() {
+        this.closed = true;
+      }
+    }
+    Object.defineProperty(window, "EventSource", { configurable: true, value: TrackedEventSource });
+    Object.defineProperty(window, "__notificationEventSources", {
+      configurable: true,
+      value: TrackedEventSource.instances,
+    });
+  });
+
+  try {
+    await page.goto("/notifications");
+    await oldStarted;
+    await expect(page.locator(".notification-center")).toBeVisible();
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            (window as unknown as { __notificationEventSources: Array<{ closed: boolean }> })
+              .__notificationEventSources.length,
+        ),
+      )
+      .toBe(1);
+
+    await page.getByRole("link", { name: "SCOUTOPS 智能选品" }).click();
+    await expect(page).toHaveURL(/\/home$/);
+    await expect
+      .poll(() =>
+        page.evaluate(
+          () =>
+            (window as unknown as { __notificationEventSources: Array<{ closed: boolean }> })
+              .__notificationEventSources[0]?.closed,
+        ),
+      )
+      .toBe(true);
+
+    const staleReadResponse = page.waitForResponse((response) =>
+      response.url().includes("/api/v1/notifications?"),
+    );
+    releaseOld();
+    await (await staleReadResponse).finished();
+
+    await page.evaluate(() => {
+      history.pushState({ ...history.state }, "", "/notifications");
+      dispatchEvent(new PopStateEvent("popstate", { state: history.state }));
+    });
+    await expect(page).toHaveURL(/\/notifications$/);
+    await expect(page.getByRole("button", { name: /返回后的最新通知/ })).toBeVisible();
+    await expect(page.getByText("离页前的旧通知", { exact: true })).toHaveCount(0);
+    expect(listReads).toBe(2);
+    const connections = await page.evaluate(() =>
+      (
+        window as unknown as {
+          __notificationEventSources: Array<{ url: string; closed: boolean }>;
+        }
+      ).__notificationEventSources.map(({ url, closed }) => ({ url, closed })),
+    );
+    expect(connections).toHaveLength(2);
+    expect(connections[0]?.closed).toBe(true);
+    expect(connections[1]?.closed).toBe(false);
+    expect(
+      connections.map(({ url }) =>
+        new URL(url, "https://scoutops.test").searchParams.get("last_event_id"),
+      ),
+    ).toEqual(["0", "0"]);
+  } finally {
+    releaseOld();
+  }
+});
+
 async function setup(page: Page) {
   const listRequests: string[] = [],
     actionBodies: Array<{ action: string }> = [];

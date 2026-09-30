@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref, watch } from "vue";
+import { computed, onActivated, onDeactivated, onUnmounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import {
@@ -94,6 +94,7 @@ let detailGeneration = 0;
 let preferenceGeneration = 0;
 let preferenceRevision = 0;
 let disposed = false;
+let suspended = false;
 watch(
   showPreferences,
   () => {
@@ -185,7 +186,7 @@ async function api<T>(
   }
 }
 async function load() {
-  if (disposed) return;
+  if (disposed || suspended) return;
   const generation = ++loadGeneration;
   const preferenceWindow = preferenceGeneration;
   let active = true;
@@ -235,7 +236,7 @@ async function load() {
   }
 }
 async function openById(id: string, syncUrl = true) {
-  if (disposed) return;
+  if (disposed || suspended) return;
   const generation = ++detailGeneration;
   const owner = { current: () => !disposed && generation === detailGeneration };
   try {
@@ -398,35 +399,59 @@ async function savePreferences() {
   }
 }
 function connectRealtime() {
+  if (disposed || suspended || stream) return;
   const cursor = sessionStorage.getItem("scoutops:last-event-id") ?? "0";
-  stream = new EventSource(`${props.apiBaseUrl}/realtime/events?last_event_id=${cursor}`, {
-    withCredentials: true,
-  });
-  stream.onopen = () => {
+  const connection = new EventSource(
+    `${props.apiBaseUrl}/realtime/events?last_event_id=${cursor}`,
+    {
+      withCredentials: true,
+    },
+  );
+  stream = connection;
+  connection.onopen = () => {
+    if (disposed || suspended || stream !== connection) return;
     recordRealtimeOpen();
     realtimeState.value = "connected";
   };
-  stream.onerror = () => {
+  connection.onerror = () => {
+    if (disposed || suspended || stream !== connection) return;
     realtimeState.value = "reconnecting";
     if (!beginRealtimeReconnect()) return;
     recordRealtimeFallbackPoll();
     void load();
   };
-  stream.addEventListener("notification.changed", (event) => {
+  connection.addEventListener("notification.changed", (event) => {
+    if (disposed || suspended || stream !== connection) return;
     const message = event as MessageEvent;
     if (message.lastEventId) sessionStorage.setItem("scoutops:last-event-id", message.lastEventId);
     void load();
   });
 }
-onMounted(() => {
+function activate() {
+  if (disposed) return;
+  suspended = false;
   void load();
   connectRealtime();
-});
+}
+function deactivate() {
+  if (suspended) return;
+  suspended = true;
+  loadGeneration += 1;
+  const connection = stream;
+  stream = null;
+  connection?.close();
+  realtimeState.value = "connecting";
+}
+onActivated(activate);
+onDeactivated(deactivate);
 onUnmounted(() => {
   disposed = true;
+  suspended = true;
   loadGeneration += 1;
   detailGeneration += 1;
-  stream?.close();
+  const connection = stream;
+  stream = null;
+  connection?.close();
 });
 watch(
   () => [route.query.category, route.query.status, route.query.unread, route.query.page],

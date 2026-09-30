@@ -46,7 +46,7 @@ class ApiClientError extends Error {
 }
 function harness(request) {
   const calls = [],
-    hooks = { mounted: [], unmounted: [], watches: [] };
+    hooks = { activated: [], deactivated: [], mounted: [], unmounted: [], watches: [] };
   const modal = [];
   const context = {
     exports: {},
@@ -58,6 +58,8 @@ function harness(request) {
     useRoute: () => ({ query: {}, fullPath: "/notifications" }),
     useRouter: () => ({ replace: async () => {} }),
     onMounted: (fn) => hooks.mounted.push(fn),
+    onActivated: (fn) => hooks.activated.push(fn),
+    onDeactivated: (fn) => hooks.deactivated.push(fn),
     onUnmounted: (fn) => hooks.unmounted.push(fn),
     watch: (getter, fn, options) => {
       hooks.watches.push({ getter, fn });
