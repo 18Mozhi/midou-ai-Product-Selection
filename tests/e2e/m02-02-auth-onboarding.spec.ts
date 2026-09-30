@@ -6,6 +6,127 @@ const envelope = (data: unknown) => ({
   request_id: "onboarding-e2e-request",
   trace_id: "onboarding-e2e-trace",
 });
+test("P03 registration ignores synchronous duplicate submit while the request is pending", async ({
+  page,
+}) => {
+  const writes: Array<{ method: string; body: unknown }> = [];
+  let releaseResponse!: () => void;
+  const pendingResponse = new Promise<void>((resolve) => {
+    releaseResponse = resolve;
+  });
+  await page.route("**/api/v1/auth/register", async (route) => {
+    writes.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    await pendingResponse;
+    await route.fulfill({
+      status: 201,
+      json: envelope({ id: "u", email: "single@example.test", status: "pending_verification" }),
+    });
+  });
+  await page.goto("/register");
+  await page.locator("#p03-registration-email").fill("single@example.test");
+  await page.locator("#p03-registration-password").fill("Long-enough-password-123!");
+  await page.locator("#p03-registration-confirm").fill("Long-enough-password-123!");
+  await page.locator(".p03-registration-form").evaluate((form: HTMLFormElement) => {
+    form.requestSubmit();
+    form.requestSubmit();
+  });
+  await expect.poll(() => writes.length).toBe(1);
+  await expect(page.locator("[data-testid='registration']")).toHaveAttribute(
+    "data-state",
+    "loading",
+  );
+  expect(writes).toEqual([
+    {
+      method: "POST",
+      body: { email: "single@example.test", password: "Long-enough-password-123!" },
+    },
+  ]);
+  releaseResponse();
+  await expect(page.getByRole("heading", { name: "检查验证邮件" })).toBeVisible();
+  expect(writes).toHaveLength(1);
+});
+
+test("P04 recovery ignores synchronous duplicate submit while the request is pending", async ({
+  page,
+}) => {
+  const writes: Array<{ method: string; body: unknown }> = [];
+  let releaseResponse!: () => void;
+  const pendingResponse = new Promise<void>((resolve) => {
+    releaseResponse = resolve;
+  });
+  await page.route("**/api/v1/auth/password-reset/request", async (route) => {
+    writes.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    await pendingResponse;
+    await route.fulfill({ status: 202, json: envelope({ status: "accepted" }) });
+  });
+  await page.goto("/forgot-password");
+  await page.locator("#p04-recovery-email").fill("recover@example.test");
+  await page.locator(".p04-recovery-form").evaluate((form: HTMLFormElement) => {
+    form.requestSubmit();
+    form.requestSubmit();
+  });
+  await expect.poll(() => writes.length).toBe(1);
+  await expect(page.locator("[data-testid='password-recovery']")).toHaveAttribute(
+    "data-state",
+    "loading",
+  );
+  expect(writes).toEqual([{ method: "POST", body: { email: "recover@example.test" } }]);
+  releaseResponse();
+  await expect(page.getByRole("status")).toContainText("请求已受理");
+  expect(writes).toHaveLength(1);
+});
+
+test("P06 reset ignores synchronous duplicate submit and retains explicit retry after failure", async ({
+  page,
+}) => {
+  const writes: Array<{ method: string; body: unknown }> = [];
+  let releaseResponse!: () => void;
+  const pendingResponse = new Promise<void>((resolve) => {
+    releaseResponse = resolve;
+  });
+  await page.route("**/api/v1/auth/password-reset/confirm", async (route) => {
+    writes.push({ method: route.request().method(), body: route.request().postDataJSON() });
+    await pendingResponse;
+    await route.fulfill({
+      status: 503,
+      json: {
+        error: { code: "service_unavailable", message: "更新暂时无法完成，请稍后重试。" },
+        request_id: "reset-pending-request",
+        trace_id: "reset-pending-trace",
+      },
+    });
+  });
+  await page.goto("/reset-password?token=single-use-token");
+  await page.locator("#p06-new-password").fill("Long-enough-password-123!");
+  await page
+    .locator("form[aria-labelledby='p06-reset-title']")
+    .evaluate((form: HTMLFormElement) => {
+      form.requestSubmit();
+      form.requestSubmit();
+    });
+  await expect.poll(() => writes.length).toBe(1);
+  await expect(page.locator("[data-testid='reset-password']")).toHaveAttribute(
+    "data-state",
+    "loading",
+  );
+  expect(writes).toEqual([
+    {
+      method: "POST",
+      body: { token: "single-use-token", new_password: "Long-enough-password-123!" },
+    },
+  ]);
+  releaseResponse();
+  await expect(page.getByRole("alert")).toContainText("更新暂时无法完成，请稍后重试。");
+  expect(writes).toHaveLength(1);
+  await page
+    .locator("form[aria-labelledby='p06-reset-title']")
+    .evaluate((form: HTMLFormElement) => {
+      form.requestSubmit();
+    });
+  await expect.poll(() => writes.length).toBe(2);
+  expect(writes[1]).toEqual(writes[0]);
+});
+
 test("M02-02.A07/A15 login brand and mobile auxiliary actions keep compact touch targets", async ({
   page,
 }) => {

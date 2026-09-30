@@ -171,6 +171,7 @@ async function confirmEmail() {
   }
 }
 async function submit() {
+  if (requestState.value === "loading") return;
   if (mode.value === "register" && password.value !== confirmPassword.value) {
     requestState.value = "error";
     message.value = "两次输入的密码不一致。";

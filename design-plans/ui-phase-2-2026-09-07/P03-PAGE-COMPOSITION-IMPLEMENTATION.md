@@ -17,6 +17,8 @@
 
 ## 本地验证
 
+- 共享 `submit()` 在同步检查 `requestState === "loading"` 时早退，覆盖当前身份模式使用的表单提交入口；实际 Vue 延迟 POST 回归通过两次同步 `requestSubmit()` 验证注册请求仅发一条、字段请求体不变，失败后仍允许显式重试。桌面 Chromium 与 390px 手机各 1/1。
+
 - `node --test tests/unit/register-page-preview.test.mjs tests/m02-02/auth-onboarding-contract.test.mjs`：4/4 通过。
 - `node scripts/run-playwright-projects.mjs --grep "registration and email confirmation|P03 registration" --workers=1`：桌面 Chromium 与 390px 移动项目各 2/2 通过；覆盖原生字段边界、确认密码零写、准确注册 payload、待验证同 URL、服务失败追踪、字段保留、局部返回登录及手机热区/无横向溢出。
 - 上述浏览器验证更新了一张过时的移动端待验证截图基线；只刷新既有 P05 蓝色主按钮基线。

@@ -54,7 +54,7 @@
     "apps/web/src/components/HomeDashboard.vue": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0",
     "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
     "apps/web/src/components/LandingRedirectSurface.vue": "321c65bae80e602f2403983f6b949ca54a6795cb44fd90704a3c72898203eddb",
-    "apps/web/src/components/LocalIdentity.vue": "36e9f5163e2ea588974b402d6b7098ee6c3ceaa0ba26ed2c7b320c3b1e33a488",
+    "apps/web/src/components/LocalIdentity.vue": "e1cbfd351ec79c7517f4c069cd3ba6d70ec4a403c72212dd3d195eea95370af8",
     "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
     "apps/web/src/components/MySqlResilienceCenter.vue": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c",
     "apps/web/src/components/navigation-surface-registry.ts": "e0f1161dd5da43df09b2710972ac431d746eb32fc7020c55502d020ef501486d",
@@ -385,18 +385,18 @@
     "scripts/verify-ui-phase2-identity-review.mjs": "560c5287210f1c068ced30531a2fd86fd15338fe7890e7bf8a0c5579e95aaff0",
     "tests/e2e/m00-01-runtime.spec.ts": "6199172b22c011e58285b64b8f093786754597619b66f05f6d53b3126f6046a4",
     "scripts/verify-landing-page-preview.mjs": "c353d7ec6e99bd0fecf918a8ab22b02b52a10e3034d2965fe994bb96317cf93d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "99928d626522d63d7f92bfd014e22043e08790e81031eec877b8bb5f0eb86aed",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "7156e901f5e9580f376a58b790381cb4c2d96adfe0099d652f82b25e3e2a6721",
     "tests/e2e/m01-02-mfa.spec.ts": "1a9d11a1b965ec9a296becef587b1beec1fd601106b5693ad0bbdbe6757ef970",
     "apps/web/src/components/local-identity-login.css": "6ae95e4f91c9308b49cac2fe5aa9686863ca932573c80d2cf163e9a7d80060cd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json": "8f55d7af48c6b6d33ff15d2722e5a2debdcae528ee90d4cc66de3a8ce6ac509a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json": "e202daec7165deaa1281ddddf8b7346e4bf713de4416b7a0c4b13f0471020cc6",
     "apps/web/src/components/local-identity-registration.css": "940a27b3840b97c7a49f3a9044a6ec3705b32d6edbbb97b1efd02907a060e126",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P04.json": "e746d6e61e42759a944e88247d0fec9f65d4ab905181ad5869f895c1adfe31ba",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P04.json": "9bad765c7ca050561130903f8c01199a86e8ca991b5264cbeb73d93a41ab64c2",
     "apps/web/src/components/local-identity-recovery.css": "0a7a7ee95210cdec20fb1ce28634649797df3ff349aa299b55ca833b78715761",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P05.json": "4a865c8a50bfe0248c36bce6963282aa3575ef8ca5bc0a5c6e9f02782159e3ac",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P05.json": "63a2ff3698d6ce04d4155565327bde2965a667120216796a77d16bb292ec1b26",
     "apps/web/src/components/local-identity-verification.css": "1634922d971948d38e0ccadb11589e3b51f8e2933484fc51e4251ac06a99849d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json": "01ab6d319d18099a8b27ad8153cc2bb09f49ce275700ea48fbe515712fa60919",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json": "68141033a0ab1368dbd206e442c814c6f2175b95b3f8c79354a886359c5a5f19",
     "apps/web/src/components/local-identity-reset.css": "44165b011c3b10a2e9d75823aa965b3a8b40837f13ae1322dbc53204ee40b239",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "90d1ac34a2cd0d083f027cb1389d43850b2d21186aef98e83d3fa858dd20393b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "114ce28c357f9c0c1bbc37a757913bf3e2c07c55cb4685d2fe9ff9016e00977c",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P08.json": "5e9388292892b6ecba631a0cd061b64ef697cb59474eecb491cbc0ab85968348",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P09.json": "d0db4debe1edc0a13e11cb949446b4fc57ec5f811d9484f97799067384778e08",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P10.json": "f53acf65f0feac1badaea92051d486e6fa0310b85693394c5ba1e43e6d466c7e",
@@ -581,10 +581,10 @@
     "tests/unit/ui-phase2-p73-action-review.test.mjs": "684eb8bf6b75cf6aaf95663cad3caf1a8a0b77efdead974ac0bf74dfbcc38bdf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "e85668e6077820947c79c3c7042145e73bec7724a4efb1e1dad47700622444a2",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "c429b797dbd4a03d6ae7ab46566440059f39dd47ba2c41b7913cf99d76677ee5",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P04.md": "e592009c74a8105a5e013cee45d66b9a72d9bfe439ed21d8721801475a92db5a",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "5d313d6c132671b76cb325c07c702b82193b786c2d27ea07aa9476ff32b26356",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P04.md": "451d5b1cfc9872295018b0592e63c9e1277ed27345d8a56bf9f570cf28350423",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P05.md": "3bf5ce1459a9d0d489a61865f02196745279af4ac711716939ed655c14bbe742",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P06.md": "60023b0f0f1b7ce1ea9f97d7d3ef70a3f50d388d2b7f5263c40934e95b4222c6",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P06.md": "051d6fc1260c67a965888162c4b441c874411ef5e23adf733602df7cbfdebe28",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P07.md": "29e870f11baee5d386d6aa04afca8bc6ce63fb72e05da8862fc6366ecd1a101e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "d05a636ce7eb3227573e7b28c456f25e440140484df0446517af24fdb8c0259a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "a79abe5883d65357d0066e7f2f64c6921179a8da0516ba5eaf47c0bdbd32a835",
@@ -20991,7 +20991,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#d545c6b53ab2b2a8.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 364,
+      "line": 365,
       "kind": "control",
       "label": "ScoutOps",
       "conditions": [
@@ -21046,7 +21046,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#9734082c2e28b39f.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 421,
+      "line": 422,
       "kind": "control",
       "label": "{{ requestState === \"loading\" ? \"正在重新读取…\" : \"重新读取安全状态\" }}",
       "conditions": [
@@ -21109,7 +21109,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#24e4d3a67a2b28f1.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 455,
+      "line": 456,
       "kind": "form-event",
       "label": "步骤 1 / 2 验证当前密码 密码仅用于启动本次认证器绑定，不会在页面回显。 当前密码 {{ mfaActionBusy ? \"正在启动绑定…\" : \"开始绑定认证器\" }}",
       "conditions": [
@@ -21172,7 +21172,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#3a0dc4e3156efd96.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 470,
+      "line": 471,
       "kind": "control",
       "label": "{{ mfaActionBusy ? \"正在启动绑定…\" : \"开始绑定认证器\" }}",
       "conditions": [
@@ -21235,7 +21235,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#4ce7b78a016bd6b5.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 474,
+      "line": 475,
       "kind": "form-event",
       "label": "步骤 2 / 2 在认证器中完成绑定 使用受信任的认证器添加密钥，并输入当前验证码完成确认。 手动输入密钥 {{ mfaSecret }} 认证器验证码 验证码会随时间更新；若已过期，请等待新验证码后重试。 {{ mfaActionBusy",
       "conditions": [
@@ -21298,7 +21298,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#7d20870a6b6ed73c.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 492,
+      "line": 493,
       "kind": "control",
       "label": "{{ mfaActionBusy ? \"正在确认…\" : \"确认并启用\" }}",
       "conditions": [
@@ -21361,7 +21361,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#29abd90f9774564d.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 526,
+      "line": 527,
       "kind": "form-event",
       "label": "当前密码 当前验证码或恢复码 {{ mfaActionBusy ? \"正在停用并撤销会话…\" : \"停用并撤销全部会话\" }}",
       "conditions": [
@@ -21420,7 +21420,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#6735871aaf8e0556.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 547,
+      "line": 548,
       "kind": "control",
       "label": "{{ mfaActionBusy ? \"正在停用并撤销会话…\" : \"停用并撤销全部会话\" }}",
       "conditions": [
@@ -21479,7 +21479,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 554,
+      "line": 555,
       "kind": "control",
       "label": "查看安全会话",
       "conditions": [
@@ -21541,7 +21541,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#e4840b8a830571e2.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 555,
+      "line": 556,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -21596,7 +21596,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 577,
+      "line": 578,
       "kind": "control",
       "label": "ScoutOps 首页",
       "conditions": [
@@ -21651,7 +21651,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#b4ef7a9c4f34af7b.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 701,
+      "line": 702,
       "kind": "form-event",
       "label": "账号（邮箱或用户名） 使用已验证邮箱或唯一用户名。 密码 密码仅用于本次登录验证。 会话与可访问范围由服务端校验。 忘记密码？ {{ requestState === \"loading\" ? \"正在验证…\" : \"登录\" }} 认证器验证码",
       "conditions": [
@@ -21710,7 +21710,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#4ea44facc4e04130.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 735,
+      "line": 736,
       "kind": "control",
       "label": "忘记密码？",
       "conditions": [
@@ -21780,7 +21780,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#3d0185dcb1b90a38.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 737,
+      "line": 738,
       "kind": "control",
       "label": "{{ requestState === \"loading\" ? \"正在验证…\" : \"登录\" }}",
       "conditions": [
@@ -21843,7 +21843,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#55432de3fcde4409.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 755,
+      "line": 756,
       "kind": "control",
       "label": "{{ requestState === \"loading\" ? \"正在验证…\" : \"验证并继续\" }}",
       "conditions": [
@@ -21906,7 +21906,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#9fb8524110a1038f.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 762,
+      "line": 763,
       "kind": "form-event",
       "label": "步骤 1 / 2 · 更新密码 当前种子密码 新的长期密码 至少 12 位，最多 128 位。 {{ seedPasswordBusy ? \"正在更新…\" : \"更新密码并重新登录\" }}",
       "conditions": [
@@ -21969,7 +21969,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#7d98b83b16e631e4.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 790,
+      "line": 791,
       "kind": "control",
       "label": "{{ seedPasswordBusy ? \"正在更新…\" : \"更新密码并重新登录\" }}",
       "conditions": [
@@ -22032,7 +22032,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#05351529fe9e3358.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 800,
+      "line": 801,
       "kind": "form-event",
       "label": "当前密码 用于启动本次认证器绑定。 {{ mfaActionBusy ? \"正在启动绑定…\" : \"开始绑定认证器\" }}",
       "conditions": [
@@ -22099,7 +22099,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#f068679ed044d696.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 814,
+      "line": 815,
       "kind": "control",
       "label": "{{ mfaActionBusy ? \"正在启动绑定…\" : \"开始绑定认证器\" }}",
       "conditions": [
@@ -22166,7 +22166,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#d9c0ff91de01c471.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 822,
+      "line": 823,
       "kind": "form-event",
       "label": "手动输入密钥 {{ mfaSecret }} 密钥仅在本次绑定期间显示，请保存在受信任的认证器中。 认证器验证码 {{ mfaActionBusy ? \"正在确认…\" : \"确认并完成安全设置\" }}",
       "conditions": [
@@ -22233,7 +22233,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#e7030ff0d08dfdb7.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 840,
+      "line": 841,
       "kind": "control",
       "label": "{{ mfaActionBusy ? \"正在确认…\" : \"确认并完成安全设置\" }}",
       "conditions": [
@@ -22300,7 +22300,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 853,
+      "line": 854,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -22370,7 +22370,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#f3edcccf9be30a1b.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 861,
+      "line": 862,
       "kind": "control",
       "label": "创建本地账号",
       "conditions": [
@@ -22429,7 +22429,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.2",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 862,
+      "line": 863,
       "kind": "control",
       "label": "查看安全会话",
       "conditions": [
@@ -22488,7 +22488,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#dce7dc58cd80c932.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 863,
+      "line": 864,
       "kind": "control",
       "label": "了解 MFA",
       "conditions": [
@@ -22547,7 +22547,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.2",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 866,
+      "line": 867,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -22613,7 +22613,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#341395d9a1567247.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 867,
+      "line": 868,
       "kind": "control",
       "label": "了解 MFA",
       "conditions": [
@@ -22676,7 +22676,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.2",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 885,
+      "line": 886,
       "kind": "control",
       "label": "ScoutOps 首页",
       "conditions": [
@@ -22731,7 +22731,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#62294b45ceb45f22.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 943,
+      "line": 944,
       "kind": "form-event",
       "label": "新密码 至少 12 位；不在页面显示或保存链接 token。 {{ requestState === \"loading\" ? \"正在安全处理…\" : \"更新密码\" }}",
       "conditions": [
@@ -22790,7 +22790,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#a8e9d7ee5148dbe5.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 963,
+      "line": 964,
       "kind": "control",
       "label": "{{ requestState === \"loading\" ? \"正在安全处理…\" : \"更新密码\" }}",
       "conditions": [
@@ -22849,7 +22849,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.3",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 970,
+      "line": 971,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -22908,7 +22908,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#56d7e5b963aa0067.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 977,
+      "line": 978,
       "kind": "control",
       "label": "找回密码",
       "conditions": [
@@ -22967,7 +22967,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#6f57070c49bdbca1.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 982,
+      "line": 983,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -23026,7 +23026,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#e0691d9aef4aa1e2.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 985,
+      "line": 986,
       "kind": "control",
       "label": "了解 MFA 设置",
       "conditions": [
@@ -23081,7 +23081,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.3",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 998,
+      "line": 999,
       "kind": "control",
       "label": "ScoutOps 首页",
       "conditions": [
@@ -23136,7 +23136,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#be82854e01e5e049.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1041,
+      "line": 1042,
       "kind": "form-event",
       "label": "邮箱 不论账号是否存在，反馈都保持一致。 {{ requestState === \"loading\" ? \"正在安全处理…\" : \"发送重置说明\" }}",
       "conditions": [
@@ -23191,7 +23191,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#4b32d082f043e0da.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1056,
+      "line": 1057,
       "kind": "control",
       "label": "{{ requestState === \"loading\" ? \"正在安全处理…\" : \"发送重置说明\" }}",
       "conditions": [
@@ -23246,7 +23246,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.4",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1061,
+      "line": 1062,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -23301,7 +23301,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#e0691d9aef4aa1e2.2",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1062,
+      "line": 1063,
       "kind": "control",
       "label": "了解 MFA 设置",
       "conditions": [
@@ -23356,7 +23356,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.4",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1079,
+      "line": 1080,
       "kind": "control",
       "label": "ScoutOps 首页",
       "conditions": [
@@ -23411,7 +23411,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#e448c4ea094171f6.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1116,
+      "line": 1117,
       "kind": "form-event",
       "label": "邮箱 用于登录及接收一次性验证链接。 密码 至少 12 位；请使用不重复的强密码。 确认密码 再次输入密码；确认值仅在本地比较。 {{ requestState === \"loading\" ? \"正在安全处理…\" : \"创建账号\" }}",
       "conditions": [
@@ -23466,7 +23466,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#8cc6c6d54ed246f6.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1161,
+      "line": 1162,
       "kind": "control",
       "label": "{{ requestState === \"loading\" ? \"正在安全处理…\" : \"创建账号\" }}",
       "conditions": [
@@ -23521,7 +23521,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.5",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1170,
+      "line": 1171,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -23576,7 +23576,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#393c4351ab80bac7.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1171,
+      "line": 1172,
       "kind": "control",
       "label": "账号安全说明",
       "conditions": [
@@ -23631,7 +23631,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#77c47b63bed1a205.5",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1187,
+      "line": 1188,
       "kind": "control",
       "label": "ScoutOps 首页",
       "conditions": [
@@ -23686,7 +23686,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.6",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1264,
+      "line": 1265,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -23741,7 +23741,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#9b4b982bf643379f.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1275,
+      "line": 1276,
       "kind": "control",
       "label": "S SCOUTOPS / 智能选品",
       "conditions": [
@@ -23803,7 +23803,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#f29375268246ac09.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1348,
+      "line": 1349,
       "kind": "control",
       "label": "撤销",
       "conditions": [
@@ -23869,7 +23869,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#f3edcccf9be30a1b.2",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1353,
+      "line": 1354,
       "kind": "control",
       "label": "创建本地账号",
       "conditions": [
@@ -23924,7 +23924,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#dc876249a8119b09.7",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1356,
+      "line": 1357,
       "kind": "control",
       "label": "返回登录",
       "conditions": [
@@ -23979,7 +23979,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#ba3feba8b42af0bf.3",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1357,
+      "line": 1358,
       "kind": "control",
       "label": "查看安全会话",
       "conditions": [
@@ -24034,7 +24034,7 @@
     {
       "candidateId": "apps/web/src/components/LocalIdentity.vue#df188704ef470c64.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
-      "line": 1358,
+      "line": 1359,
       "kind": "control",
       "label": "管理 MFA",
       "conditions": [

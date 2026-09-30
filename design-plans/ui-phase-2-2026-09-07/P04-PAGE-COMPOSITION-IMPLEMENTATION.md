@@ -14,6 +14,8 @@
 
 ## 本地验证
 
+- 共享身份 `submit()` pending 早退的 P04 实际 Vue 回归：两次同步表单提交保持单条既有 `{email}` POST；桌面 Chromium 与390px手机各1/1通过。
+
 - `node --test tests/unit/forgot-password-page-preview.test.mjs tests/m02-02/auth-onboarding-contract.test.mjs`：3/3 通过。
 - `node scripts/run-playwright-projects.mjs "--grep=P04 recovery" --workers=1`：桌面 Chromium 2/2、390px mobile 2/2 通过。本地拦截的测试响应验证无效邮箱零 POST、有效邮箱精确发送一次 `{email}`、通用 202、429追踪和局部返回登录；不发送真实邮件。
 - `node scripts/verify-ui-phase2-identity-review.mjs`：P02–P07 每路径40源控件映射、共享身份源18项检查通过。

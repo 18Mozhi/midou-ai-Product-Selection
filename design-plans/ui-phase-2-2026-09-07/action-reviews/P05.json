@@ -5,7 +5,7 @@
   "status": "implemented-not-production-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/LocalIdentity.vue": "36e9f5163e2ea588974b402d6b7098ee6c3ceaa0ba26ed2c7b320c3b1e33a488",
+    "apps/web/src/components/LocalIdentity.vue": "e1cbfd351ec79c7517f4c069cd3ba6d70ec4a403c72212dd3d195eea95370af8",
     "apps/web/src/components/local-identity-verification.css": "1634922d971948d38e0ccadb11589e3b51f8e2933484fc51e4251ac06a99849d"
   },
   "dialogs": {
@@ -1100,7 +1100,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/LocalIdentity.vue": "36e9f5163e2ea588974b402d6b7098ee6c3ceaa0ba26ed2c7b320c3b1e33a488",
+      "apps/web/src/components/LocalIdentity.vue": "e1cbfd351ec79c7517f4c069cd3ba6d70ec4a403c72212dd3d195eea95370af8",
       "apps/web/src/components/local-identity-verification.css": "1634922d971948d38e0ccadb11589e3b51f8e2933484fc51e4251ac06a99849d",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
