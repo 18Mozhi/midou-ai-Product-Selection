@@ -91,13 +91,13 @@ test("M02-04.A01/A03/A05/A06/A09/A10/A13/A14 component contract adds no backend 
   assert.equal(migrations.filter((name) => name.includes("m02_04")).length, 0);
 });
 test("M02-04 internal routes are registered only by development builds", async () => {
-  const [catalog, generated, app, vite, shell] = await Promise.all(
+  const [catalog, generated, app, vite, registry] = await Promise.all(
     [
       "apps/web/src/route-catalog.ts",
       "apps/web/src/route-catalog.generated.json",
       "apps/web/src/App.vue",
       "apps/web/vite.config.ts",
-      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/navigation-surface-registry.ts",
     ].map(read),
   );
   const internal = JSON.parse(generated).routes.find((route) => route.path === "/ui-states");
@@ -108,8 +108,7 @@ test("M02-04 internal routes are registered only by development builds", async (
   assert.match(vite, /scoutops-strip-internal-surfaces/);
   assert.match(vite, /internal_surface_production_strip_contract_missing/);
   assert.match(vite, /generateBundle[\s\S]*UiStateShowcase\|VerificationFramework/);
-  assert.match(shell, /!\.\/UiStateShowcase\.vue/);
-  assert.match(shell, /!\.\/VerificationFramework\.vue/);
+  assert.doesNotMatch(registry, /UiStateShowcase|VerificationFramework/);
 });
 test("M02-04.A07/A15/A16/A17 visual recovery and delivery evidence exists", async () => {
   const [styles, e2e, runbook, feature, blueprint] = await Promise.all(
@@ -124,7 +123,7 @@ test("M02-04.A07/A15/A16/A17 visual recovery and delivery evidence exists", asyn
   assert.match(styles, /\.ui-state-panel/);
   assert.match(styles, /\.confirm-dialog/);
   assert.match(styles, /max-height:\s*calc\(100dvh - 36px\)/);
-  assert.match(styles, /@media\s*\(\s*max-width:\s*780px\s*\)/);
+  assert.match(styles, /@media\s*\(\s*max-width:\s*840px\s*\)/);
   assert.match(e2e, /keyboard\.press/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(runbook, /python scripts\/deploy-baota\.py/);

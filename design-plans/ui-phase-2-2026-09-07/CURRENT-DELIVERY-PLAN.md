@@ -1,3 +1,7 @@
+## 2026-10-01 · P18 提前人工处理键盘闭环
+
+补齐 `OP-EARLY-DECISION-DETAILS` 实际 Vue 双端键盘路径：键盘展开后只有继续观察/驳回，采纳入口缺席；展开为零写入，Tab/Shift+Tab 顺序正确。M04-02 该用例桌面 Chromium 与390px手机各1/1，格式门通过。动作清单将 disabled/busy 标为不适用；动态质量门变化焦点交接与 hover/pressed 视觉映射仍开放。未改产品 Vue/API/权限/业务合同。
+
 ## 2026-09-30 · P15 工作台离页与代次切换取消在途读取
 
 OpportunityWorkspace 的列表、详情、利润、复核人、AI、竞品、供应、推荐配置读取现在共享当前代次 AbortController；筛选/对象切换、KeepAlive 离页或卸载时取消旧 GET，同时保留代次隔离。POST、ERP 写入、显式重试和 API/权限/业务合同不变。真实 Vue 双端生命周期定向16/16、M04-02完整双端110/110、automatic-selection-readiness单测5/5、Web类型检查与生产构建、格式/计划/文档门均通过。本地受控响应不证明真实 RBAC/数据库/M07-03，生产仍须等待 readiness。

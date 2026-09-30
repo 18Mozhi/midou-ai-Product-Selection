@@ -5,12 +5,13 @@ import { readFile } from "node:fs/promises";
 const read = (path) => readFile(path, "utf8");
 
 test("Feature Map routes are unique and Vue Router owns reactive lazy navigation", async () => {
-  const [featureSource, router, app, shell, routeState] = await Promise.all([
+  const [featureSource, router, app, shell, routeState, registry] = await Promise.all([
     read("docs/feature-map.json"),
     read("apps/web/src/router.ts"),
     read("apps/web/src/App.vue"),
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/navigation-shell-route-state.ts"),
+    read("apps/web/src/components/navigation-surface-registry.ts"),
   ]);
   const routes = JSON.parse(featureSource).routes;
   assert.equal(new Set(routes.map((route) => route.path)).size, routes.length);
@@ -18,15 +19,15 @@ test("Feature Map routes are unique and Vue Router owns reactive lazy navigation
   assert.match(app, /defineAsyncComponent[\s\S]*useRoute/);
   assert.match(router, /appRoutes[\s\S]*document\.title/);
   assert.match(
-    shell,
+    registry,
     /const componentModules[\s\S]*"\.\/SecurityOperationsCenter\.vue": \(\) => import\("\.\/SecurityOperationsCenter\.vue"\)/,
   );
   assert.match(
-    shell,
+    registry,
     /const lazy = \(name: string\) => \{[\s\S]*return defineAsyncComponent\(loader\)/,
   );
   assert.match(
-    shell,
+    registry,
     /const surfaceComponents[\s\S]*"platform-account-center": lazy\("PlatformAccountCenter"\)/,
   );
   assert.doesNotMatch(shell, /import\.meta\.glob/);

@@ -769,7 +769,7 @@
           "scene": "candidate"
         }
       ],
-      "remaining": "完整动态质量门变化/焦点与六态未验。",
+      "remaining": "真实 Vue 双端已验证候选/不具资格状态下的键盘展开、观察/驳回焦点顺序与展开零写入；动态质量门升级时的焦点交接及 hover/pressed 视觉映射仍未验。该披露始终可用，不具有 disabled/busy 变体。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#e28c61b56c99b993.1"
       ],
@@ -778,10 +778,15 @@
         "hover": "not-mapped",
         "focus": "not-mapped",
         "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "disabled": "not-applicable",
+        "busy": "not-applicable"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "P18.A07/A08/A15 详情回归在候选状态用键盘展开提前人工处理，确认只有继续观察/驳回、采纳入口缺席、展开时零决策POST，并验证Tab/Shift+Tab焦点顺序；桌面Chromium与390px各1/1。受控本地响应不证明真实RBAC、读屏器或生产验收。"
+        },
         {
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",

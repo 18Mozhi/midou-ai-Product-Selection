@@ -280,6 +280,7 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/web/src/components/OpportunityDetailInsights.vue",
     "utf8",
   );
+  const trendRuleDialogWeb = await readFile("apps/web/src/components/TrendRuleDialog.vue", "utf8");
   assert.match(
     up,
     /opportunities[\s\S]*opportunity_decisions[\s\S]*opportunity_refresh_jobs[\s\S]*opportunity_events[\s\S]*opportunity_outbox/,
@@ -298,7 +299,10 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(routes, /opportunities\/batch[\s\S]*evidence-completion-tasks/);
   assert.match(routes, /opportunity:decide/);
   const webContract = `${web}\n${listWeb}\n${decisionWeb}`;
-  assert.match(web, /class="primary"\s+to="\/opportunities\/start"[\s\S]*创建选品/);
+  assert.match(
+    web,
+    /<RouterLink\b(?=[^>]*class="[^"]*\bprimary\b[^"]*")(?=[^>]*to="\/opportunities\/start")[^>]*>[\s\S]*?创建选品/,
+  );
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(webContract, new RegExp(state));
   assert.match(webContract, /证据完整度[\s\S]*阻断原因[\s\S]*缺少可采纳证据/);
@@ -310,8 +314,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(decisionWeb, /补证阻断项/);
   assert.doesNotMatch(decisionWeb, /采纳前还缺/);
   assert.match(
-    detailInsightsWeb,
-    /达到来源门槛只进入规则命中候选[\s\S]*五项质量门全部通过后[\s\S]*建议采纳/,
+    trendRuleDialogWeb,
+    /达到来源门槛只显示“规则命中候选”[\s\S]*五项质量门全部通过后才显示“建议采纳”/,
   );
   assert.doesNotMatch(detailInsightsWeb, /达到来源门槛即可进入推荐/);
   assert.match(evidenceWeb, /证据新鲜度：观测于/);

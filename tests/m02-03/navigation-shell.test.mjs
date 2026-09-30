@@ -186,17 +186,18 @@ test("M02-03 shell presents business labels grouped search and collapsed failure
 });
 
 test("M02-03 route shell lazily imports only registered surfaces and page-owned dashboard CSS", async () => {
-  const [shell, main, dashboard, catalogRaw] = await Promise.all([
+  const [shell, registry, main, dashboard, catalogRaw] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
+    read("apps/web/src/components/navigation-surface-registry.ts"),
     read("apps/web/src/main.ts"),
     read("apps/web/src/components/PlatformDashboard.vue"),
     read("config/route-catalog.json"),
   ]);
   const imports = new Set(
-    [...shell.matchAll(/import\("\.\/([^"]+\.vue)"\)/gu)].map((match) => match[1]),
+    [...registry.matchAll(/import\("\.\/([^"]+\.vue)"\)/gu)].map((match) => match[1]),
   );
   const lazyNames = new Set(
-    [...shell.matchAll(/lazy\("([^"]+)"\)/gu)].map((match) => `${match[1]}.vue`),
+    [...registry.matchAll(/lazy\("([^"]+)"\)/gu)].map((match) => `${match[1]}.vue`),
   );
   const routeSurfaces = new Set(
     JSON.parse(catalogRaw)
@@ -204,7 +205,7 @@ test("M02-03 route shell lazily imports only registered surfaces and page-owned 
       .map((route) => route.surface),
   );
   const surfaceBindings = new Set(
-    [...shell.matchAll(/^  "([^"]+)": lazy\("([^"]+)"\),?$/gmu)].map((match) => match[1]),
+    [...registry.matchAll(/^  "([^"]+)": lazy\("([^"]+)"\),?$/gmu)].map((match) => match[1]),
   );
 
   assert.doesNotMatch(shell, /import\.meta\.glob/);
@@ -300,6 +301,7 @@ test("M02-03.A06/A13 authenticated API validates shell and preserves error contr
 test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay explicit", async () => {
   const [
     component,
+    accessPanel,
     permissions,
     routeState,
     shellTheme,
@@ -321,6 +323,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   ] = await Promise.all(
     [
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/NavigationAccessPanel.vue",
       "apps/web/src/navigation-shell-permissions.ts",
       "apps/web/src/navigation-shell-route-state.ts",
       "apps/web/src/use-navigation-shell-theme.ts",
@@ -341,7 +344,14 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
       "tests/e2e/m02-03-navigation-shell.spec.ts",
     ].map(read),
   );
-  const componentEvidence = [component, permissions, routeState, shellTheme, discovery].join("\n");
+  const componentEvidence = [
+    component,
+    accessPanel,
+    permissions,
+    routeState,
+    shellTheme,
+    discovery,
+  ].join("\n");
   const routeCatalogManifest = JSON.parse(routeCatalogManifestRaw);
   for (const shell of ["member", "organization_admin", "platform_admin"])
     assert.match(componentEvidence + openapi, new RegExp(shell));
@@ -394,7 +404,7 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(navigationMemory, /localStorage/);
   assert.match(navigationMemory, /scoutops:navigation:last-member-route/);
   assert.match(component, /breadcrumbTrail/);
-  assert.match(component, /申请权限或联系管理员/);
+  assert.match(accessPanel, /申请权限或联系管理员/);
   assert.match(component, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
   assert.match(landingRedirect, /\/me\/landing/);
@@ -434,6 +444,6 @@ test("M02-03 context selection stays outside the cached shell boundary", async (
   assert.match(app, /TenancyChooser v-else-if="selectedView === 'tenancy'"/);
   assert.match(app, /NavigationShell v-else-if="navigationShell"/);
   assert.match(shell, /<KeepAlive :max="12">/);
-  assert.match(chooser, /<RouterLink :to="safeReturnTo">/);
+  assert.match(chooser, /<RouterLink\b[^>]*:to="safeReturnTo"/);
   assert.doesNotMatch(app, /<KeepAlive[\s\S]*TenancyChooser/);
 });

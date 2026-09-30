@@ -1,3 +1,7 @@
+## 2026-10-01 · P18 提前人工处理键盘闭环
+
+补齐“规则命中候选/暂无建议采纳”分支的提前人工处理 disclosure 证据：实际 Vue 双端键盘展开后仅显示继续观察与驳回，不显示采纳；展开本身零 POST，Tab/Shift+Tab 顺序与焦点可见。修改 `tests/e2e/m04-02-opportunities.spec.ts` 后，该条 M04-02 用例桌面 Chromium、390px 手机各 1/1 通过，格式门通过。同步 P18 action review：disabled/busy 对该 disclosure 不适用。动态质量门变化时的焦点交接、hover/pressed 截图、真实 RBAC/服务端与生产验收仍开放；未改 Vue/API/权限/业务规则。
+
 ## 2026-09-30 · P26 通知页缓存生命周期与 SSE 暂停恢复
 
 NotificationCenter 改由 KeepAlive 激活/停用钩子启动和暂停：离页时递增读取代次、关闭 SSE；隐藏期间的回退/事件回调不能再发起读取，迟到列表不改写页状态；返回时按当前 URL 恰好重读一次并建立一个新 SSE 连接。已发送的通知/偏好写入不取消、不重放。新增真实 Vue Playwright 用例验证离页旧列表响应、连接关闭、返回读到最新列表及连接重建；桌面 Chromium 与 390px 手机各 1/1，通过；通知归属源回归 28/28、Web 类型检查通过。同步 P26 源指纹和本节合同/Feature Map。API、权限、邮件策略、SQL、部署配置未改；测试不证明真实 SSE 服务、接收者隔离或 M07-03。生产 readiness 仍返回 503。

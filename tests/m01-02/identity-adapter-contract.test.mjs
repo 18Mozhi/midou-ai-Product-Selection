@@ -57,6 +57,8 @@ test("M01-02.A06/A10/A13/A17 contracts, config, map and docs stay synchronized",
     assert.match(env, new RegExp(key));
   assert.match(schema, /"mfa"/);
   assert.match(map, /mfaIdentityAdapters/);
-  assert.match(architecture, /21_安全设置.jpg/);
+  assert.match(architecture, /page-specs\/P02\.md/);
+  assert.match(architecture, /page-specs\/P07\.md/);
+  assert.doesNotMatch(architecture, /霓虹科技登录页\.png|21_安全设置\.jpg/);
   assert.match(runbook, /## 回滚/);
 });

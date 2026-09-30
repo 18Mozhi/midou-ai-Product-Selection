@@ -652,8 +652,33 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await expect(page.getByText("数据不足，不能生成可靠 ROI")).toBeVisible();
   await page.getByRole("button", { name: "证据", exact: true }).click();
   await expect(page.getByText("Example News")).toBeVisible();
-  await page.getByText("提前人工处理", { exact: true }).click();
-  await page.getByRole("button", { name: "继续观察", exact: true }).click();
+  const decisionWrites: string[] = [];
+  page.on("request", (request) => {
+    if (
+      request.method() === "POST" &&
+      request.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`)
+    )
+      decisionWrites.push(request.url());
+  });
+  const earlyDecision = page.getByText("提前人工处理", { exact: true });
+  const earlyDecisionDetails = page.locator(".opportunity-decision-waiting details");
+  await earlyDecision.focus();
+  await expect(earlyDecision).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(earlyDecisionDetails).toHaveAttribute("open", "");
+  const observeButton = page.getByRole("button", { name: "继续观察", exact: true });
+  const rejectButton = page.getByRole("button", { name: "驳回", exact: true });
+  await expect(observeButton).toBeVisible();
+  await expect(rejectButton).toBeVisible();
+  await expect(page.getByRole("button", { name: "采纳建议" })).toHaveCount(0);
+  await expect.poll(() => decisionWrites.length).toBe(0);
+  await page.keyboard.press("Tab");
+  await expect(observeButton).toBeFocused();
+  await page.keyboard.press("Tab");
+  await expect(rejectButton).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(observeButton).toBeFocused();
+  await page.keyboard.press("Enter");
   const dialog = page.getByRole("dialog", { name: "记录继续观察决定" });
   await expect(dialog).toBeVisible();
   await dialog.getByLabel("原因（必填）").fill("补齐成本与竞品后再判断");
