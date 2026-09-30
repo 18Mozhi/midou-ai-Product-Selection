@@ -108,7 +108,7 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/TenancyChooser.vue | 35bc6ed956fcfc5141d904afaf4ad397bf7c9cfa34e7c27d29360937284af359 |
+| apps/web/src/components/TenancyChooser.vue | db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18 |
 
 本映射只确认当前静态候选与既有局部导航规则，不表示完成记录、持久化进度、真实身份/工作区、完整焦点读屏或生产状态已新增或验收。
 

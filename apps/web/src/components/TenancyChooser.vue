@@ -173,7 +173,9 @@ onMounted(() => {
 <template>
   <main class="tenancy-page" data-testid="tenancy">
     <header class="p08-top">
-      <RouterLink to="/" class="p08-brand"><span class="p08-brand-mark">选</span><b>智能选品</b></RouterLink>
+      <RouterLink to="/" class="p08-brand"
+        ><span class="p08-brand-mark">选</span><b>智能选品</b></RouterLink
+      >
       <span class="p08-account">账号与工作范围</span>
     </header>
     <div class="p08-layout">
@@ -188,9 +190,7 @@ onMounted(() => {
           <li :class="{ 'is-current': currentStep === 2, 'is-done': currentStep > 2 }">
             <span>2</span><b>工作区</b>
           </li>
-          <li :class="{ 'is-current': currentStep === 3 }">
-            <span>3</span><b>范围就绪</b>
-          </li>
+          <li :class="{ 'is-current': currentStep === 3 }"><span>3</span><b>范围就绪</b></li>
         </ol>
         <p class="p08-scope-note">这里只显示当前会话可见的范围。选择组织本身不会写入工作区会话。</p>
       </aside>
@@ -200,165 +200,170 @@ onMounted(() => {
           <h2 id="tenancy-title">{{ title }}</h2>
           <span>{{ copy }}</span>
         </header>
-      <div v-if="state === 'loading' || state === 'provisioning'" class="p08-notice" role="status">
-        <b>{{ state === "provisioning" ? "正在创建个人空间" : "正在读取可用范围" }}</b>
-        <p>
-          {{
-            state === "provisioning"
-              ? "创建完成后会按既有规则进入选品工作台。"
-              : "范围读取完成前，不显示可进入的组织或工作区。"
-          }}
-        </p>
-      </div>
-      <div
-        v-else-if="state === 'error' || state === 'forbidden' || state === 'expired'"
-        class="p08-notice p08-error"
-        role="alert"
-      >
-        <b>{{
-          state === "forbidden"
-            ? "当前没有可用的组织权限"
-            : state === "expired"
-              ? "登录已过期"
-              : "暂时无法读取范围"
-        }}</b>
-        <p>
-          {{
-            state === "forbidden"
-              ? "请返回组织目录；页面不会展示无权限的组织。"
-              : state === "expired"
-                ? "重新登录后再选择组织和工作区。"
-                : "检查网络或登录状态后重新读取。"
-          }}
-        </p>
-        <code v-if="requestId">关联编号：{{ requestId }}</code>
-        <RouterLink v-if="state === 'expired'" class="p08-primary-link" to="/login"
-          >重新登录</RouterLink
+        <div
+          v-if="state === 'loading' || state === 'provisioning'"
+          class="p08-notice"
+          role="status"
         >
-        <button v-else type="button" class="p08-secondary" @click="loadOrganizations">
-          返回组织列表
-        </button>
-      </div>
-      <div v-else-if="state === 'empty'" class="p08-notice p08-empty-state">
-        <span class="p08-empty-mark" aria-hidden="true">→</span>
-        <b>{{ selectedOrganization ? "该组织暂无可用工作区" : "暂无可用组织" }}</b>
-        <p>
-          {{
-            selectedOrganization
-              ? "请联系组织管理员创建或恢复工作区。"
-              : "可以创建仅属于本人的“我的选品空间”和默认工作区，也可以先查看账号安全。"
-          }}
-        </p>
-        <button
-          v-if="selectedOrganization"
-          type="button"
-          class="p08-secondary"
-          @click="loadOrganizations"
-        >
-          返回组织列表
-        </button>
-        <div v-else class="p08-actions">
-          <button type="button" class="p08-primary" @click="createPersonalWorkspace">
-            创建并进入选品空间
-          </button>
-          <RouterLink to="/me">进入个人中心</RouterLink>
-          <RouterLink to="/security/mfa">管理 MFA</RouterLink>
+          <b>{{ state === "provisioning" ? "正在创建个人空间" : "正在读取可用范围" }}</b>
+          <p>
+            {{
+              state === "provisioning"
+                ? "创建完成后会按既有规则进入选品工作台。"
+                : "范围读取完成前，不显示可进入的组织或工作区。"
+            }}
+          </p>
         </div>
-      </div>
-      <div
-        v-else-if="state === 'selected' && selectedContext"
-        class="p08-notice p08-success"
-        role="status"
-      >
-        <b>工作范围已就绪</b>
-        <p>
-          {{ selectedContext.organization.name }} ·
-          {{ selectedContext.workspace.name }}
-        </p>
-        <RouterLink class="p08-primary-link" :to="safeReturnTo">{{
-          safeReturnTo === "/onboarding" ? "继续快速引导" : "返回原页面"
-        }}</RouterLink>
-      </div>
-      <template v-else>
-        <button
-          v-if="selectedOrganization"
-          type="button"
-          class="p08-back"
-          @click="loadOrganizations"
+        <div
+          v-else-if="state === 'error' || state === 'forbidden' || state === 'expired'"
+          class="p08-notice p08-error"
+          role="alert"
         >
-          ← 返回组织
-        </button>
-        <section v-if="!selectedOrganization" class="p08-directory" aria-label="组织目录">
-          <label class="p08-search">
-            <span>搜索组织</span>
-            <input
-              v-model="organizationQuery"
-              type="search"
-              placeholder="输入组织名称或 slug"
-              autocomplete="off"
-            />
-          </label>
-          <div class="p08-list" aria-label="可用组织">
-            <button
-              v-for="organization in filteredOrganizations"
-              :key="organization.id"
-              type="button"
-              class="p08-org-row"
-              @click="chooseOrganization(organization)"
-            >
-              <span class="p08-org-initial" aria-hidden="true">{{
-                organization.name.slice(0, 1)
-              }}</span>
-              <span class="p08-org-info">
-                <strong>{{ organization.name }}</strong>
-                <small>{{ organization.slug }} · {{ organization.timezone }}</small>
-              </span>
-              <span class="p08-row-action">
-                {{ recentOrganizationIds.includes(organization.id) ? "最近使用 · " : "" }}选择组织 →
-              </span>
+          <b>{{
+            state === "forbidden"
+              ? "当前没有可用的组织权限"
+              : state === "expired"
+                ? "登录已过期"
+                : "暂时无法读取范围"
+          }}</b>
+          <p>
+            {{
+              state === "forbidden"
+                ? "请返回组织目录；页面不会展示无权限的组织。"
+                : state === "expired"
+                  ? "重新登录后再选择组织和工作区。"
+                  : "检查网络或登录状态后重新读取。"
+            }}
+          </p>
+          <code v-if="requestId">关联编号：{{ requestId }}</code>
+          <RouterLink v-if="state === 'expired'" class="p08-primary-link" to="/login"
+            >重新登录</RouterLink
+          >
+          <button v-else type="button" class="p08-secondary" @click="loadOrganizations">
+            返回组织列表
+          </button>
+        </div>
+        <div v-else-if="state === 'empty'" class="p08-notice p08-empty-state">
+          <span class="p08-empty-mark" aria-hidden="true">→</span>
+          <b>{{ selectedOrganization ? "该组织暂无可用工作区" : "暂无可用组织" }}</b>
+          <p>
+            {{
+              selectedOrganization
+                ? "请联系组织管理员创建或恢复工作区。"
+                : "可以创建仅属于本人的“我的选品空间”和默认工作区，也可以先查看账号安全。"
+            }}
+          </p>
+          <button
+            v-if="selectedOrganization"
+            type="button"
+            class="p08-secondary"
+            @click="loadOrganizations"
+          >
+            返回组织列表
+          </button>
+          <div v-else class="p08-actions">
+            <button type="button" class="p08-primary" @click="createPersonalWorkspace">
+              创建并进入选品空间
             </button>
+            <RouterLink to="/me">进入个人中心</RouterLink>
+            <RouterLink to="/security/mfa">管理 MFA</RouterLink>
           </div>
-          <div v-if="!filteredOrganizations.length" class="p08-empty-search">
-            <b>没有匹配的组织</b>
-            <span>搜索仅在当前可用组织的名称与 slug 内进行。</span>
-            <button type="button" class="p08-secondary" @click="organizationQuery = ''">
-              清除搜索
-            </button>
-          </div>
-        </section>
-        <section v-if="selectedOrganization" class="p08-organization" aria-label="当前组织工作区">
-          <header class="p08-org-context">
-            <p>当前组织</p>
-            <h2>{{ selectedOrganization.name }}</h2>
-            <span>{{ selectedOrganization.slug }} · {{ selectedOrganization.timezone }}</span>
-          </header>
-          <div class="p08-workspace-list" aria-label="可用工作区">
-            <button
-              v-for="workspace in workspaces"
-              :key="workspace.id"
-              type="button"
-              class="p08-workspace-row"
-              :disabled="workspace.status !== 'active' || state === 'selecting'"
-              @click="chooseWorkspace(workspace)"
-            >
-              <strong>{{ workspace.name }}</strong>
-              <span>{{ workspace.status === "active" ? "可进入" : "已归档，不能进入" }}</span>
-              <small>{{
-                state === "selecting" && selectedWorkspace?.id === workspace.id
-                  ? "正在写入范围…"
-                  : workspace.status === "active"
-                    ? "选择工作区 →"
-                    : "不可选择"
-              }}</small>
-            </button>
-          </div>
-          <aside class="p08-team-summary">
-            <p>组织团队</p>
-            <strong>{{ teams.length }}</strong>
-            <span>{{ teams.length ? "当前组织的团队数量" : "当前组织尚未建立团队" }}</span>
-          </aside>
-        </section>
-      </template>
+        </div>
+        <div
+          v-else-if="state === 'selected' && selectedContext"
+          class="p08-notice p08-success"
+          role="status"
+        >
+          <b>工作范围已就绪</b>
+          <p>
+            {{ selectedContext.organization.name }} ·
+            {{ selectedContext.workspace.name }}
+          </p>
+          <RouterLink class="p08-primary-link" :to="safeReturnTo">{{
+            safeReturnTo === "/onboarding" ? "继续快速引导" : "返回原页面"
+          }}</RouterLink>
+        </div>
+        <template v-else>
+          <button
+            v-if="selectedOrganization"
+            type="button"
+            class="p08-back"
+            @click="loadOrganizations"
+          >
+            ← 返回组织
+          </button>
+          <section v-if="!selectedOrganization" class="p08-directory" aria-label="组织目录">
+            <label class="p08-search">
+              <span>搜索组织</span>
+              <input
+                v-model="organizationQuery"
+                type="search"
+                placeholder="输入组织名称或 slug"
+                autocomplete="off"
+              />
+            </label>
+            <div class="p08-list" aria-label="可用组织">
+              <button
+                v-for="organization in filteredOrganizations"
+                :key="organization.id"
+                type="button"
+                class="p08-org-row"
+                @click="chooseOrganization(organization)"
+              >
+                <span class="p08-org-initial" aria-hidden="true">{{
+                  organization.name.slice(0, 1)
+                }}</span>
+                <span class="p08-org-info">
+                  <strong>{{ organization.name }}</strong>
+                  <small>{{ organization.slug }} · {{ organization.timezone }}</small>
+                </span>
+                <span class="p08-row-action">
+                  {{ recentOrganizationIds.includes(organization.id) ? "最近使用 · " : "" }}选择组织
+                  →
+                </span>
+              </button>
+            </div>
+            <div v-if="!filteredOrganizations.length" class="p08-empty-search">
+              <b>没有匹配的组织</b>
+              <span>搜索仅在当前可用组织的名称与 slug 内进行。</span>
+              <button type="button" class="p08-secondary" @click="organizationQuery = ''">
+                清除搜索
+              </button>
+            </div>
+          </section>
+          <section v-if="selectedOrganization" class="p08-organization" aria-label="当前组织工作区">
+            <header class="p08-org-context">
+              <p>当前组织</p>
+              <h2>{{ selectedOrganization.name }}</h2>
+              <span>{{ selectedOrganization.slug }} · {{ selectedOrganization.timezone }}</span>
+            </header>
+            <div class="p08-workspace-list" aria-label="可用工作区">
+              <button
+                v-for="workspace in workspaces"
+                :key="workspace.id"
+                type="button"
+                class="p08-workspace-row"
+                :disabled="workspace.status !== 'active' || state === 'selecting'"
+                @click="chooseWorkspace(workspace)"
+              >
+                <strong>{{ workspace.name }}</strong>
+                <span>{{ workspace.status === "active" ? "可进入" : "已归档，不能进入" }}</span>
+                <small>{{
+                  state === "selecting" && selectedWorkspace?.id === workspace.id
+                    ? "正在写入范围…"
+                    : workspace.status === "active"
+                      ? "选择工作区 →"
+                      : "不可选择"
+                }}</small>
+              </button>
+            </div>
+            <aside class="p08-team-summary">
+              <p>组织团队</p>
+              <strong>{{ teams.length }}</strong>
+              <span>{{ teams.length ? "当前组织的团队数量" : "当前组织尚未建立团队" }}</span>
+            </aside>
+          </section>
+        </template>
       </section>
     </div>
     <footer class="p08-boundary">
