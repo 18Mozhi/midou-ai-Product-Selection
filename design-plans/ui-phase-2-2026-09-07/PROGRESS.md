@@ -4731,3 +4731,7 @@ TrendDashboard 筛选徽标改为只统计偏离默认值的筛选字段：默�
 ## 2026-10-01 · P47 / P70 验证绑定校准
 
 全量功能门完成格式、静态分析与22工作区生产构建，但 Node 单测4批均失败：`verify-functional`首批776项中37失败，后续批次也包含大量当前源码/历史审核绑定漂移与少数测试夹具缺失；本地受控E2E及生产验收尚未执行。按当前事实修正P70调度页来源行号与指纹，并将P47读序VM夹具补上现有`useRouter`/`onUnmounted`依赖；P70断言使用完整标识符边界，避免将`useRouter`误判为`useRoute`。相关定向单测15/15通过。没有改生产Vue、API、权限、数据库或服务行为；历史截图与不可变审阅快照保持不动。全量功能门尚未通过，不得用于发布验收。
+
+## 2026-10-01 · P16 空结果审计状态保持
+
+修复 `SelectionJourney.vue` 在空结果任务完成 observe 决策后丢失来源说明：旅程 `state` 会更新为 `decided`，而任务事实仍是 `task_status=succeeded_empty`；展示判断现按任务状态，保留“真实来源没有返回可用结果”与空结果描述。扩展 M07-06 实际 Vue Playwright 回归，分别模拟成功审计回执后确认标题、说明、决策成功仍可见；桌面 Chromium 与 390px 手机各 1/1 通过。无 API/OpenAPI、权限、数据库、任务契约、依赖或配置改变；本地回包不证明生产行为。全量功能门此前仍有 314 项 Node 单测失败，生产 readiness 仍为 503（dependency_unavailable）；未部署，待 readiness 恢复及授权的 Redis 启动操作。

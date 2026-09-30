@@ -302,6 +302,25 @@ test("M07-06.A08/A16 shows succeeded_empty and forbidden without fake evidence",
           },
         }),
   );
+  await page.route(`**/api/v1/selection-journeys/${base.id}/decisions`, (r) =>
+    r.fulfill({
+      status: 201,
+      json: env({
+        ...base,
+        state: "decided",
+        task_status: "succeeded_empty",
+        terminal_at: "2026-08-10T12:00:10.000Z",
+        decision: {
+          action: "observe",
+          reason: "保留真实空结果并继续观察",
+          actor_id: "77777777-7777-4777-8777-777777777777",
+          created_at: "2026-08-10T12:00:20.000Z",
+        },
+        opportunity_id: null,
+        decided_at: "2026-08-10T12:00:20.000Z",
+      }),
+    }),
+  );
   await page.goto("/opportunities/start");
   await page.getByPlaceholder("例如 portable blender").fill("no result keyword");
   await page.getByRole("button", { name: "创建真实选品任务" }).click();
@@ -309,6 +328,13 @@ test("M07-06.A08/A16 shows succeeded_empty and forbidden without fake evidence",
   await expect(
     page.getByText("任务状态：succeeded_empty。来源处理已完成，但没有返回可用候选。"),
   ).toBeVisible();
+  await page.getByLabel("决策原因").fill("保留真实空结果并继续观察");
+  await page.getByRole("button", { name: "保存审计决策" }).click();
+  await expect(page.getByText("真实来源没有返回可用结果")).toBeVisible();
+  await expect(
+    page.getByText("任务状态：succeeded_empty。来源处理已完成，但没有返回可用候选。"),
+  ).toBeVisible();
+  await expect(page.getByText("决策已保存 · 继续观察")).toBeVisible();
   await page.getByRole("button", { name: "开始下一次" }).click();
   status = 403;
   await page.getByPlaceholder("例如 portable blender").fill("denied keyword");

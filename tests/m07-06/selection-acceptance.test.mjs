@@ -87,7 +87,7 @@ test("M07-06.A07-A17 keeps UI, contracts, production evidence and rollback synch
     assert.match(all, new RegExp(token));
   assert.match(files[1], /max-width:\s*520px/);
   assert.match(files[0], /真实来源/);
-  assert.match(files[0], /journey\.task_status === "succeeded_empty"/);
+  assert.match(files[0], /current\.task_status === "succeeded_empty"/);
   assert.match(files[0], /真实来源没有返回可用结果/);
   assert.match(files[0], /真实来源已明确受阻/);
   assert.match(files[0], /错误码：[\s\S]*journey\.blocked_reason/);
@@ -307,7 +307,7 @@ test("M07-06 preserves the real empty-result label after an audit decision", asy
     read("apps/web/src/components/SelectionJourney.vue"),
     read("apps/api/src/mysql-selection-journey-repository.ts"),
   ]);
-  assert.match(component, /journey\.task_status === "succeeded_empty"/);
+  assert.match(component, /current\.task_status === "succeeded_empty"/);
   assert.doesNotMatch(component, /journey\.state === "succeeded_empty"/);
   assert.match(
     repository,

@@ -171,7 +171,7 @@ const terminal = computed(
   terminalEvidence = computed(() => {
     const current = journey.value;
     if (!current) return { title: "", description: "" };
-    if (current.state === "succeeded_empty") {
+    if (current.task_status === "succeeded_empty") {
       return {
         title: "真实来源没有返回可用结果",
         description: `任务状态：${current.task_status}。来源处理已完成，但没有返回可用候选。`,
