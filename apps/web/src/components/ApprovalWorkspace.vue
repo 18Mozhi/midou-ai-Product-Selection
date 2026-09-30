@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, rethrowUnexpectedError } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
@@ -57,6 +57,10 @@ const props = defineProps<{ apiBaseUrl: string; capabilities?: string[] }>(),
     resource_id: "",
     title: "",
   });
+let listController: AbortController | null = null,
+  detailController: AbortController | null = null,
+  listSequence = 0,
+  detailSequence = 0;
 const { dialogElement: detailDialogElement, handleCancel: handleDetailCancel } = useModalDialog(
     () => Boolean(selected.value),
     () => void closeDetail(),
@@ -189,56 +193,96 @@ async function api<T>(
   }
 }
 async function load() {
+  const sequence = ++listSequence;
+  listController?.abort("superseded");
+  const controller = new AbortController();
+  listController = controller;
   state.value = "loading";
   try {
-    const [list, tpl, members] = await Promise.all([
-      api<ApprovalItem[]>(
+    const [listResponse, templatesResponse, membersResponse] = await Promise.all([
+      request<ApprovalItem[]>(
         `/tasks/approvals?page=${page.value}&page_size=${pageSize}&involvement=${queue.value}${filter.value ? `&status=${filter.value}` : ""}`,
-        {},
-        true,
-        (meta) => {
-          total.value = Number((meta as { total?: number } | undefined)?.total ?? 0);
-        },
+        { signal: controller.signal },
       ),
-      api<ApprovalTemplate[]>("/tasks/approval-templates"),
-      canManage.value ? api<ApprovalMemberOption[]>("/tasks/member-options") : Promise.resolve([]),
+      request<ApprovalTemplate[]>("/tasks/approval-templates", { signal: controller.signal }),
+      canManage.value
+        ? request<ApprovalMemberOption[]>("/tasks/member-options", { signal: controller.signal })
+        : Promise.resolve(null),
     ]);
+    if (sequence !== listSequence || controller.signal.aborted) return;
+    const list = listResponse.data ?? [];
+    requestId.value = listResponse.request_id;
     approvals.value = list;
-    templates.value = tpl;
-    memberOptions.value = members;
+    templates.value = templatesResponse.data ?? [];
+    memberOptions.value = membersResponse?.data ?? [];
+    total.value = Number(
+      (listResponse.meta as { total?: number } | undefined)?.total ?? list.length,
+    );
     state.value = list.length ? "ready" : "empty";
     const approvalId = typeof route.query.approval === "string" ? route.query.approval : "";
     if (approvalId) await openById(approvalId, false);
   } catch (error) {
+    if (sequence !== listSequence || controller.signal.aborted) return;
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    state.value =
+      failure?.kind === "conflict"
+        ? "version_conflict"
+        : failure?.kind === "blocked"
+          ? "error"
+          : (failure?.kind ?? "error");
+    notice.value = failure?.actionHint ?? "稍后重试。";
     rethrowUnexpectedError(error);
+  } finally {
+    if (listController === controller) listController = null;
   }
 }
 async function openById(id: string, syncUrl = true) {
+  const sequence = ++detailSequence;
+  detailController?.abort("superseded");
+  const controller = new AbortController();
+  detailController = controller;
   detailBusy.value = true;
   detailNotice.value = "";
   decisionNotice.value = "";
   try {
-    selected.value = await api<ApprovalItem>(`/tasks/approvals/${id}`, {}, false);
+    const response = await request<ApprovalItem>(`/tasks/approvals/${id}`, {
+      signal: controller.signal,
+    });
+    if (sequence !== detailSequence || controller.signal.aborted) return;
+    requestId.value = response.request_id;
+    selected.value = response.data;
     reason.value = "";
     if (syncUrl) await router.replace({ query: { ...route.query, approval: selected.value.id } });
   } catch (error) {
+    if (sequence !== detailSequence || controller.signal.aborted) return;
     const failure = error instanceof ApiClientError ? error : null;
     selected.value = null;
     detailNotice.value =
       failure?.status === 404
         ? "该审批记录不存在或不属于当前工作区。"
         : (failure?.actionHint ?? "审批详情读取失败，请重试。");
-    if (!syncUrl) await router.replace({ query: { ...route.query, approval: undefined } });
+    if (!syncUrl && route.query.approval === id)
+      await router.replace({ query: { ...route.query, approval: undefined } });
     rethrowUnexpectedError(error);
   } finally {
-    detailBusy.value = false;
+    if (sequence === detailSequence) {
+      detailBusy.value = false;
+      if (detailController === controller) detailController = null;
+    }
   }
 }
 async function open(item: ApprovalItem) {
   await openById(item.id);
 }
 async function closeDetail() {
+  detailSequence += 1;
+  detailController?.abort("closed");
+  detailController = null;
   selected.value = null;
+  detailBusy.value = false;
+  detailNotice.value = "";
+  decisionNotice.value = "";
   await router.replace({ query: { ...route.query, approval: undefined } });
 }
 function closeDetailBackdrop(event: MouseEvent) {
@@ -276,6 +320,12 @@ function keepDetailFocus(event: KeyboardEvent) {
   }
 }
 async function setQueue(value: "decidable" | "requested") {
+  detailSequence += 1;
+  detailController?.abort("scope_changed");
+  detailController = null;
+  detailBusy.value = false;
+  detailNotice.value = "";
+  decisionNotice.value = "";
   queue.value = value;
   page.value = 1;
   selected.value = null;
@@ -290,6 +340,12 @@ async function setQueue(value: "decidable" | "requested") {
   await load();
 }
 async function setFilter(value: string) {
+  detailSequence += 1;
+  detailController?.abort("scope_changed");
+  detailController = null;
+  detailBusy.value = false;
+  detailNotice.value = "";
+  decisionNotice.value = "";
   filter.value = value;
   page.value = 1;
   await router.replace({
@@ -307,27 +363,34 @@ async function setPage(value: number) {
 }
 async function decide(action: "approve" | "reject") {
   if (!selected.value || !reason.value.trim()) return;
+  const ownerSequence = detailSequence,
+    approvalId = selected.value.id,
+    body = {
+      action,
+      reason: reason.value,
+      expected_version: selected.value.version,
+    };
   decisionNotice.value = "";
   busy.value = true;
   try {
-    await api(
-      `/tasks/approvals/${selected.value.id}/actions`,
-      {
-        method: "POST",
-        body: {
-          action,
-          reason: reason.value,
-          expected_version: selected.value.version,
-        },
-      },
-      false,
-    );
+    const response = await request(`/tasks/approvals/${approvalId}/actions`, {
+      method: "POST",
+      body,
+    });
+    if (ownerSequence !== detailSequence || selected.value?.id !== approvalId) {
+      if (route.path === "/tasks/approvals") void load();
+      return;
+    }
+    requestId.value = response.request_id;
     notice.value =
       action === "approve" ? "本节点已批准，审批历史不可变。" : "本节点已驳回，审批历史不可变。";
     await closeDetail();
     await load();
   } catch (error) {
-    decisionNotice.value = notice.value;
+    if (ownerSequence !== detailSequence || selected.value?.id !== approvalId) return;
+    const failure = error instanceof ApiClientError ? error : null;
+    requestId.value = failure?.requestId ?? "";
+    decisionNotice.value = failure?.actionHint ?? "审批决策未完成，请稍后重试。";
     rethrowUnexpectedError(error);
   } finally {
     busy.value = false;
@@ -415,12 +478,35 @@ async function createRequest() {
     busy.value = false;
   }
 }
-onMounted(load);
+function suspendReads(reason: "deactivated" | "unmounted") {
+  listSequence += 1;
+  listController?.abort(reason);
+  listController = null;
+  detailSequence += 1;
+  detailController?.abort(reason);
+  detailController = null;
+  selected.value = null;
+  detailBusy.value = false;
+  detailNotice.value = "";
+}
+onActivated(() => {
+  if (route.path === "/tasks/approvals") void load();
+});
+onDeactivated(() => suspendReads("deactivated"));
+onBeforeUnmount(() => suspendReads("unmounted"));
 watch(
   () => route.query.approval,
   (value) => {
     if (typeof value === "string" && value !== selected.value?.id) void openById(value, false);
-    else if (!value) selected.value = null;
+    else if (!value) {
+      detailSequence += 1;
+      detailController?.abort("scope_changed");
+      detailController = null;
+      selected.value = null;
+      detailBusy.value = false;
+      detailNotice.value = "";
+      decisionNotice.value = "";
+    }
   },
 );
 watch(

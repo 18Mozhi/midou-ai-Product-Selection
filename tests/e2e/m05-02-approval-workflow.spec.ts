@@ -1,4 +1,4 @@
-import { test, expect, type Page } from "@playwright/test";
+import { test, expect, type Page, type Request } from "@playwright/test";
 const approvalId = "00000000-0000-4000-8000-000000000921",
   actor = "00000000-0000-4000-8000-000000000922",
   decisionId = "00000000-0000-4000-8000-000000000924",
@@ -384,6 +384,123 @@ test("approval inbox splits actionable and requested views and restores detail d
   await expect(page.getByRole("heading", { name: "便携净水杯采纳决策复核" })).toBeVisible();
   await page.getByRole("button", { name: "关闭审批详情" }).click();
   await expect(page).not.toHaveURL(/approval=/);
+});
+
+test("UI2-AN05 approval list re-reads on KeepAlive return and ignores the old response", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseOlder!: () => void;
+  let olderReached!: () => void;
+  let listRequests = 0;
+  const olderGate = new Promise<void>((resolve) => (releaseOlder = resolve));
+  const olderRequest = new Promise<void>((resolve) => (olderReached = resolve));
+  await page.route("**/api/v1/tasks/approvals?*", async (route) => {
+    listRequests += 1;
+    if (listRequests === 1) {
+      olderReached();
+      await olderGate;
+      try {
+        await route.fulfill({
+          json: { ...env([{ ...item, title: "离页前的旧结果" }]), meta: { total: 1 } },
+        });
+      } catch {
+        // Deactivation aborts the old read; its result must not reach the page.
+      }
+      return;
+    }
+    await route.fulfill({
+      json: { ...env([{ ...item, title: "返回后的最新结果" }]), meta: { total: 41 } },
+    });
+  });
+  await page.goto("/tasks/approvals");
+  await olderRequest;
+  await page.locator('a[href="/home"]').first().click();
+  await expect(page).toHaveURL(/\/home$/);
+  await page.getByRole("link", { name: "审批中心" }).first().click();
+  await expect(page).toHaveURL(/\/tasks\/approvals$/);
+  await expect(page.getByRole("button", { name: /返回后的最新结果/ })).toBeVisible();
+  await expect.poll(() => listRequests).toBe(2);
+
+  releaseOlder();
+  await expect(page.getByRole("button", { name: /离页前的旧结果/ })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: /返回后的最新结果/ })).toBeVisible();
+  await expect(page.getByLabel("审批分页")).toContainText("共 41 项");
+});
+
+test("UI2-AN06 approval detail failure cannot reopen after its scope is cleared", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseDetail!: () => void;
+  let detailReached!: () => void;
+  let pendingRequest: Request | undefined;
+  const detailGate = new Promise<void>((resolve) => (releaseDetail = resolve));
+  const detailRequest = new Promise<void>((resolve) => (detailReached = resolve));
+  await page.route(`**/api/v1/tasks/approvals/${approvalId}`, async (route) => {
+    pendingRequest = route.request();
+    detailReached();
+    await detailGate;
+    try {
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "dependency_unavailable",
+            message: "审批服务暂不可用。",
+            action_hint: "请稍后重试。",
+          },
+          request_id: "stale-approval-detail",
+        },
+      });
+    } catch {
+      // The production request is expected to be aborted after its scope is cleared.
+    }
+  });
+  await page.goto(`/tasks/approvals?approval=${approvalId}`);
+  await detailRequest;
+  await page.getByRole("button", { name: "已批准" }).click();
+  await expect(page).not.toHaveURL(/approval=/);
+  await expect.poll(() => pendingRequest?.failure(), { timeout: 1_000 }).toBeTruthy();
+  releaseDetail();
+  await page.waitForTimeout(0);
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByRole("dialog", { name: item.title })).toHaveCount(0);
+});
+
+test("UI2-AN07 committed decision response cannot close a newer cached detail", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseDecision!: () => void;
+  let decisionReached!: () => void;
+  let decisionCount = 0;
+  let submittedBody: unknown;
+  const decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
+  const decisionRequest = new Promise<void>((resolve) => (decisionReached = resolve));
+  await page.route(`**/api/v1/tasks/approvals/${approvalId}/actions`, async (route) => {
+    decisionCount += 1;
+    submittedBody = route.request().postDataJSON();
+    decisionReached();
+    await decisionGate;
+    await route.fulfill({ json: env({ ...item, status: "approved", version: 2 }) });
+  });
+  await page.goto(`/tasks/approvals?approval=${approvalId}`);
+  const dialog = page.getByRole("dialog", { name: item.title });
+  await expect(dialog).toBeVisible();
+  const reason = "证据变化已核对，同意进入下一节点";
+  await dialog.getByLabel("审批原因（批准与驳回均必填）").fill(reason);
+  await dialog.getByRole("button", { name: "批准并流转" }).click();
+  await decisionRequest;
+  await page.keyboard.press("Escape");
+  await expect(dialog).toHaveCount(0);
+  await page.getByRole("button", { name: /便携净水杯采纳决策复核/ }).click();
+  const returnedDialog = page.getByRole("dialog", { name: item.title });
+  await expect(returnedDialog).toBeVisible();
+  releaseDecision();
+  await expect(returnedDialog).toBeVisible();
+  expect(decisionCount).toBe(1);
+  expect(submittedBody).toEqual({ action: "approve", reason, expected_version: item.version });
 });
 
 test("approval management creates and publishes templates, starts requests, and deduplicates decisions", async ({

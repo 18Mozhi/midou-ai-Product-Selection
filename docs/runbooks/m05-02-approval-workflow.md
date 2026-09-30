@@ -18,6 +18,10 @@ P25规格及逐动作合同见`design-plans/ui-phase-2-2026-09-07/page-specs/P25
 
 复验使用m05-02-approval-workflow中的UI2-AN01/AN02/AN04和原模块用例；这些是局部隔离Vue证据，不证明全新视觉或生产已验。运行代码只改变前端，无新增SQL/环境变量，修复自身无需Node/Python重启。正式发布仍走`python scripts/deploy-baota.py`，需核实既有迁移白名单、恢复材料和宝塔停启窗口，不假定部署器是纯前端上传。
 
+## 审批读取归属（2026-09-30）
+
+`ApprovalWorkspace` 列表、模板和成员读取由同一个代次/AbortController 管理；重复读取会中止旧GET，KeepAlive离页及卸载会中止当前GET，返回 `/tasks/approvals` 时按当前URL重新读取一次。分页总数与页级错误仅由当前读取写入。详情读取独立管理，关闭、切队列/状态、移除 `approval` 深链或离页时中止；迟到响应不再恢复已关闭详情或覆盖新范围提示。已提交决策POST保持原请求体并继续等待；若详情归属已变化，其成功回执只在审批页仍活动时触发列表重读，不关闭新详情、不取消也不重放写入。桌面与390px回归入口为 `tests/e2e/m05-02-approval-workflow.spec.ts` 的UI2-AN05/AN06/AN07。此为前端隔离测试证据；真实会话/RBAC与服务、数据库和正式生产验收仍须单独完成。无API/SQL/环境变更。
+
 ## 回滚
 
 先在宝塔停止“ai选品”，等待 `approval_escalation_jobs.status='leased'` 的租约结束，再下线审批入口与 API。只回滚本次快照能力时，先回滚应用，再执行 `0047_approval_decision_context_snapshot.down.sql`；该操作会删除已保存快照，生产已有新审批时必须先备份且通常不应执行。若不存在任何需保留的审批历史，才可继续执行 `0018b_approval_workflow_m05_02.down.sql`；该脚本按外键逆序删除本模块表。审计、全局 Outbox 和已形成的审批动作不得为了回滚而删除。

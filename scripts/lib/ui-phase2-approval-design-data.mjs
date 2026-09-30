@@ -100,6 +100,11 @@ export async function buildApprovalDesignData(repo) {
       page: { value: 1 },
       pageCount: { value: 4 },
       selected: { value: detail },
+      detailSequence: 0,
+      detailController: null,
+      detailBusy: { value: false },
+      detailNotice: { value: "" },
+      decisionNotice: { value: "" },
       load: async () => {},
       router: { replace: async (v) => navigation.push(plain(v)) },
     }).result;
@@ -161,6 +166,10 @@ export async function buildApprovalDesignData(repo) {
       }[action];
       const bindings = {
         busy: b,
+        detailSequence: 0,
+        detailController: null,
+        route: { path: "/tasks/approvals", query: {} },
+        requestId: { value: "" },
         notice,
         decisionNotice,
         reason,
@@ -176,6 +185,18 @@ export async function buildApprovalDesignData(repo) {
           selected.value = null;
         },
         rethrowUnexpectedError: () => {},
+        ApiClientError: class extends Error {
+          constructor() {
+            super("isolated failure");
+            this.requestId = "approval-design-request";
+            this.actionHint = "审批版本已变化。";
+          }
+        },
+        request: async (url, options) => {
+          calls.push(plain({ url, ...options }));
+          if (fail) throw new bindings.ApiClientError();
+          return { request_id: "approval-design-request" };
+        },
         api: async (url, options) => {
           calls.push(plain({ url, ...options }));
           if (fail) {
@@ -209,7 +230,8 @@ export async function buildApprovalDesignData(repo) {
   assert.equal(contracts.publish.body.reason, "核验后发布");
   assert.equal(contracts.request.body.resource_id, detail.resource_id);
   assert.equal(contracts.template.body.nodes.length, 1);
-  assert.equal(failures.approve.decisionNotice, failures.approve.pageNotice);
+  assert.equal(failures.approve.decisionNotice, "审批版本已变化。");
+  assert.equal(failures.approve.pageNotice, "");
   assert.equal(failures.template.decisionNotice, "");
   // Run production validators without invoking its repository or random-ID producers.
   const service = await read("apps/api/src/approval-service.ts"),

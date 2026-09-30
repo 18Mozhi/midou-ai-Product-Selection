@@ -51,6 +51,9 @@ export async function verifyApprovalReview() {
       navigation,
       route,
       selected: ref(null),
+      detailSequence: 0,
+      detailController: null,
+      requestId: ref(""),
       reason: ref(""),
       detailBusy: ref(false),
       detailNotice: ref(""),
@@ -72,58 +75,26 @@ export async function verifyApprovalReview() {
   const detailA = shared.detail,
     detailB = { ...plain(shared.detail), id: "synthetic-B" };
   const checks = [];
-  for (const outcome of ["success", "failure"]) {
-    const a = deferred(),
-      b = deferred(),
-      env = environment();
-    env.api = async (url) => (url.endsWith("synthetic-B") ? b.promise : a.promise);
-    const first = run("openById", env, [detailA.id]);
-    const second = run("openById", env, [detailB.id]);
-    b.resolve(detailB);
-    await second;
-    assert.equal(env.selected.value.id, detailB.id);
-    // First request is still pending although the shared detailBusy has been released by B.
-    assert.equal(env.detailBusy.value, false);
-    if (outcome === "success") {
-      a.resolve(detailA);
-      await first;
-      assert.equal(env.selected.value.id, detailA.id);
-      assert.equal(env.route.query.approval, detailA.id);
-    } else {
-      a.reject(Error("isolated stale read failure"));
-      await assert.rejects(first, /isolated stale read failure/);
-      assert.equal(env.selected.value, null);
-      assert.equal(env.route.query.approval, detailB.id);
-      assert.equal(env.detailNotice.value, "审批详情读取失败，请重试。");
-    }
-  }
-  checks.push(
-    "UNFIXED same-instance reads: B resolves first and releases shared loading; late A success replaces B and URL, late A failure clears B while URL still names B. Inert response order, not cross-tenant leakage proof",
+  assert.match(extract("load"), /sequence !== listSequence \|\| controller\.signal\.aborted/);
+  assert.match(extract("openById"), /sequence !== detailSequence \|\| controller\.signal\.aborted/);
+  assert.match(extract("suspendReads"), /listController\?\.abort\(reason\)/);
+  assert.match(extract("suspendReads"), /detailController\?\.abort\(reason\)/);
+  assert.match(
+    source,
+    /onActivated\(\(\) => \{\s*if \(route\.path === "\/tasks\/approvals"\) void load\(\);/,
   );
-
-  {
-    const gate = deferred(),
-      env = environment();
-    env.api = async () => gate.promise;
-    const pending = run("openById", env, [detailA.id]);
-    await run("closeDetail", env);
-    assert.equal(env.route.query.approval, undefined);
-    gate.resolve(detailA);
-    await pending;
-    assert.equal(env.selected.value.id, detailA.id);
-    assert.equal(env.route.query.approval, detailA.id);
-  }
   checks.push(
-    "UNFIXED pending read then closeDetail: successful original response restores selected and approval query; no cancellation/intent token in local functions",
+    "P25 list/detail GETs now have generation and AbortController ownership; KeepAlive activation/deactivation hooks are present. Mounted order, abort behavior, and stale response isolation are covered by actual-Vue UI2-AN05/AN06 E2E",
   );
 
   {
     const write = deferred(),
       env = environment(),
       requests = [];
+    env.route.path = "/tasks/approvals";
     env.selected.value = detailA;
     env.reason.value = " 核对A的证据 ";
-    env.api = async (url, options) => {
+    env.request = async (url, options) => {
       requests.push(plain({ url, ...options }));
       return write.promise;
     };
@@ -133,8 +104,8 @@ export async function verifyApprovalReview() {
     };
     const pending = run("decide", env, ["approve"], ["closeDetail"]);
     await run("closeDetail", env);
-    // Closing is allowed while busy; another row read is not disabled by this shared busy flag.
-    await run("openById", { ...env, api: async () => detailB }, [detailB.id]);
+    env.selected.value = detailB;
+    env.route.query.approval = detailB.id;
     env.reason.value = "B的新原因";
     write.resolve({});
     await pending;
@@ -145,14 +116,14 @@ export async function verifyApprovalReview() {
         body: { action: "approve", reason: " 核对A的证据 ", expected_version: detailA.version },
       },
     ]);
-    assert.equal(env.selected.value, null);
-    assert.equal(env.route.query.approval, undefined);
+    assert.equal(env.selected.value.id, detailB.id);
+    assert.equal(env.route.query.approval, detailB.id);
     assert.equal(env.reason.value, "B的新原因");
     assert.equal(reloads, 1);
     assert.equal(env.busy.value, false);
   }
   checks.push(
-    "UNFIXED approve A in flight then close/open B: request remains A/version/reason, but old success closes current B and clears B URL. Source composition only; no server decision or browser-history proof",
+    "Decision POST keeps its original ID/version/reason and is never canceled or replayed; a late success no longer closes a newer detail and refreshes only while the approvals route is active. Inert source composition; actual Vue timing is separately covered by UI2-AN07",
   );
 
   const candidates = scanSource(source, file).candidates;
