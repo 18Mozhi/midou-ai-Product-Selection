@@ -39,6 +39,7 @@ const activeSection = ref<"roles" | "scopes" | "grants">("roles"),
   grantQuery = ref(""),
   selectedGrantId = ref(""),
   showGrantForm = ref(false),
+  grantFormAttempted = ref(false),
   grantMutation = ref({ reason: "", expires_at: "" });
 
 const canManage = computed(() => props.authorization?.capabilities?.includes("role:manage")),
@@ -188,6 +189,70 @@ const canManage = computed(() => props.authorization?.capabilities?.includes("ro
   },
   minGrantExpiry = localDateTime(new Date(Date.now() + 60_000)),
   maxGrantExpiry = localDateTime(new Date(Date.now() + 30 * 86_400_000));
+
+const grantResourceIdPattern =
+    /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/,
+  grantFormErrors = computed(() => {
+    if (!grantFormAttempted.value)
+      return {
+        workspace: "",
+        resourceType: "",
+        resourceId: "",
+        member: "",
+        actions: "",
+        reason: "",
+        expiry: "",
+      };
+
+    const form = props.grantForm,
+      resourceId = String(form.resource_id ?? "").trim(),
+      expiry = new Date(form.expires_at ?? "").valueOf(),
+      minExpiry = new Date(minGrantExpiry).valueOf(),
+      maxExpiry = new Date(maxGrantExpiry).valueOf();
+    return {
+      workspace: form.workspace_id ? "" : "请选择工作区。",
+      resourceType: props.resourceActions[form.resource_type] ? "" : "请选择支持的资源类型。",
+      resourceId: !resourceId
+        ? "请输入资源编号。"
+        : grantResourceIdPattern.test(resourceId)
+          ? ""
+          : "请从对应资源详情页复制有效 UUID。",
+      member: form.grantee_membership_id ? "" : "请选择同组织活动成员。",
+      actions: form.actions?.length ? "" : "至少勾选一项最小必要动作。",
+      reason: String(form.reason ?? "").trim() ? "" : "请填写业务原因。",
+      expiry: !form.expires_at
+        ? "请选择到期时间。"
+        : !Number.isFinite(expiry) || expiry < minExpiry || expiry <= Date.now()
+          ? "到期时间必须晚于当前时间。"
+          : expiry > maxExpiry
+            ? "授权期限不得超过 30 天。"
+            : "",
+    };
+  });
+
+function toggleGrantForm() {
+  showGrantForm.value = !showGrantForm.value;
+  grantFormAttempted.value = false;
+}
+
+function handleGrantFormInvalid(event: Event) {
+  grantFormAttempted.value = true;
+  event.preventDefault();
+  const form = event.currentTarget;
+  if (form instanceof HTMLFormElement) form.querySelector<HTMLElement>(":invalid")?.focus();
+}
+
+function submitGrantForm() {
+  grantFormAttempted.value = true;
+  emit("createGrant");
+}
+
+watch(
+  () => props.grantForm,
+  () => {
+    grantFormAttempted.value = false;
+  },
+);
 
 const minMutationExpiry = computed(() => {
   const current = Date.parse(selectedGrant.value?.expires_at ?? "");
@@ -465,7 +530,7 @@ watch(
             >只向同组织活动成员开放一个指定资源；下载、导出、凭证与任务重放始终不在授权范围内。</span
           >
         </div>
-        <button v-if="canManage" type="button" @click="showGrantForm = !showGrantForm">
+        <button v-if="canManage" type="button" @click="toggleGrantForm">
           {{ showGrantForm ? "取消创建" : "创建授权" }}
         </button>
       </article>
@@ -473,68 +538,150 @@ watch(
       <form
         v-if="showGrantForm && canManage"
         class="org-admin-card org-grant-form"
-        @submit.prevent="emit('createGrant')"
+        aria-labelledby="org-grant-create-title"
+        @invalid.capture="handleGrantFormInvalid"
+        @submit.prevent="submitGrantForm"
       >
         <header>
           <div>
             <p>带原因并审计</p>
-            <h3>授权指定资源</h3>
+            <h3 id="org-grant-create-title">授权指定资源</h3>
           </div>
         </header>
-        <label
-          >工作区<select v-model="grantForm.workspace_id" required>
+        <div class="org-grant-field">
+          <label for="org-grant-workspace">工作区</label>
+          <select
+            id="org-grant-workspace"
+            v-model="grantForm.workspace_id"
+            required
+            :aria-invalid="grantFormErrors.workspace ? 'true' : undefined"
+            aria-describedby="org-grant-workspace-help org-grant-workspace-error"
+          >
             <option disabled value="">选择工作区</option>
             <option v-for="workspace in workspaces" :key="workspace.id" :value="workspace.id">
               {{ workspace.name }}
             </option>
-          </select></label
-        >
-        <label
-          >资源类型<select
+          </select>
+          <small id="org-grant-workspace-help" class="org-grant-field-help"
+            >仅选择本组织内的目标工作区。</small
+          >
+          <p id="org-grant-workspace-error" class="org-grant-field-error" aria-live="polite">
+            {{ grantFormErrors.workspace }}
+          </p>
+        </div>
+        <div class="org-grant-field">
+          <label for="org-grant-resource-type">资源类型</label>
+          <select
+            id="org-grant-resource-type"
             :value="grantForm.resource_type"
             required
+            :aria-invalid="grantFormErrors.resourceType ? 'true' : undefined"
+            aria-describedby="org-grant-resource-type-help org-grant-resource-type-error"
             @change="emit('updateGrantType', ($event.target as HTMLSelectElement).value)"
           >
             <option v-for="(_, type) in resourceActions" :key="type" :value="type">
               {{ resourceTypeText(type) }}
             </option>
-          </select></label
-        >
-        <label
-          >资源编号<input
+          </select>
+          <small id="org-grant-resource-type-help" class="org-grant-field-help"
+            >资源类型决定可授予的最小动作，固定角色模板仍为只读。</small
+          >
+          <p id="org-grant-resource-type-error" class="org-grant-field-error" aria-live="polite">
+            {{ grantFormErrors.resourceType }}
+          </p>
+        </div>
+        <div class="org-grant-field org-grant-field--wide">
+          <label for="org-grant-resource-id">资源编号</label>
+          <input
+            id="org-grant-resource-id"
             v-model.trim="grantForm.resource_id"
             required
-            pattern="[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}"
+            :pattern="grantResourceIdPattern.source"
             placeholder="从资源详情页复制 UUID"
-          /><small>必须从真实资源详情页复制；实际访问仍会按工作区、资源和动作复核。</small></label
-        >
-        <label
-          >目标成员<select v-model="grantForm.grantee_membership_id" required>
+            :aria-invalid="grantFormErrors.resourceId ? 'true' : undefined"
+            aria-describedby="org-grant-resource-id-help org-grant-resource-id-error"
+          />
+          <small id="org-grant-resource-id-help" class="org-grant-field-help"
+            >从对应真实资源详情页复制
+            UUID；不通过名称搜索替代。访问时仍会按工作区、资源与动作复核。</small
+          >
+          <p id="org-grant-resource-id-error" class="org-grant-field-error" aria-live="polite">
+            {{ grantFormErrors.resourceId }}
+          </p>
+        </div>
+        <div class="org-grant-field">
+          <label for="org-grant-member">目标成员</label>
+          <select
+            id="org-grant-member"
+            v-model="grantForm.grantee_membership_id"
+            required
+            :aria-invalid="grantFormErrors.member ? 'true' : undefined"
+            aria-describedby="org-grant-member-help org-grant-member-error"
+          >
             <option disabled value="">选择同组织活动成员</option>
             <option v-for="target in grantTargets" :key="target.id" :value="target.id">
               {{ targetLabel(target.id) }}
             </option>
-          </select></label
+          </select>
+          <small id="org-grant-member-help" class="org-grant-field-help"
+            >目标仅来自当前组织的活动成员目录。</small
+          >
+          <p id="org-grant-member-error" class="org-grant-field-error" aria-live="polite">
+            {{ grantFormErrors.member }}
+          </p>
+        </div>
+        <fieldset
+          :aria-invalid="grantFormErrors.actions ? 'true' : undefined"
+          aria-describedby="org-grant-actions-help org-grant-actions-error"
         >
-        <fieldset>
-          <legend>最小必要动作</legend>
+          <legend id="org-grant-actions-label">最小必要动作</legend>
           <label v-for="action in resourceActions[grantForm.resource_type]" :key="action">
             <input v-model="grantForm.actions" type="checkbox" :value="action" />
             {{ capabilityText(action) }}
           </label>
+          <small id="org-grant-actions-help" class="org-grant-field-help"
+            >仅勾选本次协作确需的动作；至少选择一项。</small
+          >
+          <p id="org-grant-actions-error" class="org-grant-field-error" aria-live="polite">
+            {{ grantFormErrors.actions }}
+          </p>
         </fieldset>
-        <label
-          >业务原因<textarea v-model.trim="grantForm.reason" required maxlength="500"></textarea>
-        </label>
-        <label
-          >到期时间<input
+        <div class="org-grant-field org-grant-field--wide">
+          <label for="org-grant-reason">业务原因</label>
+          <textarea
+            id="org-grant-reason"
+            v-model.trim="grantForm.reason"
+            required
+            maxlength="500"
+            :aria-invalid="grantFormErrors.reason ? 'true' : undefined"
+            aria-describedby="org-grant-reason-help org-grant-reason-error"
+          ></textarea>
+          <small id="org-grant-reason-help" class="org-grant-field-help"
+            >说明本次临时授权用途；最多 500 字（{{ grantForm.reason?.length ?? 0 }}/500）。</small
+          >
+          <p id="org-grant-reason-error" class="org-grant-field-error" aria-live="polite">
+            {{ grantFormErrors.reason }}
+          </p>
+        </div>
+        <div class="org-grant-field">
+          <label for="org-grant-expiry">到期时间</label>
+          <input
+            id="org-grant-expiry"
             v-model="grantForm.expires_at"
             required
             type="datetime-local"
             :min="minGrantExpiry"
             :max="maxGrantExpiry"
-          /><small>必须晚于当前时间，且最长 30 天。</small></label
-        >
+            :aria-invalid="grantFormErrors.expiry ? 'true' : undefined"
+            aria-describedby="org-grant-expiry-help org-grant-expiry-error"
+          />
+          <small id="org-grant-expiry-help" class="org-grant-field-help"
+            >到期时间须晚于当前时间，最长 30 天。</small
+          >
+          <p id="org-grant-expiry-error" class="org-grant-field-error" aria-live="polite">
+            {{ grantFormErrors.expiry }}
+          </p>
+        </div>
         <button :disabled="busy || !grantForm.actions.length">
           {{ busy ? "正在创建…" : "创建并写入审计" }}
         </button>
@@ -717,3 +864,56 @@ watch(
     </template>
   </section>
 </template>
+
+<style scoped>
+.org-grant-form {
+  gap: 18px 22px;
+}
+
+.org-grant-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+}
+
+.org-grant-field--wide {
+  grid-column: 1 / -1;
+}
+
+.org-grant-field > label,
+.org-grant-field-help,
+.org-grant-field-error {
+  margin: 0;
+  font-size: 17px;
+}
+
+.org-grant-field > label {
+  color: var(--oa-ink);
+  font-weight: 650;
+}
+
+.org-grant-form :is(input, select, textarea)[aria-invalid="true"] {
+  border: 2px solid var(--oa-danger);
+}
+
+.org-grant-field-help {
+  color: var(--oa-muted);
+}
+
+.org-grant-field-error {
+  color: var(--oa-danger);
+}
+
+.org-grant-field-error:empty {
+  display: none;
+}
+
+.org-grant-form fieldset {
+  border-color: var(--oa-section);
+  border-radius: 0;
+}
+
+.org-grant-form fieldset :is(.org-grant-field-help, .org-grant-field-error) {
+  flex-basis: 100%;
+}
+</style>

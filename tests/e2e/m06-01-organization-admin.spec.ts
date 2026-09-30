@@ -1584,6 +1584,75 @@ test("organization resource grants validate and send audited create, extend and 
   });
 });
 
+test("resource grant creation exposes inline field errors and keeps the existing UUID contract", async ({
+  page,
+}) => {
+  await page.clock.setFixedTime(new Date("2026-08-26T10:00:00.000Z"));
+  await setup(page);
+  const writes: Array<{ method: string; body: Record<string, unknown> }> = [];
+  await page.route(`**/api/v1/org/${org}/resource-grants*`, async (route) => {
+    if (route.request().method() === "GET") return route.fallback();
+    writes.push({
+      method: route.request().method(),
+      body: route.request().postDataJSON(),
+    });
+    return route.fulfill({ status: 201, json: env({ ...activeGrant, version: 2 }) });
+  });
+
+  await page.goto("/org-admin/roles");
+  await page.getByRole("button", { name: /指定资源授权 1/ }).click();
+  await page.getByRole("button", { name: "创建授权" }).click();
+  const form = page.locator("form.org-grant-form"),
+    submit = form.getByRole("button", { name: "创建并写入审计" });
+
+  await submit.click();
+  for (const [field, error] of [
+    ["org-grant-resource-id", "请输入资源编号。"],
+    ["org-grant-member", "请选择同组织活动成员。"],
+    ["org-grant-reason", "请填写业务原因。"],
+  ] as const) {
+    const input = form.locator(`#${field}`);
+    await expect(input).toHaveAttribute("aria-invalid", "true");
+    await expect(input).toHaveAttribute("aria-describedby", /-help .*?-error/);
+    await expect(form.locator(`#${field}-error`)).toHaveText(error);
+  }
+  await expect(page.locator("#org-grant-resource-id")).toBeFocused();
+  expect(writes).toHaveLength(0);
+
+  await form.getByLabel("工作区").selectOption(ws);
+  await form.getByLabel("资源编号").fill("not-a-uuid");
+  await form.getByLabel("目标成员").selectOption(memberBuyer);
+  await form.getByLabel("业务原因").fill("临时协作核价");
+  await form.getByLabel("到期时间").fill("2020-01-01T00:00");
+  await submit.click();
+  await expect(page.locator("#org-grant-resource-id")).toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator("#org-grant-resource-id-error")).toHaveText(
+    "请从对应资源详情页复制有效 UUID。",
+  );
+  await expect(page.locator("#org-grant-expiry")).toHaveAttribute("aria-invalid", "true");
+  await expect(page.locator("#org-grant-expiry-error")).toHaveText("到期时间必须晚于当前时间。");
+  expect(writes).toHaveLength(0);
+
+  await form.getByLabel("资源编号").fill(grantResource);
+  await form.getByLabel("到期时间").fill("2026-08-27T10:00");
+  await expect(page.locator("#org-grant-resource-id")).not.toHaveAttribute("aria-invalid");
+  await expect(page.locator("#org-grant-expiry")).not.toHaveAttribute("aria-invalid");
+  await submit.click();
+  await expect(page.getByRole("status")).toContainText("指定资源授权已创建并写入审计。");
+  expect(writes).toHaveLength(1);
+  expect(writes[0]).toMatchObject({
+    method: "POST",
+    body: {
+      workspace_id: ws,
+      resource_type: "opportunity",
+      resource_id: grantResource,
+      grantee_membership_id: memberBuyer,
+      actions: ["opportunity:read"],
+      reason: "临时协作核价",
+    },
+  });
+});
+
 test("role catalog empty state is independent of resource grant count", async ({
   page,
 }, testInfo) => {
