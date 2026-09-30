@@ -42,6 +42,7 @@ export function useProviderParserSamples({
   const latestReplay = ref<ParserSampleReplay | null>(null);
   let sampleContextOperation = 0;
   let sampleReadOperation = 0;
+  let sampleReadController: AbortController | null = null;
 
   function ownsSampleContext(operation: number, providerId: string) {
     return (
@@ -52,6 +53,8 @@ export function useProviderParserSamples({
   function openParserSamples(item: SourceItem) {
     if (!item.provisioned) return;
     const operation = ++sampleContextOperation;
+    sampleReadController?.abort();
+    sampleReadController = null;
     sampleReadOperation += 1;
     sampleSource.value = item;
     sampleLoading.value = false;
@@ -71,6 +74,8 @@ export function useProviderParserSamples({
   function closeParserSamples() {
     sampleContextOperation += 1;
     sampleReadOperation += 1;
+    sampleReadController?.abort();
+    sampleReadController = null;
     sampleSource.value = null;
     sampleLoading.value = false;
     sampleReadLoaded.value = false;
@@ -84,15 +89,24 @@ export function useProviderParserSamples({
     const providerId = item.provisioned?.id;
     if (!providerId || !ownsSampleContext(contextOperation, providerId)) return false;
     const readOperation = ++sampleReadOperation;
+    sampleReadController?.abort();
+    const controller = new AbortController();
+    sampleReadController = controller;
     const isCurrent = () =>
-      readOperation === sampleReadOperation && ownsSampleContext(contextOperation, providerId);
+      !controller.signal.aborted &&
+      readOperation === sampleReadOperation &&
+      ownsSampleContext(contextOperation, providerId);
     sampleLoading.value = true;
     sampleReadError.value = "";
     try {
       const result = await api<{
         samples?: ParserSample[];
         candidates?: ParserSampleCandidate[];
-      }>(`/platform/provider-sources/${providerId}/parser-samples`, {}, isCurrent);
+      }>(
+        `/platform/provider-sources/${providerId}/parser-samples`,
+        { signal: controller.signal },
+        isCurrent,
+      );
       if (!isCurrent()) return false;
       sampleOverview.samples = result?.samples ?? [];
       sampleOverview.candidates = result?.candidates ?? [];
@@ -113,6 +127,7 @@ export function useProviderParserSamples({
       requestId.value = "";
       return false;
     } finally {
+      if (sampleReadController === controller) sampleReadController = null;
       if (isCurrent()) sampleLoading.value = false;
     }
   }
@@ -285,6 +300,8 @@ export function useProviderParserSamples({
   onBeforeUnmount(() => {
     sampleContextOperation += 1;
     sampleReadOperation += 1;
+    sampleReadController?.abort();
+    sampleReadController = null;
   });
 
   return {

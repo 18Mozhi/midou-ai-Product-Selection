@@ -660,6 +660,51 @@ test("closing a compatibility dialog aborts its in-flight matrix read", async ({
   }
 });
 
+test("closing the fixed-sample dialog aborts its in-flight sample list read", async ({ page }) => {
+  await nav(page, "platform_admin");
+  const source = { ...setup[2], code: "1688_search" };
+  await page.route("**/api/v1/platform/provider-sources", (route) =>
+    route.fulfill({ json: envelope([source]) }),
+  );
+  let releaseRead!: () => void;
+  let markReadStarted!: () => void;
+  const readGate = new Promise<void>((resolve) => (releaseRead = resolve));
+  const readStarted = new Promise<void>((resolve) => (markReadStarted = resolve));
+  await page.route(
+    `**/api/v1/platform/provider-sources/${source.provisioned.id}/parser-samples`,
+    async (route) => {
+      markReadStarted();
+      await readGate;
+      try {
+        await route.fulfill({ json: envelope({ samples: [], candidates: [] }) });
+      } catch {
+        // Closing the dialog intentionally aborts the in-flight read.
+      }
+    },
+  );
+  const abortedRequest = page.waitForEvent("requestfailed", {
+    predicate: (request) =>
+      request.method() === "GET" &&
+      new URL(request.url()).pathname.endsWith(`/parser-samples`) &&
+      request.failure()?.errorText?.includes("ERR_ABORTED") === true,
+  });
+
+  try {
+    await page.goto("/platform-admin/providers/sources");
+    await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill(source.name);
+    await openMobileSourceDetails(page, source.name);
+    await page.getByRole("button", { name: "固定样本回放" }).first().click();
+    const dialog = page.getByRole("dialog", { name: /固定样本回放/ });
+    await expect(dialog).toBeVisible();
+    await readStarted;
+    await dialog.getByRole("button", { name: "关闭固定样本回放" }).click();
+    await expect(dialog).not.toBeVisible();
+    await abortedRequest;
+  } finally {
+    releaseRead();
+  }
+});
+
 test("late compatibility reads cannot replace the matrix opened for a newer source", async ({
   page,
 }) => {
