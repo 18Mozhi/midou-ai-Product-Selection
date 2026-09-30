@@ -533,6 +533,8 @@ test("UI2-TR10 late filter reads cannot replace or block the current topic list"
   page,
 }) => {
   const data = await ready(page);
+  const failedRequests: Request[] = [];
+  page.on("requestfailed", (request) => failedRequests.push(request));
   const staleSuccess = { ...data.detail, id: id(422), title: "迟到的旧主题" },
     currentSuccess = { ...data.detail, id: id(423), title: "当前筛选主题" },
     currentAfterFailure = { ...data.detail, id: id(424), title: "失败后当前主题" };
@@ -554,25 +556,29 @@ test("UI2-TR10 late filter reads cannot replace or block the current topic list"
       if (category === "late-success") {
         markSuccessStarted();
         await successGate;
-        return route.fulfill({
-          json: envelope([staleSuccess], { page: 1, page_size: 20, total: 1 }),
-        });
+        return route
+          .fulfill({
+            json: envelope([staleSuccess], { page: 1, page_size: 20, total: 1 }),
+          })
+          .catch(() => {});
       }
       if (category === "late-failure") {
         markFailureStarted();
         await failureGate;
-        return route.fulfill({
-          status: 503,
-          json: {
-            error: {
-              code: "service_unavailable",
-              message: "旧范围暂不可用",
-              action_hint: "旧范围读取失败。",
+        return route
+          .fulfill({
+            status: 503,
+            json: {
+              error: {
+                code: "service_unavailable",
+                message: "旧范围暂不可用",
+                action_hint: "旧范围读取失败。",
+              },
+              request_id: "ui2-stale-filter-read",
+              trace_id: "ui2-stale-filter-read",
             },
-            request_id: "ui2-stale-filter-read",
-            trace_id: "ui2-stale-filter-read",
-          },
-        });
+          })
+          .catch(() => {});
       }
       const topic =
         category === "current-success"
@@ -607,29 +613,43 @@ test("UI2-TR10 late filter reads cannot replace or block the current topic list"
   await successStarted;
   await applyCategory("current-success");
   await expect(page.locator("#trend-list > button").first()).toContainText("当前筛选主题");
-  const staleSuccessResponse = page.waitForResponse(
-    (response) => new URL(response.url()).searchParams.get("category") === "late-success",
-  );
+  await expect
+    .poll(() =>
+      failedRequests.some(
+        (request) =>
+          new URL(request.url()).searchParams.get("category") === "late-success" &&
+          request.failure()?.errorText.includes("ERR_ABORTED"),
+      ),
+    )
+    .toBe(true);
   releaseSuccess();
-  await staleSuccessResponse;
   await expect(page.locator("#trend-list > button").first()).toContainText("当前筛选主题");
 
   await applyCategory("late-failure");
   await failureStarted;
   await applyCategory("current-after-failure");
   await expect(page.locator("#trend-list > button").first()).toContainText("失败后当前主题");
-  const staleFailureResponse = page.waitForResponse(
-    (response) => new URL(response.url()).searchParams.get("category") === "late-failure",
-  );
+  await expect
+    .poll(() =>
+      failedRequests.some(
+        (request) =>
+          new URL(request.url()).searchParams.get("category") === "late-failure" &&
+          request.failure()?.errorText.includes("ERR_ABORTED"),
+      ),
+    )
+    .toBe(true);
   releaseFailure();
-  await staleFailureResponse;
   await expect(page.locator("#trend-list > button").first()).toContainText("失败后当前主题");
   await expect(page.locator("#trend-list")).toBeVisible();
   expect(data.writes).toHaveLength(0);
 });
 
-test("UI2-TR10 route topic reads discard stale success and failure responses", async ({ page }) => {
+test("UI2-TR10 route topic reads cancel superseded success and failure requests", async ({
+  page,
+}) => {
   const data = await ready(page, ["task:read", "trend:read"]);
+  const failedRequests: Request[] = [];
+  page.on("requestfailed", (request) => failedRequests.push(request));
   const secondTopic = { ...data.detail, id: id(425), title: "第二主题" },
     thirdTopic = { ...data.detail, id: id(426), title: "第三主题" };
   let secondTopicReads = 0,
@@ -670,22 +690,24 @@ test("UI2-TR10 route topic reads discard stale success and failure responses", a
       if (raceMode === "success") {
         markLateSuccessStarted();
         await lateSuccessGate;
-        return route.fulfill({ json: envelope(secondTopic) });
+        return route.fulfill({ json: envelope(secondTopic) }).catch(() => {});
       }
       markLateFailureStarted();
       await lateFailureGate;
-      return route.fulfill({
-        status: 503,
-        json: {
-          error: {
-            code: "service_unavailable",
-            message: "迟到主题读取失败",
-            action_hint: "迟到主题读取失败。",
+      return route
+        .fulfill({
+          status: 503,
+          json: {
+            error: {
+              code: "service_unavailable",
+              message: "迟到主题读取失败",
+              action_hint: "迟到主题读取失败。",
+            },
+            request_id: "ui2-stale-topic-read",
+            trace_id: "ui2-stale-topic-read",
           },
-          request_id: "ui2-stale-topic-read",
-          trace_id: "ui2-stale-topic-read",
-        },
-      });
+        })
+        .catch(() => {});
     }
     if (detailId === thirdTopic.id) return route.fulfill({ json: envelope(thirdTopic) });
     if (detailId === data.detail.id) return route.fulfill({ json: envelope(data.detail) });
@@ -708,11 +730,16 @@ test("UI2-TR10 route topic reads discard stale success and failure responses", a
   await lateSuccessStarted;
   await chooseTopic(thirdTopic.title);
   await expect(page.locator(".trend-detail")).toContainText(thirdTopic.title);
-  const lateSuccessResponse = page.waitForResponse(
-    (response) => new URL(response.url()).pathname === `/api/v1/trends/${secondTopic.id}`,
-  );
+  await expect
+    .poll(() =>
+      failedRequests.some(
+        (request) =>
+          new URL(request.url()).pathname === `/api/v1/trends/${secondTopic.id}` &&
+          request.failure()?.errorText.includes("ERR_ABORTED"),
+      ),
+    )
+    .toBe(true);
   releaseLateSuccess();
-  await lateSuccessResponse;
   await expect(page.locator(".trend-detail")).toContainText(thirdTopic.title);
   await expect(page.locator(".trend-detail")).not.toContainText(secondTopic.title);
 
@@ -722,23 +749,27 @@ test("UI2-TR10 route topic reads discard stale success and failure responses", a
   await lateFailureStarted;
   await chooseTopic(thirdTopic.title);
   await expect(page.locator(".trend-detail")).toContainText(thirdTopic.title);
-  const lateFailureResponse = page.waitForResponse(
-    (response) =>
-      new URL(response.url()).pathname === `/api/v1/trends/${secondTopic.id}` &&
-      response.status() === 503,
-  );
+  await expect
+    .poll(
+      () =>
+        failedRequests.filter(
+          (request) =>
+            new URL(request.url()).pathname === `/api/v1/trends/${secondTopic.id}` &&
+            request.failure()?.errorText.includes("ERR_ABORTED"),
+        ).length,
+    )
+    .toBe(2);
   releaseLateFailure();
-  await lateFailureResponse;
   await expect(page.locator(".trend-detail")).toContainText(thirdTopic.title);
   await expect(page.locator("body")).not.toContainText("迟到主题读取失败");
   await expect(page.locator("body")).not.toContainText("ui2-stale-topic-read");
   expect(data.writes).toHaveLength(0);
 });
 
-test("UI2-TR10 stale rule and governance reads cannot replace the current view", async ({
-  page,
-}) => {
+test("UI2-TR10 rule and governance reads cancel superseded requests", async ({ page }) => {
   const data = await ready(page);
+  const failedRequests: Request[] = [];
+  page.on("requestfailed", (request) => failedRequests.push(request));
   const staleRule = { ...data.rule, name: "迟到规则" },
     currentRule = { ...data.rule, name: "当前规则" },
     staleRequest = { ...change(data), id: id(427), new_title: "迟到队列" },
@@ -790,8 +821,8 @@ test("UI2-TR10 stale rule and governance reads cannot replace the current view",
         race.rules.markStarted();
         await race.rules.wait;
         return race.outcome === "success"
-          ? route.fulfill({ json: envelope([staleRule]) })
-          : route.fulfill(failure("ui2-stale-rule-read"));
+          ? route.fulfill({ json: envelope([staleRule]) }).catch(() => {})
+          : route.fulfill(failure("ui2-stale-rule-read")).catch(() => {});
       }
       return route.fulfill({ json: envelope([currentRule]) });
     }
@@ -801,8 +832,8 @@ test("UI2-TR10 stale rule and governance reads cannot replace the current view",
         race.governance.markStarted();
         await race.governance.wait;
         return race.outcome === "success"
-          ? route.fulfill({ json: envelope([staleRequest]) })
-          : route.fulfill(failure("ui2-stale-governance-read"));
+          ? route.fulfill({ json: envelope([staleRequest]) }).catch(() => {})
+          : route.fulfill(failure("ui2-stale-governance-read")).catch(() => {});
       }
       const request =
         new URL(page.url()).searchParams.get("category") === "current-success"
@@ -843,6 +874,7 @@ test("UI2-TR10 stale rule and governance reads cannot replace the current view",
     outcome: "success" | "failure",
     requestTitle: string,
   ) => {
+    const failedBeforeRace = new Set(failedRequests);
     const oldRules = deferred(),
       oldGovernance = deferred();
     race = {
@@ -860,19 +892,20 @@ test("UI2-TR10 stale rule and governance reads cannot replace the current view",
     await expect(page.locator("#trend-list > button").first()).toContainText(data.detail.title);
     await expectCurrentView(requestTitle);
 
-    const oldRuleResponse = page.waitForResponse(
-        (response) =>
-          new URL(response.url()).pathname === "/api/v1/trends/monitoring-rules" &&
-          (outcome === "success" || response.status() === 503),
-      ),
-      oldGovernanceResponse = page.waitForResponse(
-        (response) =>
-          new URL(response.url()).pathname === "/api/v1/trends/change-requests" &&
-          (outcome === "success" || response.status() === 503),
-      );
+    await expect
+      .poll(() =>
+        ["/api/v1/trends/monitoring-rules", "/api/v1/trends/change-requests"].every((path) =>
+          failedRequests.some(
+            (request) =>
+              !failedBeforeRace.has(request) &&
+              new URL(request.url()).pathname === path &&
+              request.failure()?.errorText.includes("ERR_ABORTED"),
+          ),
+        ),
+      )
+      .toBe(true);
     oldRules.release();
     oldGovernance.release();
-    await Promise.all([oldRuleResponse, oldGovernanceResponse]);
     await expectCurrentView(requestTitle);
     if (outcome === "failure") {
       await expect(page.locator("body")).not.toContainText("旧范围读取失败");
@@ -883,6 +916,56 @@ test("UI2-TR10 stale rule and governance reads cannot replace the current view",
 
   await runRace("late-success", "current-success", "success", "当前成功队列");
   await runRace("late-failure", "current-after-failure", "failure", "失败后当前队列");
+  expect(data.writes).toHaveLength(0);
+});
+
+test("P14 deactivation cancels the active filter read", async ({ page }) => {
+  const data = await ready(page);
+  const failedRequests: Request[] = [];
+  page.on("requestfailed", (request) => failedRequests.push(request));
+  let releaseLateRead!: () => void, markLateReadStarted!: () => void;
+  const lateReadGate = new Promise<void>((resolve) => (releaseLateRead = resolve));
+  const lateReadStarted = new Promise<void>((resolve) => (markLateReadStarted = resolve));
+  await page.route("**/api/v1/trends**", async (route) => {
+    const request = route.request();
+    const url = new URL(request.url());
+    if (url.pathname === "/api/v1/trends" && url.searchParams.get("category") === "deactivate") {
+      markLateReadStarted();
+      await lateReadGate;
+      return route
+        .fulfill({ json: envelope([data.detail], { page: 1, page_size: 20, total: 1 }) })
+        .catch(() => {});
+    }
+    return route.fallback();
+  });
+
+  await page.goto("/trends");
+  await expect(page.locator("#trend-list > button").first()).toContainText(data.detail.title);
+  if ((page.viewportSize()?.width ?? 1440) <= 760)
+    await page.getByRole("button", { name: /筛选趋势/ }).click();
+  const filters =
+    (page.viewportSize()?.width ?? 1440) <= 760
+      ? page.getByRole("dialog", { name: "筛选趋势" })
+      : page.locator(".trend-filters");
+  await filters.getByRole("textbox", { name: "分类" }).fill("deactivate");
+  await filters.getByRole("button", { name: "筛选", exact: true }).click();
+  await lateReadStarted;
+
+  await page.evaluate(() => {
+    window.history.pushState({}, "", "/work");
+    window.dispatchEvent(new PopStateEvent("popstate"));
+  });
+  await expect(page).toHaveURL(/\/work(?:$|\?)/);
+  await expect
+    .poll(() =>
+      failedRequests.some(
+        (request) =>
+          new URL(request.url()).searchParams.get("category") === "deactivate" &&
+          request.failure()?.errorText.includes("ERR_ABORTED"),
+      ),
+    )
+    .toBe(true);
+  releaseLateRead();
   expect(data.writes).toHaveLength(0);
 });
 

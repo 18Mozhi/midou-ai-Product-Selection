@@ -1,5 +1,15 @@
 <script setup lang="ts">
-import { computed, nextTick, onBeforeUnmount, onMounted, reactive, ref, watch } from "vue";
+import {
+  computed,
+  nextTick,
+  onActivated,
+  onBeforeUnmount,
+  onDeactivated,
+  onMounted,
+  reactive,
+  ref,
+  watch,
+} from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
@@ -54,7 +64,11 @@ const props = defineProps<{
   sort = ref<TrendSort>("impact"),
   filters = reactive<TrendFilters>({ q: "", market: "", category: "", status: "active" });
 let listReadGeneration = 0,
-  topicDetailReadGeneration = 0;
+  topicDetailReadGeneration = 0,
+  listReadController: AbortController | null = null,
+  topicDetailReadController: AbortController | null = null,
+  pageActive = true,
+  wasDeactivated = false;
 const freshness = (value: string) =>
   new Intl.DateTimeFormat("zh-CN", {
     month: "2-digit",
@@ -146,9 +160,13 @@ const opportunityRoute = computed(() => {
     `&category=${encodeURIComponent(topic.category || "")}`
   );
 });
-async function read<T = any>(path: string, isCurrent: () => boolean = () => true) {
+async function read<T = any>(
+  path: string,
+  isCurrent: () => boolean = () => true,
+  signal?: AbortSignal,
+) {
   try {
-    const response = await request<T>(path);
+    const response = await request<T>(path, signal ? { signal } : undefined);
     if (!isCurrent()) throw new Error("trend_read_superseded");
     requestId.value = response.request_id;
     return response;
@@ -163,10 +181,16 @@ async function read<T = any>(path: string, isCurrent: () => boolean = () => true
   }
 }
 async function load() {
+  if (!pageActive) return;
   const generation = ++listReadGeneration;
+  listReadController?.abort();
+  const controller = new AbortController();
+  listReadController = controller;
   const detailGeneration = ++topicDetailReadGeneration;
-  const isCurrent = () => generation === listReadGeneration;
-  const isCurrentDetail = () => isCurrent() && detailGeneration === topicDetailReadGeneration;
+  topicDetailReadController?.abort();
+  topicDetailReadController = null;
+  const isCurrent = () =>
+    pageActive && generation === listReadGeneration && !controller.signal.aborted;
   state.value = "loading";
   message.value = "";
   try {
@@ -174,11 +198,11 @@ async function load() {
     for (const [key, value] of Object.entries(filters))
       if (value) params.set(key === "q" ? "q" : key, value);
     const governanceRequest = canManageTrends.value
-      ? read("/trends/change-requests", isCurrent)
+      ? read("/trends/change-requests", isCurrent, controller.signal)
       : Promise.resolve({ data: [] });
     const [list, ruleList, governanceList] = await Promise.all([
-      read(`/trends?${params}`, isCurrent),
-      read("/trends/monitoring-rules", isCurrent),
+      read(`/trends?${params}`, isCurrent, controller.signal),
+      read("/trends/monitoring-rules", isCurrent, controller.signal),
       governanceRequest,
     ]);
     if (!isCurrent()) return;
@@ -189,6 +213,7 @@ async function load() {
     }));
     changeRequests.value = governanceList.data;
     total.value = (list.meta as { total: number }).total;
+    if (detailGeneration !== topicDetailReadGeneration) return;
     const requestedTopic = typeof route.query.topic === "string" ? route.query.topic : "";
     const currentId =
       requestedTopic ||
@@ -198,7 +223,15 @@ async function load() {
       state.value = "empty";
       return;
     }
-    const topicDetail = (await read(`/trends/${currentId}`, isCurrentDetail)).data as Detail;
+    const detailController = new AbortController();
+    topicDetailReadController = detailController;
+    const isCurrentDetail = () =>
+      isCurrent() &&
+      detailGeneration === topicDetailReadGeneration &&
+      !detailController.signal.aborted;
+    const topicDetail = (
+      await read(`/trends/${currentId}`, isCurrentDetail, detailController.signal)
+    ).data as Detail;
     if (!isCurrentDetail()) return;
     selected.value = {
       ...topicDetail,
@@ -208,7 +241,7 @@ async function load() {
     if (requestedTopic !== currentId)
       await router.replace({ query: { ...route.query, topic: currentId } });
   } catch (error) {
-    if (!isCurrent() || !isCurrentDetail()) return;
+    if (!isCurrent() || detailGeneration !== topicDetailReadGeneration) return;
     if (!(error instanceof ApiClientError)) state.value = "blocked";
   }
 }
@@ -453,21 +486,31 @@ watch(
   ],
   () => {
     syncFromRoute();
-    void load();
+    if (pageActive) void load();
   },
 );
 watch(
   () => route.query.topic,
   async (topicId) => {
     const generation = ++topicDetailReadGeneration;
-    const isCurrent = () => generation === topicDetailReadGeneration;
+    topicDetailReadController?.abort();
+    topicDetailReadController = null;
     if (typeof topicId !== "string" || selected.value?.id === topicId) {
       if (busy.value === "detail") busy.value = "";
       return;
     }
+    if (!pageActive) {
+      if (busy.value === "detail") busy.value = "";
+      return;
+    }
+    const controller = new AbortController();
+    topicDetailReadController = controller;
+    const isCurrent = () =>
+      pageActive && generation === topicDetailReadGeneration && !controller.signal.aborted;
     busy.value = "detail";
     try {
-      const topicDetail = (await read(`/trends/${topicId}`, isCurrent)).data as Detail;
+      const topicDetail = (await read(`/trends/${topicId}`, isCurrent, controller.signal))
+        .data as Detail;
       if (!isCurrent()) return;
       selected.value = {
         ...topicDetail,
@@ -487,7 +530,7 @@ watch(
   () => syncFromRoute(),
 );
 watch(canManageTrends, (allowed) => {
-  if (allowed) {
+  if (allowed && pageActive) {
     void load();
     return;
   }
@@ -501,9 +544,32 @@ onMounted(() => {
   syncFromRoute();
   void load();
 });
-onBeforeUnmount(() => {
+onDeactivated(() => {
+  pageActive = false;
+  wasDeactivated = true;
   listReadGeneration += 1;
   topicDetailReadGeneration += 1;
+  listReadController?.abort();
+  topicDetailReadController?.abort();
+  listReadController = null;
+  topicDetailReadController = null;
+  if (busy.value === "detail") busy.value = "";
+});
+onActivated(() => {
+  pageActive = true;
+  if (!wasDeactivated) return;
+  wasDeactivated = false;
+  syncFromRoute();
+  void load();
+});
+onBeforeUnmount(() => {
+  pageActive = false;
+  listReadGeneration += 1;
+  topicDetailReadGeneration += 1;
+  listReadController?.abort();
+  topicDetailReadController?.abort();
+  listReadController = null;
+  topicDetailReadController = null;
 });
 </script>
 
