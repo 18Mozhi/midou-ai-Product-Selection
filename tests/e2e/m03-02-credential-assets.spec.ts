@@ -170,6 +170,57 @@ test("M03-02.A07/A08/A15 masked credential vault is responsive and visual", asyn
   await expect(page.getByRole("heading", { name: "凭证与浏览器档案", level: 2 })).toBeVisible();
   await expect(page.getByText("0123456789abcdef")).toBeVisible();
   await expect(page.getByText(/secret-never|cookie-value|payload_ciphertext/)).toHaveCount(0);
+  const width = page.viewportSize()?.width ?? 1280,
+    pageHeader = page.locator(".credential-center > header");
+  await expect
+    .poll(() => pageHeader.evaluate((element) => getComputedStyle(element).backgroundColor))
+    .toBe("rgb(41, 76, 175)");
+  const loginButton = page.getByRole("button", { name: "配置网页登录" });
+  await loginButton.click();
+  const loginEditor = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" }),
+    scroll = loginEditor.locator(".login-material-scroll");
+  await expect(loginEditor).toBeVisible();
+  await expect(scroll).toBeVisible();
+  const columns = await scroll.evaluate(
+    (element) => getComputedStyle(element).gridTemplateColumns.trim().split(/\s+/).length,
+  );
+  expect(columns).toBe(width <= 760 ? 1 : 2);
+  const guideAndFields = await Promise.all(
+    [".login-guide", ".credential-fields"].map((selector) =>
+      scroll.locator(selector).evaluate((element) => {
+        const rect = element.getBoundingClientRect();
+        return { left: rect.left, top: rect.top };
+      }),
+    ),
+  );
+  if (width <= 760) expect(guideAndFields[1].top).toBeGreaterThan(guideAndFields[0].top);
+  else expect(guideAndFields[1].left).toBeGreaterThan(guideAndFields[0].left);
+  await loginEditor.getByLabel("需要登录的来源").selectOption({ label: provider.name });
+  const materialInput = loginEditor.locator('input[type="file"]');
+  await materialInput.setInputFiles({
+    name: "invalid-material.bin",
+    mimeType: "application/octet-stream",
+    buffer: Buffer.from("synthetic-only"),
+  });
+  const materialStatus = loginEditor.getByRole("status");
+  await expect(materialStatus).toHaveAttribute("data-tone", "warning");
+  await materialInput.setInputFiles({
+    name: "review-only.cookies",
+    mimeType: "text/plain",
+    buffer: Buffer.from(
+      '[{"name":"review","value":"never-render-synthetic","domain":"example.test"}]',
+    ),
+  });
+  await expect(materialStatus).toHaveAttribute("data-tone", "ready");
+  await expect(page.getByText("never-render-synthetic")).toHaveCount(0);
+  const footerBox = await loginEditor.locator("footer").evaluate((element) => {
+    const rect = element.getBoundingClientRect();
+    return { top: rect.top, bottom: rect.bottom };
+  });
+  expect(footerBox.top).toBeGreaterThanOrEqual(0);
+  expect(footerBox.bottom).toBeLessThanOrEqual(page.viewportSize()?.height ?? 1000);
+  await loginEditor.getByRole("button", { name: "取消", exact: true }).click();
+  await expect(loginEditor).toBeHidden();
   if ((page.viewportSize()?.width ?? 1280) <= 760) {
     await expect(page.getByRole("table")).toBeHidden();
     await page.getByRole("button", { name: /登录页来源.*待关联有效运行档案/ }).click();

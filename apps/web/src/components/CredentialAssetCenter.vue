@@ -27,6 +27,7 @@ import ResponsiveDataView from "./ResponsiveDataView.vue";
 import "../credential-assets.css";
 import "../credential-login.css";
 import "../credential-assets-c.css";
+import "../credential-assets-page-c.css";
 type State = "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 type EditorKind = "asset" | "rotate" | "profile" | "login";
 type LoginSaveStage = "idle" | "asset" | "profile" | "partial" | "unknown";
@@ -1530,80 +1531,94 @@ onActivated(() => {
               ×
             </button>
           </header>
-          <aside class="login-guide">
-            <strong>支持哪些格式？</strong>
-            <p>
-              首选 Cookie JSON、Playwright storageState JSON 或 Netscape cookies.txt；也可上传专用
-              Chromium 的 .tar.gz 档案。公开页面不要求登录，可直接匿名测试。
-            </p>
-            <ol>
-              <li>“从当前浏览器读取”只读取当前所选来源域名。</li>
-              <li>Cookie 不在页面回显，保存后立即从页面内存清除。</li>
-              <li>完整浏览器档案仅用于确实依赖浏览器状态的网站。</li>
-            </ol>
-          </aside>
-          <div class="credential-fields">
-            <label
-              >需要登录的来源<select
-                v-model="loginProvider"
-                required
-                :disabled="loginControlsLocked"
-                @change="resetLoginMaterialContext"
+          <div class="login-material-scroll">
+            <aside class="login-guide">
+              <strong>支持哪些格式？</strong>
+              <p>
+                首选 Cookie JSON、Playwright storageState JSON 或 Netscape cookies.txt；也可上传专用
+                Chromium 的 .tar.gz 档案。公开页面不要求登录，可直接匿名测试。
+              </p>
+              <ol>
+                <li>“从当前浏览器读取”只读取当前所选来源域名。</li>
+                <li>Cookie 不在页面回显，保存后立即从页面内存清除。</li>
+                <li>完整浏览器档案仅用于确实依赖浏览器状态的网站。</li>
+              </ol>
+            </aside>
+            <div class="credential-fields">
+              <label
+                >需要登录的来源<select
+                  v-model="loginProvider"
+                  required
+                  :disabled="loginControlsLocked"
+                  @change="resetLoginMaterialContext"
+                >
+                  <option :value="null" disabled>请选择</option>
+                  <option v-for="item in loginProviders" :key="item.id" :value="item">
+                    {{ item.name }}
+                  </option>
+                </select></label
+              ><label
+                >导入方式<select
+                  v-model="loginMode"
+                  :disabled="loginControlsLocked"
+                  @change="resetLoginMaterialContext"
+                >
+                  <option value="cookie_file">上传 Cookie 文件</option>
+                  <option value="browser">从当前浏览器读取</option>
+                  <option value="archive">完整浏览器档案</option>
+                </select></label
+              ><label v-if="loginMode !== 'browser'" class="archive-picker"
+                >{{ loginMode === "archive" ? "浏览器登录档案" : "Cookie 文件"
+                }}<input
+                  type="file"
+                  :accept="
+                    loginMode === 'archive'
+                      ? '.gz,application/gzip'
+                      : '.json,.txt,.cookies,application/json,text/plain'
+                  "
+                  required
+                  :disabled="loginControlsLocked"
+                  @change="chooseLoginArchive"
+                /><small>{{
+                  loginFileName ||
+                  (loginMode === "archive"
+                    ? "请选择 .tar.gz 文件"
+                    : "请选择 Cookie JSON 或 cookies.txt")
+                }}</small></label
               >
-                <option :value="null" disabled>请选择</option>
-                <option v-for="item in loginProviders" :key="item.id" :value="item">
-                  {{ item.name }}
-                </option>
-              </select></label
-            ><label
-              >导入方式<select
-                v-model="loginMode"
-                :disabled="loginControlsLocked"
-                @change="resetLoginMaterialContext"
-              >
-                <option value="cookie_file">上传 Cookie 文件</option>
-                <option value="browser">从当前浏览器读取</option>
-                <option value="archive">完整浏览器档案</option>
-              </select></label
-            ><label v-if="loginMode !== 'browser'" class="archive-picker"
-              >{{ loginMode === "archive" ? "浏览器登录档案" : "Cookie 文件"
-              }}<input
-                type="file"
-                :accept="
-                  loginMode === 'archive'
-                    ? '.gz,application/gzip'
-                    : '.json,.txt,.cookies,application/json,text/plain'
-                "
-                required
-                :disabled="loginControlsLocked"
-                @change="chooseLoginArchive"
-              /><small>{{
-                loginFileName ||
-                (loginMode === "archive"
-                  ? "请选择 .tar.gz 文件"
-                  : "请选择 Cookie JSON 或 cookies.txt")
-              }}</small></label
-            >
-          </div>
-          <aside v-if="loginProvider" class="login-provider-status">
-            <div>
-              <strong>{{ loginProvider.name }}</strong>
-              <span v-if="loginNeedsAuthentication">该来源需要登录状态</span>
-              <span v-else>该来源是公开页面，可不登录直接测试</span>
             </div>
-            <button type="button" :disabled="loginControlsLocked" @click="openLoginPage">
-              打开{{ loginNeedsAuthentication ? "登录" : "来源" }}页面 ↗
-            </button>
-            <button
-              v-if="loginMode === 'browser'"
-              type="button"
-              :disabled="loginControlsLocked"
-              @click="acquireBrowserCookies"
+            <aside v-if="loginProvider" class="login-provider-status">
+              <div>
+                <strong>{{ loginProvider.name }}</strong>
+                <span v-if="loginNeedsAuthentication">该来源需要登录状态</span>
+                <span v-else>该来源是公开页面，可不登录直接测试</span>
+              </div>
+              <button type="button" :disabled="loginControlsLocked" @click="openLoginPage">
+                打开{{ loginNeedsAuthentication ? "登录" : "来源" }}页面 ↗
+              </button>
+              <button
+                v-if="loginMode === 'browser'"
+                type="button"
+                :disabled="loginControlsLocked"
+                @click="acquireBrowserCookies"
+              >
+                {{ loginMaterialBusy ? "读取中…" : "从当前浏览器读取 Cookie" }}
+              </button>
+            </aside>
+            <p
+              v-if="message"
+              role="status"
+              :data-tone="
+                saving || loginMaterialBusy
+                  ? 'pending'
+                  : loginPayload && loginSaveStage === 'idle'
+                    ? 'ready'
+                    : 'warning'
+              "
             >
-              {{ loginMaterialBusy ? "读取中…" : "从当前浏览器读取 Cookie" }}
-            </button>
-          </aside>
-          <p v-if="message" role="status">{{ message }}</p>
+              {{ message }}
+            </p>
+          </div>
           <footer>
             <button type="button" :disabled="writeBusy" @click="closeEditor()">取消</button
             ><button

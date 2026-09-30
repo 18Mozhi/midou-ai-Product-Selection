@@ -9,6 +9,7 @@ import { credentialHistoricalCapture } from "../../scripts/lib/ui-phase2-credent
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/CredentialAssetCenter.vue",
+  productionCss = "apps/web/src/credential-assets-page-c.css",
   cssFile = "design-plans/ui-phase-2-2026-09-07/implementation/credential-assets-page-preview.css",
   root = "output/playwright/p50-credential-page-review";
 
@@ -44,6 +45,34 @@ test("P50 page review keeps the actual credential component and contracts", () =
     '"/platform/credential-provider-options"',
   ])
     assert.ok(source.includes(preserved), preserved);
+});
+
+test("P50 reviewed page refinements ship as a route-scoped production delta", () => {
+  const source = read(component),
+    css = postcss.parse(read(productionCss)),
+    text = css.toString();
+  const selectors = [];
+  css.walkRules((rule) =>
+    selectors.push(...rule.selectors.map((selector) => selector.replace(/\s+/g, " ").trim())),
+  );
+  assert.ok(source.includes('import "../credential-assets-page-c.css";'));
+  assert.ok(
+    selectors.some((selector) => selector.endsWith(".credential-primary-actions > button.primary")),
+  );
+  assert.ok(
+    selectors.some((selector) =>
+      selector.endsWith('.credential-grid article[data-status="revoked"] header b'),
+    ),
+  );
+  assert.ok(text.includes("@media (max-width: 760px)"));
+  assert.equal(text.includes("p50-credential-page-review"), false);
+  assert.equal(text.includes("linear-gradient"), false);
+  assert.equal(text.includes("transition: all"), false);
+  css.walkRules((rule) => {
+    for (const selector of rule.selectors)
+      assert.ok(selector.includes("body:has(#app .credential-center)"), selector);
+    assert.ok(rule.nodes.filter((node) => node.type === "decl").every((node) => !node.important));
+  });
 });
 
 test("P50 review CSS is isolated and rejects the old gradient-card direction", () => {

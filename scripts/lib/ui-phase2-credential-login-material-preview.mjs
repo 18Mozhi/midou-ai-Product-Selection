@@ -6,21 +6,25 @@ const once = (source, anchor, replacement, label) => {
 };
 
 export function previewCredentialLoginMaterial(source) {
-  let review = once(
-    source,
-    `            </button>
+  const productionScroll = source.includes('class="login-material-scroll"');
+  let review = productionScroll
+    ? source.replaceAll('class="login-material-scroll"', 'class="p50-login-material-scroll"')
+    : once(
+        source,
+        `            </button>
           </header>
           <aside class="login-guide">`,
-    `            </button>
+        `            </button>
           </header>
           <div class="p50-login-material-scroll">
           <aside class="login-guide">`,
-    "login scroll start must be unique",
-  );
-  review = once(
-    review,
-    `          <p v-if="message" role="status">{{ message }}</p>`,
-    `          <p
+        "login scroll start must be unique",
+      );
+  if (!review.includes(":data-tone="))
+    review = once(
+      review,
+      `          <p v-if="message" role="status">{{ message }}</p>`,
+      `          <p
             v-if="message"
             role="status"
             :data-tone="
@@ -33,16 +37,17 @@ export function previewCredentialLoginMaterial(source) {
           >
             {{ message }}
           </p>`,
-    "login message must be unique",
-  );
-  review = once(
-    review,
-    `          <footer>
+      "login message must be unique",
+    );
+  if (!productionScroll)
+    review = once(
+      review,
+      `          <footer>
             <button type="button" :disabled="writeBusy" @click="closeEditor()">取消</button`,
-    `          </div>
+      `          </div>
           <footer>
             <button type="button" :disabled="writeBusy" @click="closeEditor()">取消</button`,
-    "login scroll end must be unique",
-  );
+      "login scroll end must be unique",
+    );
   return review;
 }

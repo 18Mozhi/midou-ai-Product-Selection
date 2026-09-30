@@ -30,6 +30,8 @@ test("P50 material review wraps and compiles the lifecycle-safe login editor", (
   );
   assert.equal(source.includes("loginMaterialBusy"), true);
   assert.equal(source.includes("p50-login-material-scroll"), false);
+  assert.ok(source.includes('class="login-material-scroll"'));
+  assert.ok(source.includes(":data-tone="));
   for (const marker of [
     "loginMaterialBusy",
     "p50-login-material-scroll",
@@ -43,6 +45,25 @@ test("P50 material review wraps and compiles the lifecycle-safe login editor", (
   assert.ok(source.includes("resetLoginMaterialContext"));
   assert.ok(source.includes("写入结果暂时无法确认"));
   assert.ok(review.includes("取消</button"));
+});
+
+test("P50 production login material wrapper keeps status inside the scroll area and footer outside", () => {
+  const source = read(component),
+    css = read("apps/web/src/credential-assets-page-c.css");
+  const scrollStart = source.indexOf('<div class="login-material-scroll">'),
+    status = source.indexOf(":data-tone=", scrollStart),
+    scrollEnd = source.indexOf("</div>\n          <footer>", scrollStart),
+    footer = source.indexOf("<footer>", scrollStart);
+  assert.ok(scrollStart >= 0);
+  assert.ok(status > scrollStart);
+  assert.ok(scrollEnd > status);
+  assert.ok(footer > scrollEnd);
+  assert.ok(css.includes(".login-material-scroll"));
+  assert.ok(css.includes('[data-tone="pending"]'));
+  assert.ok(css.includes('[data-tone="ready"]'));
+  assert.ok(css.includes('[data-tone="warning"]'));
+  assert.equal(css.includes("p50-credential-material-review"), false);
+  assert.equal(css.includes(".p50-login-material-scroll"), false);
 });
 
 test("P50 material feedback CSS is isolated, responsive and reduced-motion safe", () => {
