@@ -221,6 +221,49 @@ test("UI2-J09 server gate conflict preserves draft, refresh disables adoption, o
   });
 });
 
+for (const stateCase of [
+  {
+    state: "blocked",
+    taskStatus: "blocked_login",
+    title: "真实来源已明确受阻",
+    description: "受阻原因",
+  },
+  {
+    state: "failed",
+    taskStatus: "failed_terminal",
+    title: "真实来源任务已终止失败",
+    description: "终止失败原因",
+  },
+  {
+    state: "succeeded_empty",
+    taskStatus: "succeeded_empty",
+    title: "真实来源没有返回可用结果",
+    description: "来源处理已完成，但没有返回可用候选",
+  },
+] as const) {
+  test(`UI2-J10 ${stateCase.state} explains the terminal result without conflating states`, async ({
+    page,
+  }) => {
+    const data = await ready(page, journeyId);
+    Object.assign(data.journey, {
+      state: stateCase.state,
+      task_status: stateCase.taskStatus,
+      results: [],
+      first_result: null,
+      available_result_count: 0,
+      blocked_reason: stateCase.state === "succeeded_empty" ? null : "isolated_status_code",
+    });
+
+    await page.goto("/opportunities/start");
+    const result = page.locator(".selection-evidence--empty");
+    await expect(result.getByRole("heading", { name: stateCase.title })).toBeVisible();
+    await expect(result).toContainText(stateCase.description);
+    if (stateCase.state !== "succeeded_empty")
+      await expect(result).toContainText("isolated_status_code");
+    expect(data.writes).toHaveLength(0);
+  });
+}
+
 for (const [kind, radio, field, value] of [
   ["keyword", "关键词", "商品关键词", " portable blender "],
   ["asin", "ASIN", "10 位 ASIN", "b012345678"],
@@ -255,7 +298,9 @@ for (const [kind, radio, field, value] of [
     expect(await savedId(page)).toBe(journeyId);
     await expect(page.locator(".selection-candidates")).toContainText("已选 0 条");
     await expect(page.getByRole("radio", { name: "采纳合格机会" })).toBeDisabled();
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(
+      page.locator('.selection-journey dialog, .selection-journey [role="dialog"]'),
+    ).toHaveCount(0);
   });
 }
 

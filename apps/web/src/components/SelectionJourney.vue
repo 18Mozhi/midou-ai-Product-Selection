@@ -168,6 +168,32 @@ const terminal = computed(
         decided: "旅程已完成决策",
       })[journey.value?.state ?? "accepted"],
   ),
+  terminalEvidence = computed(() => {
+    const current = journey.value;
+    if (!current) return { title: "", description: "" };
+    if (current.state === "succeeded_empty") {
+      return {
+        title: "真实来源没有返回可用结果",
+        description: `任务状态：${current.task_status}。来源处理已完成，但没有返回可用候选。`,
+      };
+    }
+    if (current.state === "failed") {
+      return {
+        title: "真实来源任务已终止失败",
+        description: `错误码：${current.blocked_reason || "未提供"}。请结合任务状态与事件记录排查终止失败原因。`,
+      };
+    }
+    if (current.state === "blocked") {
+      return {
+        title: "真实来源已明确受阻",
+        description: `错误码：${current.blocked_reason || "未提供"}。请结合任务状态与事件记录排查受阻原因。`,
+      };
+    }
+    return {
+      title: "当前没有可用于决策的候选",
+      description: `任务状态：${current.task_status}。当前响应未包含候选结果。`,
+    };
+  }),
   stageLabel = (stage: Journey["timeline"][number]["stage"]) =>
     ({ queued: "已排队", collecting: "正在收集", parsing: "正在整理", decision: "等待决策" })[
       stage
@@ -568,20 +594,12 @@ onUnmounted(() => {
           <article v-else-if="terminal" class="selection-evidence selection-evidence--empty">
             <header>
               <div>
-                <p>明确终止状态</p>
-                <h3>
-                  {{
-                    journey.task_status === "succeeded_empty"
-                      ? "真实来源没有返回可用结果"
-                      : "真实来源已明确受阻"
-                  }}
-                </h3>
+                <p>本次结果状态</p>
+                <h3>{{ terminalEvidence.title }}</h3>
               </div>
               <b>{{ journey.task_status }}</b>
             </header>
-            <p>
-              错误码：{{ journey.blocked_reason || "none" }}。请结合任务状态与事件记录排查阻塞原因。
-            </p>
+            <p>{{ terminalEvidence.description }}</p>
             <dl v-if="journey.blocked_reason" class="selection-block-owner">
               <div>
                 <dt>责任人</dt>

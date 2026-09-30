@@ -175,7 +175,7 @@
     "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
     "apps/web/src/components/ScoreRuleConsole.vue": "c7ccd3020710ffb8d8c52bd276d77573a21b6405d47eb994fe95bf21dd51392f",
     "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
-    "apps/web/src/components/SelectionJourney.vue": "a4a30f7df9fddd4678fed6764cc690bbf85f3862573055a404d373b9b1852c3c",
+    "apps/web/src/components/SelectionJourney.vue": "21c2e95ce297a3c6a55e4301f36fdf448659d76173390901dfc01b58f200349b",
     "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
     "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
     "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
@@ -421,7 +421,7 @@
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
     "tests/e2e/m04-02-opportunities.spec.ts": "cdbefa1077bab5a0aad63ac821ce6e187654aa4a73cdf8a4f92555912ec45f0a",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "f94c9df962e6a947c5aabda7a056aab47f69a7a70cee49ef1909177a1726172e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "54f916e2e2e330288cd9ffe41edbc7e1bf36e2b9d2cc5c71bf41cbdd9deded1b",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "tests/e2e/m07-06-selection-acceptance.spec.ts": "a8193d635897bba0b28860849e6f34a4ede9ef21be664e65828d88a617deace4",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "9858dafb38e6cb7cd6ee8515a545f4ce98c636fbb19625adba3b10d639214f9d",
@@ -594,7 +594,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "7fbacb6b0b1e2a3cf5d33dda101e9941f5e86c8c94d39fe950f61d30f05117ce",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "3f33f8b6ea141279ef057d12e2ec98bcade0d10ccd35ade7e45e4e7fe681894e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "728bf0bc631016cba563a4c8ad95889a99f7128ba33fb4a05f7f951e70a5c9fa",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "554d26710d2d698a2b4f451bb943a4a72111c7cdd151781a3d47c70bdb5114a3",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "ec5f2fe1682f0c584cbcd287c73c98ba5a3b5b327ccf9443bc3774a76cd6d309",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "d56f08cd29e0f343c6c984f1f3c3e6e7e2405233957be0617696e4e91a459fa4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "75af5b069feaa12a5e14eb8e4e26514cadd3eb4452733004337b673736d1380e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
@@ -61915,7 +61915,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#feb47750cbf8d6c2.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 425,
+      "line": 451,
       "kind": "control",
       "label": "返回机会列表",
       "conditions": [],
@@ -61942,7 +61942,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8026812b48a68031.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 427,
+      "line": 453,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -61974,7 +61974,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 436,
+      "line": 462,
       "kind": "form-event",
       "label": "{{ item.label }} {{ form.input_kind === \"keyword\" ? \"商品关键词\" : form.input_kind === \"asin\" ? \"10 位 ASIN\" : \"HTTPS 商品链接\" }}",
       "conditions": [
@@ -62006,7 +62006,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 479,
+      "line": 505,
       "kind": "control",
       "label": "{{ busy ? \"正在创建真实任务…\" : reading ? \"正在恢复进度…\" : \"创建真实选品任务\" }}",
       "conditions": [
@@ -62038,7 +62038,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 493,
+      "line": 519,
       "kind": "control",
       "label": "查看处理时间轴",
       "conditions": [
@@ -62068,7 +62068,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 558,
+      "line": 584,
       "kind": "control",
       "label": "查看来源原文 ↗",
       "conditions": [
@@ -62108,7 +62108,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#ec0ddd60475ad5dd.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 596,
+      "line": 614,
       "kind": "form-event",
       "label": "留痕决策 对本次真实结果作出决策 决策不会改写原始证据 采纳质量门 {{ selectedCandidate?.quality_gates ? `${passedGateCount} / 5` : \"待核对\" }} {{ label }} ",
       "conditions": [
@@ -62142,7 +62142,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#a0b1d77731a8a57b.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 659,
+      "line": 677,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -62176,7 +62176,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 680,
+      "line": 698,
       "kind": "control",
       "label": "{{ busy ? \"正在保存…\" : \"保存审计决策\" }}",
       "conditions": [
@@ -62210,7 +62210,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 691,
+      "line": 709,
       "kind": "control",
       "label": "查看机会、证据与决策历史 ↗",
       "conditions": [
@@ -62250,7 +62250,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 696,
+      "line": 714,
       "kind": "control",
       "label": "打开自动生成的验证任务 ↗",
       "conditions": [
@@ -62290,7 +62290,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 706,
+      "line": 724,
       "kind": "control",
       "label": "开始下一次",
       "conditions": [
