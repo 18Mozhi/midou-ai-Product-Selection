@@ -118,7 +118,7 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 
 | 源签名.序号        | 行   | 类型                  | 语义归属                        |
 | ------------------ | ---- | --------------------- | ------------------------------- |
-| 15912fa115381d2d.1 | 769 | event-binding         | Q54-LOAD · 首次状态恢复         |
+| 372262b9b8d3cad6.1 | 769 | event-binding         | Q54-LOAD · 首次状态恢复，仅保留已接线主操作 |
 | 0c3266c5e4ec717f.1 | 841 | control               | Q54-LOAD · 工作区刷新           |
 | 3c02110a0877635d.1 | 851 | control               | Q54-TAB · 证据                  |
 | b2556958fd8ef037.1 | 857 | control               | Q54-TAB · 质量问题              |
@@ -211,7 +211,7 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | ---------------------------------------------------- | ---------------------------------------------------------------- |
 | apps/web/src/components/PlatformDataCenter.vue       | 904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08 |
 | apps/web/src/components/PlatformGovernanceCenter.vue | 65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9 |
-| apps/web/src/components/DataQualityCenter.vue        | 2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120 |
+| apps/web/src/components/DataQualityCenter.vue        | dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536 |
 | apps/api/src/platform-dashboard-routes.ts            | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
 | apps/api/src/platform-dashboard-service.ts           | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |
 | apps/api/src/mysql-platform-dashboard-repository.ts  | b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28 |

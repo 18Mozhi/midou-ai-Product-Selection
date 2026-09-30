@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
-    "apps/web/src/components/CollectionTaskCenter.vue": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+    "apps/web/src/components/CollectionTaskCenter.vue": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
   },
   "inputs": {
     "apps/web/src/components/CollectionTaskCenter.vue": [
@@ -98,10 +98,10 @@
       "label": "将状态面主操作接到列表读取处理器",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/CollectionTaskCenter.vue#3a210e63ca5a7831.1"
+        "apps/web/src/components/CollectionTaskCenter.vue#43ae05ac7ae508fe.1"
       ],
       "sourceContractKeys": [
-        "CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load"
+        "CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load并隐藏未接线secondary"
       ],
       "contractAliasReason": "按既有CL51合同对CL51-STATE-PRIMARY精确归属，不增加新建任务或重放路径。",
       "condition": "列表状态面提供主操作，且当前状态允许重读时。",
@@ -130,7 +130,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#3a210e63ca5a7831.1",
+          "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#43ae05ac7ae508fe.1",
           "event": "@primary",
           "handler": "() => load()",
           "targets": [
@@ -717,7 +717,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
-      "apps/web/src/components/CollectionTaskCenter.vue": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+      "apps/web/src/components/CollectionTaskCenter.vue": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

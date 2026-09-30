@@ -222,9 +222,9 @@ MFA和首次设置按钮是 form 外的 type=button，输入虽然部分有minle
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1 | 41 | event-binding | ID-LANDING-RETRY-PARENT / 子事件转发至现有入口解析与重读处理函数 |
-| apps/web/src/components/LandingRedirectSurface.vue#bb7cd7dbbdfa84a2.1 | 44 | event-binding | ID-LANDING-RETRY-SURFACE / 将通用状态主操作转发为retry事件 |
+| apps/web/src/components/LandingRedirectSurface.vue#2b603370ce085d16.1 | 44 | event-binding | ID-LANDING-RETRY-SURFACE / 将通用状态主操作转发为retry事件并隐藏未接线secondary |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/LandingRedirect.vue | bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5 |
-| apps/web/src/components/LandingRedirectSurface.vue | 321c65bae80e602f2403983f6b949ca54a6795cb44fd90704a3c72898203eddb |
+| apps/web/src/components/LandingRedirectSurface.vue | 8f3dfcfbcbbaf18eef5729352c54679da68cc204194dcb6976e6810acdf37aec |

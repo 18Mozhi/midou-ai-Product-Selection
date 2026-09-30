@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "09aab9722f9ffe73834bd19be7871a2891c3679c0a7cac48b5081a31b79b222a",
+    "apps/web/src/components/TrendDashboard.vue": "faaa3c7e911a9d975d7848f865a949f7b06dcaa833ce69ad48edb6c8db7fb7ed",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -327,10 +327,10 @@
       "kind": "read",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1"
+        "apps/web/src/components/TrendDashboard.vue#5646a97e7f9d7b17.1"
       ],
       "sourceContractKeys": [
-        "TR-RECOVER：empty清除，否则load"
+        "TR-RECOVER：empty清除，否则load；隐藏未接线通用次操作"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "topics且state!=ready；UiStatePanel内部可用动作取决于kind",
@@ -598,10 +598,10 @@
       "kind": "read",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1"
+        "apps/web/src/components/TrendDashboard.vue#0d9565586dbfab9d.1"
       ],
       "sourceContractKeys": [
-        "TR-RELOAD：规则状态恢复"
+        "TR-RELOAD：规则状态恢复；隐藏未接线通用次操作"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "rules且state不为ready/empty时UiStatePanel primary",
@@ -2875,7 +2875,7 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "09aab9722f9ffe73834bd19be7871a2891c3679c0a7cac48b5081a31b79b222a",
+      "apps/web/src/components/TrendDashboard.vue": "faaa3c7e911a9d975d7848f865a949f7b06dcaa833ce69ad48edb6c8db7fb7ed",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",

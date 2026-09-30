@@ -434,6 +434,7 @@ onActivated(() => {
       v-if="state !== 'ready'"
       :kind="state"
       :request-id="requestId"
+      :hide-secondary="true"
       @primary="load"
     /><template v-else
       ><div class="crawler-metrics">

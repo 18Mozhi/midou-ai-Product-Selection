@@ -377,6 +377,7 @@ onMounted(load);
       "
       :primary-label="state === 'loading' ? '' : state === 'expired' ? '重新登录' : '重新读取状态'"
       :request-id="requestId"
+      :hide-secondary="true"
       @primary="
         ['expired', 'forbidden', 'blocked'].includes(state) ? handleAccessPrimary() : load()
       "

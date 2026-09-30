@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/PlatformDataCenter.vue": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
-    "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120"
+    "apps/web/src/components/DataQualityCenter.vue": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
   },
   "implementationSourceHashes": {
     "tests/e2e/m06-02-platform-dashboard.spec.ts": "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
@@ -818,11 +818,13 @@
     },
     {
       "actionId": "Q54-LOAD",
+      "sourceContractKeys": ["Q54-LOAD"],
+      "contractAliasReason": "data-governance-contract-review.md以当前UiStatePanel事件映射首次质量目录重读；未接线次操作被隐藏。",
       "label": "质量状态恢复读取",
       "kind": "read",
       "routeApplicability": "P54-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#15912fa115381d2d.1",
+        "apps/web/src/components/DataQualityCenter.vue#372262b9b8d3cad6.1",
         "apps/web/src/components/DataQualityCenter.vue#0c3266c5e4ec717f.1"
       ],
       "condition": "首次状态页由UiStatePanel恢复；ready工作区提供独立刷新，写入中禁用",
@@ -2065,7 +2067,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/PlatformDataCenter.vue": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
-      "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+      "apps/web/src/components/DataQualityCenter.vue": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",

@@ -1035,6 +1035,7 @@ onActivated(() => {
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
       :request-id="readFailureRequestId"
+      :hide-secondary="true"
       @primary="load"
     />
     <section v-else>

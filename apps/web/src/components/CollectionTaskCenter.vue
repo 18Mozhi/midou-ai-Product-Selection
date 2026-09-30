@@ -604,6 +604,7 @@ onActivated(() => {
       v-if="state !== 'ready' && state !== 'empty'"
       :kind="state"
       :request-id="requestId"
+      :hide-secondary="true"
       @primary="() => load()"
     />
     <template v-else>

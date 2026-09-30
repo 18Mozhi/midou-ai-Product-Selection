@@ -558,6 +558,7 @@ onBeforeUnmount(() => {
         :kind="state"
         :request-id="requestId"
         :primary-label="state === 'empty' ? '清除筛选并恢复' : '重新加载'"
+        :hide-secondary="true"
         @primary="recoverTopics"
       />
       <div v-else class="trend-workbench" :class="{ 'is-mobile-detail-open': mobileDetailOpen }">
@@ -647,6 +648,7 @@ onBeforeUnmount(() => {
         v-if="state !== 'ready' && state !== 'empty'"
         :kind="state"
         :request-id="requestId"
+        :hide-secondary="true"
         @primary="load"
       />
       <div v-else-if="!rules.length" class="trend-rule-empty">

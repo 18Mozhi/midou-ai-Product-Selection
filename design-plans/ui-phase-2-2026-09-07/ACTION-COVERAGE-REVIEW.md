@@ -2,7 +2,7 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1749；旧登记1477；新身份774，旧表独有身份502。签名变化不等于增删业务能力。
+- 当前源候选1749；旧登记1477；新身份778，旧表独有身份506。签名变化不等于增删业务能力。
 - 已具体语义对应73页/1585源位置/1302组；其中路由动作1069组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
@@ -27,10 +27,10 @@
 | [P11 个人中心](page-specs/P11.md) | 2 | [28组](action-reviews/P11.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P12 今日行动](page-specs/P12.md) | 45 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P13 今日工作](page-specs/P13.md) | 71 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P14 热点趋势](page-specs/P14.md) | 90 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P14 热点趋势](page-specs/P14.md) | 88 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P15 选品机会](page-specs/P15.md) | 98 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P16 创建选品](page-specs/P16.md) | 40 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P17 评分规则](page-specs/P17.md) | 55 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P17 评分规则](page-specs/P17.md) | 54 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P18 机会详情](page-specs/P18.md) | 98 | [66组](action-reviews/P18.json) | 332个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 62 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 62 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -64,9 +64,9 @@
 | [P48 热点来源](page-specs/P48.md) | 77 | [26组](action-reviews/P48.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P49 1688 启用检查](page-specs/P49.md) | 77 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P50 凭证与档案](page-specs/P50.md) | 77 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P51 采集任务](page-specs/P51.md) | 80 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P52 采集总览](page-specs/P52.md) | 80 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P53 网页登录采集](page-specs/P53.md) | 80 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P51 采集任务](page-specs/P51.md) | 79 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P52 采集总览](page-specs/P52.md) | 79 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P53 网页登录采集](page-specs/P53.md) | 79 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P54 数据中心](page-specs/P54.md) | 57 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P55 质量与规则](page-specs/P55.md) | 58 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P56 内容管理](page-specs/P56.md) | 74 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |

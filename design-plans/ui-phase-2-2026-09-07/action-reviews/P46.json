@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-    "apps/web/src/components/ProviderRegistry.vue": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc",
+    "apps/web/src/components/ProviderRegistry.vue": "61023ffed367e6414668e2f3d4d9b1c2c3bb9fb039bea834faf05ea6dc8f77cb",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
@@ -87,7 +87,7 @@
       "actionId": "PR46-LOAD-WIRING",
       "label": "状态面板primary读取事件转发",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#2e080ad21acf1f26.1"],
+      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1"],
       "sourceContractKeys": ["PR46-CURRENT-LOAD-WIRING"],
       "contractAliasReason": "子组件primary事件只转发既有load；不新增读取策略或第二个业务动作。",
       "condition": "来源定义页状态面板已挂载。",
@@ -98,7 +98,7 @@
       "testReferences": [{ "file": "tests/e2e/m03-01-provider-registry.spec.ts", "evidenceType": "actual-vue-local-interception" }],
       "remaining": "转发接线不证明状态按钮文案与会话导航正确，也不代表真实权限已验证。",
       "forwardsTo": ["PR46-LOAD"],
-      "forwardBindings": [{ "candidateId": "apps/web/src/components/ProviderRegistry.vue#2e080ad21acf1f26.1", "event": "@primary", "handler": "load", "targets": ["PR46-LOAD"] }]
+      "forwardBindings": [{ "candidateId": "apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1", "event": "@primary", "handler": "load", "targets": ["PR46-LOAD"] }]
     },
     {
       "actionId": "PR46-PANEL-SECONDARY-UNBOUND",
@@ -397,7 +397,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-      "apps/web/src/components/ProviderRegistry.vue": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc",
+      "apps/web/src/components/ProviderRegistry.vue": "61023ffed367e6414668e2f3d4d9b1c2c3bb9fb039bea834faf05ea6dc8f77cb",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"

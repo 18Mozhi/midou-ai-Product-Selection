@@ -77,7 +77,7 @@
 | O:660c7a198b93551d.1 | control / 972 | CL52-BATCH / 安全重放区展开 |
 | O:9ebd065e5010fd46.1 | control / 1022 | CL52-DEAD / 链接单任务详情重放 |
 | O:1c008f867673db60.4 | control / 1026 | CL52-DEAD / 技术详情 |
-| R:25af292333a00121.1 | event-binding / 433| CL53-LOAD / 状态面primary |
+| R:a761c6ac4e81b553.1 | event-binding / 433| CL53-LOAD / 状态面仅保留已接线primary，隐藏未接线secondary |
 | R:a9a0bd7b83bfaa17.1 | control / 516| CL53-RENEW / blocked_login任务链接 |
 | R:cbea42c5b9e6a6b3.1 | form-event / 530| CL53-FILTER / applyFilters |
 | R:1c008f867673db60.1 | control / 648| CL53-DETAIL / 移动技术展开 |
@@ -163,7 +163,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/CollectionTaskCenter.vue#3a210e63ca5a7831.1 | 603 | event-binding | CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load |
+| apps/web/src/components/CollectionTaskCenter.vue#43ae05ac7ae508fe.1 | 603 | event-binding | CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load并隐藏未接线secondary |
 | apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1 | 820 | control | CL51-CURRENT-EMPTY-RECOVERY / 全部状态重读；筛选空态返回全部状态并重读 |
 | apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1 | 838 | event-binding | CL51-CURRENT-DETAIL-DISMISS / 仅详情遮罩本身mousedown时关闭详情 |
 | apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1 | 839 | dialog-definition | CL51-CURRENT-DETAIL-SEMANTICS / 当前详情面板role=dialog、aria-modal与标题/描述关联 |
@@ -177,7 +177,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 | 旧candidateId | 原始语义 | 当前替代身份 |
 | --- | --- | --- |
-| apps/web/src/components/CollectionTaskCenter.vue#2f2f0f3ceae01eac.1 | CL51-LOAD 状态面primary | #3a210e63ca5a7831.1 CL51-CURRENT-STATE-PRIMARY |
+| apps/web/src/components/CollectionTaskCenter.vue#2f2f0f3ceae01eac.1 | CL51-LOAD 状态面primary | #43ae05ac7ae508fe.1 CL51-CURRENT-STATE-PRIMARY |
 | apps/web/src/components/CollectionTaskCenter.vue#b6414d02a0f96150.1 | CL51-DETAIL 遮罩mousedown.self关闭 | #6b55734308f206c3.1 CL51-CURRENT-DETAIL-DISMISS |
 | apps/web/src/components/CollectionTaskCenter.vue#472cf13bb7c4d799.1 | CL51-DETAIL loading/error/loaded容器 | #ed8b70dc2e6170f2.1 CL51-CURRENT-DETAIL-SEMANTICS |
 | apps/web/src/components/CollectionTaskCenter.vue#86cb88a88c044c05.1 | CL51-DETAIL detailKeydown Tab/Escape | #d3da42ac8f789e3b.1 CL51-CURRENT-DETAIL-KEYBOARD |
@@ -208,9 +208,9 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/CollectionRuntimeSurface.vue | 4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f |
-| apps/web/src/components/CollectionTaskCenter.vue | 6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de |
+| apps/web/src/components/CollectionTaskCenter.vue | 02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8 |
 | apps/web/src/components/CollectionOperationsConsole.vue | 2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f |
-| apps/web/src/components/CollectionRuntimeCenter.vue | 6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17 |
+| apps/web/src/components/CollectionRuntimeCenter.vue | 7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381 |
 | apps/web/src/collection-tasks.css | e2bcf0f176fdf670efc402c104fdac4dd2eabbafbbdc4a9d7a21e3c04d90e85f |
 | apps/web/src/collection-task-detail.css | cdeb6209781acc6ff747fb4728f9675d69479c53fd3a97dfdb9e0b5c17130544 |
 | apps/web/src/styles/platform-operations.css | 2a0a0936d6132cd3fdeb74def417edfd7a038dda43ece9f010b125b62698281b |

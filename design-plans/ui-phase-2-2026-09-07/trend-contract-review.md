@@ -27,14 +27,14 @@
 | W:479   | aef07f12388401cc.1 | TR-TAB-RULES：导航入口                                   |
 | W:481   | 83125cc8b9f30181.1 | TR-TAB-GOVERNANCE                                        |
 | W:493   | 377da84835906aec.1 | TR-FILTER-APPLY/CLEAR/COPY/EDIT/SORT转发                 |
-| W:503   | eecc513e3286758d.1 | TR-RECOVER：empty清除，否则load                          |
+| W:503   | 5646a97e7f9d7b17.1 | TR-RECOVER：empty清除，否则load；隐藏未接线通用次操作   |
 | W:518   | 28d08ea282407ca1.1 | TR-TOPIC-SELECT：每个主题实例                            |
 | W:544   | a9dcb53568c4deee.1 | TR-PAGE-PREV                                             |
 | W:546   | ec3e2e186729ef5d.1 | TR-PAGE-NEXT                                             |
 | W:551   | de1bcb04278ad1bc.1 | TR-BACK/FOLLOW/RULE-OPEN/RELEVANCE-OPEN/ANOMALY-OPEN转发 |
 | W:566   | a8eb23a11ff39fa0.1 | TR-HELP：原生details展开                                 |
 | W:591   | 5b07ed8ea36a238e.1 | TR-RULE-OPEN：规则标题入口                               |
-| W:593   | d2b72f6631a5008b.1 | TR-RELOAD：规则状态恢复                                  |
+| W:647   | 0d9565586dbfab9d.1 | TR-RELOAD：规则状态恢复；隐藏未接线通用次操作           |
 | W:603   | 095a96a218ee248e.1 | TR-RULE-OPEN：规则空态入口                               |
 | W:651   | 5731738b8db06002.1 | TR-RULE-STATUS：暂停/启用                                |
 | W:654   | 273b9f9c2069857f.1 | TR-RULE-RESULTS：首关键词筛选                            |

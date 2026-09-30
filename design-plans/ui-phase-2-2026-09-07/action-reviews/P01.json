@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
-    "apps/web/src/components/LandingRedirectSurface.vue": "321c65bae80e602f2403983f6b949ca54a6795cb44fd90704a3c72898203eddb"
+    "apps/web/src/components/LandingRedirectSurface.vue": "8f3dfcfbcbbaf18eef5729352c54679da68cc204194dcb6976e6810acdf37aec"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -20,7 +20,7 @@
       "actionId": "ID-LANDING-CHECK",
       "sourceContractKeys": [
         "ID-LANDING-RETRY-PARENT / 子事件转发至现有入口解析与重读处理函数",
-        "ID-LANDING-RETRY-SURFACE / 将通用状态主操作转发为retry事件"
+        "ID-LANDING-RETRY-SURFACE / 将通用状态主操作转发为retry事件并隐藏未接线secondary"
       ],
       "contractAliasReason": "保留图稿中的既有动作标识；合同第6节将同一重试读取拆为Surface事件与父级处理两个当前源绑定，二者共同实现既有入口解析/重读，不增加第二次读取或新动作。",
       "label": "重新确定登录落点",
@@ -28,7 +28,7 @@
       "routeApplicability": "P01-local-caller-only",
       "sourceCandidateIds": [
         "apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1",
-        "apps/web/src/components/LandingRedirectSurface.vue#bb7cd7dbbdfa84a2.1"
+        "apps/web/src/components/LandingRedirectSurface.vue#2b603370ce085d16.1"
       ],
       "condition": "挂载自动读取；blocked才显示primary，loading无按钮；错误时只提供一次有效重新检查",
       "handler": "LandingRedirectSurface发出retry -> resolveLanding -> GET /me/landing -> /home恢复最近成员路径，否则replace；expired回/login",
@@ -98,7 +98,7 @@
     "includeStructuralContainers": true,
     "dependencyHashes": {
       "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
-      "apps/web/src/components/LandingRedirectSurface.vue": "321c65bae80e602f2403983f6b949ca54a6795cb44fd90704a3c72898203eddb",
+      "apps/web/src/components/LandingRedirectSurface.vue": "8f3dfcfbcbbaf18eef5729352c54679da68cc204194dcb6976e6810acdf37aec",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",

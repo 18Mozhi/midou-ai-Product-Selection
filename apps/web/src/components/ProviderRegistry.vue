@@ -679,6 +679,7 @@ onActivated(() => {
       :kind="state"
       primary-label="重新读取来源"
       :request-id="requestId"
+      :hide-secondary="true"
       @primary="load"
     />
     <section v-else-if="state === 'empty' && !editorOpen" class="provider-empty">

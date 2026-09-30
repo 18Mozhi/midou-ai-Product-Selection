@@ -178,7 +178,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | --- | --- | --- | --- |
 | A:308 | 4d3ea4004d92534e.1 | control / 308 | PR47-CURRENT-LOAD 页头刷新状态 |
 | A:311 | 3d1c1781d275b76d.1 | control / 311 | PR47-CURRENT-NAV 返回来源定义页 |
-| A:341 | 96e8b9fd90114a83.1 | event-binding / 341 | PR47-CURRENT-ACCESS-PRIMARY 状态主操作条件接线：expired导航登录，其余受阻态沿用GET |
+| A:349 | ec27f1ab7441f3a6.1 | event-binding / 349 | PR47-CURRENT-ACCESS-PRIMARY 状态主操作条件接线：expired导航登录，其余受阻态沿用GET，隐藏未接线secondary |
 | A:469 | 8dbb02bd869e9eab.1 | control / 469 | PR47-CURRENT-TRACE 展开保留快照刷新失败的读取关联编号 |
 | A:472 | d5aef91ff7434dd6.1 | control / 472 | PR47-CURRENT-LOAD 保留快照失败后重新执行当前GET |
 | A:352 | 0da6a9c39b0f685c.1 | control / 352 | PR47-CURRENT-RESET 工具栏重置全部本地筛选/排序 |
@@ -197,7 +197,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderAdapterCenter.vue | 9df7d8a37fb4fe3b0829f84644505e69997baae652f2d4425d07642c28260ada |
+| apps/web/src/components/ProviderAdapterCenter.vue | 1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b |
 
 本节只登记当前源码身份及已有事实合同归属，不代表运行时全状态、真实 `provider:configure` 探针授权、采集执行、停用恢复或生产验收已通过。
 
@@ -207,11 +207,11 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue#2e080ad21acf1f26.1 | 677 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET |
+| apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1 | 677 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET并隐藏未接线secondary |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue | 2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc |
+| apps/web/src/components/ProviderRegistry.vue | 61023ffed367e6414668e2f3d4d9b1c2c3bb9fb039bea834faf05ea6dc8f77cb |
 
 ### PR46/PR47及共享详情旧身份归档
 
@@ -232,11 +232,11 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 ## P46 页面动作映射与共享控件归属（2026-09-25）
 
-P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT-*` 仅描述 P46 路由中的当前候选归属，不扩展P47或全局导航范围；UiStatePanel secondary保留为当前未接入父处理器的无效入口，不能作为可用恢复动作验收。
+P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT-*` 仅描述 P46 路由中的当前候选归属，不扩展P47或全局导航范围；状态面板只显示已接线重读主操作，未接线secondary已隐藏。
 
 | 别名 | 当前签名 | P46语义合同 |
 | --- | --- | --- |
-| R | 2e080ad21acf1f26.1 | PR46-CURRENT-LOAD-WIRING · UiStatePanel primary事件转给现有load读取 |
+| R | d5d54f49106b55f0.1 | PR46-CURRENT-LOAD-WIRING · UiStatePanel primary事件转给现有load读取；隐藏未接线secondary |
 | T | e2fd0d02cbd9f684.1 | PR46-CURRENT-COLUMNS · 列设置原生展开控件 |
 | T | 921f4be18a3fe814.1 | PR46-CURRENT-COLUMNS · 动态列显示开关，至少保留一列 |
 | T | d09cd5524db7bee5.1 | PR46-CURRENT-FREEZE · 冻结首个可见列的本地显示偏好 |
@@ -283,7 +283,7 @@ P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT
 | S | 23ee0a87fa977a0d.1 | — | PR47-CURRENT-NAV-CREDENTIALS |
 | A:308 | 4d3ea4004d92534e.1 | control / 308 | PR47-CURRENT-LOAD |
 | U | 589e8eedc7c9c864.1 | — | PR47-CURRENT-LOAD |
-| A:341 | 96e8b9fd90114a83.1 | event-binding / 341 | PR47-CURRENT-ACCESS-PRIMARY |
+| A:349 | ec27f1ab7441f3a6.1 | event-binding / 349 | PR47-CURRENT-ACCESS-PRIMARY |
 | A:469 | 8dbb02bd869e9eab.1 | control / 469 | PR47-CURRENT-TRACE |
 | A:472 | d5aef91ff7434dd6.1 | control / 472 | PR47-CURRENT-LOAD |
 | U | e75816bb76644822.1 | — | PR47-CURRENT-SECONDARY-UNBOUND |

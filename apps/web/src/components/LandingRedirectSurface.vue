@@ -51,6 +51,7 @@ const emit = defineEmits<{ retry: [] }>();
           "
           :request-id="props.requestId"
           :primary-label="props.state === 'loading' ? '正在进入工作台' : '重新检查'"
+          :hide-secondary="true"
           @primary="emit('retry')"
         />
         <p class="p01-note">此页只处理入口解析；成功后由原路由替换进入目标页。</p>

@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CollectionRuntimeCenter.vue": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+    "apps/web/src/components/CollectionRuntimeCenter.vue": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
   },
   "inputs": {
     "apps/web/src/components/CollectionRuntimeCenter.vue": [
@@ -22,11 +22,11 @@
       "label": "读取、刷新或从状态面重试网页采集运行快照",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/CollectionRuntimeCenter.vue#25af292333a00121.1",
+        "apps/web/src/components/CollectionRuntimeCenter.vue#a761c6ac4e81b553.1",
         "apps/web/src/components/CollectionRuntimeCenter.vue#b3aff7d1ec82177c.1"
       ],
       "sourceContractKeys": [
-        "CL53-LOAD / 状态面primary",
+        "CL53-LOAD / 状态面仅保留已接线primary，隐藏未接线secondary",
         "CL53-CURRENT-LOAD / 手动重读；刷新或回收中禁用"
       ],
       "contractAliasReason": "按既有CL53合同对CL53-LOAD精确归属；不增加新的范围、数据或回收行为。",
@@ -375,7 +375,7 @@
       "apps/web/src/components/CollectionRuntimeCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CollectionRuntimeCenter.vue": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+      "apps/web/src/components/CollectionRuntimeCenter.vue": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

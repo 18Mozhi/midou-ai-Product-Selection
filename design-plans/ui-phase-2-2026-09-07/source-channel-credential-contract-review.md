@@ -74,7 +74,7 @@ ProviderRuntimeSurface五个RouterLink已随[来源定义合同](provider-defini
 | C:faa93a858a84ea60.1           | control / 536               | SC50-LOGIN / 打开导入                     |
 | C:09c5f70e0bef7952.1           | control / 537               | SC50-PROFILE / 打开关联                   |
 | C:84ead7c893248e2c.1           | control / 538               | SC50-ASSET / 新建资产                     |
-| C:d2b72f6631a5008b.1           | event-binding / 551         | SC50-LOAD / UiStatePanel主操作            |
+| C:52a1f163b96c6a4f.1           | event-binding / 551         | SC50-LOAD / UiStatePanel主操作，仅显示已接线操作 |
 | C:ad87a22b7d7dedf7.1           | control / 577               | SC50-ASSET / 空态创建                     |
 | C:7afaae6e4a36e2ab.1           | control / 626               | SC50-ROTATE / 更新资产                    |
 | C:0126143cd8671c5f.1           | control / 628               | SC50-REVOKE / 设置撤销目标                |
@@ -524,7 +524,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/CredentialAssetCenter.vue#3216d7209881fb86.1 | 1008 | control | SC50-LOGIN / 打开网页登录档案导入窗 |
 | apps/web/src/components/CredentialAssetCenter.vue#da51ee773f1eb5e2.1 | 1009 | control | SC50-PROFILE / 打开既有运行档案关联窗 |
 | apps/web/src/components/CredentialAssetCenter.vue#07c8680b127235e2.1 | 1010 | control | SC50-ASSET / 打开凭证资产新建窗 |
-| apps/web/src/components/CredentialAssetCenter.vue#466d5492514f7a0e.1 | 1034 | event-binding | SC50-LOAD / 读取失败面板的主操作转发到既有读取函数 |
+| apps/web/src/components/CredentialAssetCenter.vue#52a1f163b96c6a4f.1 | 1034 | event-binding | SC50-LOAD / 读取失败面板仅显示已接线主操作并转发到既有读取函数 |
 | apps/web/src/components/CredentialAssetCenter.vue#343034ee456c8020.1 | 1060 | control | SC50-ASSET / 空资产状态打开新建窗 |
 | apps/web/src/components/CredentialAssetCenter.vue#99e8924082a7d684.1 | 1109 | control | SC50-ROTATE / 将当前资产设为凭证轮换目标 |
 | apps/web/src/components/CredentialAssetCenter.vue#a244801ec79346ec.1 | 1115 | control | SC50-REVOKE / 将当前资产设为撤销确认目标 |
@@ -562,7 +562,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/CredentialAssetCenter.vue | d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845 |
+| apps/web/src/components/CredentialAssetCenter.vue | ec86d985dcc3db3e49d72f13053e66071a84a6fe6a20acdd2c1349b087d334cf |
 
 ## 16. P50 凭证台账被替代的旧身份
 
@@ -570,7 +570,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 旧candidateId | 原始语义 | 当前替代身份 |
 | --- | --- | --- |
-| apps/web/src/components/CredentialAssetCenter.vue#d2b72f6631a5008b.1 | SC50-LOAD 错误状态主操作 | #466d5492514f7a0e.1 读取失败面板主操作转发 |
+| apps/web/src/components/CredentialAssetCenter.vue#d2b72f6631a5008b.1 | SC50-LOAD 错误状态主操作 | #52a1f163b96c6a4f.1 读取失败面板主操作转发 |
 | apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.1 | SC50-CLOSE 取消资产新建或凭证轮换 | #2f453887d0cc66db.1 取消资产编辑器 |
 | apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1 | SC50-ASSET/ROTATE 保存或轮换 | #584e25b2c7498fe2.1 资产表单保存 |
 | apps/web/src/components/CredentialAssetCenter.vue#15bb54ff377e917e.1 | SC50-PROFILE 选择加密资产并同步来源 | #56cda485ff9a67e1.1 档案与来源同步 |

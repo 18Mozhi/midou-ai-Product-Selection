@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-    "apps/web/src/components/ProviderAdapterCenter.vue": "05aeab1ec11db8e6ee3e08672ad908aa20be522b6e4ebabc4a441b3149876754",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
@@ -117,8 +117,8 @@
       "actionId": "PR47-LOAD-WIRING",
       "label": "状态面板primary重读事件转发",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/ProviderAdapterCenter.vue#96e8b9fd90114a83.1"],
-      "sourceContractKeys": ["PR47-CURRENT-ACCESS-PRIMARY"],
+      "sourceCandidateIds": ["apps/web/src/components/ProviderAdapterCenter.vue#ec27f1ab7441f3a6.1"],
+      "sourceContractKeys": ["PR47-CURRENT-ACCESS-PRIMARY 状态主操作条件接线：expired导航登录，其余受阻态沿用GET，隐藏未接线secondary"],
       "contractAliasReason": "状态面板primary事件转发至父级条件处理器：expired只导航登录，forbidden/blocked聚焦页面标题后执行原GET；事件接线不另计导航或读取动作。",
       "condition": "状态面板处于error、expired、forbidden或blocked且显示primary操作。",
       "handler": "@primary调用handleAccessPrimary；expired导航至/login，其他受阻态聚焦标题并调用PR47-LOAD。",
@@ -126,7 +126,7 @@
       "scenes": [],
       "visualStates": {"default": "not-applicable-wiring", "hover": "not-applicable-wiring", "focus": "not-applicable-wiring", "pressed": "not-applicable-wiring", "disabled": "not-applicable-wiring", "busy": "not-applicable-wiring"},
       "forwardsTo": ["PR47-LOAD"],
-      "forwardBindings": [{"candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#96e8b9fd90114a83.1", "event": "@primary", "handler": "\n        ['expired', 'forbidden', 'blocked'].includes(state) ? handleAccessPrimary() : load()\n      ", "targets": ["PR47-LOAD"]}],
+      "forwardBindings": [{"candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#ec27f1ab7441f3a6.1", "event": "@primary", "handler": "\n        ['expired', 'forbidden', 'blocked'].includes(state) ? handleAccessPrimary() : load()\n      ", "targets": ["PR47-LOAD"]}],
       "testReferences": [{"file": "tests/unit/ui-phase2-p47-action-map.test.mjs", "evidenceType": "actual-vue-review-fixture"}, {"file": "tests/unit/ui-phase2-provider-adapter-access.test.mjs", "evidenceType": "actual-vue-review-fixture"}],
       "remaining": "接线映射覆盖父处理器的过期登录与受阻重读分支，不证明真实会话、服务端权限或目标页授权。"
     },
@@ -383,7 +383,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-      "apps/web/src/components/ProviderAdapterCenter.vue": "05aeab1ec11db8e6ee3e08672ad908aa20be522b6e4ebabc4a441b3149876754",
+      "apps/web/src/components/ProviderAdapterCenter.vue": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"

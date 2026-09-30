@@ -770,6 +770,7 @@ onBeforeUnmount(() => {
           v-if="state !== 'ready'"
           :kind="state"
           :request-id="requestId"
+          :hide-secondary="true"
           @primary="refreshQuality"
         /><template v-else
           ><div class="quality-metrics">

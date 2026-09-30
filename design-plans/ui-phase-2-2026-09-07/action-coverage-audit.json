@@ -30,9 +30,9 @@
     "apps/web/src/components/CapacityBoundaryCenter.vue": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2",
     "apps/web/src/components/CapacityBoundaryEvidence.vue": "b815e48915ae9a72d1972d7ef7eebda8b91f5299041ca3028b8af65ef933fbd9",
     "apps/web/src/components/CollectionOperationsConsole.vue": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f",
-    "apps/web/src/components/CollectionRuntimeCenter.vue": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17",
+    "apps/web/src/components/CollectionRuntimeCenter.vue": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381",
     "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
-    "apps/web/src/components/CollectionTaskCenter.vue": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de",
+    "apps/web/src/components/CollectionTaskCenter.vue": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8",
     "apps/web/src/components/CommercialOperationsCenter.vue": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec",
     "apps/web/src/components/CompetitorMonitor.vue": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
     "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
@@ -40,8 +40,8 @@
     "apps/web/src/components/CostRuleConsole.vue": "781049f4236f3e11f8a83473b7cac6e22d063c47ccd7fe8b78457302c66e5f24",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
     "apps/web/src/components/CrawlerSchedulerEvidence.vue": "5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2",
-    "apps/web/src/components/CredentialAssetCenter.vue": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845",
-    "apps/web/src/components/DataQualityCenter.vue": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+    "apps/web/src/components/CredentialAssetCenter.vue": "ec86d985dcc3db3e49d72f13053e66071a84a6fe6a20acdd2c1349b087d334cf",
+    "apps/web/src/components/DataQualityCenter.vue": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977",
     "apps/web/src/components/file-resilience/FileResilienceDirectoryLedger.vue": "386eed164bc6b225f4dd57cbc7c4d4afb43606fc7d605c9e8ac6771ede2e31ad",
@@ -53,7 +53,7 @@
     "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
     "apps/web/src/components/HomeDashboard.vue": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5",
     "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
-    "apps/web/src/components/LandingRedirectSurface.vue": "321c65bae80e602f2403983f6b949ca54a6795cb44fd90704a3c72898203eddb",
+    "apps/web/src/components/LandingRedirectSurface.vue": "8f3dfcfbcbbaf18eef5729352c54679da68cc204194dcb6976e6810acdf37aec",
     "apps/web/src/components/LocalIdentity.vue": "e1cbfd351ec79c7517f4c069cd3ba6d70ec4a403c72212dd3d195eea95370af8",
     "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
     "apps/web/src/components/MySqlResilienceCenter.vue": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c",
@@ -150,11 +150,11 @@
     "apps/web/src/components/ProviderAcceptanceEvidence.vue": "e995ed90bb6a729d94495c72f1db401340ea77b0a906b0a8c60f63a2c710d669",
     "apps/web/src/components/ProviderAcceptanceExecution.vue": "8845f961637e96dedb38d9aa362560410eabffea7ab97f80ca64ff9d54fb2422",
     "apps/web/src/components/ProviderAcceptanceOperations.vue": "12724a3fa2359a87e48748313448f7eece817fa3f8d6423f9faf409fd4a99f8f",
-    "apps/web/src/components/ProviderAdapterCenter.vue": "05aeab1ec11db8e6ee3e08672ad908aa20be522b6e4ebabc4a441b3149876754",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b",
     "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9",
     "apps/web/src/components/ProviderParserSampleDialog.vue": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6",
     "apps/web/src/components/ProviderParserSampleReview.vue": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8",
-    "apps/web/src/components/ProviderRegistry.vue": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc",
+    "apps/web/src/components/ProviderRegistry.vue": "61023ffed367e6414668e2f3d4d9b1c2c3bb9fb039bea834faf05ea6dc8f77cb",
     "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
     "apps/web/src/components/ProviderSourceCenter.vue": "21fb023c94b5594e80c015348ff4930e0fe03026a8ee1b11e183f9566b927bca",
     "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f",
@@ -173,7 +173,7 @@
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
     "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
-    "apps/web/src/components/ScoreRuleConsole.vue": "c7ccd3020710ffb8d8c52bd276d77573a21b6405d47eb994fe95bf21dd51392f",
+    "apps/web/src/components/ScoreRuleConsole.vue": "a6f164c2527db3c3b50d38db532f013f2b0c95e2d68ec9799d587d85f854f498",
     "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
     "apps/web/src/components/SelectionJourney.vue": "21c2e95ce297a3c6a55e4301f36fdf448659d76173390901dfc01b58f200349b",
     "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
@@ -198,7 +198,7 @@
     "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
     "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
     "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
-    "apps/web/src/components/TrendDashboard.vue": "09aab9722f9ffe73834bd19be7871a2891c3679c0a7cac48b5081a31b79b222a",
+    "apps/web/src/components/TrendDashboard.vue": "faaa3c7e911a9d975d7848f865a949f7b06dcaa833ce69ad48edb6c8db7fb7ed",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
@@ -248,12 +248,12 @@
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "b117737c678b77384f8dbc5422ca2af6f2816336dfd49c5b37f3f53eebee2164",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "ca542ee29760f507481282fa94b9c15ef61369f0982475d06fe614c5cae4e036",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
-    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "f75a5b158124235ff951c8dd1b69fdeed7d3cbb3b722601397ddda17b4ce5fd4",
+    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "abd071d668ec09156b21af20eead0421bd4127e412d3c1876badadba803c9bd7",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "ab4b381f48cc74f4d2a71d863fa221e989ca29a7a176674d97b429d5ef6159a8",
     "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "5f578855f790c5f60874475705bf6035dae05162c5dd1829635390ed08c3149a",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "c8e67dc3a47eda42e9d7f229d43db1dfaf7d30ebacb24cc728883e692e9b90b9",
-    "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "b8c7eed0c5b6b1ea3bfcb4df1febb5a1b47ab98d0d8a4fa3c914739d10c6a47f",
-    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "2155f2455b8bd0b180b76e24dd077c8377a14954b1ee285306529646d75993de",
+    "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "0a11f71fe3a49fbfb73c6cb4a4d8ef90bebe5f05bcf1c166cec90b583bf9f8e4",
+    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "cdac036c57563917d52634cb09454662d51d92fa4c1884c65e84ddae747f6d07",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "34916053299e841285f8666457a4055a0a6ca845dfc55a45feecfbe5f60d9c77",
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "0877a6a9f024de0fa1671e85c087ebd42ec51c222294d05f1067c7a6190d3bc8",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "c1f16d965095f032e4681b2aedeee9411312c5281e50a484203a5b4d89934662",
@@ -262,20 +262,20 @@
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "dd2def25923858383f4371d3bb5ae643cf28b06ac185aab7017aeebff8d96291",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "df6390dce4ac9dc7d7019ad972f3ff57013adc448b6bcd26b56ae3e84ba006a2",
-    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "135f86d5550c6998174114a8fa326723525379383f390641ddccf40aaf537c42",
+    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "851ba669b526c4631689495fac37cffaae44b6564b459b45d2a4b15220adb832",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "4df5cd5f4fff7e32f31a7a0ef71bd54af5ad8a68e09dbec2c8183748108e881e",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "46ad324b09b6a5f011cc39a0a0051c90e4b487087ff5a035eb28c3dc64c30efe",
-    "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "3fb3a2c10e383eae3c6d618dd439f6cadf56cf63bc79e309419c26af5bd07906",
+    "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "26419d9b450a924ebb5fa2afb4eb4876cb3efe071c093c67e83a2372c0cda95b",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "c739c31ec3c7123e4554c3d5d6a4ea6ff74d5243e1306fe484ebfa5e58056ffa",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "8ec0e6cb51df04480bfc80387554e98b8682880e306efa73052f42825421e028",
-    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "f00e287ca234882e0371a5ab38d0f477441c9a3f8ef2639f67c78f6c649109e1",
+    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "b7170d2bce947478b32967c494c669c632d4daaf563bfbd8c73df933a3396892",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fdbde9fa24ab1d8a5d3f19c23a6bef5b9745b5326d281efcb58b61115061c63f",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "a0fcc2418881596df19f77a678821fcb2792e96a5f018d76a38268026ebca270",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "af93117972cab0cd3a69985cda8e8b487a7eac7c94f45e6cfd6972e556c04b70",
     "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "46b1b86a6b500590b713ca52ce2abe9d7141eda68692354e5ad9ceeb10538cf1",
-    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "b056b397b2ec933183baba72a8a909f55887af06648c6b5db0e987f15cf27060",
+    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "8ed71407dfe6c924648dab98534c445f950e5dc5885743f3e255f97126c14c96",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "a9b294e2f83d2f8283901af7ca9fc067eb3e111ce36fa7fe0cf5cd0233cc329d",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
@@ -379,7 +379,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "419e96901c361b8285010a36f9728fec82071f859a841256363988dbe406cc92",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json": "fb414c18e59348ec4fdc1c40f7962b7fea33417ce112ea8c103d1c23c0995510",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "44c638e5d9d79968a7e18a6a0632b70168b25c0dde27fda153d3b9cb804fc24d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "3305ae481e0baddf26411a37b40b08d64f8e3bfbecc065cb3538fc0691c0d29d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "9d214eacba6e61ab25e82ecc28798a36a30896f49029a945fdf1651c4dccd412",
     "scripts/verify-ui-phase2-identity-source.mjs": "bf5b3cc4c8d684fe20ac09ea46862dc68181494e17dc9611805f96c301941ef6",
     "scripts/verify-ui-phase2-identity-c.mjs": "e738ed2727df69f8a856bb951ee8ecae593d58600b2af9bf8c037f14a56ea874",
     "scripts/verify-ui-phase2-identity-review.mjs": "560c5287210f1c068ced30531a2fd86fd15338fe7890e7bf8a0c5579e95aaff0",
@@ -414,7 +414,7 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "a13676fa70a7981eed4603d6dd4699436834f104dc8a5f958beba302ff9ce2ac",
     "scripts/lib/ui-phase2-work-design-data.mjs": "791449e3e7f6619ab8bd618d0bdae6c4cd32042a65606007e51945fedd368b12",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "20fa3ab83caa98142a7f0734237f67bb1c1eec5ed01af90b2b88d087c87a4fcb",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "babadde67b227aa17ed90d8ba767740093dfc662749db9e80dae3837b9c5f43b",
     "scripts/lib/ui-phase2-trend-design-data.mjs": "e5825e0291d9aa2c2b852f2776bb37c2eff307919216b05520e1d25a805def9d",
     "scripts/verify-ui-phase2-trend-c.mjs": "dc427da1740a9a94f6e40fe485c267cf9247e4c60c9b2775a4b6c576b41fde39",
     "tests/e2e/ui-phase2-trend-contracts.spec.ts": "c9b3be8f0656b2c4f008bcfa5741ac8185e75787b871eba310a8b6baad1db01f",
@@ -425,7 +425,7 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "54f916e2e2e330288cd9ffe41edbc7e1bf36e2b9d2cc5c71bf41cbdd9deded1b",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "tests/e2e/m07-06-selection-acceptance.spec.ts": "a8193d635897bba0b28860849e6f34a4ede9ef21be664e65828d88a617deace4",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "9858dafb38e6cb7cd6ee8515a545f4ce98c636fbb19625adba3b10d639214f9d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "36203c9a27d8c22f12907f9972a9692d587bf66cbe8b9b4ab09ed60fd3fcf2ec",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "303c605669e8fef8f1b6bd7a992686a4e3ec8afef7a5182bd6fbdce9e03e73db",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "6dd4d58c43a2bebe38dd0eacdfa56a51343b1d1ea450806449da298c13b1d49a",
@@ -516,26 +516,26 @@
     "tests/unit/ui-phase2-p44-action-map.test.mjs": "180618ba5065cf84c449d3ce4878f863a8f0077c8f48d4c85a94cfaf62784ac0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P45.json": "d17050ba541a969fcff493fbed839331d74b621833749ffa43679c3c3c7ecf13",
     "tests/unit/ui-phase2-p45-action-map.test.mjs": "8764c41dc01059d68ab3de158c83c097a30c33a6e85709961823b77820661ef9",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P46.json": "dc15ed5a687d7fbb6bdb775de6678b35b430e8f9480f9f3d1721940912dd991b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P46.json": "8900563a393b1373324eeb6363bbf1929f78fa2d5067985c81fd88640b678c34",
     "tests/e2e/m03-01-provider-registry.spec.ts": "72915fae648b4c45fd6017de436d33d0032be5abff8d473713788cc314730f88",
     "tests/unit/ui-phase2-p46-action-map.test.mjs": "2013206d1dab1da9d1c496db1cf8041f1d1f17a8f7938d7c8aa4e81c15bb6416",
     "tests/m03-01/provider-registry.test.mjs": "063dc557443189915365dac01a4b33e36d97bd841f23eec1ba9cdd8acf11a15a",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P47.json": "4252ea0795e967f6c2c0a053ae460540acd432af67f018c52ccd30e1957f6e50",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P47.json": "1656a87a74cc63d9cb60a759d77ae47111915954438f1801bd18e88e80129660",
     "tests/unit/ui-phase2-p47-action-map.test.mjs": "4df585b96c7150e6e4078e8e28bc88204adec62597dbd6498d658839a7ed002f",
     "tests/unit/ui-phase2-provider-adapter-access.test.mjs": "f66c9a6098b9b5ac780d68681848b04f2f1e9e358c1e313c4e668aaf299f7c4d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "7e0d68cdf74b5f6cdc51c869593a1a3eeb6f30e1d01200a5c4a97624cbddc154",
     "tests/unit/ui-phase2-p48-action-map.test.mjs": "65619c14a1ec77e0de7e35b75eb45258eeac1d4425c4d835c0b5cd5418c9bc0d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "0a96c4ac83e8bd5041709dcd8767f38fc75c6adfe5e3d94a3b250ca4b08adc8f",
     "tests/unit/ui-phase2-p49-action-map.test.mjs": "e68ae4976a2e7aaa11a201227c2d32139789eb698210448e5dad3382643728ed",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "7d9780ae5f819dc48a1464ade191ea4135dec50477ca10462df0b639f73132e2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "b40266a3f6561797a1d3eef6f1c50e036ad038a93a9d7510c19f8f9c6c5d02e3",
     "tests/unit/ui-phase2-p50-action-map.test.mjs": "4c61df3cb0613cd955defb597905e8381e6a55a3d83f5dde31bec168d985aa6d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P51.json": "99bd0218a17d0b7c5eb9a19b5f6a4fcb30903a048ed3acbbbf3f51de0f443d86",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P51.json": "1fe0a628f41ac0185efa4f4c9042d91dd116baec095c05dc0b1fe0239444d521",
     "tests/unit/ui-phase2-p51-action-map.test.mjs": "795e5958e54feed9ebcb6f06f5c2b66bc8455fff16be43a397248249fac208d0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P52.json": "a12d6e31b8dc3734dd1b127a02ba810178139a07300e04249b08527100711dfc",
     "tests/unit/ui-phase2-p52-action-map.test.mjs": "77d94e9e75405de5557e9f2861d447132c43a6aa7224e4f68f630e920f6f4e41",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P53.json": "8349657b306ee7456507f17a37200c49e8a0102d46e68f58ec8eced401d6df08",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P53.json": "08deea174436a93aaa01313784be3c88c42f9aba51d791a840a5144af1ecf8d4",
     "tests/unit/ui-phase2-p53-action-map.test.mjs": "4b1fc426854abe19387e7cee017d0f64a207c37e80955cfddc0ec113f39bca3d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "1203ea8eccfb04e9c962dee9bbdd06317cfa0c65e68a52eddd4796ab1a12221c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "1d7ac8a094671579ec4bc2eb6cd668eb4381ead693fb1614a68a29c62e9936be",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
     "scripts/verify-ui-phase2-data-controls-c.mjs": "789526ced8ddf184e6fd21ae12e00d17f8f0b58675c269d6abfa154011388a06",
@@ -665,8 +665,8 @@
     "routes": 73,
     "currentSourceCandidates": 1749,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 774,
-    "oldOnlyIdentities": 502,
+    "newSourceIdentities": 778,
+    "oldOnlyIdentities": 506,
     "reviewedPages": 73,
     "explicitlyGroupedSourceSites": 1585,
     "semanticGroups": 1302,
@@ -1234,7 +1234,7 @@
       "id": "P14",
       "path": "/trends",
       "title": "热点趋势",
-      "oldStaticAssociatedCandidates": 90,
+      "oldStaticAssociatedCandidates": 88,
       "review": {
         "pageId": "P14",
         "actionApproval": "pending-user-review",
@@ -1374,7 +1374,7 @@
       "id": "P17",
       "path": "/opportunities/scoring-rules",
       "title": "评分规则",
-      "oldStaticAssociatedCandidates": 55,
+      "oldStaticAssociatedCandidates": 54,
       "review": {
         "pageId": "P17",
         "actionApproval": "pending-user-review",
@@ -2879,7 +2879,7 @@
       "id": "P51",
       "path": "/platform-admin/collection",
       "title": "采集任务",
-      "oldStaticAssociatedCandidates": 80,
+      "oldStaticAssociatedCandidates": 79,
       "review": {
         "pageId": "P51",
         "actionApproval": "pending-user-review",
@@ -2921,7 +2921,7 @@
       "id": "P52",
       "path": "/platform-admin/collection/overview",
       "title": "采集总览",
-      "oldStaticAssociatedCandidates": 80,
+      "oldStaticAssociatedCandidates": 79,
       "review": {
         "pageId": "P52",
         "actionApproval": "pending-user-review",
@@ -2963,7 +2963,7 @@
       "id": "P53",
       "path": "/platform-admin/collection/browser-runtime",
       "title": "网页登录采集",
-      "oldStaticAssociatedCandidates": 80,
+      "oldStaticAssociatedCandidates": 79,
       "review": {
         "pageId": "P53",
         "actionApproval": "pending-user-review",
@@ -10717,7 +10717,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#25af292333a00121.1",
+      "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#a761c6ac4e81b553.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
       "line": 433,
       "kind": "event-binding",
@@ -10728,13 +10728,9 @@
           "expression": "state !== 'ready'"
         }
       ],
-      "staticRouteIds": [
-        "P51",
-        "P52",
-        "P53"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md",
@@ -10753,7 +10749,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#a9a0bd7b83bfaa17.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 516,
+      "line": 517,
       "kind": "control",
       "label": "处理续期任务",
       "conditions": [
@@ -10795,7 +10791,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#cbea42c5b9e6a6b3.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 530,
+      "line": 531,
       "kind": "form-event",
       "label": "搜索运行 运行状态 全部状态 运行中 成功 成功但无结果 已拦截 失败 已超时 已取消 查询 重置",
       "conditions": [
@@ -10829,7 +10825,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#764f755fb3d8ba7c.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 553,
+      "line": 554,
       "kind": "control",
       "label": "查询",
       "conditions": [
@@ -10859,7 +10855,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#06482162d2eef909.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 554,
+      "line": 555,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -10889,7 +10885,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 648,
+      "line": 649,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -10927,7 +10923,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#7219dcd9d87bc4b0.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 680,
+      "line": 681,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -10961,7 +10957,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#28a360589b0e3c7f.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 688,
+      "line": 689,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -10995,7 +10991,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#b917496c3d588d7b.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 700,
+      "line": 701,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -11020,7 +11016,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#bc8824b8df3a0c77.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
-      "line": 700,
+      "line": 701,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -11203,7 +11199,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#3a210e63ca5a7831.1",
+      "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#43ae05ac7ae508fe.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
       "line": 603,
       "kind": "event-binding",
@@ -11235,7 +11231,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#4ec44b3c83794aca.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 612,
+      "line": 613,
       "kind": "control",
       "label": "重新读取",
       "conditions": [
@@ -11273,7 +11269,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#7e6436ac5e8e9b15.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 648,
+      "line": 649,
       "kind": "event-binding",
       "label": "采集任务状态",
       "conditions": [
@@ -11307,7 +11303,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#dfaa056b9550313b.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 727,
+      "line": 728,
       "kind": "control",
       "label": "查看",
       "conditions": [
@@ -11349,7 +11345,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#5efbd64729e57af0.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 772,
+      "line": 773,
       "kind": "control",
       "label": "打开完整任务详情",
       "conditions": [
@@ -11387,7 +11383,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 782,
+      "line": 783,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -11425,7 +11421,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 820,
+      "line": 821,
       "kind": "control",
       "label": "{{ listLoading ? \"正在读取…\" : status === \"all\" ? \"重新读取\" : \"查看全部状态\" }}",
       "conditions": [
@@ -11459,7 +11455,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#680ca05fdeabfdbf.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 825,
+      "line": 826,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -11497,7 +11493,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#cda5e997a43d64c9.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 829,
+      "line": 830,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -11535,7 +11531,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 838,
+      "line": 839,
       "kind": "event-binding",
       "label": "采集任务详情 {{ detail ? `任务 ${detail.task.id.slice(0, 8)}…` : detailIssue ? \"任务详情未能读取\" : \"正在读取任务详情\" }} {{ detail ? `${label(d",
       "conditions": [
@@ -11569,7 +11565,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 839,
+      "line": 840,
       "kind": "dialog-definition",
       "label": "采集任务详情 {{ detail ? `任务 ${detail.task.id.slice(0, 8)}…` : detailIssue ? \"任务详情未能读取\" : \"正在读取任务详情\" }} {{ detail ? `${label(d",
       "conditions": [
@@ -11603,7 +11599,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 839,
+      "line": 840,
       "kind": "event-binding",
       "label": "采集任务详情 {{ detail ? `任务 ${detail.task.id.slice(0, 8)}…` : detailIssue ? \"任务详情未能读取\" : \"正在读取任务详情\" }} {{ detail ? `${label(d",
       "conditions": [
@@ -11637,7 +11633,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#30e32a01e61d8558.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 868,
+      "line": 869,
       "kind": "control",
       "label": "关闭任务详情",
       "conditions": [
@@ -11675,7 +11671,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#33bc529b8390aa3d.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 887,
+      "line": 888,
       "kind": "control",
       "label": "重试",
       "conditions": [
@@ -11717,7 +11713,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#96164ff76e31b8d8.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 911,
+      "line": 912,
       "kind": "control",
       "label": "进入重放",
       "conditions": [
@@ -11767,7 +11763,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#9334ac0d41264e22.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 912,
+      "line": 913,
       "kind": "control",
       "label": "{{ recoveryAction.label }}",
       "conditions": [
@@ -11817,7 +11813,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#d499af7185a1f039.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 935,
+      "line": 936,
       "kind": "control",
       "label": "robots 判定： {{ robotsDecisionText(item.robots_decision) }}",
       "conditions": [
@@ -11867,7 +11863,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#79686f2d00e174f0.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 994,
+      "line": 995,
       "kind": "control",
       "label": "技术标识与关联信息",
       "conditions": [
@@ -11909,7 +11905,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#5046ae27ac1c3e07.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 1043,
+      "line": 1044,
       "kind": "control",
       "label": "{{ saving ? \"正在创建重放任务…\" : \"人工重放\" }}",
       "conditions": [
@@ -11955,7 +11951,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#acbca874b622fd25.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 1055,
+      "line": 1056,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -11984,7 +11980,7 @@
     {
       "candidateId": "apps/web/src/components/CollectionTaskCenter.vue#e9f14f18f727a992.1",
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
-      "line": 1055,
+      "line": 1056,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -17119,7 +17115,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#466d5492514f7a0e.1",
+      "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#52a1f163b96c6a4f.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 1034,
       "kind": "event-binding",
@@ -17151,7 +17147,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#343034ee456c8020.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1060,
+      "line": 1061,
       "kind": "control",
       "label": "创建第一个凭证",
       "conditions": [
@@ -17185,7 +17181,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#99e8924082a7d684.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1109,
+      "line": 1110,
       "kind": "control",
       "label": "更新资料",
       "conditions": [
@@ -17223,7 +17219,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a244801ec79346ec.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1115,
+      "line": 1116,
       "kind": "control",
       "label": "撤销",
       "conditions": [
@@ -17261,7 +17257,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1229,
+      "line": 1230,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -17301,7 +17297,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f9aa4f7cabe04961.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1238,
+      "line": 1239,
       "kind": "dialog-definition",
       "label": "{{ editor === \"rotate\" ? \"更新加密资料\" : \"新建加密资料\" }} {{ editor === \"rotate\" ? `轮换 ${selected?.name}` : \"创建凭证资产\" }} × 所属来源 选择来",
       "conditions": [
@@ -17331,7 +17327,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#efc208b3291dd2c0.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1238,
+      "line": 1239,
       "kind": "event-binding",
       "label": "{{ editor === \"rotate\" ? \"更新加密资料\" : \"新建加密资料\" }} {{ editor === \"rotate\" ? `轮换 ${selected?.name}` : \"创建凭证资产\" }} × 所属来源 选择来",
       "conditions": [
@@ -17361,7 +17357,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#fcfad5327d89010f.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1252,
+      "line": 1253,
       "kind": "form-event",
       "label": "{{ editor === \"rotate\" ? \"更新加密资料\" : \"新建加密资料\" }} {{ editor === \"rotate\" ? `轮换 ${selected?.name}` : \"创建凭证资产\" }} × 所属来源 选择来",
       "conditions": [
@@ -17395,7 +17391,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a75910143d18b017.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1269,
+      "line": 1270,
       "kind": "control",
       "label": "关闭凭证编辑",
       "conditions": [
@@ -17429,7 +17425,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#3b5333f821fbebcc.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1282,
+      "line": 1283,
       "kind": "event-binding",
       "label": "选择来源 {{ p.name }}",
       "conditions": [
@@ -17467,7 +17463,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f0de1dd230399061.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1303,
+      "line": 1304,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17505,7 +17501,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#db8f358359d81455.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1339,
+      "line": 1340,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17539,7 +17535,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1367,
+      "line": 1368,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -17573,7 +17569,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#584e25b2c7498fe2.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1370,
+      "line": 1371,
       "kind": "control",
       "label": "{{ saving ? \"加密写入中…\" : editor === \"rotate\" ? \"确认轮换\" : \"加密保存\" }}",
       "conditions": [
@@ -17607,7 +17603,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#49e83794fc69aec5.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1375,
+      "line": 1376,
       "kind": "form-event",
       "label": "关联网页采集档案 创建浏览器档案引用 × 网页登录档案 选择加密档案 {{ a.name }} {{ nativeFieldErrors[\"profile.asset\"] }} 内部标识 {{ nativeFieldErrors[\"prof",
       "conditions": [
@@ -17641,7 +17637,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#785d60d74b62708a.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1388,
+      "line": 1389,
       "kind": "control",
       "label": "关闭浏览器档案编辑",
       "conditions": [
@@ -17675,7 +17671,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#56cda485ff9a67e1.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1401,
+      "line": 1402,
       "kind": "event-binding",
       "label": "选择加密档案 {{ a.name }}",
       "conditions": [
@@ -17709,7 +17705,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#118e781b0120c4b2.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1427,
+      "line": 1428,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17743,7 +17739,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2ddf54204f452511.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1444,
+      "line": 1445,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17777,7 +17773,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#6bd7eed22ff8851d.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1460,
+      "line": 1461,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17811,7 +17807,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#7550a9de2696128b.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1476,
+      "line": 1477,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17845,7 +17841,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.2",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1502,
+      "line": 1503,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -17879,7 +17875,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#98e4c1aff937289a.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1505,
+      "line": 1506,
       "kind": "control",
       "label": "保存档案引用",
       "conditions": [
@@ -17913,7 +17909,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#92da9f015f800722.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1510,
+      "line": 1511,
       "kind": "form-event",
       "label": "配置网页登录 导入已经登录的浏览器档案 × 支持哪些格式？ 首选 Cookie JSON、Playwright storageState JSON 或 Netscape cookies.txt；也可上传专用 Chromium 的 .tar.",
       "conditions": [
@@ -17947,7 +17943,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#d86a0656a93bd973.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1523,
+      "line": 1524,
       "kind": "control",
       "label": "关闭网页登录档案导入",
       "conditions": [
@@ -17981,7 +17977,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#d2a64908945092ff.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1546,
+      "line": 1547,
       "kind": "event-binding",
       "label": "请选择 {{ item.name }}",
       "conditions": [
@@ -18015,7 +18011,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#1430f57a236d6ea1.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1558,
+      "line": 1559,
       "kind": "event-binding",
       "label": "上传 Cookie 文件 从当前浏览器读取 完整浏览器档案",
       "conditions": [
@@ -18049,7 +18045,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#7443d228a98eebd4.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1569,
+      "line": 1570,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -18087,7 +18083,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1593,
+      "line": 1594,
       "kind": "control",
       "label": "打开 {{ loginNeedsAuthentication ? \"登录\" : \"来源\" }} 页面 ↗",
       "conditions": [
@@ -18125,7 +18121,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f176fdb4640192de.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1596,
+      "line": 1597,
       "kind": "control",
       "label": "{{ loginMaterialBusy ? \"读取中…\" : \"从当前浏览器读取 Cookie\" }}",
       "conditions": [
@@ -18167,7 +18163,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#148e132f8526cb9d.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1607,
+      "line": 1608,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -18201,7 +18197,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a6de35af2d13a51e.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1608,
+      "line": 1609,
       "kind": "control",
       "label": "{{ saving && loginSaveStage === \"asset\" ? \"正在保存凭证资产…\" : saving && loginSaveStage === \"profile\" ? \"正在创建运行档案…\" : \"加密保存并启用\"",
       "conditions": [
@@ -18235,7 +18231,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#5eca67d4ff8b7b15.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1630,
+      "line": 1631,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -18260,7 +18256,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#cb14d6dea1ed210f.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1630,
+      "line": 1631,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -18283,7 +18279,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/DataQualityCenter.vue#15912fa115381d2d.1",
+      "candidateId": "apps/web/src/components/DataQualityCenter.vue#372262b9b8d3cad6.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
       "line": 769,
       "kind": "event-binding",
@@ -18315,7 +18311,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#0c3266c5e4ec717f.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 841,
+      "line": 842,
       "kind": "control",
       "label": "{{ refreshing ? \"读取中…\" : \"刷新读取\" }}",
       "conditions": [
@@ -18345,7 +18341,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#3c02110a0877635d.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 851,
+      "line": 852,
       "kind": "control",
       "label": "证据",
       "conditions": [
@@ -18375,7 +18371,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#b2556958fd8ef037.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 857,
+      "line": 858,
       "kind": "control",
       "label": "质量问题",
       "conditions": [
@@ -18405,7 +18401,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#aa2356189420d59b.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 863,
+      "line": 864,
       "kind": "control",
       "label": "核对运行",
       "conditions": [
@@ -18435,7 +18431,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#50981bed37222bb6.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 889,
+      "line": 890,
       "kind": "event-binding",
       "label": "搜索证据与质量",
       "conditions": [
@@ -18469,7 +18465,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#2310ecf26c0ac332.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 896,
+      "line": 897,
       "kind": "control",
       "label": "清除搜索",
       "conditions": [
@@ -18503,7 +18499,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#c56baf2a56445da0.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 946,
+      "line": 947,
       "kind": "control",
       "label": "详情",
       "conditions": [
@@ -18541,7 +18537,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#5443375c8e9e7547.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 948,
+      "line": 949,
       "kind": "control",
       "label": "{{ downloadInFlightId === item.id ? \"申请中…\" : \"受控下载\" }}",
       "conditions": [
@@ -18579,7 +18575,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#0703818483f3ea40.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1003,
+      "line": 1004,
       "kind": "control",
       "label": "读取完整溯源",
       "conditions": [
@@ -18613,7 +18609,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#203fccdcb63ff0e1.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1006,
+      "line": 1007,
       "kind": "control",
       "label": "{{ downloadInFlightId === row.id ? \"申请中…\" : \"受控下载\" }}",
       "conditions": [
@@ -18647,7 +18643,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1019,
+      "line": 1020,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -18683,7 +18679,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#f2fe7b9e26309877.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1062,
+      "line": 1063,
       "kind": "control",
       "label": "返回全部问题",
       "conditions": [
@@ -18719,7 +18715,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#91f486fb0dc95d45.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1076,
+      "line": 1077,
       "kind": "control",
       "label": "清除选择",
       "conditions": [
@@ -18753,7 +18749,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#c0a8ac3c192bbfe4.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1106,
+      "line": 1107,
       "kind": "control",
       "label": "预览影响范围",
       "conditions": [
@@ -18787,7 +18783,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#89c4ebef359431bf.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1141,
+      "line": 1142,
       "kind": "event-binding",
       "label": "`选择 ${metricLabel(item.metric_code)}`",
       "conditions": [
@@ -18825,7 +18821,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#1abe71571b4dfe5d.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1179,
+      "line": 1180,
       "kind": "control",
       "label": "查看证据",
       "conditions": [
@@ -18867,7 +18863,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#eb0caf70507d0ae7.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1187,
+      "line": 1188,
       "kind": "control",
       "label": "记录解决",
       "conditions": [
@@ -18909,7 +18905,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#a59648cf951ee036.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1221,
+      "line": 1222,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -18947,7 +18943,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#c8ae47474adb97d3.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1279,
+      "line": 1280,
       "kind": "control",
       "label": "查看关联证据",
       "conditions": [
@@ -18985,7 +18981,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#37daad70b2e75d59.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1287,
+      "line": 1288,
       "kind": "control",
       "label": "记录解决",
       "conditions": [
@@ -19023,7 +19019,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1298,
+      "line": 1299,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -19059,7 +19055,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#6b65e8ff40f32c66.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1328,
+      "line": 1329,
       "kind": "control",
       "label": "查看异常字段与样本",
       "conditions": [
@@ -19099,7 +19095,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#6318a60e090bab69.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1338,
+      "line": 1339,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -19135,7 +19131,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#36fa4dddd2d51dd7.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1342,
+      "line": 1343,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -19171,7 +19167,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#2c714917657e61eb.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1351,
+      "line": 1352,
       "kind": "dialog-definition",
       "label": "完整证据链 证据完整溯源 {{ detailTargetId }} × 正在读取证据链… 原始证据、规范版本和字段来源将按同一证据编号关联。 暂时无法读取完整溯源 {{ detailMessage }} 重新读取 原始证据 → 规范版本 →",
       "conditions": [
@@ -19205,7 +19201,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#4b8b7c1b554343b3.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1351,
+      "line": 1352,
       "kind": "event-binding",
       "label": "完整证据链 证据完整溯源 {{ detailTargetId }} × 正在读取证据链… 原始证据、规范版本和字段来源将按同一证据编号关联。 暂时无法读取完整溯源 {{ detailMessage }} 重新读取 原始证据 → 规范版本 →",
       "conditions": [
@@ -19239,7 +19235,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#8a6a073e931655a9.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1364,
+      "line": 1365,
       "kind": "control",
       "label": "关闭证据详情",
       "conditions": [
@@ -19273,7 +19269,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#2fa1de5ac75409c9.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1375,
+      "line": 1376,
       "kind": "control",
       "label": "重新读取",
       "conditions": [
@@ -19311,7 +19307,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#495e04b542eaa8d6.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1435,
+      "line": 1436,
       "kind": "control",
       "label": "技术标识",
       "conditions": [
@@ -19349,7 +19345,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#bfa0dacb9030e23d.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1457,
+      "line": 1458,
       "kind": "dialog-definition",
       "label": "受控处置 {{ metricLabel(resolving.metric_code) }} {{ resolving.provider_name }} · 版本 {{ resolving.version }} × 字段 {{ resolvi",
       "conditions": [
@@ -19383,7 +19379,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#f662156f502d2ebe.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1457,
+      "line": 1458,
       "kind": "event-binding",
       "label": "受控处置 {{ metricLabel(resolving.metric_code) }} {{ resolving.provider_name }} · 版本 {{ resolving.version }} × 字段 {{ resolvi",
       "conditions": [
@@ -19417,7 +19413,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#9c1ba8320560a191.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1470,
+      "line": 1471,
       "kind": "control",
       "label": "关闭解决表单",
       "conditions": [
@@ -19451,7 +19447,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#2798723322952c96.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1506,
+      "line": 1507,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -19485,7 +19481,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#cb0cfd08fa44e9c8.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1507,
+      "line": 1508,
       "kind": "control",
       "label": "确认前检查",
       "conditions": [
@@ -19519,7 +19515,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#d3df84c3780de261.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1522,
+      "line": 1523,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -19544,7 +19540,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#5a462ae4421ffff4.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1522,
+      "line": 1523,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -19569,7 +19565,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#d0581b00f2b934eb.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1536,
+      "line": 1537,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -19594,7 +19590,7 @@
     {
       "candidateId": "apps/web/src/components/DataQualityCenter.vue#05d2e10fd98621ac.1",
       "file": "apps/web/src/components/DataQualityCenter.vue",
-      "line": 1536,
+      "line": 1537,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -20962,7 +20958,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/LandingRedirectSurface.vue#bb7cd7dbbdfa84a2.1",
+      "candidateId": "apps/web/src/components/LandingRedirectSurface.vue#2b603370ce085d16.1",
       "file": "apps/web/src/components/LandingRedirectSurface.vue",
       "line": 44,
       "kind": "event-binding",
@@ -52474,7 +52470,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#96e8b9fd90114a83.1",
+      "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#ec27f1ab7441f3a6.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
       "line": 349,
       "kind": "event-binding",
@@ -52511,7 +52507,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#0da6a9c39b0f685c.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 413,
+      "line": 414,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -52557,7 +52553,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#17cbcae80442585d.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 415,
+      "line": 416,
       "kind": "control",
       "label": "更多筛选与排序",
       "conditions": [
@@ -52592,7 +52588,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#8dbb02bd869e9eab.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 477,
+      "line": 478,
       "kind": "control",
       "label": "本次刷新追踪",
       "conditions": [
@@ -52635,7 +52631,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#d5aef91ff7434dd6.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 480,
+      "line": 481,
       "kind": "control",
       "label": "重新刷新",
       "conditions": [
@@ -52674,7 +52670,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#d1614ad8db6bddf9.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 494,
+      "line": 495,
       "kind": "control",
       "label": "登记来源",
       "conditions": [
@@ -52724,7 +52720,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#ccc2aafd70f9653e.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 507,
+      "line": 508,
       "kind": "control",
       "label": "清除筛选",
       "conditions": [
@@ -52763,7 +52759,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#96211fe8b4dfe48d.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 584,
+      "line": 585,
       "kind": "control",
       "label": "前往解除暂停",
       "conditions": [
@@ -52821,7 +52817,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#b02f109125f46ed4.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 591,
+      "line": 592,
       "kind": "control",
       "label": "{{ probing === item.id ? \"检查中…\" : \"健康检查\" }}",
       "conditions": [
@@ -52875,7 +52871,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#741e7ec7cc13dbe8.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 657,
+      "line": 658,
       "kind": "control",
       "label": "{{ probing === row.id ? \"检查中…\" : \"执行健康检查\" }}",
       "conditions": [
@@ -52914,7 +52910,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#1f36f7b562d00630.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 673,
+      "line": 674,
       "kind": "control",
       "label": "本次检查追踪",
       "conditions": [
@@ -52957,7 +52953,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#2cf3eb393d8269a0.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 725,
+      "line": 726,
       "kind": "control",
       "label": "前往采集调度解除暂停",
       "conditions": [
@@ -53011,7 +53007,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 732,
+      "line": 733,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -53061,7 +53057,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#b2c6d3f8f6a9e8a9.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 768,
+      "line": 769,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -53100,7 +53096,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#822e3d6d7bce849d.1",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 772,
+      "line": 773,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -53139,7 +53135,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderAdapterCenter.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
-      "line": 779,
+      "line": 780,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -53896,7 +53892,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ProviderRegistry.vue#2e080ad21acf1f26.1",
+      "candidateId": "apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
       "line": 677,
       "kind": "event-binding",
@@ -53933,7 +53929,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#de4c1cd1ccf4c8da.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 687,
+      "line": 688,
       "kind": "control",
       "label": "登记第一个来源",
       "conditions": [
@@ -53969,7 +53965,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#27f5c560567881c4.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 695,
+      "line": 696,
       "kind": "control",
       "label": "{{ refreshing ? \"刷新中…\" : \"刷新真实数据\" }}",
       "conditions": [
@@ -54005,7 +54001,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#0da6a9c39b0f685c.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 743,
+      "line": 744,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -54041,7 +54037,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#f9d454b64dd4b22a.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 752,
+      "line": 753,
       "kind": "control",
       "label": "清除筛选条件",
       "conditions": [
@@ -54077,7 +54073,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#f8fbe8533c9685db.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 800,
+      "line": 801,
       "kind": "control",
       "label": "编辑",
       "conditions": [
@@ -54111,7 +54107,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#5d4463e03e3aa18b.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 868,
+      "line": 869,
       "kind": "control",
       "label": "编辑来源",
       "conditions": [
@@ -54147,7 +54143,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 878,
+      "line": 879,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -54183,7 +54179,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#83d11b8719b1c99d.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 911,
+      "line": 912,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -54219,7 +54215,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#bd43d7b540116c32.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 912,
+      "line": 913,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -54255,7 +54251,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#51517865bc5117a4.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 915,
+      "line": 916,
       "kind": "event-binding",
       "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeTex",
       "conditions": [
@@ -54285,7 +54281,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d36ecadeb20b9988.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 921,
+      "line": 922,
       "kind": "dialog-definition",
       "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeTex",
       "conditions": [
@@ -54315,7 +54311,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#eb72344b9c9f3d10.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 921,
+      "line": 922,
       "kind": "form-event",
       "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeTex",
       "conditions": [
@@ -54345,7 +54341,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#e03ff4bf86eb6a89.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 938,
+      "line": 939,
       "kind": "control",
       "label": "关闭来源设置编辑",
       "conditions": [
@@ -54381,7 +54377,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#71fedaee68dde679.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 949,
+      "line": 950,
       "kind": "control",
       "label": "{{ index + 1 }} {{ label }}",
       "conditions": [
@@ -54421,7 +54417,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#83ffe5899e1ccfcf.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 961,
+      "line": 962,
       "kind": "control",
       "label": "应用技术模板",
       "conditions": [
@@ -54457,7 +54453,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1330,
+      "line": 1331,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -54501,7 +54497,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#4ba7742e75103fa4.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1335,
+      "line": 1336,
       "kind": "control",
       "label": "上一步",
       "conditions": [
@@ -54541,7 +54537,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d0e6c4e6deaeab8a.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1343,
+      "line": 1344,
       "kind": "control",
       "label": "下一步",
       "conditions": [
@@ -54581,7 +54577,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#addbc979a88d3d3a.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1344,
+      "line": 1345,
       "kind": "control",
       "label": "{{ saving ? pendingSaveGeneration === editorFocusGeneration ? \"保存中…\" : \"等待上一项保存…\" : editing ? \"保存新版本\" : \"创建来源\" }}",
       "conditions": [
@@ -59651,7 +59647,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1",
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#0d9565586dbfab9d.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
       "line": 522,
       "kind": "event-binding",
@@ -59662,11 +59658,9 @@
           "expression": "state !== 'ready' && state !== 'empty'"
         }
       ],
-      "staticRouteIds": [
-        "P17"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md",
@@ -59685,7 +59679,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 531,
+      "line": 532,
       "kind": "control",
       "label": "创建首个草稿",
       "conditions": [
@@ -59721,7 +59715,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 548,
+      "line": 549,
       "kind": "control",
       "label": "创建新版本补齐配置",
       "conditions": [
@@ -59757,7 +59751,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 577,
+      "line": 578,
       "kind": "control",
       "label": "预览影响",
       "conditions": [
@@ -59797,7 +59791,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 584,
+      "line": 585,
       "kind": "control",
       "label": "提交",
       "conditions": [
@@ -59837,7 +59831,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 586,
+      "line": 587,
       "kind": "control",
       "label": "批准",
       "conditions": [
@@ -59877,7 +59871,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 591,
+      "line": 592,
       "kind": "control",
       "label": "拒绝",
       "conditions": [
@@ -59917,7 +59911,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 596,
+      "line": 597,
       "kind": "control",
       "label": "启用",
       "conditions": [
@@ -59957,7 +59951,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 598,
+      "line": 599,
       "kind": "control",
       "label": "回滚",
       "conditions": [
@@ -59997,7 +59991,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#2cd4ab78b5d44750.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 609,
+      "line": 610,
       "kind": "dialog-definition",
       "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
@@ -60027,7 +60021,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6b37811d77e25f5b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 609,
+      "line": 610,
       "kind": "event-binding",
       "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
@@ -60057,7 +60051,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#237b12051c9107cf.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 616,
+      "line": 617,
       "kind": "form-event",
       "label": "不使用默认数值 新建评分规则草稿 × 版本代码 必填，最多 64 个字符。 {{ createFieldError(\"version_code\") }} 规则名称 必填，最多 160 个字符。 {{ createFieldError(\"na",
       "conditions": [
@@ -60087,7 +60081,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 622,
+      "line": 623,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60119,7 +60113,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#50a901a0bff021e2.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 627,
+      "line": 628,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -60149,7 +60143,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#03b10c0a1abc2c11.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 650,
+      "line": 651,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -60179,7 +60173,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#4d7c1c802660416a.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 672,
+      "line": 673,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -60209,7 +60203,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#1a58d01072ed8035.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 697,
+      "line": 698,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -60239,7 +60233,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#27f3439531b9b3bc.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 729,
+      "line": 730,
       "kind": "event-binding",
       "label": "`${item.label}权重`",
       "conditions": [
@@ -60273,7 +60267,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#a0c3632c651fc976.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 747,
+      "line": 748,
       "kind": "event-binding",
       "label": "`${item.label}必填`",
       "conditions": [
@@ -60307,7 +60301,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 775,
+      "line": 776,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -60339,7 +60333,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 776,
+      "line": 777,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : \"保存草稿\" }}",
       "conditions": [
@@ -60371,7 +60365,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#231a7828f8d8d02d.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 782,
+      "line": 783,
       "kind": "dialog-definition",
       "label": "只读试算 · 不写入评分运行 发布影响预览 · {{ previewRule.version_code }} × 正在按当前持久化输入试算… {{ previewError }} {{ requestId }} 重试预览 当前页 {{ pr",
       "conditions": [
@@ -60406,7 +60400,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#234e4413d96b5e41.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 782,
+      "line": 783,
       "kind": "event-binding",
       "label": "只读试算 · 不写入评分运行 发布影响预览 · {{ previewRule.version_code }} × 正在按当前持久化输入试算… {{ previewError }} {{ requestId }} 重试预览 当前页 {{ pr",
       "conditions": [
@@ -60441,7 +60435,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 795,
+      "line": 796,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60473,7 +60467,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 802,
+      "line": 803,
       "kind": "control",
       "label": "重试预览",
       "conditions": [
@@ -60509,7 +60503,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 868,
+      "line": 869,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -60545,7 +60539,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 875,
+      "line": 876,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -60581,7 +60575,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 886,
+      "line": 887,
       "kind": "dialog-definition",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60613,7 +60607,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 886,
+      "line": 887,
       "kind": "event-binding",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60645,7 +60639,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 893,
+      "line": 894,
       "kind": "form-event",
       "label": "留痕状态变更 {{ actionLabels[action] }} · {{ selected.version_code }} × 原因（必填） 回滚目标版本 请选择已批准或停用版本 {{ rule.version_code }} · {{",
       "conditions": [
@@ -60677,7 +60671,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 901,
+      "line": 902,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -60709,7 +60703,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 921,
+      "line": 922,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -60741,7 +60735,7 @@
     {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
-      "line": 922,
+      "line": 923,
       "kind": "control",
       "label": "确认 {{ actionLabels[action] }}",
       "conditions": [
@@ -68563,7 +68557,7 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#5646a97e7f9d7b17.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 556,
       "kind": "event-binding",
@@ -68578,11 +68572,9 @@
           "expression": "state !== 'ready'"
         }
       ],
-      "staticRouteIds": [
-        "P14"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
@@ -68601,7 +68593,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 571,
+      "line": 572,
       "kind": "control",
       "label": "{{ topic.title }} {{ topic.market }} · {{ topic.category || \"未分类\" }} · {{ statusLabel(topic.status) }} {{ topic.source_c",
       "conditions": [
@@ -68641,7 +68633,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 597,
+      "line": 598,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -68677,7 +68669,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 599,
+      "line": 600,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -68713,7 +68705,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 604,
+      "line": 605,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68753,7 +68745,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 619,
+      "line": 620,
       "kind": "control",
       "label": "帮助：热点趋势怎么看",
       "conditions": [
@@ -68785,7 +68777,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 644,
+      "line": 645,
       "kind": "control",
       "label": "＋ 创建规则",
       "conditions": [
@@ -68819,9 +68811,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#0d9565586dbfab9d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 646,
+      "line": 647,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68834,11 +68826,9 @@
           "expression": "state !== 'ready' && state !== 'empty'"
         }
       ],
-      "staticRouteIds": [
-        "P14"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
@@ -68857,7 +68847,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 656,
+      "line": 658,
       "kind": "control",
       "label": "创建监控规则",
       "conditions": [
@@ -68897,7 +68887,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 704,
+      "line": 706,
       "kind": "control",
       "label": "{{ item.status === \"enabled\" ? \"暂停\" : \"启用\" }}",
       "conditions": [
@@ -68937,7 +68927,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 707,
+      "line": 709,
       "kind": "control",
       "label": "查看趋势结果",
       "conditions": [
@@ -68973,7 +68963,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 710,
+      "line": 712,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -69005,7 +68995,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#1c84e99801374a43.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 719,
+      "line": 721,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -69040,7 +69030,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e2a4499152c0f457.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 719,
+      "line": 721,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -69070,7 +69060,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#70140152f0bfc00c.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 725,
+      "line": 727,
       "kind": "dialog-definition",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -69100,7 +69090,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 725,
+      "line": 727,
       "kind": "event-binding",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -69130,7 +69120,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#c6ce42d1e09856fa.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 732,
+      "line": 734,
       "kind": "form-event",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -69155,7 +69145,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#b5cb028d61878491.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 738,
+      "line": 740,
       "kind": "control",
       "label": "关闭异常报告",
       "conditions": [],
@@ -69180,7 +69170,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#79e6f49e70b53776.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 766,
+      "line": 768,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -69205,7 +69195,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 768,
+      "line": 770,
       "kind": "control",
       "label": "{{ busy.includes(\"quality-issues\") ? \"创建中…\" : \"创建质量工单\" }}",
       "conditions": [],
@@ -69232,7 +69222,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#029d267ba5289a36.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 774,
+      "line": 776,
       "kind": "dialog-definition",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -69262,7 +69252,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 774,
+      "line": 776,
       "kind": "event-binding",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -69292,7 +69282,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#60103acec5bdf33b.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 783,
+      "line": 785,
       "kind": "form-event",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -69322,7 +69312,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#74456cadd4fd8246.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 791,
+      "line": 793,
       "kind": "control",
       "label": "关闭相关性变更",
       "conditions": [
@@ -69352,7 +69342,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#90cb939f09706fb5.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 813,
+      "line": 815,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -69382,7 +69372,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#288abda590fb34b7.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 815,
+      "line": 817,
       "kind": "control",
       "label": "{{ busy.includes(\"/relevance\") ? \"提交中…\" : \"确认并记录\" }}",
       "conditions": [
@@ -70824,6 +70814,12 @@
       "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#f2f6bbdea261f58a.1",
       "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
       "line": 281,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/CollectionRuntimeCenter.vue#25af292333a00121.1",
+      "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
+      "line": 291,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
@@ -72837,6 +72833,12 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#d2b72f6631a5008b.1",
+      "file": "apps/web/src/components/ScoreRuleConsole.vue",
+      "line": 404,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/ScoreRuleConsole.vue#669a281e422bf848.1",
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
       "line": 491,
@@ -73194,6 +73196,18 @@
       "candidateId": "apps/web/src/components/ThemeStudio.vue#38740096ebfd6c5f.1",
       "file": "apps/web/src/components/ThemeStudio.vue",
       "line": 238,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#eecc513e3286758d.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 505,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 595,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
