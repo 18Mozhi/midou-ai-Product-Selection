@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/MySqlResilienceCenter.vue": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+    "apps/web/src/components/MySqlResilienceCenter.vue": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
   },
   "inputs": {},
   "actions": [
@@ -137,7 +137,7 @@
       "apps/web/src/components/MySqlResilienceCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/MySqlResilienceCenter.vue": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+      "apps/web/src/components/MySqlResilienceCenter.vue": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],
