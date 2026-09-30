@@ -6,7 +6,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
-    "apps/web/src/components/LandingRedirectSurface.vue": "8f3dfcfbcbbaf18eef5729352c54679da68cc204194dcb6976e6810acdf37aec"
+    "apps/web/src/components/LandingRedirectSurface.vue": "754c42fa9e95c98ae2e1086e74c2326507370e4a14e70e45ade38f11aaf2827d"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -65,26 +65,31 @@
           "claim": "桌面和390px覆盖延迟加载/无重复动作、503后单一重试及恢复转入服务端返回路由、成功响应缺route保持受阻；不证明生产会话或角色授权。"
         },
         {
+          "file": "tests/e2e/m00-01-runtime.spec.ts",
+          "evidenceType": "actual-vue-isolated-browser",
+          "claim": "桌面 Chromium 与390px手机的实际Vue重试控件断言默认/悬停/焦点/按压计算样式；受控重试GET挂起时页面回到loading且不显示按钮，响应后仅导航一次。此为局部浏览器视觉/交互证据，不代表真实会话、RBAC或读屏验收。"
+        },
+        {
           "file": "scripts/verify-landing-page-preview.mjs",
           "evidenceType": "actual-vue-review-fixture",
           "claim": "1440/390与reduced/no-preference共48项、24个拦截GET；没有写入、额外API或页面错误。"
         }
       ],
       "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-applicable-not-disabled-in-source",
+        "busy": "scene-reference-not-acceptance"
       },
       "visualStateNotes": {
-        "default": "蓝色主重试按钮，44px最小高度",
-        "hover": "深蓝色背景",
-        "focus": "3px蓝色键盘焦点框",
-        "pressed": "更深蓝色按下状态",
-        "disabled": "无disabled按钮；读取中不渲染重试操作",
-        "busy": "正在加载时隐藏所有操作；不接受重复触发"
+        "default": "用户已批准的P01 C方向场景引用；实际按钮默认蓝色且最小高度44px，真实Vue计算样式由m00-01-runtime.spec.ts核验",
+        "hover": "沿用获批C方向，实际Vue悬停背景为rgb(16, 59, 133)，由双端浏览器测试核验",
+        "focus": "实际Vue键盘焦点显示3px outline，由双端浏览器测试核验",
+        "pressed": "实际Vue按压背景为rgb(14, 52, 116)，由双端浏览器测试核验",
+        "disabled": "当前源码没有禁用态按钮；加载期间改为不渲染重复操作",
+        "busy": "加载/重试请求未结束时回到loading并隐藏全部按钮，双端实际Vue回归核验"
       },
       "remaining": "真实会话、真实角色权限、全部服务端目标、生产错误边界与正式M07-03仍未验证。"
     }
@@ -98,7 +103,8 @@
     "includeStructuralContainers": true,
     "dependencyHashes": {
       "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
-      "apps/web/src/components/LandingRedirectSurface.vue": "8f3dfcfbcbbaf18eef5729352c54679da68cc204194dcb6976e6810acdf37aec",
+      "apps/web/src/components/LandingRedirectSurface.vue": "754c42fa9e95c98ae2e1086e74c2326507370e4a14e70e45ade38f11aaf2827d",
+      "apps/web/src/design/landing-redirect-tokens.css": "db59714db161e028dc70a8e68a3e810b0ea7062d7391eb101b10d4a7fcf3a076",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
@@ -109,36 +115,36 @@
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
     },
     "inputs": [],
-  "containers": [
-    {
-      "file": "apps/web/src/components/LandingRedirectSurface.vue",
-      "tag": "aside",
-      "ordinal": 1,
-      "shape": "inline-aside",
-      "sourceBehavior": "会话入口说明只提供当前入口解析的静态上下文，不是业务动作或弹窗。",
-      "remaining": "设计方向已获授权；当前状态、真实会话/角色与完整页面运行验收仍独立未证。",
-      "variants": [
-        {
-          "name": "session-entry-explanation",
-          "evidenceScope": "related-scene-only",
-          "scenes": [
-            {
-              "package": "identity-direction-c",
-              "scene": "p01-blocked"
-            }
-          ],
-          "remaining": "该场景只登记说明区域的设计关联；不证明真实会话、权限或成功落点。"
-        }
-      ]
-    }
-  ],
+    "containers": [
+      {
+        "file": "apps/web/src/components/LandingRedirectSurface.vue",
+        "tag": "aside",
+        "ordinal": 1,
+        "shape": "inline-aside",
+        "sourceBehavior": "会话入口说明只提供当前入口解析的静态上下文，不是业务动作或弹窗。",
+        "remaining": "设计方向已获授权；当前状态、真实会话/角色与完整页面运行验收仍独立未证。",
+        "variants": [
+          {
+            "name": "session-entry-explanation",
+            "evidenceScope": "related-scene-only",
+            "scenes": [
+              {
+                "package": "identity-direction-c",
+                "scene": "p01-blocked"
+              }
+            ],
+            "remaining": "该场景只登记说明区域的设计关联；不证明真实会话、权限或成功落点。"
+          }
+        ]
+      }
+    ],
     "sharedRemaining": [
       "App路由准入与key、api-client/导航存储/主题、UiStatePanel内部消费者仍需实际Vue连续链验收；本清单不扩大局部源分母。",
       "所有图片是既有C离线提案；不拿跨模式/跨路径相似画面替代完整当前URL下的键盘、秘密、权限和请求归属验证。"
     ]
   },
   "compositionGaps": [
-      "局部Vue覆盖加载、依赖受阻、缺少目标与过期转登录；真实会话/角色、目标页面自身权限及M07-03仍需独立验证。"
+    "局部Vue覆盖加载、依赖受阻、缺少目标与过期转登录；真实会话/角色、目标页面自身权限及M07-03仍需独立验证。"
   ],
   "approval": "user-approved-visual-direction; remaining page visuals auto-approved by user",
   "limits": [

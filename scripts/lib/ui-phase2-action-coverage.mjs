@@ -210,7 +210,7 @@ export function validateActionReview(
       if (value === "scene-reference-not-acceptance") assert.ok(action.scenes.length);
       if (value === "not-applicable-excluded") assert.equal(action.kind, "excluded");
       if (value === "not-applicable-wiring") assert.equal(action.kind, "wiring");
-      if (value.startsWith("not-applicable-n")) assert.equal(action.kind, "navigation");
+      if (value === "not-applicable-navigation-only") assert.equal(action.kind, "navigation");
     }
     validateSourceStateApplicability(action, { candidates, sourceHashes });
     for (const ref of action.scenes) {

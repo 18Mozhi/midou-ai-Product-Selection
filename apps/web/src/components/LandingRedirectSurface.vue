@@ -216,13 +216,25 @@ const emit = defineEmits<{ retry: [] }>();
   font-size: 17px;
 }
 
+.p01-workspace :deep(.ui-state-panel footer button.primary) {
+  background: var(--p01-blue);
+}
+
 .p01-workspace :deep(.ui-state-panel footer button:hover:not(:disabled)) {
   border-color: var(--p01-blue-hover);
   background: var(--p01-blue-hover);
 }
 
+.p01-workspace :deep(.ui-state-panel footer button.primary:hover:not(:disabled)) {
+  background: var(--p01-blue-hover);
+}
+
 .p01-workspace :deep(.ui-state-panel footer button:active:not(:disabled)) {
   border-color: var(--p01-blue-pressed);
+  background: var(--p01-blue-pressed);
+}
+
+.p01-workspace :deep(.ui-state-panel footer button.primary:active:not(:disabled)) {
   background: var(--p01-blue-pressed);
 }
 

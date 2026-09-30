@@ -976,7 +976,7 @@ test("P01 landing redirect colors resolve from its route-scoped palette", async 
   assert.equal(declarations.length, names.size, "no duplicate landing palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.landing-redirect\)\s*\{[\s\S]*\}$/,
+    /^\.landing-redirect\s*\{[\s\S]*\}$/,
   );
   assert.ok(component.includes('@import "../design/landing-redirect-tokens.css";'));
   assert.deepEqual([...references].sort(), [...names].sort());

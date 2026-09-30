@@ -69,6 +69,10 @@ test("P01 root shows the approved resolver while landing is pending", async ({ p
 test("P01 failure offers one safe retry and does not claim a destination", async ({ page }) => {
   await allowMemberNavigation(page);
   let attempts = 0;
+  let releaseRetry!: () => void;
+  let signalRetryStarted!: () => void;
+  const retryResponse = new Promise<void>((resolve) => (releaseRetry = resolve));
+  const retryStarted = new Promise<void>((resolve) => (signalRetryStarted = resolve));
   await page.route("**/api/v1/me/landing", (route) => {
     attempts += 1;
     if (attempts <= 3)
@@ -80,14 +84,17 @@ test("P01 failure offers one safe retry and does not claim a destination", async
           request_id: "p01-landing-retry",
         }),
       });
-    return route.fulfill({
-      status: 200,
-      contentType: "application/json",
-      body: JSON.stringify({
-        data: { shell: "member", route: "/home", reason: "landing_member" },
-        request_id: "p01-landing-recovered",
+    signalRetryStarted();
+    return retryResponse.then(() =>
+      route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify({
+          data: { shell: "member", route: "/home", reason: "landing_member" },
+          request_id: "p01-landing-recovered",
+        }),
       }),
-    });
+    );
   });
   await page.goto("/");
   const surface = page.locator(".landing-redirect");
@@ -99,6 +106,7 @@ test("P01 failure offers one safe retry and does not claim a destination", async
   await expect
     .poll(() => retry.evaluate((node) => node.getBoundingClientRect().height >= 44))
     .toBe(true);
+  await expect(retry).toHaveCSS("background-color", "rgb(23, 72, 160)");
   await retry.hover();
   await expect
     .poll(() => retry.evaluate((node) => getComputedStyle(node).backgroundColor))
@@ -107,7 +115,16 @@ test("P01 failure offers one safe retry and does not claim a destination", async
   await expect
     .poll(() => retry.evaluate((node) => getComputedStyle(node).outlineWidth))
     .toBe("3px");
+  await page.mouse.down();
+  await expect(retry).toHaveCSS("background-color", "rgb(14, 52, 116)");
+  await page.mouse.move(0, 0);
+  await page.mouse.up();
+  await expect(surface).toHaveAttribute("data-state", "blocked");
   await retry.click();
+  await retryStarted;
+  await expect(surface).toHaveAttribute("data-state", "loading");
+  await expect(surface.getByRole("button")).toHaveCount(0);
+  releaseRetry();
   await expect(page).toHaveURL(/\/home$/);
   expect(attempts).toBe(4);
 });
@@ -158,7 +175,7 @@ test("M00-01.A15 product entry is accessible and visually stable", async ({ page
   await page.goto("/");
   await expect(page.getByRole("heading", { name: "今日行动" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
-  await expect(page.getByText("自动选品未配置", { exact: true })).toBeVisible();
+  await expect(page.getByText("自动选品状态暂不可用", { exact: true })).toBeVisible();
 });
 
 test("M00-01.A08/M00-01.A15 startup dependency error keeps recovery action at 390px", async ({

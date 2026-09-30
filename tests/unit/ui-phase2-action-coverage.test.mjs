@@ -228,6 +228,11 @@ test("local presentation is not counted as a server write", () => {
   review.actions[0].visualStates.busy = "not-applicable-navigation-only";
   assert.throws(() => validateActionReview(review, context));
 });
+test("a source action can record that its current button has no disabled variant", () => {
+  const { review, context } = fixture();
+  review.actions[0].visualStates.disabled = "not-applicable-not-disabled-in-source";
+  assert.doesNotThrow(() => validateActionReview(review, context));
+});
 for (const fault of [
   "none",
   "selector",

@@ -1,4 +1,4 @@
-html:has(body #app .landing-redirect) {
+.landing-redirect {
   --p01-blue: #1748a0;
   --p01-ink: #182d4a;
   --p01-muted: #52647b;

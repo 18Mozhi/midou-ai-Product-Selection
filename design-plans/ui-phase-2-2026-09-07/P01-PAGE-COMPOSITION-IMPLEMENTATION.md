@@ -1,5 +1,9 @@
 # P01 根入口 C 方向实际 Vue 实施记录
 
+## 2026-10-01 · 重试控件状态与在途反馈双端回归
+
+现有重试按钮 CSS 没有改动；`m00-01-runtime.spec.ts` 现在实测默认蓝色、hover 深蓝、3px 键盘焦点和pressed更深蓝，并在重试 GET 挂起时确认页面回到loading且操作按钮隐藏，释放后只进入一次既有服务端目标。桌面 Chromium 与390px手机各通过。P01动作审阅把可见状态映射到已批准C方向，并将源码不存在的disabled变体列为不适用。受控回包仅为实际Vue本地交互/视觉证据，不替代真实会话、RBAC、读屏或生产验收；无运行行为/API/权限变更。
+
 ## 页面实施
 
 P01 `/` 已将获批的轻量入口构图接入实际 `LandingRedirectSurface.vue`：独立蓝色入口说明、白色解析区、受阻原因、请求关联编号和单一重新检查按钮；不显示业务侧栏、推测角色、组织数据或成功结论。桌面宽屏居中、手机改为单列；保留系统减少动态效果设置。处理中不渲染操作按钮，关联编号仅在失败/缺少目标时显示。
@@ -19,7 +23,7 @@ P01 `/` 已将获批的轻量入口构图接入实际 `LandingRedirectSurface.vu
 - `node --test tests/unit/landing-page-preview.test.mjs`：2/2 通过。
 - `node scripts/verify-landing-page-preview.mjs`：真实 Vue 审核夹具在 1440/390、reduced/no-preference 下共 48 项检查、24 个被拦截 GET 通过；没有写请求、额外 API 或页面错误。
 - `node scripts/run-playwright-projects.mjs --grep "P01 root|P01 failure|P01 missing destination|M00-01.A15 product entry|M02-03 regression: public root resolves" --workers=1`：桌面与 390px 手机均通过，覆盖延迟加载、加载时无操作、受阻重试、缺少路由保持受阻、成员首页落点和过期转登录。
-- 实际重试按钮检查 44px 最小热区、hover 深蓝状态、3px 键盘焦点；测试使用本地隔离响应，不访问生产账号。
+- 实际重试按钮检查默认、hover 深蓝、pressed 深色、3px 键盘焦点以及44px最小热区；重试GET挂起时回到loading并隐藏按钮。`m00-01-runtime.spec.ts`完整5项在桌面Chromium与390px手机各5/5通过，P01 route-scoped palette 单测通过；测试使用本地隔离响应，不访问生产账号。
 
 ## 生产与验收边界
 

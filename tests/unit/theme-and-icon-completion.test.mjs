@@ -367,7 +367,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     if (paths[index] === "apps/web/src/design/landing-redirect-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.landing-redirect\)\s*\{(?:\s*--p01-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+        /^\.landing-redirect\s*\{(?:\s*--p01-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }
