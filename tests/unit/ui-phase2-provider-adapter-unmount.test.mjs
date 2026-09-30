@@ -132,6 +132,18 @@ test("P47 current service and registry permit distinct-key checks before either 
   assert.deepEqual(recorded, ["first-instance", "new-instance"]);
 });
 
+test("P47 aborts active list reads on actual component unmount without aborting health-check writes", () => {
+  const source = read("apps/web/src/components/ProviderAdapterCenter.vue"),
+    unmount = source.match(/onUnmounted\(\(\) => \{([\s\S]*?)\n\}\);/)?.[1] ?? "",
+    probe = source.match(/async function probe\([\s\S]*?(?=\nfunction turnPage)/)?.[0] ?? "";
+  assert.match(source, /const loadControllers = new Set<AbortController>\(\)/);
+  assert.match(unmount, /loadGeneration\s*\+=\s*1/);
+  assert.match(unmount, /for \(const controller of loadControllers\) controller\.abort\(\)/);
+  assert.match(source, /loadControllers\.add\(controller\)/);
+  assert.match(source, /loadControllers\.delete\(controller\)/);
+  assert.doesNotMatch(probe, /AbortController|signal\s*:/);
+});
+
 test("P47 archived unmount evidence binds its complete captured manifest, sources and images", () => {
   const e = evidence();
   assert.deepEqual(e, JSON.parse(captured(`${root}/evidence.json`)));

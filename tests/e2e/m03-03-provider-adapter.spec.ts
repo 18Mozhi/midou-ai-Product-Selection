@@ -449,6 +449,53 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 
+test("P47 aborts an in-flight read when its actual Vue view is unmounted", async ({ page }) => {
+  await nav(page);
+  let readStarted = false,
+    readAborted = false,
+    releaseRead!: () => void;
+  const holdRead = new Promise<void>((resolve) => (releaseRead = resolve));
+  const aborted = new Promise<void>((resolve) => {
+    page.on("requestfailed", (request) => {
+      const url = new URL(request.url());
+      if (
+        request.method() === "GET" &&
+        url.pathname === "/api/v1/platform/provider-adapters" &&
+        request.failure()?.errorText?.includes("ERR_ABORTED")
+      ) {
+        readAborted = true;
+        resolve();
+      }
+    });
+  });
+  await page.route("**/api/v1/platform/provider-adapters", async (route) => {
+    readStarted = true;
+    const result = await Promise.race([
+      holdRead.then(() => "released" as const),
+      aborted.then(() => "aborted" as const),
+    ]);
+    if (result === "aborted") return;
+    await route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ data: items, request_id: "p47-unmount-read" }),
+    });
+  });
+
+  try {
+    await page.goto("/platform-admin/providers/adapters");
+    await expect.poll(() => readStarted).toBe(true);
+    await page.evaluate(async () => {
+      const { router } = await import("/src/router.ts");
+      await router.push("/onboarding");
+    });
+    await expect(page.getByTestId("onboarding")).toBeVisible();
+    await expect.poll(() => readAborted).toBe(true);
+  } finally {
+    releaseRead();
+  }
+});
+
 test("P47 approved table controls are styled on desktop and stay hidden on mobile", async ({
   page,
 }, testInfo) => {

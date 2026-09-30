@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-    "apps/web/src/components/ProviderAdapterCenter.vue": "9df7d8a37fb4fe3b0829f84644505e69997baae652f2d4425d07642c28260ada",
+    "apps/web/src/components/ProviderAdapterCenter.vue": "05aeab1ec11db8e6ee3e08672ad908aa20be522b6e4ebabc4a441b3149876754",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
@@ -383,7 +383,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-      "apps/web/src/components/ProviderAdapterCenter.vue": "9df7d8a37fb4fe3b0829f84644505e69997baae652f2d4425d07642c28260ada",
+      "apps/web/src/components/ProviderAdapterCenter.vue": "05aeab1ec11db8e6ee3e08672ad908aa20be522b6e4ebabc4a441b3149876754",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"

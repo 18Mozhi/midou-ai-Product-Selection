@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, onMounted, ref, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 import ResponsiveDataView from "./ResponsiveDataView.vue";
@@ -184,6 +184,12 @@ function resetFilters() {
 }
 let loadGeneration = 0,
   probeRevision = 0;
+const loadControllers = new Set<AbortController>();
+onUnmounted(() => {
+  loadGeneration += 1;
+  for (const controller of loadControllers) controller.abort();
+  loadControllers.clear();
+});
 async function load() {
   const generation = ++loadGeneration,
     revision = probeRevision,
@@ -196,6 +202,7 @@ async function load() {
   refreshNotice.value = "none";
   const controller = new AbortController(),
     timer = window.setTimeout(() => controller.abort(), 12_000);
+  loadControllers.add(controller);
   try {
     const response = await request<AdapterSummary[]>("/platform/provider-adapters", {
       signal: controller.signal,
@@ -223,6 +230,7 @@ async function load() {
     } else state.value = apiError ? failure(apiError.status) : "blocked";
   } finally {
     window.clearTimeout(timer);
+    loadControllers.delete(controller);
     if (generation === loadGeneration) refreshing.value = false;
   }
 }
