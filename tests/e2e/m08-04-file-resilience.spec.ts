@@ -176,6 +176,59 @@ test("file refresh is single-flight and preserves the last verified snapshot on 
   await expect(page.getByText(/已保留上次成功的本机文件事实/)).toBeVisible();
   await expect(page.getByText("本机文件韧性门已满足")).toBeVisible();
 });
+test("P69 cancels a pending read while cached away and resumes it once when reactivated", async ({
+  page,
+}) => {
+  let calls = 0;
+  let releaseInterruptedRead: (() => void) | undefined;
+  let cancelledRead = false;
+  const methods: string[] = [];
+  page.on("requestfailed", (request) => {
+    if (request.url().includes("/api/v1/platform/operations/files")) cancelledRead = true;
+  });
+  await page.route("**/api/v1/platform/operations/files", async (route) => {
+    calls += 1;
+    methods.push(route.request().method());
+    if (calls === 1) {
+      await new Promise<void>((resolve) => (releaseInterruptedRead = resolve));
+      try {
+        await route.fulfill({ json: envelope({ ...base, state: "blocked" }) });
+      } catch {
+        // The cached page has already cancelled this deactivated read.
+      }
+      return;
+    }
+    await route.fulfill({ json: envelope(base) });
+  });
+  await page.route("**/api/v1/platform/operations/redis", (route) =>
+    route.fulfill({ status: 503, json: { error: { code: "test_unavailable" } } }),
+  );
+
+  try {
+    await page.goto("/platform-admin/files");
+    await expect.poll(() => calls).toBe(1);
+
+    await page
+      .getByRole("navigation", { name: "系统运维二级导航" })
+      .getByRole("link", { name: "Redis", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/platform-admin\/redis$/);
+    await expect.poll(() => cancelledRead).toBe(true);
+
+    await page.goBack();
+    await expect(page).toHaveURL(/\/platform-admin\/files$/);
+    await expect(page.getByText("本机文件韧性门已满足")).toBeVisible();
+    await expect(page.getByText("20 / 20")).toBeVisible();
+    expect(calls).toBe(2);
+    expect(methods).toEqual(["GET", "GET"]);
+
+    releaseInterruptedRead?.();
+    await expect(page.getByText("本机文件韧性门已阻断")).toHaveCount(0);
+    await expect(page.getByText("本机文件韧性门已满足")).toBeVisible();
+  } finally {
+    releaseInterruptedRead?.();
+  }
+});
 test("M08-04.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({
   page,
 }) => {

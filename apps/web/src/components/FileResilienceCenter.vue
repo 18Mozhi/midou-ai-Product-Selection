@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref } from "vue";
 import type { FileResilienceDto } from "@scoutops/contracts";
 import { ApiClientError, createApiClient } from "../api-client";
 import TechnicalDetails from "./TechnicalDetails.vue";
@@ -29,6 +29,7 @@ const state = ref<ViewState>("loading"),
   refreshFailure = ref<RefreshFailure | null>(null);
 let controller: AbortController | null = null;
 let sequence = 0;
+let resumeRead = false;
 const verdict = computed(
   () =>
     (
@@ -125,12 +126,23 @@ async function load() {
     }
   }
 }
-onMounted(load);
-onBeforeUnmount(() => {
+function suspendRead() {
+  const interrupted = Boolean(controller);
   sequence += 1;
   controller?.abort();
   controller = null;
+  refreshing.value = false;
+  resumeRead ||= interrupted;
+}
+onMounted(load);
+onDeactivated(suspendRead);
+onActivated(() => {
+  if (resumeRead || !data.value) {
+    resumeRead = false;
+    void load();
+  }
 });
+onBeforeUnmount(suspendRead);
 </script>
 <template>
   <section class="file-resilience file-resilience--c" :data-state="state">
