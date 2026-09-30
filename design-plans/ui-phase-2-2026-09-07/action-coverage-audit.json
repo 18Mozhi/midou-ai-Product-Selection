@@ -74,7 +74,7 @@
     "apps/web/src/components/opportunity-workspace-types.ts": "805a2fe8ff56913c39a1d13f637ef38b3fcb50a645917f8f4f29343d8539aa6f",
     "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a",
-    "apps/web/src/components/OpportunityDecisionPanel.vue": "bef71630c83c049043e89c86b759d9e9ea84199350286730e3189e8b63debdef",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "0198986474d6a0d356b83be1db8e34b5fce4ec5d1ffd95356839528b9ce21264",
     "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
     "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
@@ -420,13 +420,13 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "a9328118afd7a5e863981ba321b06e8e6a9dd42219691c2afa56771119f87983",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "tests/e2e/m04-02-opportunities.spec.ts": "49d51100e2621e4f4ffd630d147b8248797f9f06e8352fb5ff40756242d90638",
+    "tests/e2e/m04-02-opportunities.spec.ts": "cdbefa1077bab5a0aad63ac821ce6e187654aa4a73cdf8a4f92555912ec45f0a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "f94c9df962e6a947c5aabda7a056aab47f69a7a70cee49ef1909177a1726172e",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "tests/e2e/m07-06-selection-acceptance.spec.ts": "a8193d635897bba0b28860849e6f34a4ede9ef21be664e65828d88a617deace4",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "9858dafb38e6cb7cd6ee8515a545f4ce98c636fbb19625adba3b10d639214f9d",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "69c53904296d55769989a921d4d35c8d42a1ac18826bdf118ad2ddcffaac0586",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "303c605669e8fef8f1b6bd7a992686a4e3ec8afef7a5182bd6fbdce9e03e73db",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "6dd4d58c43a2bebe38dd0eacdfa56a51343b1d1ea450806449da298c13b1d49a",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -596,7 +596,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "728bf0bc631016cba563a4c8ad95889a99f7128ba33fb4a05f7f951e70a5c9fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "554d26710d2d698a2b4f451bb943a4a72111c7cdd151781a3d47c70bdb5114a3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "d56f08cd29e0f343c6c984f1f3c3e6e7e2405233957be0617696e4e91a459fa4",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "6fdfbd253424bba451d61f929a7e86c91c43ccb0defdd8024f88ccda9178410b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "75af5b069feaa12a5e14eb8e4e26514cadd3eb4452733004337b673736d1380e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3c6a60caf2045f07a9a14c89f07cd3c1d9b20851719683f69b02931ce04f730f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "683179d07629a30338b60ab10ab52c96883610215eecb1616931bf55ca66fe18",
@@ -30322,7 +30322,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#e28c61b56c99b993.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 129,
+      "line": 134,
       "kind": "control",
       "label": "提前人工处理",
       "conditions": [
@@ -30355,7 +30355,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#690b264d43e01055.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 131,
+      "line": 136,
       "kind": "control",
       "label": "继续观察",
       "conditions": [
@@ -30388,7 +30388,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#a2dfed9751073c3d.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 132,
+      "line": 137,
       "kind": "control",
       "label": "驳回",
       "conditions": [
@@ -30421,7 +30421,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#7ee1cf6f73d304fe.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 144,
+      "line": 149,
       "kind": "control",
       "label": "查看补采任务",
       "conditions": [
@@ -30458,7 +30458,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#91b42518b9942791.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 148,
+      "line": 153,
       "kind": "control",
       "label": "创建补采任务",
       "conditions": [
@@ -30495,7 +30495,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#b016bc2c6e34bc74.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 158,
+      "line": 163,
       "kind": "control",
       "label": "查看判断条件与补证进度",
       "conditions": [
@@ -30528,7 +30528,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#ad67a1fb638ba1e7.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 175,
+      "line": 180,
       "kind": "control",
       "label": "查看任务",
       "conditions": [

@@ -84,6 +84,13 @@ async function ready(
   page: Page,
   detailEvidence = evidence,
   detailOverrides: Record<string, unknown> = {},
+  capabilities = [
+    "task:read",
+    "trend:read",
+    "trend:manage",
+    "opportunity:read",
+    "opportunity:decide",
+  ],
 ) {
   let decided = false;
   await page.route("**/api/v1/me/navigation?shell=member", (route) =>
@@ -96,13 +103,7 @@ async function ready(
           organization_id: "00000000-0000-4000-8000-000000000421",
           workspace_id: "00000000-0000-4000-8000-000000000422",
           roles: ["member"],
-          capabilities: [
-            "task:read",
-            "trend:read",
-            "trend:manage",
-            "opportunity:read",
-            "opportunity:decide",
-          ],
+          capabilities,
           platform_roles: [],
           platform_capabilities: [],
           guard_reason: "navigation_member_allowed",
@@ -744,6 +745,32 @@ test("P18 adoption entry requires each quality gate even when the aggregate clai
   await expect(adopt).toBeVisible();
   await adopt.click();
   await expect(page.getByRole("dialog", { name: "记录采纳决定" })).toBeVisible();
+});
+
+test("P18 redecision link always lands on the available decision state", async ({ page }) => {
+  await ready(page, evidence, { redecision_ready: true });
+  await page.goto(`/opportunities/${opportunityId}`);
+
+  const redecisionLink = page.getByRole("link", { name: "前往决策" });
+  await expect(redecisionLink).toBeVisible();
+  await redecisionLink.click();
+  await expect(page).toHaveURL(/#opportunity-decision-actions$/);
+  await expect(page.locator("#opportunity-decision-actions")).toBeInViewport();
+  await expect(page.locator("#opportunity-decision-actions")).toContainText("当前无需你处理");
+
+  await ready(page, evidence, { redecision_ready: true }, ["opportunity:read"]);
+  await page.goto(`/opportunities/${opportunityId}`);
+  await expect(
+    page.getByText("当前角色可查看判断依据；最终决定需要“机会决策”权限。", { exact: true }),
+  ).toBeVisible();
+
+  const readonlyRedecisionLink = page.getByRole("link", { name: "前往决策" });
+  await readonlyRedecisionLink.click();
+  await expect(page).toHaveURL(/#opportunity-decision-actions$/);
+  await expect(page.locator("#opportunity-decision-actions")).toBeInViewport();
+  await expect(page.locator("#opportunity-decision-actions")).toContainText(
+    "最终决定需要“机会决策”权限",
+  );
 });
 
 test("P18 adoption dialog exposes the required-reason error without posting", async ({ page }) => {

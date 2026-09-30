@@ -7,7 +7,7 @@
   "sourceHashes": {
     "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a",
-    "apps/web/src/components/OpportunityDecisionPanel.vue": "bef71630c83c049043e89c86b759d9e9ea84199350286730e3189e8b63debdef",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "0198986474d6a0d356b83be1db8e34b5fce4ec5d1ffd95356839528b9ce21264",
     "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
     "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
@@ -530,7 +530,7 @@
       "kind": "navigation",
       "routeApplicability": "P18-local-caller-and-listed-panels",
       "condition": "detail.redecision_ready",
-      "handler": "href #opportunity-decision-actions；目标只在canDecide且canAdopt时存在",
+      "handler": "href #opportunity-decision-actions；目标覆盖可采纳、等待质量门和只读决策说明三种互斥分支",
       "variants": ["writable", "readonly", "not-adoptable"],
       "scenes": [
         {
@@ -542,7 +542,7 @@
           "scene": "overview"
         }
       ],
-      "remaining": "源可能无锚点；新稿定位不等于源锚点修复。",
+      "remaining": "稳定锚点已覆盖可采纳操作、等待质量门和只读权限三种真实Vue分支；双端E2E验证链接落点。真实服务端权限和读屏仍待独立验收。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#97f09d6274473315.1"
       ],
@@ -555,6 +555,11 @@
         "busy": "not-mapped"
       },
       "testReferences": [
+        {
+          "file": "tests/e2e/m04-02-opportunities.spec.ts",
+          "evidenceType": "actual-vue-local-interception",
+          "claim": "重决策入口在质量门未通过及只读角色分支均落到实际可见的决策状态；桌面Chromium与390px手机测试通过。受控本地回包不证明生产RBAC或读屏器验收。"
+        },
         {
           "file": "scripts/verify-ui-phase2-opportunity-detail-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue",
@@ -3200,7 +3205,7 @@
     "dependencyHashes": {
       "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
       "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a",
-      "apps/web/src/components/OpportunityDecisionPanel.vue": "bef71630c83c049043e89c86b759d9e9ea84199350286730e3189e8b63debdef",
+      "apps/web/src/components/OpportunityDecisionPanel.vue": "0198986474d6a0d356b83be1db8e34b5fce4ec5d1ffd95356839528b9ce21264",
       "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
       "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
       "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",

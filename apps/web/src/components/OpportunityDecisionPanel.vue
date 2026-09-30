@@ -120,7 +120,12 @@ const recommendationCopy = computed(() =>
       ><button @click="emit('decide', 'observe')">继续观察</button
       ><button class="reject" @click="emit('decide', 'reject')">驳回</button>
     </nav>
-    <div v-else-if="canDecide" class="opportunity-decision-waiting" role="status">
+    <div
+      v-else-if="canDecide"
+      id="opportunity-decision-actions"
+      class="opportunity-decision-waiting"
+      role="status"
+    >
       <span>
         <b>当前无需你处理</b>
         <small>系统会继续采集和计算；只有显示“建议采纳”后才进入你的最终采纳队列。</small>
@@ -133,7 +138,7 @@ const recommendationCopy = computed(() =>
         </nav>
       </details>
     </div>
-    <p v-else class="opportunity-decision-readonly" role="status">
+    <p v-else id="opportunity-decision-actions" class="opportunity-decision-readonly" role="status">
       当前角色可查看判断依据；最终决定需要“机会决策”权限。
     </p>
     <section v-if="unresolvedBlockers.length" class="opportunity-decision-gap">
