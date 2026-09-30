@@ -346,7 +346,7 @@
           "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         }
       },
       "visualStateReferences": {
@@ -624,7 +624,7 @@
           "apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         }
       }
     },
@@ -764,7 +764,7 @@
           "apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         }
       }
     },
@@ -983,7 +983,7 @@
           "apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         }
       }
     },
@@ -1224,7 +1224,7 @@
           "apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         }
       }
     },
@@ -1511,7 +1511,7 @@
       "label": "详情窗口定义",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1"
+        "apps/web/src/components/NotificationCenter.vue#83c14e43da4a0513.1"
       ],
       "sourceContractKeys": [
         "D-AN-NOTIFICATION；消息详情"
@@ -1558,7 +1558,7 @@
       "label": "关闭消息详情",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/NotificationCenter.vue#a81227b33b62c0a9.1",
+        "apps/web/src/components/NotificationCenter.vue#e6cc1debf33762b0.1",
         "apps/web/src/components/NotificationCenter.vue#24417e6753ed4eb7.1"
       ],
       "sourceContractKeys": [
@@ -2068,14 +2068,18 @@
       "label": "资源技术详情",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"
+        "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2",
+        "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.1",
+        "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.2"
       ],
       "sourceContractKeys": [
-        "AN-TECH；资源/根因键"
+        "AN-TECH；资源/根因键",
+        "AN-N-TECH-RESOURCE；详情失败追踪编号展开",
+        "AN-N-TECH-RESOURCE；偏好失败追踪编号展开"
       ],
       "contractAliasReason": "保留AN合同完整末列；同语义入口合并，两个技术详情按实际展示对象拆分，窗口定义仅作接线。",
-      "condition": "resource_id/resource_type/root_cause_key任一存在",
-      "handler": "原生details展示资源/根因键，不执行操作",
+      "condition": "资源/根因键或对应读取request_id存在",
+      "handler": "原生details展示资源/根因键或对应读取request_id，不执行操作",
       "variants": [
         "detail_technical"
       ],
@@ -2156,13 +2160,17 @@
         "reason": "所列源控件无disabled/aria-disabled/aria-busy/busy/loading/inert或动态v-bind；页级读取或显隐不等同控件禁用/忙碌。",
         "handlerBoundary": "原生details展示资源/根因键，不执行操作",
         "sourceCandidateIds": [
-          "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"
+            "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2",
+            "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.1",
+            "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.2"
         ],
         "renderedControlIds": [
-          "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2"
+            "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2",
+            "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.1",
+            "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.2"
         ],
         "sourceHashes": {
-          "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         }
       }
     },
@@ -2171,7 +2179,7 @@
       "label": "偏好窗口定义",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/NotificationCenter.vue#b332799077351299.1"
+        "apps/web/src/components/NotificationCenter.vue#3f47655822db88ed.1"
       ],
       "sourceContractKeys": [
         "D-AN-PREFERENCES；偏好"
@@ -2219,7 +2227,7 @@
       "label": "取消通知偏好",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/NotificationCenter.vue#bcb7add4c71c18a6.1",
+        "apps/web/src/components/NotificationCenter.vue#e2f8e1803ac77239.1",
         "apps/web/src/components/NotificationCenter.vue#25755513ca77e550.1"
       ],
       "sourceContractKeys": [
@@ -2327,7 +2335,7 @@
       "label": "保存通知偏好",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/NotificationCenter.vue#72947e74a11b9abc.1",
+        "apps/web/src/components/NotificationCenter.vue#8aeeea8a550ba999.1",
         "apps/web/src/components/NotificationCenter.vue#0285caea2e8607bf.1"
       ],
       "sourceContractKeys": [

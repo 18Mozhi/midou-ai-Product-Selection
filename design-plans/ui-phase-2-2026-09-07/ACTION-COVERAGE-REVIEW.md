@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1749；旧登记1477；新身份778，旧表独有身份506。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1585源位置/1302组；其中路由动作1069组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1751；旧登记1477；新身份786，旧表独有身份512。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1587源位置/1302组；其中路由动作1069组，转发/容器关联120组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -29,7 +29,7 @@
 | [P13 今日工作](page-specs/P13.md) | 71 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P14 热点趋势](page-specs/P14.md) | 88 | [51组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P15 选品机会](page-specs/P15.md) | 98 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P16 创建选品](page-specs/P16.md) | 40 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P16 创建选品](page-specs/P16.md) | 39 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 54 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P18 机会详情](page-specs/P18.md) | 98 | [66组](action-reviews/P18.json) | 332个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 62 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -39,7 +39,7 @@
 | [P23 全部任务](page-specs/P23.md) | 71 | [40组](action-reviews/P23.json) | 192个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P24 任务详情](page-specs/P24.md) | 71 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P25 审批中心](page-specs/P25.md) | 74 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P26 通知中心](page-specs/P26.md) | 55 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P26 通知中心](page-specs/P26.md) | 50 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P27 自动化规则](page-specs/P27.md) | 51 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P28 报表与导出](page-specs/P28.md) | 46 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P29 治理概览](page-specs/P29.md) | 150 | [9组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -1373,7 +1373,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-WIRING-INSIGHTS | @discover-competitors / discoverCompetitors | OP-COMPETITOR-DISCOVER |
 | OP-WIRING-INSIGHTS | @discover-suppliers / discoverSuppliers | OP-SUPPLIER-DISCOVER |
 | OP-WIRING-INSIGHTS | @queue-score / queueScore | OP-SCORE-QUEUE |
-| OP-WIRING-INSIGHTS | @retry-downstream / loadDownstream(detail?.id, undefined, $event) | OP-DOWNSTREAM-RETRY |
+| OP-WIRING-INSIGHTS | @retry-downstream / retryDownstream($event) | OP-DOWNSTREAM-RETRY |
 | OP-WIRING-INSIGHTS | @select-tab / setTab | OP-TAB |
 | OP-WIRING-FEEDBACK | @submit / submitOperatingFeedback | OP-FEEDBACK-SUBMIT |
 | OP-WIRING-FEEDBACK | @retry-unknown / retryUnknownOperatingFeedback | OP-FEEDBACK-RETRY |
@@ -2310,7 +2310,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P26 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P26.json)：23个局部源位置 → 19组；6类写入，17组路由动作，2组转发/容器关联不重复计动作。已映射6/6个源码字段位置，3/3处调用/内嵌容器，16个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P26.json)：25个局部源位置 → 19组；6类写入，17组路由动作，2组转发/容器关联不重复计动作。已映射6/6个源码字段位置，3/3处调用/内嵌容器，16个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有3个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -2333,7 +2333,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | AN-N-START 开始处理通知 / write | 1处；detail、start_busy、start_error | [detail · 1440](design/notification-direction-c/1440-detail.png) / [detail · 390](design/notification-direction-c/390-detail.png)、[start_busy · 1440](design/notification-direction-c/1440-start_busy.png) / [start_busy · 390](design/notification-direction-c/390-start_busy.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
 | AN-N-CLOSE 关闭通知 / write | 1处；detail_progress、close_error | [detail_progress · 1440](design/notification-direction-c/1440-detail_progress.png) / [detail_progress · 390](design/notification-direction-c/390-detail_progress.png)、[close_error · 1440](design/notification-direction-c/1440-close_error.png) / [close_error · 390](design/notification-direction-c/390-close_error.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
 | AN-N-REOPEN 重新打开通知 / write | 1处；detail_closed、reopen_error | [detail_closed · 1440](design/notification-direction-c/1440-detail_closed.png) / [detail_closed · 390](design/notification-direction-c/390-detail_closed.png)、[reopen_error · 1440](design/notification-direction-c/1440-reopen_error.png) / [reopen_error · 390](design/notification-direction-c/390-reopen_error.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
-| AN-N-TECH-RESOURCE 资源技术详情 / local | 1处；detail_technical | [detail_technical · 1440](design/notification-direction-c/1440-detail_technical.png) / [detail_technical · 390](design/notification-direction-c/390-detail_technical.png)、[technical-default · 1440](design/notification-navigation-direction-c/technical-default-1440.png) / [technical-default · 390](design/notification-navigation-direction-c/technical-default-390.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。 |
+| AN-N-TECH-RESOURCE 资源技术详情 / local | 3处；detail_technical | [detail_technical · 1440](design/notification-direction-c/1440-detail_technical.png) / [detail_technical · 390](design/notification-direction-c/390-detail_technical.png)、[technical-default · 1440](design/notification-navigation-direction-c/technical-default-1440.png) / [technical-default · 390](design/notification-navigation-direction-c/technical-default-390.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。 |
 | AN-N-PREF-WIRING 偏好窗口定义 / wiring | 1处；preferences | [preferences · 1440](design/notification-direction-c/1440-preferences.png) / [preferences · 390](design/notification-direction-c/390-preferences.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
 | AN-N-PREF-CLOSE 取消通知偏好 / local | 2处；preferences、preferences_busy | [preferences · 1440](design/notification-direction-c/1440-preferences.png) / [preferences · 390](design/notification-direction-c/390-preferences.png)、[preferences_busy · 1440](design/notification-direction-c/1440-preferences_busy.png) / [preferences_busy · 390](design/notification-direction-c/390-preferences_busy.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 本批新增导航/关闭控件图；selected逻辑状态另记，不混入六态。额外偏好图标仅提案，生产归属缺口及全页批准仍待。 |
 | AN-N-PREF-SAVE 保存通知偏好 / write | 2处；preferences_intent、preferences_busy、preferences_error、preferences_conflict | [preferences_intent · 1440](design/notification-direction-c/1440-preferences_intent.png) / [preferences_intent · 390](design/notification-direction-c/390-preferences_intent.png)、[preferences_busy · 1440](design/notification-direction-c/1440-preferences_busy.png) / [preferences_busy · 390](design/notification-direction-c/390-preferences_busy.png)；其余见JSON | 源码语义已核对；独立图稿关联不代表真实Vue、全变体、角色或生产验收。未映射状态继续细化，未获用户全页批准。 |
@@ -2384,7 +2384,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 - SSE/路由、列表/详情、全局导航、角色/主题/密度及真实API组合未验收。
 - 余3槽为分页busy及偏好关闭disabled/busy，需完整调用边界登记，不用假禁用图填数。
 - useModalDialog提供原生开关/焦点返回；本轮VM测试替身不证明DOM焦点，完整组合仍需真实Vue验收。
-- 读取meta/error、详情GET、自动已读/workflow和偏好草稿/保存归属已局部修复；全局上下文、markAll及模态内错误可达性仍非本轮完整验收。
+- 读取meta/error、详情GET、自动已读/workflow和偏好草稿/保存归属已局部修复；详情/偏好错误已在原弹窗中读屏播报并交接焦点；全局上下文与markAll错误定位仍待后续范围内核验。
 
 ## P27 局部动作与共享消费者
 
@@ -3949,7 +3949,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | ProviderRegistry.vue / form.status | 定义草稿/启用状态选择 | 启用状态不等于真实采集运行成功或有权执行。 |
 | ProviderRegistry.vue / form.terms_reference_url | 条款参考地址 | 无用户/权威来源时不填造地址，具体启用要求继续由PR-G01追踪。 |
 | ProviderRegistry.vue / form.terms_version | 条款版本文本 | 保存不证明条款事实或合规已审。 |
-| ProviderRegistry.vue / form.terms_expires_at | 条款到期本地输入 | Asia/Shanghai本地输入转UTC ISO的8小时时差仍按PR-G03复核，不擅改时区合同。 |
+| ProviderRegistry.vue / form.terms_expires_at | 条款到期本地输入 | 编辑时将UTC ISO瞬间转换为当前本地datetime-local，再用既有toISOString保存；上海时区实际Vue桌面/手机回归确认往返不改变分钟精度内的瞬间。真实保存、RBAC与服务端审计仍未验。 |
 
 ### 弹窗与详情消费者（有图不自动等价）
 
@@ -4652,7 +4652,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P60 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P60.json)：44个局部源位置 → 20组；1类写入，20组路由动作，0组转发/容器关联不重复计动作。已映射0/10个源码字段位置，0/5处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P60.json)：44个局部源位置 → 20组；1类写入，20组路由动作，0组转发/容器关联不重复计动作。已映射0/10个源码字段位置，0/6处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有120个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 

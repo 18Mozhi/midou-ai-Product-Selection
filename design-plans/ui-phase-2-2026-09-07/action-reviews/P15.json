@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityWorkspace.vue": "ec4f9f4e211926e571a07bdba3871ab5c704cc05436e1bd049ce3d581fec4eaf",
+    "apps/web/src/components/OpportunityWorkspace.vue": "69e2c6afdc0821067117e1e66f39fc10923248d1e6518ff0d8b881faa446c536",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
@@ -1477,7 +1477,7 @@
         "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
         "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
         "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
+        "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
         "apps/web/src/components/OpportunityWorkspace.vue#b391bf25870010b2.1",
         "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
         "apps/web/src/components/OpportunityWorkspace.vue#2aa4cc1a9f90b8fd.1",
@@ -1989,7 +1989,7 @@
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "ec4f9f4e211926e571a07bdba3871ab5c704cc05436e1bd049ce3d581fec4eaf",
+      "apps/web/src/components/OpportunityWorkspace.vue": "69e2c6afdc0821067117e1e66f39fc10923248d1e6518ff0d8b881faa446c536",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
       "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
@@ -1997,7 +1997,7 @@
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/components/opportunity-workspace-forms.ts": "d6b4d5fb34e2e28458551cf0042657e1ab5fd7a543c33a35f92d3bc2b9c94088",
-      "apps/web/src/automatic-selection-readiness.ts": "8ee0c2efad0138393a5071a7798560477db812a3463a0f9312c5a4a753b99487",
+      "apps/web/src/automatic-selection-readiness.ts": "b00655a7eb3533a0776fe564e1ca9ed20fa5463444ee0090babbc62dc92169b5",
       "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
     },

@@ -9,7 +9,7 @@
     "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
     "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
-    "apps/web/src/automatic-selection-readiness.ts": "8ee0c2efad0138393a5071a7798560477db812a3463a0f9312c5a4a753b99487",
+    "apps/web/src/automatic-selection-readiness.ts": "b00655a7eb3533a0776fe564e1ca9ed20fa5463444ee0090babbc62dc92169b5",
     "apps/web/src/components/AccountShell.vue": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
     "apps/web/src/components/Alibaba1688AcceptanceCenter.vue": "f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da",
     "apps/web/src/components/api-coverage-types.ts": "4b1a2d916fbab773dfab6e73ffca1fcafa0a85355be2493d0dab64d98cfa41a2",
@@ -19,7 +19,7 @@
     "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
     "apps/web/src/components/approval-workspace-types.ts": "85f49803b54e30f8543d7256ce27630001c943aea86baac8a84d45591f9f9792",
     "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075",
-    "apps/web/src/components/ApprovalWorkspace.vue": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee",
+    "apps/web/src/components/ApprovalWorkspace.vue": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
     "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2",
     "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
     "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
@@ -59,15 +59,15 @@
     "apps/web/src/components/MySqlResilienceCenter.vue": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c",
     "apps/web/src/components/navigation-surface-registry.ts": "e0f1161dd5da43df09b2710972ac431d746eb32fc7020c55502d020ef501486d",
     "apps/web/src/components/NavigationAccessPanel.vue": "3d2cb2dca56e68dbdbad880b4879b9739b5f86537c4e119495a1324f558c7338",
-    "apps/web/src/components/NavigationShell.vue": "ce875c8e308bf69743c1b1f4b746e37c303ebfa82f436e502418313742779927",
+    "apps/web/src/components/NavigationShell.vue": "25cdd5e342935ec0ed531c5ed2d50678a72f8f4478d8183f117636244f0d2efe",
     "apps/web/src/components/NotFoundPage.vue": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d",
-    "apps/web/src/components/NotificationCenter.vue": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036",
+    "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3",
     "apps/web/src/components/onboarding-guide/OnboardingStepPanel.vue": "eb1a29acbe8027d4e01ac226c4d33ca9132fb28b13e50c88681f746ee24876a3",
     "apps/web/src/components/onboarding-guide/steps.ts": "6dae0e1456a88d76cff30bc3f4d671a5356035418883434684d0be3340c87945",
     "apps/web/src/components/OnboardingGuide.vue": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed",
     "apps/web/src/components/OpenActionReasonDialog.vue": "74d65b519372cb12d6741eb348a9b2af46470929eea887d709796dace1db5370",
     "apps/web/src/components/OpenCreateDialog.vue": "165d6b784316b4a9ff88d0e8490d0abc21103c1fe7ec9c03e321d74f892b1261",
-    "apps/web/src/components/OpenPlatformCenter.vue": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa",
+    "apps/web/src/components/OpenPlatformCenter.vue": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859",
     "apps/web/src/components/opportunity-decision-presentation.ts": "e090c758b7b0ca14a7bc006e59fceb3fce3575660472164de6f61159becde553",
     "apps/web/src/components/opportunity-workspace-forms.ts": "d6b4d5fb34e2e28458551cf0042657e1ab5fd7a543c33a35f92d3bc2b9c94088",
     "apps/web/src/components/opportunity-workspace-presentation.ts": "18a8796a882d130441e8ba255c1bf4eddf5456675d1b92a18d0d39737f7daf16",
@@ -83,7 +83,7 @@
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "ec4f9f4e211926e571a07bdba3871ab5c704cc05436e1bd049ce3d581fec4eaf",
+    "apps/web/src/components/OpportunityWorkspace.vue": "69e2c6afdc0821067117e1e66f39fc10923248d1e6518ff0d8b881faa446c536",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
     "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
@@ -141,7 +141,7 @@
     "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a",
     "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
     "apps/web/src/components/PlatformStatusCenterView.vue": "6ce3255def9689fd88051da43680d5eb53b50699c4f229901871b267cacab9c7",
-    "apps/web/src/components/PlatformStatusWorkspace.vue": "775769a187d18e8440f6e0ccef08a13b305620cf29747eb0aad35766059b01f8",
+    "apps/web/src/components/PlatformStatusWorkspace.vue": "9293190d91518c2c6875c56a10cdb0c0f76133890140024ae57942996f2cd8e1",
     "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
     "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
@@ -154,7 +154,7 @@
     "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue": "0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9",
     "apps/web/src/components/ProviderParserSampleDialog.vue": "28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6",
     "apps/web/src/components/ProviderParserSampleReview.vue": "9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8",
-    "apps/web/src/components/ProviderRegistry.vue": "61023ffed367e6414668e2f3d4d9b1c2c3bb9fb039bea834faf05ea6dc8f77cb",
+    "apps/web/src/components/ProviderRegistry.vue": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
     "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
     "apps/web/src/components/ProviderSourceCenter.vue": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0",
     "apps/web/src/components/ProviderSourceConfigurationDialog.vue": "5fc3235c14ac208b768abc95c60807d8f646037d6ff43265d5e1b3eb7432422f",
@@ -175,7 +175,7 @@
     "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
     "apps/web/src/components/ScoreRuleConsole.vue": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d",
     "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
-    "apps/web/src/components/SelectionJourney.vue": "380e72a9ff532a588c11ff28b28e8a3efce241945b3bd47c5443f47745cc8811",
+    "apps/web/src/components/SelectionJourney.vue": "8e0103bfda31bed992d91c61b9d84d873f73d29e1564cca51e27d0000ac29e70",
     "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
     "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
     "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
@@ -198,7 +198,7 @@
     "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
     "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
     "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
-    "apps/web/src/components/TrendDashboard.vue": "e273327dbedd58e57cfebc1a22f0d74060190a42c909d3c14a07bbe1ec6e7025",
+    "apps/web/src/components/TrendDashboard.vue": "4c38fe10e342283cd5e9baf7537d634f11f3a1424618687daaa1face537513a6",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
@@ -215,7 +215,7 @@
     "apps/web/src/components/useProviderSourceDialogFocus.ts": "3639882023ff9b374823d7c7adf56f59c8a3ff9347fafc9dde95774dac55c556",
     "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
     "apps/web/src/composables/useAlibaba1688Acceptance.ts": "9805b283f08361e16195d73c0d3c1b6c2a9673d8de0f5ec7134832121ceafbdf",
-    "apps/web/src/composables/useProviderParserSamples.ts": "4f73b85d9b9e985a28817c4dbebd460a409662d7ae269a86739196c270152227",
+    "apps/web/src/composables/useProviderParserSamples.ts": "50a6947a7b925a81d7de1a1256deaed3d25e70def461cb7c7bb3cd6cd5fb57d2",
     "apps/web/src/composables/useProviderSourceConfigurationVersions.ts": "635e798746d4df20e99fa25668429787e1c982111e105537282dc55e4f70a259",
     "apps/web/src/composables/useProviderSourceDirectory.ts": "3370711c104434a86af825d377a6377e7350e7c9ccb58bd618cfa982bdf5f544",
     "apps/web/src/composables/useSourcingComparisons.ts": "e845a651880a987215dbb5659321b26e4262dcc45c007a035386312d74278150",
@@ -246,7 +246,7 @@
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
     "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "9a37882127bf26c4a26b827a83023b332c3fbe8338ccf7e168c4b62bbfea33e6",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "b117737c678b77384f8dbc5422ca2af6f2816336dfd49c5b37f3f53eebee2164",
-    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "ca542ee29760f507481282fa94b9c15ef61369f0982475d06fe614c5cae4e036",
+    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "3639baf3241ddfeed57def05b6db3fb592e2e76abd9ea22d0fa18552c904e66f",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "abd071d668ec09156b21af20eead0421bd4127e412d3c1876badadba803c9bd7",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "ab4b381f48cc74f4d2a71d863fa221e989ca29a7a176674d97b429d5ef6159a8",
@@ -255,20 +255,20 @@
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "0a11f71fe3a49fbfb73c6cb4a4d8ef90bebe5f05bcf1c166cec90b583bf9f8e4",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "cdac036c57563917d52634cb09454662d51d92fa4c1884c65e84ddae747f6d07",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "34916053299e841285f8666457a4055a0a6ca845dfc55a45feecfbe5f60d9c77",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "0877a6a9f024de0fa1671e85c087ebd42ec51c222294d05f1067c7a6190d3bc8",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "f9e0a35c02f6ecad87084aa221178a8f09f29bfeaae357f3e401a6a1b682db6e",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "c1f16d965095f032e4681b2aedeee9411312c5281e50a484203a5b4d89934662",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "532588c549bd0362042ee8b991ff84582f7061d2e8dc5f71eb5e93aa7a3169e3",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "dd2def25923858383f4371d3bb5ae643cf28b06ac185aab7017aeebff8d96291",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "df6390dce4ac9dc7d7019ad972f3ff57013adc448b6bcd26b56ae3e84ba006a2",
-    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "851ba669b526c4631689495fac37cffaae44b6564b459b45d2a4b15220adb832",
+    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "746265dec585e3fa1adba59b8a9ba865cc0b718245f87e227a92d5dccaff6589",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "4df5cd5f4fff7e32f31a7a0ef71bd54af5ad8a68e09dbec2c8183748108e881e",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "46ad324b09b6a5f011cc39a0a0051c90e4b487087ff5a035eb28c3dc64c30efe",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "6604783f1f631547071a651e4e97532f3d3109f7b21fd2004f367bf2c882337f",
-    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "f821d7b41c3f623ffd1327288d5250b8cd42e31811c053bb18c96c007fbdae66",
+    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "9add9406096178c1ec3df809c9611bdc99545d95588378221277092c22c270cf",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "8ec0e6cb51df04480bfc80387554e98b8682880e306efa73052f42825421e028",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "b7170d2bce947478b32967c494c669c632d4daaf563bfbd8c73df933a3396892",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fdbde9fa24ab1d8a5d3f19c23a6bef5b9745b5326d281efcb58b61115061c63f",
@@ -321,10 +321,10 @@
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/evidence.json": "9b185d008d6aed67bddffe22a29ac6507e15efddd14c9d976021040fdfda6a96",
     "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/evidence.json": "88f0f60d25df69964c57d95819a4b6a0294914a9680079147a6c4ad44881e46c",
     "design-plans/ui-phase-2-2026-09-07/design/mysql-direction-c/evidence.json": "eb912a8cb3e4be8a8edf248ae68dcf51fd9d5e78bc2590c4a500f685e3e3fce5",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "f4a25996f56f4d68b445ea4a12c673793a3034952340aa04aebedb2c0a75dad8",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "fe6a2e7df297fa4d285b11c1af15cfd6470547546ec648846b558a0b01937868",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-forms-direction-c/evidence.json": "53b7112cd02e8a2f714eb1b8ce0a88ef9d00ea7ab0110667de0ac57275acc751",
-    "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/evidence.json": "e73fd6d68a387c68ca8c64980b11b49c9b0bce90a0a8c5bea0b644026243f139",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-controls-direction-c/evidence.json": "303ca219166dd7df3f956501ab33eb202c546616a5e1247e271d27bd92f32495",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-direction-c/evidence.json": "5d16a3901179b2a68cff957ae6d53c2df73df88ce88cf55a52eadb626570515e",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-forms-direction-c/evidence.json": "43d846f79030a5c9b1696ea16225b4d28f5c39a8747ca55b6fe48217be220857",
+    "design-plans/ui-phase-2-2026-09-07/design/notification-navigation-direction-c/evidence.json": "204e61c3a40017985f5f2e5c07966d4d532e436544d81a36a80f53c356ecf673",
     "design-plans/ui-phase-2-2026-09-07/design/open-platform-direction-c/evidence.json": "4698957e30b3047a6234399d7ae32f40c58b99d7ed2a8175b73a965c569cb620",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "f44320050a110c0ab39bb243f0409bd087c0be76e57e5b3779973b31b025e4b7",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
@@ -407,29 +407,29 @@
     "scripts/verify-ui-phase2-personal-c.mjs": "ecdc30e4efa2ff1d99383dce7f584cd825f77d9e6e57491785a204f196885456",
     "scripts/verify-ui-phase2-personal-composed-c.mjs": "481e7923c0c9a474127b0a2e385f5679a50ed6cf0fd3e9a5240d0e034b917ac1",
     "scripts/verify-ui-phase2-personal-sections-c.mjs": "6a63a51a0bb53cab4d052ea303662b325cd303b615f60a1f82e5f15fded53de9",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "0412a9a2bfe15401dcc77f2445530e00f7b47b08f1680ba6fff90c198750af98",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "0c5fa4d8927817415d819f93f57243924943dc91b95a7871d8c53135ba9b9798",
     "scripts/lib/ui-phase2-home-design-data.mjs": "bb65ad359313f8e5351351195bf809a6ba49e3c8d52d7ceaa2ef24e89d7980c7",
     "scripts/verify-ui-phase2-home-c.mjs": "e7800a15baf9ac7ca02291e31cbd75466fa9f7eb50a0b722b09730a9c8f2af4e",
     "tests/e2e/m02-06-home-mobile.spec.ts": "c5bf73d3a6e48c32dd4dd11e1234667b66dd0a4fb18176de1e662061c22eb905",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "a13676fa70a7981eed4603d6dd4699436834f104dc8a5f958beba302ff9ce2ac",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "7004874f2497b5f67d83a82b42cf7697cc50efb3f0a3a0b64e0e21094648ab5c",
     "scripts/lib/ui-phase2-work-design-data.mjs": "791449e3e7f6619ab8bd618d0bdae6c4cd32042a65606007e51945fedd368b12",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "4c518fca591cca0f4fe93e5ed5a1d28cf576b640db901a89fd3317dd9cb93b3c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "0483f04f2b4d1c63e7fc771b8f48f33e07def0fcae5b1dc38c8bf4c2b41e4209",
     "scripts/lib/ui-phase2-trend-design-data.mjs": "3c2c1f0f639200c425d208490e5fc0850bfbfe5bdac737c0120d4153310e2378",
     "scripts/verify-ui-phase2-trend-c.mjs": "7e39683fb2b9d6bcaf86dd190679681e6e4cdfbceaf5aed03cc33ef30884d27c",
-    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "b2c7cc165feafef3651be3fd04f39d8aede2192e1c3eac7b5ea44b47f9ff218e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "a9328118afd7a5e863981ba321b06e8e6a9dd42219691c2afa56771119f87983",
+    "tests/e2e/ui-phase2-trend-contracts.spec.ts": "aa92cea4340b1ce5114bd564306312651da3c529cc8a15e887dcdb396255ed8a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "2e910feef08893d8e058bae377d04cd11a4028fb36f8d3d345606e1287a036ca",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "tests/e2e/m04-02-opportunities.spec.ts": "cdbefa1077bab5a0aad63ac821ce6e187654aa4a73cdf8a4f92555912ec45f0a",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "f77d8dcce3758616e93f04b44052e4a6d34ed28078a048ca734fde291650508c",
+    "tests/e2e/m04-02-opportunities.spec.ts": "89f833f45bc3daf905e20fc0c97c90981ca602ed2e1cc9121cf1dccb4ac18f62",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "5dedef7f1c13480e9ed6e01d382ef2090edb604be14fbb2cadefe9338cb05472",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "67b8292a4c46e39ce5a80b02ea4aaf6435a79cfcb76356850488800d377ef3d0",
     "tests/e2e/m07-06-selection-acceptance.spec.ts": "1186564ff800079ae22972ea81975e8d12093818777274b99cff691dfcce1a0d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2d387f6cccdac69f797195db1ac79909463483c1a4ae431011b699fefcbd997c",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "tests/e2e/ui-phase2-scoring-contracts.spec.ts": "14d4a1557e9d586c4b74d3598b552b1fa740e151b62616422fc7aa86ed3efd1e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "303c605669e8fef8f1b6bd7a992686a4e3ec8afef7a5182bd6fbdce9e03e73db",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "af426e49946c87289821dc9e4cd9b701668dfbdb29a60a60ecab4457a25985e3",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "6dd4d58c43a2bebe38dd0eacdfa56a51343b1d1ea450806449da298c13b1d49a",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -438,7 +438,7 @@
     "tests/e2e/m04-04-profit.spec.ts": "bdffc67a7987072ce44e6801a232c98890495e8983251c3682c2c682db9cbffe",
     "scripts/verify-ui-phase2-opportunity-detail-c.mjs": "e22ab61ee8b7caec58e8758a9ed2b0b598d4e340f47797f59a15e56d569876a5",
     "scripts/verify-ui-phase2-insights-c.mjs": "44840b3be73b1f8b754ec258b82f8d6d97ed2edc4bd7ed060ccfa90239319712",
-    "tests/e2e/ui-phase2-opportunity-contracts.spec.ts": "6d3bfba5278cdac6caa5904fbd6bc839680aa0e0c11c637e026676fa0760e2d1",
+    "tests/e2e/ui-phase2-opportunity-contracts.spec.ts": "78645ebe991f0b9151d6a47f0323630ee9dd60d7255b819496ce3aaf39a54023",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "3a12c7a808f823a2cf5d162540a3cdbee9d9e9ace5667ba7d49ff8cdb6eccfd4",
     "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
     "tests/e2e/m04-05-competitors.spec.ts": "a0ebfee8bf3124a14d8ea8483e1ba3cf926e0045a59fe0e1aac59cebfc72b691",
@@ -455,16 +455,16 @@
     "tests/e2e/m05-01-business-tasks.spec.ts": "328ea348261d6ae23e77cec0cb2eaacbd183f7e6a378f6c2887c09b8aefa8e31",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "fb68ef61f9caac81f519b6b71c8de60756ed89ce136cd89db3c5b5d13d68be70",
     "scripts/verify-ui-phase2-task-detail-review.mjs": "3250abb563be600ee900effaa9b35f38044119dd02e75f381e822a923b7ad4d8",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "09ba12b0a6245163adede127454ebb19395ac8d88437fc88c9e4ba4380aaa950",
-    "scripts/verify-ui-phase2-approval-review.mjs": "3943d8f26a3de728e8fea5d2925f3d803e4360dcdd2244310814de341984b486",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "fa2a40d62a0c11d26af5f731e5edacb4258db00bf7fc1650954d371b407715df",
+    "scripts/verify-ui-phase2-approval-review.mjs": "7bb898081f7a0a3438a78cec3fd59c13e9c259dde64b8792343d09a21600307c",
     "scripts/verify-ui-phase2-approval-c.mjs": "0448699f0aedb6b4e6851146b00382ecaca7ddf57b05f59fdefeb881fb107917",
     "scripts/verify-ui-phase2-approval-navigation-c.mjs": "637d2f5a34787039a475a3b610a39be52c9ad917e66ef6a8597c7a48b14913d7",
     "scripts/verify-ui-phase2-approval-diagnostics-c.mjs": "feaaf714543fe4b8946c4be4901cd2d464e400e74f77ff362beaee68ac199872",
     "scripts/verify-ui-phase2-approval-lifecycle-c.mjs": "59bfecbccdd956a2031d80e1b92b77430bb3728cfade05441b22eb3e405dbfb3",
     "scripts/verify-ui-phase2-approval-forms-c.mjs": "1aba43d70ecd0d52490c6922c3e681c38b004d8c5d98175bafad956b9333c1c3",
     "scripts/verify-ui-phase2-approval-controls-c.mjs": "237c54b6368df9feab55fbc8039f5e89c589c18651d9a93109ee3ce9419c7fe0",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "0e18eaafc86f70abf6fe2301be626f442e0cab6c739192f3e8186cae14be6a44",
-    "tests/unit/ui-phase2-notification-ownership.test.mjs": "937184c6f0ebc8a8a369e35c868526689a3ed61c5e80456d53bf26a8409ed838",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "820e3726e678c950d701daee14ed73d0e5b4b52ba81286b6bb593c1db61df10b",
+    "tests/unit/ui-phase2-notification-ownership.test.mjs": "26207ed6dd23ec33d75542165772a6e0ff32ccca40b4c1acb6c6152bfbaccf79",
     "scripts/verify-ui-phase2-notification-controls-c.mjs": "0d8a2b48d22f6ca05636264641d9f13a083559987b430d0b5e802c086b8d5b3e",
     "scripts/verify-ui-phase2-notification-navigation-c.mjs": "34eb1fc201f8faf92a88ad80713512358cf1e9fb4d7f375c265b3145a164290b",
     "scripts/verify-ui-phase2-notification-forms-c.mjs": "b7953605372e1d185be413e5b43f20b5e92bba04febe82825fd57afb0d41dc71",
@@ -518,16 +518,16 @@
     "tests/unit/ui-phase2-p44-action-map.test.mjs": "180618ba5065cf84c449d3ce4878f863a8f0077c8f48d4c85a94cfaf62784ac0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P45.json": "d17050ba541a969fcff493fbed839331d74b621833749ffa43679c3c3c7ecf13",
     "tests/unit/ui-phase2-p45-action-map.test.mjs": "8764c41dc01059d68ab3de158c83c097a30c33a6e85709961823b77820661ef9",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P46.json": "8900563a393b1373324eeb6363bbf1929f78fa2d5067985c81fd88640b678c34",
-    "tests/e2e/m03-01-provider-registry.spec.ts": "72915fae648b4c45fd6017de436d33d0032be5abff8d473713788cc314730f88",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P46.json": "81f0bf87279781aeaf08b91a658fe8ebca5476219ff754a716db21cd839a0915",
+    "tests/e2e/m03-01-provider-registry.spec.ts": "fdb9b7cfd824eab55d9780fdecce7d13df52883d256636f7c05e346c03ae8508",
     "tests/unit/ui-phase2-p46-action-map.test.mjs": "2013206d1dab1da9d1c496db1cf8041f1d1f17a8f7938d7c8aa4e81c15bb6416",
-    "tests/m03-01/provider-registry.test.mjs": "063dc557443189915365dac01a4b33e36d97bd841f23eec1ba9cdd8acf11a15a",
+    "tests/m03-01/provider-registry.test.mjs": "8bf873f9681404ec765db1f3fdea086c06285d3b6761ec4cb434e00d03ea0134",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P47.json": "1656a87a74cc63d9cb60a759d77ae47111915954438f1801bd18e88e80129660",
     "tests/unit/ui-phase2-p47-action-map.test.mjs": "4df585b96c7150e6e4078e8e28bc88204adec62597dbd6498d658839a7ed002f",
     "tests/unit/ui-phase2-provider-adapter-access.test.mjs": "f66c9a6098b9b5ac780d68681848b04f2f1e9e358c1e313c4e668aaf299f7c4d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "09417abe2f56c49076daa39fbcd4078fa87190b49bb1ac72e76e63cb4c7e52cf",
     "tests/unit/ui-phase2-p48-action-map.test.mjs": "65619c14a1ec77e0de7e35b75eb45258eeac1d4425c4d835c0b5cd5418c9bc0d",
-    "tests/e2e/m03-07-provider-sources.spec.ts": "1568beaca70655ba2984cd450a175f6b91120f3cea60b56cc120f6ba38262a88",
+    "tests/e2e/m03-07-provider-sources.spec.ts": "5d865c185a67fe0d529fb131f8244f96c30c5383587ac4b146230704e6fa6d96",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "0a96c4ac83e8bd5041709dcd8767f38fc75c6adfe5e3d94a3b250ca4b08adc8f",
     "tests/unit/ui-phase2-p49-action-map.test.mjs": "e68ae4976a2e7aaa11a201227c2d32139789eb698210448e5dad3382643728ed",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "b40266a3f6561797a1d3eef6f1c50e036ad038a93a9d7510c19f8f9c6c5d02e3",
@@ -542,7 +542,7 @@
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
     "scripts/verify-ui-phase2-data-controls-c.mjs": "789526ced8ddf184e6fd21ae12e00d17f8f0b58675c269d6abfa154011388a06",
-    "tests/e2e/m06-02-platform-dashboard.spec.ts": "8de90a2d0c06266da35f8421bde3ec9a7c44ff1aaa30d4add892298dadaf774f",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7351ea7298eea9426c0cf1d159e2b8e2e6dbe7989f38ea5aa9831bfba9597b26",
     "scripts/verify-ui-phase2-data-quality-c.mjs": "a5022038047c8914578a74310af96cbe4063229dbf72a81f0f3d82a6056fb8ae",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P55.json": "e4816811798949e12750b9993b37c872582a9bed0a7045a8ac9361ee2c00418f",
     "scripts/verify-ui-phase2-governance-c.mjs": "601087302a527aa19c27decca6752c4f3b6c98ffdfb55a634bba4cd3d9b3a614",
@@ -555,9 +555,9 @@
     "tests/unit/ui-phase2-p58-action-review.test.mjs": "9d8f8c1c97bec57a3f26ebc6aca25f2d0ffb4a87798cfa7173ff1e8557e059f5",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P59.json": "fe2cc20e36b60d0bf11abb6c32d131d763ecab15377339b6f02b96dec213c228",
     "tests/unit/ui-phase2-p59-action-review.test.mjs": "258002b58d77f27177a5a2efa6a4b2a4adf6f66f977ea656e91e7f018d3f4b91",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P60.json": "a445c9dcecaf13c2db4fd291f608156cff1ee0a27000a7d44f225df8b771a872",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P60.json": "1713176e49836c0aadc1b18c6fd2af5d81d3bee3f40c08e6b6a1bed6f68bf5fc",
     "tests/unit/ui-phase2-p60-action-review.test.mjs": "e8f136322989684a16a3a7817c7d191aad657e33f5996a4f106ce22772d65248",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P61.json": "e8ae2d3928773346902a8cbf3472b0979d5b87b34317da9d4c49c12f81744013",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P61.json": "95328f9096b2e11ad90a391c8b5075526f7710d062f967b281f242914a6bc190",
     "tests/unit/ui-phase2-p61-action-review.test.mjs": "13917fe4ac69e2b6dd497f1268267ea01908a7cca5eda7ca6c1a10814c7ba58e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P62.json": "7be284cd008a75e48bca574f4c81100d08a6403e708bd9de36feb24f630862a2",
     "tests/unit/ui-phase2-p62-action-review.test.mjs": "00f1e93e8e2fe8fedffaa7abecb43e395b07b9c4664ad08ae3a9a44877022dfe",
@@ -597,9 +597,9 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "1b73dc9bf3ae8ede7d3b94faba9d6b480d2265437f4f9b9b4fdc12f9c39343c5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "ec432a9be886d13c8141f3784da440c5d1f3552b417b6a7ae2278288556a34cb",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "7fbacb6b0b1e2a3cf5d33dda101e9941f5e86c8c94d39fe950f61d30f05117ce",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "0c3910045e95ae250a7f7e8f237f1a32bff0e33ab22eeaedd8115c3b2debdddb",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "728bf0bc631016cba563a4c8ad95889a99f7128ba33fb4a05f7f951e70a5c9fa",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "948d51bf073067b59c4d5d12a8725d57dc7fa90f96a474b96abdce5b3ee8cb37",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "0e90768843ea8d1fa04e4d529781a68435ef6268df6ea2a9d490fe363df3a1b9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "bc3d86437f8cd0c435d20820b0453efa7201c8305e95b1a3081fdbfb10a3d61d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "cf4c831ad6c7059780ea74377fd52ef4e90b374de610edd12f05e1be2fb954f0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "d56f08cd29e0f343c6c984f1f3c3e6e7e2405233957be0617696e4e91a459fa4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "75af5b069feaa12a5e14eb8e4e26514cadd3eb4452733004337b673736d1380e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
@@ -608,8 +608,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "9e605fdc8c12403e1e2f29b8cb73ade86dd81e8c3d96bbe5b26f9e3f08938339",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "f695f577bbfe3f52ac3263874cb7ad235ba4ecb7e8fa37499daa892b5392299f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "3a9f0143f7b78a76d81ef36a3a290bcd55197d74e0fc116ea31f2f9fa41e69c4",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "1636ba8b1e8ee5cac64b9097d54838c330591ad64d33bc841a8ffcf731deab74",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "053ca2f35ff0e6c09c964671af9c76203f03b10b1dff2e870e0e7d9b94a78533",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "1d037ef6720eb6bf4230e6e7f36dad5086c2580f1fee57c182e7d7cfe4d7abfd",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "71649dd677697325648200b80d5a49d26ef798e311b072d2bd7bed2e20208c22",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "09ee27c2a5bf18a101a88ad58f42eb4cf057a1978ed21efc81f7e59471e097aa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "f20c35839e97d775cd5dbc2ecb284ad7a1383c720e07ccf1909084be25577838",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "c0364bb11b10dc41efca32ebc9b8dec8d3131a096b426d9820f647b444bff92b",
@@ -629,9 +629,9 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "24ac7c62938906bbc19509db3421df39e56cc1b21a714defd153114fa6a4e783",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "14d8f23dafcda1a8c4777327e70a989a34f208fbd7a56785df0cc82ce6eaa4e3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "6a648fe4dbbff3bb60dd991ffe32af97a6552095613d76ef35c85cdece6ae91c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "79d4020e2d6c74c44545316cc8f6838cf1da4396ca1528d940a11135ce6b207e",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "8db16cf917520fa439d33b4b1f1c9f352d934ead55ee076c78daac439636f5d6",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "49007854be666b99e204721344df773f50621539b3b977b4779fa04890280ac2",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "bdd005662a13ea771e2f46ae430040b452d4df48df904838823702428b64dca9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "62f68056937185ab592f755f4481cb3d11082a754fc1fcec5dc8e65f6e1f064e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "242f27618e2b314c7ba6aa8b7cc3873a9c037f34fdf99b1a477ef70c8cff19a0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "03ef86da619bd15bca7def3874da6f6b974170d9110ef00a1d615c24c66122e8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "fe30eef2edfe610323d19a8a22724139df273a9d9ce09b26e4f0a12225983461",
@@ -643,8 +643,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "ba2a5d5d4155e3aa10cc4d7713167a6d0e3fa538cb99c19a6434d7f1de00a4d6",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "f5c8adcf83981edea27b9088e97b7ecba9d7153dc6c61847919a09d36ae8a50b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "171d9e09f0a49a2ef6abf0714256d394870c6f7ad510e7320767a6329276c33f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "5eda7a24e776cdd72336d1ef23433570dc6f856aa07c6b9c639dc74b0c285123",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "64a12e0759f7c35565dc469d2b4293324dcf547784d6e535d9cd52eac5755eb0",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "903952e96e318175e150f0d924fe84a186b32b39d09269d5c1d239757b8c8970",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "00cc26eb337479d306cddc84d7b252189fb10ecdf5868f41277d350dcb20b9f2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "4643301cd84bf55cb906ce4d6f9691e5faa77b5c57581a79f5a979f0ecbe1415",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "638bc66ddda804f5022476e6fe5bb8dab6668ec434aadfb36af6022134ffac36",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "97bfa7b985c4245c83f2bb86c2719766431d075601a3dc57219dafcf6787ed01",
@@ -666,12 +666,12 @@
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1749,
+    "currentSourceCandidates": 1751,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 778,
-    "oldOnlyIdentities": 506,
+    "newSourceIdentities": 786,
+    "oldOnlyIdentities": 512,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1585,
+    "explicitlyGroupedSourceSites": 1587,
     "semanticGroups": 1302,
     "routeActions": 1069,
     "wiringGroups": 120,
@@ -1327,7 +1327,7 @@
       "id": "P16",
       "path": "/opportunities/start",
       "title": "创建选品",
-      "oldStaticAssociatedCandidates": 40,
+      "oldStaticAssociatedCandidates": 39,
       "review": {
         "pageId": "P16",
         "actionApproval": "pending-user-review",
@@ -1795,12 +1795,12 @@
       "id": "P26",
       "path": "/notifications",
       "title": "通知中心",
-      "oldStaticAssociatedCandidates": 55,
+      "oldStaticAssociatedCandidates": 50,
       "review": {
         "pageId": "P26",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 23,
+        "sourceSites": 25,
         "semanticGroups": 19,
         "routeActions": 17,
         "wiringGroups": 2,
@@ -3289,7 +3289,7 @@
           "callerFiles": 1,
           "localModelBindings": 10,
           "reviewedInputBindings": 0,
-          "sourceCallerContainers": 5,
+          "sourceCallerContainers": 6,
           "callerContainers": 0,
           "consumerVariants": 0,
           "runtimeAcceptance": "unproven"
@@ -4521,7 +4521,7 @@
       "pageId": "P26",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 23,
+      "sourceSites": 25,
       "semanticGroups": 19,
       "routeActions": 17,
       "wiringGroups": 2,
@@ -5432,7 +5432,7 @@
         "callerFiles": 1,
         "localModelBindings": 10,
         "reviewedInputBindings": 0,
-        "sourceCallerContainers": 5,
+        "sourceCallerContainers": 6,
         "callerContainers": 0,
         "consumerVariants": 0,
         "runtimeAcceptance": "unproven"
@@ -6331,7 +6331,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 57,
+          "line": 61,
           "jsonPointer": null
         }
       ],
@@ -6358,7 +6358,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 58,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -6390,7 +6390,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 59,
+          "line": 63,
           "jsonPointer": null
         }
       ],
@@ -6430,7 +6430,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 60,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -6470,7 +6470,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 61,
+          "line": 65,
           "jsonPointer": null
         }
       ],
@@ -6506,7 +6506,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 62,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -6521,7 +6521,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#fe72f1f58d04daa7.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 443,
+      "line": 529,
       "kind": "control",
       "label": "管理模板",
       "conditions": [
@@ -6542,7 +6542,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 21,
+          "line": 25,
           "jsonPointer": null
         }
       ],
@@ -6557,7 +6557,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e11c8bef75450e78.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 446,
+      "line": 532,
       "kind": "control",
       "label": "＋ 发起审批",
       "conditions": [
@@ -6578,7 +6578,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 22,
+          "line": 26,
           "jsonPointer": null
         }
       ],
@@ -6593,7 +6593,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21acc635baa945ea.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 447,
+      "line": 533,
       "kind": "control",
       "label": "配置第一个模板",
       "conditions": [
@@ -6614,7 +6614,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 23,
+          "line": 27,
           "jsonPointer": null
         }
       ],
@@ -6629,7 +6629,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 454,
+      "line": 540,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -6650,7 +6650,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 24,
+          "line": 28,
           "jsonPointer": null
         }
       ],
@@ -6665,141 +6665,13 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#fa9213ee10c4bdaa.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 501,
+      "line": 587,
       "kind": "control",
       "label": "刷新最新状态",
       "conditions": [
         {
           "directive": "v-else-if",
           "expression": "\n        ['error', 'forbidden', 'expired', 'rate_limited', 'version_conflict'].includes(state)\n      "
-        }
-      ],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 25,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-LOAD",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 503,
-      "kind": "event-binding",
-      "label": "",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        }
-      ],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 26,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-QUEUE-FORWARD",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 524,
-      "kind": "control",
-      "label": "关闭提示",
-      "conditions": [
-        {
-          "directive": "v-else-if",
-          "expression": "detailNotice"
-        }
-      ],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 27,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-NOTICE-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c4a35037858480fb.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 527,
-      "kind": "control",
-      "label": "上一页",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "total > pageSize"
-        }
-      ],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 28,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-PAGE",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a0fa8a0a8fe3a4f1.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 529,
-      "kind": "control",
-      "label": "下一页",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "total > pageSize"
         }
       ],
       "staticRouteIds": [
@@ -6817,21 +6689,21 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-PAGE",
+          "actionId": "AN-A-LOAD",
           "kind": "read"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1e3aa75fca121f17.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 531,
-      "kind": "dialog-definition",
-      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selecte",
+      "line": 589,
+      "kind": "event-binding",
+      "label": "",
       "conditions": [
         {
-          "directive": "v-if",
-          "expression": "selected"
+          "directive": "v-else",
+          "expression": ""
         }
       ],
       "staticRouteIds": [
@@ -6849,21 +6721,21 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "D-AN-APPROVAL",
+          "actionId": "AN-A-QUEUE-FORWARD",
           "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1dba0cb0b0844a3c.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 531,
-      "kind": "event-binding",
-      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selecte",
+      "line": 610,
+      "kind": "control",
+      "label": "关闭提示",
       "conditions": [
         {
-          "directive": "v-if",
-          "expression": "selected"
+          "directive": "v-else-if",
+          "expression": "detailNotice"
         }
       ],
       "staticRouteIds": [
@@ -6881,21 +6753,21 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-CLOSE-FOCUS",
+          "actionId": "AN-A-NOTICE-CLOSE",
           "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#ed72f74cfb2fdb73.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c4a35037858480fb.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 540,
+      "line": 613,
       "kind": "control",
-      "label": "关闭审批详情",
+      "label": "上一页",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "selected"
+          "expression": "total > pageSize"
         }
       ],
       "staticRouteIds": [
@@ -6913,6 +6785,134 @@
       "semanticReviews": [
         {
           "pageId": "P25",
+          "actionId": "AN-A-PAGE",
+          "kind": "read"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a0fa8a0a8fe3a4f1.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 615,
+      "kind": "control",
+      "label": "下一页",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "total > pageSize"
+        }
+      ],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 33,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-PAGE",
+          "kind": "read"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1e3aa75fca121f17.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 617,
+      "kind": "dialog-definition",
+      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selecte",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 34,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "D-AN-APPROVAL",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1dba0cb0b0844a3c.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 617,
+      "kind": "event-binding",
+      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selecte",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 35,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-CLOSE-FOCUS",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#ed72f74cfb2fdb73.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 626,
+      "kind": "control",
+      "label": "关闭审批详情",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 36,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
           "actionId": "AN-A-CLOSE-FOCUS",
           "kind": "local"
         }
@@ -6921,7 +6921,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#618d905faa5eb354.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 545,
+      "line": 631,
       "kind": "control",
       "label": "查看 {{ selected.decision_context.resource.label }} →",
       "conditions": [
@@ -6942,7 +6942,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 33,
+          "line": 37,
           "jsonPointer": null
         }
       ],
@@ -6957,7 +6957,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5201b6777ca22abe.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 551,
+      "line": 637,
       "kind": "control",
       "label": "返回通知中心",
       "conditions": [
@@ -6978,7 +6978,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 34,
+          "line": 38,
           "jsonPointer": null
         }
       ],
@@ -6993,7 +6993,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#861502a87911f91f.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 678,
+      "line": 764,
       "kind": "control",
       "label": "{{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }}",
       "conditions": [
@@ -7022,7 +7022,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 35,
+          "line": 39,
           "jsonPointer": null
         }
       ],
@@ -7037,7 +7037,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#86c54779008e879e.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 774,
+      "line": 860,
       "kind": "control",
       "label": "驳回",
       "conditions": [
@@ -7058,7 +7058,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 36,
+          "line": 40,
           "jsonPointer": null
         }
       ],
@@ -7073,7 +7073,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#3cfff8f4c2f74d66.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 776,
+      "line": 862,
       "kind": "control",
       "label": "批准并流转",
       "conditions": [
@@ -7094,7 +7094,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 37,
+          "line": 41,
           "jsonPointer": null
         }
       ],
@@ -7109,7 +7109,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 781,
+      "line": 867,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -7126,7 +7126,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 38,
+          "line": 42,
           "jsonPointer": null
         }
       ],
@@ -7141,117 +7141,9 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21471c244422699b.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 802,
+      "line": 888,
       "kind": "dialog-definition",
       "label": "新建审批模板草稿",
-      "conditions": [],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 39,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "D-AN-TEMPLATE",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e5e612ec729070f4.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 802,
-      "kind": "event-binding",
-      "label": "新建审批模板草稿",
-      "conditions": [],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 40,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a85a9e0937dede29.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 807,
-      "kind": "form-event",
-      "label": "新建审批模板草稿 模板名称 资源类型 任务 机会决策 节点名称 处理时限（分钟） 技术配置：审批人与超时接收人 审批人 请选择当前工作区成员 {{ member.label }} 超时接收人 请选择当前工作区成员 {{ member.lab",
-      "conditions": [],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 41,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-SUBMIT",
-          "kind": "write"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5f8fcd4eeb82af58.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 825,
-      "kind": "control",
-      "label": "技术配置：审批人与超时接收人",
-      "conditions": [],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 42,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-FIELDS",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#33ba0693d19eb13e.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 844,
-      "kind": "control",
-      "label": "取消",
       "conditions": [],
       "staticRouteIds": [
         "P25"
@@ -7268,17 +7160,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-CLOSE",
-          "kind": "local"
+          "actionId": "D-AN-TEMPLATE",
+          "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#19071354ae303ee4.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e5e612ec729070f4.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 845,
-      "kind": "control",
-      "label": "保存草稿",
+      "line": 888,
+      "kind": "event-binding",
+      "label": "新建审批模板草稿",
       "conditions": [],
       "staticRouteIds": [
         "P25"
@@ -7295,6 +7187,114 @@
       "semanticReviews": [
         {
           "pageId": "P25",
+          "actionId": "AN-A-TEMPLATE-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a85a9e0937dede29.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 893,
+      "kind": "form-event",
+      "label": "新建审批模板草稿 模板名称 资源类型 任务 机会决策 节点名称 处理时限（分钟） 技术配置：审批人与超时接收人 审批人 请选择当前工作区成员 {{ member.label }} 超时接收人 请选择当前工作区成员 {{ member.lab",
+      "conditions": [],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 45,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-TEMPLATE-SUBMIT",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5f8fcd4eeb82af58.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 911,
+      "kind": "control",
+      "label": "技术配置：审批人与超时接收人",
+      "conditions": [],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 46,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-TEMPLATE-FIELDS",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#33ba0693d19eb13e.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 930,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 47,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-TEMPLATE-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#19071354ae303ee4.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 931,
+      "kind": "control",
+      "label": "保存草稿",
+      "conditions": [],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 48,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
           "actionId": "AN-A-TEMPLATE-SUBMIT",
           "kind": "write"
         }
@@ -7303,7 +7303,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c02233bb6662b1ab.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 854,
+      "line": 940,
       "kind": "control",
       "label": "发布",
       "conditions": [
@@ -7324,7 +7324,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 45,
+          "line": 49,
           "jsonPointer": null
         }
       ],
@@ -7339,117 +7339,9 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e6808d6bed4a59f1.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 858,
+      "line": 944,
       "kind": "dialog-definition",
       "label": "发布审批模板",
-      "conditions": [],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 46,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "D-AN-PUBLISH",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#27fc15dca539791e.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 858,
-      "kind": "event-binding",
-      "label": "发布审批模板",
-      "conditions": [],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 47,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-PUBLISH-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#132a2f4c870f90da.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 859,
-      "kind": "form-event",
-      "label": "发布审批模板 将发布“ {{ publishTarget?.name }} ”第 {{ publishTarget?.current_version }} 版。新审批会锁定该版本，历史审批不会被改写。 发布原因 返回 确认发布",
-      "conditions": [],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 48,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-PUBLISH-SUBMIT",
-          "kind": "write"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#227faf6f0cfb499d.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 875,
-      "kind": "control",
-      "label": "返回",
-      "conditions": [],
-      "staticRouteIds": [
-        "P25"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 49,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-PUBLISH-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#d5e7aa36e90f904e.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 876,
-      "kind": "control",
-      "label": "确认发布",
       "conditions": [],
       "staticRouteIds": [
         "P25"
@@ -7466,17 +7358,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-PUBLISH-SUBMIT",
-          "kind": "write"
+          "actionId": "D-AN-PUBLISH",
+          "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5eec193b0a9499f7.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#27fc15dca539791e.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 880,
-      "kind": "dialog-definition",
-      "label": "发起审批",
+      "line": 944,
+      "kind": "event-binding",
+      "label": "发布审批模板",
       "conditions": [],
       "staticRouteIds": [
         "P25"
@@ -7493,17 +7385,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "D-AN-REQUEST",
-          "kind": "wiring"
+          "actionId": "AN-A-PUBLISH-CLOSE",
+          "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a05288e1768f6320.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#132a2f4c870f90da.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 880,
-      "kind": "event-binding",
-      "label": "发起审批",
+      "line": 945,
+      "kind": "form-event",
+      "label": "发布审批模板 将发布“ {{ publishTarget?.name }} ”第 {{ publishTarget?.current_version }} 版。新审批会锁定该版本，历史审批不会被改写。 发布原因 返回 确认发布",
       "conditions": [],
       "staticRouteIds": [
         "P25"
@@ -7520,17 +7412,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-REQUEST-CLOSE",
-          "kind": "local"
+          "actionId": "AN-A-PUBLISH-SUBMIT",
+          "kind": "write"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c352b89a4148f40.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#227faf6f0cfb499d.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 881,
-      "kind": "form-event",
-      "label": "发起审批 已发布模板 请选择 {{ t.name }} 关联类型： {{ resourceText(selectedTemplate.resource_type) }} 。资源类型由模板锁定，不能单独改写。 技术配置：关联资源编号 资源编号",
+      "line": 961,
+      "kind": "control",
+      "label": "返回",
       "conditions": [],
       "staticRouteIds": [
         "P25"
@@ -7547,17 +7439,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-REQUEST-SUBMIT",
-          "kind": "write"
+          "actionId": "AN-A-PUBLISH-CLOSE",
+          "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#bfb5c0c0da487c90.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#d5e7aa36e90f904e.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 897,
+      "line": 962,
       "kind": "control",
-      "label": "技术配置：关联资源编号",
+      "label": "确认发布",
       "conditions": [],
       "staticRouteIds": [
         "P25"
@@ -7574,17 +7466,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-REQUEST-FIELDS",
-          "kind": "local"
+          "actionId": "AN-A-PUBLISH-SUBMIT",
+          "kind": "write"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#74e09fbb8250bf10.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5eec193b0a9499f7.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 902,
-      "kind": "control",
-      "label": "取消",
+      "line": 966,
+      "kind": "dialog-definition",
+      "label": "发起审批",
       "conditions": [],
       "staticRouteIds": [
         "P25"
@@ -7601,6 +7493,114 @@
       "semanticReviews": [
         {
           "pageId": "P25",
+          "actionId": "D-AN-REQUEST",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a05288e1768f6320.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 966,
+      "kind": "event-binding",
+      "label": "发起审批",
+      "conditions": [],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 56,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-REQUEST-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c352b89a4148f40.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 967,
+      "kind": "form-event",
+      "label": "发起审批 已发布模板 请选择 {{ t.name }} 关联类型： {{ resourceText(selectedTemplate.resource_type) }} 。资源类型由模板锁定，不能单独改写。 技术配置：关联资源编号 资源编号",
+      "conditions": [],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 57,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-REQUEST-SUBMIT",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#bfb5c0c0da487c90.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 983,
+      "kind": "control",
+      "label": "技术配置：关联资源编号",
+      "conditions": [],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 58,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-REQUEST-FIELDS",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#74e09fbb8250bf10.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 988,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [],
+      "staticRouteIds": [
+        "P25"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 59,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
           "actionId": "AN-A-REQUEST-CLOSE",
           "kind": "local"
         }
@@ -7609,7 +7609,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#0afc0196f9054ef3.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 903,
+      "line": 989,
       "kind": "control",
       "label": "发起",
       "conditions": [],
@@ -7621,7 +7621,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 56,
+          "line": 60,
           "jsonPointer": null
         }
       ],
@@ -26248,7 +26248,7 @@
     {
       "candidateId": "apps/web/src/components/NavigationShell.vue#827ec3c5575d94f5.1",
       "file": "apps/web/src/components/NavigationShell.vue",
-      "line": 528,
+      "line": 529,
       "kind": "control",
       "label": "当前范围 平台全局 {{ contextName(guard?.organization_name, \"未命名组织\") }} · {{ contextName(guard?.workspace_name, \"默认工作区\") }}",
       "conditions": [
@@ -26337,7 +26337,7 @@
     {
       "candidateId": "apps/web/src/components/NavigationShell.vue#3a4be4a53966fde8.1",
       "file": "apps/web/src/components/NavigationShell.vue",
-      "line": 553,
+      "line": 554,
       "kind": "control",
       "label": "{{ item.label }}",
       "conditions": [
@@ -26430,7 +26430,7 @@
     {
       "candidateId": "apps/web/src/components/NavigationShell.vue#155e2256621bdcb3.1",
       "file": "apps/web/src/components/NavigationShell.vue",
-      "line": 574,
+      "line": 575,
       "kind": "control",
       "label": "{{ item.label }}",
       "conditions": [
@@ -26519,7 +26519,7 @@
     {
       "candidateId": "apps/web/src/components/NavigationShell.vue#0b2e86222c168adc.1",
       "file": "apps/web/src/components/NavigationShell.vue",
-      "line": 580,
+      "line": 581,
       "kind": "control",
       "label": "更多",
       "conditions": [
@@ -26604,7 +26604,7 @@
     {
       "candidateId": "apps/web/src/components/NavigationShell.vue#8c3e23399022ee54.1",
       "file": "apps/web/src/components/NavigationShell.vue",
-      "line": 591,
+      "line": 592,
       "kind": "control",
       "label": "{{ theme.name }} {{ activeTheme === theme.id ? \"当前主题 · \" : \"\" }} {{ theme.caption }}",
       "conditions": [
@@ -26693,7 +26693,7 @@
     {
       "candidateId": "apps/web/src/components/NavigationShell.vue#f8690b21af426414.1",
       "file": "apps/web/src/components/NavigationShell.vue",
-      "line": 606,
+      "line": 607,
       "kind": "control",
       "label": "更多外观设置",
       "conditions": [
@@ -26778,7 +26778,7 @@
     {
       "candidateId": "apps/web/src/components/NavigationShell.vue#c5cd954168e369ca.1",
       "file": "apps/web/src/components/NavigationShell.vue",
-      "line": 611,
+      "line": 612,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -26858,7 +26858,7 @@
     {
       "candidateId": "apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1",
       "file": "apps/web/src/components/NavigationShell.vue",
-      "line": 611,
+      "line": 612,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -27024,7 +27024,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#9b4302ca61b627ec.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 481,
+      "line": 548,
       "kind": "control",
       "label": "通知偏好",
       "conditions": [],
@@ -27036,7 +27036,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 63,
+          "line": 67,
           "jsonPointer": null
         }
       ],
@@ -27051,7 +27051,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#fd5620d41b8a74b5.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 482,
+      "line": 549,
       "kind": "control",
       "label": "全部已读",
       "conditions": [],
@@ -27063,7 +27063,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 64,
+          "line": 68,
           "jsonPointer": null
         }
       ],
@@ -27078,7 +27078,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 488,
+      "line": 555,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -27099,7 +27099,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 65,
+          "line": 69,
           "jsonPointer": null
         }
       ],
@@ -27114,7 +27114,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#bfefb7250e532e63.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 507,
+      "line": 574,
       "kind": "control",
       "label": "{{ x.t }}",
       "conditions": [
@@ -27131,7 +27131,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 66,
+          "line": 70,
           "jsonPointer": null
         }
       ],
@@ -27146,7 +27146,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#cafe657338aefab6.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 521,
+      "line": 588,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -27158,7 +27158,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 67,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -27173,7 +27173,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#106ed8618827fe65.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 525,
+      "line": 592,
       "kind": "control",
       "label": "{{ item.t }}",
       "conditions": [
@@ -27190,7 +27190,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 68,
+          "line": 72,
           "jsonPointer": null
         }
       ],
@@ -27205,7 +27205,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#6a22c249121aeb4d.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 560,
+      "line": 627,
       "kind": "control",
       "label": "重新加载",
       "conditions": [
@@ -27222,7 +27222,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 69,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -27237,7 +27237,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#d953dfdf4cb40b85.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 567,
+      "line": 634,
       "kind": "control",
       "label": "{{ label(item.category).slice(0, 1) }} {{ item.title }} {{ displayBody(item) }} {{ time(item.created_at) }} {{ item.read",
       "conditions": [
@@ -27258,7 +27258,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 70,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -27273,141 +27273,13 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#01c7bba15fa9f7ce.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 589,
+      "line": 656,
       "kind": "control",
       "label": "上一页",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "total > pageSize"
-        }
-      ],
-      "staticRouteIds": [
-        "P26"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 71,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P26",
-          "actionId": "AN-N-PAGE",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/NotificationCenter.vue#bd5dbf08f126da53.1",
-      "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 591,
-      "kind": "control",
-      "label": "下一页",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "total > pageSize"
-        }
-      ],
-      "staticRouteIds": [
-        "P26"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 72,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P26",
-          "actionId": "AN-N-PAGE",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1",
-      "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 593,
-      "kind": "dialog-definition",
-      "label": "消息详情",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "selected"
-        }
-      ],
-      "staticRouteIds": [
-        "P26"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 73,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P26",
-          "actionId": "AN-N-DETAIL-WIRING",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/NotificationCenter.vue#a81227b33b62c0a9.1",
-      "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 593,
-      "kind": "event-binding",
-      "label": "消息详情",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "selected"
-        }
-      ],
-      "staticRouteIds": [
-        "P26"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 74,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P26",
-          "actionId": "AN-N-CLOSE-DETAIL",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/NotificationCenter.vue#24417e6753ed4eb7.1",
-      "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 600,
-      "kind": "control",
-      "label": "关闭消息详情",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "selected"
         }
       ],
       "staticRouteIds": [
@@ -27425,7 +27297,169 @@
       "semanticReviews": [
         {
           "pageId": "P26",
+          "actionId": "AN-N-PAGE",
+          "kind": "read"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#bd5dbf08f126da53.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 658,
+      "kind": "control",
+      "label": "下一页",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "total > pageSize"
+        }
+      ],
+      "staticRouteIds": [
+        "P26"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 76,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P26",
+          "actionId": "AN-N-PAGE",
+          "kind": "read"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#83c14e43da4a0513.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 660,
+      "kind": "dialog-definition",
+      "label": "消息详情",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 77,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P26",
+          "actionId": "AN-N-DETAIL-WIRING",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#e6cc1debf33762b0.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 660,
+      "kind": "event-binding",
+      "label": "消息详情",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 78,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P26",
           "actionId": "AN-N-CLOSE-DETAIL",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#24417e6753ed4eb7.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 668,
+      "kind": "control",
+      "label": "关闭消息详情",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [
+        "P26"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 79,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P26",
+          "actionId": "AN-N-CLOSE-DETAIL",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 705,
+      "kind": "control",
+      "label": "查看本次操作编号",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        },
+        {
+          "directive": "v-if",
+          "expression": "detailError"
+        },
+        {
+          "directive": "v-if",
+          "expression": "detailErrorRequestId"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 90,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P26",
+          "actionId": "AN-N-TECH-RESOURCE",
           "kind": "local"
         }
       ]
@@ -27433,7 +27467,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#9c8237833082965f.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 627,
+      "line": 710,
       "kind": "control",
       "label": "返回来源： {{ resourceLabel(selected.resource_type) }}",
       "conditions": [
@@ -27454,7 +27488,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 76,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -27469,7 +27503,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#d0ef81cb0803db4e.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 630,
+      "line": 713,
       "kind": "control",
       "label": "开始处理",
       "conditions": [
@@ -27490,7 +27524,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 77,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -27505,7 +27539,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#7490571390181453.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 638,
+      "line": 721,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -27526,7 +27560,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 78,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -27541,7 +27575,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#696dcabbd8c2d73e.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 646,
+      "line": 729,
       "kind": "control",
       "label": "重新打开",
       "conditions": [
@@ -27562,7 +27596,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 79,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -27577,7 +27611,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 654,
+      "line": 737,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -27598,7 +27632,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 80,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -27611,21 +27645,19 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/NotificationCenter.vue#b332799077351299.1",
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#3f47655822db88ed.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 671,
+      "line": 754,
       "kind": "dialog-definition",
       "label": "通知偏好",
       "conditions": [],
-      "staticRouteIds": [
-        "P26"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 81,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -27638,21 +27670,19 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/NotificationCenter.vue#bcb7add4c71c18a6.1",
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#e2f8e1803ac77239.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 671,
+      "line": 754,
       "kind": "event-binding",
       "label": "通知偏好",
       "conditions": [],
-      "staticRouteIds": [
-        "P26"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 82,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -27665,21 +27695,19 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/NotificationCenter.vue#72947e74a11b9abc.1",
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#8aeeea8a550ba999.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 677,
+      "line": 761,
       "kind": "form-event",
-      "label": "通知偏好 站内通知 邮件通知（服务未接入，暂不可用） 任务事件 审批事件 竞品事件 邮件渠道固定关闭；接入并验收真实 Provider 前不会产生外部发送。 取消 保存",
+      "label": "通知偏好 站内通知 邮件通知（服务未接入，暂不可用） 任务事件 审批事件 竞品事件 邮件渠道固定关闭；接入并验收真实 Provider 前不会产生外部发送。 {{ preferencesError }} 查看本次操作编号 {{ prefer",
       "conditions": [],
-      "staticRouteIds": [
-        "P26"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 83,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -27692,9 +27720,43 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#8cb2961885ab7113.2",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 782,
+      "kind": "control",
+      "label": "查看本次操作编号",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "preferencesError"
+        },
+        {
+          "directive": "v-if",
+          "expression": "preferencesErrorRequestId"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 91,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P26",
+          "actionId": "AN-N-TECH-RESOURCE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#25755513ca77e550.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 688,
+      "line": 787,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -27706,7 +27768,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 84,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -27721,7 +27783,7 @@
     {
       "candidateId": "apps/web/src/components/NotificationCenter.vue#0285caea2e8607bf.1",
       "file": "apps/web/src/components/NotificationCenter.vue",
-      "line": 689,
+      "line": 788,
       "kind": "control",
       "label": "保存",
       "conditions": [],
@@ -27733,7 +27795,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 85,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -28202,7 +28264,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#05407b8a7159149a.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 573,
+      "line": 648,
       "kind": "form-event",
       "label": "组织内部编号 {{ refreshing ? \"读取中…\" : \"读取\" }}",
       "conditions": [],
@@ -28229,7 +28291,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#88a9882a80ac28a2.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 581,
+      "line": 656,
       "kind": "control",
       "label": "{{ refreshing ? \"读取中…\" : \"读取\" }}",
       "conditions": [],
@@ -28256,7 +28318,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#32b3ac036c571c07.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 592,
+      "line": 675,
       "kind": "control",
       "label": "复制密钥",
       "conditions": [
@@ -28288,7 +28350,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#0b5f3917e5414006.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 593,
+      "line": 676,
       "kind": "control",
       "label": "我已安全保存",
       "conditions": [
@@ -28318,7 +28380,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#217f0846e7bba1ee.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 608,
+      "line": 691,
       "kind": "control",
       "label": "本次操作追踪",
       "conditions": [
@@ -28352,7 +28414,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#e4c0454be34c0156.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 611,
+      "line": 694,
       "kind": "control",
       "label": "{{ refreshing ? \"读取中…\" : \"重新读取列表\" }}",
       "conditions": [
@@ -28382,7 +28444,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 618,
+      "line": 701,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -28418,7 +28480,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 659,
+      "line": 742,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -28454,7 +28516,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#5367bd616a3abe62.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 662,
+      "line": 745,
       "kind": "control",
       "label": "重试",
       "conditions": [
@@ -28486,7 +28548,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#378899e48c4d8c4e.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 667,
+      "line": 750,
       "kind": "control",
       "label": "接口访问账号 {{ data.summary.clients.total }} {{ data.summary.clients.active }} 个可用 · {{ data.summary.clients.expired }} 个过期",
       "conditions": [
@@ -28516,7 +28578,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#e16baed7fd7574cb.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 680,
+      "line": 763,
       "kind": "control",
       "label": "事件回调地址 {{ data.summary.webhooks.total }} {{ data.summary.webhooks.active }} 个启用",
       "conditions": [
@@ -28546,7 +28608,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#b224f20b7d8e3bc6.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 690,
+      "line": 773,
       "kind": "control",
       "label": "投递记录 {{ data.summary.deliveries.total }} {{ data.summary.deliveries.retry_scheduled }} 个重试 · {{ data.summary.deliveries.",
       "conditions": [
@@ -28576,7 +28638,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#4fe0f29d19fbaf47.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 705,
+      "line": 788,
       "kind": "dialog-component-call",
       "label": "新增连接 {{ activeView === \"clients\" ? \"创建接口访问账号\" : \"创建事件回调地址\" }} 组织编号、名称和变更原因必填；所有写入均使用幂等键并记录审计。 组织内部编号 填写目标组织 UUID；与上方组织读取",
       "conditions": [
@@ -28610,7 +28672,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#b70e50f696b891f1.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 791,
+      "line": 874,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -28654,7 +28716,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7a625f6edefd5043.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 813,
+      "line": 896,
       "kind": "control",
       "label": "{{ actionBusy ? \"提交中…\" : activeView === \"clients\" ? \"创建接口访问账号\" : \"创建事件回调地址\" }}",
       "conditions": [
@@ -28690,7 +28752,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#a67ea3327ba9afd7.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 836,
+      "line": 919,
       "kind": "control",
       "label": "{{ refreshing ? \"刷新中…\" : \"刷新\" }}",
       "conditions": [
@@ -28722,7 +28784,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1a48a72d882d501b.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 840,
+      "line": 923,
       "kind": "form-event",
       "label": "搜索 状态 {{ option[1] }} 排序 {{ option[1] }} 每页 10 20 50 应用 重置",
       "conditions": [
@@ -28754,7 +28816,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#cec60f4bd63b9b5e.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 868,
+      "line": 951,
       "kind": "control",
       "label": "应用",
       "conditions": [
@@ -28786,7 +28848,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#2f1b49bdefe2e793.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 869,
+      "line": 952,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -28818,7 +28880,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#2c7db35d039ef2f4.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 875,
+      "line": 958,
       "kind": "control",
       "label": "清除筛选",
       "conditions": [
@@ -28854,7 +28916,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#f8b804e268ceefea.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 915,
+      "line": 998,
       "kind": "control",
       "label": "轮换",
       "conditions": [
@@ -28898,7 +28960,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c4ff4af0e8fd8d3.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 916,
+      "line": 999,
       "kind": "control",
       "label": "撤销",
       "conditions": [
@@ -28942,7 +29004,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.3",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 924,
+      "line": 1007,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -28982,7 +29044,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.4",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 965,
+      "line": 1048,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -29018,7 +29080,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7510ef03037c8a3a.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 982,
+      "line": 1065,
       "kind": "control",
       "label": "轮换密钥",
       "conditions": [
@@ -29058,7 +29120,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1df8fceeaa98b0b3.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 983,
+      "line": 1066,
       "kind": "control",
       "label": "撤销账号",
       "conditions": [
@@ -29098,7 +29160,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#dd00f77d258cbab6.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1025,
+      "line": 1108,
       "kind": "control",
       "label": "{{ row.status === \"active\" ? \"停用\" : \"启用\" }}",
       "conditions": [
@@ -29138,7 +29200,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1f4e699773a73075.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1027,
+      "line": 1110,
       "kind": "control",
       "label": "测试",
       "conditions": [
@@ -29182,7 +29244,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#861b950a0ddc1651.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1033,
+      "line": 1116,
       "kind": "control",
       "label": "轮换密钥",
       "conditions": [
@@ -29222,7 +29284,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.5",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1038,
+      "line": 1121,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -29262,7 +29324,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.6",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1074,
+      "line": 1157,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -29298,7 +29360,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#3a8f13d630c643d0.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1090,
+      "line": 1173,
       "kind": "control",
       "label": "{{ row.status === \"active\" ? \"停用回调\" : \"启用回调\" }}",
       "conditions": [
@@ -29334,7 +29396,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#aafad6da5f70f220.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1092,
+      "line": 1175,
       "kind": "control",
       "label": "发送测试",
       "conditions": [
@@ -29374,7 +29436,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#861b950a0ddc1651.2",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1098,
+      "line": 1181,
       "kind": "control",
       "label": "轮换密钥",
       "conditions": [
@@ -29410,7 +29472,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#92629450188f4d4f.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1140,
+      "line": 1223,
       "kind": "control",
       "label": "重放",
       "conditions": [
@@ -29454,7 +29516,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.7",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1150,
+      "line": 1233,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -29494,7 +29556,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#1c008f867673db60.8",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1195,
+      "line": 1278,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -29528,7 +29590,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#92629450188f4d4f.2",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1215,
+      "line": 1298,
       "kind": "control",
       "label": "重放",
       "conditions": [
@@ -29568,7 +29630,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#5535b1d4b215afda.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1231,
+      "line": 1314,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -29600,7 +29662,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#266a3696f502c16e.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1237,
+      "line": 1320,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -29632,7 +29694,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#f371f0b36489e592.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1249,
+      "line": 1332,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -29657,7 +29719,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#55ddee7e496796ca.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1249,
+      "line": 1332,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -29682,7 +29744,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#7dff4b4ffb8ff617.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1260,
+      "line": 1343,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -29709,7 +29771,7 @@
     {
       "candidateId": "apps/web/src/components/OpenPlatformCenter.vue#0e765674026efce4.1",
       "file": "apps/web/src/components/OpenPlatformCenter.vue",
-      "line": 1260,
+      "line": 1343,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -32488,7 +32550,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1303,
+      "line": 1361,
       "kind": "control",
       "label": "创建选品 →",
       "conditions": [
@@ -32530,7 +32592,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1305,
+      "line": 1363,
       "kind": "control",
       "label": "管理选品规则",
       "conditions": [
@@ -32572,7 +32634,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1307,
+      "line": 1365,
       "kind": "control",
       "label": "从 ERP 导入",
       "conditions": [
@@ -32618,7 +32680,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1314,
+      "line": 1372,
       "kind": "control",
       "label": "手工添加",
       "conditions": [
@@ -32664,7 +32726,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1326,
+      "line": 1384,
       "kind": "control",
       "label": "← 返回来源列表",
       "conditions": [
@@ -32702,7 +32764,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1332,
+      "line": 1390,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32737,7 +32799,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1357,
+      "line": 1415,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32776,7 +32838,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1368,
+      "line": 1426,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32815,7 +32877,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1381,
+      "line": 1439,
       "kind": "control",
       "label": "运行信息",
       "conditions": [
@@ -32857,7 +32919,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1391,
+      "line": 1449,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32899,7 +32961,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1403,
+      "line": 1461,
       "kind": "control",
       "label": "补证异常时手动处理",
       "conditions": [
@@ -32945,7 +33007,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1406,
+      "line": 1464,
       "kind": "control",
       "label": "采集 Amazon 竞品",
       "conditions": [
@@ -32995,7 +33057,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1413,
+      "line": 1471,
       "kind": "control",
       "label": "采集公开供应商",
       "conditions": [
@@ -33045,7 +33107,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1420,
+      "line": 1478,
       "kind": "control",
       "label": "检查评分规则",
       "conditions": [
@@ -33089,9 +33151,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1425,
+      "line": 1483,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33134,7 +33196,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b391bf25870010b2.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1448,
+      "line": 1506,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33177,7 +33239,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1460,
+      "line": 1518,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33220,7 +33282,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2aa4cc1a9f90b8fd.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1479,
+      "line": 1537,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33263,7 +33325,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1523,
+      "line": 1581,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33298,7 +33360,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1523,
+      "line": 1581,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [
@@ -33333,7 +33395,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1540,
+      "line": 1598,
       "kind": "dialog-definition",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -33371,7 +33433,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1540,
+      "line": 1598,
       "kind": "event-binding",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -33414,7 +33476,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1547,
+      "line": 1605,
       "kind": "form-event",
       "label": "影响预览 批量 {{ batchAction === \"assign\" ? \"指派\" : batchAction === \"archive\" ? \"归档\" : \"复核\" }} 本次仅处理当前结果中已选的 {{ currentPageSele",
       "conditions": [
@@ -33454,7 +33516,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1583,
+      "line": 1641,
       "kind": "control",
       "label": "返回",
       "conditions": [
@@ -33492,7 +33554,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1584,
+      "line": 1642,
       "kind": "control",
       "label": "确认执行",
       "conditions": [
@@ -33530,7 +33592,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#557b69e18caa81e6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1588,
+      "line": 1646,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -33560,7 +33622,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#df416310b2ec158b.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1588,
+      "line": 1646,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -33590,7 +33652,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b74012fbdb739187.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1054,
+      "line": 1104,
       "kind": "dialog-script-call",
       "label": "askAiReviewReason(reasonRequest)",
       "conditions": [],
@@ -33620,7 +33682,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca674a075f274bff.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1081,
+      "line": 1139,
       "kind": "dialog-script-call",
       "label": "askAiReviewReason({ ...reasonRequest, initialValue: notes })",
       "conditions": [],
@@ -53834,7 +53896,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#7895edf33d41a47a.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 638,
+      "line": 645,
       "kind": "control",
       "label": "＋ 新建来源",
       "conditions": [],
@@ -53865,7 +53927,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#3eebd05a35b5e2d1.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 675,
+      "line": 682,
       "kind": "control",
       "label": "再次刷新",
       "conditions": [
@@ -53901,7 +53963,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 677,
+      "line": 684,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -53936,7 +53998,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#de4c1cd1ccf4c8da.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 688,
+      "line": 695,
       "kind": "control",
       "label": "登记第一个来源",
       "conditions": [
@@ -53972,7 +54034,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#27f5c560567881c4.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 696,
+      "line": 703,
       "kind": "control",
       "label": "{{ refreshing ? \"刷新中…\" : \"刷新真实数据\" }}",
       "conditions": [
@@ -54008,7 +54070,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#0da6a9c39b0f685c.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 744,
+      "line": 751,
       "kind": "control",
       "label": "重置",
       "conditions": [
@@ -54044,7 +54106,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#f9d454b64dd4b22a.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 753,
+      "line": 760,
       "kind": "control",
       "label": "清除筛选条件",
       "conditions": [
@@ -54080,7 +54142,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#f8fbe8533c9685db.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 801,
+      "line": 808,
       "kind": "control",
       "label": "编辑",
       "conditions": [
@@ -54114,7 +54176,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#5d4463e03e3aa18b.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 869,
+      "line": 876,
       "kind": "control",
       "label": "编辑来源",
       "conditions": [
@@ -54150,7 +54212,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 879,
+      "line": 886,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -54186,7 +54248,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#83d11b8719b1c99d.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 912,
+      "line": 919,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -54222,7 +54284,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#bd43d7b540116c32.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 913,
+      "line": 920,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -54258,7 +54320,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#51517865bc5117a4.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 916,
+      "line": 923,
       "kind": "event-binding",
       "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeTex",
       "conditions": [
@@ -54288,7 +54350,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d36ecadeb20b9988.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 922,
+      "line": 929,
       "kind": "dialog-definition",
       "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeTex",
       "conditions": [
@@ -54318,7 +54380,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#eb72344b9c9f3d10.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 922,
+      "line": 929,
       "kind": "form-event",
       "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeTex",
       "conditions": [
@@ -54348,7 +54410,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#e03ff4bf86eb6a89.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 939,
+      "line": 946,
       "kind": "control",
       "label": "关闭来源设置编辑",
       "conditions": [
@@ -54384,7 +54446,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#71fedaee68dde679.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 950,
+      "line": 957,
       "kind": "control",
       "label": "{{ index + 1 }} {{ label }}",
       "conditions": [
@@ -54424,7 +54486,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#83ffe5899e1ccfcf.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 962,
+      "line": 969,
       "kind": "control",
       "label": "应用技术模板",
       "conditions": [
@@ -54460,7 +54522,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1331,
+      "line": 1338,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -54504,7 +54566,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#4ba7742e75103fa4.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1336,
+      "line": 1343,
       "kind": "control",
       "label": "上一步",
       "conditions": [
@@ -54544,7 +54606,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d0e6c4e6deaeab8a.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1344,
+      "line": 1351,
       "kind": "control",
       "label": "下一步",
       "conditions": [
@@ -54584,7 +54646,7 @@
     {
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#addbc979a88d3d3a.1",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1345,
+      "line": 1352,
       "kind": "control",
       "label": "{{ saving ? pendingSaveGeneration === editorFocusGeneration ? \"保存中…\" : \"等待上一项保存…\" : editing ? \"保存新版本\" : \"创建来源\" }}",
       "conditions": [
@@ -61900,7 +61962,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 165,
+          "line": 167,
           "jsonPointer": null
         }
       ],
@@ -61932,7 +61994,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 166,
+          "line": 168,
           "jsonPointer": null
         }
       ],
@@ -61945,26 +62007,24 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#69918daed1d2ab6a.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
       "line": 462,
       "kind": "form-event",
-      "label": "{{ item.label }} {{ form.input_kind === \"keyword\" ? \"商品关键词\" : form.input_kind === \"asin\" ? \"10 位 ASIN\" : \"HTTPS 商品链接\" }}",
+      "label": "{{ message }} {{ item.label }} {{ form.input_kind === \"keyword\" ? \"商品关键词\" : form.input_kind === \"asin\" ? \"10 位 ASIN\" : \"",
       "conditions": [
         {
           "directive": "v-if",
           "expression": "!journey"
         }
       ],
-      "staticRouteIds": [
-        "P16"
-      ],
+      "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
+      "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 167,
+          "line": 169,
           "jsonPointer": null
         }
       ],
@@ -61979,7 +62039,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#8471b8c4a13a52ef.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 507,
+      "line": 510,
       "kind": "control",
       "label": "{{ busy ? \"正在创建真实任务…\" : reading ? \"正在恢复进度…\" : \"创建真实选品任务\" }}",
       "conditions": [
@@ -61996,7 +62056,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 168,
+          "line": 170,
           "jsonPointer": null
         }
       ],
@@ -62011,7 +62071,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#702f405d1496d1cd.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 521,
+      "line": 524,
       "kind": "control",
       "label": "查看处理时间轴",
       "conditions": [
@@ -62026,7 +62086,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 169,
+          "line": 171,
           "jsonPointer": null
         }
       ],
@@ -62041,7 +62101,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#ffaf47bf1a32fcaf.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 586,
+      "line": 589,
       "kind": "control",
       "label": "查看来源原文 ↗",
       "conditions": [
@@ -62066,7 +62126,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 170,
+          "line": 172,
           "jsonPointer": null
         }
       ],
@@ -62081,7 +62141,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#ec0ddd60475ad5dd.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 616,
+      "line": 619,
       "kind": "form-event",
       "label": "留痕决策 对本次真实结果作出决策 决策不会改写原始证据 采纳质量门 {{ selectedCandidate?.quality_gates ? `${passedGateCount} / 5` : \"待核对\" }} {{ label }} ",
       "conditions": [
@@ -62100,7 +62160,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 173,
+          "line": 175,
           "jsonPointer": null
         }
       ],
@@ -62115,9 +62175,43 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#b8d4d47a1d529682.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 679,
+      "line": 682,
       "kind": "event-binding",
       "label": "",
+      "conditions": [
+        {
+          "directive": "v-else",
+          "expression": ""
+        },
+        {
+          "directive": "v-if",
+          "expression": "terminal && journey.state !== 'decided'"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
+          "line": 176,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P16",
+          "actionId": "J-DECIDE",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1",
+      "file": "apps/web/src/components/SelectionJourney.vue",
+      "line": 704,
+      "kind": "control",
+      "label": "{{ busy ? \"正在保存…\" : \"保存审计决策\" }}",
       "conditions": [
         {
           "directive": "v-else",
@@ -62147,43 +62241,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1",
-      "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 701,
-      "kind": "control",
-      "label": "{{ busy ? \"正在保存…\" : \"保存审计决策\" }}",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        },
-        {
-          "directive": "v-if",
-          "expression": "terminal && journey.state !== 'decided'"
-        }
-      ],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 172,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P16",
-          "actionId": "J-DECIDE",
-          "kind": "write"
-        }
-      ]
-    },
-    {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#2982f925c629be51.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 712,
+      "line": 715,
       "kind": "control",
       "label": "查看机会、证据与决策历史 ↗",
       "conditions": [
@@ -62208,7 +62268,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 175,
+          "line": 177,
           "jsonPointer": null
         }
       ],
@@ -62223,7 +62283,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#d3e6b84b6df72d56.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 717,
+      "line": 720,
       "kind": "control",
       "label": "打开自动生成的验证任务 ↗",
       "conditions": [
@@ -62248,7 +62308,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 176,
+          "line": 178,
           "jsonPointer": null
         }
       ],
@@ -62263,7 +62323,7 @@
     {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#283a41d530253e0d.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
-      "line": 727,
+      "line": 730,
       "kind": "control",
       "label": "开始下一次",
       "conditions": [
@@ -62280,7 +62340,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md",
-          "line": 177,
+          "line": 179,
           "jsonPointer": null
         }
       ],
@@ -68362,7 +68422,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e8d58f837015480a.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 520,
+      "line": 631,
       "kind": "control",
       "label": "{{ enabledRules.length ? \"创建趋势监控\" : \"创建第一条监控规则\" }}",
       "conditions": [
@@ -68394,7 +68454,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5abb2c07be024e83.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 528,
+      "line": 639,
       "kind": "control",
       "label": "{{ busy === \"/provider-sources/refresh\" ? \"正在启动…\" : \"立即刷新来源\" }}",
       "conditions": [],
@@ -68421,7 +68481,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#2bfafa5dccf5b5ae.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 531,
+      "line": 642,
       "kind": "control",
       "label": "管理监控规则",
       "conditions": [],
@@ -68448,7 +68508,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#c0646bdf3263a017.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 534,
+      "line": 645,
       "kind": "control",
       "label": "趋势主题",
       "conditions": [],
@@ -68475,7 +68535,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#aef07f12388401cc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 536,
+      "line": 647,
       "kind": "control",
       "label": "监控规则 {{ rules.length }}",
       "conditions": [],
@@ -68502,7 +68562,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#83125cc8b9f30181.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 538,
+      "line": 649,
       "kind": "control",
       "label": "合并与拆分 {{ changeRequests.filter((item) => item.status === \"pending\").length }}",
       "conditions": [
@@ -68534,7 +68594,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 550,
+      "line": 661,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68566,7 +68626,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5646a97e7f9d7b17.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 560,
+      "line": 671,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68600,7 +68660,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 576,
+      "line": 687,
       "kind": "control",
       "label": "{{ topic.title }} {{ topic.market }} · {{ topic.category || \"未分类\" }} · {{ statusLabel(topic.status) }} {{ topic.source_c",
       "conditions": [
@@ -68640,7 +68700,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 602,
+      "line": 713,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -68676,7 +68736,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 604,
+      "line": 715,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -68712,7 +68772,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 609,
+      "line": 720,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68752,7 +68812,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 624,
+      "line": 735,
       "kind": "control",
       "label": "帮助：热点趋势怎么看",
       "conditions": [
@@ -68784,7 +68844,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 649,
+      "line": 760,
       "kind": "control",
       "label": "＋ 创建规则",
       "conditions": [
@@ -68820,7 +68880,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#0d9565586dbfab9d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 651,
+      "line": 762,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68854,7 +68914,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 662,
+      "line": 773,
       "kind": "control",
       "label": "创建监控规则",
       "conditions": [
@@ -68894,7 +68954,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 710,
+      "line": 821,
       "kind": "control",
       "label": "{{ item.status === \"enabled\" ? \"暂停\" : \"启用\" }}",
       "conditions": [
@@ -68934,7 +68994,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 713,
+      "line": 824,
       "kind": "control",
       "label": "查看趋势结果",
       "conditions": [
@@ -68970,7 +69030,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 716,
+      "line": 827,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -69002,7 +69062,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#1c84e99801374a43.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 725,
+      "line": 836,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -69037,7 +69097,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e2a4499152c0f457.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 725,
+      "line": 836,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -69067,7 +69127,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#70140152f0bfc00c.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 731,
+      "line": 842,
       "kind": "dialog-definition",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -69097,7 +69157,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 731,
+      "line": 842,
       "kind": "event-binding",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -69127,7 +69187,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#c6ce42d1e09856fa.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 738,
+      "line": 849,
       "kind": "form-event",
       "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
       "conditions": [],
@@ -69152,7 +69212,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#b5cb028d61878491.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 744,
+      "line": 855,
       "kind": "control",
       "label": "关闭异常报告",
       "conditions": [],
@@ -69177,7 +69237,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#79e6f49e70b53776.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 772,
+      "line": 883,
       "kind": "control",
       "label": "取消",
       "conditions": [],
@@ -69202,7 +69262,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 774,
+      "line": 885,
       "kind": "control",
       "label": "{{ busy.includes(\"quality-issues\") ? \"创建中…\" : \"创建质量工单\" }}",
       "conditions": [],
@@ -69229,7 +69289,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#029d267ba5289a36.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 780,
+      "line": 891,
       "kind": "dialog-definition",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -69259,7 +69319,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 780,
+      "line": 891,
       "kind": "event-binding",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -69289,7 +69349,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#60103acec5bdf33b.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 789,
+      "line": 900,
       "kind": "form-event",
       "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
       "conditions": [
@@ -69319,7 +69379,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#74456cadd4fd8246.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 797,
+      "line": 908,
       "kind": "control",
       "label": "关闭相关性变更",
       "conditions": [
@@ -69349,7 +69409,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#90cb939f09706fb5.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 819,
+      "line": 930,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -69379,7 +69439,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#288abda590fb34b7.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 821,
+      "line": 932,
       "kind": "control",
       "label": "{{ busy.includes(\"/relevance\") ? \"提交中…\" : \"确认并记录\" }}",
       "conditions": [
@@ -71472,6 +71532,24 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#a81227b33b62c0a9.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 513,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#bcb7add4c71c18a6.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 591,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#72947e74a11b9abc.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 597,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/OnboardingGuide.vue#07db575ab56f90da.1",
       "file": "apps/web/src/components/OnboardingGuide.vue",
       "line": 40,
@@ -72864,6 +72942,12 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/SelectionJourney.vue#8c00555eac0c2a19.1",
+      "file": "apps/web/src/components/SelectionJourney.vue",
+      "line": 304,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/SelectionJourney.vue#5704caf4d4e8cd9d.1",
       "file": "apps/web/src/components/SelectionJourney.vue",
       "line": 452,
@@ -73389,6 +73473,18 @@
       "candidateId": "apps/web/src/components/DiscoveryOverlay.vue#ceb391d01220c696.1",
       "file": "apps/web/src/components/DiscoveryOverlay.vue",
       "line": 195,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 513,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/NotificationCenter.vue#b332799077351299.1",
+      "file": "apps/web/src/components/NotificationCenter.vue",
+      "line": 591,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

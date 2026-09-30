@@ -74,26 +74,21 @@
 | NC | 567 | d953dfdf4cb40b85.1 | AN-N-DETAIL；打开，未读时自动read |
 | NC | 589 | 01c7bba15fa9f7ce.1 | AN-N-PAGE；上一页 |
 | NC | 591 | bd5dbf08f126da53.1 | AN-N-PAGE；下一页 |
-| NC | 593 | 1eb1c4db747d37c9.1 | D-AN-NOTIFICATION；消息详情 |
-| NC | 593 | a81227b33b62c0a9.1 | AN-N-CLOSE-DETAIL；Escape，busy不关闭 |
+| NC | 660 | 83c14e43da4a0513.1 | D-AN-NOTIFICATION；消息详情 |
+| NC | 660 | e6cc1debf33762b0.1 | AN-N-CLOSE-DETAIL；Escape，busy不关闭 |
 | NC | 600 | 24417e6753ed4eb7.1 | AN-N-CLOSE-DETAIL；按钮同busy边界 |
 | NC | 627 | 9c8237833082965f.1 | AN-N-SOURCE；站内来源+from |
 | NC | 630 | d0ef81cb0803db4e.1 | AN-N-START；仅open |
 | NC | 638 | 7490571390181453.1 | AN-N-CLOSE；非closed |
 | NC | 646 | 696dcabbd8c2d73e.1 | AN-N-REOPEN；closed |
 | NC | 654 | 1c008f867673db60.2 | AN-TECH；资源/根因键 |
-| NC | 671 | b332799077351299.1 | D-AN-PREFERENCES；偏好 |
-| NC | 671 | bcb7add4c71c18a6.1 | AN-N-PREF-CLOSE；Escape |
-| NC | 677 | 72947e74a11b9abc.1 | AN-N-PREF-SAVE；PUT expected_version |
+| NC | 754 | 3f47655822db88ed.1 | D-AN-PREFERENCES；偏好 |
+| NC | 754 | e2f8e1803ac77239.1 | AN-N-PREF-CLOSE；Escape |
+| NC | 761 | 8aeeea8a550ba999.1 | AN-N-PREF-SAVE；PUT expected_version |
 | NC | 688 | 25755513ca77e550.1 | AN-N-PREF-CLOSE；取消保留当前ref |
 | NC | 689 | 0285caea2e8607bf.1 | AN-N-PREF-SAVE；原生submit |
-| NC | 660 | 83c14e43da4a0513.1 | AN-N-DETAIL-WIRING；详情原生dialog定义 |
-| NC | 660 | e6cc1debf33762b0.1 | AN-N-DETAIL-WIRING；详情dialog cancel事件 |
 | NC | 705 | 8cb2961885ab7113.1 | AN-N-TECH-RESOURCE；详情失败追踪编号展开 |
-| NC | 754 | 3f47655822db88ed.1 | AN-N-PREF-WIRING；偏好原生dialog定义 |
-| NC | 754 | e2f8e1803ac77239.1 | AN-N-PREF-WIRING；偏好dialog cancel事件 |
-| NC | 761 | 8aeeea8a550ba999.1 | AN-N-PREF-SAVE；偏好表单原生submit及就地错误反馈 |
-| NC | 782 | 8cb2961885ab7113.2 | AN-N-PREF-SAVE；偏好失败追踪编号展开 |
+| NC | 782 | 8cb2961885ab7113.2 | AN-N-TECH-RESOURCE；偏好失败追踪编号展开 |
 
 ## 3. 字段绑定与真实请求
 

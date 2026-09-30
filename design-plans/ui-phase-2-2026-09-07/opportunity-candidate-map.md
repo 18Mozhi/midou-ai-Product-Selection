@@ -214,7 +214,7 @@
 | apps/web/src/components/OpportunityLineagePanel.vue:109   | 51a16cdff8c0fca2.1 | OP-LINEAGE-TECHNICAL                        |
 | apps/web/src/components/OpportunityLineagePanel.vue:136   | 77d46341d92ff39a.1 | OP-LINEAGE-NAV                              |
 | apps/web/src/components/OpportunityLineagePanel.vue:144   | 59608f8fc36f7c0f.1 | OP-LINEAGE-CORRELATION                      |
-| apps/web/src/components/OpportunityWorkspace.vue:1419     | e7f8abb1c990fbad.1 | 竞品/供应采集、评分、下游重读、页签选择转发 |
+| apps/web/src/components/OpportunityWorkspace.vue:1483     | aad81bdc3f7ba55d.1 | 竞品/供应采集、评分、下游重读、页签选择转发 |
 | apps/web/src/components/OpportunityWorkspace.vue:1374     | b391bf25870010b2.1 | OP-FEEDBACK-SUBMIT/RETRY转发                |
 | apps/web/src/components/OpportunityWorkspace.vue:1405     | 2aa4cc1a9f90b8fd.1 | AI排队/重读/复核转发                        |
 | apps/web/src/components/OpportunityWorkspace.vue:1514     | 557b69e18caa81e6.1 | OP-AI-REASON-SUBMIT/CANCEL转发              |

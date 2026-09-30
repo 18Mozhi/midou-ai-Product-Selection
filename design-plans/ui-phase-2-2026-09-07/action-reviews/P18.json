@@ -14,7 +14,7 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
     "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "ec4f9f4e211926e571a07bdba3871ab5c704cc05436e1bd049ce3d581fec4eaf",
+    "apps/web/src/components/OpportunityWorkspace.vue": "69e2c6afdc0821067117e1e66f39fc10923248d1e6518ff0d8b881faa446c536",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
     "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2"
   },
@@ -2460,31 +2460,31 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
           "event": "@discover-competitors",
           "handler": "discoverCompetitors",
           "targets": ["OP-COMPETITOR-DISCOVER"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
           "event": "@discover-suppliers",
           "handler": "discoverSuppliers",
           "targets": ["OP-SUPPLIER-DISCOVER"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
           "event": "@queue-score",
           "handler": "queueScore",
           "targets": ["OP-SCORE-QUEUE"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
           "event": "@retry-downstream",
-          "handler": "loadDownstream(detail?.id, undefined, $event)",
+          "handler": "retryDownstream($event)",
           "targets": ["OP-DOWNSTREAM-RETRY"]
         },
         {
-          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1",
+          "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
           "event": "@select-tab",
           "handler": "setTab",
           "targets": ["OP-TAB"]
@@ -2501,7 +2501,7 @@
         }
       ],
       "remaining": "绑定验证的是当前源码事件字符串和操作归属，不是挂载Vue事件执行、权限或生命周期；OP-WIRING编号仅为审阅关系键，不新增业务ID。",
-      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#e7f8abb1c990fbad.1"],
+      "sourceCandidateIds": ["apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1"],
       "sourceContractKeys": ["竞品/供应采集、评分、下游重读、页签选择转发"],
       "contractAliasReason": "按原候选映射表完整单元格逐字关联；限定后缀/转发/容器/P15排除归组，非子串匹配或新业务能力。",
       "visualStates": {
@@ -3212,7 +3212,7 @@
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
       "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-      "apps/web/src/components/OpportunityWorkspace.vue": "ec4f9f4e211926e571a07bdba3871ab5c704cc05436e1bd049ce3d581fec4eaf",
+      "apps/web/src/components/OpportunityWorkspace.vue": "69e2c6afdc0821067117e1e66f39fc10923248d1e6518ff0d8b881faa446c536",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
       "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
