@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/RedisResilienceCenter.vue": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+    "apps/web/src/components/RedisResilienceCenter.vue": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
   },
   "inputs": {},
   "actions": [
@@ -137,7 +137,7 @@
       "apps/web/src/components/RedisResilienceCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/RedisResilienceCenter.vue": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+      "apps/web/src/components/RedisResilienceCenter.vue": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],
