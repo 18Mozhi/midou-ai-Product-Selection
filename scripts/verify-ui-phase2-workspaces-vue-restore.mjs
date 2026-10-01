@@ -14,7 +14,7 @@ const repo = process.cwd(),
   smoke = args.includes("--smoke"),
   outputArg = args.find((arg) => arg.startsWith("--output=")),
   output =
-    outputArg?.slice("--output=".length) ?? "output/playwright/p32-approved-restore-review-r9";
+    outputArg?.slice("--output=".length) ?? "output/playwright/p32-approved-restore-review-r11";
 assert.ok(
   args.every((arg) => ["--capture", "--smoke"].includes(arg) || arg.startsWith("--output=")) &&
     args.filter((arg) => arg.startsWith("--output=")).length <= 1 &&

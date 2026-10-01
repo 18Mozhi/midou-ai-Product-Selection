@@ -1,8 +1,8 @@
 # P32 恢复原因窗 · 已批准组合进入真实 Vue
 
-2026-10-02续：当前源码 r9 使用最新 OrganizationAdminCenter/共享原因窗/样式与E2E夹具重拍；1440/390共94项浏览器检查、20张PNG通过。视觉授权仅适用于页面视觉；隔离请求不证明生产MySQL、RBAC、审计或写入验收。
+2026-10-02续：P32 目录采用原生 `ul/li` 语义后，使用最新 OrganizationAdminCenter/共享原因窗/样式与 E2E 夹具重拍 r11；1440/390 共 94 项浏览器检查、20 张 PNG 通过，全部源码与图像指纹绑定当前版本。视觉授权仅适用于页面视觉；隔离请求不证明生产 MySQL、RBAC、审计或写入验收。
 
-[当前真实 Vue r9 图册](../../output/playwright/p32-approved-restore-review-r9/index.html) · [r9源码指纹与图像清单](../../output/playwright/p32-approved-restore-review-r9/evidence.json)
+[当前真实 Vue r11 图册](../../output/playwright/p32-approved-restore-review-r11/index.html) · [r11 源码指纹与图像清单](../../output/playwright/p32-approved-restore-review-r11/evidence.json)
 
 2026-09-27续：依据用户对已完成页面视觉自动通过的授权，保留旧r1图册与已批准PNG不变；以当前生产源码另行捕获r2桌面/手机20张Vue图。该授权只覆盖页面视觉，不覆盖动作行为、权限、真实写入或生产验收。捕获命令与证据见下方。
 
@@ -22,7 +22,7 @@ AuditedReasonDialog只在显式workspaceRestore上下文下呈现目标说明、
 
 ## 验证与使用
 
-`node scripts/verify-ui-phase2-workspaces-vue-restore.mjs --smoke`检查手机；无参数对当前r9重跑94项并核对20张图。捕获模式只创建新目录、不覆盖既有目录，`--output`仅接受`output/playwright/p32-approved-restore-review-rN`新目录。r1历史图和指纹原样保留。真实Vite路由挂载，复用既有组织管理员E2E夹具；请求全部被浏览器隔离处理，不能当作MySQL/权限/生产审计验收。
+`node scripts/verify-ui-phase2-workspaces-vue-restore.mjs --smoke`检查手机；无参数对当前 r11 重跑 94 项并核对 20 张图；r11 由 `node scripts/verify-ui-phase2-workspaces-vue-restore.mjs --capture --output=output/playwright/p32-approved-restore-review-r11` 采集。捕获模式只创建新目录、不覆盖既有目录，`--output`仅接受`output/playwright/p32-approved-restore-review-rN`新目录。r1、r9历史图和指纹原样保留。真实Vite路由挂载，复用既有组织管理员E2E夹具；请求全部被浏览器隔离处理，不能当作MySQL/权限/生产审计验收。
 
 覆盖三现有主题环境、目标/版本/成员数、至少两字、501字不截断但不提交、键盘循环、三种关闭返焦、等待禁用、精确一次版本化POST、409失败及成功后列表更新、归档不继承样式、P30撤销邀请保持原样。永久单测核对默认对象不变、上下文快照、替换/取消/提交清理和源图绑定。
 
