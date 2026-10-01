@@ -1,0 +1,22 @@
+.discovery-c-backdrop {
+  --discovery-c-ink: #202c3d;
+  --discovery-c-backdrop: rgb(24 39 59 / 68%);
+  --discovery-c-border: #dbe1e9;
+  --discovery-c-panel: #fff;
+  --discovery-c-shadow: rgb(13 28 48 / 24%);
+  --discovery-c-primary: #254a9c;
+  --discovery-c-border-subtle: #cbd5e1;
+  --discovery-c-surface: #f3f5f8;
+  --discovery-c-focus: #3478d4;
+  --discovery-c-on-primary: #fff;
+  --discovery-c-primary-muted: #d4e0ff;
+  --discovery-c-primary-subtle: #e0e8fa;
+  --discovery-c-disabled-ink: #566273;
+  --discovery-c-disabled-surface: #e6ebf3;
+  --discovery-c-danger: #7c241f;
+  --discovery-c-danger-surface: #fff0e7;
+  --discovery-c-primary-strong: #193b80;
+  --discovery-c-muted: #58677b;
+  --discovery-c-surface-muted: #f7f9fc;
+  --discovery-c-tag-surface: #eef3fd;
+}

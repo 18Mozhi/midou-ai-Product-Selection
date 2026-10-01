@@ -339,6 +339,13 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
+    if (paths[index] === "apps/web/src/design/discovery-c-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^\.discovery-c-backdrop\s*\{(?:\s*--discovery-c-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgb\([^;]+\));)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/navigation-shell-c-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

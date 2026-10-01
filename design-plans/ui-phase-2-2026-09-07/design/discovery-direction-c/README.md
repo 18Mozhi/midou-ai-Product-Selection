@@ -12,60 +12,60 @@
 
 ## 每项动作与边界
 
-| 动作 | 本稿行为与真实合同 |
-| --- | --- |
-| 搜索关键词 | 2–100字符，trim后查询，短输入就地提示并返焦，不发送请求。新增可见搜索按钮是同一Enter动作的待审入口，不新增API。 |
-| 对象／状态 | 四类对象分别读取真实状态枚举；不选对象禁用状态。换对象清空状态，不自动搜索。 |
-| 负责人 | 仅任务和机会可用，最多120字符；task与opportunity切换保留，其他类型清空。 |
-| 搜索请求 | 仅展示同合同的q、limit=10、可选resource_type/status/assignee，不带组织工作区ID；不新增分页。样例固定返回一条隔离任务，不执行搜索引擎或编造筛选结果。 |
-| 结果行 | 原任务路由、待处理状态、更新时间；无补充说明，不伪造负责人或评分。 |
-| 快捷创建 | 读取已授权入口，不提前创建对象；一条／两条来自UI2-DI夹具，组织／平台／全部注册入口是明确标识的能力投影，不证明当前会话权限，不新增壳层入口。 |
-| 最近使用 | 当前组件内去重、最多5项；关闭再开保留，卸载后清空，不写storage。修饰键点击也更新最近列表。 |
-| 普通链接／修饰键 | 记录准确目标，普通点击关闭，修饰键点击保持弹窗；审核稿统一拦截实际跳转，不能当作浏览器开新页或真实业务导航验收。 |
-| 401/403/409/429/500/503 | 两种模式分别出图；保留真实覆盖按钮“重新加载／关闭”，不是把401按钮改成登录。请求／追踪编号保持可见，重新加载清空旧编号。 |
-| 读取中／晚到结果 | 新查询取代旧查询，关闭／换模式使旧读取失效；本地计时模拟，不证明真实HTTP中止、API客户端重试或后端权限。 |
-| 关闭 | 顶栏、状态按钮、Escape、外侧遮罩均关闭返焦；内部点击不关闭，Tab首尾循环；通知仅成员壳展示。 |
-| 审核工具 | 场景选择、重新打开、模拟组件卸载仅供审核，不进入生产界面。 |
+| 动作                    | 本稿行为与真实合同                                                                                                                                   |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 搜索关键词              | 2–100字符，trim后查询，短输入就地提示并返焦，不发送请求。新增可见搜索按钮是同一Enter动作的待审入口，不新增API。                                      |
+| 对象／状态              | 四类对象分别读取真实状态枚举；不选对象禁用状态。换对象清空状态，不自动搜索。                                                                         |
+| 负责人                  | 仅任务和机会可用，最多120字符；task与opportunity切换保留，其他类型清空。                                                                             |
+| 搜索请求                | 仅展示同合同的q、limit=10、可选resource_type/status/assignee，不带组织工作区ID；不新增分页。样例固定返回一条隔离任务，不执行搜索引擎或编造筛选结果。 |
+| 结果行                  | 原任务路由、待处理状态、更新时间；无补充说明，不伪造负责人或评分。                                                                                   |
+| 快捷创建                | 读取已授权入口，不提前创建对象；一条／两条来自UI2-DI夹具，组织／平台／全部注册入口是明确标识的能力投影，不证明当前会话权限，不新增壳层入口。         |
+| 最近使用                | 当前组件内去重、最多5项；关闭再开保留，卸载后清空，不写storage。修饰键点击也更新最近列表。                                                           |
+| 普通链接／修饰键        | 记录准确目标，普通点击关闭，修饰键点击保持弹窗；审核稿统一拦截实际跳转，不能当作浏览器开新页或真实业务导航验收。                                     |
+| 401/403/409/429/500/503 | 两种模式分别出图；保留真实覆盖按钮“重新加载／关闭”，不是把401按钮改成登录。请求／追踪编号保持可见，重新加载清空旧编号。                              |
+| 读取中／晚到结果        | 新查询取代旧查询，关闭／换模式使旧读取失效；本地计时模拟，不证明真实HTTP中止、API客户端重试或后端权限。                                              |
+| 关闭                    | 顶栏、状态按钮、Escape、外侧遮罩均关闭返焦；内部点击不关闭，Tab首尾循环；通知仅成员壳展示。                                                          |
+| 审核工具                | 场景选择、重新打开、模拟组件卸载仅供审核，不进入生产界面。                                                                                           |
 
 ## 全部图
 
-| 场景 | 图 |
-| --- | --- |
-| search-idle | [1440](1440-search-idle.png) · [390](390-search-idle.png) |
-| search-invalid | [1440](1440-search-invalid.png) · [390](390-search-invalid.png) |
-| search-filter-task | [1440](1440-search-filter-task.png) · [390](390-search-filter-task.png) |
-| search-filter-opportunity | [1440](1440-search-filter-opportunity.png) · [390](390-search-filter-opportunity.png) |
-| search-filter-evidence | [1440](1440-search-filter-evidence.png) · [390](390-search-filter-evidence.png) |
-| search-filter-collection_task | [1440](1440-search-filter-collection_task.png) · [390](390-search-filter-collection_task.png) |
-| search-results | [1440](1440-search-results.png) · [390](390-search-results.png) · [390 下部](390-search-results-bottom.png) |
-| search-empty | [1440](1440-search-empty.png) · [390](390-search-empty.png) · [390 下部](390-search-empty-bottom.png) |
-| search-loading | [1440](1440-search-loading.png) · [390](390-search-loading.png) · [390 下部](390-search-loading-bottom.png) |
-| search-401 | [1440](1440-search-401.png) · [390](390-search-401.png) · [390 下部](390-search-401-bottom.png) |
-| search-403 | [1440](1440-search-403.png) · [390](390-search-403.png) · [390 下部](390-search-403-bottom.png) |
-| search-409 | [1440](1440-search-409.png) · [390](390-search-409.png) · [390 下部](390-search-409-bottom.png) |
-| search-429 | [1440](1440-search-429.png) · [390](390-search-429.png) · [390 下部](390-search-429-bottom.png) |
-| search-500 | [1440](1440-search-500.png) · [390](390-search-500.png) · [390 下部](390-search-500-bottom.png) |
-| search-503 | [1440](1440-search-503.png) · [390](390-search-503.png) · [390 下部](390-search-503-bottom.png) |
-| create-ready | [1440](1440-create-ready.png) · [390](390-create-ready.png) |
-| create-one | [1440](1440-create-one.png) · [390](390-create-one.png) |
-| create-recent | [1440](1440-create-recent.png) · [390](390-create-recent.png) |
-| create-empty | [1440](1440-create-empty.png) · [390](390-create-empty.png) |
-| create-loading | [1440](1440-create-loading.png) · [390](390-create-loading.png) |
-| create-401 | [1440](1440-create-401.png) · [390](390-create-401.png) |
-| create-403 | [1440](1440-create-403.png) · [390](390-create-403.png) |
-| create-409 | [1440](1440-create-409.png) · [390](390-create-409.png) |
-| create-429 | [1440](1440-create-429.png) · [390](390-create-429.png) |
-| create-500 | [1440](1440-create-500.png) · [390](390-create-500.png) |
-| create-503 | [1440](1440-create-503.png) · [390](390-create-503.png) |
-| create-organization_admin | [1440](1440-create-organization_admin.png) · [390](390-create-organization_admin.png) |
-| create-platform_admin | [1440](1440-create-platform_admin.png) · [390](390-create-platform_admin.png) |
-| create-all_registered | [1440](1440-create-all_registered.png) · [390](390-create-all_registered.png) · [390 下部](390-create-all_registered-bottom.png) |
+| 场景                          | 图                                                                                                                               |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| search-idle                   | [1440](1440-search-idle.png) · [390](390-search-idle.png)                                                                        |
+| search-invalid                | [1440](1440-search-invalid.png) · [390](390-search-invalid.png)                                                                  |
+| search-filter-task            | [1440](1440-search-filter-task.png) · [390](390-search-filter-task.png)                                                          |
+| search-filter-opportunity     | [1440](1440-search-filter-opportunity.png) · [390](390-search-filter-opportunity.png)                                            |
+| search-filter-evidence        | [1440](1440-search-filter-evidence.png) · [390](390-search-filter-evidence.png)                                                  |
+| search-filter-collection_task | [1440](1440-search-filter-collection_task.png) · [390](390-search-filter-collection_task.png)                                    |
+| search-results                | [1440](1440-search-results.png) · [390](390-search-results.png) · [390 下部](390-search-results-bottom.png)                      |
+| search-empty                  | [1440](1440-search-empty.png) · [390](390-search-empty.png) · [390 下部](390-search-empty-bottom.png)                            |
+| search-loading                | [1440](1440-search-loading.png) · [390](390-search-loading.png) · [390 下部](390-search-loading-bottom.png)                      |
+| search-401                    | [1440](1440-search-401.png) · [390](390-search-401.png) · [390 下部](390-search-401-bottom.png)                                  |
+| search-403                    | [1440](1440-search-403.png) · [390](390-search-403.png) · [390 下部](390-search-403-bottom.png)                                  |
+| search-409                    | [1440](1440-search-409.png) · [390](390-search-409.png) · [390 下部](390-search-409-bottom.png)                                  |
+| search-429                    | [1440](1440-search-429.png) · [390](390-search-429.png) · [390 下部](390-search-429-bottom.png)                                  |
+| search-500                    | [1440](1440-search-500.png) · [390](390-search-500.png) · [390 下部](390-search-500-bottom.png)                                  |
+| search-503                    | [1440](1440-search-503.png) · [390](390-search-503.png) · [390 下部](390-search-503-bottom.png)                                  |
+| create-ready                  | [1440](1440-create-ready.png) · [390](390-create-ready.png)                                                                      |
+| create-one                    | [1440](1440-create-one.png) · [390](390-create-one.png)                                                                          |
+| create-recent                 | [1440](1440-create-recent.png) · [390](390-create-recent.png)                                                                    |
+| create-empty                  | [1440](1440-create-empty.png) · [390](390-create-empty.png)                                                                      |
+| create-loading                | [1440](1440-create-loading.png) · [390](390-create-loading.png)                                                                  |
+| create-401                    | [1440](1440-create-401.png) · [390](390-create-401.png)                                                                          |
+| create-403                    | [1440](1440-create-403.png) · [390](390-create-403.png)                                                                          |
+| create-409                    | [1440](1440-create-409.png) · [390](390-create-409.png)                                                                          |
+| create-429                    | [1440](1440-create-429.png) · [390](390-create-429.png)                                                                          |
+| create-500                    | [1440](1440-create-500.png) · [390](390-create-500.png)                                                                          |
+| create-503                    | [1440](1440-create-503.png) · [390](390-create-503.png)                                                                          |
+| create-organization_admin     | [1440](1440-create-organization_admin.png) · [390](390-create-organization_admin.png)                                            |
+| create-platform_admin         | [1440](1440-create-platform_admin.png) · [390](390-create-platform_admin.png)                                                    |
+| create-all_registered         | [1440](1440-create-all_registered.png) · [390](390-create-all_registered.png) · [390 下部](390-create-all_registered-bottom.png) |
 
 ## 验证与使用
 
 ## Vue 集成记录（2026-10-02）
 
-`DiscoveryOverlay.vue` 已采用蓝色范围／筛选区与白色结果区；窄屏改为单列；成员移动端导航抽屉补上全局搜索与创建入口；当前组织／工作区名称沿用已有导航守卫上下文。样式隔离在 `apps/web/src/styles/navigation-discovery-c.css`。搜索与快捷创建继续使用原 API、筛选字段、授权投影、最近使用内存状态、路由与对话框焦点恢复合同；本次没有改 API、权限、数据库、配置、依赖或环境变量。
+`DiscoveryOverlay.vue` 已采用蓝色范围／筛选区与白色结果区；窄屏改为单列；成员移动端导航抽屉补上全局搜索与创建入口；当前组织／工作区名称沿用已有导航守卫上下文。样式隔离在 `apps/web/src/styles/navigation-discovery-c.css`，颜色集中在弹窗根节点作用域的 `apps/web/src/design/discovery-c-tokens.css`；令牌沿用已审核色值，生产规则不使用 `!important`。搜索与快捷创建继续使用原 API、筛选字段、授权投影、最近使用内存状态、路由与对话框焦点恢复合同；本次没有改 API、权限、数据库、配置、依赖或环境变量。
 
 本地证据：`node --test tests/m02-05/discovery-domain.test.mjs` 6/6、`npm run typecheck:web` 通过；双端真实 Vue Playwright 与完整构建/发布门的结果以本次交付记录为准。这些本地夹具验证不能代替线上真实搜索、账号权限、生产数据或完整部署验收。
 
