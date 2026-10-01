@@ -22,7 +22,7 @@ export const sharedReviewRevisions = Object.freeze({
   "scripts/lib/ui-phase2-responsive-focus-contract.mjs": {
     baseline: "54ec47364b3422b1d49a6eea18f070229af56a59",
     captured: "a664a9f5b17f53abd0673150e475025dd6d1accdcc7f809bdad8fd0cbb3596a4",
-    current: "4eec8516c17f678c82d426a6a9b923c1b3f0e2caaaf8102955958880512701bd",
+    current: "d0a787596a1c495f402ba7e641621e0c3f7e598dddf8f27272c7947ff1eb56be",
   },
   "apps/web/src/components/ConfirmDialog.vue": {
     baseline: "060e0b591af732c4c69060a468f526c45cc1330c",
@@ -37,7 +37,7 @@ export const sharedReviewRevisions = Object.freeze({
   "apps/web/src/components/NavigationShell.vue": {
     baseline: "243941a0620cd7444bd494a0242d471b343e58c5",
     captured: "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-    current: "25cdd5e342935ec0ed531c5ed2d50678a72f8f4478d8183f117636244f0d2efe",
+    current: "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
   },
   "apps/web/src/components/OrganizationApprovalPanel.vue": {
     baseline: "d77ce47ba93ed91c2aaff4263f398e13cdfbfff9",
@@ -83,13 +83,13 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "af239b08b69f7d97cd0372f9840a70009eeef0c7",
       captured: "c1095b828706864ee9eb2be430e08e0277522f4e4cf3d1beb084499265fcd457",
-      current: "4eec8516c17f678c82d426a6a9b923c1b3f0e2caaaf8102955958880512701bd",
+      current: "d0a787596a1c495f402ba7e641621e0c3f7e598dddf8f27272c7947ff1eb56be",
     },
   "scripts/lib/ui-phase2-responsive-focus-contract.mjs#86e109870bed9731f32a5beae9a5f8a316d31dcb5c5b163681e8523a8b79fde8":
     {
       baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
       captured: "86e109870bed9731f32a5beae9a5f8a316d31dcb5c5b163681e8523a8b79fde8",
-      current: "4eec8516c17f678c82d426a6a9b923c1b3f0e2caaaf8102955958880512701bd",
+      current: "d0a787596a1c495f402ba7e641621e0c3f7e598dddf8f27272c7947ff1eb56be",
     },
   "apps/web/src/components/SelectionJourney.vue#107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f":
     {
@@ -329,7 +329,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "0c5c48ee4959d24238af106ae6d2610a48aa9b9c",
       captured: "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
-      current: "dd3f58900641cf4a85c8182b0cd59f727a8d52e56c51a43a9469e855ab430e6b",
+      current: "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276",
     },
   "scripts/lib/ui-phase2-api-coverage-design-data.mjs#34ad1d77eeb70a6297aadc2a6322a377aa8b7025765d6c07aa29a2193e3a272d":
     {
