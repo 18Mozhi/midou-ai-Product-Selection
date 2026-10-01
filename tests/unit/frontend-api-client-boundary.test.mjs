@@ -43,7 +43,6 @@ test("migrated frontend surfaces use the shared API client instead of direct fet
     "apps/web/src/components/CostRuleConsole.vue",
     "apps/web/src/components/OpportunityWorkspace.vue",
     "apps/web/src/components/CompetitorMonitor.vue",
-    "apps/web/src/components/SourcingWorkspace.vue",
     "apps/web/src/components/CollectionRuntimeCenter.vue",
     "apps/web/src/components/CrawlerSchedulerCenter.vue",
     "apps/web/src/components/RuntimeTopologyCenter.vue",
@@ -61,11 +60,18 @@ test("migrated frontend surfaces use the shared API client instead of direct fet
   const personalCenterClient = await read(
     "apps/web/src/components/personal-center/usePersonalCenter.ts",
   );
+  const sourcingWorkspace = await read("apps/web/src/components/SourcingWorkspace.vue");
+  const sourcingWorkspaceClient = await read("apps/web/src/composables/useSourcingWorkspace.ts");
   assert.match(personalCenter, /usePersonalCenter/);
   assert.doesNotMatch(personalCenter, /\bfetch\s*\(/);
   assert.match(personalCenterClient, /createApiClient/);
   assert.match(personalCenterClient, /ApiClientError/);
   assert.doesNotMatch(personalCenterClient, /\bfetch\s*\(/);
+  assert.match(sourcingWorkspace, /useSourcingWorkspace/);
+  assert.doesNotMatch(sourcingWorkspace, /\bfetch\s*\(/);
+  assert.match(sourcingWorkspaceClient, /createApiClient/);
+  assert.match(sourcingWorkspaceClient, /ApiClientError/);
+  assert.doesNotMatch(sourcingWorkspaceClient, /\bfetch\s*\(/);
 });
 
 test("all frontend business modules keep direct fetch inside the shared transport", async () => {

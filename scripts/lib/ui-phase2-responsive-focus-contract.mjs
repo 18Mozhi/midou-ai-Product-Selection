@@ -31,7 +31,7 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/styles/onboarding-navigation.css":
       "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
     "apps/web/src/styles/platform-operations.css":
-      "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922",
+      "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5",
     "apps/web/src/styles/platform-dashboard.css":
       "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be",
     "apps/web/src/design/tokens.css":
@@ -39,7 +39,7 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/use-modal-dialog.ts":
       "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
     "apps/web/src/signal-ledger.css":
-      "dd3f58900641cf4a85c8182b0cd59f727a8d52e56c51a43a9469e855ab430e6b",
+      "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276",
   }),
 });
 const hash = (value) => createHash("sha256").update(value).digest("hex");
