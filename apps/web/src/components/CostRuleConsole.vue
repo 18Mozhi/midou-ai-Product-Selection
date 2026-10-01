@@ -112,7 +112,7 @@ const canManage = computed(() => props.capabilities.includes("opportunity:approv
     if (nextCostRule.value?.status === "pending_approval")
       return "规则正在等待选品经理和组织管理员完成双角色审批。";
     if (nextCostRule.value?.status === "draft") return "已有草稿，提交并完成双角色审批后才能发布。";
-    return "尚无费用规则；创建规则并完成双角色审批后才能计算利润。";
+    return "尚无费用规则；系统不使用默认费用。创建规则并完成双角色审批后才能计算利润。";
   }),
   costSetupItems = computed(() => {
     const rule = activeCostRule.value,
