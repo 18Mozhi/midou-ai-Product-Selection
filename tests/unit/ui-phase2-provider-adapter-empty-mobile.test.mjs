@@ -1,12 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
 import { beforeAdapterEmptyMobile } from "../../scripts/lib/ui-phase2-adapter-empty-mobile-baseline.mjs";
 import { beforeAdapterPaginationFocus } from "../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
-import { beforeAdapterP47ReadAndTableTools } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
+import {
+  beforeAdapterP47ReadAndTableTools,
+  p47PaletteRevisions,
+} from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const file = "apps/web/src/components/ProviderAdapterCenter.vue";
@@ -172,7 +176,14 @@ test("P47 empty CSS is mobile-scoped and reproduces the exact approved five rule
   const approved = postcss.parse(
     read("design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-empty-preview.css"),
   );
-  const tokens = read("apps/web/src/design/provider-adapter-tokens.css"),
+  const tokens = execFileSync(
+      "git",
+      [
+        "show",
+        `${p47PaletteRevisions.mobileCommit}:apps/web/src/design/provider-adapter-tokens.css`,
+      ],
+      { encoding: "utf8" },
+    ).replaceAll("\r\n", "\n"),
     palette = new Map();
   postcss.parse(tokens).walkDecls((d) => palette.set(d.prop, d.value));
   const additions =

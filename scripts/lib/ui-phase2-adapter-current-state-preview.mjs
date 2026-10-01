@@ -34,6 +34,7 @@ function compose(source, preview, handler, needsTick) {
     paginationFocusRevision.current,
     "7fce30d574f08ef93c5530b7d609e5d5fde38c0ab246e20c91fbd8c45497b798",
     "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746",
+    "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b",
   ].includes(revision);
   if (hasPaginationFocus)
     source = beforeAdapterPaginationFocus(beforeAdapterP47ReadAndTableTools(source));

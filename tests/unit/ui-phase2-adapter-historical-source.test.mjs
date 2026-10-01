@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import {
@@ -19,7 +20,14 @@ const read = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 
 test("P47 read-error inverse removes only its exact approved current presentation change", () => {
-  const source = read(files.component);
+  const latest = read(files.component);
+  assert.equal(hash(latest), readErrorRevision.approvedCurrent);
+  assert.equal(hash(beforeAdapterReadError(latest)), readErrorRevision.before);
+  const source = execFileSync(
+    "git",
+    ["show", `${readErrorRevision.approvedCommit}:${files.component}`],
+    { encoding: "utf8" },
+  ).replaceAll("\r\n", "\n");
   assert.equal(hash(source), readErrorRevision.current);
   const previous = beforeAdapterReadError(source);
   assert.equal(hash(previous), readErrorRevision.before);
@@ -61,16 +69,22 @@ test("P47 archive resolver recovers only the two complete verified capture revis
 });
 test("P47 archive resolver restores the exact 37-role palette without accepting unknown colors", () => {
   const source = read(files.palette);
-  assert.equal(hash(source), p47PaletteRevisions.mobile);
+  assert.equal(hash(source), p47PaletteRevisions.approvedCurrent);
+  const mobileSource = execFileSync(
+    "git",
+    ["show", `${p47PaletteRevisions.mobileCommit}:${files.palette}`],
+    { encoding: "utf8" },
+  ).replaceAll("\r\n", "\n");
+  assert.equal(hash(mobileSource), p47PaletteRevisions.mobile);
   for (const stage of ["pre-mobile", "pre-refresh"]) {
-    const previous = p47HistoricalSource(files.palette, source, stage);
+    const previous = p47HistoricalSource(files.palette, mobileSource, stage);
     assert.equal(hash(previous), p47PaletteRevisions.before);
     assert.equal((previous.match(/--p47-/g) ?? []).length, 37);
     assert.equal(p47HistoricalSource(files.palette, previous, stage), previous);
     for (const changed of [
-      source + "\n",
-      source.replace("#142a46", "#142a47"),
-      source.replace("#185adb", "#185adc"),
+      mobileSource + "\n",
+      mobileSource.replace("#142a46", "#142a47"),
+      mobileSource.replace("#185adb", "#185adc"),
     ])
       assert.throws(() => p47HistoricalSource(files.palette, changed, stage));
   }

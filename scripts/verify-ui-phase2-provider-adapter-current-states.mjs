@@ -24,6 +24,7 @@ const paginationFocusPreserved = [
   paginationFocusRevision.current,
   tableToolsRevision.current,
   readErrorRevision.current,
+  readErrorRevision.approvedCurrent,
 ].includes(currentAdapterSourceHash);
 assert.ok(
   !paginationFocusPreserved || !args.includes("--capture"),
