@@ -12,8 +12,7 @@ import {
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
-import { useModalDialog } from "../use-modal-dialog";
-import { trapModalTab } from "../modal-dialog-keyboard";
+import TrendEvidenceDialogs from "./TrendEvidenceDialogs.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import MonitoringReadinessStrip from "./shared/MonitoringReadinessStrip.vue";
 import { buildTrendMonitoringReadiness } from "./shared/monitoring-readiness";
@@ -21,6 +20,8 @@ import TrendDetailPanel from "./TrendDetailPanel.vue";
 import TrendFilterPanel from "./TrendFilterPanel.vue";
 import TrendChangeQueue from "./TrendChangeQueue.vue";
 import TrendRuleDialog, { type TrendRuleDraft } from "./TrendRuleDialog.vue";
+import TrendRuleList from "./TrendRuleList.vue";
+import TrendMetricExplainer from "./TrendMetricExplainer.vue";
 import { statusLabel } from "../ui/status-labels";
 import type {
   TrendDetail as Detail,
@@ -59,6 +60,7 @@ const props = defineProps<{
   qualityIssueIds = reactive<Record<string, string>>({}),
   relevanceDialog = ref<"active" | "irrelevant" | null>(null),
   relevanceReason = ref(""),
+  evidenceDialogs = ref<{ discardAnomalyReturnFocus: () => void } | null>(null),
   total = ref(0),
   page = ref(1),
   sort = ref<TrendSort>("impact"),
@@ -135,23 +137,6 @@ const canManageTrends = computed(() => props.capabilities.includes("trend:manage
       (left, right) => right.heat.value - left.heat.value || right.source_count - left.source_count,
     );
   });
-const { dialogElement: relevanceDialogElement, handleCancel: handleRelevanceCancel } =
-  useModalDialog(
-    () => Boolean(relevanceDialog.value && canManageTrends.value),
-    () => {
-      if (!busy.value) relevanceDialog.value = null;
-    },
-  );
-const {
-  dialogElement: anomalyDialogElement,
-  handleCancel: handleAnomalyCancel,
-  discardReturnFocus: discardAnomalyReturnFocus,
-} = useModalDialog(
-  () => Boolean(anomalyEvidence.value && canManageTrends.value),
-  () => {
-    if (!busy.value) anomalyEvidence.value = null;
-  },
-);
 const opportunityRoute = computed(() => {
   const topic = selected.value;
   if (!topic) return "/opportunities";
@@ -426,12 +411,6 @@ function openRelevance(status: "active" | "irrelevant") {
   relevanceReason.value = "";
   relevanceDialog.value = status;
 }
-function handleRelevanceKeydown(event: KeyboardEvent) {
-  trapModalTab(event, relevanceDialogElement.value);
-}
-function handleAnomalyKeydown(event: KeyboardEvent) {
-  trapModalTab(event, anomalyDialogElement.value);
-}
 function openAnomaly(item: Detail["evidence"][number]) {
   if (!requireTrendManage()) return;
   anomalyEvidence.value = item;
@@ -448,7 +427,7 @@ async function createQualityIssue() {
     );
   if (!result) return;
   qualityIssueIds[evidenceId] = result.issue.id;
-  discardAnomalyReturnFocus();
+  evidenceDialogs.value?.discardAnomalyReturnFocus();
   anomalyEvidence.value = null;
   anomalyReason.value = "";
   message.value = result.created
@@ -731,99 +710,19 @@ onBeforeUnmount(() => {
           @report-anomaly="openAnomaly"
         />
       </div>
-      <details class="trend-explainer">
-        <summary>帮助：热点趋势怎么看</summary>
-        <div>
-          <p>热点趋势怎么看</p>
-          <h3>不是热搜榜，而是可追溯的选品信号</h3>
-          <span
-            >系统定时抓取公开页面，把同一话题合并后展示热度、增长速度、来源数量和证据；点击任一热点可核对原始来源。</span
-          >
-        </div>
-        <ol>
-          <li><b>热度</b><span>当前收集到的相关信号数</span></li>
-          <li><b>增速</b><span>近期相对上一周期的变化</span></li>
-          <li><b>来源</b><span>支持结论的独立站点数量</span></li>
-          <li><b>可信度</b><span>按证据数量与新鲜度计算</span></li>
-        </ol>
-      </details>
+      <TrendMetricExplainer />
     </template>
-    <section v-else-if="tab === 'rules'" class="trend-rules">
-      <header class="trend-rule-heading">
-        <div>
-          <p>规则列表</p>
-          <h3>趋势监控规则</h3>
-          <span v-if="canManageTrends"
-            >来源门槛只生成规则命中候选；五项质量门全部通过后才显示建议采纳。通知仅支持站内；邮件服务未确认。</span
-          ><span v-else>当前为只读权限；可查看规则与结果，不能创建、暂停或恢复规则。</span>
-        </div>
-        <button v-if="canManageTrends" type="button" @click="showRule = true">＋ 创建规则</button>
-      </header>
-      <UiStatePanel
-        v-if="state !== 'ready' && state !== 'empty'"
-        :kind="state"
-        :request-id="requestId"
-        :hide-secondary="true"
-        @primary="load"
-      />
-      <div v-else-if="!rules.length" class="trend-rule-empty">
-        <strong>还没有监控规则</strong
-        ><span v-if="canManageTrends">按关键词、市场和语言建立第一条规则。</span
-        ><span v-else>当前工作区尚无可查看的监控规则。</span
-        ><button v-if="canManageTrends" type="button" @click="showRule = true">创建监控规则</button>
-      </div>
-      <article v-for="item in rules" :key="item.id">
-        <div>
-          <b :data-status="item.status">{{ statusLabel(item.status) }}</b>
-          <h4>{{ item.name }}</h4>
-          <span>{{ item.market }} · {{ item.language }} · {{ item.category || "全部分类" }}</span>
-        </div>
-        <p>
-          <strong>包含</strong>{{ item.include_keywords.join(" · ")
-          }}<small v-if="item.negative_keywords.length"
-            >排除：{{ item.negative_keywords.join(" · ") }}</small
-          >
-        </p>
-        <dl>
-          <div>
-            <dt>通知</dt>
-            <dd>站内</dd>
-          </div>
-          <div>
-            <dt>采集周期</dt>
-            <dd>每 {{ item.collection_interval_minutes }} 分钟</dd>
-          </div>
-          <div>
-            <dt>候选来源门槛</dt>
-            <dd>至少 {{ item.recommendation_min_source_count }} 个独立来源</dd>
-          </div>
-          <div>
-            <dt>最后评估</dt>
-            <dd>
-              {{ item.last_evaluated_at ? freshness(item.last_evaluated_at) : "尚未评估" }}
-            </dd>
-          </div>
-          <div>
-            <dt>下次采集</dt>
-            <dd>{{ item.next_collection_at ? freshness(item.next_collection_at) : "已暂停" }}</dd>
-          </div>
-          <div>
-            <dt>上次失败来源</dt>
-            <dd>
-              {{ item.last_failed_sources.length ? item.last_failed_sources.join("、") : "无" }}
-            </dd>
-          </div>
-          <div>
-            <dt>版本</dt>
-            <dd>v{{ item.version }}</dd>
-          </div>
-        </dl>
-        <button v-if="canManageTrends" type="button" @click="toggleRule(item)">
-          {{ item.status === "enabled" ? "暂停" : "启用" }}
-        </button>
-        <button type="button" class="secondary" @click="viewRuleTopics(item)">查看趋势结果</button>
-      </article>
-    </section>
+    <TrendRuleList
+      v-else-if="tab === 'rules'"
+      :state="state"
+      :request-id="requestId"
+      :rules="rules"
+      :can-manage="canManageTrends"
+      @reload="load"
+      @create="showRule = true"
+      @toggle="toggleRule"
+      @view-topics="viewRuleTopics"
+    />
     <TrendChangeQueue
       v-else-if="canManageTrends"
       :topics="topics"
@@ -839,101 +738,17 @@ onBeforeUnmount(() => {
       @close="showRule = false"
       @submit="createRule"
     />
-    <dialog
-      ref="anomalyDialogElement"
-      class="trend-modal trend-native-dialog trend-anomaly-dialog"
-      aria-labelledby="trend-anomaly-title"
-      @cancel="handleAnomalyCancel"
-      @keydown="handleAnomalyKeydown"
-    >
-      <form @submit.prevent="createQualityIssue">
-        <header>
-          <div>
-            <p>异常证据</p>
-            <h3 id="trend-anomaly-title">创建数据质量工单</h3>
-          </div>
-          <button
-            type="button"
-            aria-label="关闭异常报告"
-            :disabled="Boolean(busy)"
-            @click="anomalyEvidence = null"
-          >
-            ×
-          </button>
-        </header>
-        <p>{{ anomalyEvidence?.title }}</p>
-        <label
-          >风险等级<select v-model="anomalySeverity">
-            <option value="warning">需要复核</option>
-            <option value="critical">严重异常</option>
-          </select></label
-        ><label
-          >异常说明<textarea
-            v-model="anomalyReason"
-            required
-            minlength="2"
-            maxlength="500"
-            rows="4"
-            placeholder="说明哪个事实异常，以及复核时应检查什么"
-            autofocus
-          ></textarea>
-        </label>
-        <aside>工单会关联当前主题、证据、来源、原始证据和解析器版本。</aside>
-        <footer>
-          <button type="button" :disabled="Boolean(busy)" @click="anomalyEvidence = null">
-            取消</button
-          ><button type="submit" :disabled="anomalyReason.trim().length < 2 || Boolean(busy)">
-            {{ busy.includes("quality-issues") ? "创建中…" : "创建质量工单" }}
-          </button>
-        </footer>
-      </form>
-    </dialog>
-    <dialog
-      v-if="relevanceDialog && canManageTrends"
-      ref="relevanceDialogElement"
-      class="trend-modal trend-relevance-dialog"
-      aria-modal="true"
-      aria-labelledby="trend-relevance-title"
-      @cancel="handleRelevanceCancel"
-      @keydown="handleRelevanceKeydown"
-    >
-      <form @submit.prevent="markIrrelevant">
-        <header>
-          <div>
-            <p>相关性治理</p>
-            <h3 id="trend-relevance-title">
-              {{ relevanceDialog === "irrelevant" ? "标记为无关" : "恢复为相关" }}
-            </h3>
-          </div>
-          <button
-            type="button"
-            aria-label="关闭相关性变更"
-            :disabled="Boolean(busy)"
-            @click="relevanceDialog = null"
-          >
-            ×
-          </button>
-        </header>
-        <p>原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。</p>
-        <label
-          >变更原因<textarea
-            v-model="relevanceReason"
-            required
-            minlength="2"
-            maxlength="500"
-            rows="4"
-            placeholder="说明判定依据，便于后续复核"
-            autofocus
-          ></textarea>
-        </label>
-        <footer>
-          <button type="button" :disabled="Boolean(busy)" @click="relevanceDialog = null">
-            取消</button
-          ><button type="submit" :disabled="relevanceReason.trim().length < 2 || Boolean(busy)">
-            {{ busy.includes("/relevance") ? "提交中…" : "确认并记录" }}
-          </button>
-        </footer>
-      </form>
-    </dialog>
+    <TrendEvidenceDialogs
+      ref="evidenceDialogs"
+      v-model:anomaly-evidence="anomalyEvidence"
+      v-model:anomaly-severity="anomalySeverity"
+      v-model:anomaly-reason="anomalyReason"
+      v-model:relevance-dialog="relevanceDialog"
+      v-model:relevance-reason="relevanceReason"
+      :can-manage="canManageTrends"
+      :busy="busy"
+      @create-quality-issue="createQualityIssue"
+      @mark-irrelevant="markIrrelevant"
+    />
   </section>
 </template>

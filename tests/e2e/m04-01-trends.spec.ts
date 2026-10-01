@@ -293,9 +293,9 @@ test("M04-01.A08/A09 monitoring rule and empty/forbidden states are explicit", a
   await page.getByRole("button", { name: /^监控规则/ }).click();
   await expect(page.getByRole("heading", { name: "趋势监控规则" })).toBeVisible();
   await expect(page.getByText(/邮件服务未确认/)).toBeVisible();
-  await expect(page.getByText("至少 2 个独立来源")).toBeVisible();
+  await expect(page.getByText("至少 2 个独立来源", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "＋ 创建规则" }).click();
-  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("dialog", { name: "创建趋势监控" })).toBeVisible();
   await expect(page.getByText("候选不等于建议采纳")).toBeVisible();
   await page.getByLabel("规则名称").fill("新的监控");
   await page.getByLabel("包含关键词（逗号分隔）").fill("desk lamp");
@@ -381,12 +381,12 @@ test("trend governance proposes a merge into a second-person confirmation queue"
 test("trend view URL restores filters, sorting and direct topic navigation", async ({ page }) => {
   await ready(page);
   await page.goto(`/trends?q=skin&sort=latest&topic=${topicId}`);
-  await expect(page.getByLabel("关键词")).toHaveValue("skin");
-  await expect(page.getByLabel("排序")).toHaveValue("latest");
-  await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
   if ((page.viewportSize()?.width ?? 0) <= 760)
     await page.getByRole("button", { name: /筛选趋势/ }).click();
-  await page.getByLabel("分类").fill("beauty");
+  await expect(page.getByRole("textbox", { name: "关键词", exact: true })).toHaveValue("skin");
+  await expect(page.getByLabel("排序")).toHaveValue("latest");
+  await expect(page.getByRole("heading", { name: detail.title })).toBeVisible();
+  await page.getByRole("textbox", { name: "分类", exact: true }).fill("beauty");
   await page.getByRole("button", { name: "筛选", exact: true }).click();
   await expect(page).toHaveURL(
     new RegExp(`/trends\\?q=skin&sort=latest&category=beauty&topic=${topicId}$`),

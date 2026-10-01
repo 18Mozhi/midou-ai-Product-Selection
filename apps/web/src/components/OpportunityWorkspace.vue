@@ -1,16 +1,5 @@
 <script setup lang="ts">
-import {
-  computed,
-  defineAsyncComponent,
-  onActivated,
-  onBeforeUnmount,
-  onDeactivated,
-  onMounted,
-  nextTick,
-  ref,
-  shallowRef,
-  watch,
-} from "vue";
+import { defineAsyncComponent, ref, shallowRef } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityListPanel.vue"));
@@ -46,14 +35,21 @@ import {
   formatOpportunityTime as freshness,
   opportunityStatusLabel,
   opportunityTabs as detailTabs,
-  resolveOpportunityTab,
-  safeOpportunityReturnPath,
 } from "./opportunity-workspace-presentation";
 import type * as OpportunityTypes from "./opportunity-workspace-types";
 import {
   useOpportunityWorkspaceReads,
   type OpportunityDownstreamStates,
 } from "./use-opportunity-workspace-reads";
+import { useOpportunityWorkspaceNavigation } from "./use-opportunity-workspace-navigation";
+import { useOpportunityWorkspaceAccess } from "./use-opportunity-workspace-access";
+import { useOpportunityWorkspaceFeedbackWrites } from "./use-opportunity-workspace-feedback-writes";
+import { useOpportunityWorkspaceErpImport } from "./use-opportunity-workspace-erp-import";
+import { useOpportunityWorkspaceDecisionFocus } from "./use-opportunity-workspace-decision-focus";
+import { useOpportunityWorkspaceLifecycle } from "./use-opportunity-workspace-lifecycle";
+import { useOpportunityWorkspaceWriteScopes } from "./use-opportunity-workspace-write-scopes";
+import { useOpportunityWorkspaceCollectionActions } from "./use-opportunity-workspace-collection-actions";
+import { useOpportunityWorkspaceListState } from "./use-opportunity-workspace-list-state";
 import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
@@ -123,24 +119,14 @@ const aiReviewSubmission = shallowRef<{
   resultId: string;
   stage: "submitting" | "refreshing";
 } | null>(null);
-type OpportunityDecisionFocusIntent = {
-  opportunityId: string;
-  action: "adopt" | "observe" | "reject";
-};
-const pendingDecisionFocus = shallowRef<OpportunityDecisionFocusIntent | null>(null);
-const createFeedback = ref<
-  | {
-      type: "error";
-      message: string;
-    }
-  | {
-      type: "created";
-      id: string;
-      name: string;
-      submitted: { name: string; market: string; category: string; source_topic_id: string };
-    }
-  | null
->(null);
+let workspaceActive = true;
+const { pendingDecisionFocus, captureDecisionFocus, restoreDecisionFocus } =
+  useOpportunityWorkspaceDecisionFocus({
+    opportunityId: () => props.opportunityId,
+    workspaceActive: () => workspaceActive,
+  });
+const { createFeedback, pageCount, currentPageSelectedItems, outsideCurrentPageSelectedCount } =
+  useOpportunityWorkspaceListState({ items, selectedOpportunityIds, total });
 let createDialogGeneration = 0;
 let batchDialogGeneration = 0;
 let batchIntentGeneration = 0;
@@ -149,119 +135,14 @@ let decisionDialogGeneration = 0;
 let erpDialogGeneration = 0;
 let erpBridgeGeneration = 0;
 let writeScopeGeneration = 0;
-let activeWriteCounts = new Map<string, number>();
-let workspaceActive = true;
 let tabIntentGeneration = 0;
 let aiReviewIntentGeneration = 0;
-function captureDecisionFocus(opportunityId: string | undefined) {
-  if (!opportunityId || typeof document === "undefined") return;
-  const waiting = document.querySelector(".opportunity-decision-waiting");
-  const activeElement = document.activeElement;
-  if (!(waiting instanceof HTMLElement) || !(activeElement instanceof HTMLElement)) return;
-  if (!waiting.contains(activeElement)) return;
-  const label = activeElement
-    .closest<HTMLButtonElement>("button")
-    ?.textContent?.replace(/\s+/g, "");
-  const action = label?.includes("继续观察")
-    ? "observe"
-    : label?.includes("驳回")
-      ? "reject"
-      : "adopt";
-  pendingDecisionFocus.value = { opportunityId, action };
-}
-async function restoreDecisionFocus(opportunityId: string) {
-  const intent = pendingDecisionFocus.value;
-  pendingDecisionFocus.value = null;
-  if (
-    !intent ||
-    intent.opportunityId !== opportunityId ||
-    props.opportunityId !== opportunityId ||
-    !workspaceActive ||
-    typeof document === "undefined"
-  )
-    return;
-  await nextTick();
-  if (props.opportunityId !== opportunityId || !workspaceActive) return;
-  const actionLabel =
-    intent.action === "adopt" ? "采纳建议" : intent.action === "observe" ? "继续观察" : "驳回";
-  const action = Array.from(
-    document.querySelector("#opportunity-decision-actions")?.querySelectorAll("button") ?? [],
-  ).find((button) => button.textContent?.replace(/\s+/g, "").includes(actionLabel));
-  if (action && !action.disabled) {
-    action.focus({ preventScroll: true });
-    return;
-  }
-  document
-    .querySelector<HTMLElement>("#opportunity-decision-actions details summary")
-    ?.focus({ preventScroll: true });
-}
-function writeScopeKey(opportunityId = props.opportunityId) {
-  return opportunityId ? `opportunity:${opportunityId}` : "opportunity-list";
-}
-function beginScopedWrite(scopeKey: string) {
-  activeWriteCounts.set(scopeKey, (activeWriteCounts.get(scopeKey) ?? 0) + 1);
-  if (workspaceActive && scopeKey === writeScopeKey()) busy.value = true;
-}
-function finishScopedWrite(scopeKey: string) {
-  const remaining = Math.max(0, (activeWriteCounts.get(scopeKey) ?? 0) - 1);
-  if (remaining) activeWriteCounts.set(scopeKey, remaining);
-  else activeWriteCounts.delete(scopeKey);
-  if (workspaceActive && scopeKey === writeScopeKey()) busy.value = remaining > 0;
-}
-function pendingWriteCount(scopeKey = writeScopeKey()) {
-  return activeWriteCounts.get(scopeKey) ?? 0;
-}
-watch(
-  showCreate,
-  () => {
-    createDialogGeneration += 1;
-    createFeedback.value = null;
-  },
-  { flush: "sync" },
-);
-watch(
-  showDecision,
-  () => {
-    decisionDialogGeneration += 1;
-  },
-  { flush: "sync" },
-);
-watch(
-  showErpImport,
-  () => {
-    erpDialogGeneration += 1;
-  },
-  { flush: "sync" },
-);
-watch(
-  () => [showBatch.value, route.fullPath, props.opportunityId],
-  () => {
-    batchDialogGeneration += 1;
-  },
-  { flush: "sync" },
-);
-watch(
-  showBatch,
-  (open) => {
-    if (open) batchIntentGeneration += 1;
-  },
-  { flush: "sync" },
-);
-watch(
-  selectedOpportunityIds,
-  () => {
-    batchSelectionGeneration += 1;
-  },
-  { deep: true, flush: "sync" },
-);
-watch(
-  () => [route.fullPath, props.opportunityId],
-  () => {
-    createDialogGeneration += 1;
-    createFeedback.value = null;
-  },
-  { flush: "sync" },
-);
+const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } =
+  useOpportunityWorkspaceWriteScopes({
+    opportunityId: () => props.opportunityId,
+    workspaceActive: () => workspaceActive,
+    busy,
+  });
 const { filters, form, costForm, feedbackForm } = createOpportunityWorkspaceForms();
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
@@ -274,68 +155,28 @@ const {
   submit: submitAiReviewReason,
   cancel: cancelAiReviewReason,
 } = useAuditedReason();
-const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
-const currentPageSelectedItems = computed(() =>
-  items.value.filter((item) => selectedOpportunityIds.value.includes(item.id)),
-);
-const outsideCurrentPageSelectedCount = computed(() =>
-  Math.max(0, selectedOpportunityIds.value.length - currentPageSelectedItems.value.length),
-);
-const canDecide = computed(() => props.capabilities?.includes("opportunity:decide") ?? false);
-const canManageCompetitors = computed(
-  () => props.capabilities?.includes("competitor:manage") ?? false,
-);
-const canReadCompetitors = computed(
-  () =>
-    props.capabilities?.includes("competitor:read") ||
-    props.capabilities?.includes("competitor:manage") ||
-    false,
-);
-const canManageSuppliers = computed(
-  () => props.capabilities?.includes("supplier_quote:manage") ?? false,
-);
-const canReadSourcing = computed(
-  () =>
-    props.capabilities?.includes("sourcing:read") ||
-    props.capabilities?.includes("supplier_quote:manage") ||
-    false,
-);
-const canOpenCompetitorWorkspace = computed(
-  () => props.capabilities?.includes("competitor:read") ?? false,
-);
-const canOpenSourcingWorkspace = computed(
-  () => props.capabilities?.includes("sourcing:read") ?? false,
-);
-const canConfirmCost = computed(() => props.capabilities?.includes("cost:confirm") ?? false);
-const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
-const statePanelKind = computed(() => (state.value === "ready" ? "empty" : state.value));
-const statePanelPrimaryLabel = computed(() =>
-  statePanelKind.value === "expired"
-    ? "重新登录"
-    : ["empty", "forbidden", "not_found"].includes(statePanelKind.value)
-      ? "返回机会列表"
-      : "",
-);
-const statePanelSecondaryLabel = computed(() =>
-  ["error", "blocked"].includes(statePanelKind.value) ? "返回机会列表" : "",
-);
-function returnToOpportunityList() {
-  void router.push("/opportunities");
-}
-function handleStatePrimary() {
-  if (statePanelKind.value === "expired") {
-    void router.push({
-      path: "/login",
-      query: { reason: "authentication_required", redirect: route.fullPath },
-    });
-    return;
-  }
-  if (["empty", "forbidden", "not_found"].includes(statePanelKind.value)) {
-    returnToOpportunityList();
-    return;
-  }
-  void load();
-}
+const {
+  canDecide,
+  canManageCompetitors,
+  canReadCompetitors,
+  canManageSuppliers,
+  canReadSourcing,
+  canOpenCompetitorWorkspace,
+  canOpenSourcingWorkspace,
+  canConfirmCost,
+  returnPath,
+  statePanelKind,
+  statePanelPrimaryLabel,
+  statePanelSecondaryLabel,
+  returnToOpportunityList,
+  handleStatePrimary,
+} = useOpportunityWorkspaceAccess({
+  capabilities: () => props.capabilities,
+  route,
+  router,
+  state,
+  load: () => load(),
+});
 const {
   invalidateReads,
   load,
@@ -384,113 +225,68 @@ const {
   captureDecisionFocus,
   restoreDecisionFocus,
 });
-async function discoverCompetitors() {
-  if (!detail.value) return;
-  const result = await write(`/opportunities/${detail.value.id}/competitor-discovery`, {});
-  if (result) message.value = `Amazon 竞品采集已排队，任务编号 ${result.task_id}。`;
-}
-async function discoverSuppliers() {
-  if (!detail.value) return;
-  const result = await write("/sourcing/searches", {
-    input_type: "opportunity",
-    input_ref: detail.value.id,
+const {
+  syncListRoute,
+  applyListFilters,
+  resetListFilters,
+  setSelectionView,
+  goListPage,
+  setTab,
+  syncTabFromRoute,
+  syncCreateRouteIntent,
+} = useOpportunityWorkspaceNavigation({
+  route,
+  router,
+  opportunityId: () => props.opportunityId,
+  canDecide,
+  filters,
+  form,
+  selectionView,
+  selectedOpportunityIds,
+  page,
+  pageCount,
+  tab,
+  showCreate,
+  load,
+  advanceTabIntent: () => {
+    tabIntentGeneration += 1;
+  },
+});
+const { submitOperatingFeedback, retryUnknownOperatingFeedback, markPendingFeedbackWritesUnknown } =
+  useOpportunityWorkspaceFeedbackWrites({
+    request,
+    detail,
+    feedbackForm,
+    busy,
+    pendingFeedbackWrites,
+    feedbackWriteStates,
+    requestId,
+    message,
+    currentWriteScopeGeneration: () => writeScopeGeneration,
+    writeScopeKey,
+    beginScopedWrite,
+    finishScopedWrite,
   });
-  if (result) message.value = `公开供应商采集已排队，任务编号 ${result.task_id}。`;
-}
-async function submitOperatingFeedback() {
-  if (!detail.value) return;
-  const opportunityId = detail.value.id;
-  let pending = pendingFeedbackWrites.value[opportunityId];
-  if (!pending) {
-    feedbackForm.observed_at = new Date().toISOString();
-    pending = {
-      idempotencyKey: crypto.randomUUID(),
-      body: {
-        ...feedbackForm,
-        currency: feedbackForm.currency.toUpperCase(),
-        expected_version: detail.value.version,
-      },
-    };
-    pendingFeedbackWrites.value = {
-      ...pendingFeedbackWrites.value,
-      [opportunityId]: pending,
-    };
-  }
-  await sendOperatingFeedback(opportunityId, pending);
-}
-async function retryUnknownOperatingFeedback() {
-  const opportunityId = detail.value?.id;
-  const pending = opportunityId ? pendingFeedbackWrites.value[opportunityId] : undefined;
-  if (!opportunityId || !pending || !feedbackWriteStates.value[opportunityId]?.unknown) return;
-  await sendOperatingFeedback(opportunityId, pending);
-}
-function markPendingFeedbackWritesUnknown() {
-  const next = { ...feedbackWriteStates.value };
-  let changed = false;
-  for (const opportunityId of Object.keys(pendingFeedbackWrites.value)) {
-    const current = next[opportunityId];
-    if (current?.unknown) continue;
-    next[opportunityId] = {
-      unknown: true,
-      message: "页面切换前未能确认本次提交结果；请返回该机会并用同一请求标识恢复核对。",
-      requestId: current?.requestId ?? "",
-    };
-    changed = true;
-  }
-  if (changed) feedbackWriteStates.value = next;
-}
-async function sendOperatingFeedback(
-  opportunityId: string,
-  pending: { idempotencyKey: string; body: Record<string, unknown> },
-) {
-  if (busy.value) return;
-  const generation = writeScopeGeneration;
-  const scopeKey = writeScopeKey(opportunityId);
-  const ownsScope = () => generation === writeScopeGeneration;
-  beginScopedWrite(scopeKey);
-  message.value = "";
-  feedbackWriteStates.value = {
-    ...feedbackWriteStates.value,
-    [opportunityId]: { unknown: false, message: "", requestId: "" },
-  };
-  try {
-    const response = await request<OpportunityTypes.OpportunityDetail["operating_feedback"]>(
-      `/opportunities/${opportunityId}/operating-feedback`,
-      { method: "POST", body: pending.body, idempotencyKey: pending.idempotencyKey },
-    );
-    if (!ownsScope()) return;
-    const result = response.data;
-    if (!result || !Array.isArray(result.facts) || !("calibration" in result))
-      throw new Error("服务端已响应，但返回内容不完整；请使用原请求标识恢复核对。");
-    requestId.value = response.request_id;
-    delete pendingFeedbackWrites.value[opportunityId];
-    delete feedbackWriteStates.value[opportunityId];
-    if (detail.value?.id !== opportunityId) return;
-    detail.value.operating_feedback = result;
-    feedbackForm.source_ref = "";
-    feedbackForm.notes = "";
-    message.value = "经营复盘事实已写入；规则和人工决策均未自动变更。";
-  } catch (error) {
-    if (!ownsScope()) return;
-    const apiError = error instanceof ApiClientError ? error : null;
-    const unknown = !apiError || apiError.status === 0 || apiError.status >= 500;
-    const nextState = {
-      unknown,
-      message:
-        apiError?.actionHint ?? (error instanceof Error ? error.message : "提交结果暂未确认。"),
-      requestId: apiError?.requestId ?? "",
-    };
-    if (!unknown) delete pendingFeedbackWrites.value[opportunityId];
-    feedbackWriteStates.value = {
-      ...feedbackWriteStates.value,
-      [opportunityId]: nextState,
-    };
-    if (nextState.requestId) requestId.value = nextState.requestId;
-    message.value = nextState.message;
-  } finally {
-    finishScopedWrite(scopeKey);
-  }
-}
+const { importFromErpBrowser, importErpFile } = useOpportunityWorkspaceErpImport({
+  route,
+  opportunityId: () => props.opportunityId,
+  busy,
+  bridgeBusy: erpBridgeBusy,
+  importLimit: erpImportLimit,
+  showImport: showErpImport,
+  currentDialogGeneration: () => erpDialogGeneration,
+  currentWriteScopeGeneration: () => writeScopeGeneration,
+  beginBridgeIntent: () => ++erpBridgeGeneration,
+  currentBridgeGeneration: () => erpBridgeGeneration,
+  write,
+  load,
+  message,
+});
+const { discoverCompetitors, discoverSuppliers } = useOpportunityWorkspaceCollectionActions({
+  detail,
+  write,
+  message,
+});
 async function write(path: string, body: unknown, refreshOnStaleReceipt = true) {
   if (busy.value) return null;
   const generation = writeScopeGeneration;
@@ -571,122 +367,6 @@ async function create() {
   if (!sameRoute) return;
   if (showCreate.value) createFeedback.value = staleSuccess;
   else message.value = `机会“${submitted.name}”已创建；当前列表未跳转，请在列表中查看。`;
-}
-function browserBridge<T>(action: string, payload: Record<string, unknown>) {
-  return new Promise<T>((resolve, reject) => {
-    const request_id = crypto.randomUUID();
-    const timeout = window.setTimeout(() => {
-      window.removeEventListener("message", receive);
-      reject(new Error("browser_helper_unavailable"));
-    }, 120000);
-    function receive(event: MessageEvent) {
-      if (
-        event.source !== window ||
-        event.data?.type !== "SCOUTOPS_BROWSER_BRIDGE_RESULT" ||
-        event.data?.request_id !== request_id
-      )
-        return;
-      window.clearTimeout(timeout);
-      window.removeEventListener("message", receive);
-      if (!event.data.ok) reject(new Error(String(event.data.error || "browser_helper_failed")));
-      else resolve(event.data.data as T);
-    }
-    window.addEventListener("message", receive);
-    window.postMessage(
-      {
-        type: "SCOUTOPS_BROWSER_BRIDGE_REQUEST",
-        request_id,
-        action,
-        payload,
-      },
-      location.origin,
-    );
-  });
-}
-async function persistErpProducts(
-  data: {
-    items: unknown[];
-    source_url: string;
-    captured_at: string;
-    total?: number;
-  },
-  ownsIntent: () => boolean,
-  ownsPage: () => boolean,
-) {
-  const result = await write("/imports/erp-products", data);
-  if (!result) return;
-  if (ownsIntent()) showErpImport.value = false;
-  if (!ownsPage()) return;
-  await load();
-  if (!ownsPage()) return;
-  message.value =
-    `ERP 已读取 ${result.received_count} 条：新增 ${result.opportunity_count} 个机会、` +
-    `${result.competitor_count} 个亚马逊待采集竞品、` +
-    `${result.sourcing_search_count} 个货源匹配任务；原始记录已保存为证据。`;
-}
-async function importFromErpBrowser() {
-  if (busy.value || erpBridgeBusy.value) return;
-  const bridgeGeneration = ++erpBridgeGeneration;
-  const ownership = captureErpImportOwnership();
-  const ownsBridge = () => bridgeGeneration === erpBridgeGeneration && ownership.ownsPage();
-  erpBridgeBusy.value = true;
-  message.value = "正在从已登录的 ERP 商品列表读取数据…";
-  try {
-    const data = await browserBridge<{
-      items: unknown[];
-      source_url: string;
-      captured_at: string;
-      total: number;
-    }>("erp.products.read", { limit: Number(erpImportLimit.value) });
-    if (!ownsBridge() || !ownership.ownsIntent()) return;
-    await persistErpProducts(data, ownership.ownsIntent, ownership.ownsPage);
-  } catch (error) {
-    if (!ownsBridge() || !ownership.ownsIntent()) return;
-    const code = error instanceof Error ? error.message : "";
-    message.value =
-      code === "erp_login_page_opened"
-        ? "已打开 ERP 登录页。登录完成并进入商品列表后，再点击“从当前浏览器读取”。"
-        : code === "erp_login_required"
-          ? "ERP 登录状态无效，请在 ERP 页面重新登录。"
-          : "未检测到浏览器助手或 ERP 权限未授予。请先下载并加载浏览器助手。";
-  } finally {
-    if (bridgeGeneration === erpBridgeGeneration) erpBridgeBusy.value = false;
-  }
-}
-async function importErpFile(event: Event) {
-  const file = (event.target as HTMLInputElement).files?.[0];
-  if (!file) return;
-  const ownership = captureErpImportOwnership();
-  try {
-    const parsed = JSON.parse(await file.text());
-    if (!ownership.ownsIntent()) return;
-    const items = Array.isArray(parsed) ? parsed : parsed?.list;
-    await persistErpProducts(
-      {
-        items,
-        source_url: "https://medou.medouai.com/#/ProductList",
-        captured_at: new Date().toISOString(),
-      },
-      ownership.ownsIntent,
-      ownership.ownsPage,
-    );
-  } catch {
-    if (ownership.ownsIntent())
-      message.value = "ERP JSON 文件格式无效；应为接口返回的 list 数组或商品数组。";
-  }
-}
-function captureErpImportOwnership() {
-  const dialogGeneration = erpDialogGeneration;
-  const scopeGeneration = writeScopeGeneration;
-  const routePath = route.fullPath;
-  const ownsPage = () =>
-    scopeGeneration === writeScopeGeneration &&
-    route.fullPath === routePath &&
-    route.path === "/opportunities" &&
-    !props.opportunityId;
-  const ownsIntent = () =>
-    ownsPage() && showErpImport.value && dialogGeneration === erpDialogGeneration;
-  return { ownsIntent, ownsPage };
 }
 function startDecision(action: "adopt" | "observe" | "reject") {
   decisionAction.value = action;
@@ -923,101 +603,6 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
     if (!notes) aiReviewError.value = "";
   }
 }
-function syncListRoute() {
-  filters.q = typeof route.query.q === "string" ? route.query.q : "";
-  filters.market = typeof route.query.market === "string" ? route.query.market : "";
-  filters.decision_status =
-    typeof route.query.decision_status === "string" ? route.query.decision_status : "";
-  filters.coverage_status =
-    typeof route.query.coverage_status === "string" ? route.query.coverage_status : "";
-  filters.blocking_reason =
-    typeof route.query.blocking_reason === "string" ? route.query.blocking_reason : "";
-  filters.lifecycle_status =
-    typeof route.query.lifecycle_status === "string" ? route.query.lifecycle_status : "";
-  filters.owner_id = typeof route.query.owner_id === "string" ? route.query.owner_id : "";
-  selectionView.value =
-    route.query.view === "rule_candidates"
-      ? "rule_candidates"
-      : route.query.view === "evidence_pending"
-        ? "evidence_pending"
-        : route.query.view === "all" || route.query.scope === "all"
-          ? "all"
-          : "recommended";
-  const requestedPage = Number(route.query.page ?? 1);
-  page.value = Number.isInteger(requestedPage) && requestedPage > 0 ? requestedPage : 1;
-}
-async function applyListFilters() {
-  const previousPath = route.fullPath;
-  await router.push({
-    query: {
-      q: filters.q || undefined,
-      market: filters.market || undefined,
-      decision_status: filters.decision_status || undefined,
-      coverage_status: filters.coverage_status || undefined,
-      blocking_reason: filters.blocking_reason || undefined,
-      lifecycle_status: filters.lifecycle_status || undefined,
-      owner_id: filters.owner_id || undefined,
-      view: selectionView.value === "recommended" ? undefined : selectionView.value,
-    },
-  });
-  if (route.fullPath === previousPath) await load();
-}
-async function resetListFilters() {
-  for (const key of Object.keys(filters) as Array<keyof typeof filters>) filters[key] = "";
-  const previousPath = route.fullPath;
-  await router.push({
-    query: { view: selectionView.value === "recommended" ? undefined : selectionView.value },
-  });
-  if (route.fullPath === previousPath) await load();
-}
-async function setSelectionView(
-  nextView: "recommended" | "rule_candidates" | "evidence_pending" | "all",
-) {
-  if (selectionView.value === nextView) return;
-  selectedOpportunityIds.value = [];
-  await router.push({
-    query: {
-      ...route.query,
-      view: nextView === "recommended" ? undefined : nextView,
-      scope: undefined,
-      page: undefined,
-      decision_status: nextView === "all" ? route.query.decision_status : undefined,
-    },
-  });
-}
-async function goListPage(nextPage: number) {
-  if (nextPage < 1 || nextPage > pageCount.value) return;
-  await router.push({ query: { ...route.query, page: nextPage === 1 ? undefined : nextPage } });
-}
-async function setTab(nextTab: OpportunityTypes.OpportunityTab) {
-  if (tab.value !== nextTab) tabIntentGeneration += 1;
-  tab.value = nextTab;
-  await router.replace({
-    query: { ...route.query, tab: nextTab === "overview" ? undefined : nextTab },
-  });
-}
-function syncTabFromRoute() {
-  const nextTab = resolveOpportunityTab(route.query.tab);
-  if (tab.value !== nextTab) tabIntentGeneration += 1;
-  tab.value = nextTab;
-}
-function syncCreateRouteIntent() {
-  if (
-    props.opportunityId ||
-    route.path !== "/opportunities" ||
-    !canDecide.value ||
-    (route.query.create !== "1" && !route.query.source_topic_id)
-  )
-    return;
-  form.source_topic_id =
-    typeof route.query.source_topic_id === "string" ? route.query.source_topic_id : "";
-  form.name = typeof route.query.name === "string" ? route.query.name : "";
-  form.market = typeof route.query.market === "string" ? route.query.market : "US";
-  form.category = typeof route.query.category === "string" ? route.query.category : "";
-  showCreate.value = true;
-}
-let loadQueued = false;
-let wasDeactivated = false;
 function closeTransientDialogs() {
   showCreate.value = false;
   showErpImport.value = false;
@@ -1026,97 +611,65 @@ function closeTransientDialogs() {
   decisionAction.value = "observe";
   decisionReason.value = "";
 }
-function queueLoad() {
-  if (loadQueued) return;
-  loadQueued = true;
-  queueMicrotask(() => {
-    loadQueued = false;
-    void load();
-  });
-}
-onDeactivated(() => {
-  workspaceActive = false;
-  closeTransientDialogs();
-  if (aiReviewSubmission.value) aiReviewIntentGeneration += 1;
-  invalidateReads();
-  erpBridgeGeneration += 1;
-  erpBridgeBusy.value = false;
-  markPendingFeedbackWritesUnknown();
-  writeScopeGeneration += 1;
-  busy.value = false;
-  wasDeactivated = true;
-});
-onActivated(() => {
-  workspaceActive = true;
-  busy.value = pendingWriteCount() > 0;
-  if (!wasDeactivated) return;
-  wasDeactivated = false;
-  syncCreateRouteIntent();
-  queueLoad();
-});
-onMounted(() => {
-  syncTabFromRoute();
-  syncListRoute();
-  syncCreateRouteIntent();
-  void load();
-});
-watch(
-  () => props.opportunityId,
-  (opportunityId, previousOpportunityId) => {
-    if (opportunityId !== previousOpportunityId) {
-      aiReviewIntentGeneration += 1;
-      closeTransientDialogs();
-      cancelAiReviewReason();
-      aiReviewError.value = "";
-    }
-    invalidateReads();
+useOpportunityWorkspaceLifecycle({
+  route,
+  opportunityId: () => props.opportunityId,
+  showCreate,
+  showErpImport,
+  showBatch,
+  showDecision,
+  decisionAction,
+  decisionReason,
+  selectedOpportunityIds,
+  createFeedback,
+  aiReviewError,
+  aiReviewSubmission,
+  erpBridgeBusy,
+  busy,
+  detail,
+  profit,
+  profitLoadState,
+  profitErrorMessage,
+  profitRequestId,
+  invalidateReads,
+  pendingWriteCount,
+  closeAiReviewReason: cancelAiReviewReason,
+  markPendingFeedbackWritesUnknown,
+  syncTabFromRoute,
+  syncListRoute,
+  syncCreateRouteIntent,
+  load,
+  setWorkspaceActive: (active) => {
+    workspaceActive = active;
+  },
+  closeTransientDialogs,
+  advanceCreateDialog: () => {
+    createDialogGeneration += 1;
+  },
+  advanceDecisionDialog: () => {
+    decisionDialogGeneration += 1;
+  },
+  advanceErpDialog: () => {
+    erpDialogGeneration += 1;
+  },
+  advanceErpBridge: () => {
     erpBridgeGeneration += 1;
-    erpBridgeBusy.value = false;
-    markPendingFeedbackWritesUnknown();
+  },
+  advanceBatchDialog: () => {
+    batchDialogGeneration += 1;
+  },
+  advanceBatchIntent: () => {
+    batchIntentGeneration += 1;
+  },
+  advanceBatchSelection: () => {
+    batchSelectionGeneration += 1;
+  },
+  advanceWriteScope: () => {
     writeScopeGeneration += 1;
-    busy.value = pendingWriteCount() > 0;
-    aiReviewSubmission.value = null;
-    detail.value = null;
-    profit.value = null;
-    profitLoadState.value = "loading";
-    profitErrorMessage.value = "";
-    profitRequestId.value = "";
-    syncTabFromRoute();
-    queueLoad();
   },
-  { flush: "sync" },
-);
-watch(
-  () => route.query.tab,
-  () => syncTabFromRoute(),
-);
-watch(
-  () => [
-    route.query.q,
-    route.query.market,
-    route.query.decision_status,
-    route.query.coverage_status,
-    route.query.blocking_reason,
-    route.query.lifecycle_status,
-    route.query.owner_id,
-    route.query.view,
-    route.query.scope,
-    route.query.page,
-  ],
-  () => {
-    if (props.opportunityId || route.path !== "/opportunities") return;
-    invalidateReads();
-    syncListRoute();
-    queueLoad();
+  advanceAiReviewIntent: () => {
+    aiReviewIntentGeneration += 1;
   },
-  { flush: "sync" },
-);
-onBeforeUnmount(() => {
-  invalidateReads();
-  erpBridgeGeneration += 1;
-  erpBridgeBusy.value = false;
-  writeScopeGeneration += 1;
-  aiReviewSubmission.value = null;
 });
 </script>
 <template>

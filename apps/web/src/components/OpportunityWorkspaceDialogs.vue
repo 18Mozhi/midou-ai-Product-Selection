@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, ref, watch } from "vue";
 import { useModalDialog } from "../use-modal-dialog";
+import { containDialogTab } from "../ui/contain-dialog-tab";
+import OpportunityErpImportDialog from "./OpportunityErpImportDialog.vue";
 
 type DecisionAction = "adopt" | "observe" | "reject";
 type CreateFeedback =
@@ -31,10 +33,6 @@ const props = defineProps<{
   erpImportLimit = defineModel<number>("erpImportLimit", { required: true }),
   decisionReason = defineModel<string>("decisionReason", { required: true }),
   decisionReasonValidationAttempted = ref(false),
-  { dialogElement: erpDialog, handleCancel: cancelErp } = useModalDialog(
-    () => erpImportOpen.value,
-    () => (erpImportOpen.value = false),
-  ),
   { dialogElement: createDialog, handleCancel: cancelCreate } = useModalDialog(
     () => createOpen.value,
     () => (createOpen.value = false),
@@ -71,90 +69,16 @@ const decisionLabel = {
   observe: "继续观察",
   reject: "驳回",
 } as const;
-
-function containDialogTab(event: KeyboardEvent, dialog: HTMLDialogElement | null) {
-  if (event.key !== "Tab" || !dialog?.open) return;
-  const controls = [
-    ...dialog.querySelectorAll<HTMLElement>(
-      'a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])',
-    ),
-  ].filter(
-    (element) =>
-      !element.matches(":disabled") && element.tabIndex >= 0 && element.getClientRects().length > 0,
-  );
-  const first = controls[0];
-  const last = controls.at(-1);
-  if (!first || !last) return;
-  if (event.shiftKey && (document.activeElement === first || document.activeElement === dialog)) {
-    event.preventDefault();
-    last.focus();
-  } else if (
-    !event.shiftKey &&
-    (document.activeElement === last || document.activeElement === dialog)
-  ) {
-    event.preventDefault();
-    first.focus();
-  }
-}
 </script>
 
 <template>
-  <dialog
-    v-if="erpImportOpen"
-    ref="erpDialog"
-    class="opportunity-modal"
-    aria-labelledby="erp-import-title"
-    @cancel="cancelErp"
-    @keydown="containDialogTab($event, erpDialog)"
-  >
-    <form class="so-dialog-manifest" @submit.prevent="emit('importBrowser')">
-      <header>
-        <div>
-          <p>使用已有商品数据补齐系统</p>
-          <h3 id="erp-import-title">从米豆 ERP 商品列表导入</h3>
-        </div>
-        <button
-          class="so-action-quiet"
-          type="button"
-          aria-label="关闭 ERP 导入"
-          @click="erpImportOpen = false"
-        >
-          ×
-        </button>
-      </header>
-      <aside class="erp-import-guide">
-        <strong>真实数据流</strong>
-        <span
-          >浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给
-          智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。</span
-        >
-      </aside>
-      <label
-        >本次导入数量<input
-          v-model.number="erpImportLimit"
-          type="number"
-          min="1"
-          max="500"
-          required
-      /></label>
-      <label class="erp-file-fallback"
-        >没有安装助手时上传 ERP JSON<input
-          type="file"
-          accept=".json,application/json"
-          @change="emit('importFile', $event)"
-        /><small>接受接口返回的 list 数组或商品数组。</small></label
-      >
-      <footer>
-        <a href="/browser-helper/scoutops-browser-helper.zip">下载浏览器助手</a>
-        <button class="so-action-secondary" type="button" @click="erpImportOpen = false">
-          取消
-        </button>
-        <button class="so-action-primary" type="submit" :disabled="busy">
-          {{ busy ? "读取并导入中…" : "从当前浏览器读取" }}
-        </button>
-      </footer>
-    </form>
-  </dialog>
+  <OpportunityErpImportDialog
+    v-model:open="erpImportOpen"
+    v-model:import-limit="erpImportLimit"
+    :busy="busy"
+    @import-browser="emit('importBrowser')"
+    @import-file="emit('importFile', $event)"
+  />
 
   <dialog
     v-if="createOpen"

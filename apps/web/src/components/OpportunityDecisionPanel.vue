@@ -12,6 +12,7 @@ import {
   opportunityQualityGateLabels,
 } from "./opportunity-decision-presentation";
 import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
+import OpportunityQualityGateDetails from "./OpportunityQualityGateDetails.vue";
 const props = defineProps<{
   detail: OpportunityDetail;
   busy: boolean;
@@ -96,19 +97,7 @@ const recommendationCopy = computed(() =>
         </i>
         <strong>{{ qualityGates.all_passed ? "全部通过" : `下一项：${nextMissingGate}` }}</strong>
       </div>
-      <details class="opportunity-quality-gate-details">
-        <summary>查看每项判断</summary>
-        <ul class="opportunity-quality-gates" aria-label="五项质量门">
-          <li
-            v-for="(label, key) in opportunityQualityGateLabels"
-            :key="key"
-            :data-passed="qualityGates[key]"
-          >
-            <span>{{ label }}</span
-            ><b>{{ qualityGates[key] ? "通过" : "待完成" }}</b>
-          </li>
-        </ul>
-      </details>
+      <OpportunityQualityGateDetails :quality-gates="qualityGates" />
     </header>
     <nav
       v-if="canDecide && canAdopt"

@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { durationLabel } from "../ui/status-labels";
 import type { OpportunityDetail } from "./opportunity-workspace-types";
 import { opportunityStatusLabel } from "./opportunity-workspace-presentation";
+import OpportunityLineageCorrelation from "./OpportunityLineageCorrelation.vue";
+import OpportunityLineageSummary from "./OpportunityLineageSummary.vue";
 
 const props = defineProps<{ lineage: OpportunityDetail["lineage"] }>();
 
@@ -55,30 +56,12 @@ const nodeGroups = computed(() => {
       </b>
     </header>
 
-    <dl class="opportunity-lineage-summary">
-      <div>
-        <dt>最新原始证据</dt>
-        <dd v-if="lineage.freshness.observed_at">
-          {{ timestamp(lineage.freshness.observed_at) }}
-        </dd>
-        <dd v-else>尚无原始证据观测时间</dd>
-      </div>
-      <div>
-        <dt>距观测时间</dt>
-        <dd v-if="lineage.freshness.age_seconds !== null">
-          {{ durationLabel(lineage.freshness.age_seconds) }}
-        </dd>
-        <dd v-else>距今时间未提供</dd>
-      </div>
-      <div>
-        <dt>受影响环节</dt>
-        <dd>{{ lineage.failure_impact.affected_stages.map(kindLabel).join("、") || "无" }}</dd>
-      </div>
-      <div>
-        <dt>返回节点</dt>
-        <dd>{{ lineage.nodes.length }} 条；不代表完整历史</dd>
-      </div>
-    </dl>
+    <OpportunityLineageSummary
+      :observed-at="lineage.freshness.observed_at"
+      :age-seconds="lineage.freshness.age_seconds"
+      :affected-stages="lineage.failure_impact.affected_stages.map(kindLabel).join('、')"
+      :node-count="lineage.nodes.length"
+    />
 
     <aside v-if="lineage.failure_impact.codes.length" class="opportunity-lineage-impact">
       <strong>当前返回的失败或降级状态</strong>
@@ -140,20 +123,9 @@ const nodeGroups = computed(() => {
       </li>
     </ol>
 
-    <details class="opportunity-lineage-correlation">
-      <summary>全局关联标识</summary>
-      <div>
-        <section>
-          <strong>request_id</strong>
-          <code v-for="id in lineage.request_ids" :key="id">{{ id }}</code>
-          <span v-if="!lineage.request_ids.length">未提供</span>
-        </section>
-        <section>
-          <strong>trace_id</strong>
-          <code v-for="id in lineage.trace_ids" :key="id">{{ id }}</code>
-          <span v-if="!lineage.trace_ids.length">未提供</span>
-        </section>
-      </div>
-    </details>
+    <OpportunityLineageCorrelation
+      :request-ids="lineage.request_ids"
+      :trace-ids="lineage.trace_ids"
+    />
   </section>
 </template>
