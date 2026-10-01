@@ -12,7 +12,7 @@ import {
   watch,
 } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import { ApiClientError, createApiClient } from "../api-client";
 const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityListPanel.vue"));
 const OpportunityDecisionPanel = defineAsyncComponent(
   () => import("./OpportunityDecisionPanel.vue"),
@@ -41,10 +41,7 @@ import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import { durationLabel, statusLabel } from "../ui/status-labels";
 import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
-import {
-  loadAutomaticSelectionReadiness,
-  type AutomaticSelectionReadiness,
-} from "../automatic-selection-readiness";
+import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import {
   formatOpportunityTime as freshness,
   opportunityStatusLabel,
@@ -53,6 +50,10 @@ import {
   safeOpportunityReturnPath,
 } from "./opportunity-workspace-presentation";
 import type * as OpportunityTypes from "./opportunity-workspace-types";
+import {
+  useOpportunityWorkspaceReads,
+  type OpportunityDownstreamStates,
+} from "./use-opportunity-workspace-reads";
 import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
@@ -151,9 +152,7 @@ let writeScopeGeneration = 0;
 let activeWriteCounts = new Map<string, number>();
 let workspaceActive = true;
 let tabIntentGeneration = 0;
-let aiRequestGeneration = 0;
 let aiReviewIntentGeneration = 0;
-let aiSnapshotOpportunityId = "";
 function captureDecisionFocus(opportunityId: string | undefined) {
   if (!opportunityId || typeof document === "undefined") return;
   const waiting = document.querySelector(".opportunity-decision-waiting");
@@ -275,11 +274,6 @@ const {
   submit: submitAiReviewReason,
   cancel: cancelAiReviewReason,
 } = useAuditedReason();
-type OpportunityDownstreamSource = "competitors" | "sourcing";
-type OpportunityDownstreamStates = Record<
-  OpportunityDownstreamSource,
-  OpportunityTypes.OpportunityPartialLoadState
->;
 const pageCount = computed(() => Math.max(1, Math.ceil(total.value / 20)));
 const currentPageSelectedItems = computed(() =>
   items.value.filter((item) => selectedOpportunityIds.value.includes(item.id)),
@@ -314,12 +308,6 @@ const canOpenSourcingWorkspace = computed(
 );
 const canConfirmCost = computed(() => props.capabilities?.includes("cost:confirm") ?? false);
 const returnPath = computed(() => safeOpportunityReturnPath(route.query.from));
-const stateFrom = (kind: ApiFailureKind): OpportunityTypes.OpportunityWorkspaceState =>
-  kind === "expired" || kind === "forbidden"
-    ? kind
-    : kind === "blocked" || kind === "rate_limited"
-      ? "blocked"
-      : "error";
 const statePanelKind = computed(() => (state.value === "ready" ? "empty" : state.value));
 const statePanelPrimaryLabel = computed(() =>
   statePanelKind.value === "expired"
@@ -348,316 +336,54 @@ function handleStatePrimary() {
   }
   void load();
 }
-let readGeneration = 0;
-let workspaceReadController: AbortController | null = null;
-function invalidateReads() {
-  readGeneration += 1;
-  workspaceReadController?.abort();
-  workspaceReadController = null;
-}
-async function read(path: string, isCurrent: () => boolean = () => true, signal?: AbortSignal) {
-  try {
-    const response = await request<any>(path, { signal });
-    if (isCurrent()) requestId.value = response.request_id;
-    return response;
-  } catch (error) {
-    if (isCurrent() && error instanceof ApiClientError) {
-      requestId.value = error.requestId;
-      message.value = error.actionHint;
-      state.value = stateFrom(error.kind);
-    }
-    throw error;
-  }
-}
-async function loadAi(
-  opportunityId = props.opportunityId,
-  isCurrent?: () => boolean,
-  signal?: AbortSignal,
-) {
-  const generation = readGeneration;
-  const requestGeneration = ++aiRequestGeneration;
-  const ownsRead = () => !signal?.aborted && (isCurrent?.() ?? generation === readGeneration);
-  aiLoadState.value = "loading";
-  aiLoadErrorMessage.value = "";
-  aiRequestId.value = "";
-  try {
-    const response = await request<unknown>(`/opportunities/${opportunityId}/ai-analyses`, {
-      signal,
-    });
-    if (!ownsRead() || requestGeneration !== aiRequestGeneration) return;
-    if (!Array.isArray(response.data))
-      throw new Error("AI 分析接口返回格式异常，不能将其解释为没有分析记录。");
-    aiAnalyses.value = response.data as OpportunityTypes.OpportunityAiAnalysis[];
-    aiSnapshotOpportunityId = opportunityId ?? "";
-    aiLoadState.value = "ready";
-  } catch (error) {
-    if (!ownsRead() || requestGeneration !== aiRequestGeneration) return;
-    aiLoadState.value = "error";
-    if (error instanceof ApiClientError) {
-      aiRequestId.value = error.requestId;
-      aiLoadErrorMessage.value = error.actionHint;
-    } else {
-      aiLoadErrorMessage.value =
-        error instanceof Error
-          ? error.message
-          : "AI 分析记录读取失败；当前数据保留为上次成功快照。";
-    }
-    if (aiRequestId.value) requestId.value = aiRequestId.value;
-  }
-}
-async function loadDownstream(
-  opportunityId = props.opportunityId,
-  isCurrent?: () => boolean,
-  onlySource?: OpportunityDownstreamSource,
-  signal?: AbortSignal,
-) {
-  const generation = readGeneration;
-  const ownsRead = () => !signal?.aborted && (isCurrent?.() ?? generation === readGeneration);
-  const sources: OpportunityDownstreamSource[] = onlySource
-    ? [onlySource]
-    : ["competitors", "sourcing"];
-
-  for (const source of sources) {
-    downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "loading" };
-    if (source === "competitors") {
-      competitorItems.value = [];
-      downstream.value = { ...downstream.value, competitors: 0, snapshots: 0 };
-    } else {
-      downstream.value = { ...downstream.value, searches: 0, suppliers: 0 };
-    }
-  }
-
-  await Promise.all(
-    sources.map(async (source) => {
-      const hasAccess = source === "competitors" ? canReadCompetitors.value : canReadSourcing.value;
-      if (!hasAccess || !opportunityId) {
-        if (!ownsRead()) return;
-        downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "ready" };
-        return;
-      }
-
-      try {
-        if (source === "competitors") {
-          const response = await request<OpportunityTypes.OpportunityCompetitorSummary[]>(
-            "/competitors",
-            {
-              signal,
-            },
-          );
-          if (!ownsRead()) return;
-          const competitors = response.data.filter((item) => item.opportunity_id === opportunityId);
-          competitorItems.value = competitors;
-          downstream.value = {
-            ...downstream.value,
-            competitors: competitors.length,
-            snapshots: competitors.reduce((sum, item) => sum + Number(item.snapshot_count ?? 0), 0),
-          };
-        } else {
-          const response = await request<any[]>("/sourcing/searches", { signal });
-          if (!ownsRead()) return;
-          const searches = response.data.filter(
-            (item: any) => item.input_type === "opportunity" && item.input_ref === opportunityId,
-          );
-          downstream.value = {
-            ...downstream.value,
-            searches: searches.length,
-            suppliers: searches.reduce(
-              (sum: number, item: any) => sum + Number(item.candidate_count ?? 0),
-              0,
-            ),
-          };
-        }
-        downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "ready" };
-      } catch (error) {
-        if (!ownsRead()) return;
-        if (source === "competitors") competitorItems.value = [];
-        downstreamLoadState.value = { ...downstreamLoadState.value, [source]: "error" };
-        if (error instanceof ApiClientError) requestId.value = error.requestId;
-      }
-    }),
-  );
-}
-function retryDownstream(source: OpportunityDownstreamSource) {
-  void loadDownstream(detail.value?.id, undefined, source, workspaceReadController?.signal);
-}
-async function loadAutomationReadiness(
-  isCurrent: () => boolean = () => true,
-  signal?: AbortSignal,
-) {
-  automationReadiness.value = null;
-  const readiness = await loadAutomaticSelectionReadiness(request, signal);
-  if (isCurrent()) automationReadiness.value = readiness;
-}
-async function loadCostReviewers(isCurrent: () => boolean = () => true, signal?: AbortSignal) {
-  costReviewerLoadState.value = "loading";
-  costReviewerErrorMessage.value = "";
-  costReviewerRequestId.value = "";
-  try {
-    const reviewers = await request<Array<{ id: string; label: string }>>("/cost-input-reviewers", {
-      signal,
-    });
-    if (!isCurrent()) return;
-    costReviewerOptions.value = reviewers.data;
-    costReviewerLoadState.value = "ready";
-  } catch (error) {
-    if (!isCurrent()) return;
-    costReviewerOptions.value = [];
-    costReviewerLoadState.value = "error";
-    if (error instanceof ApiClientError) {
-      costReviewerRequestId.value = error.requestId;
-      costReviewerErrorMessage.value = error.actionHint;
-    } else {
-      costReviewerErrorMessage.value = "暂时无法读取成本复核人名单，请稍后重试。";
-    }
-  }
-}
-async function retryCostReviewers() {
-  const generation = readGeneration;
-  const opportunityId = props.opportunityId;
-  if (!opportunityId || !canConfirmCost.value || costReviewerLoadState.value === "loading") return;
-  await loadCostReviewers(
-    () =>
-      generation === readGeneration &&
-      props.opportunityId === opportunityId &&
-      !workspaceReadController?.signal.aborted,
-    workspaceReadController?.signal,
-  );
-}
-async function loadProfitAnalysis(
-  opportunityId: string,
-  isCurrent: () => boolean,
-  signal?: AbortSignal,
-) {
-  profitLoadState.value = "loading";
-  profitErrorMessage.value = "";
-  profitRequestId.value = "";
-  try {
-    const response = await request<OpportunityTypes.OpportunityProfitAnalysis>(
-      `/opportunities/${opportunityId}/profit-analysis`,
-      { signal },
-    );
-    if (!isCurrent()) return false;
-    profit.value = response.data;
-    profitLoadState.value = "ready";
-    return true;
-  } catch (error) {
-    if (!isCurrent()) return false;
-    profitLoadState.value = "error";
-    if (error instanceof ApiClientError) {
-      profitErrorMessage.value = error.actionHint;
-      profitRequestId.value = error.requestId;
-      if (error.kind === "expired") {
-        requestId.value = error.requestId;
-        message.value = error.actionHint;
-        state.value = stateFrom(error.kind);
-        return false;
-      }
-    } else {
-      profitErrorMessage.value = "暂时无法读取利润与成本，请稍后重试。";
-    }
-    return true;
-  }
-}
-async function retryProfitAnalysis() {
-  const generation = readGeneration;
-  const opportunityId = props.opportunityId;
-  if (!opportunityId || profitLoadState.value === "loading") return;
-  await loadProfitAnalysis(
-    opportunityId,
-    () =>
-      generation === readGeneration &&
-      props.opportunityId === opportunityId &&
-      !workspaceReadController?.signal.aborted,
-    workspaceReadController?.signal,
-  );
-}
-async function load() {
-  const generation = readGeneration + 1;
-  workspaceReadController?.abort();
-  const controller = new AbortController();
-  workspaceReadController = controller;
-  readGeneration = generation;
-  const opportunityId = props.opportunityId;
-  if (pendingDecisionFocus.value?.opportunityId !== opportunityId)
-    pendingDecisionFocus.value = null;
-  captureDecisionFocus(opportunityId);
-  const isCurrent = () => generation === readGeneration && !controller.signal.aborted;
-  const nextAiOwner = opportunityId ?? "";
-  if (aiSnapshotOpportunityId !== nextAiOwner) {
-    aiAnalyses.value = [];
-    aiSnapshotOpportunityId = nextAiOwner;
-  }
-  aiRequestGeneration += 1;
-  aiLoadState.value = "loading";
-  aiLoadErrorMessage.value = "";
-  aiRequestId.value = "";
-  state.value = "loading";
-  message.value = "";
-  try {
-    if (opportunityId) {
-      detail.value = null;
-      profit.value = null;
-      profitLoadState.value = "loading";
-      profitErrorMessage.value = "";
-      profitRequestId.value = "";
-      const detailResponse = await read(
-        `/opportunities/${opportunityId}`,
-        isCurrent,
-        controller.signal,
-      );
-      if (!isCurrent()) return;
-      detail.value = detailResponse.data;
-      if (!(await loadProfitAnalysis(opportunityId, isCurrent, controller.signal)) || !isCurrent())
-        return;
-      if (canConfirmCost.value) {
-        await loadCostReviewers(isCurrent, controller.signal);
-      } else {
-        costReviewerOptions.value = [];
-        costReviewerLoadState.value = "ready";
-        costReviewerErrorMessage.value = "";
-        costReviewerRequestId.value = "";
-      }
-      if (!isCurrent()) return;
-      await Promise.all([
-        loadAi(opportunityId, isCurrent, controller.signal),
-        loadDownstream(opportunityId, isCurrent, undefined, controller.signal),
-      ]);
-      if (!isCurrent()) return;
-      state.value = "ready";
-      await restoreDecisionFocus(opportunityId);
-      return;
-    }
-    const params = new URLSearchParams({
-      page: String(page.value),
-      page_size: "20",
-      selection_view: selectionView.value,
-    });
-    for (const [key, value] of Object.entries(filters)) if (value) params.set(key, value);
-    const result = await read(`/opportunities?${params}`, isCurrent, controller.signal);
-    if (!isCurrent()) return;
-    items.value = result.data;
-    const readinessPromise = loadAutomationReadiness(isCurrent, controller.signal);
-    try {
-      memberOptions.value = (
-        await request<any[]>("/opportunities/member-options", { signal: controller.signal })
-      ).data;
-    } catch (error) {
-      if (!isCurrent()) return;
-      if (!(error instanceof ApiClientError)) throw error;
-      memberOptions.value = [];
-      requestId.value = error.requestId;
-      message.value = "机会已加载；组织成员选项暂不可用，批量指派需稍后重试。";
-    }
-    await readinessPromise;
-    if (!isCurrent()) return;
-    total.value = (result.meta as { total: number }).total;
-    state.value = items.value.length ? "ready" : "empty";
-  } catch (error) {
-    if (pendingDecisionFocus.value?.opportunityId === opportunityId)
-      pendingDecisionFocus.value = null;
-    if (isCurrent() && !(error instanceof ApiClientError)) state.value = "blocked";
-  }
-}
+const {
+  invalidateReads,
+  load,
+  loadAi,
+  loadDownstream,
+  retryDownstream,
+  loadAutomationReadiness,
+  loadCostReviewers,
+  retryCostReviewers,
+  loadProfitAnalysis,
+  retryProfitAnalysis,
+  getReadSignal: getWorkspaceReadSignal,
+} = useOpportunityWorkspaceReads({
+  request,
+  opportunityId: () => props.opportunityId,
+  state,
+  items,
+  memberOptions,
+  costReviewerOptions,
+  costReviewerLoadState,
+  costReviewerErrorMessage,
+  costReviewerRequestId,
+  detail,
+  profit,
+  profitLoadState,
+  profitErrorMessage,
+  profitRequestId,
+  aiAnalyses,
+  aiLoadState,
+  aiLoadErrorMessage,
+  aiRequestId,
+  downstreamLoadState,
+  competitorItems,
+  total,
+  page,
+  requestId,
+  message,
+  automationReadiness,
+  selectionView,
+  downstream,
+  filters,
+  canReadCompetitors,
+  canReadSourcing,
+  canConfirmCost,
+  pendingDecisionFocus,
+  captureDecisionFocus,
+  restoreDecisionFocus,
+});
 async function discoverCompetitors() {
   if (!detail.value) return;
   const result = await write(`/opportunities/${detail.value.id}/competitor-discovery`, {});
@@ -1139,7 +865,7 @@ async function queueAi() {
     await loadAi(
       opportunityId,
       () => detail.value?.id === opportunityId && route.path === routePath,
-      workspaceReadController?.signal,
+      getWorkspaceReadSignal(),
     );
   }
 }
@@ -1172,7 +898,7 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
           await loadAi(
             opportunityId,
             () => detail.value?.id === opportunityId,
-            workspaceReadController?.signal,
+            getWorkspaceReadSignal(),
           );
         }
         return;
@@ -1183,7 +909,7 @@ async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
         await loadAi(
           opportunityId,
           () => detail.value?.id === opportunityId,
-          workspaceReadController?.signal,
+          getWorkspaceReadSignal(),
         );
         return;
       }
