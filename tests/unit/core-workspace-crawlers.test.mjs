@@ -369,17 +369,23 @@ test("core crawler entrypoints reject enabled providers whose compliance review 
 });
 
 test("sourcing lists show opportunity names while retaining internal trace ids", async () => {
-  const [repository, workspace] = await Promise.all([
+  const [repository, workspace, logic] = await Promise.all([
     readFile("apps/api/src/mysql-sourcing-repository.ts", "utf8"),
     readFile("apps/web/src/components/SourcingWorkspace.vue", "utf8"),
+    readFile("apps/web/src/composables/useSourcingWorkspace.ts", "utf8"),
   ]);
   assert.match(
     repository,
     /COALESCE\(o\.name,s\.input_ref\) ELSE (?:(?:["'`]\s*\+\s*["'`])?)s\.input_ref END display_name/,
   );
   assert.match(repository, /CONVERT\(o\.id USING utf8mb4\) COLLATE utf8mb4_unicode_ci/);
-  assert.match(workspace, /searchName\(item\)[\s\S]*机会编号 \{\{ selected\.input_ref \}\}/);
-  assert.match(workspace, /opportunity: "选品机会"[\s\S]*succeeded_empty: "未找到可用候选"/);
+  assert.match(
+    logic,
+    /searchName = \(item: Search \| null \| undefined\) =>[\s\S]*item\?\.display_name \|\| item\?\.input_ref/,
+  );
+  assert.match(workspace, /<b>\{\{ searchName\(item\) \}\}/);
+  assert.match(workspace, /机会编号 \{\{ selected\.input_ref \}\}/);
+  assert.match(logic, /opportunity: "选品机会"[\s\S]*succeeded_empty: "未找到可用候选"/);
 });
 
 test("collection worker quarantines exhausted queue entries without blocking fresh crawls", async () => {
