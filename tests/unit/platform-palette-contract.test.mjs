@@ -331,18 +331,22 @@ test("platform account permissions use their route-scoped palette", async () => 
 });
 
 test("credential asset palette resolves P50 component, modal and status colors in page scope", async () => {
-  const [tokens, css] = await Promise.all([
+  const [tokens, css, pageCss] = await Promise.all([
     readFile("apps/web/src/design/credential-assets-tokens.css", "utf8"),
     readFile("apps/web/src/credential-assets-c.css", "utf8"),
+    readFile("apps/web/src/credential-assets-page-c.css", "utf8"),
   ]);
   const declarations = [
     ...tokens.matchAll(/(--p50-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi),
   ];
   const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p50-[a-z-]+)\)/g)].map((match) => match[1]));
+  const references = new Set(
+    [...`${css}\n${pageCss}`.matchAll(/var\((--p50-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
 
-  assert.equal(names.size, 30);
+  assert.equal(names.size, 31);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.ok(names.has("--p50-success-ready-bg"));
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
     /^html body:has\(#app \.credential-center\)\s*\{[\s\S]*\}$/,
@@ -350,6 +354,7 @@ test("credential asset palette resolves P50 component, modal and status colors i
   assert.ok(css.startsWith('@import "./design/credential-assets-tokens.css";'));
   assert.deepEqual([...references].sort(), [...names].sort());
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  assert.doesNotMatch(pageCss, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
 test("file resilience palette preserves P69 status colors and a page-scoped reduced-motion override", async () => {

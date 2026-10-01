@@ -1,0 +1,19 @@
+#app .role-shell.role-shell--c {
+  --shell-blue: #244bb0;
+  --shell-ink: #172d4c;
+  --shell-muted: #536985;
+  --shell-border: #d8e2ef;
+  --shell-canvas: #f3f6fb;
+  --shell-paper: #fff;
+  --shell-subtle-surface: #f7f9fc;
+  --shell-nav-copy: #e2ebff;
+  --shell-nav-border: #91afea;
+  --shell-action: #365fc6;
+  --shell-action-copy: #eef3ff;
+  --shell-context-border: #7595db;
+  --shell-selection: #e8efff;
+  --shell-focus-visible: #4878e9;
+  --shell-focus-on-dark: #b9d0ff;
+  --shell-backdrop: rgb(12 29 54 / 55%);
+  --shell-mobile-close-border: #afc7f7;
+}

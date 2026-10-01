@@ -1,9 +1,6 @@
+@import "./design/navigation-shell-c-tokens.css";
+
 #app .role-shell.role-shell--c {
-  --shell-blue: #244bb0;
-  --shell-ink: #172d4c;
-  --shell-muted: #536985;
-  --shell-border: #d8e2ef;
-  --shell-canvas: #f3f6fb;
   box-sizing: border-box;
   display: grid;
   grid-template-columns: 240px minmax(0, 1fr);
@@ -28,7 +25,7 @@
   gap: 12px;
   border: 0;
   border-bottom: 1px solid var(--shell-border);
-  background: #fff;
+  background: var(--shell-paper);
 }
 
 #app .role-shell.role-shell--c .role-brand {
@@ -39,7 +36,7 @@
 #app .role-shell.role-shell--c .role-brand > span {
   border: 0;
   border-radius: 6px;
-  color: #fff;
+  color: var(--shell-paper);
   background: var(--shell-blue);
 }
 
@@ -66,11 +63,11 @@
   border: 1px solid var(--shell-border);
   border-radius: 6px;
   color: var(--shell-ink);
-  background: #fff;
+  background: var(--shell-paper);
 }
 
 #app .role-shell.role-shell--c .role-top-actions .role-quick-action {
-  color: #fff;
+  color: var(--shell-paper);
   background: var(--shell-blue);
 }
 
@@ -78,7 +75,7 @@
   padding: 2px 4px;
   border: 1px solid var(--shell-border);
   color: var(--shell-muted);
-  background: #f7f9fc;
+  background: var(--shell-subtle-surface);
   font-size: 13px;
 }
 
@@ -104,7 +101,7 @@
   overflow-y: auto;
   border: 0;
   border-radius: 0;
-  color: #fff;
+  color: var(--shell-paper);
   background: var(--shell-blue);
 }
 
@@ -138,7 +135,7 @@
 }
 
 #app .role-shell.role-shell--c .role-sidebar-head strong {
-  color: #fff;
+  color: var(--shell-paper);
   font:
     700 18px/1.5 "Microsoft YaHei",
     sans-serif;
@@ -146,7 +143,7 @@
 
 #app .role-shell.role-shell--c .role-sidebar-head small {
   max-width: 100%;
-  color: #e2ebff;
+  color: var(--shell-nav-copy);
   font:
     13px/1.7 "Microsoft YaHei",
     sans-serif;
@@ -160,10 +157,10 @@
   margin-bottom: 16px;
   padding: 0 10px;
   display: flex;
-  border: 1px solid #91afea;
+  border: 1px solid var(--shell-nav-border);
   border-radius: 6px;
   color: var(--shell-ink);
-  background: #fff;
+  background: var(--shell-paper);
 }
 
 #app .role-shell.role-shell--c .role-menu-search input {
@@ -173,7 +170,7 @@
   padding: 0 4px;
   border: 0;
   color: var(--shell-ink);
-  background: #fff;
+  background: var(--shell-paper);
   font:
     16px/1.5 "Microsoft YaHei",
     sans-serif;
@@ -205,7 +202,7 @@
   justify-content: space-between;
   border: 0;
   border-radius: 6px;
-  color: #fff;
+  color: var(--shell-paper);
   background: transparent;
   font-size: 14px;
   letter-spacing: 0;
@@ -213,7 +210,7 @@
 
 #app .role-shell.role-shell--c .role-nav-groups summary:hover,
 #app .role-shell.role-shell--c .role-nav-menu a:hover {
-  background: #365fc6;
+  background: var(--shell-action);
 }
 
 #app .role-shell.role-shell--c .role-nav-menu {
@@ -237,7 +234,7 @@
   gap: 10px;
   border: 0;
   border-radius: 6px;
-  color: #eef3ff;
+  color: var(--shell-action-copy);
   background: transparent;
   font-size: 14px;
   text-decoration: none;
@@ -245,7 +242,7 @@
 
 #app .role-shell.role-shell--c .role-nav-menu > a[aria-current="page"] {
   color: var(--shell-blue);
-  background: #fff;
+  background: var(--shell-paper);
   font-weight: 700;
 }
 
@@ -265,9 +262,9 @@
   min-height: 44px;
   padding: 10px 8px;
   border: 0;
-  border-top: 1px solid #7595db;
+  border-top: 1px solid var(--shell-context-border);
   border-radius: 0;
-  color: #fff;
+  color: var(--shell-paper);
   background: transparent;
   white-space: normal;
   font-size: 14px;
@@ -275,14 +272,14 @@
 
 #app .role-shell.role-shell--c .role-sidebar-utility a:hover,
 #app .role-shell.role-shell--c .role-sidebar-utility a:focus-visible {
-  color: #fff;
-  background: #365fc6;
+  color: var(--shell-paper);
+  background: var(--shell-action);
 }
 
 #app .role-shell.role-shell--c .role-menu-empty {
   min-width: 0;
   padding: 12px 8px;
-  color: #fff;
+  color: var(--shell-paper);
   line-height: 1.8;
 }
 
@@ -424,7 +421,7 @@
   display: flex;
   overflow-x: auto;
   border-block: 1px solid var(--shell-border);
-  background: #fff;
+  background: var(--shell-paper);
 }
 
 #app .role-shell.role-shell--c .platform-secondary-nav a {
@@ -441,7 +438,7 @@
 #app .role-shell.role-shell--c .platform-secondary-nav a:hover,
 #app .role-shell.role-shell--c .platform-secondary-nav a[aria-current="page"] {
   color: var(--shell-ink);
-  background: #e8efff;
+  background: var(--shell-selection);
 }
 
 #app .role-shell.role-shell--c .platform-secondary-nav a[aria-current="page"] {
@@ -484,7 +481,7 @@
 }
 
 #app .role-shell.role-shell--c .provider-runtime-tabs a[aria-current="page"] {
-  color: #fff;
+  color: var(--shell-paper);
   background: var(--shell-blue);
 }
 
@@ -492,12 +489,12 @@
   .role-shell.role-shell--c
   :is(.role-topbar, .role-content, .role-mobile-nav)
   :is(a, button, input, summary):focus-visible {
-  outline: 3px solid #4878e9;
+  outline: 3px solid var(--shell-focus-visible);
   outline-offset: 3px;
 }
 
 #app .role-shell.role-shell--c .role-navigation-frame :is(a, button, input, summary):focus-visible {
-  outline: 3px solid #b9d0ff;
+  outline: 3px solid var(--shell-focus-on-dark);
   outline-offset: 3px;
 }
 
@@ -560,7 +557,7 @@
     margin-bottom: 20px;
     border: 1px solid var(--shell-border);
     border-radius: 6px;
-    background: #fff;
+    background: var(--shell-paper);
   }
   #app .role-shell.role-shell--c .role-context-drawer > div {
     grid-template-columns: 1fr 1fr;
@@ -575,16 +572,16 @@
     padding: 16px;
   }
   #app .role-shell.role-shell--c .role-navigation-frame::backdrop {
-    background: rgb(12 29 54 / 55%);
+    background: var(--shell-backdrop);
   }
   #app .role-shell.role-shell--c .role-navigation-close {
     display: block;
     min-height: 44px;
     margin: 0 0 20px auto;
     padding: 0 14px;
-    border: 1px solid #afc7f7;
+    border: 1px solid var(--shell-mobile-close-border);
     border-radius: 6px;
-    color: #fff;
+    color: var(--shell-paper);
     background: transparent;
     font-size: 16px;
   }
@@ -598,7 +595,7 @@
     padding: 5px 6px env(safe-area-inset-bottom);
     border: 0;
     border-top: 1px solid var(--shell-border);
-    background: #fff;
+    background: var(--shell-paper);
   }
   #app .role-shell.role-shell--c .role-mobile-nav a,
   #app .role-shell.role-shell--c .role-mobile-nav button {
@@ -620,7 +617,7 @@
   }
   #app .role-shell.role-shell--c .role-mobile-nav [aria-current="page"] {
     color: var(--shell-blue);
-    background: #e8efff;
+    background: var(--shell-selection);
   }
   #app .role-shell.role-shell--c .provider-runtime-tabs {
     flex-wrap: nowrap;

@@ -31,6 +31,28 @@ test("production C shell SFC compiles with one responsive navigation dialog", ()
   );
 });
 
+test("production C shell colors stay inside its page-scoped semantic token sheet", async () => {
+  const [css, tokens] = await Promise.all([
+    readFile("apps/web/src/navigation-shell-c.css", "utf8"),
+    readFile("apps/web/src/design/navigation-shell-c-tokens.css", "utf8"),
+  ]);
+  const names = new Set(
+    [...tokens.matchAll(/(--shell-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi)].map(
+      (match) => match[1],
+    ),
+  );
+  const references = new Set(
+    [...css.matchAll(/var\((--shell-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+  assert.ok(css.startsWith('@import "./design/navigation-shell-c-tokens.css";'));
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^#app \.role-shell\.role-shell--c\s*\{[\s\S]*\}$/,
+  );
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+});
+
 test("production C shell preserves authorization, surface routing and primary action targets", () => {
   for (const contract of [
     "authorizedNavigation(props.shell, allCapabilities.value, guard.value?.roles ?? [])",
