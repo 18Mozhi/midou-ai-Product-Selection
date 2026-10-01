@@ -731,7 +731,7 @@
           "scene": "reject-dialog"
         }
       ],
-      "remaining": "已验证 observe 提交期间打开的 reject 新窗不受旧回执关闭；reject 原因窗同 tick 双 requestSubmit 仅发送一次并校验请求体。键盘忙碌关闭策略与真实服务端结果仍需独立验收。",
+      "remaining": "已验证 observe 提交期间打开的 reject 新窗不受旧回执关闭；reject 原因窗同 tick 双 requestSubmit 仅发送一次并校验请求体，提交中可用 Escape/关闭/取消关闭旧窗且迟到回执不影响新窗。真实服务端结果仍需独立验收。",
       "sourceCandidateIds": [
         "apps/web/src/components/OpportunityDecisionPanel.vue#6cfe6545a209df42.1",
         "apps/web/src/components/OpportunityDecisionPanel.vue#a2dfed9751073c3d.1"
