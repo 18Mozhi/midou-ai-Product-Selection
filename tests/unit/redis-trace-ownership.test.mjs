@@ -26,7 +26,9 @@ class ApiClientError extends Error {
 function harness() {
   const calls = [],
     timers = new Map();
-  let unmount,
+  let activate,
+    deactivate,
+    unmount,
     sequence = 0;
   const subject = vm.runInNewContext(
     `(function(){${code}; return {load,state,data,requestId,refreshFailure,
@@ -42,6 +44,12 @@ function harness() {
         new Promise((resolve, reject) => calls.push({ path, init, resolve, reject })),
       crypto: { randomUUID: () => `local-outbound-${++sequence}` },
       onMounted() {},
+      onActivated: (fn) => {
+        activate = fn;
+      },
+      onDeactivated: (fn) => {
+        deactivate = fn;
+      },
       onBeforeUnmount: (fn) => {
         unmount = fn;
       },
@@ -59,6 +67,8 @@ function harness() {
     subject,
     calls,
     timers,
+    activate: () => activate(),
+    deactivate: () => deactivate(),
     unmount: () => unmount(),
     async seed(empty = false, id = "snapshot-original") {
       const pending = subject.load();
@@ -148,6 +158,22 @@ test("P67 late result after unmount cannot replace accepted identities", async (
   assert.equal(h.subject.requestId.value, "snapshot-original");
   assert.equal(h.subject.failureId, "");
   assert.equal(h.timers.size, 0);
+});
+test("P67 KeepAlive deactivation cancels ownership and activation reads a fresh snapshot", async () => {
+  const h = harness(),
+    stale = h.subject.load();
+  const oldCall = h.calls.at(-1);
+  h.deactivate();
+  assert.equal(oldCall.init.signal.aborted, true);
+  oldCall.resolve({ request_id: "inactive-result", data: { state: "blocked" } });
+  await stale;
+  assert.equal(h.subject.requestId.value, "");
+  h.activate();
+  assert.equal(h.calls.length, 2);
+  h.calls.at(-1).resolve({ request_id: "reactivated-snapshot", data: { state: "ready" } });
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(h.subject.requestId.value, "reactivated-snapshot");
+  assert.equal(h.subject.state.value, "ready");
 });
 test("P67 template labels snapshot and both failure consumers separately", () => {
   const template = parse(file).descriptor.template.content;

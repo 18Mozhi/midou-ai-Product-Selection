@@ -1,6 +1,6 @@
 import { onBeforeUnmount, reactive, ref } from "vue";
 import type { Ref } from "vue";
-import { ApiClientError } from "../api-client";
+import { useProviderParserSampleActions } from "./useProviderParserSampleActions";
 import type {
   ParserSample,
   ParserSampleCandidate,
@@ -146,156 +146,22 @@ export function useProviderParserSamples({
     }
   }
 
-  async function createParserSample(candidate: ParserSampleCandidate) {
-    const sourceSnapshot = sampleSource.value;
-    const providerId = sourceSnapshot?.provisioned?.id;
-    if (
-      !sourceSnapshot ||
-      !providerId ||
-      sampleSaving.value ||
-      sampleReplaying.value ||
-      sampleReviewing.value
-    )
-      return;
-    const operation = sampleContextOperation;
-    const isCurrent = () => ownsSampleContext(operation, providerId);
-    sampleSaving.value = candidate.browser_job_id;
-    sampleActionMessage.value = "正在固定真实登录作业的样本。";
-    sampleActionRequestId.value = "";
-    try {
-      await api(
-        `/platform/provider-sources/${providerId}/parser-samples`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            browser_job_id: candidate.browser_job_id,
-            name: `真实登录样本 ${new Date(candidate.captured_at).toLocaleString("zh-CN")}`,
-          }),
-        },
-        isCurrent,
-      );
-      if (!isCurrent()) return;
-      sampleActionRequestId.value = requestId.value;
-      sampleActionMessage.value = "样本已固定，正在更新候选与样本列表。";
-      if (await readParserSamples(sourceSnapshot, operation))
-        sampleActionMessage.value = "已从真实登录作业固定样本；请执行差异回放后再启用来源。";
-      else if (isCurrent())
-        sampleActionMessage.value = "样本已固定，但列表暂未能更新；可重新读取列表。";
-    } catch (error) {
-      if (!isCurrent()) return;
-      sampleActionMessage.value =
-        error instanceof ApiClientError
-          ? error.actionHint
-          : "固定结果暂未确认，请读取样本列表后再决定下一步。";
-      sampleActionRequestId.value = error instanceof ApiClientError ? error.requestId : "";
-      message.value = "";
-      requestId.value = "";
-    } finally {
-      if (isCurrent()) sampleSaving.value = null;
-    }
-  }
-
-  async function replayParserSample(sample: ParserSample) {
-    const sourceSnapshot = sampleSource.value;
-    const providerId = sourceSnapshot?.provisioned?.id;
-    if (
-      !sourceSnapshot ||
-      !providerId ||
-      sampleSaving.value ||
-      sampleReplaying.value ||
-      sampleReviewing.value
-    )
-      return;
-    const operation = sampleContextOperation;
-    const isCurrent = () => ownsSampleContext(operation, providerId);
-    sampleReplaying.value = sample.id;
-    sampleActionMessage.value = "正在读取已保存快照并执行当前解析器回放。";
-    sampleActionRequestId.value = "";
-    try {
-      const result = await api<ParserSampleReplay>(
-        `/platform/provider-sources/${providerId}/parser-samples/${sample.id}/replays`,
-        { method: "POST" },
-        isCurrent,
-      );
-      if (!isCurrent()) return;
-      latestReplay.value = result;
-      sampleActionRequestId.value = requestId.value;
-      sampleActionMessage.value = "回放结果已留存，正在更新样本列表。";
-      if (await readParserSamples(sourceSnapshot, operation))
-        sampleActionMessage.value =
-          result.status === "passed"
-            ? "固定样本与当前解析结果一致。"
-            : "回放已留存差异，来源继续保持停用。";
-      else if (isCurrent()) sampleActionMessage.value = "回放结果已留存，但样本列表暂未能更新。";
-    } catch (error) {
-      if (!isCurrent()) return;
-      sampleActionMessage.value =
-        error instanceof ApiClientError
-          ? error.actionHint
-          : "回放结果暂未确认，请读取样本列表后核对状态。";
-      sampleActionRequestId.value = error instanceof ApiClientError ? error.requestId : "";
-      message.value = "";
-      requestId.value = "";
-    } finally {
-      if (isCurrent()) sampleReplaying.value = null;
-    }
-  }
-
-  async function reviewParserSample(
-    sample: ParserSample,
-    decision: "approved" | "rejected",
-    reason: string,
-  ) {
-    const sourceSnapshot = sampleSource.value;
-    const providerId = sourceSnapshot?.provisioned?.id;
-    if (
-      !sourceSnapshot ||
-      !providerId ||
-      sampleSaving.value ||
-      sampleReplaying.value ||
-      sampleReviewing.value
-    )
-      return;
-    const operation = sampleContextOperation;
-    const isCurrent = () => ownsSampleContext(operation, providerId);
-    sampleReviewing.value = sample.id;
-    sampleActionMessage.value = "正在记录独立管理员的复核决定。";
-    sampleActionRequestId.value = "";
-    try {
-      await api(
-        `/platform/provider-sources/${providerId}/parser-samples/${sample.id}/reviews`,
-        {
-          method: "POST",
-          body: JSON.stringify({
-            decision,
-            reason: reason.trim(),
-            expected_version: sample.review_version,
-          }),
-        },
-        isCurrent,
-      );
-      if (!isCurrent()) return;
-      sampleActionRequestId.value = requestId.value;
-      sampleActionMessage.value = "复核决定已记录，正在更新样本列表。";
-      if (await readParserSamples(sourceSnapshot, operation))
-        sampleActionMessage.value =
-          decision === "approved"
-            ? "固定样本审批通过；当前解析器回放一致后可启用来源。"
-            : "固定样本已驳回并保留审计记录；请从新的真实作业重新固定样本。";
-      else if (isCurrent()) sampleActionMessage.value = "复核决定已记录，但样本列表暂未能更新。";
-    } catch (error) {
-      if (!isCurrent()) return;
-      sampleActionMessage.value =
-        error instanceof ApiClientError
-          ? error.actionHint
-          : "复核结果暂未确认，请读取样本列表后核对状态。";
-      sampleActionRequestId.value = error instanceof ApiClientError ? error.requestId : "";
-      message.value = "";
-      requestId.value = "";
-    } finally {
-      if (isCurrent()) sampleReviewing.value = null;
-    }
-  }
+  const { createParserSample, replayParserSample, reviewParserSample } =
+    useProviderParserSampleActions({
+      api,
+      message,
+      requestId,
+      sampleSource,
+      sampleSaving,
+      sampleReplaying,
+      sampleReviewing,
+      sampleActionMessage,
+      sampleActionRequestId,
+      latestReplay,
+      currentContext: () => sampleContextOperation,
+      ownsContext: ownsSampleContext,
+      readSamples: readParserSamples,
+    });
 
   onBeforeUnmount(() => {
     sampleContextOperation += 1;

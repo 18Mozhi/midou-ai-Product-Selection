@@ -114,6 +114,7 @@ test("P46 actual close function avoids hidden/disconnected/inert targets and new
       editing: { value: { id: "selected-id" } },
       editorTrigger: { value: trigger },
       editorOpen: { value: true },
+      validationScope: { value: "all" },
       message: { value: "old" },
       editorFocusGeneration: 2,
       document: { activeElement: element("body") },

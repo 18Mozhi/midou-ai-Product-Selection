@@ -1357,6 +1357,7 @@
         "../apps/web/src/components/ProviderSourceDirectory.vue",
         "../apps/web/src/composables/useProviderSourceDirectory.ts",
         "../apps/web/src/composables/useProviderParserSamples.ts",
+        "../apps/web/src/composables/useProviderParserSampleActions.ts",
         "../apps/web/src/composables/useProviderSourceConfigurationVersions.ts",
         "../apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
         "../apps/web/src/components/ProviderAcceptanceOperations.vue",

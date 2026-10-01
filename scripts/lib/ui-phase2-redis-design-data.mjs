@@ -355,6 +355,8 @@ export async function buildRedisDesignData(repo) {
         defineProps: () => ({ apiBaseUrl: "/inert" }),
         ApiClientError: Failure,
         onMounted: (f) => (hooks.mount = f),
+        onActivated: (f) => (hooks.activate = f),
+        onDeactivated: (f) => (hooks.deactivate = f),
         onBeforeUnmount: (f) => (hooks.unmount = f),
         window: {
           setTimeout: (f, ms) => {

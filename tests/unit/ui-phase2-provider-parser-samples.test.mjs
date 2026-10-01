@@ -28,7 +28,8 @@ test("P48 parser-sample page and focused dialogs compile with the extracted oper
   const parentSource = read(parent),
     dialogSource = read(dialog),
     reviewSource = read(review),
-    composableSource = read(composable);
+    composableSource = read(composable),
+    actionsSource = read("apps/web/src/composables/useProviderParserSampleActions.ts");
   compile(parentSource, parent, "p48-parser-parent");
   compile(dialogSource, dialog, "p48-parser-dialog");
   compile(reviewSource, review, "p48-parser-review");
@@ -38,13 +39,16 @@ test("P48 parser-sample page and focused dialogs compile with the extracted oper
   assert.match(parentSource, /@review="reviewParserSample"/);
   for (const marker of [
     "${providerId}/parser-samples",
-    "${providerId}/parser-samples/${sample.id}/replays",
-    "${providerId}/parser-samples/${sample.id}/reviews",
-    "expected_version: sample.review_version",
     "sampleContextOperation += 1",
     "sampleReadOperation += 1",
   ])
     assert.ok(composableSource.includes(marker), marker);
+  for (const marker of [
+    "${providerId}/parser-samples/${sample.id}/replays",
+    "${providerId}/parser-samples/${sample.id}/reviews",
+    "expected_version: sample.review_version",
+  ])
+    assert.ok(actionsSource.includes(marker), marker);
 });
 
 test("P48 parser-sample copy and actual controls preserve replay and independent-review boundaries", () => {
