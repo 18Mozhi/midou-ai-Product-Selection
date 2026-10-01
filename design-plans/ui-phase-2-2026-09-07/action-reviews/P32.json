@@ -15,17 +15,14 @@
       "kind": "excluded",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
       ],
-      "sourceContractKeys": [
-        "OG-RETRY"
-      ],
-      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "sourceContractKeys": ["WIRE-P34-RETRY"],
+      "contractAliasReason": "P34审批读取反馈在本页不渲染；沿既有WIRE-P34-RETRY合同明确排除，不归入P32动作。",
       "condition": "仅view===approvals、无data，error/HTTP500或rate_limited/HTTP429；非P32",
       "handler": "P32不渲染此分支；P34复用原load()，不计入本页动作",
-      "variants": [
-        "normal"
-      ],
+      "variants": ["normal"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -49,64 +46,17 @@
       "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
     },
     {
-      "actionId": "EX-P34-READ-RECOVERY",
-      "label": "P34审批读取恢复接线（非本页）",
-      "kind": "excluded",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
-      ],
-      "sourceContractKeys": [
-        "WIRE-P34-RETRY"
-      ],
-      "priorContractKeys": [
-        "OG-RETRY"
-      ],
-      "contractAliasReason": "当前组织治理合同将P34的reload父级接线登记为WIRE-P34-RETRY并指向OG-RETRY；当前页面不渲染approvals分支。",
-      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P32",
-      "handler": "P32不渲染此分支；P34将reload转发至既有load()，不计入本页动作",
-      "variants": [
-        "normal"
-      ],
-      "scenes": [
-        {
-          "package": "workspaces-direction-c",
-          "scene": "normal"
-        }
-      ],
-      "visualStates": {
-        "default": "not-applicable-excluded",
-        "hover": "not-applicable-excluded",
-        "focus": "not-applicable-excluded",
-        "pressed": "not-applicable-excluded",
-        "disabled": "not-applicable-excluded",
-        "busy": "not-applicable-excluded"
-      },
-      "testReferences": [
-        {
-          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
-          "evidenceType": "offline-proposal-check-not-Vue"
-        }
-      ],
-      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。"
-    },
-    {
       "actionId": "OG-REFRESH",
       "label": "刷新工作区",
       "kind": "read",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
       ],
-      "sourceContractKeys": [
-        "OG-REFRESH"
-      ],
+      "sourceContractKeys": ["OG-REFRESH"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "loading或refreshing禁用",
       "handler": "load(background)读取组织summary和工作区列表；不是只读所选工作区",
-      "variants": [
-        "normal",
-        "refreshing",
-        "refresh_error"
-      ],
+      "variants": ["normal", "refreshing", "refresh_error"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -210,19 +160,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
       ],
-      "sourceContractKeys": [
-        "OG-RETRY"
-      ],
+      "sourceContractKeys": ["OG-RETRY"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "六种错误状态，无disabled绑定",
       "handler": "load()，不绕过权限或恢复登录",
-      "variants": [
-        "error",
-        "blocked",
-        "expired",
-        "forbidden",
-        "rate_limited"
-      ],
+      "variants": ["error", "blocked", "expired", "forbidden", "rate_limited"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -426,16 +368,11 @@
         "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
       ],
-      "sourceContractKeys": [
-        "OG-PROFILE-SAVE",
-        "OG-PROFILE-LOGO浏览器有效性"
-      ],
+      "sourceContractKeys": ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "仅summary分支",
       "handler": "P32不显示资料表单或Logo检查",
-      "variants": [
-        "normal"
-      ],
+      "variants": ["normal"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -465,15 +402,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
       ],
-      "sourceContractKeys": [
-        "P30全部成员事件父转发，复用M语义"
-      ],
+      "sourceContractKeys": ["P30全部成员事件父转发，复用M语义"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "仅members分支",
       "handler": "不计为工作区动作",
-      "variants": [
-        "normal"
-      ],
+      "variants": ["normal"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -503,15 +436,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
       ],
-      "sourceContractKeys": [
-        "P31资源授权父转发，复用已有合同"
-      ],
+      "sourceContractKeys": ["P31资源授权父转发，复用已有合同"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "仅roles分支",
       "handler": "不计为工作区动作",
-      "variants": [
-        "normal"
-      ],
+      "variants": ["normal"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -551,12 +480,7 @@
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "workspaceAction先等待共享原因",
       "handler": "初始值为归档工作区或恢复工作区；trim至少2字、前端无maxlength；先关闭再写，取消零写",
-      "variants": [
-        "reason_archive",
-        "reason_restore",
-        "reason_short",
-        "reason_long"
-      ],
+      "variants": ["reason_archive", "reason_restore", "reason_short", "reason_long"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -791,15 +715,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
       ],
-      "sourceContractKeys": [
-        "D-OG-REASON令牌轮换/撤销调用"
-      ],
+      "sourceContractKeys": ["D-OG-REASON令牌轮换/撤销调用"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "仅Token函数发起",
       "handler": "不把共享helper作为其他页面已验收",
-      "variants": [
-        "normal"
-      ],
+      "variants": ["normal"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -830,17 +750,11 @@
         "apps/web/src/components/OrganizationWorkspacePanel.vue#ee38194d65edc8d9.1",
         "apps/web/src/components/OrganizationWorkspacePanel.vue#ea9b5ddcd4502f15.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-OPEN头部/空态"
-      ],
+      "sourceContractKeys": ["OG-W-OPEN头部/空态"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "头部busy禁用；空目录入口无disabled",
       "handler": "openCreate只展开并requestAnimationFrame聚焦名称；不清草稿",
-      "variants": [
-        "normal",
-        "empty",
-        "create"
-      ],
+      "variants": ["normal", "empty", "create"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -960,9 +874,7 @@
         "apps/web/src/components/OrganizationWorkspacePanel.vue#7c1ff142d1b797a2.1",
         "apps/web/src/components/OrganizationWorkspacePanel.vue#bae4e728dfc90592.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-CREATE"
-      ],
+      "sourceContractKeys": ["OG-W-CREATE"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "原生required/pattern；busy或createBusy拒绝重复",
       "handler": "submitCreate捕获trim三字段，经函数prop到createWorkspace；成功清空/收起，失败保留；等待期间输入仍可编辑",
@@ -1080,16 +992,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#617ab4a17066056a.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-CANCEL"
-      ],
+      "sourceContractKeys": ["OG-W-CANCEL"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "createBusy禁用且函数早退；不是props.busy",
       "handler": "cancelCreate清三字段并收起，不请求服务",
-      "variants": [
-        "create_draft",
-        "create_busy"
-      ],
+      "variants": ["create_draft", "create_busy"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1175,15 +1082,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#9aeabb6f832c875d.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-FILTER状态/重置/清除"
-      ],
+      "sourceContractKeys": ["OG-W-FILTER状态/重置/清除"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "无busy禁用",
       "handler": "statusFilter=all；watch回第一页，不主动清所选项",
-      "variants": [
-        "catalog"
-      ],
+      "variants": ["catalog"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1285,15 +1188,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#18ece981bcb15fca.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-FILTER状态/重置/清除"
-      ],
+      "sourceContractKeys": ["OG-W-FILTER状态/重置/清除"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "无busy禁用",
       "handler": "statusFilter=active；计数仅当前返回数组",
-      "variants": [
-        "active"
-      ],
+      "variants": ["active"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1395,15 +1294,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#56fb9bb2ac849bf0.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-FILTER状态/重置/清除"
-      ],
+      "sourceContractKeys": ["OG-W-FILTER状态/重置/清除"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "无busy禁用",
       "handler": "statusFilter=archived；筛选不等于归档操作",
-      "variants": [
-        "archived"
-      ],
+      "variants": ["archived"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1505,16 +1400,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#66725db5db9a8fe8.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-FILTER状态/重置/清除"
-      ],
+      "sourceContractKeys": ["OG-W-FILTER状态/重置/清除"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "始终可用，无空值禁用",
       "handler": "清query/status，sort回name_asc；不清选择/创建草稿",
-      "variants": [
-        "search",
-        "catalog"
-      ],
+      "variants": ["search", "catalog"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1591,15 +1481,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#009754681935b22a.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-FILTER状态/重置/清除"
-      ],
+      "sourceContractKeys": ["OG-W-FILTER状态/重置/清除"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "全量有工作区但当前页无结果",
       "handler": "同resetFilters；不是创建首项",
-      "variants": [
-        "filter_empty"
-      ],
+      "variants": ["filter_empty"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1672,16 +1558,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#b4c1c37e889b3212.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-SELECT"
-      ],
+      "sourceContractKeys": ["OG-W-SELECT"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "pageItems，无busy禁用",
       "handler": "selectedWorkspaceId取原id；详情按全量数组，不因筛选隐藏而清空；旧button的role=listitem仍待修",
-      "variants": [
-        "selected",
-        "search"
-      ],
+      "variants": ["selected", "search"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1787,16 +1668,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#3619d28a163df5ce.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-PAGE"
-      ],
+      "sourceContractKeys": ["OG-W-PAGE"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "结果超过8条才显示；page<=1禁用",
       "handler": "page-=1，不请求服务",
-      "variants": [
-        "catalog",
-        "page_two"
-      ],
+      "variants": ["catalog", "page_two"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1882,16 +1758,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#d56d9b5edd39513e.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-PAGE"
-      ],
+      "sourceContractKeys": ["OG-W-PAGE"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "结果超过8条才显示；page>=pageCount禁用",
       "handler": "page+=1，不请求服务",
-      "variants": [
-        "catalog",
-        "page_two"
-      ],
+      "variants": ["catalog", "page_two"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -1977,9 +1848,7 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#08f874283aa537b7.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-STATE归档/恢复"
-      ],
+      "sourceContractKeys": ["OG-W-STATE归档/恢复"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "busy或活动默认项禁用；performAction仅检查选择和busy",
       "handler": "函数prop传所选对象；父按原status确定action，等待原因后读取item.id/version并POST；API仍最终核验默认项",
@@ -2144,15 +2013,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#8300243a415c8c66.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-LINK团队/概览"
-      ],
+      "sourceContractKeys": ["OG-W-LINK团队/概览"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "有选中项显示，不受busy禁用",
       "handler": "RouterLink /org-admin/teams；不修改当前会话工作区",
-      "variants": [
-        "selected"
-      ],
+      "variants": ["selected"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -2225,15 +2090,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#01af8fcac461a03d.1"
       ],
-      "sourceContractKeys": [
-        "OG-W-LINK团队/概览"
-      ],
+      "sourceContractKeys": ["OG-W-LINK团队/概览"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "有选中项显示，不受busy禁用",
       "handler": "RouterLink /org-admin；不是直接修改默认项",
-      "variants": [
-        "normal"
-      ],
+      "variants": ["normal"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -2306,15 +2167,11 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#1c008f867673db60.1"
       ],
-      "sourceContractKeys": [
-        "OG-TECH"
-      ],
+      "sourceContractKeys": ["OG-TECH"],
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "所选项存在",
       "handler": "原生details展示id/slug，不是弹窗或复制动作",
-      "variants": [
-        "technical"
-      ],
+      "variants": ["technical"],
       "scenes": [
         {
           "package": "workspaces-direction-c",
@@ -2441,13 +2298,7 @@
       "form.default_workspace_id",
       "form.reason"
     ],
-    "OrganizationWorkspacePanel.vue": [
-      "form.name",
-      "form.slug",
-      "form.reason",
-      "query",
-      "sort"
-    ]
+    "OrganizationWorkspacePanel.vue": ["form.name", "form.slug", "form.reason", "query", "sort"]
   },
   "sharedReasonInput": {
     "file": "apps/web/src/components/AuditedReasonDialog.vue",
@@ -2780,15 +2631,15 @@
     "新控件稿保留旧原型字段锁定、reason max500及未知结果保护提案；不能用控件图批准这些未确认的生产行为。"
   ],
   "approval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "limits": [
     "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。",
     "P31局部控件批准不自动外推P32整页；没有部署或更改权限/API。"
   ],
   "actualVueRestore": {
     "scope": "Approved P32 mobile restore composition only; default shared callers and original API retained",
-    "approval": "mobile-proposal-composition-approved-real-Vue-and-desktop-review-pending",
+    "approval": "mobile-proposal-composition-approved-real-Vue-desktop-mobile-verified-production-not-accepted",
     "review": "P32-VUE-RESTORE-REVIEW.md",
-    "evidence": "output/playwright/p32-approved-restore-review/evidence.json"
-  },
-  "visualApproval": "user-approved-remaining-pages-auto"
+    "evidence": "output/playwright/p32-approved-restore-review-r9/evidence.json"
+  }
 }

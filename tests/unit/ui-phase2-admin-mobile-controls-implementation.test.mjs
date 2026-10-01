@@ -11,7 +11,8 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const root = "output/playwright/p44-mobile-controls-implementation/";
-const evidence = (mode) => JSON.parse(read(root + mode + "/evidence.json"));
+const evidence = (mode) =>
+  JSON.parse(read(root + (mode === "current" ? "current-r6" : mode) + "/evidence.json"));
 const baseline = adminHistoricalCapture("controls-baseline");
 const implemented = adminHistoricalCapture("controls-implemented");
 const before = baseline.evidence,
@@ -23,7 +24,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     const capture =
       mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
     const e = capture ? capture.evidence : evidence(mode),
-      folder = root + mode;
+      folder = root + (mode === "current" ? "current-r6" : mode);
     assert.equal(e.kind, "P44-MOBILE-CONTROLS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
     assert.equal(e.processesClosed, true);
@@ -33,7 +34,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     assert.equal(e.screenshots.length, 16);
     assert.equal(
       Object.keys(e.sourceHashes).length,
-      mode === "baseline" ? 35 : mode === "current" ? 43 : 36,
+      mode === "baseline" ? 35 : mode === "current" ? 50 : 36,
     );
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
       const source = capture ? capture.source(file) : read(file);
@@ -62,10 +63,18 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
         [
           "apps/web/src/components/PlatformAccountCenterAdmin.css",
           "apps/web/src/components/PlatformAccountCenterPermissions.css",
+          "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+          "apps/web/src/components/PlatformAccountGlobalRail.vue",
+          "apps/web/src/components/PlatformAccountUsersC.css",
           "apps/web/src/components/PlatformAdminDirectoryMobile.css",
           "apps/web/src/components/PlatformRoleComparisonPermissions.css",
+          "apps/web/src/design/account-center-tokens.css",
+          "apps/web/src/design/account-permissions-tokens.css",
+          "apps/web/src/design/organization-wizard-tokens.css",
           "apps/web/src/design/platform-admin-mobile-tokens.css",
           "apps/web/src/design/platform-overlay-tokens.css",
+          "apps/web/src/design/tenancy-tokens.css",
+          "apps/web/src/styles/tenancy-workspace.css",
           "apps/web/src/use-platform-organization-detail-state.ts",
           "scripts/lib/ui-imported-style-sources.mjs",
         ],
@@ -74,7 +83,10 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
         Object.keys(after.sourceHashes)
           .filter((file) => !Object.hasOwn(e.sourceHashes, file))
           .sort(),
-        ["apps/web/src/styles/platform-dashboard.css"],
+        [
+          "apps/web/src/styles/platform-dashboard.css",
+          "apps/web/src/styles/platform-operations.css",
+        ],
       );
     }
     assert.equal(e.observations.length, 8);

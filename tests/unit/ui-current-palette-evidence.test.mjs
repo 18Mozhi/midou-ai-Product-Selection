@@ -5,21 +5,21 @@ import { createHash } from "node:crypto";
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 for (const [folder, kind, checks, images, palette] of [
   [
-    "p44-mobile-directory-implementation/current-r4",
+    "p44-mobile-directory-implementation/current-r6",
     "P44-MOBILE-DIRECTORY-IMPLEMENTATION",
     134,
     30,
     "platform-admin-mobile-tokens",
   ],
   [
-    "p44-mobile-controls-implementation/current-r5",
+    "p44-mobile-controls-implementation/current-r6",
     "P44-MOBILE-CONTROLS-IMPLEMENTATION",
     110,
     16,
     "platform-admin-mobile-tokens",
   ],
   [
-    "p44-mobile-results-implementation/current-r5",
+    "p44-mobile-results-implementation/current-r6",
     "P44-MOBILE-RESULTS-IMPLEMENTATION",
     234,
     48,
@@ -40,7 +40,7 @@ for (const [folder, kind, checks, images, palette] of [
     "provider-registry-tokens",
   ],
   [
-    "p44-mobile-role-facts-implementation/current-r5",
+    "p44-mobile-role-facts-implementation/current-r6",
     "P44-MOBILE-ROLE-FACTS-IMPLEMENTATION",
     352,
     24,

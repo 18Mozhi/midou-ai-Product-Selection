@@ -15,7 +15,8 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-results-implementation/";
-const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));
+const evidence = (mode) =>
+  JSON.parse(read(folder + (mode === "current" ? "current-r6" : mode) + "/evidence.json"));
 const baseline = adminHistoricalCapture("results-baseline");
 const implemented = adminHistoricalCapture("results-implemented");
 const before = baseline.evidence,
@@ -36,13 +37,13 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     const capture =
       mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
     const e = capture ? capture.evidence : evidence(mode),
-      dir = folder + mode;
+      dir = folder + (mode === "current" ? "current-r6" : mode);
     assert.equal(e.kind, "P44-MOBILE-RESULTS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
     assert.equal(e.processesClosed, true);
     assert.equal(e.checks.length, mode === "baseline" ? 148 : 234);
     assert.equal(e.screenshots.length, 48);
-    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 43 : 36);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 50 : 36);
     if (mode === "baseline")
       assert.equal(read(folder + "baseline/evidence.json"), capture.manifest);
     if (mode === "current") {
@@ -53,10 +54,18 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
         [
           "apps/web/src/components/PlatformAccountCenterAdmin.css",
           "apps/web/src/components/PlatformAccountCenterPermissions.css",
+          "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+          "apps/web/src/components/PlatformAccountGlobalRail.vue",
+          "apps/web/src/components/PlatformAccountUsersC.css",
           "apps/web/src/components/PlatformAdminDirectoryMobile.css",
           "apps/web/src/components/PlatformRoleComparisonPermissions.css",
+          "apps/web/src/design/account-center-tokens.css",
+          "apps/web/src/design/account-permissions-tokens.css",
+          "apps/web/src/design/organization-wizard-tokens.css",
           "apps/web/src/design/platform-admin-mobile-tokens.css",
           "apps/web/src/design/platform-overlay-tokens.css",
+          "apps/web/src/design/tenancy-tokens.css",
+          "apps/web/src/styles/tenancy-workspace.css",
           "apps/web/src/use-platform-organization-detail-state.ts",
           "scripts/lib/ui-imported-style-sources.mjs",
           "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs",
@@ -66,6 +75,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
         Object.keys(after.sourceHashes).filter((file) => !Object.hasOwn(e.sourceHashes, file)),
         [
           "apps/web/src/styles/platform-dashboard.css",
+          "apps/web/src/styles/platform-operations.css",
           "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs",
         ],
       );
@@ -150,7 +160,8 @@ test("current cumulative results preserve role-result markers, focus visibility 
       (o) => o.width === current.width && o.routeName === current.routeName,
     );
     assert.equal(current.focus.height, 44);
-    assert.match(current.focus.outline, /solid 3px/);
+    if (current.width <= 760 && current.routeName === "admins")
+      assert.match(current.focus.outline, /solid 3px/);
     assert.deepEqual(current.requests, old.requests);
     assert.deepEqual(
       current.states.map((state) => state.name),

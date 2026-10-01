@@ -1,0 +1,1592 @@
+{
+  "kind": "P44-MOBILE-CONTROLS-IMPLEMENTATION",
+  "baseline": false,
+  "scope": "Actual production parent and styles, no review CSS or template transforms; baseline parent from c489ebf0. Two routes/four widths, controls only, read-only HTTP fixtures. No full App/real permissions/deployment acceptance.",
+  "sourceHashes": {
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/OrganizationCreationWizard.vue": "11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314",
+    "apps/web/src/components/PlatformAccountCenter.css": "c03dc79fa1c445fe6f7910a1bb0cb5605c01d620e555883de22df076199db7e7",
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+    "apps/web/src/components/PlatformAccountCenterAdmin.css": "5202e29089d051a797d0368131dd8dd8cb7c5f260a7cfed7ca569309f429e036",
+    "apps/web/src/components/PlatformAccountCenterPermissions.css": "5b356692a72f499de58e95b310840cccff19bbea48a3d501ee30ded0ad778a55",
+    "apps/web/src/components/PlatformAccountDialogs.css": "aae1e4080c01ca68410b07883f46cfb6004ab39594bc954eb4883ea8e3efda2d",
+    "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+    "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
+    "apps/web/src/components/PlatformAccountUsersC.css": "0e7edccbf9ef2861ac80fa991c240cce6a46dacce8cf8c8b182712ee38c522ad",
+    "apps/web/src/components/PlatformAdminComparisonMobile.css": "03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae",
+    "apps/web/src/components/PlatformAdminDirectoryMobile.css": "fdfa34dd522009c2cdfcb2dc68d992d74ada376d6a05ec1cd89c0b5f39676048",
+    "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
+    "apps/web/src/components/PlatformOrganizationDetailDialog.vue": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43",
+    "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a",
+    "apps/web/src/components/PlatformRoleComparison.css": "79b62016cc401aaac8896984888d56ca706ee5450cb524e6266881af8430c45e",
+    "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
+    "apps/web/src/components/PlatformRoleComparisonPermissions.css": "1cdc42829c7583708369a462d00509504aee75180eded5b37006772ec6a4eb93",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
+    "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
+    "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
+    "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
+    "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
+    "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+    "apps/web/src/design/account-center-tokens.css": "7831ab29b50bed99cd98e5a885fa0996a4d993a869cd4ede21eabcf15bae91d5",
+    "apps/web/src/design/account-permissions-tokens.css": "c46509007a16a117213f601f560fc1666ac520daca742d37376b28278bb08195",
+    "apps/web/src/design/organization-wizard-tokens.css": "b6c896bab816a29ac8c436a20311b2af1e44e4b75045179dafd0ce7417762cb9",
+    "apps/web/src/design/platform-admin-mobile-tokens.css": "3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68",
+    "apps/web/src/design/platform-overlay-tokens.css": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5",
+    "apps/web/src/design/tenancy-tokens.css": "b73837aa35471c69065ad0227b52a9c8a0eb45b9348c4dafb2e1e4cd6c2083ca",
+    "apps/web/src/design/tokens.css": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a",
+    "apps/web/src/main.ts": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/signal-ledger.css": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276",
+    "apps/web/src/styles.css": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/onboarding-navigation.css": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
+    "apps/web/src/styles/tenancy-workspace.css": "7c979b6219f743a577b08ecf1096cb04b5940bf06c6676b0241c74bf03099230",
+    "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
+    "apps/web/src/use-platform-organization-actions.ts": "233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae",
+    "apps/web/src/use-platform-organization-detail-state.ts": "1518d8bd0e5e909f41d61caa6e323521937d5ce625f1fb07a535d9c9f3e1d66e",
+    "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
+    "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "scripts/lib/ui-imported-style-sources.mjs": "1ac8c9075a445b2cfb3963c1464de63cce567331eec6cfa14f197ce7929d2f84",
+    "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs": "3527f7b5739f75bee7f63d5ab85d3e6538b22603dbadbd8c3fa67df5c2edaca1",
+    "tests/e2e/m06-01-platform-accounts.spec.ts": "7ba1fcc74c8b6df7de99a73e6aed1c6690c8b8fdbe7636936bd6fe7fb9bfe5b8"
+  },
+  "checks": [
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "six original differences",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "approved blue header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "approved white header text",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "checkbox20",
+      "actual": "20px"
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "approved title size",
+      "actual": "22px"
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "approved title weight",
+      "actual": "700"
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "approved title family",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "checkbox target44",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "selectors stacked",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "filters stacked",
+      "actual": 1
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "default:no overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "Tab reaches first role",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "keyboard-focus:no overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "same role zero differences",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "same role all three",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "search empty before reset",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "reset six",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "admin comparison URL stays",
+      "actual": "http://127.0.0.1:50007/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "GET count",
+      "actual": 2
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "unexpected",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "name": "errors",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "six original differences",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "default:no overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "Tab reaches first role",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "keyboard-focus:no overflow",
+      "actual": true
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "same role zero differences",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "same role all three",
+      "actual": 3
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "search empty before reset",
+      "actual": 0
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "reset six",
+      "actual": 6
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "GET count",
+      "actual": 5
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "unexpected",
+      "actual": []
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "name": "errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "six original differences",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "approved blue header",
+      "actual": "rgb(41, 76, 175)"
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "approved white header text",
+      "actual": "rgb(255, 255, 255)"
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "checkbox20",
+      "actual": "20px"
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "approved title size",
+      "actual": "22px"
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "approved title weight",
+      "actual": "700"
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "approved title family",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "checkbox target44",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "selectors stacked",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "filters stacked",
+      "actual": 1
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "default:no overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "Tab reaches first role",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "keyboard-focus:no overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "same role zero differences",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "same role all three",
+      "actual": 3
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "search empty before reset",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "reset six",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "admin comparison URL stays",
+      "actual": "http://127.0.0.1:50007/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "GET count",
+      "actual": 2
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "unexpected",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "name": "errors",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "six original differences",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "default:no overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "Tab reaches first role",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "keyboard-focus:no overflow",
+      "actual": true
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "same role zero differences",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "same role all three",
+      "actual": 3
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "search empty before reset",
+      "actual": 0
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "reset six",
+      "actual": 6
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "GET count",
+      "actual": 5
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "unexpected",
+      "actual": []
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "name": "errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "six original differences",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "default:no overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "Tab reaches first role",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "keyboard-focus:no overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "same role zero differences",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "same role all three",
+      "actual": 3
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "search empty before reset",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "reset six",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "admin comparison URL stays",
+      "actual": "http://127.0.0.1:50007/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "GET count",
+      "actual": 2
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "unexpected",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "name": "errors",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "six original differences",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "default:no overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "Tab reaches first role",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "keyboard-focus:no overflow",
+      "actual": true
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "same role zero differences",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "same role all three",
+      "actual": 3
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "search empty before reset",
+      "actual": 0
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "reset six",
+      "actual": 6
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "GET count",
+      "actual": 5
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "unexpected",
+      "actual": []
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "name": "errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "six original differences",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "default:no overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "Tab reaches first role",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "keyboard-focus:no overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "same role zero differences",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "same role all three",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "search empty before reset",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "reset six",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "admin comparison URL stays",
+      "actual": "http://127.0.0.1:50007/platform-admin/admins?keep=p44"
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "GET count",
+      "actual": 2
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "unexpected",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "name": "errors",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "six original differences",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "default:no overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "Tab reaches first role",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "keyboard-focus:no overflow",
+      "actual": true
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "same role zero differences",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "same role all three",
+      "actual": 3
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "search empty before reset",
+      "actual": 0
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "reset six",
+      "actual": 6
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "GET count",
+      "actual": 5
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "unexpected",
+      "actual": []
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "name": "errors",
+      "actual": []
+    }
+  ],
+  "screenshots": [
+    {
+      "width": 390,
+      "routeName": "admins",
+      "state": "default",
+      "file": "390-admins-default.png",
+      "sha256": "0b2a59d0decd5eedd40a58317f622394b8f33939ea742faadfb50c012a97c6a2"
+    },
+    {
+      "width": 390,
+      "routeName": "admins",
+      "state": "keyboard-focus",
+      "file": "390-admins-keyboard-focus.png",
+      "sha256": "de0fcbff0170f66ba8ee0fbf3ad82eae84926f2390f130d60c17ec894d5e9490"
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "state": "default",
+      "file": "390-permissions-default.png",
+      "sha256": "8d49da4ff6053da5c31ee88eda2aeae0d6cb92460f39d7846084cb3156ae30d0"
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "state": "keyboard-focus",
+      "file": "390-permissions-keyboard-focus.png",
+      "sha256": "b8dde55f7f85f3a4cdec85df36c917b848addb3cbdb4529dd20f6501929e025d"
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "state": "default",
+      "file": "760-admins-default.png",
+      "sha256": "b4c52b404f23bc521ffc102652a9777822aab3f6f6dbc8fe8a356162e241311e"
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "state": "keyboard-focus",
+      "file": "760-admins-keyboard-focus.png",
+      "sha256": "d9fcef038b23625b5e711dc352109550fe9064d1d6eaf136720b4ff83b26c765"
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "state": "default",
+      "file": "760-permissions-default.png",
+      "sha256": "26aad22f2bd09d74542a84156263f495377227a26f07e0bfb213f9bf1b16f7ba"
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "state": "keyboard-focus",
+      "file": "760-permissions-keyboard-focus.png",
+      "sha256": "26aad22f2bd09d74542a84156263f495377227a26f07e0bfb213f9bf1b16f7ba"
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "state": "default",
+      "file": "761-admins-default.png",
+      "sha256": "0131a998b40c0a16f46bb801b6cb2e0eacbbf73096ba57f63b8b741b79dc059e"
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "state": "keyboard-focus",
+      "file": "761-admins-keyboard-focus.png",
+      "sha256": "48109472509bf26d9a7bbef7e5c3979cf0552104f7ce861db9d0feb670523725"
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "state": "default",
+      "file": "761-permissions-default.png",
+      "sha256": "6309a6fe84ff2df60c2c50e3db4dd3d18ee47eacde3c310aee2625360b177668"
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "state": "keyboard-focus",
+      "file": "761-permissions-keyboard-focus.png",
+      "sha256": "6309a6fe84ff2df60c2c50e3db4dd3d18ee47eacde3c310aee2625360b177668"
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "state": "default",
+      "file": "1440-admins-default.png",
+      "sha256": "15c4b993c320f641a032e48dd6b17c4afe17e3c71a994b93109f8c8e539de8ed"
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "state": "keyboard-focus",
+      "file": "1440-admins-keyboard-focus.png",
+      "sha256": "c6178c77f9d01be6634bd321da8e9bb2ede3333415fca617b9dff8558ded70bb"
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "state": "default",
+      "file": "1440-permissions-default.png",
+      "sha256": "714f2e0e593fc1f73904f9bef4f64ff3b36affae4040f1f1bdd60d5c1a05b91b"
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "state": "keyboard-focus",
+      "file": "1440-permissions-keyboard-focus.png",
+      "sha256": "714f2e0e593fc1f73904f9bef4f64ff3b36affae4040f1f1bdd60d5c1a05b91b"
+    }
+  ],
+  "observations": [
+    {
+      "width": 390,
+      "routeName": "admins",
+      "styles": {
+        "header": {
+          "backgroundColor": "rgb(41, 76, 175)",
+          "color": "rgb(255, 255, 255)",
+          "paddingTop": "20px",
+          "paddingLeft": "16px",
+          "borderRadius": "12px 12px 0px 0px"
+        },
+        "title": {
+          "fontFamily": "\"Microsoft YaHei\", sans-serif",
+          "fontSize": "22px",
+          "fontWeight": "700",
+          "color": "rgb(255, 255, 255)"
+        },
+        "selectors": {
+          "gridTemplateColumns": "356px",
+          "gap": "16px",
+          "paddingTop": "20px",
+          "marginLeft": "-4px"
+        },
+        "filter": {
+          "gridTemplateColumns": "356px",
+          "gap": "16px",
+          "paddingBottom": "20px"
+        },
+        "checkbox": {
+          "width": "20px",
+          "height": "20px",
+          "minHeight": "20px"
+        },
+        "summary": {
+          "gridTemplateColumns": "324px",
+          "gap": "20px",
+          "marginTop": "-16px",
+          "padding": "20px 16px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgb(255, 255, 255)"
+        },
+        "summaryItem": {
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(20, 42, 70)"
+        },
+        "result": {
+          "padding": "10px 12px",
+          "backgroundColor": "rgb(237, 241, 246)",
+          "color": "rgb(104, 103, 94)",
+          "fontSize": "16px"
+        },
+        "matrix": {
+          "gridTemplateColumns": "286px",
+          "padding": "12px 14px",
+          "backgroundColor": "rgb(229, 224, 210)",
+          "borderRadius": "10px",
+          "color": "rgb(32, 44, 61)"
+        }
+      },
+      "focus": {
+        "width": 356,
+        "height": 44,
+        "outline": "rgb(66, 118, 223) solid 3px",
+        "outlineOffset": "3px",
+        "border": "1px solid rgb(157, 177, 204)",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(20, 42, 70)",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontSize": "16px"
+      },
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 390,
+      "routeName": "permissions",
+      "styles": {
+        "header": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)",
+          "paddingTop": "20px",
+          "paddingLeft": "16px",
+          "borderRadius": "12px 12px 0px 0px"
+        },
+        "title": {
+          "fontFamily": "STSong, SimSun, \"Songti SC\", serif",
+          "fontSize": "22px",
+          "fontWeight": "700",
+          "color": "rgb(23, 24, 19)"
+        },
+        "selectors": {
+          "gridTemplateColumns": "350px",
+          "gap": "20px",
+          "paddingTop": "0px",
+          "marginLeft": "0px"
+        },
+        "filter": {
+          "gridTemplateColumns": "358px",
+          "gap": "14px",
+          "paddingBottom": "0px"
+        },
+        "checkbox": {
+          "width": "44px",
+          "height": "44px",
+          "minHeight": "44px"
+        },
+        "summary": {
+          "gridTemplateColumns": "350px",
+          "gap": "22px",
+          "marginTop": "28px",
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "summaryItem": {
+          "padding": "20px 0px 0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)"
+        },
+        "result": {
+          "padding": "14px 16px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)",
+          "fontSize": "16px"
+        },
+        "matrix": {
+          "gridTemplateColumns": "1fr",
+          "padding": "22px 0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderRadius": "0px",
+          "color": "rgb(23, 24, 19)"
+        }
+      },
+      "focus": {
+        "width": 350,
+        "height": 44,
+        "outline": "rgb(23, 24, 19) none 3px",
+        "outlineOffset": "0px",
+        "border": "1px solid rgb(23, 24, 19)",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(23, 24, 19)",
+        "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+        "fontSize": "16px"
+      },
+      "requests": [
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 760,
+      "routeName": "admins",
+      "styles": {
+        "header": {
+          "backgroundColor": "rgb(41, 76, 175)",
+          "color": "rgb(255, 255, 255)",
+          "paddingTop": "20px",
+          "paddingLeft": "16px",
+          "borderRadius": "12px 12px 0px 0px"
+        },
+        "title": {
+          "fontFamily": "\"Microsoft YaHei\", sans-serif",
+          "fontSize": "22px",
+          "fontWeight": "700",
+          "color": "rgb(255, 255, 255)"
+        },
+        "selectors": {
+          "gridTemplateColumns": "726px",
+          "gap": "16px",
+          "paddingTop": "20px",
+          "marginLeft": "-4px"
+        },
+        "filter": {
+          "gridTemplateColumns": "726px",
+          "gap": "16px",
+          "paddingBottom": "20px"
+        },
+        "checkbox": {
+          "width": "20px",
+          "height": "20px",
+          "minHeight": "20px"
+        },
+        "summary": {
+          "gridTemplateColumns": "694px",
+          "gap": "20px",
+          "marginTop": "-16px",
+          "padding": "20px 16px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgb(255, 255, 255)"
+        },
+        "summaryItem": {
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(20, 42, 70)"
+        },
+        "result": {
+          "padding": "10px 12px",
+          "backgroundColor": "rgb(237, 241, 246)",
+          "color": "rgb(104, 103, 94)",
+          "fontSize": "16px"
+        },
+        "matrix": {
+          "gridTemplateColumns": "213.328px 426.672px",
+          "padding": "12px 14px",
+          "backgroundColor": "rgb(229, 224, 210)",
+          "borderRadius": "10px",
+          "color": "rgb(32, 44, 61)"
+        }
+      },
+      "focus": {
+        "width": 726,
+        "height": 44,
+        "outline": "rgb(66, 118, 223) solid 3px",
+        "outlineOffset": "3px",
+        "border": "1px solid rgb(157, 177, 204)",
+        "background": "rgb(255, 255, 255)",
+        "color": "rgb(20, 42, 70)",
+        "fontFamily": "\"Microsoft YaHei\", sans-serif",
+        "fontSize": "16px"
+      },
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 760,
+      "routeName": "permissions",
+      "styles": {
+        "header": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)",
+          "paddingTop": "20px",
+          "paddingLeft": "16px",
+          "borderRadius": "12px 12px 0px 0px"
+        },
+        "title": {
+          "fontFamily": "STSong, SimSun, \"Songti SC\", serif",
+          "fontSize": "22px",
+          "fontWeight": "700",
+          "color": "rgb(23, 24, 19)"
+        },
+        "selectors": {
+          "gridTemplateColumns": "720px",
+          "gap": "20px",
+          "paddingTop": "0px",
+          "marginLeft": "0px"
+        },
+        "filter": {
+          "gridTemplateColumns": "728px",
+          "gap": "14px",
+          "paddingBottom": "0px"
+        },
+        "checkbox": {
+          "width": "44px",
+          "height": "44px",
+          "minHeight": "44px"
+        },
+        "summary": {
+          "gridTemplateColumns": "720px",
+          "gap": "22px",
+          "marginTop": "28px",
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "summaryItem": {
+          "padding": "20px 0px 0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)"
+        },
+        "result": {
+          "padding": "14px 16px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)",
+          "fontSize": "16px"
+        },
+        "matrix": {
+          "gridTemplateColumns": "minmax(170px, 0.8fr) minmax(0px, 1.6fr)",
+          "padding": "22px 0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderRadius": "0px",
+          "color": "rgb(23, 24, 19)"
+        }
+      },
+      "focus": {
+        "width": 720,
+        "height": 44,
+        "outline": "rgb(23, 24, 19) none 3px",
+        "outlineOffset": "0px",
+        "border": "1px solid rgb(23, 24, 19)",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(23, 24, 19)",
+        "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+        "fontSize": "16px"
+      },
+      "requests": [
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 761,
+      "routeName": "admins",
+      "styles": {
+        "header": {
+          "backgroundColor": "rgb(37, 74, 156)",
+          "color": "rgb(255, 255, 255)",
+          "paddingTop": "20px",
+          "paddingLeft": "22px",
+          "borderRadius": "0px"
+        },
+        "title": {
+          "fontFamily": "STSong, SimSun, \"Songti SC\", serif",
+          "fontSize": "22px",
+          "fontWeight": "700",
+          "color": "rgb(255, 255, 255)"
+        },
+        "selectors": {
+          "gridTemplateColumns": "334.5px 334.5px",
+          "gap": "10px",
+          "paddingTop": "0px",
+          "marginLeft": "20px"
+        },
+        "filter": {
+          "gridTemplateColumns": "373.125px 223.875px 62px",
+          "gap": "10px",
+          "paddingBottom": "0px"
+        },
+        "checkbox": {
+          "width": "44px",
+          "height": "44px",
+          "minHeight": "44px"
+        },
+        "summary": {
+          "gridTemplateColumns": "334.5px 334.5px",
+          "gap": "10px",
+          "marginTop": "0px",
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "summaryItem": {
+          "padding": "14px",
+          "borderRadius": "10px",
+          "backgroundColor": "rgb(229, 224, 210)",
+          "color": "rgb(32, 44, 61)"
+        },
+        "result": {
+          "padding": "10px 12px",
+          "backgroundColor": "rgb(237, 241, 246)",
+          "color": "rgb(104, 103, 94)",
+          "fontSize": "16px"
+        },
+        "matrix": {
+          "gridTemplateColumns": "211px 422px",
+          "padding": "12px 14px",
+          "backgroundColor": "rgb(229, 224, 210)",
+          "borderRadius": "10px",
+          "color": "rgb(32, 44, 61)"
+        }
+      },
+      "focus": {
+        "width": 334.5,
+        "height": 44,
+        "outline": "rgb(23, 24, 19) solid 3px",
+        "outlineOffset": "0px",
+        "border": "1px solid color(srgb 0.395137 0.386353 0.347686)",
+        "background": "rgb(255, 253, 245)",
+        "color": "rgb(23, 24, 19)",
+        "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+        "fontSize": "16px"
+      },
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 761,
+      "routeName": "permissions",
+      "styles": {
+        "header": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)",
+          "paddingTop": "22px",
+          "paddingLeft": "24px",
+          "borderRadius": "12px 12px 0px 0px"
+        },
+        "title": {
+          "fontFamily": "STSong, SimSun, \"Songti SC\", serif",
+          "fontSize": "22px",
+          "fontWeight": "700",
+          "color": "rgb(23, 24, 19)"
+        },
+        "selectors": {
+          "gridTemplateColumns": "217px",
+          "gap": "20px",
+          "paddingTop": "0px",
+          "marginLeft": "0px"
+        },
+        "filter": {
+          "gridTemplateColumns": "448px",
+          "gap": "14px",
+          "paddingBottom": "0px"
+        },
+        "checkbox": {
+          "width": "44px",
+          "height": "44px",
+          "minHeight": "44px"
+        },
+        "summary": {
+          "gridTemplateColumns": "217px",
+          "gap": "22px",
+          "marginTop": "28px",
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "summaryItem": {
+          "padding": "20px 0px 0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)"
+        },
+        "result": {
+          "padding": "14px 16px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)",
+          "fontSize": "16px"
+        },
+        "matrix": {
+          "gridTemplateColumns": "minmax(170px, 0.8fr) minmax(0px, 1.6fr)",
+          "padding": "22px 0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderRadius": "0px",
+          "color": "rgb(23, 24, 19)"
+        }
+      },
+      "focus": {
+        "width": 217,
+        "height": 44,
+        "outline": "rgb(23, 24, 19) none 3px",
+        "outlineOffset": "0px",
+        "border": "1px solid rgb(23, 24, 19)",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(23, 24, 19)",
+        "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+        "fontSize": "16px"
+      },
+      "requests": [
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "routeName": "admins",
+      "styles": {
+        "header": {
+          "backgroundColor": "rgb(37, 74, 156)",
+          "color": "rgb(255, 255, 255)",
+          "paddingTop": "20px",
+          "paddingLeft": "22px",
+          "borderRadius": "0px"
+        },
+        "title": {
+          "fontFamily": "STSong, SimSun, \"Songti SC\", serif",
+          "fontSize": "22px",
+          "fontWeight": "700",
+          "color": "rgb(255, 255, 255)"
+        },
+        "selectors": {
+          "gridTemplateColumns": "462px 462px",
+          "gap": "10px",
+          "paddingTop": "0px",
+          "marginLeft": "20px"
+        },
+        "filter": {
+          "gridTemplateColumns": "532.5px 319.5px 62px",
+          "gap": "10px",
+          "paddingBottom": "0px"
+        },
+        "checkbox": {
+          "width": "44px",
+          "height": "44px",
+          "minHeight": "44px"
+        },
+        "summary": {
+          "gridTemplateColumns": "462px 462px",
+          "gap": "10px",
+          "marginTop": "0px",
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "summaryItem": {
+          "padding": "14px",
+          "borderRadius": "10px",
+          "backgroundColor": "rgb(229, 224, 210)",
+          "color": "rgb(32, 44, 61)"
+        },
+        "result": {
+          "padding": "10px 12px",
+          "backgroundColor": "rgb(237, 241, 246)",
+          "color": "rgb(104, 103, 94)",
+          "fontSize": "16px"
+        },
+        "matrix": {
+          "gridTemplateColumns": "296px 592px",
+          "padding": "12px 14px",
+          "backgroundColor": "rgb(229, 224, 210)",
+          "borderRadius": "10px",
+          "color": "rgb(32, 44, 61)"
+        }
+      },
+      "focus": {
+        "width": 462,
+        "height": 44,
+        "outline": "rgb(23, 24, 19) solid 3px",
+        "outlineOffset": "0px",
+        "border": "1px solid color(srgb 0.395137 0.386353 0.347686)",
+        "background": "rgb(255, 253, 245)",
+        "color": "rgb(23, 24, 19)",
+        "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+        "fontSize": "16px"
+      },
+      "requests": [
+        {
+          "target": "accounts",
+          "path": "/api/v1/platform/accounts",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    },
+    {
+      "width": 1440,
+      "routeName": "permissions",
+      "styles": {
+        "header": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)",
+          "paddingTop": "22px",
+          "paddingLeft": "24px",
+          "borderRadius": "12px 12px 0px 0px"
+        },
+        "title": {
+          "fontFamily": "STSong, SimSun, \"Songti SC\", serif",
+          "fontSize": "22px",
+          "fontWeight": "700",
+          "color": "rgb(23, 24, 19)"
+        },
+        "selectors": {
+          "gridTemplateColumns": "262px",
+          "gap": "20px",
+          "paddingTop": "0px",
+          "marginLeft": "0px"
+        },
+        "filter": {
+          "gridTemplateColumns": "458.875px 367.125px 60px",
+          "gap": "14px",
+          "paddingBottom": "0px"
+        },
+        "checkbox": {
+          "width": "44px",
+          "height": "44px",
+          "minHeight": "44px"
+        },
+        "summary": {
+          "gridTemplateColumns": "262px",
+          "gap": "22px",
+          "marginTop": "28px",
+          "padding": "0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)"
+        },
+        "summaryItem": {
+          "padding": "20px 0px 0px",
+          "borderRadius": "0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)"
+        },
+        "result": {
+          "padding": "14px 16px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "color": "rgb(23, 24, 19)",
+          "fontSize": "16px"
+        },
+        "matrix": {
+          "gridTemplateColumns": "minmax(170px, 0.8fr) minmax(0px, 1.6fr)",
+          "padding": "22px 0px",
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "borderRadius": "0px",
+          "color": "rgb(23, 24, 19)"
+        }
+      },
+      "focus": {
+        "width": 262,
+        "height": 44,
+        "outline": "rgb(23, 24, 19) none 3px",
+        "outlineOffset": "0px",
+        "border": "1px solid rgb(23, 24, 19)",
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(23, 24, 19)",
+        "fontFamily": "\"Microsoft YaHei UI\", \"Microsoft YaHei\", sans-serif",
+        "fontSize": "16px"
+      },
+      "requests": [
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        },
+        {
+          "target": "roles",
+          "path": "/api/v1/platform/roles",
+          "method": "GET"
+        }
+      ],
+      "errors": [],
+      "unexpected": []
+    }
+  ],
+  "processesClosed": true
+}

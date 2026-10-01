@@ -23,8 +23,8 @@ const definitions = [
     "EX-P34-FIRST-FAILURE",
     "P34首次读取失败转发（非本页）",
     "excluded",
-    ["5ae31bc55551b1dc.1", "08a59be6f793cde6.1"],
-    ["OG-RETRY"],
+    ["5ae31bc55551b1dc.1", "08a59be6f793cde6.1", "ca4fa7a0220842a9.1"],
+    ["WIRE-P34-RETRY"],
     "仅view===approvals、无data，error/HTTP500或rate_limited/HTTP429；非P32",
     "P32不渲染此分支；P34复用原load()，不计入本页动作",
     ["normal"],
@@ -34,7 +34,7 @@ const definitions = [
     "OG-REFRESH",
     "刷新工作区",
     "read",
-    ["b11692c0597885e3.1"],
+    ["a1fb5dc1b30f9733.1"],
     ["OG-REFRESH"],
     "loading或refreshing禁用",
     "load(background)读取组织summary和工作区列表；不是只读所选工作区",
@@ -351,7 +351,10 @@ export function buildWorkspacesReview(sources, evidence, controlsEvidence) {
         kind,
         sourceCandidateIds: signatures.map((s) => `${file}#${s}`),
         sourceContractKeys,
-        contractAliasReason: "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+        contractAliasReason:
+          actionId === "EX-P34-FIRST-FAILURE"
+            ? "P34审批读取反馈在本页不渲染；沿既有WIRE-P34-RETRY合同明确排除，不归入P32动作。"
+            : "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
         condition,
         handler,
         variants,
@@ -542,9 +545,10 @@ export function buildWorkspacesReview(sources, evidence, controlsEvidence) {
   result.actualVueRestore = {
     scope:
       "Approved P32 mobile restore composition only; default shared callers and original API retained",
-    approval: "mobile-proposal-composition-approved-real-Vue-and-desktop-review-pending",
+    approval:
+      "mobile-proposal-composition-approved-real-Vue-desktop-mobile-verified-production-not-accepted",
     review: "P32-VUE-RESTORE-REVIEW.md",
-    evidence: "output/playwright/p32-approved-restore-review/evidence.json",
+    evidence: "output/playwright/p32-approved-restore-review-r9/evidence.json",
   };
   return result;
 }

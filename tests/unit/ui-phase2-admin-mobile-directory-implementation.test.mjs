@@ -8,12 +8,12 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-directory-implementation/";
 const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));
 const before = evidence("baseline"),
-  after = evidence("current-r4");
+  after = evidence("current-r6");
 const historicalHashes = (e) =>
   Object.entries(e.sourceHashes).every(([, sha]) => /^[a-f0-9]{64}$/.test(sha));
 
-for (const mode of ["baseline", "current-r4"])
-  test(`directory ${mode === "baseline" ? "historical baseline" : "current r4"}: exact stage sources, 30 PNGs and scoped read-only replay`, () => {
+for (const mode of ["baseline", "current-r6"])
+  test(`directory ${mode === "baseline" ? "historical baseline" : "current r6"}: exact stage sources, 30 PNGs and scoped read-only replay`, () => {
     const e = evidence(mode),
       dir = folder + mode;
     assert.equal(e.kind, "P44-MOBILE-DIRECTORY-IMPLEMENTATION");
@@ -22,7 +22,7 @@ for (const mode of ["baseline", "current-r4"])
     assert.equal(e.checks.length, mode === "baseline" ? 116 : 134);
     assert.equal(e.screenshots.length, 30);
     assert.equal(e.observations.length, 12);
-    assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 36 : 51);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 36 : 50);
     if (mode !== "baseline") {
       assert.deepEqual(
         Object.keys(e.sourceHashes)
@@ -38,18 +38,21 @@ for (const mode of ["baseline", "current-r4"])
           "apps/web/src/components/PlatformRoleComparisonPermissions.css",
           "apps/web/src/design/account-center-tokens.css",
           "apps/web/src/design/account-permissions-tokens.css",
-          "apps/web/src/design/collection-ops-tokens.css",
           "apps/web/src/design/organization-wizard-tokens.css",
           "apps/web/src/design/platform-admin-mobile-tokens.css",
           "apps/web/src/design/platform-overlay-tokens.css",
           "apps/web/src/design/tenancy-tokens.css",
+          "apps/web/src/styles/tenancy-workspace.css",
           "apps/web/src/use-platform-organization-detail-state.ts",
           "scripts/lib/ui-imported-style-sources.mjs",
         ],
       );
       assert.deepEqual(
         Object.keys(before.sourceHashes).filter((file) => !Object.hasOwn(e.sourceHashes, file)),
-        ["apps/web/src/styles/platform-dashboard.css"],
+        [
+          "apps/web/src/styles/platform-dashboard.css",
+          "apps/web/src/styles/platform-operations.css",
+        ],
       );
     }
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
