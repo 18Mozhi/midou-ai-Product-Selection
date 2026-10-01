@@ -470,15 +470,18 @@ test("M08-02.A04/A09/A14 persists observation view and audit in one transaction"
 });
 
 test("M08-02.A07/A08/A15/A16 UI and production evidence cover full states and single-instance recovery", async () => {
-  const [ui, e2e, manifest, architecture, runbook] = await Promise.all(
-    [
-      "apps/web/src/components/RedisResilienceCenter.vue",
-      "tests/e2e/m08-02-redis-resilience.spec.ts",
-      "infra/baota/redis-single-instance-manifest.json",
-      "docs/architecture/m08-02-redis-resilience.md",
-      "docs/runbooks/m08-02-redis-resilience.md",
-    ].map((path) => readFile(path, "utf8")),
-  );
+  const [ui, resourceEvidence, keyspaceSample, e2e, manifest, architecture, runbook] =
+    await Promise.all(
+      [
+        "apps/web/src/components/RedisResilienceCenter.vue",
+        "apps/web/src/components/redis-resilience/RedisResourceEvidence.vue",
+        "apps/web/src/components/redis-resilience/RedisKeyspaceSample.vue",
+        "tests/e2e/m08-02-redis-resilience.spec.ts",
+        "infra/baota/redis-single-instance-manifest.json",
+        "docs/architecture/m08-02-redis-resilience.md",
+        "docs/runbooks/m08-02-redis-resilience.md",
+      ].map((path) => readFile(path, "utf8")),
+    );
   for (const state of [
     "loading",
     "ready",
@@ -494,8 +497,8 @@ test("M08-02.A07/A08/A15/A16 UI and production evidence cover full states and si
   ])
     assert.match(ui, new RegExp(state));
   assert.match(
-    ui,
-    /键淘汰风险[\s\S]*max_memory_policy[\s\S]*键空间占用热点[\s\S]*不把内存占比冒充访问频率/,
+    `${resourceEvidence}\n${keyspaceSample}`,
+    /界面键淘汰风险提示[\s\S]*max_memory_policy[\s\S]*有界键空间采样[\s\S]*不是总 Redis 内存占比或访问频率/,
   );
   assert.match(
     `${ui}\n${e2e}`,
@@ -506,10 +509,9 @@ test("M08-02.A07/A08/A15/A16 UI and production evidence cover full states and si
     assert.match(ui, new RegExp(token));
   assert.match(manifest, /appendonly/);
   assert.match(manifest, /noeviction/);
-  assert.match(architecture, /61_平台运营-概览\.jpg/);
-  assert.match(architecture, /64_系统监控\.jpg/);
-  assert.match(architecture, /69_异常告警\.jpg/);
-  assert.match(architecture, /10_霓虹科技平台驾驶舱_dashboard\.png/);
+  assert.match(architecture, /# M08-02 Redis 单实例韧性/);
+  assert.match(architecture, /access_frequency_available=false/);
+  assert.match(architecture, /不再使用旧深海蓝霓虹驾驶舱/);
   assert.match(runbook, /宝塔/);
   assert.match(runbook, /## 回滚/);
   assert.doesNotMatch(
