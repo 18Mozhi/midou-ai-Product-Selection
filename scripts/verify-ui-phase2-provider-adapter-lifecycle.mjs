@@ -267,7 +267,12 @@ try {
                 : action === "probe"
                   ? `${data.items[0].name} 健康检查通过`
                   : "已刷新 2 个来源适配器状态";
-            await expect(center.locator(".adapter-message > span")).toHaveText(result);
+            const feedback = center.locator(
+              action === "read" && outcome === "failure"
+                ? ".adapter-refresh-failure > span"
+                : ".adapter-message > span",
+            );
+            await expect(feedback).toHaveText(result);
             await expect(
               center.getByRole("button", { name: "刷新状态", exact: true }),
             ).toBeEnabled();
@@ -281,11 +286,7 @@ try {
               requests.filter((req) => req.key.startsWith("POST ")).length,
               action === "probe" ? 1 : 0,
             );
-            check(
-              "cached result remains source-owned",
-              await center.locator(".adapter-message > span").textContent(),
-              result,
-            );
+            check("cached result remains source-owned", await feedback.textContent(), result);
             check("drawer stays closed on return", await drawer.count(), 0);
             // Keep a compact review pack: screenshot only the 390px completed states.
             if (width === 390) await shot("returned");

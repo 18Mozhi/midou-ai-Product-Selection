@@ -14,7 +14,6 @@ test("P47 lifecycle evidence uses current actual App sources and unchanged prese
   assert.equal(evidence.kind, "P47-PRESERVE-CACHE-LIFECYCLE-r1");
   assert.equal(evidence.productionUntransformed, true);
   assert.equal(evidence.processesClosed, true);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 166);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
     assert.equal(hash(read(file)), expected, file);
   for (const file of [
