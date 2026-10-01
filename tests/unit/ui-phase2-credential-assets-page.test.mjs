@@ -51,6 +51,7 @@ test("P50 reviewed page refinements ship as a route-scoped production delta", ()
   const source = read(component),
     css = postcss.parse(read(productionCss)),
     text = css.toString();
+  const tokens = read("apps/web/src/design/credential-assets-tokens.css");
   const selectors = [];
   css.walkRules((rule) =>
     selectors.push(...rule.selectors.map((selector) => selector.replace(/\s+/g, " ").trim())),
@@ -68,6 +69,8 @@ test("P50 reviewed page refinements ship as a route-scoped production delta", ()
   assert.equal(text.includes("p50-credential-page-review"), false);
   assert.equal(text.includes("linear-gradient"), false);
   assert.equal(text.includes("transition: all"), false);
+  assert.doesNotMatch(text, /(?:#[0-9a-f]{3,8}\b|\brgb\(|\b(?:white|black)\b)/i);
+  assert.ok(tokens.includes("--p50-success-ready-bg: #e8f3ee;"));
   css.walkRules((rule) => {
     for (const selector of rule.selectors)
       assert.ok(selector.includes("body:has(#app .credential-center)"), selector);
