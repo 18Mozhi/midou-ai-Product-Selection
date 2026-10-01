@@ -5,7 +5,10 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TrendDashboard.vue": "4c38fe10e342283cd5e9baf7537d634f11f3a1424618687daaa1face537513a6",
+    "apps/web/src/components/TrendDashboard.vue": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc",
+    "apps/web/src/components/TrendEvidenceDialogs.vue": "627689473dfc6efb55e4edc619b8c59c4bf02a1a15141083b11a32c377b8345f",
+    "apps/web/src/components/TrendRuleList.vue": "f9065e6935b569ddacb24a61fedc7297d3d654974fb9e518e3ccc93c4f53f4fb",
+    "apps/web/src/components/TrendMetricExplainer.vue": "c01bec9a20233b4508698f6c92d71005fa0816163f2200c0a0c02eec3d091af2",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -46,14 +49,14 @@
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#e8d58f837015480a.1",
-        "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
-        "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
+        "apps/web/src/components/TrendRuleList.vue#3b02a6e70df9b044.1",
+        "apps/web/src/components/TrendRuleList.vue#c1a0eb5af0495f85.1",
         "apps/web/src/components/TrendDetailPanel.vue#658c4019fe00727f.1"
       ],
       "sourceContractKeys": [
         "TR-RULE-OPEN：顶部首条/新增入口",
-        "TR-RULE-OPEN：规则标题入口",
-        "TR-RULE-OPEN：规则空态入口",
+        "TR-RULE-OPEN：规则列表创建入口",
+        "TR-RULE-OPEN：规则空状态创建入口",
         "TR-RULE-OPEN：详情入口"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
@@ -552,10 +555,10 @@
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1"
+        "apps/web/src/components/TrendMetricExplainer.vue#a8eb23a11ff39fa0.1"
       ],
       "sourceContractKeys": [
-        "TR-HELP：原生details展开"
+        "TR-HELP：指标说明原生 details"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "topics内原生details，独立于ready状态",
@@ -598,10 +601,10 @@
       "kind": "read",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#0d9565586dbfab9d.1"
+        "apps/web/src/components/TrendRuleList.vue#1cbaf0990db5c0c8.1"
       ],
       "sourceContractKeys": [
-        "TR-RELOAD：规则状态恢复；隐藏未接线通用次操作"
+        "TR-RELOAD：UiStatePanel 主动作向父级转发"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "rules且state不为ready/empty时UiStatePanel primary",
@@ -650,10 +653,10 @@
       "kind": "write",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1"
+        "apps/web/src/components/TrendRuleList.vue#4a2c7ae1a4a9a7f7.1"
       ],
       "sourceContractKeys": [
-        "TR-RULE-STATUS：暂停/启用"
+        "TR-RULE-STATUS：暂停/启用既有规则"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "仅canManage，按钮无busy禁用；requireTrendManage复核能力",
@@ -706,10 +709,10 @@
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1"
+        "apps/web/src/components/TrendRuleList.vue#e5d44b4c01598fac.1"
       ],
       "sourceContractKeys": [
-        "TR-RULE-RESULTS：首关键词筛选"
+        "TR-RULE-RESULTS：查看当前规则结果"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "规则每行read角色可用",
@@ -758,12 +761,12 @@
       "kind": "write",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#c6ce42d1e09856fa.1",
-        "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1"
+        "apps/web/src/components/TrendEvidenceDialogs.vue#ad9b133941c9fae2.1",
+        "apps/web/src/components/TrendEvidenceDialogs.vue#3ca40e4dc9ea598c.1"
       ],
       "sourceContractKeys": [
-        "TR-ANOMALY-SUBMIT表单",
-        "TR-ANOMALY-SUBMIT按钮"
+        "TR-ANOMALY-SUBMIT：表单事件向父级转发",
+        "TR-ANOMALY-SUBMIT：提交按钮"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "有selected/anomalyEvidence/管理权限；按钮trim原因>=2且非busy；HTML2..500",
@@ -826,11 +829,11 @@
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#b5cb028d61878491.1",
-        "apps/web/src/components/TrendDashboard.vue#79e6f49e70b53776.1"
+        "apps/web/src/components/TrendEvidenceDialogs.vue#b5cb028d61878491.1",
+        "apps/web/src/components/TrendEvidenceDialogs.vue#79e6f49e70b53776.1"
       ],
       "sourceContractKeys": [
-        "TR-ANOMALY-CLOSE：叉号",
+        "TR-ANOMALY-CLOSE：关闭图标",
         "TR-ANOMALY-CLOSE：取消"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
@@ -879,12 +882,12 @@
       "kind": "write",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#60103acec5bdf33b.1",
-        "apps/web/src/components/TrendDashboard.vue#288abda590fb34b7.1"
+        "apps/web/src/components/TrendEvidenceDialogs.vue#c5ff238da62218c9.1",
+        "apps/web/src/components/TrendEvidenceDialogs.vue#288abda590fb34b7.1"
       ],
       "sourceContractKeys": [
-        "TR-RELEVANCE-SUBMIT表单",
-        "TR-RELEVANCE-SUBMIT按钮"
+        "TR-RELEVANCE-SUBMIT：表单事件向父级转发",
+        "TR-RELEVANCE-SUBMIT：确认按钮"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
       "condition": "有selected/relevanceDialog/管理权限；按钮trim原因>=2且非busy，HTML2..500",
@@ -959,11 +962,11 @@
       "kind": "local",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#74456cadd4fd8246.1",
-        "apps/web/src/components/TrendDashboard.vue#90cb939f09706fb5.1"
+        "apps/web/src/components/TrendEvidenceDialogs.vue#74456cadd4fd8246.1",
+        "apps/web/src/components/TrendEvidenceDialogs.vue#90cb939f09706fb5.1"
       ],
       "sourceContractKeys": [
-        "TR-RELEVANCE-CLOSE：叉号",
+        "TR-RELEVANCE-CLOSE：关闭图标",
         "TR-RELEVANCE-CLOSE：取消"
       ],
       "contractAliasReason": "按当前趋势合同原单元格含入口后缀精确绑定；不新增业务ID或由标签推断能力。",
@@ -2610,12 +2613,12 @@
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#70140152f0bfc00c.1",
-        "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1"
+        "apps/web/src/components/TrendEvidenceDialogs.vue#70140152f0bfc00c.1",
+        "apps/web/src/components/TrendEvidenceDialogs.vue#cdba5de18bdf9c12.1"
       ],
       "sourceContractKeys": [
-        "TR-D-ANOMALY 原生模态定义",
-        "TR-D-ANOMALY-KEYBOARD：cancel与Tab处理"
+        "TR-D-ANOMALY：数据质量原生 dialog 定义",
+        "TR-D-ANOMALY：cancel/Tab 事件接线"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
@@ -2641,7 +2644,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
+          "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#cdba5de18bdf9c12.1",
           "event": "@cancel",
           "handler": "handleAnomalyCancel",
           "targets": [
@@ -2649,7 +2652,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
+          "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#cdba5de18bdf9c12.1",
           "event": "@keydown",
           "handler": "handleAnomalyKeydown",
           "targets": [
@@ -2664,12 +2667,12 @@
       "kind": "wiring",
       "routeApplicability": "P14-six-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#029d267ba5289a36.1",
-        "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1"
+        "apps/web/src/components/TrendEvidenceDialogs.vue#ca1fd5fbbfd39737.1",
+        "apps/web/src/components/TrendEvidenceDialogs.vue#b4ec9dff70849aea.1"
       ],
       "sourceContractKeys": [
-        "同定义两变体；原生模态；原因2–500；status/reason.trim/expected_version；失败保留弹窗与原因，成功才关闭清空；busy期间叉号/取消/提交/Escape禁用；原因初始获焦、正反向Tab首尾循环，Escape/取消后焦点归还打开按钮",
-        "原生cancel转handleRelevanceCancel；仅非busy允许Escape关闭，busy保持；映射到TR-RELEVANCE-CLOSE"
+        "TR-D-IRRELEVANT / TR-D-RESTORE：相关性治理原生 dialog 定义",
+        "TR-D-RELEVANCE-CANCEL：Escape/Tab 事件接线"
       ],
       "contractAliasReason": "按趋势合同真实调用/定义/转发单元格绑定；同一规则调用与role定义不重复算业务弹窗。",
       "condition": "按相应canManage/selected/showRule/anomalyEvidence/relevanceDialog及tab条件挂载",
@@ -2702,7 +2705,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
+          "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#b4ec9dff70849aea.1",
           "event": "@cancel",
           "handler": "handleRelevanceCancel",
           "targets": [
@@ -2710,7 +2713,7 @@
           ]
         },
         {
-          "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
+          "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#b4ec9dff70849aea.1",
           "event": "@keydown",
           "handler": "handleRelevanceKeydown",
           "targets": [
@@ -2808,6 +2811,135 @@
       ]
     },
     {
+      "actionId": "TR-RULE-LIST-FORWARD",
+      "label": "规则列表控件父级事件转发",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#910372297876da13.1"
+      ],
+      "sourceContractKeys": [
+        "TrendRuleList 父级事件绑定"
+      ],
+      "contractAliasReason": "按2026-10-01实际Vue子组件事件绑定映射到既有P14动作；仅记录父子转发，不增加业务动作。",
+      "condition": "趋势规则页挂载TrendRuleList组件时",
+      "handler": "将子组件reload/create/toggle/viewTopics事件转发到父级既有处理器。",
+      "variants": [
+        "rules-header",
+        "rules-empty",
+        "error",
+        "enabled-to-paused",
+        "paused-to-enabled",
+        "first-keyword"
+      ],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "这是事件接线，不是按钮或业务操作；父处理器的真实Vue运行验收按各目标动作记录。",
+      "forwardsTo": [
+        "TR-RELOAD",
+        "TR-RULE-OPEN",
+        "TR-RULE-STATUS",
+        "TR-RULE-RESULTS"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#910372297876da13.1",
+          "event": "@reload",
+          "handler": "load",
+          "targets": ["TR-RELOAD"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#910372297876da13.1",
+          "event": "@create",
+          "handler": "showRule = true",
+          "targets": ["TR-RULE-OPEN"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#910372297876da13.1",
+          "event": "@toggle",
+          "handler": "toggleRule",
+          "targets": ["TR-RULE-STATUS"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#910372297876da13.1",
+          "event": "@view-topics",
+          "handler": "viewRuleTopics",
+          "targets": ["TR-RULE-RESULTS"]
+        }
+      ]
+    },
+    {
+      "actionId": "TR-EVIDENCE-DIALOGS-FORWARD",
+      "label": "证据对话框事件父级转发",
+      "kind": "wiring",
+      "routeApplicability": "P14-six-local-callers-only",
+      "sourceCandidateIds": [
+        "apps/web/src/components/TrendDashboard.vue#7bfcec2e14d1875c.1",
+        "apps/web/src/components/TrendDashboard.vue#b1b89245fcf60bc9.1"
+      ],
+      "sourceContractKeys": [
+        "TrendEvidenceDialogs 父级事件与 v-model 接线",
+        "TrendEvidenceDialogs 组件调用"
+      ],
+      "contractAliasReason": "按2026-10-01实际Vue子组件事件绑定映射到既有P14质量工单与相关性动作；v-model更新不另计业务动作。",
+      "condition": "证据对话框调用挂载并满足既有canManage条件时",
+      "handler": "将子组件createQualityIssue和markIrrelevant事件交给父级既有写入处理器。",
+      "variants": [
+        "anomaly-open",
+        "irrelevant-open",
+        "restore-open"
+      ],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "remaining": "这是事件与模型接线，不是额外业务动作；真实权限和服务端写入仍由相应动作与生产验收覆盖。",
+      "forwardsTo": [
+        "TR-ANOMALY-SUBMIT",
+        "TR-RELEVANCE-SUBMIT"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#7bfcec2e14d1875c.1",
+          "event": "@create-quality-issue",
+          "handler": "createQualityIssue",
+          "targets": ["TR-ANOMALY-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#7bfcec2e14d1875c.1",
+          "event": "@mark-irrelevant",
+          "handler": "markIrrelevant",
+          "targets": ["TR-RELEVANCE-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#b1b89245fcf60bc9.1",
+          "event": "@create-quality-issue",
+          "handler": "createQualityIssue",
+          "targets": ["TR-ANOMALY-SUBMIT"]
+        },
+        {
+          "candidateId": "apps/web/src/components/TrendDashboard.vue#b1b89245fcf60bc9.1",
+          "event": "@mark-irrelevant",
+          "handler": "markIrrelevant",
+          "targets": ["TR-RELEVANCE-SUBMIT"]
+        }
+      ]
+    },
+    {
       "actionId": "TR-RULE-DEFINITION",
       "label": "模态定义或共享消费者关联",
       "kind": "wiring",
@@ -2868,6 +3000,9 @@
     "containerScope": "reviewed-subset-of-shared-source",
     "files": [
       "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "apps/web/src/components/TrendRuleList.vue",
+      "apps/web/src/components/TrendMetricExplainer.vue",
       "apps/web/src/components/TrendFilterPanel.vue",
       "apps/web/src/components/TrendDetailPanel.vue",
       "apps/web/src/components/TrendEvidenceTimeline.vue",
@@ -2875,7 +3010,10 @@
       "apps/web/src/components/TrendChangeQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TrendDashboard.vue": "4c38fe10e342283cd5e9baf7537d634f11f3a1424618687daaa1face537513a6",
+      "apps/web/src/components/TrendDashboard.vue": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc",
+      "apps/web/src/components/TrendEvidenceDialogs.vue": "627689473dfc6efb55e4edc619b8c59c4bf02a1a15141083b11a32c377b8345f",
+      "apps/web/src/components/TrendRuleList.vue": "f9065e6935b569ddacb24a61fedc7297d3d654974fb9e518e3ccc93c4f53f4fb",
+      "apps/web/src/components/TrendMetricExplainer.vue": "c01bec9a20233b4508698f6c92d71005fa0816163f2200c0a0c02eec3d091af2",
       "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
       "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
       "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
@@ -2893,6 +3031,12 @@
     "inputs": [
       {
         "file": "apps/web/src/components/TrendDashboard.vue",
+        "binding": "anomalyEvidence",
+        "meaning": "异常证据通过v-model传递到隔离对话框；由既有详情证据打开入口设定，不新增业务动作。",
+        "remaining": "本地组件状态接线；不证明跨主题真实服务写入或权限验收。"
+      },
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
         "binding": "anomalySeverity",
         "meaning": "warning/critical；打开异常重置warning，不是从证据自动推断风险。",
         "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
@@ -2905,9 +3049,33 @@
       },
       {
         "file": "apps/web/src/components/TrendDashboard.vue",
+        "binding": "relevanceDialog",
+        "meaning": "相关性决定值通过v-model传递到隔离对话框；active/irrelevant沿用既有操作。",
+        "remaining": "本地组件状态接线；服务端写入仍由既有合同和独立验收决定。"
+      },
+      {
+        "file": "apps/web/src/components/TrendDashboard.vue",
         "binding": "relevanceReason",
         "meaning": "相关性原因required 2..500，提交trim；当前失败也清空且关窗。",
         "remaining": "原生required/maxlength不代替服务端校验与字段错误关联；动态图/忙碌锁/主题及完整实际Vue待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+        "binding": "anomalySeverity",
+        "meaning": "warning/critical输入由对话框子组件双向绑定至父级状态。",
+        "remaining": "不代表severity与来源身份、服务端校验或完整主题切换测试等价。"
+      },
+      {
+        "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+        "binding": "anomalyReason",
+        "meaning": "异常说明textarea通过子组件defineModel映射父级状态，提交trim。",
+        "remaining": "maxlength不是服务端字段校验证明；完整主题切换结果归属仍待验。"
+      },
+      {
+        "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+        "binding": "relevanceReason",
+        "meaning": "相关性原因textarea通过子组件defineModel映射父级状态，提交trim。",
+        "remaining": "服务端规则和真实写入归属由独立API/RBAC验收覆盖。"
       },
       {
         "file": "apps/web/src/components/TrendEvidenceTimeline.vue",
@@ -3002,7 +3170,7 @@
     ],
     "containers": [
       {
-        "file": "apps/web/src/components/TrendDashboard.vue",
+        "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",
@@ -3023,7 +3191,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/TrendDashboard.vue",
+        "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
         "tag": "aside",
         "ordinal": 1,
         "shape": "inline-aside",
@@ -3044,7 +3212,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/TrendDashboard.vue",
+        "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
         "tag": "dialog",
         "ordinal": 1,
         "shape": "native-dialog",
@@ -3065,7 +3233,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/TrendDashboard.vue",
+        "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
         "tag": "form",
         "ordinal": 2,
         "shape": "form-container",
@@ -3097,7 +3265,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/TrendDashboard.vue",
+        "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
         "tag": "dialog",
         "ordinal": 2,
         "shape": "native-dialog",

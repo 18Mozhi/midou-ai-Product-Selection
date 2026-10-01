@@ -5,8 +5,9 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
   "sourceHashes": {
-    "apps/web/src/components/OpportunityWorkspace.vue": "67335ca331b3bf0a59e1146ea4354e364ce3f1a516b15a9d9b7ace18b5a88322",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
+    "apps/web/src/components/OpportunityWorkspace.vue": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce",
+    "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa"
   },
@@ -1139,11 +1140,15 @@
       "kind": "local",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#56857391914c319d.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1"
+        "apps/web/src/components/OpportunityErpImportDialog.vue#a4680b216b462f63.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#7c44d93a403dc54e.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#0b08c48f30b70cb3.1"
       ],
-      "sourceContractKeys": ["OP-ERP-CLOSE：Escape", "OP-ERP-CLOSE"],
+      "sourceContractKeys": [
+        "ERP dialog Escape 与 Tab 事件接线",
+        "OP-ERP-CLOSE：关闭图标",
+        "OP-ERP-CLOSE：取消按钮"
+      ],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "标题关闭/取消/Escape均未busy禁用",
       "handler": "erpImportOpen=false，limit仍保留；不终止120秒bridge监听或已发POST",
@@ -1186,10 +1191,10 @@
       "kind": "write",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1"
+        "apps/web/src/components/OpportunityErpImportDialog.vue#674fd720e5afc0a1.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#429c64115868d9c6.1"
       ],
-      "sourceContractKeys": ["OP-ERP-BROWSER"],
+      "sourceContractKeys": ["OP-ERP-BROWSER：浏览器导入表单提交", "OP-ERP-BROWSER：从当前浏览器读取"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "数量native required1–500；提交按钮busy禁用；函数无busy早退",
       "handler": "browserBridge('erp.products.read',{limit:Number(erpImportLimit)})，同window/type/requestId匹配，120000ms超时；再POST /imports/erp-products items/source_url/captured_at/可选total；成功关窗load及返回计数",
@@ -1261,9 +1266,9 @@
       "kind": "write",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1"
+        "apps/web/src/components/OpportunityErpImportDialog.vue#a8109ecf87f0762f.1"
       ],
-      "sourceContractKeys": ["OP-ERP-FILE"],
+      "sourceContractKeys": ["OP-ERP-FILE：选择 ERP JSON 文件事件"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "accept JSON文件；有首个file即执行；不依赖form数量required或浏览器读取按钮",
       "handler": "解析数组或parsed.list，persistErpProducts；固定source_url=https://medou.medouai.com/#/ProductList及当前ISO，不带total；无file返回",
@@ -1314,9 +1319,9 @@
       "kind": "navigation",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1"
+        "apps/web/src/components/OpportunityErpImportDialog.vue#598ca963b90371ed.1"
       ],
-      "sourceContractKeys": ["OP-HELPER-DOWNLOAD"],
+      "sourceContractKeys": ["OP-HELPER-DOWNLOAD：浏览器助手下载"],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "ERP窗中的独立a；不是submit",
       "handler": "href /browser-helper/scoutops-browser-helper.zip，无target或download属性",
@@ -1853,9 +1858,15 @@
       "kind": "wiring",
       "routeApplicability": "P15-list-four-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#196c12d0f18ac5ee.1"
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c03d94a9b28d2499.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#bc557dd36730b9c2.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#05139d1095ee9295.1"
       ],
-      "sourceContractKeys": ["ERP导入原生dialog"],
+      "sourceContractKeys": [
+        "ERP 子组件父级 v-model/事件接线",
+        "ERP 导入对话框组件调用",
+        "ERP 原生 dialog 定义"
+      ],
       "contractAliasReason": "按机会候选表当前末单元格精确绑定；同源P18入口单列排除，不将共享源码重复计为全站独立动作。",
       "condition": "仅在上述P15条件内装配；同一源事件与组件调用保留独立源位置",
       "handler": "ERP原生dialog消费者；文件与浏览器读取两不同写入触发。",
@@ -1888,7 +1899,32 @@
       },
       "remaining": "关联不新增按钮或业务弹窗；所有动态变体、真实组件及共享内部仍待完整验收。",
       "forwardsTo": ["OP-ERP-CLOSE", "OP-ERP-BROWSER", "OP-ERP-FILE", "OP-HELPER-DOWNLOAD"],
-      "forwardBindings": []
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c03d94a9b28d2499.1",
+          "event": "@import-browser",
+          "handler": "emit('importBrowser')",
+          "targets": ["OP-ERP-BROWSER"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c03d94a9b28d2499.1",
+          "event": "@import-file",
+          "handler": "emit('importFile', $event)",
+          "targets": ["OP-ERP-FILE"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#bc557dd36730b9c2.1",
+          "event": "@import-browser",
+          "handler": "emit('importBrowser')",
+          "targets": ["OP-ERP-BROWSER"]
+        },
+        {
+          "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#bc557dd36730b9c2.1",
+          "event": "@import-file",
+          "handler": "emit('importFile', $event)",
+          "targets": ["OP-ERP-FILE"]
+        }
+      ]
     },
     {
       "actionId": "OP-CREATE-DEFINITION",
@@ -1982,15 +2018,18 @@
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "includeStructuralContainers": true,
+    "containerScope": "reviewed-subset-of-shared-source",
     "files": [
       "apps/web/src/components/OpportunityWorkspace.vue",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "apps/web/src/components/OpportunityErpImportDialog.vue",
       "apps/web/src/components/OpportunityListPanel.vue",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpportunityWorkspace.vue": "67335ca331b3bf0a59e1146ea4354e364ce3f1a516b15a9d9b7ace18b5a88322",
-      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
+      "apps/web/src/components/OpportunityWorkspace.vue": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce",
+      "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
       "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
       "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
@@ -2046,6 +2085,12 @@
       },
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "binding": "erpImportOpen",
+        "meaning": "ERP子组件open模型由父级erpImportOpen控制；关闭仅收起对话框，不取消桥接或请求。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "binding": "erpImportLimit",
         "meaning": "ERP数量默认200，子number required min1 max500；父同名转发非第二个独立数量输入。",
         "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
@@ -2078,6 +2123,12 @@
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "binding": "decisionReason",
         "meaning": "P18决定原因转发/子输入，正常列表排除；不可当P15批量原因。",
+        "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+        "binding": "importLimit",
+        "meaning": "ERP数量输入实际位于拆分后的ERP导入子组件；父级erpImportLimit经v-model传入。",
         "remaining": "字段当前校验和图稿提案分别保留；每字段错误/焦点/软键盘/禁用/跨路由与真实Vue均待验。"
       },
       {
@@ -2355,7 +2406,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
         "tag": "dialog",
         "ordinal": 1,
         "shape": "native-dialog",
@@ -2387,7 +2438,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",
@@ -2419,7 +2470,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
         "tag": "aside",
         "ordinal": 1,
         "shape": "inline-aside",
@@ -2442,7 +2493,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "dialog",
-        "ordinal": 2,
+        "ordinal": 1,
         "shape": "native-dialog",
         "sourceBehavior": "手工create原生dialog；父form取消保留。",
         "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
@@ -2463,7 +2514,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "form",
-        "ordinal": 2,
+        "ordinal": 1,
         "shape": "form-container",
         "sourceBehavior": "手工四字段form；name/market required，submit由父POST并跳返回id。",
         "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
@@ -2495,7 +2546,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "aside",
-        "ordinal": 2,
+        "ordinal": 1,
         "shape": "inline-aside",
         "sourceBehavior": "创建后异步刷新说明aside，不等于采纳成功或已完成采集。",
         "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
@@ -2516,7 +2567,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "aside",
-        "ordinal": 3,
+        "ordinal": 2,
         "shape": "inline-aside",
         "sourceBehavior": "迟到的创建成功显示机会回执和查看链接；重开草稿不被旧响应关闭，同内容暂禁重提。",
         "remaining": "隔离桌面/手机Vue回归覆盖延迟成功；引用的创建窗场景不是该迟到回执状态的专门视觉验收。",
@@ -2537,7 +2588,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "dialog",
-        "ordinal": 3,
+        "ordinal": 2,
         "shape": "native-dialog",
         "sourceBehavior": "decisionOpen && hasDetail原生决定窗，三种业务原因属于P18。",
         "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
@@ -2583,7 +2634,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "form",
-        "ordinal": 3,
+        "ordinal": 2,
         "shape": "form-container",
         "sourceBehavior": "P18决定form，required原因与busy确认；不是P15批量form。",
         "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",
@@ -2629,7 +2680,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "aside",
-        "ordinal": 4,
+        "ordinal": 3,
         "shape": "inline-aside",
         "sourceBehavior": "P18决定影响说明，不构成P15业务弹窗。",
         "remaining": "结构容器和场景关联不等于独立业务弹窗或运行验收；长窗/全主题/逐控件六态/异步生命周期尚待逐项验证。",

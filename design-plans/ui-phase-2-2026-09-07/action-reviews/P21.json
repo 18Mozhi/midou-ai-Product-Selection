@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1",
+    "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
     "apps/web/src/components/SourcingWorkspaceDialogs.vue": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0",
     "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6",
@@ -261,7 +261,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1"
+          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
         }
       },
       "label": "发起找货",
@@ -374,7 +374,7 @@
           "apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1",
+          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
           "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         }
       },
@@ -854,7 +854,7 @@
           "apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1",
+          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
           "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         }
       },
@@ -1048,7 +1048,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1"
+          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
         }
       },
       "label": "选择找货记录",
@@ -1418,7 +1418,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#1e3fc27654fc0776.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1"
+          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
         }
       },
       "label": "打开删除确认",
@@ -1682,7 +1682,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1"
+          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
         }
       },
       "label": "选择报价对比",
@@ -1967,7 +1967,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1"
+          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
         }
       },
       "label": "打开报价确认",
@@ -2071,7 +2071,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1"
+          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
         }
       },
       "label": "打开采购任务",
@@ -4931,7 +4931,7 @@
       "apps/web/src/components/OpportunityCostReviewQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1",
+      "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
       "apps/web/src/components/SourcingWorkspaceDialogs.vue": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0",
       "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
       "apps/web/src/components/SourcingCostConfirmationPanel.vue": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6",

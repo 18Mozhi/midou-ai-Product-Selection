@@ -7,15 +7,19 @@
   "sourceHashes": {
     "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a",
-    "apps/web/src/components/OpportunityDecisionPanel.vue": "0198986474d6a0d356b83be1db8e34b5fce4ec5d1ffd95356839528b9ce21264",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9",
     "apps/web/src/components/OpportunityDetailNavigation.vue": "bc672394516d76821e73b3d2ee94bd3e13d5ff961ddd8a741391b51f8dceb5b7",
     "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
-    "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
+    "apps/web/src/components/OpportunityLineagePanel.vue": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "67335ca331b3bf0a59e1146ea4354e364ce3f1a516b15a9d9b7ace18b5a88322",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
+    "apps/web/src/components/OpportunityWorkspace.vue": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce",
+    "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
+    "apps/web/src/components/OpportunityLineageSummary.vue": "a7eb194dcd23b7f4f98ffdeb1241e3dca8aecf60a7fc95f1100058695ade4cbe",
+    "apps/web/src/components/OpportunityLineageCorrelation.vue": "4a88aa8b041a2d734042f5ea605dfcd46b716d2cb6dcda099350d2e9bb897999",
+    "apps/web/src/components/OpportunityQualityGateDetails.vue": "a57e053d196d7262c5341e7f14bf95a124e06fc6d2e733e8f98295d921e35e73",
     "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
   },
   "dialogs": {
@@ -592,8 +596,10 @@
       ],
       "remaining": "采纳仍以recommended与all_passed双条件，不能只按5/5条数替代。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityDecisionPanel.vue#4c415989b6830734.1"
+        "apps/web/src/components/OpportunityQualityGateDetails.vue#4c415989b6830734.1"
       ],
+      "sourceContractKeys": ["OP-GATES-DETAILS：原五项质量门详情披露"],
+      "contractAliasReason": "按当前机会候选表中的组件拆分后控件精确绑定，历史源只用于追溯。",
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -2225,14 +2231,16 @@
         "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
         "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
         "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#196c12d0f18ac5ee.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#56857391914c319d.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#05139d1095ee9295.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#a4680b216b462f63.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#674fd720e5afc0a1.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#7c44d93a403dc54e.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#a8109ecf87f0762f.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#598ca963b90371ed.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#0b08c48f30b70cb3.1",
+        "apps/web/src/components/OpportunityErpImportDialog.vue#429c64115868d9c6.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c03d94a9b28d2499.1",
+        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#bc557dd36730b9c2.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#304e73ffea549836.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#67aec29022637161.1",
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#92c0e7988ecb5b9b.1",
@@ -2251,12 +2259,16 @@
         "OP-BATCH-CANCEL：Escape",
         "OP-BATCH-SUBMIT",
         "OP-BATCH-CANCEL",
-        "ERP导入原生dialog",
-        "OP-ERP-CLOSE：Escape",
-        "OP-ERP-BROWSER",
-        "OP-ERP-CLOSE",
-        "OP-ERP-FILE",
-        "OP-HELPER-DOWNLOAD",
+        "ERP 原生 dialog 定义",
+        "ERP dialog Escape 与 Tab 事件接线",
+        "OP-ERP-BROWSER：浏览器导入表单提交",
+        "OP-ERP-CLOSE：关闭图标",
+        "OP-ERP-FILE：选择 ERP JSON 文件事件",
+        "OP-HELPER-DOWNLOAD：浏览器助手下载",
+        "OP-ERP-CLOSE：取消按钮",
+        "OP-ERP-BROWSER：从当前浏览器读取",
+        "ERP 子组件父级 v-model/事件接线",
+        "ERP 导入对话框组件调用",
         "机会创建原生dialog",
         "OP-CREATE-CLOSE：Escape",
         "OP-CREATE-SUBMIT",
@@ -3181,8 +3193,10 @@
       "scenes": [{ "package": "review-direction-c", "scene": "lineage-no-correlation" }],
       "remaining": "场景不证明真实事件关联、追踪链完整性或生产日志可用。",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityLineagePanel.vue#59608f8fc36f7c0f.1"
+        "apps/web/src/components/OpportunityLineageCorrelation.vue#59608f8fc36f7c0f.1"
       ],
+      "sourceContractKeys": ["OP-LINEAGE-CORRELATION：血缘关联详情披露"],
+      "contractAliasReason": "按当前机会候选表中的组件拆分后控件精确绑定，历史源只用于追溯。",
       "visualStates": {
         "default": "not-mapped",
         "hover": "not-mapped",
@@ -3197,6 +3211,7 @@
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "includeStructuralContainers": true,
+    "inputScope": "reviewed-subset-of-shared-source",
     "containerScope": "reviewed-subset-of-shared-source",
     "files": [
       "apps/web/src/components/AuditedReasonDialog.vue",
@@ -3205,25 +3220,33 @@
       "apps/web/src/components/OpportunityDecisionPanel.vue",
       "apps/web/src/components/OpportunityDetailInsights.vue",
       "apps/web/src/components/OpportunityDetailNavigation.vue",
+      "apps/web/src/components/OpportunityErpImportDialog.vue",
       "apps/web/src/components/OpportunityEvidencePanel.vue",
       "apps/web/src/components/OpportunityFeedbackPanel.vue",
+      "apps/web/src/components/OpportunityLineageCorrelation.vue",
       "apps/web/src/components/OpportunityLineagePanel.vue",
+      "apps/web/src/components/OpportunityLineageSummary.vue",
       "apps/web/src/components/OpportunityProfitPanel.vue",
+      "apps/web/src/components/OpportunityQualityGateDetails.vue",
       "apps/web/src/components/OpportunityWorkspace.vue",
       "apps/web/src/components/OpportunityWorkspaceDialogs.vue"
     ],
     "dependencyHashes": {
       "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
       "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a",
-      "apps/web/src/components/OpportunityDecisionPanel.vue": "0198986474d6a0d356b83be1db8e34b5fce4ec5d1ffd95356839528b9ce21264",
+      "apps/web/src/components/OpportunityDecisionPanel.vue": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9",
       "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
       "apps/web/src/components/OpportunityDetailNavigation.vue": "bc672394516d76821e73b3d2ee94bd3e13d5ff961ddd8a741391b51f8dceb5b7",
       "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
       "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
-      "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
+      "apps/web/src/components/OpportunityLineagePanel.vue": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225",
       "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-      "apps/web/src/components/OpportunityWorkspace.vue": "67335ca331b3bf0a59e1146ea4354e364ce3f1a516b15a9d9b7ace18b5a88322",
-      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
+      "apps/web/src/components/OpportunityWorkspace.vue": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce",
+      "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
+      "apps/web/src/components/OpportunityLineageSummary.vue": "a7eb194dcd23b7f4f98ffdeb1241e3dca8aecf60a7fc95f1100058695ade4cbe",
+      "apps/web/src/components/OpportunityLineageCorrelation.vue": "4a88aa8b041a2d734042f5ea605dfcd46b716d2cb6dcda099350d2e9bb897999",
+      "apps/web/src/components/OpportunityQualityGateDetails.vue": "a57e053d196d7262c5341e7f14bf95a124e06fc6d2e733e8f98295d921e35e73",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
@@ -3410,8 +3433,20 @@
       },
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "binding": "erpImportOpen",
+        "meaning": "P15 ERP开关从拆分后的ERP对话框子组件v-model回传；不是用户文本字段",
+        "remaining": "仅核对绑定/现行约束，不证明完整视觉状态或真实Vue/服务验收。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "binding": "erpImportLimit",
         "meaning": "P15导入数量model；子组件number/min1/max500/required，父转发不重复计字段",
+        "remaining": "仅核对绑定/现行约束，不证明全部输入组合、读屏、错误关联和真实后端；父model与用户字段不重复计数。"
+      },
+      {
+        "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+        "binding": "importLimit",
+        "meaning": "P15导入数量实际输入位于ERP子组件；父级erpImportLimit通过v-model传入",
         "remaining": "仅核对绑定/现行约束，不证明全部输入组合、读屏、错误关联和真实后端；父model与用户字段不重复计数。"
       },
       {
@@ -3961,7 +3996,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
         "tag": "dialog",
         "ordinal": 1,
         "shape": "native-dialog",
@@ -3983,7 +4018,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",
@@ -4005,7 +4040,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+        "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
         "tag": "aside",
         "ordinal": 1,
         "shape": "inline-aside",
@@ -4029,7 +4064,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "dialog",
-        "ordinal": 2,
+        "ordinal": 1,
         "shape": "native-dialog",
         "sourceBehavior": "createOpen时原生dialog；关闭保留父form",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
@@ -4051,7 +4086,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "form",
-        "ordinal": 2,
+        "ordinal": 1,
         "shape": "form-container",
         "sourceBehavior": "四创建字段，required名称/市场",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
@@ -4073,7 +4108,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "aside",
-        "ordinal": 2,
+        "ordinal": 1,
         "shape": "inline-aside",
         "sourceBehavior": "创建候选后异步刷新说明",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
@@ -4095,7 +4130,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "aside",
-        "ordinal": 3,
+        "ordinal": 2,
         "shape": "inline-aside",
         "sourceBehavior": "P15创建窗的迟到成功回执与已创建机会链接；不属于P18正常入口。",
         "remaining": "仅登记共享文件中的列表创建结构，不将P15回执视觉或行为提升为P18验收。",
@@ -4117,7 +4152,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "dialog",
-        "ordinal": 3,
+        "ordinal": 2,
         "shape": "native-dialog",
         "sourceBehavior": "decisionOpen && hasDetail；useModalDialog；标题ID与DecisionPanel重复",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
@@ -4160,7 +4195,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "form",
-        "ordinal": 3,
+        "ordinal": 2,
         "shape": "form-container",
         "sourceBehavior": "原生决定form；required原因，确认busy禁用，取消不禁",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",
@@ -4203,7 +4238,7 @@
       {
         "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "tag": "aside",
-        "ordinal": 4,
+        "ordinal": 3,
         "shape": "inline-aside",
         "sourceBehavior": "只读决定影响说明，嵌入决定form",
         "remaining": "结构引用不是独立业务弹窗计数；form/aside/集合调用与原生定义分层登记。",

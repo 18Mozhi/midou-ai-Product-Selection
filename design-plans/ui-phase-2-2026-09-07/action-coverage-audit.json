@@ -74,17 +74,21 @@
     "apps/web/src/components/opportunity-workspace-types.ts": "805a2fe8ff56913c39a1d13f637ef38b3fcb50a645917f8f4f29343d8539aa6f",
     "apps/web/src/components/OpportunityAiPanel.vue": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a",
-    "apps/web/src/components/OpportunityDecisionPanel.vue": "0198986474d6a0d356b83be1db8e34b5fce4ec5d1ffd95356839528b9ce21264",
+    "apps/web/src/components/OpportunityDecisionPanel.vue": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9",
     "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
     "apps/web/src/components/OpportunityDetailNavigation.vue": "bc672394516d76821e73b3d2ee94bd3e13d5ff961ddd8a741391b51f8dceb5b7",
+    "apps/web/src/components/OpportunityErpImportDialog.vue": "c934cbf407e0ec0e075d6cfbe939000a8d262bf221d3e018bb70292c7a560b33",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
-    "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
+    "apps/web/src/components/OpportunityLineageCorrelation.vue": "4a88aa8b041a2d734042f5ea605dfcd46b716d2cb6dcda099350d2e9bb897999",
+    "apps/web/src/components/OpportunityLineagePanel.vue": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225",
+    "apps/web/src/components/OpportunityLineageSummary.vue": "a7eb194dcd23b7f4f98ffdeb1241e3dca8aecf60a7fc95f1100058695ade4cbe",
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "67335ca331b3bf0a59e1146ea4354e364ce3f1a516b15a9d9b7ace18b5a88322",
-    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
+    "apps/web/src/components/OpportunityQualityGateDetails.vue": "a57e053d196d7262c5341e7f14bf95a124e06fc6d2e733e8f98295d921e35e73",
+    "apps/web/src/components/OpportunityWorkspace.vue": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+    "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce",
     "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
@@ -182,7 +186,7 @@
     "apps/web/src/components/sourcing-workspace-types.ts": "70c451bf950fcd23c2a6dd87d693ceed46439ca68c9af92727302af09f025646",
     "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6",
-    "apps/web/src/components/SourcingWorkspace.vue": "a377232b1a970aa62f3855296b05d5be931e3d50a57ea42301dfca889a5e29d1",
+    "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
     "apps/web/src/components/SourcingWorkspaceDialogs.vue": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/task-workspace-types.ts": "be914dacd68e7d4c163605082e74b9ee1ac91b07429ab68b6c08139903091b0a",
@@ -198,14 +202,26 @@
     "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
     "apps/web/src/components/trend-workspace-types.ts": "8b933e024bf8d850290ad46e422ac75ad3fd4ab5a9770d47219adeb4736e5f94",
     "apps/web/src/components/TrendChangeQueue.vue": "b212867a50893703cd8b9866a007d3680af11e27a1cb1623b3c5b758e175176f",
-    "apps/web/src/components/TrendDashboard.vue": "4c38fe10e342283cd5e9baf7537d634f11f3a1424618687daaa1face537513a6",
+    "apps/web/src/components/TrendDashboard.vue": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc",
     "apps/web/src/components/TrendDetailPanel.vue": "47c56ab2c425cb82ed7e9c84b208ac21934ae6030efa29229fe964c3de92b87b",
+    "apps/web/src/components/TrendEvidenceDialogs.vue": "627689473dfc6efb55e4edc619b8c59c4bf02a1a15141083b11a32c377b8345f",
     "apps/web/src/components/TrendEvidenceTimeline.vue": "693a84a5d91763d251cce992d3130a9132aee28f407443826c6d0bdb259bad55",
     "apps/web/src/components/TrendFilterPanel.vue": "91b8562d4f442b08cd372da42d6341e32b7ccb75863d24fd2c75313f1e5c7c66",
+    "apps/web/src/components/TrendMetricExplainer.vue": "c01bec9a20233b4508698f6c92d71005fa0816163f2200c0a0c02eec3d091af2",
     "apps/web/src/components/TrendRuleDialog.vue": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500",
+    "apps/web/src/components/TrendRuleList.vue": "f9065e6935b569ddacb24a61fedc7297d3d654974fb9e518e3ccc93c4f53f4fb",
     "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
     "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
+    "apps/web/src/components/use-opportunity-workspace-access.ts": "4e59a0c10f5ea7413b985540b7d07ee7bf6254a2f26da11fd03c3fe68331d74b",
+    "apps/web/src/components/use-opportunity-workspace-collection-actions.ts": "d2a5e5b70268b02bfb343882857e025dec0428f0530e5b2bb146a1c281b854d2",
+    "apps/web/src/components/use-opportunity-workspace-decision-focus.ts": "11f5c59613dbae25238c5c9595fa78d950b923ec821b51269dba2466123411db",
+    "apps/web/src/components/use-opportunity-workspace-erp-import.ts": "6cf9e543b5140c320914e329e3fed7a9a8795ce7513200a13e3381991cffe1f3",
+    "apps/web/src/components/use-opportunity-workspace-feedback-writes.ts": "1367f493d494f62fc7740ac8a9200df32b8516c3d2d859978304248c9b1b7662",
+    "apps/web/src/components/use-opportunity-workspace-lifecycle.ts": "1ca6bbb4807e819108ac99e0e158e1081f991da4db13e688d77d1c7b55d0b68a",
+    "apps/web/src/components/use-opportunity-workspace-list-state.ts": "d0bd9ce45a29fcb7f7ead3612b7d6e33dfdbe64f692b0017845770993030ea93",
+    "apps/web/src/components/use-opportunity-workspace-navigation.ts": "748a88ceed5ff986905cacd78268155b50bf618bb014bb64519d2c02b5d73a0e",
     "apps/web/src/components/use-opportunity-workspace-reads.ts": "91f1a34d2ce1c7ef9b112d4257e7cf79267af0fb54f84405d0ade946c70bbd05",
+    "apps/web/src/components/use-opportunity-workspace-write-scopes.ts": "f084507b162df3bbe14f86c37f2484f43daa7e128c2a06c0582039786800f230",
     "apps/web/src/components/use-platform-content-list.ts": "ff5e74901f493bfcdd9d2022e9f400382038cda38e63f2f75284b9a6d1837535",
     "apps/web/src/components/use-platform-content-review.ts": "04a83f402bc5b98ede50e7b7ac2d05da0580d47aee638b04915917993d1436e6",
     "apps/web/src/components/use-platform-message-editor.ts": "cf8bb791830a84005646bdf436663c794d577e792c994a7445d8558934112e6d",
@@ -221,6 +237,7 @@
     "apps/web/src/composables/useProviderSourceConfigurationVersions.ts": "635e798746d4df20e99fa25668429787e1c982111e105537282dc55e4f70a259",
     "apps/web/src/composables/useProviderSourceDirectory.ts": "3370711c104434a86af825d377a6377e7350e7c9ccb58bd618cfa982bdf5f544",
     "apps/web/src/composables/useSourcingComparisons.ts": "e845a651880a987215dbb5659321b26e4262dcc45c007a035386312d74278150",
+    "apps/web/src/composables/useSourcingWorkspace.ts": "71bb8698f0db0e649993dc67e9b8040aeb220cbadbcd96896b094de239a9a23e",
     "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
     "apps/web/src/credential-write-coordinator.ts": "234cc7ee8555089ed82462b2c7951c26081b2ecb7cc070e192535cae33486786",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
@@ -233,6 +250,7 @@
     "apps/web/src/realtime-client-metrics.ts": "2a1da843a954e98bb6f2e500b692f635194fc1dfe669dabfeb94c26d1185ff93",
     "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
     "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/ui/contain-dialog-tab.ts": "c3dddc59f3e048fc69f75280a129aaac526d366f4369b07a63e735dfd8d4c602",
     "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
     "apps/web/src/ui/status-labels.ts": "650924068bf52de808067527033710a711e851717a1bc14f55dea7e2767ef13a",
     "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
@@ -257,7 +275,7 @@
     "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "766bcdc71d9c830d8cdb259d53153ecb96dee33e66a52618bd3d0a07487f93c7",
     "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "8d6e6dacc9b056fad9f34813dc8d04a81d900b879ee65fa15ecb22ff43b39a7b",
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "0f980f3d976b6c35a29317d2c3ca32fbda20c1c8e77b7367b613e897ca1520a3",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "5db67a9a3e5825231a9f70fd93c0a53573e852ee298b74caa8978299dffa0fb7",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "2bdd2a6faa23906d0d8ce9f1b874bb1b7cb4b858de18ec56e2c6e9d0799e871c",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "c1f16d965095f032e4681b2aedeee9411312c5281e50a484203a5b4d89934662",
     "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "10620af50dc63949e367b4fa460d3f9a30d0535479997f7d78150fc9a9fc61cc",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
@@ -273,11 +291,11 @@
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "b8fdd4276778197d99938b934d5522db0d0371a0391c9bf3d39b8a99cddfe5d7",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "0cb8cc35e00932cf38fa80e2072f571ef64720e455840a0a9037260458d7f8e1",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "5b94000e14e6809923df2be69e6e4675669b3291fdfcc210ad696646c70a3f0b",
-    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "d1f2a2fbf84836479152284b7cdc914fb3ce35e54d897ebdb8900795834f2f35",
+    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "73b36193802d88bf733e2bb00821774aea9bf5c1f527d16a71c5bed9d7480335",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "1ac72afe9ecb51457b5b081ecec3cc9a9421d4303699ee84344ab94f2045b30e",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "683954dbfdc283c2ad5ed943842e27c338c8349acc2f3d802686382047129c47",
     "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "d2dbf814b770a3153b9036a374cb43b957b3ebb3147e6e77d6fcff53fff4aaf0",
-    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "2db59544f5217ca4deae66edbe02e55eb406bb53425ddd3281a7209fa3efc7cd",
+    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "569da295ea2dcddf23067a7e39e1481601f81147943c02c099d8a917ef0084ea",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "a9b294e2f83d2f8283901af7ca9fc067eb3e111ce36fa7fe0cf5cd0233cc329d",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
@@ -417,11 +435,11 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "7004874f2497b5f67d83a82b42cf7697cc50efb3f0a3a0b64e0e21094648ab5c",
     "scripts/lib/ui-phase2-work-design-data.mjs": "791449e3e7f6619ab8bd618d0bdae6c4cd32042a65606007e51945fedd368b12",
     "scripts/verify-ui-phase2-work-c.mjs": "506a9193fbdec9d4622855d7875e0b6b47428a33454f195184fe3653e20c16fe",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "0483f04f2b4d1c63e7fc771b8f48f33e07def0fcae5b1dc38c8bf4c2b41e4209",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "2af3ae0b3f44f91df809b1d8d49c5a7f872726505a5299f63ce5a32dead90643",
     "scripts/lib/ui-phase2-trend-design-data.mjs": "3c2c1f0f639200c425d208490e5fc0850bfbfe5bdac737c0120d4153310e2378",
     "scripts/verify-ui-phase2-trend-c.mjs": "7e39683fb2b9d6bcaf86dd190679681e6e4cdfbceaf5aed03cc33ef30884d27c",
     "tests/e2e/ui-phase2-trend-contracts.spec.ts": "aa92cea4340b1ce5114bd564306312651da3c529cc8a15e887dcdb396255ed8a",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "f254a0681fa6713017a78019b564e239f57653a516ff8b208b634600a5eba2a2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "067c7e41030180d106e0befe813a04fc90e4150802002204d6bec04c28fbed8d",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
     "tests/e2e/m04-02-opportunities.spec.ts": "778da03e1439996e21df424b6c5a0e69e41f21e41ec44f03f93cc3a67a815809",
@@ -432,7 +450,7 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2d387f6cccdac69f797195db1ac79909463483c1a4ae431011b699fefcbd997c",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "tests/e2e/ui-phase2-scoring-contracts.spec.ts": "14d4a1557e9d586c4b74d3598b552b1fa740e151b62616422fc7aa86ed3efd1e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "e6d32d0f37bf9681acb1e8727aad239dd38eb9d7c635fe80f2e4aff07fde19ca",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "ad192659bad3c8b82418e3613208693b8a3834eaf2b49d8d02bc909e94167e96",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "6dd4d58c43a2bebe38dd0eacdfa56a51343b1d1ea450806449da298c13b1d49a",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -446,7 +464,7 @@
     "scripts/verify-ui-phase2-competitor-c.mjs": "c6439f2ad30ab70b3114f86754d925f935546bd9fce34f0d1cb9624a0b06048c",
     "tests/e2e/m04-05-competitors.spec.ts": "a0ebfee8bf3124a14d8ea8483e1ba3cf926e0045a59fe0e1aac59cebfc72b691",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "b260da78109e503da63c91a572aba3dac4216288ece7eff7158503566bfa3e7c",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "e80121673e1811e030f3755ce0da2d05302f3c92dfb222b679adc6331513f231",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "771928d1e8b4ce8f7aeca2b3ee68f73ffb50df884dcaa000a7afceec132954dc",
     "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
     "tests/e2e/m04-06-sourcing.spec.ts": "26c64df61d2b2aeecdb5f5668fdcfaa13b3a655a303796fb128862340f56a9b1",
     "tests/unit/ui-phase2-p21-dialog-action-map.test.mjs": "5674783cf2af7a7511c4060cf068c08c61f2e6d9690a7a5d6f5c6b8a60cdc1c9",
@@ -669,15 +687,15 @@
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1751,
+    "currentSourceCandidates": 1756,
     "historicalCandidates": 1477,
-    "newSourceIdentities": 786,
-    "oldOnlyIdentities": 512,
+    "newSourceIdentities": 804,
+    "oldOnlyIdentities": 525,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1587,
-    "semanticGroups": 1302,
+    "explicitlyGroupedSourceSites": 1592,
+    "semanticGroups": 1304,
     "routeActions": 1069,
-    "wiringGroups": 120,
+    "wiringGroups": 122,
     "pagesWithoutExplicitSemanticReview": [],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 73,
@@ -1240,15 +1258,15 @@
       "id": "P14",
       "path": "/trends",
       "title": "热点趋势",
-      "oldStaticAssociatedCandidates": 88,
+      "oldStaticAssociatedCandidates": 82,
       "review": {
         "pageId": "P14",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 68,
-        "semanticGroups": 51,
+        "sourceSites": 71,
+        "semanticGroups": 53,
         "routeActions": 42,
-        "wiringGroups": 9,
+        "wiringGroups": 11,
         "excludedGroups": 0,
         "writeActions": 8,
         "sourceAbsentProposals": 0,
@@ -1260,9 +1278,9 @@
         ],
         "unmappedVisualSlots": 252,
         "surfaces": {
-          "callerFiles": 6,
-          "localModelBindings": 18,
-          "reviewedInputBindings": 18,
+          "callerFiles": 9,
+          "localModelBindings": 23,
+          "reviewedInputBindings": 23,
           "sourceCallerContainers": 13,
           "callerContainers": 13,
           "consumerVariants": 19,
@@ -1285,12 +1303,12 @@
       "id": "P15",
       "path": "/opportunities",
       "title": "选品机会",
-      "oldStaticAssociatedCandidates": 98,
+      "oldStaticAssociatedCandidates": 91,
       "review": {
         "pageId": "P15",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 68,
+        "sourceSites": 70,
         "semanticGroups": 36,
         "routeActions": 28,
         "wiringGroups": 6,
@@ -1304,9 +1322,9 @@
         ],
         "unmappedVisualSlots": 168,
         "surfaces": {
-          "callerFiles": 4,
-          "localModelBindings": 20,
-          "reviewedInputBindings": 20,
+          "callerFiles": 5,
+          "localModelBindings": 22,
+          "reviewedInputBindings": 22,
           "sourceCallerContainers": 18,
           "callerContainers": 18,
           "consumerVariants": 36,
@@ -1425,12 +1443,12 @@
       "id": "P18",
       "path": "/opportunities/:opportunityId",
       "title": "机会详情",
-      "oldStaticAssociatedCandidates": 98,
+      "oldStaticAssociatedCandidates": 91,
       "review": {
         "pageId": "P18",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 119,
+        "sourceSites": 121,
         "semanticGroups": 66,
         "routeActions": 55,
         "wiringGroups": 9,
@@ -1445,9 +1463,9 @@
         ],
         "unmappedVisualSlots": 330,
         "surfaces": {
-          "callerFiles": 12,
-          "localModelBindings": 35,
-          "reviewedInputBindings": 35,
+          "callerFiles": 16,
+          "localModelBindings": 37,
+          "reviewedInputBindings": 37,
           "sourceCallerContainers": 29,
           "callerContainers": 28,
           "consumerVariants": 45,
@@ -4201,10 +4219,10 @@
       "pageId": "P14",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 68,
-      "semanticGroups": 51,
+      "sourceSites": 71,
+      "semanticGroups": 53,
       "routeActions": 42,
-      "wiringGroups": 9,
+      "wiringGroups": 11,
       "excludedGroups": 0,
       "writeActions": 8,
       "sourceAbsentProposals": 0,
@@ -4216,9 +4234,9 @@
       ],
       "unmappedVisualSlots": 252,
       "surfaces": {
-        "callerFiles": 6,
-        "localModelBindings": 18,
-        "reviewedInputBindings": 18,
+        "callerFiles": 9,
+        "localModelBindings": 23,
+        "reviewedInputBindings": 23,
         "sourceCallerContainers": 13,
         "callerContainers": 13,
         "consumerVariants": 19,
@@ -4229,7 +4247,7 @@
       "pageId": "P15",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 68,
+      "sourceSites": 70,
       "semanticGroups": 36,
       "routeActions": 28,
       "wiringGroups": 6,
@@ -4243,9 +4261,9 @@
       ],
       "unmappedVisualSlots": 168,
       "surfaces": {
-        "callerFiles": 4,
-        "localModelBindings": 20,
-        "reviewedInputBindings": 20,
+        "callerFiles": 5,
+        "localModelBindings": 22,
+        "reviewedInputBindings": 22,
         "sourceCallerContainers": 18,
         "callerContainers": 18,
         "consumerVariants": 36,
@@ -4310,7 +4328,7 @@
       "pageId": "P18",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 119,
+      "sourceSites": 121,
       "semanticGroups": 66,
       "routeActions": 55,
       "wiringGroups": 9,
@@ -4325,9 +4343,9 @@
       ],
       "unmappedVisualSlots": 330,
       "surfaces": {
-        "callerFiles": 12,
-        "localModelBindings": 35,
-        "reviewedInputBindings": 35,
+        "callerFiles": 16,
+        "localModelBindings": 37,
+        "reviewedInputBindings": 37,
         "sourceCallerContainers": 29,
         "callerContainers": 28,
         "consumerVariants": 45,
@@ -30237,7 +30255,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#97f09d6274473315.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 63,
+      "line": 64,
       "kind": "control",
       "label": "前往决策",
       "conditions": [
@@ -30268,37 +30286,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#4c415989b6830734.1",
-      "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 100,
-      "kind": "control",
-      "label": "查看每项判断",
-      "conditions": [],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 27,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P18",
-          "actionId": "OP-GATES-DETAILS",
-          "kind": "local"
-        }
-      ]
-    },
-    {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#1755c866489f4c76.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 119,
+      "line": 108,
       "kind": "control",
       "label": "采纳建议",
       "conditions": [
@@ -30331,7 +30321,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#c5f40664f410ee40.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 120,
+      "line": 109,
       "kind": "control",
       "label": "继续观察",
       "conditions": [
@@ -30364,7 +30354,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#6cfe6545a209df42.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 121,
+      "line": 110,
       "kind": "control",
       "label": "驳回",
       "conditions": [
@@ -30397,7 +30387,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#e28c61b56c99b993.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 134,
+      "line": 123,
       "kind": "control",
       "label": "提前人工处理",
       "conditions": [
@@ -30430,7 +30420,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#690b264d43e01055.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 136,
+      "line": 125,
       "kind": "control",
       "label": "继续观察",
       "conditions": [
@@ -30463,7 +30453,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#a2dfed9751073c3d.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 137,
+      "line": 126,
       "kind": "control",
       "label": "驳回",
       "conditions": [
@@ -30496,7 +30486,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#7ee1cf6f73d304fe.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 149,
+      "line": 138,
       "kind": "control",
       "label": "查看补采任务",
       "conditions": [
@@ -30533,7 +30523,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#91b42518b9942791.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 153,
+      "line": 142,
       "kind": "control",
       "label": "创建补采任务",
       "conditions": [
@@ -30570,7 +30560,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#b016bc2c6e34bc74.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 163,
+      "line": 152,
       "kind": "control",
       "label": "查看判断条件与补证进度",
       "conditions": [
@@ -30603,7 +30593,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#ad67a1fb638ba1e7.1",
       "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
-      "line": 180,
+      "line": 169,
       "kind": "control",
       "label": "查看任务",
       "conditions": [
@@ -31289,6 +31279,286 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityErpImportDialog.vue#05139d1095ee9295.1",
+      "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+      "line": 19,
+      "kind": "dialog-definition",
+      "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 231,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-DEFINITION",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityErpImportDialog.vue#a4680b216b462f63.1",
+      "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+      "line": 19,
+      "kind": "event-binding",
+      "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 232,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityErpImportDialog.vue#674fd720e5afc0a1.1",
+      "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+      "line": 27,
+      "kind": "form-event",
+      "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 233,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-BROWSER",
+          "kind": "write"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityErpImportDialog.vue#7c44d93a403dc54e.1",
+      "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+      "line": 33,
+      "kind": "control",
+      "label": "关闭 ERP 导入",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 234,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityErpImportDialog.vue#a8109ecf87f0762f.1",
+      "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+      "line": 53,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 235,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-FILE",
+          "kind": "write"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityErpImportDialog.vue#598ca963b90371ed.1",
+      "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+      "line": 60,
+      "kind": "control",
+      "label": "下载浏览器助手",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 236,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-HELPER-DOWNLOAD",
+          "kind": "navigation"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityErpImportDialog.vue#0b08c48f30b70cb3.1",
+      "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+      "line": 61,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 237,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-CLOSE",
+          "kind": "local"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityErpImportDialog.vue#429c64115868d9c6.1",
+      "file": "apps/web/src/components/OpportunityErpImportDialog.vue",
+      "line": 62,
+      "kind": "control",
+      "label": "{{ busy ? \"读取并导入中…\" : \"从当前浏览器读取\" }}",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "open"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 238,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P15",
+          "actionId": "OP-ERP-BROWSER",
+          "kind": "write"
+        },
+        {
+          "pageId": "P18",
+          "actionId": "OP-P15-EXCLUDED",
+          "kind": "excluded"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityEvidencePanel.vue#e7987d558e66f413.1",
       "file": "apps/web/src/components/OpportunityEvidencePanel.vue",
       "line": 36,
@@ -31596,9 +31866,34 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityLineageCorrelation.vue#59608f8fc36f7c0f.1",
+      "file": "apps/web/src/components/OpportunityLineageCorrelation.vue",
+      "line": 7,
+      "kind": "control",
+      "label": "全局关联标识",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 230,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-LINEAGE-CORRELATION",
+          "kind": "local"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityLineagePanel.vue#51a16cdff8c0fca2.1",
       "file": "apps/web/src/components/OpportunityLineagePanel.vue",
-      "line": 109,
+      "line": 92,
       "kind": "control",
       "label": "记录标识与导航",
       "conditions": [
@@ -31636,7 +31931,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityLineagePanel.vue#77d46341d92ff39a.1",
       "file": "apps/web/src/components/OpportunityLineagePanel.vue",
-      "line": 136,
+      "line": 119,
       "kind": "control",
       "label": "打开关联记录",
       "conditions": [
@@ -31668,31 +31963,6 @@
           "pageId": "P18",
           "actionId": "OP-LINEAGE-NAV",
           "kind": "navigation"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityLineagePanel.vue#59608f8fc36f7c0f.1",
-      "file": "apps/web/src/components/OpportunityLineagePanel.vue",
-      "line": 144,
-      "kind": "control",
-      "label": "全局关联标识",
-      "conditions": [],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 216,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P18",
-          "actionId": "OP-LINEAGE-CORRELATION",
-          "kind": "local"
         }
       ]
     },
@@ -32556,9 +32826,34 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityQualityGateDetails.vue#4c415989b6830734.1",
+      "file": "apps/web/src/components/OpportunityQualityGateDetails.vue",
+      "line": 10,
+      "kind": "control",
+      "label": "查看每项判断",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
+          "line": 229,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P18",
+          "actionId": "OP-GATES-DETAILS",
+          "kind": "local"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1141,
+      "line": 694,
       "kind": "control",
       "label": "创建选品 →",
       "conditions": [
@@ -32600,7 +32895,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1143,
+      "line": 696,
       "kind": "control",
       "label": "管理选品规则",
       "conditions": [
@@ -32642,7 +32937,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1145,
+      "line": 698,
       "kind": "control",
       "label": "从 ERP 导入",
       "conditions": [
@@ -32688,7 +32983,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1152,
+      "line": 705,
       "kind": "control",
       "label": "手工添加",
       "conditions": [
@@ -32734,7 +33029,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1164,
+      "line": 717,
       "kind": "control",
       "label": "← 返回来源列表",
       "conditions": [
@@ -32772,7 +33067,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1170,
+      "line": 723,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32807,7 +33102,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1195,
+      "line": 748,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32846,7 +33141,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1206,
+      "line": 759,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32885,7 +33180,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1219,
+      "line": 772,
       "kind": "control",
       "label": "运行信息",
       "conditions": [
@@ -32927,7 +33222,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1229,
+      "line": 782,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32969,7 +33264,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1241,
+      "line": 794,
       "kind": "control",
       "label": "补证异常时手动处理",
       "conditions": [
@@ -33015,7 +33310,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1244,
+      "line": 797,
       "kind": "control",
       "label": "采集 Amazon 竞品",
       "conditions": [
@@ -33065,7 +33360,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1251,
+      "line": 804,
       "kind": "control",
       "label": "采集公开供应商",
       "conditions": [
@@ -33115,7 +33410,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1258,
+      "line": 811,
       "kind": "control",
       "label": "检查评分规则",
       "conditions": [
@@ -33161,7 +33456,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1263,
+      "line": 816,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33204,7 +33499,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b391bf25870010b2.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1286,
+      "line": 839,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33247,7 +33542,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1298,
+      "line": 851,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33290,7 +33585,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2aa4cc1a9f90b8fd.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1317,
+      "line": 870,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33333,7 +33628,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1361,
+      "line": 914,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33368,7 +33663,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1361,
+      "line": 914,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [
@@ -33403,7 +33698,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1378,
+      "line": 931,
       "kind": "dialog-definition",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -33441,7 +33736,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1378,
+      "line": 931,
       "kind": "event-binding",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -33484,7 +33779,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1385,
+      "line": 938,
       "kind": "form-event",
       "label": "影响预览 批量 {{ batchAction === \"assign\" ? \"指派\" : batchAction === \"archive\" ? \"归档\" : \"复核\" }} 本次仅处理当前结果中已选的 {{ currentPageSele",
       "conditions": [
@@ -33524,7 +33819,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1421,
+      "line": 974,
       "kind": "control",
       "label": "返回",
       "conditions": [
@@ -33562,7 +33857,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1422,
+      "line": 975,
       "kind": "control",
       "label": "确认执行",
       "conditions": [
@@ -33600,7 +33895,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#557b69e18caa81e6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1426,
+      "line": 979,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -33630,7 +33925,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#df416310b2ec158b.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1426,
+      "line": 979,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -33660,7 +33955,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b74012fbdb739187.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 884,
+      "line": 564,
       "kind": "dialog-script-call",
       "label": "askAiReviewReason(reasonRequest)",
       "conditions": [],
@@ -33690,7 +33985,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca674a075f274bff.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 919,
+      "line": 599,
       "kind": "dialog-script-call",
       "label": "askAiReviewReason({ ...reasonRequest, initialValue: notes })",
       "conditions": [],
@@ -33718,24 +34013,19 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#196c12d0f18ac5ee.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#c03d94a9b28d2499.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 102,
-      "kind": "dialog-definition",
-      "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
+      "line": 75,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [],
       "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
       "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 155,
+          "line": 239,
           "jsonPointer": null
         }
       ],
@@ -33753,265 +34043,27 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#56857391914c319d.1",
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#bc557dd36730b9c2.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 102,
-      "kind": "event-binding",
-      "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
+      "line": 75,
+      "kind": "dialog-component-call",
+      "label": "",
+      "conditions": [],
       "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
       "registration": "not-in-historical-inventory",
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 97,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 100,
+          "line": 240,
           "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P15",
-          "actionId": "OP-ERP-CLOSE",
-          "kind": "local"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 110,
-      "kind": "form-event",
-      "label": "使用已有商品数据补齐系统 从米豆 ERP 商品列表导入 × 真实数据流 浏览器助手在本机读取 ERP 登录令牌并请求商品列表；令牌不会发送给 智能选品。商品原始记录、来源网址和采集时间会保存为可追溯证据。 本次导入数量 没有安装助手时上传 ",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 111,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-BROWSER",
-          "kind": "write"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 116,
-      "kind": "control",
-      "label": "关闭 ERP 导入",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 114,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-CLOSE",
-          "kind": "local"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 141,
-      "kind": "event-binding",
-      "label": "",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 115,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-FILE",
-          "kind": "write"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 148,
-      "kind": "control",
-      "label": "下载浏览器助手",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 116,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-HELPER-DOWNLOAD",
-          "kind": "navigation"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 149,
-      "kind": "control",
-      "label": "取消",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 117,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-CLOSE",
-          "kind": "local"
-        },
-        {
-          "pageId": "P18",
-          "actionId": "OP-P15-EXCLUDED",
-          "kind": "excluded"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
-      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 152,
-      "kind": "control",
-      "label": "{{ busy ? \"读取并导入中…\" : \"从当前浏览器读取\" }}",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "erpImportOpen"
-        }
-      ],
-      "staticRouteIds": [
-        "P15",
-        "P18"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md",
-          "line": 118,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P15",
-          "actionId": "OP-ERP-BROWSER",
-          "kind": "write"
+          "actionId": "OP-ERP-DEFINITION",
+          "kind": "wiring"
         },
         {
           "pageId": "P18",
@@ -34023,7 +34075,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#304e73ffea549836.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 159,
+      "line": 83,
       "kind": "dialog-definition",
       "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
@@ -34058,7 +34110,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#67aec29022637161.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 159,
+      "line": 83,
       "kind": "event-binding",
       "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
@@ -34098,7 +34150,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#92c0e7988ecb5b9b.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 167,
+      "line": 91,
       "kind": "form-event",
       "label": "新候选项 创建机会候选 × 机会名称 市场 分类（可选） 来源趋势 ID（可选，只接受当前工作区主题） 机会“ {{ createFeedback.name }} ”已创建。当前草稿已保留；内容相同时暂不允许重复提交。 查看已创建机会 {{",
       "conditions": [
@@ -34133,7 +34185,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#93e4be8029abb2a0.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 173,
+      "line": 97,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -34171,7 +34223,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#2f7a15b104750d49.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 189,
+      "line": 113,
       "kind": "control",
       "label": "查看已创建机会",
       "conditions": [
@@ -34210,7 +34262,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#87e5a2bcb170606c.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 196,
+      "line": 120,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -34248,7 +34300,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#439b2aeecca24b47.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 197,
+      "line": 121,
       "kind": "control",
       "label": "{{ busy ? \"创建中…\" : createFeedbackMatchesForm ? \"内容已创建，请修改后再提交\" : \"创建机会\" }}",
       "conditions": [
@@ -34283,7 +34335,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5f89285e7e07f9b4.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 210,
+      "line": 134,
       "kind": "dialog-definition",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 填写决定依据，最多 1000 个字符。 请填写原因后再记录决定。 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 ",
       "conditions": [
@@ -34323,7 +34375,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#377ceb35fb7127cd.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 210,
+      "line": 134,
       "kind": "event-binding",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 填写决定依据，最多 1000 个字符。 请填写原因后再记录决定。 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 ",
       "conditions": [
@@ -34373,7 +34425,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#9e848d25400514bc.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 218,
+      "line": 142,
       "kind": "form-event",
       "label": "留痕决策 记录 {{ decisionLabel[decisionAction] }} 决定 × 原因（必填） 填写决定依据，最多 1000 个字符。 请填写原因后再记录决定。 此决定会覆盖推荐展示，但不会改写原始分数、证据或历史。 取消 ",
       "conditions": [
@@ -34418,7 +34470,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#5e85f75285d7eb96.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 230,
+      "line": 154,
       "kind": "control",
       "label": "关闭",
       "conditions": [
@@ -34456,7 +34508,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#d594d7628cde3706.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 263,
+      "line": 187,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -34494,7 +34546,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ced3effe8f7058f1.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-      "line": 266,
+      "line": 190,
       "kind": "control",
       "label": "{{ busy ? \"保存中…\" : \"确认记录\" }}",
       "conditions": [
@@ -62479,7 +62531,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4c5b0e4130d85030.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 654,
+      "line": 94,
       "kind": "control",
       "label": "供应商找货",
       "conditions": [],
@@ -62506,7 +62558,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4862df3dce4b0f1c.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 655,
+      "line": 95,
       "kind": "control",
       "label": "费用与利润规则",
       "conditions": [],
@@ -62533,7 +62585,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 669,
+      "line": 109,
       "kind": "control",
       "label": "发起供应商找货",
       "conditions": [
@@ -62565,7 +62617,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#307f53938ca7e688.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 696,
+      "line": 136,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -62597,7 +62649,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#4ded8067979a3682.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 705,
+      "line": 145,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -62629,7 +62681,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 717,
+      "line": 157,
       "kind": "control",
       "label": "{{ searchName(item) }} {{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }} {{ item.candidate_count }} 个",
       "conditions": [
@@ -62665,7 +62717,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#100e00b6d8cb9e4a.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 739,
+      "line": 179,
       "kind": "control",
       "label": "重新采集",
       "conditions": [
@@ -62705,7 +62757,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#dd2297ed2ff6c2a5.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 742,
+      "line": 182,
       "kind": "control",
       "label": "费用与利润规则",
       "conditions": [
@@ -62741,7 +62793,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#1e3fc27654fc0776.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 746,
+      "line": 186,
       "kind": "control",
       "label": "删除找货记录",
       "conditions": [
@@ -62779,7 +62831,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#a9d2be84fdbc9665.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 801,
+      "line": 241,
       "kind": "control",
       "label": "查看采集任务明细",
       "conditions": [
@@ -62823,7 +62875,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#46efe1c7f3d39475.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 822,
+      "line": 262,
       "kind": "control",
       "label": "打开 ERP 商品列表 ↗",
       "conditions": [
@@ -62863,7 +62915,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 839,
+      "line": 279,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -62907,7 +62959,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#792656883236da58.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 891,
+      "line": 331,
       "kind": "control",
       "label": "打开外部原始商品页（新窗口）",
       "conditions": [
@@ -62947,7 +62999,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 895,
+      "line": 335,
       "kind": "control",
       "label": "确认报价",
       "conditions": [
@@ -62991,7 +63043,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 897,
+      "line": 337,
       "kind": "control",
       "label": "创建采购任务",
       "conditions": [
@@ -63035,7 +63087,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#e60a87b8bebccb4b.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 903,
+      "line": 343,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -63069,7 +63121,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#658745acd55fced2.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 918,
+      "line": 358,
       "kind": "control",
       "label": "保存报价对比",
       "conditions": [
@@ -63101,7 +63153,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#0e42b816192eb48e.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 922,
+      "line": 362,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -63131,7 +63183,7 @@
     {
       "candidateId": "apps/web/src/components/SourcingWorkspace.vue#5aab87e8ea0ee176.1",
       "file": "apps/web/src/components/SourcingWorkspace.vue",
-      "line": 922,
+      "line": 362,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [
@@ -68430,7 +68482,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e8d58f837015480a.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 631,
+      "line": 610,
       "kind": "control",
       "label": "{{ enabledRules.length ? \"创建趋势监控\" : \"创建第一条监控规则\" }}",
       "conditions": [
@@ -68462,7 +68514,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5abb2c07be024e83.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 639,
+      "line": 618,
       "kind": "control",
       "label": "{{ busy === \"/provider-sources/refresh\" ? \"正在启动…\" : \"立即刷新来源\" }}",
       "conditions": [],
@@ -68489,7 +68541,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#2bfafa5dccf5b5ae.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 642,
+      "line": 621,
       "kind": "control",
       "label": "管理监控规则",
       "conditions": [],
@@ -68516,7 +68568,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#c0646bdf3263a017.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 645,
+      "line": 624,
       "kind": "control",
       "label": "趋势主题",
       "conditions": [],
@@ -68543,7 +68595,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#aef07f12388401cc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 647,
+      "line": 626,
       "kind": "control",
       "label": "监控规则 {{ rules.length }}",
       "conditions": [],
@@ -68570,7 +68622,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#83125cc8b9f30181.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 649,
+      "line": 628,
       "kind": "control",
       "label": "合并与拆分 {{ changeRequests.filter((item) => item.status === \"pending\").length }}",
       "conditions": [
@@ -68602,7 +68654,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#377da84835906aec.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 661,
+      "line": 640,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68634,7 +68686,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#5646a97e7f9d7b17.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 671,
+      "line": 650,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68668,7 +68720,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#28d08ea282407ca1.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 687,
+      "line": 666,
       "kind": "control",
       "label": "{{ topic.title }} {{ topic.market }} · {{ topic.category || \"未分类\" }} · {{ statusLabel(topic.status) }} {{ topic.source_c",
       "conditions": [
@@ -68708,7 +68760,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a9dcb53568c4deee.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 713,
+      "line": 692,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -68744,7 +68796,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#ec3e2e186729ef5d.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 715,
+      "line": 694,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -68780,7 +68832,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#de1bcb04278ad1bc.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 720,
+      "line": 699,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -68818,87 +68870,15 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#910372297876da13.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 735,
-      "kind": "control",
-      "label": "帮助：热点趋势怎么看",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "tab === 'topics'"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 35,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-HELP",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 760,
-      "kind": "control",
-      "label": "＋ 创建规则",
-      "conditions": [
-        {
-          "directive": "v-else-if",
-          "expression": "tab === 'rules'"
-        },
-        {
-          "directive": "v-if",
-          "expression": "canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 36,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RULE-OPEN",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#0d9565586dbfab9d.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 762,
+      "line": 715,
       "kind": "event-binding",
       "label": "",
       "conditions": [
         {
           "directive": "v-else-if",
           "expression": "tab === 'rules'"
-        },
-        {
-          "directive": "v-if",
-          "expression": "state !== 'ready' && state !== 'empty'"
         }
       ],
       "staticRouteIds": [],
@@ -68907,138 +68887,22 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 37,
+          "line": 166,
           "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P14",
-          "actionId": "TR-RELOAD",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 773,
-      "kind": "control",
-      "label": "创建监控规则",
-      "conditions": [
-        {
-          "directive": "v-else-if",
-          "expression": "tab === 'rules'"
-        },
-        {
-          "directive": "v-else-if",
-          "expression": "!rules.length"
-        },
-        {
-          "directive": "v-if",
-          "expression": "canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 38,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RULE-OPEN",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 821,
-      "kind": "control",
-      "label": "{{ item.status === \"enabled\" ? \"暂停\" : \"启用\" }}",
-      "conditions": [
-        {
-          "directive": "v-else-if",
-          "expression": "tab === 'rules'"
-        },
-        {
-          "directive": "v-for",
-          "expression": "item in rules"
-        },
-        {
-          "directive": "v-if",
-          "expression": "canManageTrends"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 39,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RULE-STATUS",
-          "kind": "write"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 824,
-      "kind": "control",
-      "label": "查看趋势结果",
-      "conditions": [
-        {
-          "directive": "v-else-if",
-          "expression": "tab === 'rules'"
-        },
-        {
-          "directive": "v-for",
-          "expression": "item in rules"
-        }
-      ],
-      "staticRouteIds": [
-        "P14"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 40,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RULE-RESULTS",
-          "kind": "local"
+          "actionId": "TR-RULE-LIST-FORWARD",
+          "kind": "wiring"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#05ccd6821ef51315.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 827,
+      "line": 726,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -69070,7 +68934,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#1c84e99801374a43.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 836,
+      "line": 735,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -69105,7 +68969,7 @@
     {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#e2a4499152c0f457.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 836,
+      "line": 735,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -69122,6 +68986,11 @@
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
           "line": 77,
           "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 97,
+          "jsonPointer": null
         }
       ],
       "semanticReviews": [
@@ -69133,41 +69002,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#70140152f0bfc00c.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#7bfcec2e14d1875c.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 842,
-      "kind": "dialog-definition",
-      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
-      "conditions": [],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 47,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 98,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-ANOMALY-DEFINITION",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#cdba5de18bdf9c12.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 842,
+      "line": 741,
       "kind": "event-binding",
-      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
+      "label": "",
       "conditions": [],
       "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
@@ -69175,29 +69014,24 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 48,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 99,
+          "line": 167,
           "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P14",
-          "actionId": "TR-ANOMALY-DEFINITION",
+          "actionId": "TR-EVIDENCE-DIALOGS-FORWARD",
           "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#c6ce42d1e09856fa.1",
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#b1b89245fcf60bc9.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 849,
-      "kind": "form-event",
-      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
+      "line": 741,
+      "kind": "dialog-component-call",
+      "label": "",
       "conditions": [],
       "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
@@ -69205,272 +69039,15 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 44,
+          "line": 168,
           "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P14",
-          "actionId": "TR-ANOMALY-SUBMIT",
-          "kind": "write"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#b5cb028d61878491.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 855,
-      "kind": "control",
-      "label": "关闭异常报告",
-      "conditions": [],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 45,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-ANOMALY-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#79e6f49e70b53776.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 883,
-      "kind": "control",
-      "label": "取消",
-      "conditions": [],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 46,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-ANOMALY-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 885,
-      "kind": "control",
-      "label": "{{ busy.includes(\"quality-issues\") ? \"创建中…\" : \"创建质量工单\" }}",
-      "conditions": [],
-      "staticRouteIds": [
-        "P14"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 49,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-ANOMALY-SUBMIT",
-          "kind": "write"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#029d267ba5289a36.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 891,
-      "kind": "dialog-definition",
-      "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "relevanceDialog && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 100,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RELEVANCE-DEFINITION",
+          "actionId": "TR-EVIDENCE-DIALOGS-FORWARD",
           "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#ec9cecafc655a0ec.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 891,
-      "kind": "event-binding",
-      "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "relevanceDialog && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 101,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RELEVANCE-DEFINITION",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#60103acec5bdf33b.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 900,
-      "kind": "form-event",
-      "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "relevanceDialog && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 50,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RELEVANCE-SUBMIT",
-          "kind": "write"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#74456cadd4fd8246.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 908,
-      "kind": "control",
-      "label": "关闭相关性变更",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "relevanceDialog && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 51,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RELEVANCE-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#90cb939f09706fb5.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 930,
-      "kind": "control",
-      "label": "取消",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "relevanceDialog && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 52,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RELEVANCE-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/TrendDashboard.vue#288abda590fb34b7.1",
-      "file": "apps/web/src/components/TrendDashboard.vue",
-      "line": 932,
-      "kind": "control",
-      "label": "{{ busy.includes(\"/relevance\") ? \"提交中…\" : \"确认并记录\" }}",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "relevanceDialog && canManageTrends"
-        }
-      ],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 53,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P14",
-          "actionId": "TR-RELEVANCE-SUBMIT",
-          "kind": "write"
         }
       ]
     },
@@ -69680,6 +69257,336 @@
           "pageId": "P14",
           "actionId": "TR-EVIDENCE-FORWARD",
           "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#70140152f0bfc00c.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 53,
+      "kind": "dialog-definition",
+      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 154,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#cdba5de18bdf9c12.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 53,
+      "kind": "event-binding",
+      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 155,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#ad9b133941c9fae2.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 60,
+      "kind": "form-event",
+      "label": "异常证据 创建数据质量工单 × {{ anomalyEvidence?.title }} 风险等级 需要复核 严重异常 异常说明 工单会关联当前主题、证据、来源、原始证据和解析器版本。 取消 {{ busy.includes(\"qualit",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 156,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-SUBMIT",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#b5cb028d61878491.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 66,
+      "kind": "control",
+      "label": "关闭异常报告",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 157,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#79e6f49e70b53776.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 94,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 158,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#3ca40e4dc9ea598c.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 95,
+      "kind": "control",
+      "label": "{{ busy.includes(\"quality-issues\") ? \"创建中…\" : \"创建质量工单\" }}",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 159,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-ANOMALY-SUBMIT",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#ca1fd5fbbfd39737.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 101,
+      "kind": "dialog-definition",
+      "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "relevanceDialog && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 160,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#b4ec9dff70849aea.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 101,
+      "kind": "event-binding",
+      "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "relevanceDialog && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 161,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-DEFINITION",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#c5ff238da62218c9.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 110,
+      "kind": "form-event",
+      "label": "相关性治理 {{ relevanceDialog === \"irrelevant\" ? \"标记为无关\" : \"恢复为相关\" }} × 原始证据、时间线和历史原因不会删除；本次变更会形成可回溯审计。 变更原因 取消 {{ busy.inclu",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "relevanceDialog && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 162,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-SUBMIT",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#74456cadd4fd8246.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 118,
+      "kind": "control",
+      "label": "关闭相关性变更",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "relevanceDialog && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 163,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#90cb939f09706fb5.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 140,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "relevanceDialog && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 164,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendEvidenceDialogs.vue#288abda590fb34b7.1",
+      "file": "apps/web/src/components/TrendEvidenceDialogs.vue",
+      "line": 141,
+      "kind": "control",
+      "label": "{{ busy.includes(\"/relevance\") ? \"提交中…\" : \"确认并记录\" }}",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "relevanceDialog && canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 165,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELEVANCE-SUBMIT",
+          "kind": "write"
         }
       ]
     },
@@ -70054,6 +69961,31 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/TrendMetricExplainer.vue#a8eb23a11ff39fa0.1",
+      "file": "apps/web/src/components/TrendMetricExplainer.vue",
+      "line": 3,
+      "kind": "control",
+      "label": "帮助：热点趋势怎么看",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 148,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-HELP",
+          "kind": "local"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/TrendRuleDialog.vue#f6c3de30580fd217.1",
       "file": "apps/web/src/components/TrendRuleDialog.vue",
       "line": 68,
@@ -70097,11 +70029,6 @@
         {
           "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
           "line": 79,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
-          "line": 99,
           "jsonPointer": null
         }
       ],
@@ -70218,6 +70145,164 @@
           "pageId": "P14",
           "actionId": "TR-RULE-SUBMIT",
           "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendRuleList.vue#3b02a6e70df9b044.1",
+      "file": "apps/web/src/components/TrendRuleList.vue",
+      "line": 40,
+      "kind": "control",
+      "label": "＋ 创建规则",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 149,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-OPEN",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendRuleList.vue#1cbaf0990db5c0c8.1",
+      "file": "apps/web/src/components/TrendRuleList.vue",
+      "line": 42,
+      "kind": "event-binding",
+      "label": "",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "state !== 'ready' && state !== 'empty'"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 150,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RELOAD",
+          "kind": "read"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendRuleList.vue#c1a0eb5af0495f85.1",
+      "file": "apps/web/src/components/TrendRuleList.vue",
+      "line": 53,
+      "kind": "control",
+      "label": "创建监控规则",
+      "conditions": [
+        {
+          "directive": "v-else-if",
+          "expression": "!rules.length"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 151,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-OPEN",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendRuleList.vue#4a2c7ae1a4a9a7f7.1",
+      "file": "apps/web/src/components/TrendRuleList.vue",
+      "line": 99,
+      "kind": "control",
+      "label": "{{ item.status === \"enabled\" ? \"暂停\" : \"启用\" }}",
+      "conditions": [
+        {
+          "directive": "v-for",
+          "expression": "item in rules"
+        },
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 152,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-STATUS",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendRuleList.vue#e5d44b4c01598fac.1",
+      "file": "apps/web/src/components/TrendRuleList.vue",
+      "line": 102,
+      "kind": "control",
+      "label": "查看趋势结果",
+      "conditions": [
+        {
+          "directive": "v-for",
+          "expression": "item in rules"
+        }
+      ],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md",
+          "line": 153,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P14",
+          "actionId": "TR-RULE-RESULTS",
+          "kind": "local"
         }
       ]
     },
@@ -71654,6 +71739,12 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/OpportunityDecisionPanel.vue#4c415989b6830734.1",
+      "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+      "line": 96,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/OpportunityDetailInsights.vue#e05349e8d6e988e6.1",
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
       "line": 67,
@@ -71867,6 +71958,42 @@
       "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#f9352d9bba967662.1",
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 44,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#674fd720e5afc0a1.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 51,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 57,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#a8109ecf87f0762f.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 82,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#598ca963b90371ed.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 89,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 90,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1",
+      "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+      "line": 93,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
@@ -73304,9 +73431,39 @@
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#a8eb23a11ff39fa0.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 568,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 593,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
       "candidateId": "apps/web/src/components/TrendDashboard.vue#d2b72f6631a5008b.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 595,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 605,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 653,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 656,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
@@ -73331,6 +73488,12 @@
       "candidateId": "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1",
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 707,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1",
+      "file": "apps/web/src/components/TrendDashboard.vue",
+      "line": 708,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {
