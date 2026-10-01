@@ -14,13 +14,13 @@ const repo = process.cwd(),
   smoke = args.includes("--smoke"),
   outputArg = args.find((arg) => arg.startsWith("--output=")),
   output =
-    outputArg?.slice("--output=".length) ?? "output/playwright/p32-approved-restore-review-r3";
+    outputArg?.slice("--output=".length) ?? "output/playwright/p32-approved-restore-review-r5";
 assert.ok(
   args.every((arg) => ["--capture", "--smoke"].includes(arg) || arg.startsWith("--output=")) &&
     args.filter((arg) => arg.startsWith("--output=")).length <= 1 &&
     !(capture && smoke) &&
     (!outputArg ||
-      (capture && !smoke && /^output\/playwright\/p32-approved-restore-review-r\d+$/.test(output))),
+      (!smoke && /^output\/playwright\/p32-approved-restore-review-r\d+$/.test(output))),
 );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const fixtureFile = "tests/e2e/m06-01-organization-admin.spec.ts";

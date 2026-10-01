@@ -24,10 +24,10 @@ export const responsiveFocusRevision = Object.freeze({
   tableControlsFile: "apps/web/src/components/TableViewControls.vue",
   tableControlsAfter: "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
   reasonFile: "apps/web/src/components/AuditedReasonDialog.vue",
-  reasonAfter: "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+  reasonAfter: "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
   currentDependencyHashes: Object.freeze({
-    "apps/web/src/main.ts": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
-    "apps/web/src/styles.css": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364",
+    "apps/web/src/main.ts": "ec4a6fca5f63a39533490e49820acbb56d8f19e9790f0cf288b1dd1bbcc2bb80",
+    "apps/web/src/styles.css": "6d7696d547c6dd16900b3cb38439e44742aa4675c6e276fd60e8c1c0931f9c09",
     "apps/web/src/styles/onboarding-navigation.css":
       "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
     "apps/web/src/styles/platform-operations.css":
@@ -35,7 +35,11 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/styles/platform-dashboard.css":
       "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be",
     "apps/web/src/design/tokens.css":
-      "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38",
+      "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a",
+    "apps/web/src/use-modal-dialog.ts":
+      "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
+    "apps/web/src/signal-ledger.css":
+      "dd3f58900641cf4a85c8182b0cd59f727a8d52e56c51a43a9469e855ab430e6b",
   }),
 });
 const hash = (value) => createHash("sha256").update(value).digest("hex");
