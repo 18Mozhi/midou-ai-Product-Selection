@@ -287,9 +287,9 @@
         "apps/web/src/components/PlatformLogCenter.vue#13b398e8ab4b93d3.1"
       ],
       "sourceContractKeys": [
+        "LG62-REASON 表单提交；可选P54上限提示不改变P62默认校验/submit",
         "LG62-REASON 同form确认",
-        "LG62-CURRENT-EXPORT-REASON / 向当前导出所有者转发原因提交或取消",
-        "LG62-REASON 表单提交；可选P54上限提示不改变P62默认校验/submit"
+        "LG62-CURRENT-EXPORT-REASON / 向当前导出所有者转发原因提交或取消"
       ],
       "contractAliasReason": "沿用P62日志中心合同对LG62-EXPORT精确归属，不扩大筛选、导出字段或日志范围。",
       "condition": "原因通过既有最短/最多300字约束且导出不在途时，用户明确提交。",
