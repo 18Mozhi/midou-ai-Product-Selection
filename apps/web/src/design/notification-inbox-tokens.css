@@ -1,6 +1,7 @@
 .notification-center--review {
   --review-blue: #1748a0;
   --review-blue-strong: #123d8a;
+  --review-danger-text: #842f29;
   --review-ink: #182d4a;
   --review-muted: #52647b;
   --review-line: #dce4ee;

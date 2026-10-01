@@ -147,10 +147,10 @@
 .notification-center .notification-dialog-error {
   margin: 16px 0;
   padding: 12px 14px;
-  border: 1px solid var(--so-danger-border, #d9949b);
-  border-left: 4px solid var(--so-danger, #a52630);
-  background: color-mix(in srgb, var(--so-danger, #a52630) 7%, white);
-  color: var(--so-danger-text, #842f29);
+  border: 1px solid var(--so-danger-border);
+  border-left: 4px solid var(--so-danger);
+  background: color-mix(in srgb, var(--so-danger) 7%, var(--review-white));
+  color: var(--review-danger-text);
 }
 .notification-dialog-error p {
   margin: 0;

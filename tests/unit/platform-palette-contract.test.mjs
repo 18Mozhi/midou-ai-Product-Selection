@@ -437,8 +437,9 @@ test("notification inbox palette resolves approved P26 colors in its review scop
     [...css.matchAll(/var\((--review-[a-z-]+)\)/g)].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 15);
+  assert.equal(names.size, 16);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
+  assert.ok(names.has("--review-danger-text"));
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
     /^\.notification-center--review\s*\{[\s\S]*\}$/,
