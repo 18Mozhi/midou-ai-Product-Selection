@@ -45,7 +45,10 @@ export function parseContract(
         (/^[A-Z][A-Za-z0-9]+$/.test(title) ? component(title) : null) ??
         (defaultComponent ? component(defaultComponent) : null);
     }
-    const temporalScope = [...sectionScopes.values()].some(Boolean) ? "historical" : "unclassified";
+    const temporalScope =
+      raw.includes("[历史身份，仅追溯]") || [...sectionScopes.values()].some(Boolean)
+        ? "historical"
+        : "unclassified";
     if (!raw.startsWith("|")) {
       previousCells = [];
       headers = [];

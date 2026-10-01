@@ -25,11 +25,11 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | 候选键 | 行 | actionId | 触发 / 条件 / 结果 |
 | --- | --- | --- | --- |
 | T#9b4b982bf643379f.1 | 123 | AC-ROOT | 品牌→`/` |
-| T#4a092ea79d6c2f5a.1 | 126 | AC-PROFILE | →`/me` |
-| T#ad505ab637ba2e57.1 | 127 | AC-MFA | →`/security/mfa` |
+| T#4a092ea79d6c2f5a.1 | 147 | AC-PROFILE | →`/me` |
+| T#ad505ab637ba2e57.1 | 148 | AC-MFA | →`/security/mfa` |
 | T#826731794907a876.1 | 128 | TH-ROUTE | 当前主题链接→自身路径 |
-| T#5587941412d5210f.1 | 183 | AC-LOGIN | expired→`/login` |
-| T#78d551a8e1f6be17.1 | 184 | AC-CONTEXT | blocked→`/select-context` |
+| T#5587941412d5210f.1 | 220 | AC-LOGIN | expired→`/login` |
+| T#78d551a8e1f6be17.1 | 226 | AC-CONTEXT | blocked→`/select-context` |
 | T#615525e93bd0aa8d.1 | 185 | TH-LOAD | 其他错误→load；刷新最新偏好 |
 | T#b5fc72dd64e3a6e6.1 | 200 | TH-PREVIEW | 3主题实例→choose；saving时handler返回 |
 | T#e717723479d58780.1 | 222 | TH-DENSITY | 2密度实例→chooseDensity；saving时handler返回 |
@@ -39,7 +39,7 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | A#0f58e919e43acff5.1 | 30 | AC-CONTEXT | →`/select-context` |
 | A#1f54ecd0f870df67.1 | 34 | AC-SECTION | 5链接实例→`/me?section=…`，不是局部Tab |
 | A#508ee18711ffdef2.1 | 42 | TH-ROUTE | →`/settings/theme` |
-| A#aa62e5d933afce98.1 | 46 | AC-ROOT | 面包屑应用入口→`/` |
+| A#aa62e5d933afce98.1 | 58 | AC-ROOT | 面包屑应用入口→`/` |
 | P#50ca10b185d1647b.1 | 291 | PC-LOAD | 顶部刷新→load |
 | P#835072c0eb99454f.1 | 303 | PC-LOAD | profile失败→重新加载 |
 | P#1076771cfdefa098.1 | 307 | PC-LEGACY-TAB | 非accountShell才渲染，5局部Tab；P11不重复计算这套导航实例 |
@@ -56,20 +56,20 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | P#fe2ef7002fcbab8c.1 | 446 | PC-DECISION | 决策记录→`/opportunities/{opportunity_id}` |
 | P#ee2568a050e8c314.1 | 456 | PC-TASK | 任务记录全部→`/tasks`，当前没有详情id或mine筛选 |
 | H#5a213ad1d3b14030.1 | 270 | HD-CURRENT-READ | 非ready/empty→UiStatePanel仅呈现已接线primary→load；隐藏本页未接线secondary |
-| H#5d17be0355b745f2.1 | 272 | HD-RULES | →`/trends?section=rules` |
-| H#2fdb8b56f02fb5d4.1 | 275 | HD-OPPORTUNITIES | →`/opportunities`，无view参数 |
-| H#169dd3f4eac94585.1 | 278 | HD-START | →`/opportunities/start`，非本页直接创建 |
+| H#5d17be0355b745f2.1 | 298 | HD-RULES | →`/trends?section=rules` |
+| H#2fdb8b56f02fb5d4.1 | 301 | HD-OPPORTUNITIES | →`/opportunities`，无view参数 |
+| H#169dd3f4eac94585.1 | 304 | HD-START | →`/opportunities/start`，非本页直接创建 |
 | H#6baee2bd21cfaaf6.1 | 293 | HD-RESUME | not_configured且pausedRules有值且可管理→恢复第一条；busy禁用 |
 | H#d396a13adfe5024b.1 | 301 | HD-SETUP | 可管理且无暂停规则→切setupOpen；局部折叠，不清表单 |
-| H#eb4229f8bc621174.1 | 304 | HD-RULES | 无管理能力→查看规则 |
+| H#eb4229f8bc621174.1 | 337 | HD-RULES | 无管理能力→查看规则 |
 | H#10318724b151ee94.1 | 308 | HD-CREATE-RULE | setupOpen且可管理→createRule |
-| H#a3f78d5afc916240.1 | 382 | HD-CREATE-RULE | 上述submit按钮；busy禁用 |
+| H#a3f78d5afc916240.1 | 436 | HD-CREATE-RULE | 上述submit按钮；busy禁用 |
 | H#76f38bef42464794.1 | 395 | HD-OPPORTUNITIES | 全部推荐计数链接→`/opportunities`，不假设与下方view链接相同 |
-| H#9a0707498a265485.1 | 397 | HD-RECOMMENDATION | 每条推荐→服务端item.route |
+| H#9a0707498a265485.1 | 453 | HD-RECOMMENDATION | 每条推荐→服务端item.route |
 | H#8ff687f70195e1ba.1 | 419 | HD-CANDIDATES | 无推荐且rule_candidate_count>0→规则候选view |
 | H#ebc903bac2284608.1 | 424 | HD-EVIDENCE | 无推荐/规则候选且awaiting_evidence_count>0→采集中view |
-| H#7a7b103459397eaa.1 | 442 | HD-WORK-HEALTH | 非机会待办及health各记录→item.route |
-| H#d033e930df518c8e.1 | 459 | HD-TRUTH | 原生details摘要→只切显示，无请求 |
+| H#7a7b103459397eaa.1 | 505 | HD-WORK-HEALTH | 非机会待办及health各记录→item.route |
+| H#d033e930df518c8e.1 | 522 | HD-TRUTH | 原生details摘要→只切显示，无请求 |
 | O#4a67e5db61801646.1 | 22 | HD-RECOMMENDED-VIEW | →`/opportunities?view=recommended` |
 | O#94e724cc55ab8a3c.1 | 26 | HD-CANDIDATES | →`/opportunities?view=rule_candidates` |
 | O#490c957ac97ec485.1 | 30 | HD-EVIDENCE | →`/opportunities?view=evidence_pending` |
@@ -106,22 +106,22 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | --- | ---: | --- | --- |
 | 68febff0d855d919.1 | 267 | control | HD-CURRENT-READ / 已有快照读取失败时由用户显式重读 |
 | 5a213ad1d3b14030.1 | 270 | event-binding | HD-CURRENT-READ / UiStatePanel仅呈现主操作并转给首页load；`:hide-secondary=true`抑制无监听次操作 |
-| 5d17be0355b745f2.1 | 297 | control | HD-CURRENT-RULES / 打开既有规则页 |
-| 2fdb8b56f02fb5d4.1 | 300 | control | HD-CURRENT-OPPORTUNITIES / 查看完整推荐清单 |
-| 169dd3f4eac94585.1 | 303 | control | HD-CURRENT-START / 导航至独立创建选品流程 |
-| cb01c1a61d2872cd.1 | 318 | control | HD-CURRENT-RESUME / 仅恢复第一条已暂停规则；提交中禁用 |
-| 094ecf5aedd69025.1 | 326 | control | HD-CURRENT-SETUP / 在符合状态及能力条件时展开或收起本地首次设置表单 |
-| 473fa4f4d2c5e48b.1 | 335 | control | HD-CURRENT-RULES-READ / 规则读取错误时由有管理能力者重读 |
-| eb4229f8bc621174.1 | 336 | control | HD-CURRENT-RULES / 无管理能力时只提供规则页查看入口 |
-| 68febff0d855d919.2 | 340 | control | HD-CURRENT-READ / 首页/规则状态不完整时显式重新读取 |
-| 26550e015743f49c.1 | 346 | form-event | HD-CURRENT-CREATE / 受控首次规则表单阻止原生提交并调用既有createRule |
-| a3f78d5afc916240.1 | 435 | control | HD-CURRENT-CREATE / 表单提交按钮；提交中禁用 |
-| 8386b9138fc27b68.1 | 448 | control | HD-CURRENT-OPPORTUNITIES / 查看全部推荐数量对应的列表 |
-| 9a0707498a265485.1 | 452 | control | HD-CURRENT-RECOMMENDATION / 按服务端返回的item.route打开单条推荐 |
-| 673c9efc952a0fcb.1 | 478 | control | HD-CURRENT-CANDIDATES / 仅存在规则候选时进入候选进度视图 |
-| e7ad539389d8518c.1 | 483 | control | HD-CURRENT-EVIDENCE / 无推荐/规则候选且有待采集证据时进入采集进度视图 |
-| 7a7b103459397eaa.1 | 504 | control | HD-CURRENT-WORK / 使用本人事项或健康记录提供的原始路由 |
-| d033e930df518c8e.1 | 521 | control | HD-CURRENT-TRUTH / 原生details披露来源计数/时间和非自动采纳说明，不发请求 |
+| 5d17be0355b745f2.1 | 298 | control | HD-CURRENT-RULES / 打开既有规则页 |
+| 2fdb8b56f02fb5d4.1 | 301 | control | HD-CURRENT-OPPORTUNITIES / 查看完整推荐清单 |
+| 169dd3f4eac94585.1 | 304 | control | HD-CURRENT-START / 导航至独立创建选品流程 |
+| cb01c1a61d2872cd.1 | 319 | control | HD-CURRENT-RESUME / 仅恢复第一条已暂停规则；提交中禁用 |
+| 094ecf5aedd69025.1 | 327 | control | HD-CURRENT-SETUP / 在符合状态及能力条件时展开或收起本地首次设置表单 |
+| 473fa4f4d2c5e48b.1 | 336 | control | HD-CURRENT-RULES-READ / 规则读取错误时由有管理能力者重读 |
+| eb4229f8bc621174.1 | 337 | control | HD-CURRENT-RULES / 无管理能力时只提供规则页查看入口 |
+| 68febff0d855d919.2 | 341 | control | HD-CURRENT-READ / 首页/规则状态不完整时显式重新读取 |
+| 26550e015743f49c.1 | 347 | form-event | HD-CURRENT-CREATE / 受控首次规则表单阻止原生提交并调用既有createRule |
+| a3f78d5afc916240.1 | 436 | control | HD-CURRENT-CREATE / 表单提交按钮；提交中禁用 |
+| 8386b9138fc27b68.1 | 449 | control | HD-CURRENT-OPPORTUNITIES / 查看全部推荐数量对应的列表 |
+| 9a0707498a265485.1 | 453 | control | HD-CURRENT-RECOMMENDATION / 按服务端返回的item.route打开单条推荐 |
+| 673c9efc952a0fcb.1 | 479 | control | HD-CURRENT-CANDIDATES / 仅存在规则候选时进入候选进度视图 |
+| e7ad539389d8518c.1 | 484 | control | HD-CURRENT-EVIDENCE / 无推荐/规则候选且有待采集证据时进入采集进度视图 |
+| 7a7b103459397eaa.1 | 505 | control | HD-CURRENT-WORK / 使用本人事项或健康记录提供的原始路由 |
+| d033e930df518c8e.1 | 522 | control | HD-CURRENT-TRUTH / 原生details披露来源计数/时间和非自动采纳说明，不发请求 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |

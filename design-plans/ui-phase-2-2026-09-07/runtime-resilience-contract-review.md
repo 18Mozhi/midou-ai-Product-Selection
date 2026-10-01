@@ -111,25 +111,25 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1 | 296 | control | RD67-LOGIN：expired登录 |
+| apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1 | 308 | control | RD67-LOGIN：expired登录 |
 
 ### apps/web/src/components/MySqlResilienceCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/MySqlResilienceCenter.vue#99e387027e98dda9.1 | 169 | control | MY68-LOAD：顶部单飞GET |
-| apps/web/src/components/MySqlResilienceCenter.vue#21c66441891be768.1 | 188 | control | MY68-RETRY：刷新失败重试 |
-| apps/web/src/components/MySqlResilienceCenter.vue#5587941412d5210f.1 | 212 | control | MY68-LOGIN：expired登录 |
-| apps/web/src/components/MySqlResilienceCenter.vue#6a87ca890e2cd293.1 | 213 | control | MY68-RETRY：首次错误重试 |
+| apps/web/src/components/MySqlResilienceCenter.vue#99e387027e98dda9.1 | 181 | control | MY68-LOAD：顶部单飞GET |
+| apps/web/src/components/MySqlResilienceCenter.vue#21c66441891be768.1 | 200 | control | MY68-RETRY：刷新失败重试 |
+| apps/web/src/components/MySqlResilienceCenter.vue#5587941412d5210f.1 | 224 | control | MY68-LOGIN：expired登录 |
+| apps/web/src/components/MySqlResilienceCenter.vue#6a87ca890e2cd293.1 | 225 | control | MY68-RETRY：首次错误重试 |
 
 ### apps/web/src/components/FileResilienceCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/FileResilienceCenter.vue#cdc9d1538d58eb3c.1 | 143 | control | FL69-LOAD：顶部单飞GET |
-| apps/web/src/components/FileResilienceCenter.vue#21c66441891be768.1 | 162 | control | FL69-RETRY：刷新失败重试 |
-| apps/web/src/components/FileResilienceCenter.vue#5587941412d5210f.1 | 186 | control | FL69-LOGIN：expired登录 |
-| apps/web/src/components/FileResilienceCenter.vue#6a87ca890e2cd293.1 | 187 | control | FL69-RETRY：首次错误重试 |
+| apps/web/src/components/FileResilienceCenter.vue#cdc9d1538d58eb3c.1 | 155 | control | FL69-LOAD：顶部单飞GET |
+| apps/web/src/components/FileResilienceCenter.vue#21c66441891be768.1 | 174 | control | FL69-RETRY：刷新失败重试 |
+| apps/web/src/components/FileResilienceCenter.vue#5587941412d5210f.1 | 198 | control | FL69-LOGIN：expired登录 |
+| apps/web/src/components/FileResilienceCenter.vue#6a87ca890e2cd293.1 | 199 | control | FL69-RETRY：首次错误重试 |
 
 ### apps/web/src/components/TechnicalDetails.vue
 
@@ -209,13 +209,13 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/RedisResilienceCenter.vue#58a7337b2cdfab3b.1 | 235 | control | RD67-CURRENT-LOAD / 刷新运行事实，忙碌时用ARIA状态保留焦点 |
-| apps/web/src/components/RedisResilienceCenter.vue#a93553a3ba9aa8a6.1 | 265 | control | RD67-CURRENT-RETRY / 已有成功快照且刷新失败时重新核验 |
-| apps/web/src/components/RedisResilienceCenter.vue#d45ddc5db7a2701f.1 | 297 | control | RD67-CURRENT-RETRY / 非expired错误区重试既有读取流程 |
+| apps/web/src/components/RedisResilienceCenter.vue#58a7337b2cdfab3b.1 | 247 | control | RD67-CURRENT-LOAD / 刷新运行事实，忙碌时用ARIA状态保留焦点 |
+| apps/web/src/components/RedisResilienceCenter.vue#a93553a3ba9aa8a6.1 | 277 | control | RD67-CURRENT-RETRY / 已有成功快照且刷新失败时重新核验 |
+| apps/web/src/components/RedisResilienceCenter.vue#d45ddc5db7a2701f.1 | 309 | control | RD67-CURRENT-RETRY / 非expired错误区重试既有读取流程 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/RedisResilienceCenter.vue | dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081 |
+| apps/web/src/components/RedisResilienceCenter.vue | 72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec |
 
 第6节旧指纹仍标记历史；当前映射不代替真实 Redis、MySQL、权限、采样、宝塔进程或生产恢复验收。
 

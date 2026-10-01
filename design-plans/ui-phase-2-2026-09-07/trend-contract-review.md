@@ -20,37 +20,37 @@
 
 | 文件:行 | 候选尾键           | 语义ID/入口                                              |
 | ------- | ------------------ | -------------------------------------------------------- |
-| W:463   | e8d58f837015480a.1 | TR-RULE-OPEN：顶部首条/新增入口                          |
-| W:471   | 5abb2c07be024e83.1 | TR-REFRESH-SOURCES                                       |
-| W:474   | 2bfafa5dccf5b5ae.1 | TR-TAB-RULES：顶部入口                                   |
-| W:477   | c0646bdf3263a017.1 | TR-TAB-TOPICS                                            |
-| W:479   | aef07f12388401cc.1 | TR-TAB-RULES：导航入口                                   |
-| W:481   | 83125cc8b9f30181.1 | TR-TAB-GOVERNANCE                                        |
-| W:493   | 377da84835906aec.1 | TR-FILTER-APPLY/CLEAR/COPY/EDIT/SORT转发                 |
-| W:503   | 5646a97e7f9d7b17.1 | TR-RECOVER：empty清除，否则load；隐藏未接线通用次操作   |
-| W:518   | 28d08ea282407ca1.1 | TR-TOPIC-SELECT：每个主题实例                            |
-| W:544   | a9dcb53568c4deee.1 | TR-PAGE-PREV                                             |
-| W:546   | ec3e2e186729ef5d.1 | TR-PAGE-NEXT                                             |
-| W:551   | de1bcb04278ad1bc.1 | TR-BACK/FOLLOW/RULE-OPEN/RELEVANCE-OPEN/ANOMALY-OPEN转发 |
-| W:566   | a8eb23a11ff39fa0.1 | TR-HELP：原生details展开                                 |
-| W:591   | 5b07ed8ea36a238e.1 | TR-RULE-OPEN：规则标题入口                               |
-| W:647   | 0d9565586dbfab9d.1 | TR-RELOAD：规则状态恢复；隐藏未接线通用次操作           |
-| W:603   | 095a96a218ee248e.1 | TR-RULE-OPEN：规则空态入口                               |
-| W:651   | 5731738b8db06002.1 | TR-RULE-STATUS：暂停/启用                                |
-| W:654   | 273b9f9c2069857f.1 | TR-RULE-RESULTS：首关键词筛选                            |
-| W:657   | 05ccd6821ef51315.1 | TR-PROPOSE/TR-DECIDE转发                                 |
-| W:694   | 1c84e99801374a43.1 | TR-D-RULE-CALLER：open/busy/close/submit转发             |
-| W:694   | e2a4499152c0f457.1 | TR-D-RULE-COMPONENT：受控规则组件调用                    |
-| W:707   | c6ce42d1e09856fa.1 | TR-ANOMALY-SUBMIT表单                                    |
-| W:713   | b5cb028d61878491.1 | TR-ANOMALY-CLOSE：叉号                                   |
-| W:741   | 79e6f49e70b53776.1 | TR-ANOMALY-CLOSE：取消                                   |
-| W:700   | 70140152f0bfc00c.1 | TR-D-ANOMALY 原生模态定义                                |
-| W:700   | cdba5de18bdf9c12.1 | TR-D-ANOMALY-KEYBOARD：cancel与Tab处理                   |
-| W:743   | 3ca40e4dc9ea598c.1 | TR-ANOMALY-SUBMIT按钮                                    |
-| W:719   | 60103acec5bdf33b.1 | TR-RELEVANCE-SUBMIT表单                                  |
-| W:727   | 74456cadd4fd8246.1 | TR-RELEVANCE-CLOSE：叉号                                 |
-| W:748   | 90cb939f09706fb5.1 | TR-RELEVANCE-CLOSE：取消                                 |
-| W:750   | 288abda590fb34b7.1 | TR-RELEVANCE-SUBMIT按钮                                  |
+| W:631   | e8d58f837015480a.1 | TR-RULE-OPEN：顶部首条/新增入口                          |
+| W:639   | 5abb2c07be024e83.1 | TR-REFRESH-SOURCES                                       |
+| W:642   | 2bfafa5dccf5b5ae.1 | TR-TAB-RULES：顶部入口                                   |
+| W:645   | c0646bdf3263a017.1 | TR-TAB-TOPICS                                            |
+| W:647   | aef07f12388401cc.1 | TR-TAB-RULES：导航入口                                   |
+| W:649   | 83125cc8b9f30181.1 | TR-TAB-GOVERNANCE                                        |
+| W:661   | 377da84835906aec.1 | TR-FILTER-APPLY/CLEAR/COPY/EDIT/SORT转发                 |
+| W:671   | 5646a97e7f9d7b17.1 | TR-RECOVER：empty清除，否则load；隐藏未接线通用次操作   |
+| W:687   | 28d08ea282407ca1.1 | TR-TOPIC-SELECT：每个主题实例                            |
+| W:713   | a9dcb53568c4deee.1 | TR-PAGE-PREV                                             |
+| W:715   | ec3e2e186729ef5d.1 | TR-PAGE-NEXT                                             |
+| W:720   | de1bcb04278ad1bc.1 | TR-BACK/FOLLOW/RULE-OPEN/RELEVANCE-OPEN/ANOMALY-OPEN转发 |
+| W:735   | a8eb23a11ff39fa0.1 | TR-HELP：原生details展开                                 |
+| W:760   | 5b07ed8ea36a238e.1 | TR-RULE-OPEN：规则标题入口                               |
+| W:762   | 0d9565586dbfab9d.1 | TR-RELOAD：规则状态恢复；隐藏未接线通用次操作           |
+| W:773   | 095a96a218ee248e.1 | TR-RULE-OPEN：规则空态入口                               |
+| W:821   | 5731738b8db06002.1 | TR-RULE-STATUS：暂停/启用                                |
+| W:824   | 273b9f9c2069857f.1 | TR-RULE-RESULTS：首关键词筛选                            |
+| W:827   | 05ccd6821ef51315.1 | TR-PROPOSE/TR-DECIDE转发                                 |
+| W:836   | 1c84e99801374a43.1 | TR-D-RULE-CALLER：open/busy/close/submit转发             |
+| W:836   | e2a4499152c0f457.1 | TR-D-RULE-COMPONENT：受控规则组件调用                    |
+| W:849   | c6ce42d1e09856fa.1 | TR-ANOMALY-SUBMIT表单                                    |
+| W:855   | b5cb028d61878491.1 | TR-ANOMALY-CLOSE：叉号                                   |
+| W:883   | 79e6f49e70b53776.1 | TR-ANOMALY-CLOSE：取消                                   |
+| W:842   | 70140152f0bfc00c.1 | TR-D-ANOMALY 原生模态定义                                |
+| W:842   | cdba5de18bdf9c12.1 | TR-D-ANOMALY-KEYBOARD：cancel与Tab处理                   |
+| W:885   | 3ca40e4dc9ea598c.1 | TR-ANOMALY-SUBMIT按钮                                    |
+| W:900   | 60103acec5bdf33b.1 | TR-RELEVANCE-SUBMIT表单                                  |
+| W:908   | 74456cadd4fd8246.1 | TR-RELEVANCE-CLOSE：叉号                                 |
+| W:930   | 90cb939f09706fb5.1 | TR-RELEVANCE-CLOSE：取消                                 |
+| W:932   | 288abda590fb34b7.1 | TR-RELEVANCE-SUBMIT按钮                                  |
 | F:22    | 5dfd077f141d48f4.1 | TR-FILTER-APPLY表单                                      |
 | F:24    | be2b881b65e1cc00.1 | TR-FILTER-EDIT.market                                    |
 | F:29    | 49faf4c9e9529254.1 | TR-FILTER-EDIT.category                                  |
@@ -70,14 +70,14 @@
 | E:60    | dab48a89a829b124.1 | TR-EVIDENCE-ORIGINAL：新窗口noopener/noreferrer          |
 | E:61    | 436d7eb2bb10817d.1 | TR-ANOMALY-OPEN：busy/已有工单禁用                       |
 | E:88    | 1c008f867673db60.1 | TR-HISTORY-TECHNICAL：原生details                        |
-| R:53    | b2c35007732f84af.1 | TR-RULE-SUBMIT表单                                       |
-| R:59    | 3886e9e1d2205bab.1 | TR-RULE-CLOSE：叉号                                      |
-| R:97    | 1c6857e568a31cf2.1 | TR-RULE-CLOSE：取消                                      |
-| W:694   | 1c84e99801374a43.1 | TR-D-RULE-CALLER：open/busy/close/submit转发             |
-| W:694   | e2a4499152c0f457.1 | TR-D-RULE-COMPONENT：受控规则组件调用                    |
+| R:75    | b2c35007732f84af.1 | TR-RULE-SUBMIT表单                                       |
+| R:81    | 3886e9e1d2205bab.1 | TR-RULE-CLOSE：叉号                                      |
+| R:119    | 1c6857e568a31cf2.1 | TR-RULE-CLOSE：取消                                      |
+| W:836   | 1c84e99801374a43.1 | TR-D-RULE-CALLER：open/busy/close/submit转发             |
+| W:836   | e2a4499152c0f457.1 | TR-D-RULE-COMPONENT：受控规则组件调用                    |
 | R:68    | f6c3de30580fd217.1 | TR-D-RULE 原生模态定义                                   |
 | R:68    | 8cead402b77314e2.1 | TR-D-RULE-KEYBOARD：cancel与Tab处理                      |
-| R:98    | d47ebd79f8eb69dd.1 | TR-RULE-SUBMIT按钮                                       |
+| R:120    | d47ebd79f8eb69dd.1 | TR-RULE-SUBMIT按钮                                       |
 | G:102   | bcbaae66b685ebbe.1 | TR-PROPOSE表单                                           |
 | G:107   | f8b877ec4618bce3.1 | TR-PROPOSAL-MODE.merge                                   |
 | G:110   | c375aa8bfaab646c.1 | TR-PROPOSAL-MODE.split                                   |
@@ -94,11 +94,11 @@
 
 | 定义/调用候选                                                              | 业务变体                       | 字段与行为                                                                                                                                                                                                    |
 | -------------------------------------------------------------------------- | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| W:694 #1c84e99801374a43.1 / #e2a4499152c0f457.1 → R:68 #f6c3de30580fd217.1 | TR-D-RULE                      | 一个受控调用/一个原生dialog定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消后重开仍默认US/en-US/60/1                                                    |
-| W:700 #70140152f0bfc00c.1                                                  | TR-D-ANOMALY                   | 原生dialog；warning/critical、原因2–500；提交severity/reason，证据/来源身份由URL和服务端关联；失败保留；created=false显示已有工单，当前实例按钮禁用                                                           |
-| W:700 #cdba5de18bdf9c12.1 / R:68 #8cead402b77314e2.1                       | TR-D-MODAL-KEYBOARD            | 规则/异常均由useModalDialog打开原生模态，首字段autofocus，正反Tab边界循环；Escape仅非busy关闭；取消/Escape归还触发焦点。异常写入成功后原触发项替换，焦点转到当前视图导航                                      |
-| W:744 #029d267ba5289a36.1                                                  | TR-D-IRRELEVANT / TR-D-RESTORE | 同定义两变体；原生模态；原因2–500；status/reason.trim/expected_version；失败保留弹窗与原因，成功才关闭清空；busy期间叉号/取消/提交/Escape禁用；原因初始获焦、正反向Tab首尾循环，Escape/取消后焦点归还打开按钮 |
-| W:744 #ec9cecafc655a0ec.1                                                  | TR-D-RELEVANCE-CANCEL          | 原生`cancel`转handleRelevanceCancel；仅非busy允许Escape关闭，busy保持；映射到TR-RELEVANCE-CLOSE                                                                                                               |
+| W:836 #1c84e99801374a43.1 / #e2a4499152c0f457.1 → R:68 #f6c3de30580fd217.1 | TR-D-RULE                      | 一个受控调用/一个原生dialog定义，不算两个弹窗；八输入，名称/包含词/市场/语言required；创建成功关闭并load后跳rules；失败保留；取消后重开仍默认US/en-US/60/1                                                    |
+| W:842 #70140152f0bfc00c.1                                                  | TR-D-ANOMALY                   | 原生dialog；warning/critical、原因2–500；提交severity/reason，证据/来源身份由URL和服务端关联；失败保留；created=false显示已有工单，当前实例按钮禁用                                                           |
+| W:842 #cdba5de18bdf9c12.1 / R:68 #8cead402b77314e2.1                       | TR-D-MODAL-KEYBOARD            | 规则/异常均由useModalDialog打开原生模态，首字段autofocus，正反Tab边界循环；Escape仅非busy关闭；取消/Escape归还触发焦点。异常写入成功后原触发项替换，焦点转到当前视图导航                                      |
+| W:891 #029d267ba5289a36.1                                                  | TR-D-IRRELEVANT / TR-D-RESTORE | 同定义两变体；原生模态；原因2–500；status/reason.trim/expected_version；失败保留弹窗与原因，成功才关闭清空；busy期间叉号/取消/提交/Escape禁用；原因初始获焦、正反向Tab首尾循环，Escape/取消后焦点归还打开按钮 |
+| W:891 #ec9cecafc655a0ec.1                                                  | TR-D-RELEVANCE-CANCEL          | 原生`cancel`转handleRelevanceCancel；仅非busy允许Escape关闭，busy保持；映射到TR-RELEVANCE-CLOSE                                                                                                               |
 | F:21 #574e84bbfac61d8b.1                                                   | TR-D-FILTER（共享）            | P14桌面保持group、手机760px及以下role=dialog；本地Vue桌面/390px E2E核验5字段、关闭初焦点、Tab首尾、Escape/取消归还焦点、submit.capture关闭。该共享实现其他调用方仍需独立验收                                  |
 
 三个本地原生dialog定义、四业务变体加一个共享筛选实例。合并/拆分以及确认/驳回是四种内联表单态，不新建dialogId。相关性、规则及异常弹窗均复用useModalDialog；桌面/390px E2E验证初始焦点、正反向Tab循环、非busy Escape及焦点归还。异常工单成功后原触发项变化，焦点转至当前视图导航。P14共享筛选抽屉的五字段、桌面分组、手机初焦点/边界、Escape/取消返焦及提交关闭已有实际Vue桌面/390px测试，其他共享调用方仍须单独核验。外层全局message不是弹窗内字段错误；不自动登记无障碍整体通过。

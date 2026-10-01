@@ -36,7 +36,7 @@
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformStatusWorkspace.vue | 775769a187d18e8440f6e0ccef08a13b305620cf29747eb0aad35766059b01f8 |
+| apps/web/src/components/PlatformStatusWorkspace.vue | 9293190d91518c2c6875c56a10cdb0c0f76133890140024ae57942996f2cd8e1 |
 
 该候选是重复渲染的分区模板入口，不将每个分区实例当成独立业务动作，也不代替键盘/读屏的完整工作区验收。
 
@@ -47,4 +47,4 @@
 | 当前源文件 | 当前LF SHA-256 | 当前候选 | 动作组 |
 | --- | --- | ---: | ---: |
 | apps/web/src/components/PlatformStatusCenterView.vue | 6ce3255def9689fd88051da43680d5eb53b50699c4f229901871b267cacab9c7 | 5 | 5 |
-| apps/web/src/components/PlatformStatusWorkspace.vue | 775769a187d18e8440f6e0ccef08a13b305620cf29747eb0aad35766059b01f8 | 1 | 1 |
+| apps/web/src/components/PlatformStatusWorkspace.vue | 9293190d91518c2c6875c56a10cdb0c0f76133890140024ae57942996f2cd8e1 | 1 | 1 |

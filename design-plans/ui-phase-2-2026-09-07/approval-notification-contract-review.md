@@ -22,71 +22,71 @@
 
 | 文件 | 行 | sig | 稳定语义 / 实际行为 |
 | --- | --- | --- | --- |
-| AW | 443 | fe72f1f58d04daa7.1 | AN-A-TEMPLATE-OPEN；管理模板 |
-| AW | 446 | e11c8bef75450e78.1 | AN-A-REQUEST-OPEN；已发布模板后发起 |
-| AW | 447 | 21acc635baa945ea.1 | AN-A-TEMPLATE-OPEN；首模板入口 |
-| AW | 454 | 1c008f867673db60.1 | AN-TECH；页级requestId |
-| AW | 501 | fa9213ee10c4bdaa.1 | AN-A-LOAD；错误重读 |
-| AW | 503 | 8b14c8822fa2158e.1 | AN-A-QUEUE/FILTER/DETAIL/REQUEST-OPEN/TEMPLATE-OPEN；父委托 |
-| AW | 524 | 59336a98bd70e13c.1 | AN-A-NOTICE-CLOSE；仅清详情错误 |
-| AW | 527 | c4a35037858480fb.1 | AN-A-PAGE；上一页 |
-| AW | 529 | a0fa8a0a8fe3a4f1.1 | AN-A-PAGE；下一页 |
-| AW | 531 | 1e3aa75fca121f17.1 | D-AN-APPROVAL；详情原生模态 |
-| AW | 531 | 1dba0cb0b0844a3c.1 | AN-A-CLOSE/FOCUS；cancel、遮罩边界、Tab循环 |
-| AW | 540 | ed72f74cfb2fdb73.1 | AN-A-CLOSE；关闭详情、清approval |
-| AW | 545 | 618d905faa5eb354.1 | AN-A-NAV-RESOURCE；decision_context真实route |
-| AW | 551 | 5201b6777ca22abe.1 | AN-A-NAV-RETURN；限定通知返回 |
-| AW | 678 | 861502a87911f91f.1 | AN-A-NAV-EVIDENCE；逐requirement真实route |
-| AW | 774 | 86c54779008e879e.1 | AN-A-DECIDE-REJECT；当前版本+原因 |
-| AW | 776 | 3cfff8f4c2f74d66.1 | AN-A-DECIDE-APPROVE；当前版本+原因 |
-| AW | 781 | 1c008f867673db60.2 | AN-TECH；资源/节点编号 |
-| AW | 802 | 21471c244422699b.1 | D-AN-TEMPLATE；模板草稿 |
-| AW | 802 | e5e612ec729070f4.1 | AN-A-TEMPLATE-CLOSE；Escape |
-| AW | 807 | a85a9e0937dede29.1 | AN-A-TEMPLATE-SUBMIT/INVALID；POST草稿、展开必填 |
-| AW | 825 | 5f8fcd4eeb82af58.1 | AN-A-TEMPLATE-FIELDS；审批人与超时接收人展开 |
-| AW | 844 | 33ba0693d19eb13e.1 | AN-A-TEMPLATE-CLOSE；取消保留草稿 |
-| AW | 845 | 19071354ae303ee4.1 | AN-A-TEMPLATE-SUBMIT；原生submit |
-| AW | 854 | c02233bb6662b1ab.1 | AN-A-PUBLISH-OPEN；仅draft条目 |
-| AW | 858 | e6808d6bed4a59f1.1 | D-AN-PUBLISH；版本与原因 |
-| AW | 858 | 27fc15dca539791e.1 | AN-A-PUBLISH-CLOSE；Escape清目标/原因 |
-| AW | 859 | 132a2f4c870f90da.1 | AN-A-PUBLISH-SUBMIT；POST reason/expected_revision |
-| AW | 875 | 227faf6f0cfb499d.1 | AN-A-PUBLISH-CLOSE；返回清目标 |
-| AW | 876 | d5e7aa36e90f904e.1 | AN-A-PUBLISH-SUBMIT；原生submit |
-| AW | 880 | 5eec193b0a9499f7.1 | D-AN-REQUEST；发起审批 |
-| AW | 880 | a05288e1768f6320.1 | AN-A-REQUEST-CLOSE；Escape |
-| AW | 881 | 1c352b89a4148f40.1 | AN-A-REQUEST-SUBMIT/INVALID；POST、展开必填 |
-| AW | 897 | bfb5c0c0da487c90.1 | AN-A-REQUEST-FIELDS；资源编号展开 |
-| AW | 902 | 74e09fbb8250bf10.1 | AN-A-REQUEST-CLOSE；取消保留草稿 |
-| AW | 903 | 0afc0196f9054ef3.1 | AN-A-REQUEST-SUBMIT；原生submit |
+| AW | 529 | fe72f1f58d04daa7.1 | AN-A-TEMPLATE-OPEN；管理模板 |
+| AW | 532 | e11c8bef75450e78.1 | AN-A-REQUEST-OPEN；已发布模板后发起 |
+| AW | 533 | 21acc635baa945ea.1 | AN-A-TEMPLATE-OPEN；首模板入口 |
+| AW | 540 | 1c008f867673db60.1 | AN-TECH；页级requestId |
+| AW | 587 | fa9213ee10c4bdaa.1 | AN-A-LOAD；错误重读 |
+| AW | 589 | 8b14c8822fa2158e.1 | AN-A-QUEUE/FILTER/DETAIL/REQUEST-OPEN/TEMPLATE-OPEN；父委托 |
+| AW | 610 | 59336a98bd70e13c.1 | AN-A-NOTICE-CLOSE；仅清详情错误 |
+| AW | 613 | c4a35037858480fb.1 | AN-A-PAGE；上一页 |
+| AW | 615 | a0fa8a0a8fe3a4f1.1 | AN-A-PAGE；下一页 |
+| AW | 617 | 1e3aa75fca121f17.1 | D-AN-APPROVAL；详情原生模态 |
+| AW | 617 | 1dba0cb0b0844a3c.1 | AN-A-CLOSE/FOCUS；cancel、遮罩边界、Tab循环 |
+| AW | 626 | ed72f74cfb2fdb73.1 | AN-A-CLOSE；关闭详情、清approval |
+| AW | 631 | 618d905faa5eb354.1 | AN-A-NAV-RESOURCE；decision_context真实route |
+| AW | 637 | 5201b6777ca22abe.1 | AN-A-NAV-RETURN；限定通知返回 |
+| AW | 764 | 861502a87911f91f.1 | AN-A-NAV-EVIDENCE；逐requirement真实route |
+| AW | 860 | 86c54779008e879e.1 | AN-A-DECIDE-REJECT；当前版本+原因 |
+| AW | 862 | 3cfff8f4c2f74d66.1 | AN-A-DECIDE-APPROVE；当前版本+原因 |
+| AW | 867 | 1c008f867673db60.2 | AN-TECH；资源/节点编号 |
+| AW | 888 | 21471c244422699b.1 | D-AN-TEMPLATE；模板草稿 |
+| AW | 888 | e5e612ec729070f4.1 | AN-A-TEMPLATE-CLOSE；Escape |
+| AW | 893 | a85a9e0937dede29.1 | AN-A-TEMPLATE-SUBMIT/INVALID；POST草稿、展开必填 |
+| AW | 911 | 5f8fcd4eeb82af58.1 | AN-A-TEMPLATE-FIELDS；审批人与超时接收人展开 |
+| AW | 930 | 33ba0693d19eb13e.1 | AN-A-TEMPLATE-CLOSE；取消保留草稿 |
+| AW | 931 | 19071354ae303ee4.1 | AN-A-TEMPLATE-SUBMIT；原生submit |
+| AW | 940 | c02233bb6662b1ab.1 | AN-A-PUBLISH-OPEN；仅draft条目 |
+| AW | 944 | e6808d6bed4a59f1.1 | D-AN-PUBLISH；版本与原因 |
+| AW | 944 | 27fc15dca539791e.1 | AN-A-PUBLISH-CLOSE；Escape清目标/原因 |
+| AW | 945 | 132a2f4c870f90da.1 | AN-A-PUBLISH-SUBMIT；POST reason/expected_revision |
+| AW | 961 | 227faf6f0cfb499d.1 | AN-A-PUBLISH-CLOSE；返回清目标 |
+| AW | 962 | d5e7aa36e90f904e.1 | AN-A-PUBLISH-SUBMIT；原生submit |
+| AW | 966 | 5eec193b0a9499f7.1 | D-AN-REQUEST；发起审批 |
+| AW | 966 | a05288e1768f6320.1 | AN-A-REQUEST-CLOSE；Escape |
+| AW | 967 | 1c352b89a4148f40.1 | AN-A-REQUEST-SUBMIT/INVALID；POST、展开必填 |
+| AW | 983 | bfb5c0c0da487c90.1 | AN-A-REQUEST-FIELDS；资源编号展开 |
+| AW | 988 | 74e09fbb8250bf10.1 | AN-A-REQUEST-CLOSE；取消保留草稿 |
+| AW | 989 | 0afc0196f9054ef3.1 | AN-A-REQUEST-SUBMIT；原生submit |
 | AQ | 35 | 6880c779fd5e9fc3.1 | AN-A-QUEUE；decidable |
 | AQ | 38 | 216e8feb5a6089d0.1 | AN-A-QUEUE；requested |
 | AQ | 43 | 473bb9f13020ffe6.1 | AN-A-FILTER；四状态按钮 |
 | AQ | 59 | 64616041c6d5fc5e.1 | AN-A-REQUEST-OPEN；空队列有模板 |
 | AQ | 62 | 3f91c4917c0bca2a.1 | AN-A-TEMPLATE-OPEN；空队列无模板 |
 | AQ | 68 | 134055fa33da350e.1 | AN-A-DETAIL；每个真实审批对象 |
-| NC | 481 | 9b4302ca61b627ec.1 | AN-N-PREF-OPEN；busy禁用 |
-| NC | 482 | fd5620d41b8a74b5.1 | AN-N-ALL-READ；当前接收范围全部 |
-| NC | 488 | 1c008f867673db60.1 | AN-TECH；页级requestId |
-| NC | 507 | bfefb7250e532e63.1 | AN-N-FILTER-CATEGORY；五项 |
-| NC | 521 | cafe657338aefab6.1 | AN-N-UNREAD；URL unread=1/API true |
-| NC | 525 | 106ed8618827fe65.1 | AN-N-FILTER-STATUS；四项 |
-| NC | 560 | 6a22c249121aeb4d.1 | AN-N-LOAD；重读列表/summary/preferences |
-| NC | 567 | d953dfdf4cb40b85.1 | AN-N-DETAIL；打开，未读时自动read |
-| NC | 589 | 01c7bba15fa9f7ce.1 | AN-N-PAGE；上一页 |
-| NC | 591 | bd5dbf08f126da53.1 | AN-N-PAGE；下一页 |
+| NC | 548 | 9b4302ca61b627ec.1 | AN-N-PREF-OPEN；busy禁用 |
+| NC | 549 | fd5620d41b8a74b5.1 | AN-N-ALL-READ；当前接收范围全部 |
+| NC | 555 | 1c008f867673db60.1 | AN-TECH；页级requestId |
+| NC | 574 | bfefb7250e532e63.1 | AN-N-FILTER-CATEGORY；五项 |
+| NC | 588 | cafe657338aefab6.1 | AN-N-UNREAD；URL unread=1/API true |
+| NC | 592 | 106ed8618827fe65.1 | AN-N-FILTER-STATUS；四项 |
+| NC | 627 | 6a22c249121aeb4d.1 | AN-N-LOAD；重读列表/summary/preferences |
+| NC | 634 | d953dfdf4cb40b85.1 | AN-N-DETAIL；打开，未读时自动read |
+| NC | 656 | 01c7bba15fa9f7ce.1 | AN-N-PAGE；上一页 |
+| NC | 658 | bd5dbf08f126da53.1 | AN-N-PAGE；下一页 |
 | NC | 660 | 83c14e43da4a0513.1 | D-AN-NOTIFICATION；消息详情 |
 | NC | 660 | e6cc1debf33762b0.1 | AN-N-CLOSE-DETAIL；Escape，busy不关闭 |
-| NC | 600 | 24417e6753ed4eb7.1 | AN-N-CLOSE-DETAIL；按钮同busy边界 |
-| NC | 627 | 9c8237833082965f.1 | AN-N-SOURCE；站内来源+from |
-| NC | 630 | d0ef81cb0803db4e.1 | AN-N-START；仅open |
-| NC | 638 | 7490571390181453.1 | AN-N-CLOSE；非closed |
-| NC | 646 | 696dcabbd8c2d73e.1 | AN-N-REOPEN；closed |
-| NC | 654 | 1c008f867673db60.2 | AN-TECH；资源/根因键 |
+| NC | 668 | 24417e6753ed4eb7.1 | AN-N-CLOSE-DETAIL；按钮同busy边界 |
+| NC | 710 | 9c8237833082965f.1 | AN-N-SOURCE；站内来源+from |
+| NC | 713 | d0ef81cb0803db4e.1 | AN-N-START；仅open |
+| NC | 721 | 7490571390181453.1 | AN-N-CLOSE；非closed |
+| NC | 729 | 696dcabbd8c2d73e.1 | AN-N-REOPEN；closed |
+| NC | 737 | 1c008f867673db60.2 | AN-TECH；资源/根因键 |
 | NC | 754 | 3f47655822db88ed.1 | D-AN-PREFERENCES；偏好 |
 | NC | 754 | e2f8e1803ac77239.1 | AN-N-PREF-CLOSE；Escape |
 | NC | 761 | 8aeeea8a550ba999.1 | AN-N-PREF-SAVE；PUT expected_version |
-| NC | 688 | 25755513ca77e550.1 | AN-N-PREF-CLOSE；取消保留当前ref |
-| NC | 689 | 0285caea2e8607bf.1 | AN-N-PREF-SAVE；原生submit |
+| NC | 787 | 25755513ca77e550.1 | AN-N-PREF-CLOSE；取消保留当前ref |
+| NC | 788 | 0285caea2e8607bf.1 | AN-N-PREF-SAVE；原生submit |
 | NC | 705 | 8cb2961885ab7113.1 | AN-N-TECH-RESOURCE；详情失败追踪编号展开 |
 | NC | 782 | 8cb2961885ab7113.2 | AN-N-TECH-RESOURCE；偏好失败追踪编号展开 |
 
@@ -132,9 +132,9 @@ AW的11处绑定为reason；templateForm.name/resource_type/node_name/sla_minute
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| AW | 792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee |
+| AW | c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104 |
 | AQ | 247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075 |
-| NC | 154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036 |
+| NC | 4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3 |
 | approval-workspace.css | 3baa1bd6bd42b620024d8b0930e018e985929df2dce6b4a904333417c5ac2053 |
 | notification-center.css | 3b76371449dfee575dfc3cbe52e73425b3517d1f0f544e8116ce30f8bc56e386 |
 | use-modal-dialog.ts | 08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f |

@@ -105,43 +105,43 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 
 | 源candidateId                                                   | 当前行 | 类型          | 原行号记录 | 既有语义 / 实际入口                                                           |
 | --------------------------------------------------------------- | ------ | ------------- | ---------- | ----------------------------------------------------------------------------- |
-| apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1 | 396    | control       | S396       | create.open：canDecide且非ready时顶部入口；不等于已加载可创建                 |
-| apps/web/src/components/ScoreRuleConsole.vue#0d9565586dbfab9d.1 | 566    | event-binding | S404       | list.retry：UiStatePanel primary→load；读取目录，无业务写入，隐藏未接线secondary；离页中止并在返回时恢复被中断的目录GET |
-| apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1 | 413    | control       | S413       | create.open：empty且canDecide，创建首个草稿                                   |
-| apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1 | 430    | control       | S430       | create.open：ready覆盖说明内入口；是否缺项不影响canDecide门                   |
-| apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1 | 459    | control       | S459       | preview.open：canApprove，draft/pending_approval/approved；GET第1页           |
-| apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1 | 466    | control       | S466       | action.submit.open：canDecide且draft，begin清原因/目标/错误                   |
-| apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1 | 468    | control       | S468       | action.approve.open：canApprove且pending_approval                             |
-| apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1 | 473    | control       | S473       | action.reject.open：canApprove且pending_approval                              |
-| apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1 | 478    | control       | S478       | action.activate.open：canApprove且approved                                    |
-| apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1 | 480    | control       | S480       | action.rollback.open：canApprove且active                                      |
-| apps/web/src/components/ScoreRuleConsole.vue#6b37811d77e25f5b.1 | 609    | event-binding | S491       | create.close：cancelCreate→closeCreate，关闭并清错误，不清草稿                |
-| apps/web/src/components/ScoreRuleConsole.vue#237b12051c9107cf.1 | 616    | form-event    | S498       | create.submit：createValidation无错且canDecide；正权重维度POST                |
-| apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1 | 504    | control       | S504       | create.close：标题关闭按钮，现有busy期间仍可关闭                              |
-| apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1 | 567    | control       | S567       | create.close：取消按钮，与标题关闭同合同                                      |
-| apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1 | 568    | control       | S568       | create.submit：同表单提交；busy或createValidation禁用                         |
-| apps/web/src/components/ScoreRuleConsole.vue#234e4413d96b5e41.1 | 631    | event-binding | S574       | preview.close：cancelPreview→closePreview，清错误，不取消GET                  |
-| apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1 | 587    | control       | S587       | preview.close：标题关闭按钮                                                   |
-| apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1 | 594    | control       | S594       | preview.retry：loadPreview(previewRule)，明确重试第1页而非失败页              |
-| apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1 | 657    | control       | S657       | preview.previous：page≤1或previewing禁用；GET上一页                           |
-| apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1 | 664    | control       | S664       | preview.next：page×page_size≥total或previewing禁用；GET下一页                 |
-| apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1 | 675    | event-binding | S675       | action.{action}.close：cancelAction→closeAction；关闭清错误，重开清原因/目标  |
-| apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1 | 682    | form-event    | S682       | action.{action}.submit：runAction→POST actions；expected_revision来自选中快照 |
-| apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1 | 690    | control       | S690       | action.{action}.close：标题关闭按钮；busy期间未锁定                           |
-| apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1 | 710    | control       | S710       | action.{action}.close：取消按钮；不提交、不改变规则                           |
-| apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1 | 711    | control       | S711       | action.{action}.submit：同表单提交；busy禁用；原生required仍生效              |
-| apps/web/src/components/ScoreRuleConsole.vue#50a901a0bff021e2.1 | 627    | event-binding | 版本代码错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
-| apps/web/src/components/ScoreRuleConsole.vue#03b10c0a1abc2c11.1 | 648    | event-binding | 名称错误就地关联     | create.submit：createValidation无错且canDecide；正权重维度POST |
-| apps/web/src/components/ScoreRuleConsole.vue#4d7c1c802660416a.1 | 672    | event-binding | 推荐阈值错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
-| apps/web/src/components/ScoreRuleConsole.vue#1a58d01072ed8035.1 | 697    | event-binding | 观察阈值错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
-| apps/web/src/components/ScoreRuleConsole.vue#27f3439531b9b3bc.1 | 729    | event-binding | 维度权重错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
-| apps/web/src/components/ScoreRuleConsole.vue#a0c3632c651fc976.1 | 747    | event-binding | 必填维度错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#d82691355635a0a5.1 | 553    | control       | S396       | create.open：canDecide且非ready时顶部入口；不等于已加载可创建                 |
+| apps/web/src/components/ScoreRuleConsole.vue#0d9565586dbfab9d.1 | 561    | event-binding | S404       | list.retry：UiStatePanel primary→load；读取目录，无业务写入，隐藏未接线secondary；离页中止并在返回时恢复被中断的目录GET |
+| apps/web/src/components/ScoreRuleConsole.vue#6fbceb5c19b637d0.1 | 571    | control       | S413       | create.open：empty且canDecide，创建首个草稿                                   |
+| apps/web/src/components/ScoreRuleConsole.vue#b399cd4bfcae4c58.1 | 588    | control       | S430       | create.open：ready覆盖说明内入口；是否缺项不影响canDecide门                   |
+| apps/web/src/components/ScoreRuleConsole.vue#b738886675b0d5e3.1 | 617    | control       | S459       | preview.open：canApprove，draft/pending_approval/approved；GET第1页           |
+| apps/web/src/components/ScoreRuleConsole.vue#c171285ebf86318d.1 | 624    | control       | S466       | action.submit.open：canDecide且draft，begin清原因/目标/错误                   |
+| apps/web/src/components/ScoreRuleConsole.vue#13043326f6e56d13.1 | 626    | control       | S468       | action.approve.open：canApprove且pending_approval                             |
+| apps/web/src/components/ScoreRuleConsole.vue#12a5f73b8078945b.1 | 631    | control       | S473       | action.reject.open：canApprove且pending_approval                              |
+| apps/web/src/components/ScoreRuleConsole.vue#7df938787d56d700.1 | 636    | control       | S478       | action.activate.open：canApprove且approved                                    |
+| apps/web/src/components/ScoreRuleConsole.vue#61237936dd7d6206.1 | 638    | control       | S480       | action.rollback.open：canApprove且active                                      |
+| apps/web/src/components/ScoreRuleConsole.vue#6b37811d77e25f5b.1 | 649    | event-binding | S491       | create.close：cancelCreate→closeCreate，关闭并清错误，不清草稿                |
+| apps/web/src/components/ScoreRuleConsole.vue#237b12051c9107cf.1 | 656    | form-event    | S498       | create.submit：createValidation无错且canDecide；正权重维度POST                |
+| apps/web/src/components/ScoreRuleConsole.vue#8695390d77702f3f.1 | 662    | control       | S504       | create.close：标题关闭按钮，现有busy期间仍可关闭                              |
+| apps/web/src/components/ScoreRuleConsole.vue#01f409013855890c.1 | 815    | control       | S567       | create.close：取消按钮，与标题关闭同合同                                      |
+| apps/web/src/components/ScoreRuleConsole.vue#bdb318fcff422d4c.1 | 816    | control       | S568       | create.submit：同表单提交；busy或createValidation禁用                         |
+| apps/web/src/components/ScoreRuleConsole.vue#234e4413d96b5e41.1 | 822    | event-binding | S574       | preview.close：cancelPreview→closePreview，清错误，不取消GET                  |
+| apps/web/src/components/ScoreRuleConsole.vue#6092d89fe71b29c0.1 | 835    | control       | S587       | preview.close：标题关闭按钮                                                   |
+| apps/web/src/components/ScoreRuleConsole.vue#bc8d0606729ad82e.1 | 842    | control       | S594       | preview.retry：loadPreview(previewRule)，明确重试第1页而非失败页              |
+| apps/web/src/components/ScoreRuleConsole.vue#3f5ff31c0665ba92.1 | 908    | control       | S657       | preview.previous：page≤1或previewing禁用；GET上一页                           |
+| apps/web/src/components/ScoreRuleConsole.vue#99b18758bd9b957c.1 | 915    | control       | S664       | preview.next：page×page_size≥total或previewing禁用；GET下一页                 |
+| apps/web/src/components/ScoreRuleConsole.vue#39fa5b933d8cf3f4.1 | 926    | event-binding | S675       | action.{action}.close：cancelAction→closeAction；关闭清错误，重开清原因/目标  |
+| apps/web/src/components/ScoreRuleConsole.vue#8cc2ab94f9e1a9b2.1 | 933    | form-event    | S682       | action.{action}.submit：runAction→POST actions；expected_revision来自选中快照 |
+| apps/web/src/components/ScoreRuleConsole.vue#7a6c071160ca7665.1 | 941    | control       | S690       | action.{action}.close：标题关闭按钮；busy期间未锁定                           |
+| apps/web/src/components/ScoreRuleConsole.vue#339d01fc46dc3b4b.1 | 961    | control       | S710       | action.{action}.close：取消按钮；不提交、不改变规则                           |
+| apps/web/src/components/ScoreRuleConsole.vue#935abdea8a275319.1 | 962    | control       | S711       | action.{action}.submit：同表单提交；busy禁用；原生required仍生效              |
+| apps/web/src/components/ScoreRuleConsole.vue#50a901a0bff021e2.1 | 667    | event-binding | 版本代码错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#03b10c0a1abc2c11.1 | 690    | event-binding | 名称错误就地关联     | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#4d7c1c802660416a.1 | 712    | event-binding | 推荐阈值错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#1a58d01072ed8035.1 | 737    | event-binding | 观察阈值错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#27f3439531b9b3bc.1 | 769    | event-binding | 维度权重错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
+| apps/web/src/components/ScoreRuleConsole.vue#a0c3632c651fc976.1 | 787    | event-binding | 必填维度错误就地关联 | create.submit：createValidation无错且canDecide；正权重维度POST |
 
 | 源candidateId                                                   | 当前行 | 类型              | 业务dialogId / 变体                                                     |
 | --------------------------------------------------------------- | ------ | ----------------- | ----------------------------------------------------------------------- |
-| apps/web/src/components/ScoreRuleConsole.vue#2cd4ab78b5d44750.1 | 609    | dialog-definition | scoring.create（1变体）                                                 |
-| apps/web/src/components/ScoreRuleConsole.vue#231a7828f8d8d02d.1 | 631    | dialog-definition | scoring.preview（1变体）                                                |
-| apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1 | 675    | dialog-definition | scoring.action.submit / approve / reject / activate / rollback（5变体） |
+| apps/web/src/components/ScoreRuleConsole.vue#2cd4ab78b5d44750.1 | 649    | dialog-definition | scoring.create（1变体）                                                 |
+| apps/web/src/components/ScoreRuleConsole.vue#231a7828f8d8d02d.1 | 822    | dialog-definition | scoring.preview（1变体）                                                |
+| apps/web/src/components/ScoreRuleConsole.vue#910e3d1f243c3fed.1 | 926    | dialog-definition | scoring.action.submit / approve / reject / activate / rollback（5变体） |
 
 2026-09-30 P17创建表单字段级校验补充：新增blur/change触碰态和现有validation派生的就地错误，必填、阈值关系/范围、权重总计/维度数量、必填维度仍沿用原规则；`aria-invalid`/`aria-describedby`将错误链接到控件。双端真实Vue用例验证修正清错、无效数据零写入及有效提交仍使用原POST字段。当前源映射/候选ID以最新动作审计生成物为准；页面全部弹窗状态、7个变体、30个展开输入实例、服务端权限和正式生产仍单独验收，未覆盖项不因局部映射补齐注销。
 
@@ -153,5 +153,5 @@ actions扫描不将普通v-model输入当独立动作，不能因此遗漏它们
 
 | 文件:行              | 候选尾键           | 源类型 / 语义                                          |
 | -------------------- | ------------------ | ------------------------------------------------------ |
-| ScoreRuleConsole:631 | 231a7828f8d8d02d.1 | dialog-definition / scoring.preview                    |
-| ScoreRuleConsole:631 | 234e4413d96b5e41.1 | event-binding / scoring.preview.cancel → cancelPreview |
+| ScoreRuleConsole:822 | 231a7828f8d8d02d.1 | dialog-definition / scoring.preview                    |
+| ScoreRuleConsole:822 | 234e4413d96b5e41.1 | event-binding / scoring.preview.cancel → cancelPreview |

@@ -109,12 +109,12 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号          | 行  | 类型              | 语义/消费者                                                   |
 | ------------------ | --- | ----------------- | ------------------------------------------------------------- |
-| 0a9c82c5c5fb1fd7.1 | 60 | dialog-definition | LG62-REASON 原生dialog定义；可选P32恢复上下文不改变本调用     |
-| 0b86489e495d6b17.1 | 60 | event-binding     | LG62-REASON Escape转发及可用控件首末Tab循环；处理函数不变     |
-| a9a93b43dd0dda5b.1 | 69 | form-event        | LG62-REASON 表单提交；可选P54上限提示不改变P62默认校验/submit |
-| f850a4abcc7ccc3a.1 | 75 | control           | LG62-REASON 顶部取消                                          |
-| 8724bc1f65aaf63a.1 | 108 | control           | LG62-REASON 底部取消                                          |
-| e7e63c4215a43738.1 | 109 | control           | LG62-REASON 同form确认                                        |
+| 0a9c82c5c5fb1fd7.1 | 74 | dialog-definition | LG62-REASON 原生dialog定义；可选P32恢复上下文不改变本调用     |
+| 0b86489e495d6b17.1 | 74 | event-binding     | LG62-REASON Escape转发及可用控件首末Tab循环；处理函数不变     |
+| 87015cbdd947096a.1 | 83 | form-event        | LG62-REASON 表单提交；可选P54上限提示不改变P62默认校验/submit |
+| f850a4abcc7ccc3a.1 | 89 | control           | LG62-REASON 顶部取消                                          |
+| 8724bc1f65aaf63a.1 | 135 | control           | LG62-REASON 底部取消                                          |
+| e7e63c4215a43738.1 | 136 | control           | LG62-REASON 同form确认                                        |
 
 | v-model | 属性行 | 元素     |
 | ------- | ------ | -------- |
@@ -162,13 +162,13 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 文件                                                | SHA-256（LF）                                                    |
 | --------------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/AuditedReasonDialog.vue     | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
+| apps/web/src/components/AuditedReasonDialog.vue     | 0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue  | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
 | apps/web/src/components/ResponsiveDataView.vue      | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
 | apps/web/src/components/TableViewControls.vue       | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
 | apps/web/src/components/TechnicalDetails.vue        | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
-| apps/web/src/use-audited-reason.ts                  | e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab |
-| apps/web/src/use-modal-dialog.ts                    | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
+| apps/web/src/use-audited-reason.ts                  | 90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007 |
+| apps/web/src/use-modal-dialog.ts                    | c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957 |
 | apps/web/src/api-client.ts                          | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/api/src/platform-dashboard-routes.ts           | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
 | apps/api/src/platform-dashboard-service.ts          | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |
@@ -311,7 +311,7 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 | --- | --- | ---: |
 | apps/web/src/components/PlatformLogCenter.vue | 029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518 | 20 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f | 6 |
-| apps/web/src/components/AuditedReasonDialog.vue | c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2 | 6 |
+| apps/web/src/components/AuditedReasonDialog.vue | 0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9 | 6 |
 
 P62导出原因窗的当前候选增量（与第6节历史指纹分离）：
 

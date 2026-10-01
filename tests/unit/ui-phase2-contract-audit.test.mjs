@@ -214,6 +214,32 @@ test("historical table-column scope resets at a new table", () => {
   );
 });
 
+test("row-level historical identity marker archives only the stale signature row", () => {
+  const source = '<template><button @click="save()">Save</button></template>';
+  const currentSignature = scanSource(
+    source,
+    "apps/web/src/components/Panel.vue",
+  ).candidates[0].candidateId.split("#")[1];
+  const document = parseContract(
+    [
+      "| candidateId | semantic owner | disposition |",
+      "| --- | --- | --- |",
+      "| Panel.vue#0000000000000000.1 | save | [历史身份，仅追溯] |",
+      `| Panel.vue#${currentSignature} | save | 当前映射 |`,
+    ].join("\n"),
+    { file: "contracts/review.md", defaultComponent: "Panel" },
+  );
+  const report = auditContracts({
+    documents: [document],
+    sources: new Map([["apps/web/src/components/Panel.vue", source]]),
+  });
+  assert.equal(report.records[0].temporalScope, "historical");
+  assert.equal(report.records[1].temporalScope, "unclassified");
+  assert.equal(report.summary.statuses["identity-not-found"] ?? 0, 0);
+  assert.equal(report.summary.historicalStatuses["identity-not-found"], 1);
+  assert.equal(report.unreferenced.length, 0);
+});
+
 test("route audit requires exact route tokens and accepts documented plain-text paths", () => {
   const audit = (route, spec) =>
     auditPageSpecs({
@@ -299,12 +325,18 @@ test("task and scoring stable tables cover the exact current local source set wi
       ],
       controls: 79,
       dialogs: 4,
+      historical: 159,
+      historicalLineOnly: 71,
+      historicalSignatures: 88,
     },
     {
       document: "scoring-contract-review.md",
       names: ["ScoreRuleConsole"],
-      controls: 25,
-      dialogs: 3,
+      controls: 32,
+      dialogs: 4,
+      historical: 25,
+      historicalLineOnly: 25,
+      historicalSignatures: 0,
     },
   ];
   for (const group of groups) {
@@ -322,23 +354,29 @@ test("task and scoring stable tables cover the exact current local source set wi
       return scanSource(text, file).candidates;
     });
     assert.equal(current.length, group.controls + group.dialogs);
-    assert.equal(
-      historical.length,
-      group.document === "task-contract-review.md" ? 71 + 75 : group.controls,
-    );
+    assert.equal(historical.length, group.historical);
     if (group.document === "task-contract-review.md") {
       const lineOnly = historical.filter((record) => !record.signature);
       const supersededSnapshot = historical.filter((record) => record.signature);
-      assert.equal(lineOnly.length, 71);
-      assert.equal(supersededSnapshot.length, 75);
+      assert.equal(lineOnly.length, group.historicalLineOnly);
+      assert.equal(supersededSnapshot.length, group.historicalSignatures);
       assert.ok(supersededSnapshot.every((record) => record.temporalScope === "historical"));
+    } else {
+      assert.equal(
+        historical.filter((record) => !record.signature).length,
+        group.historicalLineOnly,
+      );
+      assert.equal(
+        historical.filter((record) => record.signature).length,
+        group.historicalSignatures,
+      );
     }
     assert.equal(
       current.filter((record) => record.recordedKind === "dialog-definition").length,
       group.dialogs,
     );
     assert.deepEqual(
-      current.map((record) => record.candidateId).sort(),
+      [...new Set(current.map((record) => record.candidateId))].sort(),
       candidates.map((candidate) => candidate.candidateId).sort(),
     );
     for (const record of current) {
@@ -387,7 +425,7 @@ test("shared shell role and state contract binds every current source site witho
   const source = (file) =>
     readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll("\r\n", "\n");
   const candidates = files.flatMap((file) => scanSource(source(file), file).candidates);
-  assert.equal(records.length, 70);
+  assert.equal(records.length, 73);
   assert.deepEqual(
     records.map((record) => record.candidateId).sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
@@ -457,22 +495,36 @@ test("audited reason source bindings retain every current site and all consumer 
   const records = report.records.filter(
     (record) => record.sourceFile === file && record.temporalScope !== "historical",
   );
-  assert.equal(candidates.length, 6);
+  assert.equal(candidates.length, 7);
   assert.deepEqual(
-    records.map((r) => r.candidateId).sort(),
+    [...new Set(records.map((r) => r.candidateId))].sort(),
     candidates.map((c) => c.candidateId).sort(),
   );
   for (const record of records) {
     assert.equal(record.status, "identity-current", record.candidateId);
-    assert.equal(record.sourceBinding, "hash-current", record.candidateId);
+    assert.equal(
+      record.sourceBinding,
+      record.document.endsWith("/opportunity-candidate-map.md") ? "unrecorded" : "hash-current",
+      record.candidateId,
+    );
     assert.equal(record.recordedLine, record.currentLine);
-    assert.match(record.claim, /LG62-REASON/);
+    if (!record.document.endsWith("/opportunity-candidate-map.md")) {
+      assert.match(record.claim, /LG62-(?:REASON|CURRENT-REASON-INPUT)/);
+    }
   }
   const claims = report.sourceClaims.filter((claim) => claim.file === file);
   assert.equal(claims.length, 5);
   assert.equal(claims.filter((claim) => claim.temporalScope === "historical").length, 1);
   assert.equal(claims.filter((claim) => claim.temporalScope !== "historical").length, 4);
-  for (const claim of claims) assert.equal(claim.hash, digest(source), claim.document);
+  for (const claim of claims) {
+    if (claim.temporalScope === "historical") {
+      assert.equal(claim.hash, "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a");
+      assert.equal(claim.status, "hash-drift");
+    } else {
+      assert.equal(claim.hash, digest(source), claim.document);
+      assert.equal(claim.status, "hash-current");
+    }
+  }
   assert.equal(report.unreferenced.filter((item) => item.file === file).length, 0);
 });
 
@@ -497,7 +549,7 @@ test("current P48/P50 source maps cover each live candidate and fingerprint", ()
   assert.ok(oldMappingRows.every((record) => record.temporalScope === "historical"));
   assert.equal(
     oldMappingRows.filter((record) => record.status === "identity-not-found").length,
-    81,
+    80,
   );
   const earlyP50Start = documentLines.findIndex(
     (line) => line === "## 8. P50 早期当前源码映射（已由第15节替代）",
@@ -848,7 +900,8 @@ test("current home dashboard map covers all current routes, form actions and evi
       record.document.endsWith(document) &&
       record.sourceFile === file &&
       record.currentLine !== null &&
-      record.claim.includes("HD-CURRENT-"),
+      record.claim.includes("HD-CURRENT-") &&
+      record.temporalScope !== "historical",
   );
   assert.equal(candidates.length, 18);
   assert.deepEqual(
@@ -1578,7 +1631,7 @@ test("current P47 adapter center reconciles all candidates and isolates its supe
       record.currentLine !== null &&
       record.temporalScope !== "historical",
   );
-  assert.equal(candidates.length, 16);
+  assert.equal(candidates.length, 18);
   assert.deepEqual(
     [...new Set(currentRows.map((record) => record.candidateId))].sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
@@ -1623,7 +1676,6 @@ test("current P47 adapter center reconciles all candidates and isolates its supe
     }
   }
   for (const [sourceDocument, candidateId] of [
-    [document, "apps/web/src/components/ProviderRegistry.vue#2e080ad21acf1f26.1"],
     [
       "responsive-detail-focus-contract-review.md",
       "apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1",
@@ -2012,7 +2064,7 @@ test("current P57 notification action dialog maps reason and close versus cancel
       record.currentLine !== null &&
       record.temporalScope !== "historical",
   );
-  assert.equal(candidates.length, 6);
+  assert.equal(candidates.length, 7);
   assert.deepEqual(
     [...new Set(currentRows.map((record) => record.candidateId))].sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
@@ -2055,7 +2107,7 @@ test("current P51 task center maps missing state recovery and detail shell candi
   assert.equal(candidates.length, 23);
   assert.equal(currentRows.length, 5);
   const expectedCurrentIds = [
-    "3a210e63ca5a7831.1",
+    "43ae05ac7ae508fe.1",
     "16620352511db5c2.1",
     "6b55734308f206c3.1",
     "ed8b70dc2e6170f2.1",
@@ -2092,7 +2144,7 @@ test("current P51 task center maps missing state recovery and detail shell candi
       record.document.endsWith(document) && record.candidateId === `${file}#30e32a01e61d8558.1`,
   );
   assert.equal(sharedClose?.status, "identity-current");
-  assert.equal(sharedClose?.recordedLine, 868);
+  assert.equal(sharedClose?.recordedLine, 869);
   assert.match(sharedClose?.claim ?? "", /loading、error、loaded共用关闭详情/);
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
@@ -2467,7 +2519,10 @@ test("current P34 organization approvals map both pagers and isolate the histori
     "0ab42724896b9cf9.1",
   ].map((signature) => `${file}#${signature}`);
   assert.equal(candidates.length, 14);
-  assert.deepEqual(currentRows.map((record) => record.candidateId).sort(), expectedIds.sort());
+  assert.deepEqual(
+    [...new Set(currentRows.map((record) => record.candidateId))].sort(),
+    expectedIds.sort(),
+  );
   const historicalPagerRows = report.records.filter(
     (record) =>
       record.document.endsWith(document) &&
@@ -2485,9 +2540,12 @@ test("current P34 organization approvals map both pagers and isolate the histori
     assert.equal(record.status, "identity-current", record.candidateId);
     assert.equal(record.sourceBinding, "hash-current", record.candidateId);
     assert.equal(record.currentLine, candidate?.line, record.candidateId);
-    assert.equal(record.recordedLine, candidate?.line, record.candidateId);
-    assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+    if (record.recordedLine !== null) {
+      assert.equal(record.recordedLine, candidate?.line, record.candidateId);
+      assert.equal(record.recordedKind, candidate?.kind, record.candidateId);
+    }
   }
+  assert.equal(currentRows.filter((record) => record.recordedLine !== null).length, 4);
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
@@ -2510,7 +2568,7 @@ test("current P16 decision form map refreshes its line while isolating the super
   const document = "selection-journey-contract-review.md";
   const report = runContractAudit();
   const oldId = `${file}#5704caf4d4e8cd9d.1`;
-  const currentId = `${file}#5d5700a54ddffff7.1`;
+  const currentId = `${file}#ec0ddd60475ad5dd.1`;
   const historicalRow = report.records.find(
     (record) =>
       record.document.endsWith(document) &&
@@ -2527,8 +2585,8 @@ test("current P16 decision form map refreshes its line while isolating the super
   assert.equal(historicalRow?.currentLine, null);
   assert.equal(currentRow?.status, "identity-current");
   assert.equal(currentRow?.sourceBinding, "unrecorded");
-  assert.equal(currentRow?.recordedLine, 575);
-  assert.equal(currentRow?.currentLine, 575);
+  assert.equal(currentRow?.recordedLine, 619);
+  assert.equal(currentRow?.currentLine, 619);
   assert.equal(
     report.unreferenced.some((candidate) => candidate.candidateId === currentId),
     false,
@@ -2665,7 +2723,7 @@ test("P01 pre-split retry signature remains historical beside current parent-chi
   assert.equal(oldRow?.temporalScope, "historical");
   for (const candidateId of [
     "apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1",
-    "apps/web/src/components/LandingRedirectSurface.vue#bb7cd7dbbdfa84a2.1",
+    "apps/web/src/components/LandingRedirectSurface.vue#2b603370ce085d16.1",
   ]) {
     const record = report.records.find(
       (item) =>

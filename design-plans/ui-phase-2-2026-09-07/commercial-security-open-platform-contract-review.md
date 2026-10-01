@@ -185,41 +185,41 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 05407b8a7159149a.1 | 573 | form-event | OP60-LOAD 组织读取form |
-| 88a9882a80ac28a2.1 | 581 | control | OP60-LOAD 同form按钮 |
-| 32b3ac036c571c07.1 | 592 | control | OP60-SECRET 复制 |
-| 0b5f3917e5414006.1 | 593 | control | OP60-SECRET 安全保存后清除并使迟到密钥响应失效 |
-| 1c008f867673db60.1 | 618 | control | OP60-TECH 请求详情 |
-| 5367bd616a3abe62.1 | 662 | control | OP60-LOAD 首读错误重试 |
-| b70e50f696b891f1.1 | 791 | event-binding | OP60-EVENT 四事件checkbox转发 |
-| 7a625f6edefd5043.1 | 813 | control | OP60-NEW 两类创建转确认 |
-| a67ea3327ba9afd7.1 | 836 | control | OP60-LOAD 刷新 |
-| 1a48a72d882d501b.1 | 840 | form-event | OP60-FILTER form |
-| cec60f4bd63b9b5e.1 | 868 | control | OP60-FILTER 同form按钮 |
-| 2f1b49bdefe2e793.1 | 869 | control | OP60-RESET 重置 |
-| 2c7db35d039ef2f4.1 | 875 | control | OP60-RESET 空态清除 |
-| f8b804e268ceefea.1 | 915 | control | OP60-CLIENT-ROTATE 桌面 |
-| 1c4ff4af0e8fd8d3.1 | 916 | control | OP60-CLIENT-REVOKE 桌面 |
-| 1c008f867673db60.2 | 659 | control | OP60-TECH Client桌面 |
-| 1c008f867673db60.3 | 924 | control | OP60-TECH Client移动 |
-| 7510ef03037c8a3a.1 | 982 | control | OP60-CLIENT-ROTATE 移动 |
-| 1df8fceeaa98b0b3.1 | 983 | control | OP60-CLIENT-REVOKE 移动 |
-| dd00f77d258cbab6.1 | 1025 | control | OP60-HOOK-STATUS 桌面 |
-| 1f4e699773a73075.1 | 1027 | control | OP60-HOOK-TEST 桌面 |
-| 861b950a0ddc1651.1 | 1033 | control | OP60-HOOK-ROTATE 桌面 |
-| 1c008f867673db60.4 | 965 | control | OP60-TECH Webhook桌面 |
-| 1c008f867673db60.5 | 1038 | control | OP60-TECH Webhook移动 |
-| 3a8f13d630c643d0.1 | 1090 | control | OP60-HOOK-STATUS 移动 |
-| aafad6da5f70f220.1 | 1092 | control | OP60-HOOK-TEST 移动 |
-| 861b950a0ddc1651.2 | 1098 | control | OP60-HOOK-ROTATE 移动 |
-| 92629450188f4d4f.1 | 1140 | control | OP60-REPLAY 桌面 |
-| 1c008f867673db60.6 | 1074 | control | OP60-TECH 投递桌面 |
-| 1c008f867673db60.7 | 1150 | control | OP60-TECH 投递移动 |
-| 92629450188f4d4f.2 | 1215 | control | OP60-REPLAY 移动 |
-| 5535b1d4b215afda.1 | 1231 | control | OP60-PAGE 上一页 |
-| 266a3696f502c16e.1 | 1237 | control | OP60-PAGE 下一页 |
-| 7dff4b4ffb8ff617.1 | 1260 | event-binding | OP60-CONFIRM 确认/取消事件转发 |
-| 0e765674026efce4.1 | 1260 | dialog-component-call | OP60-CONFIRM 共享组件调用候选 |
+| 05407b8a7159149a.1 | 648 | form-event | OP60-LOAD 组织读取form |
+| 88a9882a80ac28a2.1 | 656 | control | OP60-LOAD 同form按钮 |
+| 32b3ac036c571c07.1 | 675 | control | OP60-SECRET 复制 |
+| 0b5f3917e5414006.1 | 676 | control | OP60-SECRET 安全保存后清除并使迟到密钥响应失效 |
+| 1c008f867673db60.1 | 701 | control | OP60-TECH 请求详情 |
+| 5367bd616a3abe62.1 | 745 | control | OP60-LOAD 首读错误重试 |
+| b70e50f696b891f1.1 | 874 | event-binding | OP60-EVENT 四事件checkbox转发 |
+| 7a625f6edefd5043.1 | 896 | control | OP60-NEW 两类创建转确认 |
+| a67ea3327ba9afd7.1 | 919 | control | OP60-LOAD 刷新 |
+| 1a48a72d882d501b.1 | 923 | form-event | OP60-FILTER form |
+| cec60f4bd63b9b5e.1 | 951 | control | OP60-FILTER 同form按钮 |
+| 2f1b49bdefe2e793.1 | 952 | control | OP60-RESET 重置 |
+| 2c7db35d039ef2f4.1 | 958 | control | OP60-RESET 空态清除 |
+| f8b804e268ceefea.1 | 998 | control | OP60-CLIENT-ROTATE 桌面 |
+| 1c4ff4af0e8fd8d3.1 | 999 | control | OP60-CLIENT-REVOKE 桌面 |
+| 1c008f867673db60.2 | 742 | control | OP60-TECH Client桌面 |
+| 1c008f867673db60.3 | 1007 | control | OP60-TECH Client移动 |
+| 7510ef03037c8a3a.1 | 1065 | control | OP60-CLIENT-ROTATE 移动 |
+| 1df8fceeaa98b0b3.1 | 1066 | control | OP60-CLIENT-REVOKE 移动 |
+| dd00f77d258cbab6.1 | 1108 | control | OP60-HOOK-STATUS 桌面 |
+| 1f4e699773a73075.1 | 1110 | control | OP60-HOOK-TEST 桌面 |
+| 861b950a0ddc1651.1 | 1116 | control | OP60-HOOK-ROTATE 桌面 |
+| 1c008f867673db60.4 | 1048 | control | OP60-TECH Webhook桌面 |
+| 1c008f867673db60.5 | 1121 | control | OP60-TECH Webhook移动 |
+| 3a8f13d630c643d0.1 | 1173 | control | OP60-HOOK-STATUS 移动 |
+| aafad6da5f70f220.1 | 1175 | control | OP60-HOOK-TEST 移动 |
+| 861b950a0ddc1651.2 | 1181 | control | OP60-HOOK-ROTATE 移动 |
+| 92629450188f4d4f.1 | 1223 | control | OP60-REPLAY 桌面 |
+| 1c008f867673db60.6 | 1157 | control | OP60-TECH 投递桌面 |
+| 1c008f867673db60.7 | 1233 | control | OP60-TECH 投递移动 |
+| 92629450188f4d4f.2 | 1298 | control | OP60-REPLAY 移动 |
+| 5535b1d4b215afda.1 | 1314 | control | OP60-PAGE 上一页 |
+| 266a3696f502c16e.1 | 1320 | control | OP60-PAGE 下一页 |
+| 7dff4b4ffb8ff617.1 | 1343 | event-binding | OP60-CONFIRM 确认/取消事件转发 |
+| 0e765674026efce4.1 | 1343 | dialog-component-call | OP60-CONFIRM 共享组件调用候选 |
 
 ### OpenPlatformCenter
 
@@ -263,25 +263,25 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| 217f0846e7bba1ee.1 | 608 | control | OP60-CURRENT-TRACE / 展开本次读取关联编号 |
-| e4c0454be34c0156.1 | 611 | control | OP60-CURRENT-LOAD / 重读当前组织和已选列表快照 |
-| 378899e48c4d8c4e.1 | 667 | control | OP60-CURRENT-VIEW / 切换到接口访问账号目录并显示其汇总 |
-| e16baed7fd7574cb.1 | 680 | control | OP60-CURRENT-VIEW / 切换到事件回调地址目录并显示其汇总 |
-| b224f20b7d8e3bc6.1 | 690 | control | OP60-CURRENT-VIEW / 切换到投递记录目录并显示其汇总 |
-| 4fe0f29d19fbaf47.1 | 705 | dialog-component-call | OP60-CURRENT-CREATE / 调用新增Client/Webhook共享创建确认窗，不直接写入 |
-| 1c008f867673db60.8 | 1195 | control | OP60-CURRENT-TECH / 展开移动投递详情技术信息 |
-| f371f0b36489e592.1 | 1249 | event-binding | OP60-CURRENT-REASON / 转发原因窗关闭/提交意图给当前操作所有者 |
-| 55ddee7e496796ca.1 | 1249 | dialog-component-call | OP60-CURRENT-REASON / 调用发布、轮换、撤销或重放原因确认窗 |
+| 217f0846e7bba1ee.1 | 691 | control | OP60-CURRENT-TRACE / 展开本次读取关联编号 |
+| e4c0454be34c0156.1 | 694 | control | OP60-CURRENT-LOAD / 重读当前组织和已选列表快照 |
+| 378899e48c4d8c4e.1 | 750 | control | OP60-CURRENT-VIEW / 切换到接口访问账号目录并显示其汇总 |
+| e16baed7fd7574cb.1 | 763 | control | OP60-CURRENT-VIEW / 切换到事件回调地址目录并显示其汇总 |
+| b224f20b7d8e3bc6.1 | 773 | control | OP60-CURRENT-VIEW / 切换到投递记录目录并显示其汇总 |
+| 4fe0f29d19fbaf47.1 | 788 | dialog-component-call | OP60-CURRENT-CREATE / 调用新增Client/Webhook共享创建确认窗，不直接写入 |
+| 1c008f867673db60.8 | 1278 | control | OP60-CURRENT-TECH / 展开移动投递详情技术信息 |
+| f371f0b36489e592.1 | 1332 | event-binding | OP60-CURRENT-REASON / 转发原因窗关闭/提交意图给当前操作所有者 |
+| 55ddee7e496796ca.1 | 1332 | dialog-component-call | OP60-CURRENT-REASON / 调用发布、轮换、撤销或重放原因确认窗 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/OpenPlatformCenter.vue | 888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa |
+| apps/web/src/components/OpenPlatformCenter.vue | f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859 |
 
 本节与原有OP60请求/权限/密钥/投递合同并列；所有映射均为静态源码身份，不验证数据库、真实外部回调、RBAC、密钥隔离或生产交付。
 | apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
 | apps/web/src/components/TableViewControls.vue | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
 | apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
-| apps/web/src/use-modal-dialog.ts | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
+| apps/web/src/use-modal-dialog.ts | c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957 |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/api/src/commercial-routes.ts | 0a05af04dc9264c7aad783653e461858b8c6b7e464bfaea903b8f3df018f371b |
 | apps/api/src/commercial-service.ts | 14efec9b0a8fe912ad4c19d560c4ef5ab91c124a5d0d452c9e1f2615b940df76 |
@@ -404,4 +404,4 @@ service/repository 源与内存适配器复现同键改内容误报成功。6 �
 
 | 当前源文件 | 当前LF SHA-256 | 当前候选 | 语义组 |
 | --- | --- | ---: | ---: |
-| apps/web/src/components/OpenPlatformCenter.vue | 888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa | 44 | 20 |
+| apps/web/src/components/OpenPlatformCenter.vue | f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859 | 44 | 20 |

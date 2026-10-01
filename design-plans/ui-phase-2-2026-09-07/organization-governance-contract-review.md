@@ -51,8 +51,8 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | R | 80a9a04eee3d9d46.1 | OG-TECH · 读取详情与追踪原生折叠，无API |
 | A | 95030381fd924d2b.1 | OG-A-REQUEST-FILTER · 当前审批记录上一页 |
 | A | 87f27ee40744d069.1 | OG-A-REQUEST-FILTER · 当前审批记录下一页 |
-| A | 25d2be8fec5c35cd.1 | OG-A-CURRENT-PAGINATION / 模板上一页 |
-| A | 62fcf758cc715685.1 | OG-A-CURRENT-PAGINATION / 模板下一页 |
+| A | 688 / 25d2be8fec5c35cd.1 | OG-A-CURRENT-PAGINATION / 模板上一页 |
+| A | 691 / 62fcf758cc715685.1 | OG-A-CURRENT-PAGINATION / 模板下一页 |
 | C | d6b520278ab3dd57.1,5878e30377f290ae.1 | OG-PROFILE-SAVE |
 | C | 1cbd108c64b5230c.1 | OG-PROFILE-LOGO浏览器有效性 |
 | C | 6a563eeaa67fea90.1 | P30全部成员事件父转发，复用M语义 |
@@ -194,16 +194,16 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| `apps/web/src/components/OrganizationAdminCenter.vue` | `2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86` |
+| `apps/web/src/components/OrganizationAdminCenter.vue` | `06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0` |
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
 | `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
 | `apps/web/src/components/OrganizationTeamPanel.vue` | `2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee` |
 | `apps/web/src/components/OrganizationDataPanel.vue` | `00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270` |
 | `apps/web/src/components/OrganizationTokenPanel.vue` | `f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c` |
 | `apps/web/src/components/OrganizationAuditPanel.vue` | `e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d` |
-| `apps/web/src/components/AuditedReasonDialog.vue` | 3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a |
-| `apps/web/src/use-audited-reason.ts` | `e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab` |
-| `apps/web/src/use-modal-dialog.ts` | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
+| `apps/web/src/components/AuditedReasonDialog.vue` | 0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9 |
+| `apps/web/src/use-audited-reason.ts` | `90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007` |
+| `apps/web/src/use-modal-dialog.ts` | c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957 |
 | `apps/web/src/api-client.ts` | `953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff` |
 | `apps/web/src/organization-admin.css` | `831b6561d1cbc5c46e6b3f9a2092c21685a8d8bcebd436e4c33fa2f3ae1248ee` |
 | `apps/web/src/organization-audit.css` | `383780e913c10518651362f14462a651c52b7da030764567fe6033e2fa87d17d` |

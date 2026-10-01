@@ -24,18 +24,18 @@ LF归一SHA256。七个交互候选文件完整扫描；辅助文件只沿相关
 | 文件 | SHA256 |
 | --- | --- |
 | apps/web/src/components/DiscoveryOverlay.vue | 2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977 |
-| apps/web/src/components/NavigationShell.vue | da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9 |
+| apps/web/src/components/NavigationShell.vue | 25cdd5e342935ec0ed531c5ed2d50678a72f8f4478d8183f117636244f0d2efe |
 | apps/web/src/components/NavigationAccessPanel.vue | 3d2cb2dca56e68dbdbad880b4879b9739b5f86537c4e119495a1324f558c7338 |
 | apps/web/src/components/NotFoundPage.vue | 51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d |
-| apps/web/src/components/OrganizationRolePanel.vue | aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415 |
+| apps/web/src/components/OrganizationRolePanel.vue | 4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809 |
 | apps/web/src/components/UiStateShowcase.vue | 91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09 |
-| apps/web/src/use-modal-dialog.ts | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
+| apps/web/src/use-modal-dialog.ts | c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957 |
 | apps/web/src/use-navigation-discovery.ts | e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94 |
 | apps/web/src/use-navigation-shell-theme.ts | b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56 |
 | apps/web/src/navigation-memory.ts | af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f |
 | apps/web/src/navigation-shell-permissions.ts | 8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1 |
 | apps/web/src/navigation-shell-route-state.ts | 7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458 |
-| apps/web/src/components/OrganizationAdminCenter.vue | 2f0dabcdbefed9b7f74254cc71ba6127894e7cb585950e7743c2e8c056bb4d86 |
+| apps/web/src/components/OrganizationAdminCenter.vue | 06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0 |
 | apps/web/src/App.vue | e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531 |
 | apps/web/src/router.ts | 67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4 |
 | apps/api/src/discovery-routes.ts | 7c281090d8f7e76121b0abcdf1c88b40d066cdcad38f5d9a4e6e2df29d886579 |
@@ -64,38 +64,38 @@ LF归一SHA256。七个交互候选文件完整扫描；辅助文件只沿相关
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/components/NavigationShell.vue#d597913db5935f66.1 | 284 | control | shell.brand | 按三种shell跳转/home、/org-admin或/platform-admin | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#4406969a265df88c.1 | 303 | control | shell.menu.toggle | menuOpen取反；控制role-navigation，不写业务数据 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#8dd0e178ad9b3805.1 | 315 | control | shell.theme.toggle | themeOpen取反；是浮层开关，不是原生dialog | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3e7327184ae485df.1 | 319 | control | discovery.open.search | member搜索入口；openDiscovery(search) | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#a7c175d8d28f0e5d.1 | 322 | control | shell.platform.organization.new | platform_admin且platform:superadmin时导航到创建组织页，不在此创建 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#144c13fb8312e48f.1 | 329 | control | shell.organization.members | organization_admin壳层且guard.roles含organization_admin时导航成员页，不发送邀请 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#4a47ef3decd65106.1 | 337 | control | discovery.open.create | member快捷入口；openDiscovery(create)，不创建实体 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5f177f6584a8f0d2.1 | 346 | control | shell.notifications | member导航/notifications | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#834cb169e185e0d1.1 | 348 | control | shell.account | 导航/me，目标为AccountShell | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#31e4cab37308ba7f.1 | 389 | control | shell.navigation.group.toggle | 原生details/summary；按动态group展开，搜索时自动open | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#b78108402d8cae8b.1 | 394 | control | shell.navigation.item | 按授权items导航；同时关闭menuOpen并清空menuQuery | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3afd6f3de7d5759c.1 | 407 | control | shell.platform.return.context | 平台返回先选范围；return_to为最近成员路由，from为当前fullPath | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#a37faaadc1909cc4.1 | 413 | control | shell.organization.return.member | 组织壳层返回getLastMemberRoute() | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3eee0be2f448f7bb.1 | 419 | control | shell.member.enter.organization | member且guard.roles含organization_admin才显示 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#8ca53865fab9dca4.1 | 425 | control | shell.member.enter.platform | member且guard.platform_roles非空才显示；导航不是授权证明 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#ff6d5fbc586803ed.1 | 443 | control | shell.gate.technical.toggle | requestId/traceId存在时披露故障详情 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5587941412d5210f.1 | 447 | control | shell.gate.login | 导航读取expired时去/login；当前代码不附带return_to | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#35c184e325be143b.1 | 448 | control | shell.gate.context | context_required去/select-context | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#31a7202bbbcbf38a.1 | 450 | control | shell.gate.home | 导航读取forbidden去/home | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#b83ca94093e36cba.1 | 451 | control | shell.gate.retry | 非loading且非前三类恢复链接时load()；重读/me/navigation | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#be9e2c92e3dca900.1 | 456 | control | shell.breadcrumb.navigate | breadcrumbTrail产生path才可导航；无path只显示文本 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#827ec3c5575d94f5.1 | 512 | control | shell.context.disclose | 上下文原生details；非机会ID页面，响应式可见性另验 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#3a4be4a53966fde8.1 | 541 | control | shell.operations.navigate | 平台运维二级导航固定十项目；链接展示不代替目标路由权限 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#155e2256621bdcb3.1 | 562 | control | shell.navigation.item | 移动primaryItems=items前四项；同导航语义的另一个渲染点，此处不清menuQuery | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#0b2e86222c168adc.1 | 568 | control | shell.menu.open | 移动更多仅设置menuOpen=true，不等于toggle | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#8c3e23399022ee54.1 | 579 | control | shell.theme.choose.{themeId} | 三主题动态按钮；member/org版本化保存，platform只本地应用；见主题边界 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#f8690b21af426414.1 | 594 | control | shell.theme.settings | 导航/settings/theme；此链接本身没有关闭themeOpen处理 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#c5cd954168e369ca.1 | 599 | event-binding | discovery.close | DiscoveryOverlay的close事件转closeDiscovery()，清discoveryMode | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1 | 599 | dialog-component-call | discovery.dialog | DiscoveryOverlay组件调用；搜索/创建两变体，与定义非重复业务弹窗 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#34b7254ab249a203.1 | 357 | dialog-definition | shell.menu.toggle | 移动原生导航dialog，由showModal打开；不新增业务弹窗或写入 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#ac4098542a6fc500.1 | 357 | event-binding | shell.menu.toggle | Escape、dialog关闭及背景点击统一设menuOpen=false；Tab由containTab处理 | UI2-SH01–SH06 |
-| apps/web/src/components/NavigationShell.vue#f21698ff0cf909b4.1 | 366 | control | shell.menu.toggle | 紧凑导航中的显式关闭入口，仅设置menuOpen=false | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#d597913db5935f66.1 | 291 | control | shell.brand | 按三种shell跳转/home、/org-admin或/platform-admin | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#4406969a265df88c.1 | 310 | control | shell.menu.toggle | menuOpen取反；控制role-navigation，不写业务数据 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#8dd0e178ad9b3805.1 | 322 | control | shell.theme.toggle | themeOpen取反；是浮层开关，不是原生dialog | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3e7327184ae485df.1 | 326 | control | discovery.open.search | member搜索入口；openDiscovery(search) | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#a7c175d8d28f0e5d.1 | 329 | control | shell.platform.organization.new | platform_admin且platform:superadmin时导航到创建组织页，不在此创建 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#144c13fb8312e48f.1 | 336 | control | shell.organization.members | organization_admin壳层且guard.roles含organization_admin时导航成员页，不发送邀请 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#4a47ef3decd65106.1 | 344 | control | discovery.open.create | member快捷入口；openDiscovery(create)，不创建实体 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5f177f6584a8f0d2.1 | 353 | control | shell.notifications | member导航/notifications | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#834cb169e185e0d1.1 | 355 | control | shell.account | 导航/me，目标为AccountShell | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#31e4cab37308ba7f.1 | 409 | control | shell.navigation.group.toggle | 原生details/summary；按动态group展开，搜索时自动open | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#b78108402d8cae8b.1 | 414 | control | shell.navigation.item | 按授权items导航；同时关闭menuOpen并清空menuQuery | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3afd6f3de7d5759c.1 | 427 | control | shell.platform.return.context | 平台返回先选范围；return_to为最近成员路由，from为当前fullPath | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#a37faaadc1909cc4.1 | 433 | control | shell.organization.return.member | 组织壳层返回getLastMemberRoute() | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3eee0be2f448f7bb.1 | 439 | control | shell.member.enter.organization | member且guard.roles含organization_admin才显示 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#8ca53865fab9dca4.1 | 445 | control | shell.member.enter.platform | member且guard.platform_roles非空才显示；导航不是授权证明 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#ff6d5fbc586803ed.1 | 464 | control | shell.gate.technical.toggle | requestId/traceId存在时披露故障详情 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5587941412d5210f.1 | 468 | control | shell.gate.login | 导航读取expired时去/login；当前代码不附带return_to | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#35c184e325be143b.1 | 469 | control | shell.gate.context | context_required去/select-context | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#31a7202bbbcbf38a.1 | 471 | control | shell.gate.home | 导航读取forbidden去/home | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#b83ca94093e36cba.1 | 472 | control | shell.gate.retry | 非loading且非前三类恢复链接时load()；重读/me/navigation | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#be9e2c92e3dca900.1 | 477 | control | shell.breadcrumb.navigate | breadcrumbTrail产生path才可导航；无path只显示文本 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#827ec3c5575d94f5.1 | 529 | control | shell.context.disclose | 上下文原生details；非机会ID页面，响应式可见性另验 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#3a4be4a53966fde8.1 | 554 | control | shell.operations.navigate | 平台运维二级导航固定十项目；链接展示不代替目标路由权限 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#155e2256621bdcb3.1 | 575 | control | shell.navigation.item | 移动primaryItems=items前四项；同导航语义的另一个渲染点，此处不清menuQuery | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#0b2e86222c168adc.1 | 581 | control | shell.menu.open | 移动更多仅设置menuOpen=true，不等于toggle | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#8c3e23399022ee54.1 | 592 | control | shell.theme.choose.{themeId} | 三主题动态按钮；member/org版本化保存，platform只本地应用；见主题边界 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#f8690b21af426414.1 | 607 | control | shell.theme.settings | 导航/settings/theme；此链接本身没有关闭themeOpen处理 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#c5cd954168e369ca.1 | 612 | event-binding | discovery.close | DiscoveryOverlay的close事件转closeDiscovery()，清discoveryMode | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#5e8a6b546ab251fb.1 | 612 | dialog-component-call | discovery.dialog | DiscoveryOverlay组件调用；搜索/创建两变体，与定义非重复业务弹窗 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#34b7254ab249a203.1 | 358 | dialog-definition | shell.menu.toggle | 移动原生导航dialog，由showModal打开；不新增业务弹窗或写入 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#ac4098542a6fc500.1 | 358 | event-binding | shell.menu.toggle | Escape、dialog关闭及背景点击统一设menuOpen=false；Tab由containTab处理 | UI2-SH01–SH06 |
+| apps/web/src/components/NavigationShell.vue#f21698ff0cf909b4.1 | 367 | control | shell.menu.toggle | 紧凑导航中的显式关闭入口，仅设置menuOpen=false | UI2-SH01–SH06 |
 | apps/web/src/use-navigation-shell-drawer.ts#90a3ed569be8deb0.1 | 59 | dialog-script-call | shell.menu.open | 仅在目标dialog未打开时调用showModal；不重复改变业务数据 | UI2-SH01–SH06 |
 
 ### apps/web/src/components/NavigationAccessPanel.vue
@@ -118,25 +118,25 @@ LF归一SHA256。七个交互候选文件完整扫描；辅助文件只沿相关
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/components/OrganizationRolePanel.vue#24237df37bd7b7e4.1 | 266 | control | role.section.{section} | roles/scopes/grants三分区本地切换，保留各区局部状态 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#f7e8f2a9a0457015.1 | 293 | control | role.select.{roleCode} | 选角色模板仅更新selectedRoleCode；不是赋予角色 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#23a85da051801987.1 | 322 | control | role.capability.technical.toggle | 原生details披露所选角色技术能力名称 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#be3f3fa4fcf2fb2c.1 | 358 | control | role.capability.filter.reset | 清capabilityQuery与capabilityGroup；不改roleQuery | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#5235116f7947ac74.1 | 433 | control | role.scope.filter.reset | 清scopeQuery与scopeFilter | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#24237df37bd7b7e4.1 | 331 | control | role.section.{section} | roles/scopes/grants三分区本地切换，保留各区局部状态 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#f7e8f2a9a0457015.1 | 358 | control | role.select.{roleCode} | 选角色模板仅更新selectedRoleCode；不是赋予角色 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#23a85da051801987.1 | 387 | control | role.capability.technical.toggle | 原生details披露所选角色技术能力名称 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#be3f3fa4fcf2fb2c.1 | 423 | control | role.capability.filter.reset | 清capabilityQuery与capabilityGroup；不改roleQuery | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#5235116f7947ac74.1 | 498 | control | role.scope.filter.reset | 清scopeQuery与scopeFilter | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#670d77735585203d.1 | 533 | control | grant.create.form.toggle | canManage时创建/取消内联表单；隐藏本身不清父级grantForm | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#29016e256374347e.1 | 538 | form-event | grant.create.submit | 原生form先做字段有效性拦截，合法submit emit createGrant；父级校验、POST、刷新与审计反馈 | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#4aa69073e388c5f4.1 | 574 | event-binding | grant.create.type.change | emit updateGrantType；父级替换类型并将actions设该类型首个动作 | UI2-RP01–RP05 |
 | apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1 | 685 | control | grant.create.submit | 默认submit按钮；busy或actions空时禁用，与表单同一业务提交 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#8bd3f7b2e5dcb44f.1 | 545 | control | grant.status.select.{status} | all/active/expired/revoked；emit updateGrantStatus，父级页码重置1并读取 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#a162032f86484b89.1 | 570 | control | grant.select.{grantId} | 本地选中当前页授权；不调用授权修改接口 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#5f937fb211eb5840.1 | 624 | control | grant.technical.toggle | 披露资源与授权ID，不是打开另一个弹窗 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#201e6ad7077e4318.1 | 628 | form-event | grant.expiry.submit | active且canManage的内联表单；emit grant/reason/expires_at给父级PATCH；2026-09-10字段说明改变AST标签签名，日期min反映既有后端严格延期规则 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#8c59567be7cef9a3.1 | 674 | control | grant.expiry.submit | 默认submit按钮；busy禁用，与延期表单同动作 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#5be3d5846e4138fa.1 | 675 | control | grant.revoke.request | active且canManage；emit revokeGrant，父级先询问审计原因后POST | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#bf5c2f057a07f3f3.1 | 689 | control | grant.page.previous | 有grantMeta.total时上一页；busy或page<=1禁用 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#085ead5af6973fef.1 | 697 | control | grant.page.next | 下一页；busy或page>=pageCount禁用 | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#a6d03f8144116449.1 | 708 | control | grant.create.form.open | grantTotal=0且canManage时打开首条授权表单，不直接POST | UI2-RP01–RP05 |
-| apps/web/src/components/OrganizationRolePanel.vue#cd26859a239383fd.1 | 713 | control | grant.status.all | grantTotal>0但当前meta.total为空时重读全部状态；busy禁用 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#8bd3f7b2e5dcb44f.1 | 692 | control | grant.status.select.{status} | all/active/expired/revoked；emit updateGrantStatus，父级页码重置1并读取 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#a162032f86484b89.1 | 717 | control | grant.select.{grantId} | 本地选中当前页授权；不调用授权修改接口 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#5f937fb211eb5840.1 | 771 | control | grant.technical.toggle | 披露资源与授权ID，不是打开另一个弹窗 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#201e6ad7077e4318.1 | 775 | form-event | grant.expiry.submit | active且canManage的内联表单；emit grant/reason/expires_at给父级PATCH；2026-09-10字段说明改变AST标签签名，日期min反映既有后端严格延期规则 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#8c59567be7cef9a3.1 | 821 | control | grant.expiry.submit | 默认submit按钮；busy禁用，与延期表单同动作 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#5be3d5846e4138fa.1 | 822 | control | grant.revoke.request | active且canManage；emit revokeGrant，父级先询问审计原因后POST | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#bf5c2f057a07f3f3.1 | 836 | control | grant.page.previous | 有grantMeta.total时上一页；busy或page<=1禁用 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#085ead5af6973fef.1 | 844 | control | grant.page.next | 下一页；busy或page>=pageCount禁用 | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#a6d03f8144116449.1 | 855 | control | grant.create.form.open | grantTotal=0且canManage时打开首条授权表单，不直接POST | UI2-RP01–RP05 |
+| apps/web/src/components/OrganizationRolePanel.vue#cd26859a239383fd.1 | 860 | control | grant.status.all | grantTotal>0但当前meta.total为空时重读全部状态；busy禁用 | UI2-RP01–RP05 |
 
 ### apps/web/src/components/UiStateShowcase.vue
 
@@ -153,7 +153,7 @@ LF归一SHA256。七个交互候选文件完整扫描；辅助文件只沿相关
 
 | candidateId | 行 | 类型 | 语义归属 | 真实动作与边界 | 待验组 |
 | --- | --- | --- | --- | --- | --- |
-| apps/web/src/use-modal-dialog.ts#524dddb64d598a2e.1 | 14 | dialog-script-call | modal.native.lifecycle | showModal工具调用位置；不是业务动作或某一个弹窗变体，逐调用方展开 | UI2-SM01–SM02 |
+| apps/web/src/use-modal-dialog.ts#524dddb64d598a2e.1 | 58 | dialog-script-call | modal.native.lifecycle | showModal工具调用位置；不是业务动作或某一个弹窗变体，逐调用方展开 | UI2-SM01–SM02 |
 
 ## 4. 扫描器不计入70项的输入与动态状态
 
@@ -205,7 +205,7 @@ P72八态行为沿用原ST表，loading不显示操作；error/blocked重试是�
 
 | 当前子组件candidateId | 行 | 类型 | 稳定语义归属 | 本页边界 |
 | --- | ---: | --- | --- | --- |
-| apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1 | 71 | control | ST-PRIMARY | 仅P72状态卡片调用上下文；非loading时emit primary，由父级既有八态逻辑决定本地示例或导航 |
+| apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1 | 73 | control | ST-PRIMARY | 仅P72状态卡片调用上下文；非loading时emit primary，由父级既有八态逻辑决定本地示例或导航 |
 | apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1 | 75 | control | ST-SECONDARY | 仅存在文案且非loading时emit secondary；不推断该共享组件其他消费者 |
 
 App仅DEV条件导入UiStateShowcase/VerificationFramework，NavigationShell glob显式排除二者；本批不构建、不检生产bundle，因此不声称当前生产不可达已验证。P72使用具体URL和DEV query分开验收，P73用实际未知路径，不请求字面量通配路由。

@@ -28,15 +28,15 @@ SelectionJourney本地10个控件/事件候选、0弹窗候选。下列尾键的
 
 | 行  | 候选尾键           | 语义ID / 结果                                                            |
 | --- | ------------------ | ------------------------------------------------------------------------ |
-| 247 | feb47750cbf8d6c2.1 | J-NAV-LIST：RouterLink /opportunities                                    |
+| 451 | feb47750cbf8d6c2.1 | J-NAV-LIST：RouterLink /opportunities                                    |
 | 249 | ea132f1592801c04.1 | J-STATE-PRIMARY / SECONDARY：按当前journey与错误类型处理                 |
 | 257 | 59498db8867f4665.1 | J-CREATE：form submit                                                    |
 | 300 | 09bdfc68bbfc5530.1 | J-CREATE：忙碌禁用按钮，同一动作                                         |
-| 371 | ffaf47bf1a32fcaf.1 | J-SOURCE：每候选原文外链，target=_blank、noopener noreferrer、click.stop |
+| 589 | ffaf47bf1a32fcaf.1 | J-SOURCE：每候选原文外链，target=_blank、noopener noreferrer、click.stop |
 | 405 | 5704caf4d4e8cd9d.1 | J-DECIDE：内联form submit，三动作变体                                    |
 | 444 | 1e10e5e77e7fc48e.1 | J-DECIDE：忙碌禁用按钮，同一动作                                         |
-| 452 | 2982f925c629be51.1 | J-NAV-OPPORTUNITY：仅返回opportunity_id时到P18                           |
-| 455 | d3e6b84b6df72d56.1 | J-NAV-TASK：仅返回verification_task_id时到P24                            |
+| 715 | 2982f925c629be51.1 | J-NAV-OPPORTUNITY：仅返回opportunity_id时到P18                           |
+| 720 | d3e6b84b6df72d56.1 | J-NAV-TASK：仅返回verification_task_id时到P24                            |
 | 464 | 2c481a724f0e9b09.1 | J-RESET：清当前展示/活动ID，回输入，不取消后台任务                       |
 
 | 输入语义                         | 现有字段/条件/校验                                                                                                       | 请求与草稿行为                                                                                                                                                                 |
@@ -122,16 +122,16 @@ P16十项规格和合同让N01–N03的P14/P15/P16/P18四份规格均有实际�
 
 | 当前行 | 当前候选尾键       | N03旧尾键          | 稳定语义ID / 本次变化                                                       |
 | ------ | ------------------ | ------------------ | --------------------------------------------------------------------------- |
-| 293    | feb47750cbf8d6c2.1 | 同左               | J-NAV-LIST；仅源码位置变化                                                  |
-| 295    | 8026812b48a68031.1 | ea132f1592801c04.1 | J-STATE-PRIMARY/SECONDARY；恢复重试分支与主按钮文案更新                     |
+| 451    | feb47750cbf8d6c2.1 | 同左               | J-NAV-LIST；仅源码位置变化                                                  |
+| 453    | 8026812b48a68031.1 | ea132f1592801c04.1 | J-STATE-PRIMARY/SECONDARY；恢复重试分支与主按钮文案更新                     |
 | 304    | 8c00555eac0c2a19.1 | 59498db8867f4665.1 | J-CREATE；同一submit=create，表单内忙碌文字改变签名                         |
-| 347    | 8471b8c4a13a52ef.1 | 09bdfc68bbfc5530.1 | J-CREATE；新增reading禁用与恢复文案；旧button-554经精确label/attributes关联 |
-| 418    | ffaf47bf1a32fcaf.1 | 同左               | J-SOURCE；原文链接不变                                                      |
+| 510    | 8471b8c4a13a52ef.1 | 09bdfc68bbfc5530.1 | J-CREATE；新增reading禁用与恢复文案；旧button-554经精确label/attributes关联 |
+| 589    | ffaf47bf1a32fcaf.1 | 同左               | J-SOURCE；原文链接不变                                                      |
 | 452    | 5704caf4d4e8cd9d.1 | 同左               | J-DECIDE；三变体请求合同不变                                                |
 | 491    | dc2377b526f68954.1 | 1e10e5e77e7fc48e.1 | J-DECIDE；新增reading禁用                                                   |
-| 499    | 2982f925c629be51.1 | 同左               | J-NAV-OPPORTUNITY；返回链接不变                                             |
-| 502    | d3e6b84b6df72d56.1 | 同左               | J-NAV-TASK；返回链接不变                                                    |
-| 511    | 283a41d530253e0d.1 | 2c481a724f0e9b09.1 | J-RESET；busy禁用，读取中仍可重置并使旧GET失效                              |
+| 715    | 2982f925c629be51.1 | 同左               | J-NAV-OPPORTUNITY；返回链接不变                                             |
+| 720    | d3e6b84b6df72d56.1 | 同左               | J-NAV-TASK；返回链接不变                                                    |
+| 730    | 283a41d530253e0d.1 | 2c481a724f0e9b09.1 | J-RESET；busy禁用，读取中仍可重置并使旧GET失效                              |
 
 五处v-model、零本地弹窗未变；其他1367控件候选及100弹窗候选逐对象与刷新前一致。目录外54候选及其13来源哈希另经现有验证器核对，未改语义或运行通过状态。旧704项再次全部有源码对应，不代表全动作已运行。
 
@@ -143,16 +143,16 @@ SelectionJourney.vue LF SHA-256：05f5b3a2e469960bd8132bc4d3c8883bfab0b01df1952c
 
 | 当前行 | 当前候选尾键       | 本轮核对                                      | 稳定语义ID        |
 | ------ | ------------------ | --------------------------------------------- | ----------------- |
-| 339    | feb47750cbf8d6c2.1 | 返回列表，不取消任务                          | J-NAV-LIST        |
-| 341    | 8026812b48a68031.1 | primary读取原ID，secondary按现有状态解释/返回 | J-STATE-RECOVERY  |
+| 451    | feb47750cbf8d6c2.1 | 返回列表，不取消任务                          | J-NAV-LIST        |
+| 453    | 8026812b48a68031.1 | primary读取原ID，secondary按现有状态解释/返回 | J-STATE-RECOVERY  |
 | 350    | 8c00555eac0c2a19.1 | create表单，三输入与原body保持                | J-CREATE          |
-| 393    | 8471b8c4a13a52ef.1 | 创建submit，busy或reading禁用                 | J-CREATE          |
-| 464    | ffaf47bf1a32fcaf.1 | 原文安全新开，不等于radio默认行为全验         | J-SOURCE          |
+| 510    | 8471b8c4a13a52ef.1 | 创建submit，busy或reading禁用                 | J-CREATE          |
+| 589    | ffaf47bf1a32fcaf.1 | 原文安全新开，不等于radio默认行为全验         | J-SOURCE          |
 | 498    | 5704caf4d4e8cd9d.1 | decide表单，新增canAdopt函数保护及成功清错    | J-DECIDE          |
-| 537    | 56c9199d58a1af94.1 | 保存按钮新增采纳未达门禁用，旧dc2377签名失效  | J-DECIDE          |
-| 548    | 2982f925c629be51.1 | 按返回opportunity_id显示，不猜链接            | J-NAV-OPPORTUNITY |
-| 551    | d3e6b84b6df72d56.1 | 按返回verification_task_id显示                | J-NAV-TASK        |
-| 560    | 283a41d530253e0d.1 | reset保留旧决定草稿，未取消后台任务           | J-RESET           |
+| 704    | 56c9199d58a1af94.1 | 保存按钮新增采纳未达门禁用，旧dc2377签名失效  | J-DECIDE          |
+| 715    | 2982f925c629be51.1 | 按返回opportunity_id显示，不猜链接            | J-NAV-OPPORTUNITY |
+| 720    | d3e6b84b6df72d56.1 | 按返回verification_task_id显示                | J-NAV-TASK        |
+| 730    | 283a41d530253e0d.1 | reset保留旧决定草稿，未取消后台任务           | J-RESET           |
 
 canAdopt要求topic_id、opportunity_id、recommended及五门和all_passed严格true；后端同范围机会锁内复核P18规则，冲突409拒绝。radio、按钮与submit函数都按该规则，改选不合格候选保留原因且不能提交原采纳选择。request仍为action/reason/selected_raw_evidence_id，observe/reject恒null，未新增expected_version。服务端成功后state=ready，reset草稿和在途写归属仍未修。
 
@@ -164,19 +164,19 @@ SelectionJourney.vue LF SHA-256：8e0103bfda31bed992d91c61b9d84d873f73d29e1564cc
 
 | 当前行 | 当前候选尾键       | 核对边界                                                   | 稳定语义ID        |
 | ------ | ------------------ | ---------------------------------------------------------- | ----------------- |
-| 404 | feb47750cbf8d6c2.1 | 返回列表，原路由不变                                       | J-NAV-LIST        |
-| 406 | 8026812b48a68031.1 | 恢复主次事件保持                                           | J-STATE-RECOVERY  |
-| 416 | 69918daed1d2ab6a.1 | 三输入创建form与本地存储失败状态提示保持                   | J-CREATE          |
-| 458 | 8471b8c4a13a52ef.1 | 创建busy/reading禁用保持                                   | J-CREATE          |
-| 472 | 702f405d1496d1cd.1 | 原生summary切换details.open，零请求/持久化，不新增业务写入 | J-TIMELINE        |
-| 537 | ffaf47bf1a32fcaf.1 | 原文外链属性与click.stop保持                               | J-SOURCE          |
-| 575 | 5d5700a54ddffff7.1 | 质量门只读说明进入原form；decide处理器不变                 | J-DECIDE          |
-| 644 | 56c9199d58a1af94.1 | 保存禁用与五门规则保持                                     | J-DECIDE          |
-| 595 | ec0ddd60475ad5dd.1 | 保存表单提交及原生必填错误处理                             | J-DECIDE          |
-| 679 | b8d4d47a1d529682.1 | 空原因就地错误事件，填入后清除；busy/reading时冻结原因输入 | J-DECIDE          |
-| 655 | 2982f925c629be51.1 | 机会链接按原返回ID                                         | J-NAV-OPPORTUNITY |
-| 660 | d3e6b84b6df72d56.1 | 任务链接按原返回ID                                         | J-NAV-TASK        |
-| 670 | 283a41d530253e0d.1 | reset草稿/活动ID/读取失效语义保持                          | J-RESET           |
+| 451 | feb47750cbf8d6c2.1 | 返回列表，原路由不变                                       | J-NAV-LIST        |
+| 453 | 8026812b48a68031.1 | 恢复主次事件保持                                           | J-STATE-RECOVERY  |
+| 462 | 69918daed1d2ab6a.1 | 三输入创建form与本地存储失败状态提示保持                   | J-CREATE          |
+| 510 | 8471b8c4a13a52ef.1 | 创建busy/reading禁用保持                                   | J-CREATE          |
+| 524 | 702f405d1496d1cd.1 | 原生summary切换details.open，零请求/持久化，不新增业务写入 | J-TIMELINE        |
+| 589 | ffaf47bf1a32fcaf.1 | 原文外链属性与click.stop保持                               | J-SOURCE          |
+| 575 | 5d5700a54ddffff7.1 | 质量门只读说明进入原form；decide处理器不变                 | J-DECIDE [历史身份，仅追溯] |
+| 704 | 56c9199d58a1af94.1 | 保存禁用与五门规则保持                                     | J-DECIDE          |
+| 619 | ec0ddd60475ad5dd.1 | 保存表单提交及原生必填错误处理                             | J-DECIDE          |
+| 682 | b8d4d47a1d529682.1 | 空原因就地错误事件，填入后清除；busy/reading时冻结原因输入 | J-DECIDE          |
+| 715 | 2982f925c629be51.1 | 机会链接按原返回ID                                         | J-NAV-OPPORTUNITY |
+| 720 | d3e6b84b6df72d56.1 | 任务链接按原返回ID                                         | J-NAV-TASK        |
+| 730 | 283a41d530253e0d.1 | reset草稿/活动ID/读取失效语义保持                          | J-RESET           |
 
 阶段栏是只读aside，输入→处理→终态审阅→已决定，不以本地时间假装进度。五项质量门未选中/对象未返回显示“待核对/未返回”，严格true才“已通过”；5/5仍由原canAdopt核对topic/opportunity/recommended/all_passed，服务器保存时再验。候选报告总数与本页返回数分别展示。时间轴默认收起，Enter展开/Space收起无新增旅程HTTP；字段忙碌冻结仅保护当前提交快照，不新增关闭弹窗、取消任务或重置原因逻辑。
 

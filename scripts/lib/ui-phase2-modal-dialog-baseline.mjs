@@ -8,7 +8,7 @@ export const modalDialogRevision = Object.freeze({
   file: "apps/web/src/use-modal-dialog.ts",
   baseline: "a9b1495cca558b331d5de1983abc61b5e45657db",
   captured: "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
-  current: "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+  current: "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
 });
 
 const hash = (source) => createHash("sha256").update(source).digest("hex");

@@ -390,7 +390,8 @@ test("M03-03.A03/A06-A10/A13/A15-A17 delivery evidence covers adapters without i
     service,
     web,
     css,
-    shell,
+    surfaceRegistry,
+    runtimeSurface,
     openapi,
     env,
     schema,
@@ -409,7 +410,8 @@ test("M03-03.A03/A06-A10/A13/A15-A17 delivery evidence covers adapters without i
       "apps/api/src/provider-adapter-service.ts",
       "apps/web/src/components/ProviderAdapterCenter.vue",
       "apps/web/src/provider-adapters.css",
-      "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/navigation-surface-registry.ts",
+      "apps/web/src/components/ProviderRuntimeSurface.vue",
       "docs/openapi.yaml",
       "config/env.example",
       "config/schema.json",
@@ -445,11 +447,12 @@ test("M03-03.A03/A06-A10/A13/A15-A17 delivery evidence covers adapters without i
   assert.match(web, /刷新超时，已保留上一次成功数据/);
   assert.match(web, /成功率[\s\S]*P95[\s\S]*样本/);
   assert.match(web, /网络[\s\S]*解析[\s\S]*登录[\s\S]*空结果/);
-  assert.match(web, /错误预算与恢复门[\s\S]*runtime_error_budget_remaining/);
+  assert.match(web, /错误预算[\s\S]*runtime_error_budget_remaining/);
   assert.match(openapi, /runtime_failure_threshold[\s\S]*runtime_recovery_gate_met/);
   assert.match(openapi, /page_version_sha256[\s\S]*parser_failure_count/);
   assert.match(css, /@media\s*\(max-width:\s*640px\)/);
-  assert.match(shell, /provider-runtime-surface/);
+  assert.match(surfaceRegistry, /"provider-runtime-surface": lazy\("ProviderRuntimeSurface"\)/);
+  assert.match(runtimeSurface, /<ProviderAdapterCenter/);
   assert.match(openapi, /\/platform\/provider-adapters\/\{providerId\}\/health-check:/);
   assert.match(env, /PROVIDER_ADAPTER_MAX_RESPONSE_BYTES/);
   assert.match(schema, /providerAdapters/);

@@ -22,19 +22,19 @@ candidateId前缀为apps/web/src/components/加文件名及#。共14个控件/�
 | 文件:行 | candidate后缀 | 稳定语义归属 / 真实行为 |
 | --- | --- | --- |
 | UiStateShowcase.vue:98 | a51b976ddba112e1.1 | ST-HOME，品牌去/home |
-| UiStateShowcase.vue:106 | 7f48e1357c8dae41.1 | ST-SELECT.{kind}，八态选择；合法同态不增history |
-| UiStateShowcase.vue:117 | 659be34503b475d2.1 | ST-OPEN，本地dialogOpen=true |
-| UiStateShowcase.vue:126 | b2a9d9fdd632dd45.1 | ST-PRIMARY.{kind}/ST-SECONDARY.{kind}，按下表 |
-| UiStateShowcase.vue:151 | 5cb580b48eea94d3.1 | ST-CANCEL/ST-CONFIRM，关闭；确认额外confirmed=true |
-| UiStatePanel.vue:71 | 589e8eedc7c9c864.1 | ST-PRIMARY，非loading发primary |
+| UiStateShowcase.vue:113 | 7f48e1357c8dae41.1 | ST-SELECT.{kind}，八态选择；合法同态不增history |
+| UiStateShowcase.vue:161 | 659be34503b475d2.1 | ST-OPEN，本地dialogOpen=true |
+| UiStateShowcase.vue:133 | b2a9d9fdd632dd45.1 | ST-PRIMARY.{kind}/ST-SECONDARY.{kind}，按下表 |
+| UiStateShowcase.vue:173 | 5cb580b48eea94d3.1 | ST-CANCEL/ST-CONFIRM，关闭；确认额外confirmed=true |
+| UiStatePanel.vue:73 | 589e8eedc7c9c864.1 | ST-PRIMARY，非loading发primary |
 | UiStatePanel.vue:75 | e75816bb76644822.1 | ST-SECONDARY，有文案且非loading才显示并发secondary |
 | ConfirmDialog.vue:91 | 4505a8c2bbf9389c.1 | ST-CANCEL.backdrop，mousedown.self |
 | ConfirmDialog.vue:92 | 30a3b6ddc206839e.1 | ST-FOCUS/TRAP和ST-CANCEL.escape，keydown不是业务提交 |
 | ConfirmDialog.vue:123 | d1b7ac74d4f4ffc3.1 | ST-CANCEL.button |
 | ConfirmDialog.vue:124 | 3003ba3e33804f38.1 | ST-CONFIRM，canConfirm后允许点击emit |
 | NotFoundPage.vue:46 | ad49e2f05ad189d6.1 | NF-BRAND，/home |
-| NotFoundPage.vue:78 | 0b84761726a96f8e.1 | NF-RETURN，解析后的recentDestination.fullPath |
-| NotFoundPage.vue:81 | 7ed277e44773eac9.1 | NF-HOME，最近目标path非/home时额外显示 |
+| NotFoundPage.vue:70 | 0b84761726a96f8e.1 | NF-RETURN，解析后的recentDestination.fullPath |
+| NotFoundPage.vue:73 | 7ed277e44773eac9.1 | NF-HOME，最近目标path非/home时额外显示 |
 
 ## 3. 八态及演示弹窗合同
 

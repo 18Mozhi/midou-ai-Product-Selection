@@ -50,22 +50,22 @@
 | S:404044c1ac23071f.1 | control / 24 | CL-NAV / 浏览器运行 |
 | T:d1849db8e18799fd.1 | control / 597 | CL51-LOAD / 保留快照刷新 |
 | T:a0dc06b99ac90370.1 | control / 600 | CL51-LINK / 浏览器运行 |
-| T:4ec44b3c83794aca.1 | control / 612 | CL51-LOAD / 错误重读 |
-| T:7e6436ac5e8e9b15.1 | event-binding / 648 | CL51-FILTER / changeStatus |
-| T:dfaa056b9550313b.1 | control / 727 | CL51-DETAIL / 桌面查看push task |
-| T:5efbd64729e57af0.1 | control / 772 | CL51-DETAIL / 关闭移动记录后开完整详情 |
-| T:1c008f867673db60.1 | control / 782 | CL51-TECH / 移动技术详情 |
-| T:680ca05fdeabfdbf.1 | control / 825 | CL51-PAGE / 前页 |
-| T:cda5e997a43d64c9.1 | control / 829 | CL51-PAGE / 后页 |
-| T:33bc529b8390aa3d.1 | control / 887 | CL51-DETAIL / 失败后读取当前task |
-| T:30e32a01e61d8558.1 | control / 868 | CL51-DETAIL / loading、error、loaded共用关闭详情 |
-| T:96164ff76e31b8d8.1 | control / 911 | CL51-RECOVER / 重放原因区锚点 |
-| T:9334ac0d41264e22.1 | control / 912 | CL51-RECOVER / 凭证、来源或总览链接 |
-| T:d499af7185a1f039.1 | control / 935 | CL51-TECH / robots判定展开 |
-| T:79686f2d00e174f0.1 | control / 994 | CL51-TECH / 完整技术标识 |
-| T:5046ae27ac1c3e07.1 | control / 1043 | CL51-REPLAY / 确认预览 |
-| T:acbca874b622fd25.1 | event-binding / 1055 | CL51-REPLAY / cancel、replay |
-| T:e9f14f18f727a992.1 | dialog-component-call / 1055 | CL51-REPLAY / 共享确认调用 |
+| T:4ec44b3c83794aca.1 | control / 613 | CL51-LOAD / 错误重读 |
+| T:7e6436ac5e8e9b15.1 | event-binding / 649 | CL51-FILTER / changeStatus |
+| T:dfaa056b9550313b.1 | control / 728 | CL51-DETAIL / 桌面查看push task |
+| T:5efbd64729e57af0.1 | control / 773 | CL51-DETAIL / 关闭移动记录后开完整详情 |
+| T:1c008f867673db60.1 | control / 783 | CL51-TECH / 移动技术详情 |
+| T:680ca05fdeabfdbf.1 | control / 826 | CL51-PAGE / 前页 |
+| T:cda5e997a43d64c9.1 | control / 830 | CL51-PAGE / 后页 |
+| T:33bc529b8390aa3d.1 | control / 888 | CL51-DETAIL / 失败后读取当前task |
+| T:30e32a01e61d8558.1 | control / 869 | CL51-DETAIL / loading、error、loaded共用关闭详情 |
+| T:96164ff76e31b8d8.1 | control / 912 | CL51-RECOVER / 重放原因区锚点 |
+| T:9334ac0d41264e22.1 | control / 913 | CL51-RECOVER / 凭证、来源或总览链接 |
+| T:d499af7185a1f039.1 | control / 936 | CL51-TECH / robots判定展开 |
+| T:79686f2d00e174f0.1 | control / 995 | CL51-TECH / 完整技术标识 |
+| T:5046ae27ac1c3e07.1 | control / 1044 | CL51-REPLAY / 确认预览 |
+| T:acbca874b622fd25.1 | event-binding / 1056 | CL51-REPLAY / cancel、replay |
+| T:e9f14f18f727a992.1 | dialog-component-call / 1056 | CL51-REPLAY / 共享确认调用 |
 | O:2506d9788c717641.1 | dialog-component-call / 586 | CL52-SCOPE / 移动筛选抽屉 |
 | O:9ba7fa048065cd28.1 | form-event / 587 | CL52-SCOPE / applyScope |
 | O:3a14c060674cdbaa.1 | control / 670 | CL52-LINK / 响应links六类目标 |
@@ -78,9 +78,9 @@
 | O:9ebd065e5010fd46.1 | control / 1022 | CL52-DEAD / 链接单任务详情重放 |
 | O:1c008f867673db60.4 | control / 1026 | CL52-DEAD / 技术详情 |
 | R:a761c6ac4e81b553.1 | event-binding / 433| CL53-LOAD / 状态面仅保留已接线primary，隐藏未接线secondary |
-| R:a9a0bd7b83bfaa17.1 | control / 516| CL53-RENEW / blocked_login任务链接 |
-| R:cbea42c5b9e6a6b3.1 | form-event / 530| CL53-FILTER / applyFilters |
-| R:1c008f867673db60.1 | control / 648| CL53-DETAIL / 移动技术展开 |
+| R:a9a0bd7b83bfaa17.1 | control / 517| CL53-RENEW / blocked_login任务链接 |
+| R:cbea42c5b9e6a6b3.1 | form-event / 531| CL53-FILTER / applyFilters |
+| R:1c008f867673db60.1 | control / 649| CL53-DETAIL / 移动技术展开 |
 
 ## 3. 输入绑定和弹窗变体
 
@@ -154,7 +154,7 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
 | apps/web/src/components/ResponsiveDataView.vue | 28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | a566080f7b00f13c8890ea8ef5b002296b39e9b7fe10f324a4fe754226dec011 |
-| apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
+| apps/web/src/components/UiStatePanel.vue | 54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 
 ## 9. T组件剩余当前源码候选（2026-09-24）
@@ -164,10 +164,10 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | apps/web/src/components/CollectionTaskCenter.vue#43ae05ac7ae508fe.1 | 603 | event-binding | CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load并隐藏未接线secondary |
-| apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1 | 820 | control | CL51-CURRENT-EMPTY-RECOVERY / 全部状态重读；筛选空态返回全部状态并重读 |
-| apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1 | 838 | event-binding | CL51-CURRENT-DETAIL-DISMISS / 仅详情遮罩本身mousedown时关闭详情 |
-| apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1 | 839 | dialog-definition | CL51-CURRENT-DETAIL-SEMANTICS / 当前详情面板role=dialog、aria-modal与标题/描述关联 |
-| apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1 | 839 | event-binding | CL51-CURRENT-DETAIL-KEYBOARD / 将详情keydown转发给既有Escape与Tab边界处理 |
+| apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1 | 821 | control | CL51-CURRENT-EMPTY-RECOVERY / 全部状态重读；筛选空态返回全部状态并重读 |
+| apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1 | 839 | event-binding | CL51-CURRENT-DETAIL-DISMISS / 仅详情遮罩本身mousedown时关闭详情 |
+| apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1 | 840 | dialog-definition | CL51-CURRENT-DETAIL-SEMANTICS / 当前详情面板role=dialog、aria-modal与标题/描述关联 |
+| apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1 | 840 | event-binding | CL51-CURRENT-DETAIL-KEYBOARD / 将详情keydown转发给既有Escape与Tab边界处理 |
 
 本节仅补候选定位，不将列表/详情读取、人工重放的API合同、RBAC、真实任务事实、键盘实机或生产部署验收重新声明为通过；原5个失效签名仍保持identity-not-found。
 
@@ -292,12 +292,12 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | --- | ---: | --- | --- |
 | apps/web/src/components/CollectionRuntimeCenter.vue#b3aff7d1ec82177c.1 | 417 | control | CL53-CURRENT-LOAD / 手动重读；刷新或回收中禁用 |
 | apps/web/src/components/CollectionRuntimeCenter.vue#7287ecd28dcaceb5.1 | 420 | control | CL53-CURRENT-RECOVER / 打开过期租约全局回收确认；状态未知、无快照风险或忙碌时禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#764f755fb3d8ba7c.1 | 553 | control | CL53-CURRENT-FILTER / 提交当前状态与搜索草稿；读写忙碌时禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#06482162d2eef909.1 | 554 | control | CL53-CURRENT-FILTER / 恢复全部状态和空搜索并按第一页重读 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#7219dcd9d87bc4b0.1 | 680 | control | CL53-CURRENT-PAGE / 读取前页；首末边界或忙碌时禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#28a360589b0e3c7f.1 | 688 | control | CL53-CURRENT-PAGE / 读取后页；服务端total_pages边界或忙碌时禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#b917496c3d588d7b.1 | 700 | event-binding | CL53-CURRENT-RECOVER / 转发共享确认窗取消/确认至本页状态所有者 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#bc8824b8df3a0c77.1 | 700 | dialog-component-call | CL53-CURRENT-RECOVER / 共享确认窗声明仅回收服务端确认为过期的档案租约 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#764f755fb3d8ba7c.1 | 554 | control | CL53-CURRENT-FILTER / 提交当前状态与搜索草稿；读写忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#06482162d2eef909.1 | 555 | control | CL53-CURRENT-FILTER / 恢复全部状态和空搜索并按第一页重读 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#7219dcd9d87bc4b0.1 | 681 | control | CL53-CURRENT-PAGE / 读取前页；首末边界或忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#28a360589b0e3c7f.1 | 689 | control | CL53-CURRENT-PAGE / 读取后页；服务端total_pages边界或忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#b917496c3d588d7b.1 | 701 | event-binding | CL53-CURRENT-RECOVER / 转发共享确认窗取消/确认至本页状态所有者 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#bc8824b8df3a0c77.1 | 701 | dialog-component-call | CL53-CURRENT-RECOVER / 共享确认窗声明仅回收服务端确认为过期的档案租约 |
 
 同一ConfirmDialog位置分别形成事件绑定和弹窗调用两个候选；因此本节8个候选落在7个不同源码位置。当前LF指纹仍以第8节对应文件行绑定，不重复制造哈希声明。
 
@@ -311,14 +311,14 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 | 旧candidateId | 旧源码位置 / 类型 | 原始语义 | 当前候选交叉索引 |
 | --- | --- | --- | --- |
-| R:9dee0a9f3983a0d5.1 | control / 278 | CL53-LOAD / 刷新 | #b3aff7d1ec82177c.1 / CL53-CURRENT-LOAD |
-| R:f2f6bbdea261f58a.1 | control / 281 | CL53-RECOVER / 过期回收确认 | #7287ecd28dcaceb5.1 / CL53-CURRENT-RECOVER，现为打开确认窗 |
-| R:36c7b60823abfadf.1 | control / 410 | CL53-FILTER / 原生submit | #764f755fb3d8ba7c.1 / CL53-CURRENT-FILTER |
-| R:2f1b49bdefe2e793.1 | control / 411 | CL53-FILTER / resetFilters | #06482162d2eef909.1 / CL53-CURRENT-FILTER |
-| R:053cd828dd3324d8.1 | control / 532 | CL53-PAGE / 前页 | #7219dcd9d87bc4b0.1 / CL53-CURRENT-PAGE |
-| R:b7a08810a69e9930.1 | control / 540 | CL53-PAGE / 后页 | #28a360589b0e3c7f.1 / CL53-CURRENT-PAGE |
-| R:44209f4edee14e6e.1 | event-binding / 552 | CL53-RECOVER / cancel、recover事件 | #b917496c3d588d7b.1 / CL53-CURRENT-RECOVER |
-| R:4806dd12035653ce.1 | dialog-component-call / 552 | CL53-RECOVER / 全局过期集合确认窗 | #bc8824b8df3a0c77.1 / CL53-CURRENT-RECOVER |
+| R:9dee0a9f3983a0d5.1 | control / 417 | CL53-LOAD / 刷新 | #b3aff7d1ec82177c.1 / CL53-CURRENT-LOAD |
+| R:f2f6bbdea261f58a.1 | control / 420 | CL53-RECOVER / 过期回收确认 | #7287ecd28dcaceb5.1 / CL53-CURRENT-RECOVER，现为打开确认窗 |
+| R:36c7b60823abfadf.1 | control / 554 | CL53-FILTER / 原生submit | #764f755fb3d8ba7c.1 / CL53-CURRENT-FILTER |
+| R:2f1b49bdefe2e793.1 | control / 555 | CL53-FILTER / resetFilters | #06482162d2eef909.1 / CL53-CURRENT-FILTER |
+| R:053cd828dd3324d8.1 | control / 681 | CL53-PAGE / 前页 | #7219dcd9d87bc4b0.1 / CL53-CURRENT-PAGE |
+| R:b7a08810a69e9930.1 | control / 689 | CL53-PAGE / 后页 | #28a360589b0e3c7f.1 / CL53-CURRENT-PAGE |
+| R:44209f4edee14e6e.1 | event-binding / 701 | CL53-RECOVER / cancel、recover事件 | #b917496c3d588d7b.1 / CL53-CURRENT-RECOVER |
+| R:4806dd12035653ce.1 | dialog-component-call / 701 | CL53-RECOVER / 全局过期集合确认窗 | #bc8824b8df3a0c77.1 / CL53-CURRENT-RECOVER |
 
 ## 10. P51 采集任务当前页面动作归组（2026-09-26）
 

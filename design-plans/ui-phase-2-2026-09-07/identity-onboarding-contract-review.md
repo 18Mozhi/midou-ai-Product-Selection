@@ -40,22 +40,22 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 
 | 候选键 | 行 | actionId / 分类 | 条件、行为与验收卡 |
 | --- | --- | --- | --- |
-| L#9b4b982bf643379f.1 | 1260 | ID-ROOT | 品牌→`/`；I01/I02 |
-| L#4ea44facc4e04130.1 | 726 | ID-SHOW-FORGOT | login→局部 forgot，无请求/URL变化；I02 |
-| L#dc876249a8119b09.1 | 838 | ID-SHOW-LOGIN | verify结果返回；I04/I05 |
-| L#dc876249a8119b09.2 | 851 | ID-SHOW-LOGIN | 首次设置结束、恢复码后返回；I07 |
-| L#f29375268246ac09.1 | 1333 | ID-LEGACY-SESSION-REVOKE | 旧sessions模板行，暂无公开模式入口；源码保留、运行入口待归并P11 |
-| L#ba3feba8b42af0bf.1 | 545 | ID-ACCOUNT-SECURITY | RouterLink→`/me?section=security`；I09 |
-| L#df188704ef470c64.1 | 1343 | ID-MFA-ROUTE | RouterLink→P07，会话守卫适用；I09 |
-| T#5587941412d5210f.1 | 216 | ID-LOGIN-ROUTE | expired→`/login`；I10 |
-| T#222cadb1072dc1d8.1 | 219 | ID-ORG-RELOAD | error/forbidden→loadOrganizations；I10 |
-| T#9dde30dd57699c01.1 | 232 | ID-ORG-RELOAD | 无工作区→loadOrganizations；I10 |
-| T#ecd9e9dbd8b34d05.1 | 241 | ID-PERSONAL-PROVISION | 无组织→创建本人空间、成功replace；I11 |
-| T#d29e9f25fe7a5452.1 | 244 | ID-ACCOUNT-ROUTE | 无组织→`/me`；I11 |
-| T#df188704ef470c64.1 | 245 | ID-MFA-ROUTE | 无组织→P07；I09/I11 |
-| T#72a9593314273d39.1 | 258 | ID-CONTEXT-CONTINUE | selectedContext就绪→safeReturnTo；I10 |
-| T#04d5594b96977687.1 | 263 | ID-ORG-RELOAD | 已选组织时返回组织，重新读目录；I10 |
-| T#087b197306ae2192.1 | 304 | ID-ORG-CLEAR | 搜索无结果→清空query，无写请求；I10 |
+| L#9b4b982bf643379f.1 | 1276 | ID-ROOT | 品牌→`/`；I01/I02 |
+| L#4ea44facc4e04130.1 | 736 | ID-SHOW-FORGOT | login→局部 forgot，无请求/URL变化；I02 |
+| L#dc876249a8119b09.1 | 854 | ID-SHOW-LOGIN | verify结果返回；I04/I05 |
+| L#dc876249a8119b09.2 | 867 | ID-SHOW-LOGIN | 首次设置结束、恢复码后返回；I07 |
+| L#f29375268246ac09.1 | 1349 | ID-LEGACY-SESSION-REVOKE | 旧sessions模板行，暂无公开模式入口；源码保留、运行入口待归并P11 |
+| L#ba3feba8b42af0bf.1 | 555 | ID-ACCOUNT-SECURITY | RouterLink→`/me?section=security`；I09 |
+| L#df188704ef470c64.1 | 1359 | ID-MFA-ROUTE | RouterLink→P07，会话守卫适用；I09 |
+| T#5587941412d5210f.1 | 239 | ID-LOGIN-ROUTE | expired→`/login`；I10 |
+| T#222cadb1072dc1d8.1 | 242 | ID-ORG-RELOAD | error/forbidden→loadOrganizations；I10 |
+| T#9dde30dd57699c01.1 | 256 | ID-ORG-RELOAD | 无工作区→loadOrganizations；I10 |
+| T#ecd9e9dbd8b34d05.1 | 265 | ID-PERSONAL-PROVISION | 无组织→创建本人空间、成功replace；I11 |
+| T#d29e9f25fe7a5452.1 | 268 | ID-ACCOUNT-ROUTE | 无组织→`/me`；I11 |
+| T#df188704ef470c64.1 | 269 | ID-MFA-ROUTE | 无组织→P07；I09/I11 |
+| T#72a9593314273d39.1 | 282 | ID-CONTEXT-CONTINUE | selectedContext就绪→safeReturnTo；I10 |
+| T#04d5594b96977687.1 | 287 | ID-ORG-RELOAD | 已选组织时返回组织，重新读目录；I10 |
+| T#087b197306ae2192.1 | 329 | ID-ORG-CLEAR | 搜索无结果→清空query，无写请求；I10 |
 | O#7142f76fc59ad9ee.1 | 39 | ID-GUIDE-SKIP | 跳过→P01，不写完成状态；I12 |
 
 ### 2.1 当前 LocalIdentity 源标识补记
@@ -70,7 +70,7 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | ID-MFA-CONFIRM | L#4ce7b78a016bd6b5.1；L#7d20870a6b6ed73c.1；L#d9c0ff91de01c471.1；L#e7030ff0d08dfdb7.1 | MFA 绑定确认及首次安全设置确认；表单提交与按钮归并 |
 | ID-MFA-DISABLE | L#29abd90f9774564d.1；L#6735871aaf8e0556.1 | MFA 停用表单提交与确认按钮，沿用撤销全部会话边界 |
 | ID-MFA-RETURN-LOGIN | L#e4840b8a830571e2.1 | MFA 管理页返回登录路由 |
-| ID-FORM-SUBMIT | L#b4ef7a9c4f34af7b.1；L#3d0185dcb1b90a38.1；L#55432de3fcde4409.1；L#62294b45ceb45f22.1；L#a8e9d7ee5148dbe5.1；L#be82854e01e5e049.1；L#4b32d082f043e0da.1；L#e448c4ea094171f6.1；L#8cc6c6d54ed246f6.1；L#d145d1bc092202b5.1 | login、MFA challenge、reset、forgot、register 的模式表单及提交按钮；不是一个业务请求 |
+| ID-FORM-SUBMIT | L#b4ef7a9c4f34af7b.1；L#3d0185dcb1b90a38.1；L#55432de3fcde4409.1；L#62294b45ceb45f22.1；L#a8e9d7ee5148dbe5.1；L#be82854e01e5e049.1；L#4b32d082f043e0da.1；L#e448c4ea094171f6.1；L#8cc6c6d54ed246f6.1；L#d145d1bc092202b5.1 | login、MFA challenge、reset、forgot、register 的模式表单及提交按钮；不是一个业务请求 [历史身份，仅追溯] |
 | ID-SEED-PASSWORD | L#9fb8524110a1038f.1；L#7d98b83b16e631e4.1 | 首次安全设置中的改密提交与按钮；提交期间单飞并锁定字段 |
 | ID-SHOW-REGISTER | L#f3edcccf9be30a1b.1；L#f3edcccf9be30a1b.2 | 登录/旧 sessions 模式切换到注册 |
 | ID-ACCOUNT-SECURITY | L#ba3feba8b42af0bf.2；L#ba3feba8b42af0bf.3 | 跳转本人 `/me?section=security`；旧 sessions 入口不等于该组件内会话撤销 |
@@ -103,8 +103,8 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | apps/web/src/components/TenancyChooser.vue#07db575ab56f90da.1 | 176 | control | P08-CURRENT-ROOT / 品牌链接返回根路径 |
-| apps/web/src/components/TenancyChooser.vue#51f99d2206301d80.1 | 282 | control | P08-CURRENT-ORG-CHOOSE / 选择组织并读取工作区、团队；不写会话范围 |
-| apps/web/src/components/TenancyChooser.vue#9d6c9b22e4716bb9.1 | 316 | control | P08-CURRENT-WORKSPACE-CHOOSE / 仅活动工作区可用；调用既有 `/auth/context` 更新会话范围 |
+| apps/web/src/components/TenancyChooser.vue#51f99d2206301d80.1 | 306 | control | P08-CURRENT-ORG-CHOOSE / 选择组织并读取工作区、团队；不写会话范围 |
+| apps/web/src/components/TenancyChooser.vue#9d6c9b22e4716bb9.1 | 341 | control | P08-CURRENT-WORKSPACE-CHOOSE / 仅活动工作区可用；调用既有 `/auth/context` 更新会话范围 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
@@ -227,4 +227,4 @@ MFA和首次设置按钮是 form 外的 type=button，输入虽然部分有minle
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/LandingRedirect.vue | bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5 |
-| apps/web/src/components/LandingRedirectSurface.vue | 8f3dfcfbcbbaf18eef5729352c54679da68cc204194dcb6976e6810acdf37aec |
+| apps/web/src/components/LandingRedirectSurface.vue | 754c42fa9e95c98ae2e1086e74c2326507370e4a14e70e45ade38f11aaf2827d |

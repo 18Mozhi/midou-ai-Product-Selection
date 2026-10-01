@@ -59,26 +59,26 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 
 | 源码候选 | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#8fbfd1dda992c36b.1 | 400 | control | SC70-LOAD GET（自身有审计） |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#3c7b3b6045a144ee.1 | 402 | control | SC70-EXPIRED 打开确认，无立即写入 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#4f73abdd0d99fc21.1 | 427 | control | SC70-LOAD 保留快照重试 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#ae52c30c28ab3a05.1 | 441 | control | SC70-LOAD 首次失败重试 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#0767d27629b787d7.1 | 532 | event-binding | SC70-FILTER code包含，本地并回第一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#1b581569d5d9e0d4.1 | 541 | event-binding | SC70-FILTER 运行范围，本地并回第一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1 | 587 | control | SC70-PROVIDER 打开当前来源确认 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#dac6cbc2991374ba.1 | 581 | control | SC70-DETAIL 原生最近错误披露 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#d868a97237e89c1c.1 | 604 | control | SC70-PAGE 本地上一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1 | 607 | control | SC70-PAGE 本地下一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1 | 632 | event-binding | SC70-EXPIRED cancel本地/confirm POST |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1 | 632 | dialog-component-call | SC70-EXPIRED 同一确认调用，不重复算动作 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#8fbfd1dda992c36b.1 | 405 | control | SC70-LOAD GET（自身有审计） |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#3c7b3b6045a144ee.1 | 407 | control | SC70-EXPIRED 打开确认，无立即写入 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#4f73abdd0d99fc21.1 | 432 | control | SC70-LOAD 保留快照重试 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#ae52c30c28ab3a05.1 | 446 | control | SC70-LOAD 首次失败重试 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#0767d27629b787d7.1 | 537 | event-binding | SC70-FILTER code包含，本地并回第一页 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#1b581569d5d9e0d4.1 | 546 | event-binding | SC70-FILTER 运行范围，本地并回第一页 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1 | 592 | control | SC70-PROVIDER 打开当前来源确认 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#dac6cbc2991374ba.1 | 586 | control | SC70-DETAIL 原生最近错误披露 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#d868a97237e89c1c.1 | 609 | control | SC70-PAGE 本地上一页 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1 | 612 | control | SC70-PAGE 本地下一页 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1 | 637 | event-binding | SC70-EXPIRED cancel本地/confirm POST |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1 | 637 | dialog-component-call | SC70-EXPIRED 同一确认调用，不重复算动作 |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#25d51725a70103d5.1 | 647 | event-binding | SC70-PROVIDER cancel本地/confirm POST |
 | apps/web/src/components/CrawlerSchedulerCenter.vue#c30cb3ed5106a082.1 | 647 | dialog-component-call | SC70-PROVIDER 同一确认调用，不重复算动作 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#ad3f1b8a48927d9d.1 | 237 | control | SC71-LOAD GET；保存中禁用手动刷新，成功后的归属重读仍允许 |
-| apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1 | 237 | control | SC71-ATTEST 打开确认 |
-| apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1 | 263 | control | SC71-LOAD 保留快照重试 |
-| apps/web/src/components/CapacityBoundaryCenter.vue#26fe2d5165472bca.1 | 279 | control | SC71-LOAD 首次失败重试 |
-| apps/web/src/components/CapacityBoundaryCenter.vue#bad94329bde0aecb.1 | 297 | event-binding | SC71-ATTEST cancel本地/confirm POST |
-| apps/web/src/components/CapacityBoundaryCenter.vue#0db1bef96a99927a.1 | 297 | dialog-component-call | SC71-ATTEST 同一确认调用，不重复算动作 |
+| apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1 | 244 | control | SC71-ATTEST 打开确认 |
+| apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1 | 270 | control | SC71-LOAD 保留快照重试 |
+| apps/web/src/components/CapacityBoundaryCenter.vue#26fe2d5165472bca.1 | 286 | control | SC71-LOAD 首次失败重试 |
+| apps/web/src/components/CapacityBoundaryCenter.vue#bad94329bde0aecb.1 | 304 | event-binding | SC71-ATTEST cancel本地/confirm POST |
+| apps/web/src/components/CapacityBoundaryCenter.vue#0db1bef96a99927a.1 | 304 | dialog-component-call | SC71-ATTEST 同一确认调用，不重复算动作 |
 | apps/web/src/components/TechnicalDetails.vue#b3ffca8eb967d682.1 | 62 | control | 共享原生披露 |
 | apps/web/src/components/TechnicalDetails.vue#c19091da9e2471f1.1 | 69 | control | 复制请求编号至剪贴板，非业务POST |
 
@@ -98,12 +98,12 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 | 文件 | SHA256 |
 | --- | --- |
 | apps/web/src/components/CrawlerSchedulerCenter.vue | ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee |
-| apps/web/src/components/CapacityBoundaryCenter.vue | 2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8 |
+| apps/web/src/components/CapacityBoundaryCenter.vue | b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2 |
 | apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/web/src/ui/state-contract.ts | 9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a |
-| apps/web/src/components/NavigationShell.vue | da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9 |
+| apps/web/src/components/NavigationShell.vue | 25cdd5e342935ec0ed531c5ed2d50678a72f8f4478d8183f117636244f0d2efe |
 | config/route-catalog.json | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | apps/api/src/crawler-scheduler-service.ts | 58848de6850d5068bc56ea0dbcd077257d82150f75837c08dcfb1f9368a60e99 |
 | apps/api/src/crawler-scheduler-repository.ts | 4ff9fdb39e15222c140cbcbb08d06675faf79b55d692eec41a13479743bcacef |
