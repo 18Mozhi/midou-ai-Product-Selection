@@ -1024,7 +1024,7 @@ html
 }
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure > small {
   color: #526984;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
 }

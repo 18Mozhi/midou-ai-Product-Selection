@@ -114,7 +114,7 @@ const activeLabel = computed(
 .opportunity-detail-directory-mobile button > span {
   flex: 0 0 24px;
   color: #d7e3f7;
-  font-size: 12px;
+  font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 
