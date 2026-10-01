@@ -2478,49 +2478,90 @@ test("P18 decision receipt for an old opportunity cannot refresh the current opp
   expect(nextDetailReads).toBe(currentDetailReads);
 });
 
-test("P18 decision submission rejects a second request while the first POST is pending", async ({
-  page,
-}) => {
-  await ready(page);
-  let releaseDecision!: () => void;
-  let markDecisionStarted!: () => void;
-  const decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
-  const decisionStarted = new Promise<void>((resolve) => (markDecisionStarted = resolve));
-  const submittedBodies: Record<string, unknown>[] = [];
-  await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, async (route) => {
-    submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
-    markDecisionStarted();
-    await decisionGate;
-    await route.fulfill({
-      status: 201,
-      json: envelope({ opportunity_id: opportunityId, decision_status: "observing", version: 2 }),
+for (const decision of [
+  {
+    action: "adopt",
+    trigger: "采纳建议",
+    dialog: "记录采纳决定",
+    reason: "五项质量门通过后采纳",
+    decisionStatus: "adopted",
+    opportunity: recommendedBase,
+  },
+  {
+    action: "observe",
+    trigger: "继续观察",
+    dialog: "记录继续观察决定",
+    reason: "核实趋势后继续观察",
+    decisionStatus: "observing",
+    opportunity: base,
+  },
+  {
+    action: "reject",
+    trigger: "驳回",
+    dialog: "记录驳回决定",
+    reason: "当前证据不满足准入条件",
+    decisionStatus: "rejected",
+    opportunity: base,
+  },
+] as const) {
+  test(`P18 ${decision.action} decision rejects same-tick reentry while its POST is pending`, async ({
+    page,
+  }) => {
+    await ready(
+      page,
+      decision.action === "adopt" ? evidence : undefined,
+      decision.action === "adopt" ? recommendedBase : undefined,
+    );
+    let releaseDecision!: () => void;
+    let markDecisionStarted!: () => void;
+    const decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
+    const decisionStarted = new Promise<void>((resolve) => (markDecisionStarted = resolve));
+    const submittedBodies: Record<string, unknown>[] = [];
+    await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, async (route) => {
+      submittedBodies.push(route.request().postDataJSON() as Record<string, unknown>);
+      markDecisionStarted();
+      await decisionGate;
+      await route.fulfill({
+        status: 201,
+        json: envelope({
+          opportunity_id: opportunityId,
+          decision_status: decision.decisionStatus,
+          version: decision.opportunity.version + 1,
+        }),
+      });
     });
+
+    await page.goto(`/opportunities/${opportunityId}`);
+    if (decision.action !== "adopt") await page.getByText("提前人工处理", { exact: true }).click();
+    await page.getByRole("button", { name: decision.trigger, exact: true }).last().click();
+    const dialog = page.getByRole("dialog", { name: decision.dialog });
+    await dialog.getByLabel("原因（必填）").fill(decision.reason);
+    const form = dialog.locator("form");
+
+    await form.evaluate((element) => {
+      const formElement = element as HTMLFormElement;
+      formElement.requestSubmit();
+      formElement.requestSubmit();
+    });
+    await decisionStarted;
+
+    expect(submittedBodies).toEqual([
+      {
+        action: decision.action,
+        reason: decision.reason,
+        expected_version: decision.opportunity.version,
+      },
+    ]);
+    const response = page.waitForResponse(
+      (candidate) =>
+        candidate.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`) &&
+        candidate.status() === 201,
+    );
+    releaseDecision();
+    await response;
+    await expect(dialog).toBeHidden();
   });
-
-  await page.goto(`/opportunities/${opportunityId}`);
-  await page.getByText("提前人工处理", { exact: true }).click();
-  const trigger = page.getByRole("button", { name: "继续观察", exact: true });
-  await trigger.click();
-  const dialog = page.getByRole("dialog", { name: "记录继续观察决定" });
-  await dialog.getByLabel("原因（必填）").fill("核实趋势后继续观察");
-  const form = dialog.locator("form");
-
-  await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
-  await decisionStarted;
-  await form.evaluate((element) => (element as HTMLFormElement).requestSubmit());
-
-  expect(submittedBodies).toEqual([
-    { action: "observe", reason: "核实趋势后继续观察", expected_version: base.version },
-  ]);
-  const response = page.waitForResponse(
-    (candidate) =>
-      candidate.url().includes(`/api/v1/opportunities/${opportunityId}/decisions`) &&
-      candidate.status() === 201,
-  );
-  releaseDecision();
-  await response;
-  await expect(dialog).toBeHidden();
-});
+}
 
 test("P18 operating feedback rejects repeated form submissions while the first POST is pending", async ({
   page,
