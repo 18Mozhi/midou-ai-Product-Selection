@@ -162,10 +162,10 @@ form {
 .audited-reason-error {
   margin: 0;
   padding: 10px 12px;
-  border: 1px solid var(--so-danger, #a52630);
+  border: 1px solid var(--so-danger);
   border-radius: 8px;
-  background: var(--so-danger-panel, #fff8f7);
-  color: var(--so-danger-text, #842f29);
+  background: var(--so-danger-panel);
+  color: var(--so-danger-text);
 }
 header,
 footer {

@@ -1,12 +1,17 @@
 .tenancy-page {
   --p08-blue: #1748a0;
   --p08-ink: #182d4a;
+  --p08-tenancy-canvas: #eaf0f6;
+  --p08-brand-blue: #294f9f;
   --p08-muted: #52647b;
   --p08-line: #dce4ee;
+  --p08-divider-line: #edf1f6;
   --p08-focus: #2465d7;
   --p08-white: #fff;
   --p08-light-blue: #dce8ff;
   --p08-highlight: #e2ecff;
+  --p08-action-blue: #2454a5;
+  --p08-empty-mark-bg: #edf3ff;
   --p08-pale-blue: #edf4ff;
   --p08-danger: #b42318;
   --p08-danger-bg: #fff6f5;

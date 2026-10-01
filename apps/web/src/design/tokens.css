@@ -18,6 +18,8 @@
   --so-success: #137759;
   --so-warning: #9a5b00;
   --so-danger: #b52b1c;
+  --so-danger-panel: #fff8f7;
+  --so-danger-text: #842f29;
   --so-info: #365a76;
   --so-signal: #c7e642;
 }
@@ -41,6 +43,8 @@
   --so-success: #1f7556;
   --so-warning: #925500;
   --so-danger: #aa2a1c;
+  --so-danger-panel: #fff8f7;
+  --so-danger-text: #842f29;
   --so-info: #405c6d;
   --so-signal: #c9e342;
 }
@@ -64,6 +68,8 @@
   --so-success: #117554;
   --so-warning: #8f5700;
   --so-danger: #ad2b1c;
+  --so-danger-panel: #fff8f7;
+  --so-danger-text: #842f29;
   --so-info: #375e73;
   --so-signal: #c6e23c;
 }

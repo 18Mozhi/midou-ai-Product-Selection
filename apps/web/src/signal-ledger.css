@@ -706,7 +706,7 @@ html[data-design="signal-ledger"] .role-theme-menu button[aria-pressed="true"] {
 
 /* P08's approved C entry screen deliberately uses a cool workspace canvas and soft corners. */
 html[data-design="signal-ledger"] body .tenancy-page {
-  background: #eaf0f6;
+  background: var(--p08-tenancy-canvas);
 }
 html[data-design="signal-ledger"] body .p08-scope,
 html[data-design="signal-ledger"] body .p08-workspace {
@@ -732,8 +732,8 @@ html[data-design="signal-ledger"] body .p08-hero h2 {
   letter-spacing: 0;
 }
 html[data-design="signal-ledger"] body .p08-scope h1 {
-  color: #fff;
+  color: var(--p08-white);
 }
 html[data-design="signal-ledger"] body .p08-hero h2 {
-  color: #182d4a;
+  color: var(--p08-ink);
 }

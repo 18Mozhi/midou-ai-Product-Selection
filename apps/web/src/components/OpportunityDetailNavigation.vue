@@ -68,7 +68,7 @@ const activeLabel = computed(
 }
 
 .opportunity-detail-directory__eyebrow {
-  color: #d7e3f7;
+  color: var(--so-opportunity-review-directory-label);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -81,7 +81,7 @@ const activeLabel = computed(
 }
 
 .opportunity-detail-directory__note {
-  color: #e8eef9;
+  color: var(--so-opportunity-review-directory-note);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -113,14 +113,14 @@ const activeLabel = computed(
 .opportunity-detail-directory button > span,
 .opportunity-detail-directory-mobile button > span {
   flex: 0 0 24px;
-  color: #d7e3f7;
+  color: var(--so-opportunity-review-directory-label);
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 
 .opportunity-detail-directory button:hover,
 .opportunity-detail-directory-mobile button:hover {
-  border-color: #d7e3f7;
+  border-color: var(--so-opportunity-review-directory-label);
 }
 
 .opportunity-detail-directory button[aria-current="page"],

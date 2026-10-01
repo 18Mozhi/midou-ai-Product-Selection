@@ -109,9 +109,10 @@ test("approval workspace review colors resolve from its page-scoped semantic pal
 });
 
 test("opportunity queue and detail colors resolve from their route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
+  const [tokens, css, detailNavigation] = await Promise.all([
     readFile("apps/web/src/design/opportunity-review-tokens.css", "utf8"),
     readFile("apps/web/src/automatic-selection.css", "utf8"),
+    readFile("apps/web/src/components/OpportunityDetailNavigation.vue", "utf8"),
   ]);
   const declarations = [
     ...tokens.matchAll(
@@ -120,12 +121,14 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
   ];
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set(
-    [...css.matchAll(/var\((--so-opportunity(?:-review|-list)-[a-z-]+)\)/g)].map(
-      (match) => match[1],
-    ),
+    [
+      ...`${css}\n${detailNavigation}`.matchAll(
+        /var\((--so-opportunity(?:-review|-list)-[a-z-]+)\)/g,
+      ),
+    ].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 23);
+  assert.equal(names.size, 25);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -141,9 +144,7 @@ test("opportunity AI colors resolve from a review-route-scoped palette", async (
     readFile("apps/web/src/design/opportunity-ai-tokens.css", "utf8"),
     readFile("apps/web/src/opportunity-ai.css", "utf8"),
   ]);
-  const declarations = [
-    ...tokens.matchAll(/(--so-opportunity-ai-[a-z-]+):\s*#[0-9a-f]{3,6};/gi),
-  ];
+  const declarations = [...tokens.matchAll(/(--so-opportunity-ai-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set(
     [...css.matchAll(/var\((--so-opportunity-ai-[a-z-]+)\)/g)].map((match) => match[1]),
@@ -165,9 +166,7 @@ test("opportunity feedback and lineage colors resolve from a review-route-scoped
     readFile("apps/web/src/design/opportunity-p18-workfaces-tokens.css", "utf8"),
     readFile("apps/web/src/opportunity-p18-workfaces.css", "utf8"),
   ]);
-  const declarations = [
-    ...tokens.matchAll(/(--so-opportunity-p18-[a-z-]+):\s*#[0-9a-f]{3,6};/gi),
-  ];
+  const declarations = [...tokens.matchAll(/(--so-opportunity-p18-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set(
     [...css.matchAll(/var\((--so-opportunity-p18-[a-z-]+)\)/g)].map((match) => match[1]),
@@ -572,20 +571,33 @@ test("organization admin palette resolves its approved C page colors in route sc
 });
 
 test("P08 tenancy palette resolves its original C direction colors in page scope", async () => {
-  const [tokens, css] = await Promise.all([
+  const [tokens, css, globalShellCss] = await Promise.all([
     readFile("apps/web/src/design/tenancy-tokens.css", "utf8"),
     readFile("apps/web/src/styles.css", "utf8"),
+    readFile("apps/web/src/signal-ledger.css", "utf8"),
   ]);
   const declarations = [...tokens.matchAll(/(--p08-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
   const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set([...css.matchAll(/var\((--p08-[a-z-]+)\)/g)].map((match) => match[1]));
+  const p08OverridesStart = globalShellCss.indexOf(
+    "/* P08's approved C entry screen deliberately uses a cool workspace canvas and soft corners. */",
+  );
+  assert.notEqual(
+    p08OverridesStart,
+    -1,
+    "P08 overrides remain explicitly scoped in the global shell stylesheet",
+  );
+  const p08Overrides = globalShellCss.slice(p08OverridesStart);
+  const references = new Set(
+    [...`${css}\n${globalShellCss}`.matchAll(/var\((--p08-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
 
-  assert.equal(names.size, 19);
+  assert.equal(names.size, 24);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(), /^\.tenancy-page\s*\{[\s\S]*\}$/);
   assert.ok(css.startsWith('@import "./design/tenancy-tokens.css";'));
   assert.deepEqual([...references].sort(), [...names].sort());
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
+  assert.doesNotMatch(p08Overrides, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
 test("organization audit palette resolves its original C direction colors in route scope", async () => {
