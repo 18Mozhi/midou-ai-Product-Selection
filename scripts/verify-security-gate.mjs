@@ -2,6 +2,7 @@ import { randomUUID } from "node:crypto";
 import { execFileSync, spawnSync } from "node:child_process";
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { relative, resolve } from "node:path";
+import { npmAuditExecutionFailed } from "./lib/security-gate-audit.mjs";
 
 const root = process.cwd();
 const policy = JSON.parse(await readFile(resolve(root, "verification/security-gate.json"), "utf8"));
@@ -12,6 +13,7 @@ const add = (check, file, line, code) => findings.push({ check, file, line, code
 const tracked = execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], {
   cwd: root,
   encoding: "utf8",
+  maxBuffer: 16 * 1024 * 1024,
 })
   .split(/\r?\n/)
   .filter(Boolean);
@@ -42,7 +44,7 @@ try {
 } catch {
   add("dependency-vulnerabilities", "package-lock.json", 1, "audit_output_invalid");
 }
-if (audit.status !== 0)
+if (npmAuditExecutionFailed({ ...audit, report: auditJson }))
   add("dependency-vulnerabilities", "package-lock.json", 1, "audit_command_failed");
 const counts = auditJson?.metadata?.vulnerabilities ?? {};
 if (
@@ -118,17 +120,17 @@ for (const [file, content] of webFiles) {
     });
   const selectionJourneyProgressOnly =
     file === "apps/web/src/components/SelectionJourney.vue" &&
-    localStorageCount === 6 &&
-    localStorageUses.length === 6 &&
+    localStorageCount === 3 &&
+    localStorageUses.length === 3 &&
     content.includes('progressStorageKey = "scoutops.selection-journey.active-id"') &&
     content.includes("journeyIdPattern = /^[0-9a-f]{8}-") &&
     localStorageUses.filter((match) => match[1] === "getItem").length === 1 &&
     localStorageUses.filter((match) => match[1] === "setItem").length === 1 &&
-    localStorageUses.filter((match) => match[1] === "removeItem").length === 4 &&
+    localStorageUses.filter((match) => match[1] === "removeItem").length === 1 &&
     localStorageUses.every((match) => {
       const argumentsText = match[2].replace(/\s/g, "");
       return match[1] === "setItem"
-        ? argumentsText === "progressStorageKey,next.id"
+        ? argumentsText === "progressStorageKey,id"
         : argumentsText === "progressStorageKey";
     });
   const navigationMemoryOnly =
@@ -241,7 +243,12 @@ const report = {
   trace_id: runId,
   checks,
   findings,
-  audit: { high: counts.high ?? null, critical: counts.critical ?? null },
+  audit: {
+    low: counts.low ?? null,
+    moderate: counts.moderate ?? null,
+    high: counts.high ?? null,
+    critical: counts.critical ?? null,
+  },
   finished_at: new Date().toISOString(),
 };
 const reportDir = resolve(root, process.env.VERIFY_REPORT_DIR || ".artifacts/verification");

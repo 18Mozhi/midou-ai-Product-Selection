@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { resolve } from "node:path";
+import { npmAuditExecutionFailed } from "../../scripts/lib/security-gate-audit.mjs";
 
 const root = process.cwd();
 const policy = JSON.parse(await readFile(resolve(root, "verification/security-gate.json"), "utf8"));
@@ -61,11 +62,12 @@ test("M07-02 browser storage gate allows only exact validated non-sensitive reco
     "utf8",
   );
   assert.match(gate, /file === "apps\/web\/src\/design\/theme\.ts"/);
+  assert.match(gate, /maxBuffer: 16 \* 1024 \* 1024/);
   assert.match(gate, /localStorageCount === 2/);
   assert.match(gate, /argumentsText === "themeStorageKey"/);
   assert.match(gate, /argumentsText === "themeStorageKey,theme"/);
   assert.match(gate, /file === "apps\/web\/src\/components\/SelectionJourney\.vue"/);
-  assert.match(gate, /progressStorageKey,next\.id/);
+  assert.match(gate, /progressStorageKey,id/);
   assert.match(gate, /file === "apps\/web\/src\/realtime-client-metrics\.ts"/);
   assert.match(gate, /scoutops:realtime-client-metrics/);
   assert.match(gate, /file === "apps\/web\/src\/navigation-memory\.ts"/);
@@ -78,4 +80,32 @@ test("M07-02 browser storage gate allows only exact validated non-sensitive reco
   assert.match(journey, /journeyIdPattern/);
   assert.doesNotMatch(realtime, /token|secret|credential|request_id|user_id/i);
   assert.doesNotMatch(navigationMemory, /token|secret|credential|request_id|user_id/i);
+});
+
+test("npm audit reports use the configured severity thresholds without masking execution failures", () => {
+  const moderateOnly = {
+    metadata: { vulnerabilities: { total: 1, moderate: 1, high: 0, critical: 0 } },
+  };
+  assert.equal(
+    npmAuditExecutionFailed({ status: 1, signal: null, error: null, report: moderateOnly }),
+    false,
+  );
+  assert.equal(
+    npmAuditExecutionFailed({
+      status: 1,
+      signal: null,
+      error: null,
+      report: { error: { code: "ENOAUDIT" } },
+    }),
+    true,
+  );
+  assert.equal(
+    npmAuditExecutionFailed({
+      status: 1,
+      signal: null,
+      error: null,
+      report: { metadata: { vulnerabilities: { total: 0 } } },
+    }),
+    true,
+  );
 });
