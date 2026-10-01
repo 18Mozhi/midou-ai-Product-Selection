@@ -652,10 +652,10 @@ html
   gap: 12px;
   min-height: 0;
   padding: 24px;
-  border: 1px solid #d4deea;
-  border-left: 4px solid #3867b7;
+  border: 1px solid var(--p47-state-border);
+  border-left: 4px solid var(--p47-state-accent);
   border-radius: 6px;
-  background: #f7f9fc;
+  background: var(--p47-state-panel);
   text-align: left;
 }
 html
@@ -663,14 +663,14 @@ html
   #app
   .adapter-center--c
   .ui-state-panel[data-kind="forbidden"] {
-  border-left-color: #6f8197;
+  border-left-color: var(--p47-state-neutral-accent);
 }
 html
   body:has(#app .adapter-center--c)
   #app
   .adapter-center--c
   .ui-state-panel[data-kind="blocked"] {
-  border-left-color: #a97016;
+  border-left-color: var(--p47-state-warning-accent);
 }
 html
   body:has(#app .adapter-center--c)
@@ -687,7 +687,7 @@ html
   .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
   h2 {
   margin: 0;
-  color: #162b49;
+  color: var(--p47-state-heading);
   font-size: 20px;
   line-height: 1.5;
 }
@@ -697,7 +697,7 @@ html
   .adapter-center--c
   .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
   > div {
-  color: #53657b;
+  color: var(--p47-state-copy);
   font-size: 14px;
   line-height: 1.8;
 }
@@ -712,7 +712,7 @@ html
   margin: 4px 0 0;
   padding: 4px 0 0;
   border: 0;
-  border-top: 1px solid #dce3ed;
+  border-top: 1px solid var(--p47-state-divider);
   border-radius: 0;
   background: transparent;
 }
@@ -735,7 +735,7 @@ html
   .ui-state-panel:is([data-kind="expired"], [data-kind="forbidden"], [data-kind="blocked"])
   :is(dt, dd) {
   margin: 0;
-  color: #53657b;
+  color: var(--p47-state-copy);
   font-size: 13px;
   line-height: 1.7;
 }
@@ -767,7 +767,7 @@ html
   min-width: 132px;
   min-height: 44px;
   border-radius: 6px;
-  background: #185adb;
+  background: var(--p47-state-primary);
   color: white;
 }
 html
@@ -778,7 +778,7 @@ html
   footer
   .primary:focus-visible,
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-heading:focus {
-  outline: 3px solid #185adb;
+  outline: 3px solid var(--p47-state-primary);
   outline-offset: 3px;
 }
 @media (max-width: 640px) {
@@ -1008,11 +1008,11 @@ html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-
   align-items: start;
   margin: 16px 0;
   padding: 20px 22px;
-  border: 1px solid #c5d2e4;
-  border-left: 4px solid #3867b7;
+  border: 1px solid var(--p47-refresh-border);
+  border-left: 4px solid var(--p47-state-accent);
   border-radius: 6px;
-  background: #f5f8fc;
-  color: #182d4a;
+  background: var(--p47-refresh-panel);
+  color: var(--p47-refresh-ink);
 }
 html
   body:has(#app .adapter-center--c)
@@ -1023,14 +1023,14 @@ html
   grid-column: 1;
 }
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure > small {
-  color: #526984;
+  color: var(--p47-refresh-muted);
   font-size: 13px;
   font-weight: 700;
   letter-spacing: 0.08em;
 }
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure h3 {
   margin: 0;
-  color: #162a47;
+  color: var(--p47-refresh-heading);
   font-size: 18px;
   line-height: 1.5;
 }
@@ -1041,7 +1041,7 @@ html
   .adapter-refresh-failure
   :is(p, span) {
   margin: 0;
-  color: #52647a;
+  color: var(--p47-refresh-muted);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -1051,13 +1051,13 @@ html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure summary {
   min-height: 44px;
   padding: 10px 0;
-  color: #1e56a8;
+  color: var(--p47-refresh-link);
   cursor: pointer;
 }
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-failure code {
   display: block;
   padding: 8px 0;
-  color: #52647a;
+  color: var(--p47-refresh-muted);
   font:
     13px/1.6 Consolas,
     monospace;
@@ -1069,9 +1069,9 @@ html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-refresh-
   min-width: 112px;
   min-height: 44px;
   padding: 10px 16px;
-  border: 1px solid #185adb;
+  border: 1px solid var(--p47-state-primary);
   border-radius: 6px;
-  background: #185adb;
+  background: var(--p47-state-primary);
   color: white;
   font-size: 14px;
 }
@@ -1082,7 +1082,7 @@ html
   .adapter-refresh-failure
   :is(summary, button):focus-visible,
 html body:has(#app .adapter-center--c) #app .adapter-center--c .adapter-heading:focus {
-  outline: 3px solid #185adb;
+  outline: 3px solid var(--p47-state-primary);
   outline-offset: 3px;
 }
 @media (max-width: 640px) {
@@ -1111,9 +1111,9 @@ html
   min-height: 0;
   gap: 12px;
   padding: 24px;
-  border: 1px solid #d9e1ec;
+  border: 1px solid var(--p47-empty-border);
   border-radius: 8px;
-  background: white;
+  background: var(--p47-panel);
   text-align: left;
 }
 html
@@ -1132,7 +1132,7 @@ html
   h2 {
   order: -2;
   margin: 0;
-  color: #152b49;
+  color: var(--p47-empty-ink);
   font-size: 18px;
   line-height: 1.5;
 }
@@ -1143,7 +1143,7 @@ html
   .ui-state-panel[data-kind="loading"]
   > div:not(.ui-state-skeleton) {
   order: -1;
-  color: #53657c;
+  color: var(--p47-empty-muted);
   font-size: 14px;
   line-height: 1.8;
 }
@@ -1168,7 +1168,7 @@ html
   height: 12px;
   width: 100%;
   margin: 0;
-  background: #edf1f7;
+  background: var(--p47-loading-panel);
   border-radius: 3px;
   animation: none;
 }

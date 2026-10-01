@@ -1,0 +1,14 @@
+html:has(#app .opportunity-workspace--review) {
+  --so-opportunity-ai-disabled-border: #aeb8c5;
+  --so-opportunity-ai-disabled-bg: #e7ebf0;
+  --so-opportunity-ai-disabled-text: #667386;
+  --so-opportunity-ai-boundary-bg: #edf3ff;
+  --so-opportunity-ai-boundary-text: #263b5c;
+  --so-opportunity-ai-surface: #fff;
+  --so-opportunity-ai-directory-bg: #f4f6f9;
+  --so-opportunity-ai-error-border: #e2b8b4;
+  --so-opportunity-ai-error-bg: #fff8f7;
+  --so-opportunity-ai-error-text: #762f2b;
+  --so-opportunity-ai-content-bg: #fafbfd;
+  --so-opportunity-ai-reject: #9b342e;
+}

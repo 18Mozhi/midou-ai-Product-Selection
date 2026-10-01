@@ -136,6 +136,54 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|!important/i);
 });
 
+test("opportunity AI colors resolve from a review-route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/opportunity-ai-tokens.css", "utf8"),
+    readFile("apps/web/src/opportunity-ai.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--so-opportunity-ai-[a-z-]+):\s*#[0-9a-f]{3,6};/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-opportunity-ai-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 12);
+  assert.equal(declarations.length, names.size, "no duplicate opportunity AI palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(#app \.opportunity-workspace--review\)\s*\{/,
+  );
+  assert.ok(css.startsWith('@import "./design/opportunity-ai-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
+});
+
+test("opportunity feedback and lineage colors resolve from a review-route-scoped palette", async () => {
+  const [tokens, css] = await Promise.all([
+    readFile("apps/web/src/design/opportunity-p18-workfaces-tokens.css", "utf8"),
+    readFile("apps/web/src/opportunity-p18-workfaces.css", "utf8"),
+  ]);
+  const declarations = [
+    ...tokens.matchAll(/(--so-opportunity-p18-[a-z-]+):\s*#[0-9a-f]{3,6};/gi),
+  ];
+  const names = new Set(declarations.map((match) => match[1]));
+  const references = new Set(
+    [...css.matchAll(/var\((--so-opportunity-p18-[a-z-]+)\)/g)].map((match) => match[1]),
+  );
+
+  assert.equal(names.size, 21);
+  assert.equal(declarations.length, names.size, "no duplicate P18 workface palette declarations");
+  assert.match(
+    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+    /^html:has\(#app \.opportunity-workspace--review\)\s*\{/,
+  );
+  assert.ok(css.startsWith('@import "./design/opportunity-p18-workfaces-tokens.css";'));
+  assert.deepEqual([...references].sort(), [...names].sort());
+  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(|!important/i);
+});
+
 test("automation rules palette resolves every page-local color reference", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/automation-rule-tokens.css", "utf8"),
@@ -633,7 +681,7 @@ test("P22 cost rule palette resolves its approved workbench colors in route scop
   const names = new Set(declarations.map((match) => match[1]));
   const references = new Set([...css.matchAll(/var\((--p22-[a-z-]+)\)/g)].map((match) => match[1]));
 
-  assert.equal(names.size, 14);
+  assert.equal(names.size, 15);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -763,7 +811,7 @@ test("P47 palette resolves page, portal detail and feedback without broadening a
   const tokens = await readFile("apps/web/src/design/provider-adapter-tokens.css", "utf8");
   const declarations = [...tokens.matchAll(/(--p47-[a-z-]+):\s*([^;]+);/g)];
   const palette = new Map(declarations.map((match) => [match[1], match[2]]));
-  assert.equal(palette.size, 42);
+  assert.equal(palette.size, 58);
   assert.equal(declarations.length, palette.size);
   assert.equal(
     tokens

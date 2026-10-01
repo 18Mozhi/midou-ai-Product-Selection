@@ -1,34 +1,36 @@
+@import "./design/opportunity-p18-workfaces-tokens.css";
+
 .opportunity-lineage--c,
 .opportunity-feedback--c {
   display: grid;
   gap: 18px;
-  color: var(--so-text, #202c3d);
-  background: #edf1f6;
+  color: var(--so-text);
+  background: var(--so-opportunity-p18-bg);
 }
 .opportunity-lineage--c :is(a, summary):focus-visible,
 .opportunity-feedback--c :is(button, input, textarea, summary):focus-visible {
-  outline: 3px solid var(--so-primary, #254a9c);
+  outline: 3px solid var(--so-primary);
   outline-offset: 3px;
 }
 .opportunity-lineage--c > header,
 .opportunity-feedback--c > .opportunity-feedback-heading {
   align-items: flex-start;
   padding-bottom: 14px;
-  border-bottom: 1px solid var(--so-border, #d6dde6);
+  border-bottom: 1px solid var(--so-border);
 }
 .opportunity-lineage--c > header p,
 .opportunity-feedback--c > .opportunity-feedback-heading p,
 .opportunity-feedback--c .opportunity-feedback-form > header p,
 .opportunity-feedback--c .opportunity-feedback-calibration > header p {
   margin: 0 0 5px;
-  color: var(--so-primary, #254a9c);
+  color: var(--so-primary);
   font-size: 13px;
   font-weight: 700;
 }
 .opportunity-lineage--c > header h4,
 .opportunity-feedback--c > .opportunity-feedback-heading h4 {
   margin: 0 0 6px;
-  color: #202c3d;
+  color: var(--so-opportunity-p18-ink);
   font-size: 23px;
   line-height: 1.4;
 }
@@ -36,24 +38,24 @@
 .opportunity-feedback--c > .opportunity-feedback-heading span {
   display: block;
   max-width: 760px;
-  color: #58677b;
+  color: var(--so-opportunity-p18-muted);
   line-height: 1.6;
 }
 .opportunity-lineage--c > header > b {
   padding: 8px 11px;
-  border: 1px solid var(--so-border, #d6dde6);
-  background: #fff;
-  color: #35445a;
+  border: 1px solid var(--so-border);
+  background: var(--so-opportunity-p18-surface);
+  color: var(--so-opportunity-p18-secondary);
 }
 .opportunity-lineage--c > header > b[data-impact="blocked"] {
-  border-color: #e2b8b4;
-  background: #fff8f7;
-  color: #842f29;
+  border-color: var(--so-opportunity-p18-danger-border);
+  background: var(--so-opportunity-p18-danger-bg);
+  color: var(--so-opportunity-p18-danger-text);
 }
 .opportunity-lineage--c > header > b[data-impact="degraded"] {
-  border-color: #e5d0a5;
-  background: #fffaf0;
-  color: #765315;
+  border-color: var(--so-opportunity-p18-warning-border);
+  background: var(--so-opportunity-p18-warning-bg);
+  color: var(--so-opportunity-p18-warning-text);
 }
 .opportunity-lineage--c .opportunity-lineage-summary {
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -63,28 +65,28 @@
 .opportunity-lineage--c .opportunity-lineage-summary > div {
   min-width: 0;
   padding: 13px;
-  border: 1px solid var(--so-border, #d6dde6);
+  border: 1px solid var(--so-border);
   border-radius: 5px;
-  background: #fff;
+  background: var(--so-opportunity-p18-surface);
 }
 .opportunity-lineage--c .opportunity-lineage-summary dt,
 .opportunity-feedback--c dt {
-  color: #58677b;
+  color: var(--so-opportunity-p18-muted);
   font-size: 13px;
 }
 .opportunity-lineage--c .opportunity-lineage-summary dd,
 .opportunity-feedback--c dd {
   margin: 5px 0 0;
-  color: #202c3d;
+  color: var(--so-opportunity-p18-ink);
   overflow-wrap: anywhere;
   line-height: 1.6;
 }
 .opportunity-lineage--c .opportunity-lineage-impact {
   margin: 0;
   padding: 13px;
-  border-left: 3px solid #9b342e;
-  background: #fff8f7;
-  color: #762f2b;
+  border-left: 3px solid var(--so-opportunity-p18-danger-accent);
+  background: var(--so-opportunity-p18-danger-bg);
+  color: var(--so-opportunity-p18-danger-copy);
 }
 .opportunity-lineage--c .opportunity-lineage-impact ul {
   display: flex;
@@ -104,8 +106,8 @@
 .opportunity-lineage--c .opportunity-lineage-groups > li {
   min-width: 0;
   padding: 13px;
-  border: 1px solid var(--so-border, #d6dde6);
-  background: #fff;
+  border: 1px solid var(--so-border);
+  background: var(--so-opportunity-p18-surface);
 }
 .opportunity-lineage--c .opportunity-lineage-groups > li > header,
 .opportunity-lineage--c .opportunity-lineage-node-heading {
@@ -116,11 +118,11 @@
 }
 .opportunity-lineage--c .opportunity-lineage-groups > li > header {
   padding-bottom: 9px;
-  border-bottom: 1px solid var(--so-border, #d6dde6);
+  border-bottom: 1px solid var(--so-border);
 }
 .opportunity-lineage--c .opportunity-lineage-groups > li > header span,
 .opportunity-lineage--c .opportunity-lineage-node-heading > span {
-  color: #58677b;
+  color: var(--so-opportunity-p18-muted);
   font-size: 13px;
 }
 .opportunity-lineage--c .opportunity-lineage-groups > li > ol {
@@ -129,12 +131,12 @@
 .opportunity-lineage--c .opportunity-lineage-groups > li > ol > li {
   min-width: 0;
   padding: 12px;
-  border: 1px solid #e0e5eb;
-  background: #f9fafc;
+  border: 1px solid var(--so-opportunity-p18-divider);
+  background: var(--so-opportunity-p18-surface-subtle);
 }
 .opportunity-lineage--c .opportunity-lineage-groups p {
   margin: 6px 0;
-  color: #58677b;
+  color: var(--so-opportunity-p18-muted);
   font-size: 13px;
 }
 .opportunity-lineage--c details > summary,
@@ -142,7 +144,7 @@
   min-height: 44px;
   display: flex;
   align-items: center;
-  color: var(--so-primary, #254a9c);
+  color: var(--so-primary);
   font-weight: 700;
   cursor: pointer;
 }
@@ -166,19 +168,19 @@
 .opportunity-lineage--c code,
 .opportunity-feedback--c code {
   overflow-wrap: anywhere;
-  color: #35445a;
+  color: var(--so-opportunity-p18-secondary);
   font-size: 13px;
 }
 .opportunity-lineage--c details a {
   display: inline-flex;
   min-height: 44px;
   align-items: center;
-  color: var(--so-primary, #254a9c);
+  color: var(--so-primary);
   font-weight: 700;
 }
 .opportunity-lineage--c .opportunity-lineage-correlation {
   padding-top: 9px;
-  border-top: 1px solid var(--so-border, #d6dde6);
+  border-top: 1px solid var(--so-border);
 }
 .opportunity-lineage--c .opportunity-lineage-correlation > div {
   display: grid;
@@ -192,7 +194,7 @@
 }
 .opportunity-feedback--c > .opportunity-feedback-heading > strong {
   flex: 0 0 auto;
-  color: #35445a;
+  color: var(--so-opportunity-p18-secondary);
 }
 .opportunity-feedback--c .opportunity-feedback-calibration {
   display: grid;
@@ -200,8 +202,8 @@
   gap: 11px;
   margin: 0;
   padding: 15px;
-  border: 1px solid var(--so-border, #d6dde6);
-  background: #fff;
+  border: 1px solid var(--so-border);
+  background: var(--so-opportunity-p18-surface);
 }
 .opportunity-feedback--c .opportunity-feedback-calibration > header {
   display: flex;
@@ -216,7 +218,7 @@
 }
 .opportunity-feedback--c .opportunity-feedback-calibration > header > span,
 .opportunity-feedback--c .opportunity-feedback-calibration footer {
-  color: #58677b;
+  color: var(--so-opportunity-p18-muted);
   font-size: 13px;
 }
 .opportunity-feedback--c .opportunity-feedback-calibration dl,
@@ -230,8 +232,8 @@
 .opportunity-feedback--c .opportunity-feedback-facts > li > dl > div {
   min-width: 0;
   padding: 11px;
-  border: 1px solid #e0e5eb;
-  background: #f9fafc;
+  border: 1px solid var(--so-opportunity-p18-divider);
+  background: var(--so-opportunity-p18-surface-subtle);
 }
 .opportunity-feedback--c .opportunity-feedback-calibration dd {
   font-size: 18px;
@@ -239,15 +241,15 @@
 }
 .opportunity-feedback--c .opportunity-feedback-calibration footer {
   padding-top: 9px;
-  border-top: 1px solid var(--so-border, #d6dde6);
+  border-top: 1px solid var(--so-border);
 }
 .opportunity-feedback--c .opportunity-feedback-no-calibration,
 .opportunity-feedback--c .opportunity-feedback-readonly {
   margin: 0;
   padding: 12px;
-  border-left: 3px solid var(--so-primary, #254a9c);
-  background: #edf3ff;
-  color: #263b5c;
+  border-left: 3px solid var(--so-primary);
+  background: var(--so-opportunity-p18-info-bg);
+  color: var(--so-opportunity-p18-info-text);
   line-height: 1.6;
 }
 .opportunity-feedback--c .opportunity-feedback-actions button,
@@ -255,19 +257,19 @@
 .opportunity-feedback--c .opportunity-feedback-unknown button {
   min-height: 44px;
   padding: 9px 14px;
-  border: 1px solid var(--so-primary, #254a9c);
+  border: 1px solid var(--so-primary);
   border-radius: 5px;
-  background: var(--so-primary, #254a9c);
-  color: #fff;
+  background: var(--so-primary);
+  color: var(--so-on-primary);
   font: inherit;
   font-weight: 700;
   cursor: pointer;
 }
 .opportunity-feedback--c .opportunity-feedback-actions button:disabled,
 .opportunity-feedback--c button:disabled {
-  border-color: #aeb8c5;
-  background: #e7ebf0;
-  color: #667386;
+  border-color: var(--so-opportunity-p18-control-border);
+  background: var(--so-opportunity-p18-disabled-bg);
+  color: var(--so-opportunity-p18-disabled-text);
   cursor: not-allowed;
 }
 .opportunity-feedback--c .opportunity-feedback-form {
@@ -275,25 +277,25 @@
   gap: 14px;
   margin: 0;
   padding: 16px;
-  border: 1px solid var(--so-border, #d6dde6);
-  background: #fff;
+  border: 1px solid var(--so-border);
+  background: var(--so-opportunity-p18-surface);
 }
 .opportunity-feedback--c .opportunity-feedback-form > header {
   padding-bottom: 11px;
-  border-bottom: 1px solid var(--so-border, #d6dde6);
+  border-bottom: 1px solid var(--so-border);
 }
 .opportunity-feedback--c .opportunity-feedback-form fieldset {
   min-width: 0;
   margin: 0;
   padding: 13px;
-  border: 1px solid #dbe1e8;
+  border: 1px solid var(--so-opportunity-p18-fieldset-border);
 }
 .opportunity-feedback--c .opportunity-feedback-form fieldset:disabled {
   opacity: 0.78;
 }
 .opportunity-feedback--c .opportunity-feedback-form legend {
   padding: 0 5px;
-  color: #35445a;
+  color: var(--so-opportunity-p18-secondary);
   font-weight: 700;
 }
 .opportunity-feedback--c .opportunity-feedback-fields {
@@ -305,7 +307,7 @@
   display: grid;
   min-width: 0;
   gap: 5px;
-  color: #202c3d;
+  color: var(--so-opportunity-p18-ink);
   font-size: 15px;
   font-weight: 600;
 }
@@ -314,10 +316,10 @@
   width: 100%;
   min-height: 44px;
   padding: 9px 10px;
-  border: 1px solid #aeb8c5;
+  border: 1px solid var(--so-opportunity-p18-control-border);
   border-radius: 4px;
-  background: #fff;
-  color: #202c3d;
+  background: var(--so-opportunity-p18-surface);
+  color: var(--so-opportunity-p18-ink);
   font: inherit;
 }
 .opportunity-feedback--c .opportunity-feedback-fields textarea {
@@ -326,7 +328,7 @@
 }
 .opportunity-feedback--c .opportunity-feedback-fields small,
 .opportunity-feedback--c .opportunity-feedback-observed-at {
-  color: #58677b;
+  color: var(--so-opportunity-p18-muted);
   font-size: 13px;
   font-weight: 400;
   line-height: 1.5;
@@ -336,14 +338,14 @@
 }
 .opportunity-feedback--c .opportunity-feedback-validation {
   margin: 0;
-  color: #842f29;
+  color: var(--so-opportunity-p18-danger-text);
 }
 .opportunity-feedback--c .opportunity-feedback-write-error,
 .opportunity-feedback--c .opportunity-feedback-unknown {
   padding: 12px;
-  border: 1px solid #e2b8b4;
-  background: #fff8f7;
-  color: #762f2b;
+  border: 1px solid var(--so-opportunity-p18-danger-border);
+  background: var(--so-opportunity-p18-danger-bg);
+  color: var(--so-opportunity-p18-danger-copy);
 }
 .opportunity-feedback--c .opportunity-feedback-write-error p,
 .opportunity-feedback--c .opportunity-feedback-unknown p {
@@ -359,9 +361,9 @@
 .opportunity-feedback--c .opportunity-feedback-empty {
   margin: 0;
   padding: 22px;
-  border: 1px solid var(--so-border, #d6dde6);
-  background: #fff;
-  color: #58677b;
+  border: 1px solid var(--so-border);
+  background: var(--so-opportunity-p18-surface);
+  color: var(--so-opportunity-p18-muted);
   text-align: center;
 }
 .opportunity-feedback--c .opportunity-feedback-facts {
@@ -376,8 +378,8 @@
   gap: 11px;
   min-width: 0;
   padding: 15px;
-  border: 1px solid var(--so-border, #d6dde6);
-  background: #fff;
+  border: 1px solid var(--so-border);
+  background: var(--so-opportunity-p18-surface);
 }
 .opportunity-feedback--c .opportunity-feedback-facts > li > header {
   display: flex;
@@ -385,16 +387,16 @@
   justify-content: space-between;
   gap: 10px;
   padding-bottom: 9px;
-  border-bottom: 1px solid var(--so-border, #d6dde6);
+  border-bottom: 1px solid var(--so-border);
 }
 .opportunity-feedback--c .opportunity-feedback-facts > li > header small {
   display: block;
   margin-top: 5px;
-  color: #58677b;
+  color: var(--so-opportunity-p18-muted);
   line-height: 1.5;
 }
 .opportunity-feedback--c .opportunity-feedback-facts > li > header > span {
-  color: var(--so-primary, #254a9c);
+  color: var(--so-primary);
   font-size: 13px;
 }
 .opportunity-feedback--c .opportunity-feedback-facts > li > p {

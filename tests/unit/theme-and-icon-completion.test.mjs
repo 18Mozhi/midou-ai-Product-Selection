@@ -210,6 +210,20 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       );
       continue;
     }
+    if (paths[index] === "apps/web/src/design/opportunity-ai-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(#app \.opportunity-workspace--review\)\s*\{(?:\s*--so-opportunity-ai-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
+    if (paths[index] === "apps/web/src/design/opportunity-p18-workfaces-tokens.css") {
+      assert.match(
+        source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
+        /^html:has\(#app \.opportunity-workspace--review\)\s*\{(?:\s*--so-opportunity-p18-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+      );
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/automation-rule-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

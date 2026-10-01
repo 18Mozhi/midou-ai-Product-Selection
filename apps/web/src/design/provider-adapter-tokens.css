@@ -42,4 +42,20 @@ html:has(body #app .adapter-center--c) {
   --p47-empty-ink: #152b49;
   --p47-empty-muted: #53657c;
   --p47-empty-accent: #185adb;
+  --p47-state-border: #d4deea;
+  --p47-state-accent: #3867b7;
+  --p47-state-panel: #f7f9fc;
+  --p47-state-neutral-accent: #6f8197;
+  --p47-state-warning-accent: #a97016;
+  --p47-state-heading: #162b49;
+  --p47-state-copy: #53657b;
+  --p47-state-divider: #dce3ed;
+  --p47-refresh-border: #c5d2e4;
+  --p47-refresh-panel: #f5f8fc;
+  --p47-refresh-ink: #182d4a;
+  --p47-refresh-muted: #526984;
+  --p47-refresh-heading: #162a47;
+  --p47-refresh-link: #1e56a8;
+  --p47-state-primary: #185adb;
+  --p47-loading-panel: #edf1f7;
 }

@@ -13,4 +13,5 @@ html:has(body #app .cost-console--review) {
   --p22-control-border: #b9c9dc;
   --p22-danger: #b42318;
   --p22-scrim: rgb(24 45 74 / 50%);
+  --p22-modal-shadow-color: rgb(13 35 72 / 22%);
 }

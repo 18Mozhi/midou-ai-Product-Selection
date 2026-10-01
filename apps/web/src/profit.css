@@ -746,7 +746,7 @@
   border: 1px solid var(--review-line);
   border-radius: 12px;
   background: var(--p22-white);
-  box-shadow: 0 18px 56px rgb(13 35 72 / 22%);
+  box-shadow: 0 18px 56px var(--p22-modal-shadow-color);
 }
 
 .cost-console--review .cost-create-modal {
@@ -898,7 +898,7 @@
 .cost-console--review .cost-dialog-body input:focus-visible,
 .cost-console--review .cost-dialog-body select:focus-visible,
 .cost-console--review .cost-dialog-body textarea:focus-visible {
-  outline: 3px solid var(--p22-focus, #2f6de0);
+  outline: 3px solid var(--p22-focus);
   outline-offset: 2px;
 }
 

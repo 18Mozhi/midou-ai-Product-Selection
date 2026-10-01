@@ -1,10 +1,12 @@
+@import "./design/opportunity-ai-tokens.css";
+
 .opportunity-ai--c {
   display: grid;
   gap: 18px;
-  color: var(--so-text, #202c3d);
+  color: var(--so-text);
 }
 .opportunity-ai--c :is(button, a, summary):focus-visible {
-  outline: 3px solid var(--so-primary, #254a9c);
+  outline: 3px solid var(--so-primary);
   outline-offset: 3px;
 }
 .opportunity-ai--c .opportunity-ai-heading,
@@ -19,7 +21,7 @@
 .opportunity-ai--c .opportunity-ai-heading p,
 .opportunity-ai--c .opportunity-ai-result > header p {
   margin: 0 0 5px;
-  color: var(--so-primary, #254a9c);
+  color: var(--so-primary);
   font-size: 13px;
   font-weight: 700;
 }
@@ -32,32 +34,32 @@
 .opportunity-ai--c .opportunity-ai-heading span,
 .opportunity-ai--c .opportunity-ai-result small,
 .opportunity-ai--c .opportunity-ai-directory > header span {
-  color: var(--so-text-muted, #58677b);
+  color: var(--so-text-muted);
   line-height: 1.6;
 }
 .opportunity-ai--c .opportunity-ai-heading > button,
 .opportunity-ai--c .opportunity-ai-output button {
   min-height: 44px;
   padding: 9px 14px;
-  border: 1px solid var(--so-primary, #254a9c);
+  border: 1px solid var(--so-primary);
   border-radius: 5px;
-  background: var(--so-primary, #254a9c);
-  color: #fff;
+  background: var(--so-primary);
+  color: var(--so-on-primary);
   font: inherit;
   font-weight: 700;
   cursor: pointer;
 }
 .opportunity-ai--c button:disabled {
-  border-color: #aeb8c5;
-  background: #e7ebf0;
-  color: #667386;
+  border-color: var(--so-opportunity-ai-disabled-border);
+  background: var(--so-opportunity-ai-disabled-bg);
+  color: var(--so-opportunity-ai-disabled-text);
   cursor: not-allowed;
 }
 .opportunity-ai--c .opportunity-ai-boundary {
   padding: 12px 15px;
-  border-left: 3px solid var(--so-primary, #254a9c);
-  background: #edf3ff;
-  color: #263b5c;
+  border-left: 3px solid var(--so-primary);
+  background: var(--so-opportunity-ai-boundary-bg);
+  color: var(--so-opportunity-ai-boundary-text);
   line-height: 1.6;
 }
 .opportunity-ai--c .opportunity-ai-workspace {
@@ -69,9 +71,9 @@
 .opportunity-ai--c .opportunity-ai-directory,
 .opportunity-ai--c .opportunity-ai-result {
   min-width: 0;
-  border: 1px solid var(--so-border, #d6dde6);
+  border: 1px solid var(--so-border);
   border-radius: 6px;
-  background: #fff;
+  background: var(--so-opportunity-ai-surface);
 }
 .opportunity-ai--c .opportunity-ai-directory {
   display: grid;
@@ -82,7 +84,7 @@
 .opportunity-ai--c .opportunity-ai-directory > header {
   align-items: baseline;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--so-border, #d6dde6);
+  border-bottom: 1px solid var(--so-border);
 }
 .opportunity-ai--c .opportunity-ai-directory > button {
   display: grid;
@@ -92,14 +94,14 @@
   padding: 10px;
   border: 1px solid transparent;
   border-radius: 4px;
-  background: #f4f6f9;
-  color: var(--so-text, #202c3d);
+  background: var(--so-opportunity-ai-directory-bg);
+  color: var(--so-text);
   text-align: left;
   cursor: pointer;
 }
 .opportunity-ai--c .opportunity-ai-directory > button[aria-current="true"] {
-  border-color: var(--so-primary, #254a9c);
-  background: #edf3ff;
+  border-color: var(--so-primary);
+  background: var(--so-opportunity-ai-boundary-bg);
 }
 .opportunity-ai--c .opportunity-ai-directory > button > span {
   font-weight: 700;
@@ -107,7 +109,7 @@
 .opportunity-ai--c .opportunity-ai-directory small,
 .opportunity-ai--c .opportunity-ai-directory code {
   overflow-wrap: anywhere;
-  color: var(--so-text-muted, #58677b);
+  color: var(--so-text-muted);
   font-size: 13px;
 }
 .opportunity-ai--c .opportunity-ai-output {
@@ -123,17 +125,17 @@
   gap: 16px;
   margin: 0;
   padding: 14px;
-  border: 1px solid #e2b8b4;
-  background: #fff8f7;
-  color: #762f2b;
+  border: 1px solid var(--so-opportunity-ai-error-border);
+  background: var(--so-opportunity-ai-error-bg);
+  color: var(--so-opportunity-ai-error-text);
 }
 .opportunity-ai--c .opportunity-ai-read-error p {
   margin: 5px 0;
 }
 .opportunity-ai--c .opportunity-ai-loading {
-  border-color: var(--so-border, #d6dde6);
-  background: #f4f6f9;
-  color: var(--so-text-muted, #58677b);
+  border-color: var(--so-border);
+  background: var(--so-opportunity-ai-directory-bg);
+  color: var(--so-text-muted);
 }
 .opportunity-ai--c .opportunity-ai-result {
   display: grid;
@@ -146,14 +148,14 @@
 .opportunity-ai--c .opportunity-ai-result > header {
   align-items: center;
   padding-bottom: 12px;
-  border-bottom: 1px solid var(--so-border, #d6dde6);
+  border-bottom: 1px solid var(--so-border);
 }
 .opportunity-ai--c .opportunity-ai-result > header h5 {
   margin: 0;
   font-size: 18px;
 }
 .opportunity-ai--c .opportunity-ai-result > header em {
-  color: var(--so-primary, #254a9c);
+  color: var(--so-primary);
   font-style: normal;
   font-weight: 700;
 }
@@ -163,8 +165,8 @@
 }
 .opportunity-ai--c .opportunity-ai-content > div {
   padding: 13px;
-  border: 1px solid var(--so-border, #d6dde6);
-  background: #fafbfd;
+  border: 1px solid var(--so-border);
+  background: var(--so-opportunity-ai-content-bg);
 }
 .opportunity-ai--c .opportunity-ai-content p {
   margin: 7px 0;
@@ -179,7 +181,7 @@
 }
 .opportunity-ai--c .opportunity-ai-content li {
   padding-top: 9px;
-  border-top: 1px solid var(--so-border, #d6dde6);
+  border-top: 1px solid var(--so-border);
 }
 .opportunity-ai--c .opportunity-ai-content small {
   display: block;
@@ -189,23 +191,23 @@
   align-items: center;
   flex-wrap: wrap;
   padding-top: 12px;
-  border-top: 1px solid var(--so-border, #d6dde6);
+  border-top: 1px solid var(--so-border);
 }
 .opportunity-ai--c .opportunity-ai-result > footer > span:first-child {
   margin-right: auto;
-  color: var(--so-text-muted, #58677b);
+  color: var(--so-text-muted);
 }
 .opportunity-ai--c .opportunity-ai-result > footer .reject {
-  border-color: #9b342e;
-  background: #9b342e;
+  border-color: var(--so-opportunity-ai-reject);
+  background: var(--so-opportunity-ai-reject);
 }
 .opportunity-ai--c .opportunity-ai-review-progress {
   flex-basis: 100%;
   margin: 0;
   padding: 9px 12px;
-  border-left: 3px solid var(--so-primary, #254a9c);
-  background: #edf3ff;
-  color: #263b5c;
+  border-left: 3px solid var(--so-primary);
+  background: var(--so-opportunity-ai-boundary-bg);
+  color: var(--so-opportunity-ai-boundary-text);
   line-height: 1.6;
 }
 .opportunity-ai--c .opportunity-ai-request-state {
@@ -221,7 +223,7 @@
 }
 .opportunity-ai--c .opportunity-ai-provenance {
   padding-top: 12px;
-  border-top: 1px solid var(--so-border, #d6dde6);
+  border-top: 1px solid var(--so-border);
 }
 .opportunity-ai--c .opportunity-ai-provenance dl {
   margin: 0;
@@ -232,7 +234,7 @@
   gap: 8px;
 }
 .opportunity-ai--c .opportunity-ai-provenance dt {
-  color: var(--so-text-muted, #58677b);
+  color: var(--so-text-muted);
 }
 .opportunity-ai--c .opportunity-ai-provenance dd {
   min-width: 0;
@@ -264,7 +266,7 @@
     display: grid;
     min-width: 105px;
     align-content: center;
-    border-right: 1px solid var(--so-border, #d6dde6);
+    border-right: 1px solid var(--so-border);
     border-bottom: 0;
     padding: 0 10px 0 0;
   }
