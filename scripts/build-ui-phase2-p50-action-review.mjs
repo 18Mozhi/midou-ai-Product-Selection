@@ -16,7 +16,7 @@ const sourceFile = "apps/web/src/components/CredentialAssetCenter.vue";
 const definitions = [
   {
     actionId: "SC50-LOAD",
-    candidates: ["4cff98e257b4af2d.1", "466d5492514f7a0e.1"],
+    candidates: ["4cff98e257b4af2d.1", "52a1f163b96c6a4f.1"],
     label: "读取或刷新凭证与运行档案元数据",
     kind: "read",
     condition: "页面挂载，或用户显式刷新/在可重试失败面板选择重读时。",
@@ -161,7 +161,7 @@ const definitions = [
   },
   {
     actionId: "SC50-FILE",
-    candidates: ["7443d228a98eebd4.1"],
+    candidates: ["6a8beb16368d130f.1"],
     label: "选择本地登录材料文件",
     kind: "local",
     sourceContractKeys: ["SC50-FILE / 受控文件选择"],

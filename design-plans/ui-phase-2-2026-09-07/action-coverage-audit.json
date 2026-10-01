@@ -20,7 +20,7 @@
     "apps/web/src/components/approval-workspace-types.ts": "85f49803b54e30f8543d7256ce27630001c943aea86baac8a84d45591f9f9792",
     "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075",
     "apps/web/src/components/ApprovalWorkspace.vue": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
-    "apps/web/src/components/AuditedReasonDialog.vue": "c30657784ccb58df7ad2c61b91feedb7f26c77f38fbfd4a72c84364b168399a2",
+    "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
     "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
     "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue": "6e50eea01b9eec90b19d85c7620ac54df7a6c16f4b8121e1834eeee78af5a6aa",
@@ -37,10 +37,10 @@
     "apps/web/src/components/CompetitorMonitor.vue": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
     "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
-    "apps/web/src/components/CostRuleConsole.vue": "781049f4236f3e11f8a83473b7cac6e22d063c47ccd7fe8b78457302c66e5f24",
+    "apps/web/src/components/CostRuleConsole.vue": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b",
     "apps/web/src/components/CrawlerSchedulerCenter.vue": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
     "apps/web/src/components/CrawlerSchedulerEvidence.vue": "5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2",
-    "apps/web/src/components/CredentialAssetCenter.vue": "ec86d985dcc3db3e49d72f13053e66071a84a6fe6a20acdd2c1349b087d334cf",
+    "apps/web/src/components/CredentialAssetCenter.vue": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9",
     "apps/web/src/components/DataQualityCenter.vue": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/DiscoveryOverlay.vue": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977",
@@ -49,14 +49,14 @@
     "apps/web/src/components/file-resilience/FileResilienceSnapshot.vue": "35c14452ed8eab500d37d0a8c9584fa17601372303c6a18634d045fcc9d4eb0b",
     "apps/web/src/components/file-resilience/formatters.ts": "718033ab0085796d333abc0dcb07de422a58d8ba21989ee07b4f86da3da6a0ae",
     "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
-    "apps/web/src/components/FileResilienceCenter.vue": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9",
+    "apps/web/src/components/FileResilienceCenter.vue": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914",
     "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
     "apps/web/src/components/HomeDashboard.vue": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5",
     "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
-    "apps/web/src/components/LandingRedirectSurface.vue": "8f3dfcfbcbbaf18eef5729352c54679da68cc204194dcb6976e6810acdf37aec",
-    "apps/web/src/components/LocalIdentity.vue": "e1cbfd351ec79c7517f4c069cd3ba6d70ec4a403c72212dd3d195eea95370af8",
+    "apps/web/src/components/LandingRedirectSurface.vue": "754c42fa9e95c98ae2e1086e74c2326507370e4a14e70e45ade38f11aaf2827d",
+    "apps/web/src/components/LocalIdentity.vue": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf",
     "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
-    "apps/web/src/components/MySqlResilienceCenter.vue": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c",
+    "apps/web/src/components/MySqlResilienceCenter.vue": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6",
     "apps/web/src/components/navigation-surface-registry.ts": "e0f1161dd5da43df09b2710972ac431d746eb32fc7020c55502d020ef501486d",
     "apps/web/src/components/NavigationAccessPanel.vue": "3d2cb2dca56e68dbdbad880b4879b9739b5f86537c4e119495a1324f558c7338",
     "apps/web/src/components/NavigationShell.vue": "25cdd5e342935ec0ed531c5ed2d50678a72f8f4478d8183f117636244f0d2efe",
@@ -76,14 +76,14 @@
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a",
     "apps/web/src/components/OpportunityDecisionPanel.vue": "0198986474d6a0d356b83be1db8e34b5fce4ec5d1ffd95356839528b9ce21264",
     "apps/web/src/components/OpportunityDetailInsights.vue": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0",
-    "apps/web/src/components/OpportunityDetailNavigation.vue": "d066c65cd94d168b61502d5a55c5303932aee535815a68bb67ece4bc568b3e09",
+    "apps/web/src/components/OpportunityDetailNavigation.vue": "bc672394516d76821e73b3d2ee94bd3e13d5ff961ddd8a741391b51f8dceb5b7",
     "apps/web/src/components/OpportunityEvidencePanel.vue": "d1e82af4d5a8f21a97aa9ba5552a001a2b63689066ac664947af146b88fb4392",
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
     "apps/web/src/components/OpportunityLineagePanel.vue": "1c4343f7015d95e36a1e35e72dd25e86a76e95e32eb6b4338bd11f3b9a8a350a",
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    "apps/web/src/components/OpportunityWorkspace.vue": "69e2c6afdc0821067117e1e66f39fc10923248d1e6518ff0d8b881faa446c536",
+    "apps/web/src/components/OpportunityWorkspace.vue": "67335ca331b3bf0a59e1146ea4354e364ce3f1a516b15a9d9b7ace18b5a88322",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "4a655d342fddde6578419e7a0da446db82d2ae6f7cea99b09afb8faf9b934cbb",
     "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
@@ -166,7 +166,7 @@
     "apps/web/src/components/redis-resilience/RedisResilienceSummary.vue": "de1dc93ee710a96d965d295a6e2f1b3d8d8da07f61344a743e29bae743af2a00",
     "apps/web/src/components/redis-resilience/RedisResourceEvidence.vue": "3ded48c9a122e981d6adeb1dac644247da7ef968f0aba378341983633ddc8f9e",
     "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
-    "apps/web/src/components/RedisResilienceCenter.vue": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081",
+    "apps/web/src/components/RedisResilienceCenter.vue": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec",
     "apps/web/src/components/ReleaseRolloutCenter.vue": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
     "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f",
     "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
@@ -175,7 +175,7 @@
     "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
     "apps/web/src/components/ScoreRuleConsole.vue": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d",
     "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
-    "apps/web/src/components/SelectionJourney.vue": "8e0103bfda31bed992d91c61b9d84d873f73d29e1564cca51e27d0000ac29e70",
+    "apps/web/src/components/SelectionJourney.vue": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf",
     "apps/web/src/components/shared/monitoring-readiness.ts": "c9e4b5fbf63b1d4154a451f59160dfdbe3faac1a0c1eb560225600ef765eb8b3",
     "apps/web/src/components/shared/MonitoringReadinessStrip.vue": "7476d18de49a3457fcf8111ff0a3ccdcdbd5ba9bfb7b93c0e2850d9634f03d3b",
     "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
@@ -205,6 +205,7 @@
     "apps/web/src/components/TrendRuleDialog.vue": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500",
     "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
     "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
+    "apps/web/src/components/use-opportunity-workspace-reads.ts": "91f1a34d2ce1c7ef9b112d4257e7cf79267af0fb54f84405d0ade946c70bbd05",
     "apps/web/src/components/use-platform-content-list.ts": "ff5e74901f493bfcdd9d2022e9f400382038cda38e63f2f75284b9a6d1837535",
     "apps/web/src/components/use-platform-content-review.ts": "04a83f402bc5b98ede50e7b7ac2d05da0580d47aee638b04915917993d1436e6",
     "apps/web/src/components/use-platform-message-editor.ts": "cf8bb791830a84005646bdf436663c794d577e792c994a7445d8558934112e6d",
@@ -215,14 +216,15 @@
     "apps/web/src/components/useProviderSourceDialogFocus.ts": "3639882023ff9b374823d7c7adf56f59c8a3ff9347fafc9dde95774dac55c556",
     "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
     "apps/web/src/composables/useAlibaba1688Acceptance.ts": "9805b283f08361e16195d73c0d3c1b6c2a9673d8de0f5ec7134832121ceafbdf",
-    "apps/web/src/composables/useProviderParserSamples.ts": "50a6947a7b925a81d7de1a1256deaed3d25e70def461cb7c7bb3cd6cd5fb57d2",
+    "apps/web/src/composables/useProviderParserSampleActions.ts": "7608dd3ae3f2e805bff3de5c0b26c3dfed7187865a31bd05454ab950c23c4cb9",
+    "apps/web/src/composables/useProviderParserSamples.ts": "d2ae8ad7b3e3a21b014eb94e96993a67a0a7abedb57c3127435bc268d5aa16f7",
     "apps/web/src/composables/useProviderSourceConfigurationVersions.ts": "635e798746d4df20e99fa25668429787e1c982111e105537282dc55e4f70a259",
     "apps/web/src/composables/useProviderSourceDirectory.ts": "3370711c104434a86af825d377a6377e7350e7c9ccb58bd618cfa982bdf5f544",
     "apps/web/src/composables/useSourcingComparisons.ts": "e845a651880a987215dbb5659321b26e4262dcc45c007a035386312d74278150",
     "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
     "apps/web/src/credential-write-coordinator.ts": "234cc7ee8555089ed82462b2c7951c26081b2ecb7cc070e192535cae33486786",
     "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
-    "apps/web/src/main.ts": "ec4a6fca5f63a39533490e49820acbb56d8f19e9790f0cf288b1dd1bbcc2bb80",
+    "apps/web/src/main.ts": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671",
     "apps/web/src/modal-dialog-keyboard.ts": "bb7e46c424647905c2efd7fabb5f15c3c9a62eb8b14b8ef556020b4cb31ca746",
     "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
     "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
@@ -245,37 +247,37 @@
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
     "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "9a37882127bf26c4a26b827a83023b332c3fbe8338ccf7e168c4b62bbfea33e6",
-    "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "b117737c678b77384f8dbc5422ca2af6f2816336dfd49c5b37f3f53eebee2164",
-    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "3639baf3241ddfeed57def05b6db3fb592e2e76abd9ea22d0fa18552c904e66f",
-    "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "1c0949761891f591431b4c7e2eb55e89822147eea5c682a65e1156915f1351e6",
-    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "abd071d668ec09156b21af20eead0421bd4127e412d3c1876badadba803c9bd7",
-    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "ab4b381f48cc74f4d2a71d863fa221e989ca29a7a176674d97b429d5ef6159a8",
-    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "5f578855f790c5f60874475705bf6035dae05162c5dd1829635390ed08c3149a",
+    "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "0299f051665e41a61bdedc711ea24ea0ac365c64f248c181100ec3ce4cedbecd",
+    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "d2897f92a1cf650c2cb50f325a6d36ccf661e4dde24d42181d58e7fa4984350a",
+    "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "0b428f6cc2496bd4aff581065bba5996b2e759951d3676e3c2381ba62d0e7ade",
+    "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "9c6ef633c49158b304bf884a0722037a39f0d25e460f31a566577e1d32da0a98",
+    "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "e4b0ebe9870290fc99a31742472e25bcaf62ec97bf1db10537108ea941983198",
+    "design-plans/ui-phase-2-2026-09-07/competitor-contract-review.md": "0c1f1161917d77a75c3bdc3f635835a12bc5fb06ab73a5955e1e234c9d31bd92",
     "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md": "c8e67dc3a47eda42e9d7f229d43db1dfaf7d30ebacb24cc728883e692e9b90b9",
-    "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "0a11f71fe3a49fbfb73c6cb4a4d8ef90bebe5f05bcf1c166cec90b583bf9f8e4",
-    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "cdac036c57563917d52634cb09454662d51d92fa4c1884c65e84ddae747f6d07",
-    "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "34916053299e841285f8666457a4055a0a6ca845dfc55a45feecfbe5f60d9c77",
-    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "f9e0a35c02f6ecad87084aa221178a8f09f29bfeaae357f3e401a6a1b682db6e",
+    "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md": "766bcdc71d9c830d8cdb259d53153ecb96dee33e66a52618bd3d0a07487f93c7",
+    "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md": "8d6e6dacc9b056fad9f34813dc8d04a81d900b879ee65fa15ecb22ff43b39a7b",
+    "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "0f980f3d976b6c35a29317d2c3ca32fbda20c1c8e77b7367b613e897ca1520a3",
+    "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "5db67a9a3e5825231a9f70fd93c0a53573e852ee298b74caa8978299dffa0fb7",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "c1f16d965095f032e4681b2aedeee9411312c5281e50a484203a5b4d89934662",
-    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "532588c549bd0362042ee8b991ff84582f7061d2e8dc5f71eb5e93aa7a3169e3",
+    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "10620af50dc63949e367b4fa460d3f9a30d0535479997f7d78150fc9a9fc61cc",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "dd2def25923858383f4371d3bb5ae643cf28b06ac185aab7017aeebff8d96291",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "df6390dce4ac9dc7d7019ad972f3ff57013adc448b6bcd26b56ae3e84ba006a2",
-    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "746265dec585e3fa1adba59b8a9ba865cc0b718245f87e227a92d5dccaff6589",
+    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "3665adb7a413e937deed8165d2b9967d5ed891dc23058863a40917f2c4eb30b6",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "4df5cd5f4fff7e32f31a7a0ef71bd54af5ad8a68e09dbec2c8183748108e881e",
-    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "2519ab4ecf42019f22816a66f913d797030a9652dafc0f99405d802aa32bd4e2",
-    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "46ad324b09b6a5f011cc39a0a0051c90e4b487087ff5a035eb28c3dc64c30efe",
-    "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "6604783f1f631547071a651e4e97532f3d3109f7b21fd2004f367bf2c882337f",
-    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "9add9406096178c1ec3df809c9611bdc99545d95588378221277092c22c270cf",
-    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "8ec0e6cb51df04480bfc80387554e98b8682880e306efa73052f42825421e028",
-    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "b7170d2bce947478b32967c494c669c632d4daaf563bfbd8c73df933a3396892",
-    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "fdbde9fa24ab1d8a5d3f19c23a6bef5b9745b5326d281efcb58b61115061c63f",
-    "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "a0fcc2418881596df19f77a678821fcb2792e96a5f018d76a38268026ebca270",
-    "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "af93117972cab0cd3a69985cda8e8b487a7eac7c94f45e6cfd6972e556c04b70",
-    "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "46b1b86a6b500590b713ca52ce2abe9d7141eda68692354e5ad9ceeb10538cf1",
-    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "8ed71407dfe6c924648dab98534c445f950e5dc5885743f3e255f97126c14c96",
+    "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "64e4cb7386115f3e6eb878c9b2f8a80d550cad1b2a67ae8885017709e40a2301",
+    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "d3ccd62432662a3706caacb3bec04a73fe6be21eae0c6a264f3ffc0372008719",
+    "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "457882a3aa5b80b98dfdfd5eaae06bf6f7ef000c642217c903c6a098d2b6dabc",
+    "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "b8fdd4276778197d99938b934d5522db0d0371a0391c9bf3d39b8a99cddfe5d7",
+    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "0cb8cc35e00932cf38fa80e2072f571ef64720e455840a0a9037260458d7f8e1",
+    "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "5b94000e14e6809923df2be69e6e4675669b3291fdfcc210ad696646c70a3f0b",
+    "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "d1f2a2fbf84836479152284b7cdc914fb3ce35e54d897ebdb8900795834f2f35",
+    "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "1ac72afe9ecb51457b5b081ecec3cc9a9421d4303699ee84344ab94f2045b30e",
+    "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "683954dbfdc283c2ad5ed943842e27c338c8349acc2f3d802686382047129c47",
+    "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "d2dbf814b770a3153b9036a374cb43b957b3ebb3147e6e77d6fcff53fff4aaf0",
+    "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "2db59544f5217ca4deae66edbe02e55eb406bb53425ddd3281a7209fa3efc7cd",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "a9b294e2f83d2f8283901af7ca9fc067eb3e111ce36fa7fe0cf5cd0233cc329d",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
     "design-plans/ui-phase-2-2026-09-07/design/account-direction-c/evidence.json": "7d16093008b0884c77539d9bf4f0a4307627296162ad7fad6cffe3e86de00f69",
@@ -379,24 +381,25 @@
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "419e96901c361b8285010a36f9728fec82071f859a841256363988dbe406cc92",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json": "fb414c18e59348ec4fdc1c40f7962b7fea33417ce112ea8c103d1c23c0995510",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "44c638e5d9d79968a7e18a6a0632b70168b25c0dde27fda153d3b9cb804fc24d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "9d214eacba6e61ab25e82ecc28798a36a30896f49029a945fdf1651c4dccd412",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "24c8635ab34c2899698b3054e1d93dbd8019d7b91f3f54c2f09fc1d5c56e732e",
     "scripts/verify-ui-phase2-identity-source.mjs": "bf5b3cc4c8d684fe20ac09ea46862dc68181494e17dc9611805f96c301941ef6",
     "scripts/verify-ui-phase2-identity-c.mjs": "e738ed2727df69f8a856bb951ee8ecae593d58600b2af9bf8c037f14a56ea874",
     "scripts/verify-ui-phase2-identity-review.mjs": "560c5287210f1c068ced30531a2fd86fd15338fe7890e7bf8a0c5579e95aaff0",
-    "tests/e2e/m00-01-runtime.spec.ts": "6199172b22c011e58285b64b8f093786754597619b66f05f6d53b3126f6046a4",
+    "tests/e2e/m00-01-runtime.spec.ts": "7e56ab6683b02de4cf49e3c7ba946243746d13e0b3641a8b9b2d9b579161f4ac",
     "scripts/verify-landing-page-preview.mjs": "c353d7ec6e99bd0fecf918a8ab22b02b52a10e3034d2965fe994bb96317cf93d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "7156e901f5e9580f376a58b790381cb4c2d96adfe0099d652f82b25e3e2a6721",
+    "apps/web/src/design/landing-redirect-tokens.css": "db59714db161e028dc70a8e68a3e810b0ea7062d7391eb101b10d4a7fcf3a076",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "375251d34db3e5457b4843d112a525d3c9fdbafb8645e53de7b1ce3b51fb9fb8",
     "tests/e2e/m01-02-mfa.spec.ts": "1a9d11a1b965ec9a296becef587b1beec1fd601106b5693ad0bbdbe6757ef970",
     "apps/web/src/components/local-identity-login.css": "6ae95e4f91c9308b49cac2fe5aa9686863ca932573c80d2cf163e9a7d80060cd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json": "e202daec7165deaa1281ddddf8b7346e4bf713de4416b7a0c4b13f0471020cc6",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json": "439deb2f668dbb7ba27c6ed0eaf3cc4b6dd7245c180a48a35517cf3d09b3d539",
     "apps/web/src/components/local-identity-registration.css": "940a27b3840b97c7a49f3a9044a6ec3705b32d6edbbb97b1efd02907a060e126",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P04.json": "9bad765c7ca050561130903f8c01199a86e8ca991b5264cbeb73d93a41ab64c2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P04.json": "9d9559d327e653baa3e92e8fff0925b19bcffc52ce193d3840fd154272f6bc86",
     "apps/web/src/components/local-identity-recovery.css": "0a7a7ee95210cdec20fb1ce28634649797df3ff349aa299b55ca833b78715761",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P05.json": "63a2ff3698d6ce04d4155565327bde2965a667120216796a77d16bb292ec1b26",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P05.json": "7a66061a5bbd4cbce24bf2ce7826728237f5d513f3f0b92e9c8c2d7543494ba4",
     "apps/web/src/components/local-identity-verification.css": "1634922d971948d38e0ccadb11589e3b51f8e2933484fc51e4251ac06a99849d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json": "68141033a0ab1368dbd206e442c814c6f2175b95b3f8c79354a886359c5a5f19",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json": "3612bd4903c5b8b94c0a0fd13bd3c20572908b6bab15b2f4c1e0b75b62e0a8cd",
     "apps/web/src/components/local-identity-reset.css": "44165b011c3b10a2e9d75823aa965b3a8b40837f13ae1322dbc53204ee40b239",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "114ce28c357f9c0c1bbc37a757913bf3e2c07c55cb4685d2fe9ff9016e00977c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "f5b000339ba406bebe3b733525f2a5d85496ce5a1e186cefa33338661a8fb6b9",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P08.json": "98b0531c9f7e72e09f36127bd1506e6f3b72759f210d0a4464cee9efee1845cd",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P09.json": "d0db4debe1edc0a13e11cb949446b4fc57ec5f811d9484f97799067384778e08",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P10.json": "f53acf65f0feac1badaea92051d486e6fa0310b85693394c5ba1e43e6d466c7e",
@@ -418,18 +421,18 @@
     "scripts/lib/ui-phase2-trend-design-data.mjs": "3c2c1f0f639200c425d208490e5fc0850bfbfe5bdac737c0120d4153310e2378",
     "scripts/verify-ui-phase2-trend-c.mjs": "7e39683fb2b9d6bcaf86dd190679681e6e4cdfbceaf5aed03cc33ef30884d27c",
     "tests/e2e/ui-phase2-trend-contracts.spec.ts": "aa92cea4340b1ce5114bd564306312651da3c529cc8a15e887dcdb396255ed8a",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "2e910feef08893d8e058bae377d04cd11a4028fb36f8d3d345606e1287a036ca",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "f254a0681fa6713017a78019b564e239f57653a516ff8b208b634600a5eba2a2",
     "scripts/lib/ui-phase2-opportunity-design-data.mjs": "490acc149902dfef2bcfbba230a5fd7cd1da41f65f8119336dbd46b13560c446",
     "scripts/verify-ui-phase2-opportunity-c.mjs": "1e1bc943254dba44cf85773883ac6deb9d744ec0150675058ae175f356becc95",
-    "tests/e2e/m04-02-opportunities.spec.ts": "89f833f45bc3daf905e20fc0c97c90981ca602ed2e1cc9121cf1dccb4ac18f62",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "5dedef7f1c13480e9ed6e01d382ef2090edb604be14fbb2cadefe9338cb05472",
+    "tests/e2e/m04-02-opportunities.spec.ts": "778da03e1439996e21df424b6c5a0e69e41f21e41ec44f03f93cc3a67a815809",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "30fd9929c7d72d386819264a3c1087f7519f552e4f5df5b69da6ea51b6aeac1b",
     "scripts/verify-ui-phase2-journey-c.mjs": "565ad593808a73ded057ed2b3e2bbfc1505018fcef822a387b113671dbc5a66f",
     "tests/e2e/ui-phase2-journey-contracts.spec.ts": "67b8292a4c46e39ce5a80b02ea4aaf6435a79cfcb76356850488800d377ef3d0",
-    "tests/e2e/m07-06-selection-acceptance.spec.ts": "1186564ff800079ae22972ea81975e8d12093818777274b99cff691dfcce1a0d",
+    "tests/e2e/m07-06-selection-acceptance.spec.ts": "fbb299296621475c51e6894a9103638fa3656ea6c053d18219f046fdc6cbc3c5",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2d387f6cccdac69f797195db1ac79909463483c1a4ae431011b699fefcbd997c",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "tests/e2e/ui-phase2-scoring-contracts.spec.ts": "14d4a1557e9d586c4b74d3598b552b1fa740e151b62616422fc7aa86ed3efd1e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "af426e49946c87289821dc9e4cd9b701668dfbdb29a60a60ecab4457a25985e3",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "e6d32d0f37bf9681acb1e8727aad239dd38eb9d7c635fe80f2e4aff07fde19ca",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "6dd4d58c43a2bebe38dd0eacdfa56a51343b1d1ea450806449da298c13b1d49a",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -447,7 +450,7 @@
     "scripts/verify-ui-phase2-sourcing-c.mjs": "418afbad3ee07284af704019f543c497cdb9c7d8a9a1a24c191d394ddb1f6d09",
     "tests/e2e/m04-06-sourcing.spec.ts": "26c64df61d2b2aeecdb5f5668fdcfaa13b3a655a303796fb128862340f56a9b1",
     "tests/unit/ui-phase2-p21-dialog-action-map.test.mjs": "5674783cf2af7a7511c4060cf068c08c61f2e6d9690a7a5d6f5c6b8a60cdc1c9",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "4d945c77053eec96c392c5fd3f925ce6ebb76e1bcb745ed495baf951869c6d24",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "d7036c697281ebd9ec344f6f85cddd8ce98728c77d3abc839d7715d5d62380c9",
     "scripts/verify-ui-phase2-cost-rules-review.mjs": "da2f9d44296307d6a3b910bdfe01196c638096f9df93ec733a962ee4a719cf7c",
     "scripts/verify-ui-phase2-cost-rules-c.mjs": "d96873a753a246b28fc4eb3442e80f95756da1aef4eab8bf4ee8b5a5ccd3f94b",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "bfa90c192e8abe2417f3e317b565dca09404faf337594fb124edcf5a69eaa2c9",
@@ -478,16 +481,16 @@
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "57b0a8951c588cb1137f108f61214cb8f5b1847fadd8ca45461bfc58420699cd",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "44cdd6607680da916968b2ba16b2bad6233aaaa9f75a49bc3cc7ae052eb31e9b",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "18eb05de2f6207a62407f87a3ea59117a14e790c64bd520bdde0c0c801c3276e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "8199d08c370715b4d5df2262d2388b7749560845469e78c11e4b90860715f0a4",
     "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
     "scripts/verify-ui-phase2-roles-controls-c.mjs": "a7a318f327d2a7cb95bf439f21e36d006531abca5f3a194eb2cfd50b3b203bdd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "617346819de5a326a0dd863dca54d7494c80c3db4306354f0be82e577d4df070",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "8ac9815b2bd50acb4142399cf2a2e9b9ea33bd6afc190901bac160b31947fdf2",
     "scripts/verify-ui-phase2-workspaces-c.mjs": "a2099317449e0b217cf15a384434cbd5b43efcce537552c5d4477d1242d9db5b",
     "scripts/verify-ui-phase2-workspaces-controls-c.mjs": "5ed21d201b155ff5c2eb7a2062a5c7f0e7b162d93108a2c71ab5c3d0a8b3c846",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "44dabf3153fc204ff68adbf1aca97407b52025c29b56a4f71a4a00598d4b2ab5",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "aa13dd439ad62f77b40121215c31d015794032265bf51cb344368d9cd13128d1",
     "scripts/verify-ui-phase2-teams-c.mjs": "32be558307423a0131b146701a7a8c8dbe79f365f5fa306cf2555951a55890eb",
     "scripts/verify-ui-phase2-teams-controls-c.mjs": "c2f015d785ddfff74c1ddaecec3150763fbf29a176e40e71ac4a2d783bcd4ce7",
     "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
@@ -496,7 +499,7 @@
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "7d37cd7bb1e051dfc1b91f73c4130529f93932dde0867379b70af427e3ce18a8",
     "scripts/verify-ui-phase2-org-data-controls.mjs": "32652c1547b4998316b79625d87662a3035959d9ae372aa3bf9fcd0785a9838e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "6238c15aaa510e560484a245ad9be95b0eb9021479b22d7184eca4dc1e955fc9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "1ea415386045ee9df46cbe109e2b5a8b842336a03d93bbbf73d8278a682da188",
     "scripts/verify-ui-phase2-org-token-controls.mjs": "80210a2d4d289a83eaa260e29aeb1e2eb54e5953fa9238b6eac1feb2c9c7b205",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P37.json": "72a9e86690356cd3bd632dd281e339bc1141e12a5ea8490f1440ab20f1e11e4b",
     "scripts/verify-ui-phase2-org-audit-controls.mjs": "97846b5e70b74a6a2246c0b96d9e6afee4ab8691febdfe0c6fb7685b5335e9eb",
@@ -530,7 +533,7 @@
     "tests/e2e/m03-07-provider-sources.spec.ts": "5d865c185a67fe0d529fb131f8244f96c30c5383587ac4b146230704e6fa6d96",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "0a96c4ac83e8bd5041709dcd8767f38fc75c6adfe5e3d94a3b250ca4b08adc8f",
     "tests/unit/ui-phase2-p49-action-map.test.mjs": "e68ae4976a2e7aaa11a201227c2d32139789eb698210448e5dad3382643728ed",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "b40266a3f6561797a1d3eef6f1c50e036ad038a93a9d7510c19f8f9c6c5d02e3",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "4663d3abb84e54310745a7c3e10956dee1b21d9d220984ba7b8d3cb8117538b0",
     "tests/unit/ui-phase2-p50-action-map.test.mjs": "4c61df3cb0613cd955defb597905e8381e6a55a3d83f5dde31bec168d985aa6d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P51.json": "1fe0a628f41ac0185efa4f4c9042d91dd116baec095c05dc0b1fe0239444d521",
     "tests/unit/ui-phase2-p51-action-map.test.mjs": "795e5958e54feed9ebcb6f06f5c2b66bc8455fff16be43a397248249fac208d0",
@@ -538,7 +541,7 @@
     "tests/unit/ui-phase2-p52-action-map.test.mjs": "77d94e9e75405de5557e9f2861d447132c43a6aa7224e4f68f630e920f6f4e41",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P53.json": "08deea174436a93aaa01313784be3c88c42f9aba51d791a840a5144af1ecf8d4",
     "tests/unit/ui-phase2-p53-action-map.test.mjs": "4b1fc426854abe19387e7cee017d0f64a207c37e80955cfddc0ec113f39bca3d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "1d7ac8a094671579ec4bc2eb6cd668eb4381ead693fb1614a68a29c62e9936be",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "068225fd636b244375700abd944b95aaea25fa8a3260b7ee20e78f680e400e4e",
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
     "scripts/verify-ui-phase2-data-controls-c.mjs": "789526ced8ddf184e6fd21ae12e00d17f8f0b58675c269d6abfa154011388a06",
@@ -559,7 +562,7 @@
     "tests/unit/ui-phase2-p60-action-review.test.mjs": "e8f136322989684a16a3a7817c7d191aad657e33f5996a4f106ce22772d65248",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P61.json": "95328f9096b2e11ad90a391c8b5075526f7710d062f967b281f242914a6bc190",
     "tests/unit/ui-phase2-p61-action-review.test.mjs": "13917fe4ac69e2b6dd497f1268267ea01908a7cca5eda7ca6c1a10814c7ba58e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P62.json": "7be284cd008a75e48bca574f4c81100d08a6403e708bd9de36feb24f630862a2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P62.json": "87b74a0e742f3fbb4e65f83821738902fbf91362ea23b85f87ad91585fbef762",
     "tests/unit/ui-phase2-p62-action-review.test.mjs": "00f1e93e8e2fe8fedffaa7abecb43e395b07b9c4664ad08ae3a9a44877022dfe",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P63.json": "0eaf6956b9cc12ca27e5e40ce7adb077f37258823624339007714ed1a3fcca4c",
     "tests/unit/ui-phase2-p63-action-review.test.mjs": "d960ed40575847ab67a05da9a14cc49f099be50a89fa2fd174e2bfe523376aa1",
@@ -569,11 +572,11 @@
     "tests/unit/ui-phase2-p65-action-review.test.mjs": "7f02bf53e9a207961682fb575679af0832611507597b4bf3bf8d46f5e8412494",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P66.json": "61e1ee33e2bd3eefd68ccbc0281eb176e99873de38e5646e81b3684ca3837483",
     "tests/unit/ui-phase2-p66-action-review.test.mjs": "1a65f98a1262a4991353979572dd6cecf847e9a4b76674532d5dab927eef6202",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P67.json": "9ec178eae6cc6c643868e1a0c7cddeacab1a43c7520a80ab96c2e02b0d106af4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P67.json": "994b358980e0debb0d3b40e9e671369527696007ae591bd3f498a585233a4a5d",
     "tests/unit/ui-phase2-p67-action-review.test.mjs": "1f5a0f81ee4ed4f015007de6b0f5a6a378b90e6b3fa03a5b90430227b19ba09b",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P68.json": "efa47f120405862fc98495e7f3428bd36de72922af78fe23e11c283ffc80b120",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P68.json": "3914554c182335c4204ec5f3a80a9bd8aaebbbdbbc98d9f8a77308b25a27ba23",
     "tests/unit/ui-phase2-p68-action-review.test.mjs": "9431b4f03e0f72ef37ce4c33b66a5312bdb0b7726cc8d9c2517b7b8245f4e6bd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P69.json": "157337db8ae7bf7068477e9edf5b55ed3ecdf413a474be373fd3fe719adceada",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P69.json": "c4be1c3c286ef0db01d52d9dcbb0fdcda35c2e87c8f6629b1c587ae0f73e7138",
     "tests/unit/ui-phase2-p69-action-review.test.mjs": "3e2e539566ebc4c63f5d02cb0245431157db33588672ef74b5653f5461be9fe1",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P70.json": "80de35c6a02777d762c06e14ff1d1d203afcecf00011f12e7da16f6944497e71",
     "tests/unit/ui-phase2-p70-action-review.test.mjs": "3dff08f5329be88ff5468f1b781df2a6dbdd9e48fda4e64e8d92289f7ad55f6d",
@@ -584,8 +587,8 @@
     "tests/unit/ui-phase2-p72-action-review.test.mjs": "de5d14b49c8634b5ce568a84ef9e3cbfa0ed957b8a2c2ffc5e53cb3840ea8566",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P73.json": "9f9439ce01794ee2bed7ff8bf91d888ba8944c9e725d5b4615e71d19f4a0a677",
     "tests/unit/ui-phase2-p73-action-review.test.mjs": "684eb8bf6b75cf6aaf95663cad3caf1a8a0b77efdead974ac0bf74dfbcc38bdf",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "3414c902f6d6aed13925727705022e31b5bf6cbfdf80d6f59d6c71c6133d10c5",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "e85668e6077820947c79c3c7042145e73bec7724a4efb1e1dad47700622444a2",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "908636a0d887acdfe7a3a704495201afb7120c28c2df8842a3829806e60430f8",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "2c433f1f97aee9b8c3e19f0e2baa24ed9be34572380d43b3f7694ffa93c1122a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "5d313d6c132671b76cb325c07c702b82193b786c2d27ea07aa9476ff32b26356",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P04.md": "451d5b1cfc9872295018b0592e63c9e1277ed27345d8a56bf9f570cf28350423",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P05.md": "3bf5ce1459a9d0d489a61865f02196745279af4ac711716939ed655c14bbe742",
@@ -601,7 +604,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "bc3d86437f8cd0c435d20820b0453efa7201c8305e95b1a3081fdbfb10a3d61d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "cf4c831ad6c7059780ea74377fd52ef4e90b374de610edd12f05e1be2fb954f0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "d56f08cd29e0f343c6c984f1f3c3e6e7e2405233957be0617696e4e91a459fa4",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "75af5b069feaa12a5e14eb8e4e26514cadd3eb4452733004337b673736d1380e",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "8e3f1e4a4c68334a354ac2f6663e58b60859fee18ac0908a348d143d88fdb593",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3c6a60caf2045f07a9a14c89f07cd3c1d9b20851719683f69b02931ce04f730f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "683179d07629a30338b60ab10ab52c96883610215eecb1616931bf55ca66fe18",
@@ -647,22 +650,22 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "00cc26eb337479d306cddc84d7b252189fb10ecdf5868f41277d350dcb20b9f2",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "4643301cd84bf55cb906ce4d6f9691e5faa77b5c57581a79f5a979f0ecbe1415",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "638bc66ddda804f5022476e6fe5bb8dab6668ec434aadfb36af6022134ffac36",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "97bfa7b985c4245c83f2bb86c2719766431d075601a3dc57219dafcf6787ed01",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "11c87c5e52f5b66804134edc5e3d8bd84519b4a8f3d91b233b00763681172a4b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "6484a40709152db9e56130c2311cb0966fa4871c770c0e80ed64794e8e1ff033",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "44625ac8f1344573a748a094e242d3c55c09e6f473f7a9c2af3d00442161ccf3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "ca3ee2177c96cb2f8da0e3e8e18263f4f389187c62e26f35f064ae1f48529ba8",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "a914f1ce2647afdee5215d1d8f777e231d9c2c833c228601973abb1c604effe9",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "4401a57c8e8ebefb922ff7d5eeadcf1e1e3b96ea7e0a1a3e219417e6e0f894f7",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "f9efd2c66618488b12fe919778604c030028bf44c7b4b46432f8ff2f5b7fc806",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "f682447baf5a27d7c8a0ada410025934e5203510393aa3c073bbf6e771c50705",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "9829094644f2614f6fb5cdccb5184ef4a972f7bbaf720fb398066003625feede",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "389f1671920d3e64637cc9609d47074af8fc2a5c014a95c6d0817afb6ee894b3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "e3fec9d096d754399d217656ec30a51e2a2352ab4dfa43f3323409bd670d3791",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "b58a994a201f5980f8ee68376bf8331cd6ded381d1579621398bbb900f034fc5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "8799c6057f3b537823713df64d67e76ba912331b1253f7ca34ed84fe12eba081",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5e7d02960a5904c118159279d1f9ec7a71dd0d6d235bfae42f92ee42cd7af30a",
     "scripts/audit-ui-phase2-action-coverage.mjs": "dbed9ad7022d527bb6b3897dc51a395fc1b8d2f150219057887650a638c000bf",
-    "scripts/lib/ui-phase2-action-coverage.mjs": "39ccdd68059bfd76f0ed3a534088bee6f4e958aca6ea38e2bdb224b02357edee",
+    "scripts/lib/ui-phase2-action-coverage.mjs": "db36aaa68e4a497f499ee145aea49ba88dec0083f52c1eca42a2148cf14cfa65",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "22f0710e70d77f4335a86a3ed6ef6d14c54fc23ec98d50aa2e22c50809e4e523",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
     "scripts/audit-ui-phase2-contracts.mjs": "35733d820167588b796e95647734effdb9fa3d73828c6c7062c26d0e26007319",
-    "scripts/lib/ui-phase2-contract-audit.mjs": "b7b12201094c94705ce2e0e0f5145830b4a2468632f1a33b09fe96a54e7039da"
+    "scripts/lib/ui-phase2-contract-audit.mjs": "586315fe5ec90e183ee2ac9cf2030ffc296bbeea54eeeae20fabefd88f491005"
   },
   "summary": {
     "routes": 73,
@@ -704,7 +707,7 @@
           "actual-vue-review-fixture",
           "offline-proposal-check-not-Vue"
         ],
-        "unmappedVisualSlots": 6,
+        "unmappedVisualSlots": 0,
         "surfaces": {
           "callerFiles": 2,
           "localModelBindings": 0,
@@ -1440,7 +1443,7 @@
           "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
-        "unmappedVisualSlots": 332,
+        "unmappedVisualSlots": 330,
         "surfaces": {
           "callerFiles": 12,
           "localModelBindings": 35,
@@ -3877,7 +3880,7 @@
         "actual-vue-review-fixture",
         "offline-proposal-check-not-Vue"
       ],
-      "unmappedVisualSlots": 6,
+      "unmappedVisualSlots": 0,
       "surfaces": {
         "callerFiles": 2,
         "localModelBindings": 0,
@@ -4320,7 +4323,7 @@
         "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
-      "unmappedVisualSlots": 332,
+      "unmappedVisualSlots": 330,
       "surfaces": {
         "callerFiles": 12,
         "localModelBindings": 35,
@@ -7714,6 +7717,11 @@
       "routeAttribution": "historical-static-superset-not-runtime-proof",
       "registration": "not-in-historical-inventory",
       "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md",
+          "line": 114,
+          "jsonPointer": null
+        },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md",
           "line": 320,
@@ -16993,7 +17001,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#4cff98e257b4af2d.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 998,
+      "line": 999,
       "kind": "control",
       "label": "{{ refreshing ? \"刷新中…\" : \"刷新数据\" }}",
       "conditions": [],
@@ -17018,7 +17026,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#889e842f4791c19d.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1003,
+      "line": 1004,
       "kind": "control",
       "label": "下载浏览器助手",
       "conditions": [],
@@ -17049,7 +17057,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#3216d7209881fb86.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1008,
+      "line": 1009,
       "kind": "control",
       "label": "配置网页登录",
       "conditions": [],
@@ -17074,7 +17082,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#da51ee773f1eb5e2.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1009,
+      "line": 1010,
       "kind": "control",
       "label": "关联运行档案",
       "conditions": [],
@@ -17099,7 +17107,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#07c8680b127235e2.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1010,
+      "line": 1011,
       "kind": "control",
       "label": "新建凭证资产",
       "conditions": [],
@@ -17124,7 +17132,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#52a1f163b96c6a4f.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1034,
+      "line": 1035,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17154,7 +17162,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#343034ee456c8020.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1061,
+      "line": 1062,
       "kind": "control",
       "label": "创建第一个凭证",
       "conditions": [
@@ -17188,7 +17196,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#99e8924082a7d684.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1110,
+      "line": 1111,
       "kind": "control",
       "label": "更新资料",
       "conditions": [
@@ -17226,7 +17234,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a244801ec79346ec.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1116,
+      "line": 1117,
       "kind": "control",
       "label": "撤销",
       "conditions": [
@@ -17264,7 +17272,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1230,
+      "line": 1231,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -17304,7 +17312,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f9aa4f7cabe04961.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1239,
+      "line": 1240,
       "kind": "dialog-definition",
       "label": "{{ editor === \"rotate\" ? \"更新加密资料\" : \"新建加密资料\" }} {{ editor === \"rotate\" ? `轮换 ${selected?.name}` : \"创建凭证资产\" }} × 所属来源 选择来",
       "conditions": [
@@ -17334,7 +17342,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#efc208b3291dd2c0.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1239,
+      "line": 1240,
       "kind": "event-binding",
       "label": "{{ editor === \"rotate\" ? \"更新加密资料\" : \"新建加密资料\" }} {{ editor === \"rotate\" ? `轮换 ${selected?.name}` : \"创建凭证资产\" }} × 所属来源 选择来",
       "conditions": [
@@ -17364,7 +17372,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#fcfad5327d89010f.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1253,
+      "line": 1254,
       "kind": "form-event",
       "label": "{{ editor === \"rotate\" ? \"更新加密资料\" : \"新建加密资料\" }} {{ editor === \"rotate\" ? `轮换 ${selected?.name}` : \"创建凭证资产\" }} × 所属来源 选择来",
       "conditions": [
@@ -17398,7 +17406,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a75910143d18b017.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1270,
+      "line": 1271,
       "kind": "control",
       "label": "关闭凭证编辑",
       "conditions": [
@@ -17432,7 +17440,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#3b5333f821fbebcc.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1283,
+      "line": 1284,
       "kind": "event-binding",
       "label": "选择来源 {{ p.name }}",
       "conditions": [
@@ -17470,7 +17478,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f0de1dd230399061.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1304,
+      "line": 1305,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17508,7 +17516,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#db8f358359d81455.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1340,
+      "line": 1341,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17542,7 +17550,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1368,
+      "line": 1369,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -17576,7 +17584,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#584e25b2c7498fe2.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1371,
+      "line": 1372,
       "kind": "control",
       "label": "{{ saving ? \"加密写入中…\" : editor === \"rotate\" ? \"确认轮换\" : \"加密保存\" }}",
       "conditions": [
@@ -17610,7 +17618,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#49e83794fc69aec5.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1376,
+      "line": 1377,
       "kind": "form-event",
       "label": "关联网页采集档案 创建浏览器档案引用 × 网页登录档案 选择加密档案 {{ a.name }} {{ nativeFieldErrors[\"profile.asset\"] }} 内部标识 {{ nativeFieldErrors[\"prof",
       "conditions": [
@@ -17644,7 +17652,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#785d60d74b62708a.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1389,
+      "line": 1390,
       "kind": "control",
       "label": "关闭浏览器档案编辑",
       "conditions": [
@@ -17678,7 +17686,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#56cda485ff9a67e1.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1402,
+      "line": 1403,
       "kind": "event-binding",
       "label": "选择加密档案 {{ a.name }}",
       "conditions": [
@@ -17712,7 +17720,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#118e781b0120c4b2.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1428,
+      "line": 1429,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17746,7 +17754,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2ddf54204f452511.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1445,
+      "line": 1446,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17780,7 +17788,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#6bd7eed22ff8851d.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1461,
+      "line": 1462,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17814,7 +17822,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#7550a9de2696128b.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1477,
+      "line": 1478,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -17848,7 +17856,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.2",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1503,
+      "line": 1504,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -17882,7 +17890,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#98e4c1aff937289a.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1506,
+      "line": 1507,
       "kind": "control",
       "label": "保存档案引用",
       "conditions": [
@@ -17916,7 +17924,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#92da9f015f800722.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1511,
+      "line": 1512,
       "kind": "form-event",
       "label": "配置网页登录 导入已经登录的浏览器档案 × 支持哪些格式？ 首选 Cookie JSON、Playwright storageState JSON 或 Netscape cookies.txt；也可上传专用 Chromium 的 .tar.",
       "conditions": [
@@ -17950,7 +17958,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#d86a0656a93bd973.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1524,
+      "line": 1525,
       "kind": "control",
       "label": "关闭网页登录档案导入",
       "conditions": [
@@ -17984,7 +17992,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#d2a64908945092ff.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1547,
+      "line": 1549,
       "kind": "event-binding",
       "label": "请选择 {{ item.name }}",
       "conditions": [
@@ -18018,7 +18026,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#1430f57a236d6ea1.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1559,
+      "line": 1561,
       "kind": "event-binding",
       "label": "上传 Cookie 文件 从当前浏览器读取 完整浏览器档案",
       "conditions": [
@@ -18050,9 +18058,9 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#7443d228a98eebd4.1",
+      "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#6a8beb16368d130f.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1570,
+      "line": 1572,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -18090,7 +18098,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1594,
+      "line": 1596,
       "kind": "control",
       "label": "打开 {{ loginNeedsAuthentication ? \"登录\" : \"来源\" }} 页面 ↗",
       "conditions": [
@@ -18113,7 +18121,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md",
-          "line": 558,
+          "line": 559,
           "jsonPointer": null
         }
       ],
@@ -18128,7 +18136,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#f176fdb4640192de.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1597,
+      "line": 1599,
       "kind": "control",
       "label": "{{ loginMaterialBusy ? \"读取中…\" : \"从当前浏览器读取 Cookie\" }}",
       "conditions": [
@@ -18155,7 +18163,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md",
-          "line": 559,
+          "line": 560,
           "jsonPointer": null
         }
       ],
@@ -18170,7 +18178,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#148e132f8526cb9d.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1608,
+      "line": 1623,
       "kind": "control",
       "label": "取消",
       "conditions": [
@@ -18204,7 +18212,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#a6de35af2d13a51e.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1609,
+      "line": 1624,
       "kind": "control",
       "label": "{{ saving && loginSaveStage === \"asset\" ? \"正在保存凭证资产…\" : saving && loginSaveStage === \"profile\" ? \"正在创建运行档案…\" : \"加密保存并启用\"",
       "conditions": [
@@ -18238,7 +18246,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#5eca67d4ff8b7b15.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1631,
+      "line": 1646,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -18263,7 +18271,7 @@
     {
       "candidateId": "apps/web/src/components/CredentialAssetCenter.vue#cb14d6dea1ed210f.1",
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
-      "line": 1631,
+      "line": 1646,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -20040,7 +20048,7 @@
     {
       "candidateId": "apps/web/src/components/FileResilienceCenter.vue#cdc9d1538d58eb3c.1",
       "file": "apps/web/src/components/FileResilienceCenter.vue",
-      "line": 143,
+      "line": 155,
       "kind": "control",
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新文件事实\" }}",
       "conditions": [],
@@ -20067,7 +20075,7 @@
     {
       "candidateId": "apps/web/src/components/FileResilienceCenter.vue#21c66441891be768.1",
       "file": "apps/web/src/components/FileResilienceCenter.vue",
-      "line": 162,
+      "line": 174,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -20099,7 +20107,7 @@
     {
       "candidateId": "apps/web/src/components/FileResilienceCenter.vue#5587941412d5210f.1",
       "file": "apps/web/src/components/FileResilienceCenter.vue",
-      "line": 186,
+      "line": 198,
       "kind": "control",
       "label": "重新登录",
       "conditions": [
@@ -20135,7 +20143,7 @@
     {
       "candidateId": "apps/web/src/components/FileResilienceCenter.vue#6a87ca890e2cd293.1",
       "file": "apps/web/src/components/FileResilienceCenter.vue",
-      "line": 187,
+      "line": 199,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -21650,11 +21658,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/LocalIdentity.vue#b4ef7a9c4f34af7b.1",
+      "candidateId": "apps/web/src/components/LocalIdentity.vue#d145d1bc092202b5.1",
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 702,
       "kind": "form-event",
-      "label": "账号（邮箱或用户名） 使用已验证邮箱或唯一用户名。 密码 密码仅用于本次登录验证。 会话与可访问范围由服务端校验。 忘记密码？ {{ requestState === \"loading\" ? \"正在验证…\" : \"登录\" }} 认证器验证码",
+      "label": "账号（邮箱或用户名） 使用已验证邮箱或唯一用户名。 密码 密码仅用于本次登录验证。 登录状态最长保留 30 天；可访问范围由服务端校验。 忘记密码？ {{ requestState === \"loading\" ? \"正在验证…\" : \"登录",
       "conditions": [
         {
           "directive": "v-else-if",
@@ -24154,7 +24162,7 @@
     {
       "candidateId": "apps/web/src/components/MySqlResilienceCenter.vue#99e387027e98dda9.1",
       "file": "apps/web/src/components/MySqlResilienceCenter.vue",
-      "line": 169,
+      "line": 181,
       "kind": "control",
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新运行事实\" }}",
       "conditions": [],
@@ -24181,7 +24189,7 @@
     {
       "candidateId": "apps/web/src/components/MySqlResilienceCenter.vue#21c66441891be768.1",
       "file": "apps/web/src/components/MySqlResilienceCenter.vue",
-      "line": 188,
+      "line": 200,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -24213,7 +24221,7 @@
     {
       "candidateId": "apps/web/src/components/MySqlResilienceCenter.vue#5587941412d5210f.1",
       "file": "apps/web/src/components/MySqlResilienceCenter.vue",
-      "line": 212,
+      "line": 224,
       "kind": "control",
       "label": "重新登录",
       "conditions": [
@@ -24249,7 +24257,7 @@
     {
       "candidateId": "apps/web/src/components/MySqlResilienceCenter.vue#6a87ca890e2cd293.1",
       "file": "apps/web/src/components/MySqlResilienceCenter.vue",
-      "line": 213,
+      "line": 225,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -32550,7 +32558,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1361,
+      "line": 1141,
       "kind": "control",
       "label": "创建选品 →",
       "conditions": [
@@ -32592,7 +32600,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1363,
+      "line": 1143,
       "kind": "control",
       "label": "管理选品规则",
       "conditions": [
@@ -32634,7 +32642,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1365,
+      "line": 1145,
       "kind": "control",
       "label": "从 ERP 导入",
       "conditions": [
@@ -32680,7 +32688,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1372,
+      "line": 1152,
       "kind": "control",
       "label": "手工添加",
       "conditions": [
@@ -32726,7 +32734,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1384,
+      "line": 1164,
       "kind": "control",
       "label": "← 返回来源列表",
       "conditions": [
@@ -32764,7 +32772,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1390,
+      "line": 1170,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32799,7 +32807,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1415,
+      "line": 1195,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32838,7 +32846,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1426,
+      "line": 1206,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32877,7 +32885,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1439,
+      "line": 1219,
       "kind": "control",
       "label": "运行信息",
       "conditions": [
@@ -32919,7 +32927,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1449,
+      "line": 1229,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -32961,7 +32969,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1461,
+      "line": 1241,
       "kind": "control",
       "label": "补证异常时手动处理",
       "conditions": [
@@ -33007,7 +33015,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1464,
+      "line": 1244,
       "kind": "control",
       "label": "采集 Amazon 竞品",
       "conditions": [
@@ -33057,7 +33065,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1471,
+      "line": 1251,
       "kind": "control",
       "label": "采集公开供应商",
       "conditions": [
@@ -33107,7 +33115,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1478,
+      "line": 1258,
       "kind": "control",
       "label": "检查评分规则",
       "conditions": [
@@ -33153,7 +33161,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1483,
+      "line": 1263,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33196,7 +33204,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b391bf25870010b2.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1506,
+      "line": 1286,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33239,7 +33247,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1518,
+      "line": 1298,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33282,7 +33290,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2aa4cc1a9f90b8fd.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1537,
+      "line": 1317,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33325,7 +33333,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1581,
+      "line": 1361,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -33360,7 +33368,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#3f329a786800deea.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1581,
+      "line": 1361,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [
@@ -33395,7 +33403,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#acc11467e72e9b66.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1598,
+      "line": 1378,
       "kind": "dialog-definition",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -33433,7 +33441,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1598,
+      "line": 1378,
       "kind": "event-binding",
       "label": "机会批量操作影响预览",
       "conditions": [
@@ -33476,7 +33484,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1605,
+      "line": 1385,
       "kind": "form-event",
       "label": "影响预览 批量 {{ batchAction === \"assign\" ? \"指派\" : batchAction === \"archive\" ? \"归档\" : \"复核\" }} 本次仅处理当前结果中已选的 {{ currentPageSele",
       "conditions": [
@@ -33516,7 +33524,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1641,
+      "line": 1421,
       "kind": "control",
       "label": "返回",
       "conditions": [
@@ -33554,7 +33562,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1642,
+      "line": 1422,
       "kind": "control",
       "label": "确认执行",
       "conditions": [
@@ -33592,7 +33600,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#557b69e18caa81e6.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1646,
+      "line": 1426,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -33622,7 +33630,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#df416310b2ec158b.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1646,
+      "line": 1426,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -33652,7 +33660,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b74012fbdb739187.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1104,
+      "line": 884,
       "kind": "dialog-script-call",
       "label": "askAiReviewReason(reasonRequest)",
       "conditions": [],
@@ -33682,7 +33690,7 @@
     {
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca674a075f274bff.1",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 1139,
+      "line": 919,
       "kind": "dialog-script-call",
       "label": "askAiReviewReason({ ...reasonRequest, initialValue: notes })",
       "conditions": [],
@@ -56944,7 +56952,7 @@
     {
       "candidateId": "apps/web/src/components/RedisResilienceCenter.vue#58a7337b2cdfab3b.1",
       "file": "apps/web/src/components/RedisResilienceCenter.vue",
-      "line": 235,
+      "line": 247,
       "kind": "control",
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新运行事实\" }}",
       "conditions": [],
@@ -56969,7 +56977,7 @@
     {
       "candidateId": "apps/web/src/components/RedisResilienceCenter.vue#a93553a3ba9aa8a6.1",
       "file": "apps/web/src/components/RedisResilienceCenter.vue",
-      "line": 265,
+      "line": 277,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -56999,7 +57007,7 @@
     {
       "candidateId": "apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1",
       "file": "apps/web/src/components/RedisResilienceCenter.vue",
-      "line": 296,
+      "line": 308,
       "kind": "control",
       "label": "重新登录",
       "conditions": [
@@ -57035,7 +57043,7 @@
     {
       "candidateId": "apps/web/src/components/RedisResilienceCenter.vue#d45ddc5db7a2701f.1",
       "file": "apps/web/src/components/RedisResilienceCenter.vue",
-      "line": 297,
+      "line": 309,
       "kind": "control",
       "label": "重新核验",
       "conditions": [

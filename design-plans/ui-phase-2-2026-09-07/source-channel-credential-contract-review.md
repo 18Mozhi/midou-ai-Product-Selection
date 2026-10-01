@@ -277,7 +277,7 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 | C:868396bd7e29df98.1 | control / 1318 | SC50-CLOSE / 登录导入窗关闭 |
 | C:d2a64908945092ff.1 | event-binding / 1549 | SC50-LOGIN / 来源选择及材料上下文重置 |
 | C:1430f57a236d6ea1.1 | event-binding / 1561 | SC50-LOGIN / 导入方式切换及材料上下文重置 |
-| C:7443d228a98eebd4.1 | event-binding / 1569 | SC50-FILE / 受控文件选择 |
+| C:6a8beb16368d130f.1 | event-binding / 1572 | SC50-FILE / 受控文件选择 |
 | C:e22b7ca36f2434d7.1 | control / 1596 | SC50-EXTERNAL / 打开来源登录页 |
 | C:f176fdb4640192de.1 | control / 1599 | SC50-BRIDGE / 请求助手Cookie |
 | C:54e090f9e49dd400.1 | control / 1402 | SC50-CLOSE / 取消登录导入 |
@@ -554,7 +554,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/CredentialAssetCenter.vue#cb14d6dea1ed210f.1 | 1646 | dialog-component-call | SC50-REVOKE / 调用共享危险确认窗；不另计撤销写动作 |
 | apps/web/src/components/CredentialAssetCenter.vue#d2a64908945092ff.1 | 1549 | event-binding | SC50-LOGIN / 来源选择及材料上下文重置 |
 | apps/web/src/components/CredentialAssetCenter.vue#1430f57a236d6ea1.1 | 1561 | event-binding | SC50-LOGIN / 导入方式切换及材料上下文重置 |
-| apps/web/src/components/CredentialAssetCenter.vue#6a8beb16368d130f.1 | 1572 | event-binding | SC50-LOGIN / 导入方式变化时重置登录材料上下文 |
+| apps/web/src/components/CredentialAssetCenter.vue#6a8beb16368d130f.1 | 1572 | event-binding | SC50-FILE / 受控文件选择 |
 | apps/web/src/components/CredentialAssetCenter.vue#7443d228a98eebd4.1 | 1569 | event-binding | SC50-FILE / 受控文件选择 [历史身份，仅追溯] |
 | apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1 | 1596 | control | SC50-EXTERNAL / 打开来源登录页 |
 | apps/web/src/components/CredentialAssetCenter.vue#f176fdb4640192de.1 | 1599 | control | SC50-BRIDGE / 请求助手Cookie |

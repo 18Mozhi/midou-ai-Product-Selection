@@ -14,7 +14,7 @@
 
 | 页 | 旧静态关联候选（非运行分母） | 语义审阅 | 下一步 |
 | --- | --- | --- | --- |
-| [P01 正在进入](page-specs/P01.md) | 1 | [1组](action-reviews/P01.json) | 6个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P01 正在进入](page-specs/P01.md) | 1 | [1组](action-reviews/P01.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P02 登录](page-specs/P02.md) | 7 | [15组](action-reviews/P02.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P03 注册](page-specs/P03.md) | 7 | [15组](action-reviews/P03.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P04 找回密码](page-specs/P04.md) | 7 | [15组](action-reviews/P04.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -31,7 +31,7 @@
 | [P15 选品机会](page-specs/P15.md) | 98 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P16 创建选品](page-specs/P16.md) | 39 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P17 评分规则](page-specs/P17.md) | 54 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P18 机会详情](page-specs/P18.md) | 98 | [66组](action-reviews/P18.json) | 332个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P18 机会详情](page-specs/P18.md) | 98 | [66组](action-reviews/P18.json) | 330个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P19 竞品监控](page-specs/P19.md) | 62 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P20 竞品监控规则](page-specs/P20.md) | 62 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P21 供应链与利润](page-specs/P21.md) | 63 | [41组](action-reviews/P21.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
@@ -106,7 +106,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 [逐项机器清单](action-reviews/P01.json)：2个局部源位置 → 1组；0类写入，1组路由动作，0组转发/容器关联不重复计动作。已映射0/0个源码字段位置，1/1处调用/内嵌容器，1个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有6个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有0个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -1286,7 +1286,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 [逐项机器清单](action-reviews/P18.json)：119个局部源位置 → 66组；13类写入，55组路由动作，9组转发/容器关联不重复计动作。已映射35/35个源码字段位置，28/29处调用/内嵌容器，45个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
-尚有332个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
+尚有330个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
@@ -1303,7 +1303,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OP-DECISION-OPEN.adopt 填写采纳原因 / local | 1处；allowed、hidden、busy | [adopt-empty · 1440](design/opportunity-detail-direction-c/1440-adopt-empty.png) / [adopt-empty · 390](design/opportunity-detail-direction-c/390-adopt-empty.png)、[missing-cost · 1440](design/opportunity-detail-direction-c/1440-missing-cost.png) / [missing-cost · 390](design/opportunity-detail-direction-c/390-missing-cost.png)；其余见JSON | 已由真实Vue双端场景贯通建议采纳、原因窗与成功刷新；真实API/RBAC与数据库最终采纳资格仍待生产证据。 |
 | OP-DECISION-OPEN.observe 填写观察原因 / local | 2处；recommended、early | [observe-empty · 1440](design/opportunity-detail-direction-c/1440-observe-empty.png) / [observe-empty · 390](design/opportunity-detail-direction-c/390-observe-empty.png)、[observe-dialog · 1440](design/detail-adaptive-direction-c/1440-observe-dialog.png) / [observe-dialog · 390](design/detail-adaptive-direction-c/390-observe-dialog.png)；其余见JSON | 实际 Vue E2E 已验证提交 observe 后可关闭旧窗并打开 reject 新窗，旧 POST 迟到回执不会关闭新窗；同 tick 人为重入与真实服务端结果仍未验。 |
 | OP-DECISION-OPEN.reject 填写驳回原因 / local | 2处；recommended、early | [reject-empty · 1440](design/opportunity-detail-direction-c/1440-reject-empty.png) / [reject-empty · 390](design/opportunity-detail-direction-c/390-reject-empty.png)、[reject-dialog · 1440](design/detail-adaptive-direction-c/1440-reject-dialog.png) / [reject-dialog · 390](design/detail-adaptive-direction-c/390-reject-dialog.png)；其余见JSON | 已验证 observe 提交期间打开的 reject 新窗不受旧回执关闭；键盘忙碌关闭策略与真实服务端结果仍需独立验收。 |
-| OP-EARLY-DECISION-DETAILS 提前人工处理展开 / local | 1处；candidate、not-eligible | [early · 1440](design/opportunity-detail-direction-c/1440-early.png) / [early · 390](design/opportunity-detail-direction-c/390-early.png)、[candidate · 1440](design/opportunity-detail-direction-c/1440-candidate.png) / [candidate · 390](design/opportunity-detail-direction-c/390-candidate.png)；其余见JSON | 完整动态质量门变化/焦点与六态未验。 |
+| OP-EARLY-DECISION-DETAILS 提前人工处理展开 / local | 1处；candidate、not-eligible | [early · 1440](design/opportunity-detail-direction-c/1440-early.png) / [early · 390](design/opportunity-detail-direction-c/390-early.png)、[candidate · 1440](design/opportunity-detail-direction-c/1440-candidate.png) / [candidate · 390](design/opportunity-detail-direction-c/390-candidate.png)；其余见JSON | 双端真实 Vue 已验证候选状态下展开/收起、Tab顺序、展开零决策写入、summary hover/pressed颜色，以及同一机会从rule_candidate经重新评分刷新变为recommended时保留提前处理焦点并映射到对应驳回按钮。默认/焦点视觉截图映射、读屏器、真实RBAC与生产验收仍待。该披露始终可用，不具有disabled/busy变体。 |
 | OP-BLOCKER-TASK 查看已有补采任务 / navigation | 2处；primary、all-blockers、cleared | [blockers · 1440](design/opportunity-detail-direction-c/1440-blockers.png) / [blockers · 390](design/opportunity-detail-direction-c/390-blockers.png)、[progress · 1440](design/opportunity-detail-direction-c/1440-progress.png) / [progress · 390](design/opportunity-detail-direction-c/390-progress.png)；其余见JSON | 现行查看任务与新建后导航路径不同，不能自动统一契约。 |
 | OP-EVIDENCE-TASK 创建或复用补采任务 / write | 1处；new、reused、failed | [collecting · 1440](design/opportunity-detail-direction-c/1440-collecting.png) / [collecting · 390](design/opportunity-detail-direction-c/390-collecting.png)、[progress · 1440](design/opportunity-detail-direction-c/1440-progress.png) / [progress · 390](design/opportunity-detail-direction-c/390-progress.png)；其余见JSON | 真实 Vue 双端覆盖创建/复用、唯一在途 POST、expected_version与返回任务/来源路径，也覆盖409提示/追踪且留在当前机会；真实 API、RBAC、任务审计关联、Worker采集/自动评分仍待环境验收。 |
 | OP-BLOCKERS-DETAILS 展开全部判断条件 / local | 1处；blocked、in-progress、cleared | [blockers · 1440](design/opportunity-detail-direction-c/1440-blockers.png) / [blockers · 390](design/opportunity-detail-direction-c/390-blockers.png)、[cleared · 1440](design/opportunity-detail-direction-c/1440-cleared.png) / [cleared · 390](design/opportunity-detail-direction-c/390-cleared.png)；其余见JSON | 全部code与缺值、长文、主题的组合未穷尽。 |

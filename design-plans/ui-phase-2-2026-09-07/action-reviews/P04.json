@@ -5,7 +5,7 @@
   "status": "implemented-user-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/LocalIdentity.vue": "e1cbfd351ec79c7517f4c069cd3ba6d70ec4a403c72212dd3d195eea95370af8"
+    "apps/web/src/components/LocalIdentity.vue": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -118,7 +118,7 @@
       "kind": "write",
       "routeApplicability": "shared-identity-modes-not-initial-screen-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#b4ef7a9c4f34af7b.1",
+        "apps/web/src/components/LocalIdentity.vue#d145d1bc092202b5.1",
         "apps/web/src/components/LocalIdentity.vue#3d0185dcb1b90a38.1",
         "apps/web/src/components/LocalIdentity.vue#55432de3fcde4409.1",
         "apps/web/src/components/LocalIdentity.vue#62294b45ceb45f22.1",
@@ -193,9 +193,9 @@
       "remaining": "同一submit组实际含五种业务请求，不按一张图全验。首次mode/局部切换/异步返回可不同；完整请求归属和五类表单逐控件六态待验。",
       "sourceCandidateApplicability": [
         {
-          "candidateId": "apps/web/src/components/LocalIdentity.vue#b4ef7a9c4f34af7b.1",
+          "candidateId": "apps/web/src/components/LocalIdentity.vue#d145d1bc092202b5.1",
           "classification": "route-mode-family",
-          "reason": "属于当前身份路由或其真实局部模式转换；按源条件保留。"
+          "reason": "当前 login/MFA challenge 原生表单提交事件；按共享路由与局部模式可达范围保留。"
         },
         {
           "candidateId": "apps/web/src/components/LocalIdentity.vue#3d0185dcb1b90a38.1",
@@ -1099,7 +1099,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/LocalIdentity.vue": "e1cbfd351ec79c7517f4c069cd3ba6d70ec4a403c72212dd3d195eea95370af8",
+      "apps/web/src/components/LocalIdentity.vue": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf",
       "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",

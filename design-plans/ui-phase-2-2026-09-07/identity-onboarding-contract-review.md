@@ -60,7 +60,7 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 
 ### 2.1 当前 LocalIdentity 源标识补记
 
-当前静态合同审计发现 `LocalIdentity.vue` 有45个候选未被本合同正文引用。逐项对照 `action-reviews/P02.json` 至 `P07.json` 的 `sourceCandidateIds` 与当前模板后，45/45 均能归入既有身份动作；下表仅补齐当前源标识，不新增业务动作、路由、请求或权限结论。`L#` 仍表示 `LocalIdentity.vue`，具体路由和模式条件以模板及下方P02–P07合同为准。
+本节将当前 `LocalIdentity.vue` 候选与 `action-reviews/P02.json` 至 `P07.json` 的 `sourceCandidateIds` 对齐；下表仅补齐既有身份动作的当前源标识，不新增业务动作、路由、请求或权限结论。`L#` 仍表示 `LocalIdentity.vue`，具体路由和模式条件以模板及下方P02–P07合同为准。
 
 | actionId | 当前候选键 | 当前源码语义 |
 | --- | --- | --- |
@@ -70,7 +70,7 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | ID-MFA-CONFIRM | L#4ce7b78a016bd6b5.1；L#7d20870a6b6ed73c.1；L#d9c0ff91de01c471.1；L#e7030ff0d08dfdb7.1 | MFA 绑定确认及首次安全设置确认；表单提交与按钮归并 |
 | ID-MFA-DISABLE | L#29abd90f9774564d.1；L#6735871aaf8e0556.1 | MFA 停用表单提交与确认按钮，沿用撤销全部会话边界 |
 | ID-MFA-RETURN-LOGIN | L#e4840b8a830571e2.1 | MFA 管理页返回登录路由 |
-| ID-FORM-SUBMIT | L#b4ef7a9c4f34af7b.1；L#3d0185dcb1b90a38.1；L#55432de3fcde4409.1；L#62294b45ceb45f22.1；L#a8e9d7ee5148dbe5.1；L#be82854e01e5e049.1；L#4b32d082f043e0da.1；L#e448c4ea094171f6.1；L#8cc6c6d54ed246f6.1；L#d145d1bc092202b5.1 | login、MFA challenge、reset、forgot、register 的模式表单及提交按钮；不是一个业务请求 [历史身份，仅追溯] |
+| ID-FORM-SUBMIT | L#3d0185dcb1b90a38.1；L#55432de3fcde4409.1；L#62294b45ceb45f22.1；L#a8e9d7ee5148dbe5.1；L#be82854e01e5e049.1；L#4b32d082f043e0da.1；L#e448c4ea094171f6.1；L#8cc6c6d54ed246f6.1；L#d145d1bc092202b5.1 | login、MFA challenge、reset、forgot、register 的当前模式表单及提交按钮；不是一个业务请求 |
 | ID-SEED-PASSWORD | L#9fb8524110a1038f.1；L#7d98b83b16e631e4.1 | 首次安全设置中的改密提交与按钮；提交期间单飞并锁定字段 |
 | ID-SHOW-REGISTER | L#f3edcccf9be30a1b.1；L#f3edcccf9be30a1b.2 | 登录/旧 sessions 模式切换到注册 |
 | ID-ACCOUNT-SECURITY | L#ba3feba8b42af0bf.2；L#ba3feba8b42af0bf.3 | 跳转本人 `/me?section=security`；旧 sessions 入口不等于该组件内会话撤销 |

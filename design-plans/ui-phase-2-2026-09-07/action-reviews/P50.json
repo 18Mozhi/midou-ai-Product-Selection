@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CredentialAssetCenter.vue": "ec86d985dcc3db3e49d72f13053e66071a84a6fe6a20acdd2c1349b087d334cf"
+    "apps/web/src/components/CredentialAssetCenter.vue": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
   },
   "inputs": {
     "apps/web/src/components/CredentialAssetCenter.vue": [
@@ -34,8 +34,8 @@
       "label": "读取或刷新凭证与运行档案元数据",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#52a1f163b96c6a4f.1",
-        "apps/web/src/components/CredentialAssetCenter.vue#4cff98e257b4af2d.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#4cff98e257b4af2d.1",
+        "apps/web/src/components/CredentialAssetCenter.vue#52a1f163b96c6a4f.1"
       ],
       "sourceContractKeys": [
         "SC50-LOAD / 按既有读取函数刷新安全资产与运行档案",
@@ -483,7 +483,7 @@
       "label": "选择本地登录材料文件",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#7443d228a98eebd4.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#6a8beb16368d130f.1"
       ],
       "sourceContractKeys": [
         "SC50-FILE / 受控文件选择"
@@ -769,7 +769,7 @@
       "apps/web/src/components/CredentialAssetCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CredentialAssetCenter.vue": "ec86d985dcc3db3e49d72f13053e66071a84a6fe6a20acdd2c1349b087d334cf"
+      "apps/web/src/components/CredentialAssetCenter.vue": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],
