@@ -86,13 +86,14 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
   assert.match(sources, /useProviderParserSamples\(\{ api, message, requestId \}\)/);
   assert.match(sources, /useProviderSourceConfigurationVersions/);
   assert.match(sources, /useProviderSourceDirectory/);
-  const [parserSamples, sourceVersions, sourceDirectory] = await Promise.all([
+  const [parserSamples, parserActions, sourceVersions, sourceDirectory] = await Promise.all([
     readFile("apps/web/src/composables/useProviderParserSamples.ts", "utf8"),
+    readFile("apps/web/src/composables/useProviderParserSampleActions.ts", "utf8"),
     readFile("apps/web/src/composables/useProviderSourceConfigurationVersions.ts", "utf8"),
     readFile("apps/web/src/composables/useProviderSourceDirectory.ts", "utf8"),
   ]);
-  assert.match(parserSamples, /parser-samples\/\$\{sample\.id\}\/replays/);
-  assert.match(parserSamples, /parser-samples\/\$\{sample\.id\}\/reviews/);
+  assert.match(parserActions, /parser-samples\/\$\{sample\.id\}\/replays/);
+  assert.match(parserActions, /parser-samples\/\$\{sample\.id\}\/reviews/);
   assert.match(sourceVersions, /configuration\/rollbacks/);
   assert.match(sourceDirectory, /router\.replace\(\{ query: next \}\)/);
   const parserDialog = await readFile(`${components}/ProviderParserSampleDialog.vue`, "utf8");

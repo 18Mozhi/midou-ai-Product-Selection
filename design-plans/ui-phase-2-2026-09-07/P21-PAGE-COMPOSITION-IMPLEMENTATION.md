@@ -26,3 +26,12 @@
 ## 未覆盖边界
 
 本批不等同于找货创建/删除、报价确认、对比保存、采购任务写入、真实采集、RBAC、屏幕阅读器/真机验收或正式 M07-03 证据。
+
+## 2026-10-01 · 工作区职责提取
+
+将路由/查询同步、读写请求、能力门、异步代次、四个对话框的动作处理与 KeepAlive 生命周期整体移入 `apps/web/src/composables/useSourcingWorkspace.ts`。`SourcingWorkspace.vue` 保留 C 方向页面模板与组合，源文件为 386 行，低于 700 行边界；未改 API、请求载荷、权限判断、页面可见行为和报价/采购规则。
+
+- `npm run typecheck:web`：通过。
+- `npx playwright test tests/e2e/m04-06-sourcing.spec.ts --project=desktop-chromium --project=mobile-390`：50/50 通过，使用本地拦截样例。
+- `node --test tests/unit/frontend-component-boundary.test.mjs`：1/1 通过；修正了该测试对 parser-samples 写入路径所在 composable 的过期定位，生产代码行为未变。
+- 未部署；本地拦截与组件测试不代表真实后端、RBAC 或生产验收。
