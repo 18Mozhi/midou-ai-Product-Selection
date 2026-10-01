@@ -1,0 +1,524 @@
+{
+  "kind": "P32-approved-restore-Vue-r8",
+  "boundary": "Actual Vue with current-source screenshots; user's automatic approval applies only to page visuals. Isolated API fixtures do not prove production/audit acceptance. Other shared callers retain existing behavior.",
+  "sourceHashes": {
+    "tests/e2e/m06-01-organization-admin.spec.ts": "516b9130641aab0b09ad0ebe43fe3d8b25140b414700faf4700d93c3ef9bcc5f",
+    "scripts/verify-ui-phase2-workspaces-vue-restore.mjs": "f26603620020ccb2367ea7c7aad1ac76d8385d65cc3c67182114f8aa0946977e",
+    "scripts/lib/ui-phase2-workspaces-design-data.mjs": "638b24c0fd3c9daaace7bb8ca624a967f863277532c93a1b56c5577688de2123",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+    "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+    "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
+    "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/organization-admin.css": "2b5978c98d8bc8d4dad358875edb9aa65ced7c48c78e7bf142acdaa8f28bd32d",
+    "apps/web/src/styles.css": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016",
+    "apps/web/src/design/tokens.css": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a",
+    "apps/web/src/signal-ledger.css": "dd3f58900641cf4a85c8182b0cd59f727a8d52e56c51a43a9469e855ab430e6b",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/main.ts": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671",
+    "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c"
+  },
+  "checks": [
+    {
+      "width": 1440,
+      "name": "restore context is scoped"
+    },
+    {
+      "width": 1440,
+      "name": "target name and version are displayed"
+    },
+    {
+      "width": 1440,
+      "name": "initial reason unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "initial focus"
+    },
+    {
+      "width": 1440,
+      "name": "no new upper length rule"
+    },
+    {
+      "width": 1440,
+      "name": "minimum stays two"
+    },
+    {
+      "width": 1440,
+      "name": "help text remains 16px"
+    },
+    {
+      "width": 1440,
+      "name": "deep-ocean: blue confirm"
+    },
+    {
+      "width": 1440,
+      "name": "deep-ocean: readable and usable"
+    },
+    {
+      "width": 1440,
+      "name": "restore-deep-ocean: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "aurora-purple: blue confirm"
+    },
+    {
+      "width": 1440,
+      "name": "aurora-purple: readable and usable"
+    },
+    {
+      "width": 1440,
+      "name": "restore-aurora-purple: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "cloud-white: blue confirm"
+    },
+    {
+      "width": 1440,
+      "name": "cloud-white: readable and usable"
+    },
+    {
+      "width": 1440,
+      "name": "restore-cloud-white: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "short remains disabled"
+    },
+    {
+      "width": 1440,
+      "name": "short sends no request"
+    },
+    {
+      "width": 1440,
+      "name": "restore-short: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "501 chars not truncated"
+    },
+    {
+      "width": 1440,
+      "name": "Tab reaches confirm"
+    },
+    {
+      "width": 1440,
+      "name": "Tab wraps"
+    },
+    {
+      "width": 1440,
+      "name": "ShiftTab wraps"
+    },
+    {
+      "width": 1440,
+      "name": "restore-keyboard: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "escape: focus restored"
+    },
+    {
+      "width": 1440,
+      "name": "escape: no request"
+    },
+    {
+      "width": 1440,
+      "name": "cancel: focus restored"
+    },
+    {
+      "width": 1440,
+      "name": "cancel: no request"
+    },
+    {
+      "width": 1440,
+      "name": "header: focus restored"
+    },
+    {
+      "width": 1440,
+      "name": "header: no request"
+    },
+    {
+      "width": 1440,
+      "name": "confirmation closes before response"
+    },
+    {
+      "width": 1440,
+      "name": "exact first POST"
+    },
+    {
+      "width": 1440,
+      "name": "busy prevents duplicate"
+    },
+    {
+      "width": 1440,
+      "name": "restore-pending: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "failed response retains archived facts"
+    },
+    {
+      "width": 1440,
+      "name": "restore-failed: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "reopening resets reason"
+    },
+    {
+      "width": 1440,
+      "name": "success exact version unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "restore-success: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "archive does not inherit restore style"
+    },
+    {
+      "width": 1440,
+      "name": "archive has no restore target"
+    },
+    {
+      "width": 1440,
+      "name": "archive-unchanged: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "P30 does not inherit restore style"
+    },
+    {
+      "width": 1440,
+      "name": "P30 default reason unchanged"
+    },
+    {
+      "width": 1440,
+      "name": "members-unchanged: no document overflow"
+    },
+    {
+      "width": 1440,
+      "name": "no page error"
+    },
+    {
+      "width": 1440,
+      "name": "no unexpected external request"
+    },
+    {
+      "width": 390,
+      "name": "restore context is scoped"
+    },
+    {
+      "width": 390,
+      "name": "target name and version are displayed"
+    },
+    {
+      "width": 390,
+      "name": "initial reason unchanged"
+    },
+    {
+      "width": 390,
+      "name": "initial focus"
+    },
+    {
+      "width": 390,
+      "name": "no new upper length rule"
+    },
+    {
+      "width": 390,
+      "name": "minimum stays two"
+    },
+    {
+      "width": 390,
+      "name": "help text remains 16px"
+    },
+    {
+      "width": 390,
+      "name": "deep-ocean: blue confirm"
+    },
+    {
+      "width": 390,
+      "name": "deep-ocean: readable and usable"
+    },
+    {
+      "width": 390,
+      "name": "restore-deep-ocean: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "aurora-purple: blue confirm"
+    },
+    {
+      "width": 390,
+      "name": "aurora-purple: readable and usable"
+    },
+    {
+      "width": 390,
+      "name": "restore-aurora-purple: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "cloud-white: blue confirm"
+    },
+    {
+      "width": 390,
+      "name": "cloud-white: readable and usable"
+    },
+    {
+      "width": 390,
+      "name": "restore-cloud-white: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "short remains disabled"
+    },
+    {
+      "width": 390,
+      "name": "short sends no request"
+    },
+    {
+      "width": 390,
+      "name": "restore-short: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "501 chars not truncated"
+    },
+    {
+      "width": 390,
+      "name": "Tab reaches confirm"
+    },
+    {
+      "width": 390,
+      "name": "Tab wraps"
+    },
+    {
+      "width": 390,
+      "name": "ShiftTab wraps"
+    },
+    {
+      "width": 390,
+      "name": "restore-keyboard: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "escape: focus restored"
+    },
+    {
+      "width": 390,
+      "name": "escape: no request"
+    },
+    {
+      "width": 390,
+      "name": "cancel: focus restored"
+    },
+    {
+      "width": 390,
+      "name": "cancel: no request"
+    },
+    {
+      "width": 390,
+      "name": "header: focus restored"
+    },
+    {
+      "width": 390,
+      "name": "header: no request"
+    },
+    {
+      "width": 390,
+      "name": "confirmation closes before response"
+    },
+    {
+      "width": 390,
+      "name": "exact first POST"
+    },
+    {
+      "width": 390,
+      "name": "busy prevents duplicate"
+    },
+    {
+      "width": 390,
+      "name": "restore-pending: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "failed response retains archived facts"
+    },
+    {
+      "width": 390,
+      "name": "restore-failed: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "reopening resets reason"
+    },
+    {
+      "width": 390,
+      "name": "success exact version unchanged"
+    },
+    {
+      "width": 390,
+      "name": "restore-success: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "archive does not inherit restore style"
+    },
+    {
+      "width": 390,
+      "name": "archive has no restore target"
+    },
+    {
+      "width": 390,
+      "name": "archive-unchanged: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "P30 does not inherit restore style"
+    },
+    {
+      "width": 390,
+      "name": "P30 default reason unchanged"
+    },
+    {
+      "width": 390,
+      "name": "members-unchanged: no document overflow"
+    },
+    {
+      "width": 390,
+      "name": "no page error"
+    },
+    {
+      "width": 390,
+      "name": "no unexpected external request"
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "1440-restore-deep-ocean.png",
+      "width": 1440,
+      "scene": "restore-deep-ocean",
+      "sha256": "f2e4013eb7e80867e0da02b6e8609d0ccf9b49377cf2b962fc75cb689d337fc6"
+    },
+    {
+      "file": "1440-restore-aurora-purple.png",
+      "width": 1440,
+      "scene": "restore-aurora-purple",
+      "sha256": "71f9a104f21fce0d2ed7698404327a012e509a93860d792960aa1e16a8eab47a"
+    },
+    {
+      "file": "1440-restore-cloud-white.png",
+      "width": 1440,
+      "scene": "restore-cloud-white",
+      "sha256": "238622ec86ad5b1d6e09e0b128010373fa70eac2145df882546efa1a578fe1f8"
+    },
+    {
+      "file": "1440-restore-short.png",
+      "width": 1440,
+      "scene": "restore-short",
+      "sha256": "405469cae04c5bff0d6b1e19846ecda57700906b6840aff7e436036ac99f803b"
+    },
+    {
+      "file": "1440-restore-keyboard.png",
+      "width": 1440,
+      "scene": "restore-keyboard",
+      "sha256": "163e2053638e74575621805731cb5b21533a8d008fe0576bc305b49ded2756b5"
+    },
+    {
+      "file": "1440-restore-pending.png",
+      "width": 1440,
+      "scene": "restore-pending",
+      "sha256": "1fef4895f43734fd39b32a91c5508975e4e53852eddc1aa1d56e00bafbb38932"
+    },
+    {
+      "file": "1440-restore-failed.png",
+      "width": 1440,
+      "scene": "restore-failed",
+      "sha256": "007e152272eb4da86f5a1c1964f59f12e5a690fefda4bcd63d137ff25e1d313e"
+    },
+    {
+      "file": "1440-restore-success.png",
+      "width": 1440,
+      "scene": "restore-success",
+      "sha256": "a896c0a8a50fc784f5f2774d8d396d022a235d477ddf08821d8bfe3094286055"
+    },
+    {
+      "file": "1440-archive-unchanged.png",
+      "width": 1440,
+      "scene": "archive-unchanged",
+      "sha256": "23f283babef9a7aa792f68f80f21d653070ab8ae3c5aa9759970b45b38d8b069"
+    },
+    {
+      "file": "1440-members-unchanged.png",
+      "width": 1440,
+      "scene": "members-unchanged",
+      "sha256": "1864e2486667d16968df1850f1dacf2ba6b3d60c131ade527e5a9cc612815bee"
+    },
+    {
+      "file": "390-restore-deep-ocean.png",
+      "width": 390,
+      "scene": "restore-deep-ocean",
+      "sha256": "6dbea4721c83bd36fd9ef825c76b93a018959c0a34e4b8a13f9380444f2bc937"
+    },
+    {
+      "file": "390-restore-aurora-purple.png",
+      "width": 390,
+      "scene": "restore-aurora-purple",
+      "sha256": "e7a8242dbe4c5f72d89fec4bf13bc041aa3e23d4949814eef8cc9041c8f16faa"
+    },
+    {
+      "file": "390-restore-cloud-white.png",
+      "width": 390,
+      "scene": "restore-cloud-white",
+      "sha256": "560d8600d89cbaf7dadbc962299f841142cf070db22fcd3cdf0663f91731d4fc"
+    },
+    {
+      "file": "390-restore-short.png",
+      "width": 390,
+      "scene": "restore-short",
+      "sha256": "4261c6c8fc0534079fb5c984cf857685a94c3e79ca81e1010d8623d6b7eecd29"
+    },
+    {
+      "file": "390-restore-keyboard.png",
+      "width": 390,
+      "scene": "restore-keyboard",
+      "sha256": "badc6190409e2acaab200f1c530bb610af88b7c7a3bee45a3e659302aeaa0bb3"
+    },
+    {
+      "file": "390-restore-pending.png",
+      "width": 390,
+      "scene": "restore-pending",
+      "sha256": "0c3eaeeb402cd3ce2590278d22cbf1224e46dbd9af633fa0275f0469675a4a54"
+    },
+    {
+      "file": "390-restore-failed.png",
+      "width": 390,
+      "scene": "restore-failed",
+      "sha256": "1c4b01bfe286ec5cd61305950863a73ab3842b5139ef8264cfc80fc6c3232b99"
+    },
+    {
+      "file": "390-restore-success.png",
+      "width": 390,
+      "scene": "restore-success",
+      "sha256": "48265e204a12fe40b6bf6d6931e20b7d71b7e12f1fa5e7db1c99050154d72970"
+    },
+    {
+      "file": "390-archive-unchanged.png",
+      "width": 390,
+      "scene": "archive-unchanged",
+      "sha256": "db51b7f50d07724ac4094d04649b652c4928147155933eff4c25504f66840ab4"
+    },
+    {
+      "file": "390-members-unchanged.png",
+      "width": 390,
+      "scene": "members-unchanged",
+      "sha256": "3d930df92ad16134e1e49a1d0aa99de3ac7d2b172f1aded6d85c50becbb662de"
+    }
+  ]
+}

@@ -571,10 +571,11 @@ test("organization admin palette resolves its approved C page colors in route sc
 });
 
 test("P08 tenancy palette resolves its original C direction colors in page scope", async () => {
-  const [tokens, css, globalShellCss] = await Promise.all([
+  const [tokens, css, globalShellCss, tenancyCss] = await Promise.all([
     readFile("apps/web/src/design/tenancy-tokens.css", "utf8"),
     readFile("apps/web/src/styles.css", "utf8"),
     readFile("apps/web/src/signal-ledger.css", "utf8"),
+    readFile("apps/web/src/styles/tenancy-workspace.css", "utf8"),
   ]);
   const declarations = [...tokens.matchAll(/(--p08-[a-z-]+):\s*#[0-9a-f]{3,6};/gi)];
   const names = new Set(declarations.map((match) => match[1]));
@@ -584,11 +585,13 @@ test("P08 tenancy palette resolves its original C direction colors in page scope
   assert.notEqual(
     p08OverridesStart,
     -1,
-    "P08 overrides remain explicitly scoped in the global shell stylesheet",
+    "P08 overrides remain explicitly scoped in the shared shell stylesheet",
   );
   const p08Overrides = globalShellCss.slice(p08OverridesStart);
   const references = new Set(
-    [...`${css}\n${globalShellCss}`.matchAll(/var\((--p08-[a-z-]+)\)/g)].map((match) => match[1]),
+    [...`${css}\n${globalShellCss}\n${tenancyCss}`.matchAll(/var\((--p08-[a-z-]+)\)/g)].map(
+      (match) => match[1],
+    ),
   );
 
   assert.equal(names.size, 24);

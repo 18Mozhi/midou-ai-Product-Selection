@@ -26,8 +26,8 @@ export const responsiveFocusRevision = Object.freeze({
   reasonFile: "apps/web/src/components/AuditedReasonDialog.vue",
   reasonAfter: "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
   currentDependencyHashes: Object.freeze({
-    "apps/web/src/main.ts": "ec4a6fca5f63a39533490e49820acbb56d8f19e9790f0cf288b1dd1bbcc2bb80",
-    "apps/web/src/styles.css": "6d7696d547c6dd16900b3cb38439e44742aa4675c6e276fd60e8c1c0931f9c09",
+    "apps/web/src/main.ts": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671",
+    "apps/web/src/styles.css": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016",
     "apps/web/src/styles/onboarding-navigation.css":
       "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
     "apps/web/src/styles/platform-operations.css":

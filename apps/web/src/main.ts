@@ -1,6 +1,7 @@
 import { createApp, h } from "vue";
 import { RouterView } from "vue-router";
 import "./styles.css";
+import "./styles/tenancy-workspace.css";
 import "./styles/access-governance.css";
 import "./styles/onboarding-navigation.css";
 import "./design/tokens.css";
