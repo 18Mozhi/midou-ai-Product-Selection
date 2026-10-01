@@ -1,0 +1,11 @@
+/* C palette is limited to the organization approval read-feedback region. */
+html #app .org-approval-read-feedback-c {
+  --so-approval-feedback-ink: #202c3d;
+  --so-approval-feedback-muted: #58677b;
+  --so-approval-feedback-blue: #254a9c;
+  --so-approval-feedback-deep: #193b80;
+  --so-approval-feedback-paper: #fff;
+  --so-approval-feedback-soft: #edf2fa;
+  --so-approval-feedback-line: #dbe1e9;
+  --so-approval-feedback-focus: #4d79ff;
+}
