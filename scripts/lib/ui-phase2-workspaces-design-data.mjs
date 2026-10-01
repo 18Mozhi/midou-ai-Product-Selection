@@ -202,13 +202,18 @@ export async function buildWorkspacesDesignData(repo) {
       }),
     (e) => e.code === "workspace_action_invalid",
   );
-  assert.match(child, /role="listitem"/);
+  assert.match(
+    child,
+    /<ul v-if="pageItems\.length" class="org-workspace-list" aria-label="工作区列表">[\s\S]*<li v-for="workspace in pageItems" :key="workspace\.id">[\s\S]*<button/,
+  );
+  assert.doesNotMatch(child, /role="listitem"/);
   assert.match(child, /selectedWorkspace\.status === 'active' && selectedIsDefault/);
   return {
     ...data,
     contracts,
     sourceChecks: [
       "Actual child computed/watch callbacks: filters, eight-row pagination, retained selection, fallback and empty auto-create",
+      "Actual child list uses native ul/li structure and preserves native button semantics for selection",
       "Actual child creation: trim, focus, busy guard, failed draft retained, success/cancel cleared",
       "Actual parent exact create/archive/restore bodies and cancellation zero-write",
       "Actual service slug/name/reason/action validation; uppercase normalized by service but rejected by source UI",

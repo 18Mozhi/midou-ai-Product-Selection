@@ -211,10 +211,10 @@ const definitions = [
     "OG-W-SELECT",
     "选择工作区",
     "local",
-    ["b4c1c37e889b3212.1"],
+    ["1db61553e299f9aa.1"],
     ["OG-W-SELECT"],
     "pageItems，无busy禁用",
-    "selectedWorkspaceId取原id；详情按全量数组，不因筛选隐藏而清空；旧button的role=listitem仍待修",
+    "使用原生ul/li与button列表语义；selectedWorkspaceId保留原id，详情按全量数组，不因筛选隐藏而清空",
     ["selected", "search"],
   ],
   [

@@ -425,7 +425,7 @@ test("shared shell role and state contract binds every current source site witho
   const source = (file) =>
     readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll("\r\n", "\n");
   const candidates = files.flatMap((file) => scanSource(source(file), file).candidates);
-  assert.equal(records.length, 73);
+  assert.equal(records.length, 75);
   assert.deepEqual(
     records.map((record) => record.candidateId).sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
@@ -449,6 +449,8 @@ test("shared shell role and state contract binds every current source site witho
     ["OrganizationRolePanel.vue", "grant.expiry.submit"],
   ])
     assert.equal(semantics(file, semantic).length, 2, `${file}:${semantic}`);
+  assert.equal(semantics("NavigationShell.vue", "discovery.open.search").length, 2);
+  assert.equal(semantics("NavigationShell.vue", "discovery.open.create").length, 2);
   const helper = semantics("use-modal-dialog.ts", "modal.native.lifecycle");
   assert.equal(helper.length, 1);
   assert.equal(helper[0].recordedKind, "dialog-script-call");

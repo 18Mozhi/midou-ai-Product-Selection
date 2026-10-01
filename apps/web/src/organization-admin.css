@@ -1644,11 +1644,16 @@
   align-self: end;
 }
 .org-workspace-list {
-  margin-top: 10px;
+  margin: 10px 0 0;
+  padding: 0;
+  list-style: none;
   display: grid;
   gap: 7px;
 }
-.org-workspace-list > button {
+.org-workspace-list > li {
+  min-width: 0;
+}
+.org-workspace-list > li > button {
   width: 100%;
   min-height: 74px;
   padding: 11px 12px;
@@ -1661,13 +1666,13 @@
   text-align: left;
   background: var(--so-panel-soft);
 }
-.org-workspace-list > button:hover,
-.org-workspace-list > button.is-selected {
+.org-workspace-list > li > button:hover,
+.org-workspace-list > li > button.is-selected {
   border-color: var(--so-primary-border);
   background: var(--so-primary-soft);
   transform: none;
 }
-.org-workspace-list > button.is-selected {
+.org-workspace-list > li > button.is-selected {
   box-shadow: inset 3px 0 var(--so-primary);
 }
 .org-workspace-list b,
@@ -3977,7 +3982,7 @@
   .org-workspace-status-tabs button {
     text-align: left;
   }
-  .org-workspace-list > button {
+  .org-workspace-list > li > button {
     grid-template-columns: auto minmax(0, 1fr) auto;
   }
   .org-workspace-list i {
@@ -4976,7 +4981,7 @@
   box-shadow: none;
 }
 
-.org-admin-center--workspace-review .org-workspace-list > button {
+.org-admin-center--workspace-review .org-workspace-list > li > button {
   min-height: 78px;
   padding: 13px;
   border: 1px solid var(--oa-section);
@@ -4984,13 +4989,13 @@
   background: var(--oa-white);
 }
 
-.org-admin-center--workspace-review .org-workspace-list > button:hover,
-.org-admin-center--workspace-review .org-workspace-list > button.is-selected {
+.org-admin-center--workspace-review .org-workspace-list > li > button:hover,
+.org-admin-center--workspace-review .org-workspace-list > li > button.is-selected {
   border-color: var(--oa-blue-mid);
   background: var(--oa-blue-pale);
 }
 
-.org-admin-center--workspace-review .org-workspace-list > button.is-selected {
+.org-admin-center--workspace-review .org-workspace-list > li > button.is-selected {
   box-shadow: inset 4px 0 var(--oa-blue);
 }
 

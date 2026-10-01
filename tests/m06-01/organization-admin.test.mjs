@@ -294,6 +294,11 @@ test("M06-01 organization governance exposes filters, matrix and factual compari
   assert.match(workspaces, /pattern="\^\[a-z0-9\]/);
   assert.doesNotMatch(workspaces, /pattern="\[a-z0-9-\]\+"/);
   assert.match(workspaces, /<summary>技术详情<\/summary>/);
+  assert.match(
+    workspaces,
+    /<ul v-if="pageItems\.length" class="org-workspace-list" aria-label="工作区列表">[\s\S]*<li v-for="workspace in pageItems" :key="workspace\.id">[\s\S]*<button[\s\S]*:aria-label="`选择工作区 \$\{workspace\.name\}`"[\s\S]*<\/button>[\s\S]*<\/li>[\s\S]*<\/ul>/,
+  );
+  assert.doesNotMatch(workspaces, /role="listitem"/);
   assert.match(teams, /maxlength="120"/);
   assert.match(teams, /maxlength="80"/);
   assert.match(teams, /pageSize = 8/);

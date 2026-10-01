@@ -703,10 +703,12 @@ test("organization workspaces expose truthful governance controls and audited wr
   });
 
   await page.goto("/org-admin/workspaces");
-  const workspaceItems = page.locator('.org-workspace-list > [role="listitem"]');
+  const workspaceList = page.getByRole("list", { name: "工作区列表" });
+  const workspaceItems = workspaceList.getByRole("listitem");
   await expect(page.getByRole("region", { name: "工作区治理台" })).toBeVisible();
   await expect(page.getByLabel("工作区统计")).toContainText("10");
   await expect(workspaceItems).toHaveCount(8);
+  await expect(workspaceList.getByRole("button")).toHaveCount(8);
   await expect(page.getByRole("navigation", { name: "工作区分页" })).toContainText(
     "第 1 / 2 页 · 共 10 条",
   );
@@ -720,7 +722,7 @@ test("organization workspaces expose truthful governance controls and audited wr
   await page.getByRole("button", { name: "重置筛选" }).click();
   await expect(page.getByRole("button", { name: "默认工作区不可归档" })).toBeDisabled();
 
-  await page.getByRole("listitem", { name: "选择工作区 区域工作区 1" }).click();
+  await page.getByRole("button", { name: "选择工作区 区域工作区 1" }).click();
   await page.getByRole("button", { name: "归档工作区" }).click();
   const archiveDialog = page.getByRole("dialog", { name: "归档工作区原因" });
   await archiveDialog.getByRole("textbox").fill("区域业务已经结束");
@@ -773,7 +775,7 @@ test("organization workspaces show an actionable empty state without invented ro
   await page.goto("/org-admin/workspaces");
   await expect(page.getByRole("heading", { name: "当前组织还没有工作区" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "新建工作区" })).toBeVisible();
-  await expect(page.locator('.org-workspace-list > [role="listitem"]')).toHaveCount(0);
+  await expect(page.locator(".org-workspace-list")).toHaveCount(0);
   await expect(page.getByText("创建首个工作区后，业务数据才能获得明确边界。")).toBeVisible();
 });
 

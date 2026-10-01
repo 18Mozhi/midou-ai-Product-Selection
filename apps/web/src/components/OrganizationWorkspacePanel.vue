@@ -270,28 +270,28 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
           <button type="button" class="org-admin-secondary" @click="resetFilters">重置筛选</button>
         </div>
 
-        <div v-if="pageItems.length" class="org-workspace-list" role="list">
-          <button
-            v-for="workspace in pageItems"
-            :key="workspace.id"
-            type="button"
-            role="listitem"
-            :class="{ 'is-selected': workspace.id === selectedWorkspaceId }"
-            :aria-label="`选择工作区 ${workspace.name}`"
-            :aria-current="workspace.id === selectedWorkspaceId ? 'true' : undefined"
-            @click="selectedWorkspaceId = workspace.id"
-          >
-            <span class="org-workspace-mark">{{ workspace.name.slice(0, 1) }}</span>
-            <span>
-              <b>{{ workspace.name }}</b>
-              <small
-                >{{ workspace.member_count }} 名明确范围成员 · 第 {{ workspace.version }} 版</small
-              >
-            </span>
-            <em v-if="workspace.id === defaultWorkspaceId">默认</em>
-            <i :data-status="workspace.status">{{ statusText(workspace.status) }}</i>
-          </button>
-        </div>
+        <ul v-if="pageItems.length" class="org-workspace-list" aria-label="工作区列表">
+          <li v-for="workspace in pageItems" :key="workspace.id">
+            <button
+              type="button"
+              :class="{ 'is-selected': workspace.id === selectedWorkspaceId }"
+              :aria-label="`选择工作区 ${workspace.name}`"
+              :aria-current="workspace.id === selectedWorkspaceId ? 'true' : undefined"
+              @click="selectedWorkspaceId = workspace.id"
+            >
+              <span class="org-workspace-mark">{{ workspace.name.slice(0, 1) }}</span>
+              <span>
+                <b>{{ workspace.name }}</b>
+                <small
+                  >{{ workspace.member_count }} 名明确范围成员 · 第
+                  {{ workspace.version }} 版</small
+                >
+              </span>
+              <em v-if="workspace.id === defaultWorkspaceId">默认</em>
+              <i :data-status="workspace.status">{{ statusText(workspace.status) }}</i>
+            </button>
+          </li>
+        </ul>
         <div v-else class="org-workspace-empty" role="status">
           <span aria-hidden="true">⌁</span>
           <h4>{{ workspaces.length ? "没有符合条件的工作区" : "当前组织还没有工作区" }}</h4>

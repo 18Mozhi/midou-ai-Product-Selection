@@ -177,6 +177,7 @@ window.WORKSPACES_C_DATA = {
   },
   sourceChecks: [
     "Actual child computed/watch callbacks: filters, eight-row pagination, retained selection, fallback and empty auto-create",
+    "Actual child list uses native ul/li structure and preserves native button semantics for selection",
     "Actual child creation: trim, focus, busy guard, failed draft retained, success/cancel cleared",
     "Actual parent exact create/archive/restore bodies and cancellation zero-write",
     "Actual service slug/name/reason/action validation; uppercase normalized by service but rejected by source UI",

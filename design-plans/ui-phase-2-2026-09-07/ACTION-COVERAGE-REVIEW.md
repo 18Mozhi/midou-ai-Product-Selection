@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1756；旧登记1477；新身份804，旧表独有身份525。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1592源位置/1304组；其中路由动作1069组，转发/容器关联122组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1758；旧登记1758；新身份0，旧表独有身份0。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1592源位置/1303组；其中路由动作1069组，转发/容器关联122组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -14,78 +14,78 @@
 
 | 页 | 旧静态关联候选（非运行分母） | 语义审阅 | 下一步 |
 | --- | --- | --- | --- |
-| [P01 正在进入](page-specs/P01.md) | 1 | [1组](action-reviews/P01.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P02 登录](page-specs/P02.md) | 7 | [15组](action-reviews/P02.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P03 注册](page-specs/P03.md) | 7 | [15组](action-reviews/P03.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P04 找回密码](page-specs/P04.md) | 7 | [15组](action-reviews/P04.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P05 验证邮箱](page-specs/P05.md) | 7 | [15组](action-reviews/P05.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P06 重置密码](page-specs/P06.md) | 7 | [15组](action-reviews/P06.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P07 安全设置](page-specs/P07.md) | 7 | [15组](action-reviews/P07.json) | 78个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P08 选择组织与工作区](page-specs/P08.md) | 9 | [11组](action-reviews/P08.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P09 快速引导](page-specs/P09.md) | 1 | [6组](action-reviews/P09.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P10 外观偏好](page-specs/P10.md) | 4 | [13组](action-reviews/P10.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P11 个人中心](page-specs/P11.md) | 2 | [28组](action-reviews/P11.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P12 今日行动](page-specs/P12.md) | 45 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P13 今日工作](page-specs/P13.md) | 71 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P14 热点趋势](page-specs/P14.md) | 82 | [53组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P15 选品机会](page-specs/P15.md) | 91 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P16 创建选品](page-specs/P16.md) | 39 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P17 评分规则](page-specs/P17.md) | 54 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P18 机会详情](page-specs/P18.md) | 91 | [66组](action-reviews/P18.json) | 330个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P19 竞品监控](page-specs/P19.md) | 62 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P20 竞品监控规则](page-specs/P20.md) | 62 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P21 供应链与利润](page-specs/P21.md) | 63 | [41组](action-reviews/P21.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P22 费用与利润规则](page-specs/P22.md) | 54 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P23 全部任务](page-specs/P23.md) | 71 | [40组](action-reviews/P23.json) | 192个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P24 任务详情](page-specs/P24.md) | 71 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P25 审批中心](page-specs/P25.md) | 74 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P26 通知中心](page-specs/P26.md) | 50 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P27 自动化规则](page-specs/P27.md) | 51 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P28 报表与导出](page-specs/P28.md) | 46 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 150 | [9组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P30 成员与邀请](page-specs/P30.md) | 150 | [25组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P31 角色与权限](page-specs/P31.md) | 150 | [26组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P32 工作区管理](page-specs/P32.md) | 150 | [24组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P33 团队管理](page-specs/P33.md) | 150 | [20组](action-reviews/P33.json) | 29个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P34 审批模板](page-specs/P34.md) | 150 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P35 组织数据](page-specs/P35.md) | 150 | [15组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P36 组织令牌](page-specs/P36.md) | 150 | [20组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P37 组织审计](page-specs/P37.md) | 150 | [17组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P38 平台概览](page-specs/P38.md) | 59 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P39 账号与组织](page-specs/P39.md) | 95 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P40 组织管理](page-specs/P40.md) | 95 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P41 创建组织](page-specs/P41.md) | 95 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P42 组织详情](page-specs/P42.md) | 95 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P43 用户管理](page-specs/P43.md) | 95 | [39组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P44 管理员管理](page-specs/P44.md) | 95 | [44组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P45 角色权限](page-specs/P45.md) | 95 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P46 来源设置](page-specs/P46.md) | 77 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P47 采集程序](page-specs/P47.md) | 77 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P48 热点来源](page-specs/P48.md) | 77 | [26组](action-reviews/P48.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P49 1688 启用检查](page-specs/P49.md) | 77 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P50 凭证与档案](page-specs/P50.md) | 77 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P51 采集任务](page-specs/P51.md) | 79 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P52 采集总览](page-specs/P52.md) | 79 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P53 网页登录采集](page-specs/P53.md) | 79 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P54 数据中心](page-specs/P54.md) | 57 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P55 质量与规则](page-specs/P55.md) | 58 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P56 内容管理](page-specs/P56.md) | 74 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P57 通知管理](page-specs/P57.md) | 74 | [22组](action-reviews/P57.json) | 132个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P58 配额管理](page-specs/P58.md) | 70 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P59 安全中心](page-specs/P59.md) | 68 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P60 开放平台](page-specs/P60.md) | 71 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P61 系统状态](page-specs/P61.md) | 74 | [6组](action-reviews/P61.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P62 链路日志](page-specs/P62.md) | 57 | [13组](action-reviews/P62.json) | 78个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P63 接口覆盖证据](page-specs/P63.md) | 74 | [2组](action-reviews/P63.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P64 备份与恢复](page-specs/P64.md) | 43 | [5组](action-reviews/P64.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P65 发布管理](page-specs/P65.md) | 44 | [7组](action-reviews/P65.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P66 服务拓扑](page-specs/P66.md) | 42 | [12组](action-reviews/P66.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P67 Redis 运行](page-specs/P67.md) | 35 | [3组](action-reviews/P67.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P68 MySQL 运行](page-specs/P68.md) | 38 | [3组](action-reviews/P68.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P69 文件存储](page-specs/P69.md) | 38 | [3组](action-reviews/P69.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P70 采集调度](page-specs/P70.md) | 46 | [9组](action-reviews/P70.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P71 容量边界](page-specs/P71.md) | 39 | [3组](action-reviews/P71.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P72 界面状态](page-specs/P72.md) | 6 | [4组](action-reviews/P72.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P01 正在进入](page-specs/P01.md) | 4 | [1组](action-reviews/P01.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P02 登录](page-specs/P02.md) | 52 | [15组](action-reviews/P02.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P03 注册](page-specs/P03.md) | 52 | [15组](action-reviews/P03.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P04 找回密码](page-specs/P04.md) | 52 | [15组](action-reviews/P04.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P05 验证邮箱](page-specs/P05.md) | 52 | [15组](action-reviews/P05.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P06 重置密码](page-specs/P06.md) | 52 | [15组](action-reviews/P06.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P07 安全设置](page-specs/P07.md) | 52 | [15组](action-reviews/P07.json) | 78个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P08 选择组织与工作区](page-specs/P08.md) | 12 | [11组](action-reviews/P08.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P09 快速引导](page-specs/P09.md) | 7 | [6组](action-reviews/P09.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P10 外观偏好](page-specs/P10.md) | 13 | [13组](action-reviews/P10.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P11 个人中心](page-specs/P11.md) | 41 | [28组](action-reviews/P11.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P12 今日行动](page-specs/P12.md) | 1604 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P13 今日工作](page-specs/P13.md) | 1604 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P14 热点趋势](page-specs/P14.md) | 1604 | [53组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P15 选品机会](page-specs/P15.md) | 1604 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P16 创建选品](page-specs/P16.md) | 1604 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P17 评分规则](page-specs/P17.md) | 1604 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P18 机会详情](page-specs/P18.md) | 1604 | [66组](action-reviews/P18.json) | 330个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P19 竞品监控](page-specs/P19.md) | 1604 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P20 竞品监控规则](page-specs/P20.md) | 1604 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P21 供应链与利润](page-specs/P21.md) | 1604 | [41组](action-reviews/P21.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P22 费用与利润规则](page-specs/P22.md) | 1604 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P23 全部任务](page-specs/P23.md) | 1604 | [40组](action-reviews/P23.json) | 192个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P24 任务详情](page-specs/P24.md) | 1604 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P25 审批中心](page-specs/P25.md) | 1604 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P26 通知中心](page-specs/P26.md) | 1604 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P27 自动化规则](page-specs/P27.md) | 1604 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P28 报表与导出](page-specs/P28.md) | 1604 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P29 治理概览](page-specs/P29.md) | 1604 | [9组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P30 成员与邀请](page-specs/P30.md) | 1604 | [25组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P31 角色与权限](page-specs/P31.md) | 1604 | [26组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P32 工作区管理](page-specs/P32.md) | 1604 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P33 团队管理](page-specs/P33.md) | 1604 | [20组](action-reviews/P33.json) | 29个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P34 审批模板](page-specs/P34.md) | 1604 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P35 组织数据](page-specs/P35.md) | 1604 | [15组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P36 组织令牌](page-specs/P36.md) | 1604 | [20组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P37 组织审计](page-specs/P37.md) | 1604 | [17组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P38 平台概览](page-specs/P38.md) | 1604 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P39 账号与组织](page-specs/P39.md) | 1604 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P40 组织管理](page-specs/P40.md) | 1604 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P41 创建组织](page-specs/P41.md) | 1604 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P42 组织详情](page-specs/P42.md) | 1604 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P43 用户管理](page-specs/P43.md) | 1604 | [39组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P44 管理员管理](page-specs/P44.md) | 1604 | [44组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P45 角色权限](page-specs/P45.md) | 1604 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P46 来源设置](page-specs/P46.md) | 1604 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P47 采集程序](page-specs/P47.md) | 1604 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P48 热点来源](page-specs/P48.md) | 1604 | [26组](action-reviews/P48.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P49 1688 启用检查](page-specs/P49.md) | 1604 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P50 凭证与档案](page-specs/P50.md) | 1604 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P51 采集任务](page-specs/P51.md) | 1604 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P52 采集总览](page-specs/P52.md) | 1604 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P53 网页登录采集](page-specs/P53.md) | 1604 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P54 数据中心](page-specs/P54.md) | 1604 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P55 质量与规则](page-specs/P55.md) | 1604 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P56 内容管理](page-specs/P56.md) | 1604 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P57 通知管理](page-specs/P57.md) | 1604 | [22组](action-reviews/P57.json) | 132个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P58 配额管理](page-specs/P58.md) | 1604 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P59 安全中心](page-specs/P59.md) | 1604 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P60 开放平台](page-specs/P60.md) | 1604 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P61 系统状态](page-specs/P61.md) | 1604 | [6组](action-reviews/P61.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P62 链路日志](page-specs/P62.md) | 1604 | [13组](action-reviews/P62.json) | 78个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P63 接口覆盖证据](page-specs/P63.md) | 1604 | [2组](action-reviews/P63.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P64 备份与恢复](page-specs/P64.md) | 1604 | [5组](action-reviews/P64.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P65 发布管理](page-specs/P65.md) | 1604 | [7组](action-reviews/P65.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P66 服务拓扑](page-specs/P66.md) | 1604 | [12组](action-reviews/P66.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P67 Redis 运行](page-specs/P67.md) | 1604 | [3组](action-reviews/P67.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P68 MySQL 运行](page-specs/P68.md) | 1604 | [3组](action-reviews/P68.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P69 文件存储](page-specs/P69.md) | 1604 | [3组](action-reviews/P69.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P70 采集调度](page-specs/P70.md) | 1604 | [9组](action-reviews/P70.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P71 容量边界](page-specs/P71.md) | 1604 | [3组](action-reviews/P71.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P72 界面状态](page-specs/P72.md) | 13 | [4组](action-reviews/P72.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P73 页面不存在](page-specs/P73.md) | 3 | [3组](action-reviews/P73.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 
 ## P11具体结论
@@ -2840,14 +2840,13 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P32 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P32.json)：31个局部源位置 → 24组；2类写入，18组路由动作，0组转发/容器关联不重复计动作。已映射11/11个源码字段位置，3/3处调用/内嵌容器，18个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P32.json)：31个局部源位置 → 23组；2类写入，18组路由动作，0组转发/容器关联不重复计动作。已映射11/11个源码字段位置，3/3处调用/内嵌容器，18个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有28个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
-| EX-P34-FIRST-FAILURE P34首次读取失败转发（非本页） / excluded | 2处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
-| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
+| EX-P34-FIRST-FAILURE P34首次读取失败转发（非本页） / excluded | 3处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |
 | OG-REFRESH 刷新工作区 / read | 1处；normal、refreshing、refresh_error | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)、[refreshing · 1440](design/workspaces-direction-c/1440-refreshing.png) / [refreshing · 390](design/workspaces-direction-c/390-refreshing.png)；其余见JSON | 已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。 |
 | OG-RETRY 重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited | [error · 1440](design/workspaces-direction-c/1440-error.png) / [error · 390](design/workspaces-direction-c/390-error.png)、[blocked · 1440](design/workspaces-direction-c/1440-blocked.png) / [blocked · 390](design/workspaces-direction-c/390-blocked.png)；其余见JSON | 已绑定代表控件/列明变体；未映射状态适用性、字段、全部组合、真实Vue与具体用户批准仍待。 |
 | EX-P29-PROFILE 资料分支排除 / excluded | 3处；normal | [normal · 1440](design/workspaces-direction-c/1440-normal.png) / [normal · 390](design/workspaces-direction-c/390-normal.png)；其余见JSON | 当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。 |

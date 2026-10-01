@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+  "sourceFingerprint": "f06c86ae1cc022101b7cdd9fb795da32738748e407834870568cb5f9a2678776",
   "denominatorFrozen": false,
   "pages": [
     {
@@ -21,8 +21,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 3,
+      "userReview": "pending",
+      "candidateControls": 4,
       "candidateDialogs": 0
     },
     {
@@ -43,8 +43,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 18,
+      "userReview": "pending",
+      "candidateControls": 52,
       "candidateDialogs": 0
     },
     {
@@ -65,8 +65,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 18,
+      "userReview": "pending",
+      "candidateControls": 52,
       "candidateDialogs": 0
     },
     {
@@ -87,8 +87,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 18,
+      "userReview": "pending",
+      "candidateControls": 52,
       "candidateDialogs": 0
     },
     {
@@ -109,8 +109,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 18,
+      "userReview": "pending",
+      "candidateControls": 52,
       "candidateDialogs": 0
     },
     {
@@ -131,8 +131,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 18,
+      "userReview": "pending",
+      "candidateControls": 52,
       "candidateDialogs": 0
     },
     {
@@ -153,8 +153,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 18,
+      "userReview": "pending",
+      "candidateControls": 52,
       "candidateDialogs": 0
     },
     {
@@ -175,8 +175,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 13,
+      "userReview": "pending",
+      "candidateControls": 12,
       "candidateDialogs": 0
     },
     {
@@ -197,8 +197,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 6,
+      "userReview": "pending",
+      "candidateControls": 7,
       "candidateDialogs": 0
     },
     {
@@ -219,8 +219,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 11,
+      "userReview": "pending",
+      "candidateControls": 13,
       "candidateDialogs": 0
     },
     {
@@ -241,8 +241,8 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 20,
+      "userReview": "pending",
+      "candidateControls": 41,
       "candidateDialogs": 0
     },
     {
@@ -265,9 +265,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 61,
-      "candidateDialogs": 3
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P13",
@@ -289,9 +289,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 112,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P14",
@@ -313,9 +313,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 107,
-      "candidateDialogs": 8
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P15",
@@ -337,9 +337,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 156,
-      "candidateDialogs": 12
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P16",
@@ -361,9 +361,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 51,
-      "candidateDialogs": 3
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P17",
@@ -385,9 +385,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 66,
-      "candidateDialogs": 6
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P18",
@@ -412,9 +412,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 156,
-      "candidateDialogs": 12
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P19",
@@ -436,9 +436,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 77,
-      "candidateDialogs": 6
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P20",
@@ -460,9 +460,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 77,
-      "candidateDialogs": 6
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P21",
@@ -484,9 +484,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 90,
-      "candidateDialogs": 8
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P22",
@@ -506,9 +506,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 69,
-      "candidateDialogs": 5
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P23",
@@ -530,9 +530,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 112,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P24",
@@ -557,9 +557,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 112,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P25",
@@ -581,9 +581,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 79,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P26",
@@ -605,9 +605,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 62,
-      "candidateDialogs": 5
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P27",
@@ -629,9 +629,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 58,
-      "candidateDialogs": 5
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P28",
@@ -653,9 +653,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 54,
-      "candidateDialogs": 4
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P29",
@@ -675,9 +675,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P30",
@@ -697,9 +697,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P31",
@@ -719,9 +719,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P32",
@@ -741,9 +741,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P33",
@@ -763,9 +763,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P34",
@@ -785,9 +785,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P35",
@@ -809,9 +809,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P36",
@@ -831,9 +831,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P37",
@@ -855,9 +855,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 170,
-      "candidateDialogs": 7
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P38",
@@ -880,9 +880,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 70,
-      "candidateDialogs": 4
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P39",
@@ -904,9 +904,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 136,
-      "candidateDialogs": 14
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P40",
@@ -928,9 +928,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 136,
-      "candidateDialogs": 14
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P41",
@@ -952,9 +952,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 136,
-      "candidateDialogs": 14
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P42",
@@ -980,9 +980,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 136,
-      "candidateDialogs": 14
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P43",
@@ -1004,9 +1004,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 136,
-      "candidateDialogs": 14
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P44",
@@ -1028,9 +1028,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 136,
-      "candidateDialogs": 14
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P45",
@@ -1052,9 +1052,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 136,
-      "candidateDialogs": 14
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P46",
@@ -1077,9 +1077,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 173,
-      "candidateDialogs": 17
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P47",
@@ -1102,9 +1102,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 173,
-      "candidateDialogs": 17
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P48",
@@ -1127,9 +1127,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 173,
-      "candidateDialogs": 17
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P49",
@@ -1151,9 +1151,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 173,
-      "candidateDialogs": 17
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P50",
@@ -1175,9 +1175,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 173,
-      "candidateDialogs": 17
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P51",
@@ -1200,9 +1200,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 121,
-      "candidateDialogs": 10
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P52",
@@ -1225,9 +1225,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 121,
-      "candidateDialogs": 10
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P53",
@@ -1250,9 +1250,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 121,
-      "candidateDialogs": 10
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P54",
@@ -1275,9 +1275,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 104,
-      "candidateDialogs": 11
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P55",
@@ -1300,9 +1300,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 76,
-      "candidateDialogs": 6
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P56",
@@ -1325,9 +1325,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 115,
-      "candidateDialogs": 11
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P57",
@@ -1350,9 +1350,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 115,
-      "candidateDialogs": 11
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P58",
@@ -1375,9 +1375,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 81,
-      "candidateDialogs": 6
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P59",
@@ -1400,9 +1400,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 79,
-      "candidateDialogs": 4
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P60",
@@ -1424,9 +1424,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 89,
-      "candidateDialogs": 6
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P61",
@@ -1449,9 +1449,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 115,
-      "candidateDialogs": 11
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P62",
@@ -1474,9 +1474,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 74,
-      "candidateDialogs": 8
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P63",
@@ -1498,9 +1498,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 115,
-      "candidateDialogs": 11
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P64",
@@ -1523,9 +1523,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 57,
-      "candidateDialogs": 4
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P65",
@@ -1548,9 +1548,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 58,
-      "candidateDialogs": 4
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P66",
@@ -1573,9 +1573,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 54,
-      "candidateDialogs": 3
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P67",
@@ -1598,9 +1598,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 47,
-      "candidateDialogs": 3
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P68",
@@ -1623,9 +1623,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 47,
-      "candidateDialogs": 3
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P69",
@@ -1648,9 +1648,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 47,
-      "candidateDialogs": 3
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P70",
@@ -1673,9 +1673,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 61,
-      "candidateDialogs": 6
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P71",
@@ -1698,9 +1698,9 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
-      "candidateControls": 53,
-      "candidateDialogs": 5
+      "userReview": "pending",
+      "candidateControls": 1488,
+      "candidateDialogs": 116
     },
     {
       "id": "P72",
@@ -1720,7 +1720,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
+      "userReview": "pending",
       "candidateControls": 11,
       "candidateDialogs": 2
     },
@@ -1742,7 +1742,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "approved",
+      "userReview": "pending",
       "candidateControls": 3,
       "candidateDialogs": 0
     }
@@ -1753,9 +1753,7 @@
       "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
       "line": 300,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#617a39a925d1099c.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#617a39a925d1099c.1"
       ],
@@ -1763,7 +1761,7 @@
         "start": 9562,
         "end": 9686
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -1771,9 +1769,7 @@
       "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
       "line": 329,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#4f98bc142c69e6f8.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#4f98bc142c69e6f8.1"
       ],
@@ -1781,7 +1777,7 @@
         "start": 10516,
         "end": 10636
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -1789,9 +1785,7 @@
       "file": "apps/web/src/components/Alibaba1688AcceptanceCenter.vue",
       "line": 466,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#4d5599c177edbee1.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/Alibaba1688AcceptanceCenter.vue#4d5599c177edbee1.1"
       ],
@@ -1799,7 +1793,7 @@
         "start": 15053,
         "end": 15209
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -2510,7 +2504,7 @@
       "line": 150,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/BackupRecoveryCenter.vue#de2ebca33ff1e487.1"
+        "apps/web/src/components/BackupRecoveryCenter.vue#32472f95c82e1a43.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/BackupRecoveryCenter.vue#de2ebca33ff1e487.1"
@@ -2527,9 +2521,7 @@
       "file": "apps/web/src/components/BackupRecoveryCenter.vue",
       "line": 165,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/BackupRecoveryCenter.vue#21c66441891be768.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/BackupRecoveryCenter.vue#21c66441891be768.1"
       ],
@@ -2537,7 +2529,7 @@
         "start": 5318,
         "end": 5390
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -2545,9 +2537,7 @@
       "file": "apps/web/src/components/BackupRecoveryCenter.vue",
       "line": 179,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/BackupRecoveryCenter.vue#227b66d9ec4e0216.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/BackupRecoveryCenter.vue#227b66d9ec4e0216.1"
       ],
@@ -2555,7 +2545,7 @@
         "start": 5936,
         "end": 6058
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -2564,7 +2554,7 @@
       "line": 234,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CapacityBoundaryCenter.vue#d0414c44eef669b6.1",
+        "apps/web/src/components/CapacityBoundaryCenter.vue#ad3f1b8a48927d9d.1",
         "apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1"
       ],
       "historicalCandidateIds": [
@@ -2620,7 +2610,7 @@
       "line": 361,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#f04d44ed4df285ab.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#6d3f7d591719f19f.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#f04d44ed4df285ab.1"
@@ -2638,7 +2628,7 @@
       "line": 402,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#c28b2fc7235cdb49.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#e0774dcb9c606eef.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#c28b2fc7235cdb49.1"
@@ -2656,7 +2646,7 @@
       "line": 405,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#43ad97abb073c16e.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#002b24e1d917d4a4.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#43ad97abb073c16e.1"
@@ -2674,7 +2664,7 @@
       "line": 414,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#5cb1142ec0759d3e.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#a397ba517c409773.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#5cb1142ec0759d3e.1"
@@ -2692,7 +2682,7 @@
       "line": 433,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#ea08550bb35442f9.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#c7e32d5d2ec42619.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#ea08550bb35442f9.1"
@@ -2710,7 +2700,7 @@
       "line": 534,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#f596c7474d4b8232.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#a9b7552ee181c72f.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#f596c7474d4b8232.1"
@@ -2728,7 +2718,7 @@
       "line": 573,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#0db0b4127120a05a.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#4509211b46b0337c.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#0db0b4127120a05a.1"
@@ -2746,7 +2736,7 @@
       "line": 588,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#e1cacfb14abb0a4c.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#644b6cd23fdb966a.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#e1cacfb14abb0a4c.1"
@@ -2764,7 +2754,7 @@
       "line": 698,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#9a34a1e60386c3be.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#e4688d99cdaed726.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#9a34a1e60386c3be.1"
@@ -2782,7 +2772,7 @@
       "line": 709,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#a8016a8969f38074.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#5c6a30d3ce827bee.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#a8016a8969f38074.1"
@@ -2800,7 +2790,7 @@
       "line": 757,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#713c88750f4f0639.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#9233c1fc5a4723d0.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#713c88750f4f0639.1"
@@ -2818,7 +2808,7 @@
       "line": 786,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#13685210dcee03e5.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#ead51c4255c6e1f0.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#13685210dcee03e5.1"
@@ -2836,7 +2826,7 @@
       "line": 797,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#7b21c2da3342a42a.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#19e60ba8660b9f22.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionOperationsConsole.vue#7b21c2da3342a42a.1"
@@ -2854,7 +2844,7 @@
       "line": 278,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionRuntimeCenter.vue#9dee0a9f3983a0d5.1"
+        "apps/web/src/components/CollectionRuntimeCenter.vue#b3aff7d1ec82177c.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionRuntimeCenter.vue#9dee0a9f3983a0d5.1"
@@ -2872,7 +2862,7 @@
       "line": 281,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionRuntimeCenter.vue#f2f6bbdea261f58a.1"
+        "apps/web/src/components/CollectionRuntimeCenter.vue#7287ecd28dcaceb5.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionRuntimeCenter.vue#f2f6bbdea261f58a.1"
@@ -2890,7 +2880,7 @@
       "line": 410,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionRuntimeCenter.vue#36c7b60823abfadf.1"
+        "apps/web/src/components/CollectionRuntimeCenter.vue#764f755fb3d8ba7c.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionRuntimeCenter.vue#36c7b60823abfadf.1"
@@ -2908,7 +2898,7 @@
       "line": 411,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionRuntimeCenter.vue#2f1b49bdefe2e793.1"
+        "apps/web/src/components/CollectionRuntimeCenter.vue#06482162d2eef909.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionRuntimeCenter.vue#2f1b49bdefe2e793.1"
@@ -2926,7 +2916,7 @@
       "line": 532,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionRuntimeCenter.vue#053cd828dd3324d8.1"
+        "apps/web/src/components/CollectionRuntimeCenter.vue#7219dcd9d87bc4b0.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionRuntimeCenter.vue#053cd828dd3324d8.1"
@@ -2944,7 +2934,7 @@
       "line": 540,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CollectionRuntimeCenter.vue#b7a08810a69e9930.1"
+        "apps/web/src/components/CollectionRuntimeCenter.vue#28a360589b0e3c7f.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionRuntimeCenter.vue#b7a08810a69e9930.1"
@@ -3087,9 +3077,7 @@
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
       "line": 730,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CollectionTaskCenter.vue#e2f1f3476ece93e2.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionTaskCenter.vue#e2f1f3476ece93e2.1"
       ],
@@ -3097,7 +3085,7 @@
         "start": 25650,
         "end": 25704
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -3487,9 +3475,7 @@
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
       "line": 958,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CommercialOperationsCenter.vue#1afdd47b63111a06.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CommercialOperationsCenter.vue#1afdd47b63111a06.1"
       ],
@@ -3497,7 +3483,7 @@
         "start": 33405,
         "end": 33518
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -3505,9 +3491,7 @@
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
       "line": 1006,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CommercialOperationsCenter.vue#a4c5a912e246ba93.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CommercialOperationsCenter.vue#a4c5a912e246ba93.1"
       ],
@@ -3515,7 +3499,7 @@
         "start": 34954,
         "end": 35038
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -3598,7 +3582,7 @@
       "line": 619,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1"
+        "apps/web/src/components/CompetitorMonitor.vue#1b193ec9f175425c.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#92a11027f1dd1f3c.1"
@@ -3634,7 +3618,7 @@
       "line": 669,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#056cc0832d94cfb3.1"
+        "apps/web/src/components/CompetitorMonitor.vue#0d2355591b57c284.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#056cc0832d94cfb3.1"
@@ -3652,7 +3636,7 @@
       "line": 677,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#4fe322a77ae77170.1"
+        "apps/web/src/components/CompetitorMonitor.vue#c626005c766fe7b8.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#4fe322a77ae77170.1"
@@ -3670,7 +3654,7 @@
       "line": 680,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#9e3339029c06290e.1"
+        "apps/web/src/components/CompetitorMonitor.vue#ec64e194fee06bf8.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#9e3339029c06290e.1"
@@ -3879,9 +3863,7 @@
       "file": "apps/web/src/components/CompetitorMonitor.vue",
       "line": 1093,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#8436b1677c6263f6.1"
       ],
@@ -3889,7 +3871,7 @@
         "start": 39686,
         "end": 39861
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -3898,7 +3880,6 @@
       "line": 1115,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#a94cde21d7759e06.1",
         "apps/web/src/components/CompetitorMonitor.vue#9d23c498e72940a2.1"
       ],
       "historicalCandidateIds": [
@@ -3909,7 +3890,7 @@
         "start": 40320,
         "end": 40470
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -3918,8 +3899,7 @@
       "line": 123,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/ConfirmDialog.vue#d1b7ac74d4f4ffc3.1",
-        "apps/web/src/components/ConfirmDialog.vue#3003ba3e33804f38.1"
+        "apps/web/src/components/ConfirmDialog.vue#96a1bf094dd96757.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/ConfirmDialog.vue#d1b7ac74d4f4ffc3.1",
@@ -3929,7 +3909,7 @@
         "start": 3764,
         "end": 4109
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4171,9 +4151,7 @@
       "file": "apps/web/src/components/CostRuleConsole.vue",
       "line": 740,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#8695390d77702f3f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CostRuleConsole.vue#8695390d77702f3f.1"
       ],
@@ -4181,7 +4159,7 @@
         "start": 24928,
         "end": 24997
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4210,7 +4188,7 @@
       "line": 869,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#9a6cc342b022be3d.1"
+        "apps/web/src/components/CostRuleConsole.vue#89388d2e7acd060d.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CostRuleConsole.vue#9a6cc342b022be3d.1"
@@ -4358,7 +4336,7 @@
       "line": 526,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#62c28f83dd77541b.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#4cff98e257b4af2d.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#62c28f83dd77541b.1"
@@ -4376,9 +4354,9 @@
       "line": 536,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#faa93a858a84ea60.1",
-        "apps/web/src/components/CredentialAssetCenter.vue#09c5f70e0bef7952.1",
-        "apps/web/src/components/CredentialAssetCenter.vue#84ead7c893248e2c.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#3216d7209881fb86.1",
+        "apps/web/src/components/CredentialAssetCenter.vue#da51ee773f1eb5e2.1",
+        "apps/web/src/components/CredentialAssetCenter.vue#07c8680b127235e2.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#faa93a858a84ea60.1",
@@ -4398,7 +4376,7 @@
       "line": 577,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#ad87a22b7d7dedf7.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#343034ee456c8020.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#ad87a22b7d7dedf7.1"
@@ -4416,8 +4394,7 @@
       "line": 626,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#7afaae6e4a36e2ab.1",
-        "apps/web/src/components/CredentialAssetCenter.vue#0126143cd8671c5f.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#99e8924082a7d684.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#7afaae6e4a36e2ab.1",
@@ -4427,7 +4404,7 @@
         "start": 20244,
         "end": 20587
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4436,7 +4413,7 @@
       "line": 776,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#51909c47b8cea5e6.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#a75910143d18b017.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#51909c47b8cea5e6.1"
@@ -4453,9 +4430,7 @@
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 829,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.1"
       ],
@@ -4463,7 +4438,7 @@
         "start": 27041,
         "end": 27160
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4472,7 +4447,7 @@
       "line": 832,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#584e25b2c7498fe2.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#25e471a00cbed149.1"
@@ -4490,7 +4465,7 @@
       "line": 852,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#c3ca275e26012f78.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#785d60d74b62708a.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#c3ca275e26012f78.1"
@@ -4507,9 +4482,7 @@
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 894,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#c19154c59d261941.2"
       ],
@@ -4517,7 +4490,7 @@
         "start": 29377,
         "end": 29496
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4526,7 +4499,7 @@
       "line": 897,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#91ffac2d135459f2.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#98e4c1aff937289a.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#91ffac2d135459f2.1"
@@ -4543,9 +4516,7 @@
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 915,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#9cbbc1a74784bca7.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#9cbbc1a74784bca7.1"
       ],
@@ -4553,7 +4524,7 @@
         "start": 30063,
         "end": 30132
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4562,7 +4533,7 @@
       "line": 974,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#656bff1ad830e5ab.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#656bff1ad830e5ab.1"
@@ -4579,9 +4550,7 @@
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 977,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#cccafd19b3cf9803.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#cccafd19b3cf9803.1"
       ],
@@ -4589,7 +4558,7 @@
         "start": 32552,
         "end": 32776
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4597,10 +4566,7 @@
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 988,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#5f400eb4ffa0ae12.1",
-        "apps/web/src/components/CredentialAssetCenter.vue#acee62f093368cd2.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#5f400eb4ffa0ae12.1",
         "apps/web/src/components/CredentialAssetCenter.vue#acee62f093368cd2.1"
@@ -4609,7 +4575,7 @@
         "start": 32887,
         "end": 33088
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4618,9 +4584,9 @@
       "line": 511,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#962cb06e44ff9bc9.1",
-        "apps/web/src/components/DataQualityCenter.vue#30e8ea79455855f2.1",
-        "apps/web/src/components/DataQualityCenter.vue#65223b82b82a6bdf.1"
+        "apps/web/src/components/DataQualityCenter.vue#3c02110a0877635d.1",
+        "apps/web/src/components/DataQualityCenter.vue#b2556958fd8ef037.1",
+        "apps/web/src/components/DataQualityCenter.vue#aa2356189420d59b.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#962cb06e44ff9bc9.1",
@@ -4640,8 +4606,7 @@
       "line": 572,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#7bd92702b23c9693.1",
-        "apps/web/src/components/DataQualityCenter.vue#ae9bd960542d86e4.1"
+        "apps/web/src/components/DataQualityCenter.vue#c56baf2a56445da0.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#7bd92702b23c9693.1",
@@ -4651,7 +4616,7 @@
         "start": 19982,
         "end": 20119
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4659,9 +4624,7 @@
       "file": "apps/web/src/components/DataQualityCenter.vue",
       "line": 611,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#57c01717dbdca94f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#57c01717dbdca94f.1"
       ],
@@ -4669,7 +4632,7 @@
         "start": 21401,
         "end": 21611
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4677,9 +4640,7 @@
       "file": "apps/web/src/components/DataQualityCenter.vue",
       "line": 620,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#1314e818824ce060.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#1314e818824ce060.1"
       ],
@@ -4687,7 +4648,7 @@
         "start": 21626,
         "end": 21707
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4714,7 +4675,7 @@
       "line": 694,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#e1512e639fd3f6dc.1"
+        "apps/web/src/components/DataQualityCenter.vue#c0a8ac3c192bbfe4.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#e1512e639fd3f6dc.1"
@@ -4732,7 +4693,7 @@
       "line": 754,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#232fadd70e14fb44.1"
+        "apps/web/src/components/DataQualityCenter.vue#1abe71571b4dfe5d.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#232fadd70e14fb44.1"
@@ -4750,7 +4711,7 @@
       "line": 761,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#4feb3476c1a70841.1"
+        "apps/web/src/components/DataQualityCenter.vue#eb0caf70507d0ae7.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#4feb3476c1a70841.1"
@@ -4767,9 +4728,7 @@
       "file": "apps/web/src/components/DataQualityCenter.vue",
       "line": 831,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#b4391f4667c57834.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#b4391f4667c57834.1"
       ],
@@ -4777,7 +4736,7 @@
         "start": 29186,
         "end": 29466
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4785,9 +4744,7 @@
       "file": "apps/web/src/components/DataQualityCenter.vue",
       "line": 842,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#eaff8a0f18b4cd6c.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#eaff8a0f18b4cd6c.1"
       ],
@@ -4795,7 +4752,7 @@
         "start": 29479,
         "end": 29711
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4857,9 +4814,7 @@
       "file": "apps/web/src/components/DataQualityCenter.vue",
       "line": 912,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#1052dd42c6994868.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#1052dd42c6994868.1"
       ],
@@ -4867,7 +4822,7 @@
         "start": 31841,
         "end": 31902
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4875,9 +4830,7 @@
       "file": "apps/web/src/components/DataQualityCenter.vue",
       "line": 953,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#87db0311c644aa85.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#87db0311c644aa85.1"
       ],
@@ -4885,7 +4838,7 @@
         "start": 33274,
         "end": 33338
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -4893,9 +4846,7 @@
       "file": "apps/web/src/components/DataQualityCenter.vue",
       "line": 963,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/DataQualityCenter.vue#e4b44826587c4dcd.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/DataQualityCenter.vue#e4b44826587c4dcd.1"
       ],
@@ -4903,7 +4854,7 @@
         "start": 33604,
         "end": 33720
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5042,7 +4993,7 @@
       "line": 286,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/HomeDashboard.vue#6baee2bd21cfaaf6.1"
+        "apps/web/src/components/HomeDashboard.vue#cb01c1a61d2872cd.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/HomeDashboard.vue#6baee2bd21cfaaf6.1"
@@ -5060,7 +5011,7 @@
       "line": 294,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/HomeDashboard.vue#d396a13adfe5024b.1"
+        "apps/web/src/components/HomeDashboard.vue#094ecf5aedd69025.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/HomeDashboard.vue#d396a13adfe5024b.1"
@@ -5113,9 +5064,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 417,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#e469057c327dc16e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#e469057c327dc16e.1"
       ],
@@ -5123,7 +5072,7 @@
         "start": 13546,
         "end": 14069
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5149,9 +5098,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 482,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#3170fd522bb10adc.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#3170fd522bb10adc.1"
       ],
@@ -5159,7 +5106,7 @@
         "start": 15667,
         "end": 15790
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5167,9 +5114,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 494,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.1"
       ],
@@ -5177,7 +5122,7 @@
         "start": 16129,
         "end": 16256
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5185,9 +5130,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 506,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#6eba4c9b2b754a44.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#6eba4c9b2b754a44.1"
       ],
@@ -5195,7 +5138,7 @@
         "start": 16600,
         "end": 16717
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5221,9 +5164,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 540,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.2"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#2f540419fadab817.2"
       ],
@@ -5231,7 +5172,7 @@
         "start": 17871,
         "end": 17998
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5239,9 +5180,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 553,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#ea20d050ca8862b0.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#ea20d050ca8862b0.1"
       ],
@@ -5249,7 +5188,7 @@
         "start": 18381,
         "end": 18494
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5257,9 +5196,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 576,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#44386aa05f9251f5.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#44386aa05f9251f5.1"
       ],
@@ -5267,7 +5204,7 @@
         "start": 19270,
         "end": 19330
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5293,9 +5230,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 596,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#c29c165271e564d1.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#c29c165271e564d1.1"
       ],
@@ -5303,7 +5238,7 @@
         "start": 20074,
         "end": 20273
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5311,9 +5246,7 @@
       "file": "apps/web/src/components/LocalIdentity.vue",
       "line": 604,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/LocalIdentity.vue#170fb1546e423ddb.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/LocalIdentity.vue#170fb1546e423ddb.1"
       ],
@@ -5321,7 +5254,7 @@
         "start": 20284,
         "end": 20475
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5736,9 +5669,7 @@
       "file": "apps/web/src/components/OnboardingGuide.vue",
       "line": 61,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OnboardingGuide.vue#75986af56e7cd4f4.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OnboardingGuide.vue#75986af56e7cd4f4.1"
       ],
@@ -5746,7 +5677,7 @@
         "start": 1817,
         "end": 2074
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5773,8 +5704,7 @@
       "line": 496,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OpenPlatformCenter.vue#32b3ac036c571c07.1",
-        "apps/web/src/components/OpenPlatformCenter.vue#e70a65ac56ee311f.1"
+        "apps/web/src/components/OpenPlatformCenter.vue#32b3ac036c571c07.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpenPlatformCenter.vue#32b3ac036c571c07.1",
@@ -5784,7 +5714,7 @@
         "start": 16635,
         "end": 16759
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -5811,7 +5741,7 @@
       "line": 534,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OpenPlatformCenter.vue#c66242089e076803.1"
+        "apps/web/src/components/OpenPlatformCenter.vue#378899e48c4d8c4e.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpenPlatformCenter.vue#c66242089e076803.1"
@@ -5829,7 +5759,7 @@
       "line": 546,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OpenPlatformCenter.vue#0c7b10d8381ec4f6.1"
+        "apps/web/src/components/OpenPlatformCenter.vue#e16baed7fd7574cb.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpenPlatformCenter.vue#0c7b10d8381ec4f6.1"
@@ -5847,7 +5777,7 @@
       "line": 555,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OpenPlatformCenter.vue#c3276c76b4b63985.1"
+        "apps/web/src/components/OpenPlatformCenter.vue#b224f20b7d8e3bc6.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpenPlatformCenter.vue#c3276c76b4b63985.1"
@@ -6080,9 +6010,7 @@
       "file": "apps/web/src/components/OpportunityAiPanel.vue",
       "line": 40,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityAiPanel.vue#3fc618c0a253e761.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityAiPanel.vue#3fc618c0a253e761.1"
       ],
@@ -6090,7 +6018,7 @@
         "start": 1118,
         "end": 1194
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6098,9 +6026,7 @@
       "file": "apps/web/src/components/OpportunityAiPanel.vue",
       "line": 86,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityAiPanel.vue#378bcfa62fdb2a15.1"
       ],
@@ -6108,7 +6034,7 @@
         "start": 2791,
         "end": 2907
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6116,9 +6042,7 @@
       "file": "apps/web/src/components/OpportunityAiPanel.vue",
       "line": 89,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityAiPanel.vue#ccfc7a9546285067.1"
       ],
@@ -6126,7 +6050,7 @@
         "start": 2920,
         "end": 3106
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6134,9 +6058,7 @@
       "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
       "line": 76,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#aa698411d908f10b.1"
       ],
@@ -6144,7 +6066,7 @@
         "start": 2228,
         "end": 2303
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6152,9 +6074,7 @@
       "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
       "line": 77,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#2ad8a0f45b085121.1"
       ],
@@ -6162,7 +6082,7 @@
         "start": 2312,
         "end": 2387
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6170,9 +6090,7 @@
       "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
       "line": 85,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityCostReviewQueue.vue#030d4f76526e6970.1"
       ],
@@ -6180,7 +6098,7 @@
         "start": 2701,
         "end": 2758
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6282,9 +6200,7 @@
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
       "line": 67,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityDetailInsights.vue#e05349e8d6e988e6.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#e05349e8d6e988e6.1"
       ],
@@ -6292,7 +6208,7 @@
         "start": 1926,
         "end": 2116
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6300,9 +6216,7 @@
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
       "line": 75,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityDetailInsights.vue#effae781320f38ae.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#effae781320f38ae.1"
       ],
@@ -6310,7 +6224,7 @@
         "start": 2125,
         "end": 2312
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6318,9 +6232,7 @@
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
       "line": 83,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityDetailInsights.vue#886e2ed7a10d72e3.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#886e2ed7a10d72e3.1"
       ],
@@ -6328,7 +6240,7 @@
         "start": 2321,
         "end": 2505
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6336,9 +6248,7 @@
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
       "line": 124,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityDetailInsights.vue#0ea181124012f39d.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#0ea181124012f39d.1"
       ],
@@ -6346,7 +6256,7 @@
         "start": 3809,
         "end": 3927
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6354,9 +6264,7 @@
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
       "line": 214,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityDetailInsights.vue#e05349e8d6e988e6.2"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#e05349e8d6e988e6.2"
       ],
@@ -6364,7 +6272,7 @@
         "start": 7051,
         "end": 7227
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6372,9 +6280,7 @@
       "file": "apps/web/src/components/OpportunityDetailInsights.vue",
       "line": 222,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityDetailInsights.vue#389b0cedfcdcb05c.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityDetailInsights.vue#389b0cedfcdcb05c.1"
       ],
@@ -6382,7 +6288,7 @@
         "start": 7234,
         "end": 7409
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6426,9 +6332,7 @@
       "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
       "line": 118,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityFeedbackPanel.vue#78c5b5b15ae0a028.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityFeedbackPanel.vue#78c5b5b15ae0a028.1"
       ],
@@ -6436,7 +6340,7 @@
         "start": 3681,
         "end": 3760
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6483,7 +6387,7 @@
       "line": 287,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#e4d77eb7a4a580f1.1"
+        "apps/web/src/components/OpportunityListPanel.vue#49aa86998e70364c.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityListPanel.vue#e4d77eb7a4a580f1.1"
@@ -6501,7 +6405,7 @@
       "line": 288,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#08f90a95059f6dac.1"
+        "apps/web/src/components/OpportunityListPanel.vue#a1959483e41eb1bf.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityListPanel.vue#08f90a95059f6dac.1"
@@ -6519,7 +6423,7 @@
       "line": 289,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OpportunityListPanel.vue#120a674bf7e0ed5a.1"
+        "apps/web/src/components/OpportunityListPanel.vue#b113acbf01a0938d.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityListPanel.vue#120a674bf7e0ed5a.1"
@@ -6631,8 +6535,8 @@
       "line": 158,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OpportunityProfitPanel.vue#b2258379fb999070.1",
-        "apps/web/src/components/OpportunityProfitPanel.vue#aff5d679009764bc.1"
+        "apps/web/src/components/OpportunityProfitPanel.vue#d25bbd68583e5a3d.1",
+        "apps/web/src/components/OpportunityProfitPanel.vue#f8671d189e947071.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityProfitPanel.vue#b2258379fb999070.1",
@@ -6672,8 +6576,7 @@
       "type": "button",
       "candidateIds": [
         "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
-        "apps/web/src/components/OpportunityWorkspace.vue#8dfb1ee903d0b053.1"
+        "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
@@ -6684,7 +6587,7 @@
         "start": 27036,
         "end": 27937
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6692,9 +6595,7 @@
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
       "line": 820,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityWorkspace.vue#1aef42d09991a143.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspace.vue#1aef42d09991a143.1"
       ],
@@ -6702,7 +6603,7 @@
         "start": 28077,
         "end": 28371
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6746,9 +6647,7 @@
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 57,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#072a94228fa0ed02.1"
       ],
@@ -6756,7 +6655,7 @@
         "start": 1764,
         "end": 1850
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6764,9 +6663,7 @@
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 83,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#71b07908a7d1f426.1"
       ],
@@ -6774,7 +6671,7 @@
         "start": 2588,
         "end": 2652
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6782,9 +6679,7 @@
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 84,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#429c64115868d9c6.1"
       ],
@@ -6792,7 +6687,7 @@
         "start": 2661,
         "end": 2764
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6836,9 +6731,7 @@
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 119,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ff7a5f3105576981.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ff7a5f3105576981.1"
       ],
@@ -6846,7 +6739,7 @@
         "start": 3792,
         "end": 3868
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -6909,7 +6802,7 @@
       "line": 922,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#b11692c0597885e3.1"
@@ -7016,9 +6909,7 @@
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
       "line": 437,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OrganizationApprovalPanel.vue#184674807c82ee93.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OrganizationApprovalPanel.vue#184674807c82ee93.1"
       ],
@@ -7026,7 +6917,7 @@
         "start": 15613,
         "end": 15685
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -7034,9 +6925,7 @@
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
       "line": 438,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OrganizationApprovalPanel.vue#3169b6613d3ce948.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OrganizationApprovalPanel.vue#3169b6613d3ce948.1"
       ],
@@ -7044,7 +6933,7 @@
         "start": 15696,
         "end": 15783
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -7088,9 +6977,7 @@
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
       "line": 528,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OrganizationApprovalPanel.vue#0b242741fe22e1a9.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OrganizationApprovalPanel.vue#0b242741fe22e1a9.1"
       ],
@@ -7098,7 +6985,7 @@
         "start": 18940,
         "end": 19014
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -7106,9 +6993,7 @@
       "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
       "line": 529,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OrganizationApprovalPanel.vue#0ab42724896b9cf9.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OrganizationApprovalPanel.vue#0ab42724896b9cf9.1"
       ],
@@ -7116,7 +7001,7 @@
         "start": 19029,
         "end": 19151
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -7668,9 +7553,7 @@
       "file": "apps/web/src/components/OrganizationRolePanel.vue",
       "line": 448,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OrganizationRolePanel.vue#0aac14fac3c56e10.1"
       ],
@@ -7678,7 +7561,7 @@
         "start": 14952,
         "end": 15097
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8389,7 +8272,7 @@
       "line": 274,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/OrganizationWorkspacePanel.vue#b4c1c37e889b3212.1"
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#1db61553e299f9aa.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/OrganizationWorkspacePanel.vue#b4c1c37e889b3212.1"
@@ -8496,9 +8379,7 @@
       "file": "apps/web/src/components/PersonalCenter.vue",
       "line": 291,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#50ca10b185d1647b.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PersonalCenter.vue#50ca10b185d1647b.1"
       ],
@@ -8506,7 +8387,7 @@
         "start": 8767,
         "end": 8814
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8514,9 +8395,7 @@
       "file": "apps/web/src/components/PersonalCenter.vue",
       "line": 303,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#835072c0eb99454f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PersonalCenter.vue#835072c0eb99454f.1"
       ],
@@ -8524,7 +8403,7 @@
         "start": 9225,
         "end": 9285
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8532,9 +8411,7 @@
       "file": "apps/web/src/components/PersonalCenter.vue",
       "line": 307,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#1076771cfdefa098.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PersonalCenter.vue#1076771cfdefa098.1"
       ],
@@ -8542,7 +8419,7 @@
         "start": 9384,
         "end": 9850
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8550,9 +8427,7 @@
       "file": "apps/web/src/components/PersonalCenter.vue",
       "line": 352,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#a0c7836a08f38875.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PersonalCenter.vue#a0c7836a08f38875.1"
       ],
@@ -8560,7 +8435,7 @@
         "start": 11116,
         "end": 11137
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8568,9 +8443,7 @@
       "file": "apps/web/src/components/PersonalCenter.vue",
       "line": 407,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#7872fbd4ec279ff5.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PersonalCenter.vue#7872fbd4ec279ff5.1"
       ],
@@ -8578,7 +8451,7 @@
         "start": 13192,
         "end": 13218
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8586,9 +8459,7 @@
       "file": "apps/web/src/components/PersonalCenter.vue",
       "line": 416,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#065748ba997faf11.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PersonalCenter.vue#065748ba997faf11.1"
       ],
@@ -8596,7 +8467,7 @@
         "start": 13591,
         "end": 13647
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8604,9 +8475,7 @@
       "file": "apps/web/src/components/PersonalCenter.vue",
       "line": 432,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PersonalCenter.vue#6dacbeb2eac421c9.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PersonalCenter.vue#6dacbeb2eac421c9.1"
       ],
@@ -8614,7 +8483,7 @@
         "start": 14383,
         "end": 14404
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8643,7 +8512,7 @@
       "candidateIds": [
         "apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1",
         "apps/web/src/components/PlatformAccountCenter.vue#1516ea5a6c3b1540.1",
-        "apps/web/src/components/PlatformAccountCenter.vue#eedb593a22243281.1"
+        "apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1",
@@ -8698,10 +8567,7 @@
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
       "line": 718,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformAccountCenter.vue#ebbfe99328a93a8a.1",
-        "apps/web/src/components/PlatformAccountCenter.vue#08063437101eb52f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformAccountCenter.vue#ebbfe99328a93a8a.1",
         "apps/web/src/components/PlatformAccountCenter.vue#08063437101eb52f.1"
@@ -8710,7 +8576,7 @@
         "start": 24593,
         "end": 24847
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8719,7 +8585,7 @@
       "line": 733,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformAccountCenter.vue#6a22c249121aeb4d.1"
+        "apps/web/src/components/PlatformAccountCenter.vue#c4cfef52bcc169fb.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformAccountCenter.vue#6a22c249121aeb4d.1"
@@ -8736,9 +8602,7 @@
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
       "line": 743,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformAccountCenter.vue#d4e23c718ed64cd0.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformAccountCenter.vue#d4e23c718ed64cd0.1"
       ],
@@ -8746,7 +8610,7 @@
         "start": 25613,
         "end": 25695
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8755,7 +8619,7 @@
       "line": 744,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformAccountCenter.vue#9ea6aa71cb45580a.1"
+        "apps/web/src/components/PlatformAccountCenter.vue#280136c1a545dff9.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformAccountCenter.vue#9ea6aa71cb45580a.1"
@@ -8772,9 +8636,7 @@
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
       "line": 769,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformAccountCenter.vue#d4e23c718ed64cd0.2"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformAccountCenter.vue#d4e23c718ed64cd0.2"
       ],
@@ -8782,7 +8644,7 @@
         "start": 26621,
         "end": 26703
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -8790,9 +8652,7 @@
       "file": "apps/web/src/components/PlatformAccountCenter.vue",
       "line": 770,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformAccountCenter.vue#64fa4a4db515a792.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformAccountCenter.vue#64fa4a4db515a792.1"
       ],
@@ -8800,7 +8660,7 @@
         "start": 26714,
         "end": 26787
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9045,7 +8905,7 @@
       "line": 284,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#a30c90fe071a03aa.1"
+        "apps/web/src/components/PlatformDataCenter.vue#d8576e9119c47e48.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformDataCenter.vue#a30c90fe071a03aa.1"
@@ -9063,7 +8923,7 @@
       "line": 290,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#d095b93e387de70c.1"
+        "apps/web/src/components/PlatformDataCenter.vue#3d3b85cc3453eef2.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformDataCenter.vue#d095b93e387de70c.1"
@@ -9081,7 +8941,7 @@
       "line": 302,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#c2f291caa419e5a2.1"
+        "apps/web/src/components/PlatformDataCenter.vue#318d604dd4996018.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformDataCenter.vue#c2f291caa419e5a2.1"
@@ -9099,7 +8959,7 @@
       "line": 330,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#fde295a3afc6fed6.1"
+        "apps/web/src/components/PlatformDataCenter.vue#6bb29ec0529e0e59.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformDataCenter.vue#fde295a3afc6fed6.1"
@@ -9117,7 +8977,7 @@
       "line": 331,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#644ca45b53f7ea6b.1"
+        "apps/web/src/components/PlatformDataCenter.vue#7d45674378db30da.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformDataCenter.vue#644ca45b53f7ea6b.1"
@@ -9134,9 +8994,7 @@
       "file": "apps/web/src/components/PlatformDataCenter.vue",
       "line": 338,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#225e8779258d8472.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformDataCenter.vue#225e8779258d8472.1"
       ],
@@ -9144,7 +9002,7 @@
         "start": 11674,
         "end": 11820
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9171,7 +9029,7 @@
       "line": 453,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#053cd828dd3324d8.1"
+        "apps/web/src/components/PlatformDataCenter.vue#55d3fe91022d0dbb.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformDataCenter.vue#053cd828dd3324d8.1"
@@ -9189,7 +9047,7 @@
       "line": 461,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformDataCenter.vue#b7a08810a69e9930.1"
+        "apps/web/src/components/PlatformDataCenter.vue#97d75da3f85810f7.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformDataCenter.vue#b7a08810a69e9930.1"
@@ -9261,7 +9119,7 @@
       "line": 333,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformGovernanceCenter.vue#7c508e0f69cc08ef.1"
+        "apps/web/src/components/PlatformGovernanceCenter.vue#98e49bfa8722733e.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformGovernanceCenter.vue#7c508e0f69cc08ef.1"
@@ -9278,9 +9136,7 @@
       "file": "apps/web/src/components/PlatformGovernanceCenter.vue",
       "line": 342,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformGovernanceCenter.vue#afe46eeebe1ea9c0.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformGovernanceCenter.vue#afe46eeebe1ea9c0.1"
       ],
@@ -9288,7 +9144,7 @@
         "start": 11107,
         "end": 11380
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9353,7 +9209,7 @@
       "line": 265,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformLogCenter.vue#a4a224d771806ee7.1"
+        "apps/web/src/components/PlatformLogCenter.vue#f457c74d5cac0e80.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformLogCenter.vue#a4a224d771806ee7.1"
@@ -9371,7 +9227,7 @@
       "line": 268,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformLogCenter.vue#a73ee10987ddca35.1"
+        "apps/web/src/components/PlatformLogCenter.vue#d37ca26c235aab7a.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformLogCenter.vue#a73ee10987ddca35.1"
@@ -9424,9 +9280,7 @@
       "file": "apps/web/src/components/PlatformLogCenter.vue",
       "line": 317,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformLogCenter.vue#fc60d9191880683a.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformLogCenter.vue#fc60d9191880683a.1"
       ],
@@ -9434,7 +9288,7 @@
         "start": 10835,
         "end": 10911
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9442,9 +9296,7 @@
       "file": "apps/web/src/components/PlatformManagementCenter.vue",
       "line": 383,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformManagementCenter.vue#2f53f8bf6591930e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformManagementCenter.vue#2f53f8bf6591930e.1"
       ],
@@ -9452,7 +9304,7 @@
         "start": 12853,
         "end": 12965
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9514,10 +9366,7 @@
       "file": "apps/web/src/components/PlatformManagementCenter.vue",
       "line": 616,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformManagementCenter.vue#55da33db3f9ca4bf.1",
-        "apps/web/src/components/PlatformManagementCenter.vue#642126a04c8cf655.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformManagementCenter.vue#55da33db3f9ca4bf.1",
         "apps/web/src/components/PlatformManagementCenter.vue#642126a04c8cf655.1"
@@ -9526,7 +9375,7 @@
         "start": 21380,
         "end": 21532
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9703,7 +9552,7 @@
       "line": 32,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformMessageEditor.vue#c6a9a644f04c8e3f.1"
+        "apps/web/src/components/PlatformMessageEditor.vue#02668382bdda9d3b.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformMessageEditor.vue#c6a9a644f04c8e3f.1"
@@ -9720,9 +9569,7 @@
       "file": "apps/web/src/components/PlatformMessageEditor.vue",
       "line": 117,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformMessageEditor.vue#358517db18f8c7cb.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformMessageEditor.vue#358517db18f8c7cb.1"
       ],
@@ -9730,7 +9577,7 @@
         "start": 3494,
         "end": 3551
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9739,7 +9586,7 @@
       "line": 118,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformMessageEditor.vue#d55ba76cf5f7483a.1"
+        "apps/web/src/components/PlatformMessageEditor.vue#e94ca4c02d75da69.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformMessageEditor.vue#d55ba76cf5f7483a.1"
@@ -9756,9 +9603,7 @@
       "file": "apps/web/src/components/PlatformMessageWorkbench.vue",
       "line": 65,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformMessageWorkbench.vue#2ae2df8d01820411.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformMessageWorkbench.vue#2ae2df8d01820411.1"
       ],
@@ -9766,7 +9611,7 @@
         "start": 1769,
         "end": 1817
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9774,9 +9619,7 @@
       "file": "apps/web/src/components/PlatformMessageWorkbench.vue",
       "line": 66,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformMessageWorkbench.vue#1161d842890c2c3d.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformMessageWorkbench.vue#1161d842890c2c3d.1"
       ],
@@ -9784,7 +9627,7 @@
         "start": 1828,
         "end": 1952
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9792,9 +9635,7 @@
       "file": "apps/web/src/components/PlatformMessageWorkbench.vue",
       "line": 69,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformMessageWorkbench.vue#5c263905603687c7.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformMessageWorkbench.vue#5c263905603687c7.1"
       ],
@@ -9802,7 +9643,7 @@
         "start": 1963,
         "end": 2025
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9846,9 +9687,7 @@
       "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
       "line": 40,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformOrganizationDetailDialog.vue#6fbf23d3aefd32ed.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformOrganizationDetailDialog.vue#6fbf23d3aefd32ed.1"
       ],
@@ -9856,7 +9695,7 @@
         "start": 989,
         "end": 1103
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -9901,7 +9740,7 @@
       "line": 112,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformOrganizationDetailDialog.vue#758ab89691c1c72b.1"
+        "apps/web/src/components/PlatformOrganizationDetailDialog.vue#c912786107f1a3c8.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformOrganizationDetailDialog.vue#758ab89691c1c72b.1"
@@ -9936,9 +9775,7 @@
       "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
       "line": 121,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/PlatformOrganizationDetailDialog.vue#b8fc8632d25866fd.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformOrganizationDetailDialog.vue#b8fc8632d25866fd.1"
       ],
@@ -9946,7 +9783,7 @@
         "start": 3597,
         "end": 3637
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10009,7 +9846,7 @@
       "line": 51,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformUserDetailDialog.vue#1070c07ce059b6fa.1"
+        "apps/web/src/components/PlatformUserDetailDialog.vue#2086f54419d742e3.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformUserDetailDialog.vue#1070c07ce059b6fa.1"
@@ -10027,7 +9864,7 @@
       "line": 105,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformUserDetailDialog.vue#16892f77d1719620.1"
+        "apps/web/src/components/PlatformUserDetailDialog.vue#86b2bcafa2c5529c.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformUserDetailDialog.vue#16892f77d1719620.1"
@@ -10045,7 +9882,7 @@
       "line": 117,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformUserDetailDialog.vue#3d1d03659c4b6766.1"
+        "apps/web/src/components/PlatformUserDetailDialog.vue#d7a92de7086fdce6.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformUserDetailDialog.vue#3d1d03659c4b6766.1"
@@ -10063,7 +9900,7 @@
       "line": 127,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformUserDetailDialog.vue#5477852d3db05f5c.1"
+        "apps/web/src/components/PlatformUserDetailDialog.vue#a187b4fc34f4ab4e.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformUserDetailDialog.vue#5477852d3db05f5c.1"
@@ -10081,7 +9918,7 @@
       "line": 130,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformUserDetailDialog.vue#eca5d0ed53a62ef0.1"
+        "apps/web/src/components/PlatformUserDetailDialog.vue#8406f17273df6864.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformUserDetailDialog.vue#eca5d0ed53a62ef0.1"
@@ -10099,7 +9936,7 @@
       "line": 131,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformUserDetailDialog.vue#f3c55863d4631fd4.1"
+        "apps/web/src/components/PlatformUserDetailDialog.vue#f1dd7ea535b03340.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformUserDetailDialog.vue#f3c55863d4631fd4.1"
@@ -10117,7 +9954,7 @@
       "line": 134,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/PlatformUserDetailDialog.vue#d7deda0f60ef7bb1.1"
+        "apps/web/src/components/PlatformUserDetailDialog.vue#02668382bdda9d3b.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformUserDetailDialog.vue#d7deda0f60ef7bb1.1"
@@ -10224,9 +10061,7 @@
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
       "line": 241,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderAdapterCenter.vue#92930355cc4e2a4f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderAdapterCenter.vue#92930355cc4e2a4f.1"
       ],
@@ -10234,7 +10069,7 @@
         "start": 8691,
         "end": 8813
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10260,9 +10095,7 @@
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
       "line": 337,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderAdapterCenter.vue#3670aecf7cfb60e1.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderAdapterCenter.vue#3670aecf7cfb60e1.1"
       ],
@@ -10270,7 +10103,7 @@
         "start": 12091,
         "end": 12250
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10296,9 +10129,7 @@
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
       "line": 521,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderAdapterCenter.vue#efa5a28bbc761600.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderAdapterCenter.vue#efa5a28bbc761600.1"
       ],
@@ -10306,7 +10137,7 @@
         "start": 18955,
         "end": 19103
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10314,9 +10145,7 @@
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
       "line": 565,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderAdapterCenter.vue#369397a871aefe1e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderAdapterCenter.vue#369397a871aefe1e.1"
       ],
@@ -10324,7 +10153,7 @@
         "start": 20441,
         "end": 20514
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10332,9 +10161,7 @@
       "file": "apps/web/src/components/ProviderAdapterCenter.vue",
       "line": 567,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderAdapterCenter.vue#e193aebbbf403ff8.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderAdapterCenter.vue#e193aebbbf403ff8.1"
       ],
@@ -10342,7 +10169,7 @@
         "start": 20600,
         "end": 20682
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10350,9 +10177,7 @@
       "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
       "line": 34,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#f0685e36cb38e6c1.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#f0685e36cb38e6c1.1"
       ],
@@ -10360,7 +10185,7 @@
         "start": 1037,
         "end": 1115
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10368,9 +10193,7 @@
       "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
       "line": 70,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderParserSampleDialog.vue#6fc72afafe0d64c5.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderParserSampleDialog.vue#6fc72afafe0d64c5.1"
       ],
@@ -10378,7 +10201,7 @@
         "start": 2141,
         "end": 2219
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10387,7 +10210,7 @@
       "line": 85,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/ProviderParserSampleDialog.vue#ea471875b272e83e.1"
+        "apps/web/src/components/ProviderParserSampleDialog.vue#78c716f6150b4d8d.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderParserSampleDialog.vue#ea471875b272e83e.1"
@@ -10405,7 +10228,7 @@
       "line": 118,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/ProviderParserSampleDialog.vue#9fe911ce0f68afbf.1"
+        "apps/web/src/components/ProviderParserSampleDialog.vue#27382a3b9a4eeefc.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderParserSampleDialog.vue#9fe911ce0f68afbf.1"
@@ -10567,7 +10390,7 @@
       "line": 638,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/ProviderRegistry.vue#478ad8851af1360d.1"
+        "apps/web/src/components/ProviderRegistry.vue#f8fbe8533c9685db.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderRegistry.vue#478ad8851af1360d.1"
@@ -10728,9 +10551,7 @@
       "file": "apps/web/src/components/ProviderRegistry.vue",
       "line": 945,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderRegistry.vue#476b79a4175dbc41.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderRegistry.vue#476b79a4175dbc41.1"
       ],
@@ -10738,7 +10559,7 @@
         "start": 34580,
         "end": 34749
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10746,9 +10567,7 @@
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
       "line": 606,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceCenter.vue#9287eb0473b9ee05.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceCenter.vue#9287eb0473b9ee05.1"
       ],
@@ -10756,7 +10575,7 @@
         "start": 21548,
         "end": 21670
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10764,9 +10583,7 @@
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
       "line": 688,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceCenter.vue#66725db5db9a8fe8.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceCenter.vue#66725db5db9a8fe8.1"
       ],
@@ -10774,7 +10591,7 @@
         "start": 24554,
         "end": 24632
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10782,9 +10599,7 @@
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
       "line": 706,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceCenter.vue#25214adce9760897.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceCenter.vue#25214adce9760897.1"
       ],
@@ -10792,7 +10607,7 @@
         "start": 25273,
         "end": 25357
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10800,14 +10615,7 @@
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
       "line": 790,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceCenter.vue#cd642bd4e8591939.1",
-        "apps/web/src/components/ProviderSourceCenter.vue#c45fa10015518a56.1",
-        "apps/web/src/components/ProviderSourceCenter.vue#ba6b745768e7ce7a.1",
-        "apps/web/src/components/ProviderSourceCenter.vue#d76e5df18057ffbc.1",
-        "apps/web/src/components/ProviderSourceCenter.vue#33df1c327ad3e80c.1",
-        "apps/web/src/components/ProviderSourceCenter.vue#d08df5663e79fcd3.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceCenter.vue#cd642bd4e8591939.1",
         "apps/web/src/components/ProviderSourceCenter.vue#c45fa10015518a56.1",
@@ -10820,7 +10628,7 @@
         "start": 28080,
         "end": 30252
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10828,9 +10636,7 @@
       "file": "apps/web/src/components/ProviderSourceCenter.vue",
       "line": 847,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceCenter.vue#326dc9fb6fb8f079.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceCenter.vue#326dc9fb6fb8f079.1"
       ],
@@ -10838,7 +10644,7 @@
         "start": 30437,
         "end": 30553
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10846,9 +10652,7 @@
       "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
       "line": 71,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceConfigurationDialog.vue#f133c5386c615a0f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceConfigurationDialog.vue#f133c5386c615a0f.1"
       ],
@@ -10856,7 +10660,7 @@
         "start": 2123,
         "end": 2203
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10864,9 +10668,7 @@
       "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
       "line": 152,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceConfigurationDialog.vue#978645864f7d95c4.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceConfigurationDialog.vue#978645864f7d95c4.1"
       ],
@@ -10874,7 +10676,7 @@
         "start": 4617,
         "end": 4678
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10882,9 +10684,7 @@
       "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
       "line": 153,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceConfigurationDialog.vue#899501ffcfbb32fc.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceConfigurationDialog.vue#899501ffcfbb32fc.1"
       ],
@@ -10892,7 +10692,7 @@
         "start": 4687,
         "end": 4818
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10900,9 +10700,7 @@
       "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
       "line": 172,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceConfigurationDialog.vue#5bfd25c03d15e894.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceConfigurationDialog.vue#5bfd25c03d15e894.1"
       ],
@@ -10910,7 +10708,7 @@
         "start": 5219,
         "end": 5303
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10918,9 +10716,7 @@
       "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
       "line": 196,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceConfigurationDialog.vue#449abb271a921473.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceConfigurationDialog.vue#449abb271a921473.1"
       ],
@@ -10928,7 +10724,7 @@
         "start": 6196,
         "end": 6535
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10959,7 +10755,7 @@
       "line": 192,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/RedisResilienceCenter.vue#99e387027e98dda9.1"
+        "apps/web/src/components/RedisResilienceCenter.vue#58a7337b2cdfab3b.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/RedisResilienceCenter.vue#99e387027e98dda9.1"
@@ -10976,9 +10772,7 @@
       "file": "apps/web/src/components/RedisResilienceCenter.vue",
       "line": 207,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/RedisResilienceCenter.vue#21c66441891be768.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/RedisResilienceCenter.vue#21c66441891be768.1"
       ],
@@ -10986,7 +10780,7 @@
         "start": 6688,
         "end": 6760
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -10994,9 +10788,7 @@
       "file": "apps/web/src/components/RedisResilienceCenter.vue",
       "line": 234,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/RedisResilienceCenter.vue#6a87ca890e2cd293.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/RedisResilienceCenter.vue#6a87ca890e2cd293.1"
       ],
@@ -11004,7 +10796,7 @@
         "start": 7561,
         "end": 7640
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -11013,7 +10805,7 @@
       "line": 154,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/ReleaseRolloutCenter.vue#f801437d922c379b.1"
+        "apps/web/src/components/ReleaseRolloutCenter.vue#2e6f5b1858278d74.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/ReleaseRolloutCenter.vue#f801437d922c379b.1"
@@ -11030,9 +10822,7 @@
       "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
       "line": 175,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ReleaseRolloutCenter.vue#21c66441891be768.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ReleaseRolloutCenter.vue#21c66441891be768.1"
       ],
@@ -11040,7 +10830,7 @@
         "start": 5664,
         "end": 5736
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -11048,9 +10838,7 @@
       "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
       "line": 188,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ReleaseRolloutCenter.vue#227b66d9ec4e0216.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ReleaseRolloutCenter.vue#227b66d9ec4e0216.1"
       ],
@@ -11058,7 +10846,7 @@
         "start": 6252,
         "end": 6374
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -11342,9 +11130,7 @@
       "file": "apps/web/src/components/ResponsiveDataView.vue",
       "line": 54,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ResponsiveDataView.vue#53d89072117d7eda.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ResponsiveDataView.vue#53d89072117d7eda.1"
       ],
@@ -11352,7 +11138,7 @@
         "start": 1801,
         "end": 1950
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -11379,7 +11165,7 @@
       "line": 80,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/ResponsiveFilterDrawer.vue#beb5f8d5846aa028.1"
+        "apps/web/src/components/ResponsiveFilterDrawer.vue#7e0fa28eaeb1cc09.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/ResponsiveFilterDrawer.vue#beb5f8d5846aa028.1"
@@ -11433,7 +11219,7 @@
       "line": 373,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/RuntimeTopologyCenter.vue#99e387027e98dda9.1"
+        "apps/web/src/components/RuntimeTopologyCenter.vue#58a7337b2cdfab3b.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/RuntimeTopologyCenter.vue#99e387027e98dda9.1"
@@ -11450,9 +11236,7 @@
       "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
       "line": 389,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/RuntimeTopologyCenter.vue#21c66441891be768.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/RuntimeTopologyCenter.vue#21c66441891be768.1"
       ],
@@ -11460,7 +11244,7 @@
         "start": 12110,
         "end": 12182
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -11468,9 +11252,7 @@
       "file": "apps/web/src/components/RuntimeTopologyCenter.vue",
       "line": 411,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/RuntimeTopologyCenter.vue#6a87ca890e2cd293.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/RuntimeTopologyCenter.vue#6a87ca890e2cd293.1"
       ],
@@ -11478,7 +11260,7 @@
         "start": 12912,
         "end": 12991
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -11910,7 +11692,7 @@
       "line": 444,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/SelectionJourney.vue#dc2377b526f68954.1"
+        "apps/web/src/components/SelectionJourney.vue#56c9199d58a1af94.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/SelectionJourney.vue#1e10e5e77e7fc48e.1"
@@ -11999,9 +11781,7 @@
       "file": "apps/web/src/components/SourcingWorkspace.vue",
       "line": 476,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/SourcingWorkspace.vue#0d91434c5f2ca144.1"
       ],
@@ -12009,7 +11789,7 @@
         "start": 16162,
         "end": 16363
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -12226,7 +12006,7 @@
       "line": 41,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#dcc3dd67cea16d16.1"
+        "apps/web/src/components/TaskBatchActions.vue#62a85ecfcbf87cd0.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskBatchActions.vue#dcc3dd67cea16d16.1"
@@ -12244,7 +12024,7 @@
       "line": 42,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#8c9d3d93d6a0168a.1"
+        "apps/web/src/components/TaskBatchActions.vue#e5ca8829d0379397.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskBatchActions.vue#8c9d3d93d6a0168a.1"
@@ -12262,7 +12042,7 @@
       "line": 43,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#238f1a6251ae9783.1"
+        "apps/web/src/components/TaskBatchActions.vue#2891c626e1bace29.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskBatchActions.vue#238f1a6251ae9783.1"
@@ -12280,7 +12060,7 @@
       "line": 44,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#5694b69e2e543c38.1"
+        "apps/web/src/components/TaskBatchActions.vue#9c5e331f305cf169.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskBatchActions.vue#5694b69e2e543c38.1"
@@ -12298,7 +12078,7 @@
       "line": 47,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#70c47404dd2cc51e.1"
+        "apps/web/src/components/TaskBatchActions.vue#4a8081057a9059a8.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskBatchActions.vue#70c47404dd2cc51e.1"
@@ -12316,8 +12096,7 @@
       "line": 109,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#99031a2db9919db6.1",
-        "apps/web/src/components/TaskBatchActions.vue#83d4d6c6f2015e2f.1"
+        "apps/web/src/components/TaskBatchActions.vue#9ff94b39657d19fc.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskBatchActions.vue#99031a2db9919db6.1",
@@ -12327,7 +12106,7 @@
         "start": 3134,
         "end": 3258
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -12533,10 +12312,7 @@
       "file": "apps/web/src/components/TaskDetailPanel.vue",
       "line": 308,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#fbcbfc84994eaf3e.1",
-        "apps/web/src/components/TaskDetailPanel.vue#c74a96fead2d3bc1.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskDetailPanel.vue#fbcbfc84994eaf3e.1",
         "apps/web/src/components/TaskDetailPanel.vue#c74a96fead2d3bc1.1"
@@ -12545,7 +12321,7 @@
         "start": 8942,
         "end": 9091
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -12680,7 +12456,7 @@
       "line": 726,
       "type": "button",
       "candidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1"
+        "apps/web/src/components/TaskWorkspace.vue#d0b5cc25f7a3a006.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskWorkspace.vue#2bed49a2c7d63100.1"
@@ -12845,9 +12621,7 @@
       "file": "apps/web/src/components/TenancyChooser.vue",
       "line": 153,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TenancyChooser.vue#fbfed57848d7366f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TenancyChooser.vue#fbfed57848d7366f.1"
       ],
@@ -12855,7 +12629,7 @@
         "start": 5354,
         "end": 5413
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -12935,9 +12709,7 @@
       "file": "apps/web/src/components/TenancyChooser.vue",
       "line": 253,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TenancyChooser.vue#6f0aae6f4f0ea461.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TenancyChooser.vue#6f0aae6f4f0ea461.1"
       ],
@@ -12945,7 +12717,7 @@
         "start": 8682,
         "end": 9299
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -12971,9 +12743,7 @@
       "file": "apps/web/src/components/TenancyChooser.vue",
       "line": 276,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TenancyChooser.vue#a556210b61698de6.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TenancyChooser.vue#a556210b61698de6.1"
       ],
@@ -12981,7 +12751,7 @@
         "start": 9711,
         "end": 10358
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -12989,9 +12759,7 @@
       "file": "apps/web/src/components/ThemeStudio.vue",
       "line": 185,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ThemeStudio.vue#615525e93bd0aa8d.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ThemeStudio.vue#615525e93bd0aa8d.1"
       ],
@@ -12999,7 +12767,7 @@
         "start": 5808,
         "end": 5850
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13007,9 +12775,7 @@
       "file": "apps/web/src/components/ThemeStudio.vue",
       "line": 200,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ThemeStudio.vue#b5fc72dd64e3a6e6.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ThemeStudio.vue#b5fc72dd64e3a6e6.1"
       ],
@@ -13017,7 +12783,7 @@
         "start": 6349,
         "end": 6959
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13025,9 +12791,7 @@
       "file": "apps/web/src/components/ThemeStudio.vue",
       "line": 222,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ThemeStudio.vue#e717723479d58780.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ThemeStudio.vue#e717723479d58780.1"
       ],
@@ -13035,7 +12799,7 @@
         "start": 7280,
         "end": 7766
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13043,10 +12807,7 @@
       "file": "apps/web/src/components/ThemeStudio.vue",
       "line": 237,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/ThemeStudio.vue#b13c528391353263.1",
-        "apps/web/src/components/ThemeStudio.vue#38740096ebfd6c5f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ThemeStudio.vue#b13c528391353263.1",
         "apps/web/src/components/ThemeStudio.vue#38740096ebfd6c5f.1"
@@ -13055,7 +12816,7 @@
         "start": 7861,
         "end": 8114
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13320,9 +13081,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 601,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#5b07ed8ea36a238e.1"
       ],
@@ -13330,7 +13089,7 @@
         "start": 20735,
         "end": 20820
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13338,9 +13097,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 613,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#095a96a218ee248e.1"
       ],
@@ -13348,7 +13105,7 @@
         "start": 21210,
         "end": 21295
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13356,9 +13113,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 661,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#5731738b8db06002.1"
       ],
@@ -13366,7 +13121,7 @@
         "start": 22819,
         "end": 22964
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13374,9 +13129,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 664,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#273b9f9c2069857f.1"
       ],
@@ -13384,7 +13137,7 @@
         "start": 22973,
         "end": 23058
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13392,9 +13145,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 695,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#7d73f8399a9950b5.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#7d73f8399a9950b5.1"
       ],
@@ -13402,7 +13153,7 @@
         "start": 23848,
         "end": 23932
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13410,10 +13161,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 715,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1",
-        "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#a13a34f2af9d90ee.1",
         "apps/web/src/components/TrendDashboard.vue#3ca40e4dc9ea598c.1"
@@ -13422,7 +13170,7 @@
         "start": 24524,
         "end": 24773
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13430,9 +13178,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 737,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#690d51553ff51b5d.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#690d51553ff51b5d.1"
       ],
@@ -13440,7 +13186,7 @@
         "start": 25262,
         "end": 25371
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13448,10 +13194,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 753,
       "type": "button",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#51e4bb1af788a0bf.1",
-        "apps/web/src/components/TrendDashboard.vue#5ddc6be7e1b242d6.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#51e4bb1af788a0bf.1",
         "apps/web/src/components/TrendDashboard.vue#5ddc6be7e1b242d6.1"
@@ -13460,7 +13203,7 @@
         "start": 25718,
         "end": 25917
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13588,7 +13331,7 @@
       "type": "button",
       "candidateIds": [
         "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
-        "apps/web/src/components/UiStatePanel.vue#3eebdb6b72e10446.1"
+        "apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/UiStatePanel.vue#589e8eedc7c9c864.1",
@@ -13713,7 +13456,7 @@
       "line": 38,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/AuditedReasonDialog.vue#f5d988e572723a07.1"
+        "apps/web/src/components/AuditedReasonDialog.vue#0a9c82c5c5fb1fd7.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/AuditedReasonDialog.vue#f5d988e572723a07.1"
@@ -13766,9 +13509,7 @@
       "file": "apps/web/src/components/CollectionTaskCenter.vue",
       "line": 710,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/CollectionTaskCenter.vue#472cf13bb7c4d799.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CollectionTaskCenter.vue#472cf13bb7c4d799.1"
       ],
@@ -13776,7 +13517,7 @@
         "start": 24781,
         "end": 25093
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13784,9 +13525,7 @@
       "file": "apps/web/src/components/CommercialOperationsCenter.vue",
       "line": 951,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/CommercialOperationsCenter.vue#6d27a406542824e4.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CommercialOperationsCenter.vue#6d27a406542824e4.1"
       ],
@@ -13794,7 +13533,7 @@
         "start": 33118,
         "end": 33201
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13839,7 +13578,7 @@
       "line": 929,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1"
+        "apps/web/src/components/CompetitorMonitor.vue#225c721c3e09266a.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#de57fe420db167ea.1"
@@ -13857,7 +13596,7 @@
       "line": 1018,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1"
+        "apps/web/src/components/CompetitorMonitor.vue#9538d57155059acf.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#b3cda3ddc35e3a69.1"
@@ -13875,7 +13614,7 @@
       "line": 1080,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1"
+        "apps/web/src/components/CompetitorMonitor.vue#6a4b5c16df993837.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/CompetitorMonitor.vue#9d3c873673ab0556.1"
@@ -13892,9 +13631,7 @@
       "file": "apps/web/src/components/CostRuleConsole.vue",
       "line": 727,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CostRuleConsole.vue#0cffdbc28160492d.1"
       ],
@@ -13902,7 +13639,7 @@
         "start": 24592,
         "end": 24753
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13910,9 +13647,7 @@
       "file": "apps/web/src/components/CostRuleConsole.vue",
       "line": 856,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CostRuleConsole.vue#777ba93e8ff0f331.1"
       ],
@@ -13920,7 +13655,7 @@
         "start": 28933,
         "end": 29135
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13928,9 +13663,7 @@
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 757,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#da4ba31460b3f422.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#da4ba31460b3f422.1"
       ],
@@ -13938,7 +13671,7 @@
         "start": 24453,
         "end": 24802
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13946,9 +13679,7 @@
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 837,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#921f04fe23cc343e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#921f04fe23cc343e.1"
       ],
@@ -13956,7 +13687,7 @@
         "start": 27379,
         "end": 27662
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13964,9 +13695,7 @@
       "file": "apps/web/src/components/CredentialAssetCenter.vue",
       "line": 900,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#178c3ac2db1eee78.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/CredentialAssetCenter.vue#178c3ac2db1eee78.1"
       ],
@@ -13974,7 +13703,7 @@
         "start": 29635,
         "end": 29930
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -13983,7 +13712,7 @@
       "line": 195,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/DiscoveryOverlay.vue#ceb391d01220c696.1"
+        "apps/web/src/components/DiscoveryOverlay.vue#fc1b08713168f528.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/DiscoveryOverlay.vue#ceb391d01220c696.1"
@@ -14001,7 +13730,7 @@
       "line": 512,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1"
+        "apps/web/src/components/NotificationCenter.vue#83c14e43da4a0513.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/NotificationCenter.vue#1eb1c4db747d37c9.1"
@@ -14019,7 +13748,7 @@
       "line": 590,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/NotificationCenter.vue#b332799077351299.1"
+        "apps/web/src/components/NotificationCenter.vue#3f47655822db88ed.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/NotificationCenter.vue#b332799077351299.1"
@@ -14054,9 +13783,7 @@
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 44,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#1ed288cd855ce1c0.1"
       ],
@@ -14064,7 +13791,7 @@
         "start": 1425,
         "end": 1574
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14072,9 +13799,7 @@
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 91,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#ac06eb6f17f7829e.1"
       ],
@@ -14082,7 +13807,7 @@
         "start": 2808,
         "end": 2968
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14090,9 +13815,7 @@
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
       "line": 124,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/OpportunityWorkspaceDialogs.vue#8b4dc3f5856d3c5a.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/OpportunityWorkspaceDialogs.vue#8b4dc3f5856d3c5a.1"
       ],
@@ -14100,7 +13823,7 @@
         "start": 3912,
         "end": 4093
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14198,9 +13921,7 @@
       "file": "apps/web/src/components/PlatformManagementCenter.vue",
       "line": 595,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/PlatformManagementCenter.vue#ca5a09f3ba2d41f2.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformManagementCenter.vue#ca5a09f3ba2d41f2.1"
       ],
@@ -14208,7 +13929,7 @@
         "start": 20672,
         "end": 20755
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14217,7 +13938,7 @@
       "line": 20,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/PlatformMessageEditor.vue#c18fb34a85c44a13.1"
+        "apps/web/src/components/PlatformMessageEditor.vue#ee9651365376028e.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/PlatformMessageEditor.vue#c18fb34a85c44a13.1"
@@ -14270,9 +13991,7 @@
       "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
       "line": 26,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#190aaa5dd734c333.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#190aaa5dd734c333.1"
       ],
@@ -14280,7 +13999,7 @@
         "start": 679,
         "end": 775
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14288,9 +14007,7 @@
       "file": "apps/web/src/components/ProviderParserSampleDialog.vue",
       "line": 63,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/ProviderParserSampleDialog.vue#288313c7a451cdfc.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderParserSampleDialog.vue#288313c7a451cdfc.1"
       ],
@@ -14298,7 +14015,7 @@
         "start": 1854,
         "end": 1950
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14306,9 +14023,7 @@
       "file": "apps/web/src/components/ProviderRegistry.vue",
       "line": 752,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/ProviderRegistry.vue#33a2c5d568a6c67c.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderRegistry.vue#33a2c5d568a6c67c.1"
       ],
@@ -14316,7 +14031,7 @@
         "start": 26544,
         "end": 26809
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14324,9 +14039,7 @@
       "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
       "line": 58,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceConfigurationDialog.vue#d30e612863853f7f.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceConfigurationDialog.vue#d30e612863853f7f.1"
       ],
@@ -14334,7 +14047,7 @@
         "start": 1810,
         "end": 1942
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14342,9 +14055,7 @@
       "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
       "line": 159,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/ProviderSourceConfigurationDialog.vue#0af3a3a9da1e07ad.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ProviderSourceConfigurationDialog.vue#0af3a3a9da1e07ad.1"
       ],
@@ -14352,7 +14063,7 @@
         "start": 4858,
         "end": 5006
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14379,7 +14090,7 @@
       "line": 60,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/ResponsiveDataView.vue#e23893d134b1daa1.1"
+        "apps/web/src/components/ResponsiveDataView.vue#a3c9be2acacfd788.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/ResponsiveDataView.vue#e23893d134b1daa1.1"
@@ -14396,9 +14107,7 @@
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
       "line": 491,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ScoreRuleConsole.vue#26b43594a71d94ad.1"
       ],
@@ -14406,7 +14115,7 @@
         "start": 15965,
         "end": 16143
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14414,9 +14123,7 @@
       "file": "apps/web/src/components/ScoreRuleConsole.vue",
       "line": 574,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/ScoreRuleConsole.vue#23f0c5ed2b2a7243.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/ScoreRuleConsole.vue#23f0c5ed2b2a7243.1"
       ],
@@ -14424,7 +14131,7 @@
         "start": 18872,
         "end": 19089
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14450,9 +14157,7 @@
       "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
       "line": 92,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#73d110263ae493f0.1"
       ],
@@ -14460,7 +14165,7 @@
         "start": 2554,
         "end": 2757
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14468,9 +14173,7 @@
       "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
       "line": 139,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#aa8a9b645036fe7e.1"
       ],
@@ -14478,7 +14181,7 @@
         "start": 3958,
         "end": 4162
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14486,9 +14189,7 @@
       "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
       "line": 211,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#f21fd23c2e4b9d60.1"
       ],
@@ -14496,7 +14197,7 @@
         "start": 6329,
         "end": 6541
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14504,9 +14205,7 @@
       "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
       "line": 280,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/SourcingWorkspaceDialogs.vue#d0e8a832293a76e5.1"
       ],
@@ -14514,7 +14213,7 @@
         "start": 8115,
         "end": 8316
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14522,9 +14221,7 @@
       "file": "apps/web/src/components/TaskBatchActions.vue",
       "line": 49,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/TaskBatchActions.vue#6b0b774adfa59ad6.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskBatchActions.vue#6b0b774adfa59ad6.1"
       ],
@@ -14532,7 +14229,7 @@
         "start": 1408,
         "end": 1526
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14540,9 +14237,7 @@
       "file": "apps/web/src/components/TaskDetailPanel.vue",
       "line": 225,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/TaskDetailPanel.vue#dfce0d7d3dc167b7.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskDetailPanel.vue#dfce0d7d3dc167b7.1"
       ],
@@ -14550,7 +14245,7 @@
         "start": 6493,
         "end": 6610
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14576,9 +14271,7 @@
       "file": "apps/web/src/components/TaskWorkspace.vue",
       "line": 933,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TaskWorkspace.vue#078999112ae5397e.1"
       ],
@@ -14586,7 +14279,7 @@
         "start": 29843,
         "end": 29980
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14594,9 +14287,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 682,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#2b5e528bd9cb343d.1"
       ],
@@ -14604,7 +14295,7 @@
         "start": 23486,
         "end": 23658
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14612,9 +14303,7 @@
       "file": "apps/web/src/components/TrendDashboard.vue",
       "line": 722,
       "type": "dialog",
-      "candidateIds": [
-        "apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1"
-      ],
+      "candidateIds": [],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendDashboard.vue#75e0cda23916c7c2.1"
       ],
@@ -14622,7 +14311,7 @@
         "start": 24821,
         "end": 24995
       },
-      "disposition": "historical-source-match-needs-semantic-review",
+      "disposition": "unresolved-source-changed-or-removed",
       "businessDisposition": null
     },
     {
@@ -14631,7 +14320,7 @@
       "line": 52,
       "type": "dialog",
       "candidateIds": [
-        "apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1"
+        "apps/web/src/components/TrendRuleDialog.vue#f6c3de30580fd217.1"
       ],
       "historicalCandidateIds": [
         "apps/web/src/components/TrendRuleDialog.vue#ee0ee052b72fc674.1"
@@ -14655,6 +14344,5 @@
   "verifiedBusinessActions": 0,
   "verifiedDialogVariants": 0,
   "productionExecutedActions": 0,
-  "userApprovedPages": 73,
-  "userApprovalBasis": "用户在当前线程明确确认剩余页面全部通过；该记录仅代表设计审核，不代表实现、生产或质量门验收。"
+  "userApprovedPages": 0
 }
