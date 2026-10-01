@@ -243,6 +243,71 @@ test("P67 cancels a pending read while cached away and resumes it once when reac
   }
 });
 
+test("P67 keeps partial and unsupported samples separate from overall Redis readiness", async ({
+  page,
+}) => {
+  let response = {
+    ...base,
+    memory: { ...base.memory, usage_basis_points: 8500 },
+    keyspace_sample: {
+      ...base.keyspace_sample,
+      status: "partial" as const,
+      scanned_keys: 7,
+      measured_keys: 0,
+      failed_measurements: 7,
+      total_sampled_bytes: 0,
+      hotspots: [],
+    },
+  };
+  let calls = 0;
+  const methods: string[] = [];
+  await page.route("**/api/v1/platform/operations/redis", (route) => {
+    calls += 1;
+    methods.push(route.request().method());
+    return route.fulfill({ json: envelope(response) });
+  });
+
+  await page.goto("/platform-admin/redis");
+  await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
+
+  const sample = page.locator(".p67-sampling");
+  await expect(sample.getByText("部分采样", { exact: true })).toHaveCount(2);
+  await expect(sample).toContainText("7");
+  await expect(sample).toContainText("0 B");
+  await expect(sample).toContainText(
+    "已扫描到受限键，但本次未完成有效内存测量；不能据此判断没有业务键。",
+  );
+  await expect(sample.locator(".p67-sample-list")).toHaveCount(0);
+
+  const memory = page.locator('.p67-resource[data-resource="memory"]');
+  await expect(memory).toHaveAttribute("data-severity", "ready");
+  await expect(page.locator(".p67-note[data-severity='warning']")).toContainText(
+    "接近内存上限时新写入会失败",
+  );
+  await expect(page.locator(".p67-persistence")).toContainText("不能标记为本次实测通过");
+
+  response = {
+    ...base,
+    keyspace_sample: {
+      ...base.keyspace_sample,
+      status: "unavailable",
+      unavailable_reason: "command_unsupported",
+      scanned_keys: 0,
+      measured_keys: 0,
+      failed_measurements: 0,
+      total_sampled_bytes: 0,
+      hotspots: [],
+    },
+  };
+  await page.reload();
+  await expect(page.getByRole("heading", { name: "当前韧性门满足" })).toBeVisible();
+  await expect(page.locator(".p67-sampling")).toContainText(
+    "当前客户端不支持受限 SCAN 与 MEMORY USAGE。",
+  );
+  expect(calls).toBe(2);
+  expect(methods).toEqual(["GET", "GET"]);
+});
+
 test("M08-02.A08/A09/A16 warning blocked empty forbidden expired and unavailable states", async ({
   page,
 }) => {
