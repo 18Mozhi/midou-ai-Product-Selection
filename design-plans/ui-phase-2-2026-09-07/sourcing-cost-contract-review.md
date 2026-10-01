@@ -30,25 +30,25 @@ candidateId完整格式为源码文件路径加`#`及下表后缀；同语义的
 
 | 源  | 行  | candidate后缀      | 语义与触发结果                              |
 | --- | --- | ------------------ | ------------------------------------------- |
-| SW  | 654 | 4c5b0e4130d85030.1 | SC-NAV sourcing                             |
-| SW  | 655 | 4862df3dce4b0f1c.1 | SC-NAV cost-rules                           |
-| SW  | 669 | 32fc6740cd676281.1 | SC-S-OPEN 管理者创建                        |
-| SW  | 696 | 307f53938ca7e688.1 | SC-STATE 主/次恢复或创建                    |
-| SW  | 705 | 4ded8067979a3682.1 | SC-SEARCH-CLEAR / 空筛选次动作              |
-| SW  | 717 | 95c07db60d43a586.1 | SC-DETAIL 读对象并同步record                |
-| SW  | 739 | 100e00b6d8cb9e4a.1 | SC-REFRESH 管理者POST当前对象               |
-| SW  | 742 | dd2297ed2ff6c2a5.1 | SC-NAV cost-rules含from                     |
-| SW  | 746 | 1e3fc27654fc0776.1 | SC-DELETE-OPEN 管理者选中目标               |
-| SW  | 801 | a9d2be84fdbc9665.1 | SC-NAV 受权采集明细                         |
-| SW  | 822 | 46efe1c7f3d39475.1 | SC-ERP 原始ERP新窗口                        |
-| SW  | 839 | 8fb00fc320cdc059.1 | SC-SELECT 勾选与实际最多五项同步            |
-| SW  | 891 | 792656883236da58.1 | SC-SOURCE 原始商品新窗口                    |
-| SW  | 895 | 1a57994baa2329f6.1 | SC-QUOTE-OPEN 管理者无quote                 |
-| SW  | 897 | 6ec48a1f9259ef0d.1 | SC-PURCHASE-OPEN 管理者已有quote            |
-| SW  | 918 | 658745acd55fced2.1 | SC-COMPARE 至少2项且非busy                  |
-| SW  | 922 | 0e42b816192eb48e.1 | SD九个事件转发、删除原因更新                |
-| SW  | 922 | 5aab87e8ea0ee176.1 | 四窗共享调用，不另外计为第五个业务窗         |
-| SW  | 903 | e60a87b8bebccb4b.1 | SC-G02 独立读取对比历史失败及重试事件转发   |
+| SW  | 94 | 4c5b0e4130d85030.1 | SC-NAV sourcing                             |
+| SW  | 95 | 4862df3dce4b0f1c.1 | SC-NAV cost-rules                           |
+| SW  | 109 | 32fc6740cd676281.1 | SC-S-OPEN 管理者创建                        |
+| SW  | 136 | 307f53938ca7e688.1 | SC-STATE 主/次恢复或创建                    |
+| SW  | 145 | 4ded8067979a3682.1 | SC-SEARCH-CLEAR / 空筛选次动作              |
+| SW  | 157 | 95c07db60d43a586.1 | SC-DETAIL 读对象并同步record                |
+| SW  | 179 | 100e00b6d8cb9e4a.1 | SC-REFRESH 管理者POST当前对象               |
+| SW  | 182 | dd2297ed2ff6c2a5.1 | SC-NAV cost-rules含from                     |
+| SW  | 186 | 1e3fc27654fc0776.1 | SC-DELETE-OPEN 管理者选中目标               |
+| SW  | 241 | a9d2be84fdbc9665.1 | SC-NAV 受权采集明细                         |
+| SW  | 262 | 46efe1c7f3d39475.1 | SC-ERP 原始ERP新窗口                        |
+| SW  | 279 | 8fb00fc320cdc059.1 | SC-SELECT 勾选与实际最多五项同步            |
+| SW  | 331 | 792656883236da58.1 | SC-SOURCE 原始商品新窗口                    |
+| SW  | 335 | 1a57994baa2329f6.1 | SC-QUOTE-OPEN 管理者无quote                 |
+| SW  | 337 | 6ec48a1f9259ef0d.1 | SC-PURCHASE-OPEN 管理者已有quote            |
+| SW  | 358 | 658745acd55fced2.1 | SC-COMPARE 至少2项且非busy                  |
+| SW  | 362 | 0e42b816192eb48e.1 | SD九个事件转发、删除原因更新                |
+| SW  | 362 | 5aab87e8ea0ee176.1 | 四窗共享调用，不另外计为第五个业务窗         |
+| SW  | 343 | e60a87b8bebccb4b.1 | SC-G02 独立读取对比历史失败及重试事件转发   |
 | SP  | 61  | 49464ad9054e6202.1 | SC-G02 重试对比历史 GET 按钮                |
 | SD  | 128 | e761df41504fce67.1 | SC-S-CLOSE Escape                           |
 | SD  | 135 | 2cd14710e221241b.1 | SC-S-SUBMIT 表单                            |
