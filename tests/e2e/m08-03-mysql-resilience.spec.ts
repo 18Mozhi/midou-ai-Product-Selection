@@ -153,6 +153,60 @@ test("P68 cancels a pending read while cached away and resumes it once when reac
   }
 });
 
+test("P68 separates cumulative metrics and unknown recovery facts from the overall gate", async ({
+  page,
+}) => {
+  const response = {
+    ...base,
+    state: "blocked",
+    io: { ...base.io, buffer_pool_hit_rate_basis_points: 10000 },
+    slow_queries: { ...base.slow_queries, per_minute: 1.5 },
+    recovery: {
+      status: "blocked",
+      actual_rpo_minutes: null,
+      actual_rto_minutes: null,
+      drill_age_days: null,
+    },
+    findings: [
+      {
+        code: "mysql_recovery_unverified",
+        severity: "blocked",
+        action_hint: "通过宝塔核对恢复证据。",
+      },
+      {
+        code: "mysql_rpo_exceeded",
+        severity: "blocked",
+        action_hint: "RPO 未知，不能按通过处理。",
+      },
+      {
+        code: "mysql_rto_exceeded",
+        severity: "blocked",
+        action_hint: "RTO 未知，不能按通过处理。",
+      },
+    ],
+  };
+  await page.route("**/api/v1/platform/operations/mysql", (route) =>
+    route.fulfill({ json: envelope(response) }),
+  );
+
+  await page.goto("/platform-admin/mysql");
+  await expect(page.getByText("当前单主韧性门阻断")).toBeVisible();
+
+  const measurements = page.locator(".p68-measurements");
+  await expect(measurements.getByText("1.50 次/分钟")).toBeVisible();
+  await expect(measurements.getByText("100.0%", { exact: true })).toBeVisible();
+  await expect(measurements).toContainText("累计非负增量除以至少一分钟间隔");
+  await expect(measurements).toContainText("零 requests 的 100% 不能独立证明实际命中");
+
+  const recovery = page.locator(".p68-recovery");
+  await expect(recovery.locator(".p68-recovery-state b")).toHaveText("blocked");
+  await expect(recovery.locator("dd").nth(0)).toContainText("未记录");
+  await expect(recovery.locator("dd").nth(1)).toContainText("未记录");
+  await expect(recovery.locator("dd").nth(2)).toContainText("未记录");
+  await expect(recovery.getByText("未知不填0")).toHaveCount(3);
+  await expect(recovery).toContainText("运行 policy 还会再次检查");
+});
+
 test("M08-03.A08/A09/A16 warning blocked empty forbidden expired rate limited unavailable and recovering", async ({
   page,
 }) => {
