@@ -118,6 +118,61 @@ test("UI2-RS69 directory watermarks expose names and current percentage after re
   }
   expect(methods).toEqual(["GET", "GET"]);
 });
+
+test("P69 distinguishes unknown capacity, same-disk totals, sample bias, and stale recovery", async ({
+  page,
+}) => {
+  const response = {
+    ...base,
+    state: "blocked",
+    directories: base.directories.map((root, index) =>
+      index === 0 ? { ...root, used_bytes: 0, total_bytes: 0, usage_basis_points: 10000 } : root,
+    ),
+    integrity: { sampled_files: 20, verified_files: 18, mismatch_files: 1, missing_files: 1 },
+    recovery: {
+      status: "stale",
+      encrypted_same_host_copy: true,
+      isolated_restore_verified: true,
+      drill_age_days: 90.001,
+    },
+    findings: [
+      {
+        code: "file_capacity_stop",
+        severity: "blocked",
+        action_hint: "容量未知，先核对文件系统。",
+      },
+      {
+        code: "file_recovery_drill_stale",
+        severity: "warning",
+        action_hint: "通过宝塔核验恢复演练时效。",
+      },
+    ],
+  };
+  await page.route("**/api/v1/platform/operations/files", (route) =>
+    route.fulfill({ json: envelope(response) }),
+  );
+
+  await page.goto("/platform-admin/files");
+  await expect(page.getByText("本机文件韧性门已阻断")).toBeVisible();
+
+  const directories = page.locator(".p69-directories");
+  const evidence = directories.locator('.p69-directory[data-root="evidence"]');
+  await expect(evidence).toContainText("上限 / 容量未知");
+  await expect(evidence).toContainText("不是实测满额");
+  await expect(evidence.getByRole("progressbar")).toHaveCount(0);
+  await expect(directories).toContainText(
+    "同一文件系统的三个读数可能相同；不能相加当成总磁盘用量。",
+  );
+
+  const integrity = page.locator(".p69-integrity");
+  await expect(integrity).toContainText("18 / 20");
+  await expect(integrity).toContainText("已核验样本不能外推为全部活动文件。");
+  const recovery = page.locator(".p69-recovery");
+  await expect(recovery.locator(".p69-recovery-state")).toHaveText("stale");
+  await expect(recovery.locator("dl")).toContainText("90.001");
+  await expect(page.getByText("file_recovery_drill_stale")).toBeVisible();
+});
+
 test("M08-04.A07/A08/A15 desktop and 390 local-file truth", async ({ page }) => {
   await page.route("**/api/v1/platform/operations/files", (route) =>
     route.fulfill({ json: envelope(base) }),
