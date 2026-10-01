@@ -488,14 +488,7 @@ html[data-design="signal-ledger"]
 }
 
 html[data-design="signal-ledger"]
-  :where(
-    .confirm-dialog,
-    .audited-reason-dialog,
-    .discovery-dialog,
-    dialog,
-    [role="dialog"],
-    [role="alertdialog"]
-  ) {
+  :where(.confirm-dialog, .audited-reason-dialog, dialog, [role="dialog"], [role="alertdialog"]) {
   border: 2px solid var(--so-text);
   border-top: 8px solid var(--so-primary);
   color: var(--so-text);
@@ -584,10 +577,6 @@ html[data-design="signal-ledger"] .audited-reason-dialog header p {
 
 html[data-design="signal-ledger"] .audited-reason-dialog header h3 {
   font-size: clamp(28px, 4vw, 44px);
-}
-
-html[data-design="signal-ledger"] .discovery-dialog {
-  width: min(820px, calc(100vw - 24px));
 }
 
 /* Menus and popovers behave like clipped index sheets. */

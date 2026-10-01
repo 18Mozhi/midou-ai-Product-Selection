@@ -1,6 +1,6 @@
 # 搜索与快捷创建 · DISCOVERY-C-r1
 
-状态：C方向已选，具体稿待审核；独立HTML，不是Vue实现或生产发布。
+状态：C方向及已展示的控件／状态组合均已获用户通过；Vue 本地集成完成，生产部署另以线上构建指纹和健康读回为准。
 
 [打开交互审核稿](index.html) · [截图与源指纹](evidence.json) · [上一批共享导航](../shell-direction-c/README.md)
 
@@ -63,8 +63,14 @@
 
 ## 验证与使用
 
+## Vue 集成记录（2026-10-02）
+
+`DiscoveryOverlay.vue` 已采用蓝色范围／筛选区与白色结果区；窄屏改为单列；成员移动端导航抽屉补上全局搜索与创建入口；当前组织／工作区名称沿用已有导航守卫上下文。样式隔离在 `apps/web/src/styles/navigation-discovery-c.css`。搜索与快捷创建继续使用原 API、筛选字段、授权投影、最近使用内存状态、路由与对话框焦点恢复合同；本次没有改 API、权限、数据库、配置、依赖或环境变量。
+
+本地证据：`node --test tests/m02-05/discovery-domain.test.mjs` 6/6、`npm run typecheck:web` 通过；双端真实 Vue Playwright 与完整构建/发布门的结果以本次交付记录为准。这些本地夹具验证不能代替线上真实搜索、账号权限、生产数据或完整部署验收。
+
 仓库根目录执行 `node scripts/verify-ui-phase2-discovery-c.mjs`：只读核对原始夹具／状态枚举与数据、源文件和PNG哈希，运行双端交互、字段顺序／尺寸、恢复与焦点检查。显式 `--capture` 才重新生成本目录永久截图及证据。复用现有Playwright与TypeScript，不新增依赖或服务；浏览器由finally关闭，HTTP与storage写入为零。
 
 原始依据：DiscoveryOverlay、UiStatePanel、state-contract、use-modal-dialog、api-client、discovery-service/routes与UI2-DI01–06夹具；具体源指纹见evidence。组织与工作区名称为隔离样本，2026-08-07任务时间是测试数据而非当前生产事实。
 
-未改Vue/API/OpenAPI、权限、数据库、配置、依赖、coverage和用户审批，无需生产重启。尚需用户审核具体稿、迁入真实共享壳层、真实网络／跨角色验证及部署；主题、AccountShell和其余页面仍在完整73页计划内。
+历史设计产物仍是独立 HTML，保留作为设计审核证据；Vue 集成不意味着其合成场景已在生产网络或各类真实会话中验收。主题、AccountShell和其余页面仍在完整73页计划内。

@@ -424,6 +424,14 @@ onUnmounted(() => {
           <p v-if="!menuGroups.length" class="role-menu-empty">没有匹配的菜单或分组。</p>
         </div>
         <div v-if="state === 'ready'" class="role-sidebar-utility">
+          <div v-if="shell === 'member' && compactNavigation" class="role-discovery-actions">
+            <button type="button" @click="openDiscovery('search')">
+              <AppIcon name="search" /><span>全局搜索</span>
+            </button>
+            <button type="button" @click="openDiscovery('create')">
+              <AppIcon name="plus" /><span>创建选品</span>
+            </button>
+          </div>
           <RouterLink
             v-if="shell === 'platform_admin'"
             :to="contextSwitchTarget"
@@ -614,6 +622,8 @@ onUnmounted(() => {
       :mode="discoveryMode || 'search'"
       :shell="shell"
       :api-base-url="apiBaseUrl"
+      :organization-name="guard?.organization_name ?? null"
+      :workspace-name="guard?.workspace_name ?? null"
       @close="closeDiscovery"
     />
   </main>

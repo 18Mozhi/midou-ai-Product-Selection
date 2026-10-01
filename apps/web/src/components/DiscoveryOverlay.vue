@@ -2,6 +2,7 @@
 import { computed, nextTick, onUnmounted, ref, watch } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { useModalDialog } from "../use-modal-dialog";
+import "../styles/navigation-discovery-c.css";
 import UiStatePanel from "./UiStatePanel.vue";
 type Mode = "search" | "create";
 type Shell = "member" | "organization_admin" | "platform_admin";
@@ -87,6 +88,8 @@ const props = defineProps<{
     mode: Mode;
     shell: Shell;
     apiBaseUrl: string;
+    organizationName: string | null;
+    workspaceName: string | null;
   }>(),
   emit = defineEmits<{ close: [] }>(),
   request = createApiClient(props.apiBaseUrl);
@@ -104,7 +107,9 @@ const query = ref(""),
   input = ref<HTMLInputElement | null>(null),
   recentActionIds = ref<string[]>([]),
   statusOptions = computed(() => STATUS_OPTIONS[resourceType.value] ?? []),
-  assigneeApplicable = computed(() => ["task", "opportunity"].includes(resourceType.value));
+  assigneeApplicable = computed(() => ["task", "opportunity"].includes(resourceType.value)),
+  organizationLabel = computed(() => props.organizationName?.trim() || "当前组织"),
+  workspaceLabel = computed(() => props.workspaceName?.trim() || "当前工作区");
 const { dialogElement, handleCancel } = useModalDialog(
   () => props.open,
   () => emit("close"),
@@ -245,137 +250,183 @@ watch(resourceType, () => {
 });
 </script>
 <template>
-  <Teleport to="body"
-    ><dialog
+  <Teleport to="body">
+    <dialog
       v-if="open"
       ref="dialogElement"
-      class="discovery-backdrop"
+      class="discovery-c-backdrop"
       :aria-label="mode === 'search' ? '全局搜索' : '快捷创建'"
       @cancel="handleCancel"
       @mousedown.self.prevent="emit('close')"
       @keydown="handleTab"
     >
-      <section class="discovery-dialog">
-        <header>
+      <section class="discovery-c-dialog">
+        <header class="discovery-c-header">
           <div>
             <p>{{ mode === "search" ? "GLOBAL SEARCH" : "QUICK CREATE" }}</p>
-            <h2>
-              {{ mode === "search" ? "搜索当前工作区" : "选择已授权入口" }}
-            </h2>
+            <h2>{{ mode === "search" ? "搜索当前工作区" : "选择已授权入口" }}</h2>
           </div>
-          <button type="button" aria-label="关闭" @click="emit('close')">×</button>
+          <button type="button" aria-label="关闭" @click="emit('close')">
+            关闭 <span aria-hidden="true">×</span>
+          </button>
         </header>
-        <form v-if="mode === 'search'" class="discovery-search-form" @submit.prevent="search">
-          <label class="discovery-query"
-            ><span>⌕</span
-            ><input
-              ref="input"
-              v-model="query"
-              minlength="2"
-              maxlength="100"
-              autocomplete="off"
-              aria-label="搜索关键词"
-              :aria-invalid="queryError ? 'true' : undefined"
-              :aria-describedby="queryError ? 'discovery-query-error' : undefined"
-              placeholder="输入至少 2 个字符"
-              @keydown.enter.prevent="search"
-            /><kbd>Enter</kbd></label
-          >
-          <p v-if="queryError" id="discovery-query-error" role="alert">{{ queryError }}</p>
-          <div class="discovery-filters" aria-label="搜索筛选">
-            <label
-              >对象类型<select v-model="resourceType" aria-label="对象类型">
-                <option value="">全部对象</option>
-                <option value="task">任务</option>
-                <option value="opportunity">机会</option>
-                <option value="evidence">证据</option>
-                <option value="collection_task">采集任务</option>
-              </select></label
-            >
-            <label
-              >状态<select v-model="status" aria-label="状态" :disabled="!resourceType">
-                <option value="">{{ resourceType ? "全部状态" : "先选对象类型" }}</option>
-                <option v-for="item in statusOptions" :key="item.value" :value="item.value">
-                  {{ item.label }}
-                </option>
-              </select></label
-            >
-            <label
-              >负责人<input
-                v-model="assignee"
-                aria-label="负责人"
-                maxlength="120"
-                :disabled="!assigneeApplicable"
-                :placeholder="assigneeApplicable ? '姓名或账号' : '仅任务和机会可用'"
-            /></label>
+        <div class="discovery-c-scroll">
+          <div class="discovery-c-layout">
+            <aside class="discovery-c-scope" aria-label="当前范围与搜索条件">
+              <p class="discovery-c-kicker">当前范围</p>
+              <h3>{{ organizationLabel }}</h3>
+              <p class="discovery-c-workspace-label">{{ workspaceLabel }}</p>
+              <p class="discovery-c-scope-note">范围由当前会话决定，不跨组织或工作区。</p>
+              <form
+                v-if="mode === 'search'"
+                class="discovery-c-form"
+                novalidate
+                @submit.prevent="search"
+              >
+                <label for="discovery-c-query">搜索关键词</label>
+                <input
+                  id="discovery-c-query"
+                  ref="input"
+                  v-model="query"
+                  type="text"
+                  minlength="2"
+                  maxlength="100"
+                  autocomplete="off"
+                  aria-label="搜索关键词"
+                  :aria-invalid="queryError ? 'true' : undefined"
+                  :aria-describedby="queryError ? 'discovery-query-error' : undefined"
+                  placeholder="输入至少 2 个字符"
+                />
+                <p v-if="queryError" id="discovery-query-error" role="alert">{{ queryError }}</p>
+                <label for="discovery-c-resource-type">对象类型</label>
+                <select id="discovery-c-resource-type" v-model="resourceType" aria-label="对象类型">
+                  <option value="">全部对象</option>
+                  <option value="task">任务</option>
+                  <option value="opportunity">机会</option>
+                  <option value="evidence">证据</option>
+                  <option value="collection_task">采集任务</option>
+                </select>
+                <label for="discovery-c-status">状态</label>
+                <select
+                  id="discovery-c-status"
+                  v-model="status"
+                  aria-label="状态"
+                  :disabled="!resourceType"
+                >
+                  <option value="">{{ resourceType ? "全部状态" : "先选对象类型" }}</option>
+                  <option v-for="item in statusOptions" :key="item.value" :value="item.value">
+                    {{ item.label }}
+                  </option>
+                </select>
+                <label for="discovery-c-assignee">负责人</label>
+                <input
+                  id="discovery-c-assignee"
+                  v-model="assignee"
+                  aria-label="负责人"
+                  maxlength="120"
+                  :disabled="!assigneeApplicable"
+                  :placeholder="assigneeApplicable ? '姓名或账号' : '仅任务和机会可用'"
+                />
+                <button class="discovery-c-submit" type="submit">搜索</button>
+              </form>
+              <div v-else class="discovery-c-create-note">
+                <p><strong>先选择入口</strong><br />再完成目标表单</p>
+                <p>仅展示服务端返回的已授权入口；最近使用仅保留在当前弹窗内。</p>
+              </div>
+            </aside>
+            <section class="discovery-c-results-pane" aria-label="结果区">
+              <header class="discovery-c-surface-heading">
+                <h3>{{ mode === "search" ? "搜索结果" : "可用入口" }}</h3>
+                <span>{{ mode === "search" ? "最多显示 10 项" : "由服务端返回" }}</span>
+              </header>
+              <div class="discovery-c-content" aria-live="polite">
+                <p v-if="state === 'idle'" class="discovery-c-idle">
+                  输入关键词并选择筛选条件后，查看当前范围内有权访问的结果。
+                </p>
+                <UiStatePanel
+                  v-else-if="
+                    ['loading', 'empty', 'error', 'expired', 'forbidden', 'blocked'].includes(state)
+                  "
+                  class="discovery-c-state"
+                  compact
+                  :kind="
+                    state === 'loading'
+                      ? 'loading'
+                      : state === 'empty'
+                        ? 'empty'
+                        : state === 'expired'
+                          ? 'expired'
+                          : state === 'forbidden'
+                            ? 'forbidden'
+                            : state === 'blocked'
+                              ? 'blocked'
+                              : 'error'
+                  "
+                  :request-id="requestId"
+                  :trace-id="traceId"
+                  :action-hint="actionHint"
+                  primary-label="重新加载"
+                  secondary-label="关闭"
+                  @primary="mode === 'search' ? search() : loadActions()"
+                  @secondary="emit('close')"
+                />
+                <div v-else class="discovery-c-results">
+                  <RouterLink
+                    v-for="item in results"
+                    :key="item.id"
+                    class="discovery-c-result"
+                    :to="item.route"
+                    @click="navigateAway"
+                  >
+                    <span class="discovery-c-result-main">
+                      <strong>{{ item.title }}</strong>
+                      <span class="discovery-c-tags">
+                        <span>{{ resourceLabel(item.resource_type) }}</span>
+                        <span>{{ statusLabel(item.status) }}</span>
+                      </span>
+                      <small v-if="item.subtitle">{{ item.subtitle }}</small>
+                      <small class="discovery-c-result-meta">
+                        <template v-if="item.assignee_name"
+                          >负责人 {{ item.assignee_name }} ·
+                        </template>
+                        更新于 {{ new Date(item.updated_at).toLocaleString("zh-CN") }}
+                      </small>
+                    </span>
+                    <span class="discovery-c-result-arrow" aria-hidden="true">→</span>
+                  </RouterLink>
+                  <RouterLink
+                    v-for="(item, index) in actions"
+                    :key="item.id"
+                    class="discovery-c-action"
+                    :to="item.route"
+                    @click="navigateAway($event, item.id)"
+                  >
+                    <span class="discovery-c-action-index">{{
+                      String(index + 1).padStart(2, "0")
+                    }}</span>
+                    <span class="discovery-c-action-main">
+                      <strong>{{ item.label }}</strong>
+                      <small>{{ item.description }}</small>
+                    </span>
+                    <span v-if="recentActionIds.includes(item.id)" class="discovery-c-recent"
+                      >最近</span
+                    >
+                    <span class="discovery-c-result-arrow" aria-hidden="true">→</span>
+                  </RouterLink>
+                </div>
+              </div>
+            </section>
           </div>
-        </form>
-        <div v-if="state === 'idle'" class="discovery-hint">
-          <b>只搜索真实索引</b>
-          <p>范围固定为当前组织与工作区，结果会按当前角色权限再次过滤。</p>
         </div>
-        <UiStatePanel
-          v-else-if="
-            ['loading', 'empty', 'error', 'expired', 'forbidden', 'blocked'].includes(state)
-          "
-          compact
-          :kind="
-            state === 'loading'
-              ? 'loading'
-              : state === 'empty'
-                ? 'empty'
-                : state === 'expired'
-                  ? 'expired'
-                  : state === 'forbidden'
-                    ? 'forbidden'
-                    : state === 'blocked'
-                      ? 'blocked'
-                      : 'error'
-          "
-          :request-id="requestId"
-          :trace-id="traceId"
-          :action-hint="actionHint"
-          primary-label="重新加载"
-          secondary-label="关闭"
-          @primary="mode === 'search' ? search() : loadActions()"
-          @secondary="emit('close')"
-        />
-        <div v-else class="discovery-results">
-          <RouterLink v-for="item in results" :key="item.id" :to="item.route" @click="navigateAway"
-            ><i>⌕</i
-            ><span
-              ><strong>{{ item.title }}</strong
-              ><small
-                >{{ resourceLabel(item.resource_type) }} · {{ statusLabel(item.status)
-                }}<template v-if="item.assignee_name"> · 负责人 {{ item.assignee_name }}</template>
-                · {{ item.subtitle || "无补充说明" }} ·
-                {{ new Date(item.updated_at).toLocaleString("zh-CN") }}</small
-              ></span
-            ><b>↗</b></RouterLink
-          ><RouterLink
-            v-for="item in actions"
-            :key="item.id"
-            :to="item.route"
-            @click="navigateAway($event, item.id)"
-            ><i>＋</i
-            ><span
-              ><strong>{{ item.label }}</strong
-              ><small
-                >{{ item.description
-                }}<template v-if="recentActionIds.includes(item.id)"> · 最近使用</template></small
-              ></span
-            ><b>→</b></RouterLink
-          >
-        </div>
-        <footer>
+        <footer class="discovery-c-footer">
           <span>{{
             mode === "search" ? "搜索不跨组织或工作区" : "这里只提供入口，不提前创建业务对象"
-          }}</span
-          ><RouterLink v-if="shell === 'member'" to="/notifications" @click="navigateAway"
-            >打开通知中心</RouterLink
+          }}</span>
+          <RouterLink v-if="shell === 'member'" to="/notifications" @click="navigateAway"
+            >查看通知 <span aria-hidden="true">→</span></RouterLink
           >
         </footer>
       </section>
-    </dialog></Teleport
-  >
+    </dialog>
+  </Teleport>
 </template>

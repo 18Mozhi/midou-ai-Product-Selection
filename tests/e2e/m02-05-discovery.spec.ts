@@ -4,6 +4,8 @@ const navigation = {
   shell: "member",
   organization_id: "00000000-0000-4000-8000-000000000501",
   workspace_id: "00000000-0000-4000-8000-000000000502",
+  organization_name: "测试组织",
+  workspace_name: "测试工作区",
   roles: ["member"],
   capabilities: ["task:read", "task:create", "sourcing:read", "notification:read"],
   platform_roles: [],
@@ -83,13 +85,28 @@ test("M02-05.A07/A08/A15 keyboard search is responsive and visual", async ({ pag
   await page.keyboard.press("Control+K");
   const dialog = page.getByRole("dialog", { name: "全局搜索" });
   await expect(dialog).toBeVisible();
+  await expect(dialog.getByText("测试组织")).toBeVisible();
+  await expect(dialog.getByText("测试工作区")).toBeVisible();
+  await expect(dialog.getByRole("button", { name: "搜索" })).toBeVisible();
+  const scopeBox = await dialog.locator(".discovery-c-scope").boundingBox();
+  const resultsBox = await dialog.locator(".discovery-c-results-pane").boundingBox();
+  expect(scopeBox).not.toBeNull();
+  expect(resultsBox).not.toBeNull();
+  if ((page.viewportSize()?.width ?? 0) <= 700) {
+    expect(resultsBox!.y).toBeGreaterThan(scopeBox!.y);
+    expect(Math.abs(resultsBox!.width - scopeBox!.width)).toBeLessThan(2);
+  } else {
+    expect(resultsBox!.x).toBeGreaterThan(scopeBox!.x);
+    expect(Math.abs(scopeBox!.y - resultsBox!.y)).toBeLessThan(2);
+  }
   await dialog.getByLabel("对象类型").selectOption("opportunity");
   await dialog.getByLabel("状态").selectOption("ready");
   await dialog.getByLabel("负责人").fill("选品经理");
   await dialog.getByPlaceholder("输入至少 2 个字符").fill("户外照明");
   await dialog.getByPlaceholder("输入至少 2 个字符").press("Enter");
   await expect(dialog.getByRole("link", { name: /户外照明机会/ })).toBeVisible();
-  await expect(dialog.getByText(/待决策 · 负责人 选品经理/)).toBeVisible();
+  await expect(dialog.locator(".discovery-c-result").getByText("待决策")).toBeVisible();
+  await expect(dialog.getByText("负责人 选品经理")).toBeVisible();
   expect(searchUrl).toContain("resource_type=opportunity");
   expect(searchUrl).toContain("status=ready");
   expect(searchUrl).toContain("assignee=%E9%80%89%E5%93%81%E7%BB%8F%E7%90%86");
@@ -131,9 +148,19 @@ test("M02-05.A07/A08/A09/A15 mobile quick create shows authorized entries only",
   );
   await page.goto("/home");
   await page.getByRole("button", { name: "打开导航菜单" }).click();
-  const createButton = page.getByRole("button", { name: "创建选品" });
+  const navigationDialog = page.getByRole("dialog", { name: "工作台导航" });
+  const createButton = navigationDialog.getByRole("button", { name: "创建选品" });
   await createButton.click();
   const dialog = page.getByRole("dialog", { name: "快捷创建" });
+  const scope = dialog.locator(".discovery-c-scope");
+  const results = dialog.locator(".discovery-c-results-pane");
+  const scopeBox = await scope.boundingBox();
+  const resultsBox = await results.boundingBox();
+  expect(scopeBox).not.toBeNull();
+  expect(resultsBox).not.toBeNull();
+  expect(resultsBox!.y).toBeGreaterThan(scopeBox!.y);
+  expect(Math.abs(resultsBox!.width - scopeBox!.width)).toBeLessThan(2);
+  await expect(dialog.getByText("测试组织")).toBeVisible();
   await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
   await expect(dialog.getByRole("link", { name: /发起找货/ })).toBeVisible();
   await expect(dialog.getByRole("link", { name: /创建任务/ })).toHaveAttribute(
@@ -148,6 +175,7 @@ test("M02-05.A07/A08/A09/A15 mobile quick create shows authorized entries only",
 
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();
+  await expect(navigationDialog).toBeVisible();
   await expect(createButton).toBeFocused();
 });
 

@@ -257,6 +257,38 @@
   border: 0;
 }
 
+#app .role-shell.role-shell--c .role-discovery-actions {
+  margin-bottom: 12px;
+  display: grid;
+  gap: 8px;
+}
+
+#app .role-shell.role-shell--c .role-discovery-actions button {
+  min-height: 44px;
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid rgb(255 255 255 / 48%);
+  border-radius: 8px;
+  color: var(--shell-paper);
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+#app .role-shell.role-shell--c .role-discovery-actions button:hover,
+#app .role-shell.role-shell--c .role-discovery-actions button:focus-visible {
+  color: var(--shell-paper);
+  background: var(--shell-action);
+}
+
+#app .role-shell.role-shell--c .role-discovery-actions button:focus-visible {
+  outline: 3px solid var(--shell-paper);
+  outline-offset: 2px;
+}
+
 #app .role-shell.role-shell--c .role-sidebar-utility a {
   width: auto;
   min-height: 44px;
