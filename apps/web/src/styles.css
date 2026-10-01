@@ -1734,7 +1734,7 @@ a {
   font-weight: 700;
 }
 .p08-scope-note {
-  margin-top: auto !important;
+  margin-top: auto;
   padding-top: 18px;
   border-top: 1px solid rgb(255 255 255 / 24%);
   font-size: 14px;
