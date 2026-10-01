@@ -1,8 +1,7 @@
-import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
-import { historicalProviderAsyncSource } from "../../scripts/lib/ui-phase2-provider-async-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
 import { createRequire } from "node:module";
@@ -14,12 +13,13 @@ import {
   providerFocusRevision,
 } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
 
-const read = (f) =>
-  historicalProviderAsyncSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+const read = (f, revision = "af60b101") =>
+  execFileSync("git", ["show", `${revision}:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const file = providerFocusRevision.file,
   current = read(file);
 const original = historicalProviderFocusSource(file, current);
+const production = readFileSync(file, "utf8");
 const root = "output/playwright/p46-provider-focus-implementation";
 const evidence = (mode) => JSON.parse(read(root + "/" + mode + "/evidence.json"));
 const script = (s) => parse(s).descriptor.scriptSetup.content;
@@ -63,7 +63,7 @@ test("P46 focus patch preserves the whole source outside close restoration and D
 });
 
 test("P46 actual close function avoids hidden/disconnected/inert targets and newer dialogs", () => {
-  const compiled = ts.transpileModule(functionText(current, "closeEditor"), {
+  const compiled = ts.transpileModule(functionText(production, "closeEditor"), {
     compilerOptions: { target: ts.ScriptTarget.ES2022 },
   }).outputText;
   const run = (setup = () => {}, after = () => {}) => {

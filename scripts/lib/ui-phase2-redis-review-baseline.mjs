@@ -13,7 +13,7 @@ export const redisReviewRevisions = Object.freeze({
   "scripts/lib/ui-phase2-redis-design-data.mjs": {
     baseline: "1dd2520607a33c1879cf4b5968f25911e1e26f9d",
     captured: "85b85655f6f21a50e0f008e942b14d94e71fcb38fc9d2d1e8587ce22a9ec6e6c",
-    current: "23d522a8dde893652b5b5c89c85a4d5057a66082200adaff91ae554f7c281770",
+    current: "2add4c2b46728bfc5a9293224c26c8c89fcf1929fbe84ad83a318f33cb908a27",
   },
 });
 

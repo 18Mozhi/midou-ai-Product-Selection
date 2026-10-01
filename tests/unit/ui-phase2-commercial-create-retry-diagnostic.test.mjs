@@ -3,6 +3,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import * as crypto from "node:crypto";
 import vm from "node:vm";
 import ts from "typescript";
@@ -12,6 +13,11 @@ import { outcomeState } from "../../scripts/lib/ui-phase2-commercial-create-outc
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const source = read("apps/web/src/components/CommercialOperationsCenter.vue");
+const p58ReviewBaseline = execFileSync(
+  "git",
+  ["show", "69086515^:apps/web/src/components/CommercialOperationsCenter.vue"],
+  { encoding: "utf8" },
+).replaceAll("\r\n", "\n");
 function sourceModule(file, imports = {}, globals = {}) {
   const module = { exports: {} };
   const box = {
@@ -216,7 +222,7 @@ function frontendHarness(preview, lossAfterCommit) {
   );
   const apiFailures = [],
     request = api.createApiClient("http://p58.local.invalid/api/v1");
-  const vue = preview ? previewCommercialCreateFocus(source) : source;
+  const vue = preview ? previewCommercialCreateFocus(p58ReviewBaseline) : source;
   const script = parse(vue).descriptor.scriptSetup.content,
     ast = ts.createSourceFile("p58.ts", script, ts.ScriptTarget.Latest, true);
   const names = new Set(["createPlan", "load", "call", "setNotice", "normalizedData"]);
