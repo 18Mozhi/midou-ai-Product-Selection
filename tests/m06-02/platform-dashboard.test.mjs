@@ -277,12 +277,13 @@ test("M06-02 system status presents dependency topology and bounded propagation 
   );
 });
 test("M06-02 chain logs group exact traces and deep-link persisted task or provider relations", async () => {
-  const [repository, web, sourceCenter, openapi, architecture, runbook, feature] =
+  const [repository, web, sourceCenter, sourceDirectory, openapi, architecture, runbook, feature] =
     await Promise.all(
       [
         "apps/api/src/mysql-platform-dashboard-repository.ts",
         "apps/web/src/components/PlatformLogCenter.vue",
         "apps/web/src/components/ProviderSourceCenter.vue",
+        "apps/web/src/composables/useProviderSourceDirectory.ts",
         "docs/openapi.yaml",
         "docs/architecture/m06-02-platform-dashboard.md",
         "docs/runbooks/m06-02-platform-dashboard.md",
@@ -295,7 +296,8 @@ test("M06-02 chain logs group exact traces and deep-link persisted task or provi
     assert.match(web, new RegExp(copy));
   assert.match(web, /groups\.get\(traceId\)/);
   assert.match(web, /new Date\(left\.occurred_at\)[\s\S]*new Date\(right\.occurred_at\)/);
-  assert.match(sourceCenter, /route\.query\.provider_id[\s\S]*item\.provisioned\?\.id/);
+  assert.match(sourceCenter, /useProviderSourceDirectory\(/);
+  assert.match(sourceDirectory, /route\.query\.provider_id[\s\S]*item\.provisioned\?\.id/);
   assert.match(openapi, /exact persisted collection task and provider association/);
   assert.match(architecture, /同一 `trace_id` 分组/);
   assert.match(runbook, /过滤后的来源页/);

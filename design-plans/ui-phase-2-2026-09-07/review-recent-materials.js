@@ -30,12 +30,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
-          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+          "actual": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "actual": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
         },
         {
           "file": "apps/web/src/components/AutomationRuleCenter.vue",
           "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
-          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+          "actual": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35"
         },
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
@@ -45,7 +50,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
           "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
-          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+          "actual": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2"
         },
         {
           "file": "apps/web/src/components/CollectionOperationsConsole.vue",
@@ -55,7 +60,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
           "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
-          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+          "actual": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
         },
         {
           "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
@@ -65,7 +70,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+          "actual": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
         },
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
@@ -75,37 +80,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CompetitorMonitor.vue",
           "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
-          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+          "actual": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
         },
         {
           "file": "apps/web/src/components/CostRuleConsole.vue",
           "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
-          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+          "actual": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
         },
         {
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
           "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+          "actual": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
         },
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "actual": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
         },
         {
           "file": "apps/web/src/components/DiscoveryOverlay.vue",
           "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
-          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+          "actual": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5"
         },
         {
           "file": "apps/web/src/components/FileResilienceCenter.vue",
           "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+          "actual": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
         },
         {
           "file": "apps/web/src/components/HomeDashboard.vue",
           "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
-          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+          "actual": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5"
         },
         {
           "file": "apps/web/src/components/LandingRedirect.vue",
@@ -115,17 +125,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/LocalIdentity.vue",
           "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+          "actual": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
         },
         {
           "file": "apps/web/src/components/MySqlResilienceCenter.vue",
           "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
-          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+          "actual": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
         },
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
-          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+          "actual": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b"
         },
         {
           "file": "apps/web/src/components/NotFoundPage.vue",
@@ -135,7 +145,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/NotificationCenter.vue",
           "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "actual": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         },
         {
           "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -145,17 +155,62 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+          "actual": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityAiPanel.vue",
+          "expected": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+          "actual": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+          "expected": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+          "actual": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+          "expected": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+          "actual": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+          "expected": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+          "actual": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+          "expected": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+          "actual": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+          "expected": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+          "actual": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityListPanel.vue",
+          "expected": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+          "actual": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+          "expected": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+          "actual": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6"
         },
         {
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
           "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+          "actual": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+          "expected": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+          "actual": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
-          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "actual": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
         },
         {
           "file": "apps/web/src/components/OrganizationAuditPanel.vue",
@@ -173,9 +228,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
         },
         {
+          "file": "apps/web/src/components/OrganizationRolePanel.vue",
+          "expected": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+          "actual": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+          "expected": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+          "actual": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+        },
+        {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+          "expected": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+          "actual": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
         },
         {
           "file": "apps/web/src/components/PersonalCenter.vue",
@@ -190,7 +260,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformContentCenter.vue",
@@ -223,6 +293,11 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
         },
         {
+          "file": "apps/web/src/components/PlatformNotificationActionDialog.vue",
+          "expected": "98d6bfab3dae6b9b091371a241d9096420c4f8e84f1c2b4da969ae9f8c3f9eb6",
+          "actual": "2dc6d2a4c543b985859ff6f9ddbec8331ab0d8d22a76331efd80b22d0fcc35ca"
+        },
+        {
           "file": "apps/web/src/components/PlatformNotificationCenter.vue",
           "expected": "a78a889436083b55609001c75cb72269a161588e4efd685a1aa1c719a12182bd",
           "actual": "8dd089c006eeb5c731f0d040da20436e2958613657776373b2872fe6adde52b4"
@@ -250,7 +325,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -270,7 +345,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -280,7 +355,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -290,7 +365,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+          "actual": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
         },
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -315,7 +390,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ScoreRuleConsole.vue",
           "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
-          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+          "actual": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
         },
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -325,12 +400,27 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+        },
+        {
+          "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+          "expected": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+          "actual": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd"
+        },
+        {
+          "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+          "expected": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+          "actual": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6"
         },
         {
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
-          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+          "actual": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+          "expected": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+          "actual": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0"
         },
         {
           "file": "apps/web/src/components/TableViewControls.vue",
@@ -345,17 +435,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TaskDetailPanel.vue",
           "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
-          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+          "actual": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985"
         },
         {
           "file": "apps/web/src/components/TaskWorkspace.vue",
           "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
-          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+          "actual": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25"
         },
         {
           "file": "apps/web/src/components/TenancyChooser.vue",
           "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
-          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+          "actual": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
         },
         {
           "file": "apps/web/src/components/ThemeStudio.vue",
@@ -365,7 +455,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TrendDashboard.vue",
           "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
-          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+          "actual": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc"
+        },
+        {
+          "file": "apps/web/src/components/TrendRuleDialog.vue",
+          "expected": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+          "actual": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500"
+        },
+        {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         },
         {
           "file": "apps/web/src/components/UiStateShowcase.vue",
@@ -385,12 +485,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -418,9 +518,14 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
         },
         {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -435,7 +540,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-audited-reason.ts",
+          "expected": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+          "actual": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/implementation/platform-notification-shell-preview.css",
@@ -443,9 +558,19 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "8c1de10013081fad0db5ce1655de754f74df9f335f590ccc10c81e5f6505b081"
         },
         {
+          "file": "package-lock.json",
+          "expected": "b916391ffc5df7de7a7fd720ad4f5ef62c0ad8bd1c820c7737a190938025c111",
+          "actual": "25fd72e8341cb3dc4063c31c87673910f76357e2aa9693fba3f27159f9c5303e"
+        },
+        {
           "file": "scripts/lib/platform-notification-shell-preview.mjs",
           "expected": "5ba8b716d1931670a744b9413cd87570b6bf74df030b3d01439c29ca7b0d7d6b",
           "actual": "ada34ada484bdc6e5e204f2232fb11629818fcb110fdb4d5850e918e243d2dbf"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-shell-vue-preview.mjs",
+          "expected": "03a5317adb62d291b7127e65a6c67f04eff4d34b340a8bb7e6c1245cf43781c1",
+          "actual": "d7729481848240cde71062ecd1507f725a24dfb626e2197ebbc6bed5441ff5ed"
         },
         {
           "file": "scripts/verify-platform-notification-app.mjs",
@@ -455,7 +580,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "tests/e2e/platform-message-management.spec.ts",
           "expected": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
-          "actual": "3cc3638f3cda517fc4162466e49f2235838a8649cecd64c8f1e4b3581cbb90df"
+          "actual": "e778e82379e814664d85f8ad8862a36da4538db8aad539bfe8444e05d20d4c0e"
         }
       ],
       "packetImages": 16,
@@ -504,12 +629,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
-          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+          "actual": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "actual": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
         },
         {
           "file": "apps/web/src/components/AutomationRuleCenter.vue",
           "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
-          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+          "actual": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35"
         },
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
@@ -519,7 +649,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
           "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
-          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+          "actual": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2"
         },
         {
           "file": "apps/web/src/components/CollectionOperationsConsole.vue",
@@ -529,7 +659,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
           "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
-          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+          "actual": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
         },
         {
           "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
@@ -539,7 +669,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+          "actual": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
         },
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
@@ -549,37 +679,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CompetitorMonitor.vue",
           "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
-          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+          "actual": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
         },
         {
           "file": "apps/web/src/components/CostRuleConsole.vue",
           "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
-          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+          "actual": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
         },
         {
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
           "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+          "actual": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
         },
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "actual": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
         },
         {
           "file": "apps/web/src/components/DiscoveryOverlay.vue",
           "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
-          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+          "actual": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5"
         },
         {
           "file": "apps/web/src/components/FileResilienceCenter.vue",
           "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+          "actual": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
         },
         {
           "file": "apps/web/src/components/HomeDashboard.vue",
           "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
-          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+          "actual": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5"
         },
         {
           "file": "apps/web/src/components/LandingRedirect.vue",
@@ -589,17 +724,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/LocalIdentity.vue",
           "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+          "actual": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
         },
         {
           "file": "apps/web/src/components/MySqlResilienceCenter.vue",
           "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
-          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+          "actual": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
         },
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
-          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+          "actual": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b"
         },
         {
           "file": "apps/web/src/components/NotFoundPage.vue",
@@ -609,7 +744,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/NotificationCenter.vue",
           "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "actual": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         },
         {
           "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -619,17 +754,62 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "81dad2d4a82e49b089d97dba8ed28a1eee23b5597446d3e460febea341f3b97b",
-          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+          "actual": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityAiPanel.vue",
+          "expected": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+          "actual": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+          "expected": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+          "actual": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+          "expected": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+          "actual": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+          "expected": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+          "actual": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+          "expected": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+          "actual": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+          "expected": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+          "actual": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityListPanel.vue",
+          "expected": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+          "actual": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+          "expected": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+          "actual": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6"
         },
         {
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
           "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+          "actual": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+          "expected": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+          "actual": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
-          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "actual": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
         },
         {
           "file": "apps/web/src/components/OrganizationAuditPanel.vue",
@@ -647,9 +827,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
         },
         {
+          "file": "apps/web/src/components/OrganizationRolePanel.vue",
+          "expected": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+          "actual": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+          "expected": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+          "actual": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+        },
+        {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+          "expected": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+          "actual": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
         },
         {
           "file": "apps/web/src/components/PersonalCenter.vue",
@@ -664,7 +859,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformContentCenter.vue",
@@ -697,6 +892,11 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00"
         },
         {
+          "file": "apps/web/src/components/PlatformNotificationActionDialog.vue",
+          "expected": "98d6bfab3dae6b9b091371a241d9096420c4f8e84f1c2b4da969ae9f8c3f9eb6",
+          "actual": "2dc6d2a4c543b985859ff6f9ddbec8331ab0d8d22a76331efd80b22d0fcc35ca"
+        },
+        {
           "file": "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
           "expected": "cf5d098e4d256b05db24d6f3f2a26d80a9ed411766f0818673cb105f1906c435",
           "actual": "47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43"
@@ -719,7 +919,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -739,7 +939,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -749,7 +949,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -759,7 +959,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "35614a7bdafc08e2b5c0079a5eefb423c4df71703b358daacd3c40d50217f344",
-          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+          "actual": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
         },
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -784,7 +984,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ScoreRuleConsole.vue",
           "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
-          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+          "actual": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
         },
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -794,12 +994,27 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+        },
+        {
+          "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+          "expected": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+          "actual": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd"
+        },
+        {
+          "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+          "expected": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+          "actual": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6"
         },
         {
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
-          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+          "actual": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+          "expected": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+          "actual": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0"
         },
         {
           "file": "apps/web/src/components/TableViewControls.vue",
@@ -814,17 +1029,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TaskDetailPanel.vue",
           "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
-          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+          "actual": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985"
         },
         {
           "file": "apps/web/src/components/TaskWorkspace.vue",
           "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
-          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+          "actual": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25"
         },
         {
           "file": "apps/web/src/components/TenancyChooser.vue",
           "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
-          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+          "actual": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
         },
         {
           "file": "apps/web/src/components/ThemeStudio.vue",
@@ -834,7 +1049,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TrendDashboard.vue",
           "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
-          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+          "actual": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc"
+        },
+        {
+          "file": "apps/web/src/components/TrendRuleDialog.vue",
+          "expected": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+          "actual": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500"
+        },
+        {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         },
         {
           "file": "apps/web/src/components/UiStateShowcase.vue",
@@ -849,12 +1074,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -877,9 +1102,14 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
         },
         {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -894,7 +1124,22 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-audited-reason.ts",
+          "expected": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+          "actual": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
+        },
+        {
+          "file": "package-lock.json",
+          "expected": "b916391ffc5df7de7a7fd720ad4f5ef62c0ad8bd1c820c7737a190938025c111",
+          "actual": "25fd72e8341cb3dc4063c31c87673910f76357e2aa9693fba3f27159f9c5303e"
         },
         {
           "file": "scripts/lib/platform-notification-shell-preview.mjs",
@@ -902,9 +1147,14 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "ada34ada484bdc6e5e204f2232fb11629818fcb110fdb4d5850e918e243d2dbf"
         },
         {
+          "file": "scripts/lib/ui-phase2-shell-vue-preview.mjs",
+          "expected": "03a5317adb62d291b7127e65a6c67f04eff4d34b340a8bb7e6c1245cf43781c1",
+          "actual": "d7729481848240cde71062ecd1507f725a24dfb626e2197ebbc6bed5441ff5ed"
+        },
+        {
           "file": "tests/e2e/platform-message-management.spec.ts",
           "expected": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
-          "actual": "3cc3638f3cda517fc4162466e49f2235838a8649cecd64c8f1e4b3581cbb90df"
+          "actual": "e778e82379e814664d85f8ad8862a36da4538db8aad539bfe8444e05d20d4c0e"
         }
       ],
       "packetImages": 4,
@@ -948,12 +1198,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
-          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+          "actual": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "actual": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
         },
         {
           "file": "apps/web/src/components/AutomationRuleCenter.vue",
           "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
-          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+          "actual": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35"
         },
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
@@ -963,7 +1218,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
           "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
-          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+          "actual": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2"
         },
         {
           "file": "apps/web/src/components/CollectionOperationsConsole.vue",
@@ -973,7 +1228,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
           "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
-          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+          "actual": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
         },
         {
           "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
@@ -983,7 +1238,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+          "actual": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
         },
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
@@ -993,37 +1248,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CompetitorMonitor.vue",
           "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
-          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+          "actual": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
         },
         {
           "file": "apps/web/src/components/CostRuleConsole.vue",
           "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
-          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+          "actual": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
         },
         {
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
           "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+          "actual": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
         },
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "actual": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
         },
         {
           "file": "apps/web/src/components/DiscoveryOverlay.vue",
           "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
-          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+          "actual": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5"
         },
         {
           "file": "apps/web/src/components/FileResilienceCenter.vue",
           "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+          "actual": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
         },
         {
           "file": "apps/web/src/components/HomeDashboard.vue",
           "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
-          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+          "actual": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5"
         },
         {
           "file": "apps/web/src/components/LandingRedirect.vue",
@@ -1033,17 +1293,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/LocalIdentity.vue",
           "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+          "actual": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
         },
         {
           "file": "apps/web/src/components/MySqlResilienceCenter.vue",
           "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
-          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+          "actual": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
         },
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
-          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+          "actual": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b"
         },
         {
           "file": "apps/web/src/components/NotFoundPage.vue",
@@ -1053,7 +1313,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/NotificationCenter.vue",
           "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "actual": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         },
         {
           "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -1063,17 +1323,62 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+          "actual": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityAiPanel.vue",
+          "expected": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+          "actual": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+          "expected": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+          "actual": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+          "expected": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+          "actual": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+          "expected": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+          "actual": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+          "expected": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+          "actual": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+          "expected": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+          "actual": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityListPanel.vue",
+          "expected": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+          "actual": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+          "expected": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+          "actual": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6"
         },
         {
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
           "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+          "actual": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+          "expected": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+          "actual": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
-          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "actual": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
         },
         {
           "file": "apps/web/src/components/OrganizationAuditPanel.vue",
@@ -1091,9 +1396,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
         },
         {
+          "file": "apps/web/src/components/OrganizationRolePanel.vue",
+          "expected": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+          "actual": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+          "expected": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+          "actual": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+        },
+        {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+          "expected": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+          "actual": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
         },
         {
           "file": "apps/web/src/components/PersonalCenter.vue",
@@ -1108,7 +1428,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformContentCenter.vue",
@@ -1163,7 +1483,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -1183,7 +1503,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -1193,7 +1513,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -1203,7 +1523,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+          "actual": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
         },
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -1228,7 +1548,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ScoreRuleConsole.vue",
           "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
-          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+          "actual": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
         },
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -1238,12 +1558,27 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+        },
+        {
+          "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+          "expected": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+          "actual": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd"
+        },
+        {
+          "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+          "expected": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+          "actual": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6"
         },
         {
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
-          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+          "actual": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+          "expected": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+          "actual": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0"
         },
         {
           "file": "apps/web/src/components/TableViewControls.vue",
@@ -1258,17 +1593,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TaskDetailPanel.vue",
           "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
-          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+          "actual": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985"
         },
         {
           "file": "apps/web/src/components/TaskWorkspace.vue",
           "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
-          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+          "actual": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25"
         },
         {
           "file": "apps/web/src/components/TenancyChooser.vue",
           "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
-          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+          "actual": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
         },
         {
           "file": "apps/web/src/components/ThemeStudio.vue",
@@ -1278,7 +1613,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TrendDashboard.vue",
           "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
-          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+          "actual": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc"
+        },
+        {
+          "file": "apps/web/src/components/TrendRuleDialog.vue",
+          "expected": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+          "actual": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500"
+        },
+        {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         },
         {
           "file": "apps/web/src/components/UiStateShowcase.vue",
@@ -1293,12 +1638,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -1316,9 +1661,14 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
         },
         {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -1333,7 +1683,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/implementation/platform-commercial-page-preview.css",
@@ -1341,9 +1696,19 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "2b7716733b54bfd87901758b8bda3e1173ef895f125859992ab4ac41e7234b7a"
         },
         {
+          "file": "package-lock.json",
+          "expected": "b916391ffc5df7de7a7fd720ad4f5ef62c0ad8bd1c820c7737a190938025c111",
+          "actual": "25fd72e8341cb3dc4063c31c87673910f76357e2aa9693fba3f27159f9c5303e"
+        },
+        {
           "file": "scripts/lib/platform-commercial-page-preview.mjs",
           "expected": "f783f18deec3282f65504d775811d5f4d8466af5916f551f5c346c2a3453164a",
           "actual": "42cc04a480bda819dc82ee5b141a4dc6d1dac7c941dd3b801022f50763cc0eba"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-shell-vue-preview.mjs",
+          "expected": "03a5317adb62d291b7127e65a6c67f04eff4d34b340a8bb7e6c1245cf43781c1",
+          "actual": "d7729481848240cde71062ecd1507f725a24dfb626e2197ebbc6bed5441ff5ed"
         },
         {
           "file": "scripts/preview-platform-commercial-page.mjs",
@@ -1471,12 +1836,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
-          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+          "actual": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "actual": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
         },
         {
           "file": "apps/web/src/components/AutomationRuleCenter.vue",
           "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
-          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+          "actual": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35"
         },
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
@@ -1486,7 +1856,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
           "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
-          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+          "actual": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2"
         },
         {
           "file": "apps/web/src/components/CollectionOperationsConsole.vue",
@@ -1496,7 +1866,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
           "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
-          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+          "actual": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
         },
         {
           "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
@@ -1506,7 +1876,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+          "actual": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
         },
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
@@ -1516,37 +1886,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CompetitorMonitor.vue",
           "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
-          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+          "actual": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
         },
         {
           "file": "apps/web/src/components/CostRuleConsole.vue",
           "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
-          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+          "actual": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
         },
         {
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
           "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+          "actual": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
         },
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "actual": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
         },
         {
           "file": "apps/web/src/components/DiscoveryOverlay.vue",
           "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
-          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+          "actual": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5"
         },
         {
           "file": "apps/web/src/components/FileResilienceCenter.vue",
           "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+          "actual": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
         },
         {
           "file": "apps/web/src/components/HomeDashboard.vue",
           "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
-          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+          "actual": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5"
         },
         {
           "file": "apps/web/src/components/LandingRedirect.vue",
@@ -1556,17 +1931,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/LocalIdentity.vue",
           "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+          "actual": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
         },
         {
           "file": "apps/web/src/components/MySqlResilienceCenter.vue",
           "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
-          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+          "actual": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
         },
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
-          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+          "actual": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b"
         },
         {
           "file": "apps/web/src/components/NotFoundPage.vue",
@@ -1576,7 +1951,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/NotificationCenter.vue",
           "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "actual": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         },
         {
           "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -1586,17 +1961,62 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+          "actual": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityAiPanel.vue",
+          "expected": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+          "actual": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+          "expected": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+          "actual": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+          "expected": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+          "actual": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+          "expected": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+          "actual": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+          "expected": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+          "actual": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+          "expected": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+          "actual": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityListPanel.vue",
+          "expected": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+          "actual": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+          "expected": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+          "actual": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6"
         },
         {
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
           "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+          "actual": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+          "expected": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+          "actual": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
-          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "actual": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
         },
         {
           "file": "apps/web/src/components/OrganizationAuditPanel.vue",
@@ -1614,9 +2034,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
         },
         {
+          "file": "apps/web/src/components/OrganizationRolePanel.vue",
+          "expected": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+          "actual": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+          "expected": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+          "actual": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+        },
+        {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+          "expected": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+          "actual": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
         },
         {
           "file": "apps/web/src/components/PersonalCenter.vue",
@@ -1631,7 +2066,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformContentCenter.vue",
@@ -1701,7 +2136,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -1721,7 +2156,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -1731,7 +2166,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -1741,7 +2176,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+          "actual": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
         },
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -1766,7 +2201,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ScoreRuleConsole.vue",
           "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
-          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+          "actual": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
         },
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -1776,12 +2211,27 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+        },
+        {
+          "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+          "expected": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+          "actual": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd"
+        },
+        {
+          "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+          "expected": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+          "actual": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6"
         },
         {
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
-          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+          "actual": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+          "expected": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+          "actual": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0"
         },
         {
           "file": "apps/web/src/components/TableViewControls.vue",
@@ -1796,17 +2246,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TaskDetailPanel.vue",
           "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
-          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+          "actual": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985"
         },
         {
           "file": "apps/web/src/components/TaskWorkspace.vue",
           "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
-          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+          "actual": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25"
         },
         {
           "file": "apps/web/src/components/TenancyChooser.vue",
           "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
-          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+          "actual": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
         },
         {
           "file": "apps/web/src/components/ThemeStudio.vue",
@@ -1816,7 +2266,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TrendDashboard.vue",
           "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
-          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+          "actual": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc"
+        },
+        {
+          "file": "apps/web/src/components/TrendRuleDialog.vue",
+          "expected": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+          "actual": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500"
+        },
+        {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         },
         {
           "file": "apps/web/src/components/UiStateShowcase.vue",
@@ -1831,12 +2291,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -1851,7 +2311,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/organization-admin.css",
           "expected": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
-          "actual": "b0a61a381e4542491d05bbdaeb339cb54fafa18867c74aa64145ddb719769a27"
+          "actual": "26b2c1dd143d8b752491b7dfa23c84f18d65086ddb6e7378b8a64ac463e60af5"
         },
         {
           "file": "apps/web/src/organization-audit.css",
@@ -1864,9 +2324,14 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
         },
         {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -1881,12 +2346,32 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-audited-reason.ts",
+          "expected": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+          "actual": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-org-approvals-design-data.mjs",
+          "expected": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+          "actual": "3a788866a1f630bc6fdb95f7c383c5a431bc49d606d0164f02bba8db89e6b8fc"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-shell-vue-preview.mjs",
+          "expected": "03a5317adb62d291b7127e65a6c67f04eff4d34b340a8bb7e6c1245cf43781c1",
+          "actual": "d7729481848240cde71062ecd1507f725a24dfb626e2197ebbc6bed5441ff5ed"
         },
         {
           "file": "tests/e2e/m06-01-organization-admin.spec.ts",
           "expected": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-          "actual": "641800d676a2cde82cac232a23edcccd24dd8f8c1de707c33bc1fdf7dec5ee6a"
+          "actual": "fcf2a6c22c4eea63fee263dbd0c0f0c55b4948fef060ed3ce6bc3a08c5f52ac4"
         }
       ],
       "packetImages": 82,
@@ -1950,12 +2435,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
-          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+          "actual": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "actual": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
         },
         {
           "file": "apps/web/src/components/AutomationRuleCenter.vue",
           "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
-          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+          "actual": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35"
         },
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
@@ -1965,7 +2455,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
           "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
-          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+          "actual": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2"
         },
         {
           "file": "apps/web/src/components/CollectionOperationsConsole.vue",
@@ -1975,7 +2465,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
           "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
-          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+          "actual": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
         },
         {
           "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
@@ -1985,7 +2475,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+          "actual": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
         },
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
@@ -1995,37 +2485,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CompetitorMonitor.vue",
           "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
-          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+          "actual": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
         },
         {
           "file": "apps/web/src/components/CostRuleConsole.vue",
           "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
-          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+          "actual": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
         },
         {
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
           "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+          "actual": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
         },
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "actual": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
         },
         {
           "file": "apps/web/src/components/DiscoveryOverlay.vue",
           "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
-          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+          "actual": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5"
         },
         {
           "file": "apps/web/src/components/FileResilienceCenter.vue",
           "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+          "actual": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
         },
         {
           "file": "apps/web/src/components/HomeDashboard.vue",
           "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
-          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+          "actual": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5"
         },
         {
           "file": "apps/web/src/components/LandingRedirect.vue",
@@ -2035,17 +2530,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/LocalIdentity.vue",
           "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+          "actual": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
         },
         {
           "file": "apps/web/src/components/MySqlResilienceCenter.vue",
           "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
-          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+          "actual": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
         },
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
-          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+          "actual": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b"
         },
         {
           "file": "apps/web/src/components/NotFoundPage.vue",
@@ -2055,7 +2550,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/NotificationCenter.vue",
           "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "actual": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         },
         {
           "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -2065,17 +2560,62 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+          "actual": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityAiPanel.vue",
+          "expected": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+          "actual": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+          "expected": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+          "actual": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+          "expected": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+          "actual": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+          "expected": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+          "actual": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+          "expected": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+          "actual": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+          "expected": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+          "actual": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityListPanel.vue",
+          "expected": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+          "actual": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+          "expected": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+          "actual": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6"
         },
         {
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
           "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+          "actual": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+          "expected": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+          "actual": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
-          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "actual": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
         },
         {
           "file": "apps/web/src/components/OrganizationAuditPanel.vue",
@@ -2093,9 +2633,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
         },
         {
+          "file": "apps/web/src/components/OrganizationRolePanel.vue",
+          "expected": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+          "actual": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+          "expected": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+          "actual": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+        },
+        {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+          "expected": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+          "actual": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
         },
         {
           "file": "apps/web/src/components/PersonalCenter.vue",
@@ -2110,7 +2665,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformContentCenter.vue",
@@ -2180,7 +2735,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "24a3b27fca62f5331bd19c58ba501e2b6b9777d7e59a7b03248286d82a4962a2",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -2200,7 +2755,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -2210,7 +2765,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -2220,7 +2775,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+          "actual": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
         },
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -2245,7 +2800,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ScoreRuleConsole.vue",
           "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
-          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+          "actual": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
         },
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -2255,12 +2810,27 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+        },
+        {
+          "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+          "expected": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+          "actual": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd"
+        },
+        {
+          "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+          "expected": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+          "actual": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6"
         },
         {
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
-          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+          "actual": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+          "expected": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+          "actual": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0"
         },
         {
           "file": "apps/web/src/components/TableViewControls.vue",
@@ -2275,17 +2845,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TaskDetailPanel.vue",
           "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
-          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+          "actual": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985"
         },
         {
           "file": "apps/web/src/components/TaskWorkspace.vue",
           "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
-          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+          "actual": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25"
         },
         {
           "file": "apps/web/src/components/TenancyChooser.vue",
           "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
-          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+          "actual": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
         },
         {
           "file": "apps/web/src/components/ThemeStudio.vue",
@@ -2295,7 +2865,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TrendDashboard.vue",
           "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
-          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+          "actual": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc"
+        },
+        {
+          "file": "apps/web/src/components/TrendRuleDialog.vue",
+          "expected": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+          "actual": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500"
+        },
+        {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         },
         {
           "file": "apps/web/src/components/UiStateShowcase.vue",
@@ -2310,12 +2890,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -2330,7 +2910,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/organization-admin.css",
           "expected": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
-          "actual": "b0a61a381e4542491d05bbdaeb339cb54fafa18867c74aa64145ddb719769a27"
+          "actual": "26b2c1dd143d8b752491b7dfa23c84f18d65086ddb6e7378b8a64ac463e60af5"
         },
         {
           "file": "apps/web/src/organization-audit.css",
@@ -2343,9 +2923,14 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
         },
         {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -2360,12 +2945,32 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-audited-reason.ts",
+          "expected": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+          "actual": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-org-approvals-design-data.mjs",
+          "expected": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+          "actual": "3a788866a1f630bc6fdb95f7c383c5a431bc49d606d0164f02bba8db89e6b8fc"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-shell-vue-preview.mjs",
+          "expected": "03a5317adb62d291b7127e65a6c67f04eff4d34b340a8bb7e6c1245cf43781c1",
+          "actual": "d7729481848240cde71062ecd1507f725a24dfb626e2197ebbc6bed5441ff5ed"
         },
         {
           "file": "tests/e2e/m06-01-organization-admin.spec.ts",
           "expected": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-          "actual": "641800d676a2cde82cac232a23edcccd24dd8f8c1de707c33bc1fdf7dec5ee6a"
+          "actual": "fcf2a6c22c4eea63fee263dbd0c0f0c55b4948fef060ed3ce6bc3a08c5f52ac4"
         }
       ],
       "packetImages": 18,
@@ -2398,9 +3003,60 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
       "title": "可授权账号目录",
       "scope": "已批准范围仅为手机目录区域；其他路由、详情及整页未批准。",
       "manifestSha256": "1d4e0046f21d7a0f47ea56e2389201739fd08e609ed6e529e6231ba2e2e93cd7",
-      "sourceStatus": "source-matched-at-index-build",
+      "sourceStatus": "historical-source-differs",
       "sourceCount": 51,
-      "sourceDifferences": [],
+      "sourceDifferences": [
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.css",
+          "expected": "46ca0a65a52aafa7fcf07fd6f0c92c158d4cb4875fb1bd954c16071fbf776d9d",
+          "actual": "aae1e4080c01ca68410b07883f46cfb6004ab39594bc954eb4883ea8e3efda2d"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
+        },
+        {
+          "file": "apps/web/src/design/tenancy-tokens.css",
+          "expected": "a2b9fe8a0326dd7a7b5a9ac519703e30e9fed716d083c0ed709bed6d63833b63",
+          "actual": "b73837aa35471c69065ad0227b52a9c8a0eb45b9348c4dafb2e1e4cd6c2083ca"
+        },
+        {
+          "file": "apps/web/src/design/tokens.css",
+          "expected": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38",
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
+        },
+        {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
+          "file": "apps/web/src/styles.css",
+          "expected": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364",
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
+        },
+        {
+          "file": "apps/web/src/styles/platform-operations.css",
+          "expected": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922",
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
+        },
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "expected": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71",
+          "actual": "7ba1fcc74c8b6df7de99a73e6aed1c6690c8b8fdbe7636936bd6fe7fb9bfe5b8"
+        }
+      ],
       "packetImages": 30,
       "previews": [
         {
@@ -2452,7 +3108,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.css",
           "expected": "95fa0df51f92f87fabff07e3344a8c1bdbe60152a7f0a8b00be97e235e3590fa",
-          "actual": "46ca0a65a52aafa7fcf07fd6f0c92c158d4cb4875fb1bd954c16071fbf776d9d"
+          "actual": "aae1e4080c01ca68410b07883f46cfb6004ab39594bc954eb4883ea8e3efda2d"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformAdminDirectoryMobile.css",
@@ -2482,22 +3143,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
+        },
+        {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
         },
         {
           "file": "apps/web/src/styles.css",
           "expected": "4d3f496112ece29924eafe59dd7f09fb68572542ffa42bda2d0f003d3adbc509",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "2a0a0936d6132cd3fdeb74def417edfd7a038dda43ece9f010b125b62698281b",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs",
+          "expected": "e23ed22a55a721b0419fc68d5f53c21c2895b1902bbeb83e973ad5adaebfb67b",
+          "actual": "3527f7b5739f75bee7f63d5ab85d3e6538b22603dbadbd8c3fa67df5c2edaca1"
         },
         {
           "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
           "expected": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
-          "actual": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71"
+          "actual": "7ba1fcc74c8b6df7de99a73e6aed1c6690c8b8fdbe7636936bd6fe7fb9bfe5b8"
         }
       ],
       "packetImages": 16,
@@ -2556,7 +3237,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.css",
           "expected": "95fa0df51f92f87fabff07e3344a8c1bdbe60152a7f0a8b00be97e235e3590fa",
-          "actual": "46ca0a65a52aafa7fcf07fd6f0c92c158d4cb4875fb1bd954c16071fbf776d9d"
+          "actual": "aae1e4080c01ca68410b07883f46cfb6004ab39594bc954eb4883ea8e3efda2d"
+        },
+        {
+          "file": "apps/web/src/components/PlatformAccountDialogs.vue",
+          "expected": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da",
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformAdminDirectoryMobile.css",
@@ -2586,22 +3272,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
+        },
+        {
+          "file": "apps/web/src/main.ts",
+          "expected": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1",
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
+        },
+        {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
         },
         {
           "file": "apps/web/src/styles.css",
           "expected": "4d3f496112ece29924eafe59dd7f09fb68572542ffa42bda2d0f003d3adbc509",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "2a0a0936d6132cd3fdeb74def417edfd7a038dda43ece9f010b125b62698281b",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs",
+          "expected": "6204d7d3706bc72635b4ca86ca9eee36c9e589e635def4c0e93b56c5ec46b42d",
+          "actual": "4ba87889ee0eab398f1c280e3ad64763d098ad43e743cc952f2b4fd9d96d60d4"
         },
         {
           "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
           "expected": "843fcd060a9dbdcf4ba42b62ddff25f15628efa4b38206dd75a78cd46ce3f1b8",
-          "actual": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71"
+          "actual": "7ba1fcc74c8b6df7de99a73e6aed1c6690c8b8fdbe7636936bd6fe7fb9bfe5b8"
         }
       ],
       "packetImages": 48,
@@ -2650,12 +3356,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.css",
           "expected": "b68bc058858b3c87c814f2b1fae8948d54c981ac5e3571a65d350b3876c2dacf",
-          "actual": "46ca0a65a52aafa7fcf07fd6f0c92c158d4cb4875fb1bd954c16071fbf776d9d"
+          "actual": "aae1e4080c01ca68410b07883f46cfb6004ab39594bc954eb4883ea8e3efda2d"
         },
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformAdminDirectoryMobile.css",
@@ -2700,17 +3406,22 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
+        },
+        {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
         },
         {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -2725,7 +3436,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
         },
         {
           "file": "apps/web/src/use-platform-organization-actions.ts",
@@ -2733,9 +3449,14 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae"
         },
         {
+          "file": "scripts/verify-ui-phase2-admin-mobile-results-implementation.mjs",
+          "expected": "6204d7d3706bc72635b4ca86ca9eee36c9e589e635def4c0e93b56c5ec46b42d",
+          "actual": "4ba87889ee0eab398f1c280e3ad64763d098ad43e743cc952f2b4fd9d96d60d4"
+        },
+        {
           "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
           "expected": "f6f90c24014ed89f7c13e9d2e2f6610ad1e7dad92e65271f050ebcac950deed0",
-          "actual": "562034f71d545b0b087ff88835898909a40af6eedd3a954a611a12d01624cf71"
+          "actual": "7ba1fcc74c8b6df7de99a73e6aed1c6690c8b8fdbe7636936bd6fe7fb9bfe5b8"
         }
       ],
       "packetImages": 24,
@@ -2779,12 +3500,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
-          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+          "actual": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "actual": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
         },
         {
           "file": "apps/web/src/components/AutomationRuleCenter.vue",
           "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
-          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+          "actual": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35"
         },
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
@@ -2794,7 +3520,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
           "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
-          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+          "actual": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2"
         },
         {
           "file": "apps/web/src/components/CollectionOperationsConsole.vue",
@@ -2804,7 +3530,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
           "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
-          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+          "actual": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
         },
         {
           "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
@@ -2814,7 +3540,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+          "actual": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
         },
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
@@ -2824,37 +3550,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CompetitorMonitor.vue",
           "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
-          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+          "actual": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
         },
         {
           "file": "apps/web/src/components/CostRuleConsole.vue",
           "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
-          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+          "actual": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
         },
         {
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
           "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+          "actual": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
         },
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "actual": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
         },
         {
           "file": "apps/web/src/components/DiscoveryOverlay.vue",
           "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
-          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+          "actual": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5"
         },
         {
           "file": "apps/web/src/components/FileResilienceCenter.vue",
           "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+          "actual": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
         },
         {
           "file": "apps/web/src/components/HomeDashboard.vue",
           "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
-          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+          "actual": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5"
         },
         {
           "file": "apps/web/src/components/LandingRedirect.vue",
@@ -2864,17 +3595,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/LocalIdentity.vue",
           "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+          "actual": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
         },
         {
           "file": "apps/web/src/components/MySqlResilienceCenter.vue",
           "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
-          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+          "actual": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
         },
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
-          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+          "actual": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b"
         },
         {
           "file": "apps/web/src/components/NotFoundPage.vue",
@@ -2884,7 +3615,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/NotificationCenter.vue",
           "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "actual": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         },
         {
           "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -2894,17 +3625,62 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+          "actual": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityAiPanel.vue",
+          "expected": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+          "actual": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+          "expected": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+          "actual": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+          "expected": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+          "actual": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+          "expected": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+          "actual": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+          "expected": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+          "actual": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+          "expected": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+          "actual": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityListPanel.vue",
+          "expected": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+          "actual": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+          "expected": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+          "actual": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6"
         },
         {
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
           "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+          "actual": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+          "expected": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+          "actual": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "actual": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
         },
         {
           "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
@@ -2927,9 +3703,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
         },
         {
+          "file": "apps/web/src/components/OrganizationRolePanel.vue",
+          "expected": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+          "actual": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+          "expected": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+          "actual": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+        },
+        {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+          "expected": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+          "actual": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
         },
         {
           "file": "apps/web/src/components/PersonalCenter.vue",
@@ -2944,7 +3735,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformContentCenter.vue",
@@ -3014,7 +3805,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -3034,7 +3825,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -3044,7 +3835,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -3054,7 +3845,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+          "actual": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
         },
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -3079,7 +3870,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ScoreRuleConsole.vue",
           "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
-          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+          "actual": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
         },
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -3089,12 +3880,27 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+        },
+        {
+          "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+          "expected": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+          "actual": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd"
+        },
+        {
+          "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+          "expected": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+          "actual": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6"
         },
         {
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
-          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+          "actual": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+          "expected": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+          "actual": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0"
         },
         {
           "file": "apps/web/src/components/TableViewControls.vue",
@@ -3109,17 +3915,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TaskDetailPanel.vue",
           "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
-          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+          "actual": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985"
         },
         {
           "file": "apps/web/src/components/TaskWorkspace.vue",
           "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
-          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+          "actual": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25"
         },
         {
           "file": "apps/web/src/components/TenancyChooser.vue",
           "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
-          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+          "actual": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
         },
         {
           "file": "apps/web/src/components/ThemeStudio.vue",
@@ -3129,7 +3935,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TrendDashboard.vue",
           "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
-          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+          "actual": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc"
+        },
+        {
+          "file": "apps/web/src/components/TrendRuleDialog.vue",
+          "expected": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+          "actual": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500"
+        },
+        {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         },
         {
           "file": "apps/web/src/components/UiStateShowcase.vue",
@@ -3149,7 +3965,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/provider-adapter-tokens.css",
           "expected": "c6ff4f890f97866b8e8faca8bee234532534ecb014e2acf5ba61567da24600a6",
-          "actual": "ec274e4382f9b741d26d79f5cc8d5dd5b1602967000cb227320fca0e018fe214"
+          "actual": "3f698489b5c23cd4b634655959c976c336e55d3b0fcc7d491bb56b999f71cdad"
         },
         {
           "file": "apps/web/src/design/provider-registry-tokens.css",
@@ -3159,12 +3975,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -3177,14 +3993,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
         },
         {
+          "file": "apps/web/src/provider-adapters-c-page.css",
+          "expected": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
+          "actual": "dd77cdcd4286a095605f09f4c8003f23a659a6d41308d55d6db61181d5bb0c13"
+        },
+        {
           "file": "apps/web/src/route-catalog.generated.json",
           "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
           "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
         },
         {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -3199,12 +4025,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
         },
         {
           "file": "tests/e2e/m03-01-provider-registry.spec.ts",
           "expected": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f",
-          "actual": "72915fae648b4c45fd6017de436d33d0032be5abff8d473713788cc314730f88"
+          "actual": "fdb9b7cfd824eab55d9780fdecce7d13df52883d256636f7c05e346c03ae8508"
         }
       ],
       "packetImages": 132,
@@ -3248,12 +4079,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
         },
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -3273,7 +4104,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -3283,7 +4114,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -3301,6 +4132,11 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b"
         },
         {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
+        },
+        {
           "file": "apps/web/src/credential-assets.css",
           "expected": "f2afdaa53d385b3ff0c7a8e1d79e66103353a3755257834142f887a8ec5e43f0",
           "actual": "67cab81d2eb2dbdf26ce12b346ac716ec55a898a4acb2a06214dc10e5989ea54"
@@ -3313,7 +4149,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/provider-adapter-tokens.css",
           "expected": "c6ff4f890f97866b8e8faca8bee234532534ecb014e2acf5ba61567da24600a6",
-          "actual": "ec274e4382f9b741d26d79f5cc8d5dd5b1602967000cb227320fca0e018fe214"
+          "actual": "3f698489b5c23cd4b634655959c976c336e55d3b0fcc7d491bb56b999f71cdad"
         },
         {
           "file": "apps/web/src/design/provider-registry-tokens.css",
@@ -3323,12 +4159,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -3336,9 +4172,19 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"
         },
         {
+          "file": "apps/web/src/provider-adapters-c-page.css",
+          "expected": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
+          "actual": "dd77cdcd4286a095605f09f4c8003f23a659a6d41308d55d6db61181d5bb0c13"
+        },
+        {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -3353,12 +4199,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
         },
         {
           "file": "tests/e2e/m03-01-provider-registry.spec.ts",
           "expected": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f",
-          "actual": "72915fae648b4c45fd6017de436d33d0032be5abff8d473713788cc314730f88"
+          "actual": "fdb9b7cfd824eab55d9780fdecce7d13df52883d256636f7c05e346c03ae8508"
         }
       ],
       "packetImages": 40,
@@ -3407,12 +4258,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
-          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+          "actual": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "actual": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
         },
         {
           "file": "apps/web/src/components/AutomationRuleCenter.vue",
           "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
-          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+          "actual": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35"
         },
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
@@ -3422,7 +4278,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
           "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
-          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+          "actual": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2"
         },
         {
           "file": "apps/web/src/components/CollectionOperationsConsole.vue",
@@ -3432,7 +4288,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
           "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
-          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+          "actual": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
         },
         {
           "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
@@ -3442,7 +4298,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+          "actual": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
         },
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
@@ -3452,37 +4308,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CompetitorMonitor.vue",
           "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
-          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+          "actual": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
         },
         {
           "file": "apps/web/src/components/CostRuleConsole.vue",
           "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
-          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+          "actual": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
         },
         {
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
           "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+          "actual": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
         },
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "actual": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
         },
         {
           "file": "apps/web/src/components/DiscoveryOverlay.vue",
           "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
-          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+          "actual": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5"
         },
         {
           "file": "apps/web/src/components/FileResilienceCenter.vue",
           "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+          "actual": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
         },
         {
           "file": "apps/web/src/components/HomeDashboard.vue",
           "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
-          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+          "actual": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5"
         },
         {
           "file": "apps/web/src/components/LandingRedirect.vue",
@@ -3492,17 +4353,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/LocalIdentity.vue",
           "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+          "actual": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
         },
         {
           "file": "apps/web/src/components/MySqlResilienceCenter.vue",
           "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
-          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+          "actual": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
         },
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
-          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+          "actual": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b"
         },
         {
           "file": "apps/web/src/components/NotFoundPage.vue",
@@ -3512,7 +4373,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/NotificationCenter.vue",
           "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "actual": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         },
         {
           "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -3522,17 +4383,62 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+          "actual": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityAiPanel.vue",
+          "expected": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+          "actual": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+          "expected": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+          "actual": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+          "expected": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+          "actual": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+          "expected": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+          "actual": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+          "expected": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+          "actual": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+          "expected": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+          "actual": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityListPanel.vue",
+          "expected": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+          "actual": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+          "expected": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+          "actual": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6"
         },
         {
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
           "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+          "actual": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+          "expected": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+          "actual": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "actual": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
         },
         {
           "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
@@ -3555,9 +4461,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
         },
         {
+          "file": "apps/web/src/components/OrganizationRolePanel.vue",
+          "expected": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+          "actual": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+          "expected": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+          "actual": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+        },
+        {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+          "expected": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+          "actual": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
         },
         {
           "file": "apps/web/src/components/PersonalCenter.vue",
@@ -3572,7 +4493,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformContentCenter.vue",
@@ -3642,7 +4563,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "ea3eaecf5bb8a6ec5e8e701dd8743cac61a35c6806a8a0d35079ba64be3b5e40",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -3662,7 +4583,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -3672,7 +4593,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -3682,7 +4603,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+          "actual": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
         },
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -3707,7 +4628,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ScoreRuleConsole.vue",
           "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
-          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+          "actual": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
         },
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -3717,12 +4638,27 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+        },
+        {
+          "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+          "expected": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+          "actual": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd"
+        },
+        {
+          "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+          "expected": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+          "actual": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6"
         },
         {
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
-          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+          "actual": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+          "expected": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+          "actual": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0"
         },
         {
           "file": "apps/web/src/components/TableViewControls.vue",
@@ -3737,17 +4673,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TaskDetailPanel.vue",
           "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
-          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+          "actual": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985"
         },
         {
           "file": "apps/web/src/components/TaskWorkspace.vue",
           "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
-          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+          "actual": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25"
         },
         {
           "file": "apps/web/src/components/TenancyChooser.vue",
           "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
-          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+          "actual": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
         },
         {
           "file": "apps/web/src/components/ThemeStudio.vue",
@@ -3757,7 +4693,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TrendDashboard.vue",
           "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
-          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+          "actual": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc"
+        },
+        {
+          "file": "apps/web/src/components/TrendRuleDialog.vue",
+          "expected": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+          "actual": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500"
+        },
+        {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         },
         {
           "file": "apps/web/src/components/UiStateShowcase.vue",
@@ -3777,7 +4723,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/provider-adapter-tokens.css",
           "expected": "c6ff4f890f97866b8e8faca8bee234532534ecb014e2acf5ba61567da24600a6",
-          "actual": "ec274e4382f9b741d26d79f5cc8d5dd5b1602967000cb227320fca0e018fe214"
+          "actual": "3f698489b5c23cd4b634655959c976c336e55d3b0fcc7d491bb56b999f71cdad"
         },
         {
           "file": "apps/web/src/design/provider-registry-tokens.css",
@@ -3787,12 +4733,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -3805,14 +4751,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
         },
         {
+          "file": "apps/web/src/provider-adapters-c-page.css",
+          "expected": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
+          "actual": "dd77cdcd4286a095605f09f4c8003f23a659a6d41308d55d6db61181d5bb0c13"
+        },
+        {
           "file": "apps/web/src/route-catalog.generated.json",
           "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
           "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
         },
         {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -3827,7 +4783,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
         },
         {
           "file": "config/route-catalog.json",
@@ -3837,7 +4798,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "tests/e2e/m03-03-provider-adapter.spec.ts",
           "expected": "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
-          "actual": "5382d8b68c3bf4e313daed5339c5f78c255570fa0df7d154ce8d7eb6a3dfd91f"
+          "actual": "e3227abe3a07929c9b5c048c0b1f4d5a9adfade1ef78cc40103d26dd3e0d1e7f"
         }
       ],
       "packetImages": 20,
@@ -3886,12 +4847,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "expected": "0ffbb3bd12ea11fe31c30ae37555450ca4bd8c26604790fb62c7c0e118138177",
-          "actual": "792aecd60f01b58b78a3f8613d6938a1044410dbc655ca4f7a8fffcd8868a7ee"
+          "actual": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
+        },
+        {
+          "file": "apps/web/src/components/AuditedReasonDialog.vue",
+          "expected": "3191e4ba14aa0919d5083e048f89a6ef99497d01aa6c5d8d5bcbbc47f42e1a9a",
+          "actual": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
         },
         {
           "file": "apps/web/src/components/AutomationRuleCenter.vue",
           "expected": "7d753f4648d21dfa547063ce6ca431938ce0e67cbf05bbfabb414db571c06840",
-          "actual": "08b4ae293f236fe6ae290b9ba6c074310efe29212006abfc253eeb522deab91f"
+          "actual": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35"
         },
         {
           "file": "apps/web/src/components/BackupRecoveryCenter.vue",
@@ -3901,7 +4867,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CapacityBoundaryCenter.vue",
           "expected": "9f5072b4b48f8364545b6c28cea90848c65f150c64eeab6ea4a7148005a556b4",
-          "actual": "2fd35429789991d45138cf57d61366434a2df82770937871c20a715d68f0abc8"
+          "actual": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2"
         },
         {
           "file": "apps/web/src/components/CollectionOperationsConsole.vue",
@@ -3911,7 +4877,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionRuntimeCenter.vue",
           "expected": "39f1a91cbff368c91253423bd0d400202f52af365a32a17f91147c8e93887db9",
-          "actual": "6cac2faf9677838454ad1471e1fe171b5ca32f0d5459497c99b74882bcfc2b17"
+          "actual": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
         },
         {
           "file": "apps/web/src/components/CollectionRuntimeSurface.vue",
@@ -3921,7 +4887,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CollectionTaskCenter.vue",
           "expected": "509341da51ee51234bbf27de21e14c7943d409efb0339bcd59b6dbf047ff6160",
-          "actual": "6bcf6bdecf1432f02e0d02f11e877bc6e1731793ac762a1cfea27aed696c77de"
+          "actual": "02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8"
         },
         {
           "file": "apps/web/src/components/CommercialOperationsCenter.vue",
@@ -3931,37 +4897,42 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/CompetitorMonitor.vue",
           "expected": "85f93c9f0e62a3152e36c6da6f1e852c57e23403c46d12f56814ca8141696657",
-          "actual": "fc2bc67f746ecd93923ee1955a3ebcd62ea98a718bc69a98c5e5eb812d7fc6f0"
+          "actual": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
         },
         {
           "file": "apps/web/src/components/CostRuleConsole.vue",
           "expected": "f04ff78111eb34e394be0862c924b41bd3270f9f8cd2a7697895c6f7954bb4ba",
-          "actual": "1eab3c325b67e47a3ed475be19a25891019258ce7fd2a75a184bd26cfa6cd7b3"
+          "actual": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
         },
         {
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
           "expected": "a1a78e3f18ce05f3548f48f5e50ff732654e156e66dc1b09865a6f7705b09844",
-          "actual": "ba09a7dbe0d342554b96ed281218fc9fec91d3370435f2266fcabe04c27dda72"
+          "actual": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
         },
         {
           "file": "apps/web/src/components/CredentialAssetCenter.vue",
           "expected": "e969248a6726fffb7480ddb1919b36dfe6cb10438d1c02a204e1a7e3b7f48835",
-          "actual": "d29db14dd716ebdbeee5c3ed43e4db016cb8fa4d43c3dd6f819371593f7ae845"
+          "actual": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+        },
+        {
+          "file": "apps/web/src/components/DataQualityCenter.vue",
+          "expected": "2c523882706ad74b43905b29a9d3ee6396b1bdbd676bef32089edcf311be9120",
+          "actual": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536"
         },
         {
           "file": "apps/web/src/components/DiscoveryOverlay.vue",
           "expected": "6d1fcfa002f10f3fcea31818c60f7ea93b9f91715b81b0a1a1faf7b38181cb27",
-          "actual": "2ffbb8a725bfce274b746c26db8a3f004fb8ba160a5b46379bf38e89dbe6f977"
+          "actual": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5"
         },
         {
           "file": "apps/web/src/components/FileResilienceCenter.vue",
           "expected": "e539f017ca23e53283979f2cf44a8d0a1f6a8822eb9088601e645f7111b27ee2",
-          "actual": "79e0b3d6f64ec32297b4a4f02c1f335b543596441e01f7f74d2e1610c82da0a9"
+          "actual": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
         },
         {
           "file": "apps/web/src/components/HomeDashboard.vue",
           "expected": "444ee99400055bc82f9747dfd1bcd11adcf7afc7f9923e65eff763264429933e",
-          "actual": "495943920cb36dc4686350857e4e00c65da0a207b393b2b9283b9e4449fdacb0"
+          "actual": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5"
         },
         {
           "file": "apps/web/src/components/LandingRedirect.vue",
@@ -3971,17 +4942,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/LocalIdentity.vue",
           "expected": "51d88824bff44a06ec43806702c3b627061e37a3b1e3164ccbef6d314cecc769",
-          "actual": "210f81c5ba8c4b94b60f559a0498121e9c8b6bcf703beef62e9d86775646f61a"
+          "actual": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf"
         },
         {
           "file": "apps/web/src/components/MySqlResilienceCenter.vue",
           "expected": "8467519fd4f24d53034dc92dbc5073590b128b29ffa678428463440b77e59ffa",
-          "actual": "231690bc0ed0efb867a1e1bb047cd4195dbd3b0995da3be7434c1fc843bd432c"
+          "actual": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6"
         },
         {
           "file": "apps/web/src/components/NavigationShell.vue",
           "expected": "0819cf432ed5432267631555c156d47be7487140b5ae8650adcfb327f68832eb",
-          "actual": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+          "actual": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b"
         },
         {
           "file": "apps/web/src/components/NotFoundPage.vue",
@@ -3991,7 +4962,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/NotificationCenter.vue",
           "expected": "e2d1d9474fe362261cacaf11988ef5ac266fbaed40ab61533318a0beb63b520d",
-          "actual": "154cb69b609b49df0fbb7ff4719adc0ff3a9c90d7d7eb3e2e620e478078a7036"
+          "actual": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3"
         },
         {
           "file": "apps/web/src/components/OnboardingGuide.vue",
@@ -4001,17 +4972,62 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/OpenPlatformCenter.vue",
           "expected": "5bc93ec6671395ad0e4319b4fb36aca0eba29dceb5d47a777d09fbb9ccd416d5",
-          "actual": "888dd0b9027b8eb9af3cf963044484920f58b22102cb79cc834bfa2a5cb7c2fa"
+          "actual": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityAiPanel.vue",
+          "expected": "2fde5bacaa96d003b5a7488ad064443840d6988337e608474e9cdc8e66b36b54",
+          "actual": "a6b4ed5eb74239b341fd84fc988c66f335dac58698ee5f0a261d9d1764140b8f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityCostReviewQueue.vue",
+          "expected": "e53bc46608bac7f91e1d00123eb4bc086688000c03d2c9ad8f932be2dbc87339",
+          "actual": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDecisionPanel.vue",
+          "expected": "ef7ee4759450dd89f891861319650b296cfde787154d6f0a66f7a1a2eb585cf4",
+          "actual": "467b9fa65592d607cbc89e545ad9d71ede5262d94e583cef515e3207c178d2c9"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityDetailInsights.vue",
+          "expected": "74ba55aed7b865a9e1b2d7474db9e725a3e2773d4e65b815ba2faa87650be861",
+          "actual": "41b89271764a966ce1ad822266aa8c5e26d6ddceac5cbb8683e4a4ab7c20d6d0"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityFeedbackPanel.vue",
+          "expected": "1dd720c1ee1f096bdd5ecf89deac09e2d2c05900490738e5fd9014e898dfd629",
+          "actual": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityLineagePanel.vue",
+          "expected": "fa52db2c9716cdeff9115ba8c8c9bc9dd7e3afa72ef352525019cfa643f05546",
+          "actual": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityListPanel.vue",
+          "expected": "baec683a2a21206f812fb18d5cdfc3d1e83d537c53ad2378fed2f243bb0fc3b8",
+          "actual": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityProfitPanel.vue",
+          "expected": "a9c768a23befdbee24e875572909069ddeac37e2a3c23fefeb2f2cba69d0c47f",
+          "actual": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6"
         },
         {
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
           "expected": "eaf152a2d29d285d397b9b762eaf769cdcd183d77c861afbd415b98c9c1fb6d1",
-          "actual": "700c4ca59d2d9778988f4d8fd070f1d02b7357913fbaa3d4ea009a5a653f5502"
+          "actual": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+        },
+        {
+          "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
+          "expected": "725612de20dd49d18230bbee5c46f66b85971f8973e737fbd212ff9ce0dcb617",
+          "actual": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce"
         },
         {
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
           "expected": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-          "actual": "0a3395a89fc312d7ae22cd6e8a3027e5b37d94b8493b246cead3fb376ae80e04"
+          "actual": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
         },
         {
           "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
@@ -4034,9 +5050,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
         },
         {
+          "file": "apps/web/src/components/OrganizationRolePanel.vue",
+          "expected": "aaaf903611aad9a0af38a2da040780c1904003841aa63a2b9faaa6a47d002415",
+          "actual": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationTeamPanel.vue",
+          "expected": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
+          "actual": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+        },
+        {
           "file": "apps/web/src/components/OrganizationTokenPanel.vue",
           "expected": "4713e22a2290042efd2ff180046ee15969acc0205917786aaa3e36e9fea71aa0",
           "actual": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+        },
+        {
+          "file": "apps/web/src/components/OrganizationWorkspacePanel.vue",
+          "expected": "63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7",
+          "actual": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
         },
         {
           "file": "apps/web/src/components/PersonalCenter.vue",
@@ -4051,7 +5082,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/PlatformAccountDialogs.vue",
           "expected": "53b9fc9d719fdc51a57c9c09a62bb379d68be5b3174e9975d531d0a23b7a4829",
-          "actual": "4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da"
+          "actual": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
         },
         {
           "file": "apps/web/src/components/PlatformContentCenter.vue",
@@ -4121,7 +5152,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderAdapterCenter.vue",
           "expected": "51c0ba1f86fa1179fcb0d25b9cb327ef8a38f34b0cef53d5a916f0ef2f92a2ee",
-          "actual": "4dbff48411afac2c6fccea9da1bbf19e4346ff4a472220ae4ef02ab3121ab746"
+          "actual": "1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b"
         },
         {
           "file": "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
@@ -4141,7 +5172,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "2abc992815a9fa42d9b50ef936e188b9bcff5afb5c4a7d3130e42109af7babfc"
+          "actual": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -4151,7 +5182,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderSourceCenter.vue",
           "expected": "70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6",
-          "actual": "26b1a0945f40be382a5acf7fc9b1c3e03e8ba019d1688816d16773206d32638a"
+          "actual": "c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0"
         },
         {
           "file": "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
@@ -4161,7 +5192,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/RedisResilienceCenter.vue",
           "expected": "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-          "actual": "dbaa5eef024578b3b4fbf17090573b7b4650e4b7c8e36efd1eb07b29c06dc081"
+          "actual": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec"
         },
         {
           "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
@@ -4186,7 +5217,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ScoreRuleConsole.vue",
           "expected": "cb42778323efbed6839bb0209265e912cfdaaa882e40c45f26351930e8281b28",
-          "actual": "d29bdd73cc7ef7ffbe67411cb4b748193a06789e5e7a5b5f79ee563783721723"
+          "actual": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d"
         },
         {
           "file": "apps/web/src/components/SecurityOperationsCenter.vue",
@@ -4196,12 +5227,27 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "5f0243aa070bf9249f4c82fd3404461c684e0b2fa0ffe59152af67be5a38ea7f"
+          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+        },
+        {
+          "file": "apps/web/src/components/SourcingComparisonPanel.vue",
+          "expected": "2712a6fd91e13b1a58a1bddfc6147ec8341d031ae59718c03bc4768f1cd73406",
+          "actual": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd"
+        },
+        {
+          "file": "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+          "expected": "bdf6100c15e5387b9a6e331ca5d684a690a3dea1e1eed0cab8d511b22e0920a4",
+          "actual": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6"
         },
         {
           "file": "apps/web/src/components/SourcingWorkspace.vue",
           "expected": "f74e7d26c2263d7fc0b49382cad49f360144f38fa28bbf6ccd4a59a3b2099d81",
-          "actual": "eb43371ad25781d3fc941131f86dd06762318332ea72f30da777a5e99dc99219"
+          "actual": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+        },
+        {
+          "file": "apps/web/src/components/SourcingWorkspaceDialogs.vue",
+          "expected": "e5bebf9ce4d4c9433bbc1c68a21cecc75f39a287c051f2ce7fb3bef25de901d8",
+          "actual": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0"
         },
         {
           "file": "apps/web/src/components/TableViewControls.vue",
@@ -4216,17 +5262,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TaskDetailPanel.vue",
           "expected": "c0ff4c54a81e08d86e18e479a1db93654713963632b032e7cfcb97c80e5631b6",
-          "actual": "2e483722fad729760bad5333cee637909c1e2462914e15aa3374e141aa3b7e48"
+          "actual": "23bac3d8403d605eb2aaf71225f163114ee3f9d7d65e2bc4fc7bda050286b985"
         },
         {
           "file": "apps/web/src/components/TaskWorkspace.vue",
           "expected": "c606acbee296d8a90e32f7e47cd91a9e96694ae6c78d438bef324f90f4efee7b",
-          "actual": "22b90021e5d4856d3a7e8eefa64c99a8bf33dde67f37969ead75255d68eb183d"
+          "actual": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25"
         },
         {
           "file": "apps/web/src/components/TenancyChooser.vue",
           "expected": "09b50879bc390c05cf3a41effd1fe61c0e9aa672b1f5dceb96b6bea7b17e192e",
-          "actual": "bb23c5df2396fa9a639ea0ffc8efacdc477a569abb3e3d03537e6bea73c0e3a8"
+          "actual": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
         },
         {
           "file": "apps/web/src/components/ThemeStudio.vue",
@@ -4236,7 +5282,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/TrendDashboard.vue",
           "expected": "63a7202c0fd4b90990d06d1cc533b149fd2a74bd7fa7ab88e2f1a3fc02baec64",
-          "actual": "0a039db1279abc7a4de7b33f58ea7bf15a0abbcee6b6e7e0c35214c0608ca25a"
+          "actual": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc"
+        },
+        {
+          "file": "apps/web/src/components/TrendRuleDialog.vue",
+          "expected": "aee841bff9ccef78f5426e2706cc93bf98eea0d779bfa544266d8715d814b498",
+          "actual": "246bb91107183253591b91c266432caab37cbd594e31fa25630f8b12a4689500"
+        },
+        {
+          "file": "apps/web/src/components/UiStatePanel.vue",
+          "expected": "8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164",
+          "actual": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
         },
         {
           "file": "apps/web/src/components/UiStateShowcase.vue",
@@ -4254,6 +5310,11 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
         },
         {
+          "file": "apps/web/src/design/provider-adapter-tokens.css",
+          "expected": "ec274e4382f9b741d26d79f5cc8d5dd5b1602967000cb227320fca0e018fe214",
+          "actual": "3f698489b5c23cd4b634655959c976c336e55d3b0fcc7d491bb56b999f71cdad"
+        },
+        {
           "file": "apps/web/src/design/provider-registry-tokens.css",
           "expected": "d9dea3c996e5f5426766ebed1eb2b0a7956585036d09131af5dadb7bb7aa36fc",
           "actual": "8be200080d45599729d9efe59cbfc62cd619bd89ab03bc17e7ec7477cba64255"
@@ -4261,12 +5322,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/design/tokens.css",
           "expected": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
-          "actual": "023d54d39998a7679f6b5c54ac19e583462dcde8da797cb6e1bb50c282297e38"
+          "actual": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a"
         },
         {
           "file": "apps/web/src/main.ts",
           "expected": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
-          "actual": "903e596eea2df6a27a53135c0f72947581f969775bb49b0246df48f02bc3e4e1"
+          "actual": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671"
         },
         {
           "file": "apps/web/src/navigation-shell-route-state.ts",
@@ -4279,14 +5340,24 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "actual": "b0aeca5e6240a1f45ac86aa43d961d68e9df71ed946cf7deb8b4f8f22763ed71"
         },
         {
+          "file": "apps/web/src/provider-adapters-c-page.css",
+          "expected": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
+          "actual": "dd77cdcd4286a095605f09f4c8003f23a659a6d41308d55d6db61181d5bb0c13"
+        },
+        {
           "file": "apps/web/src/route-catalog.generated.json",
           "expected": "9c9db80601fb72ce97188908e24e4a6e73b0f4b80f6ec32f079bcfc914357b74",
           "actual": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c"
         },
         {
+          "file": "apps/web/src/signal-ledger.css",
+          "expected": "09ffcb57f34b375199256ce031309f1062204a2c27cdf8200050f0da333b7da1",
+          "actual": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276"
+        },
+        {
           "file": "apps/web/src/styles.css",
           "expected": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-          "actual": "d04ebb2d729d63d594de47df592802735059bb1a1fa6f3d6098b468bd1769364"
+          "actual": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016"
         },
         {
           "file": "apps/web/src/styles/onboarding-navigation.css",
@@ -4301,12 +5372,17 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/styles/platform-operations.css",
           "expected": "7fd76092fe05dfaac21310794381af649eeecf2421c5d136162b19e1335f86f9",
-          "actual": "e9eef46d85d5b057336f7f47226185c079cf3c1e261be68f5e0a717e04cf2922"
+          "actual": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5"
+        },
+        {
+          "file": "apps/web/src/use-modal-dialog.ts",
+          "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
+          "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
         },
         {
           "file": "tests/e2e/m03-03-provider-adapter.spec.ts",
           "expected": "f5c6bd4e0d265e83dbb3179f732ff4db18409f79e87568248767827230ef1452",
-          "actual": "5382d8b68c3bf4e313daed5339c5f78c255570fa0df7d154ce8d7eb6a3dfd91f"
+          "actual": "e3227abe3a07929c9b5c048c0b1f4d5a9adfade1ef78cc40103d26dd3e0d1e7f"
         }
       ],
       "packetImages": 96,

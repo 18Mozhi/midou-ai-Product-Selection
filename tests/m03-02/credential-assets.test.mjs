@@ -181,6 +181,7 @@ test("M03-02.A03/A06-A10/A13/A15-A17 delivery evidence covers encrypted assets a
     web,
     css,
     shell,
+    surfaces,
     openapi,
     env,
     schema,
@@ -200,6 +201,7 @@ test("M03-02.A03/A06-A10/A13/A15-A17 delivery evidence covers encrypted assets a
       "apps/web/src/components/CredentialAssetCenter.vue",
       "apps/web/src/credential-assets.css",
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/navigation-surface-registry.ts",
       "docs/openapi.yaml",
       "config/env.example",
       "config/schema.json",
@@ -230,7 +232,8 @@ test("M03-02.A03/A06-A10/A13/A15-A17 delivery evidence covers encrypted assets a
   assert.match(web, /type="password"/);
   assert.doesNotMatch(web, /payload_ciphertext|payload_nonce|payload_auth_tag/);
   assert.match(css, /@media \(max-width: 640px\)/);
-  assert.match(shell, /provider-runtime-surface/);
+  assert.match(shell, /surfaceComponents\[activeSurface\.value\]/);
+  assert.match(surfaces, /"provider-runtime-surface":\s*lazy\("ProviderRuntimeSurface"\)/);
   assert.match(openapi, /\/platform\/credential-assets:/);
   assert.match(env, /CREDENTIAL_TEMP_ROOT/);
   assert.match(env, /CREDENTIALS_MASTER_KEY_VERSION/);

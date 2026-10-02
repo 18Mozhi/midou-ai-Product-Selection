@@ -28,7 +28,7 @@ function handler(name, box) {
   return box.run;
 }
 
-test("P47 takeover preserves the original data, API and business script outside three focus wrappers", () => {
+test("P47 reviewed interaction states preserve provider APIs and the production focus wrappers", () => {
   const originalStatements = ast.statements
     .filter((node) => !ts.isFunctionDeclaration(node) || !wrappers.includes(node.name?.text))
     .map((node) => node.getText(ast))
@@ -42,10 +42,18 @@ test("P47 takeover preserves the original data, API and business script outside 
     )
     .map((text) => text.replace("computed, nextTick,", "computed,"))
     .join("\n");
-  // SHA of the same TypeScript statement serialization at 883a533c.
+  // Current production script snapshot after the separately reviewed access, refresh-error and loading states.
   assert.equal(
     hash(originalStatements),
-    "17f3a81538690a413185dc4b9e9d25d112ffdafc39352c8909ebbd4f7114e989",
+    "187ae671daf2f1ba4ebf23958a8fbf327faa2af1f8dbc01eb7ec7d64e0fe3d9f",
+  );
+  assert.match(
+    source,
+    /request<AdapterSummary\[]>\("\/platform\/provider-adapters",\s*\{\s*signal: controller\.signal/,
+  );
+  assert.match(
+    source,
+    /`\/platform\/provider-adapters\/\$\{item\.id\}\/health-check`,\s*\{ method: "POST" \}/,
   );
   assert.ok(descriptor.template.content.includes('@click="refreshFromButton"'));
   assert.ok(descriptor.template.content.includes('@click="resetEmptyFilters"'));
@@ -125,8 +133,8 @@ test("P47 palette stays local and all four callers resolve their colors", () => 
   const nodes = palette.nodes.filter((node) => node.type !== "comment");
   assert.equal(nodes.length, 1);
   assert.equal(nodes[0].selector, "html:has(body #app .adapter-center--c)");
-  assert.equal(nodes[0].nodes.length, 42);
-  assert.equal(colors.size, 42);
+  assert.equal(nodes[0].nodes.length, 58);
+  assert.equal(colors.size, 58);
   assert.ok([...colors.keys()].every((key) => key.startsWith("--p47-")));
   for (const name of ["c-page", "c-detail", "c-feedback", "empty-mobile"]) {
     const css = read(`apps/web/src/provider-adapters-${name}.css`);
@@ -165,9 +173,9 @@ function declarations(source) {
   return hash(JSON.stringify(serialize(root)));
 }
 
-// Resolved ordered CSS AST fingerprints at 883a533c, before the palette extraction.
+// Resolved ordered CSS AST fingerprints after the approved P47 access/refresh/loading states were added.
 for (const [name, expected] of Object.entries({
-  page: "3e8c0c3ae4407a36d4d2bb39b125adadc40ab86b4d71eba0f0c3e4971be97b49",
+  page: "bf27ec1b2d482fd6b92a75cb1f8e02bfd66881bcd6581d89f2d4bcc724a0abba",
   detail: "e73d569a9939c2ee2801d0707e7648918e5b06b3552bf7233542e98a14501a10",
   feedback: "32e9e6cd4dea0c2e53d8fa5b7102369156d784efdf44d4ee8bc571cd6a4e7fe1",
 }))

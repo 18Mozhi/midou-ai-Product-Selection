@@ -418,7 +418,8 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(wizard, /formElement\.value\?\.reportValidity\(\)/);
   assert.match(modalDialog, /showModal\(\)/);
   assert.match(modalDialog, /handleCancel/);
-  assert.match(modalDialog, /returnFocus\?\.focus\(\)/);
+  assert.match(modalDialog, /returnFocus\?\.isConnected[\s\S]*getFallbackFocus\?\.\(\)/);
+  assert.match(modalDialog, /target\?\.focus\(\)/);
   assert.match(web, /\/platform\/roles/);
   assert.match(accountShell, /if \(tab\.value === "admins"\) await loadPlatformRoles\(\)/);
   assert.match(accountShell, /已保留上次成功读取的数据/);

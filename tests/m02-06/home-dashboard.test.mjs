@@ -264,6 +264,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     apiClient,
     opportunity,
     shell,
+    surfaces,
     openapi,
     env,
     architecture,
@@ -281,6 +282,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
       "apps/web/src/api-client.ts",
       "apps/web/src/components/OpportunityMobileShell.vue",
       "apps/web/src/components/NavigationShell.vue",
+      "apps/web/src/components/navigation-surface-registry.ts",
       "docs/openapi.yaml",
       "config/env.example",
       "docs/architecture/m02-06-home-mobile.md",
@@ -346,7 +348,8 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.doesNotMatch(home, /全链路教学/);
   assert.match(opportunity, /机会暂无详情[\s\S]*等待真实数据/);
   assert.doesNotMatch(opportunity, /SKELETON|P04/);
-  assert.match(shell, /HomeDashboard/);
+  assert.match(shell, /surfaceComponents\[activeSurface\.value\]/);
+  assert.match(surfaces, /"home-dashboard":\s*lazy\("HomeDashboard"\)/);
   assert.doesNotMatch(env, /HOME_DASHBOARD_|DASHBOARD_PROJECTION_/);
   assert.match(architecture, /不.*模拟|不.*示例/);
   assert.match(runbook, /宝塔.*Node API/s);

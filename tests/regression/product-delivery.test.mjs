@@ -85,12 +85,13 @@ test("unified backend build and lifecycle contracts are registered", async () =>
 // Regression: ISSUE-005 — visible navigation linked to phase placeholders rather than features
 // Found by route-to-component audit on 2026-08-17.
 test("every visible production navigation entry resolves to a real feature surface", async () => {
-  const [shell, identity, app, catalog, routeAdapter] = await Promise.all([
+  const [shell, identity, app, catalog, routeAdapter, surfaces] = await Promise.all([
     read("apps/web/src/components/NavigationShell.vue"),
     read("apps/web/src/components/LocalIdentity.vue"),
     read("apps/web/src/App.vue"),
     read("config/route-catalog.json").then(JSON.parse),
     read("apps/web/src/route-catalog.ts"),
+    read("apps/web/src/components/navigation-surface-registry.ts"),
   ]);
 
   for (const placeholder of [
@@ -113,7 +114,9 @@ test("every visible production navigation entry resolves to a real feature surfa
   assert.doesNotMatch(shell, /isAccountCenter|import LocalIdentity/);
   assert.doesNotMatch(identity, /['"]\/me['"]\s*:\s*['"]sessions['"]/);
   assert.match(identity, /pathModes\[window\.location\.pathname\]/);
-  assert.match(shell, /PlatformManagementCenter/);
+  assert.match(shell, /surfaceComponents\[activeSurface\.value\]/);
+  assert.match(surfaces, /"platform-dashboard":\s*lazy\("PlatformDashboard"\)/);
+  assert.match(surfaces, /"platform-management-center":\s*lazy\("PlatformManagementCenter"\)/);
 });
 
 // Regression: ISSUE-006 — production authentication depended on internal ?view= harnesses

@@ -399,7 +399,7 @@ test("M06-01 organization overview preserves facts and form context across refre
   assert.match(center, /组织数据暂不可用/);
   assert.match(
     center,
-    /:aria-busy="state === 'loading' \|\| refreshing \|\| \(view === 'audit' && busy\)"/,
+    /state === 'loading' \|\| refreshing \|\| teamRecoveryRefreshing \|\| \(view === 'audit' && busy\)/,
   );
   assert.match(styles, /org-admin-notice\[data-kind="success"\]/);
   assert.match(styles, /org-admin-notice\[data-kind="error"\]/);

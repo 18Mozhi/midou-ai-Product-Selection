@@ -32,7 +32,7 @@ test("scheduler health link is navigation-only and target query is not currently
   assert.equal(record.status, "identity-current");
   assert.equal(record.sourceBinding, "hash-current");
   assert.equal(record.currentLine, candidate?.line);
-  assert.equal(record.recordedLine, 615);
+  assert.equal(record.recordedLine, 624);
   assert.equal(record.recordedKind, candidate?.kind);
   assert.match(source, /\/platform-admin\/providers\/adapters\?provider_id=' \+ item\.id/);
   assert.match(routes, /"path": "\/platform-admin\/providers\/adapters"/);

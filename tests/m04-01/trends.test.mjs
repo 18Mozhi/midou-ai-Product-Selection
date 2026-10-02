@@ -497,7 +497,9 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     /trend_change_self_confirmation_forbidden[\s\S]*trend_change_opportunity_conflict/,
   );
   assert.match(routes, /trend:read[\s\S]*trend:manage/);
-  const webSurface = `${webTypes}\n${web}\n${ruleDialog}\n${readinessStrip}\n${readinessModel}\n${filterPanel}\n${detailPanel}\n${evidenceTimeline}\n${changeQueue}`;
+  const ruleList = await readFile("apps/web/src/components/TrendRuleList.vue", "utf8");
+  const webSurface = `${webTypes}\n${web}\n${ruleDialog}\n${ruleList}\n${readinessStrip}\n${readinessModel}\n${filterPanel}\n${detailPanel}\n${evidenceTimeline}\n${changeQueue}`;
+  assert.match(web, /TrendRuleList/);
   assert.match(
     webSurface,
     /loading[\s\S]*ready[\s\S]*empty[\s\S]*error[\s\S]*expired[\s\S]*forbidden[\s\S]*blocked/,
@@ -505,11 +507,11 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(webSurface, /来源筛选[\s\S]*timeline_sources/);
   assert.match(webSurface, /相关性回溯/);
   assert.match(webSurface, /合并主题[\s\S]*拆分主题[\s\S]*待确认/);
-  assert.match(web, /变更原因/);
-  assert.match(web, /下次采集[\s\S]*上次失败来源/);
-  assert.match(web, /class="primary"[\s\S]*创建趋势监控/);
+  assert.match(webSurface, /提议原因[\s\S]*驳回原因/);
+  assert.match(webSurface, /下次采集[\s\S]*上次失败来源/);
+  assert.match(web, /class="primary[^"]*"[\s\S]*创建趋势监控/);
   assert.match(web, /class="secondary"[\s\S]*refreshHotspots/);
-  assert.match(webSurface, /个来源[\s\S]*新鲜度[\s\S]*可信度/);
+  for (const fact of ["个来源", "新鲜度", "可信度"]) assert.match(webSurface, new RegExp(fact));
   assert.match(webSurface, /市场质量门[\s\S]*持续监控中/);
   assert.match(webSurface, /候选不等于建议采纳[\s\S]*五项质量门/);
   assert.match(schema, /TREND_PROJECTION_POLL_MS/);

@@ -118,6 +118,7 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
         "apps/web/src/components/TaskListPanel.vue",
         "apps/web/src/components/TaskBatchActions.vue",
         "apps/web/src/components/TaskDetailPanel.vue",
+        "apps/web/src/components/TaskActionDialog.vue",
       ].map((x) => readFile(x, "utf8")),
     )
   ).join("\n");

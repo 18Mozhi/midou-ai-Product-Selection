@@ -53,10 +53,11 @@ test("M01-03.A06/A09 OpenAPI and DTOs lock membership-first session context rout
 });
 
 test("M01-03.A07/A08/A15 UI implements reference-backed desktop and 390 states", async () => {
-  const [component, apiClient, styles, e2e] = await Promise.all([
+  const [component, apiClient, styles, entrypoint, e2e] = await Promise.all([
     read("apps/web/src/components/TenancyChooser.vue"),
     read("apps/web/src/api-client.ts"),
-    read("apps/web/src/styles.css"),
+    read("apps/web/src/styles/tenancy-workspace.css"),
+    read("apps/web/src/main.ts"),
     read("tests/e2e/m01-03-tenancy.spec.ts"),
   ]);
   for (const state of [
@@ -71,7 +72,8 @@ test("M01-03.A07/A08/A15 UI implements reference-backed desktop and 390 states",
     assert.match(component, new RegExp(`["']${state}["']`));
   assert.match(component, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
-  assert.match(styles, /@media\s*\(\s*max-width:\s*720px\s*\)/);
+  assert.match(entrypoint, /import\s+["']\.\/styles\/tenancy-workspace\.css["']/);
+  assert.match(styles, /@media\s*\(\s*max-width:\s*760px\s*\)/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(e2e, /keyboard\.press\(["']Enter["']\)/);
 });
@@ -79,7 +81,7 @@ test("M01-03.A07/A08/A15 UI implements reference-backed desktop and 390 states",
 test("P08 production Vue uses the reviewed C scope layout and ignores superseded reads", async () => {
   const [component, styles] = await Promise.all([
     read("apps/web/src/components/TenancyChooser.vue"),
-    read("apps/web/src/styles.css"),
+    read("apps/web/src/styles/tenancy-workspace.css"),
   ]);
   assert.match(component, /class="p08-scope"/);
   assert.match(component, /class="p08-layout"/);

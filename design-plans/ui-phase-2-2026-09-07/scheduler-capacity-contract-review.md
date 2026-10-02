@@ -59,20 +59,20 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 
 | 源码候选 | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#8fbfd1dda992c36b.1 | 430 | control | SC70-LOAD GET（自身有审计） |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#3c7b3b6045a144ee.1 | 432 | control | SC70-EXPIRED 打开确认，无立即写入 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#4f73abdd0d99fc21.1 | 457 | control | SC70-LOAD 保留快照重试 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#ae52c30c28ab3a05.1 | 471 | control | SC70-LOAD 首次失败重试 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#0767d27629b787d7.1 | 562 | event-binding | SC70-FILTER code包含，本地并回第一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#1b581569d5d9e0d4.1 | 571 | event-binding | SC70-FILTER 运行范围，本地并回第一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1 | 617 | control | SC70-PROVIDER 打开当前来源确认 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#dac6cbc2991374ba.1 | 611 | control | SC70-DETAIL 原生最近错误披露 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#d868a97237e89c1c.1 | 634 | control | SC70-PAGE 本地上一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1 | 637 | control | SC70-PAGE 本地下一页 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1 | 662 | event-binding | SC70-EXPIRED cancel本地/confirm POST |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1 | 662 | dialog-component-call | SC70-EXPIRED 同一确认调用，不重复算动作 |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#25d51725a70103d5.1 | 672 | event-binding | SC70-PROVIDER cancel本地/confirm POST |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#c30cb3ed5106a082.1 | 672 | dialog-component-call | SC70-PROVIDER 同一确认调用，不重复算动作 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#8fbfd1dda992c36b.1 | 439 | control | SC70-LOAD GET（自身有审计） |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#3c7b3b6045a144ee.1 | 441 | control | SC70-EXPIRED 打开确认，无立即写入 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#4f73abdd0d99fc21.1 | 466 | control | SC70-LOAD 保留快照重试 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#ae52c30c28ab3a05.1 | 480 | control | SC70-LOAD 首次失败重试 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#0767d27629b787d7.1 | 571 | event-binding | SC70-FILTER code包含，本地并回第一页 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#1b581569d5d9e0d4.1 | 580 | event-binding | SC70-FILTER 运行范围，本地并回第一页 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1 | 626 | control | SC70-PROVIDER 打开当前来源确认 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#dac6cbc2991374ba.1 | 620 | control | SC70-DETAIL 原生最近错误披露 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#d868a97237e89c1c.1 | 643 | control | SC70-PAGE 本地上一页 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1 | 646 | control | SC70-PAGE 本地下一页 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1 | 671 | event-binding | SC70-EXPIRED cancel本地/confirm POST |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1 | 671 | dialog-component-call | SC70-EXPIRED 同一确认调用，不重复算动作 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#25d51725a70103d5.1 | 681 | event-binding | SC70-PROVIDER cancel本地/confirm POST |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#c30cb3ed5106a082.1 | 681 | dialog-component-call | SC70-PROVIDER 同一确认调用，不重复算动作 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#ad3f1b8a48927d9d.1 | 237 | control | SC71-LOAD GET；保存中禁用手动刷新，成功后的归属重读仍允许 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#811287f91562f61d.1 | 244 | control | SC71-ATTEST 打开确认 |
 | apps/web/src/components/CapacityBoundaryCenter.vue#4f73abdd0d99fc21.1 | 270 | control | SC71-LOAD 保留快照重试 |
@@ -97,7 +97,7 @@ P71repository仅取最新production_benchmark而无SHA筛选，UTC文本解析�
 
 | 文件 | SHA256 |
 | --- | --- |
-| apps/web/src/components/CrawlerSchedulerCenter.vue | 3afd7c0fa15665a800c9ef33d8ee58101af93b95cbcc464ad17e55f17f668b17 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue | 93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea |
 | apps/web/src/components/CapacityBoundaryCenter.vue | b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2 |
 | apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
@@ -148,7 +148,7 @@ P70活动租约区的原生details只按需展示当前已返回的任务UUID、
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1 | 615 | control | SC70-HEALTH-NAV / 导航至已登记适配器路由，不代表健康检查已执行 |
+| apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1 | 624 | control | SC70-HEALTH-NAV / 导航至已登记适配器路由，不代表健康检查已执行 |
 
 ## 9. 已替代源码身份归档
 
