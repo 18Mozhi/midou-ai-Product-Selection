@@ -503,6 +503,63 @@ test("UI2-AN07 committed decision response cannot close a newer cached detail", 
   expect(submittedBody).toEqual({ action: "approve", reason, expected_version: item.version });
 });
 
+test("approval decision handler ignores synchronous re-entry while the first POST is pending", async ({
+  page,
+}) => {
+  await setup(page);
+  let action: "approve" | "reject" = "approve";
+  let releaseDecision!: () => void;
+  let signalDecision!: () => void;
+  let decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
+  let decisionStarted = new Promise<void>((resolve) => (signalDecision = resolve));
+  let decisionCount = 0;
+  let submittedBody: unknown;
+  await page.route(`**/api/v1/tasks/approvals/${approvalId}/actions`, async (route) => {
+    decisionCount += 1;
+    submittedBody = route.request().postDataJSON();
+    signalDecision();
+    await decisionGate;
+    await route.fulfill({
+      json: env({
+        ...item,
+        status: action === "approve" ? "approved" : "rejected",
+        version: item.version + 1,
+      }),
+    });
+  });
+
+  const reason = "提交前核对当前证据版本";
+  for (action of ["approve", "reject"] as const) {
+    const previousDecisionCount = decisionCount;
+    decisionGate = new Promise<void>((resolve) => (releaseDecision = resolve));
+    decisionStarted = new Promise<void>((resolve) => (signalDecision = resolve));
+    await page.goto(`/tasks/approvals?approval=${approvalId}`);
+    const dialog = page.getByRole("dialog", { name: item.title });
+    await dialog.getByLabel("审批原因（批准与驳回均必填）").fill(reason);
+    const decisionButton = dialog.getByRole("button", {
+      name: action === "approve" ? "批准并流转" : "驳回",
+    });
+    await decisionButton.click();
+    await decisionStarted;
+    await expect(decisionButton).toBeDisabled();
+    await decisionButton.evaluate((button) =>
+      button.dispatchEvent(
+        new MouseEvent("click", { bubbles: true, cancelable: true, view: window }),
+      ),
+    );
+    await expect.poll(() => decisionCount).toBe(previousDecisionCount + 1);
+
+    releaseDecision();
+    await expect(
+      page.getByText(
+        action === "approve" ? "本节点已批准，审批历史不可变。" : "本节点已驳回，审批历史不可变。",
+      ),
+    ).toBeVisible();
+    expect(decisionCount).toBe(previousDecisionCount + 1);
+    expect(submittedBody).toEqual({ action, reason, expected_version: item.version });
+  }
+});
+
 test("approval management creates and publishes templates, starts requests, and deduplicates decisions", async ({
   page,
 }) => {

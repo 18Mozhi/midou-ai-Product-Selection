@@ -19,7 +19,7 @@
     "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
     "apps/web/src/components/approval-workspace-types.ts": "85f49803b54e30f8543d7256ce27630001c943aea86baac8a84d45591f9f9792",
     "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075",
-    "apps/web/src/components/ApprovalWorkspace.vue": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+    "apps/web/src/components/ApprovalWorkspace.vue": "13b62f152801f448bba49686f5acfef34ee0a804cbee11c134bf1be3f0c3701d",
     "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
     "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
     "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
@@ -266,7 +266,7 @@
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
     "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "9a37882127bf26c4a26b827a83023b332c3fbe8338ccf7e168c4b62bbfea33e6",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "0299f051665e41a61bdedc711ea24ea0ac365c64f248c181100ec3ce4cedbecd",
-    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "d2897f92a1cf650c2cb50f325a6d36ccf661e4dde24d42181d58e7fa4984350a",
+    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "fdbd156fd14c8233e47d08bf58514410354a5dc09d64ddb83168d771d9a31310",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "0b428f6cc2496bd4aff581065bba5996b2e759951d3676e3c2381ba62d0e7ade",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "9c6ef633c49158b304bf884a0722037a39f0d25e460f31a566577e1d32da0a98",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "e4b0ebe9870290fc99a31742472e25bcaf62ec97bf1db10537108ea941983198",
@@ -476,14 +476,15 @@
     "tests/e2e/m05-01-business-tasks.spec.ts": "0364b66a66a014d79dd1b6838cdf9331f37b921fbdd62a280d1d71b01f4a4858",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "04c25fa600988f45cc171bad0be729421cb9c52f8019f8a9ba2c740e98cfa3d8",
     "scripts/verify-ui-phase2-task-detail-review.mjs": "ab060fb533cf3f80787a5edc2a7214488c25abbc1fc180c7922f94a41d43bef9",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "02b6609ce8ffda2e9574e88c988dd79e16a186ffc34fc9a579b4a2b79245fb4a",
-    "scripts/verify-ui-phase2-approval-review.mjs": "7bb898081f7a0a3438a78cec3fd59c13e9c259dde64b8792343d09a21600307c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "9d2a167fb3d3950dc8207217e68d2b545869850da8764396eff17614a2c8dca8",
+    "scripts/verify-ui-phase2-approval-review.mjs": "86dbd572a8fefedc3edb40d3f96de1ec77a9bca10d4a879cc6797e3e86e95dcc",
     "scripts/verify-ui-phase2-approval-c.mjs": "0448699f0aedb6b4e6851146b00382ecaca7ddf57b05f59fdefeb881fb107917",
     "scripts/verify-ui-phase2-approval-navigation-c.mjs": "637d2f5a34787039a475a3b610a39be52c9ad917e66ef6a8597c7a48b14913d7",
     "scripts/verify-ui-phase2-approval-diagnostics-c.mjs": "feaaf714543fe4b8946c4be4901cd2d464e400e74f77ff362beaee68ac199872",
     "scripts/verify-ui-phase2-approval-lifecycle-c.mjs": "59bfecbccdd956a2031d80e1b92b77430bb3728cfade05441b22eb3e405dbfb3",
     "scripts/verify-ui-phase2-approval-forms-c.mjs": "1aba43d70ecd0d52490c6922c3e681c38b004d8c5d98175bafad956b9333c1c3",
     "scripts/verify-ui-phase2-approval-controls-c.mjs": "237c54b6368df9feab55fbc8039f5e89c589c18651d9a93109ee3ce9419c7fe0",
+    "tests/e2e/m05-02-approval-workflow.spec.ts": "4aabf1669e2a2b0cd7630ccc946ae2756be7ba323e8c68b4536b939668ca7077",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "820e3726e678c950d701daee14ed73d0e5b4b52ba81286b6bb593c1db61df10b",
     "tests/unit/ui-phase2-notification-ownership.test.mjs": "26207ed6dd23ec33d75542165772a6e0ff32ccca40b4c1acb6c6152bfbaccf79",
     "scripts/verify-ui-phase2-notification-controls-c.mjs": "0d8a2b48d22f6ca05636264641d9f13a083559987b430d0b5e802c086b8d5b3e",
@@ -1779,6 +1780,7 @@
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 20,
         "testEvidenceTypes": [
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 21,
@@ -4529,6 +4531,7 @@
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 20,
       "testEvidenceTypes": [
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 21,
@@ -7135,7 +7138,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 61,
+          "line": 63,
           "jsonPointer": null
         }
       ],
@@ -7221,7 +7224,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 62,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -7312,7 +7315,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 63,
+          "line": 65,
           "jsonPointer": null
         }
       ],
@@ -7411,7 +7414,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 64,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -7510,7 +7513,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 65,
+          "line": 67,
           "jsonPointer": null
         }
       ],
@@ -7605,7 +7608,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 66,
+          "line": 68,
           "jsonPointer": null
         }
       ],
@@ -7700,7 +7703,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 25,
+          "line": 27,
           "jsonPointer": null
         }
       ],
@@ -7795,7 +7798,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 26,
+          "line": 28,
           "jsonPointer": null
         }
       ],
@@ -7890,7 +7893,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 27,
+          "line": 29,
           "jsonPointer": null
         }
       ],
@@ -7985,7 +7988,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 28,
+          "line": 30,
           "jsonPointer": null
         }
       ],
@@ -8076,7 +8079,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 29,
+          "line": 31,
           "jsonPointer": null
         }
       ],
@@ -8167,7 +8170,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 30,
+          "line": 32,
           "jsonPointer": null
         }
       ],
@@ -8258,7 +8261,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 31,
+          "line": 33,
           "jsonPointer": null
         }
       ],
@@ -8349,7 +8352,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 32,
+          "line": 34,
           "jsonPointer": null
         }
       ],
@@ -8440,7 +8443,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 33,
+          "line": 35,
           "jsonPointer": null
         }
       ],
@@ -8531,7 +8534,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 34,
+          "line": 36,
           "jsonPointer": null
         }
       ],
@@ -8622,7 +8625,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 35,
+          "line": 37,
           "jsonPointer": null
         }
       ],
@@ -8713,7 +8716,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 36,
+          "line": 38,
           "jsonPointer": null
         }
       ],
@@ -8808,7 +8811,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 37,
+          "line": 39,
           "jsonPointer": null
         }
       ],
@@ -8903,7 +8906,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 38,
+          "line": 40,
           "jsonPointer": null
         }
       ],
@@ -9006,7 +9009,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 39,
+          "line": 41,
           "jsonPointer": null
         }
       ],
@@ -9101,7 +9104,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 40,
+          "line": 42,
           "jsonPointer": null
         }
       ],
@@ -9196,7 +9199,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 41,
+          "line": 43,
           "jsonPointer": null
         }
       ],
@@ -9287,7 +9290,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 42,
+          "line": 44,
           "jsonPointer": null
         }
       ],
@@ -9373,7 +9376,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 43,
+          "line": 45,
           "jsonPointer": null
         }
       ],
@@ -9459,7 +9462,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 44,
+          "line": 46,
           "jsonPointer": null
         }
       ],
@@ -9545,7 +9548,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 45,
+          "line": 47,
           "jsonPointer": null
         }
       ],
@@ -9631,7 +9634,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 46,
+          "line": 48,
           "jsonPointer": null
         }
       ],
@@ -9717,7 +9720,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 47,
+          "line": 49,
           "jsonPointer": null
         }
       ],
@@ -9803,7 +9806,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 48,
+          "line": 50,
           "jsonPointer": null
         }
       ],
@@ -9898,7 +9901,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 49,
+          "line": 51,
           "jsonPointer": null
         }
       ],
@@ -9984,7 +9987,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 50,
+          "line": 52,
           "jsonPointer": null
         }
       ],
@@ -10070,7 +10073,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 51,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -10156,7 +10159,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 52,
+          "line": 54,
           "jsonPointer": null
         }
       ],
@@ -10242,7 +10245,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 53,
+          "line": 55,
           "jsonPointer": null
         }
       ],
@@ -10328,7 +10331,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 54,
+          "line": 56,
           "jsonPointer": null
         }
       ],
@@ -10414,7 +10417,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 55,
+          "line": 57,
           "jsonPointer": null
         }
       ],
@@ -10500,7 +10503,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 56,
+          "line": 58,
           "jsonPointer": null
         }
       ],
@@ -10586,7 +10589,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 57,
+          "line": 59,
           "jsonPointer": null
         }
       ],
@@ -10672,7 +10675,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 58,
+          "line": 60,
           "jsonPointer": null
         }
       ],
@@ -10758,7 +10761,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 59,
+          "line": 61,
           "jsonPointer": null
         }
       ],
@@ -10844,7 +10847,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 60,
+          "line": 62,
           "jsonPointer": null
         }
       ],
@@ -53081,7 +53084,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 67,
+          "line": 69,
           "jsonPointer": null
         }
       ],
@@ -53167,7 +53170,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 68,
+          "line": 70,
           "jsonPointer": null
         }
       ],
@@ -53262,7 +53265,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 69,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -53353,7 +53356,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 70,
+          "line": 72,
           "jsonPointer": null
         }
       ],
@@ -53439,7 +53442,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 71,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -53530,7 +53533,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 72,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -53621,7 +53624,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 73,
+          "line": 75,
           "jsonPointer": null
         }
       ],
@@ -53716,7 +53719,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 74,
+          "line": 76,
           "jsonPointer": null
         }
       ],
@@ -53807,7 +53810,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 75,
+          "line": 77,
           "jsonPointer": null
         }
       ],
@@ -53898,7 +53901,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 76,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -53989,7 +53992,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 77,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -54080,7 +54083,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 78,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -54171,7 +54174,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 79,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -54270,7 +54273,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 90,
+          "line": 92,
           "jsonPointer": null
         }
       ],
@@ -54365,7 +54368,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 80,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -54460,7 +54463,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 81,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -54555,7 +54558,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 82,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -54650,7 +54653,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 83,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -54745,7 +54748,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 84,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -54831,7 +54834,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 85,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -54917,7 +54920,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 86,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -55003,7 +55006,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 87,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -55098,7 +55101,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 91,
+          "line": 93,
           "jsonPointer": null
         }
       ],
@@ -55184,7 +55187,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 88,
+          "line": 90,
           "jsonPointer": null
         }
       ],
@@ -55270,7 +55273,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 89,
+          "line": 91,
           "jsonPointer": null
         }
       ],

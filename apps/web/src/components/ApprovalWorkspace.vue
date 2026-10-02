@@ -362,7 +362,7 @@ async function setPage(value: number) {
   await load();
 }
 async function decide(action: "approve" | "reject") {
-  if (!selected.value || !reason.value.trim()) return;
+  if (busy.value || !selected.value || !reason.value.trim()) return;
   const ownerSequence = detailSequence,
     approvalId = selected.value.id,
     body = {

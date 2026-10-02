@@ -158,13 +158,13 @@ export async function verifyApprovalReview() {
     "Publish closing is not identical: Return clears only target; actual Escape callback clears target and reason. openPublish clears reason on next opening, so retained closed draft is not claimed as visible reuse",
   );
 
-  for (const name of ["decide", "createTemplate", "createRequest"]) {
-    // A source-level distinction only; do not claim that a disabled browser button can be clicked.
+  assert.ok(extract("decide").includes("if (busy.value"));
+  for (const name of ["createTemplate", "createRequest"]) {
     assert.ok(!extract(name).includes("if (busy.value"));
   }
   assert.ok(extract("publish").includes("if (busy.value"));
   checks.push(
-    "Function busy guards differ: publish has one; decide/template/request do not. DOM buttons still disable, so this is not a reproduced browser double-submit",
+    "Function busy guards differ: publish and decide have one; template/request do not. The browser double-submit guard has a separate local Vue Playwright regression",
   );
   return {
     shared: {
