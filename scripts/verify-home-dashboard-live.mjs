@@ -37,9 +37,10 @@ async function ensure() {
 
 async function cleanup() {
   try {
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'",
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id IN (?,?)", [
+      ids.org,
+      ids.otherOrg,
+    ]);
   } catch {}
   for (const [sql, values] of [
     ["DELETE FROM approval_node_runs WHERE id=?", [ids.approvalRun]],

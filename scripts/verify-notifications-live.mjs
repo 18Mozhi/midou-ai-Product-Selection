@@ -22,9 +22,7 @@ const pool = createDatabasePool(loadRuntimeConfig(process.env, "worker")),
     event: randomUUID(),
     task: randomUUID(),
   },
-  service = new NotificationService(
-    new MySqlNotificationRepository(pool, () => now),
-  ),
+  service = new NotificationService(new MySqlNotificationRepository(pool, () => now)),
   scope = { organizationId: id.org, workspaceId: id.ws, actorId: id.user },
   write = (k) => ({ ...scope, requestId, traceId, idempotencyKey: k });
 async function migrate() {
@@ -46,7 +44,12 @@ async function migrate() {
   }
 }
 async function cleanup() {
-  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+  try {
+    await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id IN (?,?)", [
+      id.org,
+      id.otherOrg,
+    ]);
+  } catch {}
 
   for (const q of [
     "DELETE FROM notification_operations WHERE actor_id IN (?,?)",
@@ -57,10 +60,7 @@ async function cleanup() {
     "DELETE FROM outbox_events WHERE organization_id IN (?,?)",
   ]) {
     try {
-      await pool.query(
-        q,
-        q.includes("actor_id") ? [id.user, id.other] : [id.org, id.otherOrg],
-      );
+      await pool.query(q, q.includes("actor_id") ? [id.user, id.other] : [id.org, id.otherOrg]);
     } catch {}
   }
   for (const user of [id.user, id.other]) {
@@ -107,10 +107,7 @@ async function seed() {
       "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
       [w, o, `M05 ${n}`, `m0503-${n}`, id.user, now, now],
     );
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=? WHERE id=?",
-      [w, o],
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [w, o]);
   }
   await pool.query(
     "INSERT INTO outbox_events (id,organization_id,workspace_id,event_type,schema_version,payload_json,status,attempt_count,available_at,request_id,trace_id,created_at,updated_at,version) VALUES (?,?,?,'task.created',1,?,'pending',0,?,?,?,?,?,1)",
@@ -171,12 +168,7 @@ try {
     });
   if (pref.version !== 2 || prefAgain.version !== 2)
     throw new Error("preference idempotency failed");
-  const projected = await new NotificationOutboxWorker(
-    pool,
-    120,
-    3,
-    () => now,
-  ).processOnce();
+  const projected = await new NotificationOutboxWorker(pool, 120, 3, () => now).processOnce();
   if (projected.status !== "published" || projected.notifications !== 1)
     throw new Error("outbox projection failed");
   const list = await service.list({
@@ -193,16 +185,14 @@ try {
       pageSize: 50,
       unread: "false",
     });
-  if (list.total !== 1 || other.total !== 0)
-    throw new Error("inbox isolation failed");
+  if (list.total !== 1 || other.total !== 0) throw new Error("inbox isolation failed");
   const read = await service.action({
     ...write("read"),
     notificationId: list.items[0].id,
     route: "POST:/api/v1/notifications/:id/actions",
     value: { action: "read", expected_version: 1 },
   });
-  if (!read.read_at || read.version !== 2)
-    throw new Error("read action failed");
+  if (!read.read_at || read.version !== 2) throw new Error("read action failed");
   let conflict = false;
   try {
     await service.action({
@@ -212,9 +202,7 @@ try {
       value: { action: "unread", expected_version: 1 },
     });
   } catch (e) {
-    conflict =
-      e instanceof NotificationServiceError &&
-      e.code === "notification_version_conflict";
+    conflict = e instanceof NotificationServiceError && e.code === "notification_version_conflict";
   }
   const [counts] = await pool.query(
     "SELECT (SELECT COUNT(*) FROM notification_deliveries WHERE organization_id=? AND channel='in_app' AND status='delivered') inapp,(SELECT COUNT(*) FROM notification_deliveries WHERE organization_id=? AND channel='email' AND status='pending_placeholder') email,(SELECT COUNT(*) FROM audit_logs WHERE organization_id=? AND resource_type='notification') audit,(SELECT status FROM outbox_events WHERE id=?) outbox",

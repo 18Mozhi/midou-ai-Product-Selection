@@ -2,10 +2,7 @@ import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
-import {
-  AutomationService,
-  AutomationServiceError,
-} from "../apps/api/dist/automation-service.js";
+import { AutomationService, AutomationServiceError } from "../apps/api/dist/automation-service.js";
 import { MySqlAutomationRepository } from "../apps/api/dist/mysql-automation-repository.js";
 import { AutomationWorker } from "../apps/worker/dist/automation-worker.js";
 import { NotificationOutboxWorker } from "../apps/worker/dist/notification-outbox-worker.js";
@@ -29,10 +26,7 @@ const pool = createDatabasePool(loadRuntimeConfig(process.env, "worker")),
     notification2: randomUUID(),
     notification3: randomUUID(),
   },
-  service = new AutomationService(
-    new MySqlAutomationRepository(pool, () => now),
-    20,
-  ),
+  service = new AutomationService(new MySqlAutomationRepository(pool, () => now), 20),
   ctx = (k) => ({
     organizationId: id.org,
     workspaceId: id.ws,
@@ -47,10 +41,7 @@ async function migrate() {
   );
   if (Number(rows[0].n)) return;
   for (const s of (
-    await readFile(
-      "database/migrations/0018e_automation_rules_m05_05.up.sql",
-      "utf8",
-    )
+    await readFile("database/migrations/0018e_automation_rules_m05_05.up.sql", "utf8")
   )
     .split(";")
     .map((v) => v.trim())
@@ -58,7 +49,12 @@ async function migrate() {
     await pool.query(s);
 }
 async function cleanup() {
-  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+  try {
+    await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id IN (?,?)", [
+      id.org,
+      id.otherOrg,
+    ]);
+  } catch {}
 
   for (const q of [
     "DELETE FROM realtime_events WHERE organization_id IN (?,?)",
@@ -73,10 +69,7 @@ async function cleanup() {
     "DELETE FROM outbox_events WHERE organization_id IN (?,?)",
   ]) {
     try {
-      await pool.query(
-        q,
-        q.includes("actor_id") ? [id.user, id.other] : [id.org, id.otherOrg],
-      );
+      await pool.query(q, q.includes("actor_id") ? [id.user, id.other] : [id.org, id.otherOrg]);
     } catch {}
   }
   for (const u of [id.user, id.other]) {
@@ -123,10 +116,7 @@ async function seed() {
       "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
       [w, o, `M05 ${n}`, `m0505-${n}`, id.user, now, now],
     );
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=? WHERE id=?",
-      [w, o],
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [w, o]);
   }
   await pool.query(
     "INSERT INTO memberships (id,organization_id,user_id,status,joined_at,version,created_at,updated_at) VALUES (?,?,?,'active',?,1,?,?)",
@@ -159,19 +149,7 @@ async function seed() {
     );
     await pool.query(
       "INSERT INTO notifications (id,organization_id,workspace_id,recipient_id,source_event_id,category,severity,title,body,resource_type,resource_id,version,created_at,updated_at) VALUES (?,?,?,?,?,'system',?,?,?,'probe',?,1,?,?)",
-      [
-        n,
-        id.org,
-        id.ws,
-        id.user,
-        e,
-        severity,
-        event,
-        "real source event",
-        e,
-        now,
-        now,
-      ],
+      [n, id.org, id.ws, id.user, e, severity, event, "real source event", e, now, now],
     );
   }
 }
@@ -224,23 +202,15 @@ try {
     states.filter((status) => status === "succeeded").length !== 2 ||
     states.filter((status) => status === "rate_limited").length !== 1
   )
-    throw new Error(
-      `execution states failed ${first.status}/${second.status}/${third.status}`,
-    );
-  const notificationWorker = new NotificationOutboxWorker(
-    pool,
-    120,
-    3,
-    () => now,
-  );
+    throw new Error(`execution states failed ${first.status}/${second.status}/${third.status}`);
+  const notificationWorker = new NotificationOutboxWorker(pool, 120, 3, () => now);
   let automationNotificationPublished = false;
   for (let attempt = 0; attempt < 5; attempt++) {
     const projected = await notificationWorker.processOnce();
     if (projected.status === "idle") break;
-    const [event] = await pool.query(
-      "SELECT event_type FROM outbox_events WHERE id=?",
-      [projected.event_id],
-    );
+    const [event] = await pool.query("SELECT event_type FROM outbox_events WHERE id=?", [
+      projected.event_id,
+    ]);
     if (event[0]?.event_type === "automation.notification.queued") {
       automationNotificationPublished = true;
       break;
@@ -261,9 +231,7 @@ try {
       value: { action: "resume", expected_version: 1, reason: "旧版本" },
     });
   } catch (e) {
-    conflict =
-      e instanceof AutomationServiceError &&
-      e.code === "automation_version_conflict";
+    conflict = e instanceof AutomationServiceError && e.code === "automation_version_conflict";
   }
   const other = await service.list({
       organizationId: id.otherOrg,

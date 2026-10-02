@@ -16,9 +16,7 @@ const pool = createDatabasePool(loadRuntimeConfig(process.env, "worker")),
     otherOrg: randomUUID(),
     otherWs: randomUUID(),
   },
-  service = new BusinessTaskService(
-    new MySqlBusinessTaskRepository(pool, () => now),
-  ),
+  service = new BusinessTaskService(new MySqlBusinessTaskRepository(pool, () => now)),
   scope = { organizationId: id.org, workspaceId: id.ws, actorId: id.user },
   write = (k) => ({ ...scope, requestId, traceId, idempotencyKey: k });
 async function migrate() {
@@ -41,7 +39,12 @@ async function migrate() {
   }
 }
 async function cleanup() {
-  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+  try {
+    await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id IN (?,?)", [
+      id.org,
+      id.otherOrg,
+    ]);
+  } catch {}
 
   for (const q of [
     "DELETE FROM task_operations WHERE actor_id IN (?,?)",
@@ -102,10 +105,7 @@ async function seed() {
       "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
       [w, o, `M05 ${n}`, `m05-${n}`, id.user, now, now],
     );
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=? WHERE id=?",
-      [w, o],
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [w, o]);
   }
   for (const u of [id.user, id.user2]) {
     const m = randomUUID();
@@ -147,8 +147,7 @@ try {
     });
   if (created.id !== again.id) throw new Error("idempotency failed");
   let detail = await service.detail({ ...scope, taskId: created.id });
-  if (detail.sla_status !== "not_set")
-    throw new Error("missing due truth failed");
+  if (detail.sla_status !== "not_set") throw new Error("missing due truth failed");
   await service.comment({
     ...write("comment"),
     taskId: created.id,
@@ -169,8 +168,7 @@ try {
       reason: "采购成员继续跟进",
     },
   });
-  if (moved.assignee_id !== id.user2 || moved.version !== 3)
-    throw new Error("transfer failed");
+  if (moved.assignee_id !== id.user2 || moved.version !== 3) throw new Error("transfer failed");
   detail = await service.detail({ ...scope, taskId: created.id });
   const other = await service.list({
     organizationId: id.otherOrg,

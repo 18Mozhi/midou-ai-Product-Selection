@@ -2,10 +2,7 @@ import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
-import {
-  ApprovalService,
-  ApprovalServiceError,
-} from "../apps/api/dist/approval-service.js";
+import { ApprovalService, ApprovalServiceError } from "../apps/api/dist/approval-service.js";
 import { MySqlApprovalRepository } from "../apps/api/dist/mysql-approval-repository.js";
 import { ApprovalEscalationWorker } from "../apps/worker/dist/approval-escalation-worker.js";
 const pool = createDatabasePool(loadRuntimeConfig(process.env, "worker")),
@@ -36,10 +33,7 @@ async function migrate() {
     ["outbox_events", "database/migrations/0001_m00_01_foundation.up.sql"],
     ["audit_logs", "database/migrations/0006b_m00_06_audit_logs.up.sql"],
     ["tasks", "database/migrations/0018a_business_tasks_m05_01.up.sql"],
-    [
-      "approval_templates",
-      "database/migrations/0018b_approval_workflow_m05_02.up.sql",
-    ],
+    ["approval_templates", "database/migrations/0018b_approval_workflow_m05_02.up.sql"],
   ]) {
     const [rows] = await pool.query(
       "SELECT COUNT(*) n FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?",
@@ -55,7 +49,12 @@ async function migrate() {
   }
 }
 async function cleanup() {
-  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+  try {
+    await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id IN (?,?)", [
+      id.org,
+      id.otherOrg,
+    ]);
+  } catch {}
 
   for (const q of [
     "DELETE FROM approval_operations WHERE actor_id IN (?,?,?)",
@@ -74,9 +73,7 @@ async function cleanup() {
     try {
       await pool.query(
         q,
-        q.includes("actor_id")
-          ? [id.requester, id.approver, id.escalator]
-          : [id.org, id.otherOrg],
+        q.includes("actor_id") ? [id.requester, id.approver, id.escalator] : [id.org, id.otherOrg],
       );
     } catch {}
   }
@@ -120,23 +117,13 @@ async function seed() {
   ]) {
     await pool.query(
       "INSERT INTO organizations (id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES (?,?,?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",
-      [
-        o,
-        `M05 ${n}`,
-        `m0502-${n}-${requestId.slice(0, 8)}`,
-        id.requester,
-        now,
-        now,
-      ],
+      [o, `M05 ${n}`, `m0502-${n}-${requestId.slice(0, 8)}`, id.requester, now, now],
     );
     await pool.query(
       "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
       [w, o, `M05 ${n}`, `m0502-${n}`, id.requester, now, now],
     );
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=? WHERE id=?",
-      [w, o],
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [w, o]);
   }
   for (const u of [id.requester, id.approver, id.escalator]) {
     const m = randomUUID();
@@ -230,9 +217,7 @@ try {
       value: { action: "approve", expected_version: 1, reason: "越权" },
     });
   } catch (e) {
-    forbidden =
-      e instanceof ApprovalServiceError &&
-      e.code === "approval_actor_forbidden";
+    forbidden = e instanceof ApprovalServiceError && e.code === "approval_actor_forbidden";
   }
   if (!forbidden) throw new Error("approver guard failed");
   await pool.query(

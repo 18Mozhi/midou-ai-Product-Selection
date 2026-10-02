@@ -4,10 +4,7 @@ import { tmpdir } from "node:os";
 import { resolve } from "node:path";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
-import {
-  ReportService,
-  ReportServiceError,
-} from "../apps/api/dist/report-service.js";
+import { ReportService, ReportServiceError } from "../apps/api/dist/report-service.js";
 import { MySqlReportRepository } from "../apps/api/dist/mysql-report-repository.js";
 import { ReportExportWorker } from "../apps/worker/dist/report-export-worker.js";
 const pool = createDatabasePool(loadRuntimeConfig(process.env, "worker")),
@@ -43,16 +40,19 @@ async function migrate() {
     "SELECT COUNT(*) n FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='report_exports'",
   );
   if (Number(rows[0].n)) return;
-  for (const s of (
-    await readFile("database/migrations/0018f_reports_m05_06.up.sql", "utf8")
-  )
+  for (const s of (await readFile("database/migrations/0018f_reports_m05_06.up.sql", "utf8"))
     .split(";")
     .map((v) => v.trim())
     .filter(Boolean))
     await pool.query(s);
 }
 async function cleanup() {
-  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+  try {
+    await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id IN (?,?)", [
+      id.org,
+      id.otherOrg,
+    ]);
+  } catch {}
 
   for (const q of [
     "DELETE FROM report_export_operations WHERE actor_id IN (?,?)",
@@ -72,10 +72,7 @@ async function cleanup() {
     "DELETE FROM outbox_events WHERE organization_id IN (?,?)",
   ]) {
     try {
-      await pool.query(
-        q,
-        q.includes("actor_id") ? [id.user, id.other] : [id.org, id.otherOrg],
-      );
+      await pool.query(q, q.includes("actor_id") ? [id.user, id.other] : [id.org, id.otherOrg]);
     } catch {}
   }
   for (const u of [id.user, id.other])
@@ -122,10 +119,7 @@ async function seed() {
       "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
       [w, o, `M05 ${n}`, `m0506-${n}`, id.user, now, now],
     );
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=? WHERE id=?",
-      [w, o],
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [w, o]);
   }
   await pool.query(
     "INSERT INTO memberships (id,organization_id,user_id,status,joined_at,version,created_at,updated_at) VALUES (?,?,?,'active',?,1,?,?)",
@@ -199,8 +193,7 @@ try {
       exportId: created.id,
     }),
     csv = download.content.toString("utf8");
-  if (!csv.includes("'=公式注入机会"))
-    throw new Error("csv injection guard failed");
+  if (!csv.includes("'=公式注入机会")) throw new Error("csv injection guard failed");
   let isolated = false;
   try {
     await service.download({
@@ -210,22 +203,13 @@ try {
       exportId: created.id,
     });
   } catch (e) {
-    isolated =
-      e instanceof ReportServiceError && e.code === "report_export_not_found";
+    isolated = e instanceof ReportServiceError && e.code === "report_export_not_found";
   }
   await pool.query(
     "UPDATE report_exports SET expires_at=DATE_SUB(?,INTERVAL 1 SECOND) WHERE id=?",
     [now, created.id],
   );
-  await new ReportExportWorker(
-    pool,
-    "m05-06-probe",
-    root,
-    120,
-    3,
-    100,
-    () => now,
-  ).processOnce();
+  await new ReportExportWorker(pool, "m05-06-probe", root, 120, 3, 100, () => now).processOnce();
   const expired = await service.detail({
       ...ctx("expired"),
       exportId: created.id,

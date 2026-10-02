@@ -39,7 +39,12 @@ async function migrate() {
   }
 }
 async function cleanup() {
-  try { await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE LOWER(slug) REGEXP '^(m0[0-8]|test|qa|synthetic|fixture|acceptance)'" ); } catch {}
+  try {
+    await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id IN (?,?)", [
+      id.org,
+      id.otherOrg,
+    ]);
+  } catch {}
 
   for (const q of [
     "DELETE FROM realtime_events WHERE organization_id IN (?,?)",
@@ -87,10 +92,7 @@ async function seed() {
       "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,?,?,'active',?,1,?,?)",
       [w, o, `M05 ${n}`, `m0504-${n}`, id.user, now, now],
     );
-    await pool.query(
-      "UPDATE organizations SET default_workspace_id=? WHERE id=?",
-      [w, o],
-    );
+    await pool.query("UPDATE organizations SET default_workspace_id=? WHERE id=?", [w, o]);
   }
   for (const event of events)
     await pool.query(
@@ -134,8 +136,7 @@ try {
       traceId,
     },
     all = await service.replay({ ...scope, afterId: 0 });
-  if (all.length !== 2 || all[1].id <= all[0].id)
-    throw new Error("monotonic replay failed");
+  if (all.length !== 2 || all[1].id <= all[0].id) throw new Error("monotonic replay failed");
   const resumed = await service.replay({ ...scope, afterId: all[0].id }),
     other = await service.replay({
       organizationId: id.otherOrg,
