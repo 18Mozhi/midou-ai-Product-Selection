@@ -51,6 +51,7 @@ P58 四组提案联合 17 项单测通过。默认 10 个、错误追踪折叠 1
 联合回归包含此前 create-review、create-write-review、create-outcome-review 三份单测。
 
 API、权限、后端、Worker/Python、OpenAPI、env、数据库、依赖和全局配置均未改，无重启要求。
-全库既有门禁和全 73 页目标继续开放，本批未提交/未部署，commit hash 不适用。
+全库既有门禁和全 73 页目标继续开放。本批审阅工具与证据说明已提交；生产 Vue 未改、未部署，
+commit `76144395`。
 正式 PNG/JSON/HTML 是交付物保留；未创建临时脚本/日志，失败中间图由完整复跑覆盖。
 Vite/Chromium 通过 finally 关闭，5173 不保留服务；以最终 manifest 校验目录没有多余截图。

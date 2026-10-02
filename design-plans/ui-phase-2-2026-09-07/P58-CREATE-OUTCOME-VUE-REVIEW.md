@@ -63,4 +63,5 @@ P58 创建、拒绝、结果及焦点四组联合 17 项单测通过。
 `ui-phase2-commercial-create-write-review.test.mjs`。
 
 图册为正式交付物保留；无临时脚本、测试数据文件或日志。Vite/Chromium 在 finally 关闭，
-5173 不保留后台服务。生产未改、未部署；全库门禁尚未通过，本批未提交，commit hash 不适用。
+5173 不保留后台服务。生产 Vue 未改、未部署；全库门禁尚未通过。本批审阅工具与证据说明已提交，
+commit `76144395`。
