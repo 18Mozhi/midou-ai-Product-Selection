@@ -108,7 +108,14 @@ html[data-design="signal-ledger"] body tbody tr:hover {
 
 html[data-design="signal-ledger"]
   body
-  :where(.primary, [class*="primary"], [class*="-submit"], [class*="-create"]) {
+  :where(
+    button.primary,
+    button[class*="primary"],
+    button[class*="-submit"],
+    button[class*="-create"],
+    a.primary,
+    a[class*="primary"]
+  ) {
   border-color: var(--so-primary);
   color: var(--so-on-primary);
   background-color: var(--so-primary);
@@ -118,9 +125,14 @@ html[data-design="signal-ledger"]
 
 html[data-design="signal-ledger"]
   body
-  :where(.primary, [class*="primary"], [class*="-submit"], [class*="-create"]):hover:not(
-    :disabled
-  ) {
+  :where(
+    button.primary,
+    button[class*="primary"],
+    button[class*="-submit"],
+    button[class*="-create"],
+    a.primary,
+    a[class*="primary"]
+  ):hover:not(:disabled) {
   border-color: var(--so-primary-strong);
   background-color: var(--so-primary-strong);
 }

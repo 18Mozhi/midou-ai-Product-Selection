@@ -291,12 +291,22 @@ try {
         check(
           state + ":white content and blue context",
           await dialog.evaluate((n) => [
-            getComputedStyle(n.querySelector(".p43-user-fields-body")).backgroundColor,
-            getComputedStyle(n.querySelector(".p43-user-intro")).backgroundColor,
+            getComputedStyle(n.querySelector(".p44-admin-create-form")).backgroundColor,
+            getComputedStyle(n.querySelector(".p44-admin-create-rail")).backgroundColor,
           ]),
           ["rgb(255, 255, 255)", "rgb(37, 74, 156)"],
         );
         if (state.endsWith("-focus")) {
+          await page.waitForFunction(() => {
+            const active = document.activeElement;
+            if (!(active instanceof HTMLElement) || !active.matches(":focus-visible")) return false;
+            const css = getComputedStyle(active);
+            return (
+              css.outlineWidth === "3px" &&
+              css.outlineStyle === "solid" &&
+              css.outlineColor === "rgba(37, 74, 156, 0.42)"
+            );
+          });
           check(
             state + ":visible C keyboard outline",
             await dialog.evaluate((n) => {
@@ -307,7 +317,7 @@ try {
                 active.matches(":focus-visible") &&
                 css.outlineWidth === "3px" &&
                 css.outlineStyle === "solid" &&
-                css.outlineColor === "rgb(37, 74, 156)"
+                css.outlineColor === "rgba(37, 74, 156, 0.42)"
               );
             }),
           );
