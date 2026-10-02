@@ -311,7 +311,7 @@ export async function verifyTaskDetailReview() {
   });
   assert.deepEqual(routeReplacements, ["/tasks?status=paused"]);
   checks.push(
-    "Successful selected-detail deletion returns to returnPath; pending-close null-target defect remains covered by P23 verifier, not fixed here",
+    "Successful selected-detail deletion returns to returnPath; P23 and P24 actual-Vue tests cover the busy Escape lock, while P24 also asserts target/version/reason",
   );
 
   const file = "apps/web/src/components/TaskDetailPanel.vue";

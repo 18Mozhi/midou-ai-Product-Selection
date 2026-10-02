@@ -28,7 +28,7 @@
 | 转交负责人 | 单项独立task:assign，源码无终态限制；不能套用批量资格 | transfer；只有分配权、目录失败/空、终态待补 |
 | 编辑 | task:update，不额外排除终态；四字段，PATCH保留负责人和版本 | edit；标题200、说明5000、四优先级、可空本地期限 |
 | 快捷新建 | 首次create=1并task:create；当前详情无可见创建按钮 | create；快捷参数清除、来源返回和草稿待验 |
-| 删除打开/提交/关闭 | task:update，目标事实与版本，原因trim；删当前详情成功返回from | delete；普通成功已作源检查；P23已复现原生关闭晚到空引用，未修 |
+| 删除打开/提交/关闭 | task:update，目标事实与版本，原因trim；删当前详情成功返回from | delete；P23列表和P24详情均以实际Vue覆盖busy期间Escape不关闭；P24成功回原from与精确请求体由桌面/390px用例覆盖 |
 | 评论输入/提交 | task:update，required/max2000，busy禁用；trim仅判空，发送原文 | detail仅关联；独立label、空白/长文/失败/忙碌与活动增长待补 |
 | 单项表单确认 | 五变体各自字段，POST action/version；原因/说明trim，期限ISO | 失败提示保留现有 action_hint/request_id，草稿和目标不变，用户显式重试；不自动重发，不改API/权限/版本 |
 | 表单字段/返回/Escape | 进度百分比/说明、转交成员、延期时间、操作原因在途禁用；关闭/返回禁用且Escape不关闭 | desktop/mobile delayed-write 与五变体409/显式重试均有实测；离页时在途生命周期、完整焦点/读屏及真实服务仍待 |

@@ -349,7 +349,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "f44320050a110c0ab39bb243f0409bd087c0be76e57e5b3779973b31b025e4b7",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "89018220b46583fb794728eafd02c92a88437cf06cbd229afc27dc7124e3cd50",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "006347e7e3cf6177b8cb956c0c1d16bac4b6e6195a22bacfe1230ca5d9868477",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "02ae0a316e1a2d21bf7a29aed0d31b83f76d3cf0d7ad535d2a35ef80561acb2a",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "a3e853929804b3ff62a5e61a81063c6d143ef982e5a9577372d6dd94624daa59",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "0c96d81d75ccdf951b66adefb2bb46a3adfcc74331c1112b1c26e3c180edba54",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125",
@@ -471,11 +471,11 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "d7036c697281ebd9ec344f6f85cddd8ce98728c77d3abc839d7715d5d62380c9",
     "scripts/verify-ui-phase2-cost-rules-review.mjs": "da2f9d44296307d6a3b910bdfe01196c638096f9df93ec733a962ee4a719cf7c",
     "scripts/verify-ui-phase2-cost-rules-c.mjs": "d96873a753a246b28fc4eb3442e80f95756da1aef4eab8bf4ee8b5a5ccd3f94b",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "bfa90c192e8abe2417f3e317b565dca09404faf337594fb124edcf5a69eaa2c9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "f5a1ede286983b298376782ef58d86e84c709bd7bb1abb179f2d4a204c5baa37",
     "scripts/verify-ui-phase2-task-list-review.mjs": "b49bfb8bf6e4f72bf9b684b41f872f3387e93f9dadac9e5172e8b758cd211151",
-    "tests/e2e/m05-01-business-tasks.spec.ts": "328ea348261d6ae23e77cec0cb2eaacbd183f7e6a378f6c2887c09b8aefa8e31",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "fb68ef61f9caac81f519b6b71c8de60756ed89ce136cd89db3c5b5d13d68be70",
-    "scripts/verify-ui-phase2-task-detail-review.mjs": "3250abb563be600ee900effaa9b35f38044119dd02e75f381e822a923b7ad4d8",
+    "tests/e2e/m05-01-business-tasks.spec.ts": "0364b66a66a014d79dd1b6838cdf9331f37b921fbdd62a280d1d71b01f4a4858",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "04c25fa600988f45cc171bad0be729421cb9c52f8019f8a9ba2c740e98cfa3d8",
+    "scripts/verify-ui-phase2-task-detail-review.mjs": "ab060fb533cf3f80787a5edc2a7214488c25abbc1fc180c7922f94a41d43bef9",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "02b6609ce8ffda2e9574e88c988dd79e16a186ffc34fc9a579b4a2b79245fb4a",
     "scripts/verify-ui-phase2-approval-review.mjs": "7bb898081f7a0a3438a78cec3fd59c13e9c259dde64b8792343d09a21600307c",
     "scripts/verify-ui-phase2-approval-c.mjs": "0448699f0aedb6b4e6851146b00382ecaca7ddf57b05f59fdefeb881fb107917",
@@ -580,7 +580,7 @@
     "tests/unit/ui-phase2-p60-action-review.test.mjs": "e8f136322989684a16a3a7817c7d191aad657e33f5996a4f106ce22772d65248",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P61.json": "95328f9096b2e11ad90a391c8b5075526f7710d062f967b281f242914a6bc190",
     "tests/unit/ui-phase2-p61-action-review.test.mjs": "13917fe4ac69e2b6dd497f1268267ea01908a7cca5eda7ca6c1a10814c7ba58e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P62.json": "87b74a0e742f3fbb4e65f83821738902fbf91362ea23b85f87ad91585fbef762",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P62.json": "682ef6f1f96cdd98ccf30fbc3bf2188783ca046fb4b749adc5257263c12a1dc3",
     "tests/unit/ui-phase2-p62-action-review.test.mjs": "00f1e93e8e2fe8fedffaa7abecb43e395b07b9c4664ad08ae3a9a44877022dfe",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P63.json": "0eaf6956b9cc12ca27e5e40ce7adb077f37258823624339007714ed1a3fcca4c",
     "tests/unit/ui-phase2-p63-action-review.test.mjs": "d960ed40575847ab67a05da9a14cc49f099be50a89fa2fd174e2bfe523376aa1",
@@ -627,8 +627,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3c6a60caf2045f07a9a14c89f07cd3c1d9b20851719683f69b02931ce04f730f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "683179d07629a30338b60ab10ab52c96883610215eecb1616931bf55ca66fe18",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "9e605fdc8c12403e1e2f29b8cb73ade86dd81e8c3d96bbe5b26f9e3f08938339",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "f695f577bbfe3f52ac3263874cb7ad235ba4ecb7e8fa37499daa892b5392299f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "3a9f0143f7b78a76d81ef36a3a290bcd55197d74e0fc116ea31f2f9fa41e69c4",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "f3f7c510b62b7face51d49b546851e00603fde3aebcc2977cd731107120157f9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "a45152837ce15508c1cd1f33f5493bf11fa18d03e0ceed1551d5462ed9f876f4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "1d037ef6720eb6bf4230e6e7f36dad5086c2580f1fee57c182e7d7cfe4d7abfd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "71649dd677697325648200b80d5a49d26ef798e311b072d2bd7bed2e20208c22",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "09ee27c2a5bf18a101a88ad58f42eb4cf057a1978ed21efc81f7e59471e097aa",
@@ -1685,6 +1685,7 @@
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
           "actual-vue-isolated-browser",
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 192,
@@ -1731,6 +1732,7 @@
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
           "actual-vue-isolated-browser",
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 164,
@@ -4472,6 +4474,7 @@
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
         "actual-vue-isolated-browser",
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 192,
@@ -4499,6 +4502,7 @@
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
         "actual-vue-isolated-browser",
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 164,

@@ -251,8 +251,8 @@
         "task.delete.close：关闭确认窗，不提交"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
-      "condition": "取消按钮busy禁用，原生cancel无busy守卫",
-      "handler": "closeDeleteDialog清deleting/deleteReason，不撤回DELETE",
+      "condition": "取消按钮与Escape均在busy时阻止关闭；空闲时清除目标与原因",
+      "handler": "closeDeleteDialog清deleting/deleteReason，不撤回DELETE；busy时由既有守卫保留当前弹窗",
       "variants": [
         "取消",
         "Escape"
@@ -275,9 +275,13 @@
         {
           "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
         }
       ],
-      "remaining": "P23源测试已复现等待关闭→成功空引用，未修；P24正常删除成功返回来源，新脚本覆盖。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+      "remaining": "P24等待时Escape保留原目标与原因、成功后返回原筛选的本地Vue链路已双端验证；按钮六态、长内容、主题/密度以及真实后端/RBAC/服务验收仍开放。"
     },
     {
       "actionId": "delete.submit",
@@ -297,7 +301,7 @@
       "variants": [
         "普通成功",
         "错误保留",
-        "在途关闭风险"
+        "在途Escape阻止并保留原因"
       ],
       "scenes": [
         {
@@ -317,9 +321,13 @@
         {
           "file": "scripts/verify-ui-phase2-task-detail-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
         }
       ],
-      "remaining": "不硬删历史审计；原生Escape仍存在已知晚到空引用，未实施修复。具体按钮六态、长内容、主题/密度和真实Vue/服务验收未完成；既有C场景只是关联，不自动通过。"
+      "remaining": "不硬删历史审计。P24当前详情的目标版本/原因快照、busy期间Escape阻止、成功后返回原筛选已由本地Vue双端回归覆盖；错误态、按钮六态、长内容、主题/密度及真实后端/RBAC/服务验收仍开放。"
     },
     {
       "actionId": "detail.return",
@@ -1759,7 +1767,7 @@
         "tag": "dialog",
         "ordinal": 2,
         "shape": "native-dialog",
-        "sourceBehavior": "删除原生窗/表单，目标来自当前详情；成功返回from，原生关闭晚到风险未修。",
+        "sourceBehavior": "删除原生窗/表单，目标来自当前详情；busy时Escape不关闭，成功返回from。",
         "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
         "variants": [
           {
@@ -1780,7 +1788,7 @@
         "tag": "form",
         "ordinal": 2,
         "shape": "form-container",
-        "sourceBehavior": "删除原生窗/表单，目标来自当前详情；成功返回from，原生关闭晚到风险未修。",
+        "sourceBehavior": "删除原生窗/表单，目标来自当前详情；busy时Escape不关闭，成功返回from。",
         "remaining": "与真实调用形态关联，不代表逐按钮六态、主题/密度、完整权限及真实Vue验证通过。",
         "variants": [
           {

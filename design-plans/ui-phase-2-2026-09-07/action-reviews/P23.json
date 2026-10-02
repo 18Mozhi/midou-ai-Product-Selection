@@ -343,8 +343,8 @@
         "task.delete.close：关闭确认窗，不提交"
       ],
       "contractAliasReason": "按task-contract-review.md第8节，将本页每个当前源候选逐项绑定到其原始末列合同文本；动作分组仅表示页面归属，不改变合同。",
-      "condition": "取消按钮busy禁用，原生Escape不检查busy",
-      "handler": "closeDeleteDialog清deleting/deleteReason",
+      "condition": "取消按钮与Escape均在busy时阻止关闭；空闲时清除目标与原因",
+      "handler": "closeDeleteDialog清deleting/deleteReason；busy期间保留当前目标与原因",
       "variants": [
         "cancel",
         "escape",
@@ -360,6 +360,10 @@
         {
           "file": "scripts/verify-ui-phase2-task-list-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
         }
       ],
       "visualStates": {
@@ -370,7 +374,7 @@
         "disabled": "not-mapped",
         "busy": "not-mapped"
       },
-      "remaining": "执行中Escape可清deleting；removeTask在await后仍读取deleting.value.id，完整竞态待验。"
+      "remaining": "P23列表实际Vue回归覆盖busy期间Escape保留目标/原因，P24详情另覆盖成功后回原筛选；取消/重开状态与真实后端审计、版本冲突仍需独立验收。"
     },
     {
       "actionId": "task.delete.submit",
@@ -404,6 +408,10 @@
         {
           "file": "scripts/verify-ui-phase2-task-list-review.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m05-01-business-tasks.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
         }
       ],
       "visualStates": {

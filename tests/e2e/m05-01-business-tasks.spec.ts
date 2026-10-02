@@ -1156,6 +1156,50 @@ test("task create and delete dialogs stay open when Escape is pressed during a p
   await expect(deleteDialog).toBeHidden();
 });
 
+test("P24 detail delete keeps its target while pending and returns to the original task filter", async ({
+  page,
+}) => {
+  await setup(page);
+  let releaseDelete!: () => void;
+  let signalDelete!: () => void;
+  const deletePending = new Promise<void>((resolve) => (releaseDelete = resolve));
+  const deleteStarted = new Promise<void>((resolve) => (signalDelete = resolve));
+  let submittedBody: Record<string, unknown> | undefined;
+  let deleteRequests = 0;
+
+  await page.route(`**/api/v1/tasks/${taskId}`, async (route) => {
+    if (route.request().method() !== "DELETE") return route.fallback();
+    deleteRequests += 1;
+    submittedBody = route.request().postDataJSON() as Record<string, unknown>;
+    signalDelete();
+    await deletePending;
+    await route.fulfill({ json: env({ id: taskId }) });
+  });
+
+  await page.goto(`/tasks/${taskId}?from=${encodeURIComponent("/tasks?status=in_progress")}`);
+  await expect(page.getByRole("heading", { name: task.title, level: 3 })).toBeVisible();
+  await page.getByText("更多任务操作", { exact: true }).click();
+  await page.getByRole("button", { name: "删除任务", exact: true }).click();
+
+  const dialog = page.getByRole("dialog", { name: "删除任务" });
+  await dialog.getByLabel("删除原因").fill("  经复核确认不再需要  ");
+  await dialog.getByRole("button", { name: "确认删除", exact: true }).click();
+  await deleteStarted;
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("删除原因")).toHaveValue("  经复核确认不再需要  ");
+
+  releaseDelete();
+  await expect(dialog).toBeHidden();
+  await expect(page).toHaveURL(/\/tasks\?status=in_progress$/);
+  expect(deleteRequests).toBe(1);
+  expect(submittedBody).toEqual({
+    expected_version: task.version,
+    reason: "经复核确认不再需要",
+  });
+});
+
 test("personal center renders the core profile instead of staying on its loading state", async ({
   page,
 }) => {
