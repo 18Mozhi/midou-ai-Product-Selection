@@ -3,18 +3,19 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("opportunity detail keeps partial dependency failures distinct from real empty data", async () => {
-  const [workspace, insights, ai] = await Promise.all([
+  const [workspace, insights, ai, reads] = await Promise.all([
     readFile("apps/web/src/components/OpportunityWorkspace.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityDetailInsights.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityAiPanel.vue", "utf8"),
+    readFile("apps/web/src/components/use-opportunity-workspace-reads.ts", "utf8"),
   ]);
 
   assert.match(
-    workspace,
+    reads,
     /downstreamLoadState\.value = \{ \.\.\.downstreamLoadState\.value, \[source\]: "error" \}/,
   );
-  assert.match(workspace, /aiLoadState\.value = "error"/);
-  assert.doesNotMatch(workspace, /catch\s*\{\s*aiAnalyses\.value = \[\]/);
+  assert.match(reads, /aiLoadState\.value = "error"/);
+  assert.doesNotMatch(reads, /catch\s*\{\s*aiAnalyses\.value = \[\]/);
   assert.match(insights, /暂不能判定为零/);
   assert.match(ai, /不能据此判定记录为空/);
   assert.match(insights, /retryDownstream/);

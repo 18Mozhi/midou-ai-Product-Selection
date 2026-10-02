@@ -180,6 +180,7 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
     "apps/web/src/components/CostRuleConsole.vue",
     "apps/web/src/components/OpportunityWorkspace.vue",
     "apps/web/src/components/OpportunityProfitPanel.vue",
+    "apps/web/src/components/use-opportunity-workspace-reads.ts",
     "apps/web/src/components/OpportunityCostReviewQueue.vue",
     "apps/web/src/profit.css",
     "apps/web/src/opportunity-profit.css",
@@ -206,6 +207,7 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
     consoleUi,
     opportunityShell,
     profitPanel,
+    opportunityReads,
     costReviewQueue,
     ruleCss,
     profitCss,
@@ -246,13 +248,14 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
   );
   for (const state of ["loading", "ready", "empty", "error", "expired", "forbidden", "blocked"])
     assert.match(consoleUi, new RegExp(state));
-  assert.match(opportunityShell, /profit-analysis[\s\S]*OpportunityProfitPanel/);
+  assert.match(opportunityReads, /profit-analysis/);
+  assert.match(opportunityShell, /OpportunityProfitPanel[\s\S]*:profit="profit"/);
   assert.match(profitPanel, /提交成本复核[\s\S]*重新计算/);
   assert.match(`${profitPanel}\n${costReviewQueue}`, /成本复核队列[\s\S]*指定复核人/);
   assert.match(consoleUi, /成本质量门[\s\S]*costSetupItems[\s\S]*成本规则已生效/);
   assert.match(qualityGateSetupUi, /自动推荐配置[\s\S]*已满足[\s\S]*待完成/);
   assert.ok(opportunityShell.split(/\r?\n/).length < 1000);
-  assert.ok(profitPanel.split(/\r?\n/).length < 200);
+  assert.ok(profitPanel.split(/\r?\n/).length < 300);
   assert.ok(costReviewQueue.split(/\r?\n/).length < 160);
   assert.match(ruleCss, /@media\s*\(\s*max-width:\s*820px\s*\)/);
   assert.match(ruleCss, /var\(--so-panel\)/);

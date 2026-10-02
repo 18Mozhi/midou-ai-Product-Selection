@@ -28,7 +28,7 @@ function timestamp(value: string) {
       <dd v-else>尚无原始证据观测时间</dd>
     </div>
     <div>
-      <dt>距观测时间</dt>
+      <dt>数据新鲜度</dt>
       <dd v-if="ageSeconds !== null">{{ durationLabel(ageSeconds) }}</dd>
       <dd v-else>距今时间未提供</dd>
     </div>

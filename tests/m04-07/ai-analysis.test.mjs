@@ -96,7 +96,8 @@ test("M04-07.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(routes, /opportunity:decide/);
   assert.match(worker, /chat\/completions[\s\S]*response_format[\s\S]*dead_letter/);
   assert.match(workspace, /OpportunityAiPanel/);
-  assert.match(ui, /AI 辅助分析[\s\S]*ai_generated[\s\S]*抽检通过/);
+  assert.match(ui, /AI 辅助分析[\s\S]*抽检通过/);
+  assert.match(ui, /AI 输出标记[\s\S]*ai_generated/);
   assert.match(css, /@media\s*\(\s*max-width:\s*700px\s*\)/);
   assert.match(schema, /AI_RETRY_LIMIT/);
   assert.match(env, /AI_ANALYSIS_LEASE_SECONDS/);

@@ -1568,6 +1568,7 @@
         "../apps/web/src/components/opportunity-decision-presentation.ts",
         "../apps/web/src/components/OpportunityFeedbackPanel.vue",
         "../apps/web/src/components/OpportunityLineagePanel.vue",
+        "../apps/web/src/components/OpportunityLineageSummary.vue",
         "../apps/web/src/components/OpportunityWorkspaceDialogs.vue",
         "../apps/web/src/opportunity-ai.css",
         "../apps/web/src/opportunity-p18-workfaces.css",

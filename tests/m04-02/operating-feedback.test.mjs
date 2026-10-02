@@ -136,7 +136,7 @@ test("operating feedback migration, API, UI and deployment remain synchronized",
   assert.match(routes, /operating-feedback/);
   assert.match(repository, /automatic_rule_update: false/);
   assert.match(repository, /automatic_decision: false/);
-  assert.match(web, /不会自动改规则或替你决策/);
+  assert.match(web, /校准不会自动更新规则或决定/);
   assert.match(deploy, /0065_opportunity_operating_feedback/);
   assert.match(openapi, /OpportunityOperatingFeedbackInput/);
 });

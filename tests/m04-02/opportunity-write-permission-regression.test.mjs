@@ -3,17 +3,19 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 test("opportunity write controls follow their existing API capabilities", async () => {
-  const [workspace, list, decision, feedback, styles] = await Promise.all([
+  const [workspace, list, decision, feedback, styles, access, navigation] = await Promise.all([
     readFile("apps/web/src/components/OpportunityWorkspace.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityListPanel.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityDecisionPanel.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityFeedbackPanel.vue", "utf8"),
     readFile("apps/web/src/opportunities.css", "utf8"),
+    readFile("apps/web/src/components/use-opportunity-workspace-access.ts", "utf8"),
+    readFile("apps/web/src/components/use-opportunity-workspace-navigation.ts", "utf8"),
   ]);
 
-  assert.match(workspace, /includes\("opportunity:decide"\)/);
-  assert.match(workspace, /includes\("competitor:manage"\)/);
-  assert.match(workspace, /includes\("supplier_quote:manage"\)/);
+  assert.match(access, /includes\("opportunity:decide"\)/);
+  assert.match(access, /includes\("competitor:manage"\)/);
+  assert.match(access, /includes\("supplier_quote:manage"\)/);
   assert.match(workspace, /v-if="canDecide" class="opportunity-hero-actions"/);
   assert.match(workspace, /:can-decide="canDecide"/);
   assert.match(workspace, /:can-write="canDecide"/);
@@ -21,7 +23,7 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(workspace, /v-if="canManageSuppliers"[\s\S]*discoverSuppliers/);
   assert.match(list, /v-if="canDecide && selectionView === 'all' && selectedIds\.length"/);
   assert.match(list, /v-if="canDecide && selectionView === 'all'" class="opportunity-row-select"/);
-  assert.match(list, /@click="emit\('reset'\)">重置/);
+  assert.match(list, /@click="emit\('reset'\)">\s*重置/);
   assert.match(list, /selectionView === 'all'[\s\S]*canDecide[\s\S]*'手工添加机会'/);
   assert.match(list, /selectionView === 'all'[\s\S]*'刷新列表'[\s\S]*'查看全部机会'/);
   assert.match(
@@ -29,11 +31,12 @@ test("opportunity write controls follow their existing API capabilities", async 
     /state === 'empty' && selectionView !== 'all'[\s\S]*emit\('manageSetup', nextSetupPath\)/,
   );
   assert.match(workspace, /@manage-setup="router\.push\(\$event\)"/);
-  assert.match(workspace, /async function resetListFilters\(\)/);
+  assert.match(navigation, /async function resetListFilters\(\)/);
   assert.match(workspace, /@reset="resetListFilters"/);
-  assert.match(decision, /v-if="canDecide"[\s\S]*aria-label="机会决策操作"/);
+  assert.match(decision, /v-if="canDecide && canAdopt"[\s\S]*aria-label="机会决策操作"/);
+  assert.match(decision, /v-else-if="canDecide"[\s\S]*opportunity-decision-waiting/);
   assert.match(decision, /v-else-if="canDecide"[\s\S]*emit\('createEvidenceTask'\)/);
-  assert.match(feedback, /<form v-if="canWrite"/);
+  assert.match(feedback, /<form\s+v-if="canWrite && showForm"/);
   assert.match(
     styles,
     /@media \(max-width: 1100px\)[\s\S]*\.opportunity-filters[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/,

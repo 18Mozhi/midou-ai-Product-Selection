@@ -239,6 +239,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "apps/web/src/components/OpportunityDecisionPanel.vue",
     "apps/web/src/components/AutomaticSelectionReadinessPanel.vue",
     "apps/web/src/components/OpportunityEvidencePanel.vue",
+    "apps/web/src/components/use-opportunity-workspace-navigation.ts",
+    "apps/web/src/components/use-opportunity-workspace-access.ts",
     "apps/web/src/opportunities.css",
     "apps/web/src/automatic-selection.css",
     "config/schema.json",
@@ -264,6 +266,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       decisionWeb,
       readinessWeb,
       evidenceWeb,
+      navigation,
+      access,
       css,
       selectionCss,
       schema,
@@ -322,7 +326,8 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(webContract, /阶段[\s\S]*负责人[\s\S]*批量指派[\s\S]*批量复核[\s\S]*批量归档/);
   assert.match(webContract, /创建补采任务/);
   assert.match(web, /evidence-completion-tasks/);
-  assert.match(webContract, /route\.query\.from[\s\S]*route\.query\.tab[\s\S]*applyListFilters/);
+  assert.match(access, /route\.query\.from/);
+  assert.match(navigation, /route\.query\.tab[\s\S]*applyListFilters/);
   assert.match(selectionCss, /opportunity-decision-actions[\s\S]*display:\s*flex/);
   assert.doesNotMatch(decisionWeb, /opportunity-decision-bar/);
   assert.match(css, /@media\s*\(\s*max-width:\s*640px\s*\)/);
