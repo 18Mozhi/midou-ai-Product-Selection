@@ -448,8 +448,8 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
   assert.match(web, /recoveryAction[\s\S]*建议恢复动作/);
   assert.match(web, /下次重试.*任务级调度/);
   assert.match(css, /@media\s*\(max-width:\s*760px\)/);
-  assert.match(live, /const now=new Date\(\);/);
-  assert.doesNotMatch(live, /const now=new Date\(['"]\d{4}-\d{2}-\d{2}T/);
+  assert.match(live, /const now\s*=\s*new Date\(\s*\);/);
+  assert.doesNotMatch(live, /const now\s*=\s*new Date\(\s*['"]\d{4}-\d{2}-\d{2}T/);
   assert.match(openapi, /\/platform\/collection\/tasks:/);
   assert.match(env, /COLLECTION_TASK_LEASE_SECONDS=120/);
   assert.match(schema, /collectionTasks/);
@@ -466,9 +466,9 @@ test("M03-05.A03/A07/A10/A11/A14-A17 delivery surfaces are complete and Baota bo
     workerDeadLetter,
     /recoverExpiredCollectionTasks[\s\S]*collection_attempt_overflow[\s\S]*collection_dead_letters/,
   );
-  assert.match(live, /new MySqlCollectionTaskWorkerRepository\(pool,\(\)=>0,id\)/);
+  assert.match(live, /new MySqlCollectionTaskWorkerRepository\(pool,\s*\(\)\s*=>\s*0,\s*id\)/);
   assert.match(
     live,
-    /new MySqlCollectionTaskWorkerRepository\(pool,\(\)=>0,ids\.expired\)\.recoverExpired/,
+    /new MySqlCollectionTaskWorkerRepository\([\s\S]*?ids\.expired,[\s\S]*?\)\.recoverExpired\(now\)/,
   );
 });
