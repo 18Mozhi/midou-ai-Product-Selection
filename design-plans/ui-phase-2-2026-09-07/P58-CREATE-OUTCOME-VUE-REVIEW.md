@@ -3,7 +3,8 @@
 ## 范围与原因
 
 承接 [创建窗](P58-CREATE-VUE-REVIEW.md) 和 [等待/拒绝反馈](P58-CREATE-WRITE-VUE-REVIEW.md)，
-新增独立实际 Vue 审核层。此前两组具体视觉仍待答复；本批不默认通过，也不修改生产组件。
+新增独立实际 Vue 审核层，不修改生产组件。用户已授权剩余视觉项自动通过，r3 证据据此记录为
+视觉通过；该确认不覆盖动作/业务合同或生产验收。
 
 真实 createPlan 在 POST 成功后 await load；load 内部捕获读取错误而不抛出，随后 createPlan
 覆盖成功 notice，并把 requestId 恢复为创建编号。结果是目录仍旧，但读取错误被覆盖。
@@ -22,12 +23,12 @@
 
 ## 图与证据
 
-[正式图册](../../output/playwright/p58-create-outcome-review/index.html) /
-[证据清单](../../output/playwright/p58-create-outcome-review/evidence.json)。
+[正式图册 r3](../../output/playwright/p58-create-outcome-review-r3/index.html) /
+[证据清单 r3](../../output/playwright/p58-create-outcome-review-r3/evidence.json)。
 
 baseline/review × 390/760/1440 × 正常读取/409/403/503，24 组实际 App 运行，
-444 检查、66 PNG、167 原始源指纹。24 次 POST 与 78 次 commercial GET 全为本地模拟；
-P58 三组提案联合 13 项单测通过，文档门禁与相关代码格式检查通过。
+444 检查、66 PNG、115 原始源指纹。24 次 POST 与 78 次 commercial GET 全为本地模拟；
+P58 创建、拒绝、结果及焦点四组联合 17 项单测通过。
 初始数据与导航提取自现有 M06-06 E2E；POST 返回本地模拟 201，随后目录回复为明确合成的草稿
 记录，不能当作真实 MySQL 写入。服务端现有创建返回 id/status/version 的合同未变。
 
@@ -49,7 +50,7 @@ P58 三组提案联合 13 项单测通过，文档门禁与相关代码格式检
 离页/返回、旧成功关闭新窗、旧读取覆盖新范围、创建结束后重置新草稿等生命周期重构。
 原成功后的表单重置位置保留，不能据本批双结果宣称旧新窗口隔离已经完成。
 
-仅测试本次目录核对；“目录读取完成”不等于确定找到新草稿、不等于方案已启用或组织已分配。
+用户剩余视觉项授权通过；仅测试本次目录核对，“目录读取完成”不等于确定找到新草稿、不等于方案已启用或组织已分配。
 真实权限拒绝策略、MySQL/事务/幂等/审计、读屏/软键盘、全部按钮、复制和整页设计仍待。
 未修改 API/OpenAPI、后端、Worker/Python、SQL、env、依赖或部署配置，无重启要求。
 全库既有失败与全 73 页交付继续开放，不能用本批局部通过替代发布门禁。

@@ -35,10 +35,22 @@ export const draftFocusBoundary = `function keepDraftFocus(event: KeyboardEvent)
 
 export function previewCommercialCreateFocus(source) {
   let preview = previewCommercialCreateOutcome(source);
-  const marker = 'const draftFeedback = ref("");';
+  const marker = preview.includes('const draftFeedback = ref("");')
+    ? 'const draftFeedback = ref("");'
+    : "async function createPlan() {";
   assert.equal(preview.split(marker).length, 2);
   preview = preview.replace(marker, draftFocusBoundary + marker);
-  const start = '<dialog class="p58-draft-c"';
-  assert.equal(preview.split(start).length, 2);
-  return preview.replace(start, start + ' @keydown="keepDraftFocus"');
+  const reference = 'ref="createDialogElement"';
+  assert.equal(preview.split(reference).length, 2);
+  const referenceIndex = preview.indexOf(reference),
+    start = preview.lastIndexOf("<dialog", referenceIndex),
+    openEnd = preview.indexOf(">", referenceIndex) + 1;
+  assert.ok(start >= 0 && openEnd > referenceIndex);
+  const openTag = preview.slice(start, openEnd);
+  assert.ok(!openTag.includes('@keydown="keepDraftFocus"'));
+  return (
+    preview.slice(0, start) +
+    openTag.replace(">", ' @keydown="keepDraftFocus">') +
+    preview.slice(openEnd)
+  );
 }

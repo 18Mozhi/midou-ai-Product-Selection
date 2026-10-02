@@ -23,6 +23,14 @@ export const draftCatch =
 
 export function previewCommercialCreateWrite(source) {
   let result = previewCommercialCreate(source);
+  if (
+    result.includes('class="p58-draft-c"') &&
+    result.includes("function closeCreatePlanDialog()") &&
+    result.includes("function cancelCreatePlanDialog(event: Event)") &&
+    result.includes("function submitCreatePlanDialog(event: SubmitEvent)") &&
+    result.includes("createPlanFeedback.value =")
+  )
+    return result;
   const marker = "async function createPlan() {";
   assert.equal(result.split(marker).length, 2);
   result = result.replace(marker, draftWriteUi + marker);

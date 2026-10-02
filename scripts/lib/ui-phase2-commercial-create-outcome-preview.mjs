@@ -54,7 +54,10 @@ export function previewCommercialCreateOutcome(source) {
     assert.equal(result.split(before).length, 2, before);
     result = result.replace(before, after);
   };
-  replace('const draftFeedback = ref("");', outcomeState + 'const draftFeedback = ref("");');
+  const createMarker = "async function createPlan() {";
+  if (result.includes('const draftFeedback = ref("");'))
+    replace('const draftFeedback = ref("");', outcomeState + 'const draftFeedback = ref("");');
+  else replace(createMarker, outcomeState + createMarker);
   // Only add a return contract to load; existing call sites may keep ignoring it.
   const loadStart = result.indexOf("async function load("),
     loadEnd = result.indexOf(outcomeState, loadStart);
@@ -71,8 +74,10 @@ export function previewCommercialCreateOutcome(source) {
     '    return { kind: "failed" as const, requestId: failure?.requestId ?? "", hint: timedOut ? "读取超时，请稍后重试。" : failure?.actionHint ?? "读取失败" };\n  } finally {',
   );
   result = result.slice(0, loadStart) + load + result.slice(loadEnd);
-  const createStart = result.indexOf("async function createPlan() {"),
-    createEnd = result.indexOf("function beginEditPlan(", createStart);
+  const createStart = result.indexOf(createMarker),
+    closeCreateStart = result.indexOf("function closeCreatePlanDialog(", createStart),
+    legacyCreateEnd = result.indexOf("function beginEditPlan(", createStart),
+    createEnd = closeCreateStart > createStart ? closeCreateStart : legacyCreateEnd;
   let create = result.slice(createStart, createEnd);
   const swap = (before, after) => {
     assert.equal(create.split(before).length, 2, before);

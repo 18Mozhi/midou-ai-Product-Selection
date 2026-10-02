@@ -1,18 +1,32 @@
 import assert from "node:assert/strict";
 
 export function previewCommercialCreate(source) {
-  const start = source.indexOf('<dialog ref="createDialogElement"'),
-    end = source.indexOf("</dialog>", start) + "</dialog>".length;
-  assert.ok(start > 0 && end > start);
+  const reference = 'ref="createDialogElement"';
+  assert.equal(source.split(reference).length, 2, "Unique P58 create dialog ref");
+  const referenceIndex = source.indexOf(reference),
+    start = source.lastIndexOf("<dialog", referenceIndex),
+    end = source.indexOf("</dialog>", referenceIndex) + "</dialog>".length;
+  assert.ok(start >= 0 && end > start);
   let dialog = source.slice(start, end);
+
+  // Once the C form is in production, the historical layout proposal is already
+  // present. Keep this review adapter focused on any later interaction delta.
+  if (
+    dialog.includes('class="p58-draft-c"') &&
+    dialog.includes('class="p58-draft-guide"') &&
+    dialog.includes('id="p58-draft-code-help"') &&
+    dialog.includes('id="p58-draft-reason-help"')
+  )
+    return source;
+
   const replace = (before, after) => {
     assert.equal(dialog.split(before).length, 2, `Unique P58 create anchor: ${before}`);
     dialog = dialog.replace(before, after);
   };
-  replace(
-    '<dialog ref="createDialogElement"',
-    '<dialog class="p58-draft-c" ref="createDialogElement"',
-  );
+  const openTagEnd = dialog.indexOf(">") + 1,
+    openTag = dialog.slice(0, openTagEnd);
+  if (!openTag.includes('class="p58-draft-c"'))
+    dialog = dialog.replace(openTag, openTag.replace("<dialog", '<dialog class="p58-draft-c"'));
   replace(
     "<h3>创建配额方案草稿</h3>",
     '<h3>创建配额方案草稿</h3><p class="p58-intro">只创建草稿，不启用方案，也不向组织分配额度。</p>',

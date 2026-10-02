@@ -18,10 +18,10 @@
 
 ## 证据
 
-[键盘验证图册](../../output/playwright/p58-create-focus-review/index.html) /
-[机器证据](../../output/playwright/p58-create-focus-review/evidence.json)。
+[键盘验证图册 r3](../../output/playwright/p58-create-focus-review-r3/index.html) /
+[机器证据 r3](../../output/playwright/p58-create-focus-review-r3/evidence.json)。
 
-390/760/1440 × baseline/review 共 6 组、597 检查、30 PNG、168 原始源指纹；
+390/760/1440 × baseline/review 共 6 组、597 检查、30 PNG、116 原始源指纹；
 P58 四组提案联合 17 项单测通过。默认 10 个、错误追踪折叠 11 个、展开 12 个可顺序访问
 控件分别执行两轮正向和两轮反向；使用独立的实际控件定位序列核对，不以被测函数自己的候选列表
 作为判定答案。等待时十个表单控件禁用，重复按键仍留在可见标题，Escape 仍受前版等待保护。
@@ -41,11 +41,12 @@ P58 四组提案联合 17 项单测通过。默认 10 个、错误追踪折叠 1
 
 ## 边界与复验
 
-本轮不重复请求同布局视觉批准；此前创建布局、拒绝反馈及双结果组合仍按各自审核状态处理。
+依据用户“剩下的全部通过”授权，创建布局、拒绝反馈、双结果组合及本轮焦点视觉均记为视觉通过；
+此授权仅覆盖视觉，不替代动作/API/RBAC/真实生产验收。
 这里只验证 P58 创建窗的上述键盘路径，不等于编辑/确认窗、读屏、软键盘、跨路由/缓存、
 未知写入结果、完整无障碍、整页或生产验收。原成功后的表单重置和迟到结果归属仍未重构。
 
-生成：`node scripts/verify-ui-phase2-commercial-create-focus.mjs --capture`。
+生成：`node scripts/verify-ui-phase2-commercial-create-focus.mjs --capture`（r3 独立目录）。
 定向：`node --test tests/unit/ui-phase2-commercial-create-focus-review.test.mjs`。
 联合回归包含此前 create-review、create-write-review、create-outcome-review 三份单测。
 

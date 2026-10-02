@@ -14,7 +14,7 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const component = "apps/web/src/components/CommercialOperationsCenter.vue";
-const root = "output/playwright/p58-create-focus-review";
+const root = "output/playwright/p58-create-focus-review-r3";
 const source = read(component),
   preview = previewCommercialCreateFocus(source);
 test("P58 strict focus proposal compiles and consists solely of local function plus dialog keydown", () => {
@@ -206,9 +206,9 @@ test("focus candidates exclude invisible, inert-equivalent and closed-details co
 });
 test("P58 focus evidence binds unchanged visual pairs, current sources, every control traversal and local network", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
-  assert.equal(e.kind, "P58-CREATE-FOCUS-REVIEW-r1");
+  assert.equal(e.kind, "P58-CREATE-FOCUS-REVIEW-r3");
+  assert.equal(e.userReview, "approved");
   assert.equal(e.reviewOnly, true);
-  assert.equal(e.userReview, "pending");
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 6);
   assert.equal(
@@ -216,7 +216,7 @@ test("P58 focus evidence binds unchanged visual pairs, current sources, every co
     597,
   );
   assert.equal(e.screenshots.length, 30);
-  assert.equal(Object.keys(e.sourceHashes).length, 168);
+  assert.equal(Object.keys(e.sourceHashes).length, 116);
   for (const file of [
     component,
     "apps/web/src/use-modal-dialog.ts",

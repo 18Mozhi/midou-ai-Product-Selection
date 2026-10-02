@@ -16,7 +16,11 @@ const replace = (before, after) => {
 };
 replace(
   'output = "output/playwright/p58-create-current-review"',
-  'output = "output/playwright/p58-create-focus-review"',
+  'output = "output/playwright/p58-create-focus-review-r3"',
+);
+replace(
+  'dialog = page.getByRole("dialog", { name: "新建配额方案", exact: true });',
+  'dialog = page.getByRole("dialog", { name: "创建配额方案草稿", exact: true });',
 );
 replace(
   'implementation/commercial-create-preview.css";',
@@ -155,7 +159,8 @@ replace(
   sources.add("design-plans/ui-phase-2-2026-09-07/implementation/commercial-create-preview.css");
   sources.add("design-plans/ui-phase-2-2026-09-07/implementation/commercial-create-write-preview.css");`,
 );
-replace('kind: "P58-CREATE-CURRENT-REVIEW-r1"', 'kind: "P58-CREATE-FOCUS-REVIEW-r1"');
+replace('kind: "P58-CREATE-CURRENT-REVIEW-r1"', 'kind: "P58-CREATE-FOCUS-REVIEW-r3"');
+replace('userReview: "pending"', 'userReview: "approved"');
 replace(
   '"Actual App and existing E2E fixtures. Only create-dialog presentation/help and equivalent HTML-v pattern escaping in review. Production/GET/POST/API/permissions unchanged; no submit or real writes, no busy/error/save/complete-page acceptance."',
   '"Actual App, baseline is prior C outcome preview without the new keydown handler, review adds only local creation-dialog focus boundary. Same styles; original production/shared modal untouched. Default, all-disabled pending, rejected collapsed/expanded details use one local409 POST per run. No real writes, clipboard, screen reader, soft keyboard, other dialogs/lifecycle or production acceptance."',

@@ -16,7 +16,7 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const component = "apps/web/src/components/CommercialOperationsCenter.vue",
-  root = "output/playwright/p58-create-outcome-review";
+  root = "output/playwright/p58-create-outcome-review-r3";
 const source = read(component),
   preview = previewCommercialCreateOutcome(source);
 const ast = (vue) =>
@@ -275,9 +275,9 @@ test("outcome CSS is scoped to the new review region and explicit prior styleshe
 });
 test("outcome evidence binds current raw files, complete images, original retry policy and no POST on recovery", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
-  assert.equal(e.kind, "P58-CREATE-OUTCOME-REVIEW-r1");
+  assert.equal(e.kind, "P58-CREATE-OUTCOME-REVIEW-r3");
+  assert.equal(e.userReview, "approved");
   assert.equal(e.reviewOnly, true);
-  assert.equal(e.userReview, "pending");
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 24);
   assert.equal(
@@ -285,7 +285,7 @@ test("outcome evidence binds current raw files, complete images, original retry 
     444,
   );
   assert.equal(e.screenshots.length, 66);
-  assert.equal(Object.keys(e.sourceHashes).length, 167);
+  assert.equal(Object.keys(e.sourceHashes).length, 115);
   assert.equal(new Set(e.runs.map((r) => `${r.mode}/${r.width}/${r.scene}`)).size, 24);
   for (const file of [
     component,

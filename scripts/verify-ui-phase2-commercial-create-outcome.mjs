@@ -14,7 +14,11 @@ function replace(before, after) {
 }
 replace(
   'output = "output/playwright/p58-create-current-review"',
-  'output = "output/playwright/p58-create-outcome-review"',
+  'output = "output/playwright/p58-create-outcome-review-r3"',
+);
+replace(
+  'dialog = page.getByRole("dialog", { name: "新建配额方案", exact: true });',
+  'dialog = page.getByRole("dialog", { name: "创建配额方案草稿", exact: true });',
 );
 replace(
   "preview = previewCommercialCreate(source);",
@@ -195,7 +199,8 @@ replace(
   sources.add("design-plans/ui-phase-2-2026-09-07/implementation/commercial-create-preview.css");
   sources.add("design-plans/ui-phase-2-2026-09-07/implementation/commercial-create-write-preview.css");`,
 );
-replace('kind: "P58-CREATE-CURRENT-REVIEW-r1"', 'kind: "P58-CREATE-OUTCOME-REVIEW-r1"');
+replace('kind: "P58-CREATE-CURRENT-REVIEW-r1"', 'kind: "P58-CREATE-OUTCOME-REVIEW-r3"');
+replace('userReview: "pending"', 'userReview: "approved"');
 replace(
   '"Actual App and existing E2E fixtures. Only create-dialog presentation/help and equivalent HTML-v pattern escaping in review. Production/GET/POST/API/permissions unchanged; no submit or real writes, no busy/error/save/complete-page acceptance."',
   '"Actual App, local201 POST then held GET success/409/403/503 and explicit GET recovery. Review-only dual outcome, load return value and stable reread focus. Source-derived initial fixture and synthetic post-create response; no real writes, lifecycle/concurrent ownership/unknown POST/full page/production acceptance. Production and previous packets unchanged."',
