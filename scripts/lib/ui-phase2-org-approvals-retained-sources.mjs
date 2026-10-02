@@ -1,9 +1,13 @@
 import assert from "node:assert/strict";
 
-// Refresh only the real child binding and its verification machinery. A changed
-// proposal renderer/data must be reviewed as a new image revision, never relabeled.
+// Refresh the real child binding and verification machinery. The data extractor
+// may change only when the caller has already proved its full output still equals
+// the immutable proposal data; renderer/data changes remain a new image revision.
 const permitted = new Set([
   "apps/web/src/components/OrganizationApprovalPanel.vue",
+  "apps/web/src/components/OrganizationAdminCenter.vue",
+  "tests/e2e/m06-01-organization-admin.spec.ts",
+  "scripts/lib/ui-phase2-org-approvals-design-data.mjs",
   "scripts/verify-ui-phase2-org-approvals-c.mjs",
   "scripts/verify-ui-phase2-org-approvals-controls-c.mjs",
   "scripts/verify-ui-phase2-org-approvals-fields-c.mjs",

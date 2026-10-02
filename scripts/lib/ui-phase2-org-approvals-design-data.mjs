@@ -28,8 +28,13 @@ export async function buildOrgApprovalsDesignData(repo) {
     return box.exports;
   }
   const ast = parse(fixture);
-  const routes = nodes(
+  const setupFunctions = nodes(
     ast,
+    (n) => ts.isFunctionDeclaration(n) && n.name?.getText(ast) === "setup",
+  );
+  assert.equal(setupFunctions.length, 1, "one shared organization-admin setup fixture");
+  const routes = nodes(
+    setupFunctions[0],
     (n) =>
       ts.isCallExpression(n) &&
       n.expression.getText(ast) === "page.route" &&

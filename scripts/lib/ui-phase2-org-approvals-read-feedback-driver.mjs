@@ -52,9 +52,9 @@ export function readFeedbackVueDriver(input) {
               const feedback = center.locator(".org-approval-read-feedback-c"), trace = feedback.locator("details");
               const readCount = reads.length;
               check(name + ": one read feedback region", await feedback.count(), 1);
-              check(name + ": retained marker matches original state", await feedback.getAttribute("data-retained"), String(!replace));
+              check(name + ": component mode matches original state", await feedback.getAttribute("data-mode"), !replace ? "retained" : "initial");
               check(name + ": feedback title distinguishes retained data", await feedback.locator("h3").textContent(), !replace ? "审批内容未能更新" : failure.status === 409 ? "数据版本已变化" : "组织数据暂不可用");
-              check(name + ": content boundary matches visibility", await feedback.locator(".org-approval-permission-boundary").textContent(), !replace ? "仍显示上次成功读取的内容，本次更新尚未完成。" : "审批内容目前未显示，不代表记录或模板为空。");
+              check(name + ": content boundary matches visibility", await feedback.locator(".org-approval-read-feedback-c__boundary").textContent(), !replace ? "仍显示上次成功读取的内容，本次更新尚未完成。" : "审批内容目前未显示，不代表记录或模板为空。");
               check(name + ": no duplicate legacy state visible", await center.locator(".org-admin-state:visible").count(), 0);
               check(name + ": original action inventory", await center.getByRole("button", { name: "重新加载", exact: true }).count(), replace ? 1 : 0);
               check(name + ": read trace starts closed", await trace.getAttribute("open"), null);
