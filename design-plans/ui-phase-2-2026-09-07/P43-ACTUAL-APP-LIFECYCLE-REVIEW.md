@@ -1,9 +1,27 @@
 # P43 真实应用、路由与缓存下的创建/改密归属
 
-2026-09-13。本批是当前未变换 App 的功能证据，不是新的 C 方向设计提案。
+2026-09-13 的 r1 包为历史功能证据，不是新的 C 方向设计提案。
 旧视觉批准、原设计图和历史来源包不改，不要求用户把当前原界面当作新设计重新审核。
 
-## 实际覆盖
+## 2026-10-02 当前源码续采 r2
+
+保留 r1 的 168 项来源哈希及48图原件不变；新增 r2 绑定当前实际加载 App/router/KeepAlive 的
+141 项来源哈希、16组组合、224项断言和48张截图。桌面1440与手机390均覆盖创建/改密、共享账号
+路由/缓存工作台往返、延迟写入成功/失败。未变换产品Vue；请求只由浏览器本地夹具拦截，
+未知API和外部请求拒绝，密码只用合成样例。Vite与浏览器经finally关闭。
+
+P43 定向单测7/7通过；源码变化时必须另开新版本采集，禁止覆盖r1或r2。
+
+- [r2当前源码48图入口](../../output/playwright/p43-actual-app-lifecycle-r2/index.html)
+- [r2检查与141项来源](../../output/playwright/p43-actual-app-lifecycle-r2/evidence.json)
+- 完整当前源码捕获：`node scripts/verify-ui-phase2-account-app-lifecycle.mjs --capture-r2`
+- 手机快速验证：`node scripts/verify-ui-phase2-account-app-lifecycle.mjs --smoke-r2`
+- `processesClosed: true` 记录服务和浏览器已退出。
+
+这只是本地真实Vue功能证据，不代表视觉重新审核、真实写入、服务端RBAC/审计或生产验收；
+没有改产品源码、API、数据库、权限、依赖、环境变量或部署状态。
+
+## r1 历史包实际覆盖
 
 直接启动仓库 Vite 入口，加载 main.ts、App、真实 router、NavigationShell 与 KeepAlive；
 没有替换模板、注入孤立父组件或修改 Vue 内部状态。通过可见导航链接建立历史，再用浏览器

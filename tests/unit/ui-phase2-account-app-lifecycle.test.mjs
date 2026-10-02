@@ -11,6 +11,7 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const root = "output/playwright/p43-actual-app-lifecycle-r1";
+const currentRoot = "output/playwright/p43-actual-app-lifecycle-r2";
 const manifestHash = "742a2d8290fd0ae1ac6afce0197e7779c75187cb782cdb0f1e6a03f20d484aed";
 
 test("actual App fixtures retain original account, navigation, dashboard and known membership omission", () => {
@@ -88,7 +89,7 @@ test("actual App lifecycle evidence pins all 16 combinations, 224 checks and 48 
   assert.ok(!bytes.toString().includes("Local-fixture-43!"));
 });
 
-test("captured actual App source set includes router and KeepAlive with no review transformation", () => {
+test("r1 App source inventory stays pinned as historical evidence", () => {
   const evidence = JSON.parse(read(`${root}/evidence.json`));
   for (const file of [
     "apps/web/src/App.vue",
@@ -100,15 +101,40 @@ test("captured actual App source set includes router and KeepAlive with no revie
     assert.ok(file in evidence.sourceHashes, file);
   assert.equal(Object.keys(evidence.sourceHashes).length, 168);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(
-      hash(read(file)),
-      expected,
-      `Current source drift: ${file}; preserve r1 and recapture as a new version`,
-    );
+    assert.match(expected, /^[a-f0-9]{64}$/, file);
+  assert.notEqual(
+    evidence.sourceHashes["apps/web/src/components/AccountShell.vue"],
+    hash(read("apps/web/src/components/AccountShell.vue")),
+    "r1 remains bound to its captured AccountShell revision",
+  );
   const driver = read("scripts/verify-ui-phase2-account-app-lifecycle.mjs");
   assert.ok(!driver.includes("transformIndexHtml"));
   assert.ok(!driver.includes("__p43_review"));
   assert.ok(driver.includes("page.goForward()") && driver.includes("page.goBack()"));
+});
+
+test("r2 App source inventory binds the current untransformed router and KeepAlive composition", () => {
+  const bytes = readFileSync(`${currentRoot}/evidence.json`),
+    evidence = JSON.parse(bytes);
+  assert.equal(evidence.kind, "P43-ACTUAL-APP-LIFECYCLE-r2");
+  assert.equal(evidence.functionalOnly, true);
+  assert.equal(evidence.processesClosed, true);
+  assert.equal(evidence.runs.length, 16);
+  assert.equal(evidence.screenshots.length, 48);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 141);
+  for (const [file, expected] of Object.entries(evidence.sourceHashes))
+    assert.equal(hash(read(file)), expected, `Current r2 source drift: ${file}`);
+  assert.equal(
+    evidence.sourceHashes["apps/web/src/components/AccountShell.vue"],
+    hash(read("apps/web/src/components/AccountShell.vue")),
+  );
+  for (const shot of evidence.screenshots) {
+    const png = readFileSync(`${currentRoot}/${shot.file}`);
+    assert.equal(hash(png), shot.sha256);
+    assert.equal(png.readUInt32BE(16), shot.pixelWidth);
+    assert.equal(png.readUInt32BE(20), shot.pixelHeight);
+  }
+  assert.ok(!bytes.toString().includes("Local-fixture-43!"));
 });
 
 test("capture duplicate is rejected before starting a browser or server without changing original bytes", () => {
@@ -121,4 +147,17 @@ test("capture duplicate is rejected before starting a browser or server without 
   assert.match(result.stderr, /EEXIST/);
   assert.ok(!result.stdout.includes("P43 actual App lifecycle http"));
   assert.equal(hash(readFileSync(`${root}/evidence.json`)), manifestHash);
+});
+
+test("r2 capture duplicate is rejected before starting a browser or server", () => {
+  const bytes = readFileSync(`${currentRoot}/evidence.json`),
+    result = spawnSync(
+      process.execPath,
+      ["scripts/verify-ui-phase2-account-app-lifecycle.mjs", "--capture-r2"],
+      { encoding: "utf8", timeout: 20000 },
+    );
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /EEXIST/);
+  assert.ok(!result.stdout.includes("P43 actual App lifecycle http"));
+  assert.equal(hash(readFileSync(`${currentRoot}/evidence.json`)), hash(bytes));
 });

@@ -10,9 +10,14 @@ import { accountAppFixture, accountFixtureFile } from "./lib/ui-phase2-account-a
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
 const args = process.argv.slice(2);
-assert.ok(args.length <= 1 && args.every((arg) => ["--smoke", "--capture"].includes(arg)));
-const capture = args.includes("--capture");
-const output = "output/playwright/p43-actual-app-lifecycle-r1";
+assert.ok(
+  args.length <= 1 &&
+    args.every((arg) => ["--smoke", "--capture", "--smoke-r2", "--capture-r2"].includes(arg)),
+);
+const capture = args.some((arg) => arg.startsWith("--capture")),
+  version = args.some((arg) => arg.endsWith("-r2")) ? "r2" : "r1",
+  smoke = args.some((arg) => arg.startsWith("--smoke")),
+  output = `output/playwright/p43-actual-app-lifecycle-${version}`;
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const fixture = accountAppFixture(await read(accountFixtureFile));
@@ -52,7 +57,7 @@ try {
   const origin = `http://127.0.0.1:${port}`;
   console.log(`P43 actual App lifecycle ${origin}`);
   browser = await chromium.launch();
-  for (const width of args.includes("--smoke") ? [390] : [390, 1440])
+  for (const width of smoke ? [390] : [390, 1440])
     for (const action of ["create", "password"])
       for (const destination of ["shared-account-route", "cached-dashboard"])
         for (const outcome of ["success", "failure"]) {
@@ -272,7 +277,7 @@ try {
                   node.isConnected && node === document.querySelector("dialog.detail-dialog"),
               ),
             );
-            await expect(page.getByRole("dialog")).toHaveCount(0);
+            await expect(page.locator("dialog[open]:not(.role-navigation-frame)")).toHaveCount(0);
             if (action === "create") {
               await trigger.click();
               await create.getByLabel("邮箱", { exact: true }).fill("replacement@example.test");
@@ -375,7 +380,7 @@ try {
   await server.close();
   server = null;
   const evidence = {
-    kind: "P43-ACTUAL-APP-LIFECYCLE-r1",
+    kind: `P43-ACTUAL-APP-LIFECYCLE-${version}`,
     functionalOnly: true,
     designApproval: "not_requested",
     boundary:
