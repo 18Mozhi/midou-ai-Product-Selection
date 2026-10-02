@@ -11,6 +11,8 @@ npm run verify:functional
 
 `verify:module`、`verify:phase` 和 `verify:all` 是逐级的软件完成门；模块或阶段成功后会原子更新 `verification/state.json`，后续阶段和全量验收复用已通过项。`verify:functional` 用于执行新鲜的全仓回归，覆盖生产构建、软件功能 Node/Python 测试、桌面/390px E2E、文档、计划、发布矩阵和安全门。以上入口都不执行同提交生产部署证据、磁盘诊断、生产负载或容量证据，也不会修改 `capacity_claim`；容量签发仅是独立可选运营程序。
 
+模块注册表中的测试命令必须与该模块的计划条目一一对应，不得用全仓通配符替代模块测试；全仓回归只由 `verify:functional` 负责。M00-01 对应 `foundation.test.mjs`、`m00-01-contract.test.mjs`、`m00-01-runtime.test.mjs`、`test_foundation.py` 与 `m00-01-runtime.spec.ts`。
+
 默认单命令超时 120 秒，报告写入 `.artifacts/verification`。可在本地或宝塔受控发布任务中调整：
 
 ```powershell

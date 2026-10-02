@@ -35,6 +35,19 @@ test("M00-07.A04/M00-07.A05 package exposes actual module, phase and all executo
   }
 });
 
+test("M00-07.A05 module gates execute only their registered module tests", async () => {
+  const foundation = JSON.parse(await readFile("verification/modules/M00-01.json", "utf8"));
+  assert.deepEqual(foundation.commands, [
+    "npm run build",
+    "node --test tests/unit/foundation.test.mjs",
+    "node --test tests/contracts/m00-01-contract.test.mjs",
+    "node --test tests/integration/m00-01-runtime.test.mjs",
+    "python -m unittest discover -s apps/crawler/tests -p test_foundation.py",
+    "npx playwright test tests/e2e/m00-01-runtime.spec.ts",
+  ]);
+  assert.doesNotMatch(foundation.commands.join(" "), /tests\/(unit|contracts|integration)\/\*/);
+});
+
 test("M00-07.A06 runtime API stays closed while OpenAPI documents report contract", async () => {
   const openapi = await readFile("docs/openapi.yaml", "utf8");
   assert.match(openapi, /x-scoutops-verification/);

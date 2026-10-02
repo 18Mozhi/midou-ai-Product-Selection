@@ -51,10 +51,10 @@
   ],
   "commands": [
     "npm run build",
-    "node --test tests/unit/*.test.mjs",
-    "node --test tests/contracts/*.test.mjs",
-    "node --test tests/integration/*.test.mjs",
-    "npm run test:python",
+    "node --test tests/unit/foundation.test.mjs",
+    "node --test tests/contracts/m00-01-contract.test.mjs",
+    "node --test tests/integration/m00-01-runtime.test.mjs",
+    "python -m unittest discover -s apps/crawler/tests -p test_foundation.py",
     "npx playwright test tests/e2e/m00-01-runtime.spec.ts"
   ]
 }
