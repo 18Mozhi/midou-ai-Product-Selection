@@ -222,6 +222,6 @@ test("P34 maps current bindings separately from immutable proposal snapshots", (
       /stale current P34 evidence/,
     );
   const changed = new Map([...packages].map(([key, value]) => [key, copy(value)]));
-  changed.get(packageNames[0]).sourceHashes[childFile] = r.sourceHashes[childFile];
+  changed.get(packageNames[0]).sourceHashes[childFile] = "deadbeef".repeat(8);
   assert.throws(() => buildOrgApprovalsReview(sources, changed), /stale historical P34 proposal/);
 });

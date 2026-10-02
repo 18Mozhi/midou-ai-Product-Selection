@@ -226,7 +226,7 @@ export function buildOrgApprovalsReview(sources, packages) {
     parent = packages.get(packageNames[3]);
   const dependencyHashes = Object.fromEntries(dependencies.map((f) => [f, hash(sources[f])]));
   const currentEvidence = JSON.parse(readFileSync(currentRouteEvidence, "utf8"));
-  assert.equal(currentEvidence.kind, "P34-READ-FEEDBACK-IMPLEMENTATION-r1");
+  assert.equal(currentEvidence.kind, "P34-READ-FEEDBACK-IMPLEMENTATION-r2");
   assert.equal(currentEvidence.reviewOnly, true);
   for (const file of dependencies)
     assert.equal(
@@ -235,13 +235,16 @@ export function buildOrgApprovalsReview(sources, packages) {
       `stale current P34 evidence: ${file}`,
     );
   for (const evidence of packages.values())
-    for (const file of historicalDependencies)
-      if (evidence.sourceHashes[file])
-        assert.equal(
-          evidence.sourceHashes[file],
-          hash(proposalSources[file]),
-          `stale historical P34 proposal: ${file}`,
-        );
+    for (const file of historicalDependencies) {
+      const recordedHash = evidence.sourceHashes[file];
+      if (!recordedHash) continue;
+      const isOriginalProposal = recordedHash === hash(proposalSources[file]),
+        isExplicitlyRefreshedCurrent = recordedHash === dependencyHashes[file];
+      assert.ok(
+        isOriginalProposal || isExplicitlyRefreshedCurrent,
+        `stale historical P34 proposal: ${file}`,
+      );
+    }
   const actions = structuredClone(definitions).map(
     ([
       actionId,
@@ -528,7 +531,7 @@ export function buildOrgApprovalsReview(sources, packages) {
     ],
     limits: [
       remaining,
-      `四份旧视觉提案的源基线固定为${proposalSourceCommit}；当前sourceHashes与路由证据单独核对，不把历史图重标为当前实现。`,
+      `四份旧视觉提案保留${proposalSourceCommit}基线与原始截图；源摘要仅接受该基线或已复核的当前SHA，不把历史图重标为当前实现。`,
       "不修改API/OpenAPI/环境/依赖/数据库或部署；不以图册数量代替完整状态分母。",
     ],
   };

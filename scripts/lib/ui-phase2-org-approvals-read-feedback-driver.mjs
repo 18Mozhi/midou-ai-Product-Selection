@@ -6,6 +6,7 @@ import path from "node:path";
 import { expiredVueDriver } from "./ui-phase2-org-approvals-expired-driver.mjs";
 
 export const readFeedbackOutput = "output/playwright/p34-read-feedback-vue-c-r1";
+export const readFeedbackCurrentOutput = "output/playwright/p34-read-feedback-vue-c-r3";
 export function readFeedbackVueDriver(input) {
   assert.equal(
     createHash("sha256")
@@ -25,7 +26,7 @@ export function readFeedbackVueDriver(input) {
   };
   replace(
     'const output = "output/playwright/p34-expired-vue-c-r1";',
-    `const output = "${readFeedbackOutput}";`,
+    `const output = "${readFeedbackCurrentOutput}";`,
   );
   replace(
     "previewApprovalsExpired(previewApprovalsPermission(previewApprovalsParentFrame(sourceOriginals.get(approvalsParentFile))))",
@@ -38,7 +39,57 @@ export function readFeedbackVueDriver(input) {
   "scripts/lib/ui-phase2-org-approvals-read-feedback-driver.mjs",
   "scripts/verify-ui-phase2-org-approvals-read-feedback-vue.mjs", approvalsReadFeedbackCss,`,
   );
-  replace('kind: "P34-EXPIRED-VUE-C-r1",', 'kind: "P34-READ-FEEDBACK-VUE-C-r1",');
+  replace('kind: "P34-EXPIRED-VUE-C-r1",', 'kind: "P34-READ-FEEDBACK-VUE-C-r2",');
+  const expiredStart = source.indexOf("if (failure.status === 401) {"),
+    expiredEnd = source.indexOf('plan = { mode: "normal", marker: "original" };', expiredStart);
+  assert.ok(expiredStart >= 0 && expiredEnd > expiredStart, "Current expired check boundary");
+  let expiredChecks = source.slice(expiredStart, expiredEnd);
+  for (const [before, after] of [
+    [
+      'center.locator(".org-approval-expired-c")',
+      `center.locator('.org-approval-read-feedback-c[data-mode="expired"]')`,
+    ],
+    [
+      'permission.locator(".org-approval-permission-copy")',
+      'permission.locator(".org-approval-read-feedback-c__copy")',
+    ],
+    [
+      'permission.locator(".org-approval-permission-boundary")',
+      'permission.locator(".org-approval-read-feedback-c__boundary")',
+    ],
+  ]) {
+    assert.equal(expiredChecks.split(before).length, 2, `One expired check anchor: ${before}`);
+    expiredChecks = expiredChecks.replace(before, after);
+  }
+  source = source.slice(0, expiredStart) + expiredChecks + source.slice(expiredEnd);
+  const permissionStart = source.indexOf("if (failure.status === 403) {"),
+    permissionEnd = source.indexOf(
+      'plan = { mode: "normal", marker: "original" };',
+      permissionStart,
+    );
+  assert.ok(
+    permissionStart >= 0 && permissionEnd > permissionStart,
+    "Current forbidden check boundary",
+  );
+  let permissionChecks = source.slice(permissionStart, permissionEnd);
+  for (const [before, after] of [
+    [
+      'center.locator(".org-approval-permission-c")',
+      `center.locator('.org-approval-read-feedback-c[data-mode="forbidden"]')`,
+    ],
+    [
+      'permission.locator(".org-approval-permission-copy")',
+      'permission.locator(".org-approval-read-feedback-c__copy")',
+    ],
+    [
+      'permission.locator(".org-approval-permission-boundary")',
+      'permission.locator(".org-approval-read-feedback-c__boundary")',
+    ],
+  ]) {
+    assert.equal(permissionChecks.split(before).length, 2, `One forbidden check anchor: ${before}`);
+    permissionChecks = permissionChecks.replace(before, after);
+  }
+  source = source.slice(0, permissionStart) + permissionChecks + source.slice(permissionEnd);
   replace(
     "approvalsPermissionCss, approvalsExpiredCss].map",
     "approvalsPermissionCss, approvalsExpiredCss, approvalsReadFeedbackCss].map",

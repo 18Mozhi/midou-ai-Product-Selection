@@ -1,8 +1,4 @@
 import test from "node:test";
-import {
-  beforeP34OwnerPath,
-  assertP34HistoricalSourceHash,
-} from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -27,6 +23,7 @@ import {
 } from "../../scripts/lib/ui-phase2-org-approvals-read-feedback-preview.mjs";
 import {
   readFeedbackOutput,
+  readFeedbackCurrentOutput,
   readFeedbackVueDriver,
 } from "../../scripts/lib/ui-phase2-org-approvals-read-feedback-driver.mjs";
 
@@ -86,8 +83,35 @@ test("remaining feedback retains every previous check and rejects invalid option
   };
   const driver = readFeedbackVueDriver(read(approvalsParentBase)),
     current = checks(driver);
-  for (const check of checks(expiredVueDriver(read(approvalsParentBase))))
-    assert.ok(current.includes(check), check);
+  const expiredChecks = checks(expiredVueDriver(read(approvalsParentBase))),
+    expiredComponentChecks = new Set([
+      'check(name + ": approved permission copy", await permission.locator(".org-approval-permission-copy").textContent(), "当前权限还不能读取这些内容。权限调整后，可以重新加载。")',
+      'check(name + ": hidden content is not empty catalog", await permission.locator(".org-approval-permission-boundary").textContent(), "审批内容目前未显示，不代表记录或模板为空。")',
+      'check(name + ": existing expired copy", await permission.locator(".org-approval-permission-copy").textContent(), "重新登录后返回当前页面。")',
+      'check(name + ": hidden content is not empty catalog", await permission.locator(".org-approval-permission-boundary").textContent(), "审批内容目前未显示，不代表记录或模板为空。")',
+    ]);
+  for (const check of expiredChecks)
+    if (!expiredComponentChecks.has(check)) assert.ok(current.includes(check), check);
+  assert.ok(
+    current.includes(
+      'check(name + ": approved permission copy", await permission.locator(".org-approval-read-feedback-c__copy").textContent(), "当前权限还不能读取这些内容。权限调整后，可以重新加载。")',
+    ),
+  );
+  assert.ok(
+    current.includes(
+      'check(name + ": hidden content is not empty catalog", await permission.locator(".org-approval-read-feedback-c__boundary").textContent(), "审批内容目前未显示，不代表记录或模板为空。")',
+    ),
+  );
+  assert.ok(
+    current.includes(
+      'check(name + ": existing expired copy", await permission.locator(".org-approval-read-feedback-c__copy").textContent(), "重新登录后返回当前页面。")',
+    ),
+  );
+  assert.ok(
+    current.includes(
+      'check(name + ": hidden content is not empty catalog", await permission.locator(".org-approval-read-feedback-c__boundary").textContent(), "审批内容目前未显示，不代表记录或模板为空。")',
+    ),
+  );
   for (const args of [["--unknown"], ["--capture", "--smoke"], ["--smoke", "--smoke"]]) {
     const run = spawnSync(
       process.execPath,
@@ -107,19 +131,19 @@ test("previous expired packet remains byte-identical", () => {
     assert.equal(hash(readFileSync(folder + "/" + image.file)), image.sha256);
 });
 
-test("historical feedback packet binds source lineage, original matrix and32keyboard flows", () => {
-  const e = JSON.parse(read(readFeedbackOutput + "/evidence.json"));
+test("historical feedback packet remains immutable and preserves its original matrix and images", () => {
+  const evidenceBytes = readFileSync(readFeedbackOutput + "/evidence.json"),
+    e = JSON.parse(evidenceBytes.toString("utf8"));
+  assert.equal(
+    hash(evidenceBytes),
+    "c9077f463708bb86aa8d634b8ba4be670d8310b8783079a189d9cc0d0deb1543",
+  );
   assert.equal(e.kind, "P34-READ-FEEDBACK-VUE-C-r1");
   assert.equal(e.reviewOnly, true);
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 194);
-  for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34HistoricalSourceHash(file, read(file), expected);
-  assert.equal(
-    e.transformedHashes[approvalsParentFile],
-    hash(beforeP34OwnerPath(approvalsParentFile, revised)),
-  );
+  for (const expected of Object.values(e.sourceHashes)) assert.match(expected, /^[0-9a-f]{64}$/);
   const old = JSON.parse(read("output/playwright/p34-expired-vue-c-r1/evidence.json"));
   assert.deepEqual(e.scenarios, old.scenarios);
   assert.equal(e.scenarios.length, 56);
@@ -155,6 +179,29 @@ test("historical feedback packet binds source lineage, original matrix and32keyb
   assert.equal(e.screenshots.length, 160);
   for (const image of e.screenshots) {
     const bytes = readFileSync(readFeedbackOutput + "/" + image.file);
+    assert.equal(hash(bytes), image.sha256);
+    assert.equal(bytes.readUInt32BE(16), image.width);
+    assert.equal(bytes.readUInt32BE(20), image.width === 390 ? 844 : 1000);
+  }
+});
+
+test("current read-feedback packet replays the complete matrix against exact current parent bytes", () => {
+  const e = JSON.parse(read(readFeedbackCurrentOutput + "/evidence.json"));
+  assert.equal(e.kind, "P34-READ-FEEDBACK-VUE-C-r2");
+  assert.equal(e.reviewOnly, true);
+  assert.equal(e.approval, "pending");
+  assert.equal(e.processesClosed, true);
+  assert.equal(Object.keys(e.sourceHashes).length, 151);
+  for (const [file, expected] of Object.entries(e.sourceHashes))
+    assert.equal(hash(read(file)), expected, `stale current P34 r2 source: ${file}`);
+  assert.equal(e.checks.length, 1606);
+  assert.equal(e.screenshots.length, 160);
+  assert.deepEqual(e.requestCounts, [
+    { width: 1440, parentReads: 168, writes: 0 },
+    { width: 390, parentReads: 168, writes: 0 },
+  ]);
+  for (const image of e.screenshots) {
+    const bytes = readFileSync(readFeedbackCurrentOutput + "/" + image.file);
     assert.equal(hash(bytes), image.sha256);
     assert.equal(bytes.readUInt32BE(16), image.width);
     assert.equal(bytes.readUInt32BE(20), image.width === 390 ? 844 : 1000);
