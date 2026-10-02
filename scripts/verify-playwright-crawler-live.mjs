@@ -162,7 +162,7 @@ try {
     throw new Error("idempotency replay exposed or changed token");
   await assertReject(
     () => service.acquire({ ...context, idempotencyKey: "acquire-conflict" }),
-    "crawler_profile_lease_conflict",
+    "crawler_global_lease_conflict",
   );
   await assertReject(
     () =>
@@ -216,7 +216,7 @@ try {
   });
   if (recovered.recovered !== 1 || recoveredReplay.recovered !== 1)
     throw new Error("expired lease recovery idempotency failed");
-  const snapshot = await service.list(),
+  const snapshot = await service.list({ q: requestId }),
     profile = snapshot.profiles.find((item) => item.id === ids.profileId),
     moduleRuns = snapshot.runs.filter((item) => item.crawler_profile_id === ids.profileId);
   if (
@@ -229,7 +229,23 @@ try {
     !moduleRuns.some((item) => item.status === "timed_out") ||
     !moduleRuns.some((item) => item.status === "succeeded")
   )
-    throw new Error("scoped runtime snapshot mismatch");
+    throw new Error(
+      `scoped runtime snapshot mismatch: ${JSON.stringify({
+        lease_state: profile
+          ? profile.lease === null
+            ? "null"
+            : profile.lease
+              ? "present"
+              : "missing"
+          : "profile_missing",
+        run_count: moduleRuns.length,
+        run_statuses: moduleRuns.map((item) => item.status),
+        scope_matches: moduleRuns.every(
+          (item) =>
+            item.organization_id === ids.organizationId && item.workspace_id === ids.workspaceId,
+        ),
+      })}`,
+    );
   const [events] = await pool.query(
     "SELECT action,request_id,trace_id FROM crawler_profile_lease_events WHERE crawler_profile_id=? ORDER BY occurred_at,id",
     [ids.profileId],

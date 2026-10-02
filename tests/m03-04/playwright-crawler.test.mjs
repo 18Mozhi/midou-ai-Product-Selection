@@ -314,6 +314,7 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
     "apps/crawler/scoutops_crawler/playwright_bridge.py",
     "scripts/run-playwright-crawler.mjs",
     "apps/api/src/mysql-crawler-runtime-repository.ts",
+    "scripts/verify-playwright-crawler-live.mjs",
     "apps/api/src/crawler-runtime-routes.ts",
     "apps/web/src/components/CollectionRuntimeCenter.vue",
     "apps/web/src/crawler-runtime.css",
@@ -337,6 +338,7 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
     bridge,
     runner,
     repo,
+    liveProbe,
     routes,
     web,
     css,
@@ -368,6 +370,8 @@ test("M03-04.A03/A05-A10/A13/A15-A17 delivery evidence is complete and Baota bou
   assert.match(runner, /stdin/);
   assert.match(runner, /config\.playwright\.executablePath/);
   assert.match(repo, /FOR UPDATE/);
+  assert.match(liveProbe, /assertReject\([\s\S]*crawler_global_lease_conflict/);
+  assert.match(liveProbe, /service\.list\(\{ q: requestId \}\)/);
   assert.match(routes, /collection:replay/);
   assert.match(web, /loading.*ready.*empty.*error.*expired.*forbidden.*blocked/);
   assert.match(web, /expiryForecast[\s\S]*未提供有效期，无法预测/);
