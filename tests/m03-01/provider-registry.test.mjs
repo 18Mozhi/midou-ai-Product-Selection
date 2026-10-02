@@ -246,6 +246,7 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
       "apps/worker/src/provider-source-executor.ts",
     ].map(read),
   );
+  const liveProbe = await read("scripts/verify-provider-registry-live.mjs");
   for (const table of ["providers", "provider_versions", "provider_operations"])
     assert.ok(up.includes(`CREATE TABLE \`${table}\``));
   assert.doesNotMatch(up, /organization_id|workspace_id/);
@@ -275,6 +276,10 @@ test("M03-01.A03/A06-A10/A13/A15-A17 delivery contracts are complete and platfor
   assert.match(openapi, /\/platform\/providers\/\{providerId\}:/);
   assert.match(openapi, /ProviderDefinitionInput:/);
   assert.match(complianceUp, /terms_review_status/);
+  assert.match(liveProbe, /terms_review_status:\s*["']pending["']/);
+  assert.match(liveProbe, /terms_reference_url:\s*null/);
+  assert.match(liveProbe, /terms_version:\s*null/);
+  assert.match(liveProbe, /terms_expires_at:\s*null/);
   assert.match(policy, /robots\.txt/);
   assert.match(executor, /assertPublicCollectionPolicy/);
   assert.doesNotMatch(env, /PROVIDER_REGISTRY_|PROVIDER_TARGET_/);
