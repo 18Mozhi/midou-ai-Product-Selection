@@ -1613,6 +1613,32 @@ test("P44 admin workspace composes the approved C directory and read-only compar
   );
 });
 
+test("P44 admin creation surfaces retain the approved colors across hover and keyboard focus", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.goto("/platform-admin/admins");
+  await page.getByRole("button", { name: "新建管理员" }).click();
+  const dialog = page.getByRole("dialog", { name: "新建用户或平台管理员" });
+  const rail = dialog.locator(".p44-admin-create-rail");
+  const form = dialog.locator(".p44-admin-create-form");
+  const email = dialog.getByLabel("邮箱", { exact: true });
+  const password = dialog.getByLabel("临时密码", { exact: true });
+
+  await expect(rail).toHaveCSS("background-color", "rgb(37, 74, 156)");
+  await expect(form).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await rail.hover();
+  await expect(rail).toHaveCSS("background-color", "rgb(37, 74, 156)");
+  await form.hover();
+  await expect(form).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await email.focus();
+  await page.keyboard.press("Tab");
+  await expect(password).toBeFocused();
+  await expect(password).toHaveCSS("outline-width", "3px");
+  await expect(password).toHaveCSS("outline-style", "solid");
+  await expect(password).toHaveCSS("outline-color", "rgba(37, 74, 156, 0.42)");
+});
+
 test("administrator write failures stay inside their active dialogs", async ({ page }) => {
   await setup(page);
   const adminId = overview.admins[0].id;

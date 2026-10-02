@@ -259,6 +259,45 @@ button {
   padding: 24px;
   background: var(--account-org-surface);
 }
+html[data-design="signal-ledger"] body form.p44-admin-create-form,
+html[data-design="signal-ledger"] body form.p44-admin-create-form:hover {
+  border-color: var(--account-org-admin-border);
+  color: var(--account-org-ink);
+  background-color: var(--account-org-surface);
+  font-weight: 400;
+}
+html[data-design="signal-ledger"] body dialog.p44-admin-create-dialog,
+html[data-design="signal-ledger"] body dialog.p44-admin-create-dialog:hover {
+  border-color: var(--account-org-dialog-border);
+  color: var(--account-org-ink);
+  background-color: var(--account-org-surface);
+  font-weight: 400;
+}
+html[data-design="signal-ledger"] body .p44-admin-create-layout,
+html[data-design="signal-ledger"] body .p44-admin-create-layout:hover,
+html[data-design="signal-ledger"] body .p44-admin-create-group,
+html[data-design="signal-ledger"] body .p44-admin-create-group:hover,
+html[data-design="signal-ledger"] body .p44-admin-create-group-head,
+html[data-design="signal-ledger"] body .p44-admin-create-group-head:hover {
+  border-color: var(--account-org-line);
+  color: var(--account-org-ink);
+  background-color: transparent;
+  font-weight: 400;
+}
+html[data-design="signal-ledger"] body aside.p44-admin-create-rail,
+html[data-design="signal-ledger"] body aside.p44-admin-create-rail:hover {
+  border-color: var(--account-org-blue);
+  color: var(--account-org-on-blue);
+  background-color: var(--account-org-blue);
+  font-weight: 400;
+}
+html[data-design="signal-ledger"] body small.p44-admin-create-help,
+html[data-design="signal-ledger"] body small.p44-admin-create-help:hover {
+  border-color: transparent;
+  color: var(--account-org-muted);
+  background-color: transparent;
+  font-weight: 400;
+}
 .p44-admin-create-group {
   display: grid;
   gap: 14px;
@@ -291,8 +330,9 @@ button {
   padding: 14px 0 0;
   border-top: 1px solid var(--account-org-line);
 }
-.p44-admin-create-dialog :is(button, input, select):focus-visible {
-  outline-color: var(--account-org-focus-strong);
+#app .role-shell .p44-admin-create-dialog :is(button, input, select):focus-visible {
+  outline: 3px solid var(--account-org-focus-strong);
+  outline-offset: 3px;
 }
 @media (max-width: 640px) {
   .p43-account-dialog form {
