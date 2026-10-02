@@ -397,6 +397,7 @@ async function decide(action: "approve" | "reject") {
   }
 }
 async function createTemplate() {
+  if (busy.value) return;
   busy.value = true;
   try {
     await api(
@@ -455,6 +456,7 @@ async function publish() {
   }
 }
 async function createRequest() {
+  if (busy.value) return;
   busy.value = true;
   try {
     await api(

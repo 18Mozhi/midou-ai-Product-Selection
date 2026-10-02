@@ -160,11 +160,11 @@ export async function verifyApprovalReview() {
 
   assert.ok(extract("decide").includes("if (busy.value"));
   for (const name of ["createTemplate", "createRequest"]) {
-    assert.ok(!extract(name).includes("if (busy.value"));
+    assert.ok(extract(name).includes("if (busy.value"));
   }
   assert.ok(extract("publish").includes("if (busy.value"));
   checks.push(
-    "Function busy guards differ: publish and decide have one; template/request do not. The browser double-submit guard has a separate local Vue Playwright regression",
+    "All four approval write handlers have synchronous busy guards; actual Vue duplicate-submit regressions cover decisions, template creation and request creation in desktop/mobile local interception",
   );
   return {
     shared: {

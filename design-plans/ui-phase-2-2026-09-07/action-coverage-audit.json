@@ -19,7 +19,7 @@
     "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
     "apps/web/src/components/approval-workspace-types.ts": "85f49803b54e30f8543d7256ce27630001c943aea86baac8a84d45591f9f9792",
     "apps/web/src/components/ApprovalQueuePanel.vue": "247bddb44d67264787f8331e8eb1c872049edc97c72114c847849745a5822075",
-    "apps/web/src/components/ApprovalWorkspace.vue": "13b62f152801f448bba49686f5acfef34ee0a804cbee11c134bf1be3f0c3701d",
+    "apps/web/src/components/ApprovalWorkspace.vue": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
     "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
     "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
     "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
@@ -266,7 +266,7 @@
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
     "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "9a37882127bf26c4a26b827a83023b332c3fbe8338ccf7e168c4b62bbfea33e6",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "0299f051665e41a61bdedc711ea24ea0ac365c64f248c181100ec3ce4cedbecd",
-    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "fdbd156fd14c8233e47d08bf58514410354a5dc09d64ddb83168d771d9a31310",
+    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "093c9b089f1af907f93a5583e21523e23bd734bd4b993c1c518f7faa68ed4ec6",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "0b428f6cc2496bd4aff581065bba5996b2e759951d3676e3c2381ba62d0e7ade",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "9c6ef633c49158b304bf884a0722037a39f0d25e460f31a566577e1d32da0a98",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "e4b0ebe9870290fc99a31742472e25bcaf62ec97bf1db10537108ea941983198",
@@ -476,15 +476,15 @@
     "tests/e2e/m05-01-business-tasks.spec.ts": "0364b66a66a014d79dd1b6838cdf9331f37b921fbdd62a280d1d71b01f4a4858",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "04c25fa600988f45cc171bad0be729421cb9c52f8019f8a9ba2c740e98cfa3d8",
     "scripts/verify-ui-phase2-task-detail-review.mjs": "ab060fb533cf3f80787a5edc2a7214488c25abbc1fc180c7922f94a41d43bef9",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "9d2a167fb3d3950dc8207217e68d2b545869850da8764396eff17614a2c8dca8",
-    "scripts/verify-ui-phase2-approval-review.mjs": "86dbd572a8fefedc3edb40d3f96de1ec77a9bca10d4a879cc6797e3e86e95dcc",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "087682fc60307c890ef8b49e9c51b92e6b25530aeaca46daefb32ed9faed9f95",
+    "scripts/verify-ui-phase2-approval-review.mjs": "800fbd3cf2a01f33926ebc71d83d230948b1fca78695be35ad4b5d316566c786",
     "scripts/verify-ui-phase2-approval-c.mjs": "0448699f0aedb6b4e6851146b00382ecaca7ddf57b05f59fdefeb881fb107917",
     "scripts/verify-ui-phase2-approval-navigation-c.mjs": "637d2f5a34787039a475a3b610a39be52c9ad917e66ef6a8597c7a48b14913d7",
     "scripts/verify-ui-phase2-approval-diagnostics-c.mjs": "feaaf714543fe4b8946c4be4901cd2d464e400e74f77ff362beaee68ac199872",
     "scripts/verify-ui-phase2-approval-lifecycle-c.mjs": "59bfecbccdd956a2031d80e1b92b77430bb3728cfade05441b22eb3e405dbfb3",
     "scripts/verify-ui-phase2-approval-forms-c.mjs": "1aba43d70ecd0d52490c6922c3e681c38b004d8c5d98175bafad956b9333c1c3",
     "scripts/verify-ui-phase2-approval-controls-c.mjs": "237c54b6368df9feab55fbc8039f5e89c589c18651d9a93109ee3ce9419c7fe0",
-    "tests/e2e/m05-02-approval-workflow.spec.ts": "4aabf1669e2a2b0cd7630ccc946ae2756be7ba323e8c68b4536b939668ca7077",
+    "tests/e2e/m05-02-approval-workflow.spec.ts": "6111478a3ae66d18f44aedc7055b3310f9f8e5c2f1c9c30787a9908a38517a3a",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "820e3726e678c950d701daee14ed73d0e5b4b52ba81286b6bb593c1db61df10b",
     "tests/unit/ui-phase2-notification-ownership.test.mjs": "26207ed6dd23ec33d75542165772a6e0ff32ccca40b4c1acb6c6152bfbaccf79",
     "scripts/verify-ui-phase2-notification-controls-c.mjs": "0d8a2b48d22f6ca05636264641d9f13a083559987b430d0b5e802c086b8d5b3e",
@@ -7138,7 +7138,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 63,
+          "line": 65,
           "jsonPointer": null
         }
       ],
@@ -7224,7 +7224,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 64,
+          "line": 66,
           "jsonPointer": null
         }
       ],
@@ -7315,7 +7315,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 65,
+          "line": 67,
           "jsonPointer": null
         }
       ],
@@ -7414,7 +7414,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 66,
+          "line": 68,
           "jsonPointer": null
         }
       ],
@@ -7513,7 +7513,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 67,
+          "line": 69,
           "jsonPointer": null
         }
       ],
@@ -7608,7 +7608,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 68,
+          "line": 70,
           "jsonPointer": null
         }
       ],
@@ -7623,7 +7623,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#fe72f1f58d04daa7.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 529,
+      "line": 531,
       "kind": "control",
       "label": "管理模板",
       "conditions": [
@@ -7634,196 +7634,6 @@
         {
           "directive": "v-if",
           "expression": "published.length"
-        }
-      ],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 27,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-OPEN",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e11c8bef75450e78.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 532,
-      "kind": "control",
-      "label": "＋ 发起审批",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "canManage"
-        },
-        {
-          "directive": "v-if",
-          "expression": "published.length"
-        }
-      ],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 28,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-REQUEST-OPEN",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21acc635baa945ea.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 533,
-      "kind": "control",
-      "label": "配置第一个模板",
-      "conditions": [
-        {
-          "directive": "v-if",
-          "expression": "canManage"
-        },
-        {
-          "directive": "v-else",
-          "expression": ""
         }
       ],
       "staticRouteIds": [
@@ -7906,9 +7716,199 @@
       ]
     },
     {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e11c8bef75450e78.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 534,
+      "kind": "control",
+      "label": "＋ 发起审批",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        },
+        {
+          "directive": "v-if",
+          "expression": "published.length"
+        }
+      ],
+      "staticRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 30,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-REQUEST-OPEN",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21acc635baa945ea.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 535,
+      "kind": "control",
+      "label": "配置第一个模板",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "canManage"
+        },
+        {
+          "directive": "v-else",
+          "expression": ""
+        }
+      ],
+      "staticRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 31,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-TEMPLATE-OPEN",
+          "kind": "local"
+        }
+      ]
+    },
+    {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 540,
+      "line": 542,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -7988,7 +7988,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 30,
+          "line": 32,
           "jsonPointer": null
         }
       ],
@@ -8003,195 +8003,13 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#fa9213ee10c4bdaa.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 587,
+      "line": 589,
       "kind": "control",
       "label": "刷新最新状态",
       "conditions": [
         {
           "directive": "v-else-if",
           "expression": "\n        ['error', 'forbidden', 'expired', 'rate_limited', 'version_conflict'].includes(state)\n      "
-        }
-      ],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 31,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-LOAD",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 589,
-      "kind": "event-binding",
-      "label": "",
-      "conditions": [
-        {
-          "directive": "v-else",
-          "expression": ""
-        }
-      ],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 32,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-QUEUE-FORWARD",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 610,
-      "kind": "control",
-      "label": "关闭提示",
-      "conditions": [
-        {
-          "directive": "v-else-if",
-          "expression": "detailNotice"
         }
       ],
       "staticRouteIds": [
@@ -8268,21 +8086,21 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-NOTICE-CLOSE",
-          "kind": "local"
+          "actionId": "AN-A-LOAD",
+          "kind": "read"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c4a35037858480fb.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 613,
-      "kind": "control",
-      "label": "上一页",
+      "line": 591,
+      "kind": "event-binding",
+      "label": "",
       "conditions": [
         {
-          "directive": "v-if",
-          "expression": "total > pageSize"
+          "directive": "v-else",
+          "expression": ""
         }
       ],
       "staticRouteIds": [
@@ -8359,21 +8177,21 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-PAGE",
-          "kind": "read"
+          "actionId": "AN-A-QUEUE-FORWARD",
+          "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a0fa8a0a8fe3a4f1.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 615,
+      "line": 612,
       "kind": "control",
-      "label": "下一页",
+      "label": "关闭提示",
       "conditions": [
         {
-          "directive": "v-if",
-          "expression": "total > pageSize"
+          "directive": "v-else-if",
+          "expression": "detailNotice"
         }
       ],
       "staticRouteIds": [
@@ -8450,21 +8268,21 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-PAGE",
-          "kind": "read"
+          "actionId": "AN-A-NOTICE-CLOSE",
+          "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1e3aa75fca121f17.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c4a35037858480fb.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 617,
-      "kind": "dialog-definition",
-      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selecte",
+      "line": 615,
+      "kind": "control",
+      "label": "上一页",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "selected"
+          "expression": "total > pageSize"
         }
       ],
       "staticRouteIds": [
@@ -8541,21 +8359,21 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "D-AN-APPROVAL",
-          "kind": "wiring"
+          "actionId": "AN-A-PAGE",
+          "kind": "read"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1dba0cb0b0844a3c.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a0fa8a0a8fe3a4f1.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
       "line": 617,
-      "kind": "event-binding",
-      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selecte",
+      "kind": "control",
+      "label": "下一页",
       "conditions": [
         {
           "directive": "v-if",
-          "expression": "selected"
+          "expression": "total > pageSize"
         }
       ],
       "staticRouteIds": [
@@ -8632,17 +8450,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-CLOSE-FOCUS",
-          "kind": "local"
+          "actionId": "AN-A-PAGE",
+          "kind": "read"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#ed72f74cfb2fdb73.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1e3aa75fca121f17.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 626,
-      "kind": "control",
-      "label": "关闭审批详情",
+      "line": 619,
+      "kind": "dialog-definition",
+      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selecte",
       "conditions": [
         {
           "directive": "v-if",
@@ -8723,6 +8541,188 @@
       "semanticReviews": [
         {
           "pageId": "P25",
+          "actionId": "D-AN-APPROVAL",
+          "kind": "wiring"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1dba0cb0b0844a3c.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 619,
+      "kind": "event-binding",
+      "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selecte",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 39,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-CLOSE-FOCUS",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#ed72f74cfb2fdb73.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 628,
+      "kind": "control",
+      "label": "关闭审批详情",
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "selected"
+        }
+      ],
+      "staticRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 40,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
           "actionId": "AN-A-CLOSE-FOCUS",
           "kind": "local"
         }
@@ -8731,7 +8731,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#618d905faa5eb354.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 631,
+      "line": 633,
       "kind": "control",
       "label": "查看 {{ selected.decision_context.resource.label }} →",
       "conditions": [
@@ -8811,7 +8811,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 39,
+          "line": 41,
           "jsonPointer": null
         }
       ],
@@ -8826,7 +8826,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5201b6777ca22abe.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 637,
+      "line": 639,
       "kind": "control",
       "label": "返回通知中心",
       "conditions": [
@@ -8906,7 +8906,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 40,
+          "line": 42,
           "jsonPointer": null
         }
       ],
@@ -8921,7 +8921,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#861502a87911f91f.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 764,
+      "line": 766,
       "kind": "control",
       "label": "{{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }}",
       "conditions": [
@@ -9009,7 +9009,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 41,
+          "line": 43,
           "jsonPointer": null
         }
       ],
@@ -9024,7 +9024,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#86c54779008e879e.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 860,
+      "line": 862,
       "kind": "control",
       "label": "驳回",
       "conditions": [
@@ -9104,7 +9104,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 42,
+          "line": 44,
           "jsonPointer": null
         }
       ],
@@ -9119,7 +9119,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#3cfff8f4c2f74d66.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 862,
+      "line": 864,
       "kind": "control",
       "label": "批准并流转",
       "conditions": [
@@ -9199,7 +9199,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 43,
+          "line": 45,
           "jsonPointer": null
         }
       ],
@@ -9214,7 +9214,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.2",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 867,
+      "line": 869,
       "kind": "control",
       "label": "技术详情",
       "conditions": [
@@ -9290,7 +9290,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 44,
+          "line": 46,
           "jsonPointer": null
         }
       ],
@@ -9305,181 +9305,9 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21471c244422699b.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 888,
+      "line": 890,
       "kind": "dialog-definition",
       "label": "新建审批模板草稿",
-      "conditions": [],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 45,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "D-AN-TEMPLATE",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e5e612ec729070f4.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 888,
-      "kind": "event-binding",
-      "label": "新建审批模板草稿",
-      "conditions": [],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 46,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a85a9e0937dede29.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 893,
-      "kind": "form-event",
-      "label": "新建审批模板草稿 模板名称 资源类型 任务 机会决策 节点名称 处理时限（分钟） 技术配置：审批人与超时接收人 审批人 请选择当前工作区成员 {{ member.label }} 超时接收人 请选择当前工作区成员 {{ member.lab",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -9555,17 +9383,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-SUBMIT",
-          "kind": "write"
+          "actionId": "D-AN-TEMPLATE",
+          "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5f8fcd4eeb82af58.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e5e612ec729070f4.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 911,
-      "kind": "control",
-      "label": "技术配置：审批人与超时接收人",
+      "line": 890,
+      "kind": "event-binding",
+      "label": "新建审批模板草稿",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -9641,17 +9469,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-FIELDS",
+          "actionId": "AN-A-TEMPLATE-CLOSE",
           "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#33ba0693d19eb13e.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a85a9e0937dede29.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 930,
-      "kind": "control",
-      "label": "取消",
+      "line": 895,
+      "kind": "form-event",
+      "label": "新建审批模板草稿 模板名称 资源类型 任务 机会决策 节点名称 处理时限（分钟） 技术配置：审批人与超时接收人 审批人 请选择当前工作区成员 {{ member.label }} 超时接收人 请选择当前工作区成员 {{ member.lab",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -9727,17 +9555,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-TEMPLATE-CLOSE",
-          "kind": "local"
+          "actionId": "AN-A-TEMPLATE-SUBMIT",
+          "kind": "write"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#19071354ae303ee4.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5f8fcd4eeb82af58.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 931,
+      "line": 913,
       "kind": "control",
-      "label": "保存草稿",
+      "label": "技术配置：审批人与超时接收人",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -9813,6 +9641,178 @@
       "semanticReviews": [
         {
           "pageId": "P25",
+          "actionId": "AN-A-TEMPLATE-FIELDS",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#33ba0693d19eb13e.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 932,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [],
+      "staticRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 51,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-TEMPLATE-CLOSE",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#19071354ae303ee4.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 933,
+      "kind": "control",
+      "label": "保存草稿",
+      "conditions": [],
+      "staticRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 52,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
           "actionId": "AN-A-TEMPLATE-SUBMIT",
           "kind": "write"
         }
@@ -9821,7 +9821,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c02233bb6662b1ab.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 940,
+      "line": 942,
       "kind": "control",
       "label": "发布",
       "conditions": [
@@ -9901,7 +9901,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 51,
+          "line": 53,
           "jsonPointer": null
         }
       ],
@@ -9916,181 +9916,9 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e6808d6bed4a59f1.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 944,
+      "line": 946,
       "kind": "dialog-definition",
       "label": "发布审批模板",
-      "conditions": [],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 52,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "D-AN-PUBLISH",
-          "kind": "wiring"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#27fc15dca539791e.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 944,
-      "kind": "event-binding",
-      "label": "发布审批模板",
-      "conditions": [],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 53,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P25",
-          "actionId": "AN-A-PUBLISH-CLOSE",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#132a2f4c870f90da.1",
-      "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 945,
-      "kind": "form-event",
-      "label": "发布审批模板 将发布“ {{ publishTarget?.name }} ”第 {{ publishTarget?.current_version }} 版。新审批会锁定该版本，历史审批不会被改写。 发布原因 返回 确认发布",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -10166,17 +9994,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-PUBLISH-SUBMIT",
-          "kind": "write"
+          "actionId": "D-AN-PUBLISH",
+          "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#227faf6f0cfb499d.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#27fc15dca539791e.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 961,
-      "kind": "control",
-      "label": "返回",
+      "line": 946,
+      "kind": "event-binding",
+      "label": "发布审批模板",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -10258,11 +10086,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#d5e7aa36e90f904e.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#132a2f4c870f90da.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 962,
-      "kind": "control",
-      "label": "确认发布",
+      "line": 947,
+      "kind": "form-event",
+      "label": "发布审批模板 将发布“ {{ publishTarget?.name }} ”第 {{ publishTarget?.current_version }} 版。新审批会锁定该版本，历史审批不会被改写。 发布原因 返回 确认发布",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -10344,11 +10172,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5eec193b0a9499f7.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#227faf6f0cfb499d.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 966,
-      "kind": "dialog-definition",
-      "label": "发起审批",
+      "line": 963,
+      "kind": "control",
+      "label": "返回",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -10424,17 +10252,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "D-AN-REQUEST",
-          "kind": "wiring"
+          "actionId": "AN-A-PUBLISH-CLOSE",
+          "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a05288e1768f6320.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#d5e7aa36e90f904e.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 966,
-      "kind": "event-binding",
-      "label": "发起审批",
+      "line": 964,
+      "kind": "control",
+      "label": "确认发布",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -10510,17 +10338,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-REQUEST-CLOSE",
-          "kind": "local"
+          "actionId": "AN-A-PUBLISH-SUBMIT",
+          "kind": "write"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c352b89a4148f40.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5eec193b0a9499f7.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 967,
-      "kind": "form-event",
-      "label": "发起审批 已发布模板 请选择 {{ t.name }} 关联类型： {{ resourceText(selectedTemplate.resource_type) }} 。资源类型由模板锁定，不能单独改写。 技术配置：关联资源编号 资源编号",
+      "line": 968,
+      "kind": "dialog-definition",
+      "label": "发起审批",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -10596,17 +10424,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-REQUEST-SUBMIT",
-          "kind": "write"
+          "actionId": "D-AN-REQUEST",
+          "kind": "wiring"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#bfb5c0c0da487c90.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a05288e1768f6320.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 983,
-      "kind": "control",
-      "label": "技术配置：关联资源编号",
+      "line": 968,
+      "kind": "event-binding",
+      "label": "发起审批",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -10682,17 +10510,17 @@
       "semanticReviews": [
         {
           "pageId": "P25",
-          "actionId": "AN-A-REQUEST-FIELDS",
+          "actionId": "AN-A-REQUEST-CLOSE",
           "kind": "local"
         }
       ]
     },
     {
-      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#74e09fbb8250bf10.1",
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c352b89a4148f40.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 988,
-      "kind": "control",
-      "label": "取消",
+      "line": 969,
+      "kind": "form-event",
+      "label": "发起审批 已发布模板 请选择 {{ t.name }} 关联类型： {{ resourceText(selectedTemplate.resource_type) }} 。资源类型由模板锁定，不能单独改写。 技术配置：关联资源编号 资源编号",
       "conditions": [],
       "staticRouteIds": [
         "P12",
@@ -10768,6 +10596,178 @@
       "semanticReviews": [
         {
           "pageId": "P25",
+          "actionId": "AN-A-REQUEST-SUBMIT",
+          "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#bfb5c0c0da487c90.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 985,
+      "kind": "control",
+      "label": "技术配置：关联资源编号",
+      "conditions": [],
+      "staticRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 62,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
+          "actionId": "AN-A-REQUEST-FIELDS",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#74e09fbb8250bf10.1",
+      "file": "apps/web/src/components/ApprovalWorkspace.vue",
+      "line": 990,
+      "kind": "control",
+      "label": "取消",
+      "conditions": [],
+      "staticRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "same-source-site-identity",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
+          "line": 63,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P25",
           "actionId": "AN-A-REQUEST-CLOSE",
           "kind": "local"
         }
@@ -10776,7 +10776,7 @@
     {
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#0afc0196f9054ef3.1",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 989,
+      "line": 991,
       "kind": "control",
       "label": "发起",
       "conditions": [],
@@ -10847,7 +10847,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 62,
+          "line": 64,
           "jsonPointer": null
         }
       ],
@@ -53084,7 +53084,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 69,
+          "line": 71,
           "jsonPointer": null
         }
       ],
@@ -53170,7 +53170,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 70,
+          "line": 72,
           "jsonPointer": null
         }
       ],
@@ -53265,7 +53265,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 71,
+          "line": 73,
           "jsonPointer": null
         }
       ],
@@ -53356,7 +53356,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 72,
+          "line": 74,
           "jsonPointer": null
         }
       ],
@@ -53442,7 +53442,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 73,
+          "line": 75,
           "jsonPointer": null
         }
       ],
@@ -53533,7 +53533,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 74,
+          "line": 76,
           "jsonPointer": null
         }
       ],
@@ -53624,7 +53624,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 75,
+          "line": 77,
           "jsonPointer": null
         }
       ],
@@ -53719,7 +53719,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 76,
+          "line": 78,
           "jsonPointer": null
         }
       ],
@@ -53810,7 +53810,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 77,
+          "line": 79,
           "jsonPointer": null
         }
       ],
@@ -53901,7 +53901,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 78,
+          "line": 80,
           "jsonPointer": null
         }
       ],
@@ -53992,7 +53992,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 79,
+          "line": 81,
           "jsonPointer": null
         }
       ],
@@ -54083,7 +54083,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 80,
+          "line": 82,
           "jsonPointer": null
         }
       ],
@@ -54174,7 +54174,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 81,
+          "line": 83,
           "jsonPointer": null
         }
       ],
@@ -54273,7 +54273,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 92,
+          "line": 94,
           "jsonPointer": null
         }
       ],
@@ -54368,7 +54368,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 82,
+          "line": 84,
           "jsonPointer": null
         }
       ],
@@ -54463,7 +54463,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 83,
+          "line": 85,
           "jsonPointer": null
         }
       ],
@@ -54558,7 +54558,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 84,
+          "line": 86,
           "jsonPointer": null
         }
       ],
@@ -54653,7 +54653,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 85,
+          "line": 87,
           "jsonPointer": null
         }
       ],
@@ -54748,7 +54748,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 86,
+          "line": 88,
           "jsonPointer": null
         }
       ],
@@ -54834,7 +54834,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 87,
+          "line": 89,
           "jsonPointer": null
         }
       ],
@@ -54920,7 +54920,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 88,
+          "line": 90,
           "jsonPointer": null
         }
       ],
@@ -55006,7 +55006,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 89,
+          "line": 91,
           "jsonPointer": null
         }
       ],
@@ -55101,7 +55101,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 93,
+          "line": 95,
           "jsonPointer": null
         }
       ],
@@ -55187,7 +55187,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 90,
+          "line": 92,
           "jsonPointer": null
         }
       ],
@@ -55273,7 +55273,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md",
-          "line": 91,
+          "line": 93,
           "jsonPointer": null
         }
       ],

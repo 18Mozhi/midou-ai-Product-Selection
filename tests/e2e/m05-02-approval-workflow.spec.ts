@@ -542,11 +542,12 @@ test("approval decision handler ignores synchronous re-entry while the first POS
     await decisionButton.click();
     await decisionStarted;
     await expect(decisionButton).toBeDisabled();
-    await decisionButton.evaluate((button) =>
+    await decisionButton.evaluate((button) => {
+      button.removeAttribute("disabled");
       button.dispatchEvent(
         new MouseEvent("click", { bubbles: true, cancelable: true, view: window }),
-      ),
-    );
+      );
+    });
     await expect.poll(() => decisionCount).toBe(previousDecisionCount + 1);
 
     releaseDecision();
@@ -558,6 +559,119 @@ test("approval decision handler ignores synchronous re-entry while the first POS
     expect(decisionCount).toBe(previousDecisionCount + 1);
     expect(submittedBody).toEqual({ action, reason, expected_version: item.version });
   }
+});
+
+test("approval template and request handlers ignore synchronous re-entry while their POST is pending", async ({
+  page,
+}) => {
+  await setup(page);
+
+  let templateCount = 0;
+  let releaseTemplate!: () => void;
+  let signalTemplate!: () => void;
+  let templateGate = new Promise<void>((resolve) => (releaseTemplate = resolve));
+  let templateStarted = new Promise<void>((resolve) => (signalTemplate = resolve));
+  const templateBodies: unknown[] = [];
+  await page.route("**/api/v1/tasks/approval-templates", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    templateCount += 1;
+    templateBodies.push(route.request().postDataJSON());
+    signalTemplate();
+    await templateGate;
+    await route.fulfill({
+      status: 201,
+      json: env({
+        id: "00000000-0000-4000-8000-000000000942",
+        name: "仅创建一次的模板",
+        status: "draft",
+        current_version: 1,
+        revision: 1,
+        node_count: 1,
+      }),
+    });
+  });
+
+  await page.goto("/tasks/approvals");
+  await page.getByRole("button", { name: "管理模板" }).click();
+  const templateDialog = page.getByRole("dialog", { name: "新建审批模板草稿" });
+  await templateDialog.getByLabel("模板名称").fill("仅创建一次的模板");
+  await templateDialog.getByLabel("节点名称").fill("唯一复核节点");
+  await templateDialog.getByText("技术配置：审批人与超时接收人", { exact: true }).click();
+  await templateDialog.getByLabel("审批人").selectOption(actor);
+  await templateDialog
+    .getByLabel("超时接收人")
+    .selectOption("00000000-0000-4000-8000-000000000930");
+  const saveTemplate = templateDialog.getByRole("button", { name: "保存草稿" });
+  await saveTemplate.click();
+  await templateStarted;
+  await expect(saveTemplate).toBeDisabled();
+  await saveTemplate.evaluate((button) => {
+    button.removeAttribute("disabled");
+    button.dispatchEvent(
+      new MouseEvent("click", { bubbles: true, cancelable: true, view: window }),
+    );
+  });
+  await expect.poll(() => templateCount).toBe(1);
+  expect(templateBodies).toEqual([
+    {
+      name: "仅创建一次的模板",
+      resource_type: "task",
+      nodes: [
+        {
+          name: "唯一复核节点",
+          approver_id: actor,
+          sla_minutes: 60,
+          escalation_assignee_id: "00000000-0000-4000-8000-000000000930",
+        },
+      ],
+    },
+  ]);
+  releaseTemplate();
+  await expect(page.getByText("审批模板草稿已创建；发布前不会用于新审批。")).toBeVisible();
+
+  let requestCount = 0;
+  let releaseRequest!: () => void;
+  let signalRequest!: () => void;
+  const requestGate = new Promise<void>((resolve) => (releaseRequest = resolve));
+  const requestStarted = new Promise<void>((resolve) => (signalRequest = resolve));
+  const requestBodies: unknown[] = [];
+  await page.route("**/api/v1/tasks/approvals", async (route) => {
+    if (route.request().method() !== "POST") return route.fallback();
+    requestCount += 1;
+    requestBodies.push(route.request().postDataJSON());
+    signalRequest();
+    await requestGate;
+    await route.fulfill({ status: 201, json: env({ ...item, id: opportunityId }) });
+  });
+
+  await page.getByRole("button", { name: "＋ 发起审批" }).click();
+  const requestDialog = page.getByRole("dialog", { name: "发起审批" });
+  await requestDialog.getByLabel("已发布模板").selectOption(item.template_id);
+  await requestDialog.getByText("技术配置：关联资源编号", { exact: true }).click();
+  await requestDialog.getByLabel("资源编号").fill(decisionId);
+  await requestDialog.getByLabel("审批标题").fill("重复提交保护验证");
+  const startRequest = requestDialog.getByRole("button", { name: "发起", exact: true });
+  await startRequest.click();
+  await requestStarted;
+  await expect(startRequest).toBeDisabled();
+  await startRequest.evaluate((button) => {
+    button.removeAttribute("disabled");
+    button.dispatchEvent(
+      new MouseEvent("click", { bubbles: true, cancelable: true, view: window }),
+    );
+  });
+  await expect.poll(() => requestCount).toBe(1);
+  expect(requestBodies).toEqual([
+    {
+      template_id: item.template_id,
+      resource_type: "opportunity_decision",
+      resource_id: decisionId,
+      title: "重复提交保护验证",
+    },
+  ]);
+  releaseRequest();
+  await expect(page.getByText("审批已发起；第一节点 SLA 已开始计时。")).toBeVisible();
+  expect(requestCount).toBe(1);
 });
 
 test("approval management creates and publishes templates, starts requests, and deduplicates decisions", async ({
