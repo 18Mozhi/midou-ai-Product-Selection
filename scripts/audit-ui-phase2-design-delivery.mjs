@@ -47,6 +47,7 @@ import {
   tokenCopyRevisions,
 } from "./lib/ui-phase2-token-copy-baseline.mjs";
 import { findCommittedHistoricalRevision } from "./lib/ui-phase2-committed-history.mjs";
+import { visualApprovalForReview } from "./lib/ui-phase2-action-coverage.mjs";
 
 // Artifact integrity and explicit page-link inventory, NOT design/action/production acceptance.
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -227,6 +228,16 @@ for (const p of coverage.pages) {
   const spec = relative + "/page-specs/" + p.id + ".md",
     body = await text(spec);
   inputHashes[spec] = (await fileHashes(spec)).lf;
+  const reviewFile = relative + "/action-reviews/" + p.id + ".json";
+  let visualApproval;
+  try {
+    const review = await json(reviewFile);
+    assert.equal(review.pageId, p.id, p.id + " review page mismatch");
+    visualApproval = visualApprovalForReview(review);
+    inputHashes[reviewFile] = (await fileHashes(reviewFile)).lf;
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
   const references = [
     ...new Set([...body.matchAll(/\]\(\.\.\/design\/([^/)]+)\/README\.md\)/g)].map((m) => m[1])),
   ];
@@ -248,6 +259,7 @@ for (const p of coverage.pages) {
     buttonStateCoverage: "unproven",
     dialogVariantCoverage: "unproven",
     userReview: p.userReview,
+    visualApproval: visualApproval ?? "pending",
     implementationEvidence: p.implementationEvidence,
     productionEvidence: p.productionEvidence,
     notes:
@@ -295,6 +307,7 @@ const summary = {
   verifiedBusinessActions: coverage.verifiedBusinessActions,
   verifiedDialogVariants: coverage.verifiedDialogVariants,
   userApprovedPages: coverage.userApprovedPages,
+  visualApprovedPages: pages.filter((p) => p.visualApproval !== "pending").length,
   denominatorFrozen: coverage.denominatorFrozen,
   gates: coverage.gates,
 };
@@ -343,12 +356,13 @@ let machineReport = `# C方向逐页审核索引与交付缺口
 - ${summary.sourceBindings}条来源绑定 / ${summary.uniqueBoundFiles}个唯一文件，漂移${summary.sourceDrift}；PNG指纹漂移${summary.pngDrift}，未列入清单PNG ${summary.unmanifestedPng}；图册内${summary.readmeLinksChecked}个本地链接已核对。
 - 其中${packages.reduce((sum, p) => sum + p.sources.filter((s) => s.encoding === "historical-LF-exact-revision-not-current-acceptance").length, 0)}条为精确历史修订关联，旧图不等于当前源码验收；机器报告保留原hash和当前hash。
 - 用户逐页批准${summary.userApprovedPages}；业务动作已正式验收${summary.verifiedBusinessActions}、弹窗变体已正式验收${summary.verifiedDialogVariants}；分母冻结=${summary.denominatorFrozen}。保留原coverage门禁，不把静态候选算去重业务动作。
+- 视觉方向授权${summary.visualApprovedPages}/${summary.routes}（读取逐页动作审阅文件中的独立visualApproval；不等于动作/弹窗验收或正式逐页签收）。
 
 ## 本轮证据结论与下一步
 
 1. ${missing.length ? `**仍缺 ${missing.length} 个路由的整页稿关联**：${missing.join("、")}；按缺页清单继续补稿。` : "**73 路由均已有整页或分段 C 稿关联，但不等于整页通过**。P22 费用版本已补关联；下一逐页核对动作/弹窗语义分母、各态映射与 P11/P18/P54 组合，并收集具体图稿审核意见。"}
 2. **有图不等于每个按钮/弹窗六态已覆盖**：PAGES要求逐actionId/dialogId关联验证；现有总coverage仍为未冻结/0已验。各包局部场景、截图及源隔离检查不能证明全站语义分母。后续逐页补动作与变体的状态映射、适用/不适用理由和实际测试，不先把总门改绿。
-3. **审核入口已关联当前材料，批准与实现仍待办**：[C方向逐页审核台](review.html)按路由展示关联图册，并将显式登记的真实Vue证据分栏；历史候选和意见保留原身份。P11/P18/P54等多段稿仍需核对组合，不按包数或PNG数累计成完整页。具体图批准后才能进入相应Vue闭环；此处不修改用户意见或任何生产事实。
+3. **视觉方向与其余验收分栏**：[C方向逐页审核台](review.html)按路由展示关联图册，并将已授权的视觉方向与显式登记的真实Vue证据分栏；当前视觉授权不自动批准动作、状态/弹窗覆盖、生产或正式签收。P11/P18/P54等多段稿的组合实现仍待闭环；此处不修改用户意见或任何生产事实。
 
 ## 逐页审核入口
 
@@ -361,7 +375,12 @@ for (const p of pages) {
   const links = p.proposalPackages
     .map((f) => `[${f.replace("-direction-c", "")}](design/${f}/README.md)`)
     .join(" · ");
-  machineReport += `| ${p.id} | ${p.title} · \`${p.path}\` | [规格](${rel(p.spec)}) | ${links || "待补整页稿"} | ${links ? "相关稿待审；整页/全动作未证明" : "无对应整页稿关联"} |\n`;
+  const status = !links
+    ? "无对应整页稿关联"
+    : p.visualApproval === "pending"
+      ? "视觉方向待审；整页/全动作未证明"
+      : "视觉方向已按授权通过；整页/全动作未证明";
+  machineReport += `| ${p.id} | ${p.title} · \`${p.path}\` | [规格](${rel(p.spec)}) | ${links || "待补整页稿"} | ${status} |\n`;
 }
 machineReport += `\n## 共享面与历史研究（不抵扣业务整页）\n\n`;
 for (const p of packages.filter((p) => p.role !== "page-or-section-proposal"))

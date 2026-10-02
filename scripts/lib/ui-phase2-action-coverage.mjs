@@ -8,6 +8,15 @@ const visualApprovalLabels = new Set([
   "user-approved-remaining-pages-auto",
 ]);
 
+export function visualApprovalForReview(review) {
+  const visualApproval =
+    review.visualApproval ??
+    (visualApprovalLabels.has(review.approval) ? review.approval : undefined);
+  if (visualApproval)
+    assert.ok(visualApprovalLabels.has(visualApproval), "unsupported visual approval label");
+  return visualApproval;
+}
+
 function validateSourceStateApplicability(action, context) {
   const states = Object.keys(action.visualStates).filter(
     (state) => action.visualStates[state] === sourceAbsentState,
@@ -82,16 +91,12 @@ export function validateActionReview(
 ) {
   assert.equal(review.schemaVersion, 1);
   assert.match(review.pageId, /^P\d{2}$/);
-  const visualApproval =
-    review.visualApproval ??
-    (visualApprovalLabels.has(review.approval) ? review.approval : undefined);
+  const visualApproval = visualApprovalForReview(review);
   assert.ok(
     review.approval === "pending-user-review" || visualApprovalLabels.has(review.approval),
     "This registry cannot grant action approval",
   );
   assert.equal(review.actionApproval ?? "pending-user-review", "pending-user-review");
-  if (review.visualApproval)
-    assert.ok(visualApprovalLabels.has(review.visualApproval), "unsupported visual approval label");
   assert.ok(review.actions.length > 0);
   const seen = new Set(),
     actionIds = new Set(),

@@ -7,8 +7,8 @@
     "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "19a319f94a4f792c7fef6ecf54890d8d7f956dd7530820c5800f05153cd82e60",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
-    "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "1f71cf29d772543f805427eae72508cd0b010bf7ca2c6cc1416decea1ab87470",
+    "design-plans/ui-phase-2-2026-09-07/PAGES.md": "403a7df799a0aace1f6f869b878c6ae835984241913ff031586efa5566b7448e",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "b9bde4bf4f6e6122e8b44d49a87fd1949fd9f364dd7e3120a11068fce6c33d21",
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "120bf0d7417c51e38c31b8dc38f009a32feb5553bcae49e6064c680fd178ba47",
     "scripts/lib/ui-phase2-token-copy-baseline.mjs": "3b99ffa8b188b07727a1c13521e164001a02251eacbe54a81f2a2db361faba35",
     "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "b16cce55c4f07892ecf8758578003dd75198092fa60421b388b6e1ca57580a27",
@@ -22,87 +22,158 @@
     "scripts/lib/ui-phase2-admin-directory-baseline.mjs": "c2b6a90174caa8e5a9b1344bc7026f6103c918677993b5dc2443c71c04146761",
     "scripts/lib/ui-phase2-committed-history.mjs": "c54d75f144bb07a26aa3dd7b6e345cc149c1afd532fc0a5e0ca3e2d5e57dab71",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P01.md": "908636a0d887acdfe7a3a704495201afb7120c28c2df8842a3829806e60430f8",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "24c8635ab34c2899698b3054e1d93dbd8019d7b91f3f54c2f09fc1d5c56e732e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P02.md": "2c433f1f97aee9b8c3e19f0e2baa24ed9be34572380d43b3f7694ffa93c1122a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P02.json": "375251d34db3e5457b4843d112a525d3c9fdbafb8645e53de7b1ce3b51fb9fb8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P03.md": "5d313d6c132671b76cb325c07c702b82193b786c2d27ea07aa9476ff32b26356",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P03.json": "439deb2f668dbb7ba27c6ed0eaf3cc4b6dd7245c180a48a35517cf3d09b3d539",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P04.md": "451d5b1cfc9872295018b0592e63c9e1277ed27345d8a56bf9f570cf28350423",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P04.json": "9d9559d327e653baa3e92e8fff0925b19bcffc52ce193d3840fd154272f6bc86",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P05.md": "3bf5ce1459a9d0d489a61865f02196745279af4ac711716939ed655c14bbe742",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P05.json": "7a66061a5bbd4cbce24bf2ce7826728237f5d513f3f0b92e9c8c2d7543494ba4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P06.md": "051d6fc1260c67a965888162c4b441c874411ef5e23adf733602df7cbfdebe28",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P06.json": "3612bd4903c5b8b94c0a0fd13bd3c20572908b6bab15b2f4c1e0b75b62e0a8cd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P07.md": "29e870f11baee5d386d6aa04afca8bc6ce63fb72e05da8862fc6366ecd1a101e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P07.json": "f5b000339ba406bebe3b733525f2a5d85496ce5a1e186cefa33338661a8fb6b9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P08.md": "c6184c135e79c5fd38b17fd358331e50e53a52de4a8ce150514e93f793ad273b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P08.json": "98b0531c9f7e72e09f36127bd1506e6f3b72759f210d0a4464cee9efee1845cd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P09.md": "a79abe5883d65357d0066e7f2f64c6921179a8da0516ba5eaf47c0bdbd32a835",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P09.json": "d0db4debe1edc0a13e11cb949446b4fc57ec5f811d9484f97799067384778e08",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P10.md": "5d19b2cf3d14acc1beb1a6f415b06e887fc09b43f97f4442d368a66b2bf27594",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P10.json": "f53acf65f0feac1badaea92051d486e6fa0310b85693394c5ba1e43e6d466c7e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P11.md": "1b73dc9bf3ae8ede7d3b94faba9d6b480d2265437f4f9b9b4fdc12f9c39343c5",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P11.json": "a7956f8ebd927f5eab5a8b0fe0bd747355b07cec20b80945460321156eaa7728",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P12.md": "ec432a9be886d13c8141f3784da440c5d1f3552b417b6a7ae2278288556a34cb",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P12.json": "7d34f8be02301a16d88b57f4abaf77227443a8d2bb62bcdcd3942c0708440463",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P13.md": "7fbacb6b0b1e2a3cf5d33dda101e9941f5e86c8c94d39fe950f61d30f05117ce",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P13.json": "71075e508f7dd05eef56ab4c41cdaa3e9ac1dde77372dff6f4354f64f59c92b4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P14.md": "0e90768843ea8d1fa04e4d529781a68435ef6268df6ea2a9d490fe363df3a1b9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P14.json": "2de986771f0c739e6c854320c19dec7a3aa344599f20f7c918e6c674cee7027d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P15.md": "bc3d86437f8cd0c435d20820b0453efa7201c8305e95b1a3081fdbfb10a3d61d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P15.json": "067c7e41030180d106e0befe813a04fc90e4150802002204d6bec04c28fbed8d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P16.md": "cf4c831ad6c7059780ea74377fd52ef4e90b374de610edd12f05e1be2fb954f0",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P16.json": "30fd9929c7d72d386819264a3c1087f7519f552e4f5df5b69da6ea51b6aeac1b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P17.md": "d56f08cd29e0f343c6c984f1f3c3e6e7e2405233957be0617696e4e91a459fa4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2d387f6cccdac69f797195db1ac79909463483c1a4ae431011b699fefcbd997c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P18.md": "9ae526b88234a0f24cea690fec9347a03dbf2d37856d6dc5df42b458efb3b43b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "3a1cca1ae0e723599b9e1f472bbe24b5db6a76a6dfb05a2bd0582c8c6196430a",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P19.md": "f138b8b84797d4cdcd0175e06f281fa6b3fd15a9456b9fbeca68340d7584f77b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P19.json": "3a12c7a808f823a2cf5d162540a3cdbee9d9e9ace5667ba7d49ff8cdb6eccfd4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3c6a60caf2045f07a9a14c89f07cd3c1d9b20851719683f69b02931ce04f730f",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P20.json": "b260da78109e503da63c91a572aba3dac4216288ece7eff7158503566bfa3e7c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "683179d07629a30338b60ab10ab52c96883610215eecb1616931bf55ca66fe18",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json": "771928d1e8b4ce8f7aeca2b3ee68f73ffb50df884dcaa000a7afceec132954dc",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "9e605fdc8c12403e1e2f29b8cb73ade86dd81e8c3d96bbe5b26f9e3f08938339",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P22.json": "d7036c697281ebd9ec344f6f85cddd8ce98728c77d3abc839d7715d5d62380c9",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "f3f7c510b62b7face51d49b546851e00603fde3aebcc2977cd731107120157f9",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P23.json": "f5a1ede286983b298376782ef58d86e84c709bd7bb1abb179f2d4a204c5baa37",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "a45152837ce15508c1cd1f33f5493bf11fa18d03e0ceed1551d5462ed9f876f4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P24.json": "04c25fa600988f45cc171bad0be729421cb9c52f8019f8a9ba2c740e98cfa3d8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "1d037ef6720eb6bf4230e6e7f36dad5086c2580f1fee57c182e7d7cfe4d7abfd",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P25.json": "087682fc60307c890ef8b49e9c51b92e6b25530aeaca46daefb32ed9faed9f95",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "71649dd677697325648200b80d5a49d26ef798e311b072d2bd7bed2e20208c22",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "820e3726e678c950d701daee14ed73d0e5b4b52ba81286b6bb593c1db61df10b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "09ee27c2a5bf18a101a88ad58f42eb4cf057a1978ed21efc81f7e59471e097aa",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "41ddf546604f2888dfcc1701d5dd9e8980444a4db2dddc4c351092526fb1935c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "f20c35839e97d775cd5dbc2ecb284ad7a1383c720e07ccf1909084be25577838",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "fae2bc8ad53fadecc4082df6caeb475ac33db9ff8395c93cc4f472dad07eb362",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "c0364bb11b10dc41efca32ebc9b8dec8d3131a096b426d9820f647b444bff92b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "585c2b5489a1c34ad1297d954cda10c52a11cd8cf85951ffaf35905b723d9cd1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "d666be471a8ebd8c838d61e2d8facf969c867d6fa44e827b40bbeb4175ca0038",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "44cdd6607680da916968b2ba16b2bad6233aaaa9f75a49bc3cc7ae052eb31e9b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "4cfa27dea70ce875db27bf1d1b08e3ac61c2d53d91830305cc7fdd362a8b7097",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "8199d08c370715b4d5df2262d2388b7749560845469e78c11e4b90860715f0a4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "f507ab77103e870c4f31e0a715c6b16f666a18b86edbdbf886f7e61457580c36",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "253bff45890a1b58aa6b9fdce0f6bf2a20fa451f7b881184108bb3ef9a05ecaa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P33.md": "0144d888e8259c4d24bf9088958fa5dc52ec19d9a7f3cb4ec7233274b94e012a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "aa13dd439ad62f77b40121215c31d015794032265bf51cb344368d9cd13128d1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P34.md": "9a71a83189079922737c90ca0a33e994dd907184aa5a80f6cd05e30949e0abda",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "b73bfb43cc9e7d9834748538c915c39620b56a2f65e4bdd3fc9dcbc91c0f4e45",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P35.md": "5e139e443624b79f9f3d23ab36b2ff5f605ad456d7e1a17b62af63c2e205d576",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "7d37cd7bb1e051dfc1b91f73c4130529f93932dde0867379b70af427e3ce18a8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P36.md": "e143a6287617cc2053dba041b080b1e2bc6841d45ee5fc941993b49c48615ada",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "1ea415386045ee9df46cbe109e2b5a8b842336a03d93bbbf73d8278a682da188",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P37.md": "079b2a1741be1fb36bec7e77ee71ca4a290b80f1173d4147c386adcf7536cbab",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P37.json": "72a9e86690356cd3bd632dd281e339bc1141e12a5ea8490f1440ab20f1e11e4b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P38.md": "a94063447c9da3fbcfd0fad7c362ce558ed958e42820c4e261e70c4c6ce67f3d",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P38.json": "d90187ebab7d71be52dc132020cb573f41837b8417c6c575d95d31e2f0ee745d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P39.md": "4bc2c357dbb9eb942baf7a2402a4b3f9e6c8492bf46c2b191bb03fba149d1f04",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P39.json": "2f8a3d33dcd0940fe7d48217fb50707eed3b9559d3c5dfa5693693d30c32bab4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P40.md": "b14be62156584d73ff6c60addccdf74ae180b5361b74f77d95311d3163f690ef",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "9916d3b7a0db8fb95ddbde4aca7d5bf4e5ac8cccd7077da9f68220cc80858c28",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P41.md": "bc0c619fbce430464f86835046d52f5e41650d71bdbdaccd082db892cd45ed1b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P41.json": "88354639522a5d2f0a9040750986d2031299c6be1cd3d4963bc1b28565368ecb",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P42.md": "dec99d4a92145b00edaa9452014384c22b9251122288f5f92f20d4b148926a7c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P42.json": "a387162527965d364f710d71cb1ea4b366f44aa45f3463c59854451f3bb02893",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P43.md": "24ac7c62938906bbc19509db3421df39e56cc1b21a714defd153114fa6a4e783",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P43.json": "c209e586ce5f5a237d92526b0a8091126d48607e999a51d3d711ed5c7d70ed85",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P44.md": "14d8f23dafcda1a8c4777327e70a989a34f208fbd7a56785df0cc82ce6eaa4e3",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P44.json": "1f26929f3cf69daa2f54c30f73a613d54bfb6f29bb5cc0276eb7bb208c42a71f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P45.md": "6a648fe4dbbff3bb60dd991ffe32af97a6552095613d76ef35c85cdece6ae91c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P45.json": "d17050ba541a969fcff493fbed839331d74b621833749ffa43679c3c3c7ecf13",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P46.md": "8db16cf917520fa439d33b4b1f1c9f352d934ead55ee076c78daac439636f5d6",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P46.json": "81f0bf87279781aeaf08b91a658fe8ebca5476219ff754a716db21cd839a0915",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "49007854be666b99e204721344df773f50621539b3b977b4779fa04890280ac2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P47.json": "1656a87a74cc63d9cb60a759d77ae47111915954438f1801bd18e88e80129660",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "62f68056937185ab592f755f4481cb3d11082a754fc1fcec5dc8e65f6e1f064e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "09417abe2f56c49076daa39fbcd4078fa87190b49bb1ac72e76e63cb4c7e52cf",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "242f27618e2b314c7ba6aa8b7cc3873a9c037f34fdf99b1a477ef70c8cff19a0",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "0a96c4ac83e8bd5041709dcd8767f38fc75c6adfe5e3d94a3b250ca4b08adc8f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "03ef86da619bd15bca7def3874da6f6b974170d9110ef00a1d615c24c66122e8",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P50.json": "4663d3abb84e54310745a7c3e10956dee1b21d9d220984ba7b8d3cb8117538b0",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P51.md": "fe30eef2edfe610323d19a8a22724139df273a9d9ce09b26e4f0a12225983461",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P51.json": "1fe0a628f41ac0185efa4f4c9042d91dd116baec095c05dc0b1fe0239444d521",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P52.md": "88e408d69b0b18e6f5e959fe1269523ee67a81fe1727559acf86deabb5898dfa",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P52.json": "a12d6e31b8dc3734dd1b127a02ba810178139a07300e04249b08527100711dfc",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P53.md": "a3555dea91aeb57e3d72b5bbc439d6e45ac25d5918aa43d0f895911e71b99d7b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P53.json": "08deea174436a93aaa01313784be3c88c42f9aba51d791a840a5144af1ecf8d4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P54.md": "4e376152de64aa8bf2c85a6e5fb049e5d548dca0548248318b9d0252cae1ba13",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P54.json": "068225fd636b244375700abd944b95aaea25fa8a3260b7ee20e78f680e400e4e",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P55.md": "eecb01a5420fe50237138a202cd58f9623faac8741c8942a50695acda7f1499a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P55.json": "e4816811798949e12750b9993b37c872582a9bed0a7045a8ac9361ee2c00418f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P56.md": "0e4e2251072e0b24a261d350bd476434aebcb2a1dfc4c329e5d2625a7d667222",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P56.json": "d317a0f04f66b7829cf639fb71803168b5e27104e35938b3806740bfb1a72086",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P57.md": "ba2a5d5d4155e3aa10cc4d7713167a6d0e3fa538cb99c19a6434d7f1de00a4d6",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P57.json": "8d26797bc2f619681015dbe7992b20428c6278d817c7631a2ead513d6648caef",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P58.md": "f5c8adcf83981edea27b9088e97b7ecba9d7153dc6c61847919a09d36ae8a50b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P58.json": "6d70196383b8b39129e54a51eae149996259b8d251a7d38163f7eb192d9acf11",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P59.md": "171d9e09f0a49a2ef6abf0714256d394870c6f7ad510e7320767a6329276c33f",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P59.json": "fe2cc20e36b60d0bf11abb6c32d131d763ecab15377339b6f02b96dec213c228",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P60.md": "903952e96e318175e150f0d924fe84a186b32b39d09269d5c1d239757b8c8970",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P60.json": "1713176e49836c0aadc1b18c6fd2af5d81d3bee3f40c08e6b6a1bed6f68bf5fc",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P61.md": "00cc26eb337479d306cddc84d7b252189fb10ecdf5868f41277d350dcb20b9f2",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P61.json": "95328f9096b2e11ad90a391c8b5075526f7710d062f967b281f242914a6bc190",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P62.md": "4643301cd84bf55cb906ce4d6f9691e5faa77b5c57581a79f5a979f0ecbe1415",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P62.json": "682ef6f1f96cdd98ccf30fbc3bf2188783ca046fb4b749adc5257263c12a1dc3",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P63.md": "638bc66ddda804f5022476e6fe5bb8dab6668ec434aadfb36af6022134ffac36",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P63.json": "0eaf6956b9cc12ca27e5e40ce7adb077f37258823624339007714ed1a3fcca4c",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P64.md": "11c87c5e52f5b66804134edc5e3d8bd84519b4a8f3d91b233b00763681172a4b",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P64.json": "4ee9656e3fd1d81de5d25be1ec4462e7d882f66cf3aa30d5c105afb397526cc1",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P65.md": "6484a40709152db9e56130c2311cb0966fa4871c770c0e80ed64794e8e1ff033",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P65.json": "82b8ef02cf2fd3433d5cbe65ab55e6d74fc83a5b5ea42b25eb1ebc4e332fda79",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P66.md": "f9efd2c66618488b12fe919778604c030028bf44c7b4b46432f8ff2f5b7fc806",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P66.json": "61e1ee33e2bd3eefd68ccbc0281eb176e99873de38e5646e81b3684ca3837483",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "f682447baf5a27d7c8a0ada410025934e5203510393aa3c073bbf6e771c50705",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P67.json": "994b358980e0debb0d3b40e9e671369527696007ae591bd3f498a585233a4a5d",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "9829094644f2614f6fb5cdccb5184ef4a972f7bbaf720fb398066003625feede",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P68.json": "3914554c182335c4204ec5f3a80a9bd8aaebbbdbbc98d9f8a77308b25a27ba23",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "389f1671920d3e64637cc9609d47074af8fc2a5c014a95c6d0817afb6ee894b3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "ea611fdc587c92bf5187dc3d1a869a743ce5393615f3b62e0ed5f17fd715790c",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P69.json": "c4be1c3c286ef0db01d52d9dcbb0fdcda35c2e87c8f6629b1c587ae0f73e7138",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "d562b7962b48d5d8802660d5377a3cc3b90fd55672129d389130952789ddf3fa",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P70.json": "f5e5fbbf3a5a0444523be77669392b41645bd2550b9ab7e5bc0539d295a835fa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "b58a994a201f5980f8ee68376bf8331cd6ded381d1579621398bbb900f034fc5",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P71.json": "feed8dd95227fb1ed9e66a95838cd44e93cdd82db576c433d3754a86e058f3eb",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "8799c6057f3b537823713df64d67e76ba912331b1253f7ca34ed84fe12eba081",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5e7d02960a5904c118159279d1f9ec7a71dd0d6d235bfae42f92ee42cd7af30a"
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P72.json": "a57b019bd65d4d34875200ca51875a635b02703c9273a3c99f85053adc15bc9d",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5e7d02960a5904c118159279d1f9ec7a71dd0d6d235bfae42f92ee42cd7af30a",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P73.json": "9f9439ce01794ee2bed7ff8bf91d888ba8944c9e725d5b4615e71d19f4a0a677"
   },
   "summary": {
     "routes": 73,
     "specifications": 73,
-    "relatedProposalRoutes": 72,
-    "noLinkedPageProposalRoutes": 1,
-    "missingPageIds": [
-      "P70"
-    ],
+    "relatedProposalRoutes": 73,
+    "noLinkedPageProposalRoutes": 0,
+    "missingPageIds": [],
     "packages": 102,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
@@ -113,13 +184,12 @@
     "pngDrift": 0,
     "unmanifestedPng": 0,
     "readmeLinksChecked": 10157,
-    "unlinkedPagePackages": [
-      "scheduler-direction-c"
-    ],
+    "unlinkedPagePackages": [],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
     "verifiedDialogVariants": 0,
     "userApprovedPages": 0,
+    "visualApprovedPages": 73,
     "denominatorFrozen": false,
     "gates": {
       "G0": "in-progress",
@@ -149,6 +219,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-visual-direction; remaining page visuals auto-approved by user",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -171,6 +242,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-visual-direction; remaining page visuals auto-approved by user",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -193,6 +265,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-visual-direction; production checks recorded separately",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -215,6 +288,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-visual-direction; production checks recorded separately",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -237,6 +311,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-visual-direction",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -259,6 +334,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-visual-direction",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -281,6 +357,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-visual-direction",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -303,6 +380,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-visual-direction",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -325,6 +403,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -347,6 +426,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "theme-direction-c README explicitly excludes every Pxx business page; it is a shared floating panel, not ThemeStudio."
@@ -373,6 +453,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Multiple section/assembly proposals; links alone do not prove full page composition or all actions."
@@ -395,6 +476,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -417,6 +499,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -439,6 +522,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -461,6 +545,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -485,6 +570,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -507,6 +593,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -541,6 +628,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Multiple section/assembly proposals; links alone do not prove full page composition or all actions."
@@ -563,6 +651,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -585,6 +674,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -607,6 +697,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -629,6 +720,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -653,6 +745,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -677,6 +770,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -709,6 +803,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -737,6 +832,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -763,6 +859,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -787,6 +884,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -813,6 +911,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -839,6 +938,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -865,6 +965,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -893,6 +994,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -919,6 +1021,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -947,6 +1050,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -969,6 +1073,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -991,6 +1096,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1013,6 +1119,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1035,6 +1142,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1057,6 +1165,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1079,6 +1188,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1101,6 +1211,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1123,6 +1234,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1146,6 +1258,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "account-direction-c is direction-selection research; user-admin-direction-c is the later concrete proposal."
@@ -1168,6 +1281,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1190,6 +1304,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1212,6 +1327,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1234,6 +1350,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1256,6 +1373,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1278,6 +1396,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1300,6 +1419,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1322,6 +1442,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1344,6 +1465,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1366,6 +1488,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1396,6 +1519,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Multiple section/assembly proposals; links alone do not prove full page composition or all actions."
@@ -1418,6 +1542,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1440,6 +1565,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1462,6 +1588,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1484,6 +1611,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1506,6 +1634,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1528,6 +1657,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1550,6 +1680,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1572,6 +1703,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1594,6 +1726,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1616,6 +1749,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1638,6 +1772,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1660,6 +1795,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1682,6 +1818,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1704,6 +1841,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1726,6 +1864,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1737,13 +1876,18 @@
       "batch": "W08",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md",
-      "references": [],
-      "proposalPackages": [],
-      "artifactAssociation": "no-page-proposal-linked",
+      "references": [
+        "scheduler-direction-c"
+      ],
+      "proposalPackages": [
+        "scheduler-direction-c"
+      ],
+      "artifactAssociation": "related-proposal-not-complete-proof",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1766,6 +1910,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1788,6 +1933,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -1810,6 +1956,7 @@
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
       "userReview": "pending",
+      "visualApproval": "user-approved-remaining-pages-auto",
       "implementationEvidence": [],
       "productionEvidence": [],
       "notes": "Link association only; read the package boundaries before reviewing."
@@ -5280,7 +5427,7 @@
       "readme": "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/scheduler-direction-c/evidence.json",
       "manifestHash": "948120d0910430a862c0f307b28177fd653322789576c9c63f705f1ad8983471",
-      "readmeHash": "b12019071ce3983d75f95fb05915e01ffc5d853551942486e6591a6fc74e0174",
+      "readmeHash": "0111292233b16a50315562895c197062130856c56b39bd67ff87787ea378f5f8",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",

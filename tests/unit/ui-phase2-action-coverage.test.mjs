@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
+  visualApprovalForReview,
   validateActionReview,
   reconcileActionCandidates,
 } from "../../scripts/lib/ui-phase2-action-coverage.mjs";
@@ -182,6 +183,30 @@ test("visual approval remains separate from semantic action approval", () => {
   assert.equal(result.visualApproval, review.approval);
   assert.equal(result.actionApproval, "pending-user-review");
   assert.equal(result.writeActions, 1);
+});
+
+test("design audit can derive only explicit visual approval, never pending or action approval", () => {
+  assert.equal(
+    visualApprovalForReview({
+      approval: "pending-user-review",
+      actionApproval: "pending-user-review",
+    }),
+    undefined,
+  );
+  assert.equal(
+    visualApprovalForReview({
+      approval: "pending-user-review",
+      actionApproval: "pending-user-review",
+      visualApproval: "user-approved-remaining-pages-auto",
+    }),
+    "user-approved-remaining-pages-auto",
+  );
+  assert.throws(() =>
+    visualApprovalForReview({
+      approval: "pending-user-review",
+      visualApproval: "approved-everything",
+    }),
+  );
 });
 test("actual Vue evidence is retained without implying semantic approval", () => {
   const { review, context } = fixture();

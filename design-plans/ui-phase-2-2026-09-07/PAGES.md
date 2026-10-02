@@ -129,7 +129,7 @@
 | P67 | `/platform-admin/redis` Redis运行 | `RedisResilienceCenter` | 连接、队列/缓存及恢复事实按现有指标分区 | 关键异常先显示，指标带单位与观测时间 | 连续刷新不并发洪泛；超时保留快照并标异常；禁止为验收在生产停Redis或清业务队列 |
 | P68 | `/platform-admin/mysql` MySQL运行 | `MySqlResilienceCenter` | 数据库状态、兼容/恢复信息与已有诊断分区 | 状态摘要→诊断→技术细节，不压缩字段标签 | MySQL5.7事实、失败/恢复展示及刷新；不新增迁移、root连接或生产故障注入 |
 | P69 | `/platform-admin/files` 文件存储 | `FileResilienceCenter` | 存储范围、状态和现有文件恢复信息清楚 | 路径可局部滚动，容量附单位，操作先确认对象 | 已有检查/恢复入口逐项盘点；路径与固定目录一致，不删除来源不明文件，不把备份等同异地冗余 |
-| P70 | `/platform-admin/crawler-scheduler` 采集调度 | `CrawlerSchedulerCenter` | 当前调度、队列与既有容量/受阻信息按链路展示 | 先运行状态，后任务与技术参数 | 刷新链可回溯、失败和恢复诚实；调度/重放动作遵循原并发与重试配置，不因UI调整改变执行语义 |
+| P70 | `/platform-admin/crawler-scheduler` 采集调度 | `CrawlerSchedulerCenter` | [用户自动通过的 C 方向全页提案](design/scheduler-direction-c/README.md)：当前调度、队列与既有容量/受阻信息按链路展示 | 先运行状态，后任务与技术参数 | 刷新链可回溯、失败和恢复诚实；调度/重放动作遵循原并发与重试配置，不因UI调整改变执行语义 |
 | P71 | `/platform-admin/capacity` 容量边界 | `CapacityBoundaryCenter` | 实测、配置上限、演练结果与未知项分栏区别 | 容量数字带单位/来源，限制说明不能折叠得不可发现 | 展示已有刷新/演练结果；未知不填0或通过；不擅自压测生产或新增第二主机能力 |
 
 测试入口：`m06-02-platform-dashboard`、`m07-04-backup-recovery`、`m07-05-release-rollout`、`m08-01-single-server`、`m08-02-redis-resilience`、`m08-03-mysql-resilience`、`m08-04-file-resilience`、`m08-05-crawler-scheduler`、`m08-06-capacity-boundary`。现有测试的故障模拟与隔离演练不可翻译为生产破坏性操作。运维页原始截图先脱敏，真实路径和版本可保留但不携带受限配置内容。
