@@ -38,7 +38,7 @@
     "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
     "apps/web/src/components/ConfirmDialog.vue": "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
     "apps/web/src/components/CostRuleConsole.vue": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b",
-    "apps/web/src/components/CrawlerSchedulerCenter.vue": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue": "3afd7c0fa15665a800c9ef33d8ee58101af93b95cbcc464ad17e55f17f668b17",
     "apps/web/src/components/CrawlerSchedulerEvidence.vue": "5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2",
     "apps/web/src/components/CredentialAssetCenter.vue": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9",
     "apps/web/src/components/DataQualityCenter.vue": "dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536",
@@ -82,7 +82,7 @@
     "apps/web/src/components/OpportunityFeedbackPanel.vue": "516ac55d7344024545c6be96d9a14f5c3aac68a51079e457aa629c04cb8aaf1f",
     "apps/web/src/components/OpportunityLineageCorrelation.vue": "4a88aa8b041a2d734042f5ea605dfcd46b716d2cb6dcda099350d2e9bb897999",
     "apps/web/src/components/OpportunityLineagePanel.vue": "11bb90b95be0f5b501f75e6d4c89fb38c145bb1702eab5ba8bcec0a3922ea225",
-    "apps/web/src/components/OpportunityLineageSummary.vue": "a7eb194dcd23b7f4f98ffdeb1241e3dca8aecf60a7fc95f1100058695ade4cbe",
+    "apps/web/src/components/OpportunityLineageSummary.vue": "86de7931f3c1cc11d3d4eb0d4ed7005bfd2285d6169bb07d894e417892d4b331",
     "apps/web/src/components/OpportunityListPanel.vue": "0a0f300db0400365c0423e4b560efe558965c4cd4d4ae1648c9e5a641de9e4e7",
     "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
     "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
@@ -266,7 +266,7 @@
     "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "5c69d28e32004ffe8e909775eaf6f4c61c1a09d3b0bc44d8916fdc9dd8a01bd1",
     "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "9a37882127bf26c4a26b827a83023b332c3fbe8338ccf7e168c4b62bbfea33e6",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "0299f051665e41a61bdedc711ea24ea0ac365c64f248c181100ec3ce4cedbecd",
-    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "093c9b089f1af907f93a5583e21523e23bd734bd4b993c1c518f7faa68ed4ec6",
+    "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "27a45e383aaeee28da5b1a8f0e5d14b326feb698985d995f700be256f77edb3c",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "0b428f6cc2496bd4aff581065bba5996b2e759951d3676e3c2381ba62d0e7ade",
     "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md": "9c6ef633c49158b304bf884a0722037a39f0d25e460f31a566577e1d32da0a98",
     "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md": "e4b0ebe9870290fc99a31742472e25bcaf62ec97bf1db10537108ea941983198",
@@ -286,7 +286,7 @@
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "4df5cd5f4fff7e32f31a7a0ef71bd54af5ad8a68e09dbec2c8183748108e881e",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "64e4cb7386115f3e6eb878c9b2f8a80d550cad1b2a67ae8885017709e40a2301",
-    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "d3ccd62432662a3706caacb3bec04a73fe6be21eae0c6a264f3ffc0372008719",
+    "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "96553366e9a31a202e49307b8171b5d88683221866f2be1f498ae126af90a3b7",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "457882a3aa5b80b98dfdfd5eaae06bf6f7ef000c642217c903c6a098d2b6dabc",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "b8fdd4276778197d99938b934d5522db0d0371a0391c9bf3d39b8a99cddfe5d7",
     "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "3059be005ee6570e1f8b865b0186da66da42f9b323df0732d5105141434f0319",
@@ -450,7 +450,7 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P17.json": "2d387f6cccdac69f797195db1ac79909463483c1a4ae431011b699fefcbd997c",
     "scripts/verify-ui-phase2-scoring-c.mjs": "b9fb92b4cea3980ed267941190c59c16528984ee78c65bc78025ec5faf4e6cf0",
     "tests/e2e/ui-phase2-scoring-contracts.spec.ts": "14d4a1557e9d586c4b74d3598b552b1fa740e151b62616422fc7aa86ed3efd1e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "a29c50da6c27970b99587c58500be0344049f9ac28a85a6e22211d967e4551ad",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P18.json": "3a1cca1ae0e723599b9e1f472bbe24b5db6a76a6dfb05a2bd0582c8c6196430a",
     "tests/e2e/m04-07-ai-analysis.spec.ts": "6dd4d58c43a2bebe38dd0eacdfa56a51343b1d1ea450806449da298c13b1d49a",
     "scripts/verify-ui-phase2-review-c.mjs": "37f2e2c4087ee187c7a05065b2d25627a30a272cad65ec8bcba5b2fd77a65891",
     "scripts/verify-ui-phase2-detail-adaptive-c.mjs": "7640a323cf61ff7882c6b073ecc594294c1d5673b7bb0dd87e3ec6f3ab1a7fbb",
@@ -597,7 +597,7 @@
     "tests/unit/ui-phase2-p68-action-review.test.mjs": "9431b4f03e0f72ef37ce4c33b66a5312bdb0b7726cc8d9c2517b7b8245f4e6bd",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P69.json": "c4be1c3c286ef0db01d52d9dcbb0fdcda35c2e87c8f6629b1c587ae0f73e7138",
     "tests/unit/ui-phase2-p69-action-review.test.mjs": "3e2e539566ebc4c63f5d02cb0245431157db33588672ef74b5653f5461be9fe1",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P70.json": "80de35c6a02777d762c06e14ff1d1d203afcecf00011f12e7da16f6944497e71",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P70.json": "1afe7ee17fbff1e15fc680a82464db34bde1eb776ff8838cdad1641d51169c85",
     "tests/unit/ui-phase2-p70-action-review.test.mjs": "3dff08f5329be88ff5468f1b781df2a6dbdd9e48fda4e64e8d92289f7ad55f6d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P71.json": "feed8dd95227fb1ed9e66a95838cd44e93cdd82db576c433d3754a86e058f3eb",
     "tests/e2e/m08-06-capacity-boundary.spec.ts": "bf7dc863ac4a748ec5349f1bcece8a93ff1223a9cc18d08fde2939084181a9c9",
@@ -675,7 +675,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "f682447baf5a27d7c8a0ada410025934e5203510393aa3c073bbf6e771c50705",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "9829094644f2614f6fb5cdccb5184ef4a972f7bbaf720fb398066003625feede",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "389f1671920d3e64637cc9609d47074af8fc2a5c014a95c6d0817afb6ee894b3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "e3fec9d096d754399d217656ec30a51e2a2352ab4dfa43f3323409bd670d3791",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "7fe66845b92eb19b63fb087aeef01550d8c6179e82a151ef281ee9ff6d9ef254",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "b58a994a201f5980f8ee68376bf8331cd6ded381d1579621398bbb900f034fc5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "8799c6057f3b537823713df64d67e76ba912331b1253f7ca34ed84fe12eba081",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5e7d02960a5904c118159279d1f9ec7a71dd0d6d235bfae42f92ee42cd7af30a",
@@ -3741,9 +3741,7 @@
           "runtimeAcceptance": "unproven"
         }
       },
-      "proposalPackages": [
-        "scheduler-direction-c"
-      ],
+      "proposalPackages": [],
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
@@ -33586,7 +33584,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#8fbfd1dda992c36b.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 405,
+      "line": 430,
       "kind": "control",
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新运行事实\" }}",
       "conditions": [],
@@ -33672,7 +33670,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#3c7b3b6045a144ee.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 407,
+      "line": 432,
       "kind": "control",
       "label": "回收过期租约",
       "conditions": [],
@@ -33758,7 +33756,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#4f73abdd0d99fc21.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 432,
+      "line": 457,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -33849,7 +33847,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#ae52c30c28ab3a05.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 446,
+      "line": 471,
       "kind": "control",
       "label": "重新核验",
       "conditions": [
@@ -33944,7 +33942,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#0767d27629b787d7.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 537,
+      "line": 562,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -34035,7 +34033,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#1b581569d5d9e0d4.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 546,
+      "line": 571,
       "kind": "event-binding",
       "label": "需要关注 已熔断 有排队任务 全部来源",
       "conditions": [
@@ -34126,7 +34124,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#dac6cbc2991374ba.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 586,
+      "line": 611,
       "kind": "control",
       "label": "最近失败",
       "conditions": [
@@ -34225,7 +34223,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 590,
+      "line": 615,
       "kind": "control",
       "label": "前往来源健康",
       "conditions": [
@@ -34324,7 +34322,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 592,
+      "line": 617,
       "kind": "control",
       "label": "解除熔断",
       "conditions": [
@@ -34423,7 +34421,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#d868a97237e89c1c.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 609,
+      "line": 634,
       "kind": "control",
       "label": "上一页",
       "conditions": [
@@ -34518,7 +34516,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 612,
+      "line": 637,
       "kind": "control",
       "label": "下一页",
       "conditions": [
@@ -34613,7 +34611,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 637,
+      "line": 662,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -34699,7 +34697,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#b107542a89a71d5c.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 637,
+      "line": 662,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -34785,7 +34783,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#25d51725a70103d5.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 647,
+      "line": 672,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -34871,7 +34869,7 @@
     {
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#c30cb3ed5106a082.1",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 647,
+      "line": 672,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],

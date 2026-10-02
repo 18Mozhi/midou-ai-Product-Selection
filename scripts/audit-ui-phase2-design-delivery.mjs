@@ -368,7 +368,7 @@ for (const p of packages.filter((p) => p.role !== "page-or-section-proposal"))
   machineReport += `- [${p.folder}](${rel(p.readme)})：${p.role === "shared-surface-only" ? "共享面提案" : "方向选择研究"}。\n`;
 machineReport += `\n## 复验与限制\n\n- 只读复验：\`node scripts/audit-ui-phase2-design-delivery.mjs\`。\n- 有意更新本审计报告：\`node scripts/audit-ui-phase2-design-delivery.mjs --write\`；只更新本索引的机器核对区和[机器报告](design-delivery-audit.json)，不刷新人工审核日志、旧图、旧证据或批准状态。\n- 指纹匹配只是来源/图片未漂移；本轮没有重跑${packages.length}个包的浏览器测试，也没有重新人工审核${summary.pngs}张图。按钮全状态、所有弹窗、三主题密度/组合、真实Vue/权限/接口/生产及签收均不得据此宣称通过。\n- 原始规格和源盘点见[PAGES](PAGES.md)、[计划](PLAN.md)、[旧覆盖表](coverage.json)；它们的目标与静态候选不作为完成证明。\n- 无生产代码、API、环境、依赖、数据库、部署或重启变更；没有创建临时图片、浏览器或服务。审计脚本、JSON与本索引是永久交付物。\n`;
 
-const existingIndex = await readFile(reviewIndex, "utf8");
+const existingIndex = (await readFile(reviewIndex, "utf8")).replaceAll("\r\n", "\n");
 function assembledReviewIndex(existing) {
   const markedStart = existing.indexOf(machineAuditStart);
   const markedEnd = existing.indexOf(machineAuditEnd);

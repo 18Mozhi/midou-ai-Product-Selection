@@ -6,24 +6,24 @@
   "completedPhases": [],
   "moduleEvidence": {
     "M00-01": {
-      "commitSha": "5559eb9a22be977e6aa6973ceb06e9c640ad3b66",
-      "worktreeDirty": true,
-      "worktreeFingerprint": "30e868414c81fbc0de548d0e7ad296fa6890219a17746d45a2eff25b9ec6149e",
-      "completedAt": "2026-08-22T13:25:29.706Z",
+      "commitSha": "31205f834d342339e53cca4371e1bc05e9a40f9a",
+      "worktreeDirty": false,
+      "worktreeFingerprint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "completedAt": "2026-10-02T04:21:51.934Z",
       "evidenceSummary": {
-        "runId": "fc4af4a3-eb3f-4ce9-bd4c-e013bd42db7d",
+        "runId": "fb319530-6c69-4465-b50d-674dd61962a8",
         "status": "passed",
         "passedCommands": 6,
         "atomicTaskCount": 17
       }
     },
     "M00-02": {
-      "commitSha": "5559eb9a22be977e6aa6973ceb06e9c640ad3b66",
-      "worktreeDirty": true,
-      "worktreeFingerprint": "30e868414c81fbc0de548d0e7ad296fa6890219a17746d45a2eff25b9ec6149e",
-      "completedAt": "2026-08-22T13:27:00.945Z",
+      "commitSha": "31205f834d342339e53cca4371e1bc05e9a40f9a",
+      "worktreeDirty": false,
+      "worktreeFingerprint": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "completedAt": "2026-10-02T04:23:09.296Z",
       "evidenceSummary": {
-        "runId": "4c656d8d-a4b5-4e64-9388-5314ee7e61bf",
+        "runId": "7f8dd912-ece5-48be-b798-51be8eafb6b3",
         "status": "passed",
         "passedCommands": 4,
         "atomicTaskCount": 17

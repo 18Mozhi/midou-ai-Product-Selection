@@ -8,7 +8,7 @@
     "design-plans/ui-phase-2-2026-09-07/coverage.json": "19a319f94a4f792c7fef6ecf54890d8d7f956dd7530820c5800f05153cd82e60",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "ca41a447eb5be9317f20642bd87acc71ae31f9fe00147f1a7a63b7c48d39320d",
-    "scripts/audit-ui-phase2-design-delivery.mjs": "044f1e030b90e469f0afd69303f56d875fbef8943be5d5a48cab083337faebd3",
+    "scripts/audit-ui-phase2-design-delivery.mjs": "1f71cf29d772543f805427eae72508cd0b010bf7ca2c6cc1416decea1ab87470",
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "120bf0d7417c51e38c31b8dc38f009a32feb5553bcae49e6064c680fd178ba47",
     "scripts/lib/ui-phase2-token-copy-baseline.mjs": "3b99ffa8b188b07727a1c13521e164001a02251eacbe54a81f2a2db361faba35",
     "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "b16cce55c4f07892ecf8758578003dd75198092fa60421b388b6e1ca57580a27",
@@ -43,8 +43,8 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P20.md": "3c6a60caf2045f07a9a14c89f07cd3c1d9b20851719683f69b02931ce04f730f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P21.md": "683179d07629a30338b60ab10ab52c96883610215eecb1616931bf55ca66fe18",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P22.md": "9e605fdc8c12403e1e2f29b8cb73ade86dd81e8c3d96bbe5b26f9e3f08938339",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "f695f577bbfe3f52ac3263874cb7ad235ba4ecb7e8fa37499daa892b5392299f",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "3a9f0143f7b78a76d81ef36a3a290bcd55197d74e0fc116ea31f2f9fa41e69c4",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P23.md": "f3f7c510b62b7face51d49b546851e00603fde3aebcc2977cd731107120157f9",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P24.md": "a45152837ce15508c1cd1f33f5493bf11fa18d03e0ceed1551d5462ed9f876f4",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P25.md": "1d037ef6720eb6bf4230e6e7f36dad5086c2580f1fee57c182e7d7cfe4d7abfd",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "71649dd677697325648200b80d5a49d26ef798e311b072d2bd7bed2e20208c22",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "09ee27c2a5bf18a101a88ad58f42eb4cf057a1978ed21efc81f7e59471e097aa",
@@ -90,7 +90,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P67.md": "f682447baf5a27d7c8a0ada410025934e5203510393aa3c073bbf6e771c50705",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P68.md": "9829094644f2614f6fb5cdccb5184ef4a972f7bbaf720fb398066003625feede",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P69.md": "389f1671920d3e64637cc9609d47074af8fc2a5c014a95c6d0817afb6ee894b3",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "e3fec9d096d754399d217656ec30a51e2a2352ab4dfa43f3323409bd670d3791",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md": "7fe66845b92eb19b63fb087aeef01550d8c6179e82a151ef281ee9ff6d9ef254",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P71.md": "b58a994a201f5980f8ee68376bf8331cd6ded381d1579621398bbb900f034fc5",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P72.md": "8799c6057f3b537823713df64d67e76ba912331b1253f7ca34ed84fe12eba081",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P73.md": "5e7d02960a5904c118159279d1f9ec7a71dd0d6d235bfae42f92ee42cd7af30a"
@@ -98,9 +98,11 @@
   "summary": {
     "routes": 73,
     "specifications": 73,
-    "relatedProposalRoutes": 73,
-    "noLinkedPageProposalRoutes": 0,
-    "missingPageIds": [],
+    "relatedProposalRoutes": 72,
+    "noLinkedPageProposalRoutes": 1,
+    "missingPageIds": [
+      "P70"
+    ],
     "packages": 102,
     "researchPackages": 1,
     "sharedOnlyPackages": 3,
@@ -111,7 +113,9 @@
     "pngDrift": 0,
     "unmanifestedPng": 0,
     "readmeLinksChecked": 10157,
-    "unlinkedPagePackages": [],
+    "unlinkedPagePackages": [
+      "scheduler-direction-c"
+    ],
     "fullPageCompletion": "unproven",
     "verifiedBusinessActions": 0,
     "verifiedDialogVariants": 0,
@@ -1733,13 +1737,9 @@
       "batch": "W08",
       "acceptance": "protected",
       "spec": "design-plans/ui-phase-2-2026-09-07/page-specs/P70.md",
-      "references": [
-        "scheduler-direction-c"
-      ],
-      "proposalPackages": [
-        "scheduler-direction-c"
-      ],
-      "artifactAssociation": "related-proposal-not-complete-proof",
+      "references": [],
+      "proposalPackages": [],
+      "artifactAssociation": "no-page-proposal-linked",
       "fullPageCoverage": "unproven",
       "buttonStateCoverage": "unproven",
       "dialogVariantCoverage": "unproven",
@@ -4125,7 +4125,7 @@
       "folder": "org-approvals-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json",
-      "manifestHash": "006347e7e3cf6177b8cb956c0c1d16bac4b6e6195a22bacfe1230ca5d9868477",
+      "manifestHash": "02ae0a316e1a2d21bf7a29aed0d31b83f76d3cf0d7ad535d2a35ef80561acb2a",
       "readmeHash": "02a2a1f5f70374b2aa3e4615cf0ddf7af9f2de52416c74515ab67213d3496f84",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
