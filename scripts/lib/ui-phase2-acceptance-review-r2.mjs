@@ -11,6 +11,7 @@ import {
   beforeAdapterPaginationFocus,
   paginationFocusRevision,
 } from "./ui-phase2-adapter-pagination-focus-baseline.mjs";
+import { visualApprovalForReview } from "./ui-phase2-action-coverage.mjs";
 
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const escape = (value) =>
@@ -132,6 +133,12 @@ export function acceptanceReviewImagePath(stage, file) {
 export async function buildAcceptanceReviewR2(repo) {
   const root = path.join(repo, acceptanceCaptureRoot),
     sections = [];
+  const approvalPath = "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json",
+    approvalRaw = (await readFile(path.join(repo, approvalPath), "utf8")).replaceAll("\r\n", "\n"),
+    approvalReview = JSON.parse(approvalRaw),
+    visualApproval = visualApprovalForReview(approvalReview);
+  assert.equal(approvalReview.pageId, "P49");
+  assert.equal(approvalReview.actionApproval ?? "pending-user-review", "pending-user-review");
   for (const [stage, title, count, sources] of acceptanceReviewSections) {
     const folder = path.join(root, stage);
     const raw = (await readFile(path.join(folder, "evidence.json"), "utf8")).replaceAll(
@@ -189,6 +196,9 @@ export async function buildAcceptanceReviewR2(repo) {
     schemaVersion: 1,
     kind: "P49-CURRENT-REVIEW-INDEX-r2",
     reviewOnly: true,
+    visualApproval: visualApproval
+      ? { label: visualApproval, source: approvalPath, sha256: hash(approvalRaw) }
+      : null,
     userReview: "pending",
     sourceMatchesCurrent: sections.every((section) => section.sourceMatchesCurrent),
     pictures: sections.reduce((sum, section) => sum + section.count, 0),
@@ -214,6 +224,7 @@ export async function buildAcceptanceReviewR2(repo) {
     versionNote = summary.sourceMatchesCurrent
       ? "捕获来源与当前源码一致；这仍是待审设计图，不代表生产验收。"
       : `${verifiedCount}项捕获来源已由锁定补丁核验，${unverifiedCount}项无法按当前溯源规则确认；${driftCount}项来源与当前源码不同。原图未重拍，只表示捕获时提案，不证明当前实现或生产验收。`;
+  const visualStatus = visualApproval ? "视觉方向已按用户授权通过" : "视觉方向待审核";
   const html = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P49 · 设计图审核 r2</title>
 <style>
 ${[
@@ -225,11 +236,11 @@ ${[
   ";margin-top:18px}.grid img{height:420px}.source{font-size:13px;overflow-wrap:anywhere}footer{margin-top:32px;color:var(--muted)}@media(max-width:760px){.hero{grid-template-columns:1fr}main{padding:20px 16px}.cover{padding:28px 20px}img{height:480px}.rail a{flex:1;text-align:center;min-width:120px}.boundary{padding:18px}}@media(forced-colors:active){a:focus-visible,summary:focus-visible{outline-col",
   "or:Highlight}}.version-status{padding:16px;background:var(--canvas);border:1px solid var(--line);overflow-wrap:anywhere}",
 ].join("")}
-</style><header class="cover"><div class="eyebrow">SCOUTOPS / REVIEW FILE 49</div><h1>1688 启用检查</h1><span class="badge">捕获版本 · r2 · 待审核</span><p>先判断还缺哪些启用证据，再选择下一步。默认页、读取、提交、适配和缓存往返共143张实际Vue审核图。</p><nav class="rail" aria-label="审核分组">${sections.map((section) => `<a href="#${section.stage}">${section.title} · ${section.count}</a>`).join("")}</nav></header>
+</style><header class="cover"><div class="eyebrow">SCOUTOPS / REVIEW FILE 49</div><h1>1688 启用检查</h1><span class="badge">${visualStatus} · r2捕获版本</span><p>先判断还缺哪些启用证据，再选择下一步。默认页、读取、提交、适配和缓存往返共143张实际Vue审核图。</p><nav class="rail" aria-label="审核分组">${sections.map((section) => `<a href="#${section.stage}">${section.title} · ${section.count}</a>`).join("")}</nav></header>
 <main><aside class="boundary" aria-labelledby="boundary"><h2 id="boundary">本次审核边界</h2><p>重点核对蓝色结论栏、连续门禁证据、下一步、运行表单和诊断区域的排列。这些是本地测试数据上的提案，未上线。</p><p><strong>现有导航壳尚未重构；长图中的固定导航可能出现在截图中段。</strong>它们不属于本次页内布局确认，不能将这些图签收为整页完成。点击“查看原尺寸”检查完整内容。</p><p>提交双反馈与缓存返回修复仍是提案；143张图不代表143项独立功能，也不代表真实权限、采集或生产验收。</p></aside>
 <p class="version-status"><strong>${versionNote}</strong> <a href="review.json">查看版本差异</a></p>
 <div class="hero">${figure(keyImage("1440-authoritative-2-of-3.png"), "桌面 · 尚缺字段解析证据（1440px）")}${figure(keyImage("390-authoritative-2-of-3.png"), "手机 · 同一状态（390px）")}</div>
-${sections.map((section) => `<section id="${section.stage}"><h2>${section.title}</h2><p>${section.count}张图 · ${section.runs}次运行 · ${section.sources}份捕获来源记录 · ${section.sourceChanges.length}处后续源码变更。此组仍待审核。</p><details><summary>展开${section.count}张图</summary><div class="grid">${section.images.map((image) => figure(image, image.file.replace(/\.png$/, ""))).join("")}</div></details><p class="source">版本 SHA256：${section.manifestSha} · <a href="${section.stage}/evidence.json">原始检查清单</a></p></section>`).join("\n")}
-<footer>仅本地审核资料，不属于生产路由。旧r1图包独立保留；本入口没有自动批准、写入账号或启动采集的操作。</footer></main></html>`;
+${sections.map((section) => `<section id="${section.stage}"><h2>${section.title}</h2><p>${section.count}张图 · ${section.runs}次运行 · ${section.sources}份捕获来源记录 · ${section.sourceChanges.length}处后续源码变更。${visualStatus}；捕获版本差异不证明当前源码实现。</p><details><summary>展开${section.count}张图</summary><div class="grid">${section.images.map((image) => figure(image, image.file.replace(/\.png$/, ""))).join("")}</div></details><p class="source">版本 SHA256：${section.manifestSha} · <a href="${section.stage}/evidence.json">原始检查清单</a></p></section>`).join("\n")}
+<footer>仅本地审核资料，不属于生产路由。${visualStatus}；动作批准、当前源码实现、真实权限与生产验收仍未通过。本入口不会登录、写入账号或启动采集。</footer></main></html>`;
   return { html, summary };
 }

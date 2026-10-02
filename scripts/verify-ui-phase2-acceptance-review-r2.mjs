@@ -20,6 +20,9 @@ assert.deepEqual(summary, checked.summary);
 const url = pathToFileURL(path.resolve(acceptanceCaptureRoot, "index.html")).href;
 const proof = `${acceptanceCaptureRoot}/${summary.sourceMatchesCurrent ? "review-proof" : "review-proof-versioned"}`;
 if (capture) await mkdir(proof);
+const expectedBadge = summary.visualApproval
+  ? "视觉方向已按用户授权通过 · r2捕获版本"
+  : "视觉方向待审核 · r2捕获版本";
 const browser = await chromium.launch(),
   runs = [],
   images = [];
@@ -43,13 +46,18 @@ try {
       await page.locator(".version-status").waitFor();
       if (!summary.sourceMatchesCurrent) {
         assert.ok(
-          (await page.locator(".version-status").innerText()).includes("当前源码已有后续改动"),
+          (await page.locator(".version-status").innerText()).includes("来源与当前源码不同"),
         );
-        assert.equal(await page.getByText("捕获版本 · r2 · 待审核", { exact: true }).count(), 1);
+        assert.equal(await page.getByText(expectedBadge, { exact: true }).count(), 1);
         for (const section of summary.sections) {
           assert.ok(
             (await page.locator(`#${section.stage} > p`).first().innerText()).includes(
               `${section.sourceChanges.length}处后续源码变更`,
+            ),
+          );
+          assert.ok(
+            (await page.locator(`#${section.stage} > p`).first().innerText()).includes(
+              summary.visualApproval ? "视觉方向已按用户授权通过" : "视觉方向待审核",
             ),
           );
         }

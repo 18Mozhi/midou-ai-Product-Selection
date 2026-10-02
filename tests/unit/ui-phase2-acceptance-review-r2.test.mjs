@@ -19,6 +19,12 @@ test("P49 review binds 143 captured images and distinguishes confirmed from unve
   const { html, summary } = await buildAcceptanceReviewR2(process.cwd());
   assert.equal(summary.pictures, 143);
   assert.equal(summary.userReview, "pending");
+  assert.equal(summary.visualApproval.label, "user-approved-remaining-pages-auto");
+  assert.equal(
+    summary.visualApproval.source,
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json",
+  );
+  assert.match(summary.visualApproval.sha256, /^[a-f0-9]{64}$/);
   assert.equal(summary.sections.length, 5);
   assert.equal(summary.sourceMatchesCurrent, false);
   for (const section of summary.sections) {
@@ -48,6 +54,9 @@ test("P49 review binds 143 captured images and distinguishes confirmed from unve
   assert.match(html, /提交双反馈与缓存返回修复仍是提案/);
   assert.match(html, /项无法按当前溯源规则确认/);
   assert.match(html, /原图未重拍/);
+  assert.match(html, /视觉方向已按用户授权通过/);
+  assert.match(html, /动作批准、当前源码实现、真实权限与生产验收仍未通过/);
+  assert.doesNotMatch(html, /此组仍待审核|捕获版本 · r2 · 待审核/);
   assert.doesNotMatch(html, /当前源码提案/);
   assert.doesNotMatch(html, /<script|<form|http[s]?:\/\//);
   assert.equal((html.match(/<figure>/g) ?? []).length, 145);
