@@ -430,9 +430,7 @@ test("detail read failure never leaves the previous task visible", async ({ page
     await page.getByRole("button", { name: /部分完成 · 38 条证据/ }).click();
     await page.getByRole("button", { name: "打开完整任务详情" }).click();
   } else await page.getByRole("button", { name: "查看" }).first().click();
-  await expect(page.locator(".collection-task-detail")).toContainText(
-    tasks[0].id.slice(0, 8),
-  );
+  await expect(page.locator(".collection-task-detail")).toContainText(tasks[0].id.slice(0, 8));
   await page.getByRole("button", { name: "关闭任务详情" }).click();
   fail = true;
   if ((page.viewportSize()?.width ?? 1000) <= 760) {
@@ -440,9 +438,7 @@ test("detail read failure never leaves the previous task visible", async ({ page
     await page.getByRole("button", { name: "打开完整任务详情" }).click();
   } else await page.getByRole("button", { name: "查看" }).nth(1).click();
   await expect(page.getByRole("alert")).toContainText("任务详情未能读取");
-  await expect(page.locator(".collection-task-detail")).not.toContainText(
-    tasks[0].id.slice(0, 8),
-  );
+  await expect(page.locator(".collection-task-detail")).not.toContainText(tasks[0].id.slice(0, 8));
   const failureDialog = page.getByRole("dialog", { name: "任务详情未能读取" });
   const closeFailure = page.getByRole("button", { name: "关闭任务详情" });
   await expect(failureDialog).toBeVisible();
