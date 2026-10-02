@@ -20,8 +20,15 @@ const requestId = randomUUID(),
     approvalNode: randomUUID(),
     approvalRequest: randomUUID(),
     approvalRun: randomUUID(),
+    trendTopic: randomUUID(),
+    monitoringRule: randomUUID(),
+    scoreRule: randomUUID(),
     opportunity: randomUUID(),
+    opportunityRuleMatch: randomUUID(),
+    scoreRun: randomUUID(),
+    riskScoreComponent: randomUUID(),
   },
+  scoreRuleVersion = `home-live-${requestId.slice(0, 8)}`,
   now = new Date(),
   pool = createDatabasePool(loadRuntimeConfig(process.env, "api"));
 
@@ -50,6 +57,11 @@ async function cleanup() {
     ["DELETE FROM approval_templates WHERE id=?", [ids.approvalTemplate]],
     ["DELETE FROM tasks WHERE id=?", [ids.task]],
     ["DELETE FROM opportunities WHERE id=?", [ids.opportunity]],
+    ["DELETE FROM opportunity_rule_matches WHERE id=?", [ids.opportunityRuleMatch]],
+    ["DELETE FROM opportunity_score_runs WHERE id=?", [ids.scoreRun]],
+    ["DELETE FROM score_rules WHERE id=?", [ids.scoreRule]],
+    ["DELETE FROM trend_monitoring_rules WHERE id=?", [ids.monitoringRule]],
+    ["DELETE FROM trend_topics WHERE id=?", [ids.trendTopic]],
     ["DELETE FROM home_dashboard_items WHERE organization_id IN (?,?)", [ids.org, ids.otherOrg]],
     ["DELETE FROM workspaces WHERE id IN (?,?)", [ids.workspace, ids.otherWorkspace]],
     ["DELETE FROM organizations WHERE id IN (?,?)", [ids.org, ids.otherOrg]],
@@ -102,7 +114,63 @@ try {
     );
 
   await pool.query(
-    "INSERT INTO tasks (id,organization_id,workspace_id,title,description,status,priority,assignee_id,source_type,source_ref_id,collection_task_id,due_at,completed_at,created_by,version,created_at,updated_at) VALUES (?,?,?,?,?,'paused','critical',?,'collection_followup',NULL,NULL,?,NULL,?,1,?,?)",
+    "INSERT INTO trend_topics (id,organization_id,workspace_id,topic_key,title,category,market,language,status,signal_count,source_count,heat_value,heat_unit,momentum_percent,confidence_score,confidence_status,first_seen_at,last_seen_at,source_fresh_at,version,created_by,created_at,updated_at) VALUES (?,?,?,SHA2(?,256),?,'home-live','US','zh-CN','active',1,1,1,'signals',NULL,NULL,'insufficient_data',?,?,?,1,?,?,?)",
+    [
+      ids.trendTopic,
+      ids.org,
+      ids.workspace,
+      `home-live-${requestId}`,
+      "仪表盘实时验收趋势",
+      now,
+      now,
+      now,
+      ids.user,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO trend_monitoring_rules (id,organization_id,workspace_id,name,include_keywords_json,negative_keywords_json,market,language,category,notification_channel,collection_interval_minutes,recommendation_min_source_count,source_cursor,status,last_evaluated_at,last_collection_at,next_collection_at,last_collection_task_id,version,created_by,updated_by,created_at,updated_at) VALUES (?,?,?,'仪表盘实时验收规则',?,'[]','US','zh-CN','home-live','in_app',60,1,0,'enabled',?,NULL,?,NULL,1,?,?,?,?)",
+    [
+      ids.monitoringRule,
+      ids.org,
+      ids.workspace,
+      JSON.stringify(["home dashboard acceptance"]),
+      now,
+      new Date(now.getTime() + 60 * 60_000),
+      ids.user,
+      ids.user,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO score_rules (id,organization_id,workspace_id,version_code,name,status,dimensions_json,thresholds_json,revision,submitted_by,submitted_at,approved_by,approved_at,activated_at,rollback_target_id,rolled_back_at,created_by,created_at,updated_at) VALUES (?,?,?,?,'仪表盘实时验收评分规则','active',?,?,1,?,?,?,?,?,NULL,NULL,?,?,?)",
+    [
+      ids.scoreRule,
+      ids.org,
+      ids.workspace,
+      scoreRuleVersion,
+      JSON.stringify([
+        { code: "market_demand", weight: 30, required: true },
+        { code: "competition", weight: 20, required: true },
+        { code: "profit", weight: 30, required: true },
+        { code: "risk", weight: 20, required: true },
+      ]),
+      JSON.stringify({ recommend_min: 75, observe_min: 55 }),
+      ids.user,
+      now,
+      ids.user,
+      now,
+      now,
+      ids.user,
+      now,
+      now,
+    ],
+  );
+
+  await pool.query(
+    "INSERT INTO tasks (id,organization_id,workspace_id,title,description,status,priority,assignee_id,source_type,source_ref_id,collection_task_id,due_at,completed_at,created_by,version,created_at,updated_at) VALUES (?,?,?,?,?,'paused','critical',?,'collection_followup',NULL,NULL,DATE_SUB(UTC_TIMESTAMP(3), INTERVAL 1 MINUTE),NULL,?,1,?,?)",
     [
       ids.task,
       ids.org,
@@ -110,7 +178,6 @@ try {
       "真实阻断任务",
       "验证阻断任务完整上下文",
       ids.user,
-      new Date(now.getTime() - 60_000),
       ids.user,
       now,
       now,
@@ -159,8 +226,50 @@ try {
     ],
   );
   await pool.query(
-    "INSERT INTO opportunities (id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?,?,?,'真实高价值机会','US','home-live','manual',NULL,?,'ready','recommend',92,88,84,'calculated','low','measured',86,1,1,'complete','home-live-v1',?,'pending',1,?,?,?)",
-    [ids.opportunity, ids.org, ids.workspace, ids.user, now, ids.user, now, now],
+    "INSERT INTO opportunities (id,organization_id,workspace_id,name,market,category,source_type,source_ref_id,owner_id,lifecycle_status,recommendation_status,overall_score,trend_score,competition_score,profit_status,risk_level,confidence_status,confidence_score,evidence_count,source_count,coverage_status,score_rule_version,scored_at,decision_status,version,created_by,created_at,updated_at) VALUES (?,?,?,'真实高价值机会','US','home-live','trend_topic',?,?,'ready','recommend',92,88,84,'calculated','low','measured',86,1,1,'complete',?,?,'pending',1,?,?,?)",
+    [
+      ids.opportunity,
+      ids.org,
+      ids.workspace,
+      ids.trendTopic,
+      ids.user,
+      scoreRuleVersion,
+      now,
+      ids.user,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO opportunity_rule_matches (id,organization_id,workspace_id,opportunity_id,monitoring_rule_id,topic_id,matched_at) VALUES (?,?,?,?,?,?,?)",
+    [
+      ids.opportunityRuleMatch,
+      ids.org,
+      ids.workspace,
+      ids.opportunity,
+      ids.monitoringRule,
+      ids.trendTopic,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO opportunity_score_runs (id,organization_id,workspace_id,opportunity_id,score_rule_id,rule_version_code,status,overall_score,coverage_percent,confidence_score,recommendation_status,missing_fields_json,input_snapshot_json,request_id,trace_id,scored_at) VALUES (?,?,?,?,?,?,'calculated',92,100,86,'recommend','[]',?,?,?,?)",
+    [
+      ids.scoreRun,
+      ids.org,
+      ids.workspace,
+      ids.opportunity,
+      ids.scoreRule,
+      scoreRuleVersion,
+      JSON.stringify([{ dimension_code: "risk", source: "home_dashboard_probe" }]),
+      requestId,
+      traceId,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO opportunity_score_components (id,score_run_id,dimension_code,weight_percent,input_score,weighted_score,evidence_ids_json,missing_fields_json) VALUES (?,?, 'risk',20,20,4,'[]','[]')",
+    [ids.riskScoreComponent, ids.scoreRun],
   );
 
   const projectionRows = [

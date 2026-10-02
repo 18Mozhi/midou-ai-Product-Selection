@@ -271,6 +271,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     runbook,
     feature,
     e2e,
+    liveProbe,
   ] = await Promise.all(
     [
       "database/migrations/0015b_home_dashboard_m02_06.up.sql",
@@ -289,6 +290,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
       "docs/runbooks/m02-06-home-mobile.md",
       "docs/feature-map.json",
       "tests/e2e/m02-06-home-mobile.spec.ts",
+      "scripts/verify-home-dashboard-live.mjs",
     ].map(read),
   );
   assert.match(up, /CHAR\(36\) CHARACTER SET ascii/);
@@ -308,6 +310,25 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     assert.match(repo, new RegExp(rule));
   assert.match(selectionPolicy, /opportunity_rule_matches orm_gate/);
   assert.match(selectionPolicy, /recommendation_status='recommend'/);
+  for (const prerequisite of [
+    "INSERT INTO trend_topics",
+    "INSERT INTO trend_monitoring_rules",
+    "INSERT INTO score_rules",
+    "INSERT INTO opportunity_rule_matches",
+    "INSERT INTO opportunity_score_runs",
+    "INSERT INTO opportunity_score_components",
+  ])
+    assert.ok(
+      liveProbe.includes(prerequisite),
+      `home dashboard live probe must seed ${prerequisite}`,
+    );
+  for (const cleanup of [
+    "DELETE FROM opportunities WHERE id=?",
+    "DELETE FROM score_rules WHERE id=?",
+    "DELETE FROM trend_monitoring_rules WHERE id=?",
+    "DELETE FROM trend_topics WHERE id=?",
+  ])
+    assert.ok(liveProbe.includes(cleanup), `home dashboard live probe must clean ${cleanup}`);
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
