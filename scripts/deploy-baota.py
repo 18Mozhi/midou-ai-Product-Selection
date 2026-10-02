@@ -405,6 +405,18 @@ def panel_ok(response, operation, allow_messages=()):
         return
     raise RuntimeError(operation + " failed: " + text)
 
+def restart_python_project():
+    row = public.M("sites").where("name=?", (v["python_project"],)).find()
+    if not row or row.get("project_type") != "Python" or row.get("path") != str(root / "python"):
+        raise RuntimeError("Python project identity or path mismatch")
+    restarted = subprocess.run(
+        ["/www/server/panel/pyenv/bin/python", "/www/server/panel/script/restart_project.py", "python", v["python_project"]],
+        capture_output=True,
+        text=True,
+    )
+    if restarted.returncode != 0:
+        raise RuntimeError("BaoTa Python project restart failed")
+
 def ensure_inside(path):
     resolved = path.resolve(strict=False)
     if resolved == root or root not in resolved.parents:
@@ -731,6 +743,8 @@ try:
         }}
         panel_ok(python_model.ChangeProjectConf(change), "update Python project")
 
+    restart_python_project()
+
     shutil.rmtree(stage)
     result(True, "deployed", node_path=str(root / "backend"), python_path=str(root / "python"), nginx_spa_404=True)
 except Exception as error:
@@ -766,6 +780,7 @@ except Exception as error:
                 previous_release.replace(release_file)
             recovery_get = public.dict_obj(); recovery_get.project_name = v["node_project"]
             panel_ok(node.start_project(recovery_get), "restore Node")
+            restart_python_project()
             if rollback.exists():
                 shutil.rmtree(rollback)
         except Exception as runtime_error:

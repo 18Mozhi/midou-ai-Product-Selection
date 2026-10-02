@@ -8,7 +8,7 @@
 2. 复制 `verification/release-change-ownership.example.json` 为 Git 忽略的 `.artifacts/release-change-ownership.json`，把 `baseSha` 设为上次已发布 commit、`headSha` 设为当前 HEAD，并按实际工作包填写负责人、commit 与变更路径。路径清单须覆盖区间内每个 commit 触及的路径，包括随后在同一区间删除或恢复的文件。运行 `npm run verify:release-ownership`；漏项、重复归属、区间外变更、同一路径跨工作包或 HEAD 漂移必须先修正，禁止把未知并行变更统归到当前任务。
 3. 在宝塔确认网站、Node 项目“ai选品”和 Python 项目“ai选品-python”均由面板创建和管理；不得保留独立 API、Worker、Canary 或面板外常驻项目，也不要用 systemd、独立 PM2、宿主 crontab或屏外 Docker Compose代替。
 4. Node/Python 只读取 `/www/wwwroot/ai选品/config/product_scout.env` 受限环境；秘密只填宝塔受限配置，检查页面、项目环境、日志和任务输出均无秘密。2026-09-07 已完成生产目录及两个宝塔项目名称的 UTF-8 规范化；部署器在上传前校验远端根目录文件名字节，编码漂移时失败关闭，禁止通过 SSH 手工重命名绕过面板记录。
-5. 本地使用锁文件完整安装依赖，然后运行 `python scripts/deploy-baota.py` 上传运行包；不得在服务器执行 Git 或源码构建。脚本在 Git fetch 和构建前自动执行格式、运行文档与发布矩阵门，构建后自动执行固定宝塔产物 preflight；任一失败都不会读取 Windows 凭据或连接服务器。随后脚本校验发布归属清单，只允许执行内置白名单中的升序迁移，校验迁移校验值后切换固定目录，并通过宝塔接口更新或重启“ai选品”和“ai选品-python”；不会创建面板外服务。机会详情依赖的 `0065_opportunity_operating_feedback.up.sql` 必须位于 `0064` 与 `0066` 之间执行并登记，缺少时不得继续签发生产机会路由。
+5. 本地使用锁文件完整安装依赖，然后运行 `python scripts/deploy-baota.py` 上传运行包；不得在服务器执行 Git 或源码构建。脚本在 Git fetch 和构建前自动执行格式、运行文档与发布矩阵门，构建后自动执行固定宝塔产物 preflight；任一失败都不会读取 Windows 凭据或连接服务器。随后脚本校验发布归属清单，只允许执行内置白名单中的升序迁移，校验迁移校验值后切换固定目录，并通过宝塔接口更新或重启“ai选品”和“ai选品-python”；既有 Python 项目配置更新后，必须按固定名称/路径二次核对并通过宝塔 `restart_project.py python ai选品-python` 重启，避免旧解释器继续加载上一版代码。部署失败回滚 Python 运行包时也会重启既有 Python 项目；不会创建面板外服务。机会详情依赖的 `0065_opportunity_operating_feedback.up.sql` 必须位于 `0064` 与 `0066` 之间执行并登记，缺少时不得继续签发生产机会路由。
 6. 部署器只在网站 ID 29、域名与固定路径全部匹配后更新宝塔 Nginx：由当前路由目录生成 `/www/wwwroot/ai选品/config/nginx-spa-routes.conf`，登记的 SPA 深链返回 200，随机未登记路径返回应用 fallback 正文并保留 HTTP 404。为避免宝塔默认 `error_page 404 /404.html` 抢先返回静态错误页，部署器只移除其 `#ERROR-PAGE-START` 块中的精确默认映射；修改前备份，随后执行 `nginx -t` 和 reload，失败从 `/www/wwwroot/ai选品/backups/nginx` 的同提交备份恢复。继续确认 `/api/`、`/open/` 与 SSE 不受 SPA 错误页拦截。TLS 由宝塔网站签发，DNS/NAT 未完成时不得宣称公网可用。
 
 ## 生产验收
@@ -20,7 +20,7 @@
 ## 故障与回滚
 
 - 初次部署时目标或证据缺失：保持 blocked 和 `productionDeployed=false`；当前已签发环境如统一 Node、Python Crawler 或部署证据缺失，则保持 `productionDeployed=true` 但使 M07-03/M07-05 生产门失败，先在宝塔修复既有对象，不能把缺失写成通过。
-- 切换后的 Nginx、Node 或 Python 步骤失败：部署器恢复上一版 `frontend/backend/python`、`release.env` 与 Nginx，并通过宝塔重启 Node；同时删除当前 SHA 的 stage/upload。先确认公网 `ready/version` 已回到上一版，再修复错误重试；如输出包含 `rollback failed`，保留回滚目录并停止自动重试，按错误逐项恢复。
+- 切换后的 Nginx、Node 或 Python 步骤失败：部署器恢复上一版 `frontend/backend/python`、`release.env` 与 Nginx，并通过宝塔重启 Node 和既有 Python 项目；同时删除当前 SHA 的 stage/upload。先确认公网 `ready/version` 已回到上一版，再修复错误重试；如输出包含 `rollback failed`，保留回滚目录并停止自动重试，按错误逐项恢复。
 - ready 失败：保持网站维护入口，按依赖字段检查 MySQL/Redis 与受限配置；不能用缓存状态伪装健康。
 - Worker 心跳过期或 API 子进程退出：在宝塔检查“ai选品”启动配置、监督器日志和租约。Python 心跳过期则检查并重启“ai选品-python”；不启动面板外替代进程。
 - 版本或配置指纹不一致：停止签发，恢复同一上一稳定 commit 与环境快照。

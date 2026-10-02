@@ -94,6 +94,9 @@ test("M07-03 deployer runs source and built-artifact gates before remote credent
   );
   assert.match(deployer, /nginx", "-t"/);
   assert.match(deployer, /unknown_route_status == 404/);
+  assert.match(deployer, /def restart_python_project\(\):[\s\S]*project_type\"\) != \"Python\"[\s\S]*restart_project\.py\", \"python\", v\[\"python_project\"\]/);
+  assert.match(deployer, /panel_ok\(python_model\.ChangeProjectConf\(change\), \"update Python project\"\)[\s\S]*restart_python_project\(\)/);
+  assert.match(deployer, /panel_ok\(node\.start_project\(recovery_get\), \"restore Node\"\)[\s\S]*restart_python_project\(\)/);
 });
 
 test("M07-03.A17 docs, OpenAPI, Feature Map and evidence schema stay synchronized", async () => {
