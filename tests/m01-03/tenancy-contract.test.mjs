@@ -3,6 +3,15 @@ import assert from "node:assert/strict";
 import { readFile, access } from "node:fs/promises";
 
 const read = (path) => readFile(new URL(`../../${path}`, import.meta.url), "utf8");
+test("M01-03.A16 live cleanup removes downstream membership dependents first", async () => {
+  const probe = await read("scripts/verify-tenancy-live.mjs");
+  const roleCleanup = probe.indexOf('"membership_role_assignments"');
+  const scopeCleanup = probe.indexOf('"membership_data_scopes"');
+  const parentCleanup = probe.indexOf("DELETE FROM memberships");
+  assert.ok(roleCleanup >= 0 && scopeCleanup >= 0);
+  assert.ok(roleCleanup < parentCleanup && scopeCleanup < parentCleanup);
+  assert.match(probe, /information_schema\.tables/);
+});
 test("M01-03.A03/A13 migrations are MySQL57 scoped and reversible in dependency order", async () => {
   const names = [
     "0010a_organizations_m01_03",

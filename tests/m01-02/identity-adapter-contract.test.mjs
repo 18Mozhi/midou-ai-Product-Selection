@@ -1,6 +1,14 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+test("M01-02.A14 live MFA probe follows the local login identifier contract", async () => {
+  const probe = await readFile("scripts/verify-mfa-live.mjs", "utf8");
+  assert.equal(
+    (probe.match(/localAuth\.login\(\s*\{\s*identifier:\s*email,\s*password:/g) ?? []).length,
+    3,
+  );
+  assert.doesNotMatch(probe, /localAuth\.login\(\s*\{\s*email\s*,/);
+});
 test("M01-02.A03 MySQL57 MFA migrations are encrypted, indexed and reversible", async () => {
   const ups = await Promise.all(
     ["a_mfa_factors", "b_mfa_recovery_codes", "c_mfa_challenges"].map((name) =>
