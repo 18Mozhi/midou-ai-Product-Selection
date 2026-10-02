@@ -16,7 +16,7 @@ const sourceFiles = ["apps/web/src/components/CollectionRuntimeCenter.vue"];
 const definitions = [
   {
     actionId: "CL53-LOAD",
-    candidates: ["b3aff7d1ec82177c.1", "25af292333a00121.1"],
+    candidates: ["b3aff7d1ec82177c.1", "a761c6ac4e81b553.1"],
     label: "读取、刷新或从状态面重试网页采集运行快照",
     kind: "read",
     condition: "页面挂载、刷新或当前状态面提供既有重试入口时。",
