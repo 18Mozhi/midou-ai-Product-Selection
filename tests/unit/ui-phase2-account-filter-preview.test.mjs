@@ -62,6 +62,16 @@ test("P39 review refuses changed source markup instead of silently rendering an 
     ),
   );
 });
+test("P39 current extracted directory keeps its actual Vue composition untransformed", () => {
+  const current = readFileSync(component, "utf8").replaceAll("\r\n", "\n"),
+    preview = accountFilterPreview(current);
+  assert.equal(preview.source, current);
+  assert.equal(preview.original, "");
+  assert.equal(preview.form, "");
+  assert.match(current, /<PlatformAccountDirectoryWorkspace/u);
+  assert.match(current, /@apply-filters="applyFilters"/u);
+  assert.match(current, /@reset-filters="resetFilters"/u);
+});
 test("P39 evidence has captured source revisions, exact images and explicit fixture boundaries", () => {
   const e = JSON.parse(read(`${output}/evidence.json`));
   assert.equal(e.approval, "pending");

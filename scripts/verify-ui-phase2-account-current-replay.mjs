@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { mkdir, readFile, writeFile, stat } from "node:fs/promises";
+import { mkdir, readFile, writeFile, stat, readdir } from "node:fs/promises";
 import {
   accountCaptureStages,
   accountHistoricalCapture,
@@ -46,12 +46,13 @@ try {
     const code = accountReplayDriver(stage, await read(entry.driver));
     const recorded = resume && (await exists(`${accountReplayRoot}/${stage}/evidence.json`));
     if (!recorded) {
-      if (capture)
-        assert.equal(
-          await exists(`${accountReplayRoot}/${stage}`),
-          false,
-          "Do not overwrite an incomplete stage",
-        );
+      if (capture) {
+        const stageDirectory = `${accountReplayRoot}/${stage}`;
+        if (await exists(stageDirectory)) {
+          const entries = await readdir(stageDirectory);
+          assert.ok(resume && entries.length === 0, "Do not overwrite an incomplete stage");
+        }
+      }
       // The original driver owns all Vite/browser cleanup; no scratch module is created.
       await import(
         "data:text/javascript;base64," +
@@ -122,7 +123,7 @@ if (capture) {
     file.startsWith("apps/web/src/") ? read(file) : "",
   );
   const evidence = {
-    kind: "P39-current-replay-r1",
+    kind: "P39-current-replay-r2",
     approval: "pending",
     processesClosed: true,
     summaries,
@@ -130,7 +131,7 @@ if (capture) {
       await Promise.all([...sources].sort().map(async (file) => [file, hash(await read(file))])),
     ),
     boundary:
-      "Original pinned drivers and assertions; only static import resolution and output directory changed. Current raw Vue/CSS, historical manifests pinned separately, original images untouched. Local fixture-only requests, not true account creation, full App shell, permission or production acceptance. Byte differences are observations, not approvals or pixel-equivalence claims.",
+      "Original pinned drivers and assertions; static imports are resolved and output is redirected. Current extracted PlatformAccountDirectoryWorkspace composition is rendered without legacy template replacement; current CSS and local fixtures are retained. Historical manifests and images remain separate. Local requests do not prove true account creation, full App shell, permission or production acceptance. Byte differences are observations, not approvals or pixel-equivalence claims.",
   };
   await writeFile(`${accountReplayRoot}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n");
   await writeFile(

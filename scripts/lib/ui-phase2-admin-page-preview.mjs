@@ -4,8 +4,27 @@ import { userPagePreview } from "./ui-phase2-user-page-preview.mjs";
 
 // P44 review host only. Production scripts, directives and handlers remain intact.
 export function adminPagePreview(original, surface) {
-  if (surface === "detail") return userPagePreview(original, "detail");
+  if (surface === "detail") {
+    if (original.includes('class="user-detail-shell"')) {
+      assert.ok(
+        original.includes('data-user-detail-section="memberships"'),
+        "P44 detail section bridge drift",
+      );
+      assert.deepEqual(parse(original).errors, []);
+      return original;
+    }
+    return userPagePreview(original, "detail");
+  }
   assert.equal(surface, "parent");
+  // The current account center delegates the directory, authorizable-account
+  // heading and comparison to PlatformAccountDirectoryWorkspace. Historical
+  // source replays continue through the transformation below.
+  if (original.includes("<PlatformAccountDirectoryWorkspace")) {
+    assert.ok(original.includes('@apply-filters="applyFilters"'), "P44 filter bridge drift");
+    assert.ok(original.includes('@load="load"'), "P44 refresh bridge drift");
+    assert.deepEqual(parse(original).errors, []);
+    return original;
+  }
   const heading = `      <header v-if="tab === 'admins'" class="admin-directory-heading">
         <h3>可授权账号</h3>
         <p>包含尚未授予平台角色的账号。进入详情后核对身份与当前授权。</p>

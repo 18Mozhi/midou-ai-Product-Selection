@@ -129,7 +129,7 @@ if (capture) {
     file.startsWith("apps/web/src/") ? read(file) : "",
   );
   const evidence = {
-    kind: "P44-current-replay-r3",
+    kind: "P44-current-replay-r4",
     approval: "pending",
     processesClosed: true,
     summaries,
@@ -137,7 +137,7 @@ if (capture) {
       await Promise.all([...sources].sort().map(async (file) => [file, hash(await read(file))])),
     ),
     boundary:
-      "Original pinned drivers and assertions; static import resolution, output directory and one scoped review stylesheet insertion only. Current Vue/CSS with existing review-only template composition, not untransformed App. Historical manifests pinned separately, original images untouched. Local fixture-only requests, not true administrator creation, full App shell, permission or production acceptance. Byte differences are observations, not approvals or pixel-equivalence claims.",
+      "Original pinned drivers and assertions; static imports are resolved, output redirected, and one scoped review stylesheet is added. Extracted PlatformAccountDirectoryWorkspace and current user-detail composition are rendered without legacy template replacement. Historical manifests and images remain separate. Local requests do not prove true administrator creation, full App shell, permission or production acceptance. Byte differences are observations, not approvals or pixel-equivalence claims.",
   };
   await writeFile(
     `${adminReviewReplayRoot}/evidence.json`,

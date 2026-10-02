@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { accountCaptureStages } from "./ui-phase2-account-historical-capture.mjs";
 
-export const accountReplayRoot = "output/playwright/p39-current-replay-r1";
+export const accountReplayRoot = "output/playwright/p39-current-replay-r2";
 export function accountReplayDriver(stage, source) {
   assert.ok(Object.hasOwn(accountCaptureStages, stage), "Unknown P39 replay stage");
   const entry = accountCaptureStages[stage];

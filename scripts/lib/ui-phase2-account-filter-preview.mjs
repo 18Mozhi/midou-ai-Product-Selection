@@ -2,6 +2,14 @@ import assert from "node:assert/strict";
 
 // Review-host transformation only. The application never imports this module.
 export function accountFilterPreview(source) {
+  // The current production view owns its filter in the extracted child
+  // component. Keep that composition intact; this transformer is for the
+  // pinned pre-extraction review source only.
+  if (source.includes("<PlatformAccountDirectoryWorkspace")) {
+    assert.ok(source.includes('@apply-filters="applyFilters"'), "P39 filter bridge drift");
+    assert.ok(source.includes('@reset-filters="resetFilters"'), "P39 reset bridge drift");
+    return { source, original: "", form: "" };
+  }
   const forms = [...source.matchAll(/<form class="account-filter"[\s\S]*?<\/form>/g)];
   assert.equal(forms.length, 1, "Review patch requires the exact account filter form");
   const original = forms[0][0];

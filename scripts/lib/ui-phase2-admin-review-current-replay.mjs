@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { adminReviewCaptureStages } from "./ui-phase2-admin-review-historical-capture.mjs";
 
-export const adminReviewReplayRoot = "output/playwright/p44-current-replay-r3";
+export const adminReviewReplayRoot = "output/playwright/p44-current-replay-r4";
 export const adminReviewReplayStyle =
   "design-plans/ui-phase-2-2026-09-07/implementation/admin-current-replay.css";
 export const adminReviewStyleImport =
@@ -62,6 +62,19 @@ export function adminReviewReplayDriver(stage, source) {
     : `const output = "${entry.folder}";`;
   assert.equal(source.split(before).length, 2, "One exact output-only substitution");
   source = source.replace(before, `const output = "${adminReviewReplayRoot}/${stage}";`);
+  if (stage === "create") {
+    for (const [historical, current] of [
+      [".p43-user-fields-body", ".p44-admin-create-form"],
+      [".p43-user-intro", ".p44-admin-create-rail"],
+    ]) {
+      assert.equal(
+        source.split(historical).length,
+        2,
+        `One current replay selector: ${historical}`,
+      );
+      source = source.replace(historical, current);
+    }
+  }
   assert.equal(source.split("const host = ").length, 2);
   source = source.replace(
     "const host = ",

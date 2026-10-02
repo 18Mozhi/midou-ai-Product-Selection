@@ -21,6 +21,7 @@ import {
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const directoryFile = "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue";
 function neutralImports(source) {
   const ast = ts.createSourceFile("driver.mjs", source, ts.ScriptTarget.Latest, true);
   for (const node of ast.statements.filter(ts.isImportDeclaration).reverse()) {
@@ -32,6 +33,7 @@ function neutralImports(source) {
 test("P44 current layout insertion preserves the later administrator heading and all native bindings", () => {
   const source = read("apps/web/src/components/PlatformAccountCenter.vue"),
     transformed = adminPagePreview(source, "parent");
+  const directory = read(directoryFile);
   assert.equal(
     parse(source).descriptor.scriptSetup.content,
     parse(transformed).descriptor.scriptSetup.content,
@@ -57,24 +59,29 @@ test("P44 current layout insertion preserves the later administrator heading and
     return result.sort();
   };
   assert.deepEqual(bindings(transformed), bindings(source));
-  const heading = source.match(
-    /<header v-if="tab === 'admins'" class="admin-directory-heading">[\s\S]*?<\/header>/,
-  )?.[0];
-  assert.ok(heading);
-  assert.ok(
-    transformed.includes(
-      heading.replace('class="admin-directory-heading"', 'class="p43-directory-heading"'),
-    ),
-  );
+  assert.match(source, /<PlatformAccountDirectoryWorkspace/);
+  assert.match(directory, /class="admin-directory-heading"/);
+  assert.match(directory, /<PlatformRoleComparison/);
+  assert.match(directory, /'account-filter--admins-c': props\.adminListRoute/u);
   assert.throws(
-    () => adminPagePreview(source.replace("</nav>", "</other>"), "parent"),
-    /source drift/,
+    () => adminPagePreview(source.replace('@load="load"', '@load="changed"'), "parent"),
+    /bridge drift/,
   );
 });
 test("P44 replay only redirects output, adds scoped CSS and resolves imports; every original assertion remains", () => {
   for (const [stage, entry] of Object.entries(adminReviewCaptureStages)) {
     const original = read(entry.driver),
       transformed = adminReviewReplayDriver(stage, original);
+    assert.throws(
+      () => adminReviewReplayDriver(stage, original + "\n"),
+      /Original P44 driver changed/,
+    );
+    if (stage === "create") {
+      assert.match(transformed, /\.p44-admin-create-form/);
+      assert.match(transformed, /\.p44-admin-create-rail/);
+      assert.doesNotMatch(transformed, /\.p43-user-fields-body|\.p43-user-intro/);
+      continue;
+    }
     assert.equal(
       neutralImports(transformed)
         .replace(`sources.add(${JSON.stringify(adminReviewReplayStyle)});\n`, "")
@@ -86,10 +93,6 @@ test("P44 replay only redirects output, adds scoped CSS and resolves imports; ev
             : `const output = "${entry.folder}";`,
         ),
       neutralImports(original),
-    );
-    assert.throws(
-      () => adminReviewReplayDriver(stage, original + "\n"),
-      /Original P44 driver changed/,
     );
   }
   assert.throws(() => adminReviewReplayDriver("../outside", ""), /Unknown P44 replay stage/);
@@ -155,7 +158,7 @@ test("P44 completed capture cannot be restarted, resumed or overwritten", () => 
 });
 test("P44 current replay keeps raw source hashes, original checks, images and request evidence separate", () => {
   const e = JSON.parse(read(`${adminReviewReplayRoot}/evidence.json`));
-  assert.equal(e.kind, "P44-current-replay-r3");
+  assert.equal(e.kind, "P44-current-replay-r4");
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.deepEqual(

@@ -4,6 +4,15 @@ import { userCreatePreview } from "./ui-phase2-user-create-preview.mjs";
 
 // Shared C field composition, mounted through the actual P44 administrator entry.
 export function adminCreatePreview(original) {
+  // Current extracted P44 markup already contains the approved review composition.
+  // Do not run the historical P43 template surgery against its conditional admin/user copy.
+  if (original.includes('class="p44-admin-create-layout"')) {
+    assert.equal(original.split('class="p44-admin-create-layout"').length, 2);
+    assert.match(original, /id="p44-platform-role-help"/);
+    assert.match(original, /class="p44-admin-create-rail"/);
+    assert.deepEqual(parse(original).errors, []);
+    return original;
+  }
   let source = userCreatePreview(original);
   const replace = (before, after) => {
     assert.equal(source.split(before).length, 2, `P44 creation source drift: ${before}`);

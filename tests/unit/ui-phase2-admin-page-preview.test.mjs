@@ -58,12 +58,18 @@ for (const [file, surface] of [
 test("P44 transformation fails closed on mismatched source and unknown surface", () => {
   assert.throws(() =>
     adminPagePreview(
-      read(parent).replace('class="account-metrics"', 'class="unexpected"'),
+      read(parent).replace('@apply-filters="applyFilters"', '@apply-filters="changed"'),
       "parent",
     ),
   );
   assert.throws(() =>
-    adminPagePreview(read(detail).replace("<h4>组织与角色</h4>", "<h4>Changed</h4>"), "detail"),
+    adminPagePreview(
+      read(detail).replace(
+        'data-user-detail-section="memberships"',
+        'data-user-detail-section="changed"',
+      ),
+      "detail",
+    ),
   );
   assert.throws(() => adminPagePreview(read(parent), "unknown"));
 });

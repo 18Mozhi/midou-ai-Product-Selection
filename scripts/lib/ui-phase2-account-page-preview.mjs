@@ -3,6 +3,19 @@ import { accountFilterPreview } from "./ui-phase2-account-filter-preview.mjs";
 
 // Only the isolated P39 review host imports this transformation.
 export function accountPagePreview(original) {
+  // Current production composition moved the directory, filter and overview
+  // sections into PlatformAccountDirectoryWorkspace. Keep that live split
+  // intact; the legacy template transformation below is only for archived
+  // pre-extraction captures.
+  if (original.includes("<PlatformAccountDirectoryWorkspace")) {
+    assert.ok(original.includes('@load="load"'), "P39 directory load bridge drift");
+    assert.ok(
+      original.includes('@open-organization="openOrganization"'),
+      "P39 organization detail bridge drift",
+    );
+    assert.ok(original.includes('@open-user="openUserDetail"'), "P39 user detail bridge drift");
+    return original;
+  }
   let source = accountFilterPreview(original).source;
   const replace = (before, after) => {
     assert.equal(source.split(before).length, 2, `P39 review source drift: ${before.slice(0, 70)}`);

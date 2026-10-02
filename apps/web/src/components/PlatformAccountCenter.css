@@ -455,12 +455,237 @@
 .account-center--review .account-query-field input {
   width: 100%;
 }
+.account-center--review .account-filter--overview-c {
+  --p39-ink: #202c3d;
+  --p39-muted: #58677b;
+  --p39-blue: #254a9c;
+  --p39-line: #6680a2;
+  --p39-paper: #fff;
+  --p39-rule: #dbe1e9;
+  --p39-hover: #f0f5ff;
+  --p39-pressed: #193b80;
+  --p39-disabled: #edf1f6;
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 0.65fr);
+  align-items: start;
+  gap: 24px;
+  align-self: start;
+  padding: 24px;
+  border-color: var(--p39-rule);
+  border-radius: 12px;
+  background: var(--p39-paper);
+  color: var(--p39-ink);
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+.account-center--review
+  .account-page-layout:not(.account-page-layout--admins):not(.account-page-layout--organizations)
+  .account-page-main.p39-page-grid {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr);
+  align-items: start;
+  gap: 24px;
+  min-width: 0;
+}
+.account-center--review .p39-directory {
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--account-review-blue);
+  color: var(--account-review-on-blue);
+}
+.account-center--review .p39-directory > header {
+  padding: 24px;
+  border-bottom: 1px solid var(--account-org-divider);
+}
+.account-center--review .p39-directory h3,
+.account-center--review .p39-results-head h3 {
+  margin: 0 0 6px;
+  font-size: 21px;
+  line-height: 1.4;
+}
+.account-center--review .p39-directory p {
+  margin: 0;
+  color: var(--account-review-on-blue);
+  font-size: 14px;
+  line-height: 1.6;
+}
+.account-center--review .p39-directory .account-metrics {
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+.account-center--review .p39-directory .account-metrics article {
+  min-height: 0;
+  padding: 20px 24px;
+  border: 0;
+  border-bottom: 1px solid var(--account-org-divider);
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+.account-center--review .p39-directory .account-metrics :is(small, strong, span) {
+  color: var(--account-review-on-blue);
+}
+.account-center--review .p39-directory .account-metrics strong {
+  font-size: 30px;
+  line-height: 1.3;
+}
+.account-center--review .p39-directory .account-tabs {
+  display: grid;
+  gap: 8px;
+  padding: 16px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+.account-center--review .p39-directory .account-tabs a {
+  justify-content: space-between;
+  min-height: 44px;
+  border: 1px solid var(--account-org-outline);
+  border-radius: 8px;
+  color: var(--account-review-on-blue);
+  background: transparent;
+}
+.account-center--review .p39-directory .account-tabs a.on {
+  border-color: var(--account-review-surface);
+  color: var(--account-review-blue-deep);
+  background: var(--account-review-surface);
+}
+.account-center--review .p39-results {
+  min-width: 0;
+  padding: 24px;
+  border: 1px solid var(--account-review-line);
+  border-radius: 12px;
+  background: var(--account-review-surface);
+}
+.account-center--review .p39-results-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+.account-center--review .p39-results-head h3 {
+  color: var(--account-review-ink);
+}
+.account-center--review .p39-results-head p {
+  margin: 0;
+  color: var(--account-review-muted);
+  font-size: 14px;
+}
+.account-center--review:has(.p39-page-grid) .account-hero .hero-actions button:last-child {
+  display: none;
+}
+.account-center--review .p39-results :is(.account-state, .account-empty) {
+  margin: 20px 0 0;
+  padding: 24px;
+  border: 1px solid var(--account-review-line);
+  border-radius: 8px;
+  background: var(--account-review-soft);
+}
+.account-center--review .account-filter--overview-c :is(label, span, small, input, select, button) {
+  font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+}
+.account-center--review .account-filter--overview-c .p39-filter-field {
+  display: grid;
+  gap: 8px;
+  min-width: 0;
+  align-content: start;
+  color: var(--p39-ink);
+}
+.account-center--review .account-filter--overview-c .p39-filter-field > span {
+  color: var(--p39-ink);
+  font-size: 16px;
+  font-weight: 700;
+}
+.account-center--review .account-filter--overview-c .p39-filter-field > small {
+  color: var(--p39-muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+.account-center--review .account-filter--overview-c :is(input, select) {
+  width: 100%;
+  min-width: 0;
+  min-height: 48px;
+  margin: 0;
+  padding: 11px 12px;
+  border: 1px solid var(--p39-line);
+  border-radius: 8px;
+  background: var(--p39-paper);
+  color: var(--p39-ink);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.account-center--review .account-filter--overview-c input::placeholder {
+  color: var(--p39-muted);
+  opacity: 1;
+}
+.account-center--review .account-filter--overview-c .p39-filter-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 20px;
+  border-top: 1px solid var(--p39-rule);
+}
+.account-center--review .account-filter--overview-c button {
+  min-width: 112px;
+  min-height: 48px;
+  padding: 11px 20px;
+  border: 1px solid var(--p39-blue);
+  border-radius: 8px;
+  background: var(--p39-blue);
+  color: var(--p39-paper);
+  font-size: 16px;
+  font-weight: 700;
+  opacity: 1;
+  box-shadow: none;
+  transform: none;
+}
+.account-center--review .account-filter--overview-c button.secondary {
+  background: var(--p39-paper);
+  color: var(--p39-blue);
+}
+.account-center--review .account-filter--overview-c :is(input, select, button):focus-visible {
+  outline: 3px solid var(--p39-blue);
+  outline-offset: 3px;
+}
+.account-center--review .account-filter--overview-c :is(input, select):hover {
+  background: var(--p39-hover);
+}
+.account-center--review .account-filter--overview-c button:not(:disabled):hover {
+  background: var(--p39-pressed);
+}
+.account-center--review .account-filter--overview-c button.secondary:not(:disabled):hover {
+  background: var(--p39-hover);
+}
+.account-center--review .account-filter--overview-c button:not(:disabled):active {
+  background: var(--p39-pressed);
+  box-shadow: inset 0 0 0 2px var(--p39-paper);
+}
+.account-center--review .account-filter--overview-c button.secondary:not(:disabled):active {
+  background: var(--p39-disabled);
+}
+.account-center--review .account-filter--overview-c button:disabled {
+  border-color: var(--p39-rule);
+  background: var(--p39-disabled);
+  color: var(--p39-muted);
+  cursor: not-allowed;
+  opacity: 1;
+  outline: none;
+  box-shadow: none;
+}
 .account-center--review .account-filter button {
   background: var(--account-review-blue);
 }
 .account-center--review .account-filter button.secondary {
   color: var(--account-review-ink);
   background: var(--account-review-soft);
+}
+.account-center--review .account-filter--overview-c button {
+  background: var(--p39-blue);
+}
+.account-center--review .account-filter--overview-c button.secondary {
+  color: var(--p39-blue);
+  background: var(--p39-paper);
 }
 .account-center--review .admin-directory-heading {
   margin: 0;
@@ -810,6 +1035,18 @@
   .account-center--review .account-filter {
     grid-template-columns: 1fr;
   }
+  .account-center--review .account-filter--overview-c {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 24px;
+    padding: 20px 16px;
+  }
+  .account-center--review .account-filter--overview-c .p39-filter-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .account-center--review .account-filter--overview-c button {
+    width: 100%;
+  }
 }
 @media (max-width: 760px) {
   .account-center--organization-review .account-page-layout--organizations .account-page-rail {
@@ -883,4 +1120,74 @@
 }
 .account-center--user-admin-c :is(a, button, input, select, textarea):focus-visible {
   outline-color: var(--account-org-focus);
+}
+@media (max-width: 1024px) {
+  .account-center--review .account-page-main.p39-page-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .account-center--review .p39-directory > header {
+    padding: 16px 20px;
+  }
+  .account-center--review .p39-directory .account-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .account-center--review .p39-directory .account-metrics article {
+    padding: 16px 20px;
+    border-right: 1px solid var(--account-org-divider);
+  }
+  .account-center--review .p39-directory .account-tabs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .account-center--review .p39-directory .account-tabs a {
+    justify-content: center;
+  }
+  .account-center--review .p39-results {
+    padding: 16px;
+  }
+}
+@media (max-width: 760px) {
+  .account-center--review .p39-page-grid {
+    gap: 16px;
+  }
+  .account-center--review .p39-directory > header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 14px 16px;
+  }
+  .account-center--review .p39-directory h3 {
+    margin: 0;
+    font-size: 18px;
+  }
+  .account-center--review .p39-directory p {
+    max-width: 170px;
+    font-size: 13px;
+  }
+  .account-center--review .p39-directory .account-metrics article {
+    padding: 12px;
+  }
+  .account-center--review .p39-directory .account-metrics strong {
+    font-size: 23px;
+    white-space: nowrap;
+  }
+  .account-center--review .p39-directory .account-metrics :is(small, span) {
+    font-size: 13px;
+  }
+  .account-center--review .p39-directory .account-tabs {
+    padding: 12px;
+    gap: 8px;
+  }
+  .account-center--review .p39-directory .account-tabs a {
+    justify-content: center;
+    padding: 8px 2px;
+    font-size: 16px;
+  }
+  .account-center--review .p39-results-head {
+    margin-bottom: 16px;
+  }
+  .account-center--review .p39-results-head button {
+    padding-inline: 10px;
+  }
 }

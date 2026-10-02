@@ -53,8 +53,8 @@ test("P44 create composition preserves full script, conditions, bindings, native
   const marker = '<dialog ref="passwordDialogElement"';
   assert.equal(updated.slice(updated.indexOf(marker)), original.slice(original.indexOf(marker)));
   assert.throws(
-    () => adminCreatePreview(original.replace("<h3>{{ createUserTitle }}</h3>", "<h3>drift</h3>")),
-    /drift/,
+    () => adminCreatePreview(original.replace('class="p44-admin-create-layout"', 'class="drift"')),
+    /source drift/,
   );
 });
 test("P44 creation evidence pins captured production plus review-only composition and every PNG", () => {
@@ -159,12 +159,12 @@ test("P44 actual parent submits exact five-field fixture payloads with original 
       assert.ok(states.includes(state));
   }
 });
-test("P44 review containers avoid legacy action heuristics and have no production import", () => {
+test("P44 review containers use the extracted current composition without legacy template surgery", () => {
   const updated = adminCreatePreview(read(child));
   assert.ok(!updated.includes('class="p43-create'));
+  assert.equal(updated, read(child));
   assert.ok(!read("apps/web/src/main.ts").includes("user-create-preview"));
-  assert.ok(!read(child).includes("p44-platform-role-help"));
-  assert.match(updated, /aria-describedby="p44-platform-role-help"/);
+  assert.match(updated, /p44-platform-role-help/);
   assert.match(updated, /从管理员页打开时默认运营管理员/);
   assert.ok(!read(child).includes("p43-user-onboarding"));
   const scope = JSON.parse(read(`${folder}/evidence.json`)).scope;

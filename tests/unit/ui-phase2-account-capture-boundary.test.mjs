@@ -17,6 +17,7 @@ import {
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const directoryFile = "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue";
 function neutralImports(source) {
   const ast = ts.createSourceFile("driver.mjs", source, ts.ScriptTarget.Latest, true);
   for (const node of ast.statements.filter(ts.isImportDeclaration).reverse()) {
@@ -28,6 +29,7 @@ function neutralImports(source) {
 test("P39 current layout insertion preserves the later administrator heading and all native bindings", () => {
   const source = read("apps/web/src/components/PlatformAccountCenter.vue"),
     transformed = accountPagePreview(source);
+  const directory = read(directoryFile);
   assert.equal(
     parse(source).descriptor.scriptSetup.content,
     parse(transformed).descriptor.scriptSetup.content,
@@ -53,12 +55,15 @@ test("P39 current layout insertion preserves the later administrator heading and
     return result.sort();
   };
   assert.deepEqual(bindings(transformed), bindings(source));
-  const heading = source.match(
-    /<header v-if="tab === 'admins'" class="admin-directory-heading">[\s\S]*?<\/header>/,
-  )?.[0];
-  assert.ok(heading);
-  assert.ok(transformed.includes(heading));
-  assert.throws(() => accountPagePreview(source.replace("</nav>", "</other>")), /source drift/);
+  assert.match(source, /<PlatformAccountDirectoryWorkspace/);
+  assert.match(directory, /class="account-page-layout"/);
+  assert.match(directory, /class="organization-directory-heading"/);
+  assert.match(directory, /class="account-filter"/);
+  assert.match(directory, /class="admin-directory-heading"/);
+  assert.throws(
+    () => accountPagePreview(source.replace('@load="load"', '@load="changed"')),
+    /bridge drift/,
+  );
 });
 test("P39 replay only redirects output and resolves imports; every original assertion remains", () => {
   for (const [stage, entry] of Object.entries(accountCaptureStages)) {
@@ -88,7 +93,7 @@ test("P39 historical capture pins complete original manifests and all source blo
 });
 test("P39 current replay keeps raw source hashes, original checks, images and request evidence separate", () => {
   const e = JSON.parse(read(`${accountReplayRoot}/evidence.json`));
-  assert.equal(e.kind, "P39-current-replay-r1");
+  assert.equal(e.kind, "P39-current-replay-r2");
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.deepEqual(
