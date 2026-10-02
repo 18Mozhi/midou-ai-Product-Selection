@@ -1148,7 +1148,9 @@ test("P42 confirmed organization update stays distinct from a failed overview re
   const observedRequests: string[] = [];
   page.on("request", (request) => {
     if (request.url().includes("/api/v1/platform/accounts"))
-      observedRequests.push(`${request.method()} ${new URL(request.url()).pathname}${new URL(request.url()).search}`);
+      observedRequests.push(
+        `${request.method()} ${new URL(request.url()).pathname}${new URL(request.url()).search}`,
+      );
   });
   await page.route("**/api/v1/platform/accounts?**", async (route) => {
     readAttempts += 1;
@@ -1192,7 +1194,9 @@ test("P42 confirmed organization update stays distinct from a failed overview re
   await page.waitForLoadState("networkidle");
   await expect(page.getByRole("button", { name: "刷新数据" })).toBeEnabled();
   const detail = page.locator("dialog.organization-detail-dialog");
-  await detail.locator('input[aria-describedby="organization-name-help"]').fill("米豆选品团队已更新");
+  await detail
+    .locator('input[aria-describedby="organization-name-help"]')
+    .fill("米豆选品团队已更新");
   await detail.getByRole("button", { name: "保存组织资料" }).click();
   await page
     .getByRole("dialog", { name: "保存组织资料" })
@@ -1223,9 +1227,11 @@ test("P42 confirmed organization update stays distinct from a failed overview re
 
   allowSuccessfulRetry = true;
   await detail.getByRole("button", { name: "重新加载组织资料" }).click();
-  await expect(detail.getByText("组织资料已保存，但最新组织资料暂未读取。请重新加载核对。", {
-    exact: true,
-  })).toHaveCount(0);
+  await expect(
+    detail.getByText("组织资料已保存，但最新组织资料暂未读取。请重新加载核对。", {
+      exact: true,
+    }),
+  ).toHaveCount(0);
   await expect(detail.locator('input[aria-describedby="organization-name-help"]')).toHaveValue(
     "米豆选品团队已更新",
   );
