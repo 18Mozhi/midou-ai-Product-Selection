@@ -259,6 +259,13 @@ const queueRiskText = (item: Dto["providers"][number]) => {
 };
 const status = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden" || kind === "rate_limited" ? kind : "unavailable";
+function clearProtectedSnapshotAfterAccessFailure(error: ApiClientError) {
+  const failureState = status(error.kind);
+  if (failureState !== "expired" && failureState !== "forbidden") return;
+  data.value = null;
+  refreshFailure.value = null;
+  state.value = failureState;
+}
 
 async function load(options: { preserveMessage?: boolean } = {}) {
   if (!pageActive) {
@@ -348,6 +355,7 @@ async function recover() {
       requestId.value = error.requestId;
       actionHint.value = error.actionHint;
       message.value = error.actionHint;
+      clearProtectedSnapshotAfterAccessFailure(error);
       if (!data.value) state.value = status(error.kind);
     } else {
       actionHint.value = "租约回收结果暂时无法确认，请使用相同操作重试。";
@@ -386,6 +394,7 @@ async function recoverProvider() {
       requestId.value = error.requestId;
       actionHint.value = error.actionHint;
       message.value = error.actionHint;
+      clearProtectedSnapshotAfterAccessFailure(error);
     } else message.value = "来源恢复失败，请核对来源健康检查后重试。";
   } finally {
     providerRecovering.value = "";

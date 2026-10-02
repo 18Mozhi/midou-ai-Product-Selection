@@ -448,6 +448,66 @@ test("M08-05 recovery success remains visible when the follow-up read fails", as
   expect(recoveryCalls).toBe(1);
 });
 
+test("P70 recovery POST 401/403 clears the protected snapshot and keeps the access result", async ({
+  page,
+}) => {
+  let postStatus = 401;
+  const providerId = base.providers[0].id;
+  await page.route("**/api/v1/platform/operations/crawler-scheduler**", async (route) => {
+    if (route.request().method() === "POST")
+      return route.fulfill({
+        status: postStatus,
+        json: {
+          error: {
+            code: postStatus === 401 ? "session_expired" : "platform_forbidden",
+            action_hint: "请重新核验当前账号权限。",
+          },
+          request_id: `p70-access-${postStatus}`,
+          trace_id: `p70-access-${postStatus}`,
+        },
+      });
+    return route.fulfill({
+      json: envelope({
+        ...base,
+        providers: [
+          {
+            ...base.providers[0],
+            circuit_state: "open",
+            consecutive_failures: 5,
+            last_error_code: "provider_probe_failed",
+          },
+          base.providers[1],
+        ],
+      }),
+    });
+  });
+
+  for (const statusCode of [401, 403]) {
+    for (const flow of ["expired", "provider"] as const) {
+      postStatus = statusCode;
+      await page.goto("/platform-admin/crawler-scheduler");
+      await expect(page.getByText("当前采集调度门满足", { exact: true })).toBeVisible();
+      if (flow === "expired") {
+        await page.getByRole("button", { name: "回收过期租约" }).click();
+        const dialog = page.getByRole("alertdialog", { name: "回收过期调度租约？" });
+        await dialog.getByRole("textbox", { name: "输入 确认回收 继续" }).fill("确认回收");
+        await dialog.getByRole("button", { name: "确认回收" }).click();
+      } else {
+        await page.getByRole("button", { name: "解除熔断" }).click();
+        const dialog = page.getByRole("alertdialog", { name: "解除该来源的运行熔断？" });
+        await dialog.getByRole("textbox", { name: "输入 确认解除 继续" }).fill("确认解除");
+        await dialog.getByRole("button", { name: "确认解除" }).click();
+      }
+      await expect(page.getByText("当前采集调度门满足", { exact: true })).toHaveCount(0);
+      await expect(page.getByText("请重新核验当前账号权限。")).toBeVisible();
+      await expect(
+        page.getByText(statusCode === 401 ? "登录已失效" : "没有平台运维权限", { exact: true }),
+      ).toBeVisible();
+      await expect(page.getByText(providerId)).toHaveCount(0);
+    }
+  }
+});
+
 test("SC70 provider recovery confirmation identifies the exact source before its existing write", async ({
   page,
 }) => {

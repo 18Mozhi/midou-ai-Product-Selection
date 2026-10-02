@@ -24,6 +24,7 @@
 - “完成回执”必须展示待回写/隔离数量与字节、最老回执、保留期、容量上限和目录所在磁盘可用量。默认保留期 30 天、容量 512 MiB、磁盘停止线 4096 MB；保留期或隔离告警要求人工核对 correlation，禁止直接删除回执。
 - 页面和日志只用 request_id/trace_id 关联，不复制租约令牌、哈希、Cookie、凭证或任务输入。
 - 刷新同一时刻只允许一个 GET；浏览器超过 15 秒取消，API 超过 14 秒返回 `crawler_scheduler_read_timeout`。已有快照时，429、超时和 `crawler_scheduler_dependency_unavailable` 只显示刷新失败横幅并保留旧事实；401/403 必须清除受保护事实。请求取消后不得出现同 request_id 的 `platform.crawler_scheduler.read` 成功审计。
+- 两种恢复 POST 若返回 401/403，也必须清除页面已缓存的受保护事实，同时保留该失败响应的操作提示与 request_id；不得因清理快照而自动重发恢复操作。
 
 ## 过期租约恢复
 
