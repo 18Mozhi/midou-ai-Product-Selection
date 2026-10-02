@@ -30,6 +30,12 @@ test("M01-04.A03/A13 MySQL57 migrations persist roles scopes decisions and rever
   for (const surface of ["api", "worker", "export", "file", "event", "sse"])
     assert.match(decisions, new RegExp(`'${surface}'`));
 });
+test("M01-04.A04/A09 MySQL authorization binds supplied workspace and team IDs to the organization", async () => {
+  const repository = await read("apps/api/src/mysql-authorization-repository.ts");
+  assert.match(repository, /resourcesBelongToOrganization\(/);
+  assert.match(repository, /FROM workspaces WHERE id=\? AND organization_id=\? LIMIT 1/);
+  assert.match(repository, /FROM teams WHERE id=\? AND organization_id=\? LIMIT 1/);
+});
 test("M01-04.A02/A05/A09 role and guard contract separates six surfaces and platform scope", async () => {
   const source = await read("packages/authorization/src/index.ts");
   for (const role of [

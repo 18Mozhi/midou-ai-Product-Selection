@@ -240,6 +240,10 @@ export interface AuthorizationDecisionEvent {
 }
 export interface AuthorizationRepository {
   loadSubject(actorId: string, organizationId?: string): Promise<AuthorizationSubject>;
+  resourcesBelongToOrganization(
+    organizationId: string | undefined,
+    resources: { workspaceId?: string; teamId?: string },
+  ): Promise<boolean>;
   hasActiveMembership(actorId: string): Promise<boolean>;
   appendDecision(event: AuthorizationDecisionEvent): Promise<void>;
   listRoles(category?: RoleCategory): Promise<RoleDefinition[]>;
@@ -270,15 +274,27 @@ export class AuthorizationService {
     private readonly resourceGrants?: ResourceGrantAuthorizer,
   ) {}
   async authorize(check: AuthorizationCheck) {
+    const resourcesBelongToOrganization = await this.repository.resourcesBelongToOrganization(
+      check.organizationId,
+      {
+        ...(check.workspaceId ? { workspaceId: check.workspaceId } : {}),
+        ...(check.teamId ? { teamId: check.teamId } : {}),
+      },
+    );
     const subject = await this.repository.loadSubject(check.actorId, check.organizationId);
-    let reason: AuthorizationDecision["reason"] = "capability_missing",
+    let reason: AuthorizationDecision["reason"] = resourcesBelongToOrganization
+        ? "capability_missing"
+        : "scope_mismatch",
       allowed = false;
     if (
+      resourcesBelongToOrganization &&
       subject.platform_capabilities.includes(check.capability) &&
       subject.scopes.some((scope) => scope.scope === "platform")
     ) {
       allowed = true;
       reason = "allowed_platform";
+    } else if (!resourcesBelongToOrganization) {
+      reason = "scope_mismatch";
     } else if (!subject.membership_active) {
       reason = "membership_inactive";
     } else if (
@@ -292,6 +308,7 @@ export class AuthorizationService {
         ? "scope_mismatch"
         : "capability_missing";
       if (
+        resourcesBelongToOrganization &&
         this.resourceGrants &&
         subject.membership_id &&
         check.organizationId &&
@@ -530,6 +547,8 @@ export class AuthorizationService {
 export class InMemoryAuthorizationRepository implements AuthorizationRepository {
   subjects = new Map<string, AuthorizationSubject>();
   contexts = new Map<string, { user_id: string; organization_id: string; workspace_id: string }>();
+  workspaceOrganizations = new Map<string, string>();
+  teamOrganizations = new Map<string, string>();
   activeMembershipActors = new Set<string>();
   decisions: AuthorizationDecisionEvent[] = [];
   roles = BUILTIN_ROLES;
@@ -549,6 +568,22 @@ export class InMemoryAuthorizationRepository implements AuthorizationRepository 
         platform_capabilities: [],
       }
     );
+  }
+  async resourcesBelongToOrganization(
+    organizationId: string | undefined,
+    resources: { workspaceId?: string; teamId?: string },
+  ) {
+    if (
+      resources.workspaceId &&
+      (!organizationId || this.workspaceOrganizations.get(resources.workspaceId) !== organizationId)
+    )
+      return false;
+    if (
+      resources.teamId &&
+      (!organizationId || this.teamOrganizations.get(resources.teamId) !== organizationId)
+    )
+      return false;
+    return true;
   }
   async hasActiveMembership(actor: string) {
     return this.activeMembershipActors.has(actor);

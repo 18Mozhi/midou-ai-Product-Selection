@@ -54,6 +54,8 @@ test("M01-04.A02/A12 built-in matrix is exact and separates organization from pl
 test("M01-04.A04/A09/A12 own team workspace and organization scopes require matching resource facts", async () => {
   const repository = new InMemoryAuthorizationRepository(),
     service = new AuthorizationService(repository);
+  repository.workspaceOrganizations.set(workspace, org);
+  repository.teamOrganizations.set(team, org);
   for (const [scope, input] of [
     ["own", { resourceOwnerId: actor }],
     ["team", { teamId: team }],
@@ -83,6 +85,36 @@ test("M01-04.A04/A09/A12 own team workspace and organization scopes require matc
     (error) => error instanceof AuthorizationError && error.code === "permission_denied",
   );
   assert.equal(repository.decisions.at(-1).reason, "scope_mismatch");
+});
+test("M01-04.A04/A09 organization scope rejects foreign workspace and team facts", async () => {
+  const repository = new InMemoryAuthorizationRepository(),
+    service = new AuthorizationService(repository),
+    foreignWorkspace = "00000000-0000-4000-8000-000000000499",
+    foreignTeam = "00000000-0000-4000-8000-000000000498";
+  repository.subjects.set(
+    repository.key(actor, org),
+    subject({ scopes: [{ scope: "organization" }] }),
+  );
+  repository.workspaceOrganizations.set(workspace, org);
+  repository.workspaceOrganizations.set(foreignWorkspace, "00000000-0000-4000-8000-000000000497");
+  repository.teamOrganizations.set(foreignTeam, "00000000-0000-4000-8000-000000000497");
+  assert.equal((await service.authorize(check({ workspaceId: workspace }))).allowed, true);
+  await assert.rejects(
+    () => service.authorize(check({ workspaceId: foreignWorkspace })),
+    (error) => error instanceof AuthorizationError && error.code === "permission_denied",
+  );
+  await assert.rejects(
+    () => service.authorize(check({ teamId: foreignTeam })),
+    (error) => error instanceof AuthorizationError && error.code === "permission_denied",
+  );
+  await assert.rejects(
+    () => service.authorize(check({ organizationId: undefined, workspaceId: workspace })),
+    (error) => error instanceof AuthorizationError && error.code === "permission_denied",
+  );
+  assert.deepEqual(
+    repository.decisions.slice(-3).map((decision) => decision.reason),
+    ["scope_mismatch", "scope_mismatch", "scope_mismatch"],
+  );
 });
 test("M01-04.A05/A09 shared guard denies missing capability on every protected surface", async () => {
   const repository = new InMemoryAuthorizationRepository(),

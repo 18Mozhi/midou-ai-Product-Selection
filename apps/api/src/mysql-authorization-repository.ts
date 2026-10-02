@@ -11,6 +11,27 @@ import type {
 
 export class MySqlAuthorizationRepository implements AuthorizationRepository {
   constructor(private readonly pool: Pool) {}
+  async resourcesBelongToOrganization(
+    organizationId: string | undefined,
+    resources: { workspaceId?: string; teamId?: string },
+  ) {
+    if (!organizationId && (resources.workspaceId || resources.teamId)) return false;
+    if (resources.workspaceId) {
+      const [rows] = await this.pool.query<RowDataPacket[]>(
+        "SELECT 1 FROM workspaces WHERE id=? AND organization_id=? LIMIT 1",
+        [resources.workspaceId, organizationId],
+      );
+      if (!rows[0]) return false;
+    }
+    if (resources.teamId) {
+      const [rows] = await this.pool.query<RowDataPacket[]>(
+        "SELECT 1 FROM teams WHERE id=? AND organization_id=? LIMIT 1",
+        [resources.teamId, organizationId],
+      );
+      if (!rows[0]) return false;
+    }
+    return true;
+  }
   async hasActiveMembership(actorId: string) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       "SELECT 1 FROM memberships m JOIN organizations o ON o.id=m.organization_id " +

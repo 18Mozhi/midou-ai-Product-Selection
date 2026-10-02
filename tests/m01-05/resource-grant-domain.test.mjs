@@ -174,6 +174,7 @@ test("M01-05.A05/A09/A11 exact resource fallback is shared by six surfaces and e
   const f = fixture();
   await f.service.create(f.input(), f.context());
   const authRepo = new InMemoryAuthorizationRepository();
+  authRepo.workspaceOrganizations.set(workspace, org);
   authRepo.subjects.set(authRepo.key(grantee, org), {
     actor_id: grantee,
     membership_id: membership,
