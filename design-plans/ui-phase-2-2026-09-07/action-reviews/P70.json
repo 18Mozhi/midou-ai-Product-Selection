@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CrawlerSchedulerCenter.vue": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue": "3afd7c0fa15665a800c9ef33d8ee58101af93b95cbcc464ad17e55f17f668b17",
     "apps/web/src/components/CrawlerSchedulerEvidence.vue": "5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2"
   },
   "inputs": {
@@ -358,7 +358,7 @@
       "apps/web/src/components/CrawlerSchedulerEvidence.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CrawlerSchedulerCenter.vue": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "apps/web/src/components/CrawlerSchedulerCenter.vue": "3afd7c0fa15665a800c9ef33d8ee58101af93b95cbcc464ad17e55f17f668b17",
       "apps/web/src/components/CrawlerSchedulerEvidence.vue": "5202b663d54be0d34bb32aaf6b3ffadd632530cf72c40305a74f4ddf08564ee2"
     },
     "inputScope": "reviewed-subset-of-shared-source",

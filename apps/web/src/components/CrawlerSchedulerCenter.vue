@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, ref } from "vue";
+import { computed, onActivated, onBeforeUnmount, onDeactivated, onMounted, ref } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import { statusLabel } from "../ui/status-labels";
 import ConfirmDialog from "./ConfirmDialog.vue";
@@ -124,6 +124,9 @@ const data = ref<Dto | null>(null),
 const providerPageSize = 12;
 let loadController: AbortController | null = null,
   loadSequence = 0,
+  resumeRead = false,
+  resumeReadPreserveMessage = false,
+  pageActive = true,
   recoverExpiredKey: string | null = null,
   recoverProviderKey: { providerId: string; key: string } | null = null;
 const queueSummary = computed(() => {
@@ -258,6 +261,12 @@ const status = (kind: ApiFailureKind): State =>
   kind === "expired" || kind === "forbidden" || kind === "rate_limited" ? kind : "unavailable";
 
 async function load(options: { preserveMessage?: boolean } = {}) {
+  if (!pageActive) {
+    resumeRead = true;
+    resumeReadPreserveMessage ||= Boolean(options.preserveMessage);
+    return;
+  }
+  if (options.preserveMessage) resumeReadPreserveMessage = true;
   if (loadController) return;
   const currentSequence = ++loadSequence,
     controller = new AbortController(),
@@ -311,6 +320,7 @@ async function load(options: { preserveMessage?: boolean } = {}) {
     if (currentSequence === loadSequence) {
       loadController = null;
       refreshing.value = false;
+      if (pageActive) resumeReadPreserveMessage = false;
     }
   }
 }
@@ -382,12 +392,27 @@ async function recoverProvider() {
   }
 }
 
-onMounted(() => void load());
-onBeforeUnmount(() => {
+function suspendRead() {
+  const interrupted = Boolean(loadController);
+  pageActive = false;
   loadSequence += 1;
   loadController?.abort();
   loadController = null;
+  refreshing.value = false;
+  resumeRead ||= interrupted;
+}
+onMounted(() => void load());
+onDeactivated(suspendRead);
+onActivated(() => {
+  pageActive = true;
+  if (resumeRead || !data.value) {
+    resumeRead = false;
+    const preserveMessage = resumeReadPreserveMessage;
+    resumeReadPreserveMessage = false;
+    void load({ preserveMessage });
+  }
 });
+onBeforeUnmount(suspendRead);
 </script>
 
 <template>

@@ -18,6 +18,10 @@
 - `node scripts/run-playwright-projects.mjs tests/e2e/m08-05-crawler-scheduler.spec.ts`：桌面 7/7、390px 手机 7/7。
 - `npm run typecheck:web` 与相关文件 Prettier 检查通过。
 
+## 2026-10-02 · KeepAlive 读取生命周期续接
+
+`CrawlerSchedulerCenter` 现在在 KeepAlive 停用时取消在途GET、隔离迟到结果、保留已接受快照；返回时仅为中断读取或尚无快照的状态发起一次GET。若既有恢复POST在页面停用后完成，后续GET延至重新激活并保留成功提示；POST仍不取消或重放。M08-05实际Vue桌面 Chromium 与390px手机完整回归各11/11通过，覆盖普通读取、保留快照及离页完成POST；`npm run typecheck:web`通过。截获回执不证明服务端SQL/审计随客户端取消、真实RBAC或M07-03。没有改API、权限、Worker/Python、迁移、依赖或配置。
+
 ## 提交与部署
 
 - 提交/build SHA：`ca5364d35f8e05feb736d09366ae9aa1b0283422`，已推送 `main`。

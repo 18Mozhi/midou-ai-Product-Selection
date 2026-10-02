@@ -292,6 +292,129 @@ test("M08-05 refresh is single-flight and keeps the last verified snapshot on fa
   expect(reads).toBe(4);
 });
 
+test("P70 cancels an interrupted read while cached away and resumes it once", async ({ page }) => {
+  let calls = 0;
+  let releaseInterruptedRead: (() => void) | undefined;
+  let cancelledRead = false;
+  page.on("requestfailed", (request) => {
+    if (request.url().includes("/api/v1/platform/operations/crawler-scheduler"))
+      cancelledRead = true;
+  });
+  await page.route("**/api/v1/platform/operations/crawler-scheduler", async (route) => {
+    calls += 1;
+    if (calls === 1) {
+      await new Promise<void>((resolve) => (releaseInterruptedRead = resolve));
+      try {
+        await route.fulfill({ json: envelope(base) });
+      } catch {
+        // The browser has already cancelled this deactivated page's read.
+      }
+      return;
+    }
+    await route.fulfill({ json: envelope(base) });
+  });
+  await page.route("**/api/v1/platform/operations/topology", (route) =>
+    route.fulfill({
+      status: 503,
+      json: {
+        error: { code: "topology_fixture_unavailable", action_hint: "本地隔离页面。" },
+        request_id: "p70-topology-navigation",
+        trace_id: "p70-topology-navigation",
+      },
+    }),
+  );
+
+  try {
+    await page.goto("/platform-admin/crawler-scheduler");
+    await expect.poll(() => calls).toBe(1);
+
+    const operationsNav = page.getByRole("navigation", { name: "系统运维二级导航" });
+    await operationsNav.getByRole("link", { name: "服务拓扑" }).click();
+    await expect(page).toHaveURL(/\/platform-admin\/topology$/);
+    await expect.poll(() => cancelledRead).toBe(true);
+
+    await page.goBack();
+    await expect(page).toHaveURL(/\/platform-admin\/crawler-scheduler$/);
+    await expect(page.getByRole("heading", { name: "当前采集调度门满足" })).toBeVisible();
+    expect(calls).toBe(2);
+
+    await operationsNav.getByRole("link", { name: "服务拓扑" }).click();
+    await expect(page).toHaveURL(/\/platform-admin\/topology$/);
+    await page.goBack();
+    await expect(page.getByRole("heading", { name: "当前采集调度门满足" })).toBeVisible();
+    expect(calls).toBe(2);
+  } finally {
+    releaseInterruptedRead?.();
+  }
+});
+
+test("P70 defers the existing post-write read when recovery finishes while cached away", async ({
+  page,
+}) => {
+  let reads = 0;
+  let recoveryStarted: (() => void) | undefined;
+  let releaseRecovery: (() => void) | undefined;
+  const posts: Array<{ body: unknown; idempotencyKey: string | undefined }> = [];
+  page.on("requestfinished", (request) => {
+    if (request.url().includes("/api/v1/platform/operations/crawler-scheduler/recover-expired"))
+      recoveryStarted?.();
+  });
+  await page.route("**/api/v1/platform/operations/crawler-scheduler", (route) => {
+    reads += 1;
+    return route.fulfill({ json: envelope(base) });
+  });
+  await page.route(
+    "**/api/v1/platform/operations/crawler-scheduler/recover-expired",
+    async (route) => {
+      posts.push({
+        body: route.request().postDataJSON(),
+        idempotencyKey: route.request().headers()["idempotency-key"],
+      });
+      await new Promise<void>((resolve) => (releaseRecovery = resolve));
+      await route.fulfill({ json: envelope({ recovered: 0 }) });
+    },
+  );
+  await page.route("**/api/v1/platform/operations/topology", (route) =>
+    route.fulfill({
+      status: 503,
+      json: {
+        error: { code: "topology_fixture_unavailable", action_hint: "本地隔离页面。" },
+        request_id: "p70-topology-navigation",
+        trace_id: "p70-topology-navigation",
+      },
+    }),
+  );
+
+  try {
+    await page.goto("/platform-admin/crawler-scheduler");
+    await expect(page.getByRole("heading", { name: "当前采集调度门满足" })).toBeVisible();
+    await page.getByRole("button", { name: "回收过期租约" }).click();
+    const dialog = page.getByRole("alertdialog", { name: "回收过期调度租约？" });
+    await dialog.getByRole("textbox", { name: "输入 确认回收 继续" }).fill("确认回收");
+    await dialog.getByRole("button", { name: "确认回收" }).click();
+    await expect.poll(() => posts.length).toBe(1);
+
+    const operationsNav = page.getByRole("navigation", { name: "系统运维二级导航" });
+    await operationsNav.getByRole("link", { name: "服务拓扑" }).click();
+    await expect(page).toHaveURL(/\/platform-admin\/topology$/);
+    let postFinished: (() => void) | undefined;
+    const finished = new Promise<void>((resolve) => (postFinished = resolve));
+    recoveryStarted = () => postFinished?.();
+    releaseRecovery?.();
+    await finished;
+    await expect.poll(() => reads).toBe(1);
+
+    await page.goBack();
+    await expect(page.getByRole("heading", { name: "当前采集调度门满足" })).toBeVisible();
+    await expect(page.getByText("已回收 0 个过期调度槽位")).toBeVisible();
+    expect(reads).toBe(2);
+    expect(posts).toHaveLength(1);
+    expect(posts[0]).toEqual({ body: {}, idempotencyKey: expect.any(String) });
+  } finally {
+    releaseRecovery?.();
+  }
+});
+
 test("M08-05 recovery success remains visible when the follow-up read fails", async ({ page }) => {
   let reads = 0,
     recoveryCalls = 0;
