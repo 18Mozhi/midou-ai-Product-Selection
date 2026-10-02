@@ -14,7 +14,7 @@
     {"id":"M01-06.A11","evidence":"seed and audit events preserve request trace without secrets"},
     {"id":"M01-06.A12","evidence":"one-time seed password change MFA and auditor read-only unit tests"},
     {"id":"M01-06.A13","evidence":"OpenAPI DTO audit event and CLI contracts"},
-    {"id":"M01-06.A14","evidence":"real MySQL57 seed isolation query and cleanup integration"},
+    {"id":"M01-06.A14","evidence":"real MySQL57 read-only completed-seed, TOTP, role, sanitized-audit and already_seeded integration"},
     {"id":"M01-06.A15","evidence":"Playwright desktop 390 keyboard and state visual flows"},
     {"id":"M01-06.A16","evidence":"repeat seed missing secret unauthorized query and dependency drills"},
     {"id":"M01-06.A17","evidence":"blueprint Feature Map Runbook operations and rollback synchronized"}

@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 test("M01-06.A03/A06/A10/A13/A17 contracts include seed security audit pagination and rollback", async () => {
-  const [openapi, schema, env, feature, upA, downA, upB, downB, upC, downC, upD, downD, cli] =
+  const [openapi, schema, env, feature, upA, downA, upB, downB, upC, downC, upD, downD, cli, live] =
     await Promise.all(
       [
         "docs/openapi.yaml",
@@ -18,6 +18,7 @@ test("M01-06.A03/A06/A10/A13/A17 contracts include seed security audit paginatio
         "database/migrations/0013d_platform_seed_state_m01_06.up.sql",
         "database/migrations/0013d_platform_seed_state_m01_06.down.sql",
         "scripts/seed-platform-admin.mjs",
+        "scripts/verify-audit-seed-live.mjs",
       ].map((path) => readFile(path, "utf8")),
     );
   for (const value of [
@@ -43,4 +44,9 @@ test("M01-06.A03/A06/A10/A13/A17 contracts include seed security audit paginatio
   assert.match(upD, /platform-super-admin-v1/);
   assert.match(downD, /DELETE FROM/);
   assert.doesNotMatch(cli, /console\.log\([^\n]*(seed\.|email:|password:)/i);
+  assert.match(live, /completed_read_only_idempotent/);
+  assert.doesNotMatch(
+    live,
+    /\bINSERT\s+INTO\b|\bUPDATE\s+\w+\s+SET\b|\bDELETE\s+FROM\b|\b(?:CREATE|ALTER|DROP)\s+TABLE\b/i,
+  );
 });

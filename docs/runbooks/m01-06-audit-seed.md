@@ -8,6 +8,8 @@
 4. 在宝塔重启 Node API 以加载用户字段和审计路由，发布 Vue Web 静态资源。Worker 与 Crawler 无需重启。
 5. 种子管理员首次登录后先改密；会话被撤销后用新密码登录并绑定 TOTP。完成前普通 API 应返回 `security_setup_required`。
 
+生产验收 `node scripts/verify-audit-seed-live.mjs` 是只读检查：核对已完成 seed、账号安全激活状态、TOTP 因子、固定平台角色和脱敏关联审计，并验证重复调用只返回 `already_seeded`。该检查不创建管理员、不重置 seed 状态、不删除账号/角色/审计，也不自动执行迁移；首次创建仍只能经一次性宝塔发布任务完成。
+
 ## 观测与故障恢复
 
 - 用 `request_id` / `trace_id` 在 `platform_audit_events` 和宝塔 Node 日志关联；不要打印种子环境值。

@@ -3,22 +3,35 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 const read = (path) => readFile(path, "utf8");
 test("M02-01.A03/A06/A10/A13/A17 contracts include migrations API maps and no new environment secret", async () => {
-  const [openapi, feature, env, upA, downA, upB, downB, upC, downC, architecture, runbook] =
-    await Promise.all(
-      [
-        "docs/openapi.yaml",
-        "docs/feature-map.json",
-        "config/env.example",
-        "database/migrations/0014a_user_ui_preferences_m02_01.up.sql",
-        "database/migrations/0014a_user_ui_preferences_m02_01.down.sql",
-        "database/migrations/0014b_user_ui_preference_audit_m02_01.up.sql",
-        "database/migrations/0014b_user_ui_preference_audit_m02_01.down.sql",
-        "database/migrations/0014c_user_ui_preference_operations_m02_01.up.sql",
-        "database/migrations/0014c_user_ui_preference_operations_m02_01.down.sql",
-        "docs/architecture/m02-01-design-tokens-themes.md",
-        "docs/runbooks/m02-01-design-tokens-themes.md",
-      ].map(read),
-    );
+  const [
+    openapi,
+    feature,
+    env,
+    upA,
+    downA,
+    upB,
+    downB,
+    upC,
+    downC,
+    architecture,
+    runbook,
+    liveProbe,
+  ] = await Promise.all(
+    [
+      "docs/openapi.yaml",
+      "docs/feature-map.json",
+      "config/env.example",
+      "database/migrations/0014a_user_ui_preferences_m02_01.up.sql",
+      "database/migrations/0014a_user_ui_preferences_m02_01.down.sql",
+      "database/migrations/0014b_user_ui_preference_audit_m02_01.up.sql",
+      "database/migrations/0014b_user_ui_preference_audit_m02_01.down.sql",
+      "database/migrations/0014c_user_ui_preference_operations_m02_01.up.sql",
+      "database/migrations/0014c_user_ui_preference_operations_m02_01.down.sql",
+      "docs/architecture/m02-01-design-tokens-themes.md",
+      "docs/runbooks/m02-01-design-tokens-themes.md",
+      "scripts/verify-theme-preferences-live.mjs",
+    ].map(read),
+  );
   for (const value of [
     "/me/ui-preferences:",
     "UiPreferenceEnvelope",
@@ -34,6 +47,7 @@ test("M02-01.A03/A06/A10/A13/A17 contracts include migrations API maps and no ne
   assert.doesNotMatch(env, /THEME_|UI_THEME|PREFERENCE_SECRET/);
   assert.match(architecture, /同步用户操作，不创建 Worker/);
   assert.match(runbook, /Worker 与 Python Crawler.*无需重启/);
+  assert.doesNotMatch(liveProbe, /LOWER\(slug\).*REGEXP|default_workspace_id\s*=\s*NULL/i);
 });
 test("M02-01.A07/A08/A15 token and UI contracts keep semantic accessibility and responsive support", async () => {
   const [tokens, theme, ui, radio, styles, e2e] = await Promise.all(

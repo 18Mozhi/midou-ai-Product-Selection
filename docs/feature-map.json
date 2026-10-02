@@ -672,6 +672,7 @@
         "/api/v1/organizations/{organizationId}/audit-events"
       ],
       "seed": "one-time Baota-controlled CLI; environment removed after success; no browser or resident service reads seed secrets",
+      "liveVerification": "production gate is read-only: verifies the completed seed, active account, password/TOTP setup state, fixed platform role, sanitized correlated audit and already_seeded replay; never creates, resets or deletes the production seed account",
       "securitySetup": "restricted session until forced password change and TOTP enrollment both complete",
       "permissions": "platform or organization audit:read; auditor has no replay, credential, key rotation or role write capability",
       "audit": "synchronous MySQL platform-global or exact-organization events with sanitized metadata and request_id/trace_id",
