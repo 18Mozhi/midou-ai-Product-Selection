@@ -530,6 +530,9 @@
     },
     "localIdentity": {
       "module": "M01-01",
+      "liveGate": "../scripts/verify-local-auth-live.mjs",
+      "liveGateBaoTaTarget": "SCOUTOPS_LOCAL_AUTH_LIVE_TARGET=baota-production",
+      "liveGateSafety": "Random test identity and session are cleaned up on the fixed BaoTa node; production migrations and outbound mail are not triggered.",
       "entrypoints": [
         "../apps/api/src/auth-routes.ts",
         "../apps/web/src/components/LocalIdentity.vue",

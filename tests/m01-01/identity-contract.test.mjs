@@ -157,6 +157,22 @@ test("M01-01.A07/A08/A10/A11/A17 UI, config, docs, map and evidence are synchron
   );
 });
 
+test("M01-01 production probe is BaoTa-bound, migration-read-only and never sends mail", async () => {
+  const [probe, runner, runbook] = await Promise.all(
+    [
+      "scripts/verify-local-auth-live.mjs",
+      "scripts/verify-live-baota.py",
+      "docs/runbooks/m01-01-local-identity.md",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(probe, /SCOUTOPS_LOCAL_AUTH_LIVE_TARGET/);
+  assert.match(probe, /verify-live-baota\.py.*local-auth/s);
+  assert.match(probe, /outbound_delivery:\s*"not_triggered"/);
+  assert.doesNotMatch(probe, /processAuthDeliveryOnce|PendingMailProvider|CREATE TABLE|readFile/);
+  assert.match(runner, /"local-auth"/);
+  assert.match(runbook, /生产身份验收使用.*固定宝塔节点/s);
+});
+
 test("M01-01 login waits for a real MFA code and explains the 30-day session", async () => {
   const ui = await readFile("apps/web/src/components/LocalIdentity.vue", "utf8");
   assert.match(ui, /mfa_required[\s\S]*?mode\.value\s*=\s*["']mfa-challenge["'][\s\S]*?return;/);

@@ -13,8 +13,8 @@ from urllib.parse import quote
 
 def main() -> int:
     probe = sys.argv[1] if len(sys.argv) == 2 else ""
-    if probe not in {"mysql", "redis", "api", "file-audit"}:
-        raise SystemExit("probe must be mysql, redis, api, or file-audit")
+    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth"}:
+        raise SystemExit("unsupported BaoTa live probe")
 
     repo = pathlib.Path(__file__).resolve().parents[1]
     deployer = runpy.run_path(str(repo / "scripts" / "deploy-baota.py"))
@@ -48,10 +48,12 @@ def main() -> int:
         script_path = repo / "scripts" / f"verify-{probe}-live.mjs"
         source = script_path.read_text(encoding="utf-8")
         package_names = ["config"]
-        if probe in {"mysql", "api", "file-audit"}:
+        if probe in {"mysql", "api", "file-audit", "local-auth"}:
             package_names.append("database")
         if probe in {"redis", "api"}:
             package_names.append("redis")
+        if probe == "local-auth":
+            package_names.append("auth")
         if probe == "api":
             package_names.append("api")
         if probe == "file-audit":
@@ -73,6 +75,17 @@ def main() -> int:
             )
             new = json.dumps("file://" + quote(remote_path, safe="/"))
             source = source.replace(old, new, 1)
+
+        if probe == "local-auth":
+            for import_path in (
+                "../apps/api/dist/mysql-auth-repository.js",
+            ):
+                candidates = (f"'{import_path}'", f'"{import_path}"')
+                old = next((candidate for candidate in candidates if source.count(candidate) == 1), None)
+                if old is None:
+                    raise RuntimeError(f"local auth probe import mismatch: {import_path}")
+                remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
+                source = source.replace(old, json.dumps("file://" + quote(remote_path, safe="/")), 1)
 
         if probe == "mysql":
             candidates = (
