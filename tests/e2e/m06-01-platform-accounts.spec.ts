@@ -127,6 +127,9 @@ async function openAccountRecord(page: Page, email: string) {
   }
 }
 
+const accountModalDialogs = (page: Page) =>
+  page.locator("dialog[open]:not(.role-navigation-frame)");
+
 for (const scenario of ["stale-success", "stale-error", "reopened-same-user"] as const) {
   test(`UI2-PA01 account detail ownership ${scenario}`, async ({ page }) => {
     await setup(page);
@@ -197,8 +200,12 @@ for (const scenario of ["stale-success", "stale-error", "reopened-same-user"] as
         page.getByRole("dialog", { name: overview.users[0].email, exact: true }),
       ).toContainText("正在读取账号详情");
       await expect.poll(() => reads).toBe(1);
+      const dialogState = page.getByRole("dialog", {
+        name: overview.users[0].email,
+        exact: true,
+      });
       await page.keyboard.press("Escape");
-      await expect(page.getByRole("dialog")).toHaveCount(0);
+      await expect(dialogState).toHaveCount(0);
       await openAccountRecord(page, current.email);
       const dialog = page.getByRole("dialog", { name: current.email, exact: true });
       await expect(dialog).toContainText("当前读取组织");
@@ -296,13 +303,15 @@ for (const destination of ["shared-account-route", "cached-dashboard"] as const)
       await page.goBack();
       await expect(page).toHaveURL(/\/platform-admin\/users$/);
       await openAccountRecord(page, overview.users[0].email);
-      await expect(page.getByRole("dialog")).toContainText("正在读取账号详情");
+      await expect(
+        page.getByRole("dialog", { name: overview.users[0].email, exact: true }),
+      ).toContainText("正在读取账号详情");
       await expect.poll(() => reads).toBe(1);
       await page.goForward();
       await expect(page).toHaveURL(
         destination === "shared-account-route" ? /\/platform-admin\/admins$/ : /\/platform-admin$/,
       );
-      await expect(page.getByRole("dialog")).toHaveCount(0);
+      await expect(accountModalDialogs(page)).toHaveCount(0);
       const staleResponse = page.waitForResponse((response) =>
         response.url().endsWith(`/platform/accounts/users/${user}`),
       );
@@ -311,7 +320,7 @@ for (const destination of ["shared-account-route", "cached-dashboard"] as const)
       await page.waitForTimeout(200);
       await page.goBack();
       await expect(page).toHaveURL(/\/platform-admin\/users$/);
-      await expect(page.getByRole("dialog")).toHaveCount(0);
+      await expect(accountModalDialogs(page)).toHaveCount(0);
       await openAccountRecord(page, overview.users[0].email);
       const dialog = page.getByRole("dialog", { name: overview.users[0].email, exact: true });
       await expect(dialog).toContainText("重新打开后的组织");
@@ -480,7 +489,7 @@ for (const action of ["status", "platform-role", "sessions/revoke", "memberships
             await expect(page).toHaveURL(
               destination === "shared-route" ? /\/platform-admin\/admins$/ : /\/platform-admin$/,
             );
-            await expect(page.getByRole("dialog")).toHaveCount(0);
+            await expect(accountModalDialogs(page)).toHaveCount(0);
           } else if (destination !== "stay") {
             await original.getByRole("button", { name: "关闭账号详情", exact: true }).click();
             if (destination !== "closed") {
@@ -507,7 +516,7 @@ for (const action of ["status", "platform-role", "sessions/revoke", "memberships
             ).toBe(true);
           }
           if (destination === "closed" || navigates) {
-            await expect(page.getByRole("dialog")).toHaveCount(0);
+            await expect(accountModalDialogs(page)).toHaveCount(0);
           } else {
             const current = page.getByRole("dialog", { name: currentAccount.email, exact: true });
             await expect(current).toContainText(currentAccount.email);
@@ -585,7 +594,7 @@ test("UI2-PA04 stale account reason cannot submit after route change", async ({ 
   await expect(page).toHaveURL(/\/platform-admin\/admins$/);
   // Shared reason-dialog route cleanup is a separate boundary; its obsolete action must be inert.
   await reason.getByRole("button", { name: "确认执行", exact: true }).click();
-  await expect(page.getByRole("dialog")).toHaveCount(0);
+  await expect(accountModalDialogs(page)).toHaveCount(0);
   await page.waitForTimeout(200);
   expect(writes).toHaveLength(0);
 });
@@ -750,9 +759,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
           .filter((control) => control.height < 44),
       );
     expect(undersizedFilterTargets).toEqual([]);
-    await expect(filters.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveAccessibleName(
-      "搜索组织名称或用户邮箱",
-    );
+    await expect(filters.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveAccessibleName("关键词");
     await filters.getByPlaceholder("搜索组织名称或用户邮箱").fill("米豆");
     await filters.getByRole("button", { name: "关闭筛选条件" }).click();
     await page.getByRole("button", { name: /账号筛选.*1 项已选/ }).click();
@@ -765,9 +772,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
     await expect(organizationDetail.getByText(org, { exact: true })).toBeVisible();
     await organizationDetail.getByRole("button", { name: "关闭详情" }).click();
   } else {
-    await expect(page.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveAccessibleName(
-      "搜索组织名称或用户邮箱",
-    );
+    await expect(page.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveAccessibleName("关键词");
     await expect(page.getByRole("cell", { name: "米豆选品团队 midou-team" })).toBeVisible();
     const columnTools = page.locator(".table-view-controls__toolbar").first();
     await expect(columnTools.getByText("列设置", { exact: true })).toBeVisible();
@@ -1398,7 +1403,7 @@ test("organization creation keeps a late response from taking over a newer route
     await (await response).finished();
     await page.waitForTimeout(100);
     await expect(page).toHaveURL(/\/platform-admin\/users$/);
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(accountModalDialogs(page)).toHaveCount(0);
     expect(writes).toBe(1);
   } finally {
     release();
@@ -1466,8 +1471,12 @@ test("M06-01 account actions expose tooltips, user-panel switch, create account 
   const switchLink = page.getByRole("link", {
     name: "选择组织与工作区后进入用户工作台",
   });
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await page.getByRole("button", { name: "打开导航菜单" }).click();
   await expect(switchLink).toHaveAttribute("href", /\/select-context\?/);
   await expect(switchLink).toHaveAttribute("href", /return_to=%2Fhome/);
+  if ((page.viewportSize()?.width ?? 0) <= 760)
+    await page.getByRole("button", { name: "关闭导航菜单" }).click();
   await expect(page.getByRole("link", { name: "个人中心" })).toHaveAttribute("title", "个人中心");
   await page.getByRole("button", { name: "新建用户" }).click();
   const createDialog = page.getByRole("dialog").filter({

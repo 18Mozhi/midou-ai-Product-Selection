@@ -1,14 +1,14 @@
 @import "../design/platform-admin-mobile-tokens.css";
 
 /* Approved P44 mobile directory only; other routes, desktop and dialogs stay unchanged. */
-.admin-directory-heading {
+.account-center--admins-c .admin-directory-heading {
   display: none;
 }
 @media (max-width: 760px) {
   html[data-design="signal-ledger"]
     #app
     .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"]) {
-    .account-page-layout--admins > .account-page-main > .admin-directory-heading {
+    .account-page-layout--admins .account-page-main .admin-directory-heading {
       display: block;
       margin: 0 16px;
       font-family: "Microsoft YaHei", sans-serif;
@@ -27,7 +27,7 @@
         color: var(--so-admin-mobile-text-muted);
       }
     }
-    .account-page-layout--admins > .account-page-main > .account-table-wrap {
+    .account-page-layout--admins .account-page-main .account-table-wrap {
       margin: 0 16px;
       border: 1px solid var(--so-admin-mobile-border);
       border-radius: 10px;
