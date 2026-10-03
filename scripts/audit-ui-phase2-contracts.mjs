@@ -70,6 +70,7 @@ const aliases = {
     M: "PlatformAdminRecords",
     R: "PlatformRoleComparison",
     G: "PlatformAccountGlobalRail",
+    Z: "PlatformAccountDirectoryFilters",
   },
   "provider-definition-contract-review.md": {
     S: "ProviderRuntimeSurface",

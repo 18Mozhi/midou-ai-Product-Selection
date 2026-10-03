@@ -46,9 +46,9 @@ test("P43 maps the current user directory, detail and shared-dialog sources with
   });
 
   assert.equal(summary.pageId, "P43");
-  assert.equal(summary.sourceSites, 68);
+  assert.equal(summary.sourceSites, 69);
   assert.equal(summary.actionApproval, "pending-user-review");
   assert.equal(summary.visualApproval, "user-approved-remaining-pages-auto");
-  assert.equal(review.actions.length, 40);
+  assert.equal(review.actions.length, 41);
   assert.ok(review.compositionGaps.length > 0);
 });

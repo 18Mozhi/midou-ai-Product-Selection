@@ -5,17 +5,19 @@ import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 const mappingFile = "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md";
 const sourceFile = "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue";
 const railFile = "apps/web/src/components/PlatformAccountGlobalRail.vue";
+const filterFile = "apps/web/src/components/PlatformAccountDirectoryFilters.vue";
 
 test("P39 directory source candidates have exact current semantic references and source hash", () => {
   const audit = runContractAudit();
   const sourceReferences = audit.records.filter(
     (record) =>
-      record.document === mappingFile && [sourceFile, railFile].includes(record.sourceFile),
+      record.document === mappingFile &&
+      [sourceFile, railFile, filterFile].includes(record.sourceFile),
   );
   const referenced = sourceReferences.filter((record) => record.temporalScope !== "historical");
   const historical = sourceReferences.filter((record) => record.temporalScope === "historical");
 
-  assert.equal(referenced.length, 20);
+  assert.equal(referenced.length, 21);
   assert.deepEqual(
     referenced.map((record) => record.candidateId.split("#")[1]).sort(),
     [
@@ -35,6 +37,7 @@ test("P39 directory source candidates have exact current semantic references and
       "9c9141422bfd2c11.2",
       "e400286c7cd59e44.1",
       "e400286c7cd59e44.1",
+      "e064834276405c23.1",
       "e9658d470d4cbeaf.1",
       "f68d2406f8c1db70.1",
       "968274c5acaf5a33.1",

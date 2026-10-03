@@ -10,10 +10,10 @@ const prefix = '@import "../design/platform-admin-mobile-tokens.css";\n\n';
 const scope =
   'html[data-design="signal-ledger"] #app .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])';
 // Exact LF source fingerprints: Comparison at bbde542c; Directory after the reviewed P44
-// mobile selector correction and before the local color extraction.
+// mobile selector correction, before color-token expansion.
 const originals = {
   Comparison: "9b74248f24827e8e1e4800b93090ef1fd680acaebf90754bc238680bebedddde",
-  Directory: "2931d012c5c3abca6e099f7a9b43147cd4df761805f69bbab2bcf50a01afba91",
+  Directory: "8cca4f4b04a9ac27de8bd60ab234f32ec0a0a7b0ddeb68ca1ce9a3fc02e140e8",
 };
 
 function values(source) {

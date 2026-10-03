@@ -59,7 +59,7 @@ test("M07-01 live data-quality drill distinguishes wrapper drift from normalized
     resolve(root, "scripts/verify-evidence-data-quality-live.mjs"),
     "utf8",
   );
-  assert.match(verifier, /normalizedPayload:\{title:'Changed item'\}/);
+  assert.match(verifier, /normalizedPayload:\s*\{\s*title:\s*["']Changed item["']\s*\}/);
   assert.match(verifier, /dedupe conflict was not rejected/);
 });
 

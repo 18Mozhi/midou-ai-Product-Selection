@@ -334,6 +334,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       "apps/api/src/platform-account-routes.ts",
       "apps/web/src/components/PlatformAccountCenter.vue",
       "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
       "apps/web/src/components/PlatformOrganizationRecords.vue",
       "apps/web/src/components/PlatformUserRecords.vue",
       "apps/web/src/components/OrganizationCreationWizard.vue",
@@ -356,6 +357,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
       routes,
       accountShell,
       accountDirectory,
+      accountFilters,
       organizationRecords,
       userRecords,
       wizard,
@@ -373,6 +375,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
     web = [
       accountShell,
       accountDirectory,
+      accountFilters,
       organizationRecords,
       userRecords,
       wizard,
@@ -429,7 +432,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   );
   assert.match(accountDirectory, /没有符合当前条件的组织/);
   assert.match(accountShell, /organizationListRoute[\s\S]*"组织状态"/);
-  assert.match(accountDirectory, /仅筛选组织状态，不代表成员账号状态/);
+  assert.match(accountFilters, /仅筛选组织状态，不代表成员账号状态/);
   assert.match(accountShell, /搜索组织名称或标识/);
   assert.match(accountShell, /organizationEmptyState/);
   assert.match(accountDirectory, /清除筛选/);
@@ -471,6 +474,7 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
     adminRecords,
     comparison,
     accountDirectory,
+    accountFilters,
   ])
     assert.ok(component.split(/\r?\n/).length < 300);
   for (const dialog of [wizard, organizationDetail, detailDialog])

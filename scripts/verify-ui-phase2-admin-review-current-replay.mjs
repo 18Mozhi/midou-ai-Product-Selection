@@ -13,18 +13,28 @@ import {
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
 const args = process.argv.slice(2);
+const revisionIndex = args.indexOf("--revision");
+const revision = revisionIndex >= 0 ? args[revisionIndex + 1] : undefined;
+if (revisionIndex >= 0) args.splice(revisionIndex, 2);
 assert.ok(
   args.length <= 1 && args.every((arg) => ["--capture", "--smoke", "--resume"].includes(arg)),
+);
+assert.ok(
+  revisionIndex < 0 || (revision && /^r(?:[6-9]|[1-9]\d+)$/.test(revision)),
+  "--revision requires a fresh rN suffix",
 );
 const resume = args.includes("--resume"),
   capture = resume || args.includes("--capture"),
   stages = args.includes("--smoke") ? ["comparison"] : Object.keys(adminReviewCaptureStages);
+const outputRoot = revision
+  ? `output/playwright/p44-current-replay-${revision}`
+  : adminReviewReplayRoot;
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
-if (await exists(`${adminReviewReplayRoot}/evidence.json`))
+if (await exists(`${outputRoot}/evidence.json`))
   assert.fail("Completed P44 packet is immutable; do not rerun or resume");
-if (capture && !resume) await mkdir(adminReviewReplayRoot); // Exclusive permanent packet. Do not overwrite earlier images.
-if (resume) assert.ok((await stat(adminReviewReplayRoot)).isDirectory());
+if (capture && !resume) await mkdir(outputRoot); // Exclusive permanent packet. Do not overwrite earlier images.
+if (resume) assert.ok((await stat(outputRoot)).isDirectory());
 async function exists(file) {
   try {
     await stat(file);
@@ -54,12 +64,12 @@ try {
       ...(capture ? ["--capture"] : []),
       ...(stage === "boundary-baseline" ? ["--baseline"] : []),
     ];
-    const code = adminReviewReplayDriver(stage, await read(entry.driver));
-    const recorded = resume && (await exists(`${adminReviewReplayRoot}/${stage}/evidence.json`));
+    const code = adminReviewReplayDriver(stage, historical.source(entry.driver), outputRoot);
+    const recorded = resume && (await exists(`${outputRoot}/${stage}/evidence.json`));
     if (!recorded) {
       if (capture)
         assert.equal(
-          await exists(`${adminReviewReplayRoot}/${stage}`),
+          await exists(`${outputRoot}/${stage}`),
           false,
           "Do not overwrite an incomplete stage",
         );
@@ -75,7 +85,7 @@ try {
       "Original packet was not overwritten",
     );
     if (!capture) continue;
-    const file = `${adminReviewReplayRoot}/${stage}/evidence.json`,
+    const file = `${outputRoot}/${stage}/evidence.json`,
       bytes = await readFile(file),
       current = JSON.parse(bytes);
     assert.equal(current.processesClosed, true);
@@ -92,7 +102,7 @@ try {
       const old = original.screenshots.find((item) => item.file === shot.file);
       assert.ok(old, "No invented historical image match");
       const previousBytes = await readFile(`${entry.folder}/${old.file}`),
-        newBytes = await readFile(`${adminReviewReplayRoot}/${stage}/${shot.file}`);
+        newBytes = await readFile(`${outputRoot}/${stage}/${shot.file}`);
       assert.equal(hash(previousBytes), old.sha256, "Old image was not overwritten");
       assert.equal(hash(newBytes), shot.sha256);
       images.push({
@@ -129,7 +139,7 @@ if (capture) {
     file.startsWith("apps/web/src/") ? read(file) : "",
   );
   const evidence = {
-    kind: "P44-current-replay-r4",
+    kind: `P44-current-replay-${outputRoot.match(/r\d+$/)?.[0] ?? "r6"}`,
     approval: "pending",
     processesClosed: true,
     summaries,
@@ -139,13 +149,11 @@ if (capture) {
     boundary:
       "Original pinned drivers and assertions; static imports are resolved, output redirected, and one scoped review stylesheet is added. Extracted PlatformAccountDirectoryWorkspace and current user-detail composition are rendered without legacy template replacement. Historical manifests and images remain separate. Local requests do not prove true administrator creation, full App shell, permission or production acceptance. Byte differences are observations, not approvals or pixel-equivalence claims.",
   };
+  await writeFile(`${outputRoot}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n", {
+    flag: "wx",
+  });
   await writeFile(
-    `${adminReviewReplayRoot}/evidence.json`,
-    JSON.stringify(evidence, null, 2) + "\n",
-    { flag: "wx" },
-  );
-  await writeFile(
-    `${adminReviewReplayRoot}/index.html`,
+    `${outputRoot}/index.html`,
     '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P44 当前重放</title><h1>P44 当前 Vue 重放</h1><p>旧图另存，当前测试样例；未获得新批准，不代表真实账号创建或生产验收。</p>' +
       summaries
         .map(

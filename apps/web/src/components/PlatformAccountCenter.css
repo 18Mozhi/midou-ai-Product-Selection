@@ -456,15 +456,6 @@
   width: 100%;
 }
 .account-center--review .account-filter--overview-c {
-  --p39-ink: #202c3d;
-  --p39-muted: #58677b;
-  --p39-blue: #254a9c;
-  --p39-line: #6680a2;
-  --p39-paper: #fff;
-  --p39-rule: #dbe1e9;
-  --p39-hover: #f0f5ff;
-  --p39-pressed: #193b80;
-  --p39-disabled: #edf1f6;
   grid-template-columns: minmax(0, 1fr) minmax(210px, 0.65fr);
   align-items: start;
   gap: 24px;

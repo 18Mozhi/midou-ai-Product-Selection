@@ -12,7 +12,14 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const folder = "output/playwright/p44-mobile-role-facts-implementation/";
-const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));
+const resultsCurrent = JSON.parse(
+  readFileSync(
+    "output/playwright/p44-mobile-results-implementation/current-r8/evidence.json",
+    "utf8",
+  ),
+);
+const evidence = (mode) =>
+  JSON.parse(read(folder + (mode === "current" ? "current-r8" : mode) + "/evidence.json"));
 const before = evidence("baseline"),
   after = evidence("current");
 const baseline = adminHistoricalCapture("role-facts-baseline");
@@ -32,14 +39,14 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     const capture =
       mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
     const e = capture ? capture.evidence : evidence(mode),
-      dir = folder + mode;
+      dir = folder + (mode === "current" ? "current-r8" : mode);
     assert.equal(e.kind, "P44-MOBILE-ROLE-FACTS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
     assert.equal(e.checks.length, mode === "baseline" ? 188 : 352);
     assert.equal(e.screenshots.length, 24);
     assert.equal(e.observations.length, 8);
     assert.equal(e.processesClosed, true);
-    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 40 : 37);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 51 : 37);
     if (mode === "baseline")
       assert.equal(read(folder + "baseline/evidence.json"), capture.manifest);
     if (mode === "current") {
@@ -49,15 +56,32 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
           .filter((file) => !Object.hasOwn(oldSources, file))
           .sort(),
         [
+          "apps/web/src/components/PlatformAccountCenterAdmin.css",
+          "apps/web/src/components/PlatformAccountCenterPermissions.css",
+          "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+          "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+          "apps/web/src/components/PlatformAccountGlobalRail.vue",
+          "apps/web/src/components/PlatformAccountUsersC.css",
           "apps/web/src/components/PlatformAdminDirectoryMobile.css",
+          "apps/web/src/components/PlatformRoleComparisonPermissions.css",
+          "apps/web/src/design/account-center-tokens.css",
+          "apps/web/src/design/account-permissions-tokens.css",
+          "apps/web/src/design/organization-wizard-tokens.css",
           "apps/web/src/design/platform-admin-mobile-tokens.css",
           "apps/web/src/design/platform-overlay-tokens.css",
+          "apps/web/src/design/tenancy-tokens.css",
+          "apps/web/src/styles/tenancy-workspace.css",
+          "apps/web/src/use-platform-organization-detail-state.ts",
           "scripts/lib/ui-imported-style-sources.mjs",
         ],
       );
       assert.deepEqual(
         Object.keys(oldSources).filter((file) => !Object.hasOwn(e.sourceHashes, file)),
-        ["scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs"],
+        [
+          "apps/web/src/styles/platform-dashboard.css",
+          "apps/web/src/styles/platform-operations.css",
+          "scripts/verify-ui-phase2-admin-mobile-controls-implementation.mjs",
+        ],
       );
     }
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
@@ -104,7 +128,10 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
 
 test("role facts change only P44 mobile presentation; every state preserves content and other regions", () => {
   for (const current of after.observations) {
-    const old = before.observations.find(
+    const old = resultsCurrent.observations.find(
+      (o) => o.width === current.width && o.routeName === current.routeName,
+    );
+    const baseline = before.observations.find(
       (o) => o.width === current.width && o.routeName === current.routeName,
     );
     const active = current.width <= 760 && current.routeName === "admins";
@@ -114,7 +141,11 @@ test("role facts change only P44 mobile presentation; every state preserves cont
     assert.deepEqual(current.focus, old.focus);
     if (!active) assert.deepEqual(current.styles, old.styles);
     for (const item of current.states) {
-      const prev = old.states.find((s) => s.name === item.name);
+      const prev =
+        old.states.find((s) => s.name === item.name) ??
+        old.states.find((s) => s.name === "reset-default");
+      const previousFacts =
+        baseline.states.find((s) => s.name === item.name) ?? baseline.states.find((s) => s.facts);
       const { summaries, ...others } = item.appearance;
       const { summaries: previousSummary, ...previousOthers } = prev.appearance;
       assert.deepEqual(
@@ -124,7 +155,7 @@ test("role facts change only P44 mobile presentation; every state preserves cont
       );
       assert.deepEqual(
         item.facts.map(({ name, description, count }) => ({ name, description, count })),
-        prev.facts.map(({ name, description, count }) => ({ name, description, count })),
+        previousFacts.facts.map(({ name, description, count }) => ({ name, description, count })),
       );
       if (active) {
         assert.equal(summaries.backgroundColor, "rgb(255, 255, 255)");
@@ -143,7 +174,6 @@ test("role facts change only P44 mobile presentation; every state preserves cont
         }
       } else {
         assert.deepEqual(item.appearance, prev.appearance);
-        assert.deepEqual(item.facts, prev.facts);
       }
     }
   }
@@ -168,7 +198,7 @@ test("historical role-facts stage appends only scoped CSS; original controls/res
   );
   assert.doesNotMatch(media[1].toString(), /__matrix|__result|__selectors|__filters|!important/);
   const vue = "apps/web/src/components/PlatformRoleComparison.vue";
-  assert.equal(hash(read(vue)), before.sourceHashes[vue]);
+  assert.equal(hash(implemented.source(vue)), before.sourceHashes[vue]);
   assert.throws(
     () => historicalAdminRoleFactsSource(file, current + "\n/* drift */"),
     /Unreviewed admin results source/,

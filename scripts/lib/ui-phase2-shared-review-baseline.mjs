@@ -347,7 +347,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "5ad7b7b9c08697873b3f66d52fe53ebe6f133184",
       captured: "9218c2552339e5c25f2920f9fc340d9b546e89621c0978f4208179ae66151afd",
-      current: "01df9cd1b4a66fbc7b7bf9e46dcd1e63d883368f4318cd32ee1ff4b6b7f6928a",
+      current: "2e06746abec5ac8e41ff68629eed8700d726939097e0ce82501d5cbaf6e88a98",
     },
   "tests/e2e/m03-02-credential-assets.spec.ts#0b735d56167c0c9e86b4bc7a3f3f8e8c3b6bc04106c0286bb9b1d05353c16929":
     {

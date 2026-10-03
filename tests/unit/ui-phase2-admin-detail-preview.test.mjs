@@ -43,7 +43,7 @@ function contracts(source) {
 }
 
 test("P44 detail adds only exact restore presentation; script, actions and controls remain intact", () => {
-  const original = read(detail),
+  const original = adminHistoricalCapture("detail-preview").source(detail),
     updated = adminDetailPreview(original);
   assert.deepEqual(parse(updated).errors, []);
   assert.equal(
@@ -77,7 +77,6 @@ test("P44 historical administrator detail evidence pins original sources, transf
   // its historical input must still produce the exact captured transformed hash below.
   for (const file of [
     "scripts/lib/ui-phase2-admin-detail-preview.mjs",
-    "scripts/lib/ui-phase2-admin-page-assembly-preview.mjs",
     "scripts/lib/ui-phase2-user-page-preview.mjs",
   ])
     assert.equal(read(file), historical.source(file));

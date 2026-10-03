@@ -145,8 +145,13 @@ test("every live verifier that creates organizations clears the default workspac
   for (const file of files) {
     const source = await read(`scripts/${file}`);
     const createsOrganization = source.includes("INSERT INTO organizations");
-    const deletesWorkspace = /DELETE FROM workspaces|\[.workspaces./.test(source);
-    if (createsOrganization && deletesWorkspace && !source.includes("default_workspace_id=NULL")) {
+    const deleteWorkspace = source.indexOf("DELETE FROM workspaces");
+    const clearsDefaultWorkspace =
+      source.includes("default_workspace_id=NULL") ||
+      source.includes(
+        "UPDATE organizations SET default_workspace_id=IF(default_workspace_id=?,NULL,default_workspace_id) WHERE id=?",
+      );
+    if (createsOrganization && deleteWorkspace >= 0 && !clearsDefaultWorkspace) {
       offenders.push(file);
     }
   }

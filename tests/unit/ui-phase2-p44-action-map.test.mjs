@@ -43,7 +43,7 @@ const context = {
 
 test("P44 maps every current admins-route source candidate without granting action approval", () => {
   const result = validateActionReview(review, context);
-  assert.equal(result.sourceSites, 72);
+  assert.equal(result.sourceSites, 73);
   assert.equal(review.route, "/platform-admin/admins");
   assert.equal(review.visualApproval, "user-approved-remaining-pages-auto");
   assert.equal(review.actionApproval, "pending-user-review");

@@ -28,6 +28,8 @@ export const accountPairSupport = [
 ];
 export function previewAccountPair(source, surface) {
   if (surface === "shell") return previewShellVue(source);
+  if (surface === "parent" && source.includes("<PlatformAccountDirectoryWorkspace")) return source;
+  if (surface === "create" && source.includes('class="p44-admin-create-layout"')) return source;
   if (surface === "create") return userCreatePreview(source);
   if (surface === "detail") return userPagePreview(source, "detail");
   assert.equal(surface, "parent");

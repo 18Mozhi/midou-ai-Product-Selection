@@ -9,16 +9,26 @@ import { accountReplayDriver, accountReplayRoot } from "./lib/ui-phase2-account-
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
 const args = process.argv.slice(2);
+const revisionIndex = args.indexOf("--revision");
+const revision = revisionIndex >= 0 ? args[revisionIndex + 1] : undefined;
+if (revisionIndex >= 0) args.splice(revisionIndex, 2);
 assert.ok(
   args.length <= 1 && args.every((arg) => ["--capture", "--smoke", "--resume"].includes(arg)),
+);
+assert.ok(
+  revisionIndex < 0 || (revision && /^r(?:[3-9]|[1-9]\d+)$/.test(revision)),
+  "--revision requires a fresh rN suffix",
 );
 const resume = args.includes("--resume"),
   capture = resume || args.includes("--capture"),
   stages = args.includes("--smoke") ? ["filter"] : Object.keys(accountCaptureStages);
+const outputRoot = revision
+  ? `output/playwright/p39-current-replay-${revision}`
+  : accountReplayRoot;
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
-if (capture && !resume) await mkdir(accountReplayRoot); // Exclusive permanent packet. Do not overwrite earlier images.
-if (resume) assert.ok((await stat(accountReplayRoot)).isDirectory());
+if (capture && !resume) await mkdir(outputRoot); // Exclusive permanent packet. Do not overwrite earlier images.
+if (resume) assert.ok((await stat(outputRoot)).isDirectory());
 async function exists(file) {
   try {
     await stat(file);
@@ -43,11 +53,11 @@ try {
       historical = accountHistoricalCapture(stage);
     const original = JSON.parse(historical.manifest);
     process.argv = [originalArgv[0], entry.driver, ...(capture ? ["--capture"] : [])];
-    const code = accountReplayDriver(stage, await read(entry.driver));
-    const recorded = resume && (await exists(`${accountReplayRoot}/${stage}/evidence.json`));
+    const code = accountReplayDriver(stage, await read(entry.driver), outputRoot);
+    const recorded = resume && (await exists(`${outputRoot}/${stage}/evidence.json`));
     if (!recorded) {
       if (capture) {
-        const stageDirectory = `${accountReplayRoot}/${stage}`;
+        const stageDirectory = `${outputRoot}/${stage}`;
         if (await exists(stageDirectory)) {
           const entries = await readdir(stageDirectory);
           assert.ok(resume && entries.length === 0, "Do not overwrite an incomplete stage");
@@ -65,7 +75,7 @@ try {
       "Original packet was not overwritten",
     );
     if (!capture) continue;
-    const file = `${accountReplayRoot}/${stage}/evidence.json`,
+    const file = `${outputRoot}/${stage}/evidence.json`,
       bytes = await readFile(file),
       current = JSON.parse(bytes);
     assert.equal(current.processesClosed, true);
@@ -86,7 +96,7 @@ try {
       const old = original.screenshots.find((item) => item.file === shot.file);
       assert.ok(old, "No invented historical image match");
       const previousBytes = await readFile(`${entry.folder}/${old.file}`),
-        newBytes = await readFile(`${accountReplayRoot}/${stage}/${shot.file}`);
+        newBytes = await readFile(`${outputRoot}/${stage}/${shot.file}`);
       assert.equal(hash(previousBytes), old.sha256, "Old image was not overwritten");
       assert.equal(hash(newBytes), shot.sha256);
       images.push({
@@ -123,7 +133,7 @@ if (capture) {
     file.startsWith("apps/web/src/") ? read(file) : "",
   );
   const evidence = {
-    kind: "P39-current-replay-r2",
+    kind: `P39-current-replay-${revision ?? "r2"}`,
     approval: "pending",
     processesClosed: true,
     summaries,
@@ -133,9 +143,9 @@ if (capture) {
     boundary:
       "Original pinned drivers and assertions; static imports are resolved and output is redirected. Current extracted PlatformAccountDirectoryWorkspace composition is rendered without legacy template replacement; current CSS and local fixtures are retained. Historical manifests and images remain separate. Local requests do not prove true account creation, full App shell, permission or production acceptance. Byte differences are observations, not approvals or pixel-equivalence claims.",
   };
-  await writeFile(`${accountReplayRoot}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n");
+  await writeFile(`${outputRoot}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n");
   await writeFile(
-    `${accountReplayRoot}/index.html`,
+    `${outputRoot}/index.html`,
     '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P39 当前重放</title><h1>P39 当前 Vue 重放</h1><p>旧图另存，当前测试样例；未获得新批准，不代表真实账号创建或生产验收。</p>' +
       summaries
         .map(

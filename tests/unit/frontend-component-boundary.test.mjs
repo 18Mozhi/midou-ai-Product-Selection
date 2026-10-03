@@ -8,6 +8,7 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
   const limits = new Map([
     [`${components}/PlatformAccountCenter.vue`, 850],
     [`${components}/PlatformAccountDirectoryWorkspace.vue`, 280],
+    [`${components}/PlatformAccountDirectoryFilters.vue`, 220],
     [`${components}/PlatformAccountGlobalRail.vue`, 100],
     [`${components}/PlatformOrganizationRecords.vue`, 180],
     [`${components}/PlatformUserRecords.vue`, 180],
@@ -66,9 +67,13 @@ test("thousand-line platform pages keep data orchestration in bounded presentati
     readFile(`${components}/SourcingWorkspace.vue`, "utf8"),
     readFile(`${components}/OrganizationAdminCenter.vue`, "utf8"),
   ]);
+  const accountFilters = await readFile(
+    `${components}/PlatformAccountDirectoryFilters.vue`,
+    "utf8",
+  );
   assert.match(accounts, /const PlatformAccountDirectoryWorkspace = defineAsyncComponent/);
   assert.match(accounts, /loadAccounts/);
-  assert.match(accountDirectory, /defineModel<string>\("query"/);
+  assert.match(accountFilters, /defineModel<string>\("query"/);
   assert.match(accountDirectory, /\(event: "open-user"/);
   assert.doesNotMatch(accountDirectory, /createApiClient|fetch\(/);
   assert.match(accountDirectory, /import PlatformAccountGlobalRail/);

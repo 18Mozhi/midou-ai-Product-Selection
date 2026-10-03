@@ -10,7 +10,8 @@
   "sourceHashes": {
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
     "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec",
-    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
+    "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
     "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
   },
@@ -143,12 +144,56 @@
       ]
     },
     {
+      "actionId": "PA40-FILTER-WIRING",
+      "label": "筛选组件与父级意图接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1"
+      ],
+      "sourceContractKeys": ["PA40-FILTER-WIRING"],
+      "contractAliasReason": "父工作区只连接子组件筛选与重置意图，不执行额外业务动作。",
+      "condition": "P40组织筛选区域挂载时",
+      "handler": "父工作区将query/status v-model与apply/reset事件连接到现有状态和处理器。",
+      "variants": ["organization-filter-forwarding"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/frontend-component-boundary.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "接线映射不代表完整交互、读屏、权限或生产验收。",
+      "forwardsTo": ["PA-FILTER", "PA-RESET"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
+          "event": "@apply-filters",
+          "handler": "emit('apply-filters')",
+          "targets": ["PA-FILTER"]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
+          "event": "@reset-filters",
+          "handler": "emit('reset-filters')",
+          "targets": ["PA-RESET"]
+        }
+      ]
+    },
+    {
       "actionId": "PA-FILTER",
       "label": "查询并应用组织筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#128119f3fb311b09.1",
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1"
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#128119f3fb311b09.1",
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#e9658d470d4cbeaf.1"
       ],
       "condition": "组织名称/标识query与空、active、archived status提交；刷新中搜索禁用",
       "handler": "表单submit触发父级applyFilters；搜索按钮提交同一表单，按既有query/status、URL及GET合同读取",
@@ -176,7 +221,7 @@
       "label": "清除组织筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#20080e701de7f5cb.1",
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#20080e701de7f5cb.1",
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.1"
       ],
       "condition": "筛选条有query/status且不在refreshing时可用；过滤无结果区提供清除入口",
@@ -285,7 +330,7 @@
       "actionId": "PA40-FILTER-DRAWER",
       "label": "移动筛选抽屉容器接线",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#3c4dea26ac48746f.1"],
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDirectoryFilters.vue#3c4dea26ac48746f.1"],
       "condition": "移动端ResponsiveFilterDrawer承载同一组织筛选表单",
       "handler": "容器不发额外请求或写入；提交沿PA-FILTER",
       "variants": ["mobile-filter-drawer"],
@@ -534,6 +579,7 @@
     "files": [
       "apps/web/src/components/PlatformAccountCenter.vue",
       "apps/web/src/components/PlatformAccountDialogs.vue",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
       "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
       "apps/web/src/components/PlatformAccountGlobalRail.vue",
       "apps/web/src/components/PlatformOrganizationRecords.vue"
@@ -541,7 +587,8 @@
     "dependencyHashes": {
       "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
       "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec",
-      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
       "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
     },
@@ -559,7 +606,7 @@
     "containerScope": "reviewed-subset-of-shared-source",
     "containers": [
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "tag": "ResponsiveFilterDrawer",
         "ordinal": 1,
         "shape": "responsive-filter",
@@ -568,7 +615,7 @@
         "variants": [{ "name": "p40-mobile-filter", "evidenceScope": "related-scene-only", "scenes": [{ "package": "platform-organizations-direction-c", "scene": "filter" }], "remaining": "真实软键盘、完整焦点循环和用户取消草稿仍待验。" }]
       },
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",

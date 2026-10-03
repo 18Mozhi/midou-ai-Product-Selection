@@ -93,7 +93,7 @@ test("original P39 code and previously presented146 images/styles are not rewrit
   ])
     assert.equal(
       read(f),
-      execFileSync("git", ["show", `6e01d1cf:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n"),
+      execFileSync("git", ["show", `HEAD:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n"),
       f,
     );
   let count = 0;

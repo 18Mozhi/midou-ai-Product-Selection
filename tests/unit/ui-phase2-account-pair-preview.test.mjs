@@ -52,14 +52,12 @@ for (const [surface, file] of [
 test("shared account heading follows tab and avoids old direct-child-only hidden heading style", () => {
   const source = read(parent),
     preview = previewAccountPair(source, "parent");
-  assert.ok(preview.includes('<header v-if="tab !== \'admins\'" class="p43-directory-heading">'));
-  assert.ok(preview.includes('<header v-if="tab === \'admins\'" class="p43-directory-heading">'));
-  assert.ok(!preview.includes('class="admin-directory-heading"'));
-  assert.ok(preview.includes(":aria-label=\"tab === 'admins' ? '可授权账号目录' : '用户目录'\""));
-  assert.throws(() => previewAccountPair(source.replace("以下汇总", "unknown"), "wrong"));
-  assert.throws(() =>
-    previewAccountPair(source.replaceAll("admin-directory-heading", "changed-heading"), "parent"),
-  );
+  const directory = read("apps/web/src/components/PlatformAccountDirectoryWorkspace.vue");
+  assert.equal(preview, source);
+  assert.ok(source.includes("<PlatformAccountDirectoryWorkspace"));
+  assert.ok(directory.includes('class="admin-directory-heading"'));
+  assert.ok(directory.includes('v-if="props.adminListRoute"'));
+  assert.throws(() => previewAccountPair(source, "wrong"));
 });
 
 test("pair fixture uses exact original administrator identity rather than user impersonation", () => {

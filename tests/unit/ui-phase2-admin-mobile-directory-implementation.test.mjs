@@ -8,12 +8,12 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-directory-implementation/";
 const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));
 const before = evidence("baseline"),
-  after = evidence("current-r6");
+  after = evidence("current-r8");
 const historicalHashes = (e) =>
   Object.entries(e.sourceHashes).every(([, sha]) => /^[a-f0-9]{64}$/.test(sha));
 
-for (const mode of ["baseline", "current-r6"])
-  test(`directory ${mode === "baseline" ? "historical baseline" : "current r6"}: exact stage sources, 30 PNGs and scoped read-only replay`, () => {
+for (const mode of ["baseline", "current-r8"])
+  test(`directory ${mode === "baseline" ? "historical baseline" : "current r8"}: exact stage sources, 30 PNGs and scoped read-only replay`, () => {
     const e = evidence(mode),
       dir = folder + mode;
     assert.equal(e.kind, "P44-MOBILE-DIRECTORY-IMPLEMENTATION");
@@ -22,7 +22,7 @@ for (const mode of ["baseline", "current-r6"])
     assert.equal(e.checks.length, mode === "baseline" ? 116 : 134);
     assert.equal(e.screenshots.length, 30);
     assert.equal(e.observations.length, 12);
-    assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 36 : 50);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 36 : 51);
     if (mode !== "baseline") {
       assert.deepEqual(
         Object.keys(e.sourceHashes)
@@ -31,6 +31,7 @@ for (const mode of ["baseline", "current-r6"])
         [
           "apps/web/src/components/PlatformAccountCenterAdmin.css",
           "apps/web/src/components/PlatformAccountCenterPermissions.css",
+          "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
           "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
           "apps/web/src/components/PlatformAccountGlobalRail.vue",
           "apps/web/src/components/PlatformAccountUsersC.css",
@@ -126,12 +127,9 @@ test("historical directory captures stay immutable and current P44 composition s
   const mobileCss = read("apps/web/src/components/PlatformAdminDirectoryMobile.css");
   assert.match(
     mobileCss,
-    /\.account-page-layout--admins > \.account-page-main > \.admin-directory-heading/,
+    /\.account-page-layout--admins \.account-page-main \.admin-directory-heading/,
   );
-  assert.match(
-    mobileCss,
-    /\.account-page-layout--admins > \.account-page-main > \.account-table-wrap/,
-  );
+  assert.match(mobileCss, /\.account-page-layout--admins \.account-page-main \.account-table-wrap/);
   assert.match(mobileCss, /@media \(max-width: 760px\)/);
   assert.ok(read("apps/web/src/components/PlatformAccountCenterAdmin.css").length > 0);
   assert.equal(

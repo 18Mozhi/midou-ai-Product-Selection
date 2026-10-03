@@ -9,7 +9,8 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
   "sourceHashes": {
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
+    "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
     "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
     "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
@@ -947,7 +948,7 @@
       "label": "移动端筛选抽屉容器",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#3c4dea26ac48746f.1"
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#3c4dea26ac48746f.1"
       ],
       "sourceContractKeys": [
         "P43-CURRENT-3c4dea26ac48746f.1"
@@ -990,12 +991,56 @@
       "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
     },
     {
+      "actionId": "PA43-FILTER-WIRING",
+      "label": "筛选组件与父级意图接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1"
+      ],
+      "sourceContractKeys": ["P43-CURRENT-e064834276405c23.1"],
+      "contractAliasReason": "父工作区只连接子组件筛选与重置意图，不执行额外业务动作。",
+      "condition": "P43用户筛选区域挂载时",
+      "handler": "父工作区将query/status v-model与apply/reset事件连接到现有状态和处理器。",
+      "variants": ["users-filter-forwarding"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/frontend-component-boundary.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "接线映射不代表完整交互、读屏、权限或生产验收。",
+      "forwardsTo": ["PA43-FILTER", "PA43-RESET"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
+          "event": "@apply-filters",
+          "handler": "emit('apply-filters')",
+          "targets": ["PA43-FILTER"]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
+          "event": "@reset-filters",
+          "handler": "emit('reset-filters')",
+          "targets": ["PA43-RESET"]
+        }
+      ]
+    },
+    {
       "actionId": "PA43-FILTER",
       "label": "提交邮箱/组织/状态筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#128119f3fb311b09.1",
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1"
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#128119f3fb311b09.1",
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#e9658d470d4cbeaf.1"
       ],
       "sourceContractKeys": [
         "P43-CURRENT-128119f3fb311b09.1",
@@ -1047,7 +1092,7 @@
       "label": "清除用户筛选",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#20080e701de7f5cb.1",
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#20080e701de7f5cb.1",
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.1"
       ],
       "sourceContractKeys": [
@@ -2573,6 +2618,7 @@
     "status": "source-reviewed-not-runtime-accepted",
     "files": [
       "apps/web/src/components/PlatformAccountCenter.vue",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
       "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
       "apps/web/src/components/PlatformUserRecords.vue",
       "apps/web/src/components/PlatformUserDetailDialog.vue",
@@ -2581,7 +2627,8 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
       "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
       "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
@@ -2660,7 +2707,7 @@
     "containerScope": "reviewed-subset-of-shared-source",
     "containers": [
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "tag": "ResponsiveFilterDrawer",
         "ordinal": 1,
         "shape": "responsive-filter",
@@ -2685,7 +2732,7 @@
         ]
       },
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",

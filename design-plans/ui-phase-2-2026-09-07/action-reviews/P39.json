@@ -6,7 +6,8 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
+    "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
     "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
   },
@@ -213,11 +214,55 @@
       "remaining": "只排除P44条件分支，不代表P44页面已完成本动作映射。"
     },
     {
+      "actionId": "PA-FILTER-WIRING",
+      "label": "筛选组件与父级意图接线",
+      "kind": "wiring",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1"
+      ],
+      "sourceContractKeys": ["PA-FILTER-WIRING"],
+      "contractAliasReason": "父工作区只连接子组件的筛选与重置意图，不执行额外业务动作。",
+      "condition": "P39 overview筛选区域挂载时",
+      "handler": "父工作区将query/status v-model与apply/reset事件连接到现有状态和处理器。",
+      "variants": ["overview-filter-forwarding"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
+      "testReferences": [
+        {
+          "file": "tests/unit/frontend-component-boundary.test.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "接线映射不代表完整交互、读屏、权限或生产验收。",
+      "forwardsTo": ["PA-FILTER", "PA-RESET"],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
+          "event": "@apply-filters",
+          "handler": "emit('apply-filters')",
+          "targets": ["PA-FILTER"]
+        },
+        {
+          "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
+          "event": "@reset-filters",
+          "handler": "emit('reset-filters')",
+          "targets": ["PA-RESET"]
+        }
+      ]
+    },
+    {
       "actionId": "PA-FILTER-DRAWER",
       "label": "移动筛选抽屉容器关联",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#3c4dea26ac48746f.1"
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#3c4dea26ac48746f.1"
       ],
       "condition": "ResponsiveFilterDrawer封装本页移动筛选表单，不产生额外筛选业务动作",
       "handler": "筛选意图由同一组件PA-FILTER提交；容器无独立写入",
@@ -255,8 +300,8 @@
       "label": "查询与状态筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#128119f3fb311b09.1",
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1"
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#128119f3fb311b09.1",
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#e9658d470d4cbeaf.1"
       ],
       "condition": "query/status提交；刷新时搜索按钮禁用；移动筛选提交后关闭抽屉",
       "handler": "form submit触发apply-filters；搜索按钮只提交同一表单，不重复计动作",
@@ -295,7 +340,7 @@
       "label": "清除当前页组织筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#20080e701de7f5cb.1",
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#20080e701de7f5cb.1",
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.1"
       ],
       "condition": "重置按钮仅在有筛选且非刷新时启用；组织无结果且有筛选时显示清除入口",
@@ -677,25 +722,27 @@
   "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "files": [
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
       "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
       "apps/web/src/components/PlatformAccountGlobalRail.vue",
       "apps/web/src/components/PlatformOrganizationRecords.vue"
     ],
     "inputScope": "reviewed-subset-of-shared-source",
     "dependencyHashes": {
-      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
       "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
     },
     "inputs": [
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "binding": "query",
         "meaning": "搜索关键词v-model，桌面内联/手机筛选抽屉共用",
         "remaining": "字段/主题/读屏的逐控件组合需各自证据。"
       },
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "binding": "query",
         "meaning": "同一查询字段在移动抽屉内的v-model实例，不是新业务字段",
         "remaining": "不重复计算为独立查询动作。"
@@ -707,13 +754,13 @@
         "remaining": "不是额外筛选条件或独立请求。"
       },
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "binding": "status",
         "meaning": "账号状态v-model；选项随组织/管理员筛选变体而异",
         "remaining": "保留disabled/archived区分，不由本映射决定服务端权限。"
       },
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "binding": "status",
         "meaning": "同一状态字段在移动抽屉内的v-model实例",
         "remaining": "不重复计算为独立字段或动作。"
@@ -723,11 +770,35 @@
         "binding": "status",
         "meaning": "账号概览分支使用的状态v-model，仍绑定同一父级筛选草稿",
         "remaining": "不是额外筛选条件或独立请求。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+        "binding": "query",
+        "meaning": "组织目录分支的查询字段v-model，父级仅接收草稿值",
+        "remaining": "不增加查询契约。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+        "binding": "query",
+        "meaning": "管理员目录分支的邮箱查询字段v-model，父级仅接收草稿值",
+        "remaining": "不增加查询契约。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+        "binding": "status",
+        "meaning": "组织目录分支的状态选择v-model，复用既有筛选草稿",
+        "remaining": "保留active/archived既有区分。"
+      },
+      {
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+        "binding": "status",
+        "meaning": "管理员目录分支的账号状态v-model，复用既有筛选草稿",
+        "remaining": "保留active/disabled既有区分。"
       }
     ],
     "containers": [
       {
-        "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+        "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
         "tag": "ResponsiveFilterDrawer",
         "ordinal": 1,
         "shape": "responsive-filter",

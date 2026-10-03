@@ -147,10 +147,6 @@ P43动作映射使用本合同作为单一语义源。下表接续共享父组�
 | e400286c7cd59e44.1 | P43-CURRENT-e400286c7cd59e44.1 · 平台账号工作区管理员导航 |
 | 9c9141422bfd2c11.1 | P43-CURRENT-9c9141422bfd2c11.1 · 组织记录手动读取归P40 |
 | 9c9141422bfd2c11.2 | P43-CURRENT-9c9141422bfd2c11.2 · 组织记录手动刷新归P40 |
-| 3c4dea26ac48746f.1 | P43-CURRENT-3c4dea26ac48746f.1 · 响应式筛选抽屉容器 |
-| 128119f3fb311b09.1 | P43-CURRENT-128119f3fb311b09.1 · 筛选表单提交到父级applyFilters |
-| e9658d470d4cbeaf.1 | P43-CURRENT-e9658d470d4cbeaf.1 · 搜索按钮提交同一用户筛选表单 |
-| 20080e701de7f5cb.1 | P43-CURRENT-20080e701de7f5cb.1 · 重置用户query/status |
 | 322a4ac62ce3a305.1 | P43-CURRENT-322a4ac62ce3a305.1 · 用户目录首读失败重试 |
 | 86ea70e081f1f8e3.1 | P43-CURRENT-86ea70e081f1f8e3.1 · 用户筛选空态清除筛选 |
 | f68d2406f8c1db70.1 | P43-CURRENT-f68d2406f8c1db70.1 · 组织目录空态创建归P40 |
@@ -159,11 +155,22 @@ P43动作映射使用本合同作为单一语义源。下表接续共享父组�
 | 86ea70e081f1f8e3.2 | P43-CURRENT-86ea70e081f1f8e3.2 · 管理员空态筛选归P44 |
 | 38003e3f7b002f71.1 | P43-CURRENT-38003e3f7b002f71.1 · 管理员创建入口归P44 |
 | 103fa7d7798d62d6.1 | P43-CURRENT-103fa7d7798d62d6.1 · 管理员行详情转发归P44 |
+| e064834276405c23.1 | P43-CURRENT-e064834276405c23.1 · query/status绑定及筛选/重置意图由父工作区承接 |
+
+### Z
+
+| 当前签名 | P43当前语义合同键 |
+| --- | --- |
+| 3c4dea26ac48746f.1 | P43-CURRENT-3c4dea26ac48746f.1 · 响应式筛选抽屉容器 |
+| 128119f3fb311b09.1 | P43-CURRENT-128119f3fb311b09.1 · 筛选表单提交到父级applyFilters |
+| e9658d470d4cbeaf.1 | P43-CURRENT-e9658d470d4cbeaf.1 · 搜索按钮提交同一用户筛选表单 |
+| 20080e701de7f5cb.1 | P43-CURRENT-20080e701de7f5cb.1 · 重置用户query/status |
 
 | 当前父/工作区源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051 |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | aec53b882c4ace65d368fdd9352d40a3debf0b50f55cfb61365506991caea16b |
 
 其余四个直接页面组件沿用本合同已有当前候选记录；P43.json另固定六个组件的当前LF指纹。源位置数不等于唯一按钮或业务动作数。
 ## P44 当前来源补映射

@@ -12,10 +12,16 @@ import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs
 const args = process.argv.slice(2);
 assert.ok(
   args.length <= 1 &&
-    args.every((arg) => ["--smoke", "--capture", "--smoke-r2", "--capture-r2"].includes(arg)),
+    args.every((arg) =>
+      ["--smoke", "--capture", "--smoke-r2", "--capture-r2", "--capture-r3"].includes(arg),
+    ),
 );
 const capture = args.some((arg) => arg.startsWith("--capture")),
-  version = args.some((arg) => arg.endsWith("-r2")) ? "r2" : "r1",
+  version = args.some((arg) => arg.endsWith("-r3"))
+    ? "r3"
+    : args.some((arg) => arg.endsWith("-r2"))
+      ? "r2"
+      : "r1",
   smoke = args.some((arg) => arg.startsWith("--smoke")),
   output = `output/playwright/p43-actual-app-lifecycle-${version}`;
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");

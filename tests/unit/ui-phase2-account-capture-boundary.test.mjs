@@ -18,6 +18,8 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const directoryFile = "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue";
+const filtersFile = "apps/web/src/components/PlatformAccountDirectoryFilters.vue";
+const currentReplayRoot = "output/playwright/p39-current-replay-r3";
 function neutralImports(source) {
   const ast = ts.createSourceFile("driver.mjs", source, ts.ScriptTarget.Latest, true);
   for (const node of ast.statements.filter(ts.isImportDeclaration).reverse()) {
@@ -30,6 +32,7 @@ test("P39 current layout insertion preserves the later administrator heading and
   const source = read("apps/web/src/components/PlatformAccountCenter.vue"),
     transformed = accountPagePreview(source);
   const directory = read(directoryFile);
+  const filters = read(filtersFile);
   assert.equal(
     parse(source).descriptor.scriptSetup.content,
     parse(transformed).descriptor.scriptSetup.content,
@@ -58,7 +61,8 @@ test("P39 current layout insertion preserves the later administrator heading and
   assert.match(source, /<PlatformAccountDirectoryWorkspace/);
   assert.match(directory, /class="account-page-layout"/);
   assert.match(directory, /class="organization-directory-heading"/);
-  assert.match(directory, /class="account-filter"/);
+  assert.match(directory, /<PlatformAccountDirectoryFilters/);
+  assert.match(filters, /class="account-filter"/);
   assert.match(directory, /class="admin-directory-heading"/);
   assert.throws(
     () => accountPagePreview(source.replace('@load="load"', '@load="changed"')),
@@ -92,8 +96,8 @@ test("P39 historical capture pins complete original manifests and all source blo
   assert.throws(() => accountHistoricalCapture("invented"), /Unknown historical P39 stage/);
 });
 test("P39 current replay keeps raw source hashes, original checks, images and request evidence separate", () => {
-  const e = JSON.parse(read(`${accountReplayRoot}/evidence.json`));
-  assert.equal(e.kind, "P39-current-replay-r2");
+  const e = JSON.parse(read(`${currentReplayRoot}/evidence.json`));
+  assert.equal(e.kind, "P39-current-replay-r3");
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.deepEqual(
@@ -124,7 +128,7 @@ test("P39 current replay keeps raw source hashes, original checks, images and re
       assert.equal(hash(read(file)), sha, file);
     for (const image of item.images) {
       assert.equal(
-        hash(readFileSync(`${accountReplayRoot}/${item.stage}/${image.file}`)),
+        hash(readFileSync(`${currentReplayRoot}/${item.stage}/${image.file}`)),
         image.currentSha,
       );
       assert.equal(

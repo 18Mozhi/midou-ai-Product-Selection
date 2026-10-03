@@ -92,7 +92,7 @@ import '/@fs/${path.resolve(style).replaceAll("\\", "/")}';
 ${adminStyles.map((f) => `import '/@fs/${path.resolve(f).replaceAll("\\", "/")}';`).join("\n")}
 document.documentElement.dataset.design='signal-ledger';document.body.classList.add('p43-user-form-review','p43-page-preview','p44-page-preview','p44-role-review','p44-assembled');
 const router=createRouter({history:createWebHistory(),routes:[{path:'/:pathMatch(.*)*',component:{render:()=>null}}]});
-const app=createApp({render:()=>h('main',[h('p','P44 创建管理员 · 实际 Vue 逻辑 + C 创建分区 · 测试数据 · 待审'),h(Current,{apiBaseUrl:'/api/v1',initialTab:'admins',routePath:'/platform-admin/admins'})])}).use(router);await router.isReady();app.mount('#app');`;
+const app=createApp({render:()=>h('div',{class:'role-shell'},[h('main',[h('p','P44 创建管理员 · 实际 Vue 逻辑 + C 创建分区 · 测试数据 · 待审'),h(Current,{apiBaseUrl:'/api/v1',initialTab:'admins',routePath:'/platform-admin/admins'})])])}).use(router);await router.isReady();app.mount('#app');`;
 const probe = reservePort();
 await new Promise((r) => probe.listen(0, "127.0.0.1", r));
 const port = probe.address().port;
@@ -279,6 +279,7 @@ try {
         await page.evaluate(() => document.fonts.ready);
       };
       const snap = async (state, label, bottom = false) => {
+        if (state.endsWith("-focus")) await page.waitForTimeout(250);
         if (!/(focus|hover|pressed)/.test(state))
           await page.evaluate(() => {
             if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
@@ -291,8 +292,8 @@ try {
         check(
           state + ":white content and blue context",
           await dialog.evaluate((n) => [
-            getComputedStyle(n.querySelector(".p43-user-fields-body")).backgroundColor,
-            getComputedStyle(n.querySelector(".p43-user-intro")).backgroundColor,
+            getComputedStyle(n.querySelector(".p44-admin-create-form")).backgroundColor,
+            getComputedStyle(n.querySelector(".p44-admin-create-rail")).backgroundColor,
           ]),
           ["rgb(255, 255, 255)", "rgb(37, 74, 156)"],
         );
@@ -301,15 +302,29 @@ try {
             state + ":visible C keyboard outline",
             await dialog.evaluate((n) => {
               const active = document.activeElement,
-                css = getComputedStyle(active);
-              return (
-                n.contains(active) &&
-                active.matches(":focus-visible") &&
-                css.outlineWidth === "3px" &&
-                css.outlineStyle === "solid" &&
-                css.outlineColor === "rgb(37, 74, 156)"
-              );
+                css = getComputedStyle(active),
+                focusColor = css.outlineColor.match(
+                  /^rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)$/,
+                );
+              return {
+                contained: n.contains(active),
+                focusVisible: active.matches(":focus-visible"),
+                outlineWidth: css.outlineWidth,
+                outlineStyle: css.outlineStyle,
+                outlineColor:
+                  focusColor?.[1] === "37" &&
+                  focusColor?.[2] === "74" &&
+                  focusColor?.[3] === "156" &&
+                  Number(focusColor?.[4] ?? 1) > 0,
+              };
             }),
+            {
+              contained: true,
+              focusVisible: true,
+              outlineWidth: "3px",
+              outlineStyle: "solid",
+              outlineColor: true,
+            },
           );
         }
         if (!capture) return;

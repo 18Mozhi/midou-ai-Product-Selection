@@ -17,6 +17,7 @@ const ids = {
 
 function fixture(capabilities = ["trend:read"]) {
   const repository = new InMemoryAuthorizationRepository();
+  repository.workspaceOrganizations.set(ids.workspace, ids.organization);
   repository.contexts.set(ids.session, {
     user_id: ids.actor,
     organization_id: ids.organization,

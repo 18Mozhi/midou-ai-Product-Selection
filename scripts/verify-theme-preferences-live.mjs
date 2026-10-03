@@ -45,19 +45,23 @@ if (process.argv.includes("--baota-production")) {
     }
   }
   async function cleanup() {
-    for (const [sql, value] of [
-      ["DELETE FROM user_ui_preference_operations WHERE user_id=?", ids.user],
-      ["DELETE FROM user_ui_preference_audit_events WHERE user_id=?", ids.user],
-      ["DELETE FROM user_ui_preferences WHERE user_id=?", ids.user],
-      ["DELETE FROM user_session_contexts WHERE session_id=?", ids.session],
-      ["DELETE FROM memberships WHERE id=?", ids.membership],
-      ["DELETE FROM user_sessions WHERE id=?", ids.session],
-      ["DELETE FROM workspaces WHERE id=?", ids.workspace],
-      ["DELETE FROM organizations WHERE id=?", ids.org],
-      ["DELETE FROM users WHERE id=?", ids.user],
+    for (const [sql, values] of [
+      ["DELETE FROM user_ui_preference_operations WHERE user_id=?", [ids.user]],
+      ["DELETE FROM user_ui_preference_audit_events WHERE user_id=?", [ids.user]],
+      ["DELETE FROM user_ui_preferences WHERE user_id=?", [ids.user]],
+      ["DELETE FROM user_session_contexts WHERE session_id=?", [ids.session]],
+      ["DELETE FROM memberships WHERE id=?", [ids.membership]],
+      ["DELETE FROM user_sessions WHERE id=?", [ids.session]],
+      [
+        "UPDATE organizations SET default_workspace_id=IF(default_workspace_id=?,NULL,default_workspace_id) WHERE id=?",
+        [ids.workspace, ids.org],
+      ],
+      ["DELETE FROM workspaces WHERE id=?", [ids.workspace]],
+      ["DELETE FROM organizations WHERE id=?", [ids.org]],
+      ["DELETE FROM users WHERE id=?", [ids.user]],
     ])
       try {
-        await pool.query(sql, [value]);
+        await pool.query(sql, values);
       } catch {}
   }
   try {

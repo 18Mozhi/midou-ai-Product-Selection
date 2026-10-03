@@ -119,7 +119,8 @@
     "apps/web/src/components/platform-status-topology.ts": "e1442a8a3d6e28939865f063e6a155c9314445dab7f508f9a2c902da4e909c37",
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
     "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec",
-    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
+    "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
     "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
     "apps/web/src/components/PlatformContentCenter.vue": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993",
@@ -263,8 +264,8 @@
     "apps/web/src/use-platform-user-detail.ts": "8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e",
     "apps/web/src/use-provider-editor-isolation.ts": "e6ed75af7ff3647cab487b402fc655927e038c9e6a6f9e183eb0de3ae3ec5598",
     "apps/web/src/use-user-creation-owner.ts": "cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e",
-    "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "f2d0a4208e7c53f9feb8f22dd6fb66730482bd0684c6c23db50a1563f1b5bd53",
-    "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "1b67deb57a36713f45d2b0c1bf503f67ae498a51b2ad945f9a48a1c185551634",
+    "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md": "f2c332bba28b2d657b376c0ee4303c5e6fb1a32eec3b6be39ad2c3a1124f3ad1",
+    "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md": "a1f95693af41c65801dc8a08ff3c4a243e052f0079c3a7f4f68ee2d13a92f21e",
     "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md": "0299f051665e41a61bdedc711ea24ea0ac365c64f248c181100ec3ce4cedbecd",
     "design-plans/ui-phase-2-2026-09-07/approval-notification-contract-review.md": "27a45e383aaeee28da5b1a8f0e5d14b326feb698985d995f700be256f77edb3c",
     "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md": "0b428f6cc2496bd4aff581065bba5996b2e759951d3676e3c2381ba62d0e7ade",
@@ -281,7 +282,7 @@
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "dd2def25923858383f4371d3bb5ae643cf28b06ac185aab7017aeebff8d96291",
-    "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "724d0a662b4ec94215b786a35390ea0de6a98b4def6e19c8ec56baa10030e15b",
+    "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "c11596b4b15b4bc88062a3a98786154197232a80aa420595d0c6b3e821aa5b75",
     "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "3665adb7a413e937deed8165d2b9967d5ed891dc23058863a40917f2c4eb30b6",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "4df5cd5f4fff7e32f31a7a0ef71bd54af5ad8a68e09dbec2c8183748108e881e",
@@ -524,20 +525,21 @@
     "scripts/verify-ui-phase2-org-audit-controls.mjs": "97846b5e70b74a6a2246c0b96d9e6afee4ab8691febdfe0c6fb7685b5335e9eb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P38.json": "521be907f647710e4d716c11b0e5f90775878009e3bc11a5170337582a5b429d",
     "scripts/verify-ui-phase2-platform-overview-c.mjs": "b7049fb563871534d11742ebf0a42e51d0ecb9505eaa4cb2472ff26c631ee37b",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P39.json": "a59f166f503676ce0f63416722292045cf2530e4dcb303e2e390782f1a74f494",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P39.json": "98dc94c6ca4ffe48266a792c461c24d14028272005a2824bfe77c91b038438e4",
     "scripts/verify-ui-phase2-account-overview-c.mjs": "311828bc0e24463f905f0020d001177a648f29b3822df4d708f33fd28ac9dbca",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "93ac126e2cdf6eef298cfccff1e54ea34af7f11904dd8317ab55891e8946158e",
+    "tests/unit/frontend-component-boundary.test.mjs": "20a45d388677dfc25aa78583fbaeb57a7d961f01822d638108261bce3dc3c779",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "62f3563760f6226e7e38ad6909509e0831870a75b28bc6252acb3aae09baa952",
     "scripts/verify-ui-phase2-organization-list-preview.mjs": "c18b5b76788f00e85512f763a31decdf86b01043146e5de1a0bfd2c4ece6c057",
     "tests/e2e/m06-01-platform-accounts.spec.ts": "17ec41672b9f50e0456524345dec5ccb4a79b8e31184e989ac79335a8cd07577",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P41.json": "88354639522a5d2f0a9040750986d2031299c6be1cd3d4963bc1b28565368ecb",
     "tests/unit/ui-phase2-organization-create-preview.test.mjs": "2c967cb27c5ce0e088131c7dfacc6d8ecdddb83e200c6ac228b676f2b38b18eb",
     "tests/unit/ui-phase2-organization-create-production-composition.test.mjs": "d7c255007b0ec09cccb67e87450abd47ec3e6e972c411f005948127619b78820",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P42.json": "a387162527965d364f710d71cb1ea4b366f44aa45f3463c59854451f3bb02893",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P43.json": "9039f2c89f7b782ffede214514a331f88cde0a42f3d65976e1af1f29b20ae2fd",
-    "tests/m06-01/platform-accounts.test.mjs": "87c17b659204687d4c580c7ef4a2ab6824a662b38f657f407769c5d4668268a5",
-    "tests/unit/ui-phase2-p43-action-map.test.mjs": "6a12e7b8c3a4b20d11a83f29d3614ac751494a3a2edf1f09772ca3f829e456d7",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P44.json": "b9752eb25e7e0569b880410b290020b4f7b611cc997e3649944337272156ec16",
-    "tests/unit/ui-phase2-p44-action-map.test.mjs": "3fd71674e2e95c08e78af67cdea4a5d9a7fd40c44e9ba7a7fb87719f8ccd2c13",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P43.json": "34d05bfd7d309d66ecce38498a5a7a10152b253e25e53937b58894ffcde763a0",
+    "tests/m06-01/platform-accounts.test.mjs": "ad5b71fe2cbfe559c8d274fe693231ee5ae969e94995de9be867af1e51cc5d1d",
+    "tests/unit/ui-phase2-p43-action-map.test.mjs": "0c2fc5721958a06a37cc03ad1de289ac21f06705ea39f84d2ea497e490531ca6",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P44.json": "7f9ef6df769c219f553dfea6771d90e3401b768919172cf262f33c7f3b86816b",
+    "tests/unit/ui-phase2-p44-action-map.test.mjs": "781fb840b104b00a4751850b450e9fcbe4db633c375f97886cfb72ceaec80ec4",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P45.json": "d17050ba541a969fcff493fbed839331d74b621833749ffa43679c3c3c7ecf13",
     "tests/unit/ui-phase2-p45-action-map.test.mjs": "8764c41dc01059d68ab3de158c83c097a30c33a6e85709961823b77820661ef9",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P46.json": "81f0bf87279781aeaf08b91a658fe8ebca5476219ff754a716db21cd839a0915",
@@ -683,20 +685,20 @@
     "scripts/lib/ui-phase2-action-coverage.mjs": "4c60085586e1e7dc6798954e969dd0cd1aff326a2ec2516a034aa83fc0e29aec",
     "scripts/lib/ui-phase2-review-surfaces.mjs": "22f0710e70d77f4335a86a3ed6ef6d14c54fc23ec98d50aa2e22c50809e4e523",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb",
-    "scripts/audit-ui-phase2-contracts.mjs": "35733d820167588b796e95647734effdb9fa3d73828c6c7062c26d0e26007319",
+    "scripts/audit-ui-phase2-contracts.mjs": "d38314d72d21bdbc4554c8e53cb33dc4ec3964c827bb1e587b937f27a116fffc",
     "scripts/lib/ui-phase2-contract-audit.mjs": "586315fe5ec90e183ee2ac9cf2030ffc296bbeea54eeeae20fabefd88f491005"
   },
   "summary": {
     "routes": 73,
-    "currentSourceCandidates": 1759,
+    "currentSourceCandidates": 1760,
     "historicalCandidates": 1758,
-    "newSourceIdentities": 3,
-    "oldOnlyIdentities": 2,
+    "newSourceIdentities": 6,
+    "oldOnlyIdentities": 4,
     "reviewedPages": 73,
-    "explicitlyGroupedSourceSites": 1593,
-    "semanticGroups": 1306,
+    "explicitlyGroupedSourceSites": 1594,
+    "semanticGroups": 1310,
     "routeActions": 1069,
-    "wiringGroups": 122,
+    "wiringGroups": 126,
     "pagesWithoutExplicitSemanticReview": [],
     "globalDenominatorFrozen": false,
     "userApprovedPages": 0,
@@ -1172,7 +1174,7 @@
       "id": "P12",
       "path": "/home",
       "title": "今日行动",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P12",
         "actionApproval": "pending-user-review",
@@ -1216,7 +1218,7 @@
       "id": "P13",
       "path": "/work",
       "title": "今日工作",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P13",
         "actionApproval": "pending-user-review",
@@ -1259,7 +1261,7 @@
       "id": "P14",
       "path": "/trends",
       "title": "热点趋势",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P14",
         "actionApproval": "pending-user-review",
@@ -1304,7 +1306,7 @@
       "id": "P15",
       "path": "/opportunities",
       "title": "选品机会",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P15",
         "actionApproval": "pending-user-review",
@@ -1349,7 +1351,7 @@
       "id": "P16",
       "path": "/opportunities/start",
       "title": "创建选品",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P16",
         "actionApproval": "pending-user-review",
@@ -1399,7 +1401,7 @@
       "id": "P17",
       "path": "/opportunities/scoring-rules",
       "title": "评分规则",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P17",
         "actionApproval": "pending-user-review",
@@ -1444,7 +1446,7 @@
       "id": "P18",
       "path": "/opportunities/:opportunityId",
       "title": "机会详情",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P18",
         "actionApproval": "pending-user-review",
@@ -1496,7 +1498,7 @@
       "id": "P19",
       "path": "/competitors",
       "title": "竞品监控",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P19",
         "actionApproval": "pending-user-review",
@@ -1540,7 +1542,7 @@
       "id": "P20",
       "path": "/competitors/monitoring-rules",
       "title": "竞品监控规则",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P20",
         "actionApproval": "pending-user-review",
@@ -1583,7 +1585,7 @@
       "id": "P21",
       "path": "/sourcing",
       "title": "供应链与利润",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P21",
         "actionApproval": "pending-user-review",
@@ -1627,7 +1629,7 @@
       "id": "P22",
       "path": "/sourcing/cost-rules",
       "title": "费用与利润规则",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P22",
         "actionApproval": "pending-user-review",
@@ -1671,7 +1673,7 @@
       "id": "P23",
       "path": "/tasks",
       "title": "全部任务",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P23",
         "actionApproval": "pending-user-review",
@@ -1718,7 +1720,7 @@
       "id": "P24",
       "path": "/tasks/:taskId",
       "title": "任务详情",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P24",
         "actionApproval": "pending-user-review",
@@ -1766,7 +1768,7 @@
       "id": "P25",
       "path": "/tasks/approvals",
       "title": "审批中心",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P25",
         "actionApproval": "pending-user-review",
@@ -1820,7 +1822,7 @@
       "id": "P26",
       "path": "/notifications",
       "title": "通知中心",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P26",
         "actionApproval": "pending-user-review",
@@ -1866,7 +1868,7 @@
       "id": "P27",
       "path": "/automations",
       "title": "自动化规则",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P27",
         "actionApproval": "pending-user-review",
@@ -1912,7 +1914,7 @@
       "id": "P28",
       "path": "/reports",
       "title": "报表与导出",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P28",
         "actionApproval": "pending-user-review",
@@ -1954,7 +1956,7 @@
       "id": "P29",
       "path": "/org-admin",
       "title": "治理概览",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P29",
         "actionApproval": "pending-user-review",
@@ -1997,7 +1999,7 @@
       "id": "P30",
       "path": "/org-admin/members",
       "title": "成员与邀请",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P30",
         "actionApproval": "pending-user-review",
@@ -2042,7 +2044,7 @@
       "id": "P31",
       "path": "/org-admin/roles",
       "title": "角色与权限",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P31",
         "actionApproval": "pending-user-review",
@@ -2086,7 +2088,7 @@
       "id": "P32",
       "path": "/org-admin/workspaces",
       "title": "工作区管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P32",
         "actionApproval": "pending-user-review",
@@ -2131,7 +2133,7 @@
       "id": "P33",
       "path": "/org-admin/teams",
       "title": "团队管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P33",
         "actionApproval": "pending-user-review",
@@ -2176,7 +2178,7 @@
       "id": "P34",
       "path": "/org-admin/approvals",
       "title": "审批模板",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P34",
         "actionApproval": "pending-user-review",
@@ -2222,7 +2224,7 @@
       "id": "P35",
       "path": "/org-admin/data",
       "title": "组织数据",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P35",
         "actionApproval": "pending-user-review",
@@ -2265,7 +2267,7 @@
       "id": "P36",
       "path": "/org-admin/tokens",
       "title": "组织令牌",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P36",
         "actionApproval": "pending-user-review",
@@ -2308,7 +2310,7 @@
       "id": "P37",
       "path": "/org-admin/audit",
       "title": "组织审计",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P37",
         "actionApproval": "pending-user-review",
@@ -2352,7 +2354,7 @@
       "id": "P38",
       "path": "/platform-admin",
       "title": "平台概览",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P38",
         "actionApproval": "pending-user-review",
@@ -2394,15 +2396,15 @@
       "id": "P39",
       "path": "/platform-admin/accounts",
       "title": "账号与组织",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P39",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 23,
-        "semanticGroups": 18,
+        "sourceSites": 24,
+        "semanticGroups": 19,
         "routeActions": 8,
-        "wiringGroups": 2,
+        "wiringGroups": 3,
         "excludedGroups": 8,
         "writeActions": 0,
         "sourceAbsentProposals": 0,
@@ -2412,9 +2414,9 @@
         ],
         "unmappedVisualSlots": 48,
         "surfaces": {
-          "callerFiles": 3,
-          "localModelBindings": 8,
-          "reviewedInputBindings": 6,
+          "callerFiles": 4,
+          "localModelBindings": 10,
+          "reviewedInputBindings": 10,
           "sourceCallerContainers": 3,
           "callerContainers": 3,
           "consumerVariants": 3,
@@ -2436,27 +2438,28 @@
       "id": "P40",
       "path": "/platform-admin/organizations",
       "title": "组织管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P40",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 54,
-        "semanticGroups": 17,
+        "sourceSites": 55,
+        "semanticGroups": 18,
         "routeActions": 11,
-        "wiringGroups": 4,
+        "wiringGroups": 5,
         "excludedGroups": 2,
         "writeActions": 1,
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
           "actual-vue-isolated-browser",
-          "actual-vue-local-interception"
+          "actual-vue-local-interception",
+          "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 66,
         "surfaces": {
-          "callerFiles": 5,
-          "localModelBindings": 16,
+          "callerFiles": 6,
+          "localModelBindings": 18,
           "reviewedInputBindings": 7,
           "sourceCallerContainers": 11,
           "callerContainers": 6,
@@ -2479,7 +2482,7 @@
       "id": "P41",
       "path": "/platform-admin/organizations/new",
       "title": "创建组织",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P41",
         "actionApproval": "pending-user-review",
@@ -2523,7 +2526,7 @@
       "id": "P42",
       "path": "/platform-admin/organizations/:organizationId",
       "title": "组织详情",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P42",
         "actionApproval": "pending-user-review",
@@ -2565,27 +2568,28 @@
       "id": "P43",
       "path": "/platform-admin/users",
       "title": "用户管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P43",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 68,
-        "semanticGroups": 40,
+        "sourceSites": 69,
+        "semanticGroups": 41,
         "routeActions": 27,
-        "wiringGroups": 5,
+        "wiringGroups": 6,
         "excludedGroups": 8,
         "writeActions": 3,
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
           "actual-vue-local-interception",
-          "actual-vue-review-fixture"
+          "actual-vue-review-fixture",
+          "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 156,
         "surfaces": {
-          "callerFiles": 6,
-          "localModelBindings": 19,
+          "callerFiles": 7,
+          "localModelBindings": 21,
           "reviewedInputBindings": 11,
           "sourceCallerContainers": 13,
           "callerContainers": 12,
@@ -2609,27 +2613,28 @@
       "id": "P44",
       "path": "/platform-admin/admins",
       "title": "管理员管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P44",
         "actionApproval": "pending-user-review",
         "visualApproval": "user-approved-remaining-pages-auto",
-        "sourceSites": 72,
-        "semanticGroups": 45,
+        "sourceSites": 73,
+        "semanticGroups": 46,
         "routeActions": 30,
-        "wiringGroups": 5,
+        "wiringGroups": 6,
         "excludedGroups": 10,
         "writeActions": 3,
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 0,
         "testEvidenceTypes": [
           "actual-vue-local-interception",
-          "actual-vue-review-fixture"
+          "actual-vue-review-fixture",
+          "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 186,
         "surfaces": {
-          "callerFiles": 8,
-          "localModelBindings": 24,
+          "callerFiles": 9,
+          "localModelBindings": 26,
           "reviewedInputBindings": 11,
           "sourceCallerContainers": 14,
           "callerContainers": 0,
@@ -2651,7 +2656,7 @@
       "id": "P45",
       "path": "/platform-admin/permissions",
       "title": "角色权限",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P45",
         "actionApproval": "pending-user-review",
@@ -2694,7 +2699,7 @@
       "id": "P46",
       "path": "/platform-admin/providers",
       "title": "来源设置",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P46",
         "actionApproval": "pending-user-review",
@@ -2738,7 +2743,7 @@
       "id": "P47",
       "path": "/platform-admin/providers/adapters",
       "title": "采集程序",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P47",
         "actionApproval": "pending-user-review",
@@ -2781,7 +2786,7 @@
       "id": "P48",
       "path": "/platform-admin/providers/sources",
       "title": "热点来源",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P48",
         "actionApproval": "pending-user-review",
@@ -2825,7 +2830,7 @@
       "id": "P49",
       "path": "/platform-admin/providers/sources/1688-acceptance",
       "title": "1688 启用检查",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P49",
         "actionApproval": "pending-user-review",
@@ -2867,7 +2872,7 @@
       "id": "P50",
       "path": "/platform-admin/credentials",
       "title": "凭证与档案",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P50",
         "actionApproval": "pending-user-review",
@@ -2909,7 +2914,7 @@
       "id": "P51",
       "path": "/platform-admin/collection",
       "title": "采集任务",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P51",
         "actionApproval": "pending-user-review",
@@ -2951,7 +2956,7 @@
       "id": "P52",
       "path": "/platform-admin/collection/overview",
       "title": "采集总览",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P52",
         "actionApproval": "pending-user-review",
@@ -2993,7 +2998,7 @@
       "id": "P53",
       "path": "/platform-admin/collection/browser-runtime",
       "title": "网页登录采集",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P53",
         "actionApproval": "pending-user-review",
@@ -3035,7 +3040,7 @@
       "id": "P54",
       "path": "/platform-admin/data",
       "title": "数据中心",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P54",
         "actionApproval": "pending-user-review",
@@ -3083,7 +3088,7 @@
       "id": "P55",
       "path": "/platform-admin/governance",
       "title": "质量与规则",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P55",
         "actionApproval": "pending-user-review",
@@ -3124,7 +3129,7 @@
       "id": "P56",
       "path": "/platform-admin/content",
       "title": "内容管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P56",
         "actionApproval": "pending-user-review",
@@ -3166,7 +3171,7 @@
       "id": "P57",
       "path": "/platform-admin/notifications",
       "title": "通知管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P57",
         "actionApproval": "pending-user-review",
@@ -3209,7 +3214,7 @@
       "id": "P58",
       "path": "/platform-admin/commercial",
       "title": "配额管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P58",
         "actionApproval": "pending-user-review",
@@ -3251,7 +3256,7 @@
       "id": "P59",
       "path": "/platform-admin/security",
       "title": "安全中心",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P59",
         "actionApproval": "pending-user-review",
@@ -3293,7 +3298,7 @@
       "id": "P60",
       "path": "/platform-admin/open-platform",
       "title": "开放平台",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P60",
         "actionApproval": "pending-user-review",
@@ -3335,7 +3340,7 @@
       "id": "P61",
       "path": "/platform-admin/status",
       "title": "系统状态",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P61",
         "actionApproval": "pending-user-review",
@@ -3377,7 +3382,7 @@
       "id": "P62",
       "path": "/platform-admin/logs",
       "title": "链路日志",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P62",
         "actionApproval": "pending-user-review",
@@ -3420,7 +3425,7 @@
       "id": "P63",
       "path": "/platform-admin/api-coverage",
       "title": "接口覆盖证据",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P63",
         "actionApproval": "pending-user-review",
@@ -3462,7 +3467,7 @@
       "id": "P64",
       "path": "/platform-admin/operations",
       "title": "备份与恢复",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P64",
         "actionApproval": "pending-user-review",
@@ -3504,7 +3509,7 @@
       "id": "P65",
       "path": "/platform-admin/releases",
       "title": "发布管理",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P65",
         "actionApproval": "pending-user-review",
@@ -3546,7 +3551,7 @@
       "id": "P66",
       "path": "/platform-admin/topology",
       "title": "服务拓扑",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P66",
         "actionApproval": "pending-user-review",
@@ -3588,7 +3593,7 @@
       "id": "P67",
       "path": "/platform-admin/redis",
       "title": "Redis 运行",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P67",
         "actionApproval": "pending-user-review",
@@ -3630,7 +3635,7 @@
       "id": "P68",
       "path": "/platform-admin/mysql",
       "title": "MySQL 运行",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P68",
         "actionApproval": "pending-user-review",
@@ -3672,7 +3677,7 @@
       "id": "P69",
       "path": "/platform-admin/files",
       "title": "文件存储",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P69",
         "actionApproval": "pending-user-review",
@@ -3714,7 +3719,7 @@
       "id": "P70",
       "path": "/platform-admin/crawler-scheduler",
       "title": "采集调度",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P70",
         "actionApproval": "pending-user-review",
@@ -3757,7 +3762,7 @@
       "id": "P71",
       "path": "/platform-admin/capacity",
       "title": "容量边界",
-      "oldStaticAssociatedCandidates": 1602,
+      "oldStaticAssociatedCandidates": 1600,
       "review": {
         "pageId": "P71",
         "actionApproval": "pending-user-review",
@@ -4888,10 +4893,10 @@
       "pageId": "P39",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 23,
-      "semanticGroups": 18,
+      "sourceSites": 24,
+      "semanticGroups": 19,
       "routeActions": 8,
-      "wiringGroups": 2,
+      "wiringGroups": 3,
       "excludedGroups": 8,
       "writeActions": 0,
       "sourceAbsentProposals": 0,
@@ -4901,9 +4906,9 @@
       ],
       "unmappedVisualSlots": 48,
       "surfaces": {
-        "callerFiles": 3,
-        "localModelBindings": 8,
-        "reviewedInputBindings": 6,
+        "callerFiles": 4,
+        "localModelBindings": 10,
+        "reviewedInputBindings": 10,
         "sourceCallerContainers": 3,
         "callerContainers": 3,
         "consumerVariants": 3,
@@ -4914,22 +4919,23 @@
       "pageId": "P40",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 54,
-      "semanticGroups": 17,
+      "sourceSites": 55,
+      "semanticGroups": 18,
       "routeActions": 11,
-      "wiringGroups": 4,
+      "wiringGroups": 5,
       "excludedGroups": 2,
       "writeActions": 1,
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
         "actual-vue-isolated-browser",
-        "actual-vue-local-interception"
+        "actual-vue-local-interception",
+        "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 66,
       "surfaces": {
-        "callerFiles": 5,
-        "localModelBindings": 16,
+        "callerFiles": 6,
+        "localModelBindings": 18,
         "reviewedInputBindings": 7,
         "sourceCallerContainers": 11,
         "callerContainers": 6,
@@ -4995,22 +5001,23 @@
       "pageId": "P43",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 68,
-      "semanticGroups": 40,
+      "sourceSites": 69,
+      "semanticGroups": 41,
       "routeActions": 27,
-      "wiringGroups": 5,
+      "wiringGroups": 6,
       "excludedGroups": 8,
       "writeActions": 3,
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
         "actual-vue-local-interception",
-        "actual-vue-review-fixture"
+        "actual-vue-review-fixture",
+        "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 156,
       "surfaces": {
-        "callerFiles": 6,
-        "localModelBindings": 19,
+        "callerFiles": 7,
+        "localModelBindings": 21,
         "reviewedInputBindings": 11,
         "sourceCallerContainers": 13,
         "callerContainers": 12,
@@ -5022,22 +5029,23 @@
       "pageId": "P44",
       "actionApproval": "pending-user-review",
       "visualApproval": "user-approved-remaining-pages-auto",
-      "sourceSites": 72,
-      "semanticGroups": 45,
+      "sourceSites": 73,
+      "semanticGroups": 46,
       "routeActions": 30,
-      "wiringGroups": 5,
+      "wiringGroups": 6,
       "excludedGroups": 10,
       "writeActions": 3,
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 0,
       "testEvidenceTypes": [
         "actual-vue-local-interception",
-        "actual-vue-review-fixture"
+        "actual-vue-review-fixture",
+        "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 186,
       "surfaces": {
-        "callerFiles": 8,
-        "localModelBindings": 24,
+        "callerFiles": 9,
+        "localModelBindings": 26,
         "reviewedInputBindings": 11,
         "sourceCallerContainers": 14,
         "callerContainers": 0,
@@ -92652,7 +92660,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 49,
+          "line": 50,
           "jsonPointer": null
         },
         {
@@ -92763,7 +92771,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 50,
+          "line": 51,
           "jsonPointer": null
         },
         {
@@ -92874,7 +92882,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 51,
+          "line": 52,
           "jsonPointer": null
         },
         {
@@ -92985,7 +92993,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 52,
+          "line": 53,
           "jsonPointer": null
         },
         {
@@ -93096,7 +93104,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 53,
+          "line": 54,
           "jsonPointer": null
         },
         {
@@ -93207,7 +93215,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 54,
+          "line": 55,
           "jsonPointer": null
         },
         {
@@ -93318,7 +93326,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 55,
+          "line": 56,
           "jsonPointer": null
         },
         {
@@ -93429,7 +93437,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 56,
+          "line": 57,
           "jsonPointer": null
         },
         {
@@ -93540,7 +93548,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 57,
+          "line": 58,
           "jsonPointer": null
         },
         {
@@ -93651,7 +93659,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 58,
+          "line": 59,
           "jsonPointer": null
         },
         {
@@ -93762,7 +93770,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 59,
+          "line": 60,
           "jsonPointer": null
         },
         {
@@ -93873,7 +93881,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 60,
+          "line": 61,
           "jsonPointer": null
         },
         {
@@ -93984,7 +93992,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 61,
+          "line": 62,
           "jsonPointer": null
         },
         {
@@ -94095,7 +94103,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 62,
+          "line": 63,
           "jsonPointer": null
         },
         {
@@ -94206,7 +94214,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 63,
+          "line": 64,
           "jsonPointer": null
         },
         {
@@ -94317,7 +94325,7 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 64,
+          "line": 65,
           "jsonPointer": null
         },
         {
@@ -94351,6 +94359,226 @@
           "pageId": "P44",
           "actionId": "PA44-REASON-SUBMIT",
           "kind": "write"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryFilters.vue#3c4dea26ac48746f.1",
+      "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "line": 25,
+      "kind": "dialog-component-call",
+      "label": "账号邮箱 输入邮箱关键词，搜索后更新列表。 组织名称或标识 按组织名称或标识查询，不按成员邮箱查询。 关键词 概览只展示组织记录。用户邮箱查询结果请到用户管理查看。 {{ props.searchPlaceholder }} 账号状态 全部",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
+          "line": 18,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 31,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 164,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 164,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P39",
+          "actionId": "PA-FILTER-DRAWER",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA40-FILTER-DRAWER",
+          "kind": "wiring"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-FILTER-DRAWER",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-FILTER-DRAWER",
+          "kind": "local"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryFilters.vue#128119f3fb311b09.1",
+      "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "line": 26,
+      "kind": "form-event",
+      "label": "账号邮箱 输入邮箱关键词，搜索后更新列表。 组织名称或标识 按组织名称或标识查询，不按成员邮箱查询。 关键词 概览只展示组织记录。用户邮箱查询结果请到用户管理查看。 {{ props.searchPlaceholder }} 账号状态 全部",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
+          "line": 19,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 32,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 165,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 165,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P39",
+          "actionId": "PA-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-FILTER",
+          "kind": "read"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryFilters.vue#e9658d470d4cbeaf.1",
+      "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "line": 118,
+      "kind": "control",
+      "label": "搜索",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
+          "line": 13,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 33,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 166,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 166,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P39",
+          "actionId": "PA-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-FILTER",
+          "kind": "read"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-FILTER",
+          "kind": "read"
+        }
+      ]
+    },
+    {
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryFilters.vue#20080e701de7f5cb.1",
+      "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "line": 119,
+      "kind": "control",
+      "label": "重置",
+      "conditions": [],
+      "staticRouteIds": [],
+      "routeAttribution": "historical-static-superset-not-runtime-proof",
+      "registration": "not-in-historical-inventory",
+      "contractReferences": [
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
+          "line": 14,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
+          "line": 34,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 167,
+          "jsonPointer": null
+        },
+        {
+          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
+          "line": 167,
+          "jsonPointer": null
+        }
+      ],
+      "semanticReviews": [
+        {
+          "pageId": "P39",
+          "actionId": "PA-RESET",
+          "kind": "read"
+        },
+        {
+          "pageId": "P40",
+          "actionId": "PA-RESET",
+          "kind": "read"
+        },
+        {
+          "pageId": "P43",
+          "actionId": "PA43-RESET",
+          "kind": "local"
+        },
+        {
+          "pageId": "P44",
+          "actionId": "PA44-RESET",
+          "kind": "local"
         }
       ]
     },
@@ -94899,11 +95127,11 @@
       ]
     },
     {
-      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#3c4dea26ac48746f.1",
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
       "line": 169,
-      "kind": "dialog-component-call",
-      "label": "账号邮箱 输入邮箱关键词，搜索后更新列表。 组织名称或标识 按组织名称或标识查询，不按成员邮箱查询。 关键词 概览只展示组织记录。用户邮箱查询结果请到用户管理查看。 {{ props.searchPlaceholder }} 账号状态 全部",
+      "kind": "event-binding",
+      "label": "",
       "conditions": [],
       "staticRouteIds": [],
       "routeAttribution": "historical-static-superset-not-runtime-proof",
@@ -94911,339 +95139,52 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 18,
+          "line": 20,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 31,
+          "line": 35,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 150,
+          "line": 158,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 150,
+          "line": 158,
           "jsonPointer": null
         }
       ],
       "semanticReviews": [
         {
           "pageId": "P39",
-          "actionId": "PA-FILTER-DRAWER",
+          "actionId": "PA-FILTER-WIRING",
           "kind": "wiring"
         },
         {
           "pageId": "P40",
-          "actionId": "PA40-FILTER-DRAWER",
+          "actionId": "PA40-FILTER-WIRING",
           "kind": "wiring"
         },
         {
           "pageId": "P43",
-          "actionId": "PA43-FILTER-DRAWER",
-          "kind": "local"
+          "actionId": "PA43-FILTER-WIRING",
+          "kind": "wiring"
         },
         {
           "pageId": "P44",
-          "actionId": "PA44-FILTER-DRAWER",
-          "kind": "local"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#128119f3fb311b09.1",
-      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 170,
-      "kind": "form-event",
-      "label": "账号邮箱 输入邮箱关键词，搜索后更新列表。 组织名称或标识 按组织名称或标识查询，不按成员邮箱查询。 关键词 概览只展示组织记录。用户邮箱查询结果请到用户管理查看。 {{ props.searchPlaceholder }} 账号状态 全部",
-      "conditions": [],
-      "staticRouteIds": [],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "not-in-historical-inventory",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 19,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 32,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 151,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 151,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P39",
-          "actionId": "PA-FILTER",
-          "kind": "read"
-        },
-        {
-          "pageId": "P40",
-          "actionId": "PA-FILTER",
-          "kind": "read"
-        },
-        {
-          "pageId": "P43",
-          "actionId": "PA43-FILTER",
-          "kind": "read"
-        },
-        {
-          "pageId": "P44",
-          "actionId": "PA44-FILTER",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1",
-      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 272,
-      "kind": "control",
-      "label": "搜索",
-      "conditions": [],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 13,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 33,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 152,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 152,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P39",
-          "actionId": "PA-FILTER",
-          "kind": "read"
-        },
-        {
-          "pageId": "P40",
-          "actionId": "PA-FILTER",
-          "kind": "read"
-        },
-        {
-          "pageId": "P43",
-          "actionId": "PA43-FILTER",
-          "kind": "read"
-        },
-        {
-          "pageId": "P44",
-          "actionId": "PA44-FILTER",
-          "kind": "read"
-        }
-      ]
-    },
-    {
-      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#20080e701de7f5cb.1",
-      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 273,
-      "kind": "control",
-      "label": "重置",
-      "conditions": [],
-      "staticRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "historical-static-superset-not-runtime-proof",
-      "registration": "same-source-site-identity",
-      "contractReferences": [
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 14,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 34,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 153,
-          "jsonPointer": null
-        },
-        {
-          "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 153,
-          "jsonPointer": null
-        }
-      ],
-      "semanticReviews": [
-        {
-          "pageId": "P39",
-          "actionId": "PA-RESET",
-          "kind": "read"
-        },
-        {
-          "pageId": "P40",
-          "actionId": "PA-RESET",
-          "kind": "read"
-        },
-        {
-          "pageId": "P43",
-          "actionId": "PA43-RESET",
-          "kind": "local"
-        },
-        {
-          "pageId": "P44",
-          "actionId": "PA44-RESET",
-          "kind": "local"
+          "actionId": "PA44-FILTER-WIRING",
+          "kind": "wiring"
         }
       ]
     },
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#322a4ac62ce3a305.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 291,
+      "line": 190,
       "kind": "control",
       "label": "重新加载",
       "conditions": [
@@ -95324,17 +95265,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 35,
+          "line": 36,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 154,
+          "line": 150,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 154,
+          "line": 150,
           "jsonPointer": null
         }
       ],
@@ -95364,7 +95305,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 301,
+      "line": 200,
       "kind": "control",
       "label": "清除筛选",
       "conditions": [
@@ -95448,22 +95389,22 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 20,
+          "line": 21,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 36,
+          "line": 37,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 155,
+          "line": 151,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 155,
+          "line": 151,
           "jsonPointer": null
         }
       ],
@@ -95493,7 +95434,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#f68d2406f8c1db70.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 304,
+      "line": 203,
       "kind": "control",
       "label": "新建组织",
       "conditions": [
@@ -95577,22 +95518,22 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 21,
+          "line": 22,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 37,
+          "line": 38,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 156,
+          "line": 152,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 156,
+          "line": 152,
           "jsonPointer": null
         }
       ],
@@ -95622,7 +95563,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#8871f6d994e9fced.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 312,
+      "line": 211,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -95702,22 +95643,22 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 22,
+          "line": 23,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 38,
+          "line": 39,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 157,
+          "line": 153,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 157,
+          "line": 153,
           "jsonPointer": null
         }
       ],
@@ -95747,7 +95688,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#44e761922e1da1d0.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 319,
+      "line": 218,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -95827,22 +95768,22 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 23,
+          "line": 24,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 39,
+          "line": 40,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 158,
+          "line": 154,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 158,
+          "line": 154,
           "jsonPointer": null
         }
       ],
@@ -95872,7 +95813,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.2",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 335,
+      "line": 234,
       "kind": "control",
       "label": "清除筛选",
       "conditions": [
@@ -95956,22 +95897,22 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 24,
+          "line": 25,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 40,
+          "line": 41,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 159,
+          "line": 155,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 159,
+          "line": 155,
           "jsonPointer": null
         }
       ],
@@ -96001,7 +95942,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#38003e3f7b002f71.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 338,
+      "line": 237,
       "kind": "control",
       "label": "新建管理员",
       "conditions": [
@@ -96085,22 +96026,22 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 25,
+          "line": 26,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 41,
+          "line": 42,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 160,
+          "line": 156,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 160,
+          "line": 156,
           "jsonPointer": null
         }
       ],
@@ -96130,7 +96071,7 @@
     {
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#103fa7d7798d62d6.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 340,
+      "line": 239,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -96210,22 +96151,22 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 26,
+          "line": 27,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 42,
+          "line": 43,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 161,
+          "line": 157,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 161,
+          "line": 157,
           "jsonPointer": null
         }
       ],
@@ -96331,17 +96272,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 43,
+          "line": 44,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 179,
+          "line": 186,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 179,
+          "line": 186,
           "jsonPointer": null
         }
       ],
@@ -96442,17 +96383,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 44,
+          "line": 45,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 180,
+          "line": 187,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 180,
+          "line": 187,
           "jsonPointer": null
         }
       ],
@@ -96553,17 +96494,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 45,
+          "line": 46,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 181,
+          "line": 188,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 181,
+          "line": 188,
           "jsonPointer": null
         }
       ],
@@ -96669,12 +96610,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 175,
+          "line": 182,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 175,
+          "line": 182,
           "jsonPointer": null
         }
       ],
@@ -96765,12 +96706,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 176,
+          "line": 183,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 176,
+          "line": 183,
           "jsonPointer": null
         }
       ],
@@ -96861,12 +96802,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 177,
+          "line": 184,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 177,
+          "line": 184,
           "jsonPointer": null
         }
       ],
@@ -113754,12 +113695,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 27,
+          "line": 28,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 46,
+          "line": 47,
           "jsonPointer": null
         },
         {
@@ -113855,12 +113796,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 28,
+          "line": 29,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 47,
+          "line": 48,
           "jsonPointer": null
         },
         {
@@ -113956,12 +113897,12 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
-          "line": 29,
+          "line": 30,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/P40-ORGANIZATION-LIST-SOURCE-MAPPING.md",
-          "line": 48,
+          "line": 49,
           "jsonPointer": null
         },
         {
@@ -114067,12 +114008,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 178,
+          "line": 185,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
-          "line": 178,
+          "line": 185,
           "jsonPointer": null
         }
       ],
@@ -163367,6 +163308,18 @@
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#2d610959fc00fb96.1",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
       "line": 126,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1",
+      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+      "line": 182,
+      "disposition": "source-identity-changed-not-safe-to-delete"
+    },
+    {
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#20080e701de7f5cb.1",
+      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+      "line": 183,
       "disposition": "source-identity-changed-not-safe-to-delete"
     },
     {

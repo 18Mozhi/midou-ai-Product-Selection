@@ -6,7 +6,7 @@ import ts from "typescript";
 import { accountCaptureStages } from "./ui-phase2-account-historical-capture.mjs";
 
 export const accountReplayRoot = "output/playwright/p39-current-replay-r2";
-export function accountReplayDriver(stage, source) {
+export function accountReplayDriver(stage, source, outputRoot = accountReplayRoot) {
   assert.ok(Object.hasOwn(accountCaptureStages, stage), "Unknown P39 replay stage");
   const entry = accountCaptureStages[stage];
   source = source.replaceAll("\r\n", "\n");
@@ -17,7 +17,7 @@ export function accountReplayDriver(stage, source) {
   );
   const before = `const output = "${entry.folder}";`;
   assert.equal(source.split(before).length, 2, "One exact output-only substitution");
-  source = source.replace(before, `const output = "${accountReplayRoot}/${stage}";`);
+  source = source.replace(before, `const output = "${outputRoot}/${stage}";`);
   const ast = ts.createSourceFile(entry.driver, source, ts.ScriptTarget.Latest, true);
   const replacements = ast.statements.filter(ts.isImportDeclaration).map((node) => {
     const specifier = node.moduleSpecifier.text;

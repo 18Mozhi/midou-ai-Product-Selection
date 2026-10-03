@@ -330,8 +330,10 @@ html[data-design="signal-ledger"] body small.p44-admin-create-help:hover {
   padding: 14px 0 0;
   border-top: 1px solid var(--account-org-line);
 }
-#app .role-shell .p44-admin-create-dialog :is(button, input, select):focus-visible {
-  outline: 3px solid var(--account-org-focus-strong);
+:global(
+  body dialog.p43-account-dialog.p44-admin-create-dialog :is(button, input, select):focus-visible
+) {
+  outline: 3px solid var(--account-org-blue);
   outline-offset: 3px;
 }
 @media (max-width: 640px) {

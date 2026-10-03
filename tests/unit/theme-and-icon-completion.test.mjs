@@ -469,7 +469,12 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       const palette = source.replace(/\/\*[\s\S]*?\*\//g, "").trim();
       assert.match(
         palette,
-        /^html:has\(body #app \.account-center--review\)\s*\{(?:\s*--account-review-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}\s*html:has\(body #app \.account-center--organization-review\),\s*html:has\(body #app \.account-center--user-admin-c\),\s*html:has\(body #app \.account-center--admins-c\),\s*html:has\(body #app \.account-center--users-c\)\s*\{(?:\s*--account-org-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}\s*html:has\(body #app \.account-center--users-c\)\s*\{(?:\s*--account-users-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}$/,
+        new RegExp(
+          String.raw`^html:has\(body #app \.account-center--review\)\s*\{(?:\s*--account-review-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}` +
+            String.raw`\s*html:has\(body #app \.account-center--organization-review\),\s*html:has\(body #app \.account-center--user-admin-c\),\s*html:has\(body #app \.account-center--admins-c\),\s*html:has\(body #app \.account-center--users-c\)\s*\{(?:\s*--account-org-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}` +
+            String.raw`\s*html:has\(body #app \.account-center--users-c\)\s*\{(?:\s*--account-users-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}` +
+            String.raw`\s*html:has\(body #app \.account-center--review \.account-filter--overview-c\)\s*\{(?:\s*--p39-[a-z-]+:\s*(?:#[0-9a-f]{3,8}|rgba?\([^;]+\));)+\s*\}$`,
+        ),
       );
       continue;
     }

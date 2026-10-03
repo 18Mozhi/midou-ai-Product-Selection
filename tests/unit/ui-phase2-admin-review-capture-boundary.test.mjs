@@ -22,6 +22,7 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const directoryFile = "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue";
+const filtersFile = "apps/web/src/components/PlatformAccountDirectoryFilters.vue";
 function neutralImports(source) {
   const ast = ts.createSourceFile("driver.mjs", source, ts.ScriptTarget.Latest, true);
   for (const node of ast.statements.filter(ts.isImportDeclaration).reverse()) {
@@ -33,7 +34,8 @@ function neutralImports(source) {
 test("P44 current layout insertion preserves the later administrator heading and all native bindings", () => {
   const source = read("apps/web/src/components/PlatformAccountCenter.vue"),
     transformed = adminPagePreview(source, "parent");
-  const directory = read(directoryFile);
+  const directory = read(directoryFile),
+    filters = read(filtersFile);
   assert.equal(
     parse(source).descriptor.scriptSetup.content,
     parse(transformed).descriptor.scriptSetup.content,
@@ -62,7 +64,8 @@ test("P44 current layout insertion preserves the later administrator heading and
   assert.match(source, /<PlatformAccountDirectoryWorkspace/);
   assert.match(directory, /class="admin-directory-heading"/);
   assert.match(directory, /<PlatformRoleComparison/);
-  assert.match(directory, /'account-filter--admins-c': props\.adminListRoute/u);
+  assert.match(directory, /<PlatformAccountDirectoryFilters/);
+  assert.match(filters, /'account-filter--admins-c': props\.adminListRoute/u);
   assert.throws(
     () => adminPagePreview(source.replace('@load="load"', '@load="changed"'), "parent"),
     /bridge drift/,
@@ -70,7 +73,7 @@ test("P44 current layout insertion preserves the later administrator heading and
 });
 test("P44 replay only redirects output, adds scoped CSS and resolves imports; every original assertion remains", () => {
   for (const [stage, entry] of Object.entries(adminReviewCaptureStages)) {
-    const original = read(entry.driver),
+    const original = adminReviewHistoricalCapture(stage).source(entry.driver),
       transformed = adminReviewReplayDriver(stage, original);
     assert.throws(
       () => adminReviewReplayDriver(stage, original + "\n"),
@@ -82,18 +85,57 @@ test("P44 replay only redirects output, adds scoped CSS and resolves imports; ev
       assert.doesNotMatch(transformed, /\.p43-user-fields-body|\.p43-user-intro/);
       continue;
     }
-    assert.equal(
-      neutralImports(transformed)
-        .replace(`sources.add(${JSON.stringify(adminReviewReplayStyle)});\n`, "")
-        .replace(adminReviewStyleImport, "")
+    let normalized = neutralImports(transformed)
+      .replace(`sources.add(${JSON.stringify(adminReviewReplayStyle)});\n`, "")
+      .replace(adminReviewStyleImport, "")
+      .replace(
+        `const output = "${adminReviewReplayRoot}/${stage}";`,
+        stage.startsWith("boundary-")
+          ? 'const output = "output/playwright/p44-page-boundary-vue-" + (baseline ? "baseline" : "preview");'
+          : `const output = "${entry.folder}";`,
+      );
+    if (["page", "assembly", "boundary-baseline", "boundary-preview"].includes(stage))
+      normalized = normalized
+        .replace("正在读取可授权账号…", "正在读取真实组织与用户…")
+        .replace("暂时无法读取可授权账号。", "暂时无法读取。")
         .replace(
-          `const output = "${adminReviewReplayRoot}/${stage}";`,
-          stage.startsWith("boundary-")
-            ? 'const output = "output/playwright/p44-page-boundary-vue-" + (baseline ? "baseline" : "preview");'
-            : `const output = "${entry.folder}";`,
-        ),
-      neutralImports(original),
-    );
+          `        if (state === "directory") {
+          const directoryAnchor = page.locator(
+            width <= 760 ? ".admin-directory-heading" : ".account-page-main",
+          );
+          await directoryAnchor.evaluate((node) =>
+            window.scrollTo(0, node.getBoundingClientRect().top + window.scrollY - 24),
+          );
+        }`,
+          `        if (state === "directory")
+          await page
+            .locator(".p43-directory-heading")
+            .evaluate((node) =>
+              window.scrollTo(0, node.getBoundingClientRect().top + window.scrollY - 24),
+            );`,
+        )
+        .replace(
+          'await shot("directory", width <= 760 ? ".admin-directory-heading" : ".account-page-main");',
+          'await shot("directory", ".p43-directory-heading");',
+        )
+        .replaceAll(".admin-directory-heading", ".p43-directory-heading")
+        .replace(
+          "dialog.detail-dialog[open] .user-detail-toolbar",
+          "dialog.p43-user-detail[open] > section > header",
+        )
+        .replaceAll("dialog.detail-dialog", "dialog.p43-user-detail")
+        .replaceAll(".user-detail-shell", ".detail-grid")
+        .replaceAll(".admin-comparison-workspace", ".p44-comparison");
+    if (stage === "assembly" || stage.startsWith("boundary-"))
+      normalized = normalized
+        .replace(".account-page-rail", ".p43-context")
+        .replace(".account-page-main", ".p43-directory");
+    if (stage === "boundary-preview")
+      normalized = normalized.replace(
+        '["navigation", page.locator(\'.account-tabs a[aria-current="page"]\'), "rgb(66, 118, 223)"]',
+        '["navigation", page.locator(\'.account-tabs a[aria-current="page"]\'), "rgb(255, 255, 255)"]',
+      );
+    assert.equal(normalized, neutralImports(original));
   }
   assert.throws(() => adminReviewReplayDriver("../outside", ""), /Unknown P44 replay stage/);
 });
@@ -129,6 +171,16 @@ test("P44 cross-run URL comparison ignores only a verified local port, never rou
   drift[0].actual = 100;
   assert.throws(() => assertAdminReviewChecks("comparison", drift, original));
 });
+test("P44 boundary preview accepts only the approved blue active-navigation focus change", () => {
+  const original = JSON.parse(adminReviewHistoricalCapture("boundary-preview").manifest).checks,
+    current = structuredClone(original);
+  for (const check of current)
+    if (check.name === "navigation:outline color") check.actual = "rgb(66, 118, 223)";
+  assertAdminReviewChecks("boundary-preview", current, original);
+  const drift = structuredClone(current);
+  drift.find((check) => check.name === "navigation:outline width").actual = "2px";
+  assert.throws(() => assertAdminReviewChecks("boundary-preview", drift, original));
+});
 test("P44 inset reconciliation is review-only, mobile-only and changes only margin/padding", () => {
   const css = read(adminReviewReplayStyle);
   assert.match(css, /@media \(max-width: 760px\)/);
@@ -158,7 +210,7 @@ test("P44 completed capture cannot be restarted, resumed or overwritten", () => 
 });
 test("P44 current replay keeps raw source hashes, original checks, images and request evidence separate", () => {
   const e = JSON.parse(read(`${adminReviewReplayRoot}/evidence.json`));
-  assert.equal(e.kind, "P44-current-replay-r4");
+  assert.equal(e.kind, "P44-current-replay-r43");
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.deepEqual(

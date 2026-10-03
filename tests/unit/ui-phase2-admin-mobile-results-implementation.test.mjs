@@ -16,7 +16,7 @@ const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-results-implementation/";
 const evidence = (mode) =>
-  JSON.parse(read(folder + (mode === "current" ? "current-r6" : mode) + "/evidence.json"));
+  JSON.parse(read(folder + (mode === "current" ? "current-r8" : mode) + "/evidence.json"));
 const baseline = adminHistoricalCapture("results-baseline");
 const implemented = adminHistoricalCapture("results-implemented");
 const before = baseline.evidence,
@@ -37,13 +37,13 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     const capture =
       mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
     const e = capture ? capture.evidence : evidence(mode),
-      dir = folder + (mode === "current" ? "current-r6" : mode);
+      dir = folder + (mode === "current" ? "current-r8" : mode);
     assert.equal(e.kind, "P44-MOBILE-RESULTS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
     assert.equal(e.processesClosed, true);
     assert.equal(e.checks.length, mode === "baseline" ? 148 : 234);
     assert.equal(e.screenshots.length, 48);
-    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 50 : 36);
+    assert.equal(Object.keys(e.sourceHashes).length, mode === "current" ? 51 : 36);
     if (mode === "baseline")
       assert.equal(read(folder + "baseline/evidence.json"), capture.manifest);
     if (mode === "current") {
@@ -54,6 +54,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
         [
           "apps/web/src/components/PlatformAccountCenterAdmin.css",
           "apps/web/src/components/PlatformAccountCenterPermissions.css",
+          "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
           "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
           "apps/web/src/components/PlatformAccountGlobalRail.vue",
           "apps/web/src/components/PlatformAccountUsersC.css",

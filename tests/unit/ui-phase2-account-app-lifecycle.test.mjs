@@ -11,7 +11,8 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const root = "output/playwright/p43-actual-app-lifecycle-r1";
-const currentRoot = "output/playwright/p43-actual-app-lifecycle-r2";
+const currentRoot = "output/playwright/p43-actual-app-lifecycle-r3";
+const priorCurrentRoot = "output/playwright/p43-actual-app-lifecycle-r2";
 const manifestHash = "742a2d8290fd0ae1ac6afce0197e7779c75187cb782cdb0f1e6a03f20d484aed";
 
 test("actual App fixtures retain original account, navigation, dashboard and known membership omission", () => {
@@ -113,17 +114,17 @@ test("r1 App source inventory stays pinned as historical evidence", () => {
   assert.ok(driver.includes("page.goForward()") && driver.includes("page.goBack()"));
 });
 
-test("r2 App source inventory binds the current untransformed router and KeepAlive composition", () => {
+test("r3 App source inventory binds the current untransformed router and KeepAlive composition", () => {
   const bytes = readFileSync(`${currentRoot}/evidence.json`),
     evidence = JSON.parse(bytes);
-  assert.equal(evidence.kind, "P43-ACTUAL-APP-LIFECYCLE-r2");
+  assert.equal(evidence.kind, "P43-ACTUAL-APP-LIFECYCLE-r3");
   assert.equal(evidence.functionalOnly, true);
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.runs.length, 16);
   assert.equal(evidence.screenshots.length, 48);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 141);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 142);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, `Current r2 source drift: ${file}`);
+    assert.equal(hash(read(file)), expected, `Current r3 source drift: ${file}`);
   assert.equal(
     evidence.sourceHashes["apps/web/src/components/AccountShell.vue"],
     hash(read("apps/web/src/components/AccountShell.vue")),
@@ -150,7 +151,7 @@ test("capture duplicate is rejected before starting a browser or server without 
 });
 
 test("r2 capture duplicate is rejected before starting a browser or server", () => {
-  const bytes = readFileSync(`${currentRoot}/evidence.json`),
+  const bytes = readFileSync(`${priorCurrentRoot}/evidence.json`),
     result = spawnSync(
       process.execPath,
       ["scripts/verify-ui-phase2-account-app-lifecycle.mjs", "--capture-r2"],
@@ -159,5 +160,5 @@ test("r2 capture duplicate is rejected before starting a browser or server", () 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /EEXIST/);
   assert.ok(!result.stdout.includes("P43 actual App lifecycle http"));
-  assert.equal(hash(readFileSync(`${currentRoot}/evidence.json`)), hash(bytes));
+  assert.equal(hash(readFileSync(`${priorCurrentRoot}/evidence.json`)), hash(bytes));
 });
