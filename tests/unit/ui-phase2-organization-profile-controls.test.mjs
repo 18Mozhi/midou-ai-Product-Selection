@@ -52,7 +52,7 @@ test("P29 business source controls remain three actions, not 22 invented actions
   ]);
   const candidates = scanSource(source, sourceFile).candidates;
   for (const signature of [
-    "b11692c0597885e3.1",
+    "a1fb5dc1b30f9733.1",
     "97ed4772fb320d6c.1",
     "d6b520278ab3dd57.1",
     "5878e30377f290ae.1",

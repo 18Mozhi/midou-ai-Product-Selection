@@ -48,6 +48,7 @@ export async function buildOrganizationProfileDesignData(repo) {
     ]
       .map((n) => extract(vue, n, "function"))
       .join("\n");
+  const teamRecoverySequence = extract(vue, "teamRecoverySequence");
   class Failure extends Error {
     constructor(kind = "blocked") {
       super("synthetic failure");
@@ -70,6 +71,7 @@ export async function buildOrganizationProfileDesignData(repo) {
           "requestId",
           "busy",
           "refreshing",
+          "teamRecoveryRefreshing",
           "lastReadFailureStatus",
           "secret",
         ].map((k) => [
@@ -85,7 +87,7 @@ export async function buildOrganizationProfileDesignData(repo) {
       );
     let wrote = false;
     const h = run(
-      `let loadSequence=0,tokenSecretGeneration=0,surfaceActive=true; const view={value:'summary'}; ${functions}\nexport const h={load,submit,validateHttps,clearFieldValidity};`,
+      `let loadSequence=0,tokenSecretGeneration=0,surfaceActive=true,teamRecoverySequence=${teamRecoverySequence}; const view={value:'summary'}; ${functions}\nexport const h={load,submit,validateHttps,clearFieldValidity};`,
       {
         ...refs,
         ApiClientError: Failure,
