@@ -8,6 +8,8 @@
 
 ## 故障定位
 
+- 首页生产验收：本地执行 `node scripts/verify-home-dashboard-live.mjs --baota-production`。探针通过固定宝塔节点连接生产 MySQL，只预检 `home_dashboard_items` 等既有 schema，不执行 DDL；会写入随机临时验收数据并在结束时清理，不要中断清理步骤。
+
 - 首页显示“未配置”：检查活动会话的组织/工作区及 `trend_monitoring_rules.status='enabled'`；展开“运行详情”后，“监控平台”步骤必须是未完成且显示零条规则。存在规则但显示“需处理”时，继续检查最近规则采集任务的阻断/失败状态；不得用前端假状态改成“运行中”。
 - 首页无推荐：先检查 `opportunity_rule_matches`、规则启用状态、`recommendation_min_source_count` 与机会 `source_count`。达到门槛后应只增加“规则命中候选”；再依次核对评分结论与完整覆盖、市场分、竞争分、利润成本计算和风险输入。任何一项未通过都不进入推荐清单。
 - 次要行动为空：检查本人未完成任务、本人当前审批节点、本人待决策机会，以及 `home_dashboard_items` 的 capability、受众、站内 route、`source_version` 与 `observed_at`。这些范围为空时保留自动选品控制台，不应把整个首页伪装为故障。

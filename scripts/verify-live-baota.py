@@ -13,7 +13,7 @@ from urllib.parse import quote
 
 def main() -> int:
     probe = sys.argv[1] if len(sys.argv) == 2 else ""
-    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery"}:
+    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard"}:
         raise SystemExit("unsupported BaoTa live probe")
 
     repo = pathlib.Path(__file__).resolve().parents[1]
@@ -48,7 +48,7 @@ def main() -> int:
         script_path = repo / "scripts" / f"verify-{probe}-live.mjs"
         source = script_path.read_text(encoding="utf-8")
         package_names = ["config"]
-        if probe in {"mysql", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery"}:
+        if probe in {"mysql", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard"}:
             package_names.append("database")
         if probe == "theme-preferences":
             package_names.append("preferences")
@@ -126,6 +126,7 @@ def main() -> int:
                 source = source.replace(old, json.dumps("file://" + quote(remote_path, safe="/")), 1)
 
         repository_imports = {
+            "home-dashboard": ("../apps/api/dist/mysql-home-dashboard-repository.js",),
             "discovery": ("../apps/api/dist/mysql-discovery-repository.js",),
             "theme-preferences": ("../apps/api/dist/mysql-ui-preference-repository.js",),
             "resource-grants": (
@@ -148,6 +149,15 @@ def main() -> int:
             old = next((candidate for candidate in candidates if source.count(candidate) == 1), None)
             if old is None:
                 raise RuntimeError("local discovery probe service import mismatch")
+            remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
+            source = source.replace(old, json.dumps("file://" + quote(remote_path, safe="/")), 1)
+
+        if probe == "home-dashboard":
+            import_path = "../apps/api/dist/home-dashboard-service.js"
+            candidates = (f"'{import_path}'", f'"{import_path}"')
+            old = next((candidate for candidate in candidates if source.count(candidate) == 1), None)
+            if old is None:
+                raise RuntimeError("local home dashboard probe service import mismatch")
             remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
             source = source.replace(old, json.dumps("file://" + quote(remote_path, safe="/")), 1)
 

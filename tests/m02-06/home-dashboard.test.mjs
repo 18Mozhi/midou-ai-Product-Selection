@@ -310,6 +310,9 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
     assert.match(repo, new RegExp(rule));
   assert.match(selectionPolicy, /opportunity_rule_matches orm_gate/);
   assert.match(selectionPolicy, /recommendation_status='recommend'/);
+  assert.match(liveProbe, /--baota-production/);
+  assert.match(liveProbe, /assertSchemaReady/);
+  assert.doesNotMatch(liveProbe, /CREATE TABLE|ALTER TABLE/i);
   for (const prerequisite of [
     "INSERT INTO trend_topics",
     "INSERT INTO trend_monitoring_rules",
