@@ -4,7 +4,7 @@
 
 在宝塔备份 product_scout 后，按 `0010a`、`0010b`、`0010c`、`0010d`、`0010e`、`0010f`、`0010g` 顺序执行 up 迁移。发布 Web/API 构建并仅通过宝塔重启 Node API；API 代码和连接池在启动时加载，必须重启。Web 静态资源按宝塔站点发布规则替换。M01-03 没有 Worker/Crawler 逻辑或新环境变量，二者无需重启，`config/env.example` 也无需增加键。
 
-执行 `npm run build`、三个 `tests/m01-03` 测试、`node scripts/verify-tenancy-live.mjs`、M01-03 Playwright 和 `npm run verify:module -- M01-03`。真实数据库探针必须显示 MySQL 5.7、product_scout 业务账号、utf8mb4、跨组织拒绝、上下文审计和测试数据清理通过。
+执行 `npm run build`、三个 `tests/m01-03` 测试、M01-03 Playwright 和 `npm run verify:module -- M01-03`。真实数据库探针必须显示 MySQL 5.7、product_scout 业务账号、utf8mb4、跨组织拒绝、上下文审计和测试数据清理通过。默认 `node scripts/verify-tenancy-live.mjs` 连接本机配置；没有隔离测试库且已授权使用生产库时，设置 `$env:SCOUTOPS_TENANCY_LIVE_TARGET='baota-production'` 后运行同一命令，通过固定宝塔节点读取受限运行环境。生产探针只做 schema 预检，不执行迁移；使用随机账号、组织和工作区进行临时验证并在结束时清理，不修改既有业务记录。
 
 人工检查：已有成员登录后进入 `/select-context`，只能看到本人活动成员资格对应的活动组织；已归档组织即使仍残留活动成员关系也不得显示。选择组织后只能看到该组织工作区/团队摘要。没有任何可用活动组织的新账号应看到“创建并进入选品空间”，点击一次后创建固定个人组织、默认工作区、组织管理员角色和组织范围并直接进入 `/home`；重复请求不得创建第二个组织。归档工作区不可进入；选择成功后刷新后续页面应由服务端会话上下文确定范围，浏览器不能提交 actor_id/session_id。
 

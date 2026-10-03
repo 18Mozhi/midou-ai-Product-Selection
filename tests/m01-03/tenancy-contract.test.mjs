@@ -11,6 +11,12 @@ test("M01-03.A16 live cleanup removes downstream membership dependents first", a
   assert.ok(roleCleanup >= 0 && scopeCleanup >= 0);
   assert.ok(roleCleanup < parentCleanup && scopeCleanup < parentCleanup);
   assert.match(probe, /information_schema\.tables/);
+  assert.match(probe, /assertSchemaReady/);
+  assert.doesNotMatch(probe, /CREATE TABLE|ALTER TABLE|readFile\(.*migrations/);
+  assert.match(probe, /SCOUTOPS_TENANCY_LIVE_TARGET/);
+  const runner = await read("scripts/verify-live-baota.py");
+  assert.match(runner, /"tenancy"/);
+  assert.match(runner, /mysql-tenancy-repository\.js/);
 });
 test("M01-03.A03/A13 migrations are MySQL57 scoped and reversible in dependency order", async () => {
   const names = [
@@ -125,7 +131,9 @@ test("M01-03.A01/A05/A10/A11/A17 docs and machine map state exact non-goals and 
   assert.match(map, /tenancyContext/);
   assert.match(blueprint, /M01-03 组织与工作区上下文基线/);
   assert.match(docsGate, /m01-03-tenancy-context/);
-  assert.doesNotMatch(env, /M01_03|TENANCY_|ORGANIZATION_DEFAULT/);
+  assert.doesNotMatch(env, /M01_03|ORGANIZATION_DEFAULT/);
+  assert.match(env, /SCOUTOPS_TENANCY_LIVE_TARGET=local/);
+  assert.match(map, /SCOUTOPS_TENANCY_LIVE_TARGET=baota-production/);
   for (let index = 1; index <= 17; index++)
     assert.match(registry, new RegExp(`M01-03\\.A${String(index).padStart(2, "0")}`));
 });
