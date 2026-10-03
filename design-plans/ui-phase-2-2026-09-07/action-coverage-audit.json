@@ -525,7 +525,7 @@
     "scripts/verify-ui-phase2-org-audit-controls.mjs": "97846b5e70b74a6a2246c0b96d9e6afee4ab8691febdfe0c6fb7685b5335e9eb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P38.json": "521be907f647710e4d716c11b0e5f90775878009e3bc11a5170337582a5b429d",
     "scripts/verify-ui-phase2-platform-overview-c.mjs": "b7049fb563871534d11742ebf0a42e51d0ecb9505eaa4cb2472ff26c631ee37b",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P39.json": "98dc94c6ca4ffe48266a792c461c24d14028272005a2824bfe77c91b038438e4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P39.json": "4290e5fab082d18b0656dbbe817d6360f7320d84354dce801d6682a083402f20",
     "scripts/verify-ui-phase2-account-overview-c.mjs": "311828bc0e24463f905f0020d001177a648f29b3822df4d708f33fd28ac9dbca",
     "tests/unit/frontend-component-boundary.test.mjs": "20a45d388677dfc25aa78583fbaeb57a7d961f01822d638108261bce3dc3c779",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P40.json": "62f3563760f6226e7e38ad6909509e0831870a75b28bc6252acb3aae09baa952",
@@ -2429,7 +2429,7 @@
       "userReview": "pending",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
-        "本审阅只覆盖P39目录与组织记录子组件22个源码位置；P39其余父组件按钮、输入、弹窗和壳层动作尚未纳入。",
+        "本审阅只覆盖P39目录与组织记录子组件24个源码位置；P39其余父组件按钮、输入、弹窗和壳层动作尚未纳入。",
         "P40-P44共享组件条件分支显式排除于P39，不等于对应目的页动作已审阅。",
         "视觉方向已获用户统一授权继续实施；逐控件六态映射、真实App壳/KeepAlive、RBAC、组织读取与生产验收仍分开核验。"
       ]
