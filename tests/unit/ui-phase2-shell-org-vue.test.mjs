@@ -39,8 +39,8 @@ test("organization proposal changes only heading and CSS beyond existing shell p
   const proposed = previewOrgSummary(production);
   assert.equal(
     proposed.replace(
-      '<h2>{{ view === "summary" && data?.name ? data.name : title }}</h2>',
-      "<h2>{{ title }}</h2>",
+      '>{{ view === "summary" && data?.name ? data.name : title }}</component',
+      ">{{ title }}</component",
     ),
     production,
   );
@@ -58,7 +58,7 @@ test("organization proposal changes only heading and CSS beyond existing shell p
     [],
   );
   assert.throws(() =>
-    previewOrgSummary(production.replace("<h2>{{ title }}</h2>", "<h2>{{ changed }}</h2>")),
+    previewOrgSummary(production.replace(">{{ title }}</component", ">{{ changed }}</component")),
   );
 });
 test("organization capture binds all current loaded sources and requested images", async () => {

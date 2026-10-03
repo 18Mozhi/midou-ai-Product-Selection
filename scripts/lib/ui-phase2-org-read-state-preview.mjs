@@ -6,7 +6,7 @@ export const orgReadStateCss =
 export const reloadFocusScript = `function reloadFromControl(event: MouseEvent) {
   const trigger = event.currentTarget;
   if (trigger instanceof HTMLButtonElement && document.activeElement === trigger) {
-    const heading = trigger.closest(".org-admin-center")?.querySelector<HTMLElement>(".org-admin-hero h2");
+    const heading = trigger.closest(".org-admin-center")?.querySelector<HTMLElement>(".org-admin-hero :is(h1, h2)");
     if (heading?.isConnected && !heading.closest("[inert]")) heading.focus({ preventScroll: true });
   }
   return load();
@@ -26,8 +26,8 @@ export const orgReadStateReplacements = [
     "v-if=\"notice && (view !== 'summary' || ['ready', 'empty'].includes(state))\"\n      class=\"org-admin-notice\"",
   ],
   [
-    '<section v-if="state === \'loading\'" class="org-admin-state">正在读取当前组织数据…</section>',
-    '<section v-if="state === \'loading\'" class="org-admin-state" role="status"><h3>正在读取组织资料</h3><p>读取完成后显示当前组织内容。</p></section>',
+    "<template v-else>正在读取当前组织数据…</template>",
+    "<template v-else><h3>正在读取组织资料</h3><p>读取完成后显示当前组织内容。</p></template>",
   ],
   [
     'class="org-admin-state"\n    >\n      <h3>',
@@ -38,7 +38,7 @@ export const orgReadStateReplacements = [
     '<p>{{ notice }}</p>\n      <button @click="load()">重新加载</button>',
     '<p>{{ notice }}</p>\n      <details v-if="requestId"><summary>本次读取追踪</summary><code>{{ requestId }}</code></details>\n      <button @click="reloadFromControl($event)">重新加载</button>',
   ],
-  ["async function load(options:", reloadFocusScript + "async function load(options:"],
+  ["async function load(", reloadFocusScript + "async function load("],
 ];
 export function previewOrgReadState(source) {
   let result = previewOrgRefresh(source);

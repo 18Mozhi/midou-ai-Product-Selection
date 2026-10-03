@@ -89,6 +89,7 @@ function harness({ failed = false, token = false, heldWrite = false, heldRead = 
     state: ref("ready"),
     busy: ref(false),
     refreshing: ref(false),
+    teamRecoveryRefreshing: ref(false),
     notice: ref(""),
     noticeKind: ref("info"),
     requestId: ref("initial"),
@@ -127,7 +128,7 @@ function harness({ failed = false, token = false, heldWrite = false, heldRead = 
   };
   vm.runInNewContext(
     ts.transpileModule(
-      `let loadSequence=0;let tokenSecretGeneration=0;let surfaceActive=true;\n${saveReceiptScript}\n${functions.join("\n")}\nglobalThis.submit=submit;globalThis.receipt=profileSaveReceipt;globalThis.clear=clearProfileReceipt;globalThis.invalidate=()=>{loadSequence++};`,
+      `let loadSequence=0;let tokenSecretGeneration=0;let teamRecoverySequence=0;let surfaceActive=true;\n${saveReceiptScript}\n${functions.join("\n")}\nglobalThis.submit=submit;globalThis.receipt=profileSaveReceipt;globalThis.clear=clearProfileReceipt;globalThis.invalidate=()=>{loadSequence++};`,
       { compilerOptions: { target: ts.ScriptTarget.ES2022 } },
     ).outputText,
     box,

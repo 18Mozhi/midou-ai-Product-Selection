@@ -6,11 +6,11 @@ import ts from "typescript";
 export const orgFixtureFile = "tests/e2e/m06-01-organization-admin.spec.ts";
 export const orgReviewCss = "design-plans/ui-phase-2-2026-09-07/implementation/shell-org-vue-c.css";
 export function previewOrgSummary(source) {
-  const before = "<h2>{{ title }}</h2>";
+  const before = ">{{ title }}</component";
   assert.equal(source.split(before).length, 2, "Organization heading anchor changed");
   return source.replace(
     before,
-    '<h2>{{ view === "summary" && data?.name ? data.name : title }}</h2>',
+    '>{{ view === "summary" && data?.name ? data.name : title }}</component',
   );
 }
 export async function buildShellOrgFixture() {

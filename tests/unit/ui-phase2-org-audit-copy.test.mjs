@@ -39,6 +39,7 @@ function mount() {
     scope = effectScope();
   const sandbox = {
     computed,
+    nextTick,
     ref,
     watch,
     defineProps: () => props,

@@ -49,18 +49,18 @@ export const saveReceiptMarkup = `<section v-if="view === 'summary' && profileSa
       <details><summary>保存与读取追踪</summary><dl><div><dt>保存请求</dt><dd><code>{{ profileSaveReceipt.writeId }}</code></dd></div><div v-if="profileSaveReceipt.readId"><dt>页面读取</dt><dd><code>{{ profileSaveReceipt.readId }}</code></dd></div></dl></details>
     </section>`;
 export const saveFeedbackReplacements = [
-  ["async function load(options:", saveReceiptScript + "async function load(options:"],
+  ["async function load(", saveReceiptScript + "async function load("],
   [
     "  if (!options.preserveNotice) {",
     "  if (!options.preserveNotice) {\n    clearProfileReceipt();",
   ],
   [
-    '      : "empty";\n  } catch (error) {',
+    '      : "empty";\n    return true;\n  } catch (error) {',
     '      : "empty";\n    return { ok: true, requestId: viewResponse.requestId };\n  } catch (error) {',
   ],
   [
-    "    lastReadFailureStatus.value = failure?.status ?? null;\n    rethrowUnexpectedError(error);",
-    "    lastReadFailureStatus.value = failure?.status ?? null;\n    rethrowUnexpectedError(error);\n    return { ok: false, requestId: requestId.value };",
+    "    lastReadFailureStatus.value = failure?.status ?? null;\n    options.onReadFailure?.(error);\n    rethrowUnexpectedError(error);",
+    "    lastReadFailureStatus.value = failure?.status ?? null;\n    options.onReadFailure?.(error);\n    rethrowUnexpectedError(error);\n    return { ok: false, requestId: requestId.value };",
   ],
   [
     "  const secretGeneration = tokenSecretGeneration;",
@@ -71,14 +71,23 @@ export const saveFeedbackReplacements = [
   const ownsProfileWrite = () => surfaceActive && receiptGeneration === profileReceiptGeneration;`,
   ],
   [
-    '    if (!options.preserveForm) form.value = { reason: "" };\n    await load({ background: true, preserveNotice: true });',
+    `    if (!options.preserveForm) form.value = { reason: "" };
+    await load({
+      background: true,
+      preserveNotice: true,
+      onReadFailure: (error) => options.onRefreshFailure?.(error, writeRequestId),
+    });`,
     `    if (profileWrite && !ownsProfileWrite()) return true;
     if (!options.preserveForm) form.value = { reason: "" };
     if (profileWrite) {
       notice.value = "";
       profileSaveReceipt.value = { phase: "pending", writeId: writeRequestId, readId: "" };
     }
-    const readOutcome = await load({ background: true, preserveNotice: true });
+    const readOutcome = await load({
+      background: true,
+      preserveNotice: true,
+      onReadFailure: (error) => options.onRefreshFailure?.(error, writeRequestId),
+    });
     if (profileWrite) {
       if (!ownsProfileWrite()) return true;
       if (!readOutcome) { clearProfileReceipt(); return true; }
