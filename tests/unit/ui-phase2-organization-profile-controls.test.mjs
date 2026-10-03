@@ -64,7 +64,7 @@ test("P29 business source controls remain three actions, not 22 invented actions
     );
   assert.match(
     source,
-    /submit\('\/org\/admin\/profile', \{ \.\.\.form, expected_version: data.version \}, 'PATCH'\)/,
+    /submit\(\s*'\/org\/admin\/profile', \{ \.\.\.form, expected_version: data\.version \}, 'PATCH'\)/,
   );
   assert.match(source, /@invalid="validateHttps"/);
   assert.match(source, /@input="clearFieldValidity"/);
@@ -98,7 +98,7 @@ test("P29 navigation selection, disclosure and unresolved-save protection are pr
 test("P29 reuses source-function and validator checks without claiming real transactions", async () => {
   const data = await buildOrganizationProfileDesignData(path.resolve("."));
   assert.equal(data.sourceChecks.length, 6);
-  assert.ok(data.sourceChecks.some((v) => v.includes("OG-G02 reproduced")));
+  assert.ok(data.sourceChecks.some((v) => v.includes("write/read IDs")));
   assert.equal(data.summary.workspaces.total, 8);
   assert.equal(data.workspaces.length, 1);
 });

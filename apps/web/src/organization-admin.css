@@ -522,6 +522,16 @@
 .org-admin-notice code {
   float: right;
 }
+.org-admin-write-read-ids {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  margin-top: 8px;
+}
+.org-admin-write-read-ids code {
+  float: none;
+  overflow-wrap: anywhere;
+}
 .org-admin-metrics {
   margin-top: 16px;
   display: grid;
@@ -672,6 +682,14 @@
 .org-admin-card form,
 .org-admin-card label {
   display: grid;
+}
+.org-admin-profile-save-fields {
+  display: grid;
+  gap: 15px;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 .org-admin-card label {
   margin: 10px 0;

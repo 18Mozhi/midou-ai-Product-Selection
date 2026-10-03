@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2"
   },
   "actions": [
     {
@@ -97,6 +97,10 @@
         {
           "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
           "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "tests/e2e/m06-01-organization-admin.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
         }
       ],
       "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
@@ -499,7 +503,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2"
         }
       }
     },
@@ -515,8 +519,8 @@
         "OG-PROFILE-SAVE"
       ],
       "contractAliasReason": "沿F04完整语义末列显式合并表单/保存及共享原因调用；不从按钮文案推断动作。",
-      "condition": "summary内联表单；原生校验，busy禁用按钮，submit亦busy早退",
-      "handler": "submit('/org/admin/profile',{...form,expected_version:data.version},'PATCH')；写成功后重读；OG-G02成功覆盖重读失败仍存在",
+      "condition": "summary内联表单；原生校验，busy或已接受保存但资料重读失败时禁用字段与按钮；submit亦busy早退",
+      "handler": "既有内联submit继续调用PATCH /org/admin/profile及expected_version；写后GET自动重试仍失败时展示分开的写入/读取请求编号并锁定字段组，手动刷新只重读、不重放PATCH（OG-G02已修复）",
       "variants": [
         "editing",
         "save_busy",
@@ -799,7 +803,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2"
         }
       }
     },
@@ -969,7 +973,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2"
     },
     "inputs": [
       {

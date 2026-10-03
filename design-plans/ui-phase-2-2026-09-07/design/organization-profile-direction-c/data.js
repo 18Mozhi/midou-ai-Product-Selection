@@ -73,7 +73,7 @@ window.ORG_PROFILE_C_DATA = {
   sourceChecks: [
     "Three source read paths and exact versioned profile PATCH",
     "Source success keeps write ID; conflict keeps form; forbidden replaces page",
-    "Source refresh overwrites draft and write-read failure is swallowed (OG-G02 reproduced)",
+    "Source refresh overwrites the draft; accepted profile writes retain separate write/read IDs when refresh fails",
     "Source HTTPS custom validity and actual service field validators",
     "Source summary via inert SQL pool, zero counts and audit_logs seven-day scope",
     "No active-only workspace or timezone enum invented",

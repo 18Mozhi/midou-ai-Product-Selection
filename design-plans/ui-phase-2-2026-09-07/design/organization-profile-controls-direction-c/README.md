@@ -17,7 +17,7 @@
 | 三处技术详情   | 身份、页面反馈、表单反馈                                          | 四态；折叠内容提案，不当作原Vue按钮                      |
 | 保存结果核验   | 超时结果未确认、写入确认但重读失败                                | 禁用及完整表单反馈；仅待审保护，不计源busy或真实写入成功 |
 
-源OrganizationAdminCenter的五个本页候选：刷新a1fb5dc1b30f9733.1、重载97ed4772fb320d6c.1、提交表单d6b520278ab3dd57.1和保存按钮5878e30377f290ae.1、Logo有效性事件1cbd108c64b5230c.1。前四归三个业务动作，Logo事件是字段校验，不另造提交按钮。共享组件其它路由候选及全站正式action-reviews/P29清单仍须同级核对，本包不提升已核页数。
+源OrganizationAdminCenter的五个本页候选：刷新a1fb5dc1b30f9733.1、重载97ed4772fb320d6c.1、资料表单d6b520278ab3dd57.1及保存按钮5878e30377f290ae.1、Logo有效性事件1cbd108c64b5230c.1。前四归三个业务动作，Logo事件是字段校验，不另造提交按钮。共享组件其它路由候选及全站正式action-reviews/P29清单仍须同级核对，本包不提升已核页数。
 
 ## 设计细化
 
@@ -31,12 +31,12 @@
 
 `node scripts/verify-ui-phase2-organization-profile-controls-c.mjs --capture`：生成170张永久PNG、gallery和evidence。无参数只读复验源文件及图片hash、162状态和38点击，不重写图片。
 
-`node --test tests/unit/ui-phase2-organization-profile-controls.test.mjs`：6项源候选/精确提交绑定、图证双端、提案边界、重试适用性及原源函数校验。原源助手仍复现OG-G02，不称缺陷已修。
+`node --test tests/unit/ui-phase2-organization-profile-controls.test.mjs`：6项源候选/精确提交绑定、图证双端、提案边界、重试适用性及原源函数校验。P29 OG-G02现由Vue和本地拦截E2E覆盖；此离线图库仍只是审核提案，不等同生产事务验收。
 
 使用已有Playwright/TypeScript，无安装依赖；file页面不启动服务器，所有HTTP拦截且预期为零。鼠标呈现不改变事实/草稿/意图；真实点击仅记录PATCH六字段加expected_version或三GET意图，导航验证目标焦点和已选态，技术详情验证展开。零业务弹窗、零cookies/localStorage/sessionStorage、零页面错误。浏览器/上下文finally关闭；170图与测试/原型是永久交付，无临时下载或日志。
 
 ## 尚未完成
 
-具体用户审核、正式逐页动作/字段/容器注册、完整字段/主题/密度/角色/生命周期、真实Vue与后台事务/审计/权限、OG-G01–G06、全站实施与宝塔部署仍待。原表单刷新覆盖草稿及保存重读失败等行为没有在生产修复；P16布局批准不覆盖P29。
+具体用户审核、正式逐页动作/字段/容器注册、完整字段/主题/密度/角色/生命周期、真实后台事务/审计/权限、OG-G01及OG-G03–G06、全站实施与宝塔部署仍待。原表单刷新覆盖草稿不在本次范围；P16布局批准不覆盖P29。
 
 未改apps/packages/API/OpenAPI/env/数据库/权限/依赖或宝塔服务，无新增设置，无重启要求，未部署。按本包入口审核；如需修改图源，先重新capture再只读复验并更新全站证据索引，不能手改指纹。

@@ -579,6 +579,88 @@ test("organization overview keeps facts visible during refresh and retains audit
   await expect(page.getByRole("status")).toContainText("m06-01-e2e");
 });
 
+test("organization profile keeps an accepted save distinct from a failed refresh until GET retry", async ({
+  page,
+}) => {
+  await setup(page);
+  let profileReads = 0,
+    patchRequests = 0,
+    failedPostWriteRead = false,
+    postWriteReads = 0;
+  const submittedBodies: Array<Record<string, unknown>> = [];
+  await page.route("**/api/v1/org/admin/profile", async (route) => {
+    const request = route.request();
+    if (request.method() === "PATCH") {
+      patchRequests += 1;
+      submittedBodies.push(JSON.parse(request.postData() ?? "{}"));
+      await route.fulfill({
+        json: {
+          data: { ...profile, name: "更新后的组织", version: 4 },
+          request_id: "m06-01-profile-write-accepted",
+          trace_id: "m06-01-profile-write-accepted",
+        },
+      });
+      return;
+    }
+    profileReads += 1;
+    if (patchRequests > 0) {
+      postWriteReads += 1;
+    }
+    if (patchRequests > 0 && postWriteReads <= 3) {
+      failedPostWriteRead = true;
+      await route.fulfill({
+        status: 503,
+        json: {
+          error: {
+            code: "organization_service_unavailable",
+            message: "组织资料暂不可读取。",
+            action_hint: "检查服务状态后重试。",
+          },
+          request_id: "m06-01-profile-read-failed",
+          trace_id: "m06-01-profile-read-failed",
+        },
+      });
+      return;
+    }
+    if (patchRequests > 0) {
+      await route.fulfill({ json: env({ ...profile, name: "更新后的组织", version: 4 }) });
+      return;
+    }
+    await route.fallback();
+  });
+  await page.goto("/org-admin");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+
+  await page.getByLabel("名称").fill("更新后的组织");
+  await page.getByLabel("变更原因").fill("验证写后重读失败");
+  await page.getByRole("button", { name: "保存并审计" }).click();
+  expect(patchRequests).toBe(1);
+  expect(failedPostWriteRead).toBe(true);
+
+  const feedback = page.getByRole("alert");
+  await expect(feedback).toContainText("组织资料已保存并写入审计");
+  await expect(feedback).toContainText("当前资料显示可能是保存前快照");
+  await expect(feedback).toContainText("m06-01-profile-write-accepted");
+  await expect(feedback).toContainText("m06-01-profile-read-failed");
+  await expect(page.getByLabel("名称")).toBeDisabled();
+  await expect(page.getByRole("button", { name: "保存并审计" })).toBeDisabled();
+  expect(patchRequests).toBe(1);
+  expect(submittedBodies).toEqual([
+    expect.objectContaining({
+      name: "更新后的组织",
+      reason: "验证写后重读失败",
+      expected_version: 3,
+    }),
+  ]);
+
+  await page.getByRole("button", { name: "刷新数据" }).click();
+  await expect(page.locator(".org-admin-profile h3")).toHaveText("更新后的组织");
+  await expect(page.getByRole("alert")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "保存并审计" })).toBeEnabled();
+  expect(postWriteReads).toBe(4);
+  expect(patchRequests).toBe(1);
+});
+
 test("organization overview keeps the form available for validation and version conflicts", async ({
   page,
 }) => {

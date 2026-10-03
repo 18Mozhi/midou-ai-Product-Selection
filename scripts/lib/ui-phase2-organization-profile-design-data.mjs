@@ -69,6 +69,8 @@ export async function buildOrganizationProfileDesignData(repo) {
           "notice",
           "noticeKind",
           "requestId",
+          "writeReadFailure",
+          "profileSaveReadFailure",
           "busy",
           "refreshing",
           "teamRecoveryRefreshing",
@@ -85,7 +87,8 @@ export async function buildOrganizationProfileDesignData(repo) {
           },
         ]),
       );
-    let wrote = false;
+    let wrote = false,
+      failedPostWriteRead = false;
     const h = run(
       `let loadSequence=0,tokenSecretGeneration=0,surfaceActive=true,teamRecoverySequence=${teamRecoverySequence}; const view={value:'summary'}; ${functions}\nexport const h={load,submit,validateHttps,clearFieldValidity};`,
       {
@@ -104,7 +107,10 @@ export async function buildOrganizationProfileDesignData(repo) {
             wrote = true;
             return { data: { id: profile.id, version: 4 }, request_id: "synthetic-write-accepted" };
           }
-          if (mode === "read_failed" && wrote) throw new Failure();
+          if (mode === "read_failed" && wrote && !failedPostWriteRead) {
+            failedPostWriteRead = true;
+            throw new Failure();
+          }
           return { data: cloneResponse(url), request_id: "synthetic-read-ok" };
         },
       },
@@ -151,18 +157,26 @@ export async function buildOrganizationProfileDesignData(repo) {
   assert.equal(
     await failedRead.submit(
       "/org/admin/profile",
-      { ...failedRead.form.value, expected_version: 3 },
+      { ...failedRead.form.value, expected_version: failedRead.data.value.version },
       "PATCH",
     ),
     true,
   );
-  assert.equal(
-    failedRead.noticeKind.value,
-    "success",
-    "source OG-G02 falsely overwrites read-failure feedback",
-  );
-  assert.equal(failedRead.notice.value, "操作已完成并写入审计。");
+  assert.equal(failedRead.noticeKind.value, "error");
+  assert.match(failedRead.notice.value, /已保存并写入审计/);
+  assert.match(failedRead.notice.value, /不要再次提交/);
+  assert.deepEqual(plain(failedRead.profileSaveReadFailure.value), {
+    writeRequestId: "synthetic-write-accepted",
+    readRequestId: "synthetic-read-failed",
+  });
   assert.deepEqual(plain(failedRead.form.value), { reason: "" });
+  assert.equal(await failedRead.load({ background: true }), true);
+  assert.equal(failedRead.profileSaveReadFailure.value, null);
+  assert.equal(
+    failedRead.calls.filter((v) => v.method === "PATCH").length,
+    1,
+    "GET-only recovery never repeats the accepted PATCH",
+  );
   let validity = "";
   c.validateHttps({
     currentTarget: {
@@ -261,7 +275,7 @@ export async function buildOrganizationProfileDesignData(repo) {
     sourceChecks: [
       "Three source read paths and exact versioned profile PATCH",
       "Source success keeps write ID; conflict keeps form; forbidden replaces page",
-      "Source refresh overwrites draft and write-read failure is swallowed (OG-G02 reproduced)",
+      "Source refresh overwrites the draft; accepted profile writes retain separate write/read IDs when refresh fails",
       "Source HTTPS custom validity and actual service field validators",
       "Source summary via inert SQL pool, zero counts and audit_logs seven-day scope",
       "No active-only workspace or timezone enum invented",

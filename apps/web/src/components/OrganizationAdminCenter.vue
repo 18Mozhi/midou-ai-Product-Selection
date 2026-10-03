@@ -70,6 +70,8 @@ const props = defineProps<{
   notice = ref(""),
   noticeKind = ref<"info" | "success" | "error">("info"),
   requestId = ref(""),
+  writeReadFailure = ref<{ writeRequestId: string; readRequestId: string } | null>(null),
+  profileSaveReadFailure = ref<{ writeRequestId: string; readRequestId: string } | null>(null),
   busy = ref(false),
   refreshing = ref(false),
   teamRecoveryRefreshing = ref(false),
@@ -341,7 +343,9 @@ async function load(
         default_workspace_id: data.value.default_workspace_id,
         reason: "",
       };
+      profileSaveReadFailure.value = null;
     }
+    writeReadFailure.value = null;
     if (currentView === "members") {
       if (!form.value.role_code)
         form.value = {
@@ -373,11 +377,30 @@ async function load(
       : "empty";
     return true;
   } catch (error) {
-    if (sequence !== loadSequence) return undefined;
+    if (sequence !== loadSequence) {
+      options.onReadFailure?.(error);
+      return undefined;
+    }
     const failure = error instanceof ApiClientError ? error : null,
       mustReplacePage = !background || ["expired", "forbidden"].includes(failure?.kind ?? "");
     applyFailure(error, mustReplacePage);
     lastReadFailureStatus.value = failure?.status ?? null;
+    if (currentView === "summary" && profileSaveReadFailure.value) {
+      profileSaveReadFailure.value = {
+        ...profileSaveReadFailure.value,
+        readRequestId: failure?.requestId ?? "",
+      };
+      noticeKind.value = "error";
+      notice.value = `组织资料已保存并写入审计，但最新资料仍未能读取；当前资料显示可能是保存前快照。${failure?.actionHint ?? "请稍后点击“刷新数据”重试。"}不要再次提交。`;
+    }
+    if (writeReadFailure.value) {
+      writeReadFailure.value = {
+        ...writeReadFailure.value,
+        readRequestId: failure?.requestId ?? "",
+      };
+      noticeKind.value = "error";
+      notice.value = `操作已完成并写入审计，但最新数据仍未能读取。${failure?.actionHint ?? "请稍后点击“刷新数据”重试。"}不要再次提交。`;
+    }
     options.onReadFailure?.(error);
     rethrowUnexpectedError(error);
     return false;
@@ -454,6 +477,9 @@ async function submit(
 ) {
   if (busy.value) return;
   busy.value = true;
+  writeReadFailure.value = null;
+  const isProfileSave = view.value === "summary" && path === "/org/admin/profile";
+  if (isProfileSave) profileSaveReadFailure.value = null;
   const secretGeneration = tokenSecretGeneration;
   try {
     const response = await api(path, { method, body: JSON.stringify(value) }),
@@ -462,11 +488,41 @@ async function submit(
     if (surfaceActive && view.value === "tokens" && secretGeneration === tokenSecretGeneration)
       secret.value = result?.secret ?? "";
     if (!options.preserveForm) form.value = { reason: "" };
+    let readFailed = false,
+      readRequestId = "";
     await load({
       background: true,
       preserveNotice: true,
-      onReadFailure: (error) => options.onRefreshFailure?.(error, writeRequestId),
+      onReadFailure: (error) => {
+        readFailed = true;
+        readRequestId = error instanceof ApiClientError ? error.requestId : "";
+        if (options.onRefreshFailure) {
+          options.onRefreshFailure(error, writeRequestId);
+          return;
+        }
+        if (isProfileSave) {
+          const failure = error instanceof ApiClientError ? error : null;
+          profileSaveReadFailure.value = {
+            writeRequestId,
+            readRequestId: failure?.requestId ?? "",
+          };
+          noticeKind.value = "error";
+          notice.value = `组织资料已保存并写入审计，但最新资料仍未能读取；当前资料显示可能是保存前快照。${failure?.actionHint ?? "请点击“刷新数据”核对。"}不要再次提交。`;
+          return;
+        }
+        writeReadFailure.value = {
+          writeRequestId,
+          readRequestId: error instanceof ApiClientError ? error.requestId : "",
+        };
+      },
     });
+    if (readFailed) {
+      if (!options.onRefreshFailure && !isProfileSave) {
+        noticeKind.value = "error";
+        notice.value = `操作已完成并写入审计，但最新数据未能读取。请点击“刷新数据”核对${readRequestId ? "，不要再次提交" : "后重试且不要再次提交"}。`;
+      }
+      return true;
+    }
     noticeKind.value = "success";
     notice.value = secret.value
       ? "Token 明文仅显示这一次，请立即保存到受限位置。"
@@ -732,7 +788,7 @@ async function workspaceAction(item: any) {
     "POST",
     { preserveForm: true },
   );
-  if (succeeded)
+  if (succeeded && !writeReadFailure.value)
     notice.value = action === "archive" ? "工作区已归档并写入审计。" : "工作区已恢复并写入审计。";
   return Boolean(succeeded);
 }
@@ -740,7 +796,7 @@ async function createWorkspace(value: { name: string; slug: string; reason: stri
   const succeeded = await submit("/org/admin/workspaces", value, "POST", {
     preserveForm: true,
   });
-  if (succeeded) notice.value = "工作区已创建并写入审计。";
+  if (succeeded && !writeReadFailure.value) notice.value = "工作区已创建并写入审计。";
   return Boolean(succeeded);
 }
 async function createTeam(value: {
@@ -761,9 +817,11 @@ async function createTeam(value: {
         writeRequestId,
         readRequestId: error instanceof ApiClientError ? error.requestId : "",
       };
+      noticeKind.value = "error";
+      notice.value = `团队已创建并写入审计，但团队列表暂不可用。${error instanceof ApiClientError ? error.actionHint : "请稍后重读列表。"}不要重复创建。`;
     },
   });
-  if (succeeded) notice.value = "团队已创建并写入审计。";
+  if (succeeded && !teamCreateReadFailure.value) notice.value = "团队已创建并写入审计。";
   return Boolean(succeeded);
 }
 async function retryTeamListAfterCreate() {
@@ -831,7 +889,7 @@ async function teamMemberAction(item: any, action: "assign" | "remove", membersh
     "POST",
     { preserveForm: true },
   );
-  if (succeeded)
+  if (succeeded && !writeReadFailure.value)
     notice.value = action === "assign" ? "成员已分配并写入审计。" : "成员已移除并写入审计。";
   return Boolean(succeeded);
 }
@@ -1136,6 +1194,7 @@ onMounted(() => void load());
     <div
       v-if="notice"
       class="org-admin-notice"
+      :id="profileSaveReadFailure ? 'org-profile-write-read-failure' : undefined"
       :data-kind="noticeKind"
       :role="noticeKind === 'error' ? 'alert' : 'status'"
     >
@@ -1174,6 +1233,29 @@ onMounted(() => void load());
           :request-id="requestId"
           @reload="load()"
         />
+      </template>
+      <template v-else-if="profileSaveReadFailure">
+        {{ notice }}
+        <span class="org-admin-write-read-ids">
+          <span
+            >写入请求编号 <code>{{ profileSaveReadFailure.writeRequestId }}</code></span
+          >
+          <span
+            >读取失败请求编号
+            <code>{{ profileSaveReadFailure.readRequestId || "未提供" }}</code></span
+          >
+        </span>
+      </template>
+      <template v-else-if="writeReadFailure">
+        {{ notice }}
+        <span class="org-admin-write-read-ids">
+          <span
+            >写入请求编号 <code>{{ writeReadFailure.writeRequestId }}</code></span
+          >
+          <span
+            >读取失败请求编号 <code>{{ writeReadFailure.readRequestId || "未提供" }}</code></span
+          >
+        </span>
       </template>
       <template v-else
         >{{ notice }} <code v-if="requestId">{{ requestId }}</code></template
@@ -1281,52 +1363,57 @@ onMounted(() => void load());
           "
         >
           <h3>更新组织资料</h3>
-          <label
-            >名称<input
-              v-model="form.name"
-              :placeholder="data?.name"
-              required
-              maxlength="120" /></label
-          ><label
-            >Logo HTTPS 地址<input
-              v-model="form.logo_url"
-              type="url"
-              pattern="https://.*"
-              maxlength="2048"
-              title="请输入以 https:// 开头的地址"
-              placeholder="https://…"
-              @invalid="validateHttps"
-              @input="clearFieldValidity"
-            />
-            <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small></label
-          ><label
-            >时区<input
-              v-model="form.timezone"
-              :placeholder="data?.timezone"
-              required
-              maxlength="64" /></label
-          ><label
-            >数据保留天数<input
-              v-model.number="form.data_retention_days"
-              type="number"
-              min="30"
-              max="3650"
-              required
-              :placeholder="String(data?.data_retention_days)" /></label
-          ><label
-            >默认工作区<select v-model="form.default_workspace_id" required>
-              <option disabled value="">请选择工作区</option>
-              <option
-                v-for="workspace in data?.workspace_options"
-                :key="workspace.id"
-                :value="workspace.id"
-              >
-                {{ workspace.name }}
-              </option>
-            </select></label
-          ><label
-            >变更原因<textarea v-model="form.reason" required maxlength="500"></textarea></label
-          ><button :disabled="busy">{{ busy ? "正在保存…" : "保存并审计" }}</button>
+          <fieldset
+            :disabled="Boolean(profileSaveReadFailure)"
+            class="org-admin-profile-save-fields"
+          >
+            <label
+              >名称<input
+                v-model="form.name"
+                :placeholder="data?.name"
+                required
+                maxlength="120" /></label
+            ><label
+              >Logo HTTPS 地址<input
+                v-model="form.logo_url"
+                type="url"
+                pattern="https://.*"
+                maxlength="2048"
+                title="请输入以 https:// 开头的地址"
+                placeholder="https://…"
+                @invalid="validateHttps"
+                @input="clearFieldValidity"
+              />
+              <small>仅支持 HTTPS；留空表示暂不设置 Logo。</small></label
+            ><label
+              >时区<input
+                v-model="form.timezone"
+                :placeholder="data?.timezone"
+                required
+                maxlength="64" /></label
+            ><label
+              >数据保留天数<input
+                v-model.number="form.data_retention_days"
+                type="number"
+                min="30"
+                max="3650"
+                required
+                :placeholder="String(data?.data_retention_days)" /></label
+            ><label
+              >默认工作区<select v-model="form.default_workspace_id" required>
+                <option disabled value="">请选择工作区</option>
+                <option
+                  v-for="workspace in data?.workspace_options"
+                  :key="workspace.id"
+                  :value="workspace.id"
+                >
+                  {{ workspace.name }}
+                </option>
+              </select></label
+            ><label
+              >变更原因<textarea v-model="form.reason" required maxlength="500"></textarea></label
+            ><button :disabled="busy">{{ busy ? "正在保存…" : "保存并审计" }}</button>
+          </fieldset>
         </form>
       </section>
       <OrganizationMemberPanel

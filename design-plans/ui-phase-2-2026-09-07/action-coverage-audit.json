@@ -89,7 +89,7 @@
     "apps/web/src/components/OpportunityQualityGateDetails.vue": "a57e053d196d7262c5341e7f14bf95a124e06fc6d2e733e8f98295d921e35e73",
     "apps/web/src/components/OpportunityWorkspace.vue": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
     "apps/web/src/components/OpportunityWorkspaceDialogs.vue": "b132ab04c3ed0179b7fd1256314334ce5c53bdf1dad4caf68d51c275c863a5ce",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
     "apps/web/src/components/OrganizationApprovalReadFeedback.vue": "f20b3891d31459b30e6dfa5621819c4bbbaaa6523130d33f9395804def25bf52",
@@ -278,7 +278,7 @@
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "0f980f3d976b6c35a29317d2c3ca32fbda20c1c8e77b7367b613e897ca1520a3",
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "2bdd2a6faa23906d0d8ce9f1b874bb1b7cb4b858de18ec56e2c6e9d0799e871c",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "c1f16d965095f032e4681b2aedeee9411312c5281e50a484203a5b4d89934662",
-    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "2e4b9743600b4e983ff08b116c3dfe124316793e264ac3caa9d9b766d283ea52",
+    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "81ec7458a2d49676dd1f49b97574e2227f004c5b18a71415319e8e2bb1b51984",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "dd2def25923858383f4371d3bb5ae643cf28b06ac185aab7017aeebff8d96291",
@@ -350,15 +350,15 @@
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-detail-direction-c/evidence.json": "f44320050a110c0ab39bb243f0409bd087c0be76e57e5b3779973b31b025e4b7",
     "design-plans/ui-phase-2-2026-09-07/design/opportunity-direction-c/evidence.json": "ae2f594b7964b2aeb093f57c828fd381c862d4570a5ba8798a4b93c480dc31af",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "89018220b46583fb794728eafd02c92a88437cf06cbd229afc27dc7124e3cd50",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "02ae0a316e1a2d21bf7a29aed0d31b83f76d3cf0d7ad535d2a35ef80561acb2a",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "a83ef4d5b98473f92c8ee44d5ba691977077dcc4063e58f76f9986401cf7ad52",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "a3e853929804b3ff62a5e61a81063c6d143ef982e5a9577372d6dd94624daa59",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "0c96d81d75ccdf951b66adefb2bb46a3adfcc74331c1112b1c26e3c180edba54",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "e4dce1846ef3aa7c7451374f59e2637e73217dffee6e21b26f8b54ba1da7f607",
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "13ba4121baf87fa5e1477ea72f34c7e3523ecaae6935d0508e51e0d6ec8f7468",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "78821ada511bf9cebce699ca0433a9edb5ecdd5ed06bd113e32d6909ada81d0e",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "ae2b1eadd4577213820a06794883e4eb7aa6271eb7021b4d969c9dc599db8b1d",
-    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/evidence.json": "47b34807ffd53a92cb71c94a9558173aee52962a9490c875b96b73d1f2a8ca34",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json": "01652b5efca4450d3340e52961daf79fcbc932bf283cc0cd6e6c129c5ea699b1",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json": "09e48e954fe0598f7969ba2c447c7ebc6d1f7471ed5eb00348642eb3ab6f2567",
+    "design-plans/ui-phase-2-2026-09-07/design/organization-profile-fields-direction-c/evidence.json": "f66b9e5e7f53ac6d3671db9e4eab956e09638a2f31cbf64f4dc98184541f2fcd",
     "design-plans/ui-phase-2-2026-09-07/design/permission-comparison-direction-c/evidence.json": "ce1af8f9fbd07321cdcc3832442473a10afbd53605d14b6b7d80976afad884e3",
     "design-plans/ui-phase-2-2026-09-07/design/personal-composed-direction-c/evidence.json": "44d9fab15bd0857cad1d770c24d1a164a6ab0bf6fb61fbb22365d4be05c56241",
     "design-plans/ui-phase-2-2026-09-07/design/personal-direction-c/evidence.json": "a55004bd7f957bdd5e3dc8134114504f6e48b8cf44897ffd463cf71b97d0e272",
@@ -396,8 +396,8 @@
     "design-plans/ui-phase-2-2026-09-07/design/trend-direction-c/evidence.json": "f1c0b3ed599d44010a475926eff9e6f423d33d856f1f1b7c1cdb82c193880c84",
     "design-plans/ui-phase-2-2026-09-07/design/user-admin-direction-c/evidence.json": "affcc6c564f332485ea14fd28d1b7c1c7a74de565caeaa4c5b59ccfd1bcd1d48",
     "design-plans/ui-phase-2-2026-09-07/design/work-direction-c/evidence.json": "7d8af75123533b4e27c891c4f6dd5da965a64b5ba15a783ed426aa7808bb87f8",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "a473ecd3c1110f039a1e8353540037eda136d26689ee6c15e9f1eb26f813da21",
-    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "ef93492fff7691ca9d09df1ccedc9834cf7258787969a43de3b96c9c598d85f0",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-controls-direction-c/evidence.json": "294b0903ca8d4ced0f56288b6c19f7270033a053ce7c1fe0d299df4a4fe56932",
+    "design-plans/ui-phase-2-2026-09-07/design/workspaces-direction-c/evidence.json": "0f336a332a42633fccc0589a26a7023db01e2162369505a859b36ba861810b42",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-fields-direction-c/evidence.json": "fb414c18e59348ec4fdc1c40f7962b7fea33417ce112ea8c103d1c23c0995510",
     "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c/evidence.json": "44c638e5d9d79968a7e18a6a0632b70168b25c0dde27fda153d3b9cb804fc24d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P01.json": "24c8635ab34c2899698b3054e1d93dbd8019d7b91f3f54c2f09fc1d5c56e732e",
@@ -497,31 +497,31 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "fae2bc8ad53fadecc4082df6caeb475ac33db9ff8395c93cc4f472dad07eb362",
     "scripts/verify-ui-phase2-report-c.mjs": "63c52224823743579af6909fbed606a9bc2ae2765de6f7fe887cc98f4102dbdb",
     "scripts/verify-ui-phase2-report-controls-c.mjs": "9e464c9d0749bb96bb7bdde89a09e24975e8a087ae4ad2b3b706afd7d86439e7",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "f646e252381eee4d74d2f4b09da34bd295d011ba0d5f79e172c0a0f4a4c7eaed",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "e256d674f71d147ddfe9ac8ce9ec489b2a73c96961fe0ba5d09cd0bbcc7d3f91",
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "44cdd6607680da916968b2ba16b2bad6233aaaa9f75a49bc3cc7ae052eb31e9b",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "5e6a8623e4b6e7f1af0cd0dcd9e4568269e5991ebd88c4893ca682e3f96fb02e",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "b306765c85eb0140174a73075a57db012b229b040f18f8b47a165f8587b20ba7",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "8199d08c370715b4d5df2262d2388b7749560845469e78c11e4b90860715f0a4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P31.json": "4ba073c7d3b3a2dbf830dade0e2beea04dc07d5b6df9f44e0c54b39ab91d70f9",
     "scripts/verify-ui-phase2-roles-c.mjs": "d77e1f34fa446c63ef0dea49cea750b6c724ea6c0c7c53d1db4f6a7666b7c044",
     "scripts/verify-ui-phase2-roles-controls-c.mjs": "a7a318f327d2a7cb95bf439f21e36d006531abca5f3a194eb2cfd50b3b203bdd",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "253bff45890a1b58aa6b9fdce0f6bf2a20fa451f7b881184108bb3ef9a05ecaa",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P32.json": "4914731f8c988ddb57efc56f79925ca99290fe7793baff2de393616fef7f8f9a",
     "scripts/verify-ui-phase2-workspaces-c.mjs": "a2099317449e0b217cf15a384434cbd5b43efcce537552c5d4477d1242d9db5b",
     "scripts/verify-ui-phase2-workspaces-controls-c.mjs": "5ed21d201b155ff5c2eb7a2062a5c7f0e7b162d93108a2c71ab5c3d0a8b3c846",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "aa13dd439ad62f77b40121215c31d015794032265bf51cb344368d9cd13128d1",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P33.json": "d6c4a4063fbf8d4f22483e521aa85893f39375a48278f1665c9eeafb0cdd0442",
     "scripts/verify-ui-phase2-teams-c.mjs": "32be558307423a0131b146701a7a8c8dbe79f365f5fa306cf2555951a55890eb",
     "scripts/verify-ui-phase2-teams-controls-c.mjs": "c2f015d785ddfff74c1ddaecec3150763fbf29a176e40e71ac4a2d783bcd4ce7",
     "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "fcf2a6c22c4eea63fee263dbd0c0f0c55b4948fef060ed3ce6bc3a08c5f52ac4",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "4a74616fadb163527532bf2fb1cfa297e336f7b72c9c9bfe558952f87584eca4",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "e2a45857bedbfe625f36538650ecf9e2a42569fbd8062692726443d14b31bd54",
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "7d37cd7bb1e051dfc1b91f73c4130529f93932dde0867379b70af427e3ce18a8",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "1365bcaf0ab13a5cc3b36d7781aa34d9d53fa20a611089456a02fda54c486c35",
     "scripts/verify-ui-phase2-org-data-controls.mjs": "32652c1547b4998316b79625d87662a3035959d9ae372aa3bf9fcd0785a9838e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "704ffbc09ffce53d778a7fbcae6d59371df4946f774abe74b861d8d8b2313ae8",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "cb046125d36caa3e4fc6383adaf85ffb98d8bbd4881275772c2a3978de5ab873",
     "scripts/verify-ui-phase2-org-token-controls.mjs": "80210a2d4d289a83eaa260e29aeb1e2eb54e5953fa9238b6eac1feb2c9c7b205",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P37.json": "d1f1cd758972f178e57c7b341a7d69efc8961f33061c83e3f3d9788838d3b323",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P37.json": "6d41e080e2d6a561c8b52f3ae1dd784677a714afa8a9faec93a46ebbadd028e3",
     "scripts/verify-ui-phase2-org-audit-controls.mjs": "97846b5e70b74a6a2246c0b96d9e6afee4ab8691febdfe0c6fb7685b5335e9eb",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P38.json": "521be907f647710e4d716c11b0e5f90775878009e3bc11a5170337582a5b429d",
     "scripts/verify-ui-phase2-platform-overview-c.mjs": "b7049fb563871534d11742ebf0a42e51d0ecb9505eaa4cb2472ff26c631ee37b",
@@ -636,7 +636,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P26.md": "71649dd677697325648200b80d5a49d26ef798e311b072d2bd7bed2e20208c22",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "09ee27c2a5bf18a101a88ad58f42eb4cf057a1978ed21efc81f7e59471e097aa",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "f20c35839e97d775cd5dbc2ecb284ad7a1383c720e07ccf1909084be25577838",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "c0364bb11b10dc41efca32ebc9b8dec8d3131a096b426d9820f647b444bff92b",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "448c7680ca0880d68b7c447f56926e8bbb59fd26ee3a5e21b4bfb3d270b70264",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "d666be471a8ebd8c838d61e2d8facf969c867d6fa44e827b40bbeb4175ca0038",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P31.md": "4cfa27dea70ce875db27bf1d1b08e3ac61c2d53d91830305cc7fdd362a8b7097",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P32.md": "f507ab77103e870c4f31e0a715c6b16f666a18b86edbdbf886f7e61457580c36",
@@ -1970,6 +1970,7 @@
         "sourceAbsentProposals": 0,
         "sourceInapplicableVisualSlots": 4,
         "testEvidenceTypes": [
+          "actual-vue-local-interception",
           "offline-proposal-check-not-Vue"
         ],
         "unmappedVisualSlots": 0,
@@ -4641,6 +4642,7 @@
       "sourceAbsentProposals": 0,
       "sourceInapplicableVisualSlots": 4,
       "testEvidenceTypes": [
+        "actual-vue-local-interception",
         "offline-proposal-check-not-Vue"
       ],
       "unmappedVisualSlots": 0,
@@ -73129,7 +73131,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1127,
+      "line": 1185,
       "kind": "control",
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新数据\" }}",
       "conditions": [],
@@ -73260,7 +73262,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1145,
+      "line": 1204,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -73405,7 +73407,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1159,
+      "line": 1218,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -73550,7 +73552,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1170,
+      "line": 1229,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -73690,7 +73692,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1220,
+      "line": 1302,
       "kind": "control",
       "label": "重新加载",
       "conditions": [
@@ -73826,7 +73828,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1277,
+      "line": 1359,
       "kind": "form-event",
       "label": "更新组织资料 名称 Logo HTTPS 地址 仅支持 HTTPS；留空表示暂不设置 Logo。 时区 数据保留天数 默认工作区 请选择工作区 {{ workspace.name }} 变更原因 {{ busy ? \"正在保存…\" : \"保",
       "conditions": [
@@ -73966,7 +73968,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1291,
+      "line": 1377,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -74106,7 +74108,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1329,
+      "line": 1415,
       "kind": "control",
       "label": "{{ busy ? \"正在保存…\" : \"保存并审计\" }}",
       "conditions": [
@@ -74246,7 +74248,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1332,
+      "line": 1419,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -74386,7 +74388,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1394,
+      "line": 1481,
       "kind": "event-binding",
       "label": "",
       "conditions": [
@@ -74526,7 +74528,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1471,
+      "line": 1558,
       "kind": "event-binding",
       "label": "",
       "conditions": [],
@@ -74657,7 +74659,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1471,
+      "line": 1558,
       "kind": "dialog-component-call",
       "label": "",
       "conditions": [],
@@ -74788,7 +74790,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 558,
+      "line": 614,
       "kind": "dialog-script-call",
       "label": "askAuditedReason({ title: `${action}原因`, description: \"原因会与组织、操作者和目标对象一起写入审计记录。\", initialValue: action, ...(workspaceRes",
       "conditions": [],
@@ -74919,7 +74921,7 @@
     {
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 841,
+      "line": 899,
       "kind": "dialog-script-call",
       "label": "askAuditedReason({ title: rotating ? `轮换“${item.name}”密钥` : `撤销“${item.name}”访问`, description: rotating ? \"提交后旧令牌立即失效，新明",
       "conditions": [],
