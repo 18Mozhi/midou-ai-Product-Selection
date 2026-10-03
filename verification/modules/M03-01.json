@@ -43,7 +43,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m03-01/provider-registry.test.mjs",
-    "node scripts/verify-provider-registry-live.mjs",
+    "python scripts/verify-live-baota.py provider-registry",
     "npx playwright test tests/e2e/m03-01-provider-registry.spec.ts",
     "npm run verify:docs"
   ]

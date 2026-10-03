@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import pathlib
+import re
 import runpy
 import shlex
 import sys
@@ -13,7 +14,17 @@ from urllib.parse import quote
 
 def main() -> int:
     probe = sys.argv[1] if len(sys.argv) == 2 else ""
-    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard"}:
+    m03_probes = {
+        "provider-registry",
+        "credential-assets",
+        "provider-adapter",
+        "playwright-crawler",
+        "collection-task",
+        "evidence-data-quality",
+        "provider-sources",
+        "automatic-hotspots",
+    }
+    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", *m03_probes}:
         raise SystemExit("unsupported BaoTa live probe")
 
     repo = pathlib.Path(__file__).resolve().parents[1]
@@ -44,10 +55,14 @@ def main() -> int:
         if identity.get("build_sha") is None:
             raise RuntimeError("the fixed BaoTa release identity is unavailable")
 
+        project_root = deployer["PROJECT_ROOT"]
+        backend = f"{project_root}/backend"
+        env_file = f"{project_root}/config/product_scout.env"
+
         stage = "local_probe_source"
         script_path = repo / "scripts" / f"verify-{probe}-live.mjs"
         source = script_path.read_text(encoding="utf-8")
-        package_names = ["config"]
+        package_names = [] if probe in m03_probes else ["config"]
         if probe in {"mysql", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard"}:
             package_names.append("database")
         if probe == "theme-preferences":
@@ -85,6 +100,67 @@ def main() -> int:
             )
             new = json.dumps("file://" + quote(remote_path, safe="/"))
             source = source.replace(old, new, 1)
+
+        if probe in m03_probes:
+            runtime_imports = re.findall(
+                r"(['\"])(\.\./(?:packages|apps)/(?:api|worker|[a-z0-9-]+)/dist/[^'\"]+)\1",
+                source,
+            )
+            if not runtime_imports:
+                raise RuntimeError("local P03 live probe runtime imports are missing")
+            for quote_char, import_path in runtime_imports:
+                if source.count(f"{quote_char}{import_path}{quote_char}") != 1:
+                    raise RuntimeError(f"ambiguous P03 live probe import: {import_path}")
+                remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
+                source = source.replace(
+                    f"{quote_char}{import_path}{quote_char}",
+                    json.dumps("file://" + quote(remote_path, safe="/")),
+                    1,
+                )
+
+            migration_names = sorted(
+                set(re.findall(r"database/migrations/([A-Za-z0-9_.-]+\.sql)", source))
+            )
+            required_tables: set[str] = set()
+            for migration_name in migration_names:
+                migration = repo / "database" / "migrations" / migration_name
+                if not migration.is_file():
+                    raise RuntimeError(f"P03 probe references an unknown migration: {migration_name}")
+                required_tables.update(
+                    re.findall(r"CREATE\s+TABLE\s+`([^`]+)`", migration.read_text(encoding="utf-8"), re.I)
+                )
+            if required_tables:
+                config_url = "file:///www/wwwroot/ai选品/backend/packages/config/dist/index.js"
+                database_url = "file:///www/wwwroot/ai选品/backend/packages/database/dist/index.js"
+                preflight = (
+                    f"import {{loadRuntimeConfig}} from {json.dumps(config_url)};"
+                    f"import {{createDatabasePool}} from {json.dumps(database_url)};"
+                    "const pool=createDatabasePool(loadRuntimeConfig(process.env,'api'));"
+                    f"const required={json.dumps(sorted(required_tables), ensure_ascii=False)};"
+                    "try{const marks=required.map(()=>'?').join(',');"
+                    "const [rows]=await pool.query(`SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN (${marks})`,required);"
+                    "const present=new Set(rows.map(row=>row.table_name));"
+                    "const missing=required.filter(name=>!present.has(name));"
+                    "if(missing.length){console.error(JSON.stringify({status:'blocked',code:'schema_preflight_missing',missing}));process.exitCode=2;}"
+                    "else console.log(JSON.stringify({status:'passed',schema_preflight:'read_only',tables:required.length}));"
+                    "}finally{await pool.end();}"
+                )
+                stage = "production_schema_preflight"
+                preflight_command = (
+                    f"cd {shlex.quote(backend)} && "
+                    f"{shlex.quote(deployer['NODE_BIN'])} "
+                    f"--env-file={shlex.quote(env_file)} --input-type=module -e {shlex.quote(preflight)}"
+                )
+                _, preflight_stdout, preflight_stderr = client.exec_command(preflight_command, timeout=60)
+                preflight_output = preflight_stdout.read().decode("utf-8", "replace")
+                preflight_errors = preflight_stderr.read().decode("utf-8", "replace")
+                preflight_status = preflight_stdout.channel.recv_exit_status()
+                if preflight_output:
+                    sys.stdout.write(preflight_output)
+                if preflight_errors:
+                    sys.stderr.write(preflight_errors)
+                if preflight_status != 0:
+                    return preflight_status
 
         if probe in {"local-auth", "mfa"}:
             app_imports = (
@@ -175,9 +251,6 @@ def main() -> int:
             source = source.replace(old, json.dumps(sql), 1)
 
         stage = "remote_probe"
-        project_root = deployer["PROJECT_ROOT"]
-        backend = f"{project_root}/backend"
-        env_file = f"{project_root}/config/product_scout.env"
         target_var = f"SCOUTOPS_{probe.upper().replace('-', '_')}_LIVE_TARGET"
         command = (
             f"cd {shlex.quote(backend)} && "

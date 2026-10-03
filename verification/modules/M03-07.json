@@ -76,8 +76,8 @@
   "commands": [
     "npm run build",
     "node --test tests/m03-07/provider-sources.test.mjs tests/unit/1688-browser-contract.test.mjs",
-    "node scripts/verify-provider-sources-live.mjs",
-    "node scripts/verify-automatic-hotspots-live.mjs",
+    "python scripts/verify-live-baota.py provider-sources",
+    "python scripts/verify-live-baota.py automatic-hotspots",
     "npx playwright test tests/e2e/m03-07-provider-sources.spec.ts",
     "npm run verify:docs"
   ]

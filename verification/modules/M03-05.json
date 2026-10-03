@@ -70,7 +70,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m03-05/collection-task-state-machine.test.mjs",
-    "node scripts/verify-collection-task-live.mjs",
+    "python scripts/verify-live-baota.py collection-task",
     "npx playwright test tests/e2e/m03-05-collection-tasks.spec.ts",
     "npm run verify:docs"
   ]

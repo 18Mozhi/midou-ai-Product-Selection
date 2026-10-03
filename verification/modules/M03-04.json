@@ -71,7 +71,7 @@
     "npm run build",
     "npm run test:python",
     "node --test tests/m03-04/playwright-crawler.test.mjs",
-    "node scripts/verify-playwright-crawler-live.mjs",
+    "python scripts/verify-live-baota.py playwright-crawler",
     "node scripts/verify-playwright-browser-live.mjs",
     "npx playwright test tests/e2e/m03-04-playwright-crawler.spec.ts",
     "npm run verify:docs"
