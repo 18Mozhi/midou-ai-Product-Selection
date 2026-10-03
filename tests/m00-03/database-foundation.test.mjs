@@ -75,7 +75,7 @@ test("M00-03 live gate enforces business account and cleans probes", async () =>
   assert.match(source, /request_id[\s\S]*trace_id/);
   assert.match(source, /SCOUTOPS_MYSQL_LIVE_TARGET/);
   assert.match(baotaRunner, /read_windows_credential/);
-  assert.match(baotaRunner, /SCOUTOPS_\{probe\.upper\(\)\}_LIVE_TARGET/);
+  assert.match(baotaRunner, /SCOUTOPS_\{probe\.upper\(\)\.replace\('-'.*_LIVE_TARGET/);
   assert.match(baotaRunner, /--env-file=/);
   assert.doesNotMatch(baotaRunner, /DB_PASSWORD|sftp\.put/);
   assert.equal(typeof createMigrationExecutor, "function");
