@@ -4,7 +4,7 @@
 
 在宝塔受限环境保留至少 32 字符的 `CREDENTIALS_MASTER_KEY`，并按 `config/env.example` 配置 `MFA_ISSUER`、时间步、位数、时钟窗口、挑战 TTL、尝试次数和恢复码数量。默认 30 秒/6 位/窗口 1 由 RFC 6238 兼容性确定；生产更改必须由安全负责人批准。所有配置在 API 启动时读取，修改后必须在宝塔重启 Node API；Worker/Crawler 不参与 M01-02，无需重启。
 
-按 `0009a`、`0009b`、`0009c` 顺序执行 up 迁移。发布后运行 `npm run build`、三个 `tests/m01-02` 测试、`node scripts/verify-mfa-live.mjs`、M01-02 Playwright 和 `npm run verify:module -- M01-02`。真实 MySQL 探针要求 5.7、product_scout 业务账号与 utf8mb4，脚本只创建唯一测试账号并清理关联因子、挑战、恢复码、会话和审计。
+按 `0009a`、`0009b`、`0009c` 顺序执行 up 迁移。发布后运行 `npm run build`、三个 `tests/m01-02` 测试、`node scripts/verify-mfa-live.mjs`、M01-02 Playwright 和 `npm run verify:module -- M01-02`。生产 MFA 验收使用 `SCOUTOPS_MFA_LIVE_TARGET=baota-production node scripts/verify-mfa-live.mjs`，在固定宝塔节点使用受限配置；MySQL 要求 5.7、product_scout 业务账号与 utf8mb4。探针只验证部署后的表列，不执行 DDL；使用随机测试账号、内存邮件捕获器及临时 MFA 因子/挑战/恢复码，会在结束时清理关联会话和审计记录，不向外发送邮件。缺表时由正式部署迁移处理，探针失败关闭。
 
 ## 观测与故障恢复
 

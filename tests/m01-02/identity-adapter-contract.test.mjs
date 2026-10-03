@@ -9,6 +9,21 @@ test("M01-02.A14 live MFA probe follows the local login identifier contract", as
   );
   assert.doesNotMatch(probe, /localAuth\.login\(\s*\{\s*email\s*,/);
 });
+test("M01-02 production probe uses BaoTa, deployed schema and in-memory-only mail", async () => {
+  const [probe, runner, runbook] = await Promise.all(
+    [
+      "scripts/verify-mfa-live.mjs",
+      "scripts/verify-live-baota.py",
+      "docs/runbooks/m01-02-mfa-identity-adapters.md",
+    ].map((file) => readFile(file, "utf8")),
+  );
+  assert.match(probe, /SCOUTOPS_MFA_LIVE_TARGET/);
+  assert.match(probe, /verify-live-baota\.py.*mfa/s);
+  assert.match(probe, /outbound_delivery:\s*"captured_in_memory"/);
+  assert.doesNotMatch(probe, /CREATE TABLE|readFile/);
+  assert.match(runner, /"mfa"/);
+  assert.match(runbook, /生产 MFA 验收使用.*固定宝塔节点/s);
+});
 test("M01-02.A03 MySQL57 MFA migrations are encrypted, indexed and reversible", async () => {
   const ups = await Promise.all(
     ["a_mfa_factors", "b_mfa_recovery_codes", "c_mfa_challenges"].map((name) =>

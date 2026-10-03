@@ -13,7 +13,7 @@ from urllib.parse import quote
 
 def main() -> int:
     probe = sys.argv[1] if len(sys.argv) == 2 else ""
-    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth"}:
+    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa"}:
         raise SystemExit("unsupported BaoTa live probe")
 
     repo = pathlib.Path(__file__).resolve().parents[1]
@@ -48,11 +48,11 @@ def main() -> int:
         script_path = repo / "scripts" / f"verify-{probe}-live.mjs"
         source = script_path.read_text(encoding="utf-8")
         package_names = ["config"]
-        if probe in {"mysql", "api", "file-audit", "local-auth"}:
+        if probe in {"mysql", "api", "file-audit", "local-auth", "mfa"}:
             package_names.append("database")
         if probe in {"redis", "api"}:
             package_names.append("redis")
-        if probe == "local-auth":
+        if probe in {"local-auth", "mfa"}:
             package_names.append("auth")
         if probe == "api":
             package_names.append("api")
@@ -76,10 +76,17 @@ def main() -> int:
             new = json.dumps("file://" + quote(remote_path, safe="/"))
             source = source.replace(old, new, 1)
 
-        if probe == "local-auth":
-            for import_path in (
-                "../apps/api/dist/mysql-auth-repository.js",
-            ):
+        if probe in {"local-auth", "mfa"}:
+            app_imports = (
+                ("../apps/api/dist/mysql-auth-repository.js",)
+                if probe == "local-auth"
+                else (
+                    "../apps/api/dist/mysql-auth-repository.js",
+                    "../apps/api/dist/mysql-mfa-repository.js",
+                    "../apps/api/dist/mysql-auth-idempotency.js",
+                )
+            )
+            for import_path in app_imports:
                 candidates = (f"'{import_path}'", f'"{import_path}"')
                 old = next((candidate for candidate in candidates if source.count(candidate) == 1), None)
                 if old is None:

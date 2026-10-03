@@ -568,6 +568,9 @@
     },
     "mfaIdentityAdapters": {
       "module": "M01-02",
+      "liveGate": "../scripts/verify-mfa-live.mjs",
+      "liveGateBaoTaTarget": "SCOUTOPS_MFA_LIVE_TARGET=baota-production",
+      "liveGateSafety": "MFA probe runs on fixed BaoTa production using deployed schema and in-memory mail capture; test identity and MFA records are cleaned up.",
       "entrypoints": [
         "../packages/auth/src/mfa.ts",
         "../apps/api/src/mysql-mfa-repository.ts",
