@@ -468,6 +468,9 @@
     "apiFoundation": {
       "entrypoint": "../apps/api/src/app.ts",
       "bootstrap": "../apps/api/src/server.ts",
+      "liveGate": "../scripts/verify-api-live.mjs",
+      "liveGateBaoTaTarget": "SCOUTOPS_API_LIVE_TARGET=baota-production",
+      "liveGateCredentialBoundary": "Readiness probe executes on the fixed BaoTa node; production DB and Redis credentials remain server-side.",
       "registrationDomains": {
         "workflow": "../apps/api/src/bootstrap/register-workflow-domain.ts",
         "platform": "../apps/api/src/bootstrap/register-platform-domain.ts",
@@ -490,6 +493,9 @@
     },
     "fileAuditFoundation": {
       "package": "../packages/storage/src/index.ts",
+      "liveGate": "../scripts/verify-file-audit-live.mjs",
+      "liveGateBaoTaTarget": "SCOUTOPS_FILE_AUDIT_LIVE_TARGET=baota-production",
+      "liveGateCredentialBoundary": "File and audit integration probe runs on the fixed BaoTa node; database credentials remain server-side.",
       "pathScope": "organizations/<organization_id>/workspaces/<workspace_id>/...",
       "categories": ["evidence", "export", "attachment"],
       "downloadGrantMaximumSeconds": 300,

@@ -13,8 +13,8 @@ from urllib.parse import quote
 
 def main() -> int:
     probe = sys.argv[1] if len(sys.argv) == 2 else ""
-    if probe not in {"mysql", "redis"}:
-        raise SystemExit("probe must be mysql or redis")
+    if probe not in {"mysql", "redis", "api", "file-audit"}:
+        raise SystemExit("probe must be mysql, redis, api, or file-audit")
 
     repo = pathlib.Path(__file__).resolve().parents[1]
     deployer = runpy.run_path(str(repo / "scripts" / "deploy-baota.py"))
@@ -47,16 +47,30 @@ def main() -> int:
         stage = "local_probe_source"
         script_path = repo / "scripts" / f"verify-{probe}-live.mjs"
         source = script_path.read_text(encoding="utf-8")
-        package_names = ["config", "database" if probe == "mysql" else "redis"]
+        package_names = ["config"]
+        if probe in {"mysql", "api", "file-audit"}:
+            package_names.append("database")
+        if probe in {"redis", "api"}:
+            package_names.append("redis")
+        if probe == "api":
+            package_names.append("api")
+        if probe == "file-audit":
+            package_names.append("storage")
         for package in package_names:
-            candidates = (
-                f"'../packages/{package}/dist/index.js'",
-                f'"../packages/{package}/dist/index.js"',
+            import_path = (
+                "../apps/api/dist/app.js"
+                if package == "api"
+                else f"../packages/{package}/dist/index.js"
             )
+            candidates = (f"'{import_path}'", f'"{import_path}"')
             old = next((candidate for candidate in candidates if source.count(candidate) == 1), None)
             if old is None:
                 raise RuntimeError(f"local live probe import mismatch: {package}")
-            remote_path = f"/www/wwwroot/ai选品/backend/packages/{package}/dist/index.js"
+            remote_path = (
+                f"/www/wwwroot/ai选品/backend/apps/api/dist/app.js"
+                if package == "api"
+                else f"/www/wwwroot/ai选品/backend/packages/{package}/dist/index.js"
+            )
             new = json.dumps("file://" + quote(remote_path, safe="/"))
             source = source.replace(old, new, 1)
 
@@ -77,7 +91,7 @@ def main() -> int:
         project_root = deployer["PROJECT_ROOT"]
         backend = f"{project_root}/backend"
         env_file = f"{project_root}/config/product_scout.env"
-        target_var = f"SCOUTOPS_{probe.upper()}_LIVE_TARGET"
+        target_var = f"SCOUTOPS_{probe.upper().replace('-', '_')}_LIVE_TARGET"
         command = (
             f"cd {shlex.quote(backend)} && "
             f"{target_var}=local "

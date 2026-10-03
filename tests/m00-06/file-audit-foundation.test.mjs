@@ -92,6 +92,21 @@ test("M00-06 migrations are scoped, indexed, MySQL57 and reversible", async () =
     assert.match(down, /DROP TABLE/);
   }
 });
+test("M00-06 production probe uses BaoTa and requires deployed tables", async () => {
+  const [probe, runner, runbook] = await Promise.all(
+    [
+      "scripts/verify-file-audit-live.mjs",
+      "scripts/verify-live-baota.py",
+      "docs/runbooks/m00-06-file-audit-foundation.md",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(probe, /SCOUTOPS_FILE_AUDIT_LIVE_TARGET/);
+  assert.match(probe, /verify-live-baota\.py.*file-audit/s);
+  assert.match(probe, /required migration table is missing/);
+  assert.doesNotMatch(probe, /CREATE TABLE/i);
+  assert.match(runner, /"file-audit"/);
+  assert.match(runbook, /SCOUTOPS_FILE_AUDIT_LIVE_TARGET=baota-production/);
+});
 test("M00-06 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized", async () => {
   const [api, map, ui, architecture, runbook, registry] = await Promise.all(
     [

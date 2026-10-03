@@ -155,6 +155,22 @@ test("M00-05 migration is scoped, indexed, MySQL57 and reversible", async () => 
   assert.doesNotMatch(up, /CHECK\s*\(|utf8mb4_0900/i);
   assert.match(down, /DROP TABLE/);
 });
+test("M00-05 production readiness probe runs on the fixed BaoTa production node", async () => {
+  const [probe, runner, runbook] = await Promise.all(
+    [
+      "scripts/verify-api-live.mjs",
+      "scripts/verify-live-baota.py",
+      "docs/runbooks/m00-05-api-foundation.md",
+    ].map((path) => readFile(path, "utf8")),
+  );
+  assert.match(probe, /SCOUTOPS_API_LIVE_TARGET/);
+  assert.match(probe, /verify-live-baota\.py.*api/s);
+  assert.match(runner, /probe not in \{"mysql", "redis", "api", "file-audit"\}/);
+  assert.match(runner, /config\/product_scout\.env/);
+  assert.match(runbook, /SCOUTOPS_API_LIVE_TARGET=baota-production/);
+  assert.match(runbook, /生产验收使用.*固定宝塔节点/s);
+});
+
 test("M00-05 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized", async () => {
   const [api, map, ui, architecture, runbook, registry] = await Promise.all(
     [
@@ -169,6 +185,7 @@ test("M00-05 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized
   for (const token of ["HealthReadyEnvelope", "ErrorEnvelope", "BearerAuth", "IdempotencyKey"])
     assert.match(api, new RegExp(token));
   assert.match(map, /apiFoundation/);
+  assert.match(map, /SCOUTOPS_API_LIVE_TARGET=baota-production/);
   for (const state of ["loading", "ready", "error"]) assert.match(ui, new RegExp(state));
   assert.match(architecture, /64_系统监控\.jpg/);
   assert.match(runbook, /## 故障与回滚/);
