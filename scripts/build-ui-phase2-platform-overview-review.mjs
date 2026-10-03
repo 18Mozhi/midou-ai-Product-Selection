@@ -5,6 +5,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { scanSource } from "./lib/ui-phase2-inventory.mjs";
 import { scanReviewSurfaces } from "./lib/ui-phase2-review-surfaces.mjs";
+import { findCommittedHistoricalRevision } from "./lib/ui-phase2-committed-history.mjs";
 
 export const base = "design-plans/ui-phase-2-2026-09-07";
 export const sourceFiles = [
@@ -17,6 +18,7 @@ export const parentFiles = [
   "apps/web/src/components/NavigationShell.vue",
   "apps/web/src/navigation-shell-route-state.ts",
   "config/route-catalog.json",
+  "apps/web/src/components/navigation-surface-registry.ts",
 ];
 export const evidenceFile = "output/playwright/p38-entry-links/evidence.json";
 export const contractFile = base + "/platform-overview-semantic-contract-review.md";
@@ -268,6 +270,7 @@ export function buildPlatformReview(inputs) {
     route: "/platform-admin",
     status: "source-reviewed-not-runtime-accepted",
     approval: "pending-user-review",
+    visualApproval: "user-approved-remaining-pages-auto",
     contract: contractFile,
     sourceHashes,
     actions,
@@ -376,7 +379,6 @@ export function validatePlatformReview(review, inputs) {
   );
   const shell = inputs.sources[parentFiles[0]].replace(/\s+/g, " ");
   for (const fragment of [
-    '"platform-dashboard": lazy("PlatformDashboard")',
     'const activeSurface = computed(() => String(route.meta.surface ?? ""))',
     "surfaceComponents[activeSurface.value] ?? null",
     "capabilities: allCapabilities.value",
@@ -387,6 +389,7 @@ export function validatePlatformReview(review, inputs) {
     'v-bind="selectedSurfaceProps"',
   ])
     assert.ok(shell.includes(fragment), "parent wiring changed: " + fragment);
+  assert.match(inputs.sources[parentFiles[3]], /"platform-dashboard": lazy\("PlatformDashboard"\)/);
   assert.match(
     shell,
     /selectedSurfaceProps = computed<Record<string, unknown>>\(\(\) => surfaceProps\(\{/,
@@ -407,8 +410,14 @@ export function validatePlatformReview(review, inputs) {
   assert.equal(e.checks.length, 20);
   assert.equal(e.navigation.length, 52);
   assert.equal(e.screenshots.length, 8);
-  for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(f)), sha, "evidence source drift: " + f);
+  for (const [f, sha] of Object.entries(e.sourceHashes)) {
+    const currentMatch = hash(read(f)) === sha;
+    const committedRevision = findCommittedHistoricalRevision(f, sha);
+    assert.ok(
+      currentMatch || committedRevision,
+      "evidence source is neither current nor committed history: " + f,
+    );
+  }
   const nav = candidates.filter((c) => c.tag === "RouterLink");
   assert.equal(nav.length, 13);
   for (const width of [390, 760, 761, 1440]) {

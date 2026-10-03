@@ -36,12 +36,13 @@ const context = {
 };
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P29.json`, "utf8"));
 
-test("P29 maps all eleven parent sites to three business actions, Logo validity and three exclusions", () => {
+test("P29 maps all fourteen parent sites to current actions and five explicit exclusions", () => {
+  assert.equal(review().visualApproval, "user-approved-remaining-pages-auto");
   const r = validateActionReview(review(), context);
-  assert.equal(r.sourceSites, 13);
-  assert.equal(r.semanticGroups, 8);
+  assert.equal(r.sourceSites, 14);
+  assert.equal(r.semanticGroups, 9);
   assert.equal(r.routeActions, 4); // Includes the local field callback, not four business buttons.
-  assert.equal(r.excludedGroups, 4);
+  assert.equal(r.excludedGroups, 5);
   assert.equal(r.writeActions, 1);
   assert.equal(r.unmappedVisualSlots, 0);
   assert.equal(r.sourceInapplicableVisualSlots, 4);
@@ -97,14 +98,14 @@ test("P29 refuses source omissions, nonexistent approval and stale source", () =
   assert.throws(() => validateActionReview(stale, context), /reviewed source drift/);
   const approved = review();
   approved.approval = "approved";
-  assert.throws(() => validateActionReview(approved, context), /cannot grant approval/);
+  assert.throws(() => validateActionReview(approved, context), /cannot grant action approval/);
   assert.throws(
     () =>
       buildOrganizationProfileReview(
         source + "\n// drift",
         packages.get("organization-profile-controls-direction-c"),
       ),
-    /verify current proposal/,
+    /current proposal source drift/,
   );
 });
 test("P29 refuses invented fields and a missing shared reason component", () => {

@@ -26,9 +26,10 @@
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 29448f61eb8ffc80.1 | PA40-OVERVIEW-TABS-OUT · overview分支二级导航，组织目录路由不渲染 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 968274c5acaf5a33.1 | PA40-OVERVIEW-TABS-OUT · overview分支二级导航，组织目录路由不渲染 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e400286c7cd59e44.1 | PA40-OVERVIEW-TABS-OUT · overview分支二级导航，组织目录路由不渲染 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 9c9141422bfd2c11.1 | PA-REFRESH · P40组织记录区手动读取，refreshing/busy时禁用 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 03d32a05b1b3fd19.1 | PA40-FILTER-DRAWER · 移动筛选抽屉容器，不另计筛选请求 |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 2d610959fc00fb96.1 | PA-FILTER · 组织查询表单提交至父级applyFilters |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 9c9141422bfd2c11.1 | PA-REFRESH · P39账号概览的记录区按钮；P40组织列表路由不渲染 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 9c9141422bfd2c11.2 | PA-REFRESH · P40组织记录区标题栏刷新，refreshing/busy时禁用 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 3c4dea26ac48746f.1 | PA40-FILTER-DRAWER · 移动筛选抽屉容器，不另计筛选请求 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 128119f3fb311b09.1 | PA-FILTER · 组织查询表单提交至父级applyFilters |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e9658d470d4cbeaf.1 | PA-FILTER · 搜索按钮提交同一组织查询表单 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 20080e701de7f5cb.1 | PA-RESET · 重置query/status；无筛选或读取中禁用 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 322a4ac62ce3a305.1 | PA-REFRESH · 首次读取失败后重试既有GET |

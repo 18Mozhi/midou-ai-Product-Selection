@@ -7,6 +7,7 @@ import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { scanSource } from "./lib/ui-phase2-inventory.mjs";
 import { scanReviewSurfaces } from "./lib/ui-phase2-review-surfaces.mjs";
+import { findCommittedHistoricalRevision } from "./lib/ui-phase2-committed-history.mjs";
 
 export const base = "design-plans/ui-phase-2-2026-09-07";
 export const parentFile = "apps/web/src/components/OrganizationAdminCenter.vue";
@@ -25,7 +26,7 @@ const definitions = [
     "OG-REFRESH",
     "刷新审计第一页",
     "read",
-    C("b11692c0597885e3.1"),
+    C("a1fb5dc1b30f9733.1"),
     ["OG-REFRESH"],
     "loading或refreshing禁用",
     "load({background:true})，审计分支不读取治理摘要",
@@ -49,6 +50,16 @@ const definitions = [
     ["OG-RETRY"],
     "仅approvals",
     "审批500/429专有组件不属于P37",
+    "normal",
+  ],
+  [
+    "EX-P34-READ-FEEDBACK",
+    "审批读取反馈分支排除",
+    "excluded",
+    C("ca4fa7a0220842a9.1"),
+    ["WIRE-P34-RETRY"],
+    "仅view===approvals且approvalReadFeedbackMode非空",
+    "P37 /org-admin/audit 不渲染该分支",
     "normal",
   ],
   [
@@ -303,6 +314,7 @@ export function buildOrgAuditReview({ sources, external }) {
     route: "/org-admin/audit",
     status: "source-reviewed-not-runtime-accepted",
     approval: "pending-user-review",
+    visualApproval: "user-approved-remaining-pages-auto",
     contract: base + "/organization-governance-contract-review.md",
     sourceHashes,
     actions,
@@ -466,8 +478,14 @@ export function validateOrgAuditBindings(review, inputs) {
     candidates.map((c) => c.candidateId).sort(),
   );
   for (const [key, e] of Object.entries(inputs.external)) {
-    for (const [f, sha] of Object.entries(e.sourceHashes))
-      assert.equal(hash(text(f)), sha, `${key}:${f}`);
+    for (const [f, sha] of Object.entries(e.sourceHashes)) {
+      const currentMatch = hash(text(f)) === sha;
+      const committedRevision = findCommittedHistoricalRevision(f, sha);
+      assert.ok(
+        currentMatch || committedRevision,
+        `${key}:${f} is neither current nor committed history`,
+      );
+    }
     for (const s of e.screenshots)
       assert.equal(
         hash(readFileSync(path.posix.dirname(externalPaths[key]) + "/" + s.file)),

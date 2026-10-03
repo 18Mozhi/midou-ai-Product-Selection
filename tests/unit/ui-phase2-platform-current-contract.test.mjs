@@ -42,7 +42,7 @@ test("platform current contract separates its historical inventory from all 40 c
     { ...result, links: undefined },
     {
       pages: 8,
-      candidates: 137,
+      candidates: 138,
       bindings: 24,
       sources: 40,
       historicalSources: 32,

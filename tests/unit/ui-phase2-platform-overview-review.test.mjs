@@ -46,7 +46,7 @@ test("P38 exact30 sites map to19 interactions and one dialog definition without 
   assert.throws(() => validateActionReview(omitted, context), /unmapped candidates/);
   const approved = build();
   approved.approval = "approved";
-  assert.throws(() => validateActionReview(approved, context), /cannot grant approval/);
+  assert.throws(() => validateActionReview(approved, context), /cannot grant action approval/);
   const duplicate = build();
   duplicate.actions[1].sourceCandidateIds.push(duplicate.actions[0].sourceCandidateIds[0]);
   assert.throws(() => validateActionReview(duplicate, context), /mapped twice/);
@@ -56,6 +56,8 @@ test("P38 density is retained as a model even though scanner has no explicit eve
   assert.deepEqual(validateReviewSurfaces(build().surfaceReview, inputs), {
     callerFiles: 4,
     localModelBindings: 2,
+    reviewedInputBindings: 2,
+    sourceCallerContainers: 1,
     callerContainers: 1,
     consumerVariants: 3,
     runtimeAcceptance: "unproven",
@@ -135,7 +137,7 @@ test("P38 source wiring rejects wrong dispatcher, capabilities, component props 
   });
   for (const [file, from, to] of [
     [
-      parentFiles[0],
+      parentFiles[3],
       '"platform-dashboard": lazy("PlatformDashboard")',
       '"platform-dashboard": lazy("PlatformManagementCenter")',
     ],
@@ -191,5 +193,6 @@ test("P38 source hash and semantic edits cannot silently pass registry validatio
   drift.sourceHashes[sourceFiles[0]] = "0".repeat(64);
   assert.throws(() => validateActionReview(drift, context), /source drift/);
   assert.equal(build().approval, "pending-user-review");
+  assert.equal(build().visualApproval, "user-approved-remaining-pages-auto");
   assert.match(build().compositionGaps.join(" "), /401\/403/);
 });

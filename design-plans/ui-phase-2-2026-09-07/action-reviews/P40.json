@@ -10,7 +10,7 @@
   "sourceHashes": {
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
     "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec",
-    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
     "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
   },
@@ -147,7 +147,7 @@
       "label": "查询并应用组织筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#2d610959fc00fb96.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#128119f3fb311b09.1",
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1"
       ],
       "condition": "组织名称/标识query与空、active、archived status提交；刷新中搜索禁用",
@@ -202,12 +202,12 @@
       "label": "刷新组织记录或重试首次读取",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.2",
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#322a4ac62ce3a305.1"
       ],
       "condition": "手动刷新按钮在refreshing或父级busy时禁用；首次读取失败时显示重试",
       "handler": "两者都调用父级既有load/GET；不产生新URL历史或写入",
-      "variants": ["manual-refresh", "first-read-error-retry"],
+      "variants": ["organization-heading-refresh", "first-read-error-retry"],
       "scenes": [
         { "package": "platform-organizations-direction-c", "scene": "refreshing" },
         { "package": "platform-organizations-direction-c", "scene": "error" }
@@ -224,6 +224,30 @@
         { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" }
       ],
       "remaining": "读取错误/保留快照/过期/拒绝策略与真实网络、RBAC仍待独立验收。"
+    },
+    {
+      "actionId": "PA39-REFRESH-OUT-OF-SCOPE",
+      "label": "账号概览记录刷新（P40排除）",
+      "kind": "excluded",
+      "sourceContractKeys": ["PA-REFRESH"],
+      "contractAliasReason": "该刷新控件仅在P39的非组织列表分支呈现；P40使用独立标题栏刷新候选。",
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.1"],
+      "condition": "仅organizationListRoute=false且adminListRoute=false的P39组织tab显示",
+      "handler": "P40 organizationListRoute=true时不渲染此P39专属刷新按钮",
+      "variants": ["p39-account-overview-refresh"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        { "file": "scripts/verify-ui-phase2-organization-list-preview.mjs", "evidenceType": "actual-vue-isolated-browser" }
+      ],
+      "remaining": "排除只针对P40路由分支；不代表P39刷新及跨页面生命周期通过。"
     },
     {
       "actionId": "PA40-WORKSPACE-WIRING",
@@ -261,7 +285,7 @@
       "actionId": "PA40-FILTER-DRAWER",
       "label": "移动筛选抽屉容器接线",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#03d32a05b1b3fd19.1"],
+      "sourceCandidateIds": ["apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#3c4dea26ac48746f.1"],
       "condition": "移动端ResponsiveFilterDrawer承载同一组织筛选表单",
       "handler": "容器不发额外请求或写入；提交沿PA-FILTER",
       "variants": ["mobile-filter-drawer"],
@@ -517,7 +541,7 @@
     "dependencyHashes": {
       "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
       "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec",
-      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
       "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
       "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
     },

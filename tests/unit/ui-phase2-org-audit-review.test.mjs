@@ -25,12 +25,13 @@ const context = {
   files: new Set(["scripts/verify-ui-phase2-org-audit-controls.mjs"]),
 };
 
-test("P37 covers23 exact sites in11 route actions and5 exclusions without writes", () => {
+test("P37 covers24 exact sites in11 route actions and6 exclusions without writes", () => {
+  assert.equal(build().visualApproval, "user-approved-remaining-pages-auto");
   const r = validateActionReview(build(), context);
-  assert.equal(r.sourceSites, 23);
-  assert.equal(r.semanticGroups, 16);
+  assert.equal(r.sourceSites, 24);
+  assert.equal(r.semanticGroups, 17);
   assert.equal(r.routeActions, 11);
-  assert.equal(r.excludedGroups, 5);
+  assert.equal(r.excludedGroups, 6);
   assert.equal(r.wiringGroups, 0);
   assert.equal(r.writeActions, 0);
   assert.equal(r.unmappedVisualSlots, 66);
@@ -40,7 +41,7 @@ test("P37 covers23 exact sites in11 route actions and5 exclusions without writes
   assert.throws(() => validateActionReview(missing, context), /unmapped candidates/);
   const promoted = build();
   promoted.approval = "approved";
-  assert.throws(() => validateActionReview(promoted, context), /cannot grant approval/);
+  assert.throws(() => validateActionReview(promoted, context), /cannot grant action approval/);
 });
 
 test("P37 has8 source fields,6 excluded fields,6 containers and9 explicit variants", () => {
@@ -54,6 +55,8 @@ test("P37 has8 source fields,6 excluded fields,6 containers and9 explicit varian
   assert.deepEqual(validateReviewSurfaces(build().surfaceReview, inputs), {
     callerFiles: 2,
     localModelBindings: 14,
+    reviewedInputBindings: 14,
+    sourceCallerContainers: 6,
     callerContainers: 6,
     consumerVariants: 9,
     runtimeAcceptance: "unproven",
@@ -97,6 +100,10 @@ test("P37 other-route reason and approvals remain exclusions,not local dialogs",
   assert.equal(r.actions.find((a) => a.actionId === "EX-REASON").sourceCandidateIds.length, 4);
   assert.equal(r.actions.find((a) => a.actionId === "EX-P34-RETRY").kind, "excluded");
   assert.equal(
+    r.actions.find((a) => a.actionId === "EX-P34-READ-FEEDBACK").sourceCandidateIds.length,
+    1,
+  );
+  assert.equal(
     r.surfaceReview.containers.filter((c) => c.tag === "AuditedReasonDialog")[0].variants[0]
       .evidenceScope,
     "route-excluded-reference",
@@ -110,8 +117,8 @@ test("P37 other-route reason and approvals remain exclusions,not local dialogs",
 
 test("P37 all19 variants and210 field/control images bind without proposal promotion", () => {
   assert.deepEqual(validateOrgAuditBindings(build(), inputs), {
-    sourceSites: 23,
-    semanticGroups: 16,
+    sourceSites: 24,
+    semanticGroups: 17,
     routeActions: 11,
     writeKinds: 0,
     functionProps: 2,

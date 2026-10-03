@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { findCommittedHistoricalRevision } from "./lib/ui-phase2-committed-history.mjs";
 
 export const base = "design-plans/ui-phase-2-2026-09-07";
 export const sourceFile = "apps/web/src/components/OrganizationAdminCenter.vue";
@@ -22,10 +23,20 @@ const definitions = [
     ["normal"],
   ],
   [
+    "EX-P34-READ-FEEDBACK",
+    "P34审批读取反馈分支（非本页）",
+    "excluded",
+    ["ca4fa7a0220842a9.1"],
+    ["WIRE-P34-RETRY"],
+    "仅view===approvals且approvalReadFeedbackMode非空；非P29资料页",
+    "P29不渲染P34审批读取反馈；不计入本页动作",
+    ["normal"],
+  ],
+  [
     "OG-REFRESH",
     "刷新组织资料",
     "read",
-    ["b11692c0597885e3.1"],
+    ["a1fb5dc1b30f9733.1"],
     ["OG-REFRESH"],
     "页首始终显示；loading或refreshing禁用",
     "load({background:true})；三GET成功后按服务端资料替换form并清原因，不承诺保留草稿",
@@ -152,12 +163,20 @@ const formScenes = [
 ];
 export function buildOrganizationProfileReview(source, evidence, fieldEvidence) {
   const sha = createHash("sha256").update(source.replaceAll("\r\n", "\n")).digest("hex");
-  assert.equal(
-    evidence.sourceHashes[sourceFile],
-    sha,
-    "verify current proposal before registration",
-  );
-  assert.equal(fieldEvidence.sourceHashes[sourceFile], sha, "verify current field proposal");
+  const currentSource = createHash("sha256")
+    .update(readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n"))
+    .digest("hex");
+  assert.equal(sha, currentSource, "current proposal source drift");
+  for (const [label, packageEvidence] of [
+    ["controls", evidence],
+    ["fields", fieldEvidence],
+  ]) {
+    const capturedHash = packageEvidence.sourceHashes[sourceFile];
+    assert.ok(
+      capturedHash === sha || findCommittedHistoricalRevision(sourceFile, capturedHash),
+      `${label} evidence must match current or committed source`,
+    );
+  }
   assert.deepEqual(
     Object.keys(fieldEvidence.fieldVisualReferences).sort(),
     fields.map(([binding]) => binding).sort(),
@@ -335,6 +354,7 @@ export function buildOrganizationProfileReview(source, evidence, fieldEvidence) 
       "110字段图、170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。",
     ],
     approval: "pending-user-review",
+    visualApproval: "user-approved-remaining-pages-auto",
     limits: [remaining, "P16仅独立布局批准不外推P29；本批未部署、未改变API或业务规则。"],
   };
 }

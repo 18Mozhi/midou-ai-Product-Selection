@@ -35,26 +35,26 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
 | apps/web/src/components/PlatformAdminComparisonMobile.css | 03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae |
-| apps/web/src/components/PlatformAdminDirectoryMobile.css | 6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3 |
+| apps/web/src/components/PlatformAdminDirectoryMobile.css | ad2e47e9e4030dd65c40c6567b0443c5fd809d31eadd0768f3e5e277766982ea |
 | apps/web/src/design/platform-overlay-tokens.css | 1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5 |
 | apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
 
 ## 当前40个来源的LF指纹（2026-09-27）
 
-候选当前集合从平台账号、用户与共享响应式控件三份合同中按实际扫描状态取`identity-current`/`line-moved`记录，历史身份不冒充现行候选。当前17个Vue文件共137个源码候选；原15个别名源的24个v-model绑定保持原口径，P43目录工作区的重复响应式控件绑定由用户页合同单独约束。计数扩展不改原128候选历史快照分母。以下40项包括原32源、六个既有新增依赖及两个当前候选源，校验器逐项对真实工作树做LF SHA-256核对。
+候选当前集合从平台账号、用户与共享响应式控件三份合同中按实际扫描状态取`identity-current`/`line-moved`记录，历史身份不冒充现行候选。当前17个Vue文件共138个源码候选；原15个别名源的24个v-model绑定保持原口径，P43目录工作区的重复响应式控件绑定由用户页合同单独约束。计数扩展不改原128候选历史快照分母。以下40项包括原32源、六个既有新增依赖及两个当前候选源，校验器逐项对真实工作树做LF SHA-256核对。
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformDashboard.vue | 902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e |
 | apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac |
 | apps/web/src/components/PlatformAccountGlobalRail.vue | cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e |
 | apps/web/src/components/PlatformOrganizationRecords.vue | 392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a |
 | apps/web/src/components/PlatformAdminRecords.vue | 74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297 |
 | apps/web/src/components/OrganizationCreationWizard.vue | 11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314 |
 | apps/web/src/components/PlatformOrganizationDetailDialog.vue | 47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43 |
 | apps/web/src/components/PlatformRoleComparison.vue | a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309 |
-| apps/web/src/components/PlatformAccountDialogs.vue | 4dcdb542d7f45cc445606a4f704679064d998239c62551d19f696a81be7af4da |
+| apps/web/src/components/PlatformAccountDialogs.vue | e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec |
 | apps/web/src/components/PlatformUserRecords.vue | a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228 |
 | apps/web/src/components/PlatformUserDetailDialog.vue | 43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b |
 | apps/web/src/components/PlatformUserMembershipForm.vue | 553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644 |
@@ -62,11 +62,11 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
 | apps/web/src/components/TableViewControls.vue | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
-| apps/web/src/use-modal-dialog.ts | 5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc |
+| apps/web/src/use-modal-dialog.ts | c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957 |
 | apps/web/src/use-platform-user-detail.ts | 8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e |
 | apps/web/src/platform-account-types.ts | 7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2 |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
-| apps/web/src/components/NavigationShell.vue | da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9 |
+| apps/web/src/components/NavigationShell.vue | 6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b |
 | apps/api/src/authorization-routes.ts | f670a9e21650e2fedd3ea691049de840cb2a47c9c6add471c38eb7e71e208975 |
 | apps/api/src/platform-account-routes.ts | 79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226 |
 | apps/api/src/platform-account-service.ts | 189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d |
@@ -82,7 +82,7 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
 | apps/web/src/components/PlatformAdminComparisonMobile.css | 03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae |
-| apps/web/src/components/PlatformAdminDirectoryMobile.css | 6a9f05f7690a67746b4ea9dc479ea7d78a43ad2b73707bde6d2dad0c2d0050f3 |
+| apps/web/src/components/PlatformAdminDirectoryMobile.css | ad2e47e9e4030dd65c40c6567b0443c5fd809d31eadd0768f3e5e277766982ea |
 | apps/web/src/design/platform-overlay-tokens.css | 1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5 |
 | apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
 

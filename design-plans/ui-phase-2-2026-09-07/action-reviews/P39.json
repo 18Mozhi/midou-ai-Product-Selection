@@ -6,7 +6,7 @@
   "approval": "pending-user-review",
   "contract": "design-plans/ui-phase-2-2026-09-07/P39-DIRECTORY-SOURCE-MAPPING.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
     "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
   },
@@ -217,12 +217,12 @@
       "label": "移动筛选抽屉容器关联",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#03d32a05b1b3fd19.1"
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#3c4dea26ac48746f.1"
       ],
       "condition": "ResponsiveFilterDrawer封装本页移动筛选表单，不产生额外筛选业务动作",
       "handler": "筛选意图由同一组件PA-FILTER提交；容器无独立写入",
       "variants": [
-        "03d32a05b1b3fd19.1"
+        "3c4dea26ac48746f.1"
       ],
       "scenes": [
         {
@@ -255,13 +255,13 @@
       "label": "查询与状态筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#2d610959fc00fb96.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#128119f3fb311b09.1",
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1"
       ],
       "condition": "query/status提交；刷新时搜索按钮禁用；移动筛选提交后关闭抽屉",
       "handler": "form submit触发apply-filters；搜索按钮只提交同一表单，不重复计动作",
       "variants": [
-        "2d610959fc00fb96.1",
+        "128119f3fb311b09.1",
         "e9658d470d4cbeaf.1"
       ],
       "scenes": [
@@ -328,17 +328,23 @@
     },
     {
       "actionId": "PA-REFRESH",
-      "label": "首次读取失败后重新加载",
+      "label": "手动刷新与首次读取失败重试",
       "kind": "read",
       "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.1",
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#322a4ac62ce3a305.1"
       ],
-      "condition": "仅state=error显示；loading/expired/forbidden分支不属于此按钮",
-      "handler": "emit load调用父页现有GET；不把首次错误与保留快照刷新错误合并",
+      "condition": "P39组织tab手动刷新在refreshing/busy时禁用；首次读取重试仅state=error显示",
+      "handler": "两者均emit load调用父页现有GET；不把首次错误与保留快照刷新错误合并",
       "variants": [
+        "9c9141422bfd2c11.1",
         "322a4ac62ce3a305.1"
       ],
       "scenes": [
+        {
+          "package": "account-overview-direction-c",
+          "scene": "refreshing"
+        },
         {
           "package": "account-overview-direction-c",
           "scene": "error"
@@ -362,7 +368,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "错误状态场景存在不代表生产401/403或读取副作用已验收。"
+      "remaining": "图稿不代表生产401/403、保留快照策略或读取副作用已验收。"
     },
     {
       "actionId": "PA39-ORG-CREATE-EMPTY-EXCLUDED",
@@ -632,12 +638,12 @@
       "label": "组织列表手动刷新（P39排除）",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.1"
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.2"
       ],
-      "condition": "organizationListRoute=true时显示",
-      "handler": "P39账号概览不渲染组织列表页头刷新按钮",
+      "condition": "仅organizationListRoute=true时显示；P39账号概览不满足该条件",
+      "handler": "P39账号概览不渲染P40组织列表标题栏刷新按钮",
       "variants": [
-        "9c9141422bfd2c11.1"
+        "9c9141422bfd2c11.2"
       ],
       "scenes": [],
       "visualStates": {
@@ -675,8 +681,9 @@
       "apps/web/src/components/PlatformAccountGlobalRail.vue",
       "apps/web/src/components/PlatformOrganizationRecords.vue"
     ],
+    "inputScope": "reviewed-subset-of-shared-source",
     "dependencyHashes": {
-      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
       "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
       "apps/web/src/components/PlatformOrganizationRecords.vue": "392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a"
     },

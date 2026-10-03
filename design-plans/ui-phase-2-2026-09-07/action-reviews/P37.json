@@ -4,6 +4,7 @@
   "route": "/org-admin/audit",
   "status": "source-reviewed-not-runtime-accepted",
   "approval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
@@ -126,8 +127,8 @@
       "remaining": "来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。"
     },
     {
-      "actionId": "EX-P34-READ-RECOVERY",
-      "label": "P34审批读取恢复接线（非本页）",
+      "actionId": "EX-P34-READ-FEEDBACK",
+      "label": "审批读取反馈分支排除",
       "kind": "excluded",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
@@ -135,12 +136,9 @@
       "sourceContractKeys": [
         "WIRE-P34-RETRY"
       ],
-      "priorContractKeys": [
-        "OG-RETRY"
-      ],
-      "contractAliasReason": "当前组织治理合同将P34的reload父级接线登记为WIRE-P34-RETRY并指向OG-RETRY；当前页面不渲染approvals分支。",
-      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P37",
-      "handler": "P37不渲染此分支；P34将reload转发至既有load()，不计入本页动作",
+      "contractAliasReason": "按F04完整合同单元格关联；两复制字段分组不增加来源数。",
+      "condition": "仅view===approvals且approvalReadFeedbackMode非空",
+      "handler": "P37 /org-admin/audit 不渲染该分支",
       "variants": [
         "source-current"
       ],
@@ -164,7 +162,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。"
+      "remaining": "来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。"
     },
     {
       "actionId": "EX-P29-PROFILE",
@@ -2553,6 +2551,5 @@
   "limits": [
     "来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。",
     "本地仅复制/分页归属修复；无API/env/权限/数据库或审核批准变更，未部署生产。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

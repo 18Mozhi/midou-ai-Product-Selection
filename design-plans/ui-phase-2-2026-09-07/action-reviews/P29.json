@@ -56,8 +56,8 @@
       "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
     },
     {
-      "actionId": "EX-P34-READ-RECOVERY",
-      "label": "P34审批读取恢复接线（非本页）",
+      "actionId": "EX-P34-READ-FEEDBACK",
+      "label": "P34审批读取反馈分支（非本页）",
       "kind": "excluded",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
@@ -65,12 +65,9 @@
       "sourceContractKeys": [
         "WIRE-P34-RETRY"
       ],
-      "priorContractKeys": [
-        "OG-RETRY"
-      ],
-      "contractAliasReason": "当前组织治理合同将P34的reload父级接线登记为WIRE-P34-RETRY并指向OG-RETRY；当前页面不渲染approvals分支。",
-      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P29",
-      "handler": "P29不渲染此分支；P34将reload转发至既有load()，不计入本页动作",
+      "contractAliasReason": "沿F04完整语义末列显式合并表单/保存及共享原因调用；不从按钮文案推断动作。",
+      "condition": "仅view===approvals且approvalReadFeedbackMode非空；非P29资料页",
+      "handler": "P29不渲染P34审批读取反馈；不计入本页动作",
       "variants": [
         "normal"
       ],
@@ -102,7 +99,7 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。"
+      "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
     },
     {
       "actionId": "OG-REFRESH",
@@ -1662,9 +1659,9 @@
     "110字段图、170控件图与74整页图不代表真实Vue已实现；OG-G02和其它生命周期缺口仍存在。"
   ],
   "approval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "limits": [
     "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。",
     "P16仅独立布局批准不外推P29；本批未部署、未改变API或业务规则。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

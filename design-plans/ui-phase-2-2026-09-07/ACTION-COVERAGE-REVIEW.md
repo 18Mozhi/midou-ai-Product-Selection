@@ -2,8 +2,8 @@
 
 基线8e54f6d8；机器对账加人工源语义映射，不替代用户审核。
 
-- 当前源候选1758；旧登记1758；新身份0，旧表独有身份0。签名变化不等于增删业务能力。
-- 已具体语义对应73页/1592源位置/1303组；其中路由动作1069组，转发/容器关联122组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
+- 当前源候选1759；旧登记1758；新身份3，旧表独有身份2。签名变化不等于增删业务能力。
+- 已具体语义对应73页/1593源位置/1306组；其中路由动作1069组，转发/容器关联122组，其余明确排除。其余0页未完成此级映射，不称没有图或没有测试。
 - 原覆盖门与用户批准保持；静态合同已有引用，不表示六态或全弹窗已验收。
 
 已有视觉授权标记73页；语义动作授权0页。本清单不把视觉通过提升为动作通过，coverage.json中的正式页面签收保持原值。
@@ -25,66 +25,66 @@
 | [P09 快速引导](page-specs/P09.md) | 7 | [6组](action-reviews/P09.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P10 外观偏好](page-specs/P10.md) | 13 | [13组](action-reviews/P10.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P11 个人中心](page-specs/P11.md) | 41 | [28组](action-reviews/P11.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P12 今日行动](page-specs/P12.md) | 1604 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P13 今日工作](page-specs/P13.md) | 1604 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P14 热点趋势](page-specs/P14.md) | 1604 | [53组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P15 选品机会](page-specs/P15.md) | 1604 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P16 创建选品](page-specs/P16.md) | 1604 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P17 评分规则](page-specs/P17.md) | 1604 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P18 机会详情](page-specs/P18.md) | 1604 | [66组](action-reviews/P18.json) | 330个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P19 竞品监控](page-specs/P19.md) | 1604 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P20 竞品监控规则](page-specs/P20.md) | 1604 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P21 供应链与利润](page-specs/P21.md) | 1604 | [41组](action-reviews/P21.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P22 费用与利润规则](page-specs/P22.md) | 1604 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P23 全部任务](page-specs/P23.md) | 1604 | [40组](action-reviews/P23.json) | 192个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P24 任务详情](page-specs/P24.md) | 1604 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P25 审批中心](page-specs/P25.md) | 1604 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P26 通知中心](page-specs/P26.md) | 1604 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P27 自动化规则](page-specs/P27.md) | 1604 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P28 报表与导出](page-specs/P28.md) | 1604 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P29 治理概览](page-specs/P29.md) | 1604 | [9组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P30 成员与邀请](page-specs/P30.md) | 1604 | [25组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P31 角色与权限](page-specs/P31.md) | 1604 | [26组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P32 工作区管理](page-specs/P32.md) | 1604 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P33 团队管理](page-specs/P33.md) | 1604 | [20组](action-reviews/P33.json) | 29个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P34 审批模板](page-specs/P34.md) | 1604 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P35 组织数据](page-specs/P35.md) | 1604 | [15组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P36 组织令牌](page-specs/P36.md) | 1604 | [20组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P37 组织审计](page-specs/P37.md) | 1604 | [17组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P38 平台概览](page-specs/P38.md) | 1604 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P39 账号与组织](page-specs/P39.md) | 1604 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P40 组织管理](page-specs/P40.md) | 1604 | [16组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P41 创建组织](page-specs/P41.md) | 1604 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P42 组织详情](page-specs/P42.md) | 1604 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P43 用户管理](page-specs/P43.md) | 1604 | [39组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P44 管理员管理](page-specs/P44.md) | 1604 | [44组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P45 角色权限](page-specs/P45.md) | 1604 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P46 来源设置](page-specs/P46.md) | 1604 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P47 采集程序](page-specs/P47.md) | 1604 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P48 热点来源](page-specs/P48.md) | 1604 | [26组](action-reviews/P48.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P49 1688 启用检查](page-specs/P49.md) | 1604 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P50 凭证与档案](page-specs/P50.md) | 1604 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P51 采集任务](page-specs/P51.md) | 1604 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P52 采集总览](page-specs/P52.md) | 1604 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P53 网页登录采集](page-specs/P53.md) | 1604 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P54 数据中心](page-specs/P54.md) | 1604 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P55 质量与规则](page-specs/P55.md) | 1604 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P56 内容管理](page-specs/P56.md) | 1604 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P57 通知管理](page-specs/P57.md) | 1604 | [22组](action-reviews/P57.json) | 132个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P58 配额管理](page-specs/P58.md) | 1604 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P59 安全中心](page-specs/P59.md) | 1604 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P60 开放平台](page-specs/P60.md) | 1604 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P61 系统状态](page-specs/P61.md) | 1604 | [6组](action-reviews/P61.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P62 链路日志](page-specs/P62.md) | 1604 | [13组](action-reviews/P62.json) | 78个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P63 接口覆盖证据](page-specs/P63.md) | 1604 | [2组](action-reviews/P63.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P64 备份与恢复](page-specs/P64.md) | 1604 | [5组](action-reviews/P64.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P65 发布管理](page-specs/P65.md) | 1604 | [7组](action-reviews/P65.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P66 服务拓扑](page-specs/P66.md) | 1604 | [12组](action-reviews/P66.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P67 Redis 运行](page-specs/P67.md) | 1604 | [3组](action-reviews/P67.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P68 MySQL 运行](page-specs/P68.md) | 1604 | [3组](action-reviews/P68.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P69 文件存储](page-specs/P69.md) | 1604 | [3组](action-reviews/P69.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P70 采集调度](page-specs/P70.md) | 1604 | [9组](action-reviews/P70.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
-| [P71 容量边界](page-specs/P71.md) | 1604 | [3组](action-reviews/P71.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P12 今日行动](page-specs/P12.md) | 1602 | [16组](action-reviews/P12.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P13 今日工作](page-specs/P13.md) | 1602 | [36组](action-reviews/P13.json) | 174个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P14 热点趋势](page-specs/P14.md) | 1602 | [53组](action-reviews/P14.json) | 252个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P15 选品机会](page-specs/P15.md) | 1602 | [36组](action-reviews/P15.json) | 168个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P16 创建选品](page-specs/P16.md) | 1602 | [9组](action-reviews/P16.json) | 4个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P17 评分规则](page-specs/P17.md) | 1602 | [19组](action-reviews/P17.json) | 96个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P18 机会详情](page-specs/P18.md) | 1602 | [66组](action-reviews/P18.json) | 330个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P19 竞品监控](page-specs/P19.md) | 1602 | [23组](action-reviews/P19.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P20 竞品监控规则](page-specs/P20.md) | 1602 | [12组](action-reviews/P20.json) | 8个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P21 供应链与利润](page-specs/P21.md) | 1602 | [41组](action-reviews/P21.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P22 费用与利润规则](page-specs/P22.md) | 1602 | [20组](action-reviews/P22.json) | 104个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P23 全部任务](page-specs/P23.md) | 1602 | [40组](action-reviews/P23.json) | 192个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P24 任务详情](page-specs/P24.md) | 1602 | [34组](action-reviews/P24.json) | 164个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P25 审批中心](page-specs/P25.md) | 1602 | [30组](action-reviews/P25.json) | 21个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P26 通知中心](page-specs/P26.md) | 1602 | [19组](action-reviews/P26.json) | 3个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P27 自动化规则](page-specs/P27.md) | 1602 | [16组](action-reviews/P27.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P28 报表与导出](page-specs/P28.md) | 1602 | [11组](action-reviews/P28.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P29 治理概览](page-specs/P29.md) | 1602 | [9组](action-reviews/P29.json) | 0个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P30 成员与邀请](page-specs/P30.md) | 1602 | [25组](action-reviews/P30.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P31 角色与权限](page-specs/P31.md) | 1602 | [26组](action-reviews/P31.json) | 44个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P32 工作区管理](page-specs/P32.md) | 1602 | [23组](action-reviews/P32.json) | 28个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P33 团队管理](page-specs/P33.md) | 1602 | [20组](action-reviews/P33.json) | 29个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P34 审批模板](page-specs/P34.md) | 1602 | [13组](action-reviews/P34.json) | 15个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P35 组织数据](page-specs/P35.md) | 1602 | [15组](action-reviews/P35.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P36 组织令牌](page-specs/P36.md) | 1602 | [20组](action-reviews/P36.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P37 组织审计](page-specs/P37.md) | 1602 | [17组](action-reviews/P37.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P38 平台概览](page-specs/P38.md) | 1602 | [20组](action-reviews/P38.json) | 114个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P39 账号与组织](page-specs/P39.md) | 1602 | [18组](action-reviews/P39.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P40 组织管理](page-specs/P40.md) | 1602 | [17组](action-reviews/P40.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P41 创建组织](page-specs/P41.md) | 1602 | [9组](action-reviews/P41.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P42 组织详情](page-specs/P42.md) | 1602 | [14组](action-reviews/P42.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P43 用户管理](page-specs/P43.md) | 1602 | [40组](action-reviews/P43.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P44 管理员管理](page-specs/P44.md) | 1602 | [45组](action-reviews/P44.json) | 186个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P45 角色权限](page-specs/P45.md) | 1602 | [5组](action-reviews/P45.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P46 来源设置](page-specs/P46.md) | 1602 | [24组](action-reviews/P46.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P47 采集程序](page-specs/P47.md) | 1602 | [23组](action-reviews/P47.json) | 90个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P48 热点来源](page-specs/P48.md) | 1602 | [26组](action-reviews/P48.json) | 156个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P49 1688 启用检查](page-specs/P49.md) | 1602 | [11组](action-reviews/P49.json) | 66个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P50 凭证与档案](page-specs/P50.md) | 1602 | [21组](action-reviews/P50.json) | 126个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P51 采集任务](page-specs/P51.md) | 1602 | [20组](action-reviews/P51.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P52 采集总览](page-specs/P52.md) | 1602 | [24组](action-reviews/P52.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P53 网页登录采集](page-specs/P53.md) | 1602 | [10组](action-reviews/P53.json) | 60个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P54 数据中心](page-specs/P54.md) | 1602 | [18组](action-reviews/P54.json) | 26个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P55 质量与规则](page-specs/P55.md) | 1602 | [8组](action-reviews/P55.json) | 48个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P56 内容管理](page-specs/P56.md) | 1602 | [7组](action-reviews/P56.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P57 通知管理](page-specs/P57.md) | 1602 | [22组](action-reviews/P57.json) | 132个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P58 配额管理](page-specs/P58.md) | 1602 | [24组](action-reviews/P58.json) | 144个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P59 安全中心](page-specs/P59.md) | 1602 | [9组](action-reviews/P59.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P60 开放平台](page-specs/P60.md) | 1602 | [20组](action-reviews/P60.json) | 120个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P61 系统状态](page-specs/P61.md) | 1602 | [6组](action-reviews/P61.json) | 36个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P62 链路日志](page-specs/P62.md) | 1602 | [13组](action-reviews/P62.json) | 78个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P63 接口覆盖证据](page-specs/P63.md) | 1602 | [2组](action-reviews/P63.json) | 12个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P64 备份与恢复](page-specs/P64.md) | 1602 | [5组](action-reviews/P64.json) | 30个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P65 发布管理](page-specs/P65.md) | 1602 | [7组](action-reviews/P65.json) | 42个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P66 服务拓扑](page-specs/P66.md) | 1602 | [12组](action-reviews/P66.json) | 72个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P67 Redis 运行](page-specs/P67.md) | 1602 | [3组](action-reviews/P67.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P68 MySQL 运行](page-specs/P68.md) | 1602 | [3组](action-reviews/P68.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P69 文件存储](page-specs/P69.md) | 1602 | [3组](action-reviews/P69.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P70 采集调度](page-specs/P70.md) | 1602 | [9组](action-reviews/P70.json) | 54个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
+| [P71 容量边界](page-specs/P71.md) | 1602 | [3组](action-reviews/P71.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P72 界面状态](page-specs/P72.md) | 13 | [4组](action-reviews/P72.json) | 24个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 | [P73 页面不存在](page-specs/P73.md) | 3 | [3组](action-reviews/P73.json) | 18个视觉状态槽待判断/映射；完整组合/真实Vue待验 |
 
@@ -2577,7 +2577,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | 合同组 / 性质 | 源位置 / 动态变体 | 已有场景入口 | 剩余核对 |
 | --- | --- | --- | --- |
 | EX-P34-FIRST-FAILURE P34首次读取失败转发（非本页） / excluded | 2处；normal | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
-| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；normal | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
+| EX-P34-READ-FEEDBACK P34审批读取反馈分支（非本页） / excluded | 1处；normal | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 | OG-REFRESH 刷新组织资料 / read | 1处；normal、refreshing、loading、refresh_error、dirty_refresh | [normal · 1440](design/organization-profile-direction-c/1440-normal.png) / [normal · 390](design/organization-profile-direction-c/390-normal.png)、[refreshing · 1440](design/organization-profile-direction-c/1440-refreshing.png) / [refreshing · 390](design/organization-profile-direction-c/390-refreshing.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 | OG-RETRY 错误后重新加载 / read | 1处；error、blocked、expired、forbidden、rate_limited、conflict_page | [error · 1440](design/organization-profile-direction-c/1440-error.png) / [error · 390](design/organization-profile-direction-c/390-error.png)、[blocked · 1440](design/organization-profile-direction-c/1440-blocked.png) / [blocked · 390](design/organization-profile-direction-c/390-blocked.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
 | OG-PROFILE-SAVE 保存并审计 / write | 2处；editing、save_busy、save_error、save_conflict、save_success、write_read_failed、save_timeout | [editing · 1440](design/organization-profile-direction-c/1440-editing.png) / [editing · 390](design/organization-profile-direction-c/390-editing.png)、[save_busy · 1440](design/organization-profile-direction-c/1440-save_busy.png) / [save_busy · 390](design/organization-profile-direction-c/390-save_busy.png)；其余见JSON | 具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。 |
@@ -3131,7 +3131,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OG-REFRESH 刷新令牌数据 / read | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | OG-RETRY 重新读取 / read | 1处；source-current | [error · 1440](design/org-token-direction-c/1440-error.png) / [error · 390](design/org-token-direction-c/390-error.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | EX-P34-RETRY 审批专有转发排除 / excluded | 2处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
-| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
+| EX-P34-READ-FEEDBACK 审批读取反馈分支排除 / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | EX-P29-PROFILE 资料表单排除 / excluded | 3处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | EX-P30-MEMBERS 成员转发排除 / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
 | EX-P31-ROLES 资源授权转发排除 / excluded | 1处；source-current | [normal · 1440](design/org-token-direction-c/1440-normal.png) / [normal · 390](design/org-token-direction-c/390-normal.png)；其余见JSON | 源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。 |
@@ -3211,7 +3211,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | OG-REFRESH 刷新审计第一页 / read | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | OG-RETRY 重新读取 / read | 1处；source-current | [error · 1440](design/org-audit-direction-c/1440-error.png) / [error · 390](design/org-audit-direction-c/390-error.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | EX-P34-RETRY 审批专有恢复排除 / excluded | 2处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
-| EX-P34-READ-RECOVERY P34审批读取恢复接线（非本页） / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。 |
+| EX-P34-READ-FEEDBACK 审批读取反馈分支排除 / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | EX-P29-PROFILE 组织资料表单排除 / excluded | 3处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | EX-P30-MEMBERS 成员事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
 | EX-P31-ROLES 资源授权事件排除 / excluded | 1处；source-current | [normal · 1440](design/org-audit-direction-c/1440-normal.png) / [normal · 390](design/org-audit-direction-c/390-normal.png)；其余见JSON | 来源与图稿关联；复制及分页响应归属已有局部Vue验证，完整C、历史/生命周期、权限/API与生产验收未完成。 |
@@ -3330,7 +3330,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P39 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P39.json)：22个局部源位置 → 18组；0类写入，8组路由动作，2组转发/容器关联不重复计动作。已映射6/6个源码字段位置，3/3处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P39.json)：23个局部源位置 → 18组；0类写入，8组路由动作，2组转发/容器关联不重复计动作。已映射6/8个源码字段位置，3/3处调用/内嵌容器，3个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有48个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3342,10 +3342,10 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | PA39-NAV-ORG-ADMIN-BRANCH 管理员列表分支组织导航（P39排除） / excluded | 1处；apps/web/src/components/PlatformAccountGlobalRail.vue#29448f61eb8ffc80.1 | ；其余见JSON | 只排除P44条件分支，不代表P44页面已完成本动作映射。 |
 | PA39-NAV-USER-ADMIN-BRANCH 管理员列表分支用户导航（P39排除） / excluded | 1处；apps/web/src/components/PlatformAccountGlobalRail.vue#ffed2dd7f439c4b0.1 | ；其余见JSON | 只排除P44条件分支，不代表P43页面已完成本动作映射。 |
 | PA39-NAV-ADMIN-ADMIN-BRANCH 管理员列表分支管理员导航（P39排除） / excluded | 1处；apps/web/src/components/PlatformAccountGlobalRail.vue#e400286c7cd59e44.1 | ；其余见JSON | 只排除P44条件分支，不代表P44页面已完成本动作映射。 |
-| PA-FILTER-DRAWER 移动筛选抽屉容器关联 / wiring | 1处；03d32a05b1b3fd19.1 | [filter_open · 1440](design/account-overview-direction-c/1440-filter_open.png) / [filter_open · 390](design/account-overview-direction-c/390-filter_open.png)；其余见JSON | 场景引用不等同弹窗完整组合或真实焦点生命周期验收。 |
-| PA-FILTER 查询与状态筛选 / read | 2处；2d610959fc00fb96.1、e9658d470d4cbeaf.1 | [filter_open · 1440](design/account-overview-direction-c/1440-filter_open.png) / [filter_open · 390](design/account-overview-direction-c/390-filter_open.png)、[filtered_empty · 1440](design/account-overview-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/account-overview-direction-c/390-filtered_empty.png)；其余见JSON | 沿用现有URL、读取与筛选规则；场景图不抵扣各字段逐控件状态或真实会话/RBAC验收。 |
+| PA-FILTER-DRAWER 移动筛选抽屉容器关联 / wiring | 1处；3c4dea26ac48746f.1 | [filter_open · 1440](design/account-overview-direction-c/1440-filter_open.png) / [filter_open · 390](design/account-overview-direction-c/390-filter_open.png)；其余见JSON | 场景引用不等同弹窗完整组合或真实焦点生命周期验收。 |
+| PA-FILTER 查询与状态筛选 / read | 2处；128119f3fb311b09.1、e9658d470d4cbeaf.1 | [filter_open · 1440](design/account-overview-direction-c/1440-filter_open.png) / [filter_open · 390](design/account-overview-direction-c/390-filter_open.png)、[filtered_empty · 1440](design/account-overview-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/account-overview-direction-c/390-filtered_empty.png)；其余见JSON | 沿用现有URL、读取与筛选规则；场景图不抵扣各字段逐控件状态或真实会话/RBAC验收。 |
 | PA-RESET 清除当前页组织筛选 / read | 2处；20080e701de7f5cb.1、86ea70e081f1f8e3.1 | [filtered_empty · 1440](design/account-overview-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/account-overview-direction-c/390-filtered_empty.png)；其余见JSON | P44专属空态重置另行排除；本组不改变路由或读取合同。 |
-| PA-REFRESH 首次读取失败后重新加载 / read | 1处；322a4ac62ce3a305.1 | [error · 1440](design/account-overview-direction-c/1440-error.png) / [error · 390](design/account-overview-direction-c/390-error.png)、[refresh_failed · 1440](design/account-overview-direction-c/1440-refresh_failed.png) / [refresh_failed · 390](design/account-overview-direction-c/390-refresh_failed.png)；其余见JSON | 错误状态场景存在不代表生产401/403或读取副作用已验收。 |
+| PA-REFRESH 手动刷新与首次读取失败重试 / read | 2处；9c9141422bfd2c11.1、322a4ac62ce3a305.1 | [refreshing · 1440](design/account-overview-direction-c/1440-refreshing.png) / [refreshing · 390](design/account-overview-direction-c/390-refreshing.png)、[error · 1440](design/account-overview-direction-c/1440-error.png) / [error · 390](design/account-overview-direction-c/390-error.png)；其余见JSON | 图稿不代表生产401/403、保留快照策略或读取副作用已验收。 |
 | PA39-ORG-CREATE-EMPTY-EXCLUDED 组织列表空态创建（P39排除） / excluded | 1处；f68d2406f8c1db70.1 | ；其余见JSON | 只排除P39中的P40空态分支，不代表P40动作完成。 |
 | PA-ORG-DETAIL 查看组织详情 / navigation | 2处；6923b73e52535ef3.1、2a07373cb016b4b5.1 | [preview · 1440](design/account-overview-direction-c/1440-preview.png) / [preview · 390](design/account-overview-direction-c/390-preview.png)、[preview_technical · 1440](design/account-overview-direction-c/1440-preview_technical.png) / [preview_technical · 390](design/account-overview-direction-c/390-preview_technical.png)；其余见JSON | 详情页内容/全局缓存往返和目标路由真实授权另属P42及生产验收。 |
 | PA-ORG-DETAIL-WIRING 组织详情事件转发 / wiring | 1处；8871f6d994e9fced.1 | [preview · 1440](design/account-overview-direction-c/1440-preview.png) / [preview · 390](design/account-overview-direction-c/390-preview.png)；其余见JSON | 事件链可静态追到父handler；不替代已挂载真实权限或目标页验收。 |
@@ -3353,7 +3353,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | PA43-DETAIL-OUT-OF-SCOPE 用户/管理员详情转发（P39排除） / excluded | 2处；44e761922e1da1d0.1、103fa7d7798d62d6.1 | ；其余见JSON | 排除只针对P39路由；P43/P44详情链路未由本记录验收。 |
 | PA44-RESET-OUT-OF-SCOPE 管理员空态清除筛选（P39排除） / excluded | 1处；86ea70e081f1f8e3.2 | ；其余见JSON | 排除只针对P39路由，不代表P44空态完成验收。 |
 | PA44-USER-CREATE-OUT-OF-SCOPE 管理员空态新建（P39排除） / excluded | 1处；38003e3f7b002f71.1 | ；其余见JSON | 排除只针对P39子组件变体；不代表P39页头创建弹窗或P44写入完成验收。 |
-| PA40-REFRESH-OUT-OF-SCOPE 组织列表手动刷新（P39排除） / excluded | 1处；9c9141422bfd2c11.1 | ；其余见JSON | 排除只针对P39概览变体，不代表P40刷新按钮的真实生命周期验收。 |
+| PA40-REFRESH-OUT-OF-SCOPE 组织列表手动刷新（P39排除） / excluded | 1处；9c9141422bfd2c11.2 | ；其余见JSON | 排除只针对P39概览变体，不代表P40刷新按钮的真实生命周期验收。 |
 
 ### 事件转发关系（不增加业务动作）
 
@@ -3392,7 +3392,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P40 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P40.json)：53个局部源位置 → 16组；1类写入，11组路由动作，4组转发/容器关联不重复计动作。已映射7/14个源码字段位置，6/11处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P40.json)：54个局部源位置 → 17组；1类写入，11组路由动作，4组转发/容器关联不重复计动作。已映射7/16个源码字段位置，6/11处调用/内嵌容器，6个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有66个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3404,7 +3404,8 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | PA40-USER-DIALOG-WIRING P40用户弹窗的父子事件接线 / wiring | 4处；create-user-dialog、shared-inactive-dialog-branches | [create_user · 1440](design/account-overview-direction-c/1440-create_user.png) / [create_user · 390](design/account-overview-direction-c/390-create_user.png)；其余见JSON | 接线登记不等于每个共享弹窗分支的字段/焦点/写入验收；P40只验当前可达用户创建分支。 |
 | PA-FILTER 查询并应用组织筛选 / read | 2处；desktop-inline-filter、mobile-filter-drawer | [filter · 1440](design/platform-organizations-direction-c/1440-filter.png) / [filter · 390](design/platform-organizations-direction-c/390-filter.png)、[filtered_empty · 1440](design/platform-organizations-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/platform-organizations-direction-c/390-filtered_empty.png)；其余见JSON | 现有夹具验证浏览器URL与读取参数，不证明真实MySQL过滤、权限或排序。 |
 | PA-RESET 清除组织筛选 / read | 2处；filter-bar-reset、filtered-empty-clear | [filtered_empty · 1440](design/platform-organizations-direction-c/1440-filtered_empty.png) / [filtered_empty · 390](design/platform-organizations-direction-c/390-filtered_empty.png)；其余见JSON | 不外推浏览器完整历史栈、跨KeepAlive返回或真实服务端查询验收。 |
-| PA-REFRESH 刷新组织记录或重试首次读取 / read | 2处；manual-refresh、first-read-error-retry | [refreshing · 1440](design/platform-organizations-direction-c/1440-refreshing.png) / [refreshing · 390](design/platform-organizations-direction-c/390-refreshing.png)、[error · 1440](design/platform-organizations-direction-c/1440-error.png) / [error · 390](design/platform-organizations-direction-c/390-error.png)；其余见JSON | 读取错误/保留快照/过期/拒绝策略与真实网络、RBAC仍待独立验收。 |
+| PA-REFRESH 刷新组织记录或重试首次读取 / read | 2处；organization-heading-refresh、first-read-error-retry | [refreshing · 1440](design/platform-organizations-direction-c/1440-refreshing.png) / [refreshing · 390](design/platform-organizations-direction-c/390-refreshing.png)、[error · 1440](design/platform-organizations-direction-c/1440-error.png) / [error · 390](design/platform-organizations-direction-c/390-error.png)；其余见JSON | 读取错误/保留快照/过期/拒绝策略与真实网络、RBAC仍待独立验收。 |
+| PA39-REFRESH-OUT-OF-SCOPE 账号概览记录刷新（P40排除） / excluded | 1处；p39-account-overview-refresh | ；其余见JSON | 排除只针对P40路由分支；不代表P39刷新及跨页面生命周期通过。 |
 | PA40-WORKSPACE-WIRING 父级连接组织目录工作区 / wiring | 1处；organization-list-route | [list · 1440](design/platform-organizations-direction-c/1440-list.png) / [list · 390](design/platform-organizations-direction-c/390-list.png)；其余见JSON | 本组核对事件连接，不代表父级请求、角色权限和缓存/迟到结果已生产验收。 |
 | PA40-FILTER-DRAWER 移动筛选抽屉容器接线 / wiring | 1处；mobile-filter-drawer | [filter · 1440](design/platform-organizations-direction-c/1440-filter.png) / [filter · 390](design/platform-organizations-direction-c/390-filter.png)；其余见JSON | 焦点循环、触发器返焦、软键盘及共享抽屉其它消费者单独验收。 |
 | PA-ORG-DETAIL 从桌面记录或手机预览打开组织详情 / navigation | 2处；desktop-row、mobile-preview | [preview · 1440](design/platform-organizations-direction-c/1440-preview.png) / [preview · 390](design/platform-organizations-direction-c/390-preview.png)、[detail · 1440](design/platform-organizations-direction-c/1440-detail.png) / [detail · 390](design/platform-organizations-direction-c/390-detail.png)；其余见JSON | 当前浏览器路由夹具不是P42编辑/状态操作、真实组织授权或KeepAlive历史验收。 |
@@ -3611,7 +3612,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P43 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P43.json)：67个局部源位置 → 39组；3类写入，27组路由动作，5组转发/容器关联不重复计动作。已映射11/17个源码字段位置，12/13处调用/内嵌容器，12个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P43.json)：68个局部源位置 → 40组；3类写入，27组路由动作，5组转发/容器关联不重复计动作。已映射11/19个源码字段位置，12/13处调用/内嵌容器，12个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有156个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3629,6 +3630,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | PA43-DETAIL-WIRING 用户详情事件父级接线 / wiring | 2处；close、retry、status、role、membership、password、session | [users--detail · 1440](design/user-admin-direction-c/1440-users--detail.png) / [users--detail · 390](design/user-admin-direction-c/390-users--detail.png)、[users--reason_disable · 1440](design/user-admin-direction-c/1440-users--reason_disable.png) / [users--reason_disable · 390](design/user-admin-direction-c/390-users--reason_disable.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA43-NAVIGATION 账号工作区二级导航 / navigation | 3处；organizations、users、admins | [users--list · 1440](design/user-admin-direction-c/1440-users--list.png) / [users--list · 390](design/user-admin-direction-c/390-users--list.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA43-OUT-ORG-REFRESH 组织记录刷新（归P40） / excluded | 1处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA43-OUT-ORGANIZATION-LIST-REFRESH 组织列表刷新（归P40） / excluded | 1处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA43-FILTER-DRAWER 移动端筛选抽屉容器 / local | 1处；closed、open | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA43-FILTER 提交邮箱/组织/状态筛选 / read | 2处；submit、empty | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)、[users--filtered_empty · 1440](design/user-admin-direction-c/1440-users--filtered_empty.png) / [users--filtered_empty · 390](design/user-admin-direction-c/390-users--filtered_empty.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA43-RESET 清除用户筛选 / local | 2处；toolbar、filtered-empty | [users--filter · 1440](design/user-admin-direction-c/1440-users--filter.png) / [users--filter · 390](design/user-admin-direction-c/390-users--filter.png)、[users--filtered_empty · 1440](design/user-admin-direction-c/1440-users--filtered_empty.png) / [users--filtered_empty · 390](design/user-admin-direction-c/390-users--filtered_empty.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
@@ -3743,7 +3745,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 
 ## P44 局部动作与共享消费者
 
-[逐项机器清单](action-reviews/P44.json)：71个局部源位置 → 44组；3类写入，30组路由动作，5组转发/容器关联不重复计动作。已映射11/22个源码字段位置，0/14处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
+[逐项机器清单](action-reviews/P44.json)：72个局部源位置 → 45组；3类写入，30组路由动作，5组转发/容器关联不重复计动作。已映射11/24个源码字段位置，0/14处调用/内嵌容器，0个明确变体。共享源页面记录允许显式标注局部子集，不表示其余字段或容器已审阅；此处不是全页共享源的去重分母，原静态导入关联数不与本数相减当缺失按钮。
 
 尚有186个视觉状态槽未映射；已登记状态见逐项JSON，仍须判断所有变体适用性。有场景关联不等于每个按钮六态已验收，也不表示缺少同数量图片。
 
@@ -3761,6 +3763,7 @@ P11新增personal-composed-direction-c连续五分区提案、资料保存忙碌
 | PA44-DETAIL-WIRING 管理员账号详情事件父级接线 / wiring | 2处；close、retry、status、role、membership、password、session | [admins--detail · 1440](design/user-admin-direction-c/1440-admins--detail.png) / [admins--detail · 390](design/user-admin-direction-c/390-admins--detail.png)、[admins--reason_disable · 1440](design/user-admin-direction-c/1440-admins--reason_disable.png) / [admins--reason_disable · 390](design/user-admin-direction-c/390-admins--reason_disable.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA44-NAVIGATION 管理员路由隐藏的工作区目录分支 / excluded | 3处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA44-OUT-ORG-REFRESH 组织记录刷新（归P40） / excluded | 1处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
+| PA44-OUT-ORGANIZATION-LIST-REFRESH 组织列表刷新（归P40） / excluded | 1处；route-specific-excluded | ；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA44-FILTER-DRAWER 移动端筛选抽屉容器 / local | 1处；closed、open | [admins--filter · 1440](design/user-admin-direction-c/1440-admins--filter.png) / [admins--filter · 390](design/user-admin-direction-c/390-admins--filter.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA44-FILTER 提交管理员邮箱/状态筛选 / read | 2处；submit、empty | [admins--filter · 1440](design/user-admin-direction-c/1440-admins--filter.png) / [admins--filter · 390](design/user-admin-direction-c/390-admins--filter.png)、[admins--filtered_empty · 1440](design/user-admin-direction-c/1440-admins--filtered_empty.png) / [admins--filtered_empty · 390](design/user-admin-direction-c/390-admins--filtered_empty.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |
 | PA44-RESET 清除管理员筛选 / local | 1处；toolbar、filtered-empty | [admins--filter · 1440](design/user-admin-direction-c/1440-admins--filter.png) / [admins--filter · 390](design/user-admin-direction-c/390-admins--filter.png)、[admins--filtered_empty · 1440](design/user-admin-direction-c/1440-admins--filtered_empty.png) / [admins--filtered_empty · 390](design/user-admin-direction-c/390-admins--filtered_empty.png)；其余见JSON | 源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。 |

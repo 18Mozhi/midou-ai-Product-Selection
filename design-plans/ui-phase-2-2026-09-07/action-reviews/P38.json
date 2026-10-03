@@ -4,6 +4,7 @@
   "route": "/platform-admin",
   "status": "source-reviewed-not-runtime-accepted",
   "approval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/PlatformDashboard.vue": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e",
@@ -876,12 +877,14 @@
     "files": [
       "apps/web/src/components/NavigationShell.vue",
       "apps/web/src/navigation-shell-route-state.ts",
-      "config/route-catalog.json"
+      "config/route-catalog.json",
+      "apps/web/src/components/navigation-surface-registry.ts"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-      "apps/web/src/navigation-shell-route-state.ts": "40673a441c63fc8e251c3e1e82a0c4024fb5520596a3eb714583e52b8fb4f974",
-      "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150"
+      "apps/web/src/components/NavigationShell.vue": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+      "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
+      "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
+      "apps/web/src/components/navigation-surface-registry.ts": "e0f1161dd5da43df09b2710972ac431d746eb32fc7020c55502d020ef501486d"
     },
     "routeName": "platform-overview",
     "surface": "platform-dashboard",
@@ -934,6 +937,5 @@
     "具体组合/逐控件六态和全父壳生命周期需分开审核；本登记不授予视觉、权限或生产验收。",
     "0类页面写入动作不等于GET无数据库副作用：真实读取写入平台观测与审计。本轮只mock GET，不接触数据库。",
     "P38页面源/CSS不改；共享详情窗仅修复停用清理，见lifecycleEvidence。API/OpenAPI、环境、依赖或权限不变；本轮无部署/重启。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

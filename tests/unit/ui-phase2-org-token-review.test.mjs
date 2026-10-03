@@ -27,13 +27,13 @@ const context = {
   files: new Set(["scripts/verify-ui-phase2-org-token-controls.mjs"]),
 };
 
-test("P36 exact25 current sites become12 route actions,2 wirings and5 exclusions", () => {
+test("P36 exact26 current sites become12 route actions,2 wirings and6 exclusions", () => {
   const r = validateActionReview(build(), context);
-  assert.equal(r.sourceSites, 25);
-  assert.equal(r.semanticGroups, 19);
+  assert.equal(r.sourceSites, 26);
+  assert.equal(r.semanticGroups, 20);
   assert.equal(r.routeActions, 12);
   assert.equal(r.wiringGroups, 2);
-  assert.equal(r.excludedGroups, 5);
+  assert.equal(r.excludedGroups, 6);
   assert.equal(r.writeActions, 3);
   assert.equal(r.unmappedVisualSlots, 72);
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P36.json`, "utf8")), build());
@@ -42,7 +42,7 @@ test("P36 exact25 current sites become12 route actions,2 wirings and5 exclusions
   assert.throws(() => validateActionReview(missing, context), /unmapped candidates/);
   const promoted = build();
   promoted.approval = "approved";
-  assert.throws(() => validateActionReview(promoted, context), /cannot grant approval/);
+  assert.throws(() => validateActionReview(promoted, context), /cannot grant action approval/);
 });
 test("P36 reason forwards target only rotate/revoke and other-page origins remain excluded", () => {
   const review = build(),
@@ -57,6 +57,14 @@ test("P36 reason forwards target only rotate/revoke and other-page origins remai
         .find((c) => c.candidateId === id)
         .conditions.some((c) => c.expression.includes("view === 'approvals'")),
     );
+  const approvalFeedback = review.actions.find((a) => a.actionId === "EX-P34-READ-FEEDBACK");
+  assert.equal(approvalFeedback.sourceCandidateIds.length, 1);
+  assert.ok(approvalFeedback.sourceContractKeys.includes("WIRE-P34-RETRY"));
+  assert.ok(
+    context.candidates
+      .find((c) => c.candidateId === approvalFeedback.sourceCandidateIds[0])
+      .conditions.some((c) => c.expression.includes("approvalReadFeedbackMode")),
+  );
   const changed = build();
   changed.actions.find((a) => a.actionId === "W-K-REASON").forwardBindings[0].handler = "load()";
   assert.throws(() => validateActionReview(changed, context), /forward event omitted or changed/);
@@ -65,6 +73,8 @@ test("P36 all seven child models,six excluded models,six structures and nine con
   assert.deepEqual(validateReviewSurfaces(build().surfaceReview, inputs), {
     callerFiles: 2,
     localModelBindings: 13,
+    reviewedInputBindings: 13,
+    sourceCallerContainers: 6,
     callerContainers: 6,
     consumerVariants: 9,
     runtimeAcceptance: "unproven",
@@ -108,8 +118,8 @@ test("P36 explicit parent props reject altered source routing and POST contract"
 });
 test("P36 every control/field/composition/implementation image is bound without promotion", () => {
   assert.deepEqual(validateOrgTokenBindings(build(), inputs), {
-    sourceSites: 25,
-    semanticGroups: 19,
+    sourceSites: 26,
+    semanticGroups: 20,
     routeActions: 12,
     writeKinds: 3,
     functionProps: 3,
@@ -127,7 +137,7 @@ test("P36 every control/field/composition/implementation image is bound without 
   });
   assert.equal(build().externalControlCompositions.length, 10);
   assert.equal(build().externalFieldCompositions.length, 40);
-  assert.equal(build().sharedReasonReview.sourceSites.length, 6);
+  assert.equal(build().sharedReasonReview.sourceSites.length, 7);
   for (const mutate of [
     (r) => r.externalControlBindings.pop(),
     (r) => r.externalControlBindings.find((c) => c.id === "filters-open").widths.push(1440),
@@ -144,6 +154,7 @@ test("P36 every control/field/composition/implementation image is bound without 
     assert.throws(() => validateOrgTokenBindings(review, inputs));
   }
   assert.doesNotThrow(() => validateOrgTokenBindings(build(), inputs));
+  assert.equal(build().visualApproval, "user-approved-remaining-pages-auto");
   assert.deepEqual(build().approvalRecords, ["P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"]);
 });
 test("P36 historical inert source handler checks preserve original bodies and defect diagnosis", async () => {

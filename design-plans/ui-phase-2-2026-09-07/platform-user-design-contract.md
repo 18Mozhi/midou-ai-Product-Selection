@@ -146,8 +146,9 @@ P43动作映射使用本合同作为单一语义源。下表接续共享父组�
 | 968274c5acaf5a33.1 | P43-CURRENT-968274c5acaf5a33.1 · 平台账号工作区用户导航 |
 | e400286c7cd59e44.1 | P43-CURRENT-e400286c7cd59e44.1 · 平台账号工作区管理员导航 |
 | 9c9141422bfd2c11.1 | P43-CURRENT-9c9141422bfd2c11.1 · 组织记录手动读取归P40 |
-| 03d32a05b1b3fd19.1 | P43-CURRENT-03d32a05b1b3fd19.1 · 响应式筛选抽屉容器 |
-| 2d610959fc00fb96.1 | P43-CURRENT-2d610959fc00fb96.1 · 筛选表单提交到父级applyFilters |
+| 9c9141422bfd2c11.2 | P43-CURRENT-9c9141422bfd2c11.2 · 组织记录手动刷新归P40 |
+| 3c4dea26ac48746f.1 | P43-CURRENT-3c4dea26ac48746f.1 · 响应式筛选抽屉容器 |
+| 128119f3fb311b09.1 | P43-CURRENT-128119f3fb311b09.1 · 筛选表单提交到父级applyFilters |
 | e9658d470d4cbeaf.1 | P43-CURRENT-e9658d470d4cbeaf.1 · 搜索按钮提交同一用户筛选表单 |
 | 20080e701de7f5cb.1 | P43-CURRENT-20080e701de7f5cb.1 · 重置用户query/status |
 | 322a4ac62ce3a305.1 | P43-CURRENT-322a4ac62ce3a305.1 · 用户目录首读失败重试 |

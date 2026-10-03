@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
   "sourceHashes": {
     "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+    "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
     "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
     "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
@@ -904,14 +904,53 @@
       "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
     },
     {
+      "actionId": "PA43-OUT-ORGANIZATION-LIST-REFRESH",
+      "label": "组织列表刷新（归P40）",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.2"
+      ],
+      "sourceContractKeys": [
+        "P43-CURRENT-9c9141422bfd2c11.2"
+      ],
+      "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
+      "condition": "仅组织列表路由渲染",
+      "handler": "P43用户目录不显示此组织专属读取按钮。",
+      "variants": ["route-specific-excluded"],
+      "scenes": [],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "tests/e2e/m06-01-platform-accounts.spec.ts",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/m06-01/platform-accounts.test.mjs",
+          "evidenceType": "actual-vue-local-interception"
+        },
+        {
+          "file": "tests/unit/ui-phase2-p43-action-map.test.mjs",
+          "evidenceType": "actual-vue-review-fixture"
+        }
+      ],
+      "remaining": "源码与本地隔离测试不证明真实RBAC、MySQL写入、审计持久化或生产权限验收。"
+    },
+    {
       "actionId": "PA43-FILTER-DRAWER",
       "label": "移动端筛选抽屉容器",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#03d32a05b1b3fd19.1"
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#3c4dea26ac48746f.1"
       ],
       "sourceContractKeys": [
-        "P43-CURRENT-03d32a05b1b3fd19.1"
+        "P43-CURRENT-3c4dea26ac48746f.1"
       ],
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "窄视口用户筛选打开",
@@ -955,11 +994,11 @@
       "label": "提交邮箱/组织/状态筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#2d610959fc00fb96.1",
+        "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#128119f3fb311b09.1",
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1"
       ],
       "sourceContractKeys": [
-        "P43-CURRENT-2d610959fc00fb96.1",
+        "P43-CURRENT-128119f3fb311b09.1",
         "P43-CURRENT-e9658d470d4cbeaf.1"
       ],
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
@@ -2542,7 +2581,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac",
       "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
       "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
       "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",

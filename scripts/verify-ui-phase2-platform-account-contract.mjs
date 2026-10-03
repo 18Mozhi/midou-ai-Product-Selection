@@ -210,7 +210,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   }
   sameUnique(candidates, expectedCandidates, "candidates");
   sameUnique(bindings, expectedBindings, "v-model bindings");
-  assert.equal(candidates.length, 137);
+  assert.equal(candidates.length, 138);
   assert.equal(bindings.length, 24);
 
   const sourceHistory = contract.split("## 7. 源码指纹（LF SHA-256）")[1]?.split("## 8.")[0];

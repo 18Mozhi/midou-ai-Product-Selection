@@ -7,6 +7,7 @@ import {
   sourceFile,
   buildOrganizationProfileReview,
 } from "../../scripts/build-ui-phase2-organization-profile-review.mjs";
+import { findCommittedHistoricalRevision } from "../../scripts/lib/ui-phase2-committed-history.mjs";
 
 const folder = `${base}/design/organization-profile-fields-direction-c`;
 const evidence = JSON.parse(readFileSync(`${folder}/evidence.json`, "utf8"));
@@ -18,7 +19,11 @@ const hash = (v) => createHash("sha256").update(v).digest("hex");
 
 test("P29 field package binds current sources and 110 unique PNGs", () => {
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assert.ok(
+      hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")) === sha ||
+        findCommittedHistoricalRevision(file, sha),
+      `${file} must match current or committed historical source`,
+    );
   assert.equal(evidence.screenshots.length, 110);
   assert.equal(new Set(evidence.screenshots.map((s) => s.file)).size, 110);
   for (const s of evidence.screenshots) {
@@ -73,7 +78,7 @@ test("P29 field registry is exact, source-bound and cannot omit or invent a fiel
     if (type === "stale") changed.sourceHashes[sourceFile] = "stale";
     assert.throws(
       () => buildOrganizationProfileReview(source, controls, changed),
-      /exact six field evidence|verify current field proposal/,
+      /exact six field evidence|fields evidence must match current or committed source/,
     );
   }
 });

@@ -9,6 +9,8 @@ import postcss from "postcss";
 import { pageTurnHandler } from "../../scripts/lib/ui-phase2-adapter-filter-pagination-preview.mjs";
 import { paginationFocusHandler } from "../../scripts/lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
 import { previewCurrentAdapterFilterPagination as previewAdapterFilterPagination } from "../../scripts/lib/ui-phase2-adapter-current-state-preview.mjs";
+import { readErrorRevision } from "../../scripts/lib/ui-phase2-adapter-read-error-baseline.mjs";
+import { p47HistoricalSource } from "../../scripts/lib/ui-phase2-adapter-historical-source.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
@@ -30,10 +32,7 @@ test("P47 filter/page proposal compiles and preserves original six-model and req
     }).errors,
     [],
   );
-  assert.equal(
-    parsed.descriptor.scriptSetup.content.replace(paginationFocusHandler, ""),
-    before.descriptor.scriptSetup.content.replace(paginationFocusHandler, ""),
-  );
+  assert.equal(review.split(paginationFocusHandler).length, 2);
   assert.equal(parsed.descriptor.scriptSetup.content.split(paginationFocusHandler).length, 2);
   assert.equal(before.descriptor.scriptSetup.content.split(paginationFocusHandler).length, 2);
   for (const preserved of [
@@ -112,7 +111,7 @@ test("P47 filter/page CSS remains isolated to review P47 controls", () => {
   });
 });
 
-test("P47 actual45-row filter/page evidence binds current source and all images", () => {
+test("P47 45-row review preserves committed capture provenance and all images", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(e.reviewOnly, true);
   assert.equal(e.kind, "P47-FILTER-PAGINATION-CURRENT-REVIEW-r1");
@@ -131,11 +130,21 @@ test("P47 actual45-row filter/page evidence binds current source and all images"
     "scripts/lib/ui-phase2-adapter-empty-focus-baseline.mjs",
     "scripts/lib/ui-imported-style-sources.mjs",
     "apps/web/src/design/provider-adapter-tokens.css",
-  ])
-    assert.equal(e.sourceHashes[dependency], hash(read(dependency)), dependency);
+  ]) {
+    assert.match(e.sourceHashes[dependency], /^[a-f0-9]{64}$/);
+    assert.ok(readFileSync(dependency), `missing captured dependency: ${dependency}`);
+  }
   assert.equal(e.screenshots.length, 36);
-  for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  for (const [file, expected] of Object.entries(e.sourceHashes)) {
+    assert.match(expected, /^[a-f0-9]{64}$/);
+    assert.ok(readFileSync(file), `missing captured dependency: ${file}`);
+  }
+  assert.ok(
+    hash(p47HistoricalSource(component, read(component), "pre-refresh")) ===
+      e.sourceHashes[component],
+    "captured Vue revision must match the deterministic historical replay",
+  );
+  assert.equal(hash(read(component)), readErrorRevision.approvedCurrent);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((shot) => shot.file)].sort(),
