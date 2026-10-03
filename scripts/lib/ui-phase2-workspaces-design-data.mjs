@@ -147,6 +147,7 @@ export async function buildWorkspacesDesignData(repo) {
   const actions = run(
     `${["workspaceAction", "createWorkspace"].map((n) => extract(parent, n, "function")).join("\n")} export const h={workspaceAction,createWorkspace};`,
     {
+      writeReadFailure: { value: null },
       auditedReason: async () => answer,
       submit: async (url, body, method, options) => {
         writes.push(plain({ url, body, method, options }));

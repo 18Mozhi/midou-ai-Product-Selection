@@ -12,8 +12,8 @@
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "fcf2a6c22c4eea63fee263dbd0c0f0c55b4948fef060ed3ce6bc3a08c5f52ac4",
-    "scripts/lib/ui-phase2-workspaces-design-data.mjs": "7fc4cd2cc4eecb1dbfce2e2685a5d20469eef2763247da12f202b9bb08b239d3",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "5e6a8623e4b6e7f1af0cd0dcd9e4568269e5991ebd88c4893ca682e3f96fb02e",
+    "scripts/lib/ui-phase2-workspaces-design-data.mjs": "7fbb86015c737be8df4c7859511223daff98d73407ba8d0336247e1028392d63",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-workspaces-c.mjs": "a2099317449e0b217cf15a384434cbd5b43efcce537552c5d4477d1242d9db5b"
   },

@@ -364,6 +364,7 @@ test("P32 parent action captures status before reason and cancellation causes ze
   const writes = [],
     notice = { value: "" };
   const action = parentAction({
+    writeReadFailure: { value: null },
     auditedReason: () =>
       new Promise((r) => {
         answer = r;
