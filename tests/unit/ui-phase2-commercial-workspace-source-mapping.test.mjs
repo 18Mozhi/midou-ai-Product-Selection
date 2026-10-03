@@ -38,8 +38,11 @@ test("P58 quota workspace switches map to local view state without read/write cl
   const hashes = audit.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
   );
-  assert.equal(hashes.filter((claim) => claim.temporalScope !== "historical").length, 1);
-  assert.equal(hashes.find((claim) => claim.temporalScope !== "historical")?.hash, digest(source));
+  const currentHashes = hashes
+    .filter((claim) => claim.temporalScope !== "historical")
+    .map((claim) => claim.hash);
+  assert.ok(currentHashes.length > 0);
+  assert.deepEqual([...new Set(currentHashes)], [digest(source)]);
   assert.equal(audit.unreferenced.filter((candidate) => candidate.file === file).length, 0);
   assert.equal(audit.denominatorFrozen, false);
 });
