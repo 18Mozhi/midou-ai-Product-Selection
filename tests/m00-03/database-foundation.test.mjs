@@ -65,13 +65,19 @@ test("M00-03 bootstrap is MySQL57 utf8mb4 and reversible", async () => {
 });
 test("M00-03 live gate enforces business account and cleans probes", async () => {
   const source = await readFile("scripts/verify-mysql-live.mjs", "utf8");
+  const baotaRunner = await readFile("scripts/verify-live-baota.py", "utf8");
   assert.match(source, /product_scout@/);
   assert.match(source, /m00_03_tx_/);
   assert.match(source, /CREATE TABLE/);
   assert.match(source, /expected_rollback/);
   assert.match(source, /DROP TABLE IF EXISTS/);
   assert.match(source, /DELETE FROM schema_migrations/);
-  assert.match(source, /request_id.*trace_id/);
+  assert.match(source, /request_id[\s\S]*trace_id/);
+  assert.match(source, /SCOUTOPS_MYSQL_LIVE_TARGET/);
+  assert.match(baotaRunner, /read_windows_credential/);
+  assert.match(baotaRunner, /SCOUTOPS_\{probe\.upper\(\)\}_LIVE_TARGET/);
+  assert.match(baotaRunner, /--env-file=/);
+  assert.doesNotMatch(baotaRunner, /DB_PASSWORD|sftp\.put/);
   assert.equal(typeof createMigrationExecutor, "function");
 });
 test("M00-03 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized", async () => {

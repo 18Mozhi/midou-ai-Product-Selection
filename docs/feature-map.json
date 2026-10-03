@@ -445,6 +445,8 @@
     "database": {
       "package": "../packages/database/src/index.ts",
       "liveGate": "../scripts/verify-mysql-live.mjs",
+      "liveGateBaoTaTarget": "SCOUTOPS_MYSQL_LIVE_TARGET=baota-production",
+      "liveGateCredentialBoundary": "Fixed BaoTa SSH execution; DB credentials remain in the server restricted environment file.",
       "requiredVersion": "5.7",
       "requiredCharset": "utf8mb4",
       "runtimeEndpoint": "deferred_to_M00-05",
@@ -454,6 +456,8 @@
     "redis": {
       "package": "../packages/redis/src/index.ts",
       "liveGate": "../scripts/verify-redis-live.mjs",
+      "liveGateBaoTaTarget": "SCOUTOPS_REDIS_LIVE_TARGET=baota-production",
+      "liveGateCredentialBoundary": "Fixed BaoTa SSH execution; Redis credentials remain in the server restricted environment file.",
       "purposes": ["cache", "queue", "rate", "sse"],
       "keyScope": "scoutops:v1:<purpose>:org:<organization_id>:ws:<workspace_id>:...",
       "ttlPolicy": { "cache": 300, "queue": 86400, "rate": 60, "sse": 86400 },

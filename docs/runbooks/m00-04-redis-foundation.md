@@ -4,6 +4,8 @@
 
 本地与宝塔受限环境使用 `REDIS_HOST`、`REDIS_PORT`、`REDIS_PASSWORD`、`REDIS_CONNECT_TIMEOUT_MS`。密码不得进入日志、浏览器或 Git。先运行 `npm run build` 与 `node --test tests/m00-04/redis-foundation.test.mjs`，再运行 `node scripts/verify-redis-live.mjs`；真实门禁会创建一个带随机验证组织的 5 秒缓存键，读回后在 `finally` 删除。
 
+如需在没有隔离 Redis 的情况下验收现有生产实例，且已明确授权生产探针，可设置 `$env:SCOUTOPS_REDIS_LIVE_TARGET='baota-production'` 后运行阶段门。探针通过固定宝塔 SSH 在服务器执行，Redis 凭据只从宝塔受限环境读取；仅操作唯一随机组织键，并在完成后删除，不访问或清空其他键。默认仍连接本机配置，不会自动写入生产 Redis。
+
 完整模块命令：`npm run verify:module -- M00-04`。输出必须包含 request_id/trace_id；连接不可用返回 blocked（退出码 2），不得降级为 passed。
 
 ## 宝塔启动、告警与恢复

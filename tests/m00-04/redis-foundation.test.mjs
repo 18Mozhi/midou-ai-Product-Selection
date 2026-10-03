@@ -203,6 +203,16 @@ test("M00-04 config timeout validates range and remains backend-only", async () 
   assert.match(schema, /REDIS_CONNECT_TIMEOUT_MS/);
 });
 
+test("M00-04 live gate keeps credentials on BaoTa when production is selected", async () => {
+  const source = await readFile("scripts/verify-redis-live.mjs", "utf8");
+  const remoteRunner = await readFile("scripts/verify-live-baota.py", "utf8");
+  assert.match(source, /SCOUTOPS_REDIS_LIVE_TARGET/);
+  assert.match(source, /verify-live-baota\.py", "redis"/);
+  assert.match(remoteRunner, /read_windows_credential/);
+  assert.match(remoteRunner, /--env-file=/);
+  assert.doesNotMatch(remoteRunner, /DB_PASSWORD|REDIS_PASSWORD|sftp\.put/);
+});
+
 test("M00-04 OpenAPI, Feature Map, UI, docs and atomic evidence are synchronized", async () => {
   const [api, map, ui, architecture, runbook, registry] = await Promise.all(
     [
