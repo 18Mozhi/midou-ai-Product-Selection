@@ -15,10 +15,18 @@ import {
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
 const args = process.argv.slice(2);
+const revisionIndex = args.indexOf("--revision");
+const revision = revisionIndex >= 0 ? args[revisionIndex + 1] : undefined;
+if (revisionIndex >= 0) args.splice(revisionIndex, 2);
 assert.ok(args.length <= 1 && args.every((arg) => ["--smoke", "--capture"].includes(arg)));
 const capture = args.includes("--capture"),
   smoke = args.includes("--smoke");
-const output = "output/playwright/account-pair-app-c-r2";
+assert.ok(
+  revisionIndex < 0 || (capture && revision && /^r(?:[3-9]|[1-9]\d+)$/.test(revision)),
+  "--revision requires --capture and a fresh rN suffix",
+);
+const version = revision ?? "r2";
+const output = `output/playwright/account-pair-app-c-${version}`;
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const fixture = accountPairFixture(await read(accountFixtureFile));
@@ -199,10 +207,28 @@ try {
             ),
           );
           if (mode === "review") {
+            if (pageId === "P43") {
+              check(
+                "P43 users C hero retains blue contrast",
+                await page.locator(".account-center--users-c .account-hero").evaluate((node) => {
+                  const style = getComputedStyle(node);
+                  return {
+                    background: style.backgroundColor,
+                    borderStyle: style.borderTopStyle,
+                    opacity: style.opacity,
+                  };
+                }),
+                { background: "rgb(37, 74, 156)", borderStyle: "solid", opacity: "1" },
+              );
+            }
             check(
               `${pageId} one correct directory heading`,
-              await page.locator(".p43-directory-heading:visible h3").allTextContents(),
-              [pageId === "P43" ? "用户目录" : "可授权账号"],
+              await page
+                .locator(
+                  `${pageId === "P43" ? ".user-directory-heading" : ".admin-directory-heading"}:visible h3`,
+                )
+                .allTextContents(),
+              pageId === "P43" ? ["用户目录"] : width <= 760 ? ["可授权账号"] : [],
             );
             check(
               `${pageId} complete C shell`,
@@ -311,7 +337,7 @@ try {
         if (mode === "review")
           check(
             "history restores one users heading",
-            await page.locator(".p43-directory-heading:visible h3").allTextContents(),
+            await page.locator(".user-directory-heading:visible h3").allTextContents(),
             ["用户目录"],
           );
         check(
@@ -346,7 +372,7 @@ try {
   await browser.close();
   browser = null;
   const evidence = {
-    kind: "P43-P44-ACTUAL-APP-C-r2",
+    kind: `P43-P44-ACTUAL-APP-C-${version}`,
     reviewOnly: true,
     approval: "pending",
     processesClosed: true,
@@ -366,7 +392,7 @@ try {
     await writeFile(`${output}/evidence.json`, JSON.stringify(evidence, null, 2) + "\n");
     await writeFile(
       `${output}/index.html`,
-      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P43/P44 完整应用 C 审核</title><style>body{font:16px/1.7 Microsoft YaHei,sans-serif;background:#eef2f7;color:#142a46;margin:24px}img{max-width:100%;height:auto}details{background:white;padding:16px;margin:16px 0}</style><h1>P43 / P44 · 真实应用 C 组合 r2</h1><p>review 是新整页提案，baseline 是现有应用。均为本地样例，未上线；已有局部批准不代表本组合通过。</p><a href="evidence.json">完整检查与来源</a>' +
+      `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P43/P44 完整应用 C 审核 ${version}</title><style>body{font:16px/1.7 Microsoft YaHei,sans-serif;background:#eef2f7;color:#142a46;margin:24px}img{max-width:100%;height:auto}details{background:white;padding:16px;margin:16px 0}</style><h1>P43 / P44 · 真实应用 C 组合 ${version}</h1><p>review 是整页组合，baseline 是现有应用。均为本地样例，未上线；已有局部批准不替代真实权限或生产验收。</p><a href="evidence.json">完整检查与来源</a>` +
         screenshots
           .map(
             (shot) =>

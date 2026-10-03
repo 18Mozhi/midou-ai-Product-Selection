@@ -92,7 +92,7 @@ test("original P39 code and previously presented146 images/styles are not rewrit
     "design-plans/ui-phase-2-2026-09-07/implementation/account-create-preview.css",
   ])
     assert.equal(
-      read(f),
+      readFileSync(f, "utf8").replaceAll("\r\n", "\n"),
       execFileSync("git", ["show", `HEAD:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n"),
       f,
     );

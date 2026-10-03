@@ -7,14 +7,14 @@ import {
   previewAccountPair,
 } from "./ui-phase2-account-pair-preview.mjs";
 
-export const pairCompositionPacket = "output/playwright/account-pair-app-c-r2/evidence.json";
+export const pairCompositionPacket = "output/playwright/account-pair-app-c-r6/evidence.json";
 export const pairCompositionHash =
-  "c50588c178dca13d8559c1ce2901fe44161262ceb19ed3f1bb42fe5d44f9ef24";
+  "5969e0d469ef6877d986e8cb173f68155d525a5f2ef3cc832e98429fb734ade7";
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
 export async function accountPairLifecyclePreview(read, sources) {
   const manifest = await read(pairCompositionPacket);
-  assert.equal(hash(manifest), pairCompositionHash, "Original C r2 review packet changed");
+  assert.equal(hash(manifest), pairCompositionHash, "Original C r4 review packet changed");
   const evidence = JSON.parse(manifest);
   const targets = {
     "apps/web/src/components/NavigationShell.vue": "shell",
@@ -29,7 +29,7 @@ export async function accountPairLifecyclePreview(read, sources) {
     assert.equal(
       hash(source),
       evidence.sourceHashes[file],
-      `C r2 composition source drift: ${file}`,
+      `C r4 composition source drift: ${file}`,
     );
     sources.add(file);
     if (file in targets) {
@@ -38,7 +38,7 @@ export async function accountPairLifecyclePreview(read, sources) {
       assert.equal(
         hash(transformed[file]),
         evidence.transformedHashes[file],
-        `C r2 transformed source drift: ${file}`,
+        `C r4 transformed source drift: ${file}`,
       );
     }
   }
@@ -55,7 +55,7 @@ export async function accountPairLifecyclePreview(read, sources) {
       transformedHashes: evidence.transformedHashes,
     },
     plugin: {
-      name: "account-pair-r2-lifecycle-review-only",
+      name: "account-pair-r4-lifecycle-review-only",
       enforce: "pre",
       transform(source, id) {
         const file = Object.keys(targets).find(

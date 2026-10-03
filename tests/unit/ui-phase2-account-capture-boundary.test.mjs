@@ -19,7 +19,7 @@ const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const directoryFile = "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue";
 const filtersFile = "apps/web/src/components/PlatformAccountDirectoryFilters.vue";
-const currentReplayRoot = "output/playwright/p39-current-replay-r3";
+const currentReplayRoot = "output/playwright/p39-current-replay-r6";
 function neutralImports(source) {
   const ast = ts.createSourceFile("driver.mjs", source, ts.ScriptTarget.Latest, true);
   for (const node of ast.statements.filter(ts.isImportDeclaration).reverse()) {
@@ -97,7 +97,7 @@ test("P39 historical capture pins complete original manifests and all source blo
 });
 test("P39 current replay keeps raw source hashes, original checks, images and request evidence separate", () => {
   const e = JSON.parse(read(`${currentReplayRoot}/evidence.json`));
-  assert.equal(e.kind, "P39-current-replay-r3");
+  assert.equal(e.kind, "P39-current-replay-r6");
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.deepEqual(

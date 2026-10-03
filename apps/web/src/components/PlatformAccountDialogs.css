@@ -219,6 +219,13 @@ button {
   background: var(--account-org-soft);
   opacity: 1;
 }
+html[data-design="signal-ledger"] body dialog.p43-create-user-dialog,
+html[data-design="signal-ledger"] body dialog.p43-create-user-dialog:hover {
+  border-color: var(--account-org-dialog-border);
+  color: var(--account-org-ink);
+  background-color: var(--account-org-surface);
+  font-weight: 400;
+}
 .p44-admin-create-dialog {
   width: min(980px, calc(100% - 32px));
   max-height: min(92dvh, 900px);

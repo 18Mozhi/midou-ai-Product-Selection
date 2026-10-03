@@ -14,12 +14,12 @@ const hash = (value) => createHash("sha256").update(value).digest("hex");
 const folder = "output/playwright/p44-mobile-role-facts-implementation/";
 const resultsCurrent = JSON.parse(
   readFileSync(
-    "output/playwright/p44-mobile-results-implementation/current-r8/evidence.json",
+    "output/playwright/p44-mobile-results-implementation/current-r10/evidence.json",
     "utf8",
   ),
 );
 const evidence = (mode) =>
-  JSON.parse(read(folder + (mode === "current" ? "current-r8" : mode) + "/evidence.json"));
+  JSON.parse(read(folder + (mode === "current" ? "current-r10" : mode) + "/evidence.json"));
 const before = evidence("baseline"),
   after = evidence("current");
 const baseline = adminHistoricalCapture("role-facts-baseline");
@@ -39,7 +39,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     const capture =
       mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
     const e = capture ? capture.evidence : evidence(mode),
-      dir = folder + (mode === "current" ? "current-r8" : mode);
+      dir = folder + (mode === "current" ? "current-r10" : mode);
     assert.equal(e.kind, "P44-MOBILE-ROLE-FACTS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
     assert.equal(e.checks.length, mode === "baseline" ? 188 : 352);

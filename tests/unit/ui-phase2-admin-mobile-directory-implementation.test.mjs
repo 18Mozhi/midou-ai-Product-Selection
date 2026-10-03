@@ -8,12 +8,12 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-directory-implementation/";
 const evidence = (mode) => JSON.parse(read(folder + mode + "/evidence.json"));
 const before = evidence("baseline"),
-  after = evidence("current-r8");
+  after = evidence("current-r10");
 const historicalHashes = (e) =>
   Object.entries(e.sourceHashes).every(([, sha]) => /^[a-f0-9]{64}$/.test(sha));
 
-for (const mode of ["baseline", "current-r8"])
-  test(`directory ${mode === "baseline" ? "historical baseline" : "current r8"}: exact stage sources, 30 PNGs and scoped read-only replay`, () => {
+for (const mode of ["baseline", "current-r10"])
+  test(`directory ${mode === "baseline" ? "historical baseline" : "current r10"}: exact stage sources, 30 PNGs and scoped read-only replay`, () => {
     const e = evidence(mode),
       dir = folder + mode;
     assert.equal(e.kind, "P44-MOBILE-DIRECTORY-IMPLEMENTATION");

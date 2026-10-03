@@ -2,24 +2,41 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+const signalLedger = readFileSync("apps/web/src/signal-ledger.css", "utf8").replaceAll(
+  "\r\n",
+  "\n",
+);
+const accountDialogs = readFileSync(
+  "apps/web/src/components/PlatformAccountDialogs.css",
+  "utf8",
+).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
+
+test("P43 create dialog resets the global create-alias palette bleed", () => {
+  assert.match(signalLedger, /\[class\*="-create"\]/);
+  assert.match(
+    accountDialogs,
+    /html\[data-design="signal-ledger"\] body dialog\.p43-create-user-dialog,[\s\S]*?background-color: var\(--account-org-surface\)/,
+  );
+});
+
 for (const [folder, kind, checks, images, palette] of [
   [
-    "p44-mobile-directory-implementation/current-r8",
+    "p44-mobile-directory-implementation/current-r10",
     "P44-MOBILE-DIRECTORY-IMPLEMENTATION",
     134,
     30,
     "platform-admin-mobile-tokens",
   ],
   [
-    "p44-mobile-controls-implementation/current-r10",
+    "p44-mobile-controls-implementation/current-r12",
     "P44-MOBILE-CONTROLS-IMPLEMENTATION",
     110,
     16,
     "platform-admin-mobile-tokens",
   ],
   [
-    "p44-mobile-results-implementation/current-r8",
+    "p44-mobile-results-implementation/current-r10",
     "P44-MOBILE-RESULTS-IMPLEMENTATION",
     234,
     48,
@@ -40,7 +57,7 @@ for (const [folder, kind, checks, images, palette] of [
     "provider-registry-tokens",
   ],
   [
-    "p44-mobile-role-facts-implementation/current-r8",
+    "p44-mobile-role-facts-implementation/current-r10",
     "P44-MOBILE-ROLE-FACTS-IMPLEMENTATION",
     352,
     24,

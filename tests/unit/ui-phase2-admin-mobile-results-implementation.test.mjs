@@ -16,7 +16,7 @@ const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const folder = "output/playwright/p44-mobile-results-implementation/";
 const evidence = (mode) =>
-  JSON.parse(read(folder + (mode === "current" ? "current-r8" : mode) + "/evidence.json"));
+  JSON.parse(read(folder + (mode === "current" ? "current-r10" : mode) + "/evidence.json"));
 const baseline = adminHistoricalCapture("results-baseline");
 const implemented = adminHistoricalCapture("results-implemented");
 const before = baseline.evidence,
@@ -37,7 +37,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     const capture =
       mode === "baseline" ? baseline : mode === "historical-implemented" ? implemented : null;
     const e = capture ? capture.evidence : evidence(mode),
-      dir = folder + (mode === "current" ? "current-r8" : mode);
+      dir = folder + (mode === "current" ? "current-r10" : mode);
     assert.equal(e.kind, "P44-MOBILE-RESULTS-IMPLEMENTATION");
     assert.equal(e.baseline, mode === "baseline");
     assert.equal(e.processesClosed, true);

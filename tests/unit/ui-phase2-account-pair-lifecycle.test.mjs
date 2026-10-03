@@ -47,14 +47,14 @@ test("C composition preserves original flow apart from explicit navigation-aware
   );
 });
 
-const packet = "output/playwright/account-pair-c-lifecycle-r2";
-const manifestHash = "716fe28fc63aa9568558d79e754f56fecb63aa086750384e27d0ec463f42831d";
+const packet = "output/playwright/account-pair-c-lifecycle-r6";
+const manifestHash = "8a932ce97a375b8a5a8cce78a34b3163a2321d6c3ae68cba0695b0250d10d3e6";
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 test("C lifecycle capture retains every original result plus strict desktop navigation inventory", () => {
   const bytes = readFileSync(`${packet}/evidence.json`);
   assert.equal(hash(bytes), manifestHash);
   const evidence = JSON.parse(bytes);
-  const original = JSON.parse(read("output/playwright/p43-actual-app-lifecycle-r1/evidence.json"));
+  const original = JSON.parse(read("output/playwright/p43-actual-app-lifecycle-r6/evidence.json"));
   assert.equal(evidence.runs.length, 16);
   assert.equal(
     evidence.runs.reduce((sum, run) => sum + run.checks.length, 0),
@@ -62,7 +62,7 @@ test("C lifecycle capture retains every original result plus strict desktop navi
   );
   assert.equal(evidence.screenshots.length, 48);
   assert.equal(evidence.reviewComposition.sha256, pairCompositionHash);
-  assert.equal(evidence.designApproval, "r2_whole_layout_pending");
+  assert.equal(evidence.designApproval, "r6_whole_layout_pending");
   assert.equal(evidence.processesClosed, true);
   for (let index = 0; index < evidence.runs.length; index++) {
     const run = evidence.runs[index],
@@ -90,7 +90,7 @@ test("C lifecycle capture retains every original result plus strict desktop navi
       [...new Set(previous.requests.map((request) => request.key))].sort(),
     );
   }
-  assert.equal(Object.keys(evidence.sourceHashes).length, 183);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 157);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(hash(read(file)), sha, `Captured current source drift: ${file}`);
   for (const shot of evidence.screenshots) {
@@ -115,7 +115,7 @@ test("completed C lifecycle packet rejects capture before starting a service", (
   assert.equal(hash(readFileSync(`${packet}/evidence.json`)), manifestHash);
 });
 
-test("preview plugin produces the exact four pending r2 components and same CSS host", async () => {
+test("preview plugin produces the exact four pending r6 components and same CSS host", async () => {
   const sources = new Set();
   const review = await accountPairLifecyclePreview(read, sources);
   const evidence = JSON.parse(read(pairCompositionPacket));
@@ -135,7 +135,7 @@ test("composition rejects changed review metadata or any source drift before bro
       (file) => (file === pairCompositionPacket ? read(file) + " " : read(file)),
       new Set(),
     ),
-    /Original C r2 review packet changed/,
+    /Original C r4 review packet changed/,
   );
   await assert.rejects(
     accountPairLifecyclePreview(
@@ -143,6 +143,6 @@ test("composition rejects changed review metadata or any source drift before bro
         file.endsWith("account-pair-app-preview.css") ? read(file) + "\n/* drift */" : read(file),
       new Set(),
     ),
-    /C r2 composition source drift/,
+    /C r4 composition source drift/,
   );
 });
