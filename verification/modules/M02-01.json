@@ -27,7 +27,7 @@
     "node --test tests/m02-01/theme-preferences-domain.test.mjs",
     "node --test tests/m02-01/theme-preferences-api.test.mjs",
     "node --test tests/m02-01/theme-preferences-contract.test.mjs",
-    "node scripts/verify-theme-preferences-live.mjs",
+    "node scripts/verify-theme-preferences-live.mjs --baota-production",
     "npx playwright test tests/e2e/m02-01-theme-studio.spec.ts",
     "npm run verify:docs"
   ]

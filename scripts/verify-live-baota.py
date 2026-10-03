@@ -13,7 +13,7 @@ from urllib.parse import quote
 
 def main() -> int:
     probe = sys.argv[1] if len(sys.argv) == 2 else ""
-    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed"}:
+    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences"}:
         raise SystemExit("unsupported BaoTa live probe")
 
     repo = pathlib.Path(__file__).resolve().parents[1]
@@ -48,8 +48,10 @@ def main() -> int:
         script_path = repo / "scripts" / f"verify-{probe}-live.mjs"
         source = script_path.read_text(encoding="utf-8")
         package_names = ["config"]
-        if probe in {"mysql", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed"}:
+        if probe in {"mysql", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences"}:
             package_names.append("database")
+        if probe == "theme-preferences":
+            package_names.append("preferences")
         if probe in {"redis", "api"}:
             package_names.append("redis")
         if probe in {"local-auth", "mfa"}:
@@ -124,6 +126,7 @@ def main() -> int:
                 source = source.replace(old, json.dumps("file://" + quote(remote_path, safe="/")), 1)
 
         repository_imports = {
+            "theme-preferences": ("../apps/api/dist/mysql-ui-preference-repository.js",),
             "resource-grants": (
                 "../apps/api/dist/mysql-authorization-repository.js",
                 "../apps/api/dist/mysql-resource-grant-repository.js",

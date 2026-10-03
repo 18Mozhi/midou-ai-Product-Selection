@@ -16,6 +16,7 @@ test("M02-01.A03/A06/A10/A13/A17 contracts include migrations API maps and no ne
     architecture,
     runbook,
     liveProbe,
+    baotaProbe,
   ] = await Promise.all(
     [
       "docs/openapi.yaml",
@@ -30,6 +31,7 @@ test("M02-01.A03/A06/A10/A13/A17 contracts include migrations API maps and no ne
       "docs/architecture/m02-01-design-tokens-themes.md",
       "docs/runbooks/m02-01-design-tokens-themes.md",
       "scripts/verify-theme-preferences-live.mjs",
+      "scripts/verify-live-baota.py",
     ].map(read),
   );
   for (const value of [
@@ -48,6 +50,11 @@ test("M02-01.A03/A06/A10/A13/A17 contracts include migrations API maps and no ne
   assert.match(architecture, /同步用户操作，不创建 Worker/);
   assert.match(runbook, /Worker 与 Python Crawler.*无需重启/);
   assert.doesNotMatch(liveProbe, /LOWER\(slug\).*REGEXP|default_workspace_id\s*=\s*NULL/i);
+  assert.match(liveProbe, /--baota-production/);
+  assert.match(liveProbe, /assertSchemaReady/);
+  assert.doesNotMatch(liveProbe, /pool\.query\(await readFile|CREATE TABLE|ALTER TABLE/i);
+  assert.match(baotaProbe, /theme-preferences/);
+  assert.match(baotaProbe, /mysql-ui-preference-repository/);
 });
 test("M02-01.A07/A08/A15 token and UI contracts keep semantic accessibility and responsive support", async () => {
   const [tokens, theme, ui, radio, styles, e2e] = await Promise.all(

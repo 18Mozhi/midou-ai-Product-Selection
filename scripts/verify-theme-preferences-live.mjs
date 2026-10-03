@@ -1,9 +1,23 @@
 import { randomUUID, createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { spawnSync } from "node:child_process";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
 import { UiPreferenceService } from "../packages/preferences/dist/index.js";
 import { MySqlUiPreferenceRepository } from "../apps/api/dist/mysql-ui-preference-repository.js";
+function runBaoTaProbe() {
+  const result = spawnSync("python", ["scripts/verify-live-baota.py", "theme-preferences"], {
+    encoding: "utf8",
+    timeout: 150_000,
+    windowsHide: true,
+  });
+  if (result.stdout) process.stdout.write(result.stdout);
+  if (result.stderr) process.stderr.write(result.stderr);
+  if (result.error || result.status !== 0) process.exitCode = result.status ?? 2;
+}
+
+if (process.argv.includes("--baota-production")) {
+  runBaoTaProbe();
+} else {
 const requestId = randomUUID(),
   traceId = requestId,
   ids = {
@@ -13,21 +27,21 @@ const requestId = randomUUID(),
     membership: randomUUID(),
     session: randomUUID(),
   },
-  now = new Date("2026-08-07T14:30:00.000Z"),
+  now = new Date(),
   pool = createDatabasePool(loadRuntimeConfig(process.env, "api"));
 const migrations = [
   ["user_ui_preferences", "0014a_user_ui_preferences_m02_01.up.sql"],
   ["user_ui_preference_audit_events", "0014b_user_ui_preference_audit_m02_01.up.sql"],
   ["user_ui_preference_operations", "0014c_user_ui_preference_operations_m02_01.up.sql"],
 ];
-async function ensure() {
+async function assertSchemaReady() {
   for (const [table, file] of migrations) {
     const [rows] = await pool.query(
       "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?",
       [table],
     );
     if (Number(rows[0].count) === 0)
-      await pool.query(await readFile(`database/migrations/${file}`, "utf8"));
+      throw new Error(`required preference table is missing: ${table} (${file})`);
   }
 }
 async function cleanup() {
@@ -58,7 +72,7 @@ try {
     !String(runtime.account_name).startsWith("product_scout@")
   )
     throw new Error("requires MySQL57 utf8mb4 product_scout business account");
-  await ensure();
+  await assertSchemaReady();
   const email = `m02-01-${requestId}@example.test`,
     tokenHash = createHash("sha256").update(requestId).digest("hex");
   await pool.query(
@@ -138,4 +152,5 @@ try {
 } finally {
   await cleanup();
   await pool.end();
+}
 }
