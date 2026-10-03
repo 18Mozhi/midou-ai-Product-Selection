@@ -320,8 +320,14 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
   assert.doesNotMatch(runbook, /`product-scout-api` Node 项目|`product-scout-worker` Node 项目/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /news\.google\.com/);
-  assert.match(live, /DELETE FROM collection_task_evidence_links WHERE organization_id=\?/);
-  assert.match(live, /provider_sources_live_cleanup_failed/);
+  assert.match(live, /googleSource\.provisioned\?\.status === "enabled" && termsApproved/);
+  assert.match(live, /public_execution:/);
+  assert.match(live, /skipped_policy_gate/);
+  assert.match(live, /database_writes: 0/);
+  assert.doesNotMatch(
+    live,
+    /service\.replay\(|processCollectionTaskOnce\(|INSERT INTO users|UPDATE providers/,
+  );
   assert.match(automaticLive, /catalog\.length < 100/);
   assert.match(automaticLive, /automatic\.length < 80/);
   assert.match(automaticLive, /MySqlAutomaticSourceScheduler/);

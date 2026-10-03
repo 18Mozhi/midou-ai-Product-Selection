@@ -42,6 +42,8 @@
 
 所有排障都只检查“ai选品”项目自己的日志、表和证据；不得操作 PVE、其他项目、系统磁盘调度器或面板外服务。
 
+生产验收探针 `python scripts/verify-live-baota.py provider-sources` 只读检查 MySQL 表结构、Redis 健康、来源目录与 Google News 条款状态；仅当该来源已启用且条款审核仍有效时才访问公开 RSS。探针不会创建或变更 Provider、用户、组织、工作区、采集任务，也不会领取生产队列任务；缺少条款审批时会如实报告政策门禁跳过。
+
 ## 回滚
 
 先通过宝塔停止“ai选品”，回滚应用版本。只有确认旧应用不会再写 `configuration_updated` 或 `configuration_rolled_back` 后，才执行 `0053_provider_configuration_versions.down.sql`；该 down 会把这两类动作收敛为旧版可识别的 `updated`，保留版本快照但会丢失细分动作标签。未确认时保留 0053。若同时确认允许删除固定样本与回放记录，再依次执行 0051c、0051b、0051a down，最后执行 `0036_automatic_hotspot_sources.down.sql`。0051 down 会删除回放幂等、回放记录和固定样本；不删除 Provider、采集任务、原始证据、用户、组织或审计记录。若未取得该数据删除授权，只回滚应用并保留 0051 表。

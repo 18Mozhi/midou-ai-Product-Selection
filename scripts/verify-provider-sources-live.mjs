@@ -1,26 +1,17 @@
 import { randomUUID } from "node:crypto";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import { join } from "node:path";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
 import { createRedisConnection, ScopedRedisStore } from "../packages/redis/dist/index.js";
 import { ProviderAdapterRegistry } from "../packages/provider-adapters/dist/index.js";
 import {
   AUTOMATIC_PROVIDER_SOURCE_HOSTS,
-  createBuiltinSourceAdapters,
+  GoogleNewsRssAdapter,
   createProviderSourceFetch,
   parseGoogleNewsRss,
 } from "../packages/provider-sources/dist/index.js";
 import { ProviderSourceService } from "../apps/api/dist/provider-source-service.js";
 import { MySqlProviderSourceRepository } from "../apps/api/dist/mysql-provider-source-repository.js";
-import {
-  MySqlCollectionTaskWorkerRepository,
-  ScopedRedisCollectionCoordinator,
-  processCollectionTaskOnce,
-} from "../apps/worker/dist/collection-task-worker.js";
-import { MySqlEvidencePersistence } from "../apps/worker/dist/evidence-persistence.js";
-import { ProviderSourceExecutor } from "../apps/worker/dist/provider-source-executor.js";
+import { readFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 const requestId = randomUUID(),
@@ -35,9 +26,6 @@ const requestId = randomUUID(),
   pool = createDatabasePool(config),
   redisClient = createRedisConnection(config),
   store = new ScopedRedisStore(redisClient),
-  root = await mkdtemp(join(tmpdir(), "scoutops-m03-07-live-")),
-  ids = { actor: randomUUID(), organization: randomUUID(), workspace: randomUUID() },
-  created = { provider: null, task: null },
   runFile = promisify(execFile);
 async function googleXml() {
   const url = "https://news.google.com/rss/search?q=product%20innovation&hl=en-US&gl=US&ceid=US:en";
@@ -80,84 +68,8 @@ async function ensure() {
       "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name=?",
       [table],
     );
-    if (Number(rows[0].count) === 0) await pool.query(statement);
-  }
-}
-async function cleanup() {
-  try {
-    await pool.query("UPDATE organizations SET default_workspace_id=NULL WHERE id=?", [
-      ids.organization,
-    ]);
-  } catch {}
-  if (created.task)
-    try {
-      await store.delete({
-        organization_id: ids.organization,
-        workspace_id: ids.workspace,
-        purpose: "queue",
-        resource: "collection-ready",
-        identifiers: [created.task],
-      });
-    } catch {}
-  for (const sql of [
-    "DELETE FROM provider_source_operations WHERE actor_id=?",
-    "DELETE FROM evidence_data_operations WHERE actor_id=?",
-    "DELETE FROM evidence_data_outbox WHERE organization_id=?",
-    "DELETE FROM evidence_data_events WHERE organization_id=?",
-    "DELETE FROM collection_task_evidence_links WHERE organization_id=?",
-    "DELETE FROM field_provenance WHERE organization_id=?",
-    "DELETE FROM normalized_records WHERE organization_id=?",
-    "DELETE FROM raw_evidence WHERE organization_id=?",
-    "DELETE FROM file_assets WHERE organization_id=?",
-    "DELETE FROM provider_source_replay_runs WHERE organization_id=?",
-    "DELETE FROM collection_task_outbox WHERE organization_id=?",
-    "DELETE FROM collection_task_events WHERE organization_id=?",
-    "DELETE FROM collection_task_attempts WHERE task_id=?",
-    "DELETE FROM collection_subqueries WHERE organization_id=?",
-    "DELETE FROM collection_tasks WHERE organization_id=?",
-    "DELETE FROM provider_versions WHERE actor_id=?",
-  ])
-    try {
-      await pool.query(sql, [
-        sql.includes("task_id")
-          ? created.task
-          : sql.includes("actor_id")
-            ? ids.actor
-            : ids.organization,
-      ]);
-    } catch {}
-  if (created.provider)
-    try {
-      await pool.query("DELETE FROM provider_adapter_health WHERE provider_id=?", [
-        created.provider,
-      ]);
-    } catch {}
-  if (created.provider)
-    try {
-      await pool.query("DELETE FROM providers WHERE id=?", [created.provider]);
-    } catch {}
-  for (const [sql, id] of [
-    ["DELETE FROM workspaces WHERE id=?", ids.workspace],
-    ["DELETE FROM organizations WHERE id=?", ids.organization],
-    ["DELETE FROM users WHERE id=?", ids.actor],
-  ])
-    try {
-      await pool.query(sql, [id]);
-    } catch {}
-  try {
-    await rm(root, { recursive: true, force: true });
-  } catch {}
-}
-async function assertCleanup() {
-  for (const [sql, id] of [
-    ["SELECT COUNT(*) count FROM providers WHERE id=?", created.provider],
-    ["SELECT COUNT(*) count FROM workspaces WHERE id=?", ids.workspace],
-    ["SELECT COUNT(*) count FROM organizations WHERE id=?", ids.organization],
-    ["SELECT COUNT(*) count FROM users WHERE id=?", ids.actor],
-  ]) {
-    if (!id) continue;
-    const [rows] = await pool.query(sql, [id]);
-    if (Number(rows[0]?.count) !== 0) throw new Error("provider_sources_live_cleanup_failed");
+    if (Number(rows[0].count) === 0)
+      throw new Error(`required migration table is missing: ${table}`);
   }
 }
 try {
@@ -176,125 +88,98 @@ try {
   const health = await store.health(requestId, traceId);
   if (health.status !== "available") throw new Error("redis unavailable");
   await ensure();
-  await cleanup();
-  const email = `m03-07-${requestId}@example.test`;
-  await pool.query(
-    "INSERT INTO users (id,email,email_normalized,password_hash,status,email_verified_at,password_changed_at,version,created_at,updated_at) VALUES (?,?,?,'live-probe','active',?,?,1,?,?)",
-    [ids.actor, email, email, now, now, now, now],
-  );
-  await pool.query(
-    "INSERT INTO organizations (id,name,slug,status,timezone,data_retention_days,default_workspace_id,created_by,version,created_at,updated_at) VALUES (?,'M03-07 Live',?,'active','Asia/Shanghai',365,NULL,?,1,?,?)",
-    [ids.organization, `m0307-${requestId.slice(0, 8)}`, ids.actor, now, now],
-  );
-  await pool.query(
-    "INSERT INTO workspaces (id,organization_id,name,slug,status,created_by,version,created_at,updated_at) VALUES (?,?,'默认工作区','default','active',?,1,?,?)",
-    [ids.workspace, ids.organization, ids.actor, now, now],
-  );
-  const live = await googleXml(),
-    news = parseGoogleNewsRss(live.xml, 1);
-  if (!news.length) throw new Error("google news parser returned empty");
   const repository = new MySqlProviderSourceRepository(pool),
     service = new ProviderSourceService(repository, () => now),
-    context = { actorId: ids.actor, idempotencyKey: "provision-live", requestId, traceId },
-    provisioned = await service.provision("manual_product_supply_csv", context),
-    provisionReplay = await service.provision("manual_product_supply_csv", context);
-  created.provider = provisioned.id;
-  if (provisioned.status !== "disabled" || provisionReplay.id !== provisioned.id)
-    throw new Error("provision disable/idempotency failed");
-  await pool.query(
-    "UPDATE providers SET status='enabled',version=version+1,updated_by=?,updated_at=? WHERE id=?",
-    [ids.actor, now, provisioned.id],
-  );
-  const csv = `external_id,title,price,currency,supplier_name,moq,canonical_url,observed_at\nLIVE-1,Foldable Desk Lamp,12.50,USD,Live Supplier,100,https://example.test/products/live-1,${now.toISOString()}\n`,
-    replayContext = { actorId: ids.actor, idempotencyKey: "replay-live", requestId, traceId },
-    scheduled = await service.replay(
-      provisioned.id,
-      { organization_id: ids.organization, workspace_id: ids.workspace, csv_text: csv },
-      replayContext,
+    catalog = await service.list(),
+    googleSource = catalog.find((item) => item.code === "google_news_search");
+  if (!googleSource) throw new Error("google_news_source_unavailable");
+  const policyRows = googleSource.provisioned
+      ? await pool.query(
+          "SELECT terms_review_status,terms_reference_url,terms_version,terms_expires_at FROM providers WHERE id=?",
+          [googleSource.provisioned.id],
+        )
+      : [[]],
+    policy = policyRows[0][0],
+    termsApproved = Boolean(
+      policy &&
+      policy.terms_review_status === "approved" &&
+      policy.terms_reference_url &&
+      policy.terms_version &&
+      policy.terms_expires_at &&
+      new Date(policy.terms_expires_at) > now,
     ),
-    scheduledReplay = await service.replay(
-      provisioned.id,
-      { organization_id: ids.organization, workspace_id: ids.workspace, csv_text: csv },
-      replayContext,
+    publicExecutionAllowed = googleSource.provisioned?.status === "enabled" && termsApproved;
+  let live = null,
+    news = [],
+    normalized = [];
+  if (publicExecutionAllowed) {
+    live = await googleXml();
+    news = parseGoogleNewsRss(live.xml, 1);
+    if (!news.length) throw new Error("google news parser returned empty");
+    const registry = new ProviderAdapterRegistry({
+      healthTimeoutMs: 10000,
+      maxResponseBytes: 5242880,
+      maxItemsPerBatch: 500,
+    });
+    registry.register(
+      new GoogleNewsRssAdapter(
+        async () =>
+          new Response(live.xml, { status: 200, headers: { "content-type": "application/xml" } }),
+      ),
     );
-  created.task = scheduled.task_id;
-  if (scheduledReplay.id !== scheduled.id || scheduled.status !== "scheduled")
-    throw new Error("replay idempotency failed");
-  const registry = new ProviderAdapterRegistry({
-    healthTimeoutMs: 10000,
-    maxResponseBytes: 5242880,
-    maxItemsPerBatch: 500,
-  });
-  for (const adapter of createBuiltinSourceAdapters(providerFetch)) registry.register(adapter);
-  const result = await processCollectionTaskOnce({
-    repository: new MySqlCollectionTaskWorkerRepository(pool, () => 0),
-    coordinator: new ScopedRedisCollectionCoordinator(store),
-    executor: new ProviderSourceExecutor(
-      pool,
-      registry,
-      new MySqlEvidencePersistence(pool, root, 10485760, () => now),
-      "worker-live",
-    ),
-    workerId: "worker-live",
-    leaseSeconds: 120,
-    now: () => now,
-  });
-  if (result.status !== "succeeded") throw new Error(`worker result ${result.status}`);
-  const [[runRows], [evidence], [records], [provenance], [events]] = await Promise.all([
-    pool.query(
-      "SELECT status,item_count,request_id,trace_id FROM provider_source_replay_runs WHERE id=?",
-      [scheduled.id],
-    ),
-    pool.query(
-      "SELECT id,organization_id,workspace_id,content_type FROM raw_evidence WHERE collection_task_id=?",
-      [scheduled.task_id],
-    ),
-    pool.query(
-      "SELECT id,payload_json FROM normalized_records WHERE organization_id=? AND workspace_id=?",
-      [ids.organization, ids.workspace],
-    ),
-    pool.query(
-      "SELECT field_path,source_path FROM field_provenance WHERE organization_id=? AND workspace_id=?",
-      [ids.organization, ids.workspace],
-    ),
-    pool.query("SELECT request_id,trace_id FROM collection_task_events WHERE task_id=?", [
-      scheduled.task_id,
-    ]),
-  ]);
-  if (
-    runRows[0]?.status !== "succeeded" ||
-    Number(runRows[0]?.item_count) !== 1 ||
-    evidence.length !== 1 ||
-    records.length !== 1 ||
-    provenance.length !== 8 ||
-    events.some((row) => row.request_id !== requestId || row.trace_id !== traceId)
-  )
-    throw new Error("persistence correlation mismatch");
-  const [outside] = await pool.query(
-    "SELECT id FROM raw_evidence WHERE organization_id<>? AND id=?",
-    [ids.organization, evidence[0].id],
-  );
-  if (outside.length) throw new Error("organization isolation failed");
-  await cleanup();
-  await assertCleanup();
+    const context = {
+        requestId,
+        traceId,
+        organizationId: randomUUID(),
+        workspaceId: randomUUID(),
+      },
+      batch = await registry.collect({
+        ...context,
+        provider: {
+          id: googleSource.provisioned.id,
+          code: googleSource.code,
+          accessMode: googleSource.access_mode,
+          targetUrl: googleSource.target_url,
+          parserVersion: googleSource.parser_version,
+          timeoutMs: googleSource.timeout_ms,
+          fields: googleSource.fields,
+        },
+        target: { query: "product innovation" },
+        limit: 1,
+      });
+    if (!batch.records.length) throw new Error("google news adapter returned empty");
+    normalized = batch.records.map((record) =>
+      registry.normalize(googleSource.code, record, {
+        ...context,
+        provider: {
+          id: googleSource.provisioned.id,
+          code: googleSource.code,
+          accessMode: googleSource.access_mode,
+          targetUrl: googleSource.target_url,
+          parserVersion: googleSource.parser_version,
+          timeoutMs: googleSource.timeout_ms,
+          fields: googleSource.fields,
+        },
+      }),
+    );
+  }
   console.log(
     JSON.stringify({
       status: "passed",
       module: "M03-07",
       mysql: runtime.version,
       redis: "available",
-      google_news_endpoint: "reachable_xml",
-      google_news_transport: live.transport,
+      schema_preflight: "read_only",
+      google_news_provisioned: Boolean(googleSource.provisioned),
+      google_news_status: googleSource.provisioned?.status ?? "not_provisioned",
+      google_policy: termsApproved ? "approved" : "owner_review_required",
+      public_execution: publicExecutionAllowed ? "passed" : "skipped_policy_gate",
+      google_news_endpoint: publicExecutionAllowed ? "reachable_xml" : "not_requested",
+      google_news_transport: live?.transport ?? "not_requested",
       google_news_sample_count: news.length,
-      google_policy: "owner_review_required",
-      manual_csv_replay: "succeeded",
-      task_state_machine: "succeeded",
-      raw_evidence: 1,
-      normalized_records: 1,
-      field_provenance: 8,
-      idempotency: "passed",
-      organization_workspace_isolation: "passed",
-      cleanup: "passed",
+      google_news_normalized_records: normalized.length,
+      database_writes: 0,
+      unrelated_tasks_processed: 0,
       request_id: requestId,
       trace_id: traceId,
     }),
@@ -312,7 +197,6 @@ try {
   );
   process.exitCode = 2;
 } finally {
-  await cleanup();
   await store.close();
   await pool.end();
 }
