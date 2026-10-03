@@ -265,3 +265,15 @@ test("M02-05.A03/A05/A06/A07/A10/A13/A15/A16/A17 delivery contracts are explicit
   const migrations = await readdir("database/migrations");
   assert.ok(migrations.includes("0015a_search_documents_m02_05.up.sql"));
 });
+
+test("M02-05.A14 production probe is BaoTa-bound and never applies migrations", async () => {
+  const [probe, runner] = await Promise.all(
+    ["scripts/verify-discovery-live.mjs", "scripts/verify-live-baota.py"].map(read),
+  );
+  assert.match(probe, /--baota-production/);
+  assert.match(probe, /assertSchemaReady/);
+  assert.doesNotMatch(probe, /pool\.query\(\s*await readFile|CREATE TABLE|ALTER TABLE/i);
+  assert.match(runner, /"discovery"/);
+  assert.match(runner, /mysql-discovery-repository/);
+  assert.match(runner, /discovery-service/);
+});

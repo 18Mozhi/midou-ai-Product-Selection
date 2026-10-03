@@ -70,7 +70,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m02-05/discovery-domain.test.mjs",
-    "node scripts/verify-discovery-live.mjs",
+    "node scripts/verify-discovery-live.mjs --baota-production",
     "npx playwright test tests/e2e/m02-05-discovery.spec.ts",
     "npm run verify:docs"
   ]
