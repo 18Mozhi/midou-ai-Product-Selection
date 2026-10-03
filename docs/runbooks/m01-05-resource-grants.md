@@ -2,7 +2,7 @@
 
 ## 宝塔发布
 
-1. 在宝塔受限配置确认 Node API 仍连接 `product_scout` 业务账号；本模块无新增环境变量或秘密。
+1. 在宝塔受限配置确认 Node API 仍连接 `product_scout` 业务账号；生产租户验收目标只用于人工探针，不属于常驻服务配置。
 2. 备份数据库后，按顺序执行 `0012a_resource_grants_m01_05.up.sql`、`0012b_resource_grant_actions_m01_05.up.sql`、`0012c_resource_grant_audit_m01_05.up.sql`、`0012d_resource_grant_operations_m01_05.up.sql`。SQL 兼容 MySQL 5.7 与 `utf8mb4`。
 3. 在宝塔 Node 项目发布新构建并重启 `product-scout-api`；健康检查 `/api/v1/health/live`、`/ready` 和 `/version`。
 4. 在宝塔网站发布 Web 静态资源，打开 `/?view=resource-grants` 验证桌面与 390px。
@@ -11,7 +11,7 @@
 ## 验证与告警
 
 - 定向：`node --test tests/m01-05/resource-grant-domain.test.mjs`、API 与 contract 测试。
-- 真实数据层：`node scripts/verify-resource-grants-live.mjs`，必须确认 MySQL 5.7、业务账号、同组织授权、跨组织拒绝、30 天边界、延长/撤销/到期/访问审计和清理。
+- 真实数据层：`node scripts/verify-resource-grants-live.mjs`，必须确认 MySQL 5.7、业务账号、同组织授权、跨组织拒绝、30 天边界、延长/撤销/到期/访问审计和清理。生产验收时设置 `$env:SCOUTOPS_RESOURCE_GRANTS_LIVE_TARGET='baota-production'`，经固定宝塔节点运行；探针只预检既有表，不执行迁移，随机测试账号/组织/授权记录会在结束时清理。
 - 视觉：`npx playwright test tests/e2e/m01-05-resource-grants.spec.ts`。
 - 模块：`npm run verify:module -- M01-05`。
 - 监控 `resource_grant_audit_events` 中 `access_denied`/`expired` 增量和 API 403/409；日志只记录 request_id/trace_id，不记录 Cookie、会话 Token 或秘密。

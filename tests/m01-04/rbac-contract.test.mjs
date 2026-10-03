@@ -109,7 +109,16 @@ test("M01-04.A01/A10/A11/A17 docs maps and env lock exact boundaries", async () 
   assert.match(map, /"authorization"/);
   assert.match(blueprint, /M01-04 RBAC 与数据范围基线/);
   assert.match(gate, /m01-04-rbac-data-scope/);
-  assert.doesNotMatch(env, /RBAC_|AUTHORIZATION_|ROLE_DEFAULT/);
+  assert.match(env, /SCOUTOPS_RBAC_LIVE_TARGET=local/);
+  assert.match(map, /SCOUTOPS_RBAC_LIVE_TARGET=baota-production/);
+  assert.doesNotMatch(env, /AUTHORIZATION_|ROLE_DEFAULT/);
+  const probe = await read("scripts/verify-rbac-live.mjs");
+  const runner = await read("scripts/verify-live-baota.py");
+  assert.match(probe, /assertSchemaReady/);
+  assert.doesNotMatch(probe, /CREATE TABLE|ALTER TABLE|readFile\(.*migrations/);
+  assert.match(probe, /SCOUTOPS_RBAC_LIVE_TARGET/);
+  assert.match(runner, /"rbac"/);
+  assert.match(runner, /mysql-authorization-repository\.js/);
   for (let i = 1; i <= 17; i++)
     assert.match(registry, new RegExp(`M01-04\\.A${String(i).padStart(2, "0")}`));
 });

@@ -45,6 +45,9 @@ test("M01-06.A03/A06/A10/A13/A17 contracts include seed security audit paginatio
   assert.match(downD, /DELETE FROM/);
   assert.doesNotMatch(cli, /console\.log\([^\n]*(seed\.|email:|password:)/i);
   assert.match(live, /completed_read_only_idempotent/);
+  assert.match(live, /SCOUTOPS_AUDIT_SEED_LIVE_TARGET/);
+  assert.match(feature, /SCOUTOPS_AUDIT_SEED_LIVE_TARGET=baota-production/);
+  assert.match(live, /verify-live-baota\.py.*audit-seed/s);
   assert.doesNotMatch(
     live,
     /\bINSERT\s+INTO\b|\bUPDATE\s+\w+\s+SET\b|\bDELETE\s+FROM\b|\b(?:CREATE|ALTER|DROP)\s+TABLE\b/i,

@@ -106,7 +106,16 @@ test("M01-05.A10/A11/A17 docs maps env and verification gate cover operations an
   assert.match(map, /"resourceGrants"/);
   assert.match(blueprint, /M01-05 资源临时授权基线/);
   assert.match(gate, /m01-05-resource-grants/);
-  assert.doesNotMatch(env, /RESOURCE_GRANT_|GRANT_MAX_DAYS/);
+  assert.match(env, /SCOUTOPS_RESOURCE_GRANTS_LIVE_TARGET=local/);
+  assert.match(map, /SCOUTOPS_RESOURCE_GRANTS_LIVE_TARGET=baota-production/);
+  assert.doesNotMatch(env, /GRANT_MAX_DAYS/);
+  const probe = await read("scripts/verify-resource-grants-live.mjs");
+  const runner = await read("scripts/verify-live-baota.py");
+  assert.match(probe, /assertSchemaReady/);
+  assert.doesNotMatch(probe, /CREATE TABLE|ALTER TABLE|readFile\(.*migrations/);
+  assert.match(probe, /SCOUTOPS_RESOURCE_GRANTS_LIVE_TARGET/);
+  assert.match(runner, /"resource-grants"/);
+  assert.match(runner, /mysql-resource-grant-repository\.js/);
   for (let i = 1; i <= 17; i++)
     assert.match(registry, new RegExp(`M01-05\\.A${String(i).padStart(2, "0")}`));
 });

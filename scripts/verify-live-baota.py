@@ -13,7 +13,7 @@ from urllib.parse import quote
 
 def main() -> int:
     probe = sys.argv[1] if len(sys.argv) == 2 else ""
-    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy"}:
+    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed"}:
         raise SystemExit("unsupported BaoTa live probe")
 
     repo = pathlib.Path(__file__).resolve().parents[1]
@@ -48,7 +48,7 @@ def main() -> int:
         script_path = repo / "scripts" / f"verify-{probe}-live.mjs"
         source = script_path.read_text(encoding="utf-8")
         package_names = ["config"]
-        if probe in {"mysql", "api", "file-audit", "local-auth", "mfa", "tenancy"}:
+        if probe in {"mysql", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed"}:
             package_names.append("database")
         if probe in {"redis", "api"}:
             package_names.append("redis")
@@ -56,6 +56,12 @@ def main() -> int:
             package_names.append("auth")
         if probe == "tenancy":
             package_names.append("tenancy")
+        if probe == "rbac":
+            package_names.extend(("tenancy", "authorization"))
+        if probe == "resource-grants":
+            package_names.extend(("authorization", "resource-grants"))
+        if probe == "audit-seed":
+            package_names.extend(("auth", "audit"))
         if probe == "api":
             package_names.append("api")
         if probe == "file-audit":
@@ -102,6 +108,33 @@ def main() -> int:
             old = next((candidate for candidate in candidates if source.count(candidate) == 1), None)
             if old is None:
                 raise RuntimeError("local tenancy probe import mismatch")
+            remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
+            source = source.replace(old, json.dumps("file://" + quote(remote_path, safe="/")), 1)
+
+        if probe == "rbac":
+            for import_path in (
+                "../apps/api/dist/mysql-tenancy-repository.js",
+                "../apps/api/dist/mysql-authorization-repository.js",
+            ):
+                candidates = (f"'{import_path}'", f'"{import_path}"')
+                old = next((candidate for candidate in candidates if source.count(candidate) == 1), None)
+                if old is None:
+                    raise RuntimeError("local RBAC probe repository import mismatch")
+                remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
+                source = source.replace(old, json.dumps("file://" + quote(remote_path, safe="/")), 1)
+
+        repository_imports = {
+            "resource-grants": (
+                "../apps/api/dist/mysql-authorization-repository.js",
+                "../apps/api/dist/mysql-resource-grant-repository.js",
+            ),
+            "audit-seed": ("../apps/api/dist/mysql-audit-repository.js",),
+        }
+        for import_path in repository_imports.get(probe, ()):
+            candidates = (f"'{import_path}'", f'"{import_path}"')
+            old = next((candidate for candidate in candidates if source.count(candidate) == 1), None)
+            if old is None:
+                raise RuntimeError("local live probe repository import mismatch")
             remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
             source = source.replace(old, json.dumps("file://" + quote(remote_path, safe="/")), 1)
 

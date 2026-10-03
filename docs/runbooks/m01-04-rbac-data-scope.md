@@ -4,7 +4,7 @@
 
 备份 product_scout 后按 `0011a`–`0011g` 建表，再按 `0011h`、`0011i`、`0011j` 写入固定角色、能力和映射。发布 API/Web 构建，只通过宝塔重启 Node API；授权代码与连接池在启动时加载，必须重启。当前 Worker/Crawler 没有 P01 受保护业务任务，不需重启；未来消费者接入 Guard 后随对应宝塔项目发布。本模块无新环境变量，`config/env.example` 不增加键。
 
-运行 `npm run build`、三个 `tests/m01-04` 测试、`node scripts/verify-rbac-live.mjs`、M01-04 Playwright 和 `npm run verify:module -- M01-04`。真实探针必须确认 MySQL 5.7、product_scout 账号、utf8mb4、角色矩阵、工作区与平台范围、跨组织拒绝、允许/拒绝审计及测试数据清理。
+运行 `npm run build`、三个 `tests/m01-04` 测试、M01-04 Playwright 和 `npm run verify:module -- M01-04`。真实探针必须确认 MySQL 5.7、product_scout 账号、utf8mb4、角色矩阵、工作区与平台范围、跨组织拒绝、允许/拒绝审计及测试数据清理。默认 `node scripts/verify-rbac-live.mjs` 连接本机配置；没有隔离测试库且已授权使用生产库时，设置 `$env:SCOUTOPS_RBAC_LIVE_TARGET='baota-production'` 后运行，通过固定宝塔节点读取受限运行环境。生产探针只检查既有授权表，不执行迁移或种子写入；使用随机账号、组织和工作区进行临时授权验证并清理测试记录。
 
 人工验证：登录、选择组织和工作区，访问 `/?view=authorization`。有 `role:read` 与组织范围者可查看组织角色矩阵；普通成员仍可读取本人有效授权摘要，但组织角色目录返回 403 并明确联系管理员；未选择上下文返回 409；登录过期返回 401。平台超级管理员还应通过 `/api/v1/platform/roles` 读取平台角色矩阵，运营或安全管理员直接调用该接口必须返回 403。禁止通过浏览器修改响应或显示菜单来判断 API 是否授权。
 
