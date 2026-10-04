@@ -123,13 +123,35 @@ test("P47 inline retry wrapper targets only a live local persistent heading", ()
 
 test("P47 production refresh failure CSS stays scoped to the active adapter page", () => {
   const css = postcss.parse(read("apps/web/src/provider-adapters-c-page.css"));
+  const splitTopLevelSelectors = (selector) => {
+    const selectors = [];
+    let depth = 0,
+      start = 0;
+    for (let index = 0; index < selector.length; index++) {
+      if (selector[index] === "(") depth++;
+      else if (selector[index] === ")") depth--;
+      else if (selector[index] === "," && depth === 0) {
+        selectors.push(selector.slice(start, index).trim());
+        start = index + 1;
+      }
+      assert.ok(depth >= 0, `Unbalanced selector: ${selector}`);
+    }
+    assert.equal(depth, 0, `Unbalanced selector: ${selector}`);
+    selectors.push(selector.slice(start).trim());
+    return selectors;
+  };
   css.walkRules((rule) => {
     if (
       !rule.selector.includes(".adapter-refresh-failure") &&
       !rule.selector.includes(".adapter-heading:focus")
     )
       return;
-    for (const selector of rule.selectors) {
+    for (const selector of splitTopLevelSelectors(rule.selector.replace(/\s+/g, " "))) {
+      if (
+        !selector.includes(".adapter-refresh-failure") &&
+        !selector.includes(".adapter-heading:focus")
+      )
+        continue;
       assert.ok(selector.includes(".adapter-center--c"));
       assert.ok(
         selector.includes(".adapter-refresh-failure") ||

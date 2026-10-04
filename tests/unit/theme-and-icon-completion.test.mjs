@@ -398,7 +398,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
     if (paths[index] === "apps/web/src/design/commercial-review-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-        /^html:has\(body #app \.commercial--review\)\s*\{(?:\s*--so-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
+        /^(?::global\()?html:has\(body #app \.commercial--review\)\)?\s*\{(?:\s*--so-[a-z-]+:\s*#[0-9a-f]{3,6};)+\s*\}$/,
       );
       continue;
     }

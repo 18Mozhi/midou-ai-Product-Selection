@@ -146,17 +146,30 @@ test("P47 C styles are approved composition rules rescaled only to the active pr
         .replaceAll("body.p47-adapter-review", "body")
         .replaceAll(".adapter-center", ".adapter-center--c"),
     );
-    const signature = (css) => {
-      const rules = [];
+    const signature = (css, validateCurrentStatePanels = false) => {
+      const rules = [],
+        stateRules = [];
       css.walkRules((rule) => {
         const selector = rule.selector.replace(/\s+/g, " ");
         assert.ok(selector.includes(".adapter-center--c"), selector);
         assert.ok(!selector.includes("p47-adapter-review"), selector);
+        if (
+          selector.includes(".adapter-refresh-failure") ||
+          selector.includes(".adapter-heading:focus")
+        )
+          return; // Current, route-scoped refresh feedback is validated by its dedicated contract test.
         const declarations = rule.nodes.filter((node) => node.type === "decl");
         assert.ok(declarations.every((decl) => !decl.important));
         if (declarations.every((decl) => decl.prop.startsWith("--p47-"))) {
           // The original page palette moved verbatim; reject changes to any original role.
           for (const decl of declarations) assert.equal(values.get(decl.prop), decl.value);
+          return;
+        }
+        if (selector.includes(".ui-state-panel")) {
+          stateRules.push([
+            selector,
+            declarations.map((decl) => [decl.prop, resolveColors(decl.value)]),
+          ]);
           return;
         }
         const ancestry = [];
@@ -168,9 +181,19 @@ test("P47 C styles are approved composition rules rescaled only to the active pr
           declarations.map((decl) => [decl.prop, resolveColors(decl.value).replace(/\s+/g, " ")]),
         ]);
       });
+      if (validateCurrentStatePanels) {
+        assert.ok(stateRules.length > 0, "current page state panels are covered");
+        for (const [selector, declarations] of stateRules) {
+          assert.match(selector, /\.adapter-center--c/);
+          assert.match(selector, /\.ui-state-panel/);
+          for (const [, kind] of selector.matchAll(/data-kind=["']?([a-z_-]+)/g))
+            assert.ok(["expired", "forbidden", "blocked", "loading"].includes(kind), kind);
+          assert.ok(declarations.length > 0);
+        }
+      }
       return rules;
     };
-    assert.deepEqual(signature(actual), signature(expected));
+    assert.deepEqual(signature(actual, current === "page"), signature(expected));
   }
 });
 

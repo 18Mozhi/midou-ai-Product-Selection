@@ -1021,7 +1021,7 @@ test("P58 commercial operations colors resolve from its route-scoped palette", a
   assert.equal(declarations.length, names.size, "no duplicate commercial operations declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(body #app \.commercial--review\)\s*\{[\s\S]*\}$/,
+    /^(?::global\()?html:has\(body #app \.commercial--review\)\)?\s*\{[\s\S]*\}$/,
   );
   assert.ok(css.startsWith('@import "../design/commercial-review-tokens.css";'));
   assert.ok(component.includes('@import "../design/commercial-review-tokens.css";'));
