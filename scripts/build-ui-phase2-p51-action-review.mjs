@@ -44,7 +44,7 @@ const definitions = [
   },
   {
     actionId: "CL51-STATE-PRIMARY",
-    candidates: ["3a210e63ca5a7831.1"],
+    candidates: ["43ae05ac7ae508fe.1"],
     label: "将状态面主操作接到列表读取处理器",
     kind: "wiring",
     forwardsTo: ["CL51-LOAD"],
