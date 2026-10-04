@@ -1361,7 +1361,7 @@ watch(
                 v-model="form.market"
                 required
                 maxlength="40"
-                pattern="[A-Za-z0-9._-]+"
+                pattern="[-A-Za-z0-9._]+"
                 title="仅支持字母、数字、点、下划线和连字符"
             /></label>
             <label

@@ -267,7 +267,7 @@ test("competitor creation uses link, market and confirmation steps", async ({ pa
   await dialog.getByLabel("商品网址").fill("https://www.amazon.com/dp/B0SCOUTOPS");
   await dialog.getByRole("button", { name: "下一步" }).click();
   await expect(dialog.getByText("2 市场信息")).toHaveAttribute("aria-current", "step");
-  await expect(dialog.getByLabel("市场")).toHaveAttribute("pattern", "[A-Za-z0-9._-]+");
+  await expect(dialog.getByLabel("市场")).toHaveAttribute("pattern", "[-A-Za-z0-9._]+");
   await expect(dialog.getByLabel("市场")).toHaveAttribute("maxlength", "40");
   await expect(dialog.getByLabel("关联机会编号（可选）")).toHaveAttribute("maxlength", "36");
   await expect(dialog.getByLabel("监控名称")).toHaveAttribute("maxlength", "500");

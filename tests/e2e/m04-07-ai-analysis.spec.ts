@@ -131,23 +131,26 @@ test("a delayed AI enqueue receipt does not override a newer tab choice", async 
     await route.fulfill({ status: 202, json: envelope({ id: "queued-ai-analysis" }) });
   });
 
-  await page.goto(`/opportunities/${opportunityId}`);
-  await openTab(page, "AI 辅助");
-  await page.getByRole("button", { name: "生成新分析" }).click();
-  await queueStarted;
+  try {
+    await page.goto(`/opportunities/${opportunityId}`);
+    await openTab(page, "AI 辅助");
+    await page.getByRole("button", { name: "生成新分析" }).click();
+    await queueStarted;
 
-  const overviewTab = page.getByRole("button", { name: "结论", exact: true });
-  await overviewTab.click();
-  await expect(overviewTab).toHaveAttribute("aria-current", "page");
-  const queueResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
-      response.request().method() === "POST",
-  );
-  releaseQueue();
-  await queueResponse;
-  await page.waitForLoadState("networkidle");
-  await expect(overviewTab).toHaveAttribute("aria-current", "page");
+    const overviewTab = page.getByRole("button", { name: "结论", exact: true });
+    await overviewTab.click();
+    await expect(overviewTab).toHaveAttribute("aria-current", "page");
+    const queueResponse = page.waitForResponse(
+      (response) =>
+        response.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
+        response.request().method() === "POST",
+    );
+    releaseQueue();
+    await queueResponse;
+    await expect(overviewTab).toHaveAttribute("aria-current", "page");
+  } finally {
+    releaseQueue();
+  }
 });
 
 test("a delayed AI enqueue receipt cannot leak across opportunity IDs", async ({ page }) => {
