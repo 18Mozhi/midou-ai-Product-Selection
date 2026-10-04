@@ -265,7 +265,7 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ReleaseRolloutCenter.vue | ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205 |
+| apps/web/src/components/ReleaseRolloutCenter.vue | 2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e |
 
 此映射只证明静态源码候选位置，不等同于真实发布/回滚执行、GET权限、数据库审计、完整键盘/读屏、浏览器全状态或生产验收。历史双槽部署说明仍不得作为当前单后端部署指令。
 
