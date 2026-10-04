@@ -5,7 +5,7 @@
   "inputHashes": {
     "design-plans/ui-phase-2-2026-09-07/actions.json": "ae8945f3b0f082a54a501fb95d402d402bbcae8ca850b131152f2a1317c7fb42",
     "design-plans/ui-phase-2-2026-09-07/dialogs.json": "6789a0cc44c716fa1586cf34f2ad0a5ea7b38f8ef80b0afe474d046a6609e359",
-    "design-plans/ui-phase-2-2026-09-07/coverage.json": "67673a02fbc2d0e98baff3c8c2c904a46f26a7ccbaf6245111655023db0679a7",
+    "design-plans/ui-phase-2-2026-09-07/coverage.json": "8c41d0ad2d0e859e09c02aa28ff3c453270da20f40a12f3cbeb014445df23d16",
     "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
     "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
@@ -701,7 +701,7 @@
     "wiringGroups": 126,
     "pagesWithoutExplicitSemanticReview": [],
     "globalDenominatorFrozen": false,
-    "userApprovedPages": 1,
+    "userApprovedPages": 73,
     "visualApprovedReviewedPages": 73,
     "actionApprovedReviewedPages": 0
   },
@@ -783,7 +783,7 @@
       "proposalPackages": [
         "identity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。",
@@ -827,7 +827,7 @@
       "proposalPackages": [
         "identity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。",
@@ -871,7 +871,7 @@
       "proposalPackages": [
         "identity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。",
@@ -915,7 +915,7 @@
       "proposalPackages": [
         "identity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。",
@@ -959,7 +959,7 @@
       "proposalPackages": [
         "identity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。",
@@ -1004,7 +1004,7 @@
       "proposalPackages": [
         "identity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P02–P07共用18源位置；六份是路由适用性记录，不是108个独立按钮。表单submit组展开五种请求；按路由累计组数不等于全站去重业务分母。",
@@ -1048,7 +1048,7 @@
       "proposalPackages": [
         "identity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。"
@@ -1088,7 +1088,7 @@
       "proposalPackages": [
         "identity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "仅本页局部源与列明结构已核；全共享消费者/所有状态/主题/真实Vue与用户批准待验。"
@@ -1128,7 +1128,7 @@
       "proposalPackages": [
         "appearance-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "12个ThemeStudio模板候选及1个共享radio控件候选分别映射；两条父级事件绑定只作接线核对，不重复计用户控件。",
@@ -1163,7 +1163,7 @@
         "personal-direction-c",
         "personal-sections-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "已并入真实Vue并完成1440/390与两种动效的隔离浏览器验证；本地夹具不替代生产账号、真实RBAC、数据库审计或正式验收。",
@@ -1205,7 +1205,7 @@
       "proposalPackages": [
         "home-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "20源位置/14组；顶部/全部无view链接、计数view链接、item.route和首条恢复分开，不将同中文字当相同目标。",
@@ -1248,7 +1248,7 @@
       "proposalPackages": [
         "work-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "WORK-C-r1保留66PNG/33双端场景，其中2图是非业务审稿控件板；七弹窗有常态，失败/处理中只部分独立图，全部结果和主题/密度仍待补。",
@@ -1293,7 +1293,7 @@
       "proposalPackages": [
         "trend-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "42页面动作组的252代表视觉槽均未逐selector映射；146旧图涵盖68双端场景及10下部，不代表每按钮六态/动态行/全部主题。",
@@ -1337,7 +1337,7 @@
       "proposalPackages": [
         "opportunity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "27页面动作组的162个代表视觉槽未逐selector映射；现126PNG为60双端主场景+6长窗下部，不是全部控件/动态行/主题覆盖。",
@@ -1383,7 +1383,7 @@
         "shell-journey-direction-c",
         "journey-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "2026-09-10控件补充：114实际Vue图/170检查，原生hover/focus/active按真实输入采集；手机footer换列挤出按钮已修复，blocked恢复副说明仅条件纠正，API/质量门未改。",
@@ -1432,7 +1432,7 @@
       "proposalPackages": [
         "scoring-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "16页面动作×6=96视觉槽未逐selector映射。48图只有24双端场景，缺列表完整异常、有效创建/提交失败成功、多页预览/缺失字段、全部操作失败长窗/主题密度图。",
@@ -1484,7 +1484,7 @@
         "profit-direction-c",
         "opportunity-detail-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "701十分区已组合且有主题密度代表图，但无完整采纳质量门/成本输入复核链，不能借其他夹具填当前机会事实。",
@@ -1529,7 +1529,7 @@
       "proposalPackages": [
         "competitor-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "没有逐actionId/selector六态引用，不能从108PNG或通用hover/focus图片扣减全部控件状态槽；navigation仅将源无disabled/busy标为不适用。",
@@ -1572,7 +1572,7 @@
       "proposalPackages": [
         "competitor-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "没有逐actionId/selector六态引用，不能从108PNG或通用hover/focus图片扣减全部控件状态槽；navigation仅将源无disabled/busy标为不适用。",
@@ -1616,7 +1616,7 @@
       "proposalPackages": [
         "sourcing-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "150个代表状态槽有精确图引用，20个disabled/busy槽按当前源码无此控件呈现单列；未分类代表槽0，不增减38语义组或等同全状态通过。完整输入/错误/全部变体/主题密度、真实UI与用户批准仍未完成。",
@@ -1659,7 +1659,7 @@
       "proposalPackages": [
         "cost-rules-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "30源位置/20语义组/19模型/7结构；166旧图的关联不等于每控件六态或19字段验收。",
@@ -1706,7 +1706,7 @@
         "task-direction-c-forms",
         "task-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "关联两包60PNG中P23相关的目录、筛选空、创建、删除、五批量和读取异常；其余P24编辑/详情/进度与审核board不抵扣P23。",
@@ -1753,7 +1753,7 @@
         "task-direction-c-forms",
         "task-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "普通P24隐藏头部/列表/批量/导出/分页；原合同关于头部可在详情存在只反映共享DOM，不是当前可见入口。",
@@ -1804,7 +1804,7 @@
         "approval-controls-direction-c",
         "approval-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "2026-09-10生命周期包54PNG：五写入预览锁原请求/窗口代次，原窗失败保留、模拟成功仅关原窗；关闭/重开及旧A结果不改后来B。双端106离线检查，生产读写竞态和requestId覆盖仍未修。模板/发起/发布disabled取源busy=true条件，新增3映射；当前103有图/20源无状态/21待核对，不替代其他变体或具体批准。",
@@ -1855,7 +1855,7 @@
         "notification-controls-direction-c",
         "notification-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "28项源码测试覆盖读取/详情/偏好归属及正常路径，并保留普通行与深链busy差异；非完整页面、全局上下文或生命周期验收。",
@@ -1900,7 +1900,7 @@
         "automation-controls-direction-c",
         "automation-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "19源位置归16语义组，14路由动作含2写入组，另2模态接线；预览POST为只读。",
@@ -1945,7 +1945,7 @@
         "report-controls-direction-c",
         "report-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "当前全新图与真实Vue未整合；接口/SQL未改，读取批次、创建回执/下载提示和刷新重入已局部修复，重建并发策略/缓存范围及全局诊断仲裁仍待。",
@@ -1989,7 +1989,7 @@
         "organization-profile-controls-direction-c",
         "organization-profile-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "Logo四态及六字段47代表状态/8表单组合已绑定；不是全部字段/角色/主题/密度/软键盘组合。",
@@ -2032,7 +2032,7 @@
         "members-controls-direction-c",
         "members-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "十字段74代表状态/八表单组合双端164图已绑定；该新子稿按真实共享前端取消旧提案500上限，仅记录离线意图，不代表服务接受501字或生产已改。全部组合、主题/密度/软键盘仍待。",
@@ -2077,7 +2077,7 @@
         "roles-controls-direction-c",
         "roles-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "原48图保留上下文；新42控件378图绑定18代表动作76状态及24变体113状态，44代表槽仍未映射；父页刷新/错误、真实多页、字段六态仍待。单页分页仅disabled，唯一已选授权不证明切换。",
@@ -2122,7 +2122,7 @@
         "workspaces-controls-direction-c",
         "workspaces-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "原型内联错误、缺失计数区分、原生button语义、未知写结果保护尚未进入真实Vue。",
@@ -2167,7 +2167,7 @@
         "teams-controls-direction-c",
         "teams-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "OG-G02：成员请求等待后读取后来选择，可能异常或错误归属；图稿保护未进入Vue。",
@@ -2212,7 +2212,7 @@
         "org-approvals-controls-direction-c",
         "org-approvals-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "当前C整合其他非本次读取反馈区域仍有待审；实际Vue手机权限白区已单独局部批准，不代表顶部或整页。",
@@ -2255,7 +2255,7 @@
       "proposalPackages": [
         "org-data-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "独立控件/字段图通过额外精确验证关联；未改旧清单格式或冒充统一六态图包，因此通用六态槽继续not-mapped。",
@@ -2298,7 +2298,7 @@
       "proposalPackages": [
         "org-token-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "本页仅手机四筛选字段/帮助/底部重置获局部批准并有真实子Vue证据；创建及其他控件问题仍待答。",
@@ -2341,7 +2341,7 @@
       "proposalPackages": [
         "org-audit-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "基础筛选和手机详情问题尚未回复，全部P37新图待审。",
@@ -2385,7 +2385,7 @@
       "proposalPackages": [
         "platform-overview-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "8张入口组合待审，不填充通用六态，也不抵扣其他未审构图。",
@@ -2427,7 +2427,7 @@
       "proposalPackages": [
         "account-overview-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "本审阅只覆盖P39目录与组织记录子组件24个源码位置；P39其余父组件按钮、输入、弹窗和壳层动作尚未纳入。",
@@ -2471,7 +2471,7 @@
       "proposalPackages": [
         "platform-organizations-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "此文件对P40五个真实Vue源码作逐候选登记；过滤和记录六态尚未逐控件绑定到实际截图。",
@@ -2515,7 +2515,7 @@
       "proposalPackages": [
         "platform-organizations-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P41源动作已逐候选分类；全部可见按钮hover/focus/pressed/disabled/busy仍未逐控件绑定到具体状态图。",
@@ -2557,7 +2557,7 @@
       "proposalPackages": [
         "platform-organizations-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "动作映射只登记当前源码候选及语义归属，不证明所有按钮状态、弹窗变体或完整浏览器交互均已验收。",
@@ -2602,7 +2602,7 @@
         "user-admin-direction-c",
         "account-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "移动用户预览到账号详情、三路由共享父组件条件、四个原生dialog与11种原因目标仍需按真实App组合回归；静态候选和图稿不证明每条状态时序。",
@@ -2646,7 +2646,7 @@
       "proposalPackages": [
         "user-admin-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "管理员目录及只读比较的静态来源已逐项映射；P44与P43共享的详情/创建/改密/原因动作沿用同一组件合同，完整App生命周期仍需独立回归。",
@@ -2688,7 +2688,7 @@
       "proposalPackages": [
         "permission-comparison-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P45只读平台角色能力比较；选择角色、筛选和重置按现有五个query键恢复，不代表账号实际授权清单，也没有角色编辑或授权写操作。",
@@ -2731,7 +2731,7 @@
       "proposalPackages": [
         "provider-registry-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P46路由自身的37个当前扫描候选映射到页面动作、事件接线、未绑定secondary及共享行预览控件；NavigationShell和其他来源子路由静态关联候选不属于此页直接动作范围。",
@@ -2774,7 +2774,7 @@
       "proposalPackages": [
         "provider-adapters-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "31个当前P47与已列共享源候选均按实际路由调用映射；不把共享组件的其他页面消费者并入本页验收。",
@@ -2818,7 +2818,7 @@
       "proposalPackages": [
         "source-channels-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "本登记逐项覆盖九个P48本地Vue源文件的当前83个扫描候选；候选归组依据现有SC48合同，不把候选数当作独立按钮或业务动作总数。",
@@ -2861,7 +2861,7 @@
       "proposalPackages": [
         "1688-acceptance-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖三个P49页面局部Vue组件的21个当前候选；共享导航及其他通用消费者不计入P49局部候选总数。",
@@ -2903,7 +2903,7 @@
       "proposalPackages": [
         "credential-assets-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖CredentialAssetCenter.vue的39个当前扫描候选；既有共享弹窗、移动详情和导航壳内部候选不重复并入页面宿主计数。",
@@ -2945,7 +2945,7 @@
       "proposalPackages": [
         "collection-tasks-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖CollectionRuntimeSurface.vue与CollectionTaskCenter.vue的26个当前扫描候选；共享移动详情、确认窗和导航壳的内部候选不重复并入P51局部计数。",
@@ -2987,7 +2987,7 @@
       "proposalPackages": [
         "collection-overview-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖CollectionRuntimeSurface.vue与CollectionOperationsConsole.vue的32个当前扫描候选；共享抽屉、ResponsiveDataView及ConfirmDialog内部控件不重复计入P52。",
@@ -3029,7 +3029,7 @@
       "proposalPackages": [
         "browser-runtime-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖CollectionRuntimeCenter.vue的12个当前扫描候选；共享ConfirmDialog及ResponsiveDataView内部控件不重复计入P53。",
@@ -3076,7 +3076,7 @@
         "data-record-detail-direction-c",
         "data-composed-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "同页静态组合已交294PNG；实际质量工作区现由父级保持挂载，并补同路由URL恢复、读取代次与迟到响应隔离。真实浏览器长历史和生产scope仍待验。",
@@ -3119,7 +3119,7 @@
       "proposalPackages": [
         "governance-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "12张当前Vue图覆盖目录、默认、自动化详情、筛选无结果、权限拒绝和保留快照失败；不是每个动态行与六态的穷尽。",
@@ -3160,7 +3160,7 @@
       "proposalPackages": [
         "content-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "当前 Vue 代表图覆盖默认、手机记录、审核、空结果、权限拒绝和写成功/刷新失败；不是每条动态记录与全部六态穷尽。",
@@ -3203,7 +3203,7 @@
       "proposalPackages": [
         "platform-notifications-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖P57通知域6个专用Vue组件的32个当前候选；PlatformManagementCenter四个通知路径所有者候选通过既有合同交叉引用，其他11个父组件候选明确排除。",
@@ -3245,7 +3245,7 @@
       "proposalPackages": [
         "commercial-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖CommercialOperationsCenter.vue的43个当前候选；共享壳层和技术详情内部控件按共享合同处理。",
@@ -3287,7 +3287,7 @@
       "proposalPackages": [
         "security-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖SecurityOperationsCenter.vue的29个当前扫描候选；ResponsiveDataView五消费者作为共享合同交叉引用，不另计局部源按钮。",
@@ -3329,7 +3329,7 @@
       "proposalPackages": [
         "open-platform-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖OpenPlatformCenter.vue的44个当前候选；共享创建、原因、确认与详情子组件内部控件只交叉引用其自身合同。",
@@ -3371,7 +3371,7 @@
       "proposalPackages": [
         "status-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "逐项覆盖两个P61专属Vue子组件的6个源码候选；父级刷新/重试/追踪位置单独按共享合同交叉引用。",
@@ -3414,7 +3414,7 @@
       "proposalPackages": [
         "logs-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "覆盖三个P62局部源码文件的33个当前候选，包含筛选抽屉与审计原因窗共享组件；共享数据详情/表格控件内部不重复计数。",
@@ -3456,7 +3456,7 @@
       "proposalPackages": [
         "api-coverage-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "2个当前操作卡片候选分别映射五维证据和技术追踪原生披露；不计父级共享读取/筛选、报告摘要及数据展示为按钮。",
@@ -3498,7 +3498,7 @@
       "proposalPackages": [
         "backup-recovery-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "10个当前P64专属组件候选映射至5组页面动作；共享详情/列设置/复制由已有共享组件映射引用。",
@@ -3540,7 +3540,7 @@
       "proposalPackages": [
         "release-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "12个当前ReleaseRolloutCenter候选归入7组页面动作，区分刷新/重试、登录、超管导航、页内目录、配置指纹及发布门详情。",
@@ -3582,7 +3582,7 @@
       "proposalPackages": [
         "topology-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "16个当前RuntimeTopologyCenter候选映射至12类只读/本地/导航动作，分别覆盖四分区、失败重读、队列视图、策略、告警及阻断。",
@@ -3624,7 +3624,7 @@
       "proposalPackages": [
         "redis-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P67当前仅4个页面本地候选：读取/两类重读/登录；共享TechnicalDetails的三个追踪消费者按相应快照或失败ID区分。",
@@ -3666,7 +3666,7 @@
       "proposalPackages": [
         "mysql-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P68当前4个局部候选映射为只读刷新、两个错误重读分支与expired登录；无筛选、分页、排序或业务表单。",
@@ -3708,7 +3708,7 @@
       "proposalPackages": [
         "files-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P69当前4个页内候选映射只读刷新、快照/首次错误两类重读与expired登录。",
@@ -3750,7 +3750,7 @@
       "proposalPackages": [
         "scheduler-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P70当前16个页内源码候选映射至9类语义动作；两个确认调用开窗/取消/提交事件分别归入对应恢复动作。",
@@ -3794,7 +3794,7 @@
       "proposalPackages": [
         "capacity-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P71当前7个本页候选归为容量GET/重读、签认POST与本地发现披露三类动作；共享确认和请求详情内部控件单独引用。",
@@ -3837,7 +3837,7 @@
       "proposalPackages": [
         "recovery-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P72当前8个候选归入品牌导航、八态选择、卡片演示动作及纯本地确认演示四类动作。",
@@ -3880,7 +3880,7 @@
       "proposalPackages": [
         "recovery-direction-c"
       ],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "fullStateCoverage": "unproven",
       "compositionGaps": [
         "P73当前3个页面候选归为品牌主页、最近有效目标和条件主页3条导航。",

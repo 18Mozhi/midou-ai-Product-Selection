@@ -18,9 +18,16 @@
       "mobileDirection": "居中状态且不闪现错误壳层",
       "acceptanceSteps": "无会话、已登录不同角色及缺少业务范围分别跳往真实合法目标；保留请求与最终URL证据",
       "status": "implemented-user-auto-approved",
-      "designEvidence": ["design/identity-direction-c/README.md", "page-specs/P01.md"],
-      "implementationEvidence": ["P01-PAGE-COMPOSITION-IMPLEMENTATION.md"],
-      "productionEvidence": ["P01-PAGE-COMPOSITION-IMPLEMENTATION.md"],
+      "designEvidence": [
+        "design/identity-direction-c/README.md",
+        "page-specs/P01.md"
+      ],
+      "implementationEvidence": [
+        "P01-PAGE-COMPOSITION-IMPLEMENTATION.md"
+      ],
+      "productionEvidence": [
+        "P01-PAGE-COMPOSITION-IMPLEMENTATION.md"
+      ],
       "userReview": "auto-approved-by-user",
       "candidateControls": 4,
       "candidateDialogs": 0
@@ -43,7 +50,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 52,
       "candidateDialogs": 0
     },
@@ -65,7 +72,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 52,
       "candidateDialogs": 0
     },
@@ -87,7 +94,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 52,
       "candidateDialogs": 0
     },
@@ -109,7 +116,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 52,
       "candidateDialogs": 0
     },
@@ -131,7 +138,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 52,
       "candidateDialogs": 0
     },
@@ -153,7 +160,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 52,
       "candidateDialogs": 0
     },
@@ -175,7 +182,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 12,
       "candidateDialogs": 0
     },
@@ -197,7 +204,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 7,
       "candidateDialogs": 0
     },
@@ -219,7 +226,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 13,
       "candidateDialogs": 0
     },
@@ -241,7 +248,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 41,
       "candidateDialogs": 0
     },
@@ -265,7 +272,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -289,7 +296,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -313,7 +320,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -337,7 +344,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -361,7 +368,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -385,7 +392,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -412,7 +419,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -436,7 +443,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -460,7 +467,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -484,7 +491,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -506,7 +513,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -530,7 +537,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -557,7 +564,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -581,7 +588,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -605,7 +612,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -629,7 +636,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -653,7 +660,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -675,7 +682,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -697,7 +704,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -719,7 +726,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -741,7 +748,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -763,7 +770,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -785,7 +792,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -809,7 +816,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -831,7 +838,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -855,7 +862,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -880,7 +887,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -904,7 +911,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -928,7 +935,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -952,7 +959,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -980,7 +987,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1004,7 +1011,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1028,7 +1035,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1052,7 +1059,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1077,7 +1084,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1102,7 +1109,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1127,7 +1134,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1151,7 +1158,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1175,7 +1182,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1200,7 +1207,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1225,7 +1232,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1250,7 +1257,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1275,7 +1282,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1300,7 +1307,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1325,7 +1332,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1350,7 +1357,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1375,7 +1382,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1400,7 +1407,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1424,7 +1431,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1449,7 +1456,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1474,7 +1481,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1498,7 +1505,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1523,7 +1530,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1548,7 +1555,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1573,7 +1580,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1598,7 +1605,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1623,7 +1630,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1648,7 +1655,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1673,7 +1680,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1698,7 +1705,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 1488,
       "candidateDialogs": 116
     },
@@ -1720,7 +1727,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 11,
       "candidateDialogs": 2
     },
@@ -1742,7 +1749,7 @@
       "designEvidence": [],
       "implementationEvidence": [],
       "productionEvidence": [],
-      "userReview": "pending",
+      "userReview": "auto-approved-by-user",
       "candidateControls": 3,
       "candidateDialogs": 0
     }
@@ -14344,5 +14351,5 @@
   "verifiedBusinessActions": 0,
   "verifiedDialogVariants": 0,
   "productionExecutedActions": 0,
-  "userApprovedPages": 1
+  "userApprovedPages": 73
 }
