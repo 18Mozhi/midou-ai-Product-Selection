@@ -1944,6 +1944,34 @@ test("changing between the opportunity list and detail closes open list dialogs"
   await expect(batchDialog).toBeHidden();
 });
 
+test("P15 batch dialog traps keyboard focus and restores its trigger", async ({ page }) => {
+  await ready(page);
+  await page.goto("/opportunities?view=all");
+  await page.getByRole("checkbox", { name: `选择机会：${recommendedBase.name}` }).check();
+
+  const trigger = page.getByRole("button", { name: "批量归档", exact: true });
+  await trigger.focus();
+  await page.keyboard.press("Enter");
+
+  const dialog = page.getByRole("dialog", { name: "机会批量操作影响预览" });
+  await expect(dialog).toBeVisible();
+  await expect
+    .poll(() => dialog.evaluate((element) => element.contains(document.activeElement)))
+    .toBe(true);
+
+  const first = dialog.getByRole("textbox", { name: "操作原因" });
+  const last = dialog.getByRole("button", { name: "确认执行" });
+  await last.focus();
+  await page.keyboard.press("Tab");
+  await expect(first).toBeFocused();
+  await page.keyboard.press("Shift+Tab");
+  await expect(last).toBeFocused();
+
+  await page.keyboard.press("Escape");
+  await expect(dialog).toBeHidden();
+  await expect(trigger).toBeFocused();
+});
+
 test("P18 keeps a shared write locked across cached route deactivation and refreshes its receipt", async ({
   page,
 }) => {

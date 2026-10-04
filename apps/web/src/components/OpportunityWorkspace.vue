@@ -147,6 +147,8 @@ const { filters, form, costForm, feedbackForm } = createOpportunityWorkspaceForm
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
   () => (showBatch.value = false),
+  undefined,
+  { trapFocus: true },
 );
 const {
   request: aiReviewReasonRequest,
