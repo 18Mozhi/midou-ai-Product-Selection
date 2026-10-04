@@ -64,6 +64,26 @@ P43 定向单测7/7通过；源码变化时必须另开新版本采集，禁止�
 采集并保留旧包。完整清单 SHA256：
 `742a2d8290fd0ae1ac6afce0197e7779c75187cb782cdb0f1e6a03f20d484aed`。
 
+## 2026-10-04 当前源码续采 r7
+
+P15 更新了共享 `OpportunityWorkspace.vue` 的键盘焦点行为；旧 r6 捕获继续保留为历史源码快照，不将旧截图冒充当前源码证明。新增 r7 独立捕获：当前未变换 App/router/KeepAlive、16 组组合、224 项断言、48 张截图、142 项实际加载源哈希；Vite 与浏览器已关闭。证据入口：
+
+- [r7 当前源码 48 图](../../output/playwright/p43-actual-app-lifecycle-r7/index.html)
+- [r7 检查与 142 项来源](../../output/playwright/p43-actual-app-lifecycle-r7/evidence.json)
+- 完整捕获：`node scripts/verify-ui-phase2-account-app-lifecycle.mjs --capture-r7`
+
+这只更新当前功能证据；r6 的来源与图片保持不变，也不代表本页新视觉审批、真实服务端权限/审计或生产验收。
+
+## 2026-10-04 当前源码续采 r8
+
+r7 捕获后，验证脚本按仓库代码风格完成 Prettier 格式化，脚本自身哈希随之变化。为保持证据与实际运行验证器一致，保留 r6/r7 原始材料并新增独立 r8 捕获：16 组组合、224 项断言、48 张截图、142 项来源哈希；其中验证脚本哈希为 `0e304b3dcd31e8ca45b31f08a2fc25629ef8370162f10287440445f13b936a49`，`OpportunityWorkspace.vue` 为 `90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac`。Vite 与浏览器已关闭。证据入口：
+
+- [r8 当前源码 48 图](../../output/playwright/p43-actual-app-lifecycle-r8/index.html)
+- [r8 检查与 142 项来源](../../output/playwright/p43-actual-app-lifecycle-r8/evidence.json)
+- 完整捕获：`node scripts/verify-ui-phase2-account-app-lifecycle.mjs --capture-r8`
+
+这只是脚本格式化后的当前来源复捕，不代表视觉审批、真实服务端权限/审计或生产验收。
+
 ## 未覆盖和收尾
 
 没有改产品 Vue/CSS、业务/权限规则、API/OpenAPI、数据库、后端/插件/Python消费方、环境变量

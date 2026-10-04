@@ -36,15 +36,15 @@ function rejectsChange(file, mutate, pattern) {
   assert(used, `missing negative read: ${file}`);
 }
 
-test("platform current contract separates its historical inventory from all 40 current sources", () => {
+test("platform current contract separates its historical inventory from all 41 current sources", () => {
   const result = verifyPlatformAccountContract(read);
   assert.deepEqual(
     { ...result, links: undefined },
     {
       pages: 8,
-      candidates: 138,
+      candidates: 139,
       bindings: 24,
-      sources: 40,
+      sources: 41,
       historicalSources: 32,
       revisedSources: 7,
       links: undefined,
@@ -161,7 +161,7 @@ test("retains page sections and link gates", () => {
 test("normalizes Windows CRLF without treating it as a new source revision", () => {
   assert.equal(
     verifyPlatformAccountContract((file) => read(file).replaceAll("\n", "\r\n")).sources,
-    40,
+    41,
   );
 });
 

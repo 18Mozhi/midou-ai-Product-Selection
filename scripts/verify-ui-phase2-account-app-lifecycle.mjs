@@ -22,21 +22,27 @@ assert.ok(
         "--capture-r4",
         "--capture-r5",
         "--capture-r6",
+        "--capture-r7",
+        "--capture-r8",
       ].includes(arg),
     ),
 );
 const capture = args.some((arg) => arg.startsWith("--capture")),
-  version = args.some((arg) => arg.endsWith("-r6"))
-    ? "r6"
-    : args.some((arg) => arg.endsWith("-r5"))
-      ? "r5"
-      : args.some((arg) => arg.endsWith("-r4"))
-        ? "r4"
-        : args.some((arg) => arg.endsWith("-r3"))
-          ? "r3"
-          : args.some((arg) => arg.endsWith("-r2"))
-            ? "r2"
-            : "r1",
+  version = args.some((arg) => arg.endsWith("-r8"))
+    ? "r8"
+    : args.some((arg) => arg.endsWith("-r7"))
+      ? "r7"
+      : args.some((arg) => arg.endsWith("-r6"))
+        ? "r6"
+        : args.some((arg) => arg.endsWith("-r5"))
+          ? "r5"
+          : args.some((arg) => arg.endsWith("-r4"))
+            ? "r4"
+            : args.some((arg) => arg.endsWith("-r3"))
+              ? "r3"
+              : args.some((arg) => arg.endsWith("-r2"))
+                ? "r2"
+                : "r1",
   smoke = args.some((arg) => arg.startsWith("--smoke")),
   output = `output/playwright/p43-actual-app-lifecycle-${version}`;
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");

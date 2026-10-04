@@ -39,15 +39,16 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/web/src/design/platform-overlay-tokens.css | 1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5 |
 | apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
 
-## 当前40个来源的LF指纹（2026-09-27）
+## 当前41个来源的LF指纹（2026-10-04）
 
-候选当前集合从平台账号、用户与共享响应式控件三份合同中按实际扫描状态取`identity-current`/`line-moved`记录，历史身份不冒充现行候选。当前17个Vue文件共138个源码候选；原15个别名源的24个v-model绑定保持原口径，P43目录工作区的重复响应式控件绑定由用户页合同单独约束。计数扩展不改原128候选历史快照分母。以下40项包括原32源、六个既有新增依赖及两个当前候选源，校验器逐项对真实工作树做LF SHA-256核对。
+候选当前集合从平台账号、用户与共享响应式控件三份合同中按实际扫描状态取`identity-current`/`line-moved`记录，历史身份不冒充现行候选。当前18个Vue文件共139个源码候选；原15个别名源的24个v-model绑定保持原口径，P43目录工作区的重复响应式控件绑定由用户页合同单独约束。计数扩展不改原128候选历史快照分母。以下41项包括原32源、六个既有新增依赖及三个当前候选源，校验器逐项对真实工作树做LF SHA-256核对。
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformDashboard.vue | 902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e |
 | apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
-| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | fae8b7c98225c347413db4e3eb213ba522044c812345523bc434755de23d4dac |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8 |
+| apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051 |
 | apps/web/src/components/PlatformAccountGlobalRail.vue | cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e |
 | apps/web/src/components/PlatformOrganizationRecords.vue | 392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a |
 | apps/web/src/components/PlatformAdminRecords.vue | 74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297 |

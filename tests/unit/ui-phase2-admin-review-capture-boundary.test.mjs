@@ -21,6 +21,7 @@ import {
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+const historicalAdminReviewReplayRoot = "output/playwright/p44-current-replay-r43";
 const directoryFile = "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue";
 const filtersFile = "apps/web/src/components/PlatformAccountDirectoryFilters.vue";
 function neutralImports(source) {
@@ -208,9 +209,19 @@ test("P44 completed capture cannot be restarted, resumed or overwritten", () => 
     assert.equal(read(`${adminReviewReplayRoot}/evidence.json`), manifest);
   }
 });
+test("P44 r43 remains a historical replay after the shared dialog stylesheet changed", () => {
+  const e = JSON.parse(read(`${historicalAdminReviewReplayRoot}/evidence.json`));
+  assert.equal(e.kind, "P44-current-replay-r43");
+  assert.equal(e.approval, "pending");
+  assert.equal(e.processesClosed, true);
+  assert.notEqual(
+    e.sourceHashes["apps/web/src/components/PlatformAccountDialogs.css"],
+    hash(read("apps/web/src/components/PlatformAccountDialogs.css")),
+  );
+});
 test("P44 current replay keeps raw source hashes, original checks, images and request evidence separate", () => {
   const e = JSON.parse(read(`${adminReviewReplayRoot}/evidence.json`));
-  assert.equal(e.kind, "P44-current-replay-r43");
+  assert.equal(e.kind, "P44-current-replay-r44");
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.deepEqual(

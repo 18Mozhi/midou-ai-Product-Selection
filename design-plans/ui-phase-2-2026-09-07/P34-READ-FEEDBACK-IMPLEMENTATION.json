@@ -3,12 +3,12 @@
   "reviewOnly": true,
   "processesClosed": true,
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
     "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
     "apps/web/src/components/OrganizationApprovalReadFeedback.vue": "f20b3891d31459b30e6dfa5621819c4bbbaaa6523130d33f9395804def25bf52",
     "apps/web/src/approval-read-feedback.css": "c541db9bc186df395d29dbb4b00cbbe84f557f50d7c5f1c25230be221114518d",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "fcf2a6c22c4eea63fee263dbd0c0f0c55b4948fef060ed3ce6bc3a08c5f52ac4"
+    "tests/e2e/m06-01-organization-admin.spec.ts": "5e6a8623e4b6e7f1af0cd0dcd9e4568269e5991ebd88c4893ca682e3f96fb02e"
   },
   "coverage": {
     "projects": ["desktop-chromium", "mobile-390"],

@@ -11,8 +11,8 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
 const root = "output/playwright/p43-actual-app-lifecycle-r1";
-const currentRoot = "output/playwright/p43-actual-app-lifecycle-r6";
-const priorCurrentRoot = "output/playwright/p43-actual-app-lifecycle-r5";
+const currentRoot = "output/playwright/p43-actual-app-lifecycle-r8";
+const priorCurrentRoot = "output/playwright/p43-actual-app-lifecycle-r7";
 const manifestHash = "742a2d8290fd0ae1ac6afce0197e7779c75187cb782cdb0f1e6a03f20d484aed";
 
 test("actual App fixtures retain original account, navigation, dashboard and known membership omission", () => {
@@ -114,10 +114,30 @@ test("r1 App source inventory stays pinned as historical evidence", () => {
   assert.ok(driver.includes("page.goForward()") && driver.includes("page.goBack()"));
 });
 
-test("r6 App source inventory binds the current untransformed router and KeepAlive composition", () => {
+test("r7 App capture remains a historical source snapshot after verifier formatting", () => {
+  const evidence = JSON.parse(readFileSync(`${priorCurrentRoot}/evidence.json`));
+  assert.equal(evidence.kind, "P43-ACTUAL-APP-LIFECYCLE-r7");
+  assert.equal(evidence.functionalOnly, true);
+  assert.equal(evidence.processesClosed, true);
+  assert.equal(evidence.runs.length, 16);
+  assert.equal(evidence.screenshots.length, 48);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 142);
+  assert.notEqual(
+    evidence.sourceHashes["scripts/verify-ui-phase2-account-app-lifecycle.mjs"],
+    hash(read("scripts/verify-ui-phase2-account-app-lifecycle.mjs")),
+  );
+  for (const shot of evidence.screenshots) {
+    const png = readFileSync(`${priorCurrentRoot}/${shot.file}`);
+    assert.equal(hash(png), shot.sha256);
+    assert.equal(png.readUInt32BE(16), shot.pixelWidth);
+    assert.equal(png.readUInt32BE(20), shot.pixelHeight);
+  }
+});
+
+test("r8 App source inventory binds the current untransformed router and KeepAlive composition", () => {
   const bytes = readFileSync(`${currentRoot}/evidence.json`),
     evidence = JSON.parse(bytes);
-  assert.equal(evidence.kind, "P43-ACTUAL-APP-LIFECYCLE-r6");
+  assert.equal(evidence.kind, "P43-ACTUAL-APP-LIFECYCLE-r8");
   assert.equal(evidence.functionalOnly, true);
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.runs.length, 16);
@@ -150,15 +170,15 @@ test("capture duplicate is rejected before starting a browser or server without 
   assert.equal(hash(readFileSync(`${root}/evidence.json`)), manifestHash);
 });
 
-test("r4 capture duplicate is rejected before starting a browser or server", () => {
-  const bytes = readFileSync(`${priorCurrentRoot}/evidence.json`),
+test("r8 capture duplicate is rejected before starting a browser or server", () => {
+  const bytes = readFileSync(`${currentRoot}/evidence.json`),
     result = spawnSync(
       process.execPath,
-      ["scripts/verify-ui-phase2-account-app-lifecycle.mjs", "--capture-r4"],
+      ["scripts/verify-ui-phase2-account-app-lifecycle.mjs", "--capture-r8"],
       { encoding: "utf8", timeout: 20000 },
     );
   assert.equal(result.status, 1);
   assert.match(result.stderr, /EEXIST/);
   assert.ok(!result.stdout.includes("P43 actual App lifecycle http"));
-  assert.equal(hash(readFileSync(`${priorCurrentRoot}/evidence.json`)), hash(bytes));
+  assert.equal(hash(readFileSync(`${currentRoot}/evidence.json`)), hash(bytes));
 });

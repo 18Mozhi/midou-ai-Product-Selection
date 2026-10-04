@@ -26,6 +26,7 @@ const addedSources = [
   "apps/web/src/design/platform-admin-mobile-tokens.css",
 ];
 const candidateOnlySources = [
+  "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
   "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
   "apps/web/src/components/PlatformAccountGlobalRail.vue",
 ];
@@ -210,7 +211,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   }
   sameUnique(candidates, expectedCandidates, "candidates");
   sameUnique(bindings, expectedBindings, "v-model bindings");
-  assert.equal(candidates.length, 138);
+  assert.equal(candidates.length, 139);
   assert.equal(bindings.length, 24);
 
   const sourceHistory = contract.split("## 7. 源码指纹（LF SHA-256）")[1]?.split("## 8.")[0];
@@ -291,7 +292,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
   );
   // Extraction added a runtime dependency. Keep the original 32-source snapshot,
   // but do not omit the new producer from the current verification surface.
-  const addedSourceSection = currentContract.split("## 当前40个来源的LF指纹")[0];
+  const addedSourceSection = currentContract.split("## 当前41个来源的LF指纹")[0];
   const additionalHashes = [
     ...addedSourceSection.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|\s*$/gm),
   ];
@@ -308,7 +309,7 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
       `${file}: hash drift`,
     );
   }
-  const currentFingerprintSection = currentContract.split("## 当前40个来源的LF指纹")[1];
+  const currentFingerprintSection = currentContract.split("## 当前41个来源的LF指纹")[1];
   assert(currentFingerprintSection, "current source fingerprint inventory required");
   const currentFingerprints = [
     ...currentFingerprintSection.matchAll(/^\|\s*([^|\n]+?)\s*\|\s*([0-9a-f]{64})\s*\|/gm),

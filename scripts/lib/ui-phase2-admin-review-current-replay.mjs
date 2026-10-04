@@ -5,7 +5,7 @@ import { pathToFileURL } from "node:url";
 import ts from "typescript";
 import { adminReviewCaptureStages } from "./ui-phase2-admin-review-historical-capture.mjs";
 
-export const adminReviewReplayRoot = "output/playwright/p44-current-replay-r43";
+export const adminReviewReplayRoot = "output/playwright/p44-current-replay-r44";
 export const adminReviewReplayStyle =
   "design-plans/ui-phase-2-2026-09-07/implementation/admin-current-replay.css";
 export const adminReviewStyleImport =
