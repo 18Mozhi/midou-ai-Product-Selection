@@ -110,7 +110,7 @@ test("P21 maps current workspace and cost-panel retries and controls", () => {
   for (const [file, expectedHash] of [
     [
       "apps/web/src/components/SourcingWorkspace.vue",
-      "cf43c75418e76ffc758811796243e8924fbbe6af7cf25a26bff163dda0559d25",
+      "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
     ],
     [
       "apps/web/src/components/SourcingCostConfirmationPanel.vue",
