@@ -634,8 +634,8 @@ test("organization profile keeps an accepted save distinct from a failed refresh
   await page.getByLabel("名称").fill("更新后的组织");
   await page.getByLabel("变更原因").fill("验证写后重读失败");
   await page.getByRole("button", { name: "保存并审计" }).click();
-  expect(patchRequests).toBe(1);
-  expect(failedPostWriteRead).toBe(true);
+  await expect.poll(() => patchRequests).toBe(1);
+  await expect.poll(() => failedPostWriteRead).toBe(true);
 
   const feedback = page.getByRole("alert");
   await expect(feedback).toContainText("组织资料已保存并写入审计");

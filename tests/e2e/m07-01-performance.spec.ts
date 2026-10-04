@@ -48,12 +48,31 @@ test("M07-01.A07/A08/A15 representative home meets browser budgets on desktop an
           changes: [],
           follows: [],
           health: [],
+          automatic_selection: {
+            state: "not_configured",
+            enabled_rule_count: 0,
+            candidate_count: 0,
+            rule_candidate_count: 0,
+            recommended_count: 0,
+            awaiting_evidence_count: 0,
+            adopted_count: 0,
+            recommended_items: [],
+            last_collection_at: null,
+            next_collection_at: null,
+          },
           scope: { organization_id: organizationId, workspace_id: workspaceId },
           generated_at: "2026-08-08T00:00:00.000Z",
         },
         request_id: "m07-01-home",
         trace_id: "m07-01-home",
       }),
+    }),
+  );
+  await page.route("**/api/v1/trends/monitoring-rules", (route) =>
+    route.fulfill({
+      status: 200,
+      contentType: "application/json",
+      body: JSON.stringify({ data: [], request_id: "m07-01-rules", trace_id: "m07-01-rules" }),
     }),
   );
   await page.goto("/home");

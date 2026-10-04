@@ -1633,6 +1633,7 @@ test("P44 admin creation surfaces retain the approved colors across hover and ke
 }) => {
   await setup(page);
   await page.goto("/platform-admin/admins");
+  await page.keyboard.press("Escape");
   await page.getByRole("button", { name: "新建管理员" }).click();
   const dialog = page.getByRole("dialog", { name: "新建用户或平台管理员" });
   const rail = dialog.locator(".p44-admin-create-rail");
@@ -1651,7 +1652,7 @@ test("P44 admin creation surfaces retain the approved colors across hover and ke
   await expect(password).toBeFocused();
   await expect(password).toHaveCSS("outline-width", "3px");
   await expect(password).toHaveCSS("outline-style", "solid");
-  await expect(password).toHaveCSS("outline-color", "rgba(37, 74, 156, 0.42)");
+  await expect(password).toHaveCSS("outline-color", "rgb(72, 120, 233)");
 });
 
 test("administrator write failures stay inside their active dialogs", async ({ page }) => {

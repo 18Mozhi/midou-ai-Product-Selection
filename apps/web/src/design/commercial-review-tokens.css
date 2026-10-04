@@ -1,4 +1,4 @@
-html:has(body #app .commercial--review) {
+:global(html:has(body #app .commercial--review)) {
   --so-primary: #1748b5;
   --so-primary-strong: #102a63;
   --so-text: #17253c;

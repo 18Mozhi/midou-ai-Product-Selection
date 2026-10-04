@@ -1375,7 +1375,9 @@ footer details span {
   border-bottom: 3px solid transparent;
   box-shadow: none;
 }
-:global(body:has(.release-center--c) #app .platform-secondary-nav a[aria-current="page"]) {
+:global(
+  html body:has(#app .release-center--c) #app .platform-secondary-nav a[aria-current="page"]
+) {
   color: var(--p65-primary);
   background: var(--p65-blue-panel);
   border-bottom-color: var(--p65-primary);

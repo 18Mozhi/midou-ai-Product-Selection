@@ -117,6 +117,20 @@ test("SC70 health link reaches the registered adapter route without running a he
   page,
 }) => {
   const methods: string[] = [];
+  await page.route("**/api/v1/me/navigation?shell=platform_admin", (route) =>
+    route.fulfill({
+      json: envelope({
+        shell: "platform_admin",
+        organization_id: null,
+        workspace_id: null,
+        roles: [],
+        capabilities: [],
+        platform_roles: ["platform_operations_admin", "platform_super_admin"],
+        platform_capabilities: ["platform:operate", "platform:superadmin"],
+        guard_reason: "allowed",
+      }),
+    }),
+  );
   const attention = {
     ...base,
     providers: [
