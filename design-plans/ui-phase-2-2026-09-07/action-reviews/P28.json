@@ -3,6 +3,7 @@
   "pageId": "P28",
   "route": "/reports",
   "status": "source-reviewed-not-runtime-accepted",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
