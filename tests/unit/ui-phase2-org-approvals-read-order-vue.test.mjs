@@ -1,5 +1,5 @@
 import test from "node:test";
-import { assertP34HistoricalSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
+import { assertP34EvidenceSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -77,7 +77,7 @@ test("historical read-order evidence binds24response orders and its original pre
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 200);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34HistoricalSourceHash(file, read(file), expected);
+    assertP34EvidenceSourceHash(file, read(file), expected);
   const old = JSON.parse(read("output/playwright/p34-loading-vue-c-r2/evidence.json"));
   assert.deepEqual(e.transformedHashes, old.transformedHashes);
   assert.deepEqual(e.scenarios, old.scenarios);

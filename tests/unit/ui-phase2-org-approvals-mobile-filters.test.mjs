@@ -1,6 +1,5 @@
 import test from "node:test";
-import { beforeP34OwnerPath } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
-import { assertP34LegacySourceHash } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -13,7 +12,8 @@ const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const component = "apps/web/src/components/OrganizationApprovalPanel.vue";
 test("P34 historical mobile script excludes only search ref and subsequent owner-path fix", () => {
-  const current = parse(beforeP34OwnerPath(component, readFileSync(component, "utf8"))).descriptor;
+  const capturedSource = readCaptureSourceRevision(component, e.sourceHashes[component]);
+  const current = parse(capturedSource).descriptor;
   const baseline = parse(
     execFileSync("git", ["show", `${e.baselineCommit}:${component}`], { encoding: "utf8" }),
   ).descriptor;
@@ -48,7 +48,7 @@ test("P34 mounted mobile filter evidence covers four widths and preserves adjace
     ],
   );
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assertP34LegacySourceHash(file, readFileSync(file, "utf8"), sha);
+    assert.equal(hash(readCaptureSourceRevision(file, sha)), sha, file);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
 });

@@ -29,7 +29,7 @@ const definitions = [
     ["ca4fa7a0220842a9.1"],
     ["WIRE-P34-RETRY"],
     "仅view===approvals且approvalReadFeedbackMode非空；非P29资料页",
-    "P29不渲染P34审批读取反馈；不计入本页动作",
+    "P29不渲染P34审批读取反馈；P34通过隔离的端到端拦截测试验证；不计入本页动作",
     ["normal"],
   ],
   [
@@ -58,8 +58,8 @@ const definitions = [
     "write",
     ["d6b520278ab3dd57.1", "5878e30377f290ae.1"],
     ["OG-PROFILE-SAVE"],
-    "summary内联表单；原生校验，busy禁用按钮，submit亦busy早退",
-    "submit('/org/admin/profile',{...form,expected_version:data.version},'PATCH')；写成功后重读；OG-G02成功覆盖重读失败仍存在",
+    "summary内联表单；原生校验，busy或已接受保存但资料重读失败时禁用字段与按钮；submit亦busy早退",
+    "既有内联submit继续调用PATCH /org/admin/profile及expected_version；写后GET自动重试仍失败时展示分开的写入/读取请求编号并锁定字段组，手动刷新只重读、不重放PATCH（OG-G02已修复）",
     [
       "editing",
       "save_busy",
@@ -211,6 +211,11 @@ export function buildOrganizationProfileReview(source, evidence, fieldEvidence) 
         ].map((file) => ({ file, evidenceType: "offline-proposal-check-not-Vue" })),
         remaining,
       };
+      if (actionId === "EX-P34-READ-FEEDBACK")
+        action.testReferences.push({
+          file: "tests/e2e/m06-01-organization-admin.spec.ts",
+          evidenceType: "actual-vue-local-interception",
+        });
       const primary =
         actionId === "OG-PROFILE-LOGO"
           ? fieldEvidence.actionVisualReferences[actionId]

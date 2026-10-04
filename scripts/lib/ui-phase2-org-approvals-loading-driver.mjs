@@ -16,7 +16,7 @@ export function loadingVueDriver(input) {
         ).replaceAll("\r\n", "\n"),
       )
       .digest("hex"),
-    "bcce5abad35bc3ff5e92b37788893a580bd9955c9b949d0f19cdbeb52009a956",
+    "aee094d22ebae201810e5aeb50ade4a25ce80b425b8ca84d26478cb4234530a3",
   );
   let source = readFeedbackVueDriver(input);
   const replace = (before, after) => {
@@ -24,7 +24,7 @@ export function loadingVueDriver(input) {
     source = source.replace(before, after);
   };
   replace(
-    'const output = "output/playwright/p34-read-feedback-vue-c-r1";',
+    'const output = "output/playwright/p34-read-feedback-vue-c-r3";',
     `const output = "${loadingOutput}";`,
   );
   replace(
@@ -38,7 +38,7 @@ export function loadingVueDriver(input) {
   "scripts/lib/ui-phase2-org-approvals-loading-driver.mjs",
   "scripts/verify-ui-phase2-org-approvals-loading-vue.mjs", approvalsLoadingCss,`,
   );
-  replace('kind: "P34-READ-FEEDBACK-VUE-C-r1",', 'kind: "P34-LOADING-VUE-C-r2",');
+  replace('kind: "P34-READ-FEEDBACK-VUE-C-r2",', 'kind: "P34-LOADING-VUE-C-r2",');
   replace(
     "approvalsExpiredCss, approvalsReadFeedbackCss].map",
     "approvalsExpiredCss, approvalsReadFeedbackCss, approvalsLoadingCss].map",

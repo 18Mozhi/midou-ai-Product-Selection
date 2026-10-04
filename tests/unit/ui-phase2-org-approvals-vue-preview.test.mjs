@@ -1,7 +1,7 @@
 import test from "node:test";
 import {
   beforeP34OwnerPath,
-  assertP34HistoricalSourceHash,
+  assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -114,7 +114,7 @@ test("P34 historical six-width review binds source lineage, original contracts a
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 179);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34HistoricalSourceHash(file, read(file), expected);
+    assertP34EvidenceSourceHash(file, read(file), expected);
   assert.equal(
     e.transformedHashes[approvalsVueFile],
     hash(beforeP34OwnerPath(approvalsVueFile, revised)),

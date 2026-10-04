@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
 import ts from "typescript";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import {
   approvalsParentFile,
   previewApprovalsParentFrame,
@@ -185,7 +186,7 @@ test("historical feedback packet remains immutable and preserves its original ma
   }
 });
 
-test("current read-feedback packet replays the complete matrix against exact current parent bytes", () => {
+test("read-feedback r3 packet replays the complete matrix against capture-time source revisions", () => {
   const e = JSON.parse(read(readFeedbackCurrentOutput + "/evidence.json"));
   assert.equal(e.kind, "P34-READ-FEEDBACK-VUE-C-r2");
   assert.equal(e.reviewOnly, true);
@@ -193,7 +194,7 @@ test("current read-feedback packet replays the complete matrix against exact cur
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 151);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, `stale current P34 r2 source: ${file}`);
+    assertCaptureSourceRevision(file, read(file), expected);
   assert.equal(e.checks.length, 1606);
   assert.equal(e.screenshots.length, 160);
   assert.deepEqual(e.requestCounts, [

@@ -1,5 +1,6 @@
 import test from "node:test";
-import { assertP34HistoricalSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
+import { assertP34EvidenceSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -9,7 +10,8 @@ const root = "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-d
 const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 test("P34 original 13 positions plus implemented mobile clear binding cover all 14 child positions", () => {
-  const candidates = scanSource(readFileSync(e.sourceFile, "utf8"), e.sourceFile).candidates;
+  const captured = readCaptureSourceRevision(e.sourceFile, e.sourceHashes[e.sourceFile]);
+  const candidates = scanSource(captured, e.sourceFile).candidates;
   assert.equal(candidates.length, 14);
   const signatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
   assert.deepEqual(e.sourceSignatures, signatures);
@@ -109,7 +111,7 @@ test("P34 selected, pressed and archived template entries do not invent permissi
 });
 test("P34 historical controls retain source lineage and unchanged image bytes", () => {
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assertP34HistoricalSourceHash(file, readFileSync(file, "utf8"), sha);
+    assertP34EvidenceSourceHash(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
   const html = readFileSync(`${root}/index.html`, "utf8");

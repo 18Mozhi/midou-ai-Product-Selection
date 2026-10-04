@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import vm from "node:vm";
 import ts from "typescript";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { previewCommercialCreateOutcome } from "../../scripts/lib/ui-phase2-commercial-create-outcome-preview.mjs";
 import {
   previewCommercialCreateFocus,
@@ -226,7 +227,7 @@ test("P58 focus evidence binds unchanged visual pairs, current sources, every co
   ])
     assert.ok(e.sourceHashes[file], file);
   for (const [file, digest] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), digest, file);
+    assertCaptureSourceRevision(file, read(file), digest);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

@@ -1831,6 +1831,5 @@
   "limits": [
     "只有C总体方向已选择，P28未获得整页或按钮批准。",
     "实际下载字节、Worker/数据库与宝塔部署另验，不将原型请求意图当成功。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

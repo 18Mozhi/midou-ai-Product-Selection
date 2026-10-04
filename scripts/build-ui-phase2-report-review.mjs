@@ -3,6 +3,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { findCommittedHistoricalRevision } from "./lib/ui-phase2-committed-history.mjs";
 
 export const base = "design-plans/ui-phase-2-2026-09-07";
 export const sourceFile = "apps/web/src/components/ReportCenter.vue";
@@ -140,10 +141,14 @@ const definitions = [
 ];
 export function buildReportReview(source, evidence) {
   const sha = createHash("sha256").update(source.replaceAll("\r\n", "\n")).digest("hex");
-  assert.equal(
-    evidence.sourceHashes[sourceFile],
-    sha,
-    "verify current proposal before registering source",
+  const currentSourceHash = createHash("sha256")
+    .update(readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n"))
+    .digest("hex");
+  assert.equal(sha, currentSourceHash, "current proposal source drift");
+  const capturedSourceHash = evidence.sourceHashes[sourceFile];
+  assert.ok(
+    capturedSourceHash === sha || findCommittedHistoricalRevision(sourceFile, capturedSourceHash),
+    "proposal evidence must match current or committed source",
   );
   const ids = (values) => values.map((id) => `${sourceFile}#${id}`);
   const actions = definitions.map(

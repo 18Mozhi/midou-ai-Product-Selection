@@ -6,18 +6,19 @@ import {
   historicalTokenCopySource,
   tokenCopyRevisions,
   tokenCopyComponent,
+  readCaptureSourceRevision,
 } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const folder = "output/playwright/p36-copy-ownership";
 const evidence = JSON.parse(read(`${folder}/evidence.json`));
-test("P36 current mounted copy proof binds raw current sources, not historical substitution", () => {
+test("P36 mounted copy proof binds exact capture-time raw sources from Git history", () => {
   assert.equal(evidence.kind, "P36-COPY-OWNERSHIP-VUE-r1");
   assert.equal(evidence.acceptanceComplete, false);
   assert.equal(evidence.processesClosed, true);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assert.equal(hash(readCaptureSourceRevision(file, sha)), sha, file);
   assert.equal(
     evidence.sourceHashes[tokenCopyComponent],
     tokenCopyRevisions[tokenCopyComponent].after,

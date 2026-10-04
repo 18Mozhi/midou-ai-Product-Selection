@@ -67,7 +67,7 @@
       ],
       "contractAliasReason": "沿F04完整语义末列显式合并表单/保存及共享原因调用；不从按钮文案推断动作。",
       "condition": "仅view===approvals且approvalReadFeedbackMode非空；非P29资料页",
-      "handler": "P29不渲染P34审批读取反馈；不计入本页动作",
+      "handler": "P29不渲染P34审批读取反馈；P34通过隔离的端到端拦截测试验证；不计入本页动作",
       "variants": [
         "normal"
       ],

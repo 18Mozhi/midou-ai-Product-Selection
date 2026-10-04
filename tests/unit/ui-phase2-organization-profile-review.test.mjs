@@ -32,6 +32,7 @@ const context = {
     "scripts/verify-ui-phase2-organization-profile-c.mjs",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
+    "tests/e2e/m06-01-organization-admin.spec.ts",
   ]),
 };
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P29.json`, "utf8"));

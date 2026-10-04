@@ -21,7 +21,7 @@ test("P08 current tenancy chooser candidates bind root, read-only organization c
       record.claim.includes("P08-CURRENT-") &&
       record.temporalScope !== "historical",
   );
-  const expectedIds = ["d545c6b53ab2b2a8.1", "51f99d2206301d80.1", "9d6c9b22e4716bb9.1"].map(
+  const expectedIds = ["07db575ab56f90da.1", "51f99d2206301d80.1", "9d6c9b22e4716bb9.1"].map(
     (signature) => `${file}#${signature}`,
   );
 

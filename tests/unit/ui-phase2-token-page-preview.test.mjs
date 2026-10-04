@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { tokenPagePreview } from "../../scripts/lib/ui-phase2-token-page-preview.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const file = "apps/web/src/components/OrganizationTokenPanel.vue";
 const folder = "output/playwright/p36-page-vue-preview";
@@ -72,7 +73,7 @@ test("P36 page capture binds current source and44 exact four-width rendered stat
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.checks.length, 164);
   for (const [source, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(source)), sha, source);
+    assert.equal(hash(readCaptureSourceRevision(source, sha)), sha, source);
   assert.equal(evidence.transformedHashes[file], hash(transformed));
   const states = [
     "loading",

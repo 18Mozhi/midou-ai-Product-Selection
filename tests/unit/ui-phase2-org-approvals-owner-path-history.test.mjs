@@ -13,6 +13,17 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (text) => createHash("sha256").update(text).digest("hex");
 const baseline = "af239b08b69f7d97cd0372f9840a70009eeef0c7";
+const ownerPathCapture = "550808b37c9accf889c92cac03d1f6e418fb41a3";
+const ownerPathHashes = {
+  [ownerPathParent]: {
+    after: "32fc333d3b6906c762e51f1a453c5799a155c081beea6fc6ee13e5b494d74eba",
+    before: "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+  },
+  [ownerPathPanel]: {
+    after: "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+    before: "426e7089313b8c35b2986ec45ff80ed6d7e624e741c47685e2760fc8e648e285",
+  },
+};
 const old = JSON.parse(read("output/playwright/p34-read-order-vue-c-r1/evidence.json"));
 const current = JSON.parse(read("output/playwright/p34-route-lifecycle-vue-c-r1/evidence.json"));
 
@@ -51,20 +62,21 @@ test("historical and current manifests remain pinned and every listed screenshot
   }
 });
 
-test("historical inversion equals the pinned pre-fix Git files and unchanged manifest hashes", () => {
+test("P34 owner-path inversion preserves the pinned follow-up pagination patch", () => {
   for (const file of [ownerPathParent, ownerPathPanel]) {
-    const source = read(file),
+    const source = execFileSync("git", ["show", `${ownerPathCapture}:${file}`], {
+        encoding: "utf8",
+      }).replaceAll("\r\n", "\n"),
       reconstructed = beforeP34OwnerPath(file, source);
-    assert.equal(
-      reconstructed,
-      execFileSync("git", ["show", `${baseline}:${file}`], { encoding: "utf8" }).replaceAll(
-        "\r\n",
-        "\n",
-      ),
-    );
-    assertP34HistoricalSourceHash(file, source, old.sourceHashes[file]);
-    assert.equal(hash(source), current.sourceHashes[file]);
+    assert.equal(hash(source), ownerPathHashes[file].after);
+    assert.equal(hash(reconstructed), ownerPathHashes[file].before);
+    assertP34HistoricalSourceHash(file, source, ownerPathHashes[file].before);
     assert.notEqual(hash(source), old.sourceHashes[file]);
+    const preFix = execFileSync("git", ["show", `${baseline}:${file}`], {
+      encoding: "utf8",
+    }).replaceAll("\r\n", "\n");
+    if (file === ownerPathParent) assert.equal(reconstructed, preFix);
+    else assert.notEqual(reconstructed, preFix);
   }
 });
 

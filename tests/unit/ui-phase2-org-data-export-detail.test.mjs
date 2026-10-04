@@ -5,10 +5,11 @@ import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import postcss from "postcss";
 import { readBeforeAuditPage } from "../../scripts/lib/ui-phase2-audit-page-evidence.mjs";
+import { undoExportDetailTokens } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
 import {
-  capturedExportDetailHash,
-  undoExportDetailTokens,
-} from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
+  assertCaptureSourceRevision,
+  readCaptureSourceRevision,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const component = "apps/web/src/components/OrganizationDataPanel.vue";
 const baseline = "d401ec95501555a458715ea3a610e61f5f8eead7";
@@ -21,8 +22,19 @@ const hash = (v) => createHash("sha256").update(v).digest("hex");
 const e = JSON.parse(read(`${root}/evidence.json`));
 
 test("P35 export detail changes only styling marker/import, not script, fields or actions", () => {
+  const captured = readCaptureSourceRevision(component, e.sourceHashes[component]);
+  const currentWithoutLaterReviewClass = read(component).replace(
+    `  <section
+    class="org-data-panel org-data-panel--review"
+    aria-labelledby="org-data-title"
+    data-export-detail-c
+  >`,
+    '  <section class="org-data-panel" aria-labelledby="org-data-title" data-export-detail-c>',
+  );
+  assert.equal(currentWithoutLaterReviewClass, captured);
   assert.equal(
-    read(component)
+    captured
+      .replace('class="org-data-panel org-data-panel--review"', 'class="org-data-panel"')
       .replace(
         ' aria-labelledby="org-data-title" data-export-detail-c>',
         ' aria-labelledby="org-data-title">',
@@ -130,7 +142,7 @@ test("P35 actual child proof covers mobile layout, null versus zero and desktop 
   assert.deepEqual([...new Set(e.screenshots.map((s) => s.width))].sort(), [390, 760]);
   assert.match(e.scope, /not-parent-API-SQL-production/);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(capturedExportDetailHash(file, read(file)), sha, file);
+    assertCaptureSourceRevision(file, read(file), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(
@@ -150,7 +162,11 @@ test("P35 prior design evidence only updates the exact source association, prese
     // Verify the original P35-only association after undoing the separately proven P37 layer.
     const after = JSON.parse(readBeforeAuditPage(`${folder}/evidence.json`));
     assert.equal(before.sourceHashes[component], hash(old(component)));
-    before.sourceHashes[component] = hash(read(component));
+    before.sourceHashes[component] = e.sourceHashes[component];
+    assert.equal(
+      hash(readCaptureSourceRevision(component, e.sourceHashes[component])),
+      e.sourceHashes[component],
+    );
     assert.deepEqual(after, before, folder);
     for (const s of after.screenshots)
       assert.equal(hash(readFileSync(`${folder}/${s.file}`)), s.sha256, s.file);

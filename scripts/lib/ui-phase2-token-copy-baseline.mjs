@@ -18,6 +18,7 @@ export const tokenCopyRevisions = {
 const hash = (source) => createHash("sha256").update(source).digest("hex");
 const cache = new Map();
 const captureRevisionCache = new Map();
+const captureSourceCache = new Map();
 export function historicalTokenCopySource(file, source) {
   source = source.replaceAll("\r\n", "\n");
   const revision = tokenCopyRevisions[file];
@@ -78,4 +79,30 @@ export function assertCaptureSourceRevision(
     true,
     `capture-time source is not present in Git history: ${file}`,
   );
+}
+
+export function readCaptureSourceRevision(file, expectedHash, transform = (value) => value) {
+  const key = `${file}:${expectedHash}`;
+  if (captureSourceCache.has(key)) return captureSourceCache.get(key);
+  const commits = execFileSync("git", ["log", "--all", "--format=%H", "--", file], {
+    encoding: "utf8",
+  })
+    .trim()
+    .split(/\r?\n/u)
+    .filter(Boolean);
+  for (const commit of commits) {
+    try {
+      const captured = execFileSync("git", ["show", `${commit}:${file}`], {
+        encoding: "utf8",
+        maxBuffer: 16 * 1024 * 1024,
+      }).replaceAll("\r\n", "\n");
+      if (hash(transform(captured)) === expectedHash) {
+        captureSourceCache.set(key, captured);
+        return captured;
+      }
+    } catch {
+      // The path may not exist at every historical revision.
+    }
+  }
+  assert.fail(`capture-time source is not present in Git history: ${file}`);
 }

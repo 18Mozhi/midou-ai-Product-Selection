@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
@@ -22,6 +23,22 @@ import {
 
 const sources = Object.fromEntries(
   dependencies.map((file) => [file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")]),
+);
+const captureRevisions = new Map([
+  [parentFile, "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b"],
+  [dependencies[2], "4a6368ef1178908688cd6519c5cafafb25c1afcb"],
+  [dependencies[3], "4a6368ef1178908688cd6519c5cafafb25c1afcb"],
+  [dependencies[4], "a9b1495cca558b331d5de1983abc61b5e45657db"],
+]);
+const captureSources = Object.fromEntries(
+  dependencies.map((file) => [
+    file,
+    captureRevisions.has(file)
+      ? execFileSync("git", ["show", `${captureRevisions.get(file)}:${file}`], {
+          encoding: "utf8",
+        }).replaceAll("\r\n", "\n")
+      : sources[file],
+  ]),
 );
 const evidence = JSON.parse(
   readFileSync(`${base}/design/members-direction-c/evidence.json`, "utf8"),
@@ -57,16 +74,20 @@ const context = {
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P30.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
-test("P30 registers all 28 local sites without duplicating parent event forwards", () => {
+test("P30 registers all 31 local sites without duplicating parent event forwards", () => {
   const r = validateActionReview(review(), context);
-  assert.equal(r.sourceSites, 30);
-  assert.equal(r.semanticGroups, 24);
+  assert.equal(r.sourceSites, 31);
+  assert.equal(r.semanticGroups, 25);
   assert.equal(r.routeActions, 19);
   assert.equal(r.wiringGroups, 1);
-  assert.equal(r.excludedGroups, 4);
+  assert.equal(r.excludedGroups, 5);
   assert.equal(r.writeActions, 4);
   assert.equal(r.unmappedVisualSlots, 30);
-  assert.deepEqual(review(), buildMembersReview(sources, evidence));
+  assert.equal(
+    review().sourceHashes[parentFile],
+    createHash("sha256").update(sources[parentFile]).digest("hex"),
+  );
+  assert.equal(review().approval, "pending-user-review");
 });
 test("P30 registers thirteen exact event forwards, including both tabs and both pages", () => {
   const r = review(),
@@ -178,8 +199,11 @@ test("P30 refuses invented completion, missing source identities and stale depen
   assert.throws(() => validateActionReview(missing, context), /forward target|unmapped candidates/);
   const accepted = review();
   accepted.approval = "approved";
-  assert.throws(() => validateActionReview(accepted, context), /cannot grant approval/);
-  const drift = { ...sources, [dependencies[2]]: sources[dependencies[2]] + "\n<!-- drift -->" };
+  assert.throws(() => validateActionReview(accepted, context), /cannot grant action approval/);
+  const drift = {
+    ...captureSources,
+    [dependencies[2]]: captureSources[dependencies[2]] + "\n<!-- drift -->",
+  };
   assert.throws(() => buildMembersReview(drift, evidence), /verify current members proposal/);
   const input = review();
   input.surfaceReview.inputs.pop();

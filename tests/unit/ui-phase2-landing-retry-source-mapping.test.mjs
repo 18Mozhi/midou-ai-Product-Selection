@@ -14,7 +14,7 @@ const mappings = [
   },
   {
     file: "apps/web/src/components/LandingRedirectSurface.vue",
-    candidateId: "apps/web/src/components/LandingRedirectSurface.vue#bb7cd7dbbdfa84a2.1",
+    candidateId: "apps/web/src/components/LandingRedirectSurface.vue#2b603370ce085d16.1",
     contract: "ID-LANDING-RETRY-SURFACE",
     line: 44,
   },

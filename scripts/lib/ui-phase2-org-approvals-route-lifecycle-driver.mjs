@@ -14,7 +14,7 @@ export function routeLifecycleVueDriver(input) {
         ).replaceAll("\r\n", "\n"),
       )
       .digest("hex"),
-    "2c8129c6045db6b5ee2e8d5cfc70c7b3d18d7e638e4fe0bb047e9092d58c4231",
+    "3c9ac86fb3a64547f7e0d899374a81390f9e353eb26e4cc120abdcf6bf9cfbae",
   );
   let source = readOrderVueDriver(input);
   const replace = (before, after) => {

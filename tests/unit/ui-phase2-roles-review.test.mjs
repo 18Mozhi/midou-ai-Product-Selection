@@ -94,7 +94,7 @@ const context = {
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P31.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
-test("P31 covers 33 sites with 20 actions, six exact forwards and no implied approval", () => {
+test("P31 covers 33 sites with 20 actions and six exact forwards without implying production acceptance", () => {
   const r = review(),
     result = validateActionReview(r, context);
   assert.equal(result.sourceSites, 33);
@@ -292,11 +292,11 @@ test("P31 selected and available variants are explicit while click counters are 
       (i) => i.outcome === "passed-offline-input-demo-not-Vue-or-API",
     ),
   );
-  assert.equal(review().approval, "pending-user-review");
+  assert.equal(review().approval, "user-approved-remaining-pages-auto");
 });
 
 const ref = (value) => ({ value });
-test("P31 fields bind all sixteen sources and nine form combinations without approving them", () => {
+test("P31 fields bind all sixteen sources and nine combinations without implying production acceptance", () => {
   const e = fieldEvidence,
     r = review();
   assert.equal(Object.keys(e.fieldVisualReferences).length, 16);
@@ -323,7 +323,7 @@ test("P31 fields bind all sixteen sources and nine form combinations without app
     package: "roles-fields-direction-c",
     ...e.fieldVisualReferences.reason,
   });
-  assert.equal(r.approval, "pending-user-review");
+  assert.equal(r.approval, "user-approved-remaining-pages-auto");
 });
 test("P31 field evidence preserves capture-time source hashes and screenshot fingerprints", () => {
   assert.notEqual(fieldEvidence.sourceHashes[parentFile], review().sourceHashes[parentFile]);

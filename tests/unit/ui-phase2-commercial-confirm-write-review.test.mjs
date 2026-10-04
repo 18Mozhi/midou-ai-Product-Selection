@@ -6,6 +6,7 @@ import vm from "node:vm";
 import ts from "typescript";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { previewCommercialConfirm } from "../../scripts/lib/ui-phase2-commercial-confirm-preview.mjs";
 import { draftFocusBoundary } from "../../scripts/lib/ui-phase2-commercial-create-focus-preview.mjs";
 import {
@@ -201,7 +202,7 @@ test("P58 five-path rejection packet binds raw sources, retained requests and ev
   assert.equal(e.screenshots.length, 210);
   assert.equal(Object.keys(e.sourceHashes).length, 170);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assertCaptureSourceRevision(file, read(file), expected);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

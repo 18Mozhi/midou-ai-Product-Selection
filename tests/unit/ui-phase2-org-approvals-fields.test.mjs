@@ -1,5 +1,5 @@
 import test from "node:test";
-import { assertP34HistoricalSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
+import { assertP34EvidenceSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -113,7 +113,7 @@ test("P34 150 images bind 67 representative field states and eight combinations,
 });
 test("P34 historical fields retain source lineage, original renderer and image bytes", () => {
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assertP34HistoricalSourceHash(file, readFileSync(file, "utf8"), sha);
+    assertP34EvidenceSourceHash(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n"), sha);
   for (const s of e.screenshots) assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256);
   const html = readFileSync(`${root}/index.html`, "utf8");
   assert.match(html, /\.\.\/org-approvals-direction-c\/approvals\.js/);

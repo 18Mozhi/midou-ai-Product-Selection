@@ -5,6 +5,10 @@ import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { auditPagePreview } from "../../scripts/lib/ui-phase2-audit-page-preview.mjs";
+import {
+  assertCaptureSourceRevision,
+  readCaptureSourceRevision,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const file = "apps/web/src/components/OrganizationAuditPanel.vue",
   folder = "output/playwright/p37-page-vue-preview";
@@ -49,14 +53,17 @@ test("P37 audit C composition retains complete script, directives, fields and na
     auditPagePreview(original.replace('class="org-audit-filter-grid"', 'class="unexpected"')),
   );
 });
-test("P37 mounted page evidence pins39 current sources and76 exact four-width images", () => {
+test("P37 mounted page evidence pins39 capture-time sources and76 exact four-width images", () => {
   assert.equal(evidence.kind, "P37-PAGE-VUE-PREVIEW-r1");
   assert.equal(evidence.approval, "pending-user-review");
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.checks.length, 216);
   for (const [source, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(source)), sha, source);
-  assert.equal(evidence.transformedHashes[file], hash(transformed));
+    assertCaptureSourceRevision(source, read(source), sha);
+  assert.equal(
+    evidence.transformedHashes[file],
+    hash(auditPagePreview(readCaptureSourceRevision(file, evidence.sourceHashes[file]))),
+  );
   const states = [
     "loading",
     "default",

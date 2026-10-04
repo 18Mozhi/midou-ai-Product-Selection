@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "./ui-phase2-token-copy-baseline.mjs";
+import { responsiveFocusRevision } from "./ui-phase2-responsive-focus-contract.mjs";
 
 export const ownerPathParent = "apps/web/src/components/OrganizationAdminCenter.vue";
 export const ownerPathPanel = "apps/web/src/components/OrganizationApprovalPanel.vue";
@@ -36,4 +38,27 @@ export function assertP34HistoricalSourceHash(file, source, expected) {
     expected,
     `Historical source differs beyond P34 owner-path delta: ${file}`,
   );
+}
+
+export function assertP34EvidenceSourceHash(file, source, expected) {
+  if (file === ownerPathParent || file === ownerPathPanel) {
+    try {
+      assertP34HistoricalSourceHash(file, source, expected);
+      return;
+    } catch {
+      assertCaptureSourceRevision(file, source, expected);
+      return;
+    }
+  }
+  if (file === responsiveFocusRevision.paletteFile) {
+    const notificationSelector = ",\n.responsive-filter-drawer--notifications";
+    assert.equal(expected, responsiveFocusRevision.paletteBeforeNotifications);
+    assert.equal(source.split(notificationSelector).length, 2);
+    assert.equal(
+      createHash("sha256").update(source.replace(notificationSelector, "")).digest("hex"),
+      expected,
+    );
+    return;
+  }
+  assertCaptureSourceRevision(file, source, expected);
 }

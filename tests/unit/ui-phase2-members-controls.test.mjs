@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 import {
   base,
@@ -17,6 +18,33 @@ const fieldEvidence = JSON.parse(
 const buildMembersReview = (sources, parent, controls) =>
   buildReview(sources, parent, controls, fieldEvidence);
 const sources = Object.fromEntries(dependencies.map((file) => [file, readFileSync(file, "utf8")]));
+const captureRevisions = new Map([
+  [dependencies[0], "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b"],
+  [dependencies[2], "4a6368ef1178908688cd6519c5cafafb25c1afcb"],
+  [dependencies[3], "4a6368ef1178908688cd6519c5cafafb25c1afcb"],
+  [dependencies[4], "a9b1495cca558b331d5de1983abc61b5e45657db"],
+  ["tests/e2e/m06-01-organization-admin.spec.ts", "ff46bfe9c620a422d95cab9689489b07fb6b95ea"],
+  ["scripts/lib/ui-phase2-members-design-data.mjs", "b72725feaacaa4523e2bb2cd7c0dc271b4fb4c9e"],
+]);
+const capturedSource = (file) => {
+  const revision = captureRevisions.get(file);
+  return revision
+    ? execFileSync("git", ["show", `${revision}:${file}`], { encoding: "utf8" }).replaceAll(
+        "\r\n",
+        "\n",
+      )
+    : readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+};
+const captureSources = Object.fromEntries(
+  dependencies.map((file) => [
+    file,
+    captureRevisions.has(file)
+      ? execFileSync("git", ["show", `${captureRevisions.get(file)}:${file}`], {
+          encoding: "utf8",
+        }).replaceAll("\r\n", "\n")
+      : sources[file].replaceAll("\r\n", "\n"),
+  ]),
+);
 const values = Object.values(evidence.controlReferences);
 const total = (refs) =>
   Object.values(refs).reduce((n, ref) => n + Object.keys(ref.states).length, 0);
@@ -24,7 +52,7 @@ const hash = (value) => createHash("sha256").update(value).digest("hex");
 
 test("P30 controls retain exact source and PNG hashes with 432 state and 12 context images", () => {
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assert.equal(hash(capturedSource(file)), sha, file);
   assert.equal(evidence.screenshots.length, 444);
   assert.equal(new Set(evidence.screenshots.map((s) => s.file)).size, 444);
   assert.equal(evidence.screenshots.filter((s) => s.control).length, 432);
@@ -41,7 +69,7 @@ test("P30 distinguishes 19 primary controls, 22 variants and ten proposal-only c
   const proposal = values.filter((c) => c.scope === "proposal-only-not-source-action");
   assert.equal(proposal.length, 10);
   assert.equal(total(proposal), 40);
-  const r = buildMembersReview(sources, parent, evidence);
+  const r = buildMembersReview(captureSources, parent, evidence);
   assert.equal(r.proposalOnlyControls.length, 10);
   assert.equal(r.approval, "pending-user-review");
 });
@@ -109,7 +137,7 @@ test("P30 builder rejects omitted/extra primary actions and stale controls sourc
     if (kind === "stale") bad.sourceHashes[dependencies[2]] = "stale";
     assert.throws(
       () => buildMembersReview(sources, parent, bad),
-      /exact reachable|verify current members controls/,
+      /exact reachable|verify current members (?:proposal|controls)/,
     );
   }
 });

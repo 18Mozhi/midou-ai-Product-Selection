@@ -133,9 +133,9 @@ test("P28 source drift and fabricated approval fail closed", () => {
   assert.throws(() => validateActionReview(stale, context), /reviewed source drift/);
   assert.throws(
     () => buildReportReview(source + "\n// drift", packages.get("report-controls-direction-c")),
-    /verify current proposal/,
+    /current proposal source drift/,
   );
   const approved = review();
   approved.approval = "approved";
-  assert.throws(() => validateActionReview(approved, context), /cannot grant approval/);
+  assert.throws(() => validateActionReview(approved, context), /cannot grant action approval/);
 });

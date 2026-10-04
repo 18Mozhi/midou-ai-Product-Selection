@@ -591,19 +591,19 @@ export function buildRolesReview(sources, evidence, controlsEvidence, fieldEvide
     compositionGaps: [
       "原48图保留上下文；新42控件378图绑定18代表动作76状态及24变体113状态，44代表槽仍未映射；父页刷新/错误、真实多页、字段六态仍待。单页分页仅disabled，唯一已选授权不证明切换。",
       "提交中草稿归属、刷新重置延期草稿、确认期间切组织、创建成功覆盖重读失败提示仍待真实Vue与产品决策。",
-      "用户已确认四项控件视觉；新16字段代表状态与9组合保持待审。UUID复制、共享前端501字/服务端500界线、延期不得早于原值在新子稿明确，所有字段排列/主题密度/软键盘/日期弹层及真实Vue仍待，不新增目录或权限。",
+      "整页视觉方案与所列控件视觉均已由用户批准；真实Vue字段行为、权限和生产验收仍待。UUID复制、共享前端501字/服务端500界线、延期不得早于原值在新子稿明确，不新增目录或权限。",
     ],
-    approval: "pending-user-review",
+    approval: "user-approved-remaining-pages-auto",
     actualVueControlEvidence: {
       review: "P31-VUE-APPROVED-CONTROLS.md",
       evidence: "output/playwright/p31-approved-controls-review/evidence.json",
       verifier: "scripts/verify-ui-phase2-roles-vue-controls.mjs",
       scope:
-        "four-approved-control-treatments-and-extension-composition; actual Vue with isolated HTTP, not C layout or production acceptance",
-      approval: "four-design-treatments-approved; full-page-and-runtime-pending",
+        "four-approved-control-treatments-and-extension-composition; full-page C design approved; actual Vue and production acceptance remain pending",
+      approval: "full-page-design-approved; runtime-and-production-pending",
     },
     limits: [
-      "P16仅布局通过，不能外推P31或任一按钮状态。",
+      "P16与P31整页视觉已批准；不代表真实Vue行为、权限或生产验收。",
       "本批登记真实调用链并绑定独立控件图，离线输入演示不修改Vue/API/RBAC/数据库/配置或生产部署。",
     ],
   };

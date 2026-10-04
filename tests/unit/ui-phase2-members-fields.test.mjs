@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import vm from "node:vm";
 import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
@@ -19,11 +20,38 @@ const controls = JSON.parse(
   readFileSync(`${base}/design/members-controls-direction-c/evidence.json`, "utf8"),
 );
 const sources = Object.fromEntries(dependencies.map((file) => [file, readFileSync(file, "utf8")]));
+const captureRevisions = new Map([
+  [dependencies[0], "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b"],
+  [dependencies[2], "4a6368ef1178908688cd6519c5cafafb25c1afcb"],
+  [dependencies[3], "4a6368ef1178908688cd6519c5cafafb25c1afcb"],
+  [dependencies[4], "a9b1495cca558b331d5de1983abc61b5e45657db"],
+  ["tests/e2e/m06-01-organization-admin.spec.ts", "ff46bfe9c620a422d95cab9689489b07fb6b95ea"],
+  ["scripts/lib/ui-phase2-members-design-data.mjs", "b72725feaacaa4523e2bb2cd7c0dc271b4fb4c9e"],
+]);
+const capturedSource = (file) => {
+  const revision = captureRevisions.get(file);
+  return revision
+    ? execFileSync("git", ["show", `${revision}:${file}`], { encoding: "utf8" }).replaceAll(
+        "\r\n",
+        "\n",
+      )
+    : readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+};
+const captureSources = Object.fromEntries(
+  dependencies.map((file) => [
+    file,
+    captureRevisions.has(file)
+      ? execFileSync("git", ["show", `${captureRevisions.get(file)}:${file}`], {
+          encoding: "utf8",
+        }).replaceAll("\r\n", "\n")
+      : sources[file].replaceAll("\r\n", "\n"),
+  ]),
+);
 const hash = (v) => createHash("sha256").update(v).digest("hex"),
   plain = (v) => JSON.parse(JSON.stringify(v));
-test("P30 fields bind current source hashes and all 164 unique field/form PNGs", () => {
+test("P30 fields bind capture-time source hashes and all 164 unique field/form PNGs", () => {
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assert.equal(hash(capturedSource(file)), sha, file);
   assert.equal(evidence.screenshots.length, 164);
   assert.equal(new Set(evidence.screenshots.map((s) => s.file)).size, 164);
   for (const s of evidence.screenshots)
@@ -43,7 +71,7 @@ test("P30 fields bind current source hashes and all 164 unique field/form PNGs",
       }
 });
 test("P30 field registry covers three models, six controlled values and shared reason without claiming approval", () => {
-  const r = buildMembersReview(sources, parent, controls, evidence);
+  const r = buildMembersReview(captureSources, parent, controls, evidence);
   const fields = [
     ...r.surfaceReview.inputs.filter((i) => i.file === dependencies[1]),
     ...r.controlledInputs,
@@ -62,7 +90,7 @@ test("P30 field registry covers three models, six controlled values and shared r
     if (mode === "extra") bad.fieldVisualReferences.status = {};
     if (mode === "stale") bad.sourceHashes[dependencies[2]] = "stale";
     assert.throws(
-      () => buildMembersReview(sources, parent, controls, bad),
+      () => buildMembersReview(captureSources, parent, controls, bad),
       /exact ten members fields|verify current members fields/,
     );
   }
