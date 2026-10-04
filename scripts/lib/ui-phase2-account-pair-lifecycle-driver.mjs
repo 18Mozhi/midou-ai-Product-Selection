@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
@@ -7,6 +8,16 @@ import ts from "typescript";
 export const originalAccountLifecycleDriver = "scripts/verify-ui-phase2-account-app-lifecycle.mjs";
 export const originalAccountLifecycleHash =
   "6a9019477165cfd7e19085f13e965e765e7e2bb40175dc86c7447213d4551867";
+export const originalAccountLifecycleRevision = "afc9c768a9109b50f4512e160f45920eee2603f5";
+export function loadOriginalAccountLifecycleSource() {
+  return execFileSync(
+    "git",
+    ["show", `${originalAccountLifecycleRevision}:${originalAccountLifecycleDriver}`],
+    {
+      encoding: "utf8",
+    },
+  ).replaceAll("\r\n", "\n");
+}
 export const pairLifecycleOutput = "output/playwright/account-pair-c-lifecycle-r6";
 export const pairLifecycleImport =
   'import { accountPairLifecyclePreview } from "./lib/ui-phase2-account-pair-lifecycle-preview.mjs";\n';

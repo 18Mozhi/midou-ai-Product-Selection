@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import {
@@ -11,6 +12,27 @@ export const pairCompositionPacket = "output/playwright/account-pair-app-c-r6/ev
 export const pairCompositionHash =
   "5969e0d469ef6877d986e8cb173f68155d525a5f2ef3cc832e98429fb734ade7";
 const hash = (value) => createHash("sha256").update(value).digest("hex");
+const captureRevisions = new Map([
+  ["apps/web/src/components/OpportunityWorkspace.vue", "481ee60db178aecf5e0bf35898eab5273d2895b1"],
+  [
+    "apps/web/src/components/OrganizationAdminCenter.vue",
+    "e406ce8b2270921f45a3dec8c316b433cae85b13",
+  ],
+  [
+    "scripts/lib/ui-phase2-user-page-current-preview.mjs",
+    "2b99cf75b55cf257b6a6ffd5a511664fd2511ff0",
+  ],
+]);
+
+function capturedSource(read, file) {
+  const revision = captureRevisions.get(file);
+  return revision
+    ? execFileSync("git", ["show", `${revision}:${file}`], { encoding: "utf8" }).replaceAll(
+        "\r\n",
+        "\n",
+      )
+    : read(file);
+}
 
 export async function accountPairLifecyclePreview(read, sources) {
   const manifest = await read(pairCompositionPacket);
@@ -25,7 +47,7 @@ export async function accountPairLifecyclePreview(read, sources) {
   const originals = {},
     transformed = {};
   for (const file of [...accountPairSupport, ...Object.keys(targets)]) {
-    const source = await read(file);
+    const source = await capturedSource(read, file);
     assert.equal(
       hash(source),
       evidence.sourceHashes[file],

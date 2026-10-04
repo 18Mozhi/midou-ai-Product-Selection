@@ -1,10 +1,9 @@
-import { readFile } from "node:fs/promises";
 import {
   accountPairLifecycleDriver,
-  originalAccountLifecycleDriver,
+  loadOriginalAccountLifecycleSource,
 } from "./lib/ui-phase2-account-pair-lifecycle-driver.mjs";
 
-const source = await readFile(originalAccountLifecycleDriver, "utf8");
+const source = loadOriginalAccountLifecycleSource();
 // In-memory module: no scratch script or second copy of the test flow on disk.
 try {
   await import(

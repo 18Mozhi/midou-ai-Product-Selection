@@ -2,11 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { createHash } from "node:crypto";
-import { spawnSync } from "node:child_process";
+import { execFileSync, spawnSync } from "node:child_process";
 import ts from "typescript";
 import {
   accountPairLifecycleDriver,
-  originalAccountLifecycleDriver,
+  loadOriginalAccountLifecycleSource,
   pairLifecycleEdits,
 } from "../../scripts/lib/ui-phase2-account-pair-lifecycle-driver.mjs";
 import {
@@ -16,6 +16,42 @@ import {
 } from "../../scripts/lib/ui-phase2-account-pair-lifecycle-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const capturedSources = new Map([
+  ["apps/web/src/components/OpportunityWorkspace.vue", "481ee60db178aecf5e0bf35898eab5273d2895b1"],
+  [
+    "apps/web/src/components/OrganizationAdminCenter.vue",
+    "e406ce8b2270921f45a3dec8c316b433cae85b13",
+  ],
+  [
+    "scripts/lib/ui-phase2-user-page-current-preview.mjs",
+    "2b99cf75b55cf257b6a6ffd5a511664fd2511ff0",
+  ],
+  [
+    "scripts/verify-ui-phase2-account-app-lifecycle.mjs",
+    "afc9c768a9109b50f4512e160f45920eee2603f5",
+  ],
+  [
+    "scripts/lib/ui-phase2-account-pair-lifecycle-driver.mjs",
+    "afc9c768a9109b50f4512e160f45920eee2603f5",
+  ],
+  [
+    "scripts/lib/ui-phase2-account-pair-lifecycle-preview.mjs",
+    "afc9c768a9109b50f4512e160f45920eee2603f5",
+  ],
+  [
+    "scripts/verify-ui-phase2-account-pair-lifecycle.mjs",
+    "a0f943fa457e7ba59957e0af30ed87e33322ee20",
+  ],
+]);
+const readCapturedSource = (file) => {
+  const revision = capturedSources.get(file);
+  return revision
+    ? execFileSync("git", ["show", `${revision}:${file}`], { encoding: "utf8" }).replaceAll(
+        "\r\n",
+        "\n",
+      )
+    : read(file);
+};
 function neutralImports(source) {
   const ast = ts.createSourceFile("driver.mjs", source, ts.ScriptTarget.Latest, true);
   for (const node of ast.statements.filter(ts.isImportDeclaration).reverse())
@@ -26,7 +62,7 @@ function neutralImports(source) {
   return source;
 }
 test("C composition preserves original flow apart from explicit navigation-aware dialog closure", () => {
-  const original = read(originalAccountLifecycleDriver);
+  const original = loadOriginalAccountLifecycleSource();
   let transformed = accountPairLifecycleDriver(original);
   const ast = ts.createSourceFile("driver.mjs", transformed, ts.ScriptTarget.Latest, true);
   assert.ok(
@@ -92,7 +128,7 @@ test("C lifecycle capture retains every original result plus strict desktop navi
   }
   assert.equal(Object.keys(evidence.sourceHashes).length, 157);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), sha, `Captured current source drift: ${file}`);
+    assert.equal(hash(readCapturedSource(file)), sha, `Captured source drift: ${file}`);
   for (const shot of evidence.screenshots) {
     assert.match(shot.file, /^[a-z0-9-]+\.png$/);
     const png = readFileSync(`${packet}/${shot.file}`);

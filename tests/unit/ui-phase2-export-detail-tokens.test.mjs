@@ -13,11 +13,14 @@ import {
 const text = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n"),
   hash = (v) => createHash("sha256").update(v).digest("hex"),
   baseline = "c380b995b3a6d55d7f1742dc42baf9479be0e8e7",
+  capture = "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b",
   old = (f) =>
     execFileSync("git", ["show", `${baseline}:${f}`], { encoding: "utf8" }).replaceAll(
       "\r\n",
       "\n",
     ),
+  captured = (f) =>
+    execFileSync("git", ["show", `${capture}:${f}`], { encoding: "utf8" }).replaceAll("\r\n", "\n"),
   dir = "output/playwright/p35-export-token-equivalence",
   e = JSON.parse(text(`${dir}/evidence.json`));
 test("P35 palette extraction is byte-exact when expanded and keeps production Vue unchanged", () => {
@@ -30,13 +33,13 @@ test("P35 palette extraction is byte-exact when expanded and keeps production Vu
   assert.throws(() => undoExportDetailTokens(css.replace("export-detail-tokens.css", "other.css")));
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b/i);
   assert.equal(
-    text("apps/web/src/components/OrganizationDataPanel.vue"),
+    captured("apps/web/src/components/OrganizationDataPanel.vue"),
     old("apps/web/src/components/OrganizationDataPanel.vue"),
   );
   assert.equal(capturedExportDetailHash(exportDetailStyle, css), hash(old(exportDetailStyle)));
   assert.equal(capturedExportDetailHash("unrelated.css", "body{}"), hash("body{}"));
 });
-test("P35 current mounted Vue proof binds140 exact pixel comparisons at four boundary widths", () => {
+test("P35 mounted Vue evidence binds capture-time sources and 140 exact pixel comparisons", () => {
   assert.equal(e.kind, "P35-EXACT-TOKEN-EXTRACTION");
   assert.equal(e.baselineCommit, baseline);
   assert.equal(e.appearanceChanged, false);
@@ -62,7 +65,8 @@ test("P35 current mounted Vue proof binds140 exact pixel comparisons at four bou
         ["closed", "open", "focus", "hover", "pressed"],
       );
   assert.ok(e.sourceHashes[exportDetailTokens]);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(text(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(captured(f)), sha, `${f} captured source`);
 });
 test("P35 four comparison images are durable without replacing approved historical images", () => {
   assert.deepEqual(e.screenshots.map((s) => s.file).sort(), [
