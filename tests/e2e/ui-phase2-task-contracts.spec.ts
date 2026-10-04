@@ -4,7 +4,17 @@ import { setupBusinessTasks as setup, taskId, actor, env, task } from "./helpers
 // Real Vue, existing isolated fixture; these cases do not verify MySQL or production writes.
 const detail = `/tasks/${taskId}`;
 const more = (page: Page) => page.locator(".task-detail-more > summary");
-const actionDialog = (page: Page) => page.getByRole("dialog", { name: "任务操作表单" });
+const actionDialog = (page: Page, action: string) =>
+  page.getByRole("dialog", {
+    name:
+      {
+        progress: "更新任务进度",
+        pause: "暂停任务",
+        cancel: "取消任务",
+        delay: "调整任务期限",
+        transfer: "转交任务",
+      }[action] ?? "任务操作",
+  });
 const reason = "补齐交期证据后继续";
 const deadline = "2026-10-09T16:30";
 
@@ -50,9 +60,11 @@ for (const [action, label] of [
     });
     await page.goto(detail);
     if (action !== "progress") await more(page).click();
-    const trigger = page.locator(".task-detail").getByRole("button", { name: label, exact: true });
+    const trigger = page
+      .locator(".task-dossier-actions")
+      .getByRole("button", { name: label, exact: true });
     await trigger.click();
-    const dialog = actionDialog(page);
+    const dialog = actionDialog(page, action);
     await fillAction(page, dialog, action);
     await dialog.getByRole("button", { name: "返回", exact: true }).click();
     await expect(dialog).toBeHidden();
@@ -62,7 +74,7 @@ for (const [action, label] of [
     const fields = await fillAction(page, dialog, action);
     await dialog.getByRole("button", { name: "确认提交", exact: true }).click();
     await expect(dialog).toBeHidden();
-    await expect(page.locator(".task-detail h3")).toHaveText(task.title);
+    await expect(page.locator(".task-dossier h3")).toHaveText(task.title);
     expect(writes).toEqual([{ action, expected_version: 2, ...fields }]);
   });
 }
@@ -79,10 +91,13 @@ for (const [action, label, status] of [
     );
     await page.goto(detail);
     const request = page.waitForRequest((r) => r.url().endsWith(`${detail}/actions`));
-    await page.locator(".task-detail").getByRole("button", { name: label, exact: true }).click();
+    await page
+      .locator(".task-dossier-actions")
+      .getByRole("button", { name: label, exact: true })
+      .click();
     expect((await request).postDataJSON()).toEqual({ action, expected_version: 2 });
     await expect(page.locator(".task-notice")).toContainText("任务动作已记录");
-    await expect(actionDialog(page)).toBeHidden();
+    await expect(page.locator(".task-action-dialog")).toBeHidden();
     expect(observed.actionRequests).toBe(1);
   });
 }
@@ -113,7 +128,7 @@ test("UI2-T03 failed progress submission preserves input and can retry without n
   });
   await page.goto(detail);
   await page.getByRole("button", { name: "更新进度", exact: true }).click();
-  const dialog = actionDialog(page);
+  const dialog = actionDialog(page, "progress");
   const fields = await fillAction(page, dialog, "progress");
   await dialog.getByRole("button", { name: "确认提交", exact: true }).click();
   await expect(dialog.getByRole("button", { name: "确认提交", exact: true })).toBeEnabled();
@@ -147,7 +162,9 @@ for (const [action, label, eligible] of [
     await page.getByRole("checkbox", { name: "选择本页 2 项" }).check();
     const trigger = page.getByRole("button", { name: label, exact: true });
     await trigger.click();
-    const dialog = page.getByRole("dialog", { name: "确认批量任务操作" });
+    const dialog = page.getByRole("dialog", {
+      name: `确认批量${{ pause: "暂停", resume: "继续", delay: "延期", transfer: "调整负责人", cancel: "取消" }[action]}`,
+    });
     await expect(dialog.locator("dl > div").filter({ hasText: "可执行" }).locator("dd")).toHaveText(
       `${eligible} 项`,
     );
@@ -200,7 +217,7 @@ test("UI2-T04 batch submission is single-flight and keeps its confirmed action s
   await page.goto("/tasks");
   await page.getByRole("checkbox", { name: "选择本页 2 项" }).check();
   await page.getByRole("button", { name: "批量取消" }).click();
-  const dialog = page.getByRole("dialog", { name: "确认批量任务操作" });
+  const dialog = page.getByRole("dialog", { name: "确认批量取消" });
   const reasonField = dialog.getByLabel("操作原因");
   await reasonField.fill("确认时的批量取消原因");
   await dialog.getByRole("button", { name: "确认执行" }).click();
@@ -281,7 +298,7 @@ test("UI2-T06 quick-create cancel clears only its query and never writes", async
   const observed = await setup(page);
   await page.goto("/tasks?status=paused&create=1&title=补充报价&description=说明");
   const dialog = page.getByRole("dialog", { name: "新建任务", exact: true });
-  await expect(dialog.getByLabel("标题", { exact: true })).toHaveValue("补充报价");
+  await expect(dialog.getByLabel(/标题/)).toHaveValue("补充报价");
   await dialog.getByRole("button", { name: "取消", exact: true }).click();
   await expect(dialog).toBeHidden();
   await expect.poll(() => new URL(page.url()).search).toBe("?status=paused");
@@ -302,8 +319,8 @@ test("UI2-T07 edit preserves assignee and version; delete returns to the origina
   await more(page).click();
   await page.getByRole("button", { name: "编辑任务", exact: true }).click();
   const edit = page.getByRole("dialog", { name: "编辑任务", exact: true });
-  await edit.getByLabel("标题", { exact: true }).fill("更新报价核验说明");
-  await edit.getByLabel("截止时间（可选）").fill("");
+  await edit.getByLabel(/标题/).fill("更新报价核验说明");
+  await edit.getByLabel(/截止时间/).fill("");
   await edit.getByRole("button", { name: "保存修改", exact: true }).click();
   await expect(edit).toBeHidden();
   expect(writes).toEqual([
@@ -321,12 +338,18 @@ test("UI2-T07 edit preserves assignee and version; delete returns to the origina
     },
   ]);
   await more(page).click();
-  await page.locator(".task-detail").getByRole("button", { name: "删除任务", exact: true }).click();
+  await page
+    .locator(".task-dossier-actions")
+    .getByRole("button", { name: "删除任务", exact: true })
+    .click();
   const deletion = page.getByRole("dialog", { name: "删除任务", exact: true });
   await deletion.getByLabel("删除原因").fill("测试任务已合并");
   await deletion.getByRole("button", { name: "取消", exact: true }).click();
   expect(writes).toHaveLength(1);
-  await page.locator(".task-detail").getByRole("button", { name: "删除任务", exact: true }).click();
+  await page
+    .locator(".task-dossier-actions")
+    .getByRole("button", { name: "删除任务", exact: true })
+    .click();
   await expect(deletion.getByLabel("删除原因")).toHaveValue("");
   await deletion.getByLabel("删除原因").fill("  测试任务已合并  ");
   await deletion.getByRole("button", { name: "确认删除", exact: true }).click();
@@ -358,7 +381,10 @@ test("UI2-T07 closing a pending delete does not lose the submitted target", asyn
 
   await page.goto(`${detail}?from=${encodeURIComponent("/tasks?status=in_progress")}`);
   await more(page).click();
-  await page.locator(".task-detail").getByRole("button", { name: "删除任务", exact: true }).click();
+  await page
+    .locator(".task-dossier-actions")
+    .getByRole("button", { name: "删除任务", exact: true })
+    .click();
   const dialog = page.getByRole("dialog", { name: "删除任务", exact: true });
   await dialog.getByLabel("删除原因").fill("重复任务已合并");
   await dialog.getByRole("button", { name: "确认删除", exact: true }).click();
@@ -406,7 +432,7 @@ test("UI2-T08 detail not-found reload retries the read without list or summary r
   await page.goto(detail);
   await expect(page.getByRole("heading", { name: "任务不存在或已删除" })).toBeVisible();
   await page.getByRole("button", { name: "重新加载", exact: true }).click();
-  await expect(page.locator(".task-detail h3")).toHaveText(task.title);
+  await expect(page.locator(".task-dossier h3")).toHaveText(task.title);
   expect(attempts).toBe(2);
   expect(observed.listRequests + observed.summaryRequests + observed.actionRequests).toBe(0);
 });

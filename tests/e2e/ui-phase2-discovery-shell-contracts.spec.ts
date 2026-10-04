@@ -154,11 +154,11 @@ for (const entry of ["search", "quick", "notifications"] as const) {
         await dialog.getByRole("link", { name: /隔离目标任务/ }).click();
         await expect(page).toHaveURL(new RegExp(`/tasks/${taskId}$`));
       } else {
-        await dialog.getByRole("link", { name: "打开通知中心", exact: true }).click();
+        await dialog.getByRole("link", { name: "查看通知", exact: true }).click();
         await expect(page).toHaveURL(/\/notifications$/);
       }
     }
-    await expect(page.locator("dialog.discovery-backdrop")).not.toBeVisible();
+    await expect(page.locator("dialog.discovery-c-backdrop")).not.toBeVisible();
     await expect(page.getByRole("button", { name: "创建选品", exact: true })).toBeEnabled();
     expect(writes).toEqual([]);
   });
@@ -383,7 +383,7 @@ for (const mode of ["search", "create"] as const) {
       name: mode === "search" ? "全局搜索" : "快捷创建",
     });
     const first = dialog.getByRole("button", { name: "关闭", exact: true });
-    const last = dialog.getByRole("link", { name: "打开通知中心", exact: true });
+    const last = dialog.getByRole("link", { name: "查看通知", exact: true });
     if (mode === "search") await expect(dialog.getByPlaceholder("输入至少 2 个字符")).toBeFocused();
     else {
       await expect(dialog.getByRole("link", { name: /创建任务/ })).toBeVisible();
@@ -495,7 +495,7 @@ for (const outcome of ["success", "forbidden"] as const) {
         await expect(dialog.getByText("旧快捷范围拒绝", { exact: true })).toHaveCount(0);
       } else {
         await expect(page).toHaveURL(/\/me$/);
-        await expect(page.locator("dialog.discovery-backdrop")).toHaveCount(0);
+        await expect(page.locator("dialog.discovery-c-backdrop")).toHaveCount(0);
       }
       expect(writes).toEqual([]);
     });
@@ -592,7 +592,7 @@ test("UI2-DI06 recent entries reorder without duplication and reset on shell unm
     route.fulfill({ json: envelope(entries) }),
   );
   const dialog = page.getByRole("dialog", { name: "快捷创建" });
-  const labels = dialog.locator(".discovery-results a strong");
+  const labels = dialog.locator(".discovery-c-action strong");
   const reopen = async () => {
     await page.getByRole("button", { name: "创建选品", exact: true }).click();
     await expect(labels).toHaveCount(2);
@@ -609,7 +609,9 @@ test("UI2-DI06 recent entries reorder without duplication and reset on shell unm
     await expect(page).toHaveURL(/\/home$/);
     await reopen();
     await expect(labels.first()).toHaveText(label);
-    await expect(dialog.getByRole("link", { name: new RegExp(label) })).toContainText("最近使用");
+    await expect(
+      dialog.getByRole("link", { name: new RegExp(label) }).locator(".discovery-c-recent"),
+    ).toHaveText("最近");
   }
   await expect(labels).toHaveText(["创建任务", "发起找货"]);
   await page.keyboard.press("Escape");
@@ -622,7 +624,7 @@ test("UI2-DI06 recent entries reorder without duplication and reset on shell unm
   await expect(page).toHaveURL(/\/home$/);
   await reopen();
   await expect(labels).toHaveText(["创建任务", "发起找货"]);
-  await expect(dialog.getByText(/最近使用/)).toHaveCount(0);
+  await expect(dialog.locator(".discovery-c-recent")).toHaveCount(0);
   expect(writes).toEqual([]);
 });
 
@@ -766,7 +768,7 @@ for (const mode of ["search", "create"] as const) {
         await dialog.getByRole("textbox", { name: "搜索关键词" }).fill("隔离查询");
         await dialog.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
       } else await page.getByRole("button", { name: "创建选品", exact: true }).click();
-      const dialog = page.locator("dialog.discovery-backdrop");
+      const dialog = page.locator("dialog.discovery-c-backdrop");
       const panel = dialog.locator(".ui-state-panel");
       await expect(panel).toHaveAttribute("data-kind", kind);
       await expect(panel.getByText("ui2-previous-read", { exact: true })).toBeVisible();
@@ -846,7 +848,7 @@ for (const mode of ["search", "create"] as const) {
       await dialog.getByRole("textbox", { name: "搜索关键词" }).fill("没有结果");
       await dialog.getByRole("textbox", { name: "搜索关键词" }).press("Enter");
     } else await page.getByRole("button", { name: "创建选品", exact: true }).click();
-    const dialog = page.locator("dialog.discovery-backdrop");
+    const dialog = page.locator("dialog.discovery-c-backdrop");
     const panel = dialog.locator(".ui-state-panel");
     await expect(panel).toHaveAttribute("data-kind", "empty");
     await expect(panel.getByRole("button", { name: "重新加载", exact: true })).toBeEnabled();

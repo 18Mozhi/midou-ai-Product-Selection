@@ -20,7 +20,7 @@ test("UI2-C05 action refresh finishes its member directory after superseding the
     await page.goto(`/tasks/${taskId}`);
     await expect.poll(() => members).toBe(1);
     await page.getByRole("button", { name: "完成", exact: true }).click();
-    await expect(page.locator(".task-detail-facts")).toContainText("当前负责人目录");
+    await expect(page.locator(".task-dossier-facts")).toContainText("当前负责人目录");
     expect(members).toBe(2);
     expect(observed.actionRequests).toBe(1);
     expect(observed.detailRequests).toBe(2);
@@ -48,7 +48,7 @@ for (const path of ["/work", "/tasks"]) {
     });
     await page.goto(`${path}?status=in_progress&query=报价&sort=updated_desc`);
     await page.locator(".task-row-main").filter({ hasText: task.title }).click();
-    await expect(page.locator(".task-detail h3")).toHaveText(task.title);
+    await expect(page.locator(".task-dossier h3")).toHaveText(task.title);
     await settle(page);
     expect(observed.listRequests).toBe(1);
     expect(observed.summaryRequests).toBe(1);
@@ -120,7 +120,7 @@ for (const lateStatus of [200, 404]) {
       await page.goBack();
       await expect(page.locator(".task-row-main").first()).toBeVisible();
       await page.goForward();
-      await expect(page.locator(".task-detail h3")).toHaveText("最新任务事实");
+      await expect(page.locator(".task-dossier h3")).toHaveText("最新任务事实");
       expect(reads).toBe(2);
       const late = page.waitForResponse(
         (response) => response.headers()["x-ui2-response"] === "late",
@@ -128,9 +128,9 @@ for (const lateStatus of [200, 404]) {
       release();
       await (await late).finished();
       await settle(page);
-      await expect(page.locator(".task-detail h3")).toHaveText("最新任务事实");
+      await expect(page.locator(".task-dossier h3")).toHaveText("最新任务事实");
       await expect(page.getByText("旧请求错误", { exact: true })).toHaveCount(0);
-      await expect(page.locator(".task-detail-header")).toContainText("第 3 版");
+      await expect(page.locator(".task-dossier-heading")).toContainText("第 3 版");
     } finally {
       release();
     }
@@ -153,10 +153,10 @@ test("UI2-C03 cached detail changes task IDs once and keeps exports out of busin
   });
   await page.goto("/tasks");
   await page.locator(".task-row-main").filter({ hasText: task.title }).click();
-  await expect(page.locator(".task-detail h3")).toHaveText(task.title);
+  await expect(page.locator(".task-dossier h3")).toHaveText(task.title);
   await page.getByRole("link", { name: "关闭任务详情" }).click();
   await page.locator(".task-row-main").filter({ hasText: "补齐竞品价格证据" }).click();
-  await expect(page.locator(".task-detail h3")).toHaveText("第二项任务");
+  await expect(page.locator(".task-dossier h3")).toHaveText("第二项任务");
   await settle(page);
   expect(secondReads).toBe(1);
   expect(observed.detailRequests).toBe(1);
