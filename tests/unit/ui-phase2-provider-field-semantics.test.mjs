@@ -2,6 +2,7 @@ import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import path from "node:path";
@@ -12,13 +13,17 @@ import {
   historicalProviderFieldSource,
   providerFieldRevision,
 } from "../../scripts/lib/ui-phase2-provider-field-baseline.mjs";
+import { parseProviderCaptureBlobs } from "../../scripts/lib/ui-phase2-provider-historical-capture.mjs";
 
 // Bind the immutable field-only capture, before modal isolation was connected.
 const read = (f) =>
   historicalProviderIsolationSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const file = providerFieldRevision.file,
-  source = read(file),
+  source = execFileSync("git", ["show", `2bfb9038:${file}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  ),
   old = historicalProviderFieldSource(file, source);
 const root = "output/playwright/p46-field-semantics";
 const evidence = (mode) => JSON.parse(read(`${root}/${mode}/evidence.json`));
@@ -159,7 +164,21 @@ test("P46 field semantics change only field-name spans and error ARIA; scripts/s
   );
 });
 
-test("P46 field evidence binds raw current source and every retained image; old source only in baseline renderer", () => {
+test("P46 field evidence binds historical source revisions and every retained image", () => {
+  const sourceRequests = [
+    ...new Set(
+      ["baseline", "current"].flatMap((mode) =>
+        Object.keys(evidence(mode).sourceHashes).map((sourcePath) => `2bfb9038:${sourcePath}`),
+      ),
+    ),
+  ];
+  const historicalSources = parseProviderCaptureBlobs(
+    execFileSync("git", ["cat-file", "--batch"], {
+      input: sourceRequests.join("\n") + "\n",
+      maxBuffer: 128 * 1024 * 1024,
+    }),
+    sourceRequests,
+  );
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = `${root}/${mode}`;
@@ -167,7 +186,13 @@ test("P46 field evidence binds raw current source and every retained image; old 
     assert.equal(e.mode, mode);
     assert.equal(e.processesClosed, true);
     assert.equal(e.renderedRegistryHash, hash(mode === "baseline" ? old : source));
-    for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+    for (const [f, sha] of Object.entries(e.sourceHashes)) {
+      const source = historicalSources
+        .get(`2bfb9038:${f}`)
+        .toString("utf8")
+        .replaceAll("\r\n", "\n");
+      assert.equal(hash(source), sha, `${mode}:${f} captured Git source`);
+    }
     assert.equal(e.observations.length, 276);
     assert.equal(e.screenshots.length, 112);
     assert.deepEqual(

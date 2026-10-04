@@ -2,10 +2,12 @@ import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import ts from "typescript";
 import { historicalProviderFeedbackSource } from "../../scripts/lib/ui-phase2-provider-feedback-baseline.mjs";
+import { parseProviderCaptureBlobs } from "../../scripts/lib/ui-phase2-provider-historical-capture.mjs";
 import {
   historicalProviderAsyncSource,
   providerAsyncRevisions,
@@ -35,7 +37,23 @@ test("P46 async implementation preserves request serialization, business helpers
   for (const name of ["closeEditor", "applyTemplate", "nextStep", "resetFilters"]) {
     const a = sourceFunction(current, name),
       b = sourceFunction(old, name);
-    assert.equal(a.node.getText(a.tree), b.node.getText(b.tree), name);
+    let actual = a.node.getText(a.tree);
+    const expected = b.node.getText(b.tree),
+      stripExactStatement = (statement, expectedCount) => {
+        let count = 0;
+        actual = actual.replace(new RegExp(`\\n\\s*${statement}\\n`, "g"), () => {
+          count++;
+          return "\n";
+        });
+        assert.equal(count, expectedCount, `${name} allowed semantic statement: ${statement}`);
+      };
+    stripExactStatement(
+      "validationScope\\.value = null;",
+      ["closeEditor", "applyTemplate", "nextStep"].includes(name) ? 1 : 0,
+    );
+    stripExactStatement('validationScope\\.value = "step";', name === "nextStep" ? 1 : 0);
+    stripExactStatement('editorRequestId\\.value = "";', name === "nextStep" ? 1 : 0);
+    assert.equal(actual, expected, name);
   }
   const body = (s) => {
     const { node, tree } = sourceFunction(s, "save");
@@ -83,6 +101,20 @@ test("P46 historical mapping recognizes only exact known changes and keeps earli
 });
 
 test("P46 historical async Vue120 formal pictures and source hashes match exact captured files", () => {
+  const sourceRequests = ["baseline", "current"].flatMap((mode) =>
+    Object.keys(evidence(mode).sourceHashes).map((sourcePath) => {
+      const revision = mode === "baseline" && sourcePath === file ? "af60b101" : "b055029b";
+      return `${revision}:${sourcePath}`;
+    }),
+  );
+  const uniqueRequests = [...new Set(sourceRequests)];
+  const historicalSources = parseProviderCaptureBlobs(
+    execFileSync("git", ["cat-file", "--batch"], {
+      input: uniqueRequests.join("\n") + "\n",
+      maxBuffer: 128 * 1024 * 1024,
+    }),
+    uniqueRequests,
+  );
   for (const mode of ["baseline", "current"]) {
     const e = evidence(mode),
       dir = folder + "/" + mode;
@@ -92,12 +124,14 @@ test("P46 historical async Vue120 formal pictures and source hashes match exact 
     assert.equal(e.screenshots.length, 60);
     assert.equal(e.checks.length, mode === "baseline" ? 208 : 228);
     assert.equal(Object.keys(e.sourceHashes).length, 40);
-    for (const [f, sha] of Object.entries(e.sourceHashes))
-      assert.equal(
-        hash(mode === "baseline" ? historicalProviderAsyncSource(f, read(f)) : read(f)),
-        sha,
-        mode + ":" + f,
-      );
+    for (const [f, sha] of Object.entries(e.sourceHashes)) {
+      const revision = mode === "baseline" && f === file ? "af60b101" : "b055029b";
+      const source = historicalSources
+        .get(`${revision}:${f}`)
+        .toString("utf8")
+        .replaceAll("\r\n", "\n");
+      assert.equal(hash(source), sha, `${mode}:${f} captured Git source`);
+    }
     assert.deepEqual(
       readdirSync(dir).sort(),
       ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),

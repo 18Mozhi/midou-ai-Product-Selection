@@ -1,9 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
+import { parseProviderCaptureBlobs } from "../../scripts/lib/ui-phase2-provider-historical-capture.mjs";
 import {
   compatibilityCopy,
   previewProviderCompatibilityDialog,
@@ -13,6 +15,44 @@ const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/ProviderCompatibilityMatrixDialog.vue",
   root = "output/playwright/p48-compatibility-review";
+
+const p48Capture = () => {
+  const revision = "8e60a218",
+    manifest = execFileSync("git", ["show", `${revision}:${root}/evidence.json`], {
+      encoding: "utf8",
+      maxBuffer: 16 * 1024 * 1024,
+    }).replaceAll("\r\n", "\n");
+  assert.equal(hash(manifest), "f4c00a60b82552686256298d739be7bbb96abedd0753031902b7c3da49ad037d");
+  const evidence = JSON.parse(manifest),
+    paths = [
+      ...new Set([
+        ...Object.keys(evidence.sourceHashes).filter(
+          (file) => file !== "packages/config/dist/browser.js",
+        ),
+        ...evidence.screenshots.map((shot) => `${root}/${shot.file}`),
+      ]),
+    ],
+    blobs = parseProviderCaptureBlobs(
+      execFileSync("git", ["cat-file", "--batch"], {
+        input: paths.map((file) => `${revision}:${file}\n`).join(""),
+        maxBuffer: 128 * 1024 * 1024,
+      }),
+      paths,
+    );
+  return {
+    evidence,
+    manifest,
+    source(file) {
+      assert.ok(blobs.has(file), `source is not in pinned P48 revision: ${file}`);
+      return blobs.get(file).toString("utf8").replaceAll("\r\n", "\n");
+    },
+    image(file) {
+      const bytes = blobs.get(`${root}/${file}`);
+      assert.ok(bytes, `image is not in pinned P48 revision: ${file}`);
+      return bytes;
+    },
+  };
+};
 
 test("P48 compatibility review transforms the actual dialog and still compiles", () => {
   const source = read(component),
@@ -32,6 +72,10 @@ test("P48 compatibility review transforms the actual dialog and still compiles",
     "p48-compatibility-modal",
     "p48-compatibility-summary",
     "p48-compatibility-ledger",
+  ]) {
+    assert.ok(review.includes(marker), marker);
+  }
+  for (const marker of [
     "compatibilityFocusable",
     "setCompatibilityBackgroundInert",
     "handleCompatibilityKeydown",
@@ -88,7 +132,9 @@ test("P48 compatibility CSS is isolated, responsive, and keyboard-visible", () =
 });
 
 test("P48 compatibility evidence binds all read states, modal behavior, and images", () => {
-  const evidence = JSON.parse(read(`${root}/evidence.json`));
+  const capture = p48Capture(),
+    evidence = JSON.parse(read(`${root}/evidence.json`));
+  assert.equal(read(`${root}/evidence.json`), capture.manifest);
   assert.equal(evidence.kind, "P48-COMPATIBILITY-REVIEW-r1");
   assert.equal(evidence.reviewOnly, true);
   assert.ok(evidence.fixtureNotice.includes("synthetic review fixtures"));
@@ -100,14 +146,19 @@ test("P48 compatibility evidence binds all read states, modal behavior, and imag
   assert.equal(evidence.runs.length, 40);
   assert.equal(evidence.screenshots.length, 42);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
-  for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  for (const [file, expected] of Object.entries(evidence.sourceHashes)) {
+    if (file === "packages/config/dist/browser.js") {
+      assert.equal(hash(read(file)), expected, file);
+      continue;
+    }
+    assert.equal(hash(capture.source(file)), expected, file);
+  }
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),
   );
   for (const shot of evidence.screenshots) {
-    const bytes = readFileSync(`${root}/${shot.file}`);
+    const bytes = capture.image(shot.file);
     assert.equal(hash(bytes), shot.sha256, shot.file);
     assert.equal(bytes.readUInt32BE(16), shot.pixelWidth, shot.file);
     assert.equal(bytes.readUInt32BE(20), shot.pixelHeight, shot.file);

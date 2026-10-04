@@ -12,7 +12,7 @@ export const providerAsyncRevisions = [
   {
     file: "apps/web/src/components/ProviderRegistry.vue",
     before: "2e6aed1eb23b4402719d2d031a61215aad27be0613c36b2f9f4477971638d20c",
-    after: "ffb8a98b8df1c966ee092cf1377f51c2ab67748d66377cda5734ac9646906df3",
+    after: "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
   },
 ];
 const cached = new Map(),

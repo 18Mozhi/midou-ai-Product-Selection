@@ -1,13 +1,16 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
-import {
-  UI_STATE_KINDS,
-  DEFAULT_STATE_COPY,
-  stateFromHttp,
-  sanitizeCorrelationId,
-  canConfirm,
-} from "../../apps/web/src/ui/state-contract.ts";
+import ts from "typescript";
+
+const uiStateContractSource = await readFile("apps/web/src/ui/state-contract.ts", "utf8"),
+  uiStateContractJavascript = ts.transpileModule(uiStateContractSource, {
+    compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
+  }).outputText,
+  { UI_STATE_KINDS, DEFAULT_STATE_COPY, stateFromHttp, sanitizeCorrelationId, canConfirm } =
+    await import(
+      `data:text/javascript;base64,${Buffer.from(uiStateContractJavascript).toString("base64")}`
+    );
 const read = (path) => readFile(path, "utf8");
 test("M02-04.A02/A04/A12 failure mapping is deterministic and exhaustive", () => {
   assert.deepEqual(UI_STATE_KINDS, [

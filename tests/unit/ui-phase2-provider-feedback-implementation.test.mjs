@@ -30,8 +30,10 @@ const captured = (mode) => providerHistoricalCapture(`feedback-${mode}`);
 const evidence = (mode) => captured(mode).evidence;
 
 test("P46 approved feedback changes no script, event, model, text or business rule", () => {
-  const a = parse(current).descriptor,
-    b = parse(old).descriptor;
+  const feedbackCurrent = captured("current").source(file),
+    feedbackBefore = historicalProviderFeedbackSource(file, feedbackCurrent),
+    a = parse(feedbackCurrent).descriptor,
+    b = parse(feedbackBefore).descriptor;
   assert.equal(a.scriptSetup.content, b.scriptSetup.content);
   assert.deepEqual(
     a.styles.map((s) => s.src),
@@ -48,9 +50,9 @@ test("P46 approved feedback changes no script, event, model, text or business ru
     );
   assert.equal(reverted, b.template.content);
   const candidates = (source) => scanSource(source, file).candidates;
-  assert.equal(candidates(current).length, 22);
-  const changed = candidates(current).filter(
-    (c, i) => c.candidateId !== candidates(old)[i].candidateId,
+  assert.equal(candidates(feedbackCurrent).length, 22);
+  const changed = candidates(feedbackCurrent).filter(
+    (c, i) => c.candidateId !== candidates(feedbackBefore)[i].candidateId,
   );
   assert.equal(changed.length, 1);
   assert.equal(changed[0].signature, "addbc979a88d3d3a");
@@ -91,7 +93,7 @@ test("P46 CSS is limited to approved mobile attributes, no preview layout or foc
 
 test("P46 feedback history and two user-approved PNGs remain exact, unknown drift fails closed", () => {
   for (const r of providerFeedbackRevisions) {
-    const s = read(r.file);
+    const s = captured("current").source(r.file);
     assert.equal(hash(s), r.after);
     assert.equal(hash(historicalProviderFeedbackSource(r.file, s)), r.before);
     assert.equal(

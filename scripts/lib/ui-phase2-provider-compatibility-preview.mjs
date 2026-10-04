@@ -11,6 +11,15 @@ export const compatibilityCopy = {
 };
 
 const behavior = `
+const statusText = (value: ProviderPageCompatibilityObservation["status"]) =>
+  ({
+    compatible: "已兼容",
+    incompatible: "解析不兼容",
+    mixed: "结果不一致",
+    unverified: "待验证",
+  })[value];
+const fingerprint = (value: string) => "sha256:" + value.slice(0, 12);
+const time = (value: string) => new Date(value).toLocaleString("zh-CN", { hour12: false });
 const compatibilityDialog = ref<HTMLElement | null>(null);
 const compatibilityDialogTitle = ref<HTMLElement | null>(null);
 let compatibilityDialogTrigger: HTMLElement | null = null;
@@ -251,23 +260,14 @@ const template = `<template>
 export function previewProviderCompatibilityDialog(source) {
   let review = once(
     source,
-    '<script setup lang="ts">\nimport type { ProviderPageCompatibilityObservation } from "./provider-source-types";',
-    '<script setup lang="ts">\nimport { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";\nimport type { ProviderPageCompatibilityObservation } from "./provider-source-types";',
+    '<script setup lang="ts">\nimport { computed, ref } from "vue";',
+    '<script setup lang="ts">\nimport { computed, nextTick, onBeforeUnmount, onMounted, ref } from "vue";',
     "compatibility import anchor must be unique",
   );
-  review = once(
-    review,
-    "defineProps<{",
-    "const props = defineProps<{",
-    "compatibility props anchor",
-  );
-  review = once(
-    review,
-    "defineEmits<{ close: [] }>();",
-    "const emit = defineEmits<{ close: [] }>();",
-    "compatibility emit anchor",
-  );
-  review = once(review, "</script>", `${behavior}\n</script>`, "compatibility script close anchor");
+  const setupEnd = review.indexOf("\nconst dialog ="),
+    scriptEnd = review.indexOf("</script>");
+  assert.ok(setupEnd > 0 && scriptEnd > setupEnd, "compatibility setup behavior boundary");
+  review = review.slice(0, setupEnd) + behavior + "\n</script>" + review.slice(scriptEnd + 9);
   const start = review.indexOf("<template>"),
     end = review.indexOf("<style scoped>", start);
   assert.ok(start >= 0 && end > start, "compatibility template boundaries");
