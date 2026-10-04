@@ -32,6 +32,10 @@ once(
   'const output = "output/playwright/p33-member-dialog-c-r1";',
 );
 once(
+  'const capture = args.includes("--capture"),\n  smoke = args.includes("--smoke");',
+  'const capture = args.includes("--capture"),\n  smoke = args.includes("--smoke");\nif (capture) await mkdir("output/playwright/p33-member-dialog-c-r1");',
+);
+once(
   "[shellFile, teamsVueFile].map",
   "[shellFile, teamsVueFile, teamsParentFile, teamsMemberDialogFile].map",
 );
@@ -53,6 +57,10 @@ once(
   "const runs = [],",
   `for (const file of ["scripts/lib/ui-phase2-teams-member-dialog-preview.mjs", "scripts/verify-ui-phase2-teams-member-dialog.mjs", "scripts/lib/ui-phase2-teams-read-result-preview.mjs", "scripts/lib/ui-phase2-teams-recovery-focus-preview.mjs"]) sources.add(file);
 const runs = [],`,
+);
+once(
+  "if (capture) await mkdir(output);",
+  "// Capture directory was claimed before source composition.",
 );
 section(
   '        if (key === "POST /api/v1/org/admin/teams") {',

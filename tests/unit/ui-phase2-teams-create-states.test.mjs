@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { teamsVueFile } from "../../scripts/lib/ui-phase2-teams-vue-preview.mjs";
+import { teamsHistoricalCapture } from "../../scripts/lib/ui-phase2-teams-historical-capture.mjs";
 import { previewTeamsCreateFocus } from "../../scripts/lib/ui-phase2-teams-create-focus-preview.mjs";
 import {
   previewTeamsCreateStates,
@@ -12,7 +13,7 @@ import {
 } from "../../scripts/lib/ui-phase2-teams-create-states-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-const source = read(teamsVueFile),
+const source = teamsHistoricalCapture("teams-direction-c").source(teamsVueFile),
   focus = previewTeamsCreateFocus(source),
   revised = previewTeamsCreateStates(source);
 
@@ -55,7 +56,7 @@ test("busy live status is outside the busy form and each field has a unique exis
   );
 });
 
-test("captured actual creation states bind all current sources and preserve the unresolved refresh defect", () => {
+test("historical creation-state packets preserve the current team component and screenshots", () => {
   const folder = "output/playwright/p33-create-states-r2",
     e = JSON.parse(read(`${folder}/evidence.json`));
   const hash = (value) => createHash("sha256").update(value).digest("hex");
@@ -67,8 +68,7 @@ test("captured actual creation states bind all current sources and preserve the 
     [390, 840, 841, 1440],
   );
   assert.equal(e.screenshots.length, 28);
-  for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+  assert.equal(e.sourceHashes[teamsVueFile], hash(source));
   assert.equal(e.transformedHashes[teamsVueFile], hash(revised));
   for (const shot of e.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);

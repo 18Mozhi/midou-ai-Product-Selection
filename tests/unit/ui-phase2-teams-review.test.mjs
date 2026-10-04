@@ -41,28 +41,43 @@ const context = {
   packages,
   files: new Set(build().actions.flatMap((a) => a.testReferences.map((r) => r.file))),
 };
-test("P33 registers all 29 parent and child sites without counting function props as events", () => {
-  const r = build(),
-    result = validateActionReview(r, context);
+test("P33 current action review covers all 34 parent and child sites without counting function props as events", () => {
+  const r = JSON.parse(readFileSync(`${base}/action-reviews/P33.json`, "utf8")),
+    currentContext = {
+      ...context,
+      candidates: [parentFile, childFile].flatMap(
+        (file) => scanSource(readFileSync(file, "utf8"), file).candidates,
+      ),
+      sourceHashes: r.sourceHashes,
+      files: new Set(r.actions.flatMap((action) => action.testReferences.map((ref) => ref.file))),
+    },
+    result = validateActionReview(r, currentContext);
   assert.deepEqual(result, {
     pageId: "P33",
-    sourceSites: 31,
-    semanticGroups: 17,
-    routeActions: 12,
+    actionApproval: "pending-user-review",
+    visualApproval: "user-approved-remaining-pages-auto",
+    sourceSites: 34,
+    semanticGroups: 20,
+    routeActions: 14,
     wiringGroups: 0,
-    excludedGroups: 5,
+    excludedGroups: 6,
     writeActions: 2,
+    sourceAbsentProposals: 0,
     sourceInapplicableVisualSlots: 0,
-    unmappedVisualSlots: 17,
+    testEvidenceTypes: ["actual-vue-local-interception", "offline-proposal-check-not-Vue"],
+    unmappedVisualSlots: 29,
   });
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P33.json`, "utf8")), r);
   assert.equal(r.approval, "pending-user-review");
-  const omitted = build();
+  const omitted = copy(r);
   omitted.actions.pop();
-  assert.throws(() => validateActionReview(omitted, context), /unmapped candidates/);
-  const approved = build();
+  assert.throws(() => validateActionReview(omitted, currentContext), /unmapped candidates/);
+  const approved = copy(r);
   approved.approval = "approved";
-  assert.throws(() => validateActionReview(approved, context), /cannot grant approval/);
+  assert.throws(
+    () => validateActionReview(approved, currentContext),
+    /cannot grant action approval/,
+  );
 });
 test("P33 41 business control variants and seven fields bind all catalog states and both viewports", () => {
   assert.deepEqual(validateTeamsEvidenceBindings(build(), packages), {
@@ -127,6 +142,8 @@ test("P33 thirteen models and three containers preserve one shared dialog versus
   assert.deepEqual(validateReviewSurfaces(build().surfaceReview, { sources, packages }), {
     callerFiles: 2,
     localModelBindings: 13,
+    reviewedInputBindings: 13,
+    sourceCallerContainers: 3,
     callerContainers: 3,
     consumerVariants: 14,
     runtimeAcceptance: "unproven",

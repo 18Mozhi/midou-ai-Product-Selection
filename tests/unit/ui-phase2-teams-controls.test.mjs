@@ -14,7 +14,8 @@ const root = "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction
 const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 test("P33 individual controls cover every actual child candidate once without counting variants as new source actions", () => {
-  const candidates = scanSource(readFileSync(e.sourceFile, "utf8"), e.sourceFile).candidates;
+  const capture = teamsHistoricalCapture("teams-controls-direction-c"),
+    candidates = scanSource(capture.source(e.sourceFile), e.sourceFile).candidates;
   assert.equal(candidates.length, 18);
   const signatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
   assert.deepEqual(e.sourceSignatures, signatures);
@@ -54,6 +55,28 @@ test("P33 all control variants and reason compositions have exact dual-viewport 
     assert.equal(s.control.actionId, c.actionId);
     assert.ok(c.states.includes(s.control.variant));
   }
+});
+test("P33 post-capture Vue additions have current source and E2E evidence", () => {
+  const capture = teamsHistoricalCapture("teams-controls-direction-c"),
+    historical = scanSource(capture.source(e.sourceFile), e.sourceFile).candidates,
+    currentSource = readFileSync(e.sourceFile, "utf8"),
+    current = scanSource(currentSource, e.sourceFile).candidates,
+    historicalIds = new Set(historical.map((c) => c.candidateId.split("#")[1])),
+    additions = current.filter((c) => !historicalIds.has(c.candidateId.split("#")[1]));
+  assert.equal(additions.length, 2);
+  assert.ok(additions.some((c) => c.attributes["@click"] === "refreshTeamList"));
+  assert.match(currentSource, /<summary>查看本次请求编号<\/summary>/);
+  const proof = JSON.parse(
+    readFileSync("output/playwright/p33-teams-vue-c-r5/evidence.json", "utf8"),
+  );
+  assert.equal(proof.kind, "P33-ACTUAL-VUE-C-r5");
+  assert.equal(proof.screenshots.length, 34);
+  const e2e = readFileSync("tests/e2e/m06-01-organization-admin.spec.ts", "utf8");
+  assert.match(
+    e2e,
+    /team creation keeps its receipt when list refresh fails and retry only rereads/,
+  );
+  assert.match(e2e, /retryButton\.click\(\)/);
 });
 test("P33 absent-member and archived-team states do not invent disabled rules or versioned membership writes", () => {
   for (const action of ["assign", "remove"])

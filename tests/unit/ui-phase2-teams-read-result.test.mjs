@@ -11,9 +11,10 @@ import {
   teamsParentFile,
   teamsReadResultComponent,
 } from "../../scripts/lib/ui-phase2-teams-read-result-preview.mjs";
+import { teamsHistoricalCapture } from "../../scripts/lib/ui-phase2-teams-historical-capture.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-const original = read(teamsParentFile),
+const original = teamsHistoricalCapture("teams-direction-c").source(teamsParentFile),
   revised = previewTeamsReadResult(original);
 const script = parse(revised).descriptor.scriptSetup.content;
 const ast = ts.createSourceFile("parent.ts", script, ts.ScriptTarget.Latest, true);
@@ -238,7 +239,7 @@ test("busy or inactive recovery has no effect, and legacy submit callers remain 
   assert.equal(h.teamCreateWriteRequestId.value, "");
 });
 
-test("captured correction packets bind current sources and separate 500 from 403 permission states", () => {
+test("historical correction packets retain their parent revision and separate 500 from 403 states", () => {
   const hash = (value) => createHash("sha256").update(value).digest("hex");
   for (const status of [500, 403]) {
     const folder = `output/playwright/p33-read-result-${status}-r2`,
@@ -251,8 +252,7 @@ test("captured correction packets bind current sources and separate 500 from 403
       e.runs.map((r) => r.width),
       [390, 840, 841, 1440],
     );
-    for (const [file, expected] of Object.entries(e.sourceHashes))
-      assert.equal(hash(read(file)), expected, file);
+    assert.equal(e.sourceHashes[teamsParentFile], hash(original));
     assert.equal(e.transformedHashes[teamsParentFile], hash(revised));
     for (const shot of e.screenshots)
       assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256);

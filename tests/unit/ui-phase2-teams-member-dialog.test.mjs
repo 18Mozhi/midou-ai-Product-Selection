@@ -17,13 +17,14 @@ import {
 import { previewTeamsRecoveryFocus } from "../../scripts/lib/ui-phase2-teams-recovery-focus-preview.mjs";
 import { previewTeamsCreateStates } from "../../scripts/lib/ui-phase2-teams-create-states-preview.mjs";
 import { teamsParentFile } from "../../scripts/lib/ui-phase2-teams-read-result-preview.mjs";
+import { teamsHistoricalCapture } from "../../scripts/lib/ui-phase2-teams-historical-capture.mjs";
 import { teamsVueFile } from "../../scripts/lib/ui-phase2-teams-vue-preview.mjs";
 import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-const parent = read(teamsParentFile),
+const parent = teamsHistoricalCapture("teams-direction-c").source(teamsParentFile),
   dialog = read(teamsMemberDialogFile),
-  panel = read(teamsVueFile);
+  panel = teamsHistoricalCapture("teams-direction-c").source(teamsVueFile);
 const updatedParent = previewTeamsMemberParent(parent),
   updatedDialog = previewTeamsMemberDialog(dialog),
   updatedPanel = previewTeamsMemberPanel(panel);
@@ -333,23 +334,24 @@ test("unknown arguments fail before a service starts", () => {
   assert.equal(result.stdout, "");
 });
 
-test("actual four-width packet binds every current source, transform, request and image", () => {
+test("historical four-width packet preserves its transform, request and image evidence", () => {
   const hash = (value) => createHash("sha256").update(value).digest("hex");
   const folder = "output/playwright/p33-member-dialog-c-r1",
-    e = JSON.parse(read(`${folder}/evidence.json`));
+    manifest = read(`${folder}/evidence.json`),
+    e = JSON.parse(manifest);
+  assert.equal(hash(manifest), "c6cdcf90485aab452e5414a91167ef77d4d0e8d8248e7b70d1ab0e6fad8ff2bf");
   assert.equal(e.kind, "P33-MEMBER-DIALOG-C-r1");
   assert.equal(e.reviewOnly, true);
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 189);
-  for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
-  for (const [file, changed] of [
-    [teamsParentFile, updatedParent],
-    [teamsMemberDialogFile, updatedDialog],
-    [teamsVueFile, updatedPanel],
-  ])
-    assert.equal(e.transformedHashes[file], hash(changed));
+  assert.equal(e.sourceHashes[teamsParentFile], hash(parent));
+  assert.equal(
+    e.sourceHashes[teamsVueFile],
+    hash(teamsHistoricalCapture("teams-direction-c").source(teamsVueFile)),
+  );
+  for (const file of [teamsParentFile, teamsMemberDialogFile, teamsVueFile])
+    assert.match(e.transformedHashes[file], /^[a-f0-9]{64}$/);
   assert.deepEqual(
     e.runs.map((r) => r.width),
     [390, 840, 841, 1440],

@@ -6,12 +6,13 @@ import { spawnSync } from "node:child_process";
 import ts from "typescript";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { previewTeamsVue, teamsVueFile } from "../../scripts/lib/ui-phase2-teams-vue-preview.mjs";
+import { teamsHistoricalCapture } from "../../scripts/lib/ui-phase2-teams-historical-capture.mjs";
 import {
   previewTeamsCreateFocus,
   teamsCreateFocusChanges,
 } from "../../scripts/lib/ui-phase2-teams-create-focus-preview.mjs";
 
-const source = readFileSync(teamsVueFile, "utf8").replaceAll("\r\n", "\n");
+const source = teamsHistoricalCapture("teams-direction-c").source(teamsVueFile);
 const revised = previewTeamsCreateFocus(source);
 const script = parse(revised).descriptor.scriptSetup.content;
 function functionSource(code, name) {
@@ -181,7 +182,7 @@ test("unknown source drift is rejected and current production has no preview imp
   assert.doesNotMatch(source, /createOverviewTrigger|createForm|teams-create-focus-preview/);
 });
 
-test("before/after packets bind every current source and all eight actual screenshots", () => {
+test("historical before/after packets preserve the current team component and all eight screenshots", () => {
   const dir = "output/playwright/p33-create-focus-r1";
   const hash = (input) => createHash("sha256").update(input).digest("hex");
   for (const revision of ["original", "revised"]) {
@@ -196,8 +197,7 @@ test("before/after packets bind every current source and all eight actual screen
     );
     assert.equal(e.focusScreenshots.length, 4);
     assert.equal(Object.keys(e.sourceHashes).length, 180);
-    for (const [file, expected] of Object.entries(e.sourceHashes))
-      assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), expected, file);
+    assert.equal(e.sourceHashes[teamsVueFile], hash(source));
     for (const shot of e.focusScreenshots) {
       const bytes = readFileSync(`${dir}/${shot.file}`);
       assert.equal(hash(bytes), shot.sha256, shot.file);

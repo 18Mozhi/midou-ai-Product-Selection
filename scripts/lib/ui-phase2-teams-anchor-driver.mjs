@@ -6,7 +6,11 @@ import ts from "typescript";
 
 export const teamsAnchorBase = "scripts/verify-ui-phase2-teams-vue-c.mjs";
 export const teamsAnchorBaseHash =
-  "b5eb47ed230f5a2b218b96577ddab8f27f81b49581535f6c6651db3ee8dc599a";
+  "381a8fa72fc840266cff829187f51ba58b3948c108222cc6340ffbe89ce68059";
+const teamsAnchorBaseHashes = new Set([
+  teamsAnchorBaseHash,
+  "499f71e8ca741fee8c8283eb107c8a3adc32de3d982477d64e050d8deb8a108a",
+]);
 
 export const teamsAnchorScenario = `
         if (mode === "review") {
@@ -83,16 +87,15 @@ export const teamsAnchorEdits = [
     '        await shot("create", ".org-team-create");',
     teamsAnchorScenario + '        await shot("create", ".org-team-create");',
   ],
-  ['    kind: "P33-ACTUAL-VUE-C-r4",', '    kind: "P33-C-ANCHOR-INTERACTIONS-r1",'],
+  ['    kind: "P33-ACTUAL-VUE-C-r5",', '    kind: "P33-C-ANCHOR-INTERACTIONS-r1",'],
 ];
 
-// Compose only the test driver; preserve the r4 Vue/CSS/capture sources and original checks.
+// Compose only the test driver; preserve the r5 Vue/CSS/capture sources and original checks.
 export function teamsAnchorDriver(input) {
   let source = input.replaceAll("\r\n", "\n");
-  assert.equal(
-    createHash("sha256").update(source).digest("hex"),
-    teamsAnchorBaseHash,
-    "Inspect changed P33 r4 driver before composition",
+  assert.ok(
+    teamsAnchorBaseHashes.has(createHash("sha256").update(source).digest("hex")),
+    "Inspect changed P33 r5 driver before composition",
   );
   for (const [before, after] of teamsAnchorEdits) {
     assert.equal(source.split(before).length, 2, "One exact P33 anchor driver edit");

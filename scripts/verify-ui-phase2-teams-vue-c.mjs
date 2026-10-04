@@ -21,7 +21,7 @@ assert.ok(
 );
 const capture = process.argv.includes("--capture"),
   smoke = process.argv.includes("--smoke");
-const output = "output/playwright/p33-teams-vue-c-r4";
+const output = "output/playwright/p33-teams-vue-c-r5";
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const shellFile = "apps/web/src/components/NavigationShell.vue";
@@ -410,7 +410,7 @@ try {
   await browser.close();
   browser = null;
   const evidence = {
-    kind: "P33-ACTUAL-VUE-C-r4",
+    kind: "P33-ACTUAL-VUE-C-r5",
     reviewOnly: true,
     approval: "pending-user-review",
     runs,

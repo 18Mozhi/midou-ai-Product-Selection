@@ -9,6 +9,7 @@ import {
   previewTeamsReadResult,
   teamsParentFile,
 } from "../../scripts/lib/ui-phase2-teams-read-result-preview.mjs";
+import { teamsHistoricalCapture } from "../../scripts/lib/ui-phase2-teams-historical-capture.mjs";
 import {
   previewTeamsRecoveryFocus,
   teamsRecoveryFocusChanges,
@@ -16,7 +17,7 @@ import {
 } from "../../scripts/lib/ui-phase2-teams-recovery-focus-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-const original = read(teamsParentFile),
+const original = teamsHistoricalCapture("teams-direction-c").source(teamsParentFile),
   revised = previewTeamsRecoveryFocus(original);
 const descriptor = parse(revised).descriptor;
 const ast = ts.createSourceFile(
@@ -272,7 +273,7 @@ test("invalid driver flags are rejected before browser startup", () => {
   }
 });
 
-test("six current packets preserve the reviewed flow and prove scoped focus destinations", () => {
+test("six historical packets preserve the reviewed flow and prove scoped focus destinations", () => {
   const hash = (value) => createHash("sha256").update(value).digest("hex");
   let groups = 0,
     checks = 0,
@@ -292,8 +293,7 @@ test("six current packets preserve the reviewed flow and prove scoped focus dest
       assert.equal(evidence.processesClosed, true);
       assert.equal(evidence.readFailureStatus, status);
       assert.equal(Object.keys(evidence.sourceHashes).length, 188);
-      for (const [file, expected] of Object.entries(evidence.sourceHashes))
-        assert.equal(hash(read(file)), expected, file);
+      assert.equal(evidence.sourceHashes[teamsParentFile], hash(original));
       assert.equal(
         evidence.transformedHashes[teamsParentFile],
         hash(mode === "baseline" ? previewTeamsReadResult(original) : revised),

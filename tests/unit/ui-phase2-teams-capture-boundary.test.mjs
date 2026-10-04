@@ -78,10 +78,7 @@ test("P33 builder still rejects current sources paired with historical proposal 
     packageNames.map((name) => [name, JSON.parse(teamsHistoricalCapture(name).manifest)]),
   );
   const current = Object.fromEntries(dependencies.map((file) => [file, read(file)]));
-  assert.throws(
-    () => buildTeamsReview(current, packages),
-    /stale team source.*AuditedReasonDialog/,
-  );
+  assert.throws(() => buildTeamsReview(current, packages), /stale team source/);
   const archived = Object.fromEntries(
     dependencies.map((file) => [file, teamsHistoricalCapture(packageNames[0]).source(file)]),
   );

@@ -13,7 +13,7 @@ import {
 const base = readFileSync(teamsAnchorBase, "utf8").replaceAll("\r\n", "\n");
 const composed = teamsAnchorDriver(base);
 
-test("anchor checks compose without changing original r4 checks or fixture wiring", () => {
+test("anchor checks compose without changing original r5 checks or fixture wiring", () => {
   let changed = base;
   for (const [before, after] of teamsAnchorEdits) changed = changed.replace(before, after);
   for (const [before, after] of [...teamsAnchorEdits].reverse()) {
