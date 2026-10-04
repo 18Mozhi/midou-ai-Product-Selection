@@ -10,6 +10,18 @@ export function userPagePreview(original, surface) {
     assert.ok(original.includes('class="admin-directory-heading"'), "Current P44 heading drift");
     return original;
   }
+  if (surface === "parent" && original.includes("<PlatformAccountDirectoryWorkspace")) {
+    assert.ok(
+      original.includes('class="account-metrics permission-metrics"'),
+      "Current P43 permission metrics drift",
+    );
+    assert.equal(
+      original.split("<PlatformAccountDirectoryWorkspace").length,
+      2,
+      "Current P43 directory workspace anchor drift",
+    );
+    return original;
+  }
   if (surface === "detail" && original.includes('class="user-detail-shell"')) {
     assert.ok(
       original.includes('data-user-detail-section="memberships"'),

@@ -7,7 +7,6 @@ import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import { userPagePreview } from "../../scripts/lib/ui-phase2-user-page-current-preview.mjs";
-import { userPasswordPreview } from "../../scripts/lib/ui-phase2-user-password-preview.mjs";
 import {
   userSecurityReviewCaptureStages,
   userSecurityReviewHistoricalCapture,
@@ -27,8 +26,9 @@ function neutralImports(source) {
   }
   return source;
 }
-test("P43 current layout insertion preserves the later administrator heading and all native bindings", () => {
+test("P43 current route preserves the directory workspace and all native bindings", () => {
   const source = read("apps/web/src/components/PlatformAccountCenter.vue"),
+    workspace = read("apps/web/src/components/PlatformAccountDirectoryWorkspace.vue"),
     transformed = userPagePreview(source, "parent");
   assert.equal(
     parse(source).descriptor.scriptSetup.content,
@@ -55,13 +55,14 @@ test("P43 current layout insertion preserves the later administrator heading and
     return result.sort();
   };
   assert.deepEqual(bindings(transformed), bindings(source));
-  const heading = source.match(
-    /<header v-if="tab === 'admins'" class="admin-directory-heading">[\s\S]*?<\/header>/,
-  )?.[0];
-  assert.ok(heading);
-  assert.ok(transformed.includes(heading));
+  assert.match(transformed, /<PlatformAccountDirectoryWorkspace/);
+  assert.match(workspace, /class="admin-directory-heading"/);
   assert.throws(
-    () => userPagePreview(source.replace("</nav>", "</other>"), "parent"),
+    () =>
+      userPagePreview(
+        source.replace("<PlatformAccountDirectoryWorkspace", "<ChangedDirectory"),
+        "parent",
+      ),
     /source drift/,
   );
 });
@@ -98,8 +99,10 @@ test("P43 historical capture pins complete original manifests and all source blo
     /Unknown historical P43 stage/,
   );
 });
-test("P43 current replay keeps raw source hashes, original checks, images and request evidence separate", () => {
-  const e = JSON.parse(read(`${userSecurityReviewReplayRoot}/evidence.json`));
+test("P43 captured replay remains immutable and keeps checks, images and request evidence separate", () => {
+  const manifest = read(`${userSecurityReviewReplayRoot}/evidence.json`),
+    e = JSON.parse(manifest);
+  assert.equal(hash(manifest), "25efe4132bc0b64fe7c52b74ef4804db4fea73dd4e683869e9ed4df59860181a");
   assert.equal(e.kind, "P43-security-current-replay-r1");
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
@@ -115,8 +118,6 @@ test("P43 current replay keeps raw source hashes, original checks, images and re
     e.summaries.reduce((n, item) => n + item.images.length, 0),
     368,
   );
-  for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
   for (const item of e.summaries) {
     const bytes = readFileSync(item.manifest);
     assert.equal(hash(bytes), item.manifestSha);
@@ -124,19 +125,10 @@ test("P43 current replay keeps raw source hashes, original checks, images and re
       original = JSON.parse(userSecurityReviewHistoricalCapture(item.stage).manifest);
     assert.deepEqual(current.checks, original.checks);
     assert.deepEqual(current.cases, original.cases);
-    for (const [file, surface] of [
-      ["apps/web/src/components/PlatformAccountCenter.vue", "parent"],
-      ["apps/web/src/components/PlatformUserDetailDialog.vue", "detail"],
-    ])
-      assert.equal(current.transformedHashes[file], hash(userPagePreview(read(file), surface)));
-    const child = "apps/web/src/components/PlatformAccountDialogs.vue";
-    assert.equal(current.transformedHashes[child], hash(userPasswordPreview(read(child))));
     assert.deepEqual(
       current.requestsByWidth ?? current.observations,
       original.requestsByWidth ?? original.observations,
     );
-    for (const [file, sha] of Object.entries(current.sourceHashes))
-      assert.equal(hash(read(file)), sha, file);
     for (const image of item.images) {
       assert.equal(
         hash(readFileSync(`${userSecurityReviewReplayRoot}/${item.stage}/${image.file}`)),

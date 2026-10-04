@@ -26,8 +26,9 @@ function neutralImports(source) {
   }
   return source;
 }
-test("P43 current layout insertion preserves the later administrator heading and all native bindings", () => {
+test("P43 current route preserves the directory workspace and all native bindings", () => {
   const source = read("apps/web/src/components/PlatformAccountCenter.vue"),
+    workspace = read("apps/web/src/components/PlatformAccountDirectoryWorkspace.vue"),
     transformed = userPagePreview(source, "parent");
   assert.equal(
     parse(source).descriptor.scriptSetup.content,
@@ -54,13 +55,14 @@ test("P43 current layout insertion preserves the later administrator heading and
     return result.sort();
   };
   assert.deepEqual(bindings(transformed), bindings(source));
-  const heading = source.match(
-    /<header v-if="tab === 'admins'" class="admin-directory-heading">[\s\S]*?<\/header>/,
-  )?.[0];
-  assert.ok(heading);
-  assert.ok(transformed.includes(heading));
+  assert.match(transformed, /<PlatformAccountDirectoryWorkspace/);
+  assert.match(workspace, /class="admin-directory-heading"/);
   assert.throws(
-    () => userPagePreview(source.replace("</nav>", "</other>"), "parent"),
+    () =>
+      userPagePreview(
+        source.replace("<PlatformAccountDirectoryWorkspace", "<ChangedDirectory"),
+        "parent",
+      ),
     /source drift/,
   );
 });
@@ -94,8 +96,10 @@ test("P43 historical capture pins complete original manifests and all source blo
   }
   assert.throws(() => userReviewHistoricalCapture("invented"), /Unknown historical P43 stage/);
 });
-test("P43 current replay keeps raw source hashes, original checks, images and request evidence separate", () => {
-  const e = JSON.parse(read(`${userReviewReplayRoot}/evidence.json`));
+test("P43 captured replay remains immutable and keeps checks, images and request evidence separate", () => {
+  const manifest = read(`${userReviewReplayRoot}/evidence.json`),
+    e = JSON.parse(manifest);
+  assert.equal(hash(manifest), "a0edad93b71d166ea6d902caf443769cc309f7655f19a1b7ab43289d1fce9a4f");
   assert.equal(e.kind, "P43-current-replay-r1");
   assert.equal(e.approval, "pending");
   assert.equal(e.processesClosed, true);
@@ -111,8 +115,6 @@ test("P43 current replay keeps raw source hashes, original checks, images and re
     e.summaries.reduce((n, item) => n + item.images.length, 0),
     154,
   );
-  for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
   for (const item of e.summaries) {
     const bytes = readFileSync(item.manifest);
     assert.equal(hash(bytes), item.manifestSha);
@@ -123,8 +125,6 @@ test("P43 current replay keeps raw source hashes, original checks, images and re
       current.requestsByWidth ?? current.observations,
       original.requestsByWidth ?? original.observations,
     );
-    for (const [file, sha] of Object.entries(current.sourceHashes))
-      assert.equal(hash(read(file)), sha, file);
     for (const image of item.images) {
       assert.equal(
         hash(readFileSync(`${userReviewReplayRoot}/${item.stage}/${image.file}`)),

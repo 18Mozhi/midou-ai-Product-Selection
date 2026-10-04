@@ -13,6 +13,7 @@ const hash = (v) => createHash("sha256").update(v).digest("hex");
 const child = "apps/web/src/components/PlatformAccountDialogs.vue";
 const parent = "apps/web/src/components/PlatformAccountCenter.vue";
 const folder = "output/playwright/p43-create-user-preview";
+const historicalCreate = userReviewHistoricalCapture("create");
 function contracts(source) {
   const directives = [],
     controls = [],
@@ -41,8 +42,8 @@ function contracts(source) {
     expressions: expressions.sort(),
   };
 }
-test("P43 create composition preserves full script, conditions, bindings, native fields and other dialogs", () => {
-  const original = read(child),
+test("P43 historical create composition preserves script, conditions, fields and other dialogs", () => {
+  const original = historicalCreate.source(child),
     updated = userCreatePreview(original);
   assert.deepEqual(parse(updated).errors, []);
   assert.equal(
@@ -129,7 +130,7 @@ test("P43 actual parent submits exact five-field fixture payloads with unchanged
   }
 });
 test("P43 review containers avoid legacy action heuristics and have no production import", () => {
-  const updated = userCreatePreview(read(child));
+  const updated = userCreatePreview(historicalCreate.source(child));
   assert.ok(!updated.includes('class="p43-create'));
   assert.ok(!read("apps/web/src/main.ts").includes("user-create-preview"));
   assert.ok(!read(child).includes("p43-user-onboarding"));

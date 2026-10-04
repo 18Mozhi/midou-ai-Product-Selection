@@ -7,7 +7,7 @@ export const sharedReviewRevisions = Object.freeze({
   "apps/web/src/components/OrganizationAdminCenter.vue": {
     baseline: "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b",
     captured: "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-    current: "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+    current: "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
   },
   "apps/web/src/components/AuditedReasonDialog.vue": {
     baseline: "4a6368ef1178908688cd6519c5cafafb25c1afcb",

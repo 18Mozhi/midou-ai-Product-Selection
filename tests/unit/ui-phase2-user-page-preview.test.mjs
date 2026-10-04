@@ -59,7 +59,10 @@ for (const [file, surface] of [
 test("P43 transformation fails closed on mismatched source and unknown surface", () => {
   assert.throws(() =>
     currentUserPagePreview(
-      read(parent).replaceAll('class="account-metrics"', 'class="unexpected"'),
+      read(parent).replaceAll(
+        'class="account-metrics permission-metrics"',
+        'class="unexpected permission-metrics"',
+      ),
       "parent",
     ),
   );
