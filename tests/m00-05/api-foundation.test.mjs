@@ -165,10 +165,8 @@ test("M00-05 production readiness probe runs on the fixed BaoTa production node"
   );
   assert.match(probe, /SCOUTOPS_API_LIVE_TARGET/);
   assert.match(probe, /verify-live-baota\.py.*api/s);
-  assert.match(
-    runner,
-    /probe not in \{"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", \*m03_probes\}/,
-  );
+  assert.match(runner, /runtime_probes\s*=\s*m03_probes\s*\|\s*m04_probes/);
+  assert.match(runner, /"opportunities"[\s\S]*"scoring"[\s\S]*"ai-analysis"/);
   assert.match(runner, /config\/product_scout\.env/);
   assert.match(runner, /schema_preflight_missing/);
   assert.match(runner, /information_schema\.tables/);
