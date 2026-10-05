@@ -449,6 +449,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "tests/e2e/m04-01-trends.spec.ts",
     "scripts/verify-trends-live.mjs",
     "scripts/verify-live-baota.py",
+    "verification/modules/M04-01.json",
     "new-product-enterprise-blueprint.md",
   ];
   const values = await Promise.all(paths.map((path) => readFile(path, "utf8"))),
@@ -481,6 +482,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       e2e,
       live,
       liveRunner,
+      moduleRegistry,
       blueprint,
     ] = values;
   const projectionSurface = `${calculation}\n${persistence}\n${alerts}\n${worker}`;
@@ -532,6 +534,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(live, /verification_fixture: true/);
   assert.match(live, /information_schema\.tables/);
   assert.match(liveRunner, /"trends"/);
+  assert.match(moduleRegistry, /python scripts\/verify-live-baota\.py trends/);
   assert.doesNotMatch(live, /CREATE TABLE|readFile\(/);
   assert.doesNotMatch(
     live,

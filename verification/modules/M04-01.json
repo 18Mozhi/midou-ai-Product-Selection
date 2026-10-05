@@ -77,7 +77,7 @@
     "npm run build",
     "node --test tests/m04-01/trends.test.mjs",
     "node --test tests/m03-06/evidence-data-quality.test.mjs",
-    "node scripts/verify-trends-live.mjs",
+    "python scripts/verify-live-baota.py trends",
     "npx playwright test tests/e2e/m04-01-trends.spec.ts",
     "npm run verify:docs"
   ]
