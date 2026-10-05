@@ -532,6 +532,63 @@
   float: none;
   overflow-wrap: anywhere;
 }
+.org-admin-center--profile-review > .org-profile-receipt {
+  margin-top: 14px;
+  padding: 20px 24px;
+  border: 1px solid var(--oa-section);
+  border-left: 4px solid var(--oa-blue);
+  border-radius: 0;
+  color: var(--oa-ink);
+  background: var(--oa-white);
+  font-family: var(--so-font-ui, "Microsoft YaHei", sans-serif);
+}
+.org-profile-receipt h3 {
+  margin: 6px 0 10px;
+  font-size: 20px;
+  line-height: 1.45;
+}
+.org-profile-receipt p {
+  margin: 0;
+  line-height: 1.65;
+}
+.org-profile-receipt .org-profile-receipt-kicker {
+  color: var(--oa-blue);
+  font-size: 13px;
+  font-weight: 700;
+}
+.org-profile-receipt details {
+  margin-top: 14px;
+  border-top: 1px solid var(--oa-section);
+}
+.org-profile-receipt summary {
+  min-height: 44px;
+  padding: 10px 0;
+  box-sizing: border-box;
+  cursor: pointer;
+}
+.org-profile-receipt summary:focus-visible {
+  outline: 2px solid var(--oa-focus);
+  outline-offset: 3px;
+}
+.org-profile-receipt dl {
+  display: grid;
+  gap: 14px;
+  margin: 8px 0 0;
+}
+.org-profile-receipt dl > div {
+  min-width: 0;
+}
+.org-profile-receipt dt {
+  color: var(--oa-muted);
+  font-size: 13px;
+}
+.org-profile-receipt dd {
+  margin: 4px 0 0;
+  overflow-wrap: anywhere;
+}
+.org-profile-receipt code {
+  font-size: 13px;
+}
 .org-admin-metrics {
   margin-top: 16px;
   display: grid;

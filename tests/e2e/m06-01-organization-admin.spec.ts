@@ -575,8 +575,71 @@ test("organization overview keeps facts visible during refresh and retains audit
 
   await page.getByLabel("变更原因").fill("验证成功反馈");
   await page.getByRole("button", { name: "保存并审计" }).click();
-  await expect(page.getByRole("status")).toContainText("操作已完成并写入审计");
-  await expect(page.getByRole("status")).toContainText("m06-01-e2e");
+  const receipt = page.locator(".org-profile-receipt");
+  await expect(receipt).toHaveAttribute("data-phase", "ready");
+  await expect(receipt).toContainText("资料已保存，页面已更新");
+  await expect(receipt.locator("code").first()).toHaveText("m06-01-e2e");
+  await expect(page.locator('.org-admin-notice[data-kind="success"]')).toHaveCount(0);
+});
+
+test("organization profile reports accepted save and completed reread separately", async ({
+  page,
+}) => {
+  await setup(page);
+  let patchRequests = 0,
+    releaseRead: () => void = () => {};
+  const readGate = new Promise<void>((resolve) => {
+    releaseRead = resolve;
+  });
+  await page.route("**/api/v1/org/admin/profile", async (route) => {
+    if (route.request().method() === "PATCH") {
+      patchRequests += 1;
+      await route.fulfill({
+        json: {
+          data: { ...profile, name: "保存后的组织", version: 4 },
+          request_id: "m06-01-profile-write-receipt",
+          trace_id: "m06-01-profile-write-receipt",
+        },
+      });
+      return;
+    }
+    if (patchRequests > 0) {
+      await readGate;
+      await route.fulfill({
+        json: {
+          data: { ...profile, name: "保存后的组织", version: 4 },
+          request_id: "m06-01-profile-read-receipt",
+          trace_id: "m06-01-profile-read-receipt",
+        },
+      });
+      return;
+    }
+    await route.fallback();
+  });
+  await page.goto("/org-admin");
+  await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+  await page.getByLabel("名称").fill("保存后的组织");
+  await page.getByLabel("变更原因").fill("验证写入与重读反馈分离");
+  await page.getByRole("button", { name: "保存并审计" }).click();
+
+  const receipt = page.locator(".org-profile-receipt");
+  await expect(receipt).toHaveAttribute("data-phase", "pending");
+  await expect(receipt).toContainText("资料已保存，正在更新页面");
+  await expect(receipt).toContainText("m06-01-profile-write-receipt");
+  await expect(receipt).not.toContainText("m06-01-profile-read-receipt");
+  await expect(page.locator(".org-admin-profile h3")).toHaveText(profile.name);
+  await expect(page.getByRole("button", { name: "正在保存…" })).toBeDisabled();
+
+  releaseRead();
+  await expect(receipt).toHaveAttribute("data-phase", "ready");
+  await expect(receipt).toContainText("资料已保存，页面已更新");
+  await expect(receipt).toContainText("m06-01-profile-write-receipt");
+  await expect(receipt).toContainText("m06-01-profile-read-receipt");
+  await expect(page.locator(".org-admin-profile h3")).toHaveText("保存后的组织");
+  await receipt.locator("summary").focus();
+  await page.keyboard.press("Enter");
+  await expect(receipt.locator("details")).toHaveAttribute("open", "");
+  expect(patchRequests).toBe(1);
 });
 
 test("organization profile keeps an accepted save distinct from a failed refresh until GET retry", async ({
@@ -586,7 +649,11 @@ test("organization profile keeps an accepted save distinct from a failed refresh
   let profileReads = 0,
     patchRequests = 0,
     failedPostWriteRead = false,
-    postWriteReads = 0;
+    postWriteReads = 0,
+    releaseManualRead: () => void = () => {};
+  const manualReadGate = new Promise<void>((resolve) => {
+    releaseManualRead = resolve;
+  });
   const submittedBodies: Array<Record<string, unknown>> = [];
   await page.route("**/api/v1/org/admin/profile", async (route) => {
     const request = route.request();
@@ -623,7 +690,14 @@ test("organization profile keeps an accepted save distinct from a failed refresh
       return;
     }
     if (patchRequests > 0) {
-      await route.fulfill({ json: env({ ...profile, name: "更新后的组织", version: 4 }) });
+      await manualReadGate;
+      await route.fulfill({
+        json: {
+          data: { ...profile, name: "更新后的组织", version: 4 },
+          request_id: "m06-01-profile-read-recovered",
+          trace_id: "m06-01-profile-read-recovered",
+        },
+      });
       return;
     }
     await route.fallback();
@@ -638,6 +712,9 @@ test("organization profile keeps an accepted save distinct from a failed refresh
   await expect.poll(() => failedPostWriteRead).toBe(true);
 
   const feedback = page.getByRole("alert");
+  const receipt = page.locator(".org-profile-receipt");
+  await expect(receipt).toHaveAttribute("data-phase", "failed");
+  await expect(receipt).toContainText("资料已保存，页面暂未更新");
   await expect(feedback).toContainText("组织资料已保存并写入审计");
   await expect(feedback).toContainText("当前资料显示可能是保存前快照");
   await expect(feedback).toContainText("m06-01-profile-write-accepted");
@@ -654,7 +731,11 @@ test("organization profile keeps an accepted save distinct from a failed refresh
   ]);
 
   await page.getByRole("button", { name: "刷新数据" }).click();
+  await expect(receipt).toHaveAttribute("data-phase", "pending");
+  releaseManualRead();
   await expect(page.locator(".org-admin-profile h3")).toHaveText("更新后的组织");
+  await expect(receipt).toHaveAttribute("data-phase", "ready");
+  await expect(receipt).toContainText("m06-01-profile-read-recovered");
   await expect(page.getByRole("alert")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "保存并审计" })).toBeEnabled();
   expect(postWriteReads).toBe(4);

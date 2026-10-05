@@ -45,6 +45,11 @@ type OrganizationAuditFilters = {
   occurred_from: string;
   occurred_to: string;
 };
+type ProfileSaveReceipt = {
+  phase: "pending" | "ready" | "failed";
+  writeRequestId: string;
+  readRequestId: string;
+};
 const initialAuditFilters = (): OrganizationAuditFilters => {
   const query = new URLSearchParams(window.location.search);
   return {
@@ -72,6 +77,7 @@ const props = defineProps<{
   requestId = ref(""),
   writeReadFailure = ref<{ writeRequestId: string; readRequestId: string } | null>(null),
   profileSaveReadFailure = ref<{ writeRequestId: string; readRequestId: string } | null>(null),
+  profileSaveReceipt = ref<ProfileSaveReceipt | null>(null),
   busy = ref(false),
   refreshing = ref(false),
   teamRecoveryRefreshing = ref(false),
@@ -105,7 +111,13 @@ const props = defineProps<{
 let loadSequence = 0;
 let teamRecoverySequence = 0;
 let tokenSecretGeneration = 0;
+let profileReceiptGeneration = 0;
 let surfaceActive = true;
+function clearProfileReceipt() {
+  profileReceiptGeneration += 1;
+  profileSaveReceipt.value = null;
+  profileSaveReadFailure.value = null;
+}
 const {
   request: auditedReasonRequest,
   open: auditedReasonOpen,
@@ -316,12 +328,21 @@ async function load(
   teamRecoveryRefreshing.value = false;
   const sequence = ++loadSequence,
     currentView = view.value,
+    recoverProfileReceipt =
+      currentView === "summary" && Boolean(profileSaveReadFailure.value) && !options.preserveNotice,
     background = Boolean(
       options.background && data.value && (currentView === "audit" || summary.value),
     );
   refreshing.value = background;
   if (!background) state.value = "loading";
   if (!options.preserveNotice) {
+    if (recoverProfileReceipt && profileSaveReceipt.value) {
+      profileSaveReceipt.value = {
+        ...profileSaveReceipt.value,
+        phase: "pending",
+        readRequestId: "",
+      };
+    } else clearProfileReceipt();
     notice.value = "";
     noticeKind.value = "info";
   }
@@ -344,6 +365,13 @@ async function load(
         reason: "",
       };
       profileSaveReadFailure.value = null;
+      if (profileSaveReceipt.value?.phase === "pending") {
+        profileSaveReceipt.value = {
+          ...profileSaveReceipt.value,
+          phase: "ready",
+          readRequestId: viewResponse.requestId,
+        };
+      }
     }
     writeReadFailure.value = null;
     if (currentView === "members") {
@@ -392,6 +420,13 @@ async function load(
       };
       noticeKind.value = "error";
       notice.value = `组织资料已保存并写入审计，但最新资料仍未能读取；当前资料显示可能是保存前快照。${failure?.actionHint ?? "请稍后点击“刷新数据”重试。"}不要再次提交。`;
+      if (profileSaveReceipt.value) {
+        profileSaveReceipt.value = {
+          ...profileSaveReceipt.value,
+          phase: "failed",
+          readRequestId: failure?.requestId ?? "",
+        };
+      }
     }
     if (writeReadFailure.value) {
       writeReadFailure.value = {
@@ -479,18 +514,30 @@ async function submit(
   busy.value = true;
   writeReadFailure.value = null;
   const isProfileSave = view.value === "summary" && path === "/org/admin/profile";
-  if (isProfileSave) profileSaveReadFailure.value = null;
+  if (isProfileSave) clearProfileReceipt();
+  const receiptGeneration = profileReceiptGeneration,
+    ownsProfileWrite = () => surfaceActive && receiptGeneration === profileReceiptGeneration;
   const secretGeneration = tokenSecretGeneration;
   try {
     const response = await api(path, { method, body: JSON.stringify(value) }),
       result = response.data,
       writeRequestId = response.request_id;
+    if (isProfileSave && !ownsProfileWrite()) return true;
     if (surfaceActive && view.value === "tokens" && secretGeneration === tokenSecretGeneration)
       secret.value = result?.secret ?? "";
     if (!options.preserveForm) form.value = { reason: "" };
+    if (isProfileSave) {
+      notice.value = "";
+      noticeKind.value = "info";
+      profileSaveReceipt.value = {
+        phase: "pending",
+        writeRequestId,
+        readRequestId: "",
+      };
+    }
     let readFailed = false,
       readRequestId = "";
-    await load({
+    const readSucceeded = await load({
       background: true,
       preserveNotice: true,
       onReadFailure: (error) => {
@@ -506,6 +553,13 @@ async function submit(
             writeRequestId,
             readRequestId: failure?.requestId ?? "",
           };
+          if (profileSaveReceipt.value) {
+            profileSaveReceipt.value = {
+              ...profileSaveReceipt.value,
+              phase: "failed",
+              readRequestId: failure?.requestId ?? "",
+            };
+          }
           noticeKind.value = "error";
           notice.value = `组织资料已保存并写入审计，但最新资料仍未能读取；当前资料显示可能是保存前快照。${failure?.actionHint ?? "请点击“刷新数据”核对。"}不要再次提交。`;
           return;
@@ -516,6 +570,17 @@ async function submit(
         };
       },
     });
+    if (isProfileSave) {
+      if (!ownsProfileWrite()) return true;
+      if (readFailed) return true;
+      if (readSucceeded === undefined) {
+        clearProfileReceipt();
+        return true;
+      }
+      notice.value = "";
+      noticeKind.value = "info";
+      return true;
+    }
     if (readFailed) {
       if (!options.onRefreshFailure && !isProfileSave) {
         noticeKind.value = "error";
@@ -530,6 +595,10 @@ async function submit(
     requestId.value = writeRequestId;
     return true;
   } catch (error) {
+    if (isProfileSave && !ownsProfileWrite()) {
+      rethrowUnexpectedError(error);
+      return false;
+    }
     applyFailure(
       error,
       error instanceof ApiClientError && ["expired", "forbidden"].includes(error.kind),
@@ -933,6 +1002,7 @@ function dismissTokenSecret() {
 watch(
   [() => props.routePath, () => props.organizationId],
   () => {
+    clearProfileReceipt();
     teamRecoverySequence += 1;
     teamRecoveryRefreshing.value = false;
     dismissTokenSecret();
@@ -944,12 +1014,14 @@ onActivated(() => {
 });
 onDeactivated(() => {
   surfaceActive = false;
+  clearProfileReceipt();
   teamRecoverySequence += 1;
   teamRecoveryRefreshing.value = false;
   dismissTokenSecret();
 });
 onBeforeUnmount(() => {
   surfaceActive = false;
+  clearProfileReceipt();
   teamRecoverySequence += 1;
   teamRecoveryRefreshing.value = false;
   dismissTokenSecret();
@@ -1191,6 +1263,53 @@ onMounted(() => void load());
         </button>
       </div>
     </header>
+    <section
+      v-if="view === 'summary' && profileSaveReceipt"
+      class="org-profile-receipt"
+      :data-phase="profileSaveReceipt.phase"
+      aria-labelledby="org-profile-receipt-title"
+    >
+      <div role="status" aria-live="polite">
+        <p class="org-profile-receipt-kicker">本次保存</p>
+        <h3 id="org-profile-receipt-title">
+          {{
+            profileSaveReceipt.phase === "pending"
+              ? "资料已保存，正在更新页面"
+              : profileSaveReceipt.phase === "ready"
+                ? "资料已保存，页面已更新"
+                : "资料已保存，页面暂未更新"
+          }}
+        </h3>
+        <p>
+          {{
+            profileSaveReceipt.phase === "pending"
+              ? "正在重新读取组织资料，请稍候。"
+              : profileSaveReceipt.phase === "ready"
+                ? "页面已显示本次重新读取的资料。"
+                : state === "ready"
+                  ? "下方只读资料仍来自上次读取。可以使用上方“刷新数据”重新读取；无需重复保存。"
+                  : "当前暂时无法读取组织资料。请根据下方提示处理后重新加载；无需重复保存。"
+          }}
+        </p>
+      </div>
+      <details>
+        <summary>保存与读取追踪</summary>
+        <dl>
+          <div>
+            <dt>保存请求</dt>
+            <dd>
+              <code>{{ profileSaveReceipt.writeRequestId }}</code>
+            </dd>
+          </div>
+          <div v-if="profileSaveReceipt.readRequestId">
+            <dt>页面读取</dt>
+            <dd>
+              <code>{{ profileSaveReceipt.readRequestId }}</code>
+            </dd>
+          </div>
+        </dl>
+      </details>
+    </section>
     <div
       v-if="notice"
       class="org-admin-notice"
