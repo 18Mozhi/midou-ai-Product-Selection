@@ -93,6 +93,19 @@ test("M06-03.A03/A05/A09/A11/A16 reads audited real source and root-cause relati
     );
 });
 
+test("M06-03 production probe is routed through the fixed BaoTa verifier", async () => {
+  const [manifest, runner] = await Promise.all([
+    readFile("verification/modules/M06-03.json", "utf8"),
+    readFile("scripts/verify-live-baota.py", "utf8"),
+  ]);
+  assert.ok(
+    JSON.parse(manifest).commands.includes(
+      "python scripts/verify-live-baota.py collection-console",
+    ),
+  );
+  assert.match(runner, /m06_probes\s*=\s*\{[\s\S]*"collection-console"[\s\S]*\}/);
+});
+
 test("M06-03 repository applies one source and time scope to task facts without placeholder drift", async () => {
   const organizationId = "00000000-0000-4000-8000-000000000603";
   const workspaceId = "00000000-0000-4000-8000-000000000604";

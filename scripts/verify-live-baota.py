@@ -41,7 +41,12 @@ def main() -> int:
         "automation",
         "reports",
     }
-    m06_probes = {"organization-admin", "platform-accounts", "platform-dashboard"}
+    m06_probes = {
+        "organization-admin",
+        "platform-accounts",
+        "platform-dashboard",
+        "collection-console",
+    }
     runtime_probes = m03_probes | m04_probes | m05_probes | m06_probes
     if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", *runtime_probes}:
         raise SystemExit("unsupported BaoTa live probe")
