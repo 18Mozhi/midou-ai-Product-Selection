@@ -95,7 +95,7 @@ try {
   if (!googleSource) throw new Error("google_news_source_unavailable");
   const policyRows = googleSource.provisioned
       ? await pool.query(
-          "SELECT terms_review_status,terms_reference_url,terms_version,terms_expires_at FROM providers WHERE id=?",
+          "SELECT terms_review_status,terms_version,terms_expires_at FROM providers WHERE id=?",
           [googleSource.provisioned.id],
         )
       : [[]],
@@ -103,7 +103,6 @@ try {
     termsApproved = Boolean(
       policy &&
       policy.terms_review_status === "approved" &&
-      policy.terms_reference_url &&
       policy.terms_version &&
       policy.terms_expires_at &&
       new Date(policy.terms_expires_at) > now,
@@ -173,6 +172,11 @@ try {
       google_news_provisioned: Boolean(googleSource.provisioned),
       google_news_status: googleSource.provisioned?.status ?? "not_provisioned",
       google_policy: termsApproved ? "approved" : "owner_review_required",
+      google_terms_review_status: policy?.terms_review_status ?? "unavailable",
+      google_terms_version_present: Boolean(policy?.terms_version),
+      google_terms_expiry_future: Boolean(
+        policy?.terms_expires_at && new Date(policy.terms_expires_at) > now,
+      ),
       public_execution: publicExecutionAllowed ? "passed" : "skipped_policy_gate",
       google_news_endpoint: publicExecutionAllowed ? "reachable_xml" : "not_requested",
       google_news_transport: live?.transport ?? "not_requested",

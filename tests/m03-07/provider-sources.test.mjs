@@ -320,6 +320,10 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
   assert.doesNotMatch(runbook, /`product-scout-api` Node 项目|`product-scout-worker` Node 项目/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /news\.google\.com/);
+  assert.doesNotMatch(live, /terms_reference_url/);
+  assert.match(live, /google_terms_review_status:/);
+  assert.match(live, /google_terms_version_present:/);
+  assert.match(live, /google_terms_expiry_future:/);
   assert.match(live, /googleSource\.provisioned\?\.status === "enabled" && termsApproved/);
   assert.match(live, /public_execution:/);
   assert.match(live, /skipped_policy_gate/);
