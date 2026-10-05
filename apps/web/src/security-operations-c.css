@@ -1,7 +1,7 @@
 /* P59 C direction: investigation first, evidence second, metadata on demand. */
 @import "./design/security-operations-tokens.css";
 
-.role-shell:has(.security-ops--c) .role-page-title {
+#app .role-shell.role-shell--c:has(.security-ops--c) .role-page-title {
   display: none;
 }
 

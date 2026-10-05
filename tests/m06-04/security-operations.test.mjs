@@ -120,4 +120,9 @@ test("M06-04.A06/A07/A08/A10/A13/A17 contracts", async () => {
     assert.match(sources[1], new RegExp(copy));
   assert.match(sources[8], /platform-overview[\s\S]*platform:operate[\s\S]*platform:superadmin/);
   assert.match(sources[9], /landing_platform_security/);
+  const layout = await readFile("apps/web/src/security-operations-c.css", "utf8");
+  assert.match(
+    layout,
+    /#app\s+\.role-shell\.role-shell--c:has\(\.security-ops--c\)\s+\.role-page-title\s*\{\s*display:\s*none;/,
+  );
 });
