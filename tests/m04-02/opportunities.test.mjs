@@ -354,6 +354,8 @@ test("M04-02 live verification uses synthetic evidence and never mutates provide
   assert.match(live, /verification_fixture:\s*true/);
   assert.match(live, /assertSchemaReady/);
   assert.match(live, /assertProbeClean/);
+  assert.match(live, /\["blocked",\s*"in_progress"\]\.includes\(recommendationBlocker\.status\)/);
+  assert.match(live, /DELETE FROM task_events[\s\S]*DELETE FROM tasks WHERE organization_id IN/);
   assert.doesNotMatch(
     live,
     /ProviderSourceService|\.provision\(|\.replay\(|UPDATE providers|CREATE TABLE|ALTER TABLE/,

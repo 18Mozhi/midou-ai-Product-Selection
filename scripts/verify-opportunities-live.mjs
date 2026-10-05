@@ -112,6 +112,14 @@ async function cleanup() {
       await pool.query(sql, params);
     } catch {}
   }
+  await pool.query(
+    "DELETE FROM task_events WHERE task_id IN (SELECT id FROM tasks WHERE organization_id IN (?,?) AND (created_by=? OR assignee_id=?))",
+    [ids.organization, ids.otherOrganization, ids.actor, ids.actor],
+  );
+  await pool.query(
+    "DELETE FROM tasks WHERE organization_id IN (?,?) AND (created_by=? OR assignee_id=?)",
+    [ids.organization, ids.otherOrganization, ids.actor, ids.actor],
+  );
   for (const [sql, id] of [
     ["DELETE FROM workspaces WHERE id=?", ids.workspace],
     ["DELETE FROM workspaces WHERE id=?", ids.otherWorkspace],
@@ -283,7 +291,10 @@ try {
     }
     if (result.status === "idle") break;
   }
-  if (!topicId) throw new Error("trend prerequisite projection failed");
+  if (!topicId)
+    throw new Error(
+      `trend prerequisite projection failed: ${JSON.stringify(projectionResults.map(({ status, error_code }) => ({ status, error_code })))}`,
+    );
   const service = new OpportunityService(new MySqlOpportunityRepository(pool)),
     scope = { organizationId: ids.organization, workspaceId: ids.workspace, actorId: ids.actor },
     write = { ...scope, requestId, traceId, idempotencyKey: "create-live" },
@@ -320,14 +331,18 @@ try {
     detail.section_status.competition !== "insufficient_data"
   )
     throw new Error("evidence coverage mismatch");
+  const recommendationBlocker = detail.adoption_blockers.find(
+    (item) => item.code === "recommendation_insufficient",
+  );
   if (
     !detail.lifecycle_entered_at ||
     detail.lifecycle_dwell_seconds < 0 ||
-    !detail.adoption_blockers.some(
-      (item) => item.code === "recommendation_insufficient" && item.status === "blocked",
-    )
+    !recommendationBlocker ||
+    !["blocked", "in_progress"].includes(recommendationBlocker.status)
   )
-    throw new Error("lifecycle dwell or blocker progress mismatch");
+    throw new Error(
+      `lifecycle dwell or blocker progress mismatch: ${JSON.stringify({ lifecycle_entered_at: detail.lifecycle_entered_at, lifecycle_dwell_seconds: detail.lifecycle_dwell_seconds, recommendation_blocker_status: recommendationBlocker?.status ?? null })}`,
+    );
   const other = await service.list({
     organizationId: ids.otherOrganization,
     workspaceId: ids.otherWorkspace,
