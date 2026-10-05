@@ -109,6 +109,90 @@ test("rule scheduler queries the manual keyword crawler and completes all source
   );
 });
 
+test("automatic source scheduler writes one approved 16-source batch and advances its cursor", async () => {
+  const now = new Date("2026-08-19T10:00:00.000Z");
+  const statements = [];
+  const subqueries = [];
+  const events = [];
+  const outbox = [];
+  let scheduleUpdate = null;
+  const connection = {
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release: () => {},
+    query: async (sql, values = []) => {
+      statements.push(sql);
+      if (sql.startsWith("SELECT COUNT(*) count FROM collection_tasks"))
+        return [[{ count: 0 }], []];
+      if (sql.includes("SELECT r.* FROM trend_monitoring_rules r WHERE")) return [[], []];
+      if (sql.startsWith("SELECT COUNT(*) count FROM trend_monitoring_rules"))
+        return [[{ count: 0 }], []];
+      if (sql.includes("SELECT s.* FROM automatic_source_schedules"))
+        return [
+          [
+            {
+              id: "00000000-0000-4000-8000-000000004501",
+              organization_id: "00000000-0000-4000-8000-000000004502",
+              workspace_id: "00000000-0000-4000-8000-000000004503",
+              provider_offset: 0,
+            },
+          ],
+          [],
+        ];
+      if (sql.includes("SELECT id,code FROM providers"))
+        return [
+          Array.from({ length: 18 }, (_, index) => ({
+            id: `approved-provider-${index}`,
+            code: `source-${index}`,
+          })),
+          [],
+        ];
+      if (sql.startsWith("SELECT id FROM users WHERE id=?")) return [[{ id: values[0] }], []];
+      if (sql.includes("INSERT INTO collection_subqueries")) subqueries.push(values);
+      if (sql.includes("INSERT INTO collection_task_events")) events.push(values);
+      if (sql.includes("INSERT INTO collection_task_outbox")) outbox.push(values);
+      if (sql.startsWith("UPDATE automatic_source_schedules SET last_task_id="))
+        scheduleUpdate = values;
+      return [[], []];
+    },
+  };
+  const result = await new MySqlAutomaticSourceScheduler(
+    { getConnection: async () => connection },
+    16,
+    () => now,
+    {
+      systemActorId: "00000000-0000-4000-8000-000000004599",
+      tenantActiveTaskBudget: 2,
+      queueBacklogLimit: 1000,
+    },
+  ).processOnce();
+
+  assert.equal(result.status, "scheduled");
+  assert.equal(result.organizationId, "00000000-0000-4000-8000-000000004502");
+  assert.equal(result.workspaceId, "00000000-0000-4000-8000-000000004503");
+  assert.equal(result.sourceCount, 16);
+  assert.equal(subqueries.length, 16);
+  assert.ok(subqueries.every((values) => values[1] === result.taskId));
+  assert.equal(events.length, 1);
+  assert.equal(events[0][4], "hotspot.automatic.scheduled");
+  assert.deepEqual(JSON.parse(events[0][8]), { source_count: 16, provider_offset: 0 });
+  assert.equal(outbox.length, 1);
+  assert.equal(outbox[0][4], "hotspot.automatic.scheduled");
+  assert.ok(
+    statements.some(
+      (sql) =>
+        sql.includes("terms_review_status='approved'") &&
+        sql.includes("terms_reference_url IS NOT NULL") &&
+        sql.includes("terms_expires_at>NOW(3)"),
+    ),
+  );
+  assert.equal(scheduleUpdate[0], result.taskId);
+  assert.equal(scheduleUpdate[1], 16);
+  assert.equal(new Date(scheduleUpdate[3]).toISOString(), "2026-08-19T10:01:00.000Z");
+  assert.equal(scheduleUpdate[5], "00000000-0000-4000-8000-000000004501");
+});
+
 test("full automatic source scheduler skips persistence when no terms-approved provider is eligible", async () => {
   const now = new Date("2026-08-19T10:00:00.000Z");
   const statements = [];
