@@ -59,41 +59,51 @@ export const saveFeedbackReplacements = [
     '      : "empty";\n    return { ok: true, requestId: viewResponse.requestId };\n  } catch (error) {',
   ],
   [
-    "    lastReadFailureStatus.value = failure?.status ?? null;\n    options.onReadFailure?.(error);\n    rethrowUnexpectedError(error);",
-    "    lastReadFailureStatus.value = failure?.status ?? null;\n    options.onReadFailure?.(error);\n    rethrowUnexpectedError(error);\n    return { ok: false, requestId: requestId.value };",
+    "    options.onReadFailure?.(error);\n    rethrowUnexpectedError(error);\n    return false;",
+    "    options.onReadFailure?.(error);\n    rethrowUnexpectedError(error);\n    return { ok: false, requestId: requestId.value };",
   ],
   [
     "  const secretGeneration = tokenSecretGeneration;",
     `  const secretGeneration = tokenSecretGeneration;
-  const profileWrite = path === "/org/admin/profile" && method === "PATCH" && view.value === "summary";
+  const profileWrite = isProfileSave && method === "PATCH";
   if (profileWrite) clearProfileReceipt();
   const receiptGeneration = profileReceiptGeneration;
   const ownsProfileWrite = () => surfaceActive && receiptGeneration === profileReceiptGeneration;`,
   ],
   [
-    `    if (!options.preserveForm) form.value = { reason: "" };
-    await load({
-      background: true,
-      preserveNotice: true,
-      onReadFailure: (error) => options.onRefreshFailure?.(error, writeRequestId),
-    });`,
+    `    if (!options.preserveForm) form.value = { reason: "" };`,
     `    if (profileWrite && !ownsProfileWrite()) return true;
     if (!options.preserveForm) form.value = { reason: "" };
     if (profileWrite) {
       notice.value = "";
       profileSaveReceipt.value = { phase: "pending", writeId: writeRequestId, readId: "" };
-    }
-    const readOutcome = await load({
+    }`,
+  ],
+  [
+    `    await load({
       background: true,
       preserveNotice: true,
-      onReadFailure: (error) => options.onRefreshFailure?.(error, writeRequestId),
-    });
+      onReadFailure: (error) => {`,
+    `    const readOutcome = await load({
+      background: true,
+      preserveNotice: true,
+      onReadFailure: (error) => {`,
+  ],
+  [
+    `    });
+    if (readFailed) {`,
+    `    });
     if (profileWrite) {
       if (!ownsProfileWrite()) return true;
       if (!readOutcome) { clearProfileReceipt(); return true; }
-      profileSaveReceipt.value = { phase: readOutcome.ok ? "ready" : "failed", writeId: writeRequestId, readId: readOutcome.requestId };
+      profileSaveReceipt.value = {
+        phase: readOutcome.ok ? "ready" : "failed",
+        writeId: writeRequestId,
+        readId: readOutcome.requestId,
+      };
       return true;
-    }`,
+    }
+    if (readFailed) {`,
   ],
   [
     "    requestId.value = writeRequestId;\n    return true;\n  } catch (error) {",

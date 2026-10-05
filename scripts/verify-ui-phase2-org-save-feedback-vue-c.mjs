@@ -35,7 +35,7 @@ assert.ok(
 );
 const capture = process.argv.includes("--capture"),
   smoke = process.argv.includes("--smoke");
-const output = "output/playwright/org-save-feedback-vue-c-r1";
+const output = "output/playwright/org-save-feedback-vue-c-r2";
 const shell = "apps/web/src/components/NavigationShell.vue",
   orgComponent = "apps/web/src/components/OrganizationAdminCenter.vue";
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
@@ -315,6 +315,7 @@ try {
                 "failure request not overwritten",
                 await page
                   .locator(status === 403 ? ".org-admin-state code" : ".org-admin-notice code")
+                  .last()
                   .textContent(),
                 readId,
               );
@@ -328,15 +329,34 @@ try {
             await shot("trace", ".org-profile-receipt");
           } else {
             const notice = page.locator(status === 403 ? ".org-admin-state" : ".org-admin-notice");
-            check(
-              "baseline overwrites reread result with generic success",
-              (await notice.textContent()).includes("操作已完成并写入审计"),
-            );
-            check(
-              "baseline overwrites read request",
-              await notice.locator("code").textContent(),
-              writeId,
-            );
+            if (status === 200) {
+              check(
+                "baseline success notice follows successful reread",
+                (await notice.textContent()).includes("操作已完成并写入审计"),
+              );
+              check(
+                "baseline success request remains visible",
+                await notice.locator("code").last().textContent(),
+                writeId,
+              );
+            } else if (status === 500) {
+              check(
+                "baseline preserves the existing failed-reread outcome",
+                (await notice.textContent()).includes("最新资料仍未能读取"),
+              );
+              check(
+                "baseline preserves read-failure request",
+                await notice.locator("code").last().textContent(),
+                readId,
+              );
+            } else {
+              check("baseline permission failure withdraws the form", await form.count(), 0);
+              check(
+                "baseline permission state retains read-failure request",
+                await notice.locator("code").last().textContent(),
+                readId,
+              );
+            }
             await shot(
               "original-result",
               status === 403 ? ".org-admin-state" : ".org-admin-notice",
@@ -403,9 +423,9 @@ try {
   await browser.close();
   browser = null;
   const evidence = {
-    kind: "ORG-SAVE-FEEDBACK-VUE-C-r1",
+    kind: "ORG-SAVE-FEEDBACK-VUE-C-r2",
     reviewOnly: true,
-    userReview: "pending",
+    userReview: "user-approved-remaining-pages-auto",
     processesClosed: true,
     ports,
     runs,

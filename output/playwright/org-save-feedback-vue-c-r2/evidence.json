@@ -1,0 +1,2248 @@
+{
+  "kind": "ORG-SAVE-FEEDBACK-VUE-C-r2",
+  "reviewOnly": true,
+  "userReview": "user-approved-remaining-pages-auto",
+  "processesClosed": true,
+  "ports": [
+    59088,
+    59151
+  ],
+  "runs": [
+    {
+      "mode": "baseline",
+      "width": 390,
+      "status": 200,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "result page state",
+          "actual": "ready"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 1
+        },
+        {
+          "name": "baseline success notice follows successful reread",
+          "actual": true
+        },
+        {
+          "name": "baseline success request remains visible",
+          "actual": "org-save-local-write"
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 390,
+      "status": 500,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "result page state",
+          "actual": "ready"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 1
+        },
+        {
+          "name": "failed reread retains old facts",
+          "actual": 6
+        },
+        {
+          "name": "baseline preserves the existing failed-reread outcome",
+          "actual": true
+        },
+        {
+          "name": "baseline preserves read-failure request",
+          "actual": "org-save-local-read-500"
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 390,
+      "status": 403,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "result page state",
+          "actual": "forbidden"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 0
+        },
+        {
+          "name": "baseline permission failure withdraws the form",
+          "actual": 0
+        },
+        {
+          "name": "baseline permission state retains read-failure request",
+          "actual": "org-save-local-read-403"
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 1440,
+      "status": 200,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "result page state",
+          "actual": "ready"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 1
+        },
+        {
+          "name": "baseline success notice follows successful reread",
+          "actual": true
+        },
+        {
+          "name": "baseline success request remains visible",
+          "actual": "org-save-local-write"
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 1440,
+      "status": 500,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "result page state",
+          "actual": "ready"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 1
+        },
+        {
+          "name": "failed reread retains old facts",
+          "actual": 6
+        },
+        {
+          "name": "baseline preserves the existing failed-reread outcome",
+          "actual": true
+        },
+        {
+          "name": "baseline preserves read-failure request",
+          "actual": "org-save-local-read-500"
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "baseline",
+      "width": 1440,
+      "status": 403,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "result page state",
+          "actual": "forbidden"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 0
+        },
+        {
+          "name": "baseline permission failure withdraws the form",
+          "actual": 0
+        },
+        {
+          "name": "baseline permission state retains read-failure request",
+          "actual": "org-save-local-read-403"
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 390,
+      "status": 200,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "no premature page updated claim",
+          "actual": true
+        },
+        {
+          "name": "result page state",
+          "actual": "ready"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 1
+        },
+        {
+          "name": "receipt phase",
+          "actual": "ready"
+        },
+        {
+          "name": "write trace preserved",
+          "actual": "org-save-local-write"
+        },
+        {
+          "name": "read trace separate",
+          "actual": "org-save-local-read-200"
+        },
+        {
+          "name": "no generic saved notice masking read failure",
+          "actual": 0
+        },
+        {
+          "name": "keyboard expands trace",
+          "actual": true
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 390,
+      "status": 500,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "no premature page updated claim",
+          "actual": true
+        },
+        {
+          "name": "result page state",
+          "actual": "ready"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 1
+        },
+        {
+          "name": "failed reread retains old facts",
+          "actual": 6
+        },
+        {
+          "name": "receipt phase",
+          "actual": "failed"
+        },
+        {
+          "name": "write trace preserved",
+          "actual": "org-save-local-write"
+        },
+        {
+          "name": "read trace separate",
+          "actual": "org-save-local-read-500"
+        },
+        {
+          "name": "no generic saved notice masking read failure",
+          "actual": 0
+        },
+        {
+          "name": "failure request not overwritten",
+          "actual": "org-save-local-read-500"
+        },
+        {
+          "name": "keyboard expands trace",
+          "actual": true
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 390,
+      "status": 403,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "no premature page updated claim",
+          "actual": true
+        },
+        {
+          "name": "result page state",
+          "actual": "forbidden"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 0
+        },
+        {
+          "name": "receipt phase",
+          "actual": "failed"
+        },
+        {
+          "name": "write trace preserved",
+          "actual": "org-save-local-write"
+        },
+        {
+          "name": "read trace separate",
+          "actual": "org-save-local-read-403"
+        },
+        {
+          "name": "no generic saved notice masking read failure",
+          "actual": 0
+        },
+        {
+          "name": "failure request not overwritten",
+          "actual": "org-save-local-read-403"
+        },
+        {
+          "name": "keyboard expands trace",
+          "actual": true
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 1440,
+      "status": 200,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "no premature page updated claim",
+          "actual": true
+        },
+        {
+          "name": "result page state",
+          "actual": "ready"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 1
+        },
+        {
+          "name": "receipt phase",
+          "actual": "ready"
+        },
+        {
+          "name": "write trace preserved",
+          "actual": "org-save-local-write"
+        },
+        {
+          "name": "read trace separate",
+          "actual": "org-save-local-read-200"
+        },
+        {
+          "name": "no generic saved notice masking read failure",
+          "actual": 0
+        },
+        {
+          "name": "keyboard expands trace",
+          "actual": true
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 1440,
+      "status": 500,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "no premature page updated claim",
+          "actual": true
+        },
+        {
+          "name": "result page state",
+          "actual": "ready"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 1
+        },
+        {
+          "name": "failed reread retains old facts",
+          "actual": 6
+        },
+        {
+          "name": "receipt phase",
+          "actual": "failed"
+        },
+        {
+          "name": "write trace preserved",
+          "actual": "org-save-local-write"
+        },
+        {
+          "name": "read trace separate",
+          "actual": "org-save-local-read-500"
+        },
+        {
+          "name": "no generic saved notice masking read failure",
+          "actual": 0
+        },
+        {
+          "name": "failure request not overwritten",
+          "actual": "org-save-local-read-500"
+        },
+        {
+          "name": "keyboard expands trace",
+          "actual": true
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    },
+    {
+      "mode": "review",
+      "width": 1440,
+      "status": 403,
+      "checks": [
+        {
+          "name": "one PATCH before reread",
+          "actual": 1
+        },
+        {
+          "name": "original PATCH payload",
+          "actual": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          }
+        },
+        {
+          "name": "original request headers present",
+          "actual": true
+        },
+        {
+          "name": "save disabled while rereading",
+          "actual": true
+        },
+        {
+          "name": "old facts remain while waiting",
+          "actual": 6
+        },
+        {
+          "name": "no premature page updated claim",
+          "actual": true
+        },
+        {
+          "name": "result page state",
+          "actual": "forbidden"
+        },
+        {
+          "name": "permission withdraws form",
+          "actual": 0
+        },
+        {
+          "name": "receipt phase",
+          "actual": "failed"
+        },
+        {
+          "name": "write trace preserved",
+          "actual": "org-save-local-write"
+        },
+        {
+          "name": "read trace separate",
+          "actual": "org-save-local-read-403"
+        },
+        {
+          "name": "no generic saved notice masking read failure",
+          "actual": 0
+        },
+        {
+          "name": "failure request not overwritten",
+          "actual": "org-save-local-read-403"
+        },
+        {
+          "name": "keyboard expands trace",
+          "actual": true
+        },
+        {
+          "name": "exact automatic read count",
+          "actual": 2
+        },
+        {
+          "name": "manual reread never resaves",
+          "actual": 1
+        },
+        {
+          "name": "manual reread once",
+          "actual": 3
+        },
+        {
+          "name": "manual reread restores name",
+          "actual": "Global Goods Co."
+        },
+        {
+          "name": "original reason reset unchanged",
+          "actual": ""
+        },
+        {
+          "name": "previous receipt cleared on new manual read",
+          "actual": 0
+        },
+        {
+          "name": "only expected local write",
+          "actual": [
+            "PATCH /api/v1/org/admin/profile"
+          ]
+        },
+        {
+          "name": "no overflow",
+          "actual": true
+        },
+        {
+          "name": "no unexpected network",
+          "actual": []
+        },
+        {
+          "name": "no runtime errors",
+          "actual": []
+        }
+      ],
+      "requests": [
+        {
+          "key": "GET /api/v1/me/navigation?shell=organization_admin"
+        },
+        {
+          "key": "GET /api/v1/me/ui-preferences"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "PATCH /api/v1/org/admin/profile",
+          "body": {
+            "name": "Global Goods Co.",
+            "logo_url": "https://example.test/logo.png",
+            "timezone": "Asia/Shanghai",
+            "data_retention_days": 365,
+            "default_workspace_id": "00000000-0000-4000-8000-000000000602",
+            "reason": "本地保存反馈审核",
+            "expected_version": 3
+          },
+          "hasIdempotency": true,
+          "hasRequest": true
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        },
+        {
+          "key": "GET /api/v1/org/admin/summary"
+        },
+        {
+          "key": "GET /api/v1/org/admin/profile"
+        },
+        {
+          "key": "GET /api/v1/org/admin/workspaces"
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "baseline-390-200-original-result.png",
+      "mode": "baseline",
+      "width": 390,
+      "status": 200,
+      "scene": "original-result",
+      "selector": ".org-admin-notice",
+      "sha256": "ce0e4b14f27c6f29d2ed75ced415cfe61f7ae54e0fae299e648d670713ba857e",
+      "pixelWidth": 358,
+      "pixelHeight": 129
+    },
+    {
+      "file": "baseline-390-500-original-result.png",
+      "mode": "baseline",
+      "width": 390,
+      "status": 500,
+      "scene": "original-result",
+      "selector": ".org-admin-notice",
+      "sha256": "3f68ad36c866279c1f018586d44bc6e3325f6fca0297026226d641c1210e7cec",
+      "pixelWidth": 358,
+      "pixelHeight": 294
+    },
+    {
+      "file": "baseline-390-403-original-result.png",
+      "mode": "baseline",
+      "width": 390,
+      "status": 403,
+      "scene": "original-result",
+      "selector": ".org-admin-state",
+      "sha256": "fef94a8c02c1f45d559d2c3b7931198a352537527c526f0f4f775b054438c0d7",
+      "pixelWidth": 358,
+      "pixelHeight": 340
+    },
+    {
+      "file": "baseline-1440-200-original-result.png",
+      "mode": "baseline",
+      "width": 1440,
+      "status": 200,
+      "scene": "original-result",
+      "selector": ".org-admin-notice",
+      "sha256": "e90398bc3714adab0f918c4a9ca8af0bfd82efdff0c828b8ce7f18916138d553",
+      "pixelWidth": 1136,
+      "pixelHeight": 129
+    },
+    {
+      "file": "baseline-1440-500-original-result.png",
+      "mode": "baseline",
+      "width": 1440,
+      "status": 500,
+      "scene": "original-result",
+      "selector": ".org-admin-notice",
+      "sha256": "58becfb553454278fa459dddedccf1ed8f9ddc8bdb27fec08ccb8f8d9fc034b6",
+      "pixelWidth": 1136,
+      "pixelHeight": 149
+    },
+    {
+      "file": "baseline-1440-403-original-result.png",
+      "mode": "baseline",
+      "width": 1440,
+      "status": 403,
+      "scene": "original-result",
+      "selector": ".org-admin-state",
+      "sha256": "c3bfb9f6ebedafd88d99c47de0a80eb6ae8296254ca79f499f5cbbd82aaa7fd2",
+      "pixelWidth": 1136,
+      "pixelHeight": 262
+    },
+    {
+      "file": "review-390-200-reread-pending.png",
+      "mode": "review",
+      "width": 390,
+      "status": 200,
+      "scene": "reread-pending",
+      "selector": ".org-profile-receipt",
+      "sha256": "8ffb13ad85e22063710502e573913a4b90c03c63739b38d3dc3b12d045e0db99",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "review-390-200-result.png",
+      "mode": "review",
+      "width": 390,
+      "status": 200,
+      "scene": "result",
+      "selector": ".org-profile-receipt",
+      "sha256": "0ba6f4509d456de23f08cd075b3b08144d8e57b0ea542658af0d8bc4bd99e4b9",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "review-390-200-trace.png",
+      "mode": "review",
+      "width": 390,
+      "status": 200,
+      "scene": "trace",
+      "selector": ".org-profile-receipt",
+      "sha256": "f7da93a7d6c2d4d5300d0f3f8ed4ccad2f5187927d9733701d9347e769d0f300",
+      "pixelWidth": 358,
+      "pixelHeight": 312
+    },
+    {
+      "file": "review-390-500-reread-pending.png",
+      "mode": "review",
+      "width": 390,
+      "status": 500,
+      "scene": "reread-pending",
+      "selector": ".org-profile-receipt",
+      "sha256": "8ffb13ad85e22063710502e573913a4b90c03c63739b38d3dc3b12d045e0db99",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "review-390-500-result.png",
+      "mode": "review",
+      "width": 390,
+      "status": 500,
+      "scene": "result",
+      "selector": ".org-profile-receipt",
+      "sha256": "62f96958576afc699686fe219dc7f91803610837daafdbc02c30f596646bf1ea",
+      "pixelWidth": 358,
+      "pixelHeight": 232
+    },
+    {
+      "file": "review-390-500-trace.png",
+      "mode": "review",
+      "width": 390,
+      "status": 500,
+      "scene": "trace",
+      "selector": ".org-profile-receipt",
+      "sha256": "8af5d6444bb5080f143cd97beb9d79bcca861ff571fa6f250f704a20acf18553",
+      "pixelWidth": 358,
+      "pixelHeight": 340
+    },
+    {
+      "file": "review-390-403-reread-pending.png",
+      "mode": "review",
+      "width": 390,
+      "status": 403,
+      "scene": "reread-pending",
+      "selector": ".org-profile-receipt",
+      "sha256": "8ffb13ad85e22063710502e573913a4b90c03c63739b38d3dc3b12d045e0db99",
+      "pixelWidth": 358,
+      "pixelHeight": 204
+    },
+    {
+      "file": "review-390-403-result.png",
+      "mode": "review",
+      "width": 390,
+      "status": 403,
+      "scene": "result",
+      "selector": ".org-profile-receipt",
+      "sha256": "91270a3439c7830d1398cc1a4791f66172b564e7a3b33e26eacccb89027970be",
+      "pixelWidth": 358,
+      "pixelHeight": 231
+    },
+    {
+      "file": "review-390-403-trace.png",
+      "mode": "review",
+      "width": 390,
+      "status": 403,
+      "scene": "trace",
+      "selector": ".org-profile-receipt",
+      "sha256": "3afa4863f3312bfd162a7449c2e5c1465de8a3b4ef97188c95ca621489bbcf83",
+      "pixelWidth": 358,
+      "pixelHeight": 339
+    },
+    {
+      "file": "review-1440-200-reread-pending.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 200,
+      "scene": "reread-pending",
+      "selector": ".org-profile-receipt",
+      "sha256": "21774f9cd4f3e07460008f1021121be6d18b98e977b0689d9da8c00256d9fbe1",
+      "pixelWidth": 1136,
+      "pixelHeight": 216
+    },
+    {
+      "file": "review-1440-200-result.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 200,
+      "scene": "result",
+      "selector": ".org-profile-receipt",
+      "sha256": "9f94206c92111e821e288826f1b78effae8f9ddda6bb30f2ab58eb5353d1cf40",
+      "pixelWidth": 1136,
+      "pixelHeight": 216
+    },
+    {
+      "file": "review-1440-200-trace.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 200,
+      "scene": "trace",
+      "selector": ".org-profile-receipt",
+      "sha256": "1230b143716e7b237e0c275c8ea5263d9a7947681999e1a87fe00780056cb082",
+      "pixelWidth": 1136,
+      "pixelHeight": 324
+    },
+    {
+      "file": "review-1440-500-reread-pending.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 500,
+      "scene": "reread-pending",
+      "selector": ".org-profile-receipt",
+      "sha256": "21774f9cd4f3e07460008f1021121be6d18b98e977b0689d9da8c00256d9fbe1",
+      "pixelWidth": 1136,
+      "pixelHeight": 216
+    },
+    {
+      "file": "review-1440-500-result.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 500,
+      "scene": "result",
+      "selector": ".org-profile-receipt",
+      "sha256": "8d206d449c40e8dc95ba8f59e1a8deb31fb2e44baf84fff1352a3156c12fd6a1",
+      "pixelWidth": 1136,
+      "pixelHeight": 216
+    },
+    {
+      "file": "review-1440-500-trace.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 500,
+      "scene": "trace",
+      "selector": ".org-profile-receipt",
+      "sha256": "ebee5102b401ad6354daec1080213cc47c2a2d2f2be7b69ba4ed68e7ef8f4ac1",
+      "pixelWidth": 1136,
+      "pixelHeight": 324
+    },
+    {
+      "file": "review-1440-403-reread-pending.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 403,
+      "scene": "reread-pending",
+      "selector": ".org-profile-receipt",
+      "sha256": "21774f9cd4f3e07460008f1021121be6d18b98e977b0689d9da8c00256d9fbe1",
+      "pixelWidth": 1136,
+      "pixelHeight": 216
+    },
+    {
+      "file": "review-1440-403-result.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 403,
+      "scene": "result",
+      "selector": ".org-profile-receipt",
+      "sha256": "354c621eba1d8d1023f84991b10265c79f08aab9722ebe5ab09dd93ba101036f",
+      "pixelWidth": 1136,
+      "pixelHeight": 216
+    },
+    {
+      "file": "review-1440-403-trace.png",
+      "mode": "review",
+      "width": 1440,
+      "status": 403,
+      "scene": "trace",
+      "selector": ".org-profile-receipt",
+      "sha256": "e25556c22ac1d99afcb54b63cccac08f1421317689b08594b7a99ac27e751af3",
+      "pixelWidth": 1136,
+      "pixelHeight": 324
+    }
+  ],
+  "sourceHashes": {
+    "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
+    "apps/web/index.html": "0376c4bf04227ac5dbb6bb43895e5ed97eef6ca8bde54f08774908d3f07d9d88",
+    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+    "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
+    "apps/web/src/capacity-boundary-c.css": "7279164c4b6e4aa7b385035c61a2c7b2425a71994e006db07a45d715e44c5314",
+    "apps/web/src/components/AccountShell.vue": "f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39",
+    "apps/web/src/components/ApiFoundation.vue": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32",
+    "apps/web/src/components/AppIcon.vue": "9c372a9ee10f06c0b74d55156d0134cc9772de8ce9e8d22b3c78ec6e07a8b455",
+    "apps/web/src/components/ApprovalWorkspace.vue": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
+    "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
+    "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+    "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
+    "apps/web/src/components/AutomationRuleCenter.vue": "44d23536f20a370d29b62fe89a463464a6bc5dbe5e298b3f0806e2cf82494d35",
+    "apps/web/src/components/BackupRecoveryCenter.vue": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
+    "apps/web/src/components/CapacityBoundaryCenter.vue": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2",
+    "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
+    "apps/web/src/components/CommercialOperationsCenter.vue": "48c2b61c9649e267b0b591dfc6652d5a5aefc98a9f12b9d15a38e5fcbcd765ec",
+    "apps/web/src/components/CompetitorMonitor.vue": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
+    "apps/web/src/components/ConfigBoundary.vue": "36d9cdf35921c647740965aad0d6ed490ecbc0afdc9c80da6b861befbbc622cb",
+    "apps/web/src/components/CostRuleConsole.vue": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b",
+    "apps/web/src/components/CrawlerSchedulerCenter.vue": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
+    "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
+    "apps/web/src/components/DiscoveryOverlay.vue": "de8af2e6f38f14eddc590079353b146bfe412bb4831d1f9f948c35887b762ff5",
+    "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
+    "apps/web/src/components/FileResilienceCenter.vue": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914",
+    "apps/web/src/components/HomeDashboard.vue": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5",
+    "apps/web/src/components/LandingRedirect.vue": "bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5",
+    "apps/web/src/components/LocalIdentity.vue": "93bae79f7b253564e9c031189f5b57a891d571fc3c353e53c33d11d28c4f5eaf",
+    "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
+    "apps/web/src/components/MySqlResilienceCenter.vue": "5a8749d5b26ef92d211314de1b53d4065d339e6cba6c710126bd6d42336ff1b6",
+    "apps/web/src/components/NavigationAccessPanel.vue": "3d2cb2dca56e68dbdbad880b4879b9739b5f86537c4e119495a1324f558c7338",
+    "apps/web/src/components/NavigationShell.vue": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+    "apps/web/src/components/NotFoundPage.vue": "51ebcf498abcd75376734fa4c93084d4a2588f25496c91ffa271d711bdc9499d",
+    "apps/web/src/components/NotificationCenter.vue": "4a3233cb6d570e3f2d68d0b399c25bba188dce1f7d7a3e40c9b17120938d4aa3",
+    "apps/web/src/components/OnboardingGuide.vue": "abfa994e639442460aad2203478b27cb015c7c319170b3e04c2be2b5a17536ed",
+    "apps/web/src/components/OpenPlatformCenter.vue": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859",
+    "apps/web/src/components/OpportunityWorkspace.vue": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+    "apps/web/src/components/OrganizationApprovalReadFeedback.vue": "f20b3891d31459b30e6dfa5621819c4bbbaaa6523130d33f9395804def25bf52",
+    "apps/web/src/components/OrganizationAuditPanel.vue": "e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d",
+    "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270",
+    "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
+    "apps/web/src/components/OrganizationRolePanel.vue": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e",
+    "apps/web/src/components/PersonalCenter.vue": "5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee",
+    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+    "apps/web/src/components/PlatformDashboard.vue": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e",
+    "apps/web/src/components/PlatformDataCenter.vue": "904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08",
+    "apps/web/src/components/PlatformGovernanceCenter.vue": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9",
+    "apps/web/src/components/PlatformLogCenter.vue": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518",
+    "apps/web/src/components/PlatformManagementCenter.vue": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00",
+    "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
+    "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
+    "apps/web/src/components/RedisResilienceCenter.vue": "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec",
+    "apps/web/src/components/ReleaseRolloutCenter.vue": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
+    "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f",
+    "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
+    "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd",
+    "apps/web/src/components/ScoreRuleConsole.vue": "350c6492eda6a7695cdb3423ab44481962877f046921cb61c658029207f34b4d",
+    "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4",
+    "apps/web/src/components/SelectionJourney.vue": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf",
+    "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
+    "apps/web/src/components/TaskWorkspace.vue": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25",
+    "apps/web/src/components/TenancyChooser.vue": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18",
+    "apps/web/src/components/ThemeStudio.vue": "fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f",
+    "apps/web/src/components/TrendDashboard.vue": "0f3b4d27fd809e6770ccf4e4cc0e464e128f9e83f6a70c723256d49ba73035dc",
+    "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
+    "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
+    "apps/web/src/components/VerificationFramework.vue": "aab55dcadf05e3427665faadb057f86a5fbe44dde8f022b0a7225f6c1ec6cccf",
+    "apps/web/src/components/navigation-surface-registry.ts": "e0f1161dd5da43df09b2710972ac431d746eb32fc7020c55502d020ef501486d",
+    "apps/web/src/config.ts": "5c1304c023e8258443b1a7d003997b6aa3f65c2c085b7e8ed05d75e647f53b64",
+    "apps/web/src/crawler-scheduler-c.css": "999d22ba96d4dcc4473a2d3f68394fa45a3ef4b8b2d2cabea46173b3e01aed54",
+    "apps/web/src/design/capacity-boundary-tokens.css": "e03a845308e5d3408d64f0b0e9140984c51f570c0ad8bdc7a4455c3d1ac1f9bb",
+    "apps/web/src/design/collection-ops-tokens.css": "8ffb4b6c580216a748e3d541722a08e8d17d3c98bd0c9888a20bab25675b34f6",
+    "apps/web/src/design/commercial-review-tokens.css": "991ebbdf70982008d3e18cae18790e8c50c1e46fafbcf127f6d4d9873e29c03b",
+    "apps/web/src/design/crawler-scheduler-tokens.css": "d3d73deb0fff9cc2d9cf5c8bdbb919b6f02a093f9c222434a4a41c3800982a1b",
+    "apps/web/src/design/discovery-c-tokens.css": "3b0e2f8bd1fab77d033edbaafd29fd5b13554b8dd45633d12ed5b991715141df",
+    "apps/web/src/design/mysql-resilience-tokens.css": "35ea642cb163c8b6deb61953915950c9abd05c3b22427979aa25760a0ae3578d",
+    "apps/web/src/design/navigation-shell-c-tokens.css": "1fab32076ee17b590d8912e71da664d59a8b41d2687d7f6fd5515559af230ef1",
+    "apps/web/src/design/not-found-tokens.css": "a046ab84923d643da70d7da148a5a39c51d8c9e34f23dc439d28e23ffc392fc6",
+    "apps/web/src/design/organization-admin-tokens.css": "0eb9dde0342b1b3d265706569cbad84175c06d139c4510e8ed536501d366c493",
+    "apps/web/src/design/platform-data-tokens.css": "add319c74e7ffd01bcf2ff247168e5717aa08b271ffc4cd65ad1dfb6acc1a039",
+    "apps/web/src/design/roles-tokens.css": "6d221a20b1f308603d1166c5af01df233906e32f1e08ecb5e7f7f119ff8a60eb",
+    "apps/web/src/design/tenancy-tokens.css": "b73837aa35471c69065ad0227b52a9c8a0eb45b9348c4dafb2e1e4cd6c2083ca",
+    "apps/web/src/design/theme.ts": "0a356b3505c576b0db1a46e406dae9018b3ddba883da8a4c77836f3101cde285",
+    "apps/web/src/design/tokens.css": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a",
+    "apps/web/src/design/workspace-restore-tokens.css": "65f8a33413cc0f3669858731f868d579b8c90152926e387adcee4b7ca5925019",
+    "apps/web/src/main.ts": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671",
+    "apps/web/src/member-workspace-polish.css": "355d5f8eb4de2b650b3cd14a069c86b8a8a883f808f29687532a70cdc8ff89b9",
+    "apps/web/src/mysql-resilience-c.css": "9d51865f41fccf84627556bb46acd59689f56446de1a9689e3567e8e75a44cd7",
+    "apps/web/src/navigation-memory.ts": "af064b6f6418d131862cb6a99c5c6d979f0539af1235102a9b81e0e4a4faab8f",
+    "apps/web/src/navigation-shell-c.css": "86bf0dfa338ffe9121849d03f58a404612ef5a1087640201e14478410ea3b1d8",
+    "apps/web/src/navigation-shell-permissions.ts": "8ae667b142516d55b6d58a864911752b46534bbf63de634ebb8e62f9f7b14fe1",
+    "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
+    "apps/web/src/organization-admin.css": "7f1c795978ca227f5383f5a6b9f7bc741615c8a21d6daa05448ce88e74f99a6e",
+    "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
+    "apps/web/src/route-catalog.generated.json": "aa448640ac7c70e9fb0587c25e840305555c7ff69620ad80aab48e4f2390253c",
+    "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
+    "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
+    "apps/web/src/signal-ledger-workflows.css": "3a3bcb8ca4aa2c0b7dae11218223aaa9de25db45eb0704a2670ea156bf06229b",
+    "apps/web/src/signal-ledger.css": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276",
+    "apps/web/src/styles.css": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016",
+    "apps/web/src/styles/access-governance.css": "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
+    "apps/web/src/styles/navigation-discovery-c.css": "aa8b74a0104fc7c49cd393ec31dba73cafcea10fa70c6e86afc0483193a90cad",
+    "apps/web/src/styles/onboarding-navigation.css": "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
+    "apps/web/src/styles/platform-operations.css": "6c10b8443c2f3c2d274c215a4652132032af67888c1f5a88f47963f595a071c5",
+    "apps/web/src/styles/tenancy-workspace.css": "7c979b6219f743a577b08ecf1096cb04b5940bf06c6676b0241c74bf03099230",
+    "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+    "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
+    "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
+    "apps/web/src/use-navigation-discovery.ts": "e6ffdb0cc734f35f7461fb4f67d4c8c632f3de83168f7d3a2b99d0928db05f94",
+    "apps/web/src/use-navigation-shell-drawer.ts": "894634809088c8ce2a43c2a655d0c12bf30bbe46b338925f31f9db756b661ff3",
+    "apps/web/src/use-navigation-shell-theme.ts": "b3ee6f650feaa2fdbdc905ffddefe231df099596866a492418c098b5012b0c56",
+    "apps/web/vite.config.ts": "e9a954a654ad017cf8c2fd8b78c5cb233fff3840333857898f1c149e6c302c5d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/org-profile-form-c.css": "e0f3e15b3ef9ebcc59c6b7bb7799fba206b36b79102220bab63e859aecf29d53",
+    "design-plans/ui-phase-2-2026-09-07/implementation/org-read-state-c.css": "29f8fc0e751ba5695a94bd6f924c50c03a0bc5bcf3eb2f7aa6beb2b23b4f31bf",
+    "design-plans/ui-phase-2-2026-09-07/implementation/org-refresh-c.css": "46c1fefb65979150478e85e6445f11b5905fb44f903a967275827c04a54ebf99",
+    "design-plans/ui-phase-2-2026-09-07/implementation/org-save-feedback-c.css": "dfdd8a7da3829e61ff714229195d29fd4b33a34057c1eaed31c237872876a73b",
+    "design-plans/ui-phase-2-2026-09-07/implementation/shell-org-vue-c.css": "0280adc1dde37880daee746658f86786a7d7bedba8e0c252995c9b0058cf739c",
+    "design-plans/ui-phase-2-2026-09-07/implementation/shell-review-navigation.ts": "f829add727648e35a044dd413a16c65dbede4c75f0def5dc471ebc6f8607d49d",
+    "design-plans/ui-phase-2-2026-09-07/implementation/shell-vue-c-preview.css": "7607f918eef47cd5670be727928f7fa5fcca5129a8a7ce37c6ba1f2ca1e1d4be",
+    "scripts/lib/ui-imported-style-sources.mjs": "1ac8c9075a445b2cfb3963c1464de63cce567331eec6cfa14f197ce7929d2f84",
+    "scripts/lib/ui-phase2-org-profile-form-preview.mjs": "57aee5ea15f025740611d555327be3d1147e1151739bcedcb8a3b6c52d507ba7",
+    "scripts/lib/ui-phase2-org-read-state-preview.mjs": "71954bf22be4723ff242abfbb8f2aa5521e0cbf2ba1b630c9ee3cf26f01508d1",
+    "scripts/lib/ui-phase2-org-refresh-preview.mjs": "eb42b78c930b2a00d6a2a0a90cf331376c2c0a5102f9a735b5e56fc2e3878d8f",
+    "scripts/lib/ui-phase2-org-save-feedback-preview.mjs": "2887abfaee6183a17a2f16556bdde956d06047606281120072bbb05f15a3856e",
+    "scripts/lib/ui-phase2-shell-org-fixture.mjs": "f04368b44a55fd2d1af1252b2a67e6939185fca204b9b11dbf172cf1cd99b6f4",
+    "scripts/lib/ui-phase2-shell-vue-preview.mjs": "d7729481848240cde71062ecd1507f725a24dfb626e2197ebbc6bed5441ff5ed",
+    "scripts/verify-ui-phase2-org-save-feedback-vue-c.mjs": "a0e29ad847fe348222264ef017df62d4ed7a2d1f4e805a582616f460d92ae2c6",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "3d54a2f62e71ecda3f1ea5787d1c8d049fe36b70be40ba3738eabe49eba12897"
+  },
+  "boundary": "Actual App and Vue; baseline prior profile-form proposal. PATCH success shape extracted from repository; local fixture clock, not real persisted save or audit. Summary reread200/500/403, unchanged request/form/permission rules. Preview-only receipt and per-read outcome; generic notices for other writes unchanged. No production imports, deployment or broad acceptance."
+}

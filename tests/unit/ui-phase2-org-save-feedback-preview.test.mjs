@@ -93,6 +93,8 @@ function harness({ failed = false, token = false, heldWrite = false, heldRead = 
     notice: ref(""),
     noticeKind: ref("info"),
     requestId: ref("initial"),
+    writeReadFailure: ref(null),
+    profileSaveReadFailure: ref(null),
     secret: ref(""),
     lastReadFailureStatus: ref(500),
     ApiClientError: ApiError,
@@ -143,7 +145,12 @@ test("per-read outcome preserves failed read ID and ignores stale lastReadFailur
     assert.equal(box.receipt.value.writeId, "write-id");
     assert.equal(box.receipt.value.readId, failed ? "failed-read-id" : "read-id");
     assert.equal(box.requestId.value, failed ? "failed-read-id" : "read-id");
-    assert.equal(box.notice.value, failed ? "read failed" : "");
+    assert.equal(
+      box.notice.value,
+      failed
+        ? "组织资料已保存并写入审计，但最新资料仍未能读取；当前资料显示可能是保存前快照。请点击“刷新数据”核对。不要再次提交。"
+        : "",
+    );
     assert.equal(box.form.value.reason, "");
     assert.equal(box.lastReadFailureStatus.value, 500);
   }
@@ -178,16 +185,16 @@ test("non-profile submit retains existing generic success behavior", async () =>
 });
 
 test("save receipt packet binds current sources and separated write/read evidence", async () => {
-  const root = "output/playwright/org-save-feedback-vue-c-r1";
+  const root = "output/playwright/org-save-feedback-vue-c-r2";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-  assert.equal(evidence.kind, "ORG-SAVE-FEEDBACK-VUE-C-r1");
+  assert.equal(evidence.kind, "ORG-SAVE-FEEDBACK-VUE-C-r2");
   assert.equal(evidence.reviewOnly, true);
-  assert.equal(evidence.userReview, "pending");
+  assert.equal(evidence.userReview, "user-approved-remaining-pages-auto");
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.runs.length, 12);
   assert.equal(evidence.screenshots.length, 24);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 183);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 135);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
   for (const shot of evidence.screenshots) {
@@ -209,6 +216,20 @@ test("save receipt packet binds current sources and separated write/read evidenc
       assert.equal(actual("receipt phase"), run.status === 200 ? "ready" : "failed");
       assert.equal(actual("write trace preserved"), "org-save-local-write");
       assert.equal(actual("read trace separate"), `org-save-local-read-${run.status}`);
-    } else assert.equal(actual("baseline overwrites reread result with generic success"), true);
+    } else if (run.status === 200)
+      assert.equal(actual("baseline success notice follows successful reread"), true);
+    else if (run.status === 500) {
+      assert.equal(actual("baseline preserves the existing failed-reread outcome"), true);
+      assert.equal(
+        actual("baseline preserves read-failure request"),
+        `org-save-local-read-${run.status}`,
+      );
+    } else {
+      assert.equal(actual("baseline permission failure withdraws the form"), 0);
+      assert.equal(
+        actual("baseline permission state retains read-failure request"),
+        `org-save-local-read-${run.status}`,
+      );
+    }
   }
 });
