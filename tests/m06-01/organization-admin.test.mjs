@@ -485,7 +485,10 @@ test("M06-01 live database probes run through the fixed BaoTa verifier and embed
       "npx playwright test tests/e2e/m06-01-organization-admin.spec.ts tests/e2e/m06-01-platform-accounts.spec.ts --workers=1",
     ),
   );
-  assert.match(runner, /m06_probes\s*=\s*\{"organization-admin", "platform-accounts"\}/);
+  assert.match(
+    runner,
+    /m06_probes\s*=\s*\{[\s\S]*"organization-admin"[\s\S]*"platform-accounts"[\s\S]*"platform-dashboard"[\s\S]*\}/,
+  );
   assert.match(runner, /if probe in m06_probes:[\s\S]*live probe migration read mismatch/);
   assert.match(runner, /SCOUTOPS_\{probe\.upper\(\)\.replace\('-', '_'\)\}_LIVE_TARGET/);
 });
