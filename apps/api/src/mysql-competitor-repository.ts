@@ -429,7 +429,7 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
   private async amazonProvider(c: PoolConnection) {
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT id FROM providers WHERE code='amazon_product' AND status='enabled' AND access_mode='public_page' " +
-        "AND terms_review_status='approved' AND terms_reference_url IS NOT NULL AND terms_version IS NOT NULL " +
+        "AND terms_review_status='approved' AND terms_version IS NOT NULL " +
         "AND terms_expires_at>NOW(3) LIMIT 1 FOR UPDATE",
     );
     if (!rows[0])

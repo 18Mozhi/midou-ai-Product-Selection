@@ -8689,7 +8689,7 @@ components:
         healthcheck_url: { type: string, format: uri, maxLength: 1000, nullable: true }
         owner_label: { type: string, minLength: 2, maxLength: 120 }
         terms_review_status: { type: string, enum: [pending, approved, rejected], default: pending }
-        terms_reference_url: { type: string, format: uri, maxLength: 1000, nullable: true }
+        terms_reference_url: { type: string, format: uri, maxLength: 1000, nullable: true, description: Optional HTTPS reference for audit convenience; not required for approval, enablement, scheduling, or execution. If supplied, it must be HTTPS. }
         terms_version: { type: string, pattern: "^[A-Za-z0-9._:-]{1,80}$", nullable: true }
         terms_expires_at: { type: string, format: date-time, nullable: true }
         status: { type: string, enum: [draft, disabled, enabled], default: disabled }

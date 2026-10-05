@@ -24,7 +24,7 @@ const staticRequired = new Set([
   "retention_days",
   "failure_rules",
 ]);
-const conditionalRequired = new Set(["terms_reference_url", "terms_version", "terms_expires_at"]);
+const conditionalRequired = new Set(["terms_version", "terms_expires_at"]);
 
 test("P46 required semantics compile and match only fields currently required by validation", () => {
   const parsed = parse(component);
@@ -61,6 +61,8 @@ test("P46 required semantics compile and match only fields currently required by
 
   assert.deepEqual(foundStatic, staticRequired);
   assert.deepEqual(foundConditional, conditionalRequired);
+  assert.match(parsed.descriptor.template.content, /条款参考 URL（可选）/);
+  assert.match(parsed.descriptor.template.content, /aria-required="false"/);
   assert.match(
     parsed.descriptor.scriptSetup.content,
     /const publicTermsRequired = computed\(\s*\(\) => \["public_page", "public_rss"\]\.includes\(form\.access_mode\) && form\.status === "enabled",\s*\);/,

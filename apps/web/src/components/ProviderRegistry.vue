@@ -116,6 +116,7 @@ const steps = ["基本信息", "范围与字段", "执行策略", "合规与发�
     circuit_failure_threshold: 3,
     retention_days: 3,
     failure_rules: 3,
+    terms_review_status: 4,
     terms_reference_url: 4,
     terms_version: 4,
     terms_expires_at: 4,
@@ -157,7 +158,6 @@ const admission = (item: Provider): { state: AdmissionState; label: string; deta
         : Number.NaN;
       const complete =
         item.terms_review_status === "approved" &&
-        Boolean(item.terms_reference_url) &&
         Boolean(item.terms_version) &&
         Number.isFinite(expiresAt) &&
         expiresAt > Date.now();
@@ -175,8 +175,8 @@ const admission = (item: Provider): { state: AdmissionState; label: string; deta
                 ? "公开采集条款已拒绝"
                 : item.terms_review_status !== "approved"
                   ? "公开采集条款尚未批准"
-                  : !item.terms_reference_url || !item.terms_version
-                    ? "公开采集条款资料不完整"
+                  : !item.terms_version
+                    ? "公开采集条款版本未登记"
                     : "公开采集条款已过期或缺少有效期",
           };
     }
@@ -294,9 +294,7 @@ const list = (v: string) =>
       errors.terms_expires_at = "请选择有效时间。";
     if (["public_page", "public_rss"].includes(form.access_mode) && form.status === "enabled") {
       if (form.terms_review_status !== "approved")
-        errors.terms_reference_url = "启用公开来源前必须批准条款并补齐下列信息。";
-      if (!form.terms_reference_url || !validHttpUrl(form.terms_reference_url, true))
-        errors.terms_reference_url = "启用前必须登记 HTTPS 条款地址。";
+        errors.terms_review_status = "启用公开来源前必须由负责人批准条款。";
       if (!form.terms_version) errors.terms_version = "启用前必须登记条款版本。";
       if (!form.terms_expires_at || new Date(form.terms_expires_at) <= new Date())
         errors.terms_expires_at = "启用前必须登记未来的到期时间。";
@@ -1255,12 +1253,24 @@ onActivated(() => {
             ><span id="provider-field-terms_review_status-label">平台条款复核</span
             ><select
               aria-labelledby="provider-field-terms_review_status-label"
+              :aria-required="publicTermsRequired"
+              :aria-invalid="Boolean(formErrors.terms_review_status)"
+              :aria-describedby="
+                formErrors.terms_review_status
+                  ? 'provider-field-terms_review_status-error'
+                  : undefined
+              "
               v-model="form.terms_review_status"
             >
               <option value="pending">待复核</option>
               <option value="approved">已批准</option>
               <option value="rejected">已拒绝</option>
-            </select></label
+            </select>
+            <small
+              v-if="formErrors.terms_review_status"
+              id="provider-field-terms_review_status-error"
+              >{{ formErrors.terms_review_status }}</small
+            ></label
           ><label
             ><span id="provider-field-status-label">发布状态</span
             ><select aria-labelledby="provider-field-status-label" v-model="form.status">
@@ -1269,10 +1279,10 @@ onActivated(() => {
               <option value="enabled">已启用</option>
             </select></label
           ><label class="wide"
-            ><span id="provider-field-terms_reference_url-label">条款参考 URL</span
+            ><span id="provider-field-terms_reference_url-label">条款参考 URL（可选）</span
             ><input
               aria-labelledby="provider-field-terms_reference_url-label"
-              :aria-required="publicTermsRequired"
+              aria-required="false"
               :aria-invalid="Boolean(formErrors.terms_reference_url)"
               :aria-describedby="
                 formErrors.terms_reference_url
@@ -1281,7 +1291,7 @@ onActivated(() => {
               "
               v-model="form.terms_reference_url"
               type="url"
-              placeholder="https://…"
+              placeholder="如需留档可填写 HTTPS 地址"
             />
             <small
               v-if="formErrors.terms_reference_url"

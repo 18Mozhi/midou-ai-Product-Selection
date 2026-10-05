@@ -362,7 +362,7 @@ test("core crawler entrypoints reject enabled providers whose compliance review 
   ]);
   for (const repository of [competitor, sourcing]) {
     assert.match(repository, /terms_review_status='approved'/);
-    assert.match(repository, /terms_reference_url IS NOT NULL/);
+    assert.doesNotMatch(repository, /terms_reference_url IS NOT NULL/);
     assert.match(repository, /terms_version IS NOT NULL/);
     assert.match(repository, /terms_expires_at>NOW\(3\)/);
   }
@@ -888,7 +888,6 @@ test("required non-retryable login failure blocks the collection task", async ()
     fields_json: ["title"],
     status: "enabled",
     terms_review_status: "approved",
-    terms_reference_url: "https://example.com/terms",
     terms_version: "2026-08",
     terms_expires_at: "2099-08-31T00:00:00.000Z",
     created_by: "66666666-6666-4666-8666-666666666666",

@@ -77,8 +77,8 @@ test("rule scheduler queries the manual keyword crawler and completes all source
     statements.some(
       (sql) =>
         sql.includes("terms_review_status='approved'") &&
-        sql.includes("terms_reference_url IS NOT NULL") &&
         sql.includes("terms_version IS NOT NULL") &&
+        !sql.includes("terms_reference_url IS NOT NULL") &&
         sql.includes("terms_expires_at>NOW(3)"),
     ),
   );
@@ -183,7 +183,7 @@ test("automatic source scheduler writes one approved 16-source batch and advance
     statements.some(
       (sql) =>
         sql.includes("terms_review_status='approved'") &&
-        sql.includes("terms_reference_url IS NOT NULL") &&
+        !sql.includes("terms_reference_url IS NOT NULL") &&
         sql.includes("terms_expires_at>NOW(3)"),
     ),
   );

@@ -134,7 +134,6 @@ export class MySqlProviderSourceVersionRepository {
         input.status === "enabled" &&
         ["public_page", "public_rss"].includes(String(current.access_mode)) &&
         (current.terms_review_status !== "approved" ||
-          !current.terms_reference_url ||
           !current.terms_version ||
           !current.terms_expires_at ||
           new Date(current.terms_expires_at) <= input.now)
@@ -142,7 +141,7 @@ export class MySqlProviderSourceVersionRepository {
         throw new ProviderSourceServiceError(
           "provider_source_compliance_required",
           409,
-          "先在来源定义页批准平台条款，并登记 HTTPS 参考地址、版本和未来到期时间。",
+          "先在来源定义页批准平台条款，并登记版本和未来到期时间。",
         );
       if (
         input.status === "enabled" &&
@@ -347,7 +346,6 @@ export class MySqlProviderSourceVersionRepository {
         target.status === "enabled" &&
         ["public_page", "public_rss"].includes(String(current.access_mode)) &&
         (current.terms_review_status !== "approved" ||
-          !current.terms_reference_url ||
           !current.terms_version ||
           !current.terms_expires_at ||
           new Date(current.terms_expires_at) <= input.now)

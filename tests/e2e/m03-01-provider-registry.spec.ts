@@ -167,11 +167,12 @@ test("M03-01.P46 editor announces required fields without changing validation be
     await expect(field(name)).toHaveAttribute("aria-required", "true");
 
   await editor.getByRole("button", { name: "4 合规与发布" }).click();
-  const termsFields = ["terms_reference_url", "terms_version", "terms_expires_at"];
+  const termsFields = ["terms_version", "terms_expires_at"];
   for (const name of termsFields)
     await expect(field(name)).not.toHaveAttribute("aria-required", "true");
   await editor.getByRole("combobox", { name: "发布状态" }).selectOption("enabled");
-  for (const name of termsFields)
+  await expect(field("terms_reference_url")).toHaveAttribute("aria-required", "false");
+  for (const name of ["terms_version", "terms_expires_at"])
     await expect(field(name)).toHaveAttribute("aria-required", "true");
 
   await editor.getByRole("button", { name: "1 基本信息" }).click();
@@ -182,9 +183,11 @@ test("M03-01.P46 editor announces required fields without changing validation be
   await editor.getByRole("button", { name: "1 基本信息" }).click();
   await editor.getByRole("combobox", { name: "接入模式" }).selectOption("public_page");
   await editor.getByRole("button", { name: "4 合规与发布" }).click();
+  await expect(field("terms_reference_url")).toHaveAttribute("aria-required", "false");
   for (const name of termsFields)
     await expect(field(name)).toHaveAttribute("aria-required", "true");
   await editor.getByRole("combobox", { name: "发布状态" }).selectOption("disabled");
+  await expect(field("terms_reference_url")).toHaveAttribute("aria-required", "false");
   for (const name of termsFields)
     await expect(field(name)).not.toHaveAttribute("aria-required", "true");
 });

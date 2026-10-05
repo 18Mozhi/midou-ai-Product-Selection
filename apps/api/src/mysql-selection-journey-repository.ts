@@ -78,7 +78,7 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           "选择活动组织与工作区后重试。",
         );
       const [providers] = await c.query<RowDataPacket[]>(
-          "SELECT id,code,access_mode,terms_review_status,terms_reference_url,terms_version," +
+          "SELECT id,code,access_mode,terms_review_status,terms_version," +
             "terms_expires_at FROM providers WHERE code=? AND status='enabled' LIMIT 1 FOR UPDATE",
           [i.providerCode],
         ),
@@ -92,7 +92,6 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       if (
         ["public_page", "public_rss"].includes(String(provider.access_mode)) &&
         (provider.terms_review_status !== "approved" ||
-          !provider.terms_reference_url ||
           !provider.terms_version ||
           !provider.terms_expires_at ||
           new Date(provider.terms_expires_at).getTime() <= i.now.getTime())

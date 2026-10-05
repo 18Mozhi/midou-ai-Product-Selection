@@ -111,7 +111,6 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
       ...valid,
       status: "enabled",
       terms_review_status: "approved",
-      terms_reference_url: "https://example.test/terms",
       terms_version: "2026-08",
       terms_expires_at: "2027-08-07T17:00:00.000Z",
     },
@@ -124,6 +123,7 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
   );
   assert.equal(approved.terms_reviewed_at, now.toISOString());
   assert.equal(approved.terms_version, "2026-08");
+  assert.equal(approved.terms_reference_url, null);
 });
 test("M03-01.A04/A06/A09/A11/A13 API enforces platform capability, origin, idempotency and correlation", async () => {
   const calls = [],

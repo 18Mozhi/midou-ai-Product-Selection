@@ -159,7 +159,6 @@ function validate(value: ProviderDefinitionInput, now: Date): ProviderDefinition
     ["public_page", "public_rss"].includes(value.access_mode) &&
     value.status === "enabled" &&
     (value.terms_review_status !== "approved" ||
-      !termsReferenceUrl ||
       !termsVersion ||
       !termsExpiry ||
       termsExpiry <= now)
@@ -167,7 +166,7 @@ function validate(value: ProviderDefinitionInput, now: Date): ProviderDefinition
     throw new ProviderRegistryError(
       "public_source_compliance_required",
       409,
-      "公开来源启用前必须批准平台条款，并登记 HTTPS 参考地址、版本和未来到期时间。",
+      "公开来源启用前必须由负责人批准条款，并登记版本和未来到期时间。",
     );
   return {
     ...value,
