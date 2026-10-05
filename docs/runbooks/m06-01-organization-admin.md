@@ -10,6 +10,8 @@
 
 ## 观测与故障处理
 
+- 组织后台与平台账号的 MySQL 生产探针只能通过 `python scripts/verify-live-baota.py organization-admin` 和 `python scripts/verify-live-baota.py platform-accounts` 运行；不要直接在本机执行 `scripts/verify-organization-admin-live.mjs` 或 `scripts/verify-platform-accounts-live.mjs`。固定入口仅连接宝塔既定项目，并把本地已审阅的迁移 SQL 作为探针输入；组织后台探针仅在既有令牌表缺失时执行 `0019_organization_admin_m06_01.up.sql`，平台账号探针按迁移逐表检查并补齐 `0036_automatic_hotspot_sources.up.sql`。探针使用随机合成账号、严格按本次组织/用户 ID 清理并检查结果，不使用真实用户或令牌。
+
 - P34审核映射用`node scripts/build-ui-phase2-org-approvals-review.mjs --check`核对：历史
   提案固定Git提交，当前组件匹配路由证据。若报stale，应重新核对真实来源与覆盖，
   不覆盖旧图片或把新哈希回填旧manifest。共享历史测试仅用于旧快照，不进入运行时。

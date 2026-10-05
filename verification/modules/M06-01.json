@@ -70,9 +70,9 @@
   "commands": [
     "npm run build",
     "node --test tests/m06-01/organization-admin.test.mjs tests/m06-01/platform-accounts.test.mjs",
-    "node scripts/verify-organization-admin-live.mjs",
-    "node scripts/verify-platform-accounts-live.mjs",
-    "npx playwright test tests/e2e/m06-01-organization-admin.spec.ts tests/e2e/m06-01-platform-accounts.spec.ts",
+    "python scripts/verify-live-baota.py organization-admin",
+    "python scripts/verify-live-baota.py platform-accounts",
+    "npx playwright test tests/e2e/m06-01-organization-admin.spec.ts tests/e2e/m06-01-platform-accounts.spec.ts --workers=1",
     "npm run verify:docs"
   ]
 }

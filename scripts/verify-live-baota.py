@@ -41,7 +41,8 @@ def main() -> int:
         "automation",
         "reports",
     }
-    runtime_probes = m03_probes | m04_probes | m05_probes
+    m06_probes = {"organization-admin", "platform-accounts"}
+    runtime_probes = m03_probes | m04_probes | m05_probes | m06_probes
     if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", *runtime_probes}:
         raise SystemExit("unsupported BaoTa live probe")
 
@@ -135,6 +136,23 @@ def main() -> int:
                     json.dumps("file://" + quote(remote_path, safe="/")),
                     1,
                 )
+
+            if probe in m06_probes:
+                migration_names = sorted(
+                    set(re.findall(r"database/migrations/([A-Za-z0-9_.-]+\.sql)", source))
+                )
+                for migration_name in migration_names:
+                    migration = repo / "database" / "migrations" / migration_name
+                    if not migration.is_file():
+                        raise RuntimeError(f"live probe references an unknown migration: {migration_name}")
+                    read_call = re.compile(
+                        rf'await readFile\(\s*["\']database/migrations/{re.escape(migration_name)}["\']\s*,\s*["\']utf8["\']\s*\)'
+                    )
+                    source, replacements = read_call.subn(
+                        lambda _match: json.dumps(migration.read_text(encoding="utf-8")), source
+                    )
+                    if replacements != 1:
+                        raise RuntimeError(f"live probe migration read mismatch: {migration_name}")
 
             if probe == "reports":
                 local_temp_root = "resolve(tmpdir(), `scoutops-m05-06-${requestId}`)"

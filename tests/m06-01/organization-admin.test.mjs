@@ -471,3 +471,21 @@ test("M06-01 compares the current approval template with its immediate previous 
   );
   assert.equal(result.templates[0].version_diff.changes[1].kind, "added");
 });
+
+test("M06-01 live database probes run through the fixed BaoTa verifier and embed approved migrations", async () => {
+  const [module, runner] = await Promise.all([
+    readFile("verification/modules/M06-01.json", "utf8"),
+    readFile("scripts/verify-live-baota.py", "utf8"),
+  ]);
+  const manifest = JSON.parse(module);
+  assert.ok(manifest.commands.includes("python scripts/verify-live-baota.py organization-admin"));
+  assert.ok(manifest.commands.includes("python scripts/verify-live-baota.py platform-accounts"));
+  assert.ok(
+    manifest.commands.includes(
+      "npx playwright test tests/e2e/m06-01-organization-admin.spec.ts tests/e2e/m06-01-platform-accounts.spec.ts --workers=1",
+    ),
+  );
+  assert.match(runner, /m06_probes\s*=\s*\{"organization-admin", "platform-accounts"\}/);
+  assert.match(runner, /if probe in m06_probes:[\s\S]*live probe migration read mismatch/);
+  assert.match(runner, /SCOUTOPS_\{probe\.upper\(\)\.replace\('-', '_'\)\}_LIVE_TARGET/);
+});

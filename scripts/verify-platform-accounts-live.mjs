@@ -130,7 +130,14 @@ try {
     ],
   );
 
-  const service = new PlatformAccountService(new MySqlPlatformAccountRepository(pool), () => now);
+  const service = new PlatformAccountService(
+    new MySqlPlatformAccountRepository(pool),
+    () => now,
+    undefined,
+    undefined,
+    undefined,
+    randomUUID(),
+  );
   const authorizationRepository = new MySqlAuthorizationRepository(pool);
   const authorization = new AuthorizationService(authorizationRepository, () => now);
   const context = (key) => ({ actorId: ids.actor, idempotencyKey: key, requestId, traceId });
@@ -157,7 +164,7 @@ try {
     context("create-organization"),
   );
   const replay = await service.createOrganization(
-    { name: "不会重复创建", slug: `${slug}-replay` },
+    { name: "平台账号真实验收", slug },
     context("create-organization"),
   );
   organizationId = created.id;
@@ -192,7 +199,7 @@ try {
   );
   const grantReplay = await service.platformRole(
     ids.target,
-    { role_code: "platform_operations_admin", enabled: true, reason: "幂等重放" },
+    { role_code: "platform_operations_admin", enabled: true, reason: "真实数据库验收" },
     context("grant-role"),
   );
   if (!granted.enabled || granted.id !== grantReplay.id)

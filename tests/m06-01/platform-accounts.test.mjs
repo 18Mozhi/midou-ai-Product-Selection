@@ -495,5 +495,6 @@ test("M06-01 platform account delivery includes API, migration, novice UI, permi
   assert.match(live, /platform_capability_unexpected_allow/);
   assert.match(live, /authorization_decisions/);
   assert.match(live, /platform_permission_decision_audit_failed/);
+  assert.match(live, /new PlatformAccountService\([\s\S]*randomUUID\(\)\s*,\s*\)/);
   assert.match(live, /assertCleanup/);
 });
