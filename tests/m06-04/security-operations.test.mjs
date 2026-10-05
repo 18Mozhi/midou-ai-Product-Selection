@@ -5,6 +5,20 @@ import {
   SecurityOperationsService,
   SecurityOperationsError,
 } from "../../apps/api/dist/security-operations-service.js";
+
+test("M06-04 production probe is routed through the fixed BaoTa verifier", async () => {
+  const [manifest, runner] = await Promise.all([
+    readFile("verification/modules/M06-04.json", "utf8"),
+    readFile("scripts/verify-live-baota.py", "utf8"),
+  ]);
+  assert.ok(
+    JSON.parse(manifest).commands.includes(
+      "python scripts/verify-live-baota.py security-operations",
+    ),
+  );
+  assert.match(runner, /m06_probes\s*=\s*\{[\s\S]*"security-operations"[\s\S]*\}/);
+});
+
 test("M06-04.A01/A02/A04/A12 validates windows", async () => {
   const calls = [],
     s = new SecurityOperationsService({ read: async (i) => (calls.push(i), i) }, "24h", 20);
