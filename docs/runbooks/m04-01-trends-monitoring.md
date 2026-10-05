@@ -7,6 +7,8 @@
 3. 由宝塔先重启 Node Worker，再重启 Node API。Web 静态产物随网站发布；不得创建 systemd、独立 PM2、宿主 crontab或面板外容器。
 4. 检查 Worker 日志中的 `queue=trend_projection`，再运行 `npm run verify:module -- M04-01`。
 
+M04-01 生产探针只读预检全部趋势迁移表，缺表即停止，不会代替部署执行 DDL。它只读复用现有 Google News Provider ID，把带 `verification_fixture=true` 的合成证据写入唯一测试组织，并创建已完成态采集任务供趋势投影核验。它不登记、启用或修改 Provider，不领取生产采集队列，也不访问外部来源；完成后清理测试组织及其证据。
+
 发布后在桌面和 390px `/trends` 核对列表项的来源数、新鲜度和可信度，确认帮助面板位于列表之后且默认折叠；进入详情后依次选择“全部来源”和各来源，时间线点数应与 `timeline_sources` 一致。关注、创建监控和转为机会必须仍进入各自原有动作。
 
 从任一证据点击“报告异常”，选择风险等级并填写原因。首次提交应返回 `201` 和 `created=true`，同一原始证据已有未关闭工单时应返回 `200` 和 `created=false`；随后在“平台后台 → 数据质量”按工单 ID 核对来源、原始证据、规范化记录、解析器版本、归因原因、`request_id` 与 `trace_id`。跨组织、跨工作区或不属于当前主题的 signal ID 必须返回 404，不能泄露其他范围是否存在。

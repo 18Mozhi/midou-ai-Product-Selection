@@ -1,12 +1,10 @@
 import { randomUUID, createHash } from "node:crypto";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
 import { createRedisConnection, ScopedRedisStore } from "../packages/redis/dist/index.js";
-import { ProviderSourceService } from "../apps/api/dist/provider-source-service.js";
-import { MySqlProviderSourceRepository } from "../apps/api/dist/mysql-provider-source-repository.js";
 import { MySqlEvidencePersistence } from "../apps/worker/dist/evidence-persistence.js";
 import { MySqlTrendProjectionWorker } from "../apps/worker/dist/trend-projection-worker.js";
 import { TrendService } from "../apps/api/dist/trend-service.js";
@@ -16,7 +14,7 @@ import { MySqlDataQualityRepository } from "../apps/api/dist/mysql-data-quality-
 
 const requestId = randomUUID(),
   traceId = randomUUID(),
-  now = new Date("2026-08-07T15:00:00.000Z"),
+  now = new Date(),
   config = loadRuntimeConfig(process.env, "worker"),
   pool = createDatabasePool(config),
   redisClient = createRedisConnection(config),
@@ -30,19 +28,28 @@ const ids = {
     otherWorkspace: randomUUID(),
   },
   created = { provider: null, task: null };
+let schemaReady = false;
 const sha = (value) => createHash("sha256").update(String(value)).digest("hex");
 
-async function migrate() {
-  const [rows] = await pool.query(
-    "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='trend_topics'",
-  );
-  if (Number(rows[0].count)) return;
-  const sql = await readFile("database/migrations/0017a_trends_m04_01.up.sql", "utf8");
-  for (const statement of sql
-    .split(";")
-    .map((value) => value.trim())
-    .filter(Boolean))
-    await pool.query(statement);
+async function assertSchemaReady() {
+  const required = [
+      "trend_topics",
+      "trend_signals",
+      "trend_topic_keywords",
+      "trend_topic_follows",
+      "trend_monitoring_rules",
+      "trend_projection_jobs",
+      "trend_events",
+      "trend_outbox",
+      "trend_operations",
+    ],
+    [rows] = await pool.query(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN (?)",
+      [required],
+    ),
+    present = new Set(rows.map((row) => String(row.table_name))),
+    missing = required.filter((table) => !present.has(table));
+  if (missing.length) throw new Error(`M04-01 migration is not applied: ${missing.join(",")}`);
 }
 async function cleanup() {
   try {
@@ -61,6 +68,7 @@ async function cleanup() {
     "DELETE FROM trend_topic_keywords WHERE organization_id IN (?,?)",
     "DELETE FROM trend_signals WHERE organization_id IN (?,?)",
     "DELETE FROM trend_topics WHERE organization_id IN (?,?)",
+    "DELETE FROM collection_task_evidence_links WHERE organization_id IN (?,?)",
     "DELETE FROM evidence_data_operations WHERE actor_id=?",
     "DELETE FROM evidence_data_outbox WHERE organization_id IN (?,?)",
     "DELETE FROM evidence_data_events WHERE organization_id IN (?,?)",
@@ -112,6 +120,98 @@ async function cleanup() {
   } catch {}
 }
 
+async function assertProbeClean() {
+  const checks = [
+    ["users", "id", ids.actor],
+    ["organizations", "id", ids.organization],
+    ["organizations", "id", ids.otherOrganization],
+    ["workspaces", "id", ids.workspace],
+    ["workspaces", "id", ids.otherWorkspace],
+    ["collection_tasks", "id", created.task],
+  ];
+  for (const [table, column, value] of checks) {
+    if (!value) continue;
+    const [[row]] = await pool.query(`SELECT COUNT(*) count FROM ${table} WHERE ${column}=?`, [
+      value,
+    ]);
+    if (Number(row.count) !== 0) throw new Error(`live probe cleanup left ${table} rows`);
+  }
+  for (const [table, column, values] of [
+    ["trend_operations", "actor_id", [ids.actor]],
+    ["trend_topics", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["trend_signals", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["trend_topic_keywords", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["trend_topic_follows", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["trend_monitoring_rules", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["trend_projection_jobs", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["trend_events", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["trend_outbox", "organization_id", [ids.organization, ids.otherOrganization]],
+    [
+      "collection_task_evidence_links",
+      "organization_id",
+      [ids.organization, ids.otherOrganization],
+    ],
+    ["raw_evidence", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["normalized_records", "organization_id", [ids.organization, ids.otherOrganization]],
+    ["data_quality_issues", "organization_id", [ids.organization, ids.otherOrganization]],
+  ]) {
+    const [[row]] = await pool.query(`SELECT COUNT(*) count FROM ${table} WHERE ${column} IN (?)`, [
+      values,
+    ]);
+    if (Number(row.count) !== 0) throw new Error(`live probe cleanup left ${table} rows`);
+  }
+}
+
+async function createSyntheticTask(providerId) {
+  const taskId = randomUUID(),
+    subqueryId = randomUUID();
+  created.task = taskId;
+  await pool.query(
+    [
+      "INSERT INTO collection_tasks (id,organization_id,workspace_id,status,coverage_status,priority,",
+      "scheduled_at,available_at,finished_at,attempt_count,successful_subquery_count,failed_subquery_count,",
+      "blocked_subquery_count,available_result_count,missing_fields_json,request_id,trace_id,version,created_by,",
+      "created_at,updated_at) VALUES (?,?,?,'succeeded','complete','normal',?,?,?,1,1,0,0,1,'[]',?,?,1,?,?,?)",
+    ].join(""),
+    [
+      taskId,
+      ids.organization,
+      ids.workspace,
+      now,
+      now,
+      now,
+      requestId,
+      traceId,
+      ids.actor,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    [
+      "INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id,provider_id,ordinal,",
+      "target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,",
+      "started_at,finished_at,version,created_at,updated_at) VALUES (?,?,?,?,?,1,?,1,'succeeded',1,'[]',NULL,0,?,?,1,?,?)",
+    ].join(""),
+    [
+      subqueryId,
+      taskId,
+      ids.organization,
+      ids.workspace,
+      providerId,
+      JSON.stringify({
+        query: "synthetic M04-01 trend projection fixture",
+        verification_fixture: true,
+      }),
+      now,
+      now,
+      now,
+      now,
+    ],
+  );
+  return { taskId, subqueryId };
+}
+
 try {
   const [versions] = await pool.query(
       "SELECT VERSION() version,@@character_set_server charset,DATABASE() database_name,CURRENT_USER() account_name",
@@ -127,7 +227,8 @@ try {
   await redis.connect();
   if ((await redis.health(requestId, traceId)).status !== "available")
     throw new Error("redis unavailable");
-  await migrate();
+  await assertSchemaReady();
+  schemaReady = true;
   await cleanup();
   const email = `m04-01-${requestId}@example.test`;
   await pool.query(
@@ -147,46 +248,29 @@ try {
       [ws, org, ids.actor, now, now],
     );
   }
-  const sourceRepo = new MySqlProviderSourceRepository(pool),
-    sourceService = new ProviderSourceService(sourceRepo, () => now),
-    provision = await sourceService.provision("google_news_search", {
-      actorId: ids.actor,
-      idempotencyKey: "m04-provision",
-      requestId,
-      traceId,
-    });
-  created.provider = provision.id;
-  await pool.query(
-    "UPDATE providers SET status='enabled',version=version+1,updated_by=?,updated_at=? WHERE id=?",
-    [ids.actor, now, provision.id],
-  );
-  const scheduled = await sourceService.replay(
-    provision.id,
-    { organization_id: ids.organization, workspace_id: ids.workspace, query: "ai skincare" },
-    { actorId: ids.actor, idempotencyKey: "m04-replay", requestId, traceId },
-  );
-  created.task = scheduled.task_id;
-  const [queries] = await pool.query("SELECT id FROM collection_subqueries WHERE task_id=?", [
-      scheduled.task_id,
-    ]),
-    subqueryId = String(queries[0].id),
+  const [providers] = await pool.query("SELECT id FROM providers WHERE code=? LIMIT 1", [
+    "google_news_search",
+  ]);
+  if (!providers[0]) throw new Error("existing Google News provider reference is unavailable");
+  const providerId = String(providers[0].id),
+    { taskId, subqueryId } = await createSyntheticTask(providerId),
     evidence = new MySqlEvidencePersistence(pool, root, 10485760, () => now),
     payload = {
       title: "AI Skin Care Demand Rises",
       summary: "Retailers report new demand.",
-      published_at: "2026-08-07T14:00:00.000Z",
+      published_at: new Date(now.getTime() - 60 * 60 * 1000).toISOString(),
       source_url: "https://example.test/news/ai-skincare",
       publisher: "Example News",
       canonical_url: "https://example.test/news/ai-skincare",
-      observed_at: "2026-08-07T14:05:00.000Z",
-      evidence_ref: "m04-live",
+      observed_at: new Date(now.getTime() - 5 * 60 * 1000).toISOString(),
+      evidence_ref: `synthetic-m04-01-${requestId}`,
     };
   const persisted = await evidence.persist({
     organizationId: ids.organization,
     workspaceId: ids.workspace,
-    taskId: scheduled.task_id,
+    taskId,
     subqueryId,
-    providerId: provision.id,
+    providerId,
     sourceUrl: payload.source_url,
     canonicalUrl: payload.canonical_url,
     dedupeKey: "m04-ai-skincare",
@@ -341,6 +425,7 @@ try {
   )
     throw new Error("audit outbox or evidence preservation mismatch");
   await cleanup();
+  await assertProbeClean();
   console.log(
     JSON.stringify({
       status: "passed",
@@ -378,6 +463,7 @@ try {
   process.exitCode = 2;
 } finally {
   await cleanup();
+  if (schemaReady) await assertProbeClean();
   await redis.close();
   await pool.end();
 }

@@ -23,6 +23,7 @@ def main() -> int:
         "evidence-data-quality",
         "provider-sources",
         "automatic-hotspots",
+        "trends",
     }
     if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", *m03_probes}:
         raise SystemExit("unsupported BaoTa live probe")

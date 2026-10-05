@@ -448,6 +448,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
     "docs/runbooks/m04-01-trends-monitoring.md",
     "tests/e2e/m04-01-trends.spec.ts",
     "scripts/verify-trends-live.mjs",
+    "scripts/verify-live-baota.py",
     "new-product-enterprise-blueprint.md",
   ];
   const values = await Promise.all(paths.map((path) => readFile(path, "utf8"))),
@@ -479,6 +480,7 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
       runbook,
       e2e,
       live,
+      liveRunner,
       blueprint,
     ] = values;
   const projectionSurface = `${calculation}\n${persistence}\n${alerts}\n${worker}`;
@@ -526,6 +528,15 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(runbook, /宝塔[\s\S]*回滚/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /MySqlTrendProjectionWorker/);
+  assert.match(live, /SELECT id FROM providers WHERE code=\?/);
+  assert.match(live, /verification_fixture: true/);
+  assert.match(live, /information_schema\.tables/);
+  assert.match(liveRunner, /"trends"/);
+  assert.doesNotMatch(live, /CREATE TABLE|readFile\(/);
+  assert.doesNotMatch(
+    live,
+    /sourceService\.(?:provision|replay)|UPDATE providers SET status='enabled'/,
+  );
   assert.match(blueprint, /M04-01 实现合同/);
   assert.match(
     projectionSurface,
