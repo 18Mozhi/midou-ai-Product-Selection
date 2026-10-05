@@ -1,12 +1,10 @@
 import { createHash, randomUUID } from "node:crypto";
-import { mkdtemp, readFile, rm } from "node:fs/promises";
+import { mkdtemp, rm } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
 import { createRedisConnection, ScopedRedisStore } from "../packages/redis/dist/index.js";
-import { ProviderSourceService } from "../apps/api/dist/provider-source-service.js";
-import { MySqlProviderSourceRepository } from "../apps/api/dist/mysql-provider-source-repository.js";
 import { MySqlEvidencePersistence } from "../apps/worker/dist/evidence-persistence.js";
 import { MySqlTrendProjectionWorker } from "../apps/worker/dist/trend-projection-worker.js";
 import {
@@ -31,27 +29,38 @@ const ids = {
     otherOrganization: randomUUID(),
     otherWorkspace: randomUUID(),
   },
-  created = { provider: null, providerOwned: false, task: null };
+  created = { task: null };
 const sha = (value) => createHash("sha256").update(String(value)).digest("hex");
-async function applyMigration(file) {
-  const sql = await readFile(file, "utf8");
-  for (const statement of sql
-    .split(";")
-    .map((value) => value.replace(/^--.*$/gm, "").trim())
-    .filter(Boolean))
-    await pool.query(statement);
-}
-async function migrate() {
-  const [rows] = await pool.query(
-    "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='opportunities'",
-  );
-  if (!Number(rows[0].count))
-    await applyMigration("database/migrations/0017b_opportunities_m04_02.up.sql");
+async function assertSchemaReady() {
+  const required = [
+      "opportunities",
+      "opportunity_decisions",
+      "opportunity_evidence_links",
+      "opportunity_refresh_jobs",
+      "opportunity_events",
+      "opportunity_outbox",
+      "trend_topics",
+      "trend_projection_jobs",
+      "collection_tasks",
+      "collection_subqueries",
+      "collection_task_evidence_links",
+      "raw_evidence",
+      "normalized_records",
+      "field_provenance",
+      "evidence_data_events",
+      "evidence_data_outbox",
+    ],
+    [rows] = await pool.query(
+      "SELECT table_name FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN (?)",
+      [required],
+    ),
+    present = new Set(rows.map((row) => String(row.table_name))),
+    missing = required.filter((table) => !present.has(table));
+  if (missing.length) throw new Error(`M04-02 schema is not applied: ${missing.join(",")}`);
   const [columns] = await pool.query(
     "SELECT COUNT(*) count FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='opportunities' AND column_name='lifecycle_entered_at'",
   );
-  if (!Number(columns[0].count))
-    await applyMigration("database/migrations/0060_opportunity_workflow_visibility.up.sql");
+  if (!Number(columns[0].count)) throw new Error("M04-02 lifecycle schema is not applied");
 }
 async function cleanup() {
   try {
@@ -79,6 +88,7 @@ async function cleanup() {
     "DELETE FROM evidence_data_operations WHERE actor_id=?",
     "DELETE FROM evidence_data_outbox WHERE organization_id IN (?,?)",
     "DELETE FROM evidence_data_events WHERE organization_id IN (?,?)",
+    "DELETE FROM collection_task_evidence_links WHERE organization_id IN (?,?)",
     "DELETE FROM field_provenance WHERE organization_id IN (?,?)",
     "DELETE FROM normalized_records WHERE organization_id IN (?,?)",
     "DELETE FROM raw_evidence WHERE organization_id IN (?,?)",
@@ -102,16 +112,6 @@ async function cleanup() {
       await pool.query(sql, params);
     } catch {}
   }
-  if (created.providerOwned && created.provider) {
-    try {
-      await pool.query("DELETE FROM provider_adapter_health WHERE provider_id=?", [
-        created.provider,
-      ]);
-    } catch {}
-    try {
-      await pool.query("DELETE FROM providers WHERE id=?", [created.provider]);
-    } catch {}
-  }
   for (const [sql, id] of [
     ["DELETE FROM workspaces WHERE id=?", ids.workspace],
     ["DELETE FROM workspaces WHERE id=?", ids.otherWorkspace],
@@ -125,6 +125,74 @@ async function cleanup() {
   try {
     await rm(root, { recursive: true, force: true });
   } catch {}
+}
+async function assertProbeClean() {
+  for (const [table, column, value] of [
+    ["users", "id", ids.actor],
+    ["organizations", "id", ids.organization],
+    ["organizations", "id", ids.otherOrganization],
+    ["workspaces", "id", ids.workspace],
+    ["workspaces", "id", ids.otherWorkspace],
+    ["collection_tasks", "id", created.task],
+  ]) {
+    if (!value) continue;
+    const [[row]] = await pool.query(`SELECT COUNT(*) count FROM ${table} WHERE ${column}=?`, [
+      value,
+    ]);
+    if (Number(row.count) !== 0) throw new Error(`M04-02 cleanup left ${table} rows`);
+  }
+  for (const table of [
+    "opportunities",
+    "opportunity_events",
+    "opportunity_outbox",
+    "trend_topics",
+    "raw_evidence",
+    "normalized_records",
+    "collection_task_evidence_links",
+  ]) {
+    const [[row]] = await pool.query(
+      `SELECT COUNT(*) count FROM ${table} WHERE organization_id IN (?,?)`,
+      [ids.organization, ids.otherOrganization],
+    );
+    if (Number(row.count) !== 0) throw new Error(`M04-02 cleanup left ${table} rows`);
+  }
+}
+async function createSyntheticTask(providerId) {
+  const taskId = randomUUID(),
+    subqueryId = randomUUID();
+  created.task = taskId;
+  await pool.query(
+    "INSERT INTO collection_tasks (id,organization_id,workspace_id,status,coverage_status,priority,scheduled_at,available_at,finished_at,attempt_count,successful_subquery_count,failed_subquery_count,blocked_subquery_count,available_result_count,missing_fields_json,request_id,trace_id,version,created_by,created_at,updated_at) VALUES (?,?,?,'succeeded','complete','normal',?,?,?,1,1,0,0,1,'[]',?,?,1,?,?,?)",
+    [
+      taskId,
+      ids.organization,
+      ids.workspace,
+      now,
+      now,
+      now,
+      requestId,
+      traceId,
+      ids.actor,
+      now,
+      now,
+    ],
+  );
+  await pool.query(
+    "INSERT INTO collection_subqueries (id,task_id,organization_id,workspace_id,provider_id,ordinal,target_json,is_required,status,available_result_count,missing_fields_json,error_code,retryable,started_at,finished_at,version,created_at,updated_at) VALUES (?,?,?,?,?,1,?,1,'succeeded',1,'[]',NULL,0,?,?,1,?,?)",
+    [
+      subqueryId,
+      taskId,
+      ids.organization,
+      ids.workspace,
+      providerId,
+      JSON.stringify({ query: "synthetic M04-02 opportunity fixture", verification_fixture: true }),
+      now,
+      now,
+      now,
+      now,
+    ],
+  );
+  return { taskId, subqueryId };
 }
 try {
   const [versions] = await pool.query(
@@ -141,7 +209,7 @@ try {
   await redis.connect();
   if ((await redis.health(requestId, traceId)).status !== "available")
     throw new Error("redis unavailable");
-  await migrate();
+  await assertSchemaReady();
   await cleanup();
   const email = `m04-02-${requestId}@example.test`;
   await pool.query(
@@ -161,39 +229,12 @@ try {
       [ws, org, ids.actor, now, now],
     );
   }
-  const sourceService = new ProviderSourceService(
-      new MySqlProviderSourceRepository(pool),
-      () => now,
-    ),
-    catalog = await sourceService.list();
-  let provider = catalog.find((item) => item.code === "google_news_search")?.provisioned;
-  if (provider && provider.status !== "enabled")
-    throw new Error("provider_source_existing_not_enabled");
-  if (!provider) {
-    provider = await sourceService.provision("google_news_search", {
-      actorId: ids.actor,
-      idempotencyKey: "m0402-provision",
-      requestId,
-      traceId,
-    });
-    created.providerOwned = true;
-    await pool.query(
-      "UPDATE providers SET status='enabled',version=version+1,updated_by=?,updated_at=? WHERE id=?",
-      [ids.actor, now, provider.id],
-    );
-    provider = { ...provider, status: "enabled" };
-  }
-  created.provider = provider.id;
-  const scheduled = await sourceService.replay(
-    provider.id,
-    { organization_id: ids.organization, workspace_id: ids.workspace, query: "ai skincare" },
-    { actorId: ids.actor, idempotencyKey: "m0402-replay", requestId, traceId },
-  );
-  created.task = scheduled.task_id;
-  const [queries] = await pool.query("SELECT id FROM collection_subqueries WHERE task_id=?", [
-      scheduled.task_id,
-    ]),
-    subqueryId = String(queries[0].id),
+  const [providers] = await pool.query("SELECT id FROM providers WHERE code=? LIMIT 1", [
+    "google_news_search",
+  ]);
+  if (!providers[0]) throw new Error("existing provider reference is unavailable");
+  const providerId = String(providers[0].id),
+    { taskId, subqueryId } = await createSyntheticTask(providerId),
     payload = {
       title: "AI Skin Care Demand Rises",
       summary: "Retailers report new demand.",
@@ -208,9 +249,9 @@ try {
     persisted = await evidence.persist({
       organizationId: ids.organization,
       workspaceId: ids.workspace,
-      taskId: scheduled.task_id,
+      taskId,
       subqueryId,
-      providerId: provider.id,
+      providerId,
       sourceUrl: payload.source_url,
       canonicalUrl: payload.canonical_url,
       dedupeKey: "m0402-ai-skincare",
@@ -343,6 +384,7 @@ try {
   )
     throw new Error("audit outbox or evidence preservation mismatch");
   await cleanup();
+  await assertProbeClean();
   console.log(
     JSON.stringify({
       status: "passed",
@@ -378,6 +420,7 @@ try {
   process.exitCode = 2;
 } finally {
   await cleanup();
+  await assertProbeClean();
   await redis.close();
   await pool.end();
 }

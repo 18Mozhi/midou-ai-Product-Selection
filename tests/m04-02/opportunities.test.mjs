@@ -349,10 +349,33 @@ test("M04-02.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(blueprint, /M04-02 实现合同/);
 });
 
-test("M04-02 live verification reuses an enabled production source without owning or deleting it", async () => {
+test("M04-02 live verification uses synthetic evidence and never mutates provider or schema state", async () => {
   const live = await readFile("scripts/verify-opportunities-live.mjs", "utf8");
-  assert.match(live, /sourceService\.list\(\)/);
-  assert.match(live, /providerOwned/);
-  assert.match(live, /created\.providerOwned\s*&&\s*created\.provider/);
-  assert.match(live, /provider_source_existing_not_enabled/);
+  assert.match(live, /verification_fixture:\s*true/);
+  assert.match(live, /assertSchemaReady/);
+  assert.match(live, /assertProbeClean/);
+  assert.doesNotMatch(
+    live,
+    /ProviderSourceService|\.provision\(|\.replay\(|UPDATE providers|CREATE TABLE|ALTER TABLE/,
+  );
+});
+
+test("M04 production probes are read-only for schema and never run migrations", async () => {
+  const probes = [
+    "scripts/verify-opportunities-live.mjs",
+    "scripts/verify-scoring-live.mjs",
+    "scripts/verify-profit-live.mjs",
+    "scripts/verify-competitors-live.mjs",
+    "scripts/verify-sourcing-live.mjs",
+    "scripts/verify-ai-analysis-live.mjs",
+  ];
+  for (const path of probes) {
+    const source = await readFile(path, "utf8");
+    assert.match(source, /assertSchemaReady\(\)/, `${path} must verify deployed schema`);
+    assert.doesNotMatch(
+      source,
+      /applyMigration|CREATE TABLE|ALTER TABLE|database\/migrations\/.*\.up\.sql/,
+      `${path} must not migrate production`,
+    );
+  }
 });

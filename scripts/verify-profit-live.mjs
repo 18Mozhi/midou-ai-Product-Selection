@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
 import {
@@ -55,17 +54,11 @@ const fee_lines = [
   { type: "fulfillment", mode: "fixed_amount", value: 2, currency: "USD" },
 ];
 
-async function migrate() {
+async function assertSchemaReady() {
   const [rows] = await pool.query(
     "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='cost_rules'",
   );
-  if (Number(rows[0].count)) return;
-  const sql = await readFile("database/migrations/0017d_profit_cost_m04_04.up.sql", "utf8");
-  for (const statement of sql
-    .split(";")
-    .map((value) => value.trim())
-    .filter(Boolean))
-    await pool.query(statement);
+  if (!Number(rows[0].count)) throw new Error("M04-04 schema is not applied");
 }
 async function cleanup() {
   try {
@@ -230,7 +223,7 @@ try {
     !String(runtime.account_name).startsWith("product_scout@")
   )
     throw new Error("requires MySQL57 utf8mb4 product_scout business account");
-  await migrate();
+  await assertSchemaReady();
   await cleanup();
   await seed();
   let invalid = false;

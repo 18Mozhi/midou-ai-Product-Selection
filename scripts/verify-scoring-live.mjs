@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
 import { createRedisConnection, ScopedRedisStore } from "../packages/redis/dist/index.js";
@@ -33,25 +32,15 @@ const requestId = randomUUID(),
   opportunities = new OpportunityService(new MySqlOpportunityRepository(pool));
 const scope = { organizationId: ids.organization, workspaceId: ids.workspace, actorId: ids.actor },
   write = (key) => ({ ...scope, requestId, traceId, idempotencyKey: key });
-async function applyMigration(file) {
-  const sql = await readFile(file, "utf8");
-  for (const statement of sql
-    .split(";")
-    .map((value) => value.replace(/^--.*$/gm, "").trim())
-    .filter(Boolean))
-    await pool.query(statement);
-}
-async function migrate() {
+async function assertSchemaReady() {
   const [rows] = await pool.query(
-    "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='score_rules'",
-  );
-  if (!Number(rows[0].count))
-    await applyMigration("database/migrations/0017c_scoring_rules_m04_03.up.sql");
-  const [columns] = await pool.query(
-    "SELECT COUNT(*) count FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='opportunity_score_jobs' AND column_name='trigger_task_id'",
-  );
-  if (!Number(columns[0].count))
-    await applyMigration("database/migrations/0060_opportunity_workflow_visibility.up.sql");
+      "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name IN ('score_rules','opportunity_score_runs','opportunity_score_jobs')",
+    ),
+    [columns] = await pool.query(
+      "SELECT COUNT(*) count FROM information_schema.columns WHERE table_schema=DATABASE() AND table_name='opportunity_score_jobs' AND column_name='trigger_task_id'",
+    );
+  if (Number(rows[0].count) !== 3 || !Number(columns[0].count))
+    throw new Error("M04-03 schema is not applied");
 }
 async function cleanup() {
   try {
@@ -183,7 +172,7 @@ try {
   await redis.connect();
   if ((await redis.health(requestId, traceId)).status !== "available")
     throw new Error("redis unavailable");
-  await migrate();
+  await assertSchemaReady();
   await cleanup();
   await seed();
   let invalid = false;

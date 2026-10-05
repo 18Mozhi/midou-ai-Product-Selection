@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { readFile } from "node:fs/promises";
 import { loadRuntimeConfig } from "../packages/config/dist/index.js";
 import { createDatabasePool } from "../packages/database/dist/index.js";
 import { AiAnalysisService, AiAnalysisServiceError } from "../apps/api/dist/ai-analysis-service.js";
@@ -23,17 +22,11 @@ const requestId = randomUUID(),
   service = new AiAnalysisService(new MySqlAiAnalysisRepository(pool)),
   scope = { organizationId: ids.org, workspaceId: ids.ws, actorId: ids.actor },
   write = (key) => ({ ...scope, requestId, traceId, idempotencyKey: key });
-async function migrate() {
+async function assertSchemaReady() {
   const [rows] = await pool.query(
     "SELECT COUNT(*) count FROM information_schema.tables WHERE table_schema=DATABASE() AND table_name='ai_analysis_requests'",
   );
-  if (Number(rows[0].count)) return;
-  const sql = await readFile("database/migrations/0017g_ai_assist_m04_07.up.sql", "utf8");
-  for (const s of sql
-    .split(";")
-    .map((v) => v.replace(/^--.*$/gm, "").trim())
-    .filter(Boolean))
-    await pool.query(s);
+  if (!Number(rows[0].count)) throw new Error("M04-07 schema is not applied");
 }
 async function cleanup() {
   try {
@@ -135,7 +128,7 @@ try {
     !String(runtime.account_name).startsWith("product_scout@")
   )
     throw new Error("requires MySQL57 utf8mb4 product_scout business account");
-  await migrate();
+  await assertSchemaReady();
   await cleanup();
   await seed();
   const queued = await service.queue({

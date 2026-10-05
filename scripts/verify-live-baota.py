@@ -25,7 +25,16 @@ def main() -> int:
         "automatic-hotspots",
         "trends",
     }
-    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", *m03_probes}:
+    m04_probes = {
+        "opportunities",
+        "scoring",
+        "profit",
+        "competitors",
+        "sourcing",
+        "ai-analysis",
+    }
+    runtime_probes = m03_probes | m04_probes
+    if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", *runtime_probes}:
         raise SystemExit("unsupported BaoTa live probe")
 
     repo = pathlib.Path(__file__).resolve().parents[1]
@@ -63,7 +72,7 @@ def main() -> int:
         stage = "local_probe_source"
         script_path = repo / "scripts" / f"verify-{probe}-live.mjs"
         source = script_path.read_text(encoding="utf-8")
-        package_names = [] if probe in m03_probes else ["config"]
+        package_names = [] if probe in runtime_probes else ["config"]
         if probe in {"mysql", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard"}:
             package_names.append("database")
         if probe == "theme-preferences":
@@ -102,16 +111,16 @@ def main() -> int:
             new = json.dumps("file://" + quote(remote_path, safe="/"))
             source = source.replace(old, new, 1)
 
-        if probe in m03_probes:
+        if probe in runtime_probes:
             runtime_imports = re.findall(
                 r"(['\"])(\.\./(?:packages|apps)/(?:api|worker|[a-z0-9-]+)/dist/[^'\"]+)\1",
                 source,
             )
             if not runtime_imports:
-                raise RuntimeError("local P03 live probe runtime imports are missing")
+                raise RuntimeError("local live probe runtime imports are missing")
             for quote_char, import_path in runtime_imports:
                 if source.count(f"{quote_char}{import_path}{quote_char}") != 1:
-                    raise RuntimeError(f"ambiguous P03 live probe import: {import_path}")
+                    raise RuntimeError(f"ambiguous live probe import: {import_path}")
                 remote_path = f"/www/wwwroot/ai选品/backend/{import_path.removeprefix('../')}"
                 source = source.replace(
                     f"{quote_char}{import_path}{quote_char}",
@@ -126,7 +135,7 @@ def main() -> int:
             for migration_name in migration_names:
                 migration = repo / "database" / "migrations" / migration_name
                 if not migration.is_file():
-                    raise RuntimeError(f"P03 probe references an unknown migration: {migration_name}")
+                    raise RuntimeError(f"live probe references an unknown migration: {migration_name}")
                 required_tables.update(
                     re.findall(r"CREATE\s+TABLE\s+`([^`]+)`", migration.read_text(encoding="utf-8"), re.I)
                 )

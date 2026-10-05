@@ -533,7 +533,16 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(live, /SELECT id FROM providers WHERE code=\?/);
   assert.match(live, /verification_fixture: true/);
   assert.match(live, /information_schema\.tables/);
-  assert.match(liveRunner, /"trends"/);
+  for (const probe of [
+    "trends",
+    "opportunities",
+    "scoring",
+    "profit",
+    "competitors",
+    "sourcing",
+    "ai-analysis",
+  ])
+    assert.match(liveRunner, new RegExp(`"${probe}"`));
   assert.match(moduleRegistry, /python scripts\/verify-live-baota\.py trends/);
   assert.doesNotMatch(live, /CREATE TABLE|readFile\(/);
   assert.doesNotMatch(
