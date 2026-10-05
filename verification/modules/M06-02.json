@@ -58,7 +58,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m06-02/platform-dashboard.test.mjs",
-    "node scripts/verify-platform-dashboard-live.mjs",
+    "python scripts/verify-live-baota.py platform-dashboard",
     "npx playwright test tests/e2e/m06-02-platform-dashboard.spec.ts",
     "npm run verify:docs"
   ]

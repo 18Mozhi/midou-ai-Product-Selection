@@ -183,6 +183,16 @@ test("M06-02.A06/A07/A08/A10/A13/A17 contracts frontend config and handoff stay 
   assert.match(runbook, /宝塔重启 Node API/);
   assert.equal(JSON.parse(feature).implementation.platformDashboard.module, "M06-02");
 });
+test("M06-02.A14 production probe is routed through fixed BaoTa MySQL", async () => {
+  const [manifest, runner, probe] = await Promise.all([
+    readFile("verification/modules/M06-02.json", "utf8"),
+    readFile("scripts/verify-live-baota.py", "utf8"),
+    readFile("scripts/verify-platform-dashboard-live.mjs", "utf8"),
+  ]);
+  assert.match(manifest, /python scripts\/verify-live-baota\.py platform-dashboard/);
+  assert.match(runner, /m06_probes\s*=\s*\{[^}]*"platform-dashboard"/);
+  assert.match(probe, /data\.provider_health\.find\(\(provider\)\s*=>\s*provider\.code===/);
+});
 test("M06-02 platform overview gives administrators clear next actions", async () => {
   const [web, styles] = await Promise.all([
     readFile("apps/web/src/components/PlatformDashboard.vue", "utf8"),
