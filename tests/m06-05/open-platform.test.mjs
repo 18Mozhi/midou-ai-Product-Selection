@@ -124,6 +124,20 @@ test("M06-05.A03/A05/A10/A11/A12/A14/A16 security and persistence contracts", as
   assert.doesNotMatch(files[3], /SELECT[^;]+secret_ciphertext[^;]+overview/i);
   await assert.rejects(() => resolveWebhookTarget("https://127.0.0.1/hook"), /private/);
 });
+test("M06-05 production verification uses the fixed BaoTa route and read-only schema preflight", async () => {
+  const [manifestText, liveProbe, baotaRunner] = await Promise.all([
+    readFile("verification/modules/M06-05.json", "utf8"),
+    readFile("scripts/verify-open-platform-live.mjs", "utf8"),
+    readFile("scripts/verify-live-baota.py", "utf8"),
+  ]);
+  const manifest = JSON.parse(manifestText);
+  assert.ok(manifest.commands.includes("python scripts/verify-live-baota.py open-platform"));
+  assert.doesNotMatch(manifest.commands.join("\n"), /node scripts\/verify-open-platform-live\.mjs/);
+  assert.match(baotaRunner, /"open-platform"/);
+  assert.match(liveProbe, /database\/migrations\/0023_open_platform_m06_05\.up\.sql/);
+  assert.match(liveProbe, /information_schema\.tables/);
+  assert.doesNotMatch(liveProbe, /applyMigration|CREATE\s+TABLE|ALTER\s+TABLE/i);
+});
 test("M06-05.A06/A07/A08/A13/A15/A17 documented UI and contracts", async () => {
   const all = (
     await Promise.all(

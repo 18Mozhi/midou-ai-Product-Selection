@@ -58,7 +58,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m06-05/open-platform.test.mjs",
-    "node scripts/verify-open-platform-live.mjs",
+    "python scripts/verify-live-baota.py open-platform",
     "npx playwright test tests/e2e/m06-05-open-platform.spec.ts",
     "npm run verify:docs"
   ]
