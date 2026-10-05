@@ -1718,9 +1718,13 @@ test("platform completion exposes data governance notifications and user-panel s
     await expect(page.getByRole("button", { name: /^便携照明趋势 · 展示中/ })).toBeVisible();
   else await expect(page.getByText("便携照明趋势", { exact: true })).toBeVisible();
   await expect(page.getByText("trend-1", { exact: true })).not.toBeVisible();
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await page.getByRole("button", { name: "打开导航菜单" }).click();
   await expect(
     page.getByRole("link", { name: "选择组织与工作区后进入用户工作台" }),
   ).toHaveAttribute("href", /\/select-context\?return_to=%2Fhome/);
+  if ((page.viewportSize()?.width ?? 1000) <= 760)
+    await page.getByRole("button", { name: "关闭导航菜单" }).click();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
