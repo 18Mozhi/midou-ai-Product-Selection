@@ -148,7 +148,9 @@ const closeTaskEditor = () => {
   ),
   { dialogElement: deleteDialogElement, handleCancel: handleDeleteCancel } = useModalDialog(
     () => Boolean(deleting.value),
-    closeDeleteDialog,
+    () => {
+      if (!busy.value) closeDeleteDialog();
+    },
   );
 const pageSize = 10,
   canCreate = computed(() => props.capabilities?.includes("task:create") ?? false),
