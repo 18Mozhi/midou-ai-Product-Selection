@@ -52,7 +52,7 @@ export const sharedReviewRevisions = Object.freeze({
   "tests/e2e/m06-02-platform-dashboard.spec.ts": {
     baseline: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
     captured: "7d0f9118b740aa7844bd63796e5cf5ede3ebefda1f88d58419257b962e68cd58",
-    current: "7351ea7298eea9426c0cf1d159e2b8e2e6dbe7989f38ea5aa9831bfba9597b26",
+    current: "8c08f87ecf170e26828d95c8cdd64880a27987997dabb9617d7eb4376a8fb7da",
   },
   "tests/e2e/m03-06-evidence-data-quality.spec.ts": {
     baseline: "d99f047c95a15508066cdd191275344d3086f46a",
@@ -359,7 +359,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "3d297b78d6e26abe803a10bd1a688fc4254d38bb",
       captured: "ad45253b01418096d7df00f364d8b820c99f7285ff961798c7749211bb2f1bb0",
-      current: "7351ea7298eea9426c0cf1d159e2b8e2e6dbe7989f38ea5aa9831bfba9597b26",
+      current: "8c08f87ecf170e26828d95c8cdd64880a27987997dabb9617d7eb4376a8fb7da",
     },
   "tests/unit/platform-notification-operations.test.mjs#366dc7309b7def6692fb8edd0861d37e3da3a82b3a713a9b0aa7004e2e3d2f75":
     {

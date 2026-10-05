@@ -566,7 +566,7 @@
     "scripts/verify-ui-phase2-data-records-c.mjs": "40e627cc2688d1159442b8c1374569c8818f746ef18a97b87eb812a1314750a0",
     "scripts/verify-ui-phase2-data-composed-c.mjs": "dd936e280afadfa8a2975a1f32e0c51b9559720325d2321b742ccd2f65a51879",
     "scripts/verify-ui-phase2-data-controls-c.mjs": "789526ced8ddf184e6fd21ae12e00d17f8f0b58675c269d6abfa154011388a06",
-    "tests/e2e/m06-02-platform-dashboard.spec.ts": "7351ea7298eea9426c0cf1d159e2b8e2e6dbe7989f38ea5aa9831bfba9597b26",
+    "tests/e2e/m06-02-platform-dashboard.spec.ts": "8c08f87ecf170e26828d95c8cdd64880a27987997dabb9617d7eb4376a8fb7da",
     "scripts/verify-ui-phase2-data-quality-c.mjs": "a5022038047c8914578a74310af96cbe4063229dbf72a81f0f3d82a6056fb8ae",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P55.json": "e4816811798949e12750b9993b37c872582a9bed0a7045a8ac9361ee2c00418f",
     "scripts/verify-ui-phase2-governance-c.mjs": "601087302a527aa19c27decca6752c4f3b6c98ffdfb55a634bba4cd3d9b3a614",
