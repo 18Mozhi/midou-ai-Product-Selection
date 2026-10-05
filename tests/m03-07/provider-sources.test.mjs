@@ -333,7 +333,14 @@ test("M03-07.A03/A06-A11/A13-A17 delivery evidence is complete", async () => {
     /service\.replay\(|processCollectionTaskOnce\(|INSERT INTO users|UPDATE providers/,
   );
   assert.match(automaticLive, /catalog\.length < 100/);
-  assert.match(automaticLive, /automatic\.length < 80/);
+  assert.match(automaticLive, /persisted_catalog_scope_insufficient/);
+  assert.doesNotMatch(automaticLive, /ensureCatalog\(\)/);
+  assert.match(automaticLive, /terms_review_status='approved'/);
+  assert.match(automaticLive, /terms_expires_at>NOW\(3\)/);
+  assert.match(automaticLive, /provider_source_automatic_empty/);
+  assert.match(automaticLive, /scheduler_did_not_idle_without_eligible_sources/);
+  assert.match(automaticLive, /no_source_scheduler_created_persisted_work/);
+  assert.doesNotMatch(automaticLive, /automatic\.length < 80/);
   assert.match(automaticLive, /MySqlAutomaticSourceScheduler/);
   assert.match(automaticLive, /manual_refresh_idempotency/);
   assert.match(automaticLive, /assertCleanup/);
