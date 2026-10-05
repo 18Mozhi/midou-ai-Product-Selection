@@ -30,8 +30,12 @@
     { "id": "verify-evidence-data-quality-live", "program": "node", "args": ["scripts/verify-evidence-data-quality-live.mjs"] },
     { "id": "verify-opportunities-live", "program": "node", "args": ["scripts/verify-opportunities-live.mjs"] },
     { "id": "verify-sourcing-live", "program": "node", "args": ["scripts/verify-sourcing-live.mjs"] },
-    { "id": "verify-business-tasks-live", "program": "node", "args": ["scripts/verify-business-tasks-live.mjs"] },
-    { "id": "verify-approval-workflow-live", "program": "node", "args": ["scripts/verify-approval-workflow-live.mjs"] },
+    { "id": "verify-business-tasks-live", "program": "python", "args": ["scripts/verify-live-baota.py", "business-tasks"] },
+    { "id": "verify-approval-workflow-live", "program": "python", "args": ["scripts/verify-live-baota.py", "approval-workflow"] },
+    { "id": "verify-notifications-live", "program": "python", "args": ["scripts/verify-live-baota.py", "notifications"] },
+    { "id": "verify-realtime-live", "program": "python", "args": ["scripts/verify-live-baota.py", "realtime"] },
+    { "id": "verify-automation-live", "program": "python", "args": ["scripts/verify-live-baota.py", "automation"] },
+    { "id": "verify-reports-live", "program": "python", "args": ["scripts/verify-live-baota.py", "reports"] },
     { "id": "verify-security-operations-live", "program": "node", "args": ["scripts/verify-security-operations-live.mjs"] }
   ],
   "browserGroups": {

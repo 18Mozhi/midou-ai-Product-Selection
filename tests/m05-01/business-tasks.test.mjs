@@ -109,6 +109,7 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     "docs/feature-map.json",
     "config/env.example",
     "verification/modules/M05-01.json",
+    "scripts/verify-live-baota.py",
   ];
   const values = await Promise.all(files.map((x) => readFile(x, "utf8")));
   const taskUi = (
@@ -160,6 +161,9 @@ test("M05-01.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(values[2], /evidence_completion[\s\S]*opportunity_score_jobs[\s\S]*trigger_task_id/);
   assert.match(values[9], /\/tasks\/\{taskId\}/);
   assert.match(values[9], /\/tasks\/member-options/);
-  const registry = JSON.parse(values.at(-1));
+  const registry = JSON.parse(values[11]);
   assert.equal(registry.atomicTasks.length, 17);
+  assert.match(values[12], /"business-tasks"/);
+  assert.match(values[12], /required_tables\.update/);
+  assert.match(values[11], /python scripts\/verify-live-baota\.py business-tasks/);
 });

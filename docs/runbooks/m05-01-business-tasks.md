@@ -2,6 +2,8 @@
 
 ## 宝塔运行
 
+生产验收使用 `python scripts/verify-live-baota.py business-tasks`，探针在固定宝塔 Node 项目目录读取受限运行配置，先只读检查 M05-01 迁移表，再对合成组织/用户执行创建、评论、状态转移、隔离及审计/Outbox 断言并按请求标识清理；不会连接本机 MySQL，也不会在生产执行迁移。浏览器 E2E 使用本地 fixture，与该生产探针分开记录。
+
 应用迁移后在宝塔重启唯一的“ai选品”统一后端。内部 Worker 读取 `BUSINESS_TASK_PROJECTION_POLL_MS` 和 `BUSINESS_TASK_PROJECTION_LEASE_SECONDS`；调整后必须在宝塔重启“ai选品”。生产不得另建 Worker 项目或使用面板外 PM2、systemd、crontab。
 
 观察 Node Worker 日志中的 `business_task_projection`，并检查 `/api/v1/tasks`。成功投影应生成中文标题的 `sourcing_purchase` 任务，把 `sourcing_outbox.status` 更新为 `published` 并清空 `leased_by`、`leased_at`、`lease_expires_at`；该表没有 `published_at` 字段。若日志出现 `Illegal mix of collations`，说明运行包没有包含采购 ID 从 `ascii` 到 `utf8mb4` 的显式转换。`not_set` 表示上游未提供期限，不是故障。租约过期会被下一次轮询接管；来源唯一键避免重复任务。

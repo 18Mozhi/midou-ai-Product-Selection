@@ -25,7 +25,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m05-05/automation-rules.test.mjs",
-    "node scripts/verify-automation-live.mjs",
+    "python scripts/verify-live-baota.py automation",
     "npx playwright test tests/e2e/m05-05-automation-rules.spec.ts",
     "npm run verify:docs"
   ]

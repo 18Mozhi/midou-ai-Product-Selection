@@ -76,7 +76,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m05-04/realtime-sse.test.mjs",
-    "node scripts/verify-realtime-live.mjs",
+    "python scripts/verify-live-baota.py realtime",
     "npx playwright test tests/e2e/m05-04-realtime.spec.ts",
     "npm run verify:docs"
   ]

@@ -2,6 +2,8 @@
 
 ## 宝塔配置
 
+生产验收探针使用 `python scripts/verify-live-baota.py reports`；临时导出文件限定写入项目 `runtime/verification`，探针完成或失败时清理该请求目录，不向用户导出真实客户数据。
+
 Node API 与 Node Worker 必须在宝塔配置相同的 `REPORT_EXPORT_ROOT`。Worker 还读取轮询、租约、重试、生命周期和最大行数配置。所有配置均在启动时读取，修改后在宝塔重启 Node API 与 Node Worker；不得创建面板外生产服务。
 
 目录应仅允许对应宝塔项目账号读写。日志队列名为 `report_exports`，关注 `succeeded`、`retry_scheduled`、`dead_letter`、`row_limit_exceeded`、`dependency_failed`。使用 `request_id/trace_id` 关联 `report_exports`、`audit_logs` 和 `outbox_events`。

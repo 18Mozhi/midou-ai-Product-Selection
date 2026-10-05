@@ -2,6 +2,8 @@
 
 ## 宝塔运行
 
+生产验收探针使用 `python scripts/verify-live-baota.py approval-workflow`；探针在固定宝塔项目读取受限配置、只读预检审批迁移表，并创建与清理请求标识唯一的合成审批数据。本地浏览器 E2E 与生产探针证据分开记录。
+
 应用数据库迁移后，在宝塔面板重启唯一的“ai选品”统一后端。0047 为 `approval_requests` 增加可空的 `decision_context_json`；新审批会保存发起时快照，旧审批保持空值并在详情明确标记当前事实回退。内部 Worker 读取 `APPROVAL_ESCALATION_POLL_MS`（默认 2000）和 `APPROVAL_ESCALATION_LEASE_SECONDS`（默认 120）；修改任一配置后必须重启“ai选品”。生产不得另建 Worker 项目或使用面板外 PM2、systemd、crontab。
 
 检查 API 的 `/api/v1/tasks/approval-templates` 与 `/api/v1/tasks/approvals`。机会决策审批详情应返回 `snapshot_status=captured`、四类证据检查、审批/评分/利润规则版本、申请原因及 `decision_context_diff`；补采证据或重新计算后，差异中的提交值保持不变，当前值与变化明细应更新。该比较是只读的，不得新增评分运行、审批动作或证据记录。若新请求仍为 `live_fallback`，先检查 0047 是否应用以及 Node 是否已重启；历史回退详情没有可靠提交快照，`decision_context_diff.available` 必须为 false。再观察 Worker 日志队列名 `approval_escalation`：`queued` 任务到期后应成为 `succeeded`，对应节点保留 pending，但 active approver 改为超时接收人，并产生 `approval.overdue` Outbox。超时后请求若自动变成 approved/rejected 属于严重故障，应立即在宝塔停止 Worker。

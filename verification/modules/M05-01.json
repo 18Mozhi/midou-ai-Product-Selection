@@ -76,7 +76,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m05-01/business-tasks.test.mjs",
-    "node scripts/verify-business-tasks-live.mjs",
+    "python scripts/verify-live-baota.py business-tasks",
     "npx playwright test tests/e2e/m05-01-business-tasks.spec.ts",
     "npm run verify:docs"
   ]

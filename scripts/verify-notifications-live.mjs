@@ -142,13 +142,32 @@ try {
   await migrate();
   await cleanup();
   await seed();
+  let emailProviderPending = false;
+  try {
+    await service.updatePreferences({
+      ...write("email-provider-pending"),
+      route: "PUT:/api/v1/me/notification-preferences",
+      value: {
+        expected_version: 1,
+        in_app_enabled: true,
+        email_enabled: true,
+        task_enabled: true,
+        approval_enabled: true,
+        competitor_enabled: true,
+      },
+    });
+  } catch (e) {
+    emailProviderPending =
+      e instanceof NotificationServiceError && e.code === "mail_provider_pending";
+  }
+  if (!emailProviderPending) throw new Error("email provider gate failed");
   const pref = await service.updatePreferences({
       ...write("pref"),
       route: "PUT:/api/v1/me/notification-preferences",
       value: {
         expected_version: 1,
         in_app_enabled: true,
-        email_enabled: true,
+        email_enabled: false,
         task_enabled: true,
         approval_enabled: true,
         competitor_enabled: true,
@@ -205,13 +224,14 @@ try {
     conflict = e instanceof NotificationServiceError && e.code === "notification_version_conflict";
   }
   const [counts] = await pool.query(
-    "SELECT (SELECT COUNT(*) FROM notification_deliveries WHERE organization_id=? AND channel='in_app' AND status='delivered') inapp,(SELECT COUNT(*) FROM notification_deliveries WHERE organization_id=? AND channel='email' AND status='pending_placeholder') email,(SELECT COUNT(*) FROM audit_logs WHERE organization_id=? AND resource_type='notification') audit,(SELECT status FROM outbox_events WHERE id=?) outbox",
-    [id.org, id.org, id.org, id.event],
+    "SELECT (SELECT COUNT(*) FROM notification_deliveries WHERE organization_id=? AND channel='in_app' AND status='delivered') inapp,(SELECT COUNT(*) FROM notification_deliveries WHERE organization_id=? AND channel='email' AND status IN ('pending_placeholder','suppressed')) email,(SELECT MAX(status) FROM notification_deliveries WHERE organization_id=? AND channel='email') email_status,(SELECT COUNT(*) FROM audit_logs WHERE organization_id=? AND resource_type='notification') audit,(SELECT status FROM outbox_events WHERE id=?) outbox",
+    [id.org, id.org, id.org, id.org, id.event],
   );
   if (
     !conflict ||
     Number(counts[0].inapp) !== 1 ||
     Number(counts[0].email) !== 1 ||
+    !["pending_placeholder", "suppressed"].includes(counts[0].email_status) ||
     Number(counts[0].audit) < 2 ||
     counts[0].outbox !== "published"
   )
@@ -225,6 +245,7 @@ try {
       outbox_dedupe: "passed",
       in_app_delivery: "passed",
       email_provider: "pending_placeholder",
+      email_provider_gate: "passed",
       preference_idempotency: "passed",
       read_version_lock: "passed",
       organization_workspace_recipient_isolation: "passed",

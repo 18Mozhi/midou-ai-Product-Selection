@@ -33,7 +33,15 @@ def main() -> int:
         "sourcing",
         "ai-analysis",
     }
-    runtime_probes = m03_probes | m04_probes
+    m05_probes = {
+        "business-tasks",
+        "approval-workflow",
+        "notifications",
+        "realtime",
+        "automation",
+        "reports",
+    }
+    runtime_probes = m03_probes | m04_probes | m05_probes
     if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", *runtime_probes}:
         raise SystemExit("unsupported BaoTa live probe")
 
@@ -127,6 +135,16 @@ def main() -> int:
                     json.dumps("file://" + quote(remote_path, safe="/")),
                     1,
                 )
+
+            if probe == "reports":
+                local_temp_root = "resolve(tmpdir(), `scoutops-m05-06-${requestId}`)"
+                remote_temp_root = (
+                    f"resolve({json.dumps(f'{project_root}/runtime/verification')}, "
+                    "`scoutops-m05-06-${requestId}`)"
+                )
+                if source.count(local_temp_root) != 1:
+                    raise RuntimeError("local report probe temporary root mismatch")
+                source = source.replace(local_temp_root, remote_temp_root, 1)
 
             migration_names = sorted(
                 set(re.findall(r"database/migrations/([A-Za-z0-9_.-]+\.sql)", source))

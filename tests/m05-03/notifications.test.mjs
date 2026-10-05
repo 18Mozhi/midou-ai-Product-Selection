@@ -209,6 +209,7 @@ test("M05-03.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       "docs/feature-map.json",
       "config/env.example",
       "verification/modules/M05-03.json",
+      "scripts/verify-notifications-live.mjs",
     ],
     values = await Promise.all(files.map((x) => readFile(x, "utf8")));
   assert.match(
@@ -221,6 +222,8 @@ test("M05-03.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
     /workflow_status=\?[\s\S]*GROUP BY group_key[\s\S]*notification_version_conflict/,
   );
   assert.match(values[4], /pending_placeholder/);
+  assert.match(values[12], /mail_provider_pending/);
+  assert.match(values[12], /email_enabled: false/);
   assert.match(values[4], /notificationBody\(category\)/);
   assert.match(
     values[4],
@@ -233,5 +236,6 @@ test("M05-03.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   );
   assert.match(values[5], /category:[\s\S]*status:[\s\S]*unread:[\s\S]*notification:/);
   assert.match(values[5], /sourceRoute[\s\S]*返回来源/);
-  assert.equal(JSON.parse(values.at(-1)).atomicTasks.length, 17);
+  assert.equal(JSON.parse(values[11]).atomicTasks.length, 17);
+  assert.match(values[11], /python scripts\/verify-live-baota\.py notifications/);
 });

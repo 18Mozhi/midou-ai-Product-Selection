@@ -76,7 +76,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m05-03/notifications.test.mjs",
-    "node scripts/verify-notifications-live.mjs",
+    "python scripts/verify-live-baota.py notifications",
     "npx playwright test tests/e2e/m05-03-notifications.spec.ts",
     "npm run verify:docs"
   ]

@@ -43,9 +43,43 @@ test("M07-01 release validation fails closed when current documentation drifts f
 
 test("M07-01.A03/A04/A05/A14/A16 matrix invokes existing reversible MySQL Redis Worker and failure drills", async () => {
   for (const scenario of matrix.liveScenarios) {
-    assert.equal(scenario.program, "node");
-    assert.equal(scenario.args.length, 1);
+    assert.ok(["node", "python"].includes(scenario.program));
+    assert.ok(scenario.args.length >= 1);
     await access(resolve(root, scenario.args[0]));
+  }
+  const businessTasks = matrix.liveScenarios.find(({ id }) => id === "verify-business-tasks-live");
+  assert.deepEqual(businessTasks, {
+    id: "verify-business-tasks-live",
+    program: "python",
+    args: ["scripts/verify-live-baota.py", "business-tasks"],
+  });
+  for (const [id, probe] of [
+    ["verify-approval-workflow-live", "approval-workflow"],
+    ["verify-notifications-live", "notifications"],
+    ["verify-realtime-live", "realtime"],
+    ["verify-automation-live", "automation"],
+    ["verify-reports-live", "reports"],
+  ]) {
+    assert.deepEqual(matrix.liveScenarios.find((scenario) => scenario.id === id), {
+      id,
+      program: "python",
+      args: ["scripts/verify-live-baota.py", probe],
+    });
+  }
+  const runner = await readFile(resolve(root, "scripts/verify-live-baota.py"), "utf8");
+  assert.match(runner, /m05_probes\s*=\s*\{[\s\S]*"business-tasks"[\s\S]*"reports"/);
+  assert.match(runner, /local report probe temporary root mismatch/);
+  for (const [moduleId, probe] of [
+    ["M05-02", "approval-workflow"],
+    ["M05-03", "notifications"],
+    ["M05-04", "realtime"],
+    ["M05-05", "automation"],
+    ["M05-06", "reports"],
+  ]) {
+    const module = JSON.parse(
+      await readFile(resolve(root, `verification/modules/${moduleId}.json`), "utf8"),
+    );
+    assert.ok(module.commands.includes(`python scripts/verify-live-baota.py ${probe}`));
   }
   const migrations = await readdir(resolve(root, "database/migrations"));
   const ups = migrations.filter((name) => name.endsWith(".up.sql"));

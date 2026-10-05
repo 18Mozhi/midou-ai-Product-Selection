@@ -70,7 +70,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m05-06/reports-exports.test.mjs",
-    "node scripts/verify-reports-live.mjs",
+    "python scripts/verify-live-baota.py reports",
     "npx playwright test tests/e2e/m05-06-reports.spec.ts",
     "npm run verify:docs"
   ]

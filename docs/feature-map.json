@@ -1935,7 +1935,9 @@
         "../apps/web/src/components/TaskBatchActions.vue",
         "../apps/web/src/components/TaskDetailPanel.vue",
         "../apps/web/src/components/TaskActionDialog.vue",
-        "../apps/web/src/components/task-workspace-types.ts"
+        "../apps/web/src/components/task-workspace-types.ts",
+        "../scripts/verify-business-tasks-live.mjs",
+        "../scripts/verify-live-baota.py"
       ],
       "routes": [
         "/work",
@@ -1973,7 +1975,7 @@
       ],
       "verificationRunId": "7fad07fb-3b22-4136-8e4a-2d274f0a7cdb",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "module_verified; production probe runs on the fixed BaoTa target with read-only schema preflight, synthetic tenant-scoped writes, and exact cleanup"
     },
     "approvalWorkflow": {
       "module": "M05-02",
@@ -2648,7 +2650,8 @@
         "../tests/e2e/m06-01-organization-audit-history.spec.ts",
         "../scripts/verify-production-core-e2e.mjs",
         "../tests/e2e/helpers/mobile-occlusion.ts",
-        "../scripts/lib/typescript-test-loader.mjs"
+        "../scripts/lib/typescript-test-loader.mjs",
+        "../scripts/verify-live-baota.py"
       ],
       "scope": "P00-P06 role source collection task quality desktop mobile performance and security regression matrix",
       "runtimeBoundary": "local CI or Baota-controlled release task only; no production API table page permission daemon or multi-node claim",

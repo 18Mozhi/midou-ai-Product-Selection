@@ -2,6 +2,8 @@
 
 ## 宝塔配置
 
+生产验收探针使用 `python scripts/verify-live-baota.py automation`，通过固定宝塔运行环境验证租约、审计与隔离，并仅创建及清理合成规则数据。
+
 在宝塔 `Node Worker` 项目环境变量设置 `AUTOMATION_POLL_MS`、`AUTOMATION_LEASE_SECONDS`、`AUTOMATION_RETRY_LIMIT`、`AUTOMATION_DEFAULT_RATE_LIMIT`。配置在启动时读取，变更后必须在宝塔重启 Node Worker；API 默认限流值变更还需重启 Node API。不得创建面板外生产服务。
 
 ## 观测与故障处理

@@ -76,7 +76,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m05-02/approval-workflow.test.mjs",
-    "node scripts/verify-approval-workflow-live.mjs",
+    "python scripts/verify-live-baota.py approval-workflow",
     "npx playwright test tests/e2e/m05-02-approval-workflow.spec.ts",
     "npm run verify:docs"
   ]
