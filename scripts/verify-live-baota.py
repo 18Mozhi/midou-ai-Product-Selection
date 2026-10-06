@@ -48,6 +48,7 @@ def main() -> int:
         "collection-console",
         "security-operations",
         "open-platform",
+        "commercial",
     }
     runtime_probes = m03_probes | m04_probes | m05_probes | m06_probes
     if probe not in {"mysql", "redis", "api", "file-audit", "local-auth", "mfa", "tenancy", "rbac", "resource-grants", "audit-seed", "theme-preferences", "discovery", "home-dashboard", *runtime_probes}:

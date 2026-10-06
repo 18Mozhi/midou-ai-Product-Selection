@@ -73,7 +73,7 @@
   "commands": [
     "npm run build",
     "node --test tests/m06-06/commercial.test.mjs",
-    "node scripts/verify-commercial-live.mjs",
+    "python scripts/verify-live-baota.py commercial",
     "npx playwright test tests/e2e/m06-06-commercial.spec.ts",
     "npm run verify:docs"
   ]

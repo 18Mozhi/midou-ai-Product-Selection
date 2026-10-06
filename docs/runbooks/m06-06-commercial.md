@@ -16,7 +16,7 @@
 
 ### 模块完整验收
 
-先运行 `node --test tests/m06-06/commercial.test.mjs`，再以 MySQL 5.7 环境运行 `node scripts/verify-commercial-live.mjs`，随后运行 Playwright 桌面与 390px 检查和 `npm run verify:module -- M06-06`。验收时确认平台导航、页面标题、确认文案均使用配额语义，页面明确说明当前不包含计费、价格或支付；方案列表的 `assignment_count` 应与活动或暂停的组织分配数一致，启用方案始终排在草稿前，筛选总数和页码一致。为同一组织准备超过 10 条调整时，逐页记录可以分页，但有效配额必须包含全部仍有效调整。组织不存在应返回 404 `organization_not_found`；已有分配使用旧 `expected_version` 应返回 409；非法暂停/恢复/结束状态转换也应返回 409。中断本地测试 MySQL 后读取应返回 503 `commercial_dependency_unavailable`，恢复数据库后原页面刷新成功且旧数据在失败期间保留。影响预览只使用本次读取到的用量和配额事实。若数量不符，先核对 `organization_plan_assignments.status`，若余量不符，再核对当前账期和人工调整有效期。现有 `/api/v1/platform/commercial/*` 路由以及原有 `plans`、`assignments` 字段保持不变；读取响应增加 `summary`、`pagination`、`adjustment_pagination` 和可选 `organization`。生产冒烟只创建可删除的测试组织数据，结束后清理；不要使用真实客户数据做回归。
+先运行 `node --test tests/m06-06/commercial.test.mjs`，再运行 `python scripts/verify-live-baota.py commercial`，由宝塔 Node 运行环境连接 MySQL 5.7 执行生产冒烟，随后运行 Playwright 桌面与 390px 检查和 `npm run verify:module -- M06-06`。验收时确认平台导航、页面标题、确认文案均使用配额语义，页面明确说明当前不包含计费、价格或支付；方案列表的 `assignment_count` 应与活动或暂停的组织分配数一致，启用方案始终排在草稿前，筛选总数和页码一致。为同一组织准备超过 10 条调整时，逐页记录可以分页，但有效配额必须包含全部仍有效调整。组织不存在应返回 404 `organization_not_found`；已有分配使用旧 `expected_version` 应返回 409；非法暂停/恢复/结束状态转换也应返回 409。中断测试 MySQL 后读取应返回 503 `commercial_dependency_unavailable`，恢复数据库后原页面刷新成功且旧数据在失败期间保留。影响预览只使用本次读取到的用量和配额事实。若数量不符，先核对 `organization_plan_assignments.status`，若余量不符，再核对当前账期和人工调整有效期。现有 `/api/v1/platform/commercial/*` 路由以及原有 `plans`、`assignments` 字段保持不变；读取响应增加 `summary`、`pagination`、`adjustment_pagination` 和可选 `organization`。生产冒烟只创建可删除的测试组织数据，结束后清理；不要使用真实客户数据做回归。
 
 ## 回滚
 

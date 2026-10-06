@@ -169,6 +169,15 @@ test("M06-06.A06/A07/A08/A13/A15/A17 contracts and docs", async () => {
     assert.match(all, new RegExp(marker.replaceAll("/", "\\/")));
 });
 
+test("M06-06 production verification routes through the fixed BaoTa probe", async () => {
+  const [manifest, runner] = await Promise.all([
+    readFile("verification/modules/M06-06.json", "utf8"),
+    readFile("scripts/verify-live-baota.py", "utf8"),
+  ]);
+  assert.match(manifest, /python scripts\/verify-live-baota\.py commercial/);
+  assert.match(runner, /m06_probes\s*=\s*\{[\s\S]*"commercial"[\s\S]*\}/);
+});
+
 test("M06-06.A07/A08/A13 presents the quota-only boundary truthfully", async () => {
   const center = await readFile("apps/web/src/components/CommercialOperationsCenter.vue", "utf8");
   const navigation = await readFile("apps/web/src/route-catalog.generated.json", "utf8");
