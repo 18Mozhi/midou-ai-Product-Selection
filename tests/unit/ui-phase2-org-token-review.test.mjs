@@ -27,13 +27,13 @@ const context = {
   files: new Set(["scripts/verify-ui-phase2-org-token-controls.mjs"]),
 };
 
-test("P36 exact26 current sites become12 route actions,2 wirings and6 exclusions", () => {
+test("P36 exact27 current sites become12 route actions,2 wirings and7 exclusions", () => {
   const r = validateActionReview(build(), context);
-  assert.equal(r.sourceSites, 26);
-  assert.equal(r.semanticGroups, 20);
+  assert.equal(r.sourceSites, 27);
+  assert.equal(r.semanticGroups, 21);
   assert.equal(r.routeActions, 12);
   assert.equal(r.wiringGroups, 2);
-  assert.equal(r.excludedGroups, 6);
+  assert.equal(r.excludedGroups, 7);
   assert.equal(r.writeActions, 3);
   assert.equal(r.unmappedVisualSlots, 72);
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P36.json`, "utf8")), build());
@@ -118,8 +118,8 @@ test("P36 explicit parent props reject altered source routing and POST contract"
 });
 test("P36 every control/field/composition/implementation image is bound without promotion", () => {
   assert.deepEqual(validateOrgTokenBindings(build(), inputs), {
-    sourceSites: 26,
-    semanticGroups: 20,
+    sourceSites: 27,
+    semanticGroups: 21,
     routeActions: 12,
     writeKinds: 3,
     functionProps: 3,

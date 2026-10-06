@@ -36,14 +36,14 @@ const context = {
   files: new Set(build().actions.flatMap((a) => a.testReferences.map((r) => r.file))),
 };
 const copy = (v) => JSON.parse(JSON.stringify(v));
-test("P34 maps all32 source sites into8 read-only page actions,one forwarding and4 exclusions", () => {
+test("P34 maps all33 source sites into8 read-only page actions,one forwarding and5 exclusions", () => {
   const review = build(),
     r = validateActionReview(review, context);
-  assert.equal(r.sourceSites, 32);
-  assert.equal(r.semanticGroups, 13);
+  assert.equal(r.sourceSites, 33);
+  assert.equal(r.semanticGroups, 14);
   assert.equal(r.routeActions, 8);
   assert.equal(r.wiringGroups, 1);
-  assert.equal(r.excludedGroups, 4);
+  assert.equal(r.excludedGroups, 5);
   assert.equal(r.writeActions, 0);
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P34.json`, "utf8")), review);
   assert.equal(review.visualApproval, "user-approved-remaining-pages-auto");
@@ -64,7 +64,7 @@ test("P34 distinguishes25 existing control variants,7 historical proposal contro
   assert.deepEqual(validateOrgApprovalsBindings(build(), packages), {
     controls: 25,
     proposalOnlyControls: 7,
-    sourceSites: 32,
+    sourceSites: 33,
     fields: 10,
     fieldStates: 67,
     fieldCompositions: 8,
@@ -172,15 +172,19 @@ test("P34 implementation evidence and narrow approval records resolve without pr
         "d2d566c2fceeef6ab1754f409475e2cf7582b8ef",
       "output/playwright/p34-mobile-template-filters/evidence.json": proposalSourceCommit,
       "output/playwright/p34-rate-limit-vue/evidence.json": proposalSourceCommit,
-      "output/playwright/p34-parent-read-states/evidence.json": proposalSourceCommit,
     };
-    assert.equal(ref.asOfCommit, legacy[ref.evidence]);
+    assert.equal(ref.asOfCommit ?? undefined, legacy[ref.evidence]);
     if (ref.snapshotKind === "immutable-captured-worktree-not-commit") {
       assert.equal(ref.evidence, routeLifecycleEvidence);
       for (const file of historicalDependencies) assert.ok(e.sourceHashes[file]);
       continue;
     }
-    if (!ref.asOfCommit) assert.equal(ref.evidence, currentRouteEvidence);
+    if (!ref.asOfCommit)
+      assert.ok(
+        [currentRouteEvidence, "output/playwright/p34-parent-read-states/evidence.json"].includes(
+          ref.evidence,
+        ),
+      );
     for (const [f, h] of Object.entries(e.sourceHashes)) {
       const source = ref.asOfCommit
         ? execFileSync("git", ["show", `${ref.asOfCommit}:${f}`], { encoding: "utf8" })

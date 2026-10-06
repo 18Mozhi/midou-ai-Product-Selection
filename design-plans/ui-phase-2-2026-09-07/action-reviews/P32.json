@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/web/src/components/OrganizationWorkspacePanel.vue": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
   },
   "actions": [
@@ -393,6 +393,44 @@
       "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
       "condition": "仅summary分支",
       "handler": "P32不显示资料表单或Logo检查",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "workspaces-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-workspaces-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码与旧C稿上下文关联；逐控件状态、完整组合、真实Vue生命周期、具体用户批准与生产验收仍待。"
+    },
+    {
+      "actionId": "OG-PROFILE-TRACE",
+      "label": "组织资料追踪披露排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"
+      ],
+      "contractAliasReason": "沿既有OG-W合同按具体入口拆分状态/分页/链接；不增加现有业务写入种类。",
+      "condition": "summary专属；P32仅workspace分支",
+      "handler": "仅既有请求/读取追踪披露，不新增请求，P32不呈现",
       "variants": [
         "normal"
       ],
@@ -2425,7 +2463,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "apps/web/src/components/OrganizationWorkspacePanel.vue": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"

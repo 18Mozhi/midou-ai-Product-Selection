@@ -4,6 +4,10 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";
+import {
+  capturedExportDetailHash,
+  exportDetailStyle,
+} from "./lib/ui-phase2-export-detail-token-delta.mjs";
 
 const capture = process.argv.includes("--capture"),
   smoke = process.argv.includes("--smoke");
@@ -18,7 +22,14 @@ const text = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const actual = JSON.parse(await text(actualFile));
 const sourceHashes = { ...actual.sourceHashes };
-for (const [f, sha] of Object.entries(sourceHashes)) assert.equal(hash(await text(f)), sha, f);
+for (const [f, sha] of Object.entries(sourceHashes)) {
+  const source = await text(f);
+  assert.equal(
+    f === exportDetailStyle ? capturedExportDetailHash(f, source) : hash(source),
+    sha,
+    f,
+  );
+}
 for (const s of actual.screenshots)
   assert.equal(hash(await readFile(`${path.posix.dirname(actualFile)}/${s.file}`)), s.sha256);
 for (const f of [

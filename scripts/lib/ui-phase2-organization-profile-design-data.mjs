@@ -42,6 +42,7 @@ export async function buildOrganizationProfileDesignData(repo) {
       "readView",
       "load",
       "submit",
+      "clearProfileReceipt",
       "applyFailure",
       "validateHttps",
       "clearFieldValidity",
@@ -70,6 +71,7 @@ export async function buildOrganizationProfileDesignData(repo) {
           "noticeKind",
           "requestId",
           "writeReadFailure",
+          "profileSaveReceipt",
           "profileSaveReadFailure",
           "busy",
           "refreshing",
@@ -90,7 +92,7 @@ export async function buildOrganizationProfileDesignData(repo) {
     let wrote = false,
       failedPostWriteRead = false;
     const h = run(
-      `let loadSequence=0,tokenSecretGeneration=0,surfaceActive=true,teamRecoverySequence=${teamRecoverySequence}; const view={value:'summary'}; ${functions}\nexport const h={load,submit,validateHttps,clearFieldValidity};`,
+      `let loadSequence=0,tokenSecretGeneration=0,profileReceiptGeneration=0,surfaceActive=true,teamRecoverySequence=${teamRecoverySequence}; const view={value:'summary'}; ${functions}\nexport const h={load,submit,validateHttps,clearFieldValidity};`,
       {
         ...refs,
         ApiClientError: Failure,
@@ -135,7 +137,11 @@ export async function buildOrganizationProfileDesignData(repo) {
   assert.equal(await c.submit("/org/admin/profile", body, "PATCH"), true);
   const contract = c.calls.find((v) => v.method === "PATCH");
   assert.deepEqual(contract, { url: "/org/admin/profile", method: "PATCH", body });
-  assert.equal(c.requestId.value, "synthetic-write-accepted");
+  assert.equal(
+    c.requestId.value,
+    "synthetic-read-ok",
+    "successful post-save refresh is the latest request",
+  );
   c.form.value.name = "未提交的名称";
   await c.load({ background: true });
   assert.equal(c.form.value.name, profile.name, "source refresh replaces unsaved draft");

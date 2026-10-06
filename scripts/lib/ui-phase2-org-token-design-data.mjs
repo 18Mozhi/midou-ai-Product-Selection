@@ -249,13 +249,14 @@ export async function buildOrgTokenDesignData(repo) {
       busy = { value: false },
       secret = { value: "" };
     const state = run(
-      "let tokenSecretGeneration=0,surfaceActive=true;" +
+      "let tokenSecretGeneration=0,profileReceiptGeneration=0,surfaceActive=true;" +
         submitSource +
         "\n" +
         dismiss +
         "\nglobalThis.__result={submit,dismissTokenSecret,leave:()=>{surfaceActive=false;dismissTokenSecret();},activate:()=>{surfaceActive=true;}};",
       {
         busy,
+        writeReadFailure: { value: null },
         secret,
         view: { value: "tokens" },
         form: { value: {} },

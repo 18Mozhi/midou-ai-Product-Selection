@@ -135,13 +135,13 @@ test("P32 source and review preserve explicit inherited proposal differences", (
   assert.equal(review().approval, "pending-user-review");
   assert.match(review().compositionGaps.at(-1), /字段锁定/);
 });
-test("P32 maps 28 source sites and 18 actions while keeping action review pending", () => {
+test("P32 maps 32 source sites and 18 actions while keeping action review pending", () => {
   const r = review(),
     result = validateActionReview(r, context);
-  assert.equal(result.sourceSites, 31);
-  assert.equal(result.semanticGroups, 23);
+  assert.equal(result.sourceSites, 32);
+  assert.equal(result.semanticGroups, 24);
   assert.equal(result.routeActions, 18);
-  assert.equal(result.excludedGroups, 5);
+  assert.equal(result.excludedGroups, 6);
   assert.equal(result.writeActions, 2);
   assert.equal(result.wiringGroups, 0);
   assert.equal(result.unmappedVisualSlots, 28);

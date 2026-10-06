@@ -6,16 +6,16 @@
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/members.css": "0e8003bb6d7e83c19aa476714e2b89b187640ad9535a635582cdcefe450c7321",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/members.js": "7ff3f1996d6b4eba1ad9b3c4965cbeaaf3b2bb45f8e89950fb02786548c765b4",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/data.js": "1b77035c84b821f261fa335073bd3553ef9a98f6839cd8ffec2a252f78404f57",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
-    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
-    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+    "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
+    "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-    "scripts/lib/ui-phase2-members-design-data.mjs": "9a7089274376dabacb9854d71234ab2e989ee49ab7f26b2387ee8ae70e697e8e",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
+    "scripts/lib/ui-phase2-members-design-data.mjs": "fe4bd67e00f1b293fabcc8adb116e20e692a8763bf7e3b61e7387083b58a2c2e",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "design-plans/ui-phase-2-2026-09-07/design/members-controls-direction-c/index.html": "9119a23ca20bd002c6c8c435a977e84e2c87257feb0e7afc797b2b859b20ff97",
@@ -10189,7 +10189,7 @@
       "file": "retry-expired-focus-1440.png",
       "width": 1440,
       "scene": "retry-expired-focus",
-      "sha256": "9a18c589220cd43b1202542f54ae47ea7f633ef6518f67001280436c8b67111d",
+      "sha256": "ee5924b3199668a56f3c6535f9cad42b999401d314ecb07d73fd494c3bfa4b53",
       "control": {
         "key": "P30-retry-expired",
         "actionId": "OG-RETRY",
@@ -10293,7 +10293,7 @@
       "file": "retry-rate_limited-focus-1440.png",
       "width": 1440,
       "scene": "retry-rate_limited-focus",
-      "sha256": "755b29245a0f92896599aae2dc23a482288c8e79295b7d2f2ea2e39635bbbdea",
+      "sha256": "e1203dd6bd2ffec1aa896ce118938b1b1da1b9c1897e9a35bed3dceb23cffed7",
       "control": {
         "key": "P30-retry-rate_limited",
         "actionId": "OG-RETRY",
@@ -10345,7 +10345,7 @@
       "file": "invite-focus-1440.png",
       "width": 1440,
       "scene": "invite-focus",
-      "sha256": "a71dffaaa48d26ae8669d8774868486653b16be64e47450184bd54c46d6d4fa5",
+      "sha256": "8bb74c106db49450c664423c26678bbe7fe132261cad549413db757e03415475",
       "control": {
         "key": "P30-invite",
         "actionId": "OG-M-INVITE",
@@ -10527,7 +10527,7 @@
       "file": "tab-pending-available-focus-1440.png",
       "width": 1440,
       "scene": "tab-pending-available-focus",
-      "sha256": "c57f328f6505d05606a32ad9a6b80ac6a72592dd634ca0786149235098544829",
+      "sha256": "64ee05073a0dd895bb1abacb4a5f15bb89d42cb7768e6a1ee1491d9d3169afe6",
       "control": {
         "key": "P30-tab-pending-available",
         "actionId": "OG-M-TAB-PENDING",
@@ -10579,7 +10579,7 @@
       "file": "tab-pending-selected-focus-1440.png",
       "width": 1440,
       "scene": "tab-pending-selected-focus",
-      "sha256": "3abafc3308f78000d48b8652fb71f219030b6193de01cf25f628588da1ad3bbf",
+      "sha256": "d89235518f0c24ed081dc39204c5db1f2ee7557e6c9b1a9ef82bd3fdb2394195",
       "control": {
         "key": "P30-tab-pending-selected",
         "actionId": "OG-M-TAB-PENDING",
@@ -10631,7 +10631,7 @@
       "file": "tab-expired-available-focus-1440.png",
       "width": 1440,
       "scene": "tab-expired-available-focus",
-      "sha256": "a540e3e4ae76c9f9e243414ea32ed39f978f05d05c97a6126faeefc68fc7645d",
+      "sha256": "8940689c77b943c802236c51d9efe708ab4b8a009328d0a985459c629cbd1b7d",
       "control": {
         "key": "P30-tab-expired-available",
         "actionId": "OG-M-TAB-EXPIRED",
@@ -10683,7 +10683,7 @@
       "file": "tab-expired-selected-focus-1440.png",
       "width": 1440,
       "scene": "tab-expired-selected-focus",
-      "sha256": "9f77fabcddc93c8c9b4767293555e77e6b227d7be6d2ec55b68dd0a5e008c6ad",
+      "sha256": "844eb969f2e9e8a6ac0b8c312ca05fde898c0c660d6990c1454df8849cb3d444",
       "control": {
         "key": "P30-tab-expired-selected",
         "actionId": "OG-M-TAB-EXPIRED",
@@ -10735,7 +10735,7 @@
       "file": "revoke-normal-focus-1440.png",
       "width": 1440,
       "scene": "revoke-normal-focus",
-      "sha256": "3c32a03ee8785357cb91acc9ca4aabf387053b17af35222b6e0cd5edc7ac18bf",
+      "sha256": "6596147390dc66d18ddec4c4c13d9413faed9e69a26e928a7b2c58e6e4dc7d64",
       "control": {
         "key": "P30-revoke-normal",
         "actionId": "OG-M-INVITATION-REVOKE",
@@ -10813,7 +10813,7 @@
       "file": "revoke-invite_acceptance-focus-1440.png",
       "width": 1440,
       "scene": "revoke-invite_acceptance-focus",
-      "sha256": "2e98a6836022a45b4218c7663ef1c8e18f5b85ad1cbd9a8ab352036ec3f45494",
+      "sha256": "d9d3a88f96ce1cf8c26751685b1ab7c569e30966d87eebc7863f9977a5649757",
       "control": {
         "key": "P30-revoke-invite_acceptance",
         "actionId": "OG-M-INVITATION-REVOKE",
@@ -10904,7 +10904,7 @@
       "file": "search-pressed-1440.png",
       "width": 1440,
       "scene": "search-pressed",
-      "sha256": "ec3af2d1a3e2f0ef7bfe481de3c0083692d8285fbc00b9daf0b17199bd303d90",
+      "sha256": "5b59be956de3c8afdb4f6b6f7b88b461dcf8a1e2bdef7fc4a018a4b75802b83d",
       "control": {
         "key": "P30-search",
         "actionId": "OG-M-SEARCH",
@@ -10943,7 +10943,7 @@
       "file": "filter-status-focus-1440.png",
       "width": 1440,
       "scene": "filter-status-focus",
-      "sha256": "7aeaefa8ba36a8dc51a2214a61d053d4fe6c412225a946d52b044f08bab0cf81",
+      "sha256": "2721ee38000dee5befb223217556c5d8158be85f250146c910b97c8bf563c13d",
       "control": {
         "key": "P30-filter-status",
         "actionId": "OG-M-STATUS-FILTER",
@@ -10982,7 +10982,7 @@
       "file": "filter-role-focus-1440.png",
       "width": 1440,
       "scene": "filter-role-focus",
-      "sha256": "c0f71cb2decbb0a3e1bd7c1af843776827bcdef613a77294e726579a3e1e1f8f",
+      "sha256": "0de70080ed1fa62141f95d798911e41f5694fb2578de2a15692616288f9cbe53",
       "control": {
         "key": "P30-filter-role",
         "actionId": "OG-M-ROLE-FILTER",
@@ -11060,7 +11060,7 @@
       "file": "filter-sort-focus-1440.png",
       "width": 1440,
       "scene": "filter-sort-focus",
-      "sha256": "c40da776ca616a2237a1e4dafbb9b082845eb0f6608151f98115213da89c1def",
+      "sha256": "206a9c0f7087c71ba9f22faf50b3f25ddebd9e7f2339705b0c4a1a20de7b2a54",
       "control": {
         "key": "P30-filter-sort",
         "actionId": "OG-M-SORT",
@@ -11112,7 +11112,7 @@
       "file": "reset-default-1440.png",
       "width": 1440,
       "scene": "reset-default",
-      "sha256": "ef6c534cb545c68bc6a95ac6facf2b39899c186e6e157d73f3e5b28fb6565805",
+      "sha256": "38a4217ec7b3095ffb5d0bc982e000ba5d2667f8c64a914a90f6684264794982",
       "control": {
         "key": "P30-reset",
         "actionId": "OG-M-RESET",
@@ -11138,7 +11138,7 @@
       "file": "reset-focus-1440.png",
       "width": 1440,
       "scene": "reset-focus",
-      "sha256": "d0e2c9a041f1552f7ed82c1fca0d57b33092e80a9be120134364fd0273528150",
+      "sha256": "99e36c7649bf9309b9a757621e402eb2d49eba4eceaae870f3b2a10665917ba9",
       "control": {
         "key": "P30-reset",
         "actionId": "OG-M-RESET",
@@ -11190,7 +11190,7 @@
       "file": "reset-empty-focus-1440.png",
       "width": 1440,
       "scene": "reset-empty-focus",
-      "sha256": "6365b90c355e6390e2a906685390e51e5294036c82bdfd9a2d5e4880612b69d1",
+      "sha256": "9890d4da30d696cd4533d37e229b9cbfd7e758081d6c1fcf5a116bba4750867b",
       "control": {
         "key": "P30-reset-empty",
         "actionId": "PROPOSAL-RESET-EMPTY",
@@ -11294,7 +11294,7 @@
       "file": "technical-open-focus-1440.png",
       "width": 1440,
       "scene": "technical-open-focus",
-      "sha256": "73aa2194e4f5fb1f28ac2afa6ff0974c2a4d6a8a9a90f5bddd8337031f151101",
+      "sha256": "a44b7c1561e622aca9bf07be39592d7b1c477f168ab6beeb36babbe6cd2deaab",
       "control": {
         "key": "P30-technical-open",
         "actionId": "OG-TECH",
@@ -11424,7 +11424,7 @@
       "file": "disable-focus-1440.png",
       "width": 1440,
       "scene": "disable-focus",
-      "sha256": "dea1d8d5963c76d3b6972c70fb9f21f9cdd82847c034ecbdae12f4eee54466e2",
+      "sha256": "782ed84da225d062729e61b25363151e05abb48b71052d36eac5f4fbe0a6517c",
       "control": {
         "key": "P30-disable",
         "actionId": "OG-M-STATE",
@@ -11502,7 +11502,7 @@
       "file": "restore-focus-1440.png",
       "width": 1440,
       "scene": "restore-focus",
-      "sha256": "be87582d0a41182878a926d9398c8030efdb6875f044573c74767e01ad6fa1aa",
+      "sha256": "e2b848af5ec67d0638806c96d6166e6aebf54c990a63ac19832105c4f8f3be4e",
       "control": {
         "key": "P30-restore",
         "actionId": "OG-M-STATE",
@@ -11580,7 +11580,7 @@
       "file": "prev-focus-1440.png",
       "width": 1440,
       "scene": "prev-focus",
-      "sha256": "956f1f7fcac590a88880bd61bebc1673dad19ad489623a635abffd9b0e92e3c1",
+      "sha256": "1d23a228186d30cc570267cead33ba21cfe0d23d421e9c44f2ab591f02881bba",
       "control": {
         "key": "P30-prev",
         "actionId": "OG-M-PREV",
@@ -11645,7 +11645,7 @@
       "file": "next-focus-1440.png",
       "width": 1440,
       "scene": "next-focus",
-      "sha256": "3e812bfb537dd969b395be4804355fccfc9d332a20c0538a294e273a284a5eee",
+      "sha256": "ec60b199a3fef54e4dc72ae75c18bf0ed4f8d13c7590b4a83f3f8353b1a165b2",
       "control": {
         "key": "P30-next",
         "actionId": "OG-M-NEXT",
@@ -11775,7 +11775,7 @@
       "file": "reason-disable-cancel-focus-1440.png",
       "width": 1440,
       "scene": "reason-disable-cancel-focus",
-      "sha256": "83ebe6a0965c4723a9cc0701be8ac70913477374728fbd95f019240e547141aa",
+      "sha256": "24e8279d7aecbe4428e3571029e035dabc1dc211173ddc815686b4170c506f3e",
       "control": {
         "key": "P30-reason-disable-cancel",
         "actionId": "D-OG-REASON",
@@ -11827,7 +11827,7 @@
       "file": "reason-disable-close-focus-1440.png",
       "width": 1440,
       "scene": "reason-disable-close-focus",
-      "sha256": "d5c28503327242e0d6c0fa8e2b49451a0805c902a9a894580dd4eb7d8832b9e9",
+      "sha256": "d9ba6f682e18526f98eb91a4d9ba4f4f96dab944edb6b4f36159e32b56fd1ba2",
       "control": {
         "key": "P30-reason-disable-close",
         "actionId": "D-OG-REASON",
@@ -11879,7 +11879,7 @@
       "file": "reason-restore-confirm-focus-1440.png",
       "width": 1440,
       "scene": "reason-restore-confirm-focus",
-      "sha256": "c30f84be1df3377ca58c32407335117036e8dec163014a519c44450cba13aa67",
+      "sha256": "7d1e5b5fc558f2b6204a4bd73ee169fd7ca1de49beccde1fa4d4e1886cc2ac7d",
       "control": {
         "key": "P30-reason-restore-confirm",
         "actionId": "D-OG-REASON",
@@ -11944,7 +11944,7 @@
       "file": "reason-restore-cancel-focus-1440.png",
       "width": 1440,
       "scene": "reason-restore-cancel-focus",
-      "sha256": "a35a50be0787abfb9f1bfe6f55067d4379306be4c2640b41d0ff17ec3df62811",
+      "sha256": "14988227bfc2633d924d93576c59fa975e97341a57f49ff7d28094aaa3bd316f",
       "control": {
         "key": "P30-reason-restore-cancel",
         "actionId": "D-OG-REASON",
@@ -11957,7 +11957,7 @@
       "file": "reason-restore-cancel-pressed-1440.png",
       "width": 1440,
       "scene": "reason-restore-cancel-pressed",
-      "sha256": "6a9d72c35f66d4eb273c6305736bfb1da14d7b4e409d7b40eac6549a39e0ba7f",
+      "sha256": "9a3c18074702b51a8d9dfe94b76176c78d37ba408f745adc00857d59a6ad0f59",
       "control": {
         "key": "P30-reason-restore-cancel",
         "actionId": "D-OG-REASON",
@@ -11996,7 +11996,7 @@
       "file": "reason-restore-close-focus-1440.png",
       "width": 1440,
       "scene": "reason-restore-close-focus",
-      "sha256": "3faae8685322f01545d07318b11c92e868a7808c80d0627041a57d305b527172",
+      "sha256": "4f11e93f3b940741f952871bc05f9ca034a9651e92ce7387801ea158fe0817b4",
       "control": {
         "key": "P30-reason-restore-close",
         "actionId": "D-OG-REASON",
@@ -12113,7 +12113,7 @@
       "file": "reason-role-cancel-focus-1440.png",
       "width": 1440,
       "scene": "reason-role-cancel-focus",
-      "sha256": "b606474fbfa540ecfab205e2277e9fbdca1a67a2e6c9c6a30fce54bed8c3ba94",
+      "sha256": "9ed35ef49738ba3c58eca5b1c686e238fd41b5f6369d2d02e685443a2e608271",
       "control": {
         "key": "P30-reason-role-cancel",
         "actionId": "D-OG-REASON",
@@ -12217,7 +12217,7 @@
       "file": "reason-revoke-confirm-focus-1440.png",
       "width": 1440,
       "scene": "reason-revoke-confirm-focus",
-      "sha256": "d01bd3f07c10d20cf1a3173123f3ad783ceb3c65e3f9e270efcf7ba9e70e3f35",
+      "sha256": "bde04866271512973a92c0273e8b52344119a2340989659181e32d55ae37a31d",
       "control": {
         "key": "P30-reason-revoke-confirm",
         "actionId": "D-OG-REASON",
@@ -12230,7 +12230,7 @@
       "file": "reason-revoke-confirm-pressed-1440.png",
       "width": 1440,
       "scene": "reason-revoke-confirm-pressed",
-      "sha256": "21870a4dc907c481840a6f7244182a391c1fd492faac7ba6e20fc7117b8f7559",
+      "sha256": "dfb8da275a3da0a229021ec4162a7cf9c4d29151815ff74095a98c431fdc0f2e",
       "control": {
         "key": "P30-reason-revoke-confirm",
         "actionId": "D-OG-REASON",
@@ -12308,7 +12308,7 @@
       "file": "reason-revoke-close-default-1440.png",
       "width": 1440,
       "scene": "reason-revoke-close-default",
-      "sha256": "26c7368d977ccc2806c313e79d0502d441262a827cc453abcb42b2cb768d840f",
+      "sha256": "344ad1a935a4820b11ed116b6b4de414bb0acad51c7e9eae1c3c2f30b6cef4d4",
       "control": {
         "key": "P30-reason-revoke-close",
         "actionId": "D-OG-REASON",
@@ -12334,7 +12334,7 @@
       "file": "reason-revoke-close-focus-1440.png",
       "width": 1440,
       "scene": "reason-revoke-close-focus",
-      "sha256": "08ca7ccdbcc588a2d7e80205355611ea85159a6bbbb48bfbb7328507296af843",
+      "sha256": "a5f046f4b37e5d656bf6a935b42ecefe9d20ee30b3a811f3f4967c9c4b7e96ed",
       "control": {
         "key": "P30-reason-revoke-close",
         "actionId": "D-OG-REASON",
@@ -12347,7 +12347,7 @@
       "file": "reason-revoke-close-pressed-1440.png",
       "width": 1440,
       "scene": "reason-revoke-close-pressed",
-      "sha256": "6f2fdf35f064fd366283e1d7b92d8e39bb7a97304217020076da08ef96778f09",
+      "sha256": "95226d6fa106e12e16e2b108cf309eae61f4ac29726daca33d5875edf2d97ac0",
       "control": {
         "key": "P30-reason-revoke-close",
         "actionId": "D-OG-REASON",
@@ -12373,7 +12373,7 @@
       "file": "directory-member-section-available-hover-1440.png",
       "width": 1440,
       "scene": "directory-member-section-available-hover",
-      "sha256": "7507a46deb17ccf4e79a9d6353a52b328ea14e7aa17325fc12e513294a4cc631",
+      "sha256": "706ccad4a023d302501cccbdb214627502ad5c61260503bb9a0b8754c55b5863",
       "control": {
         "key": "P30-directory-member-section-available",
         "actionId": "PROPOSAL-DIRECTORY",
@@ -12438,7 +12438,7 @@
       "file": "directory-member-section-selected-focus-1440.png",
       "width": 1440,
       "scene": "directory-member-section-selected-focus",
-      "sha256": "73ae7100c054eba5c2e415ac07b1daca2eeede0ef2c5b78137bce87da5c5c31a",
+      "sha256": "fe8afbd696bd1576efa072e48842802bb946f692f5986a65cf8cc8b18ee5b650",
       "control": {
         "key": "P30-directory-member-section-selected",
         "actionId": "PROPOSAL-DIRECTORY",
@@ -12490,7 +12490,7 @@
       "file": "directory-invitation-section-available-focus-1440.png",
       "width": 1440,
       "scene": "directory-invitation-section-available-focus",
-      "sha256": "8e170217562bb80f0eaf4419f3c86bc55898d346d62fba4bc1511d64715780de",
+      "sha256": "bae11c26514235e6884dec9d04b1d2593aa570bd15f2d911e5585b17e6492348",
       "control": {
         "key": "P30-directory-invitation-section-available",
         "actionId": "PROPOSAL-DIRECTORY",
@@ -12750,7 +12750,7 @@
       "file": "feedback-action_conflict-focus-1440.png",
       "width": 1440,
       "scene": "feedback-action_conflict-focus",
-      "sha256": "80c2e48d1d6747c2ad8052f225a39aec6e9d2847339c26e15b9cf7ddc0ae91f3",
+      "sha256": "f6854e983be5f57208964d70cc6b6b885770cc28ffc7a53f801d8be88e92fd05",
       "control": {
         "key": "P30-feedback-action_conflict",
         "actionId": "PROPOSAL-FEEDBACK-TECH",
@@ -12763,7 +12763,7 @@
       "file": "feedback-action_conflict-pressed-1440.png",
       "width": 1440,
       "scene": "feedback-action_conflict-pressed",
-      "sha256": "e92e76c265d55ce11904c15a894b271460a43153302cdb4ea926c62338b87b4e",
+      "sha256": "df616d9295c85ab4c747e19d942f071f6eddf100d7be645e2b9ce8ea327ee0e4",
       "control": {
         "key": "P30-feedback-action_conflict",
         "actionId": "PROPOSAL-FEEDBACK-TECH",
@@ -12935,7 +12935,7 @@
       "file": "retry-error-focus-390.png",
       "width": 390,
       "scene": "retry-error-focus",
-      "sha256": "45699a73bffa0e10481eed50563e3ca3f7c02638b0655fe58652b489ad67b770",
+      "sha256": "d3de6f4b72b2218953699acc0f92e6e8a71eb6bdd43fcf3bd22cc7b5659bae24",
       "control": {
         "key": "P30-retry-error",
         "actionId": "OG-RETRY",
@@ -12948,7 +12948,7 @@
       "file": "retry-error-pressed-390.png",
       "width": 390,
       "scene": "retry-error-pressed",
-      "sha256": "c5a5a8395fa7db8a849b5c1e8198b5eb156a1d01ecf71572fb30382d23500d68",
+      "sha256": "9dd5d05f466b77e6c5de69d7e44490fe515aec13e4629f9863009697151e9940",
       "control": {
         "key": "P30-retry-error",
         "actionId": "OG-RETRY",
@@ -13208,7 +13208,7 @@
       "file": "invite-pressed-390.png",
       "width": 390,
       "scene": "invite-pressed",
-      "sha256": "47e56cac779f31f216d0e39a52cb86730725d6743682a4a3a1d370d03b9b9e7c",
+      "sha256": "828792fc9a567d3c94f2c66da0b943635e357a7c91fa5febe010afad13ba817e",
       "control": {
         "key": "P30-invite",
         "actionId": "OG-M-INVITE",
@@ -13286,7 +13286,7 @@
       "file": "invite_partial-pressed-390.png",
       "width": 390,
       "scene": "invite_partial-pressed",
-      "sha256": "6bb5929a3ea8a365ee2c8fbe55cc347ddf16c202216a7f215d929e9c53334b7f",
+      "sha256": "74f24d1c6986cc50a86f4163212b91899f3e3981f0ec3638000c11f89979df9b",
       "control": {
         "key": "P30-invite_partial",
         "actionId": "OG-M-INVITE",
@@ -13338,7 +13338,7 @@
       "file": "invite_interrupted-pressed-390.png",
       "width": 390,
       "scene": "invite_interrupted-pressed",
-      "sha256": "a06b1fed9b9e83ddf7425528116377c22c52e4cffa5da55f5277427e3ad9dd3c",
+      "sha256": "6a8d8504e51b8ad233c7ce98f56da13aa1390feebaa71cb6ed95744624111e68",
       "control": {
         "key": "P30-invite_interrupted",
         "actionId": "OG-M-INVITE",
@@ -13377,7 +13377,7 @@
       "file": "tab-pending-available-focus-390.png",
       "width": 390,
       "scene": "tab-pending-available-focus",
-      "sha256": "9373cf52d859a6d9a7363f2202bf98a3f827eec561b0c26cfd97476e371a4366",
+      "sha256": "fcae7dc3d1306f71adefa6164da1930f543cedb0d71bacac1cd4f7e2e4aa6c6e",
       "control": {
         "key": "P30-tab-pending-available",
         "actionId": "OG-M-TAB-PENDING",
@@ -13390,7 +13390,7 @@
       "file": "tab-pending-available-pressed-390.png",
       "width": 390,
       "scene": "tab-pending-available-pressed",
-      "sha256": "456a99c697d40f483d5ce775cc4d574a9168a808403190778308a23abc3fd7af",
+      "sha256": "63451e58e1e43a614ca3409b9da457cba39b2afd3e0d8f05a3ad1c7a862dd931",
       "control": {
         "key": "P30-tab-pending-available",
         "actionId": "OG-M-TAB-PENDING",
@@ -13494,7 +13494,7 @@
       "file": "tab-expired-available-pressed-390.png",
       "width": 390,
       "scene": "tab-expired-available-pressed",
-      "sha256": "1ec5e79bb4fb963a472a9623808e061741d28261f1ab46928f8b7d5f21421303",
+      "sha256": "460705458907fb6953ec501fe5435fdbf957a66377becf091cdaf4cc7df007b8",
       "control": {
         "key": "P30-tab-expired-available",
         "actionId": "OG-M-TAB-EXPIRED",
@@ -13676,7 +13676,7 @@
       "file": "revoke-invite_acceptance-pressed-390.png",
       "width": 390,
       "scene": "revoke-invite_acceptance-pressed",
-      "sha256": "32871cc4b29d4c56c368587e7b4c48cc9d5c949d74cc269543c5ebc164d4a136",
+      "sha256": "ca34ce605dfc82bdce89b3e449e86c32fe5602373c67dbb7ed1cf5b985b6942a",
       "control": {
         "key": "P30-revoke-invite_acceptance",
         "actionId": "OG-M-INVITATION-REVOKE",
@@ -13871,7 +13871,7 @@
       "file": "filter-team-focus-390.png",
       "width": 390,
       "scene": "filter-team-focus",
-      "sha256": "44cacafc1946770883d3efa0bf5a4ae9641eb38eddff5507ba3d406ceb9913f7",
+      "sha256": "7fa4a59605f04254c28f6a916b4582c71ed626f1b27f64274b2624f4fd827f5b",
       "control": {
         "key": "P30-filter-team",
         "actionId": "OG-M-TEAM-FILTER",
@@ -14430,7 +14430,7 @@
       "file": "prev-focus-390.png",
       "width": 390,
       "scene": "prev-focus",
-      "sha256": "5c800eb8ce31978a2c0874b5edd02154534dcec2d234eafc850c4351f3c70edc",
+      "sha256": "879474306b301d8db35b343e9dc63af241e9671babd7a3e24a5c59abfbe302f0",
       "control": {
         "key": "P30-prev",
         "actionId": "OG-M-PREV",
@@ -15509,7 +15509,7 @@
       "file": "filters-open-pressed-390.png",
       "width": 390,
       "scene": "filters-open-pressed",
-      "sha256": "5e5e8103c1b438a9e59eb60bb91d9ca7eab38e70f53ac5b82ed5c28bcddf2abe",
+      "sha256": "b0e4e7caf49960fc1228ee403263199ddd32e4a146312ef75b83b91f1417a2dc",
       "control": {
         "key": "P30-filters-open",
         "actionId": "PROPOSAL-FILTER-DISCLOSURE",

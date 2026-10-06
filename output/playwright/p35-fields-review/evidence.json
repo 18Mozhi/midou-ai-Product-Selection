@@ -2,8 +2,8 @@
   "version": "P35-fields-C-r1",
   "boundary": "Independent HTML proposal using unchanged C renderer; actual source computed ID oracle, not mounted Vue/API/RBAC/production. No field approvals implied. Native popup rendering/history/lifecycle/whole-page remain pending.",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationDataPanel.vue": "0c361f1214b5405c3554624c5ec0ac1d1edfae776dde44cb047e6a20d817d478",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
     "scripts/lib/ui-phase2-org-data-design-data.mjs": "4c6db4f4924384c2bf1361533798e829299d54a10b0cbc730633161afeac51cb",
     "scripts/verify-ui-phase2-org-data-fields.mjs": "cccf0fc6a73172a53501b3f3802856141877c46fb2e08ac95334ac785344b5da",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/data.js": "6946d6f85afb11e6526649ccd4fa9af6b7a592d8811cd22bdb54b4e5590491f9",
@@ -15,11 +15,11 @@
   },
   "retained": {
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c": {
-      "manifest": "e4dce1846ef3aa7c7451374f59e2637e73217dffee6e21b26f8b54ba1da7f607",
+      "manifest": "b80700fee36a74e848b34bea9d6165a577aea942814cffabe75bce639c1ac3fe",
       "pngCount": 94
     },
     "output/playwright/p35-controls-review": {
-      "manifest": "a99151114cfe641591a6a6c18f2a49fa8540bd5082f81fc4986de60bba961f5d",
+      "manifest": "1cdedc21bb6003ffa7fb9bfc27d93c2b91f52f3eb268867e4bdc93cbc38d628a",
       "pngCount": 192
     },
     "output/playwright/p35-export-detail-vue": {

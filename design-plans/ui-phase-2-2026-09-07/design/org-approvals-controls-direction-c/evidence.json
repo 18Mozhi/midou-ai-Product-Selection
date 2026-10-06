@@ -7,18 +7,18 @@
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/approvals.css": "3be4abdd5b5da99a65af4dad58768d7d01f89fe5c78ed009338bd82a79e2a939",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/approvals.js": "9c540d872ff310e3518b9000e9ac0e38c1a2eec3381ef014d4fc78a8602d89b2",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/data.js": "31ea1b44acd786ce73e5ec75646ebbda7e4bb70baf736c9c9c7be0857f4c1a38",
-    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "3a788866a1f630bc6fdb95f7c383c5a431bc49d606d0164f02bba8db89e6b8fc",
     "scripts/verify-ui-phase2-org-approvals-c.mjs": "3af77fe1cf4635c22e1ee2ee1873853b1efd24ed49857b148fc306c1fc4076c5",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
-    "scripts/lib/ui-phase2-org-approvals-retained-sources.mjs": "e7df6e4d846d5493893eb8f12b105e5891907b4a82e0364aa2da7a0de2e2abcc",
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "scripts/lib/ui-phase2-org-approvals-retained-sources.mjs": "b14c7c0c8439c73d73afd77d6faba2edd9425247c826c877091c592f6cbcbb4d",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/index.html": "d7b377ee1d0c315935edaff90fcf02f6a6f31171e2a518b3217e6ef072fa6756",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/controls.js": "2705094ad55b103490f39dd67c52f62a55b2355710b6812953f9adde79631e8f",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/controls.js": "4ada3666e791e74f0f4036226c7a75587ed59fc1faaedb5dfee0841083ad3701",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/controls.css": "55f3c91d48b07bbb7005ed99ff74efa8f74bf21d533b683307e465e78cd8ef84",
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb"
@@ -26,19 +26,30 @@
   "sourceFile": "apps/web/src/components/OrganizationApprovalPanel.vue",
   "sourceSignatures": [
     "00f81ad5e8a2f732.1",
-    "0ab42724896b9cf9.1",
-    "0b242741fe22e1a9.1",
-    "184674807c82ee93.1",
     "1c008f867673db60.1",
     "1c008f867673db60.2",
+    "25d2be8fec5c35cd.1",
     "2a3781fdd41e7df6.1",
-    "3169b6613d3ce948.1",
+    "62fcf758cc715685.1",
     "86f59f25b64551b6.1",
+    "87f27ee40744d069.1",
+    "95030381fd924d2b.1",
     "97e57c58af0dc63f.1",
     "a8c2e662cd00ee63.1",
     "cb237b82e3d08902.1",
     "f376017b5e1818c0.1",
     "f6777d94811ef9af.1"
+  ],
+  "implementedBindings": [
+    {
+      "sourceSignature": "97e57c58af0dc63f.1",
+      "proposalControlId": "template-clear-empty",
+      "selector": ".org-template-empty-clear",
+      "widths": [
+        390
+      ],
+      "scope": "mobile-only-implemented-binding-original-proposal-images-retained"
+    }
   ],
   "controls": [
     {
@@ -288,7 +299,7 @@
       "selector": "[data-page=\"-1\"]",
       "scene": "request_page_two",
       "signatures": [
-        "184674807c82ee93.1"
+        "95030381fd924d2b.1"
       ],
       "kind": "request",
       "delta": -1,
@@ -312,7 +323,7 @@
       "selector": "[data-page=\"1\"]",
       "scene": "normal",
       "signatures": [
-        "3169b6613d3ce948.1"
+        "87f27ee40744d069.1"
       ],
       "kind": "request",
       "delta": 1,
@@ -458,7 +469,7 @@
       "selector": "[data-page=\"-1\"]",
       "scene": "template_page_two",
       "signatures": [
-        "0b242741fe22e1a9.1"
+        "25d2be8fec5c35cd.1"
       ],
       "kind": "template",
       "delta": -1,
@@ -482,7 +493,7 @@
       "selector": "[data-page=\"1\"]",
       "scene": "template_catalog",
       "signatures": [
-        "0ab42724896b9cf9.1"
+        "62fcf758cc715685.1"
       ],
       "kind": "template",
       "delta": 1,
@@ -2868,7 +2879,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "3e73c7f15d3ca11c9e10dd1f24dd5445136b8fb43ac357b7ec5c2b2eea3a801d",
+      "sha256": "f29e8d1e8b500efd23bce44e967e7e1bd3045c6e6eca3c4ff1d2423fa34b4036",
       "control": {
         "id": "refresh",
         "actionId": "OG-REFRESH",
@@ -3258,7 +3269,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "8e6815e6e0c494fc10cc487e90c7caed3bd85c9c0ef04a786e3d4717753b8579",
+      "sha256": "760c750af771dbb7d2d281c9e1dd4d9c010f5324a176f0a3c7fc30161f97ff3d",
       "control": {
         "id": "view-requests-selected",
         "actionId": "OG-A-VIEW",
@@ -3558,7 +3569,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "e812bd064ee462a4d17c21332082c72d018ce2fa5d755ecb8dec80cbf52cadfd",
+      "sha256": "66a47b1cd7a433e5428c5dd97399c297ee998af26c82e9b04c44d34c2a313475",
       "control": {
         "id": "request-previous",
         "actionId": "OG-A-REQUEST-FILTER",
@@ -3948,7 +3959,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "e4f1d8915ef6aa0b542d90eb90d6edb7993f7f3923a62fac38081f3bbcec892d",
+      "sha256": "5dd18617c9c574c5ebbb4a6dca25fe4b104fff41e45d14f29d9d5e68a70cc235",
       "control": {
         "id": "template-previous",
         "actionId": "OG-A-TEMPLATE-FILTER",
@@ -4218,7 +4229,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "05da8fce13134a0166a6c364289b7a59a23a71a2d4e9d36cb93804dd52e98997",
+      "sha256": "d1685aa9bae8d6342498057985ba0b347b6f5ce1e963584ce3799dce96e99b9e",
       "control": {
         "id": "select",
         "actionId": "OG-A-SELECT",
@@ -4278,7 +4289,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "c7f210204a83d6483ddef326a578486228b0724b2554d9947507d14b2af6ce41",
+      "sha256": "53fda3d46f6458f5eb64a24ce04265f82ed481c2b0833859254ced8db6556873",
       "control": {
         "id": "select-current",
         "actionId": "OG-A-SELECT",
@@ -4338,7 +4349,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "efdbd417a439ecf6eb181082d5372e2e6639a3f0c3a92b001deda28eb7af18f7",
+      "sha256": "6c2a9568b1ede2985930e7ffaff2dbfb9d10bff2e6ac08641c59e506a290957e",
       "control": {
         "id": "select-archived",
         "actionId": "OG-A-SELECT",
@@ -4926,7 +4937,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "4c17af578b1f31bc26402c59cb426e013969c4fffad427ef6a32e24f3a5fe069",
+      "sha256": "253d31cc446894a5aa4522e0aedfaed3d82a079f3a19342fcd0be685168a4e2d",
       "control": {
         "id": "view-requests-selected",
         "actionId": "OG-A-VIEW",
@@ -5166,7 +5177,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "4db2f265d02ed40b10892e1c735a4659637492e78fd548a7d862dc5817bca99a",
+      "sha256": "7e3349de987e4d445244df31643b6c0b4e7c592db24412155fa9814d8479b36a",
       "control": {
         "id": "request-clear-empty",
         "actionId": "OG-A-REQUEST-FILTER",
@@ -5496,7 +5507,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "8e5ba7e013c42aebf96ec7c613ca3352d563aa3b17f1f0add0e747b96e4197d8",
+      "sha256": "0f45b8305105cbb847d55244f8c87f5d8081a345fe30c155f582fe3f18017f31",
       "control": {
         "id": "request-filters-closed",
         "actionId": "PROPOSAL-FILTERS",
@@ -6006,7 +6017,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "b28464fab08df581c569aaae75a4d23766e59b8e77042192ccb8487c8e7b4d4f",
+      "sha256": "b16d9dff7435185a8472554fcdfe0859db35fe717fdefb3e34db0edd3e1f1ba8",
       "control": {
         "id": "template-filters-closed",
         "actionId": "PROPOSAL-FILTERS",
@@ -6126,7 +6137,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "1af6f1549d40782047408d6b95fb3061997ec82b4311ff8bc2386774e2bbff5b",
+      "sha256": "9abb2d69de3077e18ad0eedbb7472f8694ca9f468d9556e6bc9b7f0f281acf94",
       "control": {
         "id": "select",
         "actionId": "OG-A-SELECT",
@@ -6186,7 +6197,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "offline-control-not-vue-or-production",
-      "sha256": "53000e5eb18cb1ee0083a67ef0463079d5dd299cc11614ffdfe7c198d263bb64",
+      "sha256": "188ee1d57b92d9d1286b78adfc941f602e900adb6444b38eed4fcfdee0d76f77",
       "control": {
         "id": "select-current",
         "actionId": "OG-A-SELECT",
@@ -6467,17 +6478,6 @@
       "scope": "pending-template-detail-composition",
       "sha256": "da1dcaa6e6d1c871bea25767bb1fa841eaa2e3e2192cf3f1ccc2d2f59e7f062a",
       "captureSelector": "#detail"
-    }
-  ],
-  "implementedBindings": [
-    {
-      "sourceSignature": "97e57c58af0dc63f.1",
-      "proposalControlId": "template-clear-empty",
-      "selector": ".org-template-empty-clear",
-      "widths": [
-        390
-      ],
-      "scope": "mobile-only-implemented-binding-original-proposal-images-retained"
     }
   ]
 }

@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7"
   },
   "actions": [
@@ -47,47 +47,6 @@
         }
       ],
       "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
-    },
-    {
-      "actionId": "EX-P34-READ-RECOVERY",
-      "label": "P34审批读取恢复接线（非本页）",
-      "kind": "excluded",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
-      ],
-      "sourceContractKeys": [
-        "WIRE-P34-RETRY"
-      ],
-      "priorContractKeys": [
-        "OG-RETRY"
-      ],
-      "contractAliasReason": "当前组织治理合同将P34的reload父级接线登记为WIRE-P34-RETRY并指向OG-RETRY；当前页面不渲染approvals分支。",
-      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P30",
-      "handler": "P30不渲染此分支；P34将reload转发至既有load()，不计入本页动作",
-      "variants": [
-        "normal"
-      ],
-      "scenes": [
-        {
-          "package": "members-direction-c",
-          "scene": "normal"
-        }
-      ],
-      "visualStates": {
-        "default": "not-applicable-excluded",
-        "hover": "not-applicable-excluded",
-        "focus": "not-applicable-excluded",
-        "pressed": "not-applicable-excluded",
-        "disabled": "not-applicable-excluded",
-        "busy": "not-applicable-excluded"
-      },
-      "testReferences": [
-        {
-          "file": "scripts/verify-ui-phase2-members-c.mjs",
-          "evidenceType": "offline-proposal-check-not-Vue"
-        }
-      ],
-      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。"
     },
     {
       "actionId": "OG-REFRESH",
@@ -442,6 +401,82 @@
       "contractAliasReason": "沿F04末列明确细分各筛选/页签/分页；同一源码身份仅归一组，父接线不重复计操作。",
       "condition": "summary专属，P30 view为members",
       "handler": "排除profile submit、Logo有效性和保存按钮，不扩大P29批准",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "members-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-members-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+    },
+    {
+      "actionId": "OG-PROFILE-TRACE",
+      "label": "组织资料追踪 disclosure 排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"
+      ],
+      "contractAliasReason": "沿F04末列明确细分各筛选/页签/分页；同一源码身份仅归一组，父接线不重复计操作。",
+      "condition": "summary专属；P30 view为members",
+      "handler": "仅为既有请求/读取追踪披露，不新增请求，P30不呈现",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "members-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-members-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "当前源码及独立C稿关联，不代表精确控件全部状态、真实Vue/异步归属、具体用户批准或生产验收。"
+    },
+    {
+      "actionId": "WIRE-P34-RETRY",
+      "label": "P34读取反馈转发排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
+      ],
+      "sourceContractKeys": [
+        "WIRE-P34-RETRY"
+      ],
+      "contractAliasReason": "沿F04末列明确细分各筛选/页签/分页；同一源码身份仅归一组，父接线不重复计操作。",
+      "condition": "P34审批读取反馈专属，P30 view为members",
+      "handler": "P34复用原load()；P30不渲染审批恢复反馈分支",
       "variants": [
         "normal"
       ],
@@ -2873,7 +2908,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
@@ -3606,9 +3641,9 @@
     "OG-G01角色选择陈旧、OG-G02邀请尾部/notice及通用写后重读、OG-G03原因上限/重开、跨范围迟到回执与全部C真实实现继续待。"
   ],
   "approval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "limits": [
     "P16仅独立布局批准，不外推P30。",
     "本批源注册/证据测试，不改业务API、数据库、权限或生产服务，不发邮件。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

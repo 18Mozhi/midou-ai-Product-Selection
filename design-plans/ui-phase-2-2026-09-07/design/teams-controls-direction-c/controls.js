@@ -42,6 +42,33 @@
       { busyScene: "create_busy" },
     ),
     control(
+      "create-read-traces",
+      "OG-T-CREATE-READ-TRACE",
+      "展开创建与读取追踪",
+      ".create-read-failure details summary",
+      "create_read_failed",
+      ["be579efd97f36382.1"],
+      { detailsOpen: false },
+    ),
+    control(
+      "create-read-traces-open",
+      "OG-T-CREATE-READ-TRACE",
+      "收起已展开的创建与读取追踪",
+      ".create-read-failure details summary",
+      "create_read_failed",
+      [],
+      { detailsOpen: true },
+    ),
+    control(
+      "create-read-retry",
+      "OG-T-CREATE-READ",
+      "重新读取团队列表",
+      ".create-read-failure button",
+      "create_read_failed",
+      ["8c30506a17605129.1"],
+      { disabledScene: "create_read_pending" },
+    ),
+    control(
       "cancel-create",
       "OG-T-CANCEL",
       "取消创建",
@@ -214,6 +241,7 @@
       select.dispatchEvent(new Event("change", { bubbles: true }));
     }
     if (c.filtersOpen !== undefined) $("#filters").open = c.filtersOpen;
+    if (c.detailsOpen !== undefined) $(".create-read-failure details").open = c.detailsOpen;
     document.body.dataset.reasonAction = c.reasonAction || "";
     if (state === "disabled" && c.shortReason) {
       $("#reason-input").value = "短";

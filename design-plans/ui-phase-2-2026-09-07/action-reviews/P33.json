@@ -4,9 +4,10 @@
   "route": "/org-admin/teams",
   "status": "source-reviewed-not-runtime-accepted",
   "approval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/web/src/components/OrganizationTeamPanel.vue": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
   },
   "actions": [
@@ -58,21 +59,18 @@
       "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
     },
     {
-      "actionId": "EX-P34-READ-RECOVERY",
-      "label": "P34审批读取恢复接线（非本页）",
+      "actionId": "EX-P29-PROFILE-TRACE",
+      "label": "P29资料追踪披露排除",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"
       ],
       "sourceContractKeys": [
-        "WIRE-P34-RETRY"
+        "OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"
       ],
-      "priorContractKeys": [
-        "OG-RETRY"
-      ],
-      "contractAliasReason": "当前组织治理合同将P34的reload父级接线登记为WIRE-P34-RETRY并指向OG-RETRY；当前页面不渲染approvals分支。",
-      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P33",
-      "handler": "P33不渲染此分支；P34将reload转发至既有load()，不计入本页动作",
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "summary专属；P33为teams分支",
+      "handler": "仅既有请求/读取追踪披露，不新增请求；P33不呈现",
       "variants": [
         "normal"
       ],
@@ -104,7 +102,53 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。"
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
+    },
+    {
+      "actionId": "EX-P34-READ-FEEDBACK",
+      "label": "P34审批读取反馈转发排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
+      ],
+      "sourceContractKeys": [
+        "WIRE-P34-RETRY"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "审批读取反馈专属；P33为teams分支",
+      "handler": "P34复用原load()；P33不渲染审批恢复反馈分支",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。"
     },
     {
       "actionId": "OG-REFRESH",
@@ -1239,6 +1283,258 @@
             "focus": "create-focus",
             "pressed": "create-pressed",
             "busy": "create-busy"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-CREATE-READ-TRACE",
+      "label": "创建后读取追踪披露",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#be579efd97f36382.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-CREATE-RECOVERY-TRACE"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "创建已确认但团队列表重读失败时展开查看；原生details/summary",
+      "handler": "只披露独立创建与读取请求编号，不重试创建、不发请求",
+      "variants": [
+        "create_read_failed"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "create_read_failed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-open-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-open-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-open-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-open-pressed"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-default",
+          "selector": ".create-read-failure details summary",
+          "catalogControlId": "create-read-traces"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-hover",
+          "selector": ".create-read-failure details summary",
+          "catalogControlId": "create-read-traces"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-focus",
+          "selector": ".create-read-failure details summary",
+          "catalogControlId": "create-read-traces"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-traces-pressed",
+          "selector": ".create-read-failure details summary",
+          "catalogControlId": "create-read-traces"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "create-read-traces",
+          "selector": ".create-read-failure details summary",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#be579efd97f36382.1"
+          ],
+          "states": {
+            "default": "create-read-traces-default",
+            "hover": "create-read-traces-hover",
+            "focus": "create-read-traces-focus",
+            "pressed": "create-read-traces-pressed"
+          }
+        },
+        {
+          "id": "create-read-traces-open",
+          "selector": ".create-read-failure details summary",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [],
+          "states": {
+            "default": "create-read-traces-open-default",
+            "hover": "create-read-traces-open-hover",
+            "focus": "create-read-traces-open-focus",
+            "pressed": "create-read-traces-open-pressed"
+          }
+        }
+      ]
+    },
+    {
+      "actionId": "OG-T-CREATE-READ",
+      "label": "创建后重新读取团队列表",
+      "kind": "read",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTeamPanel.vue#8c30506a17605129.1"
+      ],
+      "sourceContractKeys": [
+        "OG-T-CREATE-RECOVERY-READ"
+      ],
+      "contractAliasReason": "按既有OG-T合同分组；控件变体不算新增业务动作。",
+      "condition": "创建已确认但列表重读失败后可用；重读进行中禁用",
+      "handler": "只重读团队列表，不重复提交创建",
+      "variants": [
+        "create_read_failed",
+        "create_read_pending"
+      ],
+      "scenes": [
+        {
+          "package": "teams-direction-c",
+          "scene": "create_read_failed"
+        },
+        {
+          "package": "teams-direction-c",
+          "scene": "create_read_pending"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-default"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-hover"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-focus"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-pressed"
+        },
+        {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-disabled"
+        }
+      ],
+      "visualStates": {
+        "default": "scene-reference-not-acceptance",
+        "hover": "scene-reference-not-acceptance",
+        "focus": "scene-reference-not-acceptance",
+        "pressed": "scene-reference-not-acceptance",
+        "disabled": "scene-reference-not-acceptance",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-teams-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-teams-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
+      "visualStateReferences": {
+        "default": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-default",
+          "selector": ".create-read-failure button",
+          "catalogControlId": "create-read-retry"
+        },
+        "hover": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-hover",
+          "selector": ".create-read-failure button",
+          "catalogControlId": "create-read-retry"
+        },
+        "focus": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-focus",
+          "selector": ".create-read-failure button",
+          "catalogControlId": "create-read-retry"
+        },
+        "pressed": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-pressed",
+          "selector": ".create-read-failure button",
+          "catalogControlId": "create-read-retry"
+        },
+        "disabled": {
+          "package": "teams-controls-direction-c",
+          "scene": "create-read-retry-disabled",
+          "selector": ".create-read-failure button",
+          "catalogControlId": "create-read-retry"
+        }
+      },
+      "controlCatalogBindings": [
+        {
+          "id": "create-read-retry",
+          "selector": ".create-read-failure button",
+          "package": "teams-controls-direction-c",
+          "sourceCandidateIds": [
+            "apps/web/src/components/OrganizationTeamPanel.vue#8c30506a17605129.1"
+          ],
+          "states": {
+            "default": "create-read-retry-default",
+            "hover": "create-read-retry-hover",
+            "focus": "create-read-retry-focus",
+            "pressed": "create-read-retry-pressed",
+            "disabled": "create-read-retry-disabled"
           }
         }
       ]
@@ -2598,86 +2894,6 @@
           }
         }
       ]
-    },
-    {
-      "actionId": "OG-T-CREATE-RECOVERY-TRACE",
-      "label": "查看本次请求编号",
-      "kind": "local",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTeamPanel.vue#be579efd97f36382.1"
-      ],
-      "sourceContractKeys": [
-        "OG-T-CREATE-RECOVERY-TRACE"
-      ],
-      "contractAliasReason": "P33此前未单列团队创建后读取失败的本地追踪折叠控件；为其建立独立映射，不与纯技术详情或读请求合并。",
-      "condition": "团队已创建但团队列表未能读取；默认折叠",
-      "handler": "原生details展开或折叠创建/读取请求编号，不发起请求",
-      "variants": [
-        "collapsed",
-        "expanded"
-      ],
-      "scenes": [
-        {
-          "package": "teams-direction-c",
-          "scene": "create_read_failed"
-        }
-      ],
-      "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
-      },
-      "testReferences": [
-        {
-          "file": "tests/e2e/m06-01-organization-admin.spec.ts",
-          "evidenceType": "actual-vue-local-interception"
-        }
-      ],
-      "remaining": "本地模拟覆盖折叠和编号展示；不证明真实后端日志、生产权限或生产验收，完整视觉状态仍待。"
-    },
-    {
-      "actionId": "OG-T-CREATE-RECOVERY-READ",
-      "label": "重新读取团队列表",
-      "kind": "read",
-      "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTeamPanel.vue#8c30506a17605129.1"
-      ],
-      "sourceContractKeys": [
-        "OG-T-CREATE-RECOVERY-READ"
-      ],
-      "contractAliasReason": "P33此前未单列创建成功后的团队列表恢复GET；与创建POST及父级整页刷新区分。",
-      "condition": "团队创建POST已成功而列表读取失败；仅团队视图显示恢复入口",
-      "handler": "只GET /org/admin/teams并更新teams；读取失败更新读取请求编号并保留已创建提示；成功清除恢复提示；不重发创建POST",
-      "variants": [
-        "read_failure",
-        "retry_failure",
-        "retry_success",
-        "retry_in_flight"
-      ],
-      "scenes": [
-        {
-          "package": "teams-direction-c",
-          "scene": "create_read_failed"
-        }
-      ],
-      "visualStates": {
-        "default": "not-mapped",
-        "hover": "not-mapped",
-        "focus": "not-mapped",
-        "pressed": "not-mapped",
-        "disabled": "not-mapped",
-        "busy": "not-mapped"
-      },
-      "testReferences": [
-        {
-          "file": "tests/e2e/m06-01-organization-admin.spec.ts",
-          "evidenceType": "actual-vue-local-interception"
-        }
-      ],
-      "remaining": "真实Vue浏览器测试使用本地拦截数据；覆盖读取失败、重试失败和成功，不证明真实API、RBAC或生产验收；重试中的截图状态未测。"
     }
   ],
   "functionProps": [
@@ -2747,7 +2963,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "apps/web/src/components/OrganizationTeamPanel.vue": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"
@@ -3140,6 +3356,5 @@
   "limits": [
     "源码和独立图稿对应，不是挂载Vue/真实后端/生产或用户批准；完整适用性与生命周期仍待。",
     "P31/P32局部批准不外推P33；无生产源码/API/env/依赖/权限/部署变化。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

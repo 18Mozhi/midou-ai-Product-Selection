@@ -61,9 +61,9 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | R    | 4ba7742e75103fa4.1 | PR46-STEP-PREV     | 上一步，内存字段保留                                                                             |
 | R    | d0e6c4e6deaeab8a.1 | PR46-STEP-NEXT     | 校验当前组再下一步                                                                               |
 | R    | addbc979a88d3d3a.1 | PR46-SAVE          | type=submit；创建POST/编辑PUT+expected_version，同一实例串行；新窗等待上一项保存，结果按代次归属 |
-| R | 8fad861111d9338e.1 | PR46-SAVE | 现有编辑窗表单submit事件转发至save；沿用上方创建/编辑API所有者，不构成新业务动作 |
+| R | 8fad861111d9338e.1 | PR46-CLOSE | 自定义遮罩mousedown.self.prevent调用closeEditor，阻止默认鼠标焦点覆盖恢复目标 |
 | R | a862aba9d276c718.1 | PR46-EDITOR | role=dialog的现有来源编辑表单容器；沿用四步编辑窗与既有焦点/关闭处理 |
-| R | f4f17798bbc8fc53.1 | PR46-SAVE | 表单提交事件绑定至save，与已有提交按钮共用一个保存流程 |
+| R | f4f17798bbc8fc53.1 | PR46-EDITOR-KEYBOARD-WIRING | Tab/Escape键盘约束与表单submit接线；分别转发至既有编辑器、关闭和保存动作 |
 | A    | 3d1c1781d275b76d.1 | PR47-DEFINE        | 页头返回P46，仅导航                                                                              |
 | A    | 0da6a9c39b0f685c.1 | PR47-RESET         | 工具栏完整resetFilters                                                                           |
 | A    | d1614ad8db6bddf9.1 | PR47-DEFINE        | 无来源时“登记来源”去P46，不是登记程序                                                            |
@@ -214,7 +214,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue | da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0 |
+| apps/web/src/components/ProviderRegistry.vue | 8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc |
 
 ### PR46/PR47及共享详情旧身份归档
 

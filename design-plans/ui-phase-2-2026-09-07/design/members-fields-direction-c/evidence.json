@@ -6,16 +6,16 @@
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/members.css": "0e8003bb6d7e83c19aa476714e2b89b187640ad9535a635582cdcefe450c7321",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/members.js": "7ff3f1996d6b4eba1ad9b3c4965cbeaaf3b2bb45f8e89950fb02786548c765b4",
     "design-plans/ui-phase-2-2026-09-07/design/members-direction-c/data.js": "1b77035c84b821f261fa335073bd3553ef9a98f6839cd8ffec2a252f78404f57",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/web/src/components/OrganizationMemberPanel.vue": "33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7",
-    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
-    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
-    "apps/web/src/use-modal-dialog.ts": "08bfc1db3703e25927576eacaca733cfb8cc16d4d90e8aa2741a72d138fdf74f",
+    "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+    "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
+    "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-    "scripts/lib/ui-phase2-members-design-data.mjs": "9a7089274376dabacb9854d71234ab2e989ee49ab7f26b2387ee8ae70e697e8e",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
+    "scripts/lib/ui-phase2-members-design-data.mjs": "fe4bd67e00f1b293fabcc8adb116e20e692a8763bf7e3b61e7387083b58a2c2e",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "design-plans/ui-phase-2-2026-09-07/design/members-fields-direction-c/index.html": "8f536f18bbaa9bac8d748e959a374311b10413d41c2c70995aa9c07da01763ed",
@@ -4012,7 +4012,7 @@
       "file": "emails-focus-1440.png",
       "scene": "emails-focus",
       "width": 1440,
-      "sha256": "ce9153e8b7c83c5859739d6008a348805fdbcf9e271e79b68ab81dbeb006fed0",
+      "sha256": "6b18096ecc494a0bb678fbd1990a11d0e31bb21b882d7e44ca08739ab17acf3a",
       "control": {
         "selector": "#invite-emails",
         "binding": "form.emails",
@@ -4122,7 +4122,7 @@
       "file": "invite-role-focus-1440.png",
       "scene": "invite-role-focus",
       "width": 1440,
-      "sha256": "1cd02a96ad0ddab647483c0110f10556c29034264d4ebcef6edeaa5deaa446de",
+      "sha256": "957b958cc0176cd3640f48982b59f4a3428798b69cab9574a9ffc9e162e4f111",
       "control": {
         "selector": "#invite-role",
         "binding": "form.role_code",
@@ -4606,7 +4606,7 @@
       "file": "sort-focus-1440.png",
       "scene": "sort-focus",
       "width": 1440,
-      "sha256": "2170e1f0eb132ec6e61954cacab49c3f5b1078fcdd3b2fc86ae044c8610ef965",
+      "sha256": "cf9db32ef5be470ca60c23e96fb408788c8c67be447e7b794d1c37b7e6ba64fe",
       "control": {
         "selector": "#filter-sort",
         "binding": "memberSort",
@@ -4672,7 +4672,7 @@
       "file": "row-role-focus-1440.png",
       "scene": "row-role-focus",
       "width": 1440,
-      "sha256": "a466896b070e1cee2904a714b1911f54894d3cc5bde068ea713661379e44a7b2",
+      "sha256": "76f16a60f62ffa5cc25e03f6b9caed75a8c7e096af3113afab09e8bc99b10e7e",
       "control": {
         "selector": "#role-00000000-0000-4000-8000-000000000612",
         "binding": "memberRoles[member.id] || member.roles[0] || 'member'",
@@ -4760,7 +4760,7 @@
       "file": "shared-reason-focus-1440.png",
       "scene": "shared-reason-focus",
       "width": 1440,
-      "sha256": "4678164ea81d47db670a8935818fd30d8420e50b43747b6570a82f7e0f26b889",
+      "sha256": "1f8356d76784293b54ffa847f4351911cc74167c83929e9fb86e837b8232514e",
       "control": {
         "selector": "#reason-input",
         "binding": "reason",
@@ -4804,7 +4804,7 @@
       "file": "shared-reason-long501-1440.png",
       "scene": "shared-reason-long501",
       "width": 1440,
-      "sha256": "4a510bceb2b186550b87bba1ed86573b1ee5b77de3a710e25d2bf6c471d76d59",
+      "sha256": "3b4f51f35de85281e6845ec390a422a1c64649cd143a448474a3fc3d3a82bf80",
       "control": {
         "selector": "#reason-input",
         "binding": "reason",
@@ -4992,7 +4992,7 @@
       "file": "invite-role-focus-390.png",
       "scene": "invite-role-focus",
       "width": 390,
-      "sha256": "dcf85a4afb15da658195ff8da989165aeeb8d79219e3a684640d854b2db395f3",
+      "sha256": "b9c4a8062866df3fb599ed64898394cf7c88f665f74977c28bdc3c25a18cdc5d",
       "control": {
         "selector": "#invite-role",
         "binding": "form.role_code",
@@ -5476,7 +5476,7 @@
       "file": "sort-focus-390.png",
       "scene": "sort-focus",
       "width": 390,
-      "sha256": "fd2e77b605ca120d50e02fd06c0afa3f81063ade9ebb840eefa0ace3a328aedf",
+      "sha256": "c1a46d43725bae4fa5ed5d859e35ff71a2fe34762cceb0078594d36f84b1b804",
       "control": {
         "selector": "#filter-sort",
         "binding": "memberSort",
@@ -5720,14 +5720,14 @@
       "file": "reason_restore-form-390.png",
       "scene": "reason_restore-form",
       "width": 390,
-      "sha256": "05f1d56b4f728d019ef3610a212e65eeffc3c721ea0a7e3cb6eb20f2e1da9516",
+      "sha256": "8713ce1db54cab79ff0d8a92d244b4f858380d5ded8236e748a91b0b388e89a6",
       "scope": "form-combination-not-all-runtime-states"
     },
     {
       "file": "reason_role-form-390.png",
       "scene": "reason_role-form",
       "width": 390,
-      "sha256": "f3791b7fc6bd48821d8eacbbfecd9591e6243001c8736c838785f5c32a25c79a",
+      "sha256": "91ef009a4c9fb9e764f34f65e38fb8e468e57f2ebdd08674bc863ec78bed6a3c",
       "scope": "form-combination-not-all-runtime-states"
     },
     {

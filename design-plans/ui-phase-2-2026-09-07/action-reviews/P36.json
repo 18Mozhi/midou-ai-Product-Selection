@@ -7,7 +7,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
   },
   "actions": [
@@ -155,6 +155,38 @@
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅summary",
       "handler": "保存资料/Logo检查不属本页",
+      "variants": ["source-current"],
+      "scenes": [
+        {
+          "package": "org-token-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-token-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
+    },
+    {
+      "actionId": "EX-P29-PROFILE-TRACE",
+      "label": "资料追踪披露排除",
+      "kind": "excluded",
+      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"],
+      "sourceContractKeys": ["OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"],
+      "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
+      "condition": "仅summary",
+      "handler": "既有资料请求/读取追踪披露不属本页",
       "variants": ["source-current"],
       "scenes": [
         {
@@ -3748,7 +3780,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
     },
     "inputs": [

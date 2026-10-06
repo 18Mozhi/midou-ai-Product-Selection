@@ -74,13 +74,13 @@ const context = {
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P30.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
-test("P30 registers all 31 local sites without duplicating parent event forwards", () => {
+test("P30 registers all 32 local sites without duplicating parent event forwards", () => {
   const r = validateActionReview(review(), context);
-  assert.equal(r.sourceSites, 31);
-  assert.equal(r.semanticGroups, 25);
+  assert.equal(r.sourceSites, 32);
+  assert.equal(r.semanticGroups, 26);
   assert.equal(r.routeActions, 19);
   assert.equal(r.wiringGroups, 1);
-  assert.equal(r.excludedGroups, 5);
+  assert.equal(r.excludedGroups, 6);
   assert.equal(r.writeActions, 4);
   assert.equal(r.unmappedVisualSlots, 30);
   assert.equal(

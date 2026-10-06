@@ -89,6 +89,16 @@ const definitions = [
     null,
   ],
   [
+    "EX-P29-PROFILE-TRACE",
+    "P29资料追踪披露排除",
+    "excluded",
+    C("bd677fb7d2212a2b.1"),
+    ["OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"],
+    "summary专属；审批页不呈现资料追踪",
+    "既有请求/读取追踪披露，不属于P34审批动作",
+    null,
+  ],
+  [
     "EX-P30-MEMBERS",
     "成员事件排除",
     "excluded",
@@ -498,8 +508,8 @@ export function buildOrgApprovalsReview(sources, packages) {
       {
         review: "P34-PARENT-READ-STATES-REVIEW.md",
         evidence: "output/playwright/p34-parent-read-states/evidence.json",
-        asOfCommit: proposalSourceCommit,
-        scope: "历史App隔离HTTP56场景712检查；固定原源码，不是当前后端SQL/权限或整页C批准",
+        asOfCommit: null,
+        scope: "当前Vue隔离HTTP56场景712检查；零写、无浏览器错误，不代表真实RBAC/SQL或生产批准",
       },
       {
         review: "P34-ROUTE-LIFECYCLE-VUE-C-REVIEW.md",

@@ -228,7 +228,17 @@ try {
               method: "NAVIGATE",
             },
           ]);
-        else if (c.actionId === "OG-TECH")
+        else if (c.actionId === "OG-T-CREATE-READ-TRACE") {
+          assert.deepEqual(after.intents, before.intents);
+          assert.equal(
+            await page.locator(".create-read-failure details").evaluate((details) => details.open),
+            !c.detailsOpen,
+          );
+        } else if (c.actionId === "OG-T-CREATE-READ") {
+          assert.deepEqual(after.intents, [{ url: "/org/admin/teams", method: "GET" }]);
+          assert.equal(after.createRefreshFailure, null);
+          assert.match(after.notice, /不会再次提交创建/);
+        } else if (c.actionId === "OG-TECH")
           assert.equal(
             await page.locator("#technical").evaluate((n) => n.open),
             c.id !== "technical-open",

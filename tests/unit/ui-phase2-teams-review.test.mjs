@@ -23,9 +23,7 @@ import {
 } from "../../scripts/build-ui-phase2-teams-review.mjs";
 
 for (const name of packageNames) assertTeamsCurrentSources(name);
-const sources = Object.fromEntries(
-  dependencies.map((f) => [f, teamsHistoricalCapture(packageNames[0]).source(f)]),
-);
+const sources = Object.fromEntries(dependencies.map((f) => [f, readFileSync(f, "utf8")]));
 const packages = new Map(
   packageNames.map((p) => [
     p,
@@ -56,16 +54,16 @@ test("P33 current action review covers all 34 parent and child sites without cou
     pageId: "P33",
     actionApproval: "pending-user-review",
     visualApproval: "user-approved-remaining-pages-auto",
-    sourceSites: 34,
-    semanticGroups: 20,
+    sourceSites: 35,
+    semanticGroups: 21,
     routeActions: 14,
     wiringGroups: 0,
-    excludedGroups: 6,
+    excludedGroups: 7,
     writeActions: 2,
     sourceAbsentProposals: 0,
     sourceInapplicableVisualSlots: 0,
-    testEvidenceTypes: ["actual-vue-local-interception", "offline-proposal-check-not-Vue"],
-    unmappedVisualSlots: 29,
+    testEvidenceTypes: ["offline-proposal-check-not-Vue"],
+    unmappedVisualSlots: 20,
   });
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P33.json`, "utf8")), r);
   assert.equal(r.approval, "pending-user-review");
@@ -81,8 +79,8 @@ test("P33 current action review covers all 34 parent and child sites without cou
 });
 test("P33 41 business control variants and seven fields bind all catalog states and both viewports", () => {
   assert.deepEqual(validateTeamsEvidenceBindings(build(), packages), {
-    controls: 41,
-    sourceSignatures: 18,
+    controls: 44,
+    sourceSignatures: 20,
     fields: 7,
     fieldStates: 49,
   });
@@ -154,7 +152,8 @@ test("P33 thirteen models and three containers preserve one shared dialog versus
     assert.throws(() => validateReviewSurfaces(r.surfaceReview, { sources, packages }));
   }
   assert.equal(build().sharedReasonInput.maximumLength, null);
-  assert.doesNotMatch(sources[dependencies[2]], /maxlength=/);
+  assert.match(sources[dependencies[2]], /:maxlength="maximumLength"/);
+  assert.match(sources[dependencies[2]], /maximumLength\?: number/);
   assert.throws(
     () => buildTeamsReview({ ...sources, [childFile]: sources[childFile] + "\n" }, packages),
     /stale team source/,
@@ -181,7 +180,10 @@ test("P33 actual function props and data/busy bindings match the registered chil
     teams: "data?.teams ?? []",
     members: "data?.members ?? []",
     busy: "busy",
+    refreshing: "refreshing || teamRecoveryRefreshing",
+    "create-refresh-failure": "teamCreateReadFailure",
     "create-team": "createTeam",
+    "refresh-team-list": "retryTeamListAfterCreate",
     "perform-member-action": "teamMemberAction",
   });
   for (const p of r.functionProps) {

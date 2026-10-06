@@ -64,6 +64,17 @@ const definitions = [
   ],
   [
     parentFile,
+    "OG-PROFILE-TRACE",
+    "组织资料追踪披露排除",
+    "excluded",
+    ["bd677fb7d2212a2b.1"],
+    ["OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"],
+    "summary专属；P32仅workspace分支",
+    "仅既有请求/读取追踪披露，不新增请求，P32不呈现",
+    ["normal"],
+  ],
+  [
+    parentFile,
     "EX-P30-MEMBERS",
     "成员分支排除",
     "excluded",

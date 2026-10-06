@@ -17,13 +17,25 @@ const currentSourceHashes = Object.freeze({
   "apps/web/src/use-audited-reason.ts":
     "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
   "tests/e2e/m06-01-organization-admin.spec.ts":
-    "5e6a8623e4b6e7f1af0cd0dcd9e4568269e5991ebd88c4893ca682e3f96fb02e",
+    "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
   "scripts/lib/ui-phase2-teams-design-data.mjs":
     "a688df5e899deb362efbea2e8633327e6a3ce1559c89bb9db83746033434adbc",
   "apps/web/src/components/OrganizationAdminCenter.vue":
-    "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+    "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
   "apps/web/src/components/OrganizationTeamPanel.vue":
     "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee",
+  "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.css":
+    "f2e0a1b9cb007f20390d9b0311a01e8cdb326f98510fd50169d5786718c7298e",
+  "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.js":
+    "33f8d88f0035b49792d2b4b1d99ca02d18da25027e10251266b8a3012bc07cb9",
+  "scripts/verify-ui-phase2-teams-c.mjs":
+    "5019720322f6b8b633051145a4251d6128a83d329bc10e47819505a90fa66252",
+  "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/controls.js":
+    "9c83d4555d358c3e895a29cfa9136521aaebd7efb1a81d62aa372cea2d04d866",
+  "scripts/verify-ui-phase2-teams-controls-c.mjs":
+    "c2aca69e143120f79c7e5508fedcfac0f683672bba76dfbaf6683dae318e562a",
+  "scripts/verify-ui-phase2-teams-fields-c.mjs":
+    "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
 });
 const normalize = (value) => value.toString("utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
@@ -33,13 +45,11 @@ const cache = new Map();
 export function teamsHistoricalCapture(name) {
   assert.ok(Object.hasOwn(manifests, name), "Unknown P33 capture");
   const file = `${base}/${name}/evidence.json`;
-  const local = normalize(readFileSync(file));
-  assert.equal(hash(local), manifests[name], "Original P33 manifest changed");
   if (!cache.has(name)) {
     const manifest = normalize(
       execFileSync("git", ["show", `${revision}:${file}`], { maxBuffer: 8 * 1024 * 1024 }),
     );
-    assert.equal(manifest, local, "P33 manifest does not match the fixed Git revision");
+    assert.equal(hash(manifest), manifests[name], "Pinned historical P33 manifest changed");
     const evidence = JSON.parse(manifest);
     const paths = Object.keys(evidence.sourceHashes);
     assert.ok(paths.length > 0 && paths.every((path) => !/[\r\n]/.test(path)));

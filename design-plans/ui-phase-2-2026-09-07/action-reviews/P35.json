@@ -4,9 +4,10 @@
   "route": "/org-admin/data",
   "status": "source-reviewed-not-runtime-accepted",
   "approval": "pending-user-review",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
   },
   "actions": [
@@ -126,8 +127,8 @@
       "remaining": "源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。"
     },
     {
-      "actionId": "EX-P34-READ-RECOVERY",
-      "label": "P34审批读取恢复接线（非本页）",
+      "actionId": "WIRE-P34-RETRY",
+      "label": "P34读取反馈转发排除",
       "kind": "excluded",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
@@ -135,12 +136,9 @@
       "sourceContractKeys": [
         "WIRE-P34-RETRY"
       ],
-      "priorContractKeys": [
-        "OG-RETRY"
-      ],
-      "contractAliasReason": "当前组织治理合同将P34的reload父级接线登记为WIRE-P34-RETRY并指向OG-RETRY；当前页面不渲染approvals分支。",
-      "condition": "仅view===approvals且approvalReadFeedbackMode!==null；非P35",
-      "handler": "P35不渲染此分支；P34将reload转发至既有load()，不计入本页动作",
+      "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
+      "condition": "P34审批读取反馈专属，P35 view为organization-data",
+      "handler": "P34复用原load()；P35不渲染审批恢复反馈分支",
       "variants": [
         "source-current"
       ],
@@ -164,7 +162,45 @@
           "evidenceType": "offline-proposal-check-not-Vue"
         }
       ],
-      "remaining": "仅当前源码语义与路由排除映射；P34实际读取权限、错误恢复和生产行为不由本页证据证明。"
+      "remaining": "源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。"
+    },
+    {
+      "actionId": "OG-PROFILE-TRACE",
+      "label": "组织资料追踪披露排除",
+      "kind": "excluded",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"
+      ],
+      "contractAliasReason": "复用F04明确合同；选中变体与重复渲染不增加源码动作数。",
+      "condition": "summary专属，P35 view为organization-data",
+      "handler": "仅为既有请求/读取追踪披露，不新增请求，P35不呈现",
+      "variants": [
+        "source-current"
+      ],
+      "scenes": [
+        {
+          "package": "org-data-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-applicable-excluded",
+        "hover": "not-applicable-excluded",
+        "focus": "not-applicable-excluded",
+        "pressed": "not-applicable-excluded",
+        "disabled": "not-applicable-excluded",
+        "busy": "not-applicable-excluded"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-org-data-controls.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。"
     },
     {
       "actionId": "EX-P29-PROFILE",
@@ -636,23 +672,23 @@
   "externalEvidence": {
     "controls": {
       "file": "output/playwright/p35-controls-review/evidence.json",
-      "sha256": "a99151114cfe641591a6a6c18f2a49fa8540bd5082f81fc4986de60bba961f5d"
+      "sha256": "1cdedc21bb6003ffa7fb9bfc27d93c2b91f52f3eb268867e4bdc93cbc38d628a"
     },
     "fields": {
       "file": "output/playwright/p35-fields-review/evidence.json",
-      "sha256": "48faee5d7261fcd7f280580ad3a187e3c03f2566659a706af38b04585816474e"
+      "sha256": "677881c925a5fb4b0a4ee9eea3c1178525df99fbfe5cbdb3da198381c1d4f1da"
     },
     "implementation": {
       "file": "output/playwright/p35-export-detail-vue/evidence.json",
-      "sha256": "339c7d0825e1b56699d21ad51d5f8f1576a48f5b5351c8daf8bf594db2a2035e"
+      "sha256": "a572538c03629ee9b4bc29c887644bdc722c00fc9c6489cb1d8d203fd4950315"
     },
     "parent": {
       "file": "output/playwright/p35-parent-read-states/evidence.json",
-      "sha256": "45fc289df73ae49c0952b9200b159812b76dbd182409965c44c0c4df6085c887"
+      "sha256": "0f9abe626a297fe3c98883ba98d2891d7481534187376304113ab473badb997a"
     },
     "parentDesign": {
       "file": "output/playwright/p35-parent-c-review/evidence.json",
-      "sha256": "886461923b7d9cb1da90f0b7d9bce4a323b7fddd1182f8b8a54d6d74730c0d98"
+      "sha256": "222e53ddeb03d7044ba8cd5893663f97559cf2fb2783a263fbac476b7ff84076"
     }
   },
   "externalControlBindings": [
@@ -2361,7 +2397,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
     },
     "inputs": [
@@ -3231,6 +3267,5 @@
   "limits": [
     "源语义与独立图关联，不是全页C、完整生命周期、真实API/权限或生产验收。",
     "无生产/API/OpenAPI/环境/依赖/数据库/部署变化；本登记不能授予批准。"
-  ],
-  "visualApproval": "user-approved-remaining-pages-auto"
+  ]
 }

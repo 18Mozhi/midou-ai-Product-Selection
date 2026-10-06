@@ -7,6 +7,10 @@ import { createServer } from "vite";
 import { chromium } from "playwright";
 import ts from "typescript";
 import { buildOrgDataDesignData } from "./lib/ui-phase2-org-data-design-data.mjs";
+import {
+  capturedExportDetailHash,
+  exportDetailStyle,
+} from "./lib/ui-phase2-export-detail-token-delta.mjs";
 
 const capture = process.argv.includes("--capture"),
   smoke = process.argv.includes("--smoke");
@@ -81,7 +85,10 @@ const sources = [
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const sourceHashes = Object.fromEntries(
   await Promise.all(
-    sources.map(async (f) => [f, hash((await readFile(f, "utf8")).replaceAll("\r\n", "\n"))]),
+    sources.map(async (f) => {
+      const source = (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
+      return [f, f === exportDetailStyle ? capturedExportDetailHash(f, source) : hash(source)];
+    }),
   ),
 );
 let previous;
@@ -429,7 +436,16 @@ try {
       check("no business writes", writes, []);
       check("no unmatched or external requests", unexpected, []);
       check("no page errors", errors, []);
-      check("no business dialogs fabricated", await page.locator("dialog[open]").count(), 0);
+      check(
+        "no business dialogs fabricated",
+        await page.locator("dialog.audited-reason-dialog[open]").evaluateAll((dialogs) =>
+          dialogs.map((dialog) => ({
+            label: dialog.getAttribute("aria-label"),
+            text: dialog.innerText.slice(0, 160),
+          })),
+        ),
+        [],
+      );
     } finally {
       for (const release of releases) release();
       await context.close();

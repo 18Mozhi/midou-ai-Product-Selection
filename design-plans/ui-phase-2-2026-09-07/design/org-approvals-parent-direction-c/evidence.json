@@ -3,24 +3,27 @@
   "approval": "pending-concrete-parent-section-review",
   "boundary": "Offline HTML proposal reuses existing child prototype; actual parent behavior linked,not production Vue or authorization proof. New parent wording,trace fold and placement require review. 409 is synthetic client classification. No new endpoints or business dialogs.",
   "sourceHashes": {
-    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-    "scripts/verify-ui-phase2-org-approvals-parent.mjs": "eff13338e7fd7ebf581ef682a7abcd99789a2d62108d783f66a916fd8d901944",
-    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "b2d28c6d338a520b4f9e674c345905d6d690236a49c33976dac2e262b23e8f9a",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
+    "scripts/verify-ui-phase2-org-approvals-parent.mjs": "42806da668b4dc3fa4e278a62e2922b34c1a3363474bb548ae3f72dd9f0b96ed",
+    "scripts/lib/ui-phase2-org-approvals-design-data.mjs": "3a788866a1f630bc6fdb95f7c383c5a431bc49d606d0164f02bba8db89e6b8fc",
     "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
-    "apps/web/src/main.ts": "77f3b208d8f56415150617a4ee5e60c7e532c3aabc50e5730fd8e846dcd27531",
+    "apps/web/src/main.ts": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671",
     "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
     "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
-    "apps/web/src/components/NavigationShell.vue": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "16d86905c07d49050cb10a707d0d3f0157fd2dc837039cab425f8a85bc3ab1cf",
-    "apps/web/src/organization-admin.css": "87d1538cae86a8efa3f0e54ff96a90dd89f71c436bbfbcc91c0e676f8bb8de7b",
-    "apps/web/src/styles.css": "a34e0481ef2a1ddd6188d7c9fe5c137ce55cb4da13dd3bcce2951ccf2729cf20",
-    "apps/web/src/design/tokens.css": "05e1ef9af6b0cd4de8d06be215401791a79822c6cfedd3b0de73609e95a97db7",
+    "apps/web/src/components/NavigationShell.vue": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+    "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
+    "apps/web/src/approval-read-failure.css": "6295ffead416eae4dfdf0fa88dde57a3b7ec6fa60241b44e4405e3f1755aaa6a",
+    "apps/web/src/design/approval-read-failure-tokens.css": "bd13bd68c498bd64b2bb29cba882d09fb324b0fbacf5cab1812fd52abbdb6692",
+    "apps/web/src/organization-admin.css": "d59e862e32ca1b3617da819ff1718c1b340e9afc07c978d0403698abcd25fc65",
+    "apps/web/src/styles.css": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016",
+    "apps/web/src/design/tokens.css": "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a",
     "apps/web/src/design/approval-filter-tokens.css": "65a96d723f5aa5e98122d73ae58c8decdc7cb89e721c194c591eb7948fe6c4bc",
-    "apps/web/src/signal-ledger.css": "b4ff3916aa2916ea4ecd1ea52ceea0a04c6cdb9f37562c1543f08d6f7052a59b",
+    "apps/web/src/signal-ledger.css": "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276",
     "apps/web/src/responsive-baselines.css": "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
     "apps/web/src/accessibility.css": "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
-    "output/playwright/p34-parent-read-states/evidence.json": "31d5fcdc44694c6a09a5121e5dee6c18f4dcdbdb4d4715021e28fb78ead7a26d",
+    "output/playwright/p34-parent-read-states/evidence.json": "ba5ad6cbc27d466aad8bacb3c4ad5ed738bd114a97e38680e259165ef8f334ac",
     "scripts/verify-ui-phase2-org-approvals-parent-c.mjs": "a20a118cc6e02fef71b0482116928766c26147a0ae350712a38e8c655e5089f1",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/index.html": "5358791ced1f7d13a8b4f36863fb13b13563885bc64088e79ff85205a6436931",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/parent.css": "c59100b53f5a14d52457033ab971511d0ead6c6f40a83ca690f5a697e7a0897b",
@@ -1689,7 +1692,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "parent-section-proposal-not-production-or-user-approval",
-      "sha256": "1786064cca74d7e97240770fc157916eb6c3b849398bbf6eec978a9942122229"
+      "sha256": "50edd6223145209e14d1a44acc123be88651f64542942b7294fbcbb92027dc49"
     },
     {
       "file": "initial-rate-limited-focus-1440.png",
@@ -1697,7 +1700,7 @@
       "width": 1440,
       "pageId": "P34",
       "scope": "parent-section-proposal-not-production-or-user-approval",
-      "sha256": "e92640d2abd79613640e03b30be0eeb70e74a144669ca12eddf2d55296f491f8"
+      "sha256": "b17007da6287bca606aa2b19275538bb77bbb833d97e60652de8ad7cfaa03d6f"
     },
     {
       "file": "initial-session-expired-1440.png",
@@ -1905,7 +1908,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "parent-section-proposal-not-production-or-user-approval",
-      "sha256": "d6a3ca2e6858e6cc1bef3b1459eeb8677d6614d8f30f527d909659a2d1cbbbfc"
+      "sha256": "333ea3b876e9249bf3f58ee3f54cae205c350cb49887623755b0771dd78af99d"
     },
     {
       "file": "ready-390.png",
@@ -2041,7 +2044,7 @@
       "width": 390,
       "pageId": "P34",
       "scope": "parent-section-proposal-not-production-or-user-approval",
-      "sha256": "08445825aa9babcf4db3c0cfd6d1d4cb5ecd70d259bdd3de588978aad29a4afb"
+      "sha256": "1707b6316615ac3a64fb5f927bf11b21bf368792b61a8172369cf0d74914fe56"
     },
     {
       "file": "background-server-error-390.png",

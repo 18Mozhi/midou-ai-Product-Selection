@@ -25,13 +25,13 @@ const context = {
   files: new Set(["scripts/verify-ui-phase2-org-audit-controls.mjs"]),
 };
 
-test("P37 covers24 exact sites in11 route actions and6 exclusions without writes", () => {
+test("P37 covers25 exact sites in11 route actions and7 exclusions without writes", () => {
   assert.equal(build().visualApproval, "user-approved-remaining-pages-auto");
   const r = validateActionReview(build(), context);
-  assert.equal(r.sourceSites, 24);
-  assert.equal(r.semanticGroups, 17);
+  assert.equal(r.sourceSites, 25);
+  assert.equal(r.semanticGroups, 18);
   assert.equal(r.routeActions, 11);
-  assert.equal(r.excludedGroups, 6);
+  assert.equal(r.excludedGroups, 7);
   assert.equal(r.wiringGroups, 0);
   assert.equal(r.writeActions, 0);
   assert.equal(r.unmappedVisualSlots, 66);
@@ -117,8 +117,8 @@ test("P37 other-route reason and approvals remain exclusions,not local dialogs",
 
 test("P37 all19 variants and210 field/control images bind without proposal promotion", () => {
   assert.deepEqual(validateOrgAuditBindings(build(), inputs), {
-    sourceSites: 24,
-    semanticGroups: 17,
+    sourceSites: 25,
+    semanticGroups: 18,
     routeActions: 11,
     writeKinds: 0,
     functionProps: 2,

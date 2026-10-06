@@ -8,6 +8,10 @@ import { createServer } from "vite";
 import { chromium } from "playwright";
 import ts from "typescript";
 import { buildOrgDataDesignData } from "./lib/ui-phase2-org-data-design-data.mjs";
+import {
+  capturedExportDetailHash,
+  exportDetailStyle,
+} from "./lib/ui-phase2-export-detail-token-delta.mjs";
 
 const capture = process.argv.includes("--capture"),
   smoke = process.argv.includes("--smoke");
@@ -27,8 +31,8 @@ const currentSource = await read(component);
 assert.equal(
   currentSource
     .replace(
-      ' aria-labelledby="org-data-title" data-export-detail-c>',
-      ' aria-labelledby="org-data-title">',
+      '  <section\n    class="org-data-panel org-data-panel--review"\n    aria-labelledby="org-data-title"\n    data-export-detail-c\n  >',
+      '  <section class="org-data-panel" aria-labelledby="org-data-title">',
     )
     .replace('\n<style src="../org-data-export-detail.css"></style>\n', ""),
   baselineSource,
@@ -69,7 +73,12 @@ const sourceFiles = [
   ...cssFiles.map((f) => `apps/web/src/${f}`),
 ];
 const sourceHashes = Object.fromEntries(
-  await Promise.all(sourceFiles.map(async (f) => [f, hash(await read(f))])),
+  await Promise.all(
+    sourceFiles.map(async (f) => {
+      const source = await read(f);
+      return [f, f === exportDetailStyle ? capturedExportDetailHash(f, source) : hash(source)];
+    }),
+  ),
 );
 let previous;
 if (!smoke && !capture) {

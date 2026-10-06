@@ -27,12 +27,12 @@ const context = {
   files: new Set(["scripts/verify-ui-phase2-org-data-controls.mjs"]),
 };
 
-test("P35 all23 current source sites are nine read-only route actions and five exclusions", () => {
+test("P35 all25 current source sites are nine read-only route actions and seven exclusions", () => {
   const r = validateActionReview(build(), context);
-  assert.equal(r.sourceSites, 23);
-  assert.equal(r.semanticGroups, 14);
+  assert.equal(r.sourceSites, 25);
+  assert.equal(r.semanticGroups, 16);
   assert.equal(r.routeActions, 9);
-  assert.equal(r.excludedGroups, 5);
+  assert.equal(r.excludedGroups, 7);
   assert.equal(r.wiringGroups, 0);
   assert.equal(r.writeActions, 0);
   assert.deepEqual(JSON.parse(readFileSync(`${base}/action-reviews/P35.json`, "utf8")), build());
@@ -41,7 +41,7 @@ test("P35 all23 current source sites are nine read-only route actions and five e
   assert.throws(() => validateActionReview(missing, context), /unmapped candidates/);
   const promoted = build();
   promoted.approval = "approved";
-  assert.throws(() => validateActionReview(promoted, context), /cannot grant approval/);
+  assert.throws(() => validateActionReview(promoted, context), /cannot grant action approval/);
 });
 
 test("P35 actual props and two P34-only failure forwards remain route-separated", () => {
@@ -86,6 +86,8 @@ test("P35 eight local fields and six excluded parent fields, no local business d
   assert.deepEqual(validateReviewSurfaces(r.surfaceReview, inputs), {
     callerFiles: 2,
     localModelBindings: 14,
+    reviewedInputBindings: 14,
+    sourceCallerContainers: 4,
     callerContainers: 4,
     consumerVariants: 4,
     runtimeAcceptance: "unproven",
@@ -109,7 +111,7 @@ test("P35 eight local fields and six excluded parent fields, no local business d
 
 test("P35 all independent control, field and real Vue images are pinned without promoting global slots", () => {
   assert.deepEqual(validateOrgDataBindings(build(), inputs), {
-    sourceSites: 23,
+    sourceSites: 25,
     existingControlVariants: 19,
     proposedControlVariants: 6,
     localFields: 8,

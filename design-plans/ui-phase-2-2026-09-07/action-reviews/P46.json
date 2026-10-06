@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-    "apps/web/src/components/ProviderRegistry.vue": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+    "apps/web/src/components/ProviderRegistry.vue": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
@@ -184,7 +184,7 @@
       "actionId": "PR46-CLOSE",
       "label": "关闭来源编辑器",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#51517865bc5117a4.1", "apps/web/src/components/ProviderRegistry.vue#e03ff4bf86eb6a89.1"],
+      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#8fad861111d9338e.1", "apps/web/src/components/ProviderRegistry.vue#e03ff4bf86eb6a89.1"],
       "contractAliasReason": "遮罩mousedown.self.prevent与带名称的关闭按钮都到同一closeEditor处理器；Escape由表单事件接线另行转发到此动作。",
       "condition": "编辑窗口开启且没有尚未结束的串行保存阻断。",
       "handler": "调用closeEditor清关闭选择/反馈，并按当前触发来源尝试返回焦点；不撤销已提交的网络写入。",
@@ -198,7 +198,7 @@
       "actionId": "PR46-EDITOR",
       "label": "创建/编辑四步模态编辑器容器",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#d36ecadeb20b9988.1"],
+      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#a862aba9d276c718.1"],
       "condition": "由创建或编辑入口打开；同一模板定义承载两个模式和四个步骤。",
       "handler": "呈现现有role=dialog容器与页面内字段，不产生创建、更新或退出副作用。",
       "variants": ["create-step-1-to-4", "edit-step-1-to-4", "validation", "save-feedback"],
@@ -211,8 +211,7 @@
       "actionId": "PR46-EDITOR-KEYBOARD-WIRING",
       "label": "编辑器Tab/Escape/form提交事件接线",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#eb72344b9c9f3d10.1"],
-      "sourceContractKeys": ["表单Escape关闭，submit.prevent保存；和提交按钮同调用链"],
+      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1"],
       "contractAliasReason": "同一表单源位置转发Tab焦点处理、Escape关闭和submit保存三个事件；分别连接编辑器容器、PR46-CLOSE和PR46-SAVE，不重复计业务提交。",
       "condition": "来源编辑器form已挂载。",
       "handler": "@keydown调用containEditorTab；@keydown.esc.stop.prevent调用closeEditor；@submit.prevent调用save。",
@@ -223,9 +222,9 @@
       "remaining": "局部实际Vue用例不证明完整App叠层或真实读屏器键盘体验。",
       "forwardsTo": ["PR46-EDITOR", "PR46-CLOSE", "PR46-SAVE"],
       "forwardBindings": [
-        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#eb72344b9c9f3d10.1", "event": "@keydown", "handler": "containEditorTab", "targets": ["PR46-EDITOR"] },
-        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#eb72344b9c9f3d10.1", "event": "@keydown.esc.stop.prevent", "handler": "closeEditor", "targets": ["PR46-CLOSE"] },
-        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#eb72344b9c9f3d10.1", "event": "@submit.prevent", "handler": "save", "targets": ["PR46-SAVE"] }
+        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1", "event": "@keydown", "handler": "containEditorTab", "targets": ["PR46-EDITOR"] },
+        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1", "event": "@keydown.esc.stop.prevent", "handler": "closeEditor", "targets": ["PR46-CLOSE"] },
+        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1", "event": "@submit.prevent", "handler": "save", "targets": ["PR46-SAVE"] }
       ]
     },
     {
@@ -397,7 +396,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-      "apps/web/src/components/ProviderRegistry.vue": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "apps/web/src/components/ProviderRegistry.vue": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"

@@ -105,7 +105,7 @@ try {
         hold = () => page.evaluate(() => window.TEAMS_C.setMode("hold")),
         complete = (outcome) => page.evaluate((v) => window.TEAMS_C.complete(v), outcome),
         names = await page.evaluate(() => Object.keys(window.TEAMS_C.scenes));
-      assert.equal(names.length, 48);
+      assert.equal(names.length, 49);
       for (const name of names) {
         await scene(name);
         await metrics(page);

@@ -4,24 +4,24 @@
   "boundary": "Individual offline control states only. All child candidates linked; not formal full parent/field registry or real Vue/API/production acceptance. Inherited pending-field locks, reason500 and result ownership are proposals, not source rules.",
   "sourceHashes": {
     "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/index.html": "3abacda97240479cb04e55e4376a4900b9a944fbc4adfa468729618d1f5c64bf",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.css": "5aa4a2a298ec8546fe78e7fcf47a05cd847566e46f972bd89d932a8bd018bd5b",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.js": "3f2ca35d59a27fcb284d2378b3531f0dc376627836e22fadbb547f77b4a9c412",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.css": "f2e0a1b9cb007f20390d9b0311a01e8cdb326f98510fd50169d5786718c7298e",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.js": "33f8d88f0035b49792d2b4b1d99ca02d18da25027e10251266b8a3012bc07cb9",
     "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/data.js": "0608f8b32717d4ede9ba24c018029251d2cfadb06885c6d2b8e5d84feb2259e9",
-    "apps/web/src/components/OrganizationAdminCenter.vue": "3a7cb53678305b9699614f67e180d3c75f283f60e1831f3f7cf748a1577fec93",
-    "apps/web/src/components/OrganizationTeamPanel.vue": "cbd68fbeea765cadc9259b98fcb91e87a122df2e64fe0171d6fe68765ee64174",
-    "apps/web/src/components/AuditedReasonDialog.vue": "b58a89ec1f0fcc2ce6b8e8209e92c1b30450f8920e629718e1e03d74a9b2d5cb",
-    "apps/web/src/use-audited-reason.ts": "e31e580799041d994e58d011f991d96918e6ca5b699473a94577967f63302eab",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee",
+    "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+    "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
     "apps/api/src/organization-admin-service.ts": "e941cc16bab984a52d36c089c48a8ba9055ee533e474222d4f1b03ac8fba621c",
     "apps/api/src/organization-admin-routes.ts": "62652cb7a0bd966cb6800c89ed09d81957f0745d83435f45268dfd57ff4a7c81",
     "apps/api/src/mysql-organization-admin-repository.ts": "63b9a7005a006b51d1b6e07a105d826dff3fd367fe0200fcc87e96b345a0880b",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-    "scripts/lib/ui-phase2-teams-design-data.mjs": "314917fa2a35f9dfa12608f0c1a7bd217465a424574beb8a87440c0bcf9ac71f",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
+    "scripts/lib/ui-phase2-teams-design-data.mjs": "a688df5e899deb362efbea2e8633327e6a3ce1559c89bb9db83746033434adbc",
     "scripts/lib/ui-phase2-prototype-metrics.mjs": "83bdc036fcfeb391fddddbe0715afb819f45a3708c905023d527f5001d67d87c",
-    "scripts/verify-ui-phase2-teams-c.mjs": "32be558307423a0131b146701a7a8c8dbe79f365f5fa306cf2555951a55890eb",
+    "scripts/verify-ui-phase2-teams-c.mjs": "5019720322f6b8b633051145a4251d6128a83d329bc10e47819505a90fa66252",
     "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/index.html": "5d7d281755d3eb430f689df776ac0c7ca7e18a7d861f0e61a307b8365aec66b6",
-    "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/controls.js": "1aacacea64a5661fb2860e2ed63c7b953281130f992f3f374a326d79d82ed0e8",
+    "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/controls.js": "9c83d4555d358c3e895a29cfa9136521aaebd7efb1a81d62aa372cea2d04d866",
     "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c/controls.css": "7e0c772e5fe1fef0ddfeeb5f049540644dab028e8d49a6efd9c96e4bffab5e2c",
-    "scripts/verify-ui-phase2-teams-controls-c.mjs": "c2f015d785ddfff74c1ddaecec3150763fbf29a176e40e71ac4a2d783bcd4ce7",
+    "scripts/verify-ui-phase2-teams-controls-c.mjs": "c2aca69e143120f79c7e5508fedcfac0f683672bba76dfbaf6683dae318e562a",
     "scripts/lib/ui-phase2-inventory.mjs": "fb6f49934ea44c6248dc172d01b86da4d4a0eb7cffca7ed81e6e69d3958a79eb"
   },
   "sourceFile": "apps/web/src/components/OrganizationTeamPanel.vue",
@@ -36,11 +36,13 @@
     "66725db5db9a8fe8.1",
     "76054446429e86da.1",
     "83a359c9f404cb11.1",
+    "8c30506a17605129.1",
     "917ad4e4a5730305.1",
     "95629c96c6d7c41b.1",
     "9f5ea38e58a26f78.1",
     "9fbd42d272c62579.1",
     "bae4e728dfc90592.1",
+    "be579efd97f36382.1",
     "cde0a7cecbbc9a09.1",
     "d56d9b5edd39513e.1",
     "dea8d744b50ed1f0.1"
@@ -195,6 +197,56 @@
         "focus",
         "pressed",
         "busy"
+      ]
+    },
+    {
+      "id": "create-read-traces",
+      "actionId": "OG-T-CREATE-READ-TRACE",
+      "label": "展开创建与读取追踪",
+      "selector": ".create-read-failure details summary",
+      "scene": "create_read_failed",
+      "signatures": [
+        "be579efd97f36382.1"
+      ],
+      "detailsOpen": false,
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "create-read-traces-open",
+      "actionId": "OG-T-CREATE-READ-TRACE",
+      "label": "收起已展开的创建与读取追踪",
+      "selector": ".create-read-failure details summary",
+      "scene": "create_read_failed",
+      "signatures": [],
+      "detailsOpen": true,
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ]
+    },
+    {
+      "id": "create-read-retry",
+      "actionId": "OG-T-CREATE-READ",
+      "label": "重新读取团队列表",
+      "selector": ".create-read-failure button",
+      "scene": "create_read_failed",
+      "signatures": [
+        "8c30506a17605129.1"
+      ],
+      "disabledScene": "create_read_pending",
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
       ]
     },
     {
@@ -1011,6 +1063,97 @@
       "noSideEffect": true
     },
     {
+      "id": "create-read-traces",
+      "variant": "default",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces",
+      "variant": "hover",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces",
+      "variant": "focus",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces-open",
+      "variant": "default",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces-open",
+      "variant": "hover",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces-open",
+      "variant": "focus",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces-open",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "default",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "hover",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "focus",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "pressed",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "disabled",
+      "width": 1440,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
       "id": "cancel-create",
       "variant": "default",
       "width": 1440,
@@ -2259,6 +2402,97 @@
     {
       "id": "create",
       "variant": "busy",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces",
+      "variant": "default",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces",
+      "variant": "hover",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces",
+      "variant": "focus",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces",
+      "variant": "pressed",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces-open",
+      "variant": "default",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces-open",
+      "variant": "hover",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces-open",
+      "variant": "focus",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-traces-open",
+      "variant": "pressed",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "default",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "hover",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "focus",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "pressed",
+      "width": 390,
+      "nativeStateVerified": true,
+      "noSideEffect": true
+    },
+    {
+      "id": "create-read-retry",
+      "variant": "disabled",
       "width": 390,
       "nativeStateVerified": true,
       "noSideEffect": true
@@ -3382,6 +3616,29 @@
       ]
     },
     {
+      "id": "create-read-traces",
+      "width": 1440,
+      "actionId": "OG-T-CREATE-READ-TRACE",
+      "intents": []
+    },
+    {
+      "id": "create-read-traces-open",
+      "width": 1440,
+      "actionId": "OG-T-CREATE-READ-TRACE",
+      "intents": []
+    },
+    {
+      "id": "create-read-retry",
+      "width": 1440,
+      "actionId": "OG-T-CREATE-READ",
+      "intents": [
+        {
+          "url": "/org/admin/teams",
+          "method": "GET"
+        }
+      ]
+    },
+    {
       "id": "cancel-create",
       "width": 1440,
       "actionId": "OG-T-CANCEL",
@@ -3749,6 +4006,29 @@
             "default_workflow_key": "opportunity-review",
             "reason": "建立亚太新品采购协作边界"
           }
+        }
+      ]
+    },
+    {
+      "id": "create-read-traces",
+      "width": 390,
+      "actionId": "OG-T-CREATE-READ-TRACE",
+      "intents": []
+    },
+    {
+      "id": "create-read-traces-open",
+      "width": 390,
+      "actionId": "OG-T-CREATE-READ-TRACE",
+      "intents": []
+    },
+    {
+      "id": "create-read-retry",
+      "width": 390,
+      "actionId": "OG-T-CREATE-READ",
+      "intents": [
+        {
+          "url": "/org/admin/teams",
+          "method": "GET"
         }
       ]
     },
@@ -4543,6 +4823,188 @@
       }
     },
     {
+      "file": "create-read-traces-default-1440.png",
+      "scene": "create-read-traces-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "771a45827048310dcde60b85d00247e9c075b45453631be01700a9208879a460",
+      "control": {
+        "id": "create-read-traces",
+        "selector": ".create-read-failure details summary",
+        "variant": "default",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-hover-1440.png",
+      "scene": "create-read-traces-hover",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "0763d35d8d307b6b673cfb572eb031fb83d087648662f7336d41214e44f30bbe",
+      "control": {
+        "id": "create-read-traces",
+        "selector": ".create-read-failure details summary",
+        "variant": "hover",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-focus-1440.png",
+      "scene": "create-read-traces-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "0207b78b20e622ed461da064f2cd2a69f5125fe68336de31386d615bf3ba85cc",
+      "control": {
+        "id": "create-read-traces",
+        "selector": ".create-read-failure details summary",
+        "variant": "focus",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-pressed-1440.png",
+      "scene": "create-read-traces-pressed",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "0c64aeb7051dccd895bbd16051c61945c27ce06a6eec2323b527dcd79b070ef0",
+      "control": {
+        "id": "create-read-traces",
+        "selector": ".create-read-failure details summary",
+        "variant": "pressed",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-open-default-1440.png",
+      "scene": "create-read-traces-open-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "0f772fdfd03ab92fcd98d2029a8d978602bd1c6f075f949f5caabf4949de4fcd",
+      "control": {
+        "id": "create-read-traces-open",
+        "selector": ".create-read-failure details summary",
+        "variant": "default",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-open-hover-1440.png",
+      "scene": "create-read-traces-open-hover",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "ccc2ea1242efbf49eba5d8bd74277bdb48ca959aeca87ae281e7567daae832b5",
+      "control": {
+        "id": "create-read-traces-open",
+        "selector": ".create-read-failure details summary",
+        "variant": "hover",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-open-focus-1440.png",
+      "scene": "create-read-traces-open-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "453f45bb82f9e3915d2bbc63b7c225e1134261243a419173e8eff8a3f04e9fc6",
+      "control": {
+        "id": "create-read-traces-open",
+        "selector": ".create-read-failure details summary",
+        "variant": "focus",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-open-pressed-1440.png",
+      "scene": "create-read-traces-open-pressed",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "d3b188016d195cada10ae9a70cec414ca7466d06fef63458bed926b76709b498",
+      "control": {
+        "id": "create-read-traces-open",
+        "selector": ".create-read-failure details summary",
+        "variant": "pressed",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-retry-default-1440.png",
+      "scene": "create-read-retry-default",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "badfd3631d0615285a6bb1534c1f457680506774c5bb8163f0ac5d52077a4b7c",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "default",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
+      "file": "create-read-retry-hover-1440.png",
+      "scene": "create-read-retry-hover",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "4612194d2efd3227633703e235ef43ed27ee26e212dee7fb1b0eb96b8bd96591",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "hover",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
+      "file": "create-read-retry-focus-1440.png",
+      "scene": "create-read-retry-focus",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "8374ce643b001e1418eed6ac5684dda095ed672de4a6d2fc6cbf365526998719",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "focus",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
+      "file": "create-read-retry-pressed-1440.png",
+      "scene": "create-read-retry-pressed",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "b79537c14fcd5b9dc529a95f79b5faece1ad256eb467e54a1055572a2b5a6f30",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "pressed",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
+      "file": "create-read-retry-disabled-1440.png",
+      "scene": "create-read-retry-disabled",
+      "width": 1440,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "692111aacc41f6a6d368860e1ef12cc8461930813e429edd2b57c739278141f6",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "disabled",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
       "file": "cancel-create-default-1440.png",
       "scene": "cancel-create-default",
       "width": 1440,
@@ -4758,7 +5220,7 @@
       "width": 1440,
       "pageId": "P33",
       "scope": "individual-control-not-full-page",
-      "sha256": "c2e3bc851b86d99e2e604aded31d79f6c21566abd157632c0bdff2ff5a4e9b9a",
+      "sha256": "4d793a7299565de23bab17b503d1bd96cc443c412bd371a99f94f0644180b365",
       "control": {
         "id": "status-active-available",
         "selector": "[data-status=\"active\"]",
@@ -4926,7 +5388,7 @@
       "width": 1440,
       "pageId": "P33",
       "scope": "individual-control-not-full-page",
-      "sha256": "eaa5fd2fea54fba54f7405b70266e77ac1a967e62f1f75497289773968a4990f",
+      "sha256": "409c025b00735868e866619b8ef018e8f4e27955e9ebbb6d164f8079e0771277",
       "control": {
         "id": "status-archived-selected",
         "selector": "[data-status=\"archived\"]",
@@ -5038,7 +5500,7 @@
       "width": 1440,
       "pageId": "P33",
       "scope": "individual-control-not-full-page",
-      "sha256": "48de4bd68f6c5a8ed1b03b12e3362fe9a1d015cb3ec8c95fb0c54a0e666345ea",
+      "sha256": "a585440bbfe1f1f21c86996d414a3fa4399ca2263330dc3f30ce2b2cbd71f80c",
       "control": {
         "id": "clear-empty",
         "selector": ".empty [data-reset]",
@@ -5150,7 +5612,7 @@
       "width": 1440,
       "pageId": "P33",
       "scope": "individual-control-not-full-page",
-      "sha256": "7f8f2d277a45e6a37c7eaa73f5e37222557289f2a8010a832c8c70f498c3fafd",
+      "sha256": "558d33f6f5468a1718e5d88da1a7b3c67bf19b12adf477a1c8c6927064abd251",
       "control": {
         "id": "select-current",
         "selector": ".team-row[aria-pressed='true']",
@@ -6410,7 +6872,7 @@
       "width": 1440,
       "pageId": "P33",
       "scope": "proposal-only-control",
-      "sha256": "a476a403a18ec4414e20c610a3a06e0ba13ccec3b0c9074becee77c8d80a7ae8",
+      "sha256": "4354d83b7954df510a8b70a7e103b5454ca11da10f845e3c72e62e013103d054",
       "control": {
         "id": "filters-closed",
         "selector": "#filters summary",
@@ -6424,7 +6886,7 @@
       "width": 1440,
       "pageId": "P33",
       "scope": "proposal-only-control",
-      "sha256": "3bc77dbab0e517462ed6171c75f3d2f36d4aadd8754e5025a7e3376e103095bb",
+      "sha256": "ef2967ca0adf4003c5a038c1295b1a0aeb70436f9a0d854efedcf41b9e2a5c1c",
       "control": {
         "id": "filters-closed",
         "selector": "#filters summary",
@@ -6958,7 +7420,7 @@
       "width": 390,
       "pageId": "P33",
       "scope": "individual-control-not-full-page",
-      "sha256": "9bab27255fee6bc89a01e1ee00c02b948f46a008a1aded4803579336a5ae1b64",
+      "sha256": "de091d84b033344a633e476898e8247cbe8f541ff3f7095b76a7d1de7218db62",
       "control": {
         "id": "open-empty",
         "selector": ".empty [data-create]",
@@ -7062,6 +7524,188 @@
         "selector": "#create-submit",
         "variant": "busy",
         "actionId": "OG-T-CREATE"
+      }
+    },
+    {
+      "file": "create-read-traces-default-390.png",
+      "scene": "create-read-traces-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "d27cbb6dbf9a4941b400aa67884830064be094c2ef425d9df671c839ce4cd404",
+      "control": {
+        "id": "create-read-traces",
+        "selector": ".create-read-failure details summary",
+        "variant": "default",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-hover-390.png",
+      "scene": "create-read-traces-hover",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "3a327bfedbd5ee6d8f9066bce26cedc6b3f333f72afbe186f36ce6863d0e4f25",
+      "control": {
+        "id": "create-read-traces",
+        "selector": ".create-read-failure details summary",
+        "variant": "hover",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-focus-390.png",
+      "scene": "create-read-traces-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "22bac711b0a46091462f4a87308f45832e3aed1b321c5b7e61f93e51e512cf14",
+      "control": {
+        "id": "create-read-traces",
+        "selector": ".create-read-failure details summary",
+        "variant": "focus",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-pressed-390.png",
+      "scene": "create-read-traces-pressed",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "e92d7c19c7bfc88863599953bbe8724a0efc889f19fa2c90174f0b3e7eb4dc43",
+      "control": {
+        "id": "create-read-traces",
+        "selector": ".create-read-failure details summary",
+        "variant": "pressed",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-open-default-390.png",
+      "scene": "create-read-traces-open-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "b1e6c4176c90d48d96a38be557491cd865c2f21d14bb2ed8235d5bfff975791c",
+      "control": {
+        "id": "create-read-traces-open",
+        "selector": ".create-read-failure details summary",
+        "variant": "default",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-open-hover-390.png",
+      "scene": "create-read-traces-open-hover",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "b1e6c4176c90d48d96a38be557491cd865c2f21d14bb2ed8235d5bfff975791c",
+      "control": {
+        "id": "create-read-traces-open",
+        "selector": ".create-read-failure details summary",
+        "variant": "hover",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-open-focus-390.png",
+      "scene": "create-read-traces-open-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "cd1fba99ede85ea8478407cb72084ac1ddf68ed0c3d1ce6308c9a402da273ad1",
+      "control": {
+        "id": "create-read-traces-open",
+        "selector": ".create-read-failure details summary",
+        "variant": "focus",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-traces-open-pressed-390.png",
+      "scene": "create-read-traces-open-pressed",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "e223033f34ec876fc95ed4cc542751688705f92f189bf64a625273e31032917c",
+      "control": {
+        "id": "create-read-traces-open",
+        "selector": ".create-read-failure details summary",
+        "variant": "pressed",
+        "actionId": "OG-T-CREATE-READ-TRACE"
+      }
+    },
+    {
+      "file": "create-read-retry-default-390.png",
+      "scene": "create-read-retry-default",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "a59d0733abed413e7ae1b8e76130d72378ff164df487e0177057be5a77a314b9",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "default",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
+      "file": "create-read-retry-hover-390.png",
+      "scene": "create-read-retry-hover",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "3cd521c3c3a988d8a5247bd8d64cb06f9e257bbd9901d929b406429c6dbf1280",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "hover",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
+      "file": "create-read-retry-focus-390.png",
+      "scene": "create-read-retry-focus",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "c55ae60e23f26b025dc5419fd117827b7acf4f591b007817c583b6d45649734a",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "focus",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
+      "file": "create-read-retry-pressed-390.png",
+      "scene": "create-read-retry-pressed",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "e76bc7774521a77940a58ebada75e962c1d0800174985d585aa1a79c346d5d9b",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "pressed",
+        "actionId": "OG-T-CREATE-READ"
+      }
+    },
+    {
+      "file": "create-read-retry-disabled-390.png",
+      "scene": "create-read-retry-disabled",
+      "width": 390,
+      "pageId": "P33",
+      "scope": "individual-control-not-full-page",
+      "sha256": "da81b9441befe0faa4b230347863a0fb626471bbade37e74de3924b5a3a80a72",
+      "control": {
+        "id": "create-read-retry",
+        "selector": ".create-read-failure button",
+        "variant": "disabled",
+        "actionId": "OG-T-CREATE-READ"
       }
     },
     {
@@ -7392,7 +8036,7 @@
       "width": 390,
       "pageId": "P33",
       "scope": "individual-control-not-full-page",
-      "sha256": "54404bcb56bfedc1f03498c1467eb1b737c076e5ae4122e8934e2a311dd1b398",
+      "sha256": "e25b588dab86ab8890b7d29ca45c3eeb010c5c8e1def6648c749363e2ddbad33",
       "control": {
         "id": "status-archived-available",
         "selector": "[data-status=\"archived\"]",
@@ -8764,7 +9408,7 @@
       "width": 390,
       "pageId": "P33",
       "scope": "individual-control-not-full-page",
-      "sha256": "5eb1920223997ed29cac54c1650e6b6fd50f92213feef15d6b88cec4dfff381a",
+      "sha256": "74afce93d79bdb4db01f56849bf1ea900e48915ec409e9c861e1ef1fd5082bdb",
       "control": {
         "id": "reason-remove-confirm",
         "selector": "#reason-confirm",
@@ -9024,7 +9668,7 @@
       "width": 390,
       "pageId": "P33",
       "scope": "pending-reason-composition",
-      "sha256": "734b96949b7e435604c6aa1ee19774535b7bae3e8a8bcb6c8d11d1ad411975f5"
+      "sha256": "3f7ba2f7da7608e8acc3762cf7a3e0d752195a75a095f9136137992191c7cead"
     }
   ]
 }

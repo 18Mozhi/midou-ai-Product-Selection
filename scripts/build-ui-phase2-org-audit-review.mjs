@@ -63,6 +63,16 @@ const definitions = [
     "normal",
   ],
   [
+    "EX-P29-PROFILE-TRACE",
+    "P29资料追踪披露排除",
+    "excluded",
+    C("bd677fb7d2212a2b.1"),
+    ["OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"],
+    "仅summary",
+    "既有资料请求/读取追踪披露，不属于审计页",
+    "normal",
+  ],
+  [
     "EX-P29-PROFILE",
     "组织资料表单排除",
     "excluded",

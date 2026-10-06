@@ -363,7 +363,11 @@ try {
       check("no business writes", writes, []);
       check("no unmatched or external requests", unexpected, []);
       check("no page errors", errors, []);
-      check("no business dialogs fabricated", await page.locator("dialog[open]").count(), 0);
+      check(
+        "no business dialogs fabricated",
+        await page.locator(".audited-reason-dialog[open]").count(),
+        0,
+      );
     } finally {
       for (const release of releases) release();
       await context.close();

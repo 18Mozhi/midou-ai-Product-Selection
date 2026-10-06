@@ -36,6 +36,7 @@
     create_failure: "创建失败保留草稿",
     create_success: "合成创建已确认",
     create_read_failed: "写后读取失败",
+    create_read_pending: "列表重新读取中",
     create_unknown: "写入结果未知",
     reason_assign: "分配原因窗",
     reason_remove: "移除原因窗",
@@ -173,6 +174,11 @@
       disabled = state.busy === "create" || state.unresolved;
     return `<form id="create-form" class="paper create-form" novalidate><header class="create-head"><h2>新建团队</h2><button id="cancel-create" type="button" ${state.busy === "create" ? "disabled" : ""}>取消</button></header><p class="create-intro">负责人可暂不设置；设置后会同时建立团队成员关系。</p>${feedback("form-feedback", state.formNotice)}<div class="create-grid"><div><label for="team-name">团队名称</label><input id="team-name" name="name" required maxlength="120" value="${esc(f.name)}" ${disabled ? "disabled" : ""} aria-invalid="${!!state.errors.name}" aria-describedby="name-error"><small id="name-error" class="field-error">${esc(state.errors.name || "最多120个字符")}</small></div><div><label for="team-lead">负责人（可选）</label><select id="team-lead" name="lead_membership_id" ${disabled ? "disabled" : ""} aria-invalid="${!!state.errors.lead_membership_id}" aria-describedby="lead-error">${options(f.lead_membership_id, "暂不设置")}</select><small id="lead-error" class="field-error">${esc(state.errors.lead_membership_id || "仅当前组织活动成员，不额外过滤锁定账号")}</small></div><div class="full"><label for="team-workflow">默认工作流程（可选）</label><input id="team-workflow" name="default_workflow_key" maxlength="80" value="${esc(f.default_workflow_key)}" ${disabled ? "disabled" : ""} aria-describedby="workflow-error"><small id="workflow-error">保存流程键，最多80字符；不校验是否存在对应流程。</small></div><div class="full"><label for="team-reason">创建原因</label><textarea id="team-reason" name="reason" required maxlength="500" ${disabled ? "disabled" : ""} aria-invalid="${!!state.errors.reason}" aria-describedby="create-reason-error">${esc(f.reason)}</textarea><small id="create-reason-error" class="field-error">${esc(state.errors.reason || "最多500个字符")}</small></div></div><footer><p>创建后为正常使用；原型不创建真实团队或审计记录。</p><button id="create-submit" class="primary" ${state.busy || state.unresolved ? "disabled" : ""}>${state.busy === "create" ? "正在创建…" : "创建并写入审计"}</button></footer></form>`;
   }
+  function createReadFailure() {
+    const receipt = state.createRefreshFailure;
+    if (!receipt) return "";
+    return `<section class="create-read-failure" role="alert" aria-labelledby="create-read-title"><div><h3 id="create-read-title">团队已创建，列表暂未更新</h3><p>创建操作已成功并写入审计；重新读取只会请求团队列表，不会再次提交创建。</p><details><summary>查看本次请求编号</summary><dl><div><dt>创建请求</dt><dd>${esc(receipt.writeRequestId)}</dd></div><div><dt>读取失败请求</dt><dd>${esc(receipt.readRequestId)}</dd></div></dl></details></div><button id="create-read-retry" type="button" ${state.refreshing ? "disabled" : ""}>${state.refreshing ? "正在重新读取…" : "重新读取团队列表"}</button></section>`;
+  }
   function render() {
     reconcile();
     const titles = {
@@ -184,7 +190,7 @@
       rate_limited: "请求过于频繁",
     };
     $("#workspace").innerHTML =
-      `<header class="page-head"><div><h2>团队治理</h2><p>先选团队，再核对成员关系的操作对象。</p></div><div class="head-actions"><button id="refresh" ${state.busy || state.pageState === "loading" ? "disabled" : ""}>${state.busy === "refresh" ? "正在刷新…" : "刷新数据"}</button>${state.pageState === "ready" ? `<button data-create class="primary" ${state.busy ? "disabled" : ""}>新建团队</button>` : ""}</div></header>${feedback("feedback", state.notice)}${state.pageState === "ready" ? `<div class="summary-strip"><span>已加载 <b>${state.items.length}</b> 个团队</span><span>成员关系 <b>${state.items.some((r) => r.member_count == null) ? "数据不全" : state.items.reduce((s, r) => s + Number(r.member_count ?? 0), 0)}</b> 次</span><span>有负责人 <b>${state.items.filter((r) => r.lead_membership_id).length}</b> 个</span><span>有流程键 <b>${state.items.filter((r) => r.default_workflow_key).length}</b> 个</span></div>${catalog()}${relationship()}${createForm()}<p class="provenance">${esc(state.provenance)} 成员关系合计不是组织去重人数；流程键不证明流程有效。</p>` : `<div class="empty"><h3>${titles[state.pageState]}</h3>${state.pageState === "loading" ? "" : '<button id="retry">重新加载</button>'}</div>`}`;
+      `<header class="page-head"><div><h2>团队治理</h2><p>先选团队，再核对成员关系的操作对象。</p></div><div class="head-actions"><button id="refresh" ${state.busy || state.pageState === "loading" ? "disabled" : ""}>${state.busy === "refresh" ? "正在刷新…" : "刷新数据"}</button>${state.pageState === "ready" ? `<button data-create class="primary" ${state.busy ? "disabled" : ""}>新建团队</button>` : ""}</div></header>${createReadFailure()}${feedback("feedback", state.notice)}${state.pageState === "ready" ? `<div class="summary-strip"><span>已加载 <b>${state.items.length}</b> 个团队</span><span>成员关系 <b>${state.items.some((r) => r.member_count == null) ? "数据不全" : state.items.reduce((s, r) => s + Number(r.member_count ?? 0), 0)}</b> 次</span><span>有负责人 <b>${state.items.filter((r) => r.lead_membership_id).length}</b> 个</span><span>有流程键 <b>${state.items.filter((r) => r.default_workflow_key).length}</b> 个</span></div>${catalog()}${relationship()}${createForm()}<p class="provenance">${esc(state.provenance)} 成员关系合计不是组织去重人数；流程键不证明流程有效。</p>` : `<div class="empty"><h3>${titles[state.pageState]}</h3>${state.pageState === "loading" ? "" : '<button id="retry">重新加载</button>'}</div>`}`;
     $("#scene-picker").value = state.scene;
     $("#filters")?.addEventListener("toggle", (e) => {
       if (e.target.isConnected) state.filtersOpen = e.target.open;
@@ -363,6 +369,7 @@
       sort: "name_asc",
       page: 1,
       createOpen: false,
+      createRefreshFailure: null,
       form: cleanForm(),
       errors: {},
       formNotice: "",
@@ -431,7 +438,10 @@
     }
     if (name === "zero_count") state.items[0].member_count = 0;
     if (name === "missing_count") delete state.items[0].member_count;
-    if (name.startsWith("create") || ["hover", "pressed", "focus"].includes(name)) {
+    if (
+      (name.startsWith("create") && !["create_read_failed", "create_read_pending"].includes(name)) ||
+      ["hover", "pressed", "focus"].includes(name)
+    ) {
       state.createOpen = true;
       state.form = clone(D.contracts.create.body);
     }
@@ -457,6 +467,15 @@
         create_unknown: "合成写入结果未知，请先刷新核验，不重复创建。",
       }[name];
       state.unresolved = name !== "create_failure";
+    }
+    if (["create_read_failed", "create_read_pending"].includes(name)) {
+      state.formNotice = "";
+      state.createOpen = false;
+      state.createRefreshFailure = {
+        writeRequestId: "p33-create-local-write",
+        readRequestId: "p33-create-local-read",
+      };
+      state.refreshing = name === "create_read_pending";
     }
     if (name === "create_success") {
       state.createOpen = false;
@@ -588,6 +607,14 @@
     if (["refresh", "retry"].includes(b.id)) {
       for (const p of ["summary", "teams", "members"]) log("/org/admin/" + p);
       state.notice = "仅记录读取意图，未访问服务，团队与草稿不变。";
+      render();
+      focus("#feedback");
+    }
+    if (b.id === "create-read-retry") {
+      log("/org/admin/teams", "GET");
+      state.createRefreshFailure = null;
+      state.refreshing = false;
+      state.notice = "已记录团队列表重读意图；不会再次提交创建。";
       render();
       focus("#feedback");
     }

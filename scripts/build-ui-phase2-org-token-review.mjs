@@ -77,6 +77,16 @@ const definitions = [
     "normal",
   ],
   [
+    "EX-P29-PROFILE-TRACE",
+    "资料追踪披露排除",
+    "excluded",
+    C("bd677fb7d2212a2b.1"),
+    ["OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"],
+    "仅summary",
+    "既有资料请求/读取追踪披露不属本页",
+    "normal",
+  ],
+  [
     "EX-P30-MEMBERS",
     "成员转发排除",
     "excluded",
