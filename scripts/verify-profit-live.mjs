@@ -211,6 +211,7 @@ async function approveAndPublish(rule, key) {
   });
 }
 
+let diagnosticRuleId;
 try {
   const [versions] = await pool.query(
       "SELECT VERSION() version,@@character_set_server charset,DATABASE() database_name,CURRENT_USER() account_name",
@@ -224,6 +225,10 @@ try {
   )
     throw new Error("requires MySQL57 utf8mb4 product_scout business account");
   await assertSchemaReady();
+  const [[calendar]] = await pool.query(
+    "SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL 1 DAY),'%Y-%m-%d') effective_date",
+  );
+  const effectiveDate = calendar.effective_date;
   await cleanup();
   await seed();
   let invalid = false;
@@ -247,7 +252,7 @@ try {
         platform: "amazon",
         version_code: "US-AMZ-2026-01",
         name: "美国站费用规则一",
-        effective_from: now.toISOString().slice(0, 10),
+        effective_from: effectiveDate,
         fee_lines,
       },
     }),
@@ -258,11 +263,12 @@ try {
         platform: "amazon",
         version_code: "US-AMZ-2026-01",
         name: "美国站费用规则一",
-        effective_from: now.toISOString().slice(0, 10),
+        effective_from: effectiveDate,
         fee_lines,
       },
     });
   if (draft.id !== replay.id) throw new Error("rule idempotency failed");
+  diagnosticRuleId = draft.id;
   let version = 1;
   for (const [value, key] of [
     [
@@ -451,12 +457,31 @@ try {
     }),
   );
 } catch (error) {
+  let ruleDiagnostics;
+  if (error?.code === "active_cost_rule_missing") {
+    try {
+      const [[diagnostics]] = await pool.query(
+        "SELECT EXISTS(SELECT 1 FROM cost_rules WHERE id=?) rule_exists," +
+          "EXISTS(SELECT 1 FROM cost_rules WHERE id=? AND status='active') rule_active," +
+          "EXISTS(SELECT 1 FROM cost_rules WHERE id=? AND status='active' AND effective_from<=NOW()) rule_effective_now," +
+          "EXISTS(SELECT 1 FROM cost_rules r JOIN opportunities o ON o.id=? WHERE r.id=? AND r.organization_id=o.organization_id AND r.workspace_id=o.workspace_id AND r.market=o.market AND r.platform=? AND r.status='active' AND r.effective_from<=NOW()) queue_scope_matches," +
+          "DATE_FORMAT(NOW(),'%Y-%m-%d %H:%i:%s') mysql_now",
+        [diagnosticRuleId ?? "", diagnosticRuleId ?? "", diagnosticRuleId ?? "", ids.opportunity, diagnosticRuleId ?? "", "amazon"],
+      );
+      ruleDiagnostics = Object.fromEntries(
+        Object.entries(diagnostics).map(([key, value]) => [key, Number(value) || value]),
+      );
+    } catch {
+      ruleDiagnostics = { status: "unavailable" };
+    }
+  }
   console.error(
     JSON.stringify({
       status: "blocked",
       code: error?.code ?? "profit_live_failed",
       message: error instanceof Error ? error.message : "unknown",
       stack: error instanceof Error ? error.stack : "unknown",
+      ...(ruleDiagnostics ? { rule_diagnostics: ruleDiagnostics } : {}),
       request_id: requestId,
       trace_id: traceId,
     }),

@@ -271,5 +271,7 @@ test("M04-04.A03/A05-A11/A13-A17 complete delivery evidence exists", async () =>
   assert.match(runbook, /宝塔[\s\S]*回滚/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /historical_runs_preserved/);
+  assert.match(live, /DATE_SUB\(CURDATE\(\), INTERVAL 1 DAY\)/);
+  assert.equal([...live.matchAll(/effective_from: effectiveDate/g)].length, 2);
   assert.match(blueprint, /M04-04 实现合同/);
 });
