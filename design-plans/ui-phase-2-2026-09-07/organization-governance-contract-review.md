@@ -34,7 +34,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 
 文件简称均位于apps/web/src/components：C=OrganizationAdminCenter.vue；M=OrganizationMemberPanel.vue；W=OrganizationWorkspacePanel.vue；T=OrganizationTeamPanel.vue；A=OrganizationApprovalPanel.vue；D=OrganizationDataPanel.vue；K=OrganizationTokenPanel.vue；U=OrganizationAuditPanel.vue；F=OrganizationApprovalFirstFailure.vue。完整候选ID为文件路径#sig；每个sig在下表出现一次，同行逗号表示同一业务动作的多个源码入口，不以渲染记录数扩张分母。
 
-八文件共110候选：107控件/事件、3弹窗调用候选（父层AuditedReasonDialog组件调用及两处askAuditedReason）。本地没有新原生dialog定义，复用共享AuditedReasonDialog/useAuditedReason/useModalDialog。54处v-model另列输入表，扫描候选不包含所有无显式事件的字段。P31的父转发只标复用，不再次计为新动作。全站G0仍未冻结。
+八文件共111候选：108控件/事件、3弹窗调用候选（父层AuditedReasonDialog组件调用及两处askAuditedReason）。本地没有新原生dialog定义，复用共享AuditedReasonDialog/useAuditedReason/useModalDialog。54处v-model另列输入表，扫描候选不包含所有无显式事件的字段。P31的父转发只标复用，不再次计为新动作。全站G0仍未冻结。
 
 | 文件 | sig（逗号分隔） | 语义归属 |
 | --- | --- | --- |
@@ -61,6 +61,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | C | 35233f910d34fac6.1 | D-OG-REASON组件调用 |
 | C | ab6191688d424055.1 | D-OG-REASON通用成员/邀请/工作区/团队及P31调用 |
 | C | e828f4ab0fdb0415.1 | D-OG-REASON令牌轮换/撤销调用 |
+| C | bd677fb7d2212a2b.1 | OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求 |
 | M | 3faa2495a550b3c6.1,0589c9bc31734883.1 | OG-M-INVITE |
 | M | 171dd535ef8757aa.1,5fa949f2fa7f314d.1 | OG-M-INVITATION-TAB |
 | M | 4f34de62fea95c43.1 | OG-M-INVITATION-REVOKE |

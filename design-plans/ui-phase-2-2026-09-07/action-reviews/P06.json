@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "pageId": "P06",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "route": "/reset-password",
   "status": "implemented-not-production-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",

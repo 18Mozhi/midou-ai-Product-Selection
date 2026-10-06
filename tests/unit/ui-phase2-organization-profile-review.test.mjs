@@ -37,15 +37,15 @@ const context = {
 };
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P29.json`, "utf8"));
 
-test("P29 maps all fourteen parent sites to current actions and five explicit exclusions", () => {
+test("P29 maps all fifteen parent sites to current actions and five explicit exclusions", () => {
   assert.equal(review().visualApproval, "user-approved-remaining-pages-auto");
   const r = validateActionReview(review(), context);
-  assert.equal(r.sourceSites, 14);
-  assert.equal(r.semanticGroups, 9);
-  assert.equal(r.routeActions, 4); // Includes the local field callback, not four business buttons.
+  assert.equal(r.sourceSites, 15);
+  assert.equal(r.semanticGroups, 10);
+  assert.equal(r.routeActions, 5); // Includes local field and trace disclosures, not five business buttons.
   assert.equal(r.excludedGroups, 5);
   assert.equal(r.writeActions, 1);
-  assert.equal(r.unmappedVisualSlots, 0);
+  assert.equal(r.unmappedVisualSlots, 6);
   assert.equal(r.sourceInapplicableVisualSlots, 4);
   assert.equal(
     review().actions.find((a) => a.actionId === "OG-PROFILE-SAVE").sourceCandidateIds.length,

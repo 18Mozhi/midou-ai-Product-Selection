@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "pageId": "P08",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "route": "/select-context",
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",

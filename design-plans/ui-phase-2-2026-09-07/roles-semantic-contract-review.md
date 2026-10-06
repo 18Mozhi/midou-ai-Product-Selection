@@ -15,7 +15,7 @@
 | 5ae31bc55551b1dc.1 | P34首次500恢复转发，P31不渲染该分支 | EX-P34-FIRST-FAILURE |
 | 08a59be6f793cde6.1 | P34首次429恢复转发，P31不渲染该分支 | EX-P34-FIRST-FAILURE |
 | ca4fa7a0220842a9.1 | P34审批恢复反馈reload转发至现有load()，P31不渲染审批分支 | EX-P34-READ-RECOVERY |
-| d6b520278ab3dd57.1、1cbd108c64b5230c.1、5878e30377f290ae.1 | summary资料三位置排除 | EX-P29-PROFILE |
+| d6b520278ab3dd57.1、1cbd108c64b5230c.1、5878e30377f290ae.1、bd677fb7d2212a2b.1 | summary资料三位置及只读保存/读取追踪披露排除 | EX-P29-PROFILE |
 | 6a563eeaa67fea90.1 | members事件转发排除 | EX-P30-MEMBERS |
 | b09d7923228aabe6.1 | 六事件转发八目标；父busy或refreshing均传子busy | WIRE-ROLES |
 | 773c2105d1d0d008.1、35233f910d34fac6.1、ab6191688d424055.1 | 通用原因调用及确认/取消转发；本页仅撤销发起 | D-OG-REASON |
@@ -45,7 +45,7 @@
 
 ## 字段、图稿与后续实施
 
-[机器登记](action-reviews/P31.json) · [原48张C稿](design/roles-direction-c/README.md) · [设计入口](design/roles-direction-c/index.html)。20路由动作/1接线/5排除（26语义组），当前登记33个源码位置；本次将三个旧P31候选ID替换为当前Vue源身份，不增加业务动作。120代表视觉槽尚未逐控件绑定，不能用整页图代替hover/focus/pressed/disabled/busy证明。
+[机器登记](action-reviews/P31.json) · [原48张C稿](design/roles-direction-c/README.md) · [设计入口](design/roles-direction-c/index.html)。20路由动作/1接线/5排除（26语义组），当前登记34个源码位置；其中summary资料分支追踪折叠明确排除于P31，不增加业务动作。120代表视觉槽尚未逐控件绑定，不能用整页图代替hover/focus/pressed/disabled/busy证明。
 
 14个子组件v-model、1个type受控输入、1个共享撤销reason；父组件另6个summary模型在本页排除。创建7字段、延期2字段，另6个查询/筛选输入；共享原因另算。创建与延期是两内联form，撤销是一个共享窗；父summary form另列排除，不是四个弹窗。
 
@@ -55,7 +55,7 @@
 
 源码行为需保留为待核对风险：创建在途编辑可被旧成功清除；刷新同ID新对象会清延期原因；无选中对象时watch保留旧草稿；撤销确认后的组织ID和grant.version未固定到开窗时。测试复现这些现状，不代表修复或批准。
 
-资源编号目前要求复制UUID，与总纲避免手填UUID有冲突。2026-09-10用户明确确认“保留从详情页复制 UUID 的方式”，作为本页例外优先于总纲的一般建议；保持现有模式，不新增按名称选择、目录API、权限或数据规则。P16批准仅该页布局，不外推P31。
+资源编号目前要求复制UUID，与总纲避免手填UUID有冲突。2026-09-10用户明确确认“保留从详情页复制 UUID 的方式”，作为本页例外优先于总纲的一般建议；保持现有模式，不新增按名称选择、目录API、权限或数据规则。全页视觉方向已按用户全局批准记录；动作、字段、运行时及生产验收仍分别核对，不由视觉批准代替。
 
 ## 验证与操作
 

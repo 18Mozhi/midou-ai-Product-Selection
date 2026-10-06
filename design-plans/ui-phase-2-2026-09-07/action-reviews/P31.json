@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
     "apps/web/src/components/OrganizationRolePanel.vue": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
   },
   "actions": [
@@ -181,18 +181,21 @@
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"
       ],
       "sourceContractKeys": [
         "EX-P29-PROFILE"
       ],
       "priorContractKeys": [
         "OG-PROFILE-SAVE",
-        "OG-PROFILE-LOGO浏览器有效性"
+        "OG-PROFILE-LOGO浏览器有效性",
+        "EX-P29-PROFILE",
+        "OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"
       ],
       "contractAliasReason": "源码合同明确身份归一；父事件接线与业务操作分别登记。",
       "condition": "summary分支非P31",
-      "handler": "不重复计资料提交/Logo检查",
+      "handler": "不重复计资料提交/Logo检查；保存与读取追踪折叠仅在summary资料分支显示",
       "variants": [
         "roles"
       ],
@@ -2871,7 +2874,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "apps/web/src/components/OrganizationRolePanel.vue": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",

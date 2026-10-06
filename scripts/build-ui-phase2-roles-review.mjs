@@ -68,10 +68,15 @@ const definitions = [
     "EX-P29-PROFILE",
     "组织资料分支排除",
     "excluded",
-    ["d6b520278ab3dd57.1", "1cbd108c64b5230c.1", "5878e30377f290ae.1"],
-    ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
+    ["d6b520278ab3dd57.1", "1cbd108c64b5230c.1", "5878e30377f290ae.1", "bd677fb7d2212a2b.1"],
+    [
+      "OG-PROFILE-SAVE",
+      "OG-PROFILE-LOGO浏览器有效性",
+      "EX-P29-PROFILE",
+      "OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求",
+    ],
     "summary分支非P31",
-    "不重复计资料提交/Logo检查",
+    "不重复计资料提交/Logo检查；保存与读取追踪折叠仅在summary资料分支显示",
     ["roles"],
   ],
   [

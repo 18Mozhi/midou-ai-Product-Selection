@@ -1,6 +1,7 @@
 {
   "schemaVersion": 1,
   "pageId": "P11",
+  "visualApproval": "user-approved-remaining-pages-auto",
   "route": "/me",
   "status": "implemented-user-auto-approved",
   "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",

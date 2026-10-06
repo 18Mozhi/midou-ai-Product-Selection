@@ -31,7 +31,7 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 
 ## 2. 直接候选逐项映射
 
-文件别名：S=ProviderRuntimeSurface.vue，R=ProviderRegistry.vue，A=ProviderAdapterCenter.vue；均在apps/web/src/components。完整candidateId为该路径加`#`和下表签名。41个直接静态候选=S5+R22+A14；包含同一个提交的form/button以及定义/事件，不是41个独立业务动作。条件分支和重复行需要运行时扩展，不据此冻结全站分母。
+文件别名：S=ProviderRuntimeSurface.vue，R=ProviderRegistry.vue，A=ProviderAdapterCenter.vue；均在apps/web/src/components。完整candidateId为该路径加`#`和下表签名。44个直接静态候选=S5+R25+A14；包含同一个提交的form/button以及定义/事件，不是44个独立业务动作。条件分支和重复行需要运行时扩展，不据此冻结全站分母。
 
 | 文件 | 签名               | 动作/定义归属      | 实际入口、条件与结果                                                                             |
 | ---- | ------------------ | ------------------ | ------------------------------------------------------------------------------------------------ |
@@ -61,6 +61,9 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | R    | 4ba7742e75103fa4.1 | PR46-STEP-PREV     | 上一步，内存字段保留                                                                             |
 | R    | d0e6c4e6deaeab8a.1 | PR46-STEP-NEXT     | 校验当前组再下一步                                                                               |
 | R    | addbc979a88d3d3a.1 | PR46-SAVE          | type=submit；创建POST/编辑PUT+expected_version，同一实例串行；新窗等待上一项保存，结果按代次归属 |
+| R | 8fad861111d9338e.1 | PR46-SAVE | 现有编辑窗表单submit事件转发至save；沿用上方创建/编辑API所有者，不构成新业务动作 |
+| R | a862aba9d276c718.1 | PR46-EDITOR | role=dialog的现有来源编辑表单容器；沿用四步编辑窗与既有焦点/关闭处理 |
+| R | f4f17798bbc8fc53.1 | PR46-SAVE | 表单提交事件绑定至save，与已有提交按钮共用一个保存流程 |
 | A    | 3d1c1781d275b76d.1 | PR47-DEFINE        | 页头返回P46，仅导航                                                                              |
 | A    | 0da6a9c39b0f685c.1 | PR47-RESET         | 工具栏完整resetFilters                                                                           |
 | A    | d1614ad8db6bddf9.1 | PR47-DEFINE        | 无来源时“登记来源”去P46，不是登记程序                                                            |

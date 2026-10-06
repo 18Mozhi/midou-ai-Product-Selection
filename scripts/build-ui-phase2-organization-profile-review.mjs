@@ -81,6 +81,16 @@ const definitions = [
     ["normal", "logo_invalid", "blank_logo"],
   ],
   [
+    "OG-PROFILE-TRACE",
+    "展开保存与资料读取追踪",
+    "local",
+    ["bd677fb7d2212a2b.1"],
+    ["OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"],
+    "资料读写反馈提供关联编号时，用户主动展开技术追踪",
+    "切换原生details展开状态，只披露当前已有的保存/读取关联编号；不发请求、不重放保存",
+    ["normal"],
+  ],
+  [
     "EX-P30-MEMBERS",
     "P30成员事件（非本页）",
     "excluded",
@@ -360,7 +370,7 @@ export function buildOrganizationProfileReview(source, evidence, fieldEvidence) 
     ],
     approval: "pending-user-review",
     visualApproval: "user-approved-remaining-pages-auto",
-    limits: [remaining, "P16仅独立布局批准不外推P29；本批未部署、未改变API或业务规则。"],
+    limits: [remaining, "全页视觉方向已按用户全局批准记录；动作验收与生产验收仍独立待完成。本批未部署、未改变API或业务规则。"],
   };
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

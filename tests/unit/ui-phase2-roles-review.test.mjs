@@ -94,10 +94,10 @@ const context = {
 const review = () => JSON.parse(readFileSync(`${base}/action-reviews/P31.json`, "utf8"));
 const plain = (v) => JSON.parse(JSON.stringify(v));
 
-test("P31 covers 33 sites with 20 actions and six exact forwards without implying production acceptance", () => {
+test("P31 covers 34 sites with 20 actions and six exact forwards without implying production acceptance", () => {
   const r = review(),
     result = validateActionReview(r, context);
-  assert.equal(result.sourceSites, 33);
+  assert.equal(result.sourceSites, 34);
   assert.equal(result.semanticGroups, 26);
   assert.equal(result.routeActions, 20);
   assert.equal(result.writeActions, 3);

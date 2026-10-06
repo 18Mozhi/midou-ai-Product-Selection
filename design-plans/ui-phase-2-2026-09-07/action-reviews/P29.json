@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
   },
   "actions": [
     {
@@ -503,7 +503,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
         }
       }
     },
@@ -803,9 +803,55 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
         }
       }
+    },
+    {
+      "actionId": "OG-PROFILE-TRACE",
+      "label": "展开保存与资料读取追踪",
+      "kind": "local",
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"
+      ],
+      "contractAliasReason": "沿F04完整语义末列显式合并表单/保存及共享原因调用；不从按钮文案推断动作。",
+      "condition": "资料读写反馈提供关联编号时，用户主动展开技术追踪",
+      "handler": "切换原生details展开状态，只披露当前已有的保存/读取关联编号；不发请求、不重放保存",
+      "variants": [
+        "normal"
+      ],
+      "scenes": [
+        {
+          "package": "organization-profile-direction-c",
+          "scene": "normal"
+        }
+      ],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
+      "testReferences": [
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-controls-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        },
+        {
+          "file": "scripts/verify-ui-phase2-organization-profile-fields-c.mjs",
+          "evidenceType": "offline-proposal-check-not-Vue"
+        }
+      ],
+      "remaining": "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。"
     },
     {
       "actionId": "EX-P30-MEMBERS",
@@ -973,7 +1019,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "7fc41cc7fa1e366b6d7a913e42a7f19881d83ddf5b2110e7d69b2d5f4d0744f2"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
     },
     "inputs": [
       {
@@ -1666,6 +1712,6 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "limits": [
     "具体用户批准、完整字段/角色/主题/密度/真实Vue生命周期/数据库审计与生产验收未完成。",
-    "P16仅独立布局批准不外推P29；本批未部署、未改变API或业务规则。"
+    "全页视觉方向已按用户全局批准记录；动作验收与生产验收仍独立待完成。本批未部署、未改变API或业务规则。"
   ]
 }
