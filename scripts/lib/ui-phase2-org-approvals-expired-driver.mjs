@@ -19,7 +19,7 @@ export function expiredVueDriver(input) {
         ).replaceAll("\r\n", "\n"),
       )
       .digest("hex"),
-    "e886e563e7851791084b1102b459a5b842b7a6ad8efc50c627e05d0b20f2a270",
+    "a19bd9f0842a3edc4e170b3bf152b249bf218c27229eff5b93db099b3cc0cdee",
   );
   let source = permissionVueDriver(input);
   const replace = (before, after) => {

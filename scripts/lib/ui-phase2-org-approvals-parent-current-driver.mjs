@@ -6,7 +6,7 @@ import ts from "typescript";
 
 export const approvalsParentBase = "scripts/verify-ui-phase2-org-approvals-parent.mjs";
 export const approvalsParentBaseHash =
-  "eff13338e7fd7ebf581ef682a7abcd99789a2d62108d783f66a916fd8d901944";
+  "42806da668b4dc3fa4e278a62e2922b34c1a3363474bb548ae3f72dd9f0b96ed";
 export const approvalsParentOutput = "output/playwright/p34-parent-current-c-r3";
 
 const imports = `
@@ -68,9 +68,13 @@ export const approvalsParentCurrentEdits = [
         check(scene + ": C parent header survives child state", await center.getAttribute("data-approval-c-view"), "true");`,
   ],
   [
-    '      check("no business dialogs fabricated", await page.locator("dialog[open]").count(), 0);',
+    `      check(
+        "no business dialogs fabricated",
+        await page.locator(".audited-reason-dialog[open]").count(),
+        0,
+      );`,
     `
-      check("no business dialogs fabricated", await page.locator("dialog[open]:not(.role-navigation-frame)").count(), 0);
+      check("no business dialogs fabricated", await page.locator(".audited-reason-dialog[open]").count(), 0);
       check("only desktop navigation container remains open", await page.locator('dialog.role-navigation-frame[open][aria-label="工作台导航"]').count(), width > 840 ? 1 : 0);
       check("no unexpected modal blocks content", await page.locator("dialog:modal").count(), 0);`,
   ],

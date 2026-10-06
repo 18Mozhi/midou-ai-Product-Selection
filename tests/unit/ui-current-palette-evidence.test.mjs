@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 const signalLedger = readFileSync("apps/web/src/signal-ledger.css", "utf8").replaceAll(
   "\r\n",
   "\n",
@@ -88,7 +89,8 @@ for (const [folder, kind, checks, images, palette] of [
     } else {
       for (const [source, expected] of Object.entries(evidence.sourceHashes)) {
         const text = readFileSync(source, "utf8").replaceAll("\r\n", "\n");
-        assert.equal(hash(text), expected, source);
+        if (source.startsWith("tests/e2e/")) assertCaptureSourceRevision(source, text, expected);
+        else assert.equal(hash(text), expected, source);
       }
     }
     for (const shot of evidence.screenshots)

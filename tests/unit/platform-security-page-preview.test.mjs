@@ -74,7 +74,7 @@ test("P59 production C layout owns one heading, separates background counts, and
     styles = await readFile("apps/web/src/security-operations-c.css", "utf8");
   assert.match(page, /class="security-ops security-ops--c"/);
   assert.match(page, /<h1 id="security-operations-title">安全中心<\/h1>/);
-  assert.match(styles, /\.role-shell:has\(\.security-ops--c\) \.role-page-title/);
+  assert.match(styles, /\.role-shell\.role-shell--c:has\(\.security-ops--c\) \.role-page-title/);
   assert.ok(page.indexOf('class="security-view-nav"') < page.indexOf('class="p59-background"'));
   assert.ok(page.indexOf('class="p59-background"') < page.indexOf('class="p59-investigation"'));
   assert.equal((page.match(/appearance="security"/g) || []).length, 5);

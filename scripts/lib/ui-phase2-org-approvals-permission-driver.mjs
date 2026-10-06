@@ -7,7 +7,7 @@ import { approvalsParentCurrentDriver } from "./ui-phase2-org-approvals-parent-c
 
 export const permissionDriverBase = "scripts/lib/ui-phase2-org-approvals-parent-current-driver.mjs";
 export const permissionDriverBaseHash =
-  "e6cac68bfb0e461245dcb680ca539bc1cd7639dc578999753f474b16023f35eb";
+  "ea531ee2594b8a123a54f4bd298d794483354f8afe85fd96b0942f232864a845";
 export const permissionOutput = "output/playwright/p34-permission-vue-c-r1";
 const url = pathToFileURL(
   path.resolve("scripts/lib/ui-phase2-org-approvals-permission-preview.mjs"),

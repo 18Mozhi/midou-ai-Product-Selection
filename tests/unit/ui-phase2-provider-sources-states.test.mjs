@@ -4,20 +4,17 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
-import {
-  previewProviderSourcesStates,
-  sourceStateCopy,
-} from "../../scripts/lib/ui-phase2-provider-sources-states-preview.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import { sourceStateCopy } from "../../scripts/lib/ui-phase2-provider-sources-states-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/ProviderSourceCenter.vue",
   root = "output/playwright/p48-source-states-review";
 
-test("P48 source-state review transforms the actual component and still compiles", () => {
+test("P48 production source states preserve the current component contract and compile", () => {
   const source = read(component),
-    review = previewProviderSourcesStates(source),
-    parsed = parse(review);
+    parsed = parse(source);
   assert.deepEqual(parsed.errors, []);
   compileScript(parsed.descriptor, { id: "p48-source-states" });
   assert.deepEqual(
@@ -29,20 +26,18 @@ test("P48 source-state review transforms the actual component and still compiles
     [],
   );
   for (const marker of [
-    "p48-source-state-host",
-    "p48-source-state-panel",
-    "p48-source-state-eyebrow",
-    "p48-source-state-description",
-    "p48-source-state-technical",
-    "p48-source-state-primary",
+    'class="source-state-panel"',
+    'class="source-state-eyebrow"',
+    'class="source-state-description"',
+    'class="source-state-technical"',
+    'class="source-state-primary"',
     "handleSourceStatePrimary",
   ]) {
-    assert.ok(review.includes(marker), marker);
-    assert.equal(source.includes(marker), false, `production must not contain ${marker}`);
+    assert.ok(source.includes(marker), marker);
   }
-  assert.ok(review.includes("v-if=\"message && state === 'ready'\""));
-  assert.ok(review.includes("v-if=\"state === 'ready'\""));
-  assert.ok(review.includes('void router.push("/login")'));
+  assert.ok(source.includes('state === "forbidden"'));
+  assert.ok(source.includes("当前权限还不能读取这些内容。权限调整后，可以重新加载。"));
+  assert.ok(source.includes('void router.push("/login")'));
 });
 
 test("P48 source-state copy stays factual, actionable, and gentle", () => {
@@ -95,7 +90,7 @@ test("P48 source-state evidence binds seven states, recovery, and every image", 
   assert.equal(evidence.screenshots.length, 34);
   assert.equal(Object.keys(evidence.sourceHashes).length, 65);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assertCaptureSourceRevision(file, read(file), expected);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

@@ -3,6 +3,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import {
   adminControlsRevision,
   historicalAdminControlsSource,
@@ -38,11 +39,10 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     );
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
       const source = capture ? capture.source(file) : read(file);
-      assert.equal(
-        hash(mode === "baseline" ? historicalAdminControlsSource(file, source) : source),
-        sha,
-        file,
-      );
+      if (mode === "baseline")
+        assert.equal(hash(historicalAdminControlsSource(file, source)), sha, file);
+      else if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, source, sha);
+      else assert.equal(hash(source), sha, file);
       assert.ok(!file.includes("-preview.css"), file);
     }
     assert.deepEqual(

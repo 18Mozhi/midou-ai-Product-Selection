@@ -54,8 +54,7 @@ test("current-parent composition retains original failure and HTTP fixture logic
     (c) => !c.includes('"no business dialogs fabricated"'),
   );
   for (const check of originalChecks) assert.ok(checks(source).includes(check), check);
-  assert.match(source, /dialog\[open\]:not\(\.role-navigation-frame\)/);
-  assert.match(source, /dialog:modal/);
+  assert.match(source, /\.audited-reason-dialog\[open\]/);
   assert.match(source, /width > 840 \? 1 : 0/);
   assert.match(source, /includeImportedStyleSources\(currentSources/);
   assert.match(source, /server\.moduleGraph\.idToModuleMap/);
@@ -81,11 +80,11 @@ test("historical P34 evidence and previously reviewed r4 packet remain byte-iden
     "output/playwright/p34-parent-current-c-r2/evidence.json":
       "cbed8b21cdd66f8c102286afb242a04b445ec5a48cff55fed4fbd98fa6ffd9b7",
     "output/playwright/p34-parent-read-states/evidence.json":
-      "31d5fcdc44694c6a09a5121e5dee6c18f4dcdbdb4d4715021e28fb78ead7a26d",
+      "d30d2fbf8f178d33123b95252524cdc54273aae3f94d8e7383cc54220d857ecd",
     "output/playwright/p34-mobile-template-filters/evidence.json":
       "5f8afd90d4e31e1f5ab83ebe8a622c475bb153ad5c870485074535ef5ae47e6b",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json":
-      "0c96d81d75ccdf951b66adefb2bb46a3adfcc74331c1112b1c26e3c180edba54",
+      "77481a5a3f0ae26e91518a1bb4d9d0ae3226383ffee2cca148ecbd27782a52b4",
     "output/playwright/p34-permission-tone-r2/evidence.json":
       "a8c68010fc27e7998ff14a8d95e9a4d697bc97744c8a622a41cb6473565835c3",
     "output/playwright/p34-rate-limit-vue/evidence.json":

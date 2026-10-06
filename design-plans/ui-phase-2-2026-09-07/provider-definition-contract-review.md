@@ -51,9 +51,9 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | R    | 1c008f867673db60.1 | PR46-TECH-ROW      | 原生details/summary展开ID/目标/解析等技术值                                                      |
 | R    | 83d11b8719b1c99d.1 | PR46-PAGE-PREV     | 本地上一页，边界禁用                                                                             |
 | R    | bd43d7b540116c32.1 | PR46-PAGE-NEXT     | 本地下一页，边界禁用                                                                             |
-| R    | 51517865bc5117a4.1 | PR46-CLOSE         | 自定义遮罩mousedown.self.prevent调用closeEditor，防默认鼠标聚焦覆盖恢复目标                      |
-| R    | d36ecadeb20b9988.1 | PR46-EDITOR        | role=dialog定义；创建/编辑×四步，不是八个独立定义                                                |
-| R    | eb72344b9c9f3d10.1 | PR46-CLOSE/SAVE    | 表单Escape关闭，submit.prevent保存；和提交按钮同调用链                                           |
+| R    | 51517865bc5117a4.1 | PR46-CLOSE         | 自定义遮罩mousedown.self.prevent调用closeEditor，防默认鼠标聚焦覆盖恢复目标 [历史身份，仅追溯] 当前见8fad861111d9338e.1 |
+| R    | d36ecadeb20b9988.1 | PR46-EDITOR        | role=dialog定义；创建/编辑×四步，不是八个独立定义 [历史身份，仅追溯] 当前见a862aba9d276c718.1 |
+| R    | eb72344b9c9f3d10.1 | PR46-CLOSE/SAVE    | 表单Escape关闭，submit.prevent保存；和提交按钮同调用链 [历史身份，仅追溯] 当前见f4f17798bbc8fc53.1 |
 | R    | e03ff4bf86eb6a89.1 | PR46-CLOSE         | 编辑器命名关闭按钮                                                                               |
 | R    | 71fedaee68dde679.1 | PR46-STEP-JUMP     | v-for四步骤，直接跳步不做当前组校验                                                              |
 | R    | 83ffe5899e1ccfcf.1 | PR46-TEMPLATE      | 按五模式应用技术模板，覆盖共用策略及fields/failure_rules                                         |
@@ -210,7 +210,7 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1 | 684 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET并隐藏未接线secondary |
+| apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1 | 682 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET并隐藏未接线secondary |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
@@ -218,10 +218,13 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 ### PR46/PR47及共享详情旧身份归档
 
-以下十个早期身份已由第8/9节、共享详情当前源码映射或对应当前源组件候选替代；旧合同保留追溯，不计当前覆盖。
+以下十三个早期身份已由第8/9节、共享详情当前源码映射或对应当前源组件候选替代；旧合同保留追溯，不计当前覆盖。
 
 | source | 旧签名 | 旧语义 |
 | --- | --- | --- |
+| apps/web/src/components/ProviderRegistry.vue | 51517865bc5117a4.1 | PR46旧遮罩关闭，当前见8fad861111d9338e.1 |
+| apps/web/src/components/ProviderRegistry.vue | d36ecadeb20b9988.1 | PR46旧编辑器定义，当前见a862aba9d276c718.1 |
+| apps/web/src/components/ProviderRegistry.vue | eb72344b9c9f3d10.1 | PR46旧关闭/提交接线，当前见f4f17798bbc8fc53.1 |
 | apps/web/src/components/ProviderRegistry.vue | d2b72f6631a5008b.1 | PR46受阻态重读旧转发 |
 | apps/web/src/components/ProviderAdapterCenter.vue | 92930355cc4e2a4f.1 | PR47旧刷新入口 |
 | apps/web/src/components/ProviderAdapterCenter.vue | d2b72f6631a5008b.1 | PR47旧受阻态重读转发 |

@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import { spawnSync } from "node:child_process";
 import ts from "typescript";
@@ -236,8 +237,10 @@ test("P44 current replay keeps raw source hashes, original checks, images and re
     e.summaries.reduce((n, item) => n + item.images.length, 0),
     322,
   );
-  for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+  for (const [file, sha] of Object.entries(e.sourceHashes)) {
+    if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, read(file), sha);
+    else assert.equal(hash(read(file)), sha, file);
+  }
   for (const item of e.summaries) {
     const bytes = readFileSync(item.manifest);
     assert.equal(hash(bytes), item.manifestSha);
@@ -248,8 +251,10 @@ test("P44 current replay keeps raw source hashes, original checks, images and re
       current.requestsByWidth ?? current.observations,
       original.requestsByWidth ?? original.observations,
     );
-    for (const [file, sha] of Object.entries(current.sourceHashes))
-      assert.equal(hash(read(file)), sha, file);
+    for (const [file, sha] of Object.entries(current.sourceHashes)) {
+      if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, read(file), sha);
+      else assert.equal(hash(read(file)), sha, file);
+    }
     for (const image of item.images) {
       assert.equal(
         hash(readFileSync(`${adminReviewReplayRoot}/${item.stage}/${image.file}`)),

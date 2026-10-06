@@ -16,7 +16,7 @@ export function loadingVueDriver(input) {
         ).replaceAll("\r\n", "\n"),
       )
       .digest("hex"),
-    "aee094d22ebae201810e5aeb50ade4a25ce80b425b8ca84d26478cb4234530a3",
+    "4961385ce40706eb88c8e55fec6968e0319f39f9d1251888fe11b11aa972aed0",
   );
   let source = readFeedbackVueDriver(input);
   const replace = (before, after) => {

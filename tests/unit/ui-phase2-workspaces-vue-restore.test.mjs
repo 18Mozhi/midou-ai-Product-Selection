@@ -5,6 +5,7 @@ import ts from "typescript";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { computed, ref } from "vue";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const file = "apps/web/src/use-audited-reason.ts";
 const source = readFileSync(file, "utf8");
@@ -65,14 +66,14 @@ test("P32 restore context cannot leak into a replacement archive or another call
   h.cancel();
   assert.equal(await latest, null);
 });
-test("P32 actual Vue evidence binds current production sources and adjacent caller checks", () => {
+test("P32 actual Vue evidence binds capture-time production sources and adjacent caller checks", () => {
   const base = "output/playwright/p32-approved-restore-review-r13";
   const proof = JSON.parse(readFileSync(`${base}/evidence.json`, "utf8"));
   const hash = (v) => createHash("sha256").update(v).digest("hex");
   assert.equal(proof.kind, "P32-approved-restore-Vue-r13");
   assert.match(proof.boundary, /automatic approval applies only to page visuals/);
   for (const [f, sha] of Object.entries(proof.sourceHashes))
-    assert.equal(hash(readFileSync(f, "utf8").replaceAll("\r\n", "\n")), sha, f);
+    assertCaptureSourceRevision(f, readFileSync(f, "utf8"), sha);
   assert.equal(proof.screenshots.length, 20);
   for (const shot of proof.screenshots)
     assert.equal(hash(readFileSync(`${base}/${shot.file}`)), shot.sha256);

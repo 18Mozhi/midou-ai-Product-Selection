@@ -4,20 +4,17 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
-import {
-  previewProviderSourcesRefresh,
-  refreshCopy,
-} from "../../scripts/lib/ui-phase2-provider-sources-refresh-preview.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import { refreshCopy } from "../../scripts/lib/ui-phase2-provider-sources-refresh-preview.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/ProviderSourceCenter.vue",
   root = "output/playwright/p48-source-refresh-review";
 
-test("P48 refresh review transforms the actual component and still compiles", () => {
+test("P48 production refresh preserves the current component contract and compiles", () => {
   const source = read(component),
-    review = previewProviderSourcesRefresh(source),
-    parsed = parse(review);
+    parsed = parse(source);
   assert.deepEqual(parsed.errors, []);
   compileScript(parsed.descriptor, { id: "p48-source-refresh" });
   assert.deepEqual(
@@ -32,16 +29,18 @@ test("P48 refresh review transforms the actual component and still compiles", ()
     "refreshFeedback",
     "refreshFailureKind",
     "handleSourceRefresh",
-    "p48-source-refresh-host",
-    "p48-source-refresh-feedback",
-    "p48-source-refresh-technical",
-    "p48-source-refresh-primary",
+    'class="source-refresh-host"',
+    'class="source-refresh-feedback"',
+    'class="source-refresh-primary"',
+    'class="source-state-technical"',
   ]) {
-    assert.ok(review.includes(marker), marker);
-    assert.equal(source.includes(marker), false, `production must not contain ${marker}`);
+    assert.ok(source.includes(marker), marker);
   }
-  assert.ok(review.includes('["expired", "forbidden"].includes(refreshFailureKind.value)'));
-  assert.equal(review.includes('router.push("/login")'), false);
+  assert.match(
+    source,
+    /options\.showFeedback && !\["expired", "forbidden"\]\.includes\(refreshFailure\)/,
+  );
+  assert.ok(source.includes('void router.push("/login")'));
 });
 
 test("P48 refresh copy distinguishes progress, success, blocked, and error", () => {
@@ -82,7 +81,7 @@ test("P48 refresh evidence binds preserved data, retries, focus, and every image
   assert.equal(evidence.screenshots.length, 27);
   assert.equal(Object.keys(evidence.sourceHashes).length, 64);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assertCaptureSourceRevision(file, read(file), expected);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

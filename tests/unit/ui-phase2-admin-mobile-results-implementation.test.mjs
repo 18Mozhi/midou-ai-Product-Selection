@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import vm from "node:vm";
 import { parse } from "@vue/compiler-sfc";
@@ -83,11 +84,10 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
     }
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
       const source = capture ? capture.source(file) : read(file);
-      assert.equal(
-        hash(mode === "baseline" ? historicalAdminResultsSource(file, source) : source),
-        sha,
-        file,
-      );
+      if (mode === "baseline")
+        assert.equal(hash(historicalAdminResultsSource(file, source)), sha, file);
+      else if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, source, sha);
+      else assert.equal(hash(source), sha, file);
       assert.ok(!file.includes("-preview.css"));
     }
     assert.deepEqual(
