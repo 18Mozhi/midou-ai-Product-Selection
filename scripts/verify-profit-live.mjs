@@ -331,7 +331,7 @@ try {
       pool,
       "worker-m0404-profit",
       120,
-      () => new Date(now.getTime() + 1000),
+      () => new Date(Date.now() + 1000),
     ),
     partial = await worker.processOnce();
   if (partial.status !== "completed_with_warnings" || partial.profit_status !== "insufficient_data")
@@ -371,7 +371,7 @@ try {
     pool,
     "worker-m0404-profit",
     120,
-    () => new Date(now.getTime() + 2000),
+      () => new Date(Date.now() + 2000),
   ).processOnce();
   if (complete.status !== "succeeded" || complete.profit_status !== "calculated")
     throw new Error(`complete profit failed: ${JSON.stringify(complete)}`);
