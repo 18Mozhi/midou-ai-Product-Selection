@@ -251,5 +251,6 @@ test("M04-03.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(runbook, /宝塔[\s\S]*回滚/);
   assert.match(e2e, /toBeVisible|toHaveAttribute|keyboard\\.press/);
   assert.match(live, /historical_runs_preserved/);
+  assert.match(live, /new Date\(Date\.now\(\) \+ 1000\)/);
   assert.match(blueprint, /M04-03 实现合同/);
 });

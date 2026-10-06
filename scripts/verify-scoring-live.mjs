@@ -219,7 +219,7 @@ try {
       pool,
       "worker-m0403-score",
       120,
-      () => new Date(now.getTime() + 1000),
+      () => new Date(Date.now() + 1000),
     ),
     partial = await worker.processOnce();
   if (partial.status !== "completed_with_warnings" || partial.coverage_percent !== 66.67)
