@@ -38,7 +38,10 @@ test("P34 original 13 positions plus implemented mobile clear binding cover all 
       const source = bySignature.get(signature);
       if (c.view) assert.equal(source.attributes["@click"], `section = '${c.view}'`);
       if (c.delta) {
-        assert.equal(source.attributes["@click"], `${c.kind}Page${c.delta < 0 ? "--" : "++"}`);
+        assert.equal(
+          source.attributes["@click"],
+          `turnPage('${c.kind === "request" ? "requests" : "templates"}', ${c.delta}, $event)`,
+        );
         assert.equal(
           source.attributes[":disabled"],
           c.delta < 0 ? `${c.kind}Page <= 1` : `${c.kind}Page >= ${c.kind}PageCount`,

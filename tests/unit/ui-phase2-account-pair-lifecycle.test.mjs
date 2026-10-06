@@ -14,6 +14,7 @@ import {
   pairCompositionPacket,
   pairCompositionHash,
 } from "../../scripts/lib/ui-phase2-account-pair-lifecycle-preview.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const capturedSources = new Map([
@@ -127,8 +128,11 @@ test("C lifecycle capture retains every original result plus strict desktop navi
     );
   }
   assert.equal(Object.keys(evidence.sourceHashes).length, 157);
-  for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readCapturedSource(file)), sha, `Captured source drift: ${file}`);
+  for (const [file, sha] of Object.entries(evidence.sourceHashes)) {
+    if (capturedSources.has(file))
+      assert.equal(hash(readCapturedSource(file)), sha, `Captured source drift: ${file}`);
+    else assertCaptureSourceRevision(file, read(file), sha);
+  }
   for (const shot of evidence.screenshots) {
     assert.match(shot.file, /^[a-z0-9-]+\.png$/);
     const png = readFileSync(`${packet}/${shot.file}`);

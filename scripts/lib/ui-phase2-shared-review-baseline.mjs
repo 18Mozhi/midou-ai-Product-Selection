@@ -269,13 +269,13 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "7b86e25d7ed1f3a75400887b4ab6efa7f0585031",
       captured: "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
-      current: "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      current: "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
     },
   "apps/web/src/components/ReleaseRolloutCenter.vue#0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1":
     {
       baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
       captured: "0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1",
-      current: "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      current: "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
     },
   "apps/web/src/components/ResponsiveDataView.vue#28fa47d1a8beac1666c0cf8be1316484abd39729682a68adb4fed803742f2aaa":
     {

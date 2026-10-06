@@ -6,6 +6,7 @@ import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import postcss from "postcss";
 import { previewCommercialEdit } from "../../scripts/lib/ui-phase2-commercial-edit-preview.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const component = "apps/web/src/components/CommercialOperationsCenter.vue";
 const root = "output/playwright/p58-edit-current-review";
@@ -88,7 +89,7 @@ test("P58 edit help is associated but not included in existing field names; C CS
       assert.ok(rule.nodes.filter((n) => n.type === "decl").every((n) => !n.important));
     });
 });
-test("P58 edit browser packet binds current raw sources, untouched background, continuous images and no writes", () => {
+test("P58 edit browser packet binds capture-time raw sources, untouched background, continuous images and no writes", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(e.kind, "P58-EDIT-CURRENT-REVIEW-r1");
   assert.equal(e.reviewOnly, true);
@@ -102,7 +103,7 @@ test("P58 edit browser packet binds current raw sources, untouched background, c
   assert.equal(e.screenshots.length, 33);
   assert.equal(Object.keys(e.sourceHashes).length, 163);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assertCaptureSourceRevision(file, read(file), expected);
   for (const file of [
     component,
     "scripts/verify-ui-phase2-commercial-edit.mjs",

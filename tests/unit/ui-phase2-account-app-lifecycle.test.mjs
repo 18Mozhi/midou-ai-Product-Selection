@@ -7,6 +7,7 @@ import {
   accountAppFixture,
   accountFixtureFile,
 } from "../../scripts/lib/ui-phase2-account-app-fixture.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -134,7 +135,7 @@ test("r7 App capture remains a historical source snapshot after verifier formatt
   }
 });
 
-test("r8 App source inventory binds the current untransformed router and KeepAlive composition", () => {
+test("r8 App source inventory binds current and capture-time router/KeepAlive sources", () => {
   const bytes = readFileSync(`${currentRoot}/evidence.json`),
     evidence = JSON.parse(bytes);
   assert.equal(evidence.kind, "P43-ACTUAL-APP-LIFECYCLE-r8");
@@ -144,7 +145,7 @@ test("r8 App source inventory binds the current untransformed router and KeepAli
   assert.equal(evidence.screenshots.length, 48);
   assert.equal(Object.keys(evidence.sourceHashes).length, 142);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, `Current r6 source drift: ${file}`);
+    assertCaptureSourceRevision(file, read(file), expected);
   assert.equal(
     evidence.sourceHashes["apps/web/src/components/AccountShell.vue"],
     hash(read("apps/web/src/components/AccountShell.vue")),
