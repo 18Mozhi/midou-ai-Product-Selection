@@ -129,6 +129,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           type="number"
           min="1"
           max="10080"
+          step="1"
           required
           :disabled="saving"
           aria-describedby="source-edit-schedule-help"
@@ -141,6 +142,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           type="number"
           min="1000"
           max="120000"
+          step="1"
           required
           :disabled="saving"
           aria-describedby="source-edit-timeout-help"
@@ -153,6 +155,7 @@ const requiresSmokeTest = (source: ProviderSourceItem, form: ProviderSourceConfi
           type="number"
           min="0"
           max="10"
+          step="1"
           required
           :disabled="saving"
           aria-describedby="source-edit-retry-help"

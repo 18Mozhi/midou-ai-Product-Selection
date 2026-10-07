@@ -4,6 +4,7 @@ import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter
 import { historicalAdapterFeedbackSource } from "../../scripts/lib/ui-phase2-adapter-feedback-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   historicalProviderSummarySource,
@@ -13,9 +14,13 @@ import vm from "node:vm";
 import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
 import { ref, reactive, computed, watch } from "vue";
+import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 const file = "apps/web/src/components/ProviderRegistry.vue";
-const text = historicalAdapterCSource(file, readFileSync(file, "utf8")).replaceAll("\r\n", "\n");
+const text = execFileSync("git", ["show", `b7a7de9e:${file}`], { encoding: "utf8" }).replaceAll(
+  "\r\n",
+  "\n",
+);
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const read = (f) =>
   historicalAdapterFeedbackSource(
@@ -158,7 +163,7 @@ test("P46 current raw App captures bind all104 images and prove summary changes 
     assert.equal(e.observations.length, 52);
     assert.equal(e.checks.length, 136);
     assert.equal(e.screenshots.length, 52);
-    for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+    assertP46CapturedSources(e);
     assert.deepEqual(
       readdirSync(dir).sort(),
       [...e.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),

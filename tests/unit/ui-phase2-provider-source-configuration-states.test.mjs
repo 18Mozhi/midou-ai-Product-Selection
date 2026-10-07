@@ -13,8 +13,9 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   parent = "apps/web/src/components/ProviderSourceCenter.vue",
-  dialog = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
-  root = "output/playwright/p48-source-configuration-states-review";
+  dialog = "apps/web/src/components/ProviderSourceEditDialog.vue",
+  root = "output/playwright/p48-source-configuration-states-review-r4",
+  historicalRoot = "output/playwright/p48-source-configuration-states-review";
 
 const compile = (source, filename, id) => {
   const parsed = parse(source);
@@ -41,7 +42,7 @@ test("P48 configuration-state review transforms the actual parent and dialog", (
     "enabling",
   ]) {
     assert.ok(parentReview.includes(marker), marker);
-    assert.equal(parentSource.includes(marker), false, `production parent must not contain ${marker}`);
+    assert.ok(parentSource.includes(marker), `production parent must contain ${marker}`);
   }
   for (const marker of [
     "p48-source-configuration-save-feedback",
@@ -50,17 +51,22 @@ test("P48 configuration-state review transforms the actual parent and dialog", (
     'aria-live="polite"',
   ]) {
     assert.ok(dialogReview.includes(marker), marker);
-    assert.equal(dialogSource.includes(marker), false, `production dialog must not contain ${marker}`);
+    assert.ok(dialogSource.includes(marker), `production dialog must contain ${marker}`);
   }
+});
+
+test("P48 state r1 proposal evidence remains intact after current-source recapture", () => {
+  const evidence = JSON.parse(read(`${historicalRoot}/evidence.json`));
+  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-STATES-REVIEW-r1");
+  assert.equal(evidence.screenshots.length, 49);
+  for (const shot of evidence.screenshots)
+    assert.equal(hash(readFileSync(`${historicalRoot}/${shot.file}`)), shot.sha256);
 });
 
 test("P48 configuration-state copy distinguishes writes, smoke, partial save, and conflict", () => {
   assert.equal(configurationSaveCopy.saving.title, "正在保存采集设置");
   assert.equal(configurationSaveCopy.saving_disabled.title, "正在先保存停用配置");
-  assert.equal(
-    configurationSaveCopy.smoke_testing.title,
-    "停用配置已保存，正在进行真实页面烟测",
-  );
+  assert.equal(configurationSaveCopy.smoke_testing.title, "停用配置已保存，正在进行真实页面烟测");
   assert.equal(configurationSaveCopy.enabling.title, "烟测已通过，正在启用来源");
   assert.equal(configurationSaveCopy.partial.title, "停用配置已保存，来源尚未启用");
   assert.equal(configurationSaveCopy.conflict.title, "配置已经更新，请重新读取");
@@ -94,7 +100,7 @@ test("P48 configuration-state CSS is isolated and preserves feedback accessibili
 
 test("P48 configuration-state evidence binds every state, write order, and image", () => {
   const evidence = JSON.parse(read(`${root}/evidence.json`));
-  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-STATES-REVIEW-r1");
+  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-STATES-REVIEW-r4");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.productionChanged, false);
   assert.equal(evidence.deployed, false);

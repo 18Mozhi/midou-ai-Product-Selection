@@ -12,12 +12,12 @@ export const providerKeyboardRevisions = [
   {
     file: "scripts/verify-ui-phase2-provider-route-assembly.mjs",
     before: "d18333019fef76b30875c8d33ee87c4a9f5c0c73974bfffdb2fb199d7c3d381b",
-    after: "ff6ece0be359d3a447ce2246a3bf62105afa22ac1a33b7e1af0393ffa9a537c5",
+    after: "277da69fb914edb2d051191fc64d7b61ea7a26302fc4cdae866b6cf4e6c7ba3f",
   },
   {
     file: "scripts/lib/ui-phase2-provider-feedback-baseline.mjs",
     before: "1b45a7ebe301630a29fa6c867e4f0bfddf08575b727a787cb6c2544f868c64ef",
-    after: "6ad5331a615e2c8b0f4773f10856ba63437e9304d79e78737d09c8316002cec6",
+    after: "f93bd28ccd6550c5b4738e5249703f328c21429bce51cb00e10fbb74864f9312",
   },
 ];
 const cache = new Map();

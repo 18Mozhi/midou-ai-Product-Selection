@@ -34,3 +34,18 @@ pbakaus/clarify 用于把两个结果拆开说明：配置是否已经写入，�
 ## 待审与未覆盖
 
 本批只申请配置终态返回、目录重读失败和恢复组合的视觉、文案与焦点审核。没有执行真实 API/MySQL/外部烟测；401/403、安全会话边界、目录 GET 超时、组件卸载、多个并发请求和完整 SC48/PR-G01 仍需后续验证。配置历史、固定样本和兼容矩阵三个任务窗不在本批范围。
+
+## 当前生产源码复核 r2
+
+当前目录返回反馈和竞态归属已经落在真实 `ProviderSourceCenter`；弹窗由当前 `ProviderSourceEditDialog` 发出完成/确认事件。r2 直接加载这两个生产组件，旧 r1 证据保留且不重新绑定。关闭检查限定为本配置窗，避免把桌面壳层其他 dialog 语义误算为配置窗未关闭。
+
+- 新图与证据：[r2 图册](../../output/playwright/p48-source-configuration-return-review-r2/index.html)、[r2 机器证据](../../output/playwright/p48-source-configuration-return-review-r2/evidence.json)。
+- 1440/1024/760/390、保存成功/部分保存/冲突及读取结果：32 组、456 项检查、35 张图、57 个实际加载源码哈希。业务写入仅由本地拦截响应承接。
+- 复验：`node scripts/verify-ui-phase2-provider-source-configuration-return.mjs` 与 `node --test tests/unit/ui-phase2-provider-source-configuration-return.test.mjs`。捕获使用 `--capture rN` 并独占创建新版本目录。
+- 视觉方向按用户本轮授权自动通过；未执行真实生产写入、权限或数据库验收。
+
+## 当前证据格式校验与源码指纹校准 r4
+
+验证器格式化后，旧机器证据正确地不再匹配当前源码指纹。重新采集 r4 并更新自动化断言；此前历史不覆盖。
+
+- [r4 图册](../../output/playwright/p48-source-configuration-return-review-r4/index.html)；32 组、456 项检查、35 张图、57 个源码哈希。

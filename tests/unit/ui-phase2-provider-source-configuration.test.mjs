@@ -11,8 +11,9 @@ import {
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
-  component = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
-  root = "output/playwright/p48-source-configuration-review";
+  component = "apps/web/src/components/ProviderSourceEditDialog.vue",
+  root = "output/playwright/p48-source-configuration-review-r4",
+  historicalRoot = "output/playwright/p48-source-configuration-review";
 
 test("P48 configuration review transforms the actual dialog and still compiles", () => {
   const source = read(component),
@@ -30,16 +31,22 @@ test("P48 configuration review transforms the actual dialog and still compiles",
   );
   for (const marker of [
     "p48-source-configuration-modal",
-    "p48-source-configuration-identity",
-    "p48-source-configuration-fields",
-    "p48-source-configuration-preview",
-    "handleEditKeydown",
-    "setEditBackgroundInert",
-    "closeEditDialog",
+    "useProviderSourceDialogFocus",
+    "editFocus.onKeydown",
+    "requiresSmokeTest",
+    "p48-source-configuration-save-feedback",
   ]) {
     assert.ok(review.includes(marker), marker);
-    assert.equal(source.includes(marker), false, `production must not contain ${marker}`);
+    assert.ok(source.includes(marker), `production review source must contain ${marker}`);
   }
+});
+
+test("P48 r1 proposal evidence remains intact after current-source recapture", () => {
+  const evidence = JSON.parse(read(`${historicalRoot}/evidence.json`));
+  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-REVIEW-r1");
+  assert.equal(evidence.screenshots.length, 12);
+  for (const shot of evidence.screenshots)
+    assert.equal(hash(readFileSync(`${historicalRoot}/${shot.file}`)), shot.sha256);
 });
 
 test("P48 configuration review preserves all five factual inputs and smoke consequence", () => {
@@ -55,7 +62,7 @@ test("P48 configuration review preserves all five factual inputs and smoke conse
     '<option value="disabled">停用</option>',
     'minlength="2"',
     'maxlength="500"',
-    "刚才保存的停用配置仍会保留",
+    "烟测失败不会启用来源",
     "烟测并启用",
   ])
     assert.ok(review.includes(marker), marker);
@@ -82,7 +89,7 @@ test("P48 configuration CSS is isolated, responsive, and keyboard-visible", () =
 
 test("P48 configuration evidence binds fields, modal behavior, network, and every image", () => {
   const evidence = JSON.parse(read(`${root}/evidence.json`));
-  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-REVIEW-r1");
+  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-REVIEW-r4");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.productionChanged, false);
   assert.equal(evidence.deployed, false);

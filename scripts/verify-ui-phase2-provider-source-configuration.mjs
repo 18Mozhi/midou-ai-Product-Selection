@@ -12,9 +12,11 @@ import {
   previewProviderSourceConfiguration,
 } from "./lib/ui-phase2-provider-source-configuration-preview.mjs";
 
-assert.ok(process.argv.slice(2).every((argument) => argument === "--capture"));
-const capture = process.argv.includes("--capture"),
-  output = "output/playwright/p48-source-configuration-review",
+const args = process.argv.slice(2),
+  capture = args[0] === "--capture",
+  revision = capture ? args[1] : "";
+assert.ok(args.length === 0 || (capture && args.length === 2 && /^r[1-9]\d*$/.test(revision)));
+const output = `output/playwright/p48-source-configuration-review${capture ? `-${revision}` : ""}`,
   component = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
   pageCss = "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css",
   dialogCss =
@@ -93,7 +95,7 @@ const fixtureData = JSON.parse(JSON.stringify(box.data)),
 let browser, server;
 try {
   browser = await chromium.launch();
-  if (capture) await mkdir(output, { recursive: true });
+  if (capture) await mkdir(output);
   const reservation = reservePort();
   await new Promise((resolve) => reservation.listen(0, "127.0.0.1", resolve));
   const port = reservation.address().port;
@@ -209,7 +211,9 @@ try {
         });
 
         await page.goto(origin + "/platform-admin/providers/sources");
-        const editButton = page.getByRole("button", { name: "编辑采集设置" }),
+        const card = page.locator(".source-list article").filter({ hasText: scene.item.name });
+        if (width <= 760) await card.getByRole("button", { name: "查看来源详情" }).click();
+        const editButton = card.getByRole("button", { name: "编辑采集设置" }),
           center = page.locator(".source-center");
         await expect(editButton).toBeVisible();
         await editButton.focus();
@@ -259,15 +263,22 @@ try {
         await status.selectOption(scene.status);
         await expect(status).toHaveValue(scene.status);
         await expect(dialog.getByRole("button", { name: scene.action })).toBeVisible();
-        check("smoke notice visibility", await dialog.locator(".p48-source-configuration-smoke").isVisible(), scene.smoke);
+        check(
+          "smoke notice visibility",
+          await dialog.locator(".source-smoke-notice").isVisible(),
+          scene.smoke,
+        );
         if (scene.smoke) {
           await expect(
-            dialog.getByRole("heading", { name: "将先保存停用版，再执行真实页面烟测" }),
+            dialog.getByText("先以停用状态保存这版配置", { exact: false }),
           ).toBeVisible();
-          await expect(dialog.getByText("刚才保存的停用配置仍会保留", { exact: false })).toBeVisible();
+          await expect(dialog.getByText("烟测失败不会启用来源", { exact: false })).toBeVisible();
           await expect(dialog.getByText("1 / 1")).toBeVisible();
         }
-        check("form validity", await dialog.locator("form").evaluate((form) => form.checkValidity()));
+        check(
+          "form validity",
+          await dialog.locator("form").evaluate((form) => form.checkValidity()),
+        );
         check(
           "no horizontal overflow",
           await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
@@ -275,10 +286,12 @@ try {
         check(
           "44px representative controls",
           await Promise.all(
-            [schedule, status, dialog.getByRole("button", { name: scene.action })].map(async (locator) => {
-              const box = await locator.boundingBox();
-              return Boolean(box && box.height >= 44);
-            }),
+            [schedule, status, dialog.getByRole("button", { name: scene.action })].map(
+              async (locator) => {
+                const box = await locator.boundingBox();
+                return Boolean(box && box.height >= 44);
+              },
+            ),
           ),
           [true, true, true],
         );
@@ -288,7 +301,9 @@ try {
           await picture("reason-actions");
         }
 
-        const closeButton = dialog.getByRole("button", { name: `关闭 ${scene.item.name} 采集设置` }),
+        const closeButton = dialog.getByRole("button", {
+            name: `关闭 ${scene.item.name} 采集设置`,
+          }),
           actionButton = dialog.getByRole("button", { name: scene.action });
         await closeButton.focus();
         await page.keyboard.press("Shift+Tab");
@@ -301,9 +316,20 @@ try {
         await expect(editButton).toBeFocused();
         check("escape restores trigger", true);
         check("background inert cleared", await center.locator(":scope > [inert]").count(), 0);
-        check("one source GET", requests.filter((request) => request.key.endsWith("provider-sources")).length, 1);
-        check("no write requests", requests.filter((request) => !request.key.startsWith("GET ")).length, 0);
-        check("no request bodies", requests.every((request) => request.body == null));
+        check(
+          "one source GET",
+          requests.filter((request) => request.key.endsWith("provider-sources")).length,
+          1,
+        );
+        check(
+          "no write requests",
+          requests.filter((request) => !request.key.startsWith("GET ")).length,
+          0,
+        );
+        check(
+          "no request bodies",
+          requests.every((request) => request.body == null),
+        );
         check("no unexpected network", unexpected, []);
         check("no runtime errors", errors, []);
         runs.push({ width, scene: scene.name, checks, requests });
@@ -320,7 +346,7 @@ if (capture) {
   const sourceHashes = {};
   for (const file of [...loadedSources].sort()) sourceHashes[file] = hash(await read(file));
   const evidence = {
-    kind: "P48-SOURCE-CONFIGURATION-REVIEW-r1",
+    kind: `P48-SOURCE-CONFIGURATION-REVIEW-${revision}`,
     generatedAt: new Date().toISOString(),
     reviewOnly: true,
     productionChanged: false,
@@ -340,7 +366,7 @@ if (capture) {
     .join("\n");
   await writeFile(
     `${output}/index.html`,
-    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P48 编辑采集设置评审</title><style>body{margin:0;padding:24px;background:#e9eef6;color:#172033;font:14px system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}figure{margin:0;padding:12px;border-radius:16px;background:white;box-shadow:0 8px 24px #18243b1f}img{display:block;width:100%;height:auto;border-radius:10px}figcaption{padding-top:10px}</style><h1>P48 编辑采集设置 · 实际 Vue r1</h1><main>${cards}</main></html>`,
+    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P48 编辑采集设置评审 ${revision}</title><style>body{margin:0;padding:24px;background:#e9eef6;color:#172033;font:14px system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}figure{margin:0;padding:12px;border-radius:16px;background:white;box-shadow:0 8px 24px #18243b1f}img{display:block;width:100%;height:auto;border-radius:10px}figcaption{padding-top:10px}</style><h1>P48 编辑采集设置 · 实际 Vue ${revision}</h1><main>${cards}</main></html>`,
   );
   console.log(
     JSON.stringify({

@@ -12,10 +12,12 @@ import {
   versionDialogCopy,
 } from "./lib/ui-phase2-provider-source-versions-preview.mjs";
 
-assert.ok(process.argv.slice(2).every((argument) => argument === "--capture"));
-const capture = process.argv.includes("--capture"),
-  output = "output/playwright/p48-source-versions-review",
-  component = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
+const args = process.argv.slice(2),
+  capture = args[0] === "--capture",
+  revision = capture ? (args[1] ?? "r3") : "",
+  output = `output/playwright/p48-source-versions-review${capture ? `-${revision}` : ""}`;
+assert.ok(args.length === 0 || (capture && args.length === 2 && /^r[1-9]\d*$/.test(revision)));
+const component = "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue",
   pageCss = "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css",
   dialogCss =
     "design-plans/ui-phase-2-2026-09-07/implementation/provider-source-versions-preview.css",
@@ -111,7 +113,7 @@ const fixtureData = JSON.parse(JSON.stringify(box.data)),
 let browser, server;
 try {
   browser = await chromium.launch();
-  if (capture) await mkdir(output, { recursive: true });
+  if (capture) await mkdir(output);
   const reservation = reservePort();
   await new Promise((resolve) => reservation.listen(0, "127.0.0.1", resolve));
   const port = reservation.address().port;
@@ -238,61 +240,83 @@ try {
 
         await page.goto(origin + "/platform-admin/providers/sources");
         await page.getByPlaceholder("搜索 Amazon、eBay、Reddit、国家或来源网址").fill("Amazon");
+        if (width <= 760) await page.getByRole("button", { name: "查看来源详情" }).click();
         const trigger = page.getByRole("button", { name: "版本与回滚" }).first(),
           center = page.locator(".source-center");
         await expect(trigger).toBeVisible();
         await trigger.focus();
         await page.keyboard.press("Enter");
         const dialog = page.getByRole("dialog", {
-            name: `配置历史 · ${fixtureData.setup[0].name}`,
+            name: `版本、差异与回滚 · ${fixtureData.setup[0].name}`,
           }),
           heading = dialog.getByRole("heading", {
-            name: `配置历史 · ${fixtureData.setup[0].name}`,
+            name: `版本、差异与回滚 · ${fixtureData.setup[0].name}`,
           });
         await expect(dialog).toBeVisible();
         await expect(heading).toBeFocused();
         check("dialog title focused", true);
         check("background inert", (await center.locator(":scope > [inert]").count()) > 0);
         await expect(dialog).toHaveAttribute("aria-modal", "true");
-        await expect(dialog).toHaveAttribute("aria-describedby", "configuration-version-description");
-        await expect(dialog.getByText(versionDialogCopy.description)).toBeVisible();
         await expect(dialog.getByText(versionDialogCopy.privacy)).toBeVisible();
 
         if (scene.loading) {
-          await expect(dialog.getByRole("heading", { name: "正在读取配置历史" })).toBeVisible();
+          await expect(dialog.getByText("正在读取配置版本…")).toBeVisible();
           await expect(dialog.locator('[aria-busy="true"]')).toBeVisible();
-          check("rollback reason hidden", await dialog.getByLabel("回滚原因").count(), 0);
+          check(
+            "no rollback action without candidate",
+            await dialog.getByRole("button", { name: "恢复此版本" }).count(),
+            0,
+          );
         } else if (scene.name === "empty") {
-          await expect(dialog.getByRole("heading", { name: "还没有可显示的配置版本" })).toBeVisible();
-          check("rollback reason hidden", await dialog.getByLabel("回滚原因").count(), 0);
+          await expect(dialog.getByText("还没有可用配置版本。")).toBeVisible();
+          check(
+            "no rollback action without candidate",
+            await dialog.getByRole("button", { name: "恢复此版本" }).count(),
+            0,
+          );
         } else {
-          await expect(dialog.getByText(`当前第 ${scene.currentVersion} 版`)).toBeVisible();
-          await expect(dialog.getByText(`${scene.versions.length} 条历史`)).toBeVisible();
+          await expect(dialog.getByText(`第 ${scene.currentVersion} 版`)).toBeVisible();
           const reason = dialog.getByLabel("回滚原因");
           await expect(reason).toHaveAttribute("minlength", "2");
           await expect(reason).toHaveAttribute("maxlength", "500");
           await expect(reason).toHaveAttribute("aria-describedby", "configuration-rollback-help");
           if (scene.invalidReason) {
             await reason.fill("短");
-            check("all restore actions disabled", await dialog.locator("button", { hasText: "恢复第" }).evaluateAll((buttons) => buttons.every((button) => button.disabled)));
+            check(
+              "all restore actions disabled",
+              await dialog
+                .getByRole("button", { name: "恢复此版本" })
+                .evaluateAll((buttons) => buttons.every((button) => button.disabled)),
+            );
           }
           if (scene.name === "history") {
-            for (const text of ["30 分钟", "45 分钟", "20000 毫秒", "30000 毫秒", "3 次", "2 次", "停用", "启用", "未设置"])
+            for (const text of ["30 → 45", "20000 → 30000", "3 → 2", "disabled → enabled"])
               await expect(dialog.getByText(text, { exact: true }).first()).toBeVisible();
-            await expect(dialog.getByRole("button", { name: "恢复第 2 版" })).toBeEnabled();
-            await expect(dialog.getByRole("button", { name: "恢复第 1 版" })).toBeEnabled();
+            await expect(dialog.getByRole("button", { name: "恢复此版本" }).first()).toBeEnabled();
+            await expect(dialog.getByRole("button", { name: "恢复此版本" }).nth(1)).toBeEnabled();
           }
           if (scene.name === "no-visible-change")
-            check("two no-diff messages", await dialog.getByText("与上一版本的可见采集设置一致。").count(), 2);
+            check(
+              "two no-diff messages",
+              await dialog.getByText("与上一版本的可见采集设置一致。").count(),
+              2,
+            );
         }
 
-        check("no horizontal overflow", await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth));
+        check(
+          "no horizontal overflow",
+          await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth),
+        );
         const close = dialog.getByRole("button", { name: "关闭", exact: true }),
-          closeIcon = dialog.getByRole("button", { name: `关闭 ${fixtureData.setup[0].name} 配置历史` });
+          closeIcon = dialog.getByRole("button", { name: "关闭配置版本" });
         check(
           "44px representative controls",
           await Promise.all(
-            [closeIcon, close, ...(scene.loading || scene.name === "empty" ? [] : [dialog.getByLabel("回滚原因")])].map(async (locator) => {
+            [
+              closeIcon,
+              close,
+              ...(scene.loading || scene.name === "empty" ? [] : [dialog.getByLabel("回滚原因")]),
+            ].map(async (locator) => {
               const box = await locator.boundingBox();
               return Boolean(box && box.height >= 44);
             }),
@@ -300,7 +324,10 @@ try {
           scene.loading || scene.name === "empty" ? [true, true] : [true, true, true],
         );
         await picture("top");
-        if (width <= 760 && ["history", "reason-required", "no-visible-change"].includes(scene.name)) {
+        if (
+          width <= 760 &&
+          ["history", "reason-required", "no-visible-change"].includes(scene.name)
+        ) {
           await dialog.locator(".p48-source-versions-panel").evaluate((panel) => {
             panel.scrollTop = panel.scrollHeight;
           });
@@ -319,10 +346,25 @@ try {
         check("escape restores trigger", true);
         check("background inert cleared", await center.locator(":scope > [inert]").count(), 0);
         if (scene.loading) releaseVersions?.();
-        check("one source GET", requests.filter((request) => request.key.endsWith("provider-sources")).length, 1);
-        check("one versions GET", requests.filter((request) => request.key.endsWith("/configuration/versions")).length, 1);
-        check("no write requests", requests.filter((request) => !request.key.startsWith("GET ")).length, 0);
-        check("no request bodies", requests.every((request) => request.body == null));
+        check(
+          "one source GET",
+          requests.filter((request) => request.key.endsWith("provider-sources")).length,
+          1,
+        );
+        check(
+          "one versions GET",
+          requests.filter((request) => request.key.endsWith("/configuration/versions")).length,
+          1,
+        );
+        check(
+          "no write requests",
+          requests.filter((request) => !request.key.startsWith("GET ")).length,
+          0,
+        );
+        check(
+          "no request bodies",
+          requests.every((request) => request.body == null),
+        );
         check("no unexpected network", unexpected, []);
         check("no runtime errors", errors, []);
         runs.push({ width, scene: scene.name, checks, requests });
@@ -339,7 +381,7 @@ if (capture) {
   const sourceHashes = {};
   for (const file of [...loadedSources].sort()) sourceHashes[file] = hash(await read(file));
   const evidence = {
-    kind: "P48-SOURCE-VERSIONS-REVIEW-r1",
+    kind: `P48-SOURCE-VERSIONS-REVIEW-${revision}`,
     generatedAt: new Date().toISOString(),
     reviewOnly: true,
     productionChanged: false,
@@ -359,7 +401,7 @@ if (capture) {
     .join("\n");
   await writeFile(
     `${output}/index.html`,
-    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P48 配置历史评审</title><style>body{margin:0;padding:24px;background:#e9eef6;color:#172033;font:14px system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}figure{margin:0;padding:12px;border-radius:16px;background:white;box-shadow:0 8px 24px #18243b1f}img{display:block;width:100%;height:auto;border-radius:10px}figcaption{padding-top:10px}</style><h1>P48 配置历史与回滚 · 实际 Vue r1</h1><main>${cards}</main></html>`,
+    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P48 配置版本评审 ${revision}</title><style>body{margin:0;padding:24px;background:#e9eef6;color:#172033;font:14px system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}figure{margin:0;padding:12px;border-radius:16px;background:white;box-shadow:0 8px 24px #18243b1f}img{display:block;width:100%;height:auto;border-radius:10px}figcaption{padding-top:10px}</style><h1>P48 配置版本与回滚 · 实际 Vue ${revision}</h1><main>${cards}</main></html>`,
   );
   console.log(
     JSON.stringify({

@@ -11,8 +11,8 @@ import {
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
-  component = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
-  root = "output/playwright/p48-source-versions-review";
+  component = "apps/web/src/components/ProviderSourceVersionHistoryDialog.vue",
+  root = "output/playwright/p48-source-versions-review-r4";
 
 test("P48 source versions review transforms the actual dialog and still compiles", () => {
   const source = read(component),
@@ -31,33 +31,29 @@ test("P48 source versions review transforms the actual dialog and still compiles
   for (const marker of [
     "p48-source-versions-modal",
     "p48-source-versions-identity",
-    "p48-source-versions-timeline",
-    "handleVersionKeydown",
-    "setVersionBackgroundInert",
-    "configurationValueText",
+    "configuration-version-list",
+    "versionFocus.onKeydown",
+    "versionActionHeading",
+    "displayValue",
   ]) {
     assert.ok(review.includes(marker), marker);
-    assert.equal(source.includes(marker), false, `production must not contain ${marker}`);
+    assert.ok(source.includes(marker), `production component must contain ${marker}`);
   }
 });
 
 test("P48 source versions copy preserves the immutable rollback and privacy contracts", () => {
   const review = previewProviderSourceVersions(read(component));
   for (const marker of [
-    "这里只显示采集频率、超时、重试和启停状态",
-    "凭证、Cookie 与受限配置不会进入历史详情",
+    "只展示采集频率、超时、重试和启停状态",
+    "凭证、Cookie 与受限环境值不会进入版本详情",
     'minlength="2"',
     'maxlength="500"',
-    "恢复操作会追加新的当前版本，现有历史保持不变",
-    "恢复第 ",
-    "未设置",
-    "毫秒",
+    "恢复会生成新的当前版本，不会改写历史记录。",
+    "恢复此版本",
+    "版本、差异与回滚",
   ])
     assert.ok(review.includes(marker), marker);
-  assert.equal(
-    versionDialogCopy.rollbackHelp,
-    "填写 2–500 个字符。恢复会生成新版本，不会删除或覆盖历史。",
-  );
+  assert.equal(versionDialogCopy.rollbackHelp, "填写 2–500 个字符，说明恢复该版本的原因。");
 });
 
 test("P48 source versions CSS is isolated, responsive, and keyboard-visible", () => {
@@ -78,7 +74,7 @@ test("P48 source versions CSS is isolated, responsive, and keyboard-visible", ()
 
 test("P48 source versions evidence binds all states, modal behavior, network, and images", () => {
   const evidence = JSON.parse(read(`${root}/evidence.json`));
-  assert.equal(evidence.kind, "P48-SOURCE-VERSIONS-REVIEW-r1");
+  assert.equal(evidence.kind, "P48-SOURCE-VERSIONS-REVIEW-r4");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.productionChanged, false);
   assert.equal(evidence.deployed, false);
@@ -117,7 +113,7 @@ test("P48 source versions evidence binds all states, modal behavior, network, an
     assert.deepEqual(value("no unexpected network"), []);
     assert.deepEqual(value("no runtime errors"), []);
     if (run.scene === "loading" || run.scene === "empty")
-      assert.equal(value("rollback reason hidden"), 0);
+      assert.equal(value("no rollback action without candidate"), 0);
     if (run.scene === "reason-required") assert.equal(value("all restore actions disabled"), true);
     if (run.scene === "no-visible-change") assert.equal(value("two no-diff messages"), 2);
   }

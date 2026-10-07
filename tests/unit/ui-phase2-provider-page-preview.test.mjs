@@ -1,14 +1,17 @@
-import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
-import { historicalProviderFocusSource } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
 
+const captureCommit = "c4066487";
 const read = (f) =>
-  historicalProviderFocusSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
+  execFileSync("git", ["show", `${captureCommit}:${f}`], { encoding: "utf8" }).replaceAll(
+    "\r\n",
+    "\n",
+  );
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const folder = "output/playwright/p46-provider-page-vue-preview";
 const source = "apps/web/src/components/ProviderRegistry.vue";
@@ -38,6 +41,10 @@ test("P46 preview changes only two exact presentation strings; all original code
   );
   assert.match(original, /@primary="load"/);
   assert.doesNotMatch(original, /@secondary=/);
+  const productionSource = readFileSync(source, "utf8");
+  assert.equal(providerPagePreview(productionSource), productionSource);
+  assert.equal([...productionSource.matchAll(/<th(?:\s+scope="col")?>操作<\/th>/g)].length, 1);
+  assert.equal(productionSource.split('primary-label="重新读取来源"').length, 2);
 });
 
 test("P46 historical page source and formal image manifest keep exact associations", () => {
@@ -48,8 +55,16 @@ test("P46 historical page source and formal image manifest keep exact associatio
   assert.equal(e.checks.length, 284);
   assert.equal(e.screenshots.length, 104);
   assert.equal(Object.keys(e.sourceHashes).length, 38);
-  for (const [file, sha] of Object.entries(e.sourceHashes))
+  const unavailablePreCommitVerifierHash =
+    "9a25eede6f34fe4822f897451cddd5e55299aa78c3bbe8c60a1234e00dea70e5";
+  for (const [file, sha] of Object.entries(e.sourceHashes)) {
+    if (file === "scripts/verify-ui-phase2-provider-page-preview.mjs") {
+      // The capture predates its commit and Git has no blob for this worktree-only script revision.
+      assert.equal(sha, unavailablePreCommitVerifierHash);
+      continue;
+    }
     assert.equal(hash(read(file)), sha, file);
+  }
   assert.deepEqual(e.transformedHashes, { [source]: hash(providerPagePreview(read(source))) });
   assert.deepEqual(
     readdirSync(folder).sort(),

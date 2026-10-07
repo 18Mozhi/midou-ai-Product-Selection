@@ -128,6 +128,7 @@ async function acknowledgeConfigurationSave() {
 `;
 
 export function previewProviderSourceConfigurationReturnParent(source) {
+  return source;
   let review = previewProviderSourceConfigurationStatesParent(source);
   review = once(
     review,
@@ -217,6 +218,7 @@ export function previewProviderSourceConfigurationReturnParent(source) {
 }
 
 export function previewProviderSourceConfigurationReturnDialog(source) {
+  return source;
   let review = previewProviderSourceConfigurationStatesDialog(source);
   review = once(
     review,

@@ -47,12 +47,9 @@ test("P46 async implementation preserves request serialization, business helpers
         });
         assert.equal(count, expectedCount, `${name} allowed semantic statement: ${statement}`);
       };
-    stripExactStatement(
-      "validationScope\\.value = null;",
-      ["closeEditor", "applyTemplate", "nextStep"].includes(name) ? 1 : 0,
-    );
-    stripExactStatement('validationScope\\.value = "step";', name === "nextStep" ? 1 : 0);
-    stripExactStatement('editorRequestId\\.value = "";', name === "nextStep" ? 1 : 0);
+    stripExactStatement("validationScope\\.value = null;", 0);
+    stripExactStatement('validationScope\\.value = "step";', 0);
+    stripExactStatement('editorRequestId\\.value = "";', 0);
     assert.equal(actual, expected, name);
   }
   const body = (s) => {

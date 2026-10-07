@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { historicalProviderKeyboardSource } from "../../scripts/lib/ui-phase2-provider-keyboard-baseline.mjs";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
+import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 // Approved assembly is immutable historical evidence; the keyboard suite binds raw current sources.
 const read = (f) =>
@@ -21,7 +22,7 @@ test("P46 approved full-route evidence binds exact pre-keyboard entry and source
   assert.equal(e.kind, "P46-REAL-ROUTE-C-ASSEMBLY-r1");
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 168);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  assertP46CapturedSources(e);
   for (const suffix of [
     "index.html",
     "main.ts",

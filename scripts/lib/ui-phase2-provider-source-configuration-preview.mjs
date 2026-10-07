@@ -283,22 +283,8 @@ const editTemplate = `  <div
 `;
 
 export function previewProviderSourceConfiguration(source) {
-  let review = once(
-    source,
-    "<script setup lang=\"ts\">",
-    '<script setup lang="ts">\nimport { nextTick, onBeforeUnmount, ref, watch } from "vue";',
-    "script setup anchor must be unique",
-  );
-  review = once(
-    review,
-    "</script>",
-    `${accessibilityScript}\n</script>`,
-    "script close anchor must be unique",
-  );
-  const start = review.indexOf('  <div\n    v-if="editing"');
-  const end = review.indexOf('  <div\n    v-if="versionSource"');
-  assert.ok(start >= 0, "editing dialog start");
-  assert.ok(end > start, "version dialog start");
-  review = review.slice(0, start) + editTemplate + review.slice(end);
-  return review;
+  // The C layout and modal focus handling now live in the production edit-dialog
+  // component. Keep review captures on that source instead of replaying the old
+  // pre-extraction template patch against the wrapper component.
+  return source;
 }

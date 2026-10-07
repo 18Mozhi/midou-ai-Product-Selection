@@ -10,6 +10,7 @@ import {
   historicalProviderIsolationSource,
   providerIsolationRevision,
 } from "../../scripts/lib/ui-phase2-provider-isolation-baseline.mjs";
+import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 const read = (f) =>
   historicalProviderSummarySource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
@@ -48,7 +49,7 @@ test("P46 actual App captures bind raw sources, mock network and all 80 formal P
     assert.equal(e.observations.length, 70);
     assert.equal(e.screenshots.length, 40);
     assert.equal(Object.keys(e.sourceHashes).length, mode === "baseline" ? 164 : 165);
-    for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+    assertP46CapturedSources(e);
     assert.equal(Boolean(e.sourceHashes[hook]), mode === "current");
     assert.deepEqual(
       readdirSync(dir).sort(),

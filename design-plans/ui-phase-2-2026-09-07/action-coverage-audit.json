@@ -278,24 +278,24 @@
     "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md": "0fc31a56298e6e9539eba5ac58400ad55098c78de1e30f3ba220fea7424fc65f",
     "design-plans/ui-phase-2-2026-09-07/opportunity-candidate-map.md": "3dd6cee712b1c496339adb46d8287f091f371617fbfbd2f3ea6d673f8e656b4a",
     "design-plans/ui-phase-2-2026-09-07/opportunity-contract-review.md": "c1f16d965095f032e4681b2aedeee9411312c5281e50a484203a5b4d89934662",
-    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "5fc266cfac8ec62b33dfbe469140ec5694e176a7c3254204879d3c74c23369be",
+    "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md": "399d18cb9d2a026fb0066c1c470b2a77689426904ccf753fc9e27fce9f8c52b7",
     "design-plans/ui-phase-2-2026-09-07/platform-account-contract-review.md": "f14b458ca6aa4aba81fed638a6516ed012fc2f1d1212a9f87d2cd3197461bc90",
     "design-plans/ui-phase-2-2026-09-07/platform-account-detail-contract-review.md": "cbe47a11a113348a4c4ea1fd832fff9256243bea684bd565ae0ac738f17e9691",
     "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md": "dd2def25923858383f4371d3bb5ae643cf28b06ac185aab7017aeebff8d96291",
     "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md": "c11596b4b15b4bc88062a3a98786154197232a80aa420595d0c6b3e821aa5b75",
-    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "5e270676acf3381d2969e4cf0b992313099e0a0ad1773ad013e87c5cc853a5e1",
+    "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md": "720eb72a94e19f8b5e1675c206fc3018ac4e05923b3e2db08508719248633691",
     "design-plans/ui-phase-2-2026-09-07/responsive-detail-focus-contract-review.md": "d0b88dba706e546aa67ebe4dae72770ff85f7b9c3cc67f3a3ca031cd9c1f50c5",
     "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md": "e9bf58ece4163aa21e716d8246ff039bfd69395004d0ca9a67a67a37d9879484",
     "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md": "64e4cb7386115f3e6eb878c9b2f8a80d550cad1b2a67ae8885017709e40a2301",
     "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md": "09896f0626364e62ef45cecc35a942e85d996d059e381bf7eac64e9c4fcb1b2c",
     "design-plans/ui-phase-2-2026-09-07/scoring-contract-review.md": "457882a3aa5b80b98dfdfd5eaae06bf6f7ef000c642217c903c6a098d2b6dabc",
     "design-plans/ui-phase-2-2026-09-07/selection-journey-contract-review.md": "b8fdd4276778197d99938b934d5522db0d0371a0391c9bf3d39b8a99cddfe5d7",
-    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "c774e2454fd95b9f463e52c88294c792f41457a7738d89d4181a37a34b71f528",
+    "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md": "46bbfdf801a63f145e94ff5cf319386f4f4e7f151869be2895aae3620deaf819",
     "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md": "5b94000e14e6809923df2be69e6e4675669b3291fdfcc210ad696646c70a3f0b",
     "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md": "73b36193802d88bf733e2bb00821774aea9bf5c1f527d16a71c5bed9d7480335",
     "design-plans/ui-phase-2-2026-09-07/state-recovery-contract-review.md": "1ac72afe9ecb51457b5b081ecec3cc9a9421d4303699ee84344ab94f2045b30e",
     "design-plans/ui-phase-2-2026-09-07/status-center-contract-review.md": "683954dbfdc283c2ad5ed943842e27c338c8349acc2f3d802686382047129c47",
-    "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "f0cf949303696a71a401ad57339742f2477128e828b839dff7fb937780261384",
+    "design-plans/ui-phase-2-2026-09-07/task-contract-review.md": "d2dbf814b770a3153b9036a374cb43b957b3ebb3147e6e77d6fcff53fff4aaf0",
     "design-plans/ui-phase-2-2026-09-07/trend-contract-review.md": "569da295ea2dcddf23067a7e39e1481601f81147943c02c099d8a917ef0084ea",
     "design-plans/ui-phase-2-2026-09-07/source-scope-review.json": "a9b294e2f83d2f8283901af7ca9fc067eb3e111ce36fa7fe0cf5cd0233cc329d",
     "design-plans/ui-phase-2-2026-09-07/design/1688-acceptance-direction-c/evidence.json": "b50fb6185e6879ccc39616433ac24ac85bf7bac130ba37311115795b93520983",
@@ -352,7 +352,7 @@
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c/evidence.json": "06d9e78ab7c440a180ea5f0d861bfea08ea552df931b57701764fdbb6ff18e3f",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-direction-c/evidence.json": "13fce469cf6870ed2fa331e86abf829eca49edc81e87a9aa76f5eabaf1d2b310",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c/evidence.json": "30aba528771369f66c6659475c02d823e50383c3d65bea89f925894dace65568",
-    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "60e379abd2f642e4b26a00cd64ab725df90f5393514221377ec6eed2b8994d46",
+    "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json": "77481a5a3f0ae26e91518a1bb4d9d0ae3226383ffee2cca148ecbd27782a52b4",
     "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/evidence.json": "a2922c0831c8bf7288e57fbe913bd261d3d6ef6468cb7a06415c967b1ed48125",
     "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c/evidence.json": "b80700fee36a74e848b34bea9d6165a577aea942814cffabe75bce639c1ac3fe",
     "design-plans/ui-phase-2-2026-09-07/design/org-token-direction-c/evidence.json": "13ba4121baf87fa5e1477ea72f34c7e3523ecaae6935d0508e51e0d6ec8f7468",
@@ -517,7 +517,7 @@
     "scripts/verify-ui-phase2-teams-fields-c.mjs": "67044958c03df9293e4c5e5974b1cf895572c1a81edf82f64bea4b3c1a34ca69",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P34.json": "823f35806228e8073da1cbb9730b78a8334e705de36b743076cdaf7ec71d4e81",
     "scripts/verify-ui-phase2-org-approvals-controls-c.mjs": "6e341623167e84504655841006bb57b6cc2c7d1c47e4b86fce0ebbd79e63f7cb",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "8afb5a47f52dfe2c5faffbc3067898d50b71d8cfbe1214c5a117d39e6e834560",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P35.json": "97d6598f267cb5649e550e2890b893f9c4e58a0eaf511c12c2a00d3bfb0ac488",
     "scripts/verify-ui-phase2-org-data-controls.mjs": "32652c1547b4998316b79625d87662a3035959d9ae372aa3bf9fcd0785a9838e",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P36.json": "d6cb962a1e1d7caa70f5a62f11b7cba8f3825cca6d84a495629c3055871adee7",
     "scripts/verify-ui-phase2-org-token-controls.mjs": "80210a2d4d289a83eaa260e29aeb1e2eb54e5953fa9238b6eac1feb2c9c7b205",
@@ -117618,7 +117618,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 287,
+          "line": 290,
           "jsonPointer": null
         }
       ],
@@ -117714,7 +117714,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 281,
+          "line": 284,
           "jsonPointer": null
         }
       ],
@@ -117810,7 +117810,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 289,
+          "line": 292,
           "jsonPointer": null
         }
       ],
@@ -117911,7 +117911,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 293,
+          "line": 296,
           "jsonPointer": null
         }
       ],
@@ -118007,7 +118007,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 295,
+          "line": 298,
           "jsonPointer": null
         }
       ],
@@ -118111,7 +118111,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 290,
+          "line": 293,
           "jsonPointer": null
         }
       ],
@@ -118211,7 +118211,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 291,
+          "line": 294,
           "jsonPointer": null
         }
       ],
@@ -118316,7 +118316,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 282,
+          "line": 285,
           "jsonPointer": null
         }
       ],
@@ -118416,7 +118416,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 294,
+          "line": 297,
           "jsonPointer": null
         }
       ],
@@ -118529,7 +118529,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 296,
+          "line": 299,
           "jsonPointer": null
         }
       ],
@@ -118638,7 +118638,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 298,
+          "line": 301,
           "jsonPointer": null
         }
       ],
@@ -118738,7 +118738,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 299,
+          "line": 302,
           "jsonPointer": null
         }
       ],
@@ -118842,7 +118842,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 300,
+          "line": 303,
           "jsonPointer": null
         }
       ],
@@ -118951,7 +118951,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 297,
+          "line": 300,
           "jsonPointer": null
         }
       ],
@@ -119056,7 +119056,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 302,
+          "line": 305,
           "jsonPointer": null
         }
       ],
@@ -119156,7 +119156,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 303,
+          "line": 306,
           "jsonPointer": null
         }
       ],
@@ -119256,7 +119256,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 304,
+          "line": 307,
           "jsonPointer": null
         }
       ],
@@ -119365,7 +119365,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 301,
+          "line": 304,
           "jsonPointer": null
         }
       ],
@@ -121466,7 +121466,7 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 242,
+          "line": 245,
           "jsonPointer": null
         }
       ],
@@ -123131,12 +123131,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 260,
+          "line": 263,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 280,
+          "line": 283,
           "jsonPointer": null
         }
       ],
@@ -123232,12 +123232,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 261,
+          "line": 264,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 283,
+          "line": 286,
           "jsonPointer": null
         }
       ],
@@ -123333,12 +123333,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 262,
+          "line": 265,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 284,
+          "line": 287,
           "jsonPointer": null
         }
       ],
@@ -123439,12 +123439,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 263,
+          "line": 266,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 285,
+          "line": 288,
           "jsonPointer": null
         }
       ],
@@ -123545,12 +123545,12 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 264,
+          "line": 267,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 286,
+          "line": 289,
           "jsonPointer": null
         }
       ],
@@ -132769,17 +132769,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 246,
+          "line": 249,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 265,
+          "line": 268,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 305,
+          "line": 308,
           "jsonPointer": null
         },
         {
@@ -132890,17 +132890,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 247,
+          "line": 250,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 266,
+          "line": 269,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 306,
+          "line": 309,
           "jsonPointer": null
         },
         {
@@ -133011,17 +133011,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 248,
+          "line": 251,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 267,
+          "line": 270,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 307,
+          "line": 310,
           "jsonPointer": null
         },
         {
@@ -133132,17 +133132,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 249,
+          "line": 252,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 268,
+          "line": 271,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 309,
+          "line": 312,
           "jsonPointer": null
         },
         {
@@ -133268,17 +133268,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 250,
+          "line": 253,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 269,
+          "line": 272,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 308,
+          "line": 311,
           "jsonPointer": null
         },
         {
@@ -147010,17 +147010,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 243,
+          "line": 246,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 270,
+          "line": 273,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 310,
+          "line": 313,
           "jsonPointer": null
         }
       ],
@@ -147145,17 +147145,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 244,
+          "line": 247,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 271,
+          "line": 274,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 311,
+          "line": 314,
           "jsonPointer": null
         }
       ],
@@ -147276,17 +147276,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 245,
+          "line": 248,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 272,
+          "line": 275,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 312,
+          "line": 315,
           "jsonPointer": null
         }
       ],
@@ -162708,17 +162708,17 @@
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 251,
+          "line": 254,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 273,
+          "line": 276,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 288,
+          "line": 291,
           "jsonPointer": null
         },
         {
@@ -162830,17 +162830,17 @@
       "contractReferences": [
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 252,
+          "line": 255,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 274,
+          "line": 277,
           "jsonPointer": null
         },
         {
           "file": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
-          "line": 292,
+          "line": 295,
           "jsonPointer": null
         },
         {

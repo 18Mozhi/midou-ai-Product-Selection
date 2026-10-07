@@ -10,6 +10,7 @@ import {
   providerKeyboardRevisions,
 } from "../../scripts/lib/ui-phase2-provider-keyboard-baseline.mjs";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
+import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 // Preserve the keyboard-only capture; the structure suite binds raw current sources.
 const read = (f) =>
@@ -81,7 +82,7 @@ test("P46 current keyboard capture binds raw sources and separate 104-image mani
   assert.equal(e.checks.length, 388);
   assert.equal(e.screenshots.length, 104);
   assert.equal(Object.keys(e.sourceHashes).length, 168);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  assertP46CapturedSources(e);
   assert.equal(e.transformedRegistryHash, hash(providerPagePreview(current)));
   assert.deepEqual(
     readdirSync(folder).sort(),

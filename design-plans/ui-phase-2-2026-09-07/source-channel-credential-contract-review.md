@@ -301,16 +301,16 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 | apps/web/src/components/ProviderSourceEditDialog.vue#683678bf384a1e42.1 | form-event / 74 | SC48-CONFIG / 表单提交转发既有save |
 | apps/web/src/components/ProviderSourceEditDialog.vue#004f04ff66f655ca.1 | control / 94 | SC48-CONFIG / 关闭编辑设置并按阶段通知 |
 | apps/web/src/components/ProviderSourceEditDialog.vue#1c008f867673db60.1 | control / 122 | SC48-CONFIG / 处理结果技术详情折叠 |
-| apps/web/src/components/ProviderSourceEditDialog.vue#a3dad946584f7803.1 | event-binding / 127 | SC48-CONFIG / schedule_minutes转Number并更新既有表单 |
-| apps/web/src/components/ProviderSourceEditDialog.vue#73764f74b8f1a61a.1 | event-binding / 139 | SC48-CONFIG / timeout_ms转Number并更新既有表单 |
-| apps/web/src/components/ProviderSourceEditDialog.vue#0d47ebf53fe0590e.1 | event-binding / 151 | SC48-CONFIG / retry_limit转Number并更新既有表单 |
-| apps/web/src/components/ProviderSourceEditDialog.vue#c57686ba7c1f6588.1 | event-binding / 164 | SC48-CONFIG / status更新既有表单 |
-| apps/web/src/components/ProviderSourceEditDialog.vue#c0923c491565b4ef.1 | event-binding / 205 | SC48-CONFIG / reason更新既有表单 |
-| apps/web/src/components/ProviderSourceEditDialog.vue#c74c69289cda1b1c.1 | control / 226 | SC48-CONFIG / 确认结果后关闭并回到目录同步流程 |
-| apps/web/src/components/ProviderSourceEditDialog.vue#a8cf70fb83e27873.1 | control / 236 | SC48-CONFIG / 取消或关闭未完成设置 |
-| apps/web/src/components/ProviderSourceEditDialog.vue#d166a16792084fe1.1 | control / 237 | SC48-CONFIG / 原保存或烟测提交入口 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#2e3324731e3cd339.1 | event-binding / 127 | SC48-CONFIG / schedule_minutes转Number并更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#9e5fb1c87586c9b3.1 | event-binding / 140 | SC48-CONFIG / timeout_ms转Number并更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#df27ce16947a3af7.1 | event-binding / 153 | SC48-CONFIG / retry_limit转Number并更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#c57686ba7c1f6588.1 | event-binding / 167 | SC48-CONFIG / status更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#c0923c491565b4ef.1 | event-binding / 208 | SC48-CONFIG / reason更新既有表单 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#c74c69289cda1b1c.1 | control / 229 | SC48-CONFIG / 确认结果后关闭并回到目录同步流程 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#a8cf70fb83e27873.1 | control / 239 | SC48-CONFIG / 取消或关闭未完成设置 |
+| apps/web/src/components/ProviderSourceEditDialog.vue#d166a16792084fe1.1 | control / 240 | SC48-CONFIG / 原保存或烟测提交入口 |
 
-| apps/web/src/components/ProviderSourceEditDialog.vue | 4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296 |
+| apps/web/src/components/ProviderSourceEditDialog.vue | 405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303 |
 
 ### H
 

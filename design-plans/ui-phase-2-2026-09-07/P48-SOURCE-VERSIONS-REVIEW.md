@@ -24,13 +24,20 @@ pbakaus/distill 用于压缩版本判断路径：来源身份、当前版和历�
 
 ## 实际证据
 
-- [26 图总览](../../output/playwright/p48-source-versions-review/index.html)：390/760/1024/1440 下五种状态；手机另保留历史、短原因和无差异的下部检查图。
-- [机器证据](../../output/playwright/p48-source-versions-review/evidence.json)：20 次实际 App 运行、276 项检查、26 张 PNG、59 个实际加载源码哈希。
+- [26 图总览](../../output/playwright/p48-source-versions-review-r4/index.html)：390/760/1024/1440 下五种状态；手机另保留历史、短原因和无差异的下部检查图。
+- [机器证据](../../output/playwright/p48-source-versions-review-r4/evidence.json)：20 次实际 App 运行、276 项检查、26 张 PNG、53 个实际加载源码哈希。
 - 每组只有 1 次来源目录 GET 和 1 次配置版本 GET；没有 POST/PUT、请求体、未知网络或外链。
 - 逐组断言隐私文案、本地化差异、回滚原因门槛、无差异计数、标题首焦点、背景隔离、Tab 循环、Escape 归还、44px 控件及水平溢出。
 
-复验：`node --test tests/unit/ui-phase2-provider-source-versions.test.mjs`。重建图包：`node scripts/verify-ui-phase2-provider-source-versions.mjs --capture`。随机端口和浏览器已关闭，正式图包保留。
+复验：`node --test tests/unit/ui-phase2-provider-source-versions.test.mjs`。重建图包：`node scripts/verify-ui-phase2-provider-source-versions.mjs --capture rN`；独占创建，不覆盖既有图包。随机端口和浏览器已关闭，正式图包保留。
 
 ## 待审与未覆盖
 
-本批只申请版本窗五种读取/字段组合、时间线、回滚原因门槛和键盘行为的视觉审核。没有发出真实回滚请求，也未验证真实 API/MySQL/权限、409、回滚中/成功/失败、历史回读失败、迟到响应或组件卸载；这些交互状态以及固定样本、兼容矩阵两个任务窗继续开放。
+本批覆盖版本窗五种读取/字段组合、时间线、回滚原因门槛和键盘行为；用户已批准剩余视觉页面自动通过。没有发出真实回滚请求，也未验证真实 API/MySQL/权限、409、回滚中/成功/失败、历史回读失败、迟到响应或组件卸载；这些交互状态以及固定样本、兼容矩阵两个任务窗继续开放。
+
+## 当前生产源码复核 r4
+
+旧 r1 证据把后来已经拆出的弹窗重写成提案模板，不再作为当前页面事实。r4 直接通过生产 `ProviderSourceVersionHistoryDialog.vue` 与真实父级来源目录操作，手机先进入来源详情再打开“版本与回滚”；本地只拦截读取请求，无写入。内容与焦点行为以当前组件实际文案及 `useProviderSourceDialogFocus` 为准。
+
+- [r4 图册](../../output/playwright/p48-source-versions-review-r4/index.html)；20 组、276 项检查、26 张图、53 个源码哈希。
+- 原 r1 图册继续保留；当前 source ownership 与动作合同同步校准，未更改 API、权限、回滚业务规则或生产组件。

@@ -13,9 +13,11 @@ import {
   previewProviderSourceConfigurationReturnParent,
 } from "./lib/ui-phase2-provider-source-configuration-return-preview.mjs";
 
-assert.ok(process.argv.slice(2).every((argument) => argument === "--capture"));
-const capture = process.argv.includes("--capture"),
-  output = "output/playwright/p48-source-configuration-return-review",
+const args = process.argv.slice(2),
+  capture = args[0] === "--capture",
+  revision = capture ? args[1] : "";
+assert.ok(args.length === 0 || (capture && args.length === 2 && /^r[1-9]\d*$/.test(revision)));
+const output = `output/playwright/p48-source-configuration-return-review${capture ? `-${revision}` : ""}`,
   parentComponent = "apps/web/src/components/ProviderSourceCenter.vue",
   dialogComponent = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
   pageCss = "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css",
@@ -68,14 +70,39 @@ const fixtureData = JSON.parse(JSON.stringify(box.data)),
     },
   },
   scenes = [
-    { name: "saved-refreshing", outcome: "saved", hold: "refresh", capture: "refreshing", final: "success" },
+    {
+      name: "saved-refreshing",
+      outcome: "saved",
+      hold: "refresh",
+      capture: "refreshing",
+      final: "success",
+    },
     { name: "saved-success", outcome: "saved", capture: "success", final: "success" },
     { name: "saved-failed", outcome: "saved", fail: "refresh", capture: "failed", final: "failed" },
-    { name: "saved-retry", outcome: "saved", fail: "first-refresh", hold: "retry", capture: "refreshing", final: "success" },
+    {
+      name: "saved-retry",
+      outcome: "saved",
+      fail: "first-refresh",
+      hold: "retry",
+      capture: "refreshing",
+      final: "success",
+    },
     { name: "partial-success", outcome: "partial", capture: "success", final: "success" },
-    { name: "partial-failed", outcome: "partial", fail: "refresh", capture: "failed", final: "failed" },
+    {
+      name: "partial-failed",
+      outcome: "partial",
+      fail: "refresh",
+      capture: "failed",
+      final: "failed",
+    },
     { name: "conflict-success", outcome: "conflict", capture: "success", final: "success" },
-    { name: "conflict-failed", outcome: "conflict", fail: "refresh", capture: "failed", final: "failed" },
+    {
+      name: "conflict-failed",
+      outcome: "conflict",
+      fail: "refresh",
+      capture: "failed",
+      final: "failed",
+    },
   ],
   loadedSources = new Set([
     parentComponent,
@@ -99,7 +126,7 @@ const fixtureData = JSON.parse(JSON.stringify(box.data)),
 let browser, server;
 try {
   browser = await chromium.launch();
-  if (capture) await mkdir(output, { recursive: true });
+  if (capture) await mkdir(output);
   const reservation = reservePort();
   await new Promise((resolve) => reservation.listen(0, "127.0.0.1", resolve));
   const port = reservation.address().port;
@@ -168,7 +195,10 @@ try {
       let releasePending;
       try {
         const page = await context.newPage(),
-          item = scene.outcome === "partial" ? structuredClone(publicSource) : structuredClone(fixtureData.setup[0]),
+          item =
+            scene.outcome === "partial"
+              ? structuredClone(publicSource)
+              : structuredClone(fixtureData.setup[0]),
           requests = [],
           unexpected = [],
           errors = [],
@@ -187,7 +217,8 @@ try {
               ...item.provisioned,
               version: scene.outcome === "conflict" ? 5 : scene.outcome === "partial" ? 2 : 2,
               status: "disabled",
-              schedule_minutes: scene.outcome === "conflict" ? 60 : item.provisioned.schedule_minutes,
+              schedule_minutes:
+                scene.outcome === "conflict" ? 60 : item.provisioned.schedule_minutes,
             },
           }),
           fulfillError = (route, status, code, actionHint) =>
@@ -237,7 +268,11 @@ try {
             unexpected.push(key);
             return route.abort();
           }
-          requests.push({ key, body: request.postData(), idempotencyKey: request.headers()["idempotency-key"] });
+          requests.push({
+            key,
+            body: request.postData(),
+            idempotencyKey: request.headers()["idempotency-key"],
+          });
           if (url.pathname.endsWith("/me/navigation"))
             return route.fulfill({ json: { data: fixtureData.navigation, request_id: "p48-nav" } });
           if (url.pathname.endsWith("/auth/session-status"))
@@ -245,8 +280,13 @@ try {
           if (key === "GET /api/v1/platform/provider-sources") {
             catalogReads++;
             if (catalogReads === 1)
-              return route.fulfill({ json: { data: [item], request_id: `p48-${scene.name}-initial` } });
-            if ((scene.hold === "refresh" && catalogReads === 2) || (scene.hold === "retry" && catalogReads === 3))
+              return route.fulfill({
+                json: { data: [item], request_id: `p48-${scene.name}-initial` },
+              });
+            if (
+              (scene.hold === "refresh" && catalogReads === 2) ||
+              (scene.hold === "retry" && catalogReads === 3)
+            )
               await pendingGate;
             if (
               (scene.fail === "refresh" && catalogReads === 2) ||
@@ -259,7 +299,10 @@ try {
                 "来源目录暂时无法读取，请稍后重试。",
               );
             return route.fulfill({
-              json: { data: [updatedItem()], request_id: `p48-${scene.name}-refreshed-${catalogReads}` },
+              json: {
+                data: [updatedItem()],
+                request_id: `p48-${scene.name}-refreshed-${catalogReads}`,
+              },
             });
           }
           if (request.method() === "POST") {
@@ -289,7 +332,9 @@ try {
         });
 
         await page.goto(origin + "/platform-admin/providers/sources");
-        const editButton = page.getByRole("button", { name: "编辑采集设置" });
+        const card = page.locator(".source-list article").filter({ hasText: item.name });
+        if (width <= 760) await card.getByRole("button", { name: "查看来源详情" }).click();
+        const editButton = card.getByRole("button", { name: "编辑采集设置" });
         await editButton.focus();
         await page.keyboard.press("Enter");
         const dialog = page.getByRole("dialog", { name: `采集设置 · ${item.name}` });
@@ -340,7 +385,11 @@ try {
         if (scene.capture === "failed")
           await expect(feedback.getByRole("button", { name: "重新读取来源目录" })).toBeFocused();
         else await expect(feedback.getByRole("heading")).toBeFocused();
-        check("dialog closed before directory result", await page.getByRole("dialog").count(), 0);
+        check(
+          "configuration dialog closed before directory result",
+          await page.locator(".p48-source-configuration-modal").count(),
+          0,
+        );
         check("one source remains visible", await page.locator(".source-list article").count(), 1);
         check("global message suppressed", await page.locator(".source-message").count(), 0);
         check(
@@ -361,16 +410,31 @@ try {
         check("final state", await feedback.getAttribute("data-state"), scene.final);
         if (scene.final === "success") await expect(feedback.getByRole("heading")).toBeFocused();
         const writes = requests.filter((request) => !request.key.startsWith("GET "));
-        check("all writes have idempotency keys", writes.every((request) => request.idempotencyKey));
+        check(
+          "all writes have idempotency keys",
+          writes.every((request) => request.idempotencyKey),
+        );
         check("catalog read count", catalogReads, scene.name === "saved-retry" ? 3 : 2);
         check("no unexpected network", unexpected, []);
         check("no runtime errors", errors, []);
         check("write count", putCount + healthCount, scene.outcome === "partial" ? 2 : 1);
         if (scene.outcome === "partial") {
-          check("partial has one disabled PUT", JSON.parse(writes.find((request) => request.key.startsWith("PUT ")).body).status, "disabled");
+          check(
+            "partial has one disabled PUT",
+            JSON.parse(writes.find((request) => request.key.startsWith("PUT ")).body).status,
+            "disabled",
+          );
           check("partial has one health check", healthCount, 1);
         } else check("no health check", healthCount, 0);
-        runs.push({ width, scene: scene.name, outcome: scene.outcome, capture: scene.capture, final: scene.final, checks, requests });
+        runs.push({
+          width,
+          scene: scene.name,
+          outcome: scene.outcome,
+          capture: scene.capture,
+          final: scene.final,
+          checks,
+          requests,
+        });
       } finally {
         releasePending?.();
         await context.close();
@@ -385,7 +449,7 @@ if (capture) {
   const sourceHashes = {};
   for (const file of [...loadedSources].sort()) sourceHashes[file] = hash(await read(file));
   const evidence = {
-    kind: "P48-SOURCE-CONFIGURATION-RETURN-REVIEW-r1",
+    kind: `P48-SOURCE-CONFIGURATION-RETURN-REVIEW-${revision}`,
     generatedAt: new Date().toISOString(),
     reviewOnly: true,
     productionChanged: false,
@@ -406,7 +470,7 @@ if (capture) {
     .join("\n");
   await writeFile(
     `${output}/index.html`,
-    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P48 配置结果返回评审</title><style>body{margin:0;padding:24px;background:#e9eef6;color:#172033;font:14px system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}figure{margin:0;padding:12px;border-radius:16px;background:white;box-shadow:0 8px 24px #18243b1f}img{display:block;width:100%;height:auto;border-radius:10px}figcaption{padding-top:10px}</style><h1>P48 编辑采集设置 · 终态返回与目录重读 r1</h1><main>${cards}</main></html>`,
+    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P48 配置结果返回评审 ${revision}</title><style>body{margin:0;padding:24px;background:#e9eef6;color:#172033;font:14px system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}figure{margin:0;padding:12px;border-radius:16px;background:white;box-shadow:0 8px 24px #18243b1f}img{display:block;width:100%;height:auto;border-radius:10px}figcaption{padding-top:10px}</style><h1>P48 编辑采集设置 · 终态返回与目录重读 ${revision}</h1><main>${cards}</main></html>`,
   );
   console.log(
     JSON.stringify({

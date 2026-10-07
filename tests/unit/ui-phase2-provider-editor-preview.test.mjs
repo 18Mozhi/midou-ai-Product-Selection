@@ -6,6 +6,7 @@ import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
 import { providerPagePreview } from "../../scripts/lib/ui-phase2-provider-page-preview.mjs";
 import { historicalProviderFocusSource } from "../../scripts/lib/ui-phase2-provider-focus-baseline.mjs";
+import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 const read = (f) =>
   historicalProviderFocusSource(f, historicalAdapterCSource(f, readFileSync(f, "utf8")));
@@ -45,7 +46,7 @@ test("P46 editor historical source and134 image inventory remain pinned", () => 
   assert.equal(e.checks.length, 444);
   assert.equal(e.screenshots.length, 134);
   assert.equal(Object.keys(e.sourceHashes).length, 39);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  assertP46CapturedSources(e);
   assert.deepEqual(e.transformedHashes, { [source]: hash(providerPagePreview(read(source))) });
   assert.deepEqual(
     readdirSync(folder).sort(),

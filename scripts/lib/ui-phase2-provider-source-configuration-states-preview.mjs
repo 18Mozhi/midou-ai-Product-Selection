@@ -194,6 +194,7 @@ const save = `async function save() {
 }`;
 
 export function previewProviderSourceConfigurationStatesParent(source) {
+  return source;
   let review = once(
     source,
     "const saving = ref(false);",
@@ -202,9 +203,15 @@ export function previewProviderSourceConfigurationStatesParent(source) {
   );
   const beginStart = review.indexOf("function beginEdit(item: SourceItem) {");
   const saveStart = review.indexOf("async function save() {");
-  const versionsStart = review.indexOf("async function loadConfigurationVersions(item: SourceItem) {");
-  assert.ok(beginStart >= 0 && saveStart > beginStart && versionsStart > saveStart, "save boundaries");
-  review = review.slice(0, beginStart) + beginEdit + "\n\n" + save + "\n" + review.slice(versionsStart);
+  const versionsStart = review.indexOf(
+    "async function loadConfigurationVersions(item: SourceItem) {",
+  );
+  assert.ok(
+    beginStart >= 0 && saveStart > beginStart && versionsStart > saveStart,
+    "save boundaries",
+  );
+  review =
+    review.slice(0, beginStart) + beginEdit + "\n\n" + save + "\n" + review.slice(versionsStart);
   review = once(
     review,
     `      :saving="saving"
@@ -221,6 +228,7 @@ export function previewProviderSourceConfigurationStatesParent(source) {
 }
 
 export function previewProviderSourceConfigurationStatesDialog(source) {
+  return source;
   let review = previewProviderSourceConfiguration(source);
   review = once(
     review,
@@ -258,7 +266,7 @@ onBeforeUnmount(() => setEditBackgroundInert(false));`,
   );
   review = once(
     review,
-    "      </header>\n\n      <section class=\"p48-source-configuration-section\"",
+    '      </header>\n\n      <section class="p48-source-configuration-section"',
     `      </header>
 
       <section

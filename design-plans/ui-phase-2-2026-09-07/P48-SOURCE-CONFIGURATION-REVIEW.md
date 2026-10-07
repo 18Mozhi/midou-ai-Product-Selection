@@ -34,3 +34,18 @@
 ## 待审与未覆盖
 
 本批只申请配置窗的默认字段结构、网页登录停用组合、公开来源烟测启用组合及基础模态交互审核。没有触发真实保存、烟测或二次 PUT；保存中、成功、烟测失败、PUT 失败、版本冲突和重读失败仍需下一批逐项验证。配置历史、固定样本、兼容矩阵另外三个任务窗、401/403 刷新边界、SC48/PR-G01、真实权限/MySQL/外部来源及生产部署仍未覆盖。
+
+## 当前生产源码复核 r2
+
+后续 P48 拆分了配置弹窗与来源详情入口，因此 r1 保留为当时的提案/捕获，不再拿它的旧源码绑定代表当前实现。r2 直接运行当前 `ProviderSourceCenter` 与 `ProviderSourceEditDialog`，手机先进入来源详情再打开配置；不向生产组件注入旧字段模板。另为三个数字输入显式增加 `step="1"`，使整数约束在真实表单标记中可直接核验。
+
+- 新图与证据：[r2 图册](../../output/playwright/p48-source-configuration-review-r2/index.html)、[r2 机器证据](../../output/playwright/p48-source-configuration-review-r2/evidence.json)。
+- 1440/1024/760/390 四宽度、两种来源场景：8 组、120 项检查、12 张图、53 个实际加载源码哈希。仍只有目录 GET；无写入、未知网络或运行错误。
+- 复验：`node scripts/verify-ui-phase2-provider-source-configuration.mjs` 与 `node --test tests/unit/ui-phase2-provider-source-configuration.test.mjs`。新版本捕获命令为 `node scripts/verify-ui-phase2-provider-source-configuration.mjs --capture rN`；目录已存在会失败，不覆盖 r1/r2。
+- 视觉方向按用户本轮“剩余全部通过”授权自动通过；这里只记录配置窗视觉与本地拦截交互，不代表生产写入、权限或来源烟测验收。
+
+## 当前证据格式校验与源码指纹校准 r4
+
+格式检查要求仓库 P48 验证脚本遵循 Prettier；格式化只改变脚本排版、不改变页面或场景。重新采集并将自动化断言切换到 r4，r1–r3 图册继续保留。
+
+- [r4 图册](../../output/playwright/p48-source-configuration-review-r4/index.html)；8 组、120 项检查、12 张图、53 个源码哈希。

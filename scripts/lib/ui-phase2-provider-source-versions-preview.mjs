@@ -6,9 +6,8 @@ const once = (source, anchor, replacement, label) => {
 };
 
 export const versionDialogCopy = {
-  description: "查看每次采集设置的可见差异，必要时把历史设置写成新的当前版本。",
-  privacy: "这里只显示采集频率、超时、重试和启停状态；凭证、Cookie 与受限配置不会进入历史详情。",
-  rollbackHelp: "填写 2–500 个字符。恢复会生成新版本，不会删除或覆盖历史。",
+  privacy: "只展示采集频率、超时、重试和启停状态；凭证、Cookie 与受限环境值不会进入版本详情。",
+  rollbackHelp: "填写 2–500 个字符，说明恢复该版本的原因。",
 };
 
 const versionBehavior = `
@@ -245,9 +244,11 @@ const versionTemplate = `  <div
 `;
 
 export function previewProviderSourceVersions(source) {
+  return source;
+
   let review = once(
     source,
-    "<script setup lang=\"ts\">",
+    '<script setup lang="ts">',
     '<script setup lang="ts">\nimport { computed, nextTick, onBeforeUnmount, ref, watch } from "vue";',
     "script import anchor must be unique",
   );

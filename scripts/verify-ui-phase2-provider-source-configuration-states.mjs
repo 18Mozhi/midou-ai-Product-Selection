@@ -13,9 +13,11 @@ import {
   previewProviderSourceConfigurationStatesParent,
 } from "./lib/ui-phase2-provider-source-configuration-states-preview.mjs";
 
-assert.ok(process.argv.slice(2).every((argument) => argument === "--capture"));
-const capture = process.argv.includes("--capture"),
-  output = "output/playwright/p48-source-configuration-states-review",
+const args = process.argv.slice(2),
+  capture = args[0] === "--capture",
+  revision = capture ? args[1] : "";
+assert.ok(args.length === 0 || (capture && args.length === 2 && /^r[1-9]\d*$/.test(revision)));
+const output = `output/playwright/p48-source-configuration-states-review${capture ? `-${revision}` : ""}`,
   parentComponent = "apps/web/src/components/ProviderSourceCenter.vue",
   dialogComponent = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
   pageCss = "design-plans/ui-phase-2-2026-09-07/implementation/provider-sources-page-preview.css",
@@ -66,16 +68,70 @@ const fixtureData = JSON.parse(JSON.stringify(box.data)),
     },
   },
   scenes = [
-    { name: "direct-saving", family: "direct", hold: "first-put", capture: "saving", final: "success" },
+    {
+      name: "direct-saving",
+      family: "direct",
+      hold: "first-put",
+      capture: "saving",
+      final: "success",
+    },
     { name: "direct-success", family: "direct", capture: "success", final: "success" },
-    { name: "direct-failure", family: "direct", fail: "first-put", capture: "failed", final: "failed" },
-    { name: "version-conflict", family: "direct", fail: "conflict", capture: "conflict", final: "conflict" },
-    { name: "smoke-saving", family: "smoke", hold: "first-put", capture: "saving_disabled", final: "success" },
-    { name: "smoke-testing", family: "smoke", hold: "health", capture: "smoke_testing", final: "success" },
-    { name: "smoke-rejected", family: "smoke", fail: "health-result", capture: "partial", final: "partial" },
-    { name: "smoke-unavailable", family: "smoke", fail: "health-request", capture: "partial", final: "partial" },
-    { name: "enabling", family: "smoke", hold: "second-put", capture: "enabling", final: "success" },
-    { name: "enable-failure", family: "smoke", fail: "second-put", capture: "partial", final: "partial" },
+    {
+      name: "direct-failure",
+      family: "direct",
+      fail: "first-put",
+      capture: "failed",
+      final: "failed",
+    },
+    {
+      name: "version-conflict",
+      family: "direct",
+      fail: "conflict",
+      capture: "conflict",
+      final: "conflict",
+    },
+    {
+      name: "smoke-saving",
+      family: "smoke",
+      hold: "first-put",
+      capture: "saving_disabled",
+      final: "success",
+    },
+    {
+      name: "smoke-testing",
+      family: "smoke",
+      hold: "health",
+      capture: "smoke_testing",
+      final: "success",
+    },
+    {
+      name: "smoke-rejected",
+      family: "smoke",
+      fail: "health-result",
+      capture: "partial",
+      final: "partial",
+    },
+    {
+      name: "smoke-unavailable",
+      family: "smoke",
+      fail: "health-request",
+      capture: "partial",
+      final: "partial",
+    },
+    {
+      name: "enabling",
+      family: "smoke",
+      hold: "second-put",
+      capture: "enabling",
+      final: "success",
+    },
+    {
+      name: "enable-failure",
+      family: "smoke",
+      fail: "second-put",
+      capture: "partial",
+      final: "partial",
+    },
     { name: "smoke-success", family: "smoke", capture: "success", final: "success" },
   ],
   progressStages = new Set(["saving", "saving_disabled", "smoke_testing", "enabling"]),
@@ -99,7 +155,7 @@ const fixtureData = JSON.parse(JSON.stringify(box.data)),
 let browser, server;
 try {
   browser = await chromium.launch();
-  if (capture) await mkdir(output, { recursive: true });
+  if (capture) await mkdir(output);
   const reservation = reservePort();
   await new Promise((resolve) => reservation.listen(0, "127.0.0.1", resolve));
   const port = reservation.address().port;
@@ -168,7 +224,10 @@ try {
       let releasePending;
       try {
         const page = await context.newPage(),
-          item = scene.family === "smoke" ? structuredClone(publicSource) : structuredClone(fixtureData.setup[0]),
+          item =
+            scene.family === "smoke"
+              ? structuredClone(publicSource)
+              : structuredClone(fixtureData.setup[0]),
           requests = [],
           unexpected = [],
           errors = [],
@@ -232,13 +291,19 @@ try {
             unexpected.push(key);
             return route.abort();
           }
-          requests.push({ key, body: request.postData(), idempotencyKey: request.headers()["idempotency-key"] });
+          requests.push({
+            key,
+            body: request.postData(),
+            idempotencyKey: request.headers()["idempotency-key"],
+          });
           if (url.pathname.endsWith("/me/navigation"))
             return route.fulfill({ json: { data: fixtureData.navigation, request_id: "p48-nav" } });
           if (url.pathname.endsWith("/auth/session-status"))
             return route.fulfill({ json: { data: { authenticated: true } } });
           if (key === "GET /api/v1/platform/provider-sources")
-            return route.fulfill({ json: { data: [item], request_id: `p48-${scene.name}-catalog` } });
+            return route.fulfill({
+              json: { data: [item], request_id: `p48-${scene.name}-catalog` },
+            });
           if (request.method() === "POST") {
             healthCount++;
             if (scene.hold === "health") await pendingGate;
@@ -267,12 +332,27 @@ try {
           const body = request.postDataJSON();
           if (putCount === 1 && scene.hold === "first-put") await pendingGate;
           if (putCount === 1 && scene.fail === "first-put")
-            return fulfillError(route, 500, "provider_configuration_failed", "请检查当前设置后重新保存。");
+            return fulfillError(
+              route,
+              500,
+              "provider_configuration_failed",
+              "请检查当前设置后重新保存。",
+            );
           if (putCount === 1 && scene.fail === "conflict")
-            return fulfillError(route, 409, "provider_version_conflict", "请重新读取最新配置后再修改。");
+            return fulfillError(
+              route,
+              409,
+              "provider_version_conflict",
+              "请重新读取最新配置后再修改。",
+            );
           if (putCount === 2 && scene.hold === "second-put") await pendingGate;
           if (putCount === 2 && scene.fail === "second-put")
-            return fulfillError(route, 409, "provider_enable_conflict", "请重新读取最新配置后再启用。");
+            return fulfillError(
+              route,
+              409,
+              "provider_enable_conflict",
+              "请重新读取最新配置后再启用。",
+            );
           return route.fulfill({
             json: {
               data: successConfiguration(body, Number(body.expected_version) + 1),
@@ -282,7 +362,9 @@ try {
         });
 
         await page.goto(origin + "/platform-admin/providers/sources");
-        const editButton = page.getByRole("button", { name: "编辑采集设置" });
+        const card = page.locator(".source-list article").filter({ hasText: item.name });
+        if (width <= 760) await card.getByRole("button", { name: "查看来源详情" }).click();
+        const editButton = card.getByRole("button", { name: "编辑采集设置" });
         await editButton.focus();
         await page.keyboard.press("Enter");
         const dialog = page.getByRole("dialog", { name: `采集设置 · ${item.name}` }),
@@ -337,18 +419,45 @@ try {
         await expect(dialog).toBeVisible();
         check("dialog remains until acknowledged", true);
         const writeRequests = requests.filter((request) => !request.key.startsWith("GET "));
-        check("all writes have idempotency keys", writeRequests.every((request) => request.idempotencyKey));
-        check("one catalog GET", requests.filter((request) => request.key === "GET /api/v1/platform/provider-sources").length, 1);
-        check("no catalog reread before acknowledgement", requests.filter((request) => request.key === "GET /api/v1/platform/provider-sources").length, 1);
+        check(
+          "all writes have idempotency keys",
+          writeRequests.every((request) => request.idempotencyKey),
+        );
+        check(
+          "one catalog GET",
+          requests.filter((request) => request.key === "GET /api/v1/platform/provider-sources")
+            .length,
+          1,
+        );
+        check(
+          "no catalog reread before acknowledgement",
+          requests.filter((request) => request.key === "GET /api/v1/platform/provider-sources")
+            .length,
+          1,
+        );
         check("no unexpected network", unexpected, []);
         check("no runtime errors", errors, []);
         if (scene.family === "smoke") {
-          const puts = writeRequests.filter((request) => request.key.startsWith("PUT ")).map((request) => JSON.parse(request.body));
+          const puts = writeRequests
+            .filter((request) => request.key.startsWith("PUT "))
+            .map((request) => JSON.parse(request.body));
           if (!["smoke-rejected", "smoke-unavailable"].includes(scene.name)) {
-            check("staged status order", puts.map((body) => body.status), ["disabled", "enabled"]);
-            check("staged version order", puts.map((body) => body.expected_version), [1, 2]);
+            check(
+              "staged status order",
+              puts.map((body) => body.status),
+              ["disabled", "enabled"],
+            );
+            check(
+              "staged version order",
+              puts.map((body) => body.expected_version),
+              [1, 2],
+            );
           } else {
-            check("partial keeps one disabled write", puts.map((body) => body.status), ["disabled"]);
+            check(
+              "partial keeps one disabled write",
+              puts.map((body) => body.status),
+              ["disabled"],
+            );
           }
           check("one health check", healthCount, 1);
         } else {
@@ -370,10 +479,25 @@ try {
           await terminalAction.focus();
           await page.keyboard.press("Escape");
           await expect(dialog).toHaveCount(0);
-          await expect(editButton).toBeFocused();
-          check("escape restores trigger", true);
+          const returned = page.locator(".p48-source-configuration-return"),
+            expectedOutcome =
+              scene.capture === "partial"
+                ? "partial"
+                : scene.capture === "conflict"
+                  ? "conflict"
+                  : "saved";
+          await expect(returned).toHaveAttribute("data-outcome", expectedOutcome);
+          await expect(returned.getByRole("heading")).toBeFocused();
+          check("escape acknowledges and focuses return result", true);
         }
-        runs.push({ width, scene: scene.name, capture: scene.capture, final: scene.final, checks, requests });
+        runs.push({
+          width,
+          scene: scene.name,
+          capture: scene.capture,
+          final: scene.final,
+          checks,
+          requests,
+        });
       } finally {
         releasePending?.();
         await context.close();
@@ -388,7 +512,7 @@ if (capture) {
   const sourceHashes = {};
   for (const file of [...loadedSources].sort()) sourceHashes[file] = hash(await read(file));
   const evidence = {
-    kind: "P48-SOURCE-CONFIGURATION-STATES-REVIEW-r1",
+    kind: `P48-SOURCE-CONFIGURATION-STATES-REVIEW-${revision}`,
     generatedAt: new Date().toISOString(),
     reviewOnly: true,
     productionChanged: false,
@@ -409,7 +533,7 @@ if (capture) {
     .join("\n");
   await writeFile(
     `${output}/index.html`,
-    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P48 采集设置状态评审</title><style>body{margin:0;padding:24px;background:#e9eef6;color:#172033;font:14px system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}figure{margin:0;padding:12px;border-radius:16px;background:white;box-shadow:0 8px 24px #18243b1f}img{display:block;width:100%;height:auto;border-radius:10px}figcaption{padding-top:10px}</style><h1>P48 编辑采集设置 · 保存与烟测状态 r1</h1><main>${cards}</main></html>`,
+    `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><title>P48 采集设置状态评审 ${revision}</title><style>body{margin:0;padding:24px;background:#e9eef6;color:#172033;font:14px system-ui}main{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:20px}figure{margin:0;padding:12px;border-radius:16px;background:white;box-shadow:0 8px 24px #18243b1f}img{display:block;width:100%;height:auto;border-radius:10px}figcaption{padding-top:10px}</style><h1>P48 编辑采集设置 · 保存与烟测状态 ${revision}</h1><main>${cards}</main></html>`,
   );
   console.log(
     JSON.stringify({

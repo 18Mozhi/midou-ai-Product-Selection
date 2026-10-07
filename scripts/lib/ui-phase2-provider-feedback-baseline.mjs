@@ -20,8 +20,11 @@ const cache = new Map(),
 // Exact historical association, not a current-source acceptance shortcut.
 export function historicalProviderFeedbackSource(file, source) {
   source = historicalProviderKeyboardSource(file, source);
-  const r = providerFeedbackRevisions.find((r) => r.file === file);
-  if (!r || hash(source) !== r.after) return source;
+  const currentHash = hash(source),
+    r = providerFeedbackRevisions.find(
+      (entry) => entry.file === file && currentHash === entry.after,
+    );
+  if (!r) return source;
   if (!cache.has(file)) {
     const old = execFileSync("git", ["show", `b055029b:${file}`], { encoding: "utf8" }).replaceAll(
       "\r\n",

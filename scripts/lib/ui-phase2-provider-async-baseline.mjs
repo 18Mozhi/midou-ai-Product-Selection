@@ -12,15 +12,16 @@ export const providerAsyncRevisions = [
   {
     file: "apps/web/src/components/ProviderRegistry.vue",
     before: "2e6aed1eb23b4402719d2d031a61215aad27be0613c36b2f9f4477971638d20c",
-    after: "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+    after: "ffb8a98b8df1c966ee092cf1377f51c2ab67748d66377cda5734ac9646906df3",
   },
 ];
 const cached = new Map(),
   hash = (s) => createHash("sha256").update(s).digest("hex");
 export function historicalProviderAsyncSource(file, source) {
   source = historicalProviderFeedbackSource(file, source);
-  const r = providerAsyncRevisions.find((r) => r.file === file);
-  if (!r || hash(source) !== r.after) return source;
+  const currentHash = hash(source),
+    r = providerAsyncRevisions.find((entry) => entry.file === file && currentHash === entry.after);
+  if (!r) return source;
   if (!cached.has(file)) {
     const old = execFileSync("git", ["show", `af60b101:${file}`], { encoding: "utf8" }).replaceAll(
       "\r\n",

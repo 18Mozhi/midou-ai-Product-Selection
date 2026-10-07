@@ -13,8 +13,9 @@ import {
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   parent = "apps/web/src/components/ProviderSourceCenter.vue",
-  dialog = "apps/web/src/components/ProviderSourceConfigurationDialog.vue",
-  root = "output/playwright/p48-source-configuration-return-review";
+  dialog = "apps/web/src/components/ProviderSourceEditDialog.vue",
+  root = "output/playwright/p48-source-configuration-return-review-r4",
+  historicalRoot = "output/playwright/p48-source-configuration-return-review";
 
 const compile = (source, filename, id) => {
   const parsed = parse(source);
@@ -41,10 +42,18 @@ test("P48 configuration-return review transforms the actual parent and dialog", 
     "重新读取来源目录",
   ]) {
     assert.ok(parentReview.includes(marker), marker);
-    assert.equal(parentSource.includes(marker), false, `production parent must not contain ${marker}`);
+    assert.ok(parentSource.includes(marker), `production parent must contain ${marker}`);
   }
   assert.ok(dialogReview.includes('emit("acknowledge")'));
-  assert.equal(dialogSource.includes('emit("acknowledge")'), false);
+  assert.ok(dialogSource.includes('emit("acknowledge")'));
+});
+
+test("P48 return r1 proposal evidence remains intact after current-source recapture", () => {
+  const evidence = JSON.parse(read(`${historicalRoot}/evidence.json`));
+  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-RETURN-REVIEW-r1");
+  assert.equal(evidence.screenshots.length, 35);
+  for (const shot of evidence.screenshots)
+    assert.equal(hash(readFileSync(`${historicalRoot}/${shot.file}`)), shot.sha256);
 });
 
 test("P48 configuration-return copy preserves saved, partial, and conflict facts", () => {
@@ -83,7 +92,7 @@ test("P48 configuration-return CSS is isolated and keeps explicit recovery focus
 
 test("P48 configuration-return evidence binds acknowledgement, reread, recovery, and images", () => {
   const evidence = JSON.parse(read(`${root}/evidence.json`));
-  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-RETURN-REVIEW-r1");
+  assert.equal(evidence.kind, "P48-SOURCE-CONFIGURATION-RETURN-REVIEW-r4");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.productionChanged, false);
   assert.equal(evidence.deployed, false);
@@ -113,7 +122,7 @@ test("P48 configuration-return evidence binds acknowledgement, reread, recovery,
     assert.equal(value("capture state"), run.capture);
     assert.equal(value("return outcome"), run.outcome);
     assert.equal(value("final state"), run.final);
-    assert.equal(value("dialog closed before directory result"), 0);
+    assert.equal(value("configuration dialog closed before directory result"), 0);
     assert.equal(value("one source remains visible"), 1);
     assert.equal(value("global message suppressed"), 0);
     assert.equal(value("no horizontal overflow"), true);

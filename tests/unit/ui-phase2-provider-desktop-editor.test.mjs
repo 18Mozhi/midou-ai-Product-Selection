@@ -7,6 +7,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import postcss from "postcss";
 import { historicalProviderSummarySource } from "../../scripts/lib/ui-phase2-provider-summary-baseline.mjs";
+import { assertP46CapturedSources } from "./ui-phase2-p46-capture-source.mjs";
 
 const root = "output/playwright/p46-desktop-editor";
 const preview =
@@ -50,7 +51,7 @@ test("P46 actual route evidence binds current raw source, all fields and every f
     assert.equal(e.renderedRegistryHash, hash(read(registry)));
     assert.equal(e.observations.length, 345);
     assert.equal(e.screenshots.length, 75);
-    for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+    assertP46CapturedSources(e);
     assert.deepEqual(
       readdirSync(dir).sort(),
       [...e.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),
