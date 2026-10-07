@@ -4,16 +4,6 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { createServer as reservePort } from "node:net";
 import path from "node:path";
-import { createServer } from "vite";
-import { chromium } from "playwright";
-import { openPagePlugin, openPageSources } from "./lib/platform-open-page-preview.mjs";
-import { openReviewFixtures, openEnvelope, openFixtureFile } from "./lib/open-review-fixtures.mjs";
-import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
-import { openDetailPlugin, openDetailCss } from "./lib/open-detail-preview.mjs";
-import { verifyOpenDetails, openDetailCases } from "./lib/open-detail-verification.mjs";
-import { openReadPlugin, openReadCss } from "./lib/open-read-state-preview.mjs";
-import { verifyOpenReadStates } from "./lib/open-read-state-verification.mjs";
-import { verifyOpenActionResults } from "./lib/open-action-result-verification.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
@@ -31,6 +21,36 @@ assert.ok(
       /^r[1-9]\d*$/.test(args[1])),
   "Use no arguments, --details, --read-states, --action-results, --action-keyboard, or one --capture-review/--capture-details/--capture-read-states/--capture-action-results/--capture-action-keyboard rN",
 );
+const [
+  { createServer },
+  { chromium },
+  { openPagePlugin, openPageSources },
+  fixtures,
+  styles,
+  details,
+  detailVerification,
+  reads,
+  readVerification,
+  actionVerification,
+] = await Promise.all([
+  import("vite"),
+  import("playwright"),
+  import("./lib/platform-open-page-preview.mjs"),
+  import("./lib/open-review-fixtures.mjs"),
+  import("./lib/ui-imported-style-sources.mjs"),
+  import("./lib/open-detail-preview.mjs"),
+  import("./lib/open-detail-verification.mjs"),
+  import("./lib/open-read-state-preview.mjs"),
+  import("./lib/open-read-state-verification.mjs"),
+  import("./lib/open-action-result-verification.mjs"),
+]);
+const { openReviewFixtures, openEnvelope, openFixtureFile } = fixtures;
+const { includeImportedStyleSources } = styles;
+const { openDetailPlugin, openDetailCss } = details;
+const { verifyOpenDetails, openDetailCases } = detailVerification;
+const { openReadPlugin, openReadCss } = reads;
+const { verifyOpenReadStates } = readVerification;
+const { verifyOpenActionResults } = actionVerification;
 const detailsMode = ["--details", "--capture-details"].includes(args[0]);
 const readStatesMode = ["--read-states", "--capture-read-states"].includes(args[0]);
 const actionResultsMode = ["--action-results", "--capture-action-results"].includes(args[0]);

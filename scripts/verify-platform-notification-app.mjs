@@ -3,15 +3,6 @@ import { readFile, mkdir, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
 import path from "node:path";
-import ts from "typescript";
-import { createServer } from "vite";
-import { chromium, expect } from "@playwright/test";
-import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
-import { checkNotificationResponsive } from "./lib/platform-notification-responsive-checks.mjs";
-import {
-  notificationShellPlugin,
-  notificationShellSources,
-} from "./lib/platform-notification-shell-preview.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
@@ -22,6 +13,25 @@ const capture = args.includes("--capture-review");
 const shellPreview = args.includes("--shell-preview");
 const responsive = args.includes("--responsive");
 assert.ok(!responsive || shellPreview, "--responsive requires --shell-preview");
+const [
+  typescript,
+  { createServer },
+  { chromium, expect },
+  styles,
+  responsiveChecks,
+  shellPreviewModule,
+] = await Promise.all([
+  import("typescript"),
+  import("vite"),
+  import("@playwright/test"),
+  import("./lib/ui-imported-style-sources.mjs"),
+  import("./lib/platform-notification-responsive-checks.mjs"),
+  import("./lib/platform-notification-shell-preview.mjs"),
+]);
+const ts = typescript.default;
+const { includeImportedStyleSources } = styles;
+const { checkNotificationResponsive } = responsiveChecks;
+const { notificationShellPlugin, notificationShellSources } = shellPreviewModule;
 const output = path.resolve(
   responsive
     ? "output/playwright/p57-shell-responsive-r3"
