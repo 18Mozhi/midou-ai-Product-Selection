@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const base = "design-plans/ui-phase-2-2026-09-07/design/workspaces-restore-states-direction-c";
 const proof = JSON.parse(readFileSync(`${base}/evidence.json`, "utf8"));
@@ -45,7 +46,11 @@ test("P32 new state evidence preserves the exact prior approval without approvin
 
 test("P32 renderer, visual adapter and verifier are fingerprint-bound", () => {
   for (const [file, expected] of Object.entries(proof.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), expected, file);
+    assertCaptureSourceRevision(
+      file,
+      readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
+      expected,
+    );
   assert.ok(proof.sourceHashes[`${base}/index.html`]);
   assert.ok(proof.sourceHashes[`${base}/states.js`]);
   assert.ok(proof.sourceHashes["apps/web/src/components/AuditedReasonDialog.vue"]);
