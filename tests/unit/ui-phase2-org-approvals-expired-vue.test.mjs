@@ -28,6 +28,7 @@ import {
   expiredOutput,
   expiredVueDriver,
 } from "../../scripts/lib/ui-phase2-org-approvals-expired-driver.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -109,10 +110,14 @@ test("historical expired packet verifies source lineage, recovery matrix and key
   assert.equal(Object.keys(e.sourceHashes).length, 190);
   for (const [file, expected] of Object.entries(e.sourceHashes))
     assertP34EvidenceSourceHash(file, read(file), expected);
-  assert.equal(
-    e.transformedHashes[approvalsParentFile],
-    hash(beforeP34OwnerPath(approvalsParentFile, revised)),
+  const capturedParent = previewApprovalsExpired(
+    previewApprovalsPermission(
+      previewApprovalsParentFrame(
+        readCaptureSourceRevision(approvalsParentFile, e.sourceHashes[approvalsParentFile]),
+      ),
+    ),
   );
+  assert.equal(e.transformedHashes[approvalsParentFile], hash(capturedParent));
   const old = JSON.parse(read("output/playwright/p34-permission-vue-c-r1/evidence.json"));
   assert.deepEqual(e.scenarios, old.scenarios);
   assert.equal(e.scenarios.length, 56);

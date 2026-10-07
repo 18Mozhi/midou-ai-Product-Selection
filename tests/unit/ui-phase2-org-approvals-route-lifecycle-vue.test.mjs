@@ -10,6 +10,7 @@ import {
   routeLifecycleOutput,
   routeLifecycleVueDriver,
 } from "../../scripts/lib/ui-phase2-org-approvals-route-lifecycle-driver.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -77,7 +78,7 @@ test("route evidence binds24actual history/cache cases and old matrices", () => 
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 202);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assertCaptureSourceRevision(file, read(file), expected);
   const parent = "apps/web/src/components/OrganizationAdminCenter.vue",
     panel = "apps/web/src/components/OrganizationApprovalPanel.vue";
   assert.deepEqual(

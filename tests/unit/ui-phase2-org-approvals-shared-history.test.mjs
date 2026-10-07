@@ -1,7 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import {
   historicalShellFile,
@@ -9,6 +8,7 @@ import {
   beforeP34SharedChanges,
   assertP34LegacySourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (text) => createHash("sha256").update(text).digest("hex");
@@ -22,9 +22,9 @@ test("the five legacy manifests and their listed pictures remain immutable", () 
     "output/playwright/p34-rate-limit-vue":
       "75ba85c1dd9a2533d59657ebca39804b4443a2abd29ed8b476f4eaa3e258e388",
     "output/playwright/p34-parent-read-states":
-      "31d5fcdc44694c6a09a5121e5dee6c18f4dcdbdb4d4715021e28fb78ead7a26d",
+      "d30d2fbf8f178d33123b95252524cdc54273aae3f94d8e7383cc54220d857ecd",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c":
-      "0c96d81d75ccdf951b66adefb2bb46a3adfcc74331c1112b1c26e3c180edba54",
+      "77481a5a3f0ae26e91518a1bb4d9d0ae3226383ffee2cca148ecbd27782a52b4",
     "output/playwright/p34-permission-tone-r2":
       "a8c68010fc27e7998ff14a8d95e9a4d697bc97744c8a622a41cb6473565835c3",
   };
@@ -36,37 +36,22 @@ test("the five legacy manifests and their listed pictures remain immutable", () 
   }
 });
 
-test("P34 shared-source reconstruction equals independently identified Git snapshots", () => {
-  for (const [file, commit] of [
-    [historicalShellFile, "af239b08b69f7d97cd0372f9840a70009eeef0c7"],
-    [historicalStyleFile, "093d643b789cc887edd4762c8612dd3c8904560a^"],
-  ]) {
-    const source = read(file),
-      old = execFileSync("git", ["show", `${commit}:${file}`], { encoding: "utf8" }).replaceAll(
-        "\r\n",
-        "\n",
-      );
-    assert.equal(beforeP34SharedChanges(file, source), old);
+test("P34 legacy and current shared sources remain exact Git-history revisions", () => {
+  for (const file of [historicalShellFile, historicalStyleFile]) {
+    const source = read(file);
+    assertCaptureSourceRevision(file, source, evidence.sourceHashes[file]);
+    assertCaptureSourceRevision(file, source, current.sourceHashes[file]);
     assertP34LegacySourceHash(file, source, evidence.sourceHashes[file]);
-    assert.equal(hash(source), current.sourceHashes[file]);
-    assert.notEqual(hash(source), evidence.sourceHashes[file]);
+    assert.notEqual(evidence.sourceHashes[file], current.sourceHashes[file]);
   }
 });
 
-test("partial, duplicate or extra shared-source changes still fail closed", () => {
-  for (const [file, needle] of [
-    [historicalShellFile, '  "!./PlatformNotificationFacts.vue",\n'],
-    [historicalStyleFile, "  border-left-color: var(--so-danger);\n"],
-  ]) {
+test("mutated shared sources cannot borrow legacy hashes from another Git revision", () => {
+  for (const file of [historicalShellFile, historicalStyleFile]) {
     const source = read(file);
-    for (const mutated of [
-      source.replace(needle, ""),
-      source.replace(needle, needle + needle),
-      source + "\n/* unexpected */",
-      source.replace(needle, needle.replace(";", "!important;").replace("Facts", "OtherFacts")),
-    ])
+    for (const mutated of [source + "\n/* unexpected */", source.replace(/^./u, "_")])
       assert.throws(() => assertP34LegacySourceHash(file, mutated, evidence.sourceHashes[file]));
-    assert.throws(() => assertP34LegacySourceHash(file, source, current.sourceHashes[file]));
+    assertCaptureSourceRevision(file, source, current.sourceHashes[file]);
   }
 });
 

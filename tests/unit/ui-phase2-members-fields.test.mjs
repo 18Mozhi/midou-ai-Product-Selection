@@ -21,12 +21,13 @@ const controls = JSON.parse(
 );
 const sources = Object.fromEntries(dependencies.map((file) => [file, readFileSync(file, "utf8")]));
 const captureRevisions = new Map([
-  [dependencies[0], "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b"],
-  [dependencies[2], "4a6368ef1178908688cd6519c5cafafb25c1afcb"],
-  [dependencies[3], "4a6368ef1178908688cd6519c5cafafb25c1afcb"],
-  [dependencies[4], "a9b1495cca558b331d5de1983abc61b5e45657db"],
-  ["tests/e2e/m06-01-organization-admin.spec.ts", "ff46bfe9c620a422d95cab9689489b07fb6b95ea"],
-  ["scripts/lib/ui-phase2-members-design-data.mjs", "b72725feaacaa4523e2bb2cd7c0dc271b4fb4c9e"],
+  [dependencies[0], "f872f957c50d1fdf185d272ae4bebc2e6eea8efc"],
+  [dependencies[1], "ceead68d0da163f93abb0d618936989020a2f02c"],
+  [dependencies[2], "ed5d8be4a67b8934418074d55d7cd9ed8df8323e"],
+  [dependencies[3], "c8c1480e299f8e5c8cf43145dcdcf4ef7be32f0d"],
+  [dependencies[4], "b4dc7f4ee3f8d91f5ec2d07b4234df795537e679"],
+  ["tests/e2e/m06-01-organization-admin.spec.ts", "f872f957c50d1fdf185d272ae4bebc2e6eea8efc"],
+  ["scripts/lib/ui-phase2-members-design-data.mjs", "a0f943fa457e7ba59957e0af30ed87e33322ee20"],
 ]);
 const capturedSource = (file) => {
   const revision = captureRevisions.get(file);

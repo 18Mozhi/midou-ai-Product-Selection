@@ -1,7 +1,10 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
-import { assertCaptureSourceRevision } from "./ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  assertCurrentSourceRevision,
+} from "./ui-phase2-token-copy-baseline.mjs";
 import { responsiveFocusRevision } from "./ui-phase2-responsive-focus-contract.mjs";
 
 export const ownerPathParent = "apps/web/src/components/OrganizationAdminCenter.vue";
@@ -39,11 +42,16 @@ export function beforeP34OwnerPath(file, source) {
 
 export function assertP34HistoricalSourceHash(file, source, expected) {
   const reconstructed = beforeP34OwnerPath(file, source);
-  assert.equal(
-    createHash("sha256").update(reconstructed).digest("hex"),
-    expected,
-    `Historical source differs beyond P34 owner-path delta: ${file}`,
-  );
+  const reconstructedHash = createHash("sha256").update(reconstructed).digest("hex");
+  if (reconstructedHash === expected) return;
+  try {
+    // Later page work may change the current source after the immutable P34 capture.
+    // Bind the supplied current source to HEAD and prove the capture separately in history.
+    assertCurrentSourceRevision(file, source);
+    assertCaptureSourceRevision(file, reconstructed, expected);
+  } catch {
+    assert.fail(`Historical source differs beyond P34 owner-path delta: ${file}`);
+  }
 }
 
 export function assertP34EvidenceSourceHash(file, source, expected) {

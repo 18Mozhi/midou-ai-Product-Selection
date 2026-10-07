@@ -81,6 +81,14 @@ export function assertCaptureSourceRevision(
   );
 }
 
+export function assertCurrentSourceRevision(file, source) {
+  const head = execFileSync("git", ["show", `HEAD:${file}`], {
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "ignore"],
+  }).replaceAll("\r\n", "\n");
+  assert.equal(source.replaceAll("\r\n", "\n"), head, `current source differs from HEAD: ${file}`);
+}
+
 export function readCaptureSourceRevision(file, expectedHash, transform = (value) => value) {
   const key = `${file}:${expectedHash}`;
   if (captureSourceCache.has(key)) return captureSourceCache.get(key);

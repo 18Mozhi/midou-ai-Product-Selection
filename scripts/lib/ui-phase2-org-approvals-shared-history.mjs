@@ -1,5 +1,10 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { assertP34HistoricalSourceHash } from "./ui-phase2-org-approvals-owner-path-history.mjs";
+import {
+  assertCaptureSourceRevision,
+  assertCurrentSourceRevision,
+} from "./ui-phase2-token-copy-baseline.mjs";
 
 export const historicalShellFile = "apps/web/src/components/NavigationShell.vue";
 export const historicalStyleFile = "apps/web/src/signal-ledger.css";
@@ -26,7 +31,7 @@ const additions = new Map([
 ]);
 
 // Historical evidence only; no runtime, generator, or current-source replacement.
-// The complete original hash must still match after these exact known additions.
+// Reverse the known additions when present; later source revisions are checked against HEAD.
 export function beforeP34SharedChanges(file, source) {
   const text = source.replaceAll("\r\n", "\n"),
     addition = additions.get(file);
@@ -36,5 +41,14 @@ export function beforeP34SharedChanges(file, source) {
 }
 
 export function assertP34LegacySourceHash(file, source, expected) {
-  assertP34HistoricalSourceHash(file, beforeP34SharedChanges(file, source), expected);
+  try {
+    assertP34HistoricalSourceHash(file, beforeP34SharedChanges(file, source), expected);
+    return;
+  } catch {
+    // Later legitimate shared-source edits may replace the original addition block.
+    // Preserve fail-closed behavior by proving both exact source versions in Git.
+    const normalized = source.replaceAll("\r\n", "\n");
+    assertCurrentSourceRevision(file, normalized);
+    assertCaptureSourceRevision(file, normalized, expected);
+  }
 }

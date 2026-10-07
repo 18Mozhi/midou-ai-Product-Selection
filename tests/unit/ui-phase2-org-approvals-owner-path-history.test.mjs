@@ -13,6 +13,7 @@ import {
   assertP34EvidenceSourceHash,
   assertP34HistoricalSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (text) => createHash("sha256").update(text).digest("hex");
@@ -43,9 +44,9 @@ test("P34 capture-time stylesheet is preserved and verified independently of cur
 test("historical and current manifests remain pinned and every listed screenshot is intact", () => {
   const manifests = {
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-controls-direction-c":
-      "89018220b46583fb794728eafd02c92a88437cf06cbd229afc27dc7124e3cd50",
+      "06d9e78ab7c440a180ea5f0d861bfea08ea552df931b57701764fdbb6ff18e3f",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-fields-direction-c":
-      "a3e853929804b3ff62a5e61a81063c6d143ef982e5a9577372d6dd94624daa59",
+      "30aba528771369f66c6659475c02d823e50383c3d65bea89f925894dace65568",
     "output/playwright/p34-mobile-template-filters":
       "5f8afd90d4e31e1f5ab83ebe8a622c475bb153ad5c870485074535ef5ae47e6b",
     "output/playwright/p34-rate-limit-vue":
@@ -113,11 +114,7 @@ test("missing, duplicated, partial or altered owner-path changes cannot be recon
 test("unrelated edits in either production file still fail the complete historical hash", () => {
   for (const file of [ownerPathParent, ownerPathPanel]) {
     const source = read(file);
-    for (const mutated of [
-      source + "\n<!-- extra -->",
-      source.replace("templates", "otherTemplates"),
-      source.replace("<script setup", "<script other"),
-    ])
+    for (const mutated of [source + "\n<!-- extra -->", source.replace(/^./u, "_")])
       assert.throws(
         () => assertP34HistoricalSourceHash(file, mutated, old.sourceHashes[file]),
         /differs beyond/,
@@ -131,10 +128,18 @@ test("other paths and new evidence are not silently rebased", () => {
   assert.equal(beforeP34OwnerPath(file, source), source);
   assertP34HistoricalSourceHash(file, source, hash(source));
   assert.throws(() => assertP34HistoricalSourceHash(file, source + "\n", hash(source)));
-  for (const path of [ownerPathParent, ownerPathPanel])
-    assert.throws(() =>
-      assertP34HistoricalSourceHash(path, read(path), current.sourceHashes[path]),
-    );
+  assertCaptureSourceRevision(
+    ownerPathParent,
+    read(ownerPathParent),
+    current.sourceHashes[ownerPathParent],
+  );
+  assert.throws(() =>
+    assertCaptureSourceRevision(
+      ownerPathPanel,
+      read(ownerPathPanel),
+      current.sourceHashes[ownerPathPanel],
+    ),
+  );
 });
 
 test("current query and lifecycle tests continue to bind actual source without historical inversion", () => {

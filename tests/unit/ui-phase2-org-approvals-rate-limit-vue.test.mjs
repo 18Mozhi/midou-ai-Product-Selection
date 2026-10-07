@@ -6,6 +6,7 @@ import { readFileSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { undoAuditPageDelta } from "../../scripts/lib/ui-phase2-audit-page-delta.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import {
   rateLimitBaseline,
   rateLimitParent,
@@ -16,16 +17,20 @@ import {
 const original = (file) =>
   execFileSync("git", ["show", `${rateLimitBaseline}:${file}`], { encoding: "utf8" });
 const before = Object.fromEntries([rateLimitParent, rateLimitCard].map((f) => [f, original(f)]));
+const output = "output/playwright/p34-rate-limit-vue";
+const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
+const capturedSources = Object.fromEntries(
+  [rateLimitParent, rateLimitCard].map((file) => [
+    file,
+    readCaptureSourceRevision(file, e.sourceHashes[file]),
+  ]),
+);
 const after = Object.fromEntries(
   [rateLimitParent, rateLimitCard].map((f) => [
     f,
-    f === rateLimitParent
-      ? undoAuditPageDelta(beforeP34OwnerPath(f, readFileSync(f, "utf8")))
-      : readFileSync(f, "utf8"),
+    f === rateLimitParent ? undoAuditPageDelta(capturedSources[f]) : capturedSources[f],
   ]),
 );
-const output = "output/playwright/p34-rate-limit-vue";
-const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
 const hash = (data) => createHash("sha256").update(data).digest("hex");
 test("P34 historical rate-limit delta excludes subsequent audit and owner-path fixes", () => {
   assert.doesNotThrow(() => assertRateLimitPresentationDelta(before, after));
