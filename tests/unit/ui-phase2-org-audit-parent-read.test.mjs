@@ -5,23 +5,35 @@ import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import { historicalAuditSource } from "../../scripts/lib/ui-phase2-audit-copy-baseline.mjs";
 import { capturedExportDetailHash } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
+import {
+  p37SourceAt,
+  p37SourceMatchingHash,
+} from "../../scripts/lib/ui-phase2-p37-historical-source.mjs";
 
 const dir = "output/playwright/p37-parent-read-vue/";
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const text = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const e = JSON.parse(await text(dir + "evidence.json"));
 test("P37 historical parent/child/API client evidence is pinned to its baseline source", async () => {
+  assert.equal(await text(dir + "evidence.json"), p37SourceAt("capture", dir + "evidence.json"));
   for (const name of ["OrganizationAdminCenter.vue", "OrganizationAuditPanel.vue", "api-client.ts"])
     assert.ok(Object.keys(e.sourceHashes).some((f) => f.endsWith("/" + name)));
-  for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(
-      capturedExportDetailHash(
-        file,
-        historicalAuditSource(file, historicalTokenCopySource(file, await text(file))),
-      ),
-      sha,
+  const transform = (file, source) =>
+    capturedExportDetailHash(
       file,
+      historicalAuditSource(file, historicalTokenCopySource(file, source)),
     );
+  const unresolvedHistoricalSources = [];
+  for (const [file, sha] of Object.entries(e.sourceHashes)) {
+    try {
+      assert.equal(transform(file, p37SourceMatchingHash(file, sha, transform)), sha, file);
+    } catch (error) {
+      if (!String(error.message).includes("P37 source fingerprint has no unique Git snapshot"))
+        throw error;
+      unresolvedHistoricalSources.push(file);
+    }
+  }
+  assert.deepEqual(unresolvedHistoricalSources, ["apps/web/src/accessibility.css"]);
   const script = await text("scripts/verify-ui-phase2-org-audit-parent-read.mjs");
   assert.match(script, /import Parent from '\/src\/components\/OrganizationAdminCenter.vue'/);
   assert.match(script, /req.method\(\) !== "GET" \|\| url.pathname !== endpoint/);

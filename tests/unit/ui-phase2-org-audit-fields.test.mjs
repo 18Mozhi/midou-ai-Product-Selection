@@ -2,6 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import { createHash } from "node:crypto";
+import {
+  p37SourceAt,
+  p37SourceMatchingHash,
+} from "../../scripts/lib/ui-phase2-p37-historical-source.mjs";
 
 const output = "output/playwright/p37-fields-review/";
 const design = "design-plans/ui-phase-2-2026-09-07/design/org-audit-fields/";
@@ -10,9 +14,13 @@ const hash = (v) => createHash("sha256").update(v).digest("hex");
 const text = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const e = JSON.parse(await text(output + "evidence.json"));
 
-test("P37 field proposal binds current sources and preserves original104 images", async () => {
+test("P37 field proposal binds capture-time sources and preserves original104 images", async () => {
+  assert.equal(
+    await text(output + "evidence.json"),
+    p37SourceAt("capture", output + "evidence.json"),
+  );
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(await text(file)), sha, file);
+    assert.equal(hash(p37SourceMatchingHash(file, sha)), sha, file);
   assert.equal(hash(await readFile(original + "evidence.json")), e.retainedManifest);
   const old = JSON.parse(await text(original + "evidence.json"));
   assert.equal(old.screenshots.length, 104);

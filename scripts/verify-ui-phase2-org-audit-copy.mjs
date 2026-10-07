@@ -9,9 +9,17 @@ import { buildOrgAuditDesignData } from "./lib/ui-phase2-org-audit-design-data.m
 
 const capture = process.argv.includes("--capture"),
   smoke = process.argv.includes("--smoke");
-assert.ok(process.argv.slice(2).every((v) => ["--capture", "--smoke"].includes(v)));
+const revisionArg = process.argv.find((v) => v.startsWith("--revision=")),
+  revision = revisionArg?.slice("--revision=".length) ?? "r1";
+assert.ok(
+  process.argv.slice(2).every((v) => ["--capture", "--smoke"].includes(v) || v === revisionArg),
+);
 assert.ok(!(capture && smoke));
-const output = "output/playwright/p37-copy-ownership-vue";
+assert.match(revision, /^r[1-9][0-9]*$/);
+const output =
+  revision === "r1"
+    ? "output/playwright/p37-copy-ownership-vue"
+    : `output/playwright/p37-copy-ownership-vue-${revision}`;
 const data = await buildOrgAuditDesignData(process.cwd());
 const endpoint = `/api/v1/organizations/${data.events[0].organization_id}/audit-events`;
 const hash = (v) => createHash("sha256").update(v).digest("hex");
@@ -299,7 +307,7 @@ if (!smoke) {
     ),
   );
   const result = {
-    kind: "P37-CURRENT-COPY-OWNERSHIP-VUE",
+    kind: `P37-CURRENT-COPY-OWNERSHIP-VUE-${revision}`,
     scope:
       "Unmodified current SFCs mounted through actual Parent and Child in isolated Router/KeepAlive; synthetic audit GET and clipboard promises. Copy-feedback repair only, not full C implementation/backend/RBAC/OS clipboard/production acceptance.",
     sourceHashes,

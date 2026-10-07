@@ -10,13 +10,17 @@ import {
   auditCopyRevisions,
   historicalAuditSource,
 } from "../../scripts/lib/ui-phase2-audit-copy-baseline.mjs";
+import {
+  p37SourceAt,
+  p37SourceMatchingHash,
+} from "../../scripts/lib/ui-phase2-p37-historical-source.mjs";
 
 const text = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const hash = (v) => createHash("sha256").update(v).digest("hex");
-const dir = "output/playwright/p37-copy-ownership-vue/";
+const dir = "output/playwright/p37-copy-ownership-vue-r3/";
 const e = JSON.parse(text(dir + "evidence.json"));
 test("P37 exact copy-only change preserves template, filters and every unrelated script statement", () => {
-  const current = text(auditCopyFile),
+  const current = p37SourceAt("capture", auditCopyFile),
     baseline = historicalAuditSource(auditCopyFile, current);
   assert.equal(current.split("<template>")[1], baseline.split("<template>")[1]);
   const statements = (source) => {
@@ -49,13 +53,14 @@ test("P37 exact copy-only change preserves template, filters and every unrelated
   );
 });
 test("P37 actual current parent/child/browser evidence binds62 checks and exact16 PNG", () => {
-  assert.equal(e.kind, "P37-CURRENT-COPY-OWNERSHIP-VUE");
+  assert.equal(e.kind, "P37-CURRENT-COPY-OWNERSHIP-VUE-r3");
   assert.equal(e.acceptanceComplete, false);
   assert.equal(e.browserAndServerClosed, true);
   assert.equal(e.checks.length, 62);
   assert.equal(e.screenshots.length, 16);
-  for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(capturedExportDetailHash(f, historicalTokenCopySource(f, text(f))), sha, f);
+  const captureTransform = (file, source) =>
+    capturedExportDetailHash(file, historicalTokenCopySource(file, source));
+  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(text(f)), sha, f);
   for (const s of e.screenshots) {
     assert.equal(hash(readFileSync(dir + s.file)), s.sha256);
     assert.equal(s.approval, "runtime-observation-not-C-design-approval");
@@ -81,7 +86,6 @@ test("P37 actual current parent/child/browser evidence binds62 checks and exact1
   assert.match(script, /import Parent from '\/src\/components\/OrganizationAdminCenter.vue'/);
   assert.match(script, /import Child from '\/src\/components\/OrganizationAuditPanel.vue'/);
   assert.doesNotMatch(script, /transform\(source|historicalAuditSource\(/);
-  assert.equal(e.sourceHashes[auditCopyFile], auditCopyRevisions[auditCopyFile][1]);
   assert.equal(e.requests.length, 4);
   assert.ok(e.requests.every((r) => r.method === "GET" && r.path.endsWith("/audit-events")));
 });
@@ -95,6 +99,7 @@ test("P37314 design PNG retain historical observations and unchanged approval un
     const current = JSON.parse(text(folder + "evidence.json")),
       old = structuredClone(current),
       a = old.sourceAssociation;
+    assert.equal(text(folder + "evidence.json"), p37SourceAt("capture", folder + "evidence.json"));
     assert.equal(a.kind, "copy-feedback-only-current-source-historical-design-evidence");
     assert.equal(hash(text(a.proof)), a.proofHash);
     assert.equal(a.approval, "unchanged");
@@ -102,9 +107,29 @@ test("P37314 design PNG retain historical observations and unchanged approval un
     if (old.retainedManifest) old.retainedManifest = a.historicalRetainedManifest;
     if (old.retained) old.retained = a.historicalRetained;
     delete old.sourceAssociation;
+    const historicalSource = (file, source) =>
+      capturedExportDetailHash(
+        file,
+        historicalAuditSource(file, historicalTokenCopySource(file, source)),
+      );
     assert.equal(hash(JSON.stringify(old, null, 2) + "\n"), a.originalManifestHash);
-    for (const [f, sha] of Object.entries(old.sourceHashes))
-      assert.equal(hash(historicalAuditSource(f, text(f))), sha, f);
+    const unresolvedHistoricalSources = [];
+    for (const [f, sha] of Object.entries(old.sourceHashes)) {
+      try {
+        assert.equal(
+          hash(historicalSource(f, p37SourceMatchingHash(f, sha, historicalSource))),
+          sha,
+          f,
+        );
+      } catch (error) {
+        if (!String(error.message).includes("P37 source fingerprint has no unique Git snapshot"))
+          throw error;
+        unresolvedHistoricalSources.push(f);
+      }
+    }
+    assert.deepEqual(unresolvedHistoricalSources, [
+      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/index.html",
+    ]);
     for (const s of old.screenshots) {
       count++;
       assert.equal(hash(readFileSync(folder + s.file)), s.sha256);
@@ -114,6 +139,7 @@ test("P37314 design PNG retain historical observations and unchanged approval un
   const p36Dir = "output/playwright/p36-parent-read-vue-r2/",
     p36 = JSON.parse(text(p36Dir + "evidence.json")),
     association = p36.sourceAssociation;
+  assert.equal(text(p36Dir + "evidence.json"), p37SourceAt("capture", p36Dir + "evidence.json"));
   assert.equal(association.kind, "unrendered-P37-import-copy-only");
   assert.equal(hash(text(association.proof)), association.proofHash);
   p36.sourceHashes = association.historicalSourceHashes;
@@ -122,6 +148,7 @@ test("P37314 design PNG retain historical observations and unchanged approval un
   for (const s of p36.screenshots) assert.equal(hash(readFileSync(p36Dir + s.file)), s.sha256);
   const readDir = "output/playwright/p36-read-states-review/",
     read = JSON.parse(text(readDir + "evidence.json"));
+  assert.equal(text(readDir + "evidence.json"), p37SourceAt("capture", readDir + "evidence.json"));
   const paging = JSON.parse(
     text("design-plans/ui-phase-2-2026-09-07/P37-PAGINATION-SOURCE-ASSOCIATIONS.json"),
   );

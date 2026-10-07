@@ -4,6 +4,7 @@ import path from "node:path";
 import vm from "node:vm";
 import ts from "typescript";
 import { historicalAuditSource } from "./ui-phase2-audit-copy-baseline.mjs";
+import { p37SourceAt } from "./ui-phase2-p37-historical-source.mjs";
 const plain = (v) => JSON.parse(JSON.stringify(v));
 export async function buildOrgAuditDesignData(repo) {
   const read = (p) => readFile(path.join(repo, p), "utf8"),
@@ -62,7 +63,7 @@ export async function buildOrgAuditDesignData(repo) {
     child = parse(
       historicalAuditSource(
         "apps/web/src/components/OrganizationAuditPanel.vue",
-        await read("apps/web/src/components/OrganizationAuditPanel.vue"),
+        p37SourceAt("capture", "apps/web/src/components/OrganizationAuditPanel.vue"),
       )
         .split(/<script setup[^>]*>/)[1]
         .split("</script>")[0],
