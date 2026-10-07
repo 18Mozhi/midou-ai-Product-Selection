@@ -45,8 +45,12 @@ const taskIds = new Set([
   ids.conflict,
   ids.outsideTask,
 ]);
-const now = new Date();
-let redisReady = false;
+// Keep probe rows outside the running BaoTa worker's wall-clock queue window.
+// The probe injects this logical clock, so it can still exercise claim/recovery
+// deterministically while the production worker cannot consume these temp rows.
+const now = new Date(Date.now() + 60 * 60 * 1000);
+let redisReady = false,
+  stage = "bootstrap";
 
 async function ensureMigration(path) {
   const sql = await readFile(path, "utf8");
@@ -147,6 +151,7 @@ async function seedTask(
   );
 }
 async function runOne(id, executor, coordinator) {
+  stage = "process_collection_task";
   const repository = new MySqlCollectionTaskWorkerRepository(pool, () => 0, id);
   const result = await processCollectionTaskOnce({
     repository,
@@ -311,12 +316,14 @@ try {
       new Date(now.getTime() - 121000),
     ],
   );
+  stage = "expired_lease_recovery";
   const recovered = await new MySqlCollectionTaskWorkerRepository(
     pool,
     () => 0,
     ids.expired,
   ).recoverExpired(now);
   if (recovered !== 1) throw new Error("expired lease recovery failed");
+  stage = "coordination_conflict";
   await seedTask(ids.conflict, "critical");
   result = await runOne(
     ids.conflict,
@@ -329,6 +336,7 @@ try {
     workspace: ids.outsideWorkspace,
     actor: ids.outsideActor,
   });
+  stage = "manual_replay";
   const service = new CollectionTaskService(new MySqlCollectionTaskRepository(pool), () => now),
     context = { actorId: ids.actor, idempotencyKey: "replay-live-1", requestId, traceId };
   const replayed = await service.replay(ids.dead, { reason: "实时验收已确认依赖恢复" }, context);
@@ -396,6 +404,7 @@ try {
     JSON.stringify({
       status: "blocked",
       code: error?.code ?? "collection_task_live_failed",
+      stage,
       message: error instanceof Error ? error.message : "unknown",
       request_id: requestId,
       trace_id: traceId,
