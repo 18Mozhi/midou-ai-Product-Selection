@@ -6,7 +6,11 @@ import { execFileSync } from "node:child_process";
 import {
   ownerPathParent,
   ownerPathPanel,
+  ownerPathCss,
+  ownerPathCssSnapshot,
+  ownerPathCssHash,
   beforeP34OwnerPath,
+  assertP34EvidenceSourceHash,
   assertP34HistoricalSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 
@@ -26,6 +30,15 @@ const ownerPathHashes = {
 };
 const old = JSON.parse(read("output/playwright/p34-read-order-vue-c-r1/evidence.json"));
 const current = JSON.parse(read("output/playwright/p34-route-lifecycle-vue-c-r1/evidence.json"));
+
+test("P34 capture-time stylesheet is preserved and verified independently of current CSS", () => {
+  const snapshot = read(ownerPathCssSnapshot),
+    currentCss = read(ownerPathCss);
+  assert.equal(hash(snapshot), ownerPathCssHash);
+  assert.notEqual(hash(currentCss), ownerPathCssHash);
+  assertP34EvidenceSourceHash(ownerPathCss, currentCss, ownerPathCssHash);
+  assert.throws(() => assertP34EvidenceSourceHash(ownerPathCss, currentCss, "0".repeat(64)));
+});
 
 test("historical and current manifests remain pinned and every listed screenshot is intact", () => {
   const manifests = {
