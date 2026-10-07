@@ -51,12 +51,14 @@ export function teamsHistoricalCapture(name) {
     );
     assert.equal(hash(manifest), manifests[name], "Pinned historical P33 manifest changed");
     const evidence = JSON.parse(manifest);
-    const paths = Object.keys(evidence.sourceHashes);
+    const folder = `${base}/${name}`;
+    const imagePaths = evidence.screenshots.map((shot) => `${folder}/${shot.file}`);
+    const paths = [...Object.keys(evidence.sourceHashes), ...imagePaths];
     assert.ok(paths.length > 0 && paths.every((path) => !/[\r\n]/.test(path)));
     const blobs = parseProviderCaptureBlobs(
       execFileSync("git", ["cat-file", "--batch"], {
         input: paths.map((path) => `${revision}:${path}\n`).join(""),
-        maxBuffer: 16 * 1024 * 1024,
+        maxBuffer: 128 * 1024 * 1024,
       }),
       paths,
     );
@@ -66,15 +68,26 @@ export function teamsHistoricalCapture(name) {
       assert.equal(hash(source), sha, `Original P33 source mismatch: ${path}`);
       sources.set(path, source);
     }
-    cache.set(name, { manifest, sources });
+    const images = new Map();
+    for (const shot of evidence.screenshots) {
+      const file = `${folder}/${shot.file}`;
+      const image = Buffer.from(blobs.get(file));
+      assert.equal(hash(image), shot.sha256, `Original P33 image mismatch: ${shot.file}`);
+      images.set(shot.file, image);
+    }
+    cache.set(name, { manifest, sources, images });
   }
-  const { manifest, sources } = cache.get(name);
+  const { manifest, sources, images } = cache.get(name);
   return {
     revision,
     manifest,
     source(path) {
       assert.ok(sources.has(path), `Source absent from P33 capture: ${path}`);
       return sources.get(path);
+    },
+    image(file) {
+      assert.ok(images.has(file), `Image absent from P33 capture: ${file}`);
+      return Buffer.from(images.get(file));
     },
   };
 }

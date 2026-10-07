@@ -17,29 +17,42 @@ import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-or
 const read = (file) => readFileSync(file, "utf8");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 
-test("P33 three immutable proposal packets retain all 55 source bindings and 574 images", () => {
+test("P33 immutable historical packets stay in Git while current packets bind their own sources and images", () => {
   let sources = 0,
-    images = 0;
+    images = 0,
+    currentSources = 0,
+    currentImages = 0;
   for (const name of packageNames) {
     const capture = teamsHistoricalCapture(name);
-    const evidence = JSON.parse(capture.manifest);
-    sources += Object.keys(evidence.sourceHashes).length;
-    for (const [file, sha] of Object.entries(evidence.sourceHashes))
+    const historical = JSON.parse(capture.manifest);
+    sources += Object.keys(historical.sourceHashes).length;
+    for (const [file, sha] of Object.entries(historical.sourceHashes))
       assert.equal(hash(capture.source(file)), sha, file);
-    for (const shot of evidence.screenshots) {
-      assert.equal(hash(readFileSync(`${base}/design/${name}/${shot.file}`)), shot.sha256);
+    for (const shot of historical.screenshots) {
+      assert.equal(hash(capture.image(shot.file)), shot.sha256);
       images++;
     }
+    const current = JSON.parse(read(`${base}/design/${name}/evidence.json`));
+    for (const [file, sha] of Object.entries(current.sourceHashes)) {
+      assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+      currentSources++;
+    }
+    for (const shot of current.screenshots) {
+      assert.equal(hash(readFileSync(`${base}/design/${name}/${shot.file}`)), shot.sha256);
+      currentImages++;
+    }
     if (name === "teams-direction-c") {
-      assert.equal(Object.hasOwn(evidence, "approval"), false);
+      assert.equal(Object.hasOwn(historical, "approval"), false);
       assert.match(
-        evidence.boundary,
+        historical.boundary,
         /not mounted Vue, real API\/MySQL\/permissions\/audit or production proof/,
       );
-    } else assert.equal(evidence.approval, "pending-user-review");
+    } else assert.equal(historical.approval, "pending-user-review");
   }
   assert.equal(sources, 55);
   assert.equal(images, 574);
+  assert.equal(currentSources, 55);
+  assert.equal(currentImages, 602);
 });
 
 test("P33 current-source boundary checks every dependency, not only the changed shared dialog", () => {
@@ -82,5 +95,8 @@ test("P33 builder still rejects current sources paired with historical proposal 
   const archived = Object.fromEntries(
     dependencies.map((file) => [file, teamsHistoricalCapture(packageNames[0]).source(file)]),
   );
-  assert.equal(buildTeamsReview(archived, packages).approval, "pending-user-review");
+  assert.throws(
+    () => buildTeamsReview(archived, packages),
+    /missing representative control create-read-traces for OG-T-CREATE-READ-TRACE/,
+  );
 });

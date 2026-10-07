@@ -378,6 +378,10 @@ export function buildTeamsReview(sources, packages) {
       };
       if (representative) {
         const c = controls.controls.find((c) => c.id === representative);
+        assert.ok(
+          c,
+          `missing representative control ${representative} for ${actionId}; recapture a matching controls packet`,
+        );
         assert.equal(c.actionId, actionId);
         action.visualStateReferences = {};
         for (const state of c.states) {

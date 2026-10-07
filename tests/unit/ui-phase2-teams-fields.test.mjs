@@ -84,8 +84,11 @@ test("P33 49 field states and nine combinations bind exactly 116 dual viewport i
 test("P33 field evidence rejects source and image drift without modifying approved P32 image", () => {
   const capture = teamsHistoricalCapture("teams-fields-direction-c");
   assertTeamsCurrentSources("teams-fields-direction-c");
-  for (const [file, sha] of Object.entries(e.sourceHashes))
+  const historical = JSON.parse(capture.manifest);
+  for (const [file, sha] of Object.entries(historical.sourceHashes))
     assert.equal(hash(capture.source(file)), sha, file);
+  for (const [file, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
   assert.equal(

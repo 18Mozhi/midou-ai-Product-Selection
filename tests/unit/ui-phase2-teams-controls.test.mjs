@@ -14,9 +14,8 @@ const root = "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction
 const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 test("P33 individual controls cover every actual child candidate once without counting variants as new source actions", () => {
-  const capture = teamsHistoricalCapture("teams-controls-direction-c"),
-    candidates = scanSource(capture.source(e.sourceFile), e.sourceFile).candidates;
-  assert.equal(candidates.length, 18);
+  const candidates = scanSource(readFileSync(e.sourceFile, "utf8"), e.sourceFile).candidates;
+  assert.equal(candidates.length, 20);
   const signatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
   assert.deepEqual(e.sourceSignatures, signatures);
   assert.deepEqual(e.controls.flatMap((c) => c.signatures).sort(), signatures);
@@ -34,14 +33,14 @@ test("P33 individual controls cover every actual child candidate once without co
     }
 });
 test("P33 all control variants and reason compositions have exact dual-viewport image bindings", () => {
-  assert.equal(e.controls.length, 43);
+  assert.equal(e.controls.length, 46);
   assert.equal(
     e.controls.reduce((n, c) => n + c.states.length, 0),
-    179,
+    192,
   );
-  assert.equal(e.screenshots.length, 362);
-  assert.equal(e.checks.length, 358);
-  assert.equal(e.interactions.length, 84);
+  assert.equal(e.screenshots.length, 388);
+  assert.equal(e.checks.length, 384);
+  assert.equal(e.interactions.length, 90);
   const expected = e.controls.flatMap((c) =>
     c.states.flatMap((s) => [1440, 390].map((w) => `${c.id}-${s}/${w}`)),
   );
@@ -101,8 +100,11 @@ test("P33 absent-member and archived-team states do not invent disabled rules or
 test("P33 evidence rejects drift in source dependencies and all permanent screenshots", () => {
   const capture = teamsHistoricalCapture("teams-controls-direction-c");
   assertTeamsCurrentSources("teams-controls-direction-c");
-  for (const [file, sha] of Object.entries(e.sourceHashes))
+  const historical = JSON.parse(capture.manifest);
+  for (const [file, sha] of Object.entries(historical.sourceHashes))
     assert.equal(hash(capture.source(file)), sha, file);
+  for (const [file, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
 });
