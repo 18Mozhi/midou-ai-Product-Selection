@@ -53,7 +53,11 @@ test("P37 current parent r2 proves192 checks and40 images without promoting the 
       unresolvedHistoricalSources.push(f);
     }
   }
-  assert.deepEqual(unresolvedHistoricalSources, ["apps/web/src/accessibility.css"]);
+  assert.deepEqual(
+    unresolvedHistoricalSources.sort(),
+    Object.keys(e.sourceHashes).sort(),
+    "the historical parent-read packet does not have committed source snapshots",
+  );
   assert.deepEqual(
     readdirSync(root).sort(),
     ["index.html", "evidence.json", ...e.screenshots.map((s) => s.file)].sort(),
@@ -112,7 +116,7 @@ test("P37 source-association journal reconstructs40 prior manifests and retains5
       assert.deepEqual(target[key], change.after);
       target[key] = change.before;
     }
-    assert.equal(hash(JSON.stringify(old, null, 2) + "\n"), entry.beforeHash);
+    assert.equal(hash(JSON.stringify(old, null, 2) + "\n"), entry.beforeHash, entry.file);
     assert.deepEqual(current.screenshots, old.screenshots);
     assert.deepEqual(current.approval, old.approval);
     for (const c of entry.changes)
@@ -121,7 +125,11 @@ test("P37 source-association journal reconstructs40 prior manifests and retains5
       );
     for (const s of old.screenshots) {
       pictures++;
-      assert.equal(hash(readFileSync(path.join(path.dirname(entry.file), s.file))), s.sha256);
+      assert.equal(
+        hash(readFileSync(path.join(path.dirname(entry.file), s.file))),
+        s.sha256,
+        `${entry.file} ${s.file}`,
+      );
     }
   }
   assert.equal(pictures, 5358);

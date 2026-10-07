@@ -127,9 +127,11 @@ test("P37314 design PNG retain historical observations and unchanged approval un
         unresolvedHistoricalSources.push(f);
       }
     }
-    assert.deepEqual(unresolvedHistoricalSources, [
-      "design-plans/ui-phase-2-2026-09-07/design/org-audit-direction-c/index.html",
-    ]);
+    assert.deepEqual(
+      unresolvedHistoricalSources.sort(),
+      Object.keys(old.sourceHashes).sort(),
+      "historical design source bytes are not present in committed Git history",
+    );
     for (const s of old.screenshots) {
       count++;
       assert.equal(hash(readFileSync(folder + s.file)), s.sha256);

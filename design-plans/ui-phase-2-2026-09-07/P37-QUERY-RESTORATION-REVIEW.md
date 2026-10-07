@@ -17,7 +17,7 @@
 
 - 本次 `node scripts/run-playwright-projects.mjs tests/e2e/m06-01-organization-audit-history.spec.ts` 在桌面 Chromium 与 390px mobile 各通过 1/1；它验证当前应用路由的查询恢复、筛选恢复与缓存返回，不覆盖真实后端、RBAC 或生产环境。
 - 新建的 copy 归属实际 Vue r3 包记录 62 项检查、16 张图、4 个只读请求；包内源码哈希与采集时工作树一致，仍标记 `acceptanceComplete: false`，不等于整页或生产验收。
-- 旧 P37 证据清单引用的多份离线方向稿、Vue/API 源文件（例如 `index.html`、`audit.css/js/data.js`、`apps/web/src/accessibility.css`）无法从当前可达 Git 提交历史唯一还原。旧 PNG、清单哈希与既有审核值仍逐项校验；不可恢复源码只作为明确历史缺口，不伪造 Git 来源，也不把旧图说成当前页面证明。
+- 旧 P37 证据清单引用的多份离线方向稿、Vue/API 源文件（例如 `index.html`、`audit.css/js/data.js`、`apps/web/src/accessibility.css`）无法从当前可达 Git 提交历史唯一还原。对固定 P37 清单中的 5,358 张历史 PNG 逐项复核，发现 336 张当前文件字节与清单 SHA-256 不一致；未改写这些原图、清单或审核值，也不把失配图当作已验证证据。此项完整性问题仍阻断发布。
 - 尝试生成新的 P37 父子页 r3 隔离截图时，隔离宿主报告父页 `ready`，但未挂载审计子组件，因此没有接受或保留 r3 图。该失败仅限截图隔离宿主；上面的正式路由 E2E 已通过。生产发布门禁仍须单独通过。
 
 ## 验证

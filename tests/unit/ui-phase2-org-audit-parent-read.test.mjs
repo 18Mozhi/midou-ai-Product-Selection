@@ -14,7 +14,7 @@ const dir = "output/playwright/p37-parent-read-vue/";
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const text = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const e = JSON.parse(await text(dir + "evidence.json"));
-test("P37 historical parent/child/API client evidence is pinned to its baseline source", async () => {
+test("P37 historical parent/child evidence marks missing source snapshots without relabeling it current", async () => {
   assert.equal(await text(dir + "evidence.json"), p37SourceAt("capture", dir + "evidence.json"));
   for (const name of ["OrganizationAdminCenter.vue", "OrganizationAuditPanel.vue", "api-client.ts"])
     assert.ok(Object.keys(e.sourceHashes).some((f) => f.endsWith("/" + name)));
@@ -33,7 +33,11 @@ test("P37 historical parent/child/API client evidence is pinned to its baseline 
       unresolvedHistoricalSources.push(file);
     }
   }
-  assert.deepEqual(unresolvedHistoricalSources, ["apps/web/src/accessibility.css"]);
+  assert.deepEqual(
+    unresolvedHistoricalSources.sort(),
+    Object.keys(e.sourceHashes).sort(),
+    "the historical parent-read packet does not have committed source snapshots",
+  );
   const script = await text("scripts/verify-ui-phase2-org-audit-parent-read.mjs");
   assert.match(script, /import Parent from '\/src\/components\/OrganizationAdminCenter.vue'/);
   assert.match(script, /req.method\(\) !== "GET" \|\| url.pathname !== endpoint/);
