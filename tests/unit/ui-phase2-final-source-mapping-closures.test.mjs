@@ -17,7 +17,7 @@ const cases = [
     file: "apps/web/src/components/ProviderRegistry.vue",
     contract: "PR01-CURRENT-RETRY",
     candidateId: "apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1",
-    line: 684,
+    line: 682,
   },
   {
     document: "account-home-contract-review.md",

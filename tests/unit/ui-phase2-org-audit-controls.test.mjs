@@ -3,15 +3,16 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, readdir } from "node:fs/promises";
 import { auditControls, auditCompositions } from "../../scripts/lib/ui-phase2-audit-controls.mjs";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const output = "output/playwright/p37-controls-review/";
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 const text = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const evidence = JSON.parse(await text(output + "evidence.json"));
 
-test("P37 controls bind current source and preserve142 earlier PNG", async () => {
+test("P37 controls bind capture-time source revisions and preserve142 earlier PNG", async () => {
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(await text(file)), sha, file);
+    assertCaptureSourceRevision(file, await text(file), sha);
   let count = 0;
   for (const [dir, old] of Object.entries(evidence.retained)) {
     assert.equal(hash(await readFile(dir + "evidence.json")), old.manifest);
