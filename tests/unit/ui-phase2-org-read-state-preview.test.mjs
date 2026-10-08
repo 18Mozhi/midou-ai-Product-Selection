@@ -96,10 +96,10 @@ test("organization unavailable CSS is review scoped and header facts require rea
   assert.ok(orgReadStateReplacements[7][1].includes("{{ requestId }}"));
 });
 test("organization read-state packet proves current images, redaction and original retry counts", async () => {
-  const root = "output/playwright/org-read-state-vue-c-r9";
+  const root = "output/playwright/org-read-state-vue-c-r10";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-  assert.equal(evidence.kind, "ORG-READ-STATE-VUE-C-r9");
+  assert.equal(evidence.kind, "ORG-READ-STATE-VUE-C-r10");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.userReview, "pending");
   assert.equal(evidence.visualApproval.decision, "user-approved-remaining-pages-auto");

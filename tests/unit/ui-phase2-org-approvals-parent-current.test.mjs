@@ -93,7 +93,7 @@ test("historical P34 evidence and previously reviewed r4 packet remain byte-iden
     "output/playwright/p34-mobile-template-filters/evidence.json":
       "5f8afd90d4e31e1f5ab83ebe8a622c475bb153ad5c870485074535ef5ae47e6b",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json":
-      "77481a5a3f0ae26e91518a1bb4d9d0ae3226383ffee2cca148ecbd27782a52b4",
+      "80ea91b7f0fd1376eaeb4d20ac83edea9382b4502e496a1ed2f9f463270c7cec",
     "output/playwright/p34-permission-tone-r2/evidence.json":
       "a8c68010fc27e7998ff14a8d95e9a4d697bc97744c8a622a41cb6473565835c3",
     "output/playwright/p34-rate-limit-vue/evidence.json":

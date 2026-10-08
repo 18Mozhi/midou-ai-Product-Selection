@@ -111,12 +111,12 @@ test("recheck focus only follows its own focused button and always invokes the o
 });
 
 test("access capture covers three shells and five HTTP classes with current source and image provenance", async () => {
-  const root = "output/playwright/shell-access-vue-c-r1";
+  const root = "output/playwright/shell-access-vue-c-r2";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-  assert.equal(evidence.kind, "SHELL-ACCESS-VUE-C-r1");
+  assert.equal(evidence.kind, "SHELL-ACCESS-VUE-C-r2");
   assert.equal(evidence.reviewOnly, true);
-  assert.equal(evidence.userReview, "pending");
+  assert.equal(evidence.userReview, "auto-approved-by-user");
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.runs.length, 60);
   assert.equal(
@@ -137,7 +137,9 @@ test("access capture covers three shells and five HTTP classes with current sour
     expected.sort(),
   );
   assert.equal(evidence.screenshots.length, 84);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 163);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 110);
+  assert.match(evidence.sourceCommit, /^[a-f0-9]{40}$/u);
+  assert.equal(evidence.sourceSha, hash(JSON.stringify(evidence.sourceHashes)));
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
   for (const shot of evidence.screenshots) {

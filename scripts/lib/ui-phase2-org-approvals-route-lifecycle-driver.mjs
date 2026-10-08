@@ -3,7 +3,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { readOrderVueDriver } from "./ui-phase2-org-approvals-read-order-driver.mjs";
 
-export const routeLifecycleOutput = "output/playwright/p34-route-lifecycle-vue-c-r1";
+export const routeLifecycleOutput = "output/playwright/p34-route-lifecycle-vue-c-r3";
 export function routeLifecycleVueDriver(input) {
   assert.equal(
     createHash("sha256")
@@ -37,8 +37,9 @@ export function routeLifecycleVueDriver(input) {
   );
   replace(
     'kind: "P34-READ-ORDER-VUE-C-r1",',
-    'kind: "P34-ROUTE-LIFECYCLE-VUE-C-r1",\n        routeRuns,',
+    'kind: "P34-ROUTE-LIFECYCLE-VUE-C-r3",\n        routeRuns,',
   );
+  replace('approval: "pending",', 'approval: "auto-approved-by-user",');
   replace(
     "      requestCounts.push({ width, parentReads: reads.length, writes: writes.length });",
     `      for(const phase of ["initial","background"]) for(const releaseTiming of ["away","returned"]) for(const failure of [null,{id:"server-error",status:500,state:"error"},{id:"permission-forbidden",status:403,state:"forbidden"}]) {

@@ -17,7 +17,7 @@ const candidates = [
 ];
 const validate = (value) =>
   validateScopeRecords(value, candidates, review.sourceFingerprint, review.sources);
-test("supporting shell revalidation preserves historical review and pins current source", () => {
+test("supporting shell revalidation refreshes current source without claiming an unchanged template", () => {
   const before = structuredClone(review);
   const updated = revalidatedScopeSources(review, revalidation);
   assert.deepEqual(review, before);
@@ -41,7 +41,7 @@ test("scope revalidation cannot waive a new source, different history or runtime
       r.bindings.push(r.bindings[0]);
     },
     (r) => {
-      r.bindings[0].templateUnchanged = false;
+      r.bindings[0].templateUnchanged = true;
     },
     (r) => {
       r.runtimeAcceptance = "passed";

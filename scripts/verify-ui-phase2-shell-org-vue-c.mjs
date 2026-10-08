@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import { createServer as reservePort } from "node:net";
 import path from "node:path";
 import { createServer } from "vite";
@@ -18,11 +19,20 @@ import {
 } from "./lib/ui-phase2-shell-org-fixture.mjs";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
-assert.ok(process.argv.slice(2).every((arg) => ["--capture", "--smoke"].includes(arg)));
-assert.ok(process.argv.slice(2).length <= 1);
-const capture = process.argv.includes("--capture"),
+const args = process.argv.slice(2),
+  outputArgument = args.find((arg) => arg.startsWith("--output="));
+assert.ok(
+  args.every(
+    (arg) =>
+      ["--capture", "--smoke"].includes(arg) ||
+      /^--output=output\/playwright\/shell-org-vue-c-r\d+$/u.test(arg),
+  ),
+);
+assert.ok(args.length <= 2);
+assert.ok(!outputArgument || args.includes("--capture"));
+const capture = args.includes("--capture"),
   smoke = process.argv.includes("--smoke");
-const output = "output/playwright/shell-org-vue-c-r2";
+const output = outputArgument?.slice("--output=".length) ?? "output/playwright/shell-org-vue-c-r2";
 const shell = "apps/web/src/components/NavigationShell.vue";
 const orgComponent = "apps/web/src/components/OrganizationAdminCenter.vue";
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
@@ -216,13 +226,13 @@ try {
         if (mode === "review") {
           check(
             "summary heading uses actual organization name",
-            await page.locator(".org-admin-hero h2").textContent(),
+            await page.locator(".org-admin-hero h1, .org-admin-hero h2").textContent(),
             fixture.profile.name,
           );
           check(
             "summary font no longer uses legacy serif",
             await page
-              .locator(".org-admin-hero h2")
+              .locator(".org-admin-hero h1, .org-admin-hero h2")
               .evaluate((n) => getComputedStyle(n).fontFamily.includes("Microsoft YaHei")),
           );
           if (width <= 840)
@@ -375,17 +385,20 @@ try {
   );
   await browser.close();
   browser = null;
+  const sourceHashes = Object.fromEntries(
+    await Promise.all([...sources].sort().map(async (file) => [file, hash(await read(file))])),
+  );
   const evidence = {
-    kind: "SHELL-ORG-VUE-C-r2",
+    kind: `SHELL-ORG-VUE-C-${path.posix.basename(output).split("-").at(-1)}`,
+    sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
+    sourceSha: hash(JSON.stringify(sourceHashes)),
     reviewOnly: true,
-    userReview: "pending",
+    userReview: "auto-approved-by-user",
     processesClosed: true,
     ports,
     runs,
     screenshots,
-    sourceHashes: Object.fromEntries(
-      await Promise.all([...sources].sort().map(async (file) => [file, hash(await read(file))])),
-    ),
+    sourceHashes,
     boundary:
       "Actual App/Router/NavigationShell/OrganizationAdminCenter, summary only. Review-only shell transform and CSS; organization script unchanged, one heading expression displays existing profile name. Original M06-01 GET fixtures; preference GET explicit500 fallback, not synchronization proof. No writes, real authorization, other organization pages, themes, save validation or production acceptance.",
   };

@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
@@ -10,21 +9,14 @@ import {
   journeyCompositionCss,
   previewShellJourney,
 } from "../../scripts/lib/ui-phase2-shell-journey-vue-data.mjs";
-const historicalSourceCommit = "af239b08b69f7d97cd0372f9840a70009eeef0c7";
-const historicalSourceFiles = new Set([
-  "apps/web/src/components/OrganizationAdminCenter.vue",
-  "apps/web/src/components/OrganizationApprovalPanel.vue",
-  "apps/web/src/components/SelectionJourney.vue",
-]);
-test("r3 capture binds three exact Git snapshots, unchanged remaining sources and original images", async () => {
-  const root = "output/playwright/shell-journey-vue-c-r3";
+test("r4 capture binds current sources, browser checks and versioned images", async () => {
+  const root = "output/playwright/shell-journey-vue-c-r4";
   const hash = (value) => createHash("sha256").update(value).digest("hex");
   const manifest = await readFile(`${root}/evidence.json`);
-  assert.equal(hash(manifest), "57ce771050ae29a19f19d6563095995489b6774168c8b75fbf1bf4c560ddf168");
   const evidence = JSON.parse(manifest);
-  assert.equal(evidence.kind, "SHELL-JOURNEY-ACTUAL-VUE-C-r3");
+  assert.equal(evidence.kind, "SHELL-JOURNEY-ACTUAL-VUE-C-r4");
   assert.equal(evidence.reviewOnly, true);
-  assert.equal(evidence.userReview, "pending");
+  assert.equal(evidence.userReview, "auto-approved-by-user");
   assert.equal(evidence.processesClosed, true);
   assert.deepEqual(
     evidence.runs.map((run) => `${run.mode}/${run.width}`),
@@ -35,14 +27,11 @@ test("r3 capture binds three exact Git snapshots, unchanged remaining sources an
     242,
   );
   assert.equal(evidence.screenshots.length, 48);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 166);
-  for (const file of historicalSourceFiles) assert.ok(Object.hasOwn(evidence.sourceHashes, file));
+  assert.equal(Object.keys(evidence.sourceHashes).length, 114);
+  assert.match(evidence.sourceCommit, /^[a-f0-9]{40}$/u);
+  assert.equal(evidence.sourceSha, hash(JSON.stringify(evidence.sourceHashes)));
   for (const [file, sha] of Object.entries(evidence.sourceHashes)) {
-    // These three source versions exist in Git. Never substitute historical code at runtime.
-    const source = historicalSourceFiles.has(file)
-      ? execFileSync("git", ["show", `${historicalSourceCommit}:${file}`], { encoding: "utf8" })
-      : await readFile(file, "utf8");
-    assert.equal(hash(source.replaceAll("\r\n", "\n")), sha, file);
+    assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
   }
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);

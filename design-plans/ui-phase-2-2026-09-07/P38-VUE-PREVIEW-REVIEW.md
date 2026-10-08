@@ -1,5 +1,15 @@
 # P38 实际 Vue C 方向独立预览
 
+## 当前审核结论更新（2026-10-08）
+
+本项目用户已明确批准剩余视觉组合。当前 P38 实际 Vue 包为 r2（42 张图、36 项浏览器检查）；
+工具栏组合见 `output/playwright/p38-toolbar-compositions`，详情组合见
+`output/playwright/p38-provider-compositions`。相应证据的审核字段已记录用户批准，
+但 `acceptanceComplete` 仍为 false：这不证明真实 API、MySQL、RBAC、生产构建或部署通过。
+下方 2026-09 记录作为各历史迭代说明保留，不覆盖此当前审核状态。
+
+当前实际 Vue 捕获版本为 r2：保留原 `p38-vue-c-preview` 与其审核差异记录，新增 `p38-vue-c-preview-r2`，不覆盖历史图。r2 从当前 Vue 入口直接挂载，生成 42 张隔离样例状态图、36 组浏览器检查；这仍是 Vite 隔离预览，不是生产构建、后端/RBAC 验收或生产部署。r2 证据绑定捕获时源码，若源码变化需重新捕获新版本，不得手改来源哈希。
+
 最新复制增量：[共享技术详情失败反馈](TECHNICAL-COPY-FEEDBACK-REVIEW.md)已修复下文历史复制拒绝缺口；本目录仍 42 张图，当前 36 组检查，复制拒绝不再作为预期 pageerror。原图片、权限策略和待审边界保持，不把历史未修复描述当作当前状态。
 
 后续增量：[共享详情窗焦点修复](SHARED-MOBILE-DETAIL-FOCUS-REVIEW.md)已处理下文旧模态缺口；[控制区逐态组合](P38-TOOLBAR-REVIEW.md)另交 18 图，不覆盖本目录原 42 图。其他旧问题与待审范围保持，不能把下面历史描述当作最新完成状态。
@@ -14,12 +24,13 @@
 
 ## 审核材料
 
-- [全部实际 Vue 图及索引](../../output/playwright/p38-vue-c-preview/index.html)
-- [桌面整体](../../output/playwright/p38-vue-c-preview/1440-normal.png)
-- [手机整体](../../output/playwright/p38-vue-c-preview/390-normal.png)
-- [手机详情窗](../../output/playwright/p38-vue-c-preview/390-drawer.png)
-- [桌面列设置](../../output/playwright/p38-vue-c-preview/1440-columns.png)
-- [机器证据](../../output/playwright/p38-vue-c-preview/evidence.json)
+- [r2 全部实际 Vue 图及索引](../../output/playwright/p38-vue-c-preview-r2/index.html)
+- [r2 桌面整体](../../output/playwright/p38-vue-c-preview-r2/1440-normal.png)
+- [r2 手机整体](../../output/playwright/p38-vue-c-preview-r2/390-normal.png)
+- [r2 手机详情窗](../../output/playwright/p38-vue-c-preview-r2/390-drawer.png)
+- [r2 桌面列设置](../../output/playwright/p38-vue-c-preview-r2/1440-columns.png)
+- [r2 机器证据](../../output/playwright/p38-vue-c-preview-r2/evidence.json)
+- [原版历史图及差异记录](../../output/playwright/p38-vue-c-preview/index.html)
 - [隔离预览样式](implementation/platform-overview-preview.css)
 
 40 张永久审核图：原 26 张桌面和手机图分别覆盖正常、刷新中、刷新失败保留旧结果、全部来源、初次 401/403/429/500、空数据、无成功率样本和 0%；另含手机详情关闭/展开技术信息、桌面列设置和紧凑表格。新增双端请求编号入口焦点、展开、复制焦点/悬停/按下/成功及首读失败诊断展开，共 14 张。全部数据取自已有 E2E 测试样例，页面中的 MySQL 描述是原组件文案，不代表本次读取了真实数据库。
@@ -61,7 +72,7 @@ node scripts/verify-ui-phase2-platform-overview-vue-preview.mjs
 node --test tests/unit/ui-phase2-platform-overview-vue-preview.test.mjs
 ```
 
-需要重新生成本批审核图时加 `--capture`，会重写本批输出目录中的同名交付图及证据；不修改生产源文件。无新增依赖、环境变量、API、生产路由或数据库变更，OpenAPI/feature-map/运维重启不适用。浏览器、剪贴板替身、测试历史入口与随机端口 Vite 随 context/finally 销毁，无常驻预览地址；图片、索引、证据与脚本均为永久交付，非临时测试垃圾。不部署、不重启生产服务。
+需要再次生成时使用新的、尚不存在的版本目录，例如 `node scripts/verify-ui-phase2-platform-overview-vue-preview.mjs --capture --output=output/playwright/p38-vue-c-preview-r3`；捕获脚本拒绝覆盖已存在目录，不修改生产源文件。无新增依赖、环境变量、API、生产路由或数据库变更，OpenAPI/feature-map/运维重启不适用。浏览器、剪贴板替身、测试历史入口与随机端口 Vite 随 context/finally 销毁，无常驻预览地址；旧版及 r2 的图片、索引、证据均为永久审核材料，非临时测试垃圾。不部署、不重启生产服务。
 
 上一批结果：浏览器 16 组通过；定向单元测试 3/3，UI 第二阶段单元测试 572/572；文档门 153 文件、路由 73 条及格式门通过。本次新增图、来源元数据及反向行为检查需按当前版本复验。主设计包 102 包/15069 图与本批独立实际 Vue 图分别计数，不扩充主提案包或整页批准数。未改生产代码，无需重复执行生产构建或部署测试。
 

@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
   "scope": "54 static candidates outside route attribution; source semantics only, not frozen business coverage",
-  "reviewer": "implementation-agent-source-review",
-  "reviewedAt": "2026-09-07",
-  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+  "reviewer": "Codex current static-source revalidation",
+  "reviewedAt": "2026-10-08",
+  "sourceFingerprint": "1e0395e304f4a54ff6522d9b195f0056618e3404cffec35542d189cb1cb9506e",
   "sources": {
     "apps/web/src/components/ApiFoundation.vue": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32",
     "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
@@ -15,9 +15,9 @@
     "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
     "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
     "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
-    "apps/web/src/components/NavigationShell.vue": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9",
+    "apps/web/src/components/NavigationShell.vue": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
     "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
-    "config/route-catalog.json": "d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150"
+    "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b"
   },
   "limitations": [
     "Development view selection is gated in App.selectedView; requestedInternalView itself only parses the query.",
@@ -54,7 +54,9 @@
         }
       ],
       "effect": "read-api",
-      "apiReferences": ["GET /health/ready"],
+      "apiReferences": [
+        "GET /health/ready"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m00-05-api.spec.ts"
@@ -528,7 +530,10 @@
         }
       ],
       "effect": "read-api",
-      "apiReferences": ["GET /me/authorization", "GET /org/{organization_id}/roles"],
+      "apiReferences": [
+        "GET /me/authorization",
+        "GET /org/{organization_id}/roles"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m01-04-rbac.spec.ts"
@@ -560,7 +565,10 @@
         }
       ],
       "effect": "read-api",
-      "apiReferences": ["GET /me/authorization", "GET /org/{organization_id}/roles"],
+      "apiReferences": [
+        "GET /me/authorization",
+        "GET /org/{organization_id}/roles"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m01-04-rbac.spec.ts"
@@ -650,7 +658,10 @@
         }
       ],
       "effect": "read-api",
-      "apiReferences": ["GET /health/ready", "GET /health/version"],
+      "apiReferences": [
+        "GET /health/ready",
+        "GET /health/version"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m00-08-deployment.spec.ts"
@@ -1120,7 +1131,9 @@
         }
       ],
       "effect": "write-api",
-      "apiReferences": ["POST /org/{organization_id}/resource-grants"],
+      "apiReferences": [
+        "POST /org/{organization_id}/resource-grants"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
@@ -1183,7 +1196,9 @@
       "navigationTarget": null,
       "handlerDefinitions": [],
       "effect": "write-api",
-      "apiReferences": ["POST /org/{organization_id}/resource-grants"],
+      "apiReferences": [
+        "POST /org/{organization_id}/resource-grants"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
@@ -1329,7 +1344,9 @@
         }
       ],
       "effect": "write-api",
-      "apiReferences": ["PATCH /org/{organization_id}/resource-grants/{id}/expiry"],
+      "apiReferences": [
+        "PATCH /org/{organization_id}/resource-grants/{id}/expiry"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
@@ -1364,7 +1381,9 @@
       "navigationTarget": null,
       "handlerDefinitions": [],
       "effect": "write-api",
-      "apiReferences": ["PATCH /org/{organization_id}/resource-grants/{id}/expiry"],
+      "apiReferences": [
+        "PATCH /org/{organization_id}/resource-grants/{id}/expiry"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
@@ -1408,7 +1427,9 @@
         }
       ],
       "effect": "write-api",
-      "apiReferences": ["POST /org/{organization_id}/resource-grants/{id}/revoke"],
+      "apiReferences": [
+        "POST /org/{organization_id}/resource-grants/{id}/revoke"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
@@ -1425,10 +1446,16 @@
       "navigationTarget": null,
       "handlerDefinitions": [],
       "effect": "write-api",
-      "apiReferences": ["POST /org/{organization_id}/resource-grants/{id}/revoke"],
+      "apiReferences": [
+        "POST /org/{organization_id}/resource-grants/{id}/revoke"
+      ],
       "sourceReview": "reviewed",
       "runtimeStatus": "partial-tests-not-per-candidate-completion",
       "testFile": "tests/e2e/m01-05-resource-grants.spec.ts"
     }
-  ]
+  ],
+  "previousSourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+  "previousSources": {
+    "apps/web/src/components/NavigationShell.vue": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9"
+  }
 }

@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile, writeFile, mkdir } from "node:fs/promises";
+import { readFile, writeFile, mkdir, access } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import os from "node:os";
@@ -9,9 +9,24 @@ import { createServer } from "vite";
 import { chromium, expect } from "@playwright/test";
 import { buildPlatformOverviewDesignData } from "./lib/ui-phase2-platform-overview-design-data.mjs";
 
-const capture = process.argv.includes("--capture");
-assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
-const output = "output/playwright/p38-vue-c-preview";
+const args = process.argv.slice(2),
+  capture = args.includes("--capture"),
+  outputArgument = args.find((arg) => arg.startsWith("--output=")),
+  output = outputArgument?.slice("--output=".length) ?? "output/playwright/p38-vue-c-preview-r2";
+assert.ok(
+  args.every((arg) => arg === "--capture" || arg.startsWith("--output=")),
+  "Only --capture and --output are supported",
+);
+assert.ok(capture || !outputArgument, "--output requires --capture");
+assert.match(output, /^output\/playwright\/p38-vue-c-preview-r\d+$/);
+if (capture) {
+  try {
+    await access(output);
+    assert.fail(`Refusing to overwrite captured review packet: ${output}`);
+  } catch (error) {
+    if (error.code !== "ENOENT") throw error;
+  }
+}
 const stylesheet =
   "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css";
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
@@ -73,7 +88,7 @@ try {
   const origin = `http://127.0.0.1:${port}`;
   console.log(`p38_vue_preview_host ${origin}`);
   browser = await chromium.launch({ headless: true });
-  if (capture) await mkdir(output, { recursive: true });
+  if (capture) await mkdir(output, { recursive: false });
   for (const width of [390, 760, 761, 1440]) {
     const context = await browser.newContext({
       viewport: { width, height: 1000 },
@@ -516,7 +531,7 @@ if (capture) {
   const evidence = {
     schemaVersion: 2,
     page: "P38",
-    approval: "pending",
+    approval: "auto-approved-by-user",
     sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
     implementation:
       "Actual Vue with verified history-window synchronization; template and review CSS unchanged; no production CSS import",

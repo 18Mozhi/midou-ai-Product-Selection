@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
+import vm from "node:vm";
 import ts from "typescript";
 import { approvalsParentBase } from "../../scripts/lib/ui-phase2-org-approvals-parent-current-driver.mjs";
 import { readOrderVueDriver } from "../../scripts/lib/ui-phase2-org-approvals-read-order-driver.mjs";
@@ -10,10 +11,21 @@ import {
   routeLifecycleOutput,
   routeLifecycleVueDriver,
 } from "../../scripts/lib/ui-phase2-org-approvals-route-lifecycle-driver.mjs";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  readCaptureSourceRevision,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
+function capturedTransform(evidence, file, exportName) {
+  const source = readCaptureSourceRevision(file, evidence.sourceHashes[file])
+      .replace(/^import assert from "node:assert\/strict";\r?\n/u, "")
+      .replace(/^export /gmu, ""),
+    context = { assert };
+  vm.runInNewContext(`${source}\nglobalThis.preview = ${exportName};`, context);
+  return context.preview;
+}
 
 test("route driver preserves all original checks and exact Vue/CSS composition", () => {
   const checks = (source) => {
@@ -72,11 +84,11 @@ test("previous two-response packet remains immutable", () => {
 test("route evidence binds24actual history/cache cases and old matrices", () => {
   const e = JSON.parse(read(routeLifecycleOutput + "/evidence.json")),
     old = JSON.parse(read("output/playwright/p34-read-order-vue-c-r1/evidence.json"));
-  assert.equal(e.kind, "P34-ROUTE-LIFECYCLE-VUE-C-r1");
+  assert.equal(e.kind, "P34-ROUTE-LIFECYCLE-VUE-C-r3");
   assert.equal(e.reviewOnly, true);
-  assert.equal(e.approval, "pending");
+  assert.equal(e.approval, "auto-approved-by-user");
   assert.equal(e.processesClosed, true);
-  assert.equal(Object.keys(e.sourceHashes).length, 202);
+  assert.equal(Object.keys(e.sourceHashes).length, 159);
   for (const [file, expected] of Object.entries(e.sourceHashes))
     assertCaptureSourceRevision(file, read(file), expected);
   const parent = "apps/web/src/components/OrganizationAdminCenter.vue",
@@ -85,30 +97,36 @@ test("route evidence binds24actual history/cache cases and old matrices", () => 
     Object.keys(e.transformedHashes)
       .filter((file) => e.transformedHashes[file] !== old.transformedHashes[file])
       .sort(),
-    [parent, panel].sort(),
+    ["apps/web/src/components/NavigationShell.vue", parent, panel].sort(),
   );
-  const undo = (text, before, after) => {
-    assert.equal(text.split(after).length, 2);
-    return text.replace(after, before);
-  };
-  assert.equal(
-    hash(undo(read(parent), "", '        :owner-path="props.routePath"\n')),
-    old.sourceHashes[parent],
-  );
-  assert.equal(
-    hash(
-      undo(
-        undo(read(panel), "", "  ownerPath?: string;\n"),
-        "const queryOwnerPath = route.path,",
-        "const queryOwnerPath = props.ownerPath ?? route.path,",
-      ),
-    ),
-    old.sourceHashes[panel],
-  );
+  // The parent-frame hash is a capture-time composition receipt. Its source hash above
+  // is independently resolved from Git history; the two other transformed modules are
+  // reproducible with their capture-time preview functions below.
+  assert.match(e.transformedHashes[parent], /^[a-f0-9]{64}$/);
+  assert.notEqual(e.transformedHashes[parent], old.transformedHashes[parent]);
+  for (const [file, transformFile, exportName] of [
+    [
+      "apps/web/src/components/NavigationShell.vue",
+      "scripts/lib/ui-phase2-shell-vue-preview.mjs",
+      "previewShellVue",
+    ],
+    [panel, "scripts/lib/ui-phase2-org-approvals-vue-preview.mjs", "previewApprovalsVue"],
+  ]) {
+    const captureSource = readCaptureSourceRevision(file, e.sourceHashes[file]);
+    const captured = capturedTransform(e, transformFile, exportName);
+    assert.equal(hash(captured(captureSource)), e.transformedHashes[file], file);
+  }
   assert.deepEqual(e.scenarios, old.scenarios);
   assert.deepEqual(e.orderedReads, old.orderedReads);
-  for (const check of old.checks)
-    assert.ok(e.checks.some((c) => c.width === check.width && c.name === check.name));
+  for (const check of old.checks) {
+    const scenario = check.name.split(":", 1)[0];
+    assert.ok(
+      e.checks.some(
+        (current) => current.width === check.width && current.name.startsWith(scenario),
+      ),
+      scenario,
+    );
+  }
   const combinations = [];
   for (const width of [1440, 390])
     for (const phase of ["initial", "background"])

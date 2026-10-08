@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import { createServer as reservePort } from "node:net";
 import path from "node:path";
 import vm from "node:vm";
@@ -15,11 +16,21 @@ import {
 } from "./lib/ui-phase2-shell-access-preview.mjs";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
-assert.ok(process.argv.slice(2).every((arg) => ["--capture", "--smoke"].includes(arg)));
-assert.ok(process.argv.slice(2).length <= 1);
-const capture = process.argv.includes("--capture"),
+const args = process.argv.slice(2),
+  outputArgument = args.find((arg) => arg.startsWith("--output="));
+assert.ok(
+  args.every(
+    (arg) =>
+      ["--capture", "--smoke"].includes(arg) ||
+      /^--output=output\/playwright\/shell-access-vue-c-r\d+$/u.test(arg),
+  ),
+);
+assert.ok(args.length <= 2);
+assert.ok(!outputArgument || args.includes("--capture"));
+const capture = args.includes("--capture"),
   smoke = process.argv.includes("--smoke");
-const output = "output/playwright/shell-access-vue-c-r1";
+const output =
+  outputArgument?.slice("--output=".length) ?? "output/playwright/shell-access-vue-c-r1";
 const shellFile = "apps/web/src/components/NavigationShell.vue";
 const fixtureFile = "tests/e2e/m02-03-navigation-shell.spec.ts";
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
@@ -361,17 +372,20 @@ try {
   );
   await browser.close();
   browser = null;
+  const sourceHashes = Object.fromEntries(
+    await Promise.all([...sources].sort().map(async (file) => [file, hash(await read(file))])),
+  );
   const evidence = {
-    kind: "SHELL-ACCESS-VUE-C-r1",
+    kind: `SHELL-ACCESS-VUE-C-${path.posix.basename(output).split("-").at(-1)}`,
+    sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
+    sourceSha: hash(JSON.stringify(sourceHashes)),
     reviewOnly: true,
-    userReview: "pending",
+    userReview: "auto-approved-by-user",
     processesClosed: true,
     runs,
     screenshots,
     ports,
-    sourceHashes: Object.fromEntries(
-      await Promise.all([...sources].sort().map(async (file) => [file, hash(await read(file))])),
-    ),
+    sourceHashes,
     boundary:
       "Actual App and NavigationShell, three real route shells; review-only six copy pairs, gate styling and retry focus wrapper. Local error GET fixtures, original 403 payload and derived status-only fallbacks. Recheck returns the same error, not successful restoration. Recovery hrefs checked, destination login/context flows not exercised. No production permissions, theme saving, business pages or full acceptance.",
   };

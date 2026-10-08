@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "approval": "pending",
+  "approval": "auto-approved-by-user",
   "sourceCommit": "3023a0300d265ee27a9a932a5e29a244e6d1ea17",
   "scope": "Actual Vue toolbar with fixture GET and scoped review CSS; not native popup, full page, real RBAC/API, MySQL or production acceptance",
   "checks": [

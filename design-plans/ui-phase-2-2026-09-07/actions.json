@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "f06c86ae1cc022101b7cdd9fb795da32738748e407834870568cb5f9a2678776",
+  "sourceFingerprint": "1e0395e304f4a54ff6522d9b195f0056618e3404cffec35542d189cb1cb9506e",
   "status": "discovery-not-behavior-coverage",
   "candidates": [
     {
@@ -2001,10 +2001,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 529,
+      "line": 531,
       "sourceRange": {
-        "start": 17044,
-        "end": 17156
+        "start": 17110,
+        "end": 17222
       },
       "label": "管理模板",
       "attributes": {
@@ -2027,7 +2027,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#fe72f1f58d04daa7.1",
       "signature": "fe72f1f58d04daa7",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2106,10 +2106,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 532,
+      "line": 534,
       "sourceRange": {
-        "start": 17165,
-        "end": 17240
+        "start": 17231,
+        "end": 17306
       },
       "label": "＋ 发起审批",
       "attributes": {
@@ -2131,7 +2131,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e11c8bef75450e78.1",
       "signature": "e11c8bef75450e78",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2210,10 +2210,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 533,
+      "line": 535,
       "sourceRange": {
-        "start": 17249,
-        "end": 17309
+        "start": 17315,
+        "end": 17375
       },
       "label": "配置第一个模板",
       "attributes": {
@@ -2235,7 +2235,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#21acc635baa945ea.1",
       "signature": "21acc635baa945ea",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2314,10 +2314,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 540,
+      "line": 542,
       "sourceRange": {
-        "start": 17521,
-        "end": 17544
+        "start": 17587,
+        "end": 17610
       },
       "label": "技术详情",
       "attributes": {},
@@ -2334,7 +2334,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.1",
       "signature": "1c008f867673db60",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2411,10 +2411,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 587,
+      "line": 589,
       "sourceRange": {
-        "start": 18867,
-        "end": 18904
+        "start": 18933,
+        "end": 18970
       },
       "label": "刷新最新状态",
       "attributes": {
@@ -2431,7 +2431,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#fa9213ee10c4bdaa.1",
       "signature": "fa9213ee10c4bdaa",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "load",
@@ -2517,10 +2517,10 @@
       "kind": "event-binding",
       "tag": "ApprovalQueuePanel",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 589,
+      "line": 591,
       "sourceRange": {
-        "start": 18924,
-        "end": 19353
+        "start": 18990,
+        "end": 19419
       },
       "label": "",
       "attributes": {
@@ -2554,7 +2554,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#8b14c8822fa2158e.1",
       "signature": "8b14c8822fa2158e",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "open",
@@ -2650,10 +2650,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 610,
+      "line": 612,
       "sourceRange": {
-        "start": 19579,
-        "end": 19645
+        "start": 19645,
+        "end": 19711
       },
       "label": "关闭提示",
       "attributes": {
@@ -2671,7 +2671,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#59336a98bd70e13c.1",
       "signature": "59336a98bd70e13c",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -2750,10 +2750,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 613,
+      "line": 615,
       "sourceRange": {
-        "start": 19747,
-        "end": 19816
+        "start": 19813,
+        "end": 19882
       },
       "label": "上一页",
       "attributes": {
@@ -2771,7 +2771,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c4a35037858480fb.1",
       "signature": "c4a35037858480fb",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "setPage",
@@ -2857,10 +2857,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 615,
+      "line": 617,
       "sourceRange": {
-        "start": 19893,
-        "end": 19970
+        "start": 19959,
+        "end": 20036
       },
       "label": "下一页",
       "attributes": {
@@ -2878,7 +2878,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a0fa8a0a8fe3a4f1.1",
       "signature": "a0fa8a0a8fe3a4f1",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "setPage",
@@ -2964,10 +2964,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 617,
+      "line": 619,
       "sourceRange": {
-        "start": 19986,
-        "end": 30639
+        "start": 20052,
+        "end": 30705
       },
       "label": "× {{ selected.template_name }} / 模板 v {{ selected.approval_template_version ?? \"—\" }} {{ selected.title }} 查看 {{ selected.decision_context.resource.label }} → 返回通知中心 影响范围 {{ resourceText(selected.resource_type) }} · {{ selected.title }} 当前节点 {{ selected.current_node_name || \"流程已结束\" }} 判断依据 证据完整度 {{ selected.decision_context.evidence.percent }} % {{ selected.decision_context?.evidence.note || \"按任务事实审批\" }} 证据完整度 {{ selected.decision_context.evidence.percent }} % 不适用 审批模板版本 {{ selected.decision_context.rule_versions.approval_template }} {{ selected.decision_context.snapshot_status === \"captured\" ? `发起审批时已锁定 · ${time(selected.decision_context.captured_at)}` : `历史审批未保存快照，以下为当前事实 · ${time(selected.decision_context.observed_at)}` }} 提交快照与当前证据 当前事实读取于 {{ time(selected.decision_context_diff.observed_at) }} 已有变化 保持一致 提交时完整度 {{ selected.decision_context_diff.evidence_summary.before_percent ?? \"不适用\" }} % → 当前完整度 {{ selected.decision_context_diff.evidence_summary.after_percent ?? \"不适用\" }} % 当前证据、事实和规则版本与提交审批时一致。 {{ change.label }} 提交时： {{ change.before_detail ?? \"无\" }} → 当前： {{ change.after_detail ?? \"无\" }} {{ change.label }} 提交时： {{ basisValue(change.before) }} → 当前： {{ basisValue(change.after) }} {{ change.label }} 提交时： {{ change.before ?? \"未生成\" }} → 当前： {{ change.after ?? \"未生成\" }} 缺失： {{ selected.decision_context.evidence.missing_items.join(\"、\") }} {{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }} {{ selected.decision_context.evidence.note }} 规则版本 审批模板 {{ selected.decision_context.rule_versions.approval_template }} 评分规则 {{ selected.decision_context.rule_versions.scoring ?? \"未生成\" }} 利润规则 {{ selected.decision_context.rule_versions.profit ?? \"未生成\" }} 申请决策 {{ statusText(selected.decision_context.decision.action) }} {{ selected.decision_context.decision.reason }} 基于机会第 {{ selected.decision_context.decision.opportunity_version }} 版 决策依据 {{ basis.label }} {{ basisValue(basis.value) }} {{ node.ordinal }} . {{ node.name }} {{ statusText(node.status) }} · {{ time(node.due_at) }} 当前审批人 {{ node.active_approver_name }} {{ node.approver_name }} 超时后 → {{ node.escalation_assignee_name }} 已于 {{ time(node.escalated_at) }} 升级 {{ node.decision_reason }} 操作记录 尚无批准、驳回或升级记录。 {{ actionText(action.action) }} {{ action.actor_name || \"未知成员\" }} · {{ time(action.created_at) }} {{ action.reason }} {{ decisionNotice }} 证据仍有缺失；若继续审批，请在原因中明确说明判断依据。 审批原因（批准与驳回均必填） 驳回 批准并流转 当前节点不是由你审批，或审批已结束。 技术详情 审批编号 {{ selected.id }} 资源类型 {{ selected.resource_type }} 资源编号 {{ selected.resource_id }} 节点 {{ node.ordinal }} {{ node.id }} / {{ node.active_approver_id }}",
       "attributes": {
@@ -2992,7 +2992,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1dba0cb0b0844a3c.1",
       "signature": "1dba0cb0b0844a3c",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "closeDetailBackdrop",
@@ -3082,10 +3082,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 626,
+      "line": 628,
       "sourceRange": {
-        "start": 20239,
-        "end": 20343
+        "start": 20305,
+        "end": 20409
       },
       "label": "关闭审批详情",
       "attributes": {
@@ -3105,7 +3105,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#ed72f74cfb2fdb73.1",
       "signature": "ed72f74cfb2fdb73",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "closeDetail",
@@ -3191,10 +3191,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 631,
+      "line": 633,
       "sourceRange": {
-        "start": 20509,
-        "end": 20745
+        "start": 20575,
+        "end": 20811
       },
       "label": "查看 {{ selected.decision_context.resource.label }} →",
       "attributes": {
@@ -3215,7 +3215,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#618d905faa5eb354.1",
       "signature": "618d905faa5eb354",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -3292,10 +3292,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 637,
+      "line": 639,
       "sourceRange": {
-        "start": 20752,
-        "end": 20881
+        "start": 20818,
+        "end": 20947
       },
       "label": "返回通知中心",
       "attributes": {
@@ -3316,7 +3316,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5201b6777ca22abe.1",
       "signature": "5201b6777ca22abe",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -3393,10 +3393,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 764,
+      "line": 766,
       "sourceRange": {
-        "start": 25866,
-        "end": 26342
+        "start": 25932,
+        "end": 26408
       },
       "label": "{{ requirement.label }} {{ requirement.complete ? \"已具备\" : \"待补齐\" }} {{ requirement.detail }}",
       "attributes": {
@@ -3426,7 +3426,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#861502a87911f91f.1",
       "signature": "861502a87911f91f",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -3503,10 +3503,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 860,
+      "line": 862,
       "sourceRange": {
-        "start": 29685,
-        "end": 29804
+        "start": 29751,
+        "end": 29870
       },
       "label": "驳回",
       "attributes": {
@@ -3529,7 +3529,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#86c54779008e879e.1",
       "signature": "86c54779008e879e",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "decide",
@@ -3615,10 +3615,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 862,
+      "line": 864,
       "sourceRange": {
-        "start": 29804,
-        "end": 29888
+        "start": 29870,
+        "end": 29954
       },
       "label": "批准并流转",
       "attributes": {
@@ -3640,7 +3640,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#3cfff8f4c2f74d66.1",
       "signature": "3cfff8f4c2f74d66",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "decide",
@@ -3726,10 +3726,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 867,
+      "line": 869,
       "sourceRange": {
-        "start": 30040,
-        "end": 30063
+        "start": 30106,
+        "end": 30129
       },
       "label": "技术详情",
       "attributes": {},
@@ -3742,7 +3742,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c008f867673db60.2",
       "signature": "1c008f867673db60",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -3819,10 +3819,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 888,
+      "line": 890,
       "sourceRange": {
-        "start": 30644,
-        "end": 32864
+        "start": 30710,
+        "end": 32930
       },
       "label": "新建审批模板草稿",
       "attributes": {
@@ -3836,7 +3836,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#e5e612ec729070f4.1",
       "signature": "e5e612ec729070f4",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -3913,10 +3913,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 893,
+      "line": 895,
       "sourceRange": {
-        "start": 30763,
-        "end": 32485
+        "start": 30829,
+        "end": 32551
       },
       "label": "新建审批模板草稿 模板名称 资源类型 任务 机会决策 节点名称 处理时限（分钟） 技术配置：审批人与超时接收人 审批人 请选择当前工作区成员 {{ member.label }} 超时接收人 请选择当前工作区成员 {{ member.label }} 草稿必须显式发布；超时只升级审批人，不会自动批准或驳回。 取消 保存草稿",
       "attributes": {
@@ -3930,7 +3930,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a85a9e0937dede29.1",
       "signature": "a85a9e0937dede29",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "revealInvalidField",
@@ -3942,7 +3942,7 @@
           "name": "createTemplate",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
           "line": 399,
-          "endLine": 429
+          "endLine": 430
         }
       ],
       "reviewStatus": "unreviewed",
@@ -4020,10 +4020,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 911,
+      "line": 913,
       "sourceRange": {
-        "start": 31529,
-        "end": 31562
+        "start": 31595,
+        "end": 31628
       },
       "label": "技术配置：审批人与超时接收人",
       "attributes": {},
@@ -4031,7 +4031,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#5f8fcd4eeb82af58.1",
       "signature": "5f8fcd4eeb82af58",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -4108,10 +4108,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 930,
+      "line": 932,
       "sourceRange": {
-        "start": 32326,
-        "end": 32418
+        "start": 32392,
+        "end": 32484
       },
       "label": "取消",
       "attributes": {
@@ -4125,7 +4125,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#33ba0693d19eb13e.1",
       "signature": "33ba0693d19eb13e",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -4204,10 +4204,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 931,
+      "line": 933,
       "sourceRange": {
-        "start": 32418,
-        "end": 32456
+        "start": 32484,
+        "end": 32522
       },
       "label": "保存草稿",
       "attributes": {
@@ -4217,7 +4217,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#19071354ae303ee4.1",
       "signature": "19071354ae303ee4",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -4296,10 +4296,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 940,
+      "line": 942,
       "sourceRange": {
-        "start": 32743,
-        "end": 32814
+        "start": 32809,
+        "end": 32880
       },
       "label": "发布",
       "attributes": {
@@ -4321,13 +4321,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#c02233bb6662b1ab.1",
       "signature": "c02233bb6662b1ab",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "openPublish",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 430,
-          "endLine": 433
+          "line": 431,
+          "endLine": 434
         }
       ],
       "reviewStatus": "unreviewed",
@@ -4407,10 +4407,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 944,
+      "line": 946,
       "sourceRange": {
-        "start": 32869,
-        "end": 33588
+        "start": 32935,
+        "end": 33654
       },
       "label": "发布审批模板",
       "attributes": {
@@ -4424,7 +4424,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#27fc15dca539791e.1",
       "signature": "27fc15dca539791e",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -4501,10 +4501,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 945,
+      "line": 947,
       "sourceRange": {
-        "start": 32961,
-        "end": 33574
+        "start": 33027,
+        "end": 33640
       },
       "label": "发布审批模板 将发布“ {{ publishTarget?.name }} ”第 {{ publishTarget?.current_version }} 版。新审批会锁定该版本，历史审批不会被改写。 发布原因 返回 确认发布",
       "attributes": {
@@ -4516,13 +4516,13 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#132a2f4c870f90da.1",
       "signature": "132a2f4c870f90da",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "publish",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 434,
-          "endLine": 456
+          "line": 435,
+          "endLine": 457
         }
       ],
       "reviewStatus": "unreviewed",
@@ -4600,10 +4600,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 961,
+      "line": 963,
       "sourceRange": {
-        "start": 33401,
-        "end": 33482
+        "start": 33467,
+        "end": 33548
       },
       "label": "返回",
       "attributes": {
@@ -4617,7 +4617,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#227faf6f0cfb499d.1",
       "signature": "227faf6f0cfb499d",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -4696,10 +4696,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 962,
+      "line": 964,
       "sourceRange": {
-        "start": 33493,
-        "end": 33545
+        "start": 33559,
+        "end": 33611
       },
       "label": "确认发布",
       "attributes": {
@@ -4710,7 +4710,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#d5e7aa36e90f904e.1",
       "signature": "d5e7aa36e90f904e",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -4789,10 +4789,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 966,
+      "line": 968,
       "sourceRange": {
-        "start": 33593,
-        "end": 34754
+        "start": 33659,
+        "end": 34820
       },
       "label": "发起审批",
       "attributes": {
@@ -4806,7 +4806,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#a05288e1768f6320.1",
       "signature": "a05288e1768f6320",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -4883,10 +4883,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 967,
+      "line": 969,
       "sourceRange": {
-        "start": 33683,
-        "end": 34740
+        "start": 33749,
+        "end": 34806
       },
       "label": "发起审批 已发布模板 请选择 {{ t.name }} 关联类型： {{ resourceText(selectedTemplate.resource_type) }} 。资源类型由模板锁定，不能单独改写。 技术配置：关联资源编号 资源编号 审批标题 取消 发起",
       "attributes": {
@@ -4900,7 +4900,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#1c352b89a4148f40.1",
       "signature": "1c352b89a4148f40",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [
         {
           "name": "revealInvalidField",
@@ -4911,8 +4911,8 @@
         {
           "name": "createRequest",
           "file": "apps/web/src/components/ApprovalWorkspace.vue",
-          "line": 457,
-          "endLine": 480
+          "line": 458,
+          "endLine": 482
         }
       ],
       "reviewStatus": "unreviewed",
@@ -4990,10 +4990,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 983,
+      "line": 985,
       "sourceRange": {
-        "start": 34317,
-        "end": 34347
+        "start": 34383,
+        "end": 34413
       },
       "label": "技术配置：关联资源编号",
       "attributes": {},
@@ -5001,7 +5001,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#bfb5c0c0da487c90.1",
       "signature": "bfb5c0c0da487c90",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -5078,10 +5078,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 988,
+      "line": 990,
       "sourceRange": {
-        "start": 34563,
-        "end": 34654
+        "start": 34629,
+        "end": 34720
       },
       "label": "取消",
       "attributes": {
@@ -5095,7 +5095,7 @@
       },
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#74e09fbb8250bf10.1",
       "signature": "74e09fbb8250bf10",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -5174,10 +5174,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "line": 989,
+      "line": 991,
       "sourceRange": {
-        "start": 34654,
-        "end": 34711
+        "start": 34720,
+        "end": 34777
       },
       "label": "发起",
       "attributes": {
@@ -5187,7 +5187,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ApprovalWorkspace.vue#0afc0196f9054ef3.1",
       "signature": "0afc0196f9054ef3",
-      "sourceSha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104",
+      "sourceSha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -21343,7 +21343,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#1b193ec9f175425c.1",
       "signature": "1b193ec9f175425c",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openRule",
@@ -21448,7 +21448,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d17349bf034941db.1",
       "signature": "d17349bf034941db",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -21556,7 +21556,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#f006bd8812c49ea9.1",
       "signature": "f006bd8812c49ea9",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "handleStatePrimary",
@@ -21680,7 +21680,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#5c8a7bc537511253.1",
       "signature": "5c8a7bc537511253",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openRule",
@@ -21793,7 +21793,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6f1c1026f48433b0.1",
       "signature": "6f1c1026f48433b0",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "reloadRules",
@@ -21904,7 +21904,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0d2355591b57c284.1",
       "signature": "0d2355591b57c284",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openRule",
@@ -22017,7 +22017,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c626005c766fe7b8.1",
       "signature": "c626005c766fe7b8",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openCreate",
@@ -22129,7 +22129,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ec64e194fee06bf8.1",
       "signature": "ec64e194fee06bf8",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openCreate",
@@ -22236,7 +22236,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#908bdb9143e5350e.1",
       "signature": "908bdb9143e5350e",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openRule",
@@ -22353,7 +22353,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#8d078d22d63338ea.1",
       "signature": "8d078d22d63338ea",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "handleStatePrimary",
@@ -22475,7 +22475,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ec3b988601b97577.1",
       "signature": "ec3b988601b97577",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "load",
@@ -22602,7 +22602,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0832ce1b3b353933.1",
       "signature": "0832ce1b3b353933",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "detail",
@@ -22716,7 +22716,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e39ead97fb52b914.1",
       "signature": "e39ead97fb52b914",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -22828,7 +22828,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3d04d80f54cd9d35.1",
       "signature": "3d04d80f54cd9d35",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "collect",
@@ -22944,7 +22944,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#301ee04052a2735e.1",
       "signature": "301ee04052a2735e",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openRule",
@@ -23065,7 +23065,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.1",
       "signature": "d176f11e3e762c47",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "toggle",
@@ -23186,7 +23186,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.1",
       "signature": "219a5337696882de",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openDelete",
@@ -23300,7 +23300,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#6bc70845bac2b99a.1",
       "signature": "6bc70845bac2b99a",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23412,7 +23412,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d176f11e3e762c47.2",
       "signature": "d176f11e3e762c47",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "toggle",
@@ -23533,7 +23533,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#219a5337696882de.2",
       "signature": "219a5337696882de",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "openDelete",
@@ -23651,7 +23651,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c14a7d89545c4bbd.1",
       "signature": "c14a7d89545c4bbd",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23763,7 +23763,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#3edcc1c1730d78dd.1",
       "signature": "3edcc1c1730d78dd",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -23879,7 +23879,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9f03a53fb65e7c6b.1",
       "signature": "9f03a53fb65e7c6b",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "createValidationTask",
@@ -23981,7 +23981,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9deedc4f8d67733e.1",
       "signature": "9deedc4f8d67733e",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -24085,7 +24085,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0a5942425b87d8da.1",
       "signature": "0a5942425b87d8da",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "trapDialogTab",
@@ -24189,7 +24189,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#e6be6aad71e6c32f.1",
       "signature": "e6be6aad71e6c32f",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "submitCreateStep",
@@ -24296,7 +24296,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#933d6f0c73f9a623.1",
       "signature": "933d6f0c73f9a623",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "closeCreate",
@@ -24409,7 +24409,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#76ebcf7c57bc49e4.1",
       "signature": "76ebcf7c57bc49e4",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "closeCreate",
@@ -24522,7 +24522,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#4ae114e438c807d5.1",
       "signature": "4ae114e438c807d5",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -24620,7 +24620,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#d32ececd9e3b4c22.1",
       "signature": "d32ececd9e3b4c22",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -24726,7 +24726,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#eaaea75753101b7d.1",
       "signature": "eaaea75753101b7d",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "trapDialogTab",
@@ -24831,7 +24831,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#0effcb12f0e7344b.1",
       "signature": "0effcb12f0e7344b",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "createRule",
@@ -24938,7 +24938,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ad5c3e206797e35f.1",
       "signature": "ad5c3e206797e35f",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "closeRule",
@@ -25046,7 +25046,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#c40c87a6e5ef3e66.1",
       "signature": "c40c87a6e5ef3e66",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "closeRule",
@@ -25151,7 +25151,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#108089b4d17a2d6e.1",
       "signature": "108089b4d17a2d6e",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -25257,7 +25257,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#ef60f454df6c8376.1",
       "signature": "ef60f454df6c8376",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "trapDialogTab",
@@ -25362,7 +25362,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#33765167c1ac37f5.1",
       "signature": "33765167c1ac37f5",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "remove",
@@ -25469,7 +25469,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9738acdb81108bf8.1",
       "signature": "9738acdb81108bf8",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "closeDelete",
@@ -25575,7 +25575,7 @@
       },
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#5433acf9dddc7c6a.1",
       "signature": "5433acf9dddc7c6a",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [
         {
           "name": "closeDelete",
@@ -25679,7 +25679,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CompetitorMonitor.vue#9d23c498e72940a2.1",
       "signature": "9d23c498e72940a2",
-      "sourceSha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4",
+      "sourceSha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -29223,10 +29223,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 405,
+      "line": 439,
       "sourceRange": {
-        "start": 14060,
-        "end": 14217
+        "start": 15226,
+        "end": 15383
       },
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新运行事实\" }}",
       "attributes": {
@@ -29241,13 +29241,13 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#8fbfd1dda992c36b.1",
       "signature": "8fbfd1dda992c36b",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-          "line": 260,
-          "endLine": 316
+          "line": 270,
+          "endLine": 333
         }
       ],
       "reviewStatus": "unreviewed",
@@ -29327,10 +29327,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 407,
+      "line": 441,
       "sourceRange": {
-        "start": 14217,
-        "end": 14398
+        "start": 15383,
+        "end": 15564
       },
       "label": "回收过期租约",
       "attributes": {
@@ -29345,7 +29345,7 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#3c7b3b6045a144ee.1",
       "signature": "3c7b3b6045a144ee",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -29424,10 +29424,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 432,
+      "line": 466,
       "sourceRange": {
-        "start": 14927,
-        "end": 15007
+        "start": 16093,
+        "end": 16173
       },
       "label": "重新核验",
       "attributes": {
@@ -29446,13 +29446,13 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#4f73abdd0d99fc21.1",
       "signature": "4f73abdd0d99fc21",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-          "line": 260,
-          "endLine": 316
+          "line": 270,
+          "endLine": 333
         }
       ],
       "reviewStatus": "unreviewed",
@@ -29532,10 +29532,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 446,
+      "line": 480,
       "sourceRange": {
-        "start": 15422,
-        "end": 15545
+        "start": 16588,
+        "end": 16711
       },
       "label": "重新核验",
       "attributes": {
@@ -29558,13 +29558,13 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#ae52c30c28ab3a05.1",
       "signature": "ae52c30c28ab3a05",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-          "line": 260,
-          "endLine": 316
+          "line": 270,
+          "endLine": 333
         }
       ],
       "reviewStatus": "unreviewed",
@@ -29644,10 +29644,10 @@
       "kind": "event-binding",
       "tag": "input",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 537,
+      "line": 571,
       "sourceRange": {
-        "start": 18593,
-        "end": 18766
+        "start": 19759,
+        "end": 19932
       },
       "label": "",
       "attributes": {
@@ -29667,13 +29667,13 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#0767d27629b787d7.1",
       "signature": "0767d27629b787d7",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [
         {
           "name": "resetProviderPage",
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-          "line": 179,
-          "endLine": 181
+          "line": 182,
+          "endLine": 184
         }
       ],
       "reviewStatus": "unreviewed",
@@ -29751,10 +29751,10 @@
       "kind": "event-binding",
       "tag": "select",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 546,
+      "line": 580,
       "sourceRange": {
-        "start": 18841,
-        "end": 19136
+        "start": 20007,
+        "end": 20302
       },
       "label": "需要关注 已熔断 有排队任务 全部来源",
       "attributes": {
@@ -29772,13 +29772,13 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#1b581569d5d9e0d4.1",
       "signature": "1b581569d5d9e0d4",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [
         {
           "name": "resetProviderPage",
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-          "line": 179,
-          "endLine": 181
+          "line": 182,
+          "endLine": 184
         }
       ],
       "reviewStatus": "unreviewed",
@@ -29856,10 +29856,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 586,
+      "line": 620,
       "sourceRange": {
-        "start": 20570,
-        "end": 20593
+        "start": 21736,
+        "end": 21759
       },
       "label": "最近失败",
       "attributes": {},
@@ -29880,7 +29880,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#dac6cbc2991374ba.1",
       "signature": "dac6cbc2991374ba",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -29957,10 +29957,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 590,
+      "line": 624,
       "sourceRange": {
-        "start": 20777,
-        "end": 20910
+        "start": 21943,
+        "end": 22076
       },
       "label": "前往来源健康",
       "attributes": {
@@ -29983,7 +29983,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#c198ccff780259e3.1",
       "signature": "c198ccff780259e3",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -30060,10 +30060,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 592,
+      "line": 626,
       "sourceRange": {
-        "start": 20910,
-        "end": 21140
+        "start": 22076,
+        "end": 22306
       },
       "label": "解除熔断",
       "attributes": {
@@ -30090,7 +30090,7 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#c07df29b8de46d08.1",
       "signature": "c07df29b8de46d08",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -30169,10 +30169,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 609,
+      "line": 643,
       "sourceRange": {
-        "start": 21504,
-        "end": 21623
+        "start": 22670,
+        "end": 22789
       },
       "label": "上一页",
       "attributes": {
@@ -30195,7 +30195,7 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#d868a97237e89c1c.1",
       "signature": "d868a97237e89c1c",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -30274,10 +30274,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 612,
+      "line": 646,
       "sourceRange": {
-        "start": 21697,
-        "end": 21887
+        "start": 22863,
+        "end": 23053
       },
       "label": "下一页",
       "attributes": {
@@ -30300,7 +30300,7 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#3a29e19ec40c7562.1",
       "signature": "3a29e19ec40c7562",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -30379,10 +30379,10 @@
       "kind": "event-binding",
       "tag": "ConfirmDialog",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 637,
+      "line": 671,
       "sourceRange": {
-        "start": 22371,
-        "end": 22652
+        "start": 23537,
+        "end": 23818
       },
       "label": "",
       "attributes": {
@@ -30402,13 +30402,13 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#a00a70cca22f9831.1",
       "signature": "a00a70cca22f9831",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [
         {
           "name": "recover",
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-          "line": 318,
-          "endLine": 350
+          "line": 335,
+          "endLine": 368
         }
       ],
       "reviewStatus": "unreviewed",
@@ -30486,10 +30486,10 @@
       "kind": "event-binding",
       "tag": "ConfirmDialog",
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "line": 647,
+      "line": 681,
       "sourceRange": {
-        "start": 22657,
-        "end": 22964
+        "start": 23823,
+        "end": 24130
       },
       "label": "",
       "attributes": {
@@ -30509,13 +30509,13 @@
       },
       "candidateId": "apps/web/src/components/CrawlerSchedulerCenter.vue#25d51725a70103d5.1",
       "signature": "25d51725a70103d5",
-      "sourceSha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee",
+      "sourceSha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea",
       "handlerDefinitions": [
         {
           "name": "recoverProvider",
           "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-          "line": 352,
-          "endLine": 383
+          "line": 370,
+          "endLine": 402
         }
       ],
       "reviewStatus": "unreviewed",
@@ -65913,10 +65913,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 694,
+      "line": 696,
       "sourceRange": {
-        "start": 22823,
-        "end": 22934
+        "start": 22859,
+        "end": 22970
       },
       "label": "创建选品 →",
       "attributes": {
@@ -65936,7 +65936,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#169dd3f4eac94585.1",
       "signature": "169dd3f4eac94585",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -66013,10 +66013,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 696,
+      "line": 698,
       "sourceRange": {
-        "start": 22934,
-        "end": 23050
+        "start": 22970,
+        "end": 23086
       },
       "label": "管理选品规则",
       "attributes": {
@@ -66036,7 +66036,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#bbd1b04e367f3e80.1",
       "signature": "bbd1b04e367f3e80",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -66113,10 +66113,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 698,
+      "line": 700,
       "sourceRange": {
-        "start": 23050,
-        "end": 23263
+        "start": 23086,
+        "end": 23299
       },
       "label": "从 ERP 导入",
       "attributes": {
@@ -66144,7 +66144,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#98ee78e079ff2f4c.1",
       "signature": "98ee78e079ff2f4c",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -66223,10 +66223,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 705,
+      "line": 707,
       "sourceRange": {
-        "start": 23263,
-        "end": 23469
+        "start": 23299,
+        "end": 23505
       },
       "label": "手工添加",
       "attributes": {
@@ -66254,7 +66254,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#d9bac0eae791bdd6.1",
       "signature": "d9bac0eae791bdd6",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -66333,10 +66333,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 717,
+      "line": 719,
       "sourceRange": {
-        "start": 23633,
-        "end": 23683
+        "start": 23669,
+        "end": 23719
       },
       "label": "← 返回来源列表",
       "attributes": {
@@ -66351,7 +66351,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#43e671d75fd48bea.1",
       "signature": "43e671d75fd48bea",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -66428,10 +66428,10 @@
       "kind": "event-binding",
       "tag": "OpportunityListPanel",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 723,
+      "line": 725,
       "sourceRange": {
-        "start": 23863,
-        "end": 24685
+        "start": 23899,
+        "end": 24721
       },
       "label": "",
       "attributes": {
@@ -66476,13 +66476,13 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#5eb2834c0e9007bc.1",
       "signature": "5eb2834c0e9007bc",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [
         {
           "name": "openBatch",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 426,
-          "endLine": 432
+          "line": 428,
+          "endLine": 434
         }
       ],
       "reviewStatus": "unreviewed",
@@ -66560,10 +66560,10 @@
       "kind": "event-binding",
       "tag": "UiStatePanel",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 748,
+      "line": 750,
       "sourceRange": {
-        "start": 24714,
-        "end": 25078
+        "start": 24750,
+        "end": 25114
       },
       "label": "",
       "attributes": {
@@ -66592,7 +66592,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#8b803ab2032008cb.1",
       "signature": "8b803ab2032008cb",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -66669,10 +66669,10 @@
       "kind": "event-binding",
       "tag": "OpportunityDetailNavigation",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 759,
+      "line": 761,
       "sourceRange": {
-        "start": 25159,
-        "end": 25245
+        "start": 25195,
+        "end": 25281
       },
       "label": "",
       "attributes": {
@@ -66695,7 +66695,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#ca5be0ff28a9202d.1",
       "signature": "ca5be0ff28a9202d",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -66772,10 +66772,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 772,
+      "line": 774,
       "sourceRange": {
-        "start": 25885,
-        "end": 25908
+        "start": 25921,
+        "end": 25944
       },
       "label": "运行信息",
       "attributes": {},
@@ -66792,7 +66792,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#e5851472e99b48d6.1",
       "signature": "e5851472e99b48d6",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -66869,10 +66869,10 @@
       "kind": "event-binding",
       "tag": "OpportunityDecisionPanel",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 782,
+      "line": 784,
       "sourceRange": {
-        "start": 26265,
-        "end": 26496
+        "start": 26301,
+        "end": 26532
       },
       "label": "",
       "attributes": {
@@ -66898,19 +66898,19 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#6bbaa8f037121cf9.1",
       "signature": "6bbaa8f037121cf9",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [
         {
           "name": "startDecision",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 371,
-          "endLine": 375
+          "line": 373,
+          "endLine": 377
         },
         {
           "name": "createEvidenceTask",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 413,
-          "endLine": 425
+          "line": 415,
+          "endLine": 427
         }
       ],
       "reviewStatus": "unreviewed",
@@ -66988,10 +66988,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 794,
+      "line": 796,
       "sourceRange": {
-        "start": 26708,
-        "end": 26736
+        "start": 26744,
+        "end": 26772
       },
       "label": "补证异常时手动处理",
       "attributes": {},
@@ -67012,7 +67012,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#f563427d32a93860.1",
       "signature": "f563427d32a93860",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -67089,10 +67089,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 797,
+      "line": 799,
       "sourceRange": {
-        "start": 26829,
-        "end": 27085
+        "start": 26865,
+        "end": 27121
       },
       "label": "采集 Amazon 竞品",
       "attributes": {
@@ -67124,7 +67124,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0027d6cd14c50e46.1",
       "signature": "0027d6cd14c50e46",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -67203,10 +67203,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 804,
+      "line": 806,
       "sourceRange": {
-        "start": 27085,
-        "end": 27332
+        "start": 27121,
+        "end": 27368
       },
       "label": "采集公开供应商",
       "attributes": {
@@ -67238,7 +67238,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#927ece864672036d.1",
       "signature": "927ece864672036d",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -67317,10 +67317,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 811,
+      "line": 813,
       "sourceRange": {
-        "start": 27332,
-        "end": 27397
+        "start": 27368,
+        "end": 27433
       },
       "label": "检查评分规则",
       "attributes": {
@@ -67343,7 +67343,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#145043f313e0dfef.1",
       "signature": "145043f313e0dfef",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -67420,10 +67420,10 @@
       "kind": "event-binding",
       "tag": "OpportunityDetailInsights",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 816,
+      "line": 818,
       "sourceRange": {
-        "start": 27544,
-        "end": 28618
+        "start": 27580,
+        "end": 28654
       },
       "label": "",
       "attributes": {
@@ -67471,13 +67471,13 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#aad81bdc3f7ba55d.1",
       "signature": "aad81bdc3f7ba55d",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [
         {
           "name": "queueScore",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 397,
-          "endLine": 412
+          "line": 399,
+          "endLine": 414
         }
       ],
       "reviewStatus": "unreviewed",
@@ -67555,10 +67555,10 @@
       "kind": "event-binding",
       "tag": "OpportunityFeedbackPanel",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 839,
+      "line": 841,
       "sourceRange": {
-        "start": 28731,
-        "end": 29331
+        "start": 28767,
+        "end": 29367
       },
       "label": "",
       "attributes": {
@@ -67593,7 +67593,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b391bf25870010b2.1",
       "signature": "b391bf25870010b2",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -67670,10 +67670,10 @@
       "kind": "event-binding",
       "tag": "OpportunityProfitPanel",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 851,
+      "line": 853,
       "sourceRange": {
-        "start": 29346,
-        "end": 30228
+        "start": 29382,
+        "end": 30264
       },
       "label": "",
       "attributes": {
@@ -67718,25 +67718,25 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#0a05ec1cf1820fcb.1",
       "signature": "0a05ec1cf1820fcb",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [
         {
           "name": "confirmCost",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 466,
-          "endLine": 492
+          "line": 468,
+          "endLine": 494
         },
         {
           "name": "reviewCost",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 493,
-          "endLine": 521
+          "line": 495,
+          "endLine": 523
         },
         {
           "name": "queueProfit",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 522,
-          "endLine": 532
+          "line": 524,
+          "endLine": 534
         }
       ],
       "reviewStatus": "unreviewed",
@@ -67814,10 +67814,10 @@
       "kind": "event-binding",
       "tag": "OpportunityAiPanel",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 870,
+      "line": 872,
       "sourceRange": {
-        "start": 30243,
-        "end": 30807
+        "start": 30279,
+        "end": 30843
       },
       "label": "",
       "attributes": {
@@ -67855,19 +67855,19 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2aa4cc1a9f90b8fd.1",
       "signature": "2aa4cc1a9f90b8fd",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [
         {
           "name": "queueAi",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 533,
-          "endLine": 551
+          "line": 535,
+          "endLine": 553
         },
         {
           "name": "reviewAi",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 552,
-          "endLine": 605
+          "line": 554,
+          "endLine": 607
         }
       ],
       "reviewStatus": "unreviewed",
@@ -67945,10 +67945,10 @@
       "kind": "event-binding",
       "tag": "OpportunityWorkspaceDialogs",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 914,
+      "line": 916,
       "sourceRange": {
-        "start": 31980,
-        "end": 32558
+        "start": 32016,
+        "end": 32594
       },
       "label": "",
       "attributes": {
@@ -67982,19 +67982,19 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#613df9c64125db86.1",
       "signature": "613df9c64125db86",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [
         {
           "name": "create",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 334,
-          "endLine": 370
+          "line": 336,
+          "endLine": 372
         },
         {
           "name": "decide",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 376,
-          "endLine": 396
+          "line": 378,
+          "endLine": 398
         }
       ],
       "reviewStatus": "unreviewed",
@@ -68072,10 +68072,10 @@
       "kind": "event-binding",
       "tag": "dialog",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 931,
+      "line": 933,
       "sourceRange": {
-        "start": 32563,
-        "end": 34209
+        "start": 32599,
+        "end": 34245
       },
       "label": "机会批量操作影响预览",
       "attributes": {
@@ -68096,7 +68096,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#2f4e238755b201b9.1",
       "signature": "2f4e238755b201b9",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -68173,10 +68173,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 938,
+      "line": 940,
       "sourceRange": {
-        "start": 32758,
-        "end": 34195
+        "start": 32794,
+        "end": 34231
       },
       "label": "影响预览 批量 {{ batchAction === \"assign\" ? \"指派\" : batchAction === \"archive\" ? \"归档\" : \"复核\" }} 本次仅处理当前结果中已选的 {{ currentPageSelectedItems.length }} 个机会；任一版本变化都会整批回滚。 另有 {{ outsideCurrentPageSelectedCount }} 个已选机会不在当前结果中，不会随本次操作提交。 负责人 请选择可访问当前工作区的成员 {{ member.label }} 每个机会会进入“验证中”阶段，并创建或复用一条人工复核任务；不会自动改变决策结论。 已归档机会默认不在列表显示，可通过“阶段：已归档”筛选恢复查看。 操作原因 返回 确认执行",
       "attributes": {
@@ -68193,13 +68193,13 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#b4d79d3e558083d3.1",
       "signature": "b4d79d3e558083d3",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [
         {
           "name": "confirmBatch",
           "file": "apps/web/src/components/OpportunityWorkspace.vue",
-          "line": 433,
-          "endLine": 465
+          "line": 435,
+          "endLine": 467
         }
       ],
       "reviewStatus": "unreviewed",
@@ -68277,10 +68277,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 974,
+      "line": 976,
       "sourceRange": {
-        "start": 34040,
-        "end": 34100
+        "start": 34076,
+        "end": 34136
       },
       "label": "返回",
       "attributes": {
@@ -68298,7 +68298,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#64891e806e385e12.1",
       "signature": "64891e806e385e12",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -68377,10 +68377,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 975,
+      "line": 977,
       "sourceRange": {
-        "start": 34111,
-        "end": 34163
+        "start": 34147,
+        "end": 34199
       },
       "label": "确认执行",
       "attributes": {
@@ -68396,7 +68396,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#c70ff783b9d26396.1",
       "signature": "c70ff783b9d26396",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -68475,10 +68475,10 @@
       "kind": "event-binding",
       "tag": "AuditedReasonDialog",
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "line": 979,
+      "line": 981,
       "sourceRange": {
-        "start": 34214,
-        "end": 34676
+        "start": 34250,
+        "end": 34712
       },
       "label": "",
       "attributes": {
@@ -68499,7 +68499,7 @@
       },
       "candidateId": "apps/web/src/components/OpportunityWorkspace.vue#557b69e18caa81e6.1",
       "signature": "557b69e18caa81e6",
-      "sourceSha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783",
+      "sourceSha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -69785,10 +69785,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1127,
+      "line": 1257,
       "sourceRange": {
-        "start": 37502,
-        "end": 37735
+        "start": 42285,
+        "end": 42518
       },
       "label": "{{ refreshing ? \"正在刷新…\" : \"刷新数据\" }}",
       "attributes": {
@@ -69802,13 +69802,13 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1",
       "signature": "a1fb5dc1b30f9733",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 306,
-          "endLine": 387
+          "line": 320,
+          "endLine": 445
         }
       ],
       "reviewStatus": "unreviewed",
@@ -69885,13 +69885,106 @@
       "sourceScope": "catalog-route-candidate"
     },
     {
+      "kind": "control",
+      "tag": "summary",
+      "file": "apps/web/src/components/OrganizationAdminCenter.vue",
+      "line": 1296,
+      "sourceRange": {
+        "start": 43549,
+        "end": 43575
+      },
+      "label": "保存与读取追踪",
+      "attributes": {},
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "view === 'summary' && profileSaveReceipt"
+        }
+      ],
+      "events": {},
+      "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1",
+      "signature": "bd677fb7d2212a2b",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
       "kind": "event-binding",
       "tag": "OrganizationApprovalFirstFailure",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1145,
+      "line": 1323,
       "sourceRange": {
-        "start": 38048,
-        "end": 38180
+        "start": 44363,
+        "end": 44495
       },
       "label": "",
       "attributes": {
@@ -69914,13 +70007,13 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
       "signature": "5ae31bc55551b1dc",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 306,
-          "endLine": 387
+          "line": 320,
+          "endLine": 445
         }
       ],
       "reviewStatus": "unreviewed",
@@ -69998,10 +70091,10 @@
       "kind": "event-binding",
       "tag": "OrganizationApprovalFirstFailure",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1159,
+      "line": 1337,
       "sourceRange": {
-        "start": 38504,
-        "end": 38661
+        "start": 44819,
+        "end": 44976
       },
       "label": "",
       "attributes": {
@@ -70025,13 +70118,13 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1",
       "signature": "08a59be6f793cde6",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 306,
-          "endLine": 387
+          "line": 320,
+          "endLine": 445
         }
       ],
       "reviewStatus": "unreviewed",
@@ -70109,10 +70202,10 @@
       "kind": "event-binding",
       "tag": "OrganizationApprovalReadFeedback",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1170,
+      "line": 1348,
       "sourceRange": {
-        "start": 38884,
-        "end": 39097
+        "start": 45199,
+        "end": 45412
       },
       "label": "",
       "attributes": {
@@ -70137,13 +70230,13 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1",
       "signature": "ca4fa7a0220842a9",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 306,
-          "endLine": 387
+          "line": 320,
+          "endLine": 445
         }
       ],
       "reviewStatus": "unreviewed",
@@ -70221,10 +70314,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1220,
+      "line": 1421,
       "sourceRange": {
-        "start": 40461,
-        "end": 40498
+        "start": 47544,
+        "end": 47581
       },
       "label": "重新加载",
       "attributes": {
@@ -70241,13 +70334,13 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1",
       "signature": "97ed4772fb320d6c",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 306,
-          "endLine": 387
+          "line": 320,
+          "endLine": 445
         }
       ],
       "reviewStatus": "unreviewed",
@@ -70327,10 +70420,10 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1277,
+      "line": 1478,
       "sourceRange": {
-        "start": 42396,
-        "end": 44264
+        "start": 49479,
+        "end": 51599
       },
       "label": "更新组织资料 名称 Logo HTTPS 地址 仅支持 HTTPS；留空表示暂不设置 Logo。 时区 数据保留天数 默认工作区 请选择工作区 {{ workspace.name }} 变更原因 {{ busy ? \"正在保存…\" : \"保存并审计\" }}",
       "attributes": {
@@ -70352,13 +70445,13 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
       "signature": "d6b520278ab3dd57",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "submit",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 446,
-          "endLine": 486
+          "line": 504,
+          "endLine": 611
         }
       ],
       "reviewStatus": "unreviewed",
@@ -70436,10 +70529,10 @@
       "kind": "event-binding",
       "tag": "input",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1291,
+      "line": 1496,
       "sourceRange": {
-        "start": 42826,
-        "end": 43137
+        "start": 50063,
+        "end": 50392
       },
       "label": "",
       "attributes": {
@@ -70468,19 +70561,19 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
       "signature": "1cbd108c64b5230c",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "validateHttps",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 217,
-          "endLine": 220
+          "line": 231,
+          "endLine": 234
         },
         {
           "name": "clearFieldValidity",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 221,
-          "endLine": 223
+          "line": 235,
+          "endLine": 237
         }
       ],
       "reviewStatus": "unreviewed",
@@ -70558,10 +70651,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1329,
+      "line": 1534,
       "sourceRange": {
-        "start": 44184,
-        "end": 44248
+        "start": 51497,
+        "end": 51561
       },
       "label": "{{ busy ? \"正在保存…\" : \"保存并审计\" }}",
       "attributes": {
@@ -70580,7 +70673,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
       "signature": "5878e30377f290ae",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -70659,10 +70752,10 @@
       "kind": "event-binding",
       "tag": "OrganizationMemberPanel",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1332,
+      "line": 1538,
       "sourceRange": {
-        "start": 44288,
-        "end": 46337
+        "start": 51623,
+        "end": 53672
       },
       "label": "",
       "attributes": {
@@ -70732,31 +70825,31 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1",
       "signature": "6a563eeaa67fea90",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "inviteMembers",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 487,
-          "endLine": 555
+          "line": 612,
+          "endLine": 680
         },
         {
           "name": "memberAction",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 566,
-          "endLine": 576
+          "line": 691,
+          "endLine": 701
         },
         {
           "name": "assignRole",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 577,
-          "endLine": 587
+          "line": 702,
+          "endLine": 712
         },
         {
           "name": "invitationAction",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 588,
-          "endLine": 597
+          "line": 713,
+          "endLine": 722
         }
       ],
       "reviewStatus": "unreviewed",
@@ -70834,10 +70927,10 @@
       "kind": "event-binding",
       "tag": "OrganizationRolePanel",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1394,
+      "line": 1600,
       "sourceRange": {
-        "start": 46344,
-        "end": 47404
+        "start": 53679,
+        "end": 54739
       },
       "label": "",
       "attributes": {
@@ -70886,43 +70979,43 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1",
       "signature": "b09d7923228aabe6",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [
         {
           "name": "updateResourceGrantType",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 609,
-          "endLine": 612
+          "line": 734,
+          "endLine": 737
         },
         {
           "name": "createResourceGrant",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 623,
-          "endLine": 669
+          "line": 748,
+          "endLine": 794
         },
         {
           "name": "updateResourceGrantStatus",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 670,
-          "endLine": 675
+          "line": 795,
+          "endLine": 800
         },
         {
           "name": "updateResourceGrantPage",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 676,
-          "endLine": 680
+          "line": 801,
+          "endLine": 805
         },
         {
           "name": "extendResourceGrant",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 681,
-          "endLine": 698
+          "line": 806,
+          "endLine": 823
         },
         {
           "name": "revokeResourceGrant",
           "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-          "line": 699,
-          "endLine": 715
+          "line": 824,
+          "endLine": 840
         }
       ],
       "reviewStatus": "unreviewed",
@@ -71000,10 +71093,10 @@
       "kind": "event-binding",
       "tag": "AuditedReasonDialog",
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1471,
+      "line": 1677,
       "sourceRange": {
-        "start": 49237,
-        "end": 49668
+        "start": 56572,
+        "end": 57003
       },
       "label": "",
       "attributes": {
@@ -71023,7 +71116,7 @@
       },
       "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
       "signature": "773c2105d1d0d008",
-      "sourceSha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0",
+      "sourceSha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -90965,13 +91058,292 @@
       "sourceScope": "catalog-route-candidate"
     },
     {
+      "kind": "form-event",
+      "tag": "form",
+      "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "line": 26,
+      "sourceRange": {
+        "start": 747,
+        "end": 4695
+      },
+      "label": "账号邮箱 输入邮箱关键词，搜索后更新列表。 组织名称或标识 按组织名称或标识查询，不按成员邮箱查询。 关键词 概览只展示组织记录。用户邮箱查询结果请到用户管理查看。 {{ props.searchPlaceholder }} 账号状态 全部状态 正常使用 已停用 仅筛选账号状态，不代表角色权限范围。 组织状态 全部状态 正常使用 已停用组织 仅筛选组织状态，不代表成员账号状态。 {{ props.statusLabel }} 全部状态 正常使用 已停用 已停用组织 “已停用”和“已停用组织”是不同的筛选值。 全部状态 正常使用 已停用 已停用组织 搜索 重置",
+      "attributes": {
+        "class": "account-filter",
+        ":class": "{\n        'account-filter--admins-c': props.adminListRoute,\n        'account-filter--overview-c':\n          !props.adminListRoute && !props.organizationListRoute && props.tab === 'organizations',\n      }",
+        "@submit.prevent": "emit('apply-filters')"
+      },
+      "conditions": [],
+      "events": {
+        "@submit.prevent": "emit('apply-filters')"
+      },
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryFilters.vue#128119f3fb311b09.1",
+      "signature": "128119f3fb311b09",
+      "sourceSha256": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "control",
+      "tag": "button",
+      "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "line": 118,
+      "sourceRange": {
+        "start": 4405,
+        "end": 4453
+      },
+      "label": "搜索",
+      "attributes": {
+        ":disabled": "props.refreshing"
+      },
+      "conditions": [],
+      "events": {},
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryFilters.vue#e9658d470d4cbeaf.1",
+      "signature": "e9658d470d4cbeaf",
+      "sourceSha256": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "control",
+      "tag": "button",
+      "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "line": 119,
+      "sourceRange": {
+        "start": 4462,
+        "end": 4670
+      },
+      "label": "重置",
+      "attributes": {
+        "type": "button",
+        "class": "secondary",
+        ":disabled": "!props.activeFilterCount || props.refreshing",
+        "@click": "emit('reset-filters')"
+      },
+      "conditions": [],
+      "events": {
+        "@click": "emit('reset-filters')"
+      },
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryFilters.vue#20080e701de7f5cb.1",
+      "signature": "20080e701de7f5cb",
+      "sourceSha256": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 85,
+      "line": 104,
       "sourceRange": {
-        "start": 3063,
-        "end": 3301
+        "start": 3685,
+        "end": 3923
       },
       "label": "组织管理",
       "attributes": {
@@ -90988,7 +91360,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#29448f61eb8ffc80.1",
       "signature": "29448f61eb8ffc80",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -91065,10 +91437,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 90,
+      "line": 109,
       "sourceRange": {
-        "start": 3301,
-        "end": 3515
+        "start": 3923,
+        "end": 4137
       },
       "label": "用户管理",
       "attributes": {
@@ -91085,7 +91457,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#968274c5acaf5a33.1",
       "signature": "968274c5acaf5a33",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -91162,10 +91534,10 @@
       "kind": "control",
       "tag": "RouterLink",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 95,
+      "line": 114,
       "sourceRange": {
-        "start": 3515,
-        "end": 3733
+        "start": 4137,
+        "end": 4355
       },
       "label": "管理员管理",
       "attributes": {
@@ -91182,7 +91554,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e400286c7cd59e44.1",
       "signature": "e400286c7cd59e44",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -91259,10 +91631,109 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 116,
+      "line": 143,
       "sourceRange": {
-        "start": 4276,
-        "end": 4500
+        "start": 5026,
+        "end": 5187
+      },
+      "label": "{{ props.refreshing ? \"正在刷新…\" : \"刷新数据\" }}",
+      "attributes": {
+        "type": "button",
+        ":disabled": "props.refreshing || props.busy",
+        "@click": "emit('load')"
+      },
+      "conditions": [
+        {
+          "directive": "v-if",
+          "expression": "\n            !props.adminListRoute && !props.organizationListRoute && props.tab === 'organizations'\n          "
+        }
+      ],
+      "events": {
+        "@click": "emit('load')"
+      },
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.1",
+      "signature": "9c9141422bfd2c11",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
+      "handlerDefinitions": [],
+      "reviewStatus": "unreviewed",
+      "actionId": null,
+      "dialogId": null,
+      "sideEffect": "unknown-until-handler-reviewed",
+      "candidateRouteIds": [
+        "P12",
+        "P13",
+        "P14",
+        "P15",
+        "P16",
+        "P17",
+        "P18",
+        "P19",
+        "P20",
+        "P21",
+        "P22",
+        "P23",
+        "P24",
+        "P25",
+        "P26",
+        "P27",
+        "P28",
+        "P29",
+        "P30",
+        "P31",
+        "P32",
+        "P33",
+        "P34",
+        "P35",
+        "P36",
+        "P37",
+        "P38",
+        "P39",
+        "P40",
+        "P41",
+        "P42",
+        "P43",
+        "P44",
+        "P45",
+        "P46",
+        "P47",
+        "P48",
+        "P49",
+        "P50",
+        "P51",
+        "P52",
+        "P53",
+        "P54",
+        "P55",
+        "P56",
+        "P57",
+        "P58",
+        "P59",
+        "P60",
+        "P61",
+        "P62",
+        "P63",
+        "P64",
+        "P65",
+        "P66",
+        "P67",
+        "P68",
+        "P69",
+        "P70",
+        "P71"
+      ],
+      "routeAttribution": "static-import-superset-not-runtime-proof",
+      "sourceInventoryIds": [],
+      "evidence": [],
+      "sourceScope": "catalog-route-candidate"
+    },
+    {
+      "kind": "control",
+      "tag": "button",
+      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+      "line": 160,
+      "sourceRange": {
+        "start": 5743,
+        "end": 5981
       },
       "label": "{{ props.refreshing ? \"正在刷新…\" : \"刷新数据\" }}",
       "attributes": {
@@ -91280,9 +91751,9 @@
       "events": {
         "@click": "emit('load')"
       },
-      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.1",
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#9c9141422bfd2c11.2",
       "signature": "9c9141422bfd2c11",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -91356,27 +91827,37 @@
       "sourceScope": "catalog-route-candidate"
     },
     {
-      "kind": "form-event",
-      "tag": "form",
+      "kind": "event-binding",
+      "tag": "PlatformAccountDirectoryFilters",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 126,
+      "line": 169,
       "sourceRange": {
-        "start": 4623,
-        "end": 7492
+        "start": 6008,
+        "end": 6600
       },
-      "label": "账号邮箱 输入邮箱关键词，搜索后更新列表。 组织名称或标识 按组织名称或标识查询，不按成员邮箱查询。 {{ props.searchPlaceholder }} 账号状态 全部状态 正常使用 已停用 仅筛选账号状态，不代表角色权限范围。 组织状态 全部状态 正常使用 已停用组织 仅筛选组织状态，不代表成员账号状态。 全部状态 正常使用 已停用 已停用组织 搜索 重置",
+      "label": "",
       "attributes": {
-        "class": "account-filter",
-        ":class": "{ 'account-filter--admins-c': props.adminListRoute }",
-        "@submit.prevent": "emit('apply-filters')"
+        "v-modelquery": "query",
+        "v-modelstatus": "status",
+        ":tab": "props.tab",
+        ":organization-list-route": "props.organizationListRoute",
+        ":admin-list-route": "props.adminListRoute",
+        ":filter-label": "props.filterLabel",
+        ":active-filter-count": "props.activeFilterCount",
+        ":search-placeholder": "props.searchPlaceholder",
+        ":status-label": "props.statusLabel",
+        ":refreshing": "props.refreshing",
+        "@apply-filters": "emit('apply-filters')",
+        "@reset-filters": "emit('reset-filters')"
       },
       "conditions": [],
       "events": {
-        "@submit.prevent": "emit('apply-filters')"
+        "@apply-filters": "emit('apply-filters')",
+        "@reset-filters": "emit('reset-filters')"
       },
-      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#2d610959fc00fb96.1",
-      "signature": "2d610959fc00fb96",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
+      "signature": "e064834276405c23",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -91453,195 +91934,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 182,
+      "line": 190,
       "sourceRange": {
-        "start": 7162,
-        "end": 7210
-      },
-      "label": "搜索",
-      "attributes": {
-        ":disabled": "props.refreshing"
-      },
-      "conditions": [],
-      "events": {},
-      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e9658d470d4cbeaf.1",
-      "signature": "e9658d470d4cbeaf",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
-      "handlerDefinitions": [],
-      "reviewStatus": "unreviewed",
-      "actionId": null,
-      "dialogId": null,
-      "sideEffect": "unknown-until-handler-reviewed",
-      "candidateRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "static-import-superset-not-runtime-proof",
-      "sourceInventoryIds": [],
-      "evidence": [],
-      "sourceScope": "catalog-route-candidate"
-    },
-    {
-      "kind": "control",
-      "tag": "button",
-      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 183,
-      "sourceRange": {
-        "start": 7223,
-        "end": 7459
-      },
-      "label": "重置",
-      "attributes": {
-        "type": "button",
-        "class": "secondary",
-        ":disabled": "!props.activeFilterCount || props.refreshing",
-        "@click": "emit('reset-filters')"
-      },
-      "conditions": [],
-      "events": {
-        "@click": "emit('reset-filters')"
-      },
-      "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#20080e701de7f5cb.1",
-      "signature": "20080e701de7f5cb",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
-      "handlerDefinitions": [],
-      "reviewStatus": "unreviewed",
-      "actionId": null,
-      "dialogId": null,
-      "sideEffect": "unknown-until-handler-reviewed",
-      "candidateRouteIds": [
-        "P12",
-        "P13",
-        "P14",
-        "P15",
-        "P16",
-        "P17",
-        "P18",
-        "P19",
-        "P20",
-        "P21",
-        "P22",
-        "P23",
-        "P24",
-        "P25",
-        "P26",
-        "P27",
-        "P28",
-        "P29",
-        "P30",
-        "P31",
-        "P32",
-        "P33",
-        "P34",
-        "P35",
-        "P36",
-        "P37",
-        "P38",
-        "P39",
-        "P40",
-        "P41",
-        "P42",
-        "P43",
-        "P44",
-        "P45",
-        "P46",
-        "P47",
-        "P48",
-        "P49",
-        "P50",
-        "P51",
-        "P52",
-        "P53",
-        "P54",
-        "P55",
-        "P56",
-        "P57",
-        "P58",
-        "P59",
-        "P60",
-        "P61",
-        "P62",
-        "P63",
-        "P64",
-        "P65",
-        "P66",
-        "P67",
-        "P68",
-        "P69",
-        "P70",
-        "P71"
-      ],
-      "routeAttribution": "static-import-superset-not-runtime-proof",
-      "sourceInventoryIds": [],
-      "evidence": [],
-      "sourceScope": "catalog-route-candidate"
-    },
-    {
-      "kind": "control",
-      "tag": "button",
-      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 201,
-      "sourceRange": {
-        "start": 7984,
-        "end": 8027
+        "start": 7076,
+        "end": 7119
       },
       "label": "重新加载",
       "attributes": {
@@ -91658,7 +91954,7 @@
       },
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#322a4ac62ce3a305.1",
       "signature": "322a4ac62ce3a305",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -91735,10 +92031,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 211,
+      "line": 200,
       "sourceRange": {
-        "start": 8417,
-        "end": 8538
+        "start": 7529,
+        "end": 7654
       },
       "label": "清除筛选",
       "attributes": {
@@ -91765,7 +92061,7 @@
       },
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.1",
       "signature": "86ea70e081f1f8e3",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -91842,10 +92138,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 214,
+      "line": 203,
       "sourceRange": {
-        "start": 8549,
-        "end": 8732
+        "start": 7667,
+        "end": 7862
       },
       "label": "新建组织",
       "attributes": {
@@ -91872,7 +92168,7 @@
       },
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#f68d2406f8c1db70.1",
       "signature": "f68d2406f8c1db70",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -91949,10 +92245,10 @@
       "kind": "event-binding",
       "tag": "PlatformOrganizationRecords",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 222,
+      "line": 211,
       "sourceRange": {
-        "start": 8760,
-        "end": 9016
+        "start": 7894,
+        "end": 8162
       },
       "label": "",
       "attributes": {
@@ -91977,7 +92273,7 @@
       },
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#8871f6d994e9fced.1",
       "signature": "8871f6d994e9fced",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -92054,10 +92350,10 @@
       "kind": "event-binding",
       "tag": "PlatformUserRecords",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 229,
+      "line": 218,
       "sourceRange": {
-        "start": 9025,
-        "end": 9258
+        "start": 8173,
+        "end": 8418
       },
       "label": "",
       "attributes": {
@@ -92082,7 +92378,7 @@
       },
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#44e761922e1da1d0.1",
       "signature": "44e761922e1da1d0",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -92159,10 +92455,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 245,
+      "line": 234,
       "sourceRange": {
-        "start": 9629,
-        "end": 9750
+        "start": 8809,
+        "end": 8934
       },
       "label": "清除筛选",
       "attributes": {
@@ -92189,7 +92485,7 @@
       },
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#86ea70e081f1f8e3.2",
       "signature": "86ea70e081f1f8e3",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -92266,10 +92562,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 248,
+      "line": 237,
       "sourceRange": {
-        "start": 9761,
-        "end": 9834
+        "start": 8947,
+        "end": 9020
       },
       "label": "新建管理员",
       "attributes": {
@@ -92296,7 +92592,7 @@
       },
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#38003e3f7b002f71.1",
       "signature": "38003e3f7b002f71",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -92373,10 +92669,10 @@
       "kind": "event-binding",
       "tag": "PlatformAdminRecords",
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "line": 250,
+      "line": 239,
       "sourceRange": {
-        "start": 9862,
-        "end": 9951
+        "start": 9052,
+        "end": 9141
       },
       "label": "",
       "attributes": {
@@ -92399,7 +92695,7 @@
       },
       "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#103fa7d7798d62d6.1",
       "signature": "103fa7d7798d62d6",
-      "sourceSha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08",
+      "sourceSha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -117626,10 +117922,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 645,
+      "line": 643,
       "sourceRange": {
-        "start": 22961,
-        "end": 23031
+        "start": 22766,
+        "end": 22836
       },
       "label": "＋ 新建来源",
       "attributes": {
@@ -117642,13 +117938,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#7895edf33d41a47a.1",
       "signature": "7895edf33d41a47a",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "edit",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 374,
-          "endLine": 429
+          "line": 372,
+          "endLine": 427
         }
       ],
       "reviewStatus": "unreviewed",
@@ -117728,10 +118024,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 682,
+      "line": 680,
       "sourceRange": {
-        "start": 24231,
-        "end": 24280
+        "start": 24036,
+        "end": 24085
       },
       "label": "再次刷新",
       "attributes": {
@@ -117749,13 +118045,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#3eebd05a35b5e2d1.1",
       "signature": "3eebd05a35b5e2d1",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 330,
-          "endLine": 371
+          "line": 328,
+          "endLine": 369
         }
       ],
       "reviewStatus": "unreviewed",
@@ -117835,10 +118131,10 @@
       "kind": "event-binding",
       "tag": "UiStatePanel",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 684,
+      "line": 682,
       "sourceRange": {
-        "start": 24294,
-        "end": 24496
+        "start": 24099,
+        "end": 24301
       },
       "label": "",
       "attributes": {
@@ -117860,13 +118156,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1",
       "signature": "d5d54f49106b55f0",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 330,
-          "endLine": 371
+          "line": 328,
+          "endLine": 369
         }
       ],
       "reviewStatus": "unreviewed",
@@ -117944,10 +118240,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 695,
+      "line": 693,
       "sourceRange": {
-        "start": 24654,
-        "end": 24725
+        "start": 24459,
+        "end": 24530
       },
       "label": "登记第一个来源",
       "attributes": {
@@ -117965,13 +118261,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#de4c1cd1ccf4c8da.1",
       "signature": "de4c1cd1ccf4c8da",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "edit",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 374,
-          "endLine": 429
+          "line": 372,
+          "endLine": 427
         }
       ],
       "reviewStatus": "unreviewed",
@@ -118051,10 +118347,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 703,
+      "line": 701,
       "sourceRange": {
-        "start": 25006,
-        "end": 25130
+        "start": 24811,
+        "end": 24935
       },
       "label": "{{ refreshing ? \"刷新中…\" : \"刷新真实数据\" }}",
       "attributes": {
@@ -118073,13 +118369,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#27f5c560567881c4.1",
       "signature": "27f5c560567881c4",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "load",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 330,
-          "endLine": 371
+          "line": 328,
+          "endLine": 369
         }
       ],
       "reviewStatus": "unreviewed",
@@ -118159,10 +118455,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 751,
+      "line": 749,
       "sourceRange": {
-        "start": 26828,
-        "end": 26906
+        "start": 26633,
+        "end": 26711
       },
       "label": "重置",
       "attributes": {
@@ -118181,13 +118477,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#0da6a9c39b0f685c.1",
       "signature": "0da6a9c39b0f685c",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "resetFilters",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 604,
-          "endLine": 610
+          "line": 602,
+          "endLine": 608
         }
       ],
       "reviewStatus": "unreviewed",
@@ -118267,10 +118563,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 760,
+      "line": 758,
       "sourceRange": {
-        "start": 27137,
-        "end": 27196
+        "start": 26942,
+        "end": 27001
       },
       "label": "清除筛选条件",
       "attributes": {
@@ -118288,13 +118584,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#f9d454b64dd4b22a.1",
       "signature": "f9d454b64dd4b22a",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "resetFilters",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 604,
-          "endLine": 610
+          "line": 602,
+          "endLine": 608
         }
       ],
       "reviewStatus": "unreviewed",
@@ -118374,10 +118670,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 808,
+      "line": 806,
       "sourceRange": {
-        "start": 29020,
-        "end": 29234
+        "start": 28825,
+        "end": 29039
       },
       "label": "编辑",
       "attributes": {
@@ -118400,13 +118696,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#f8fbe8533c9685db.1",
       "signature": "f8fbe8533c9685db",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "edit",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 374,
-          "endLine": 429
+          "line": 372,
+          "endLine": 427
         }
       ],
       "reviewStatus": "unreviewed",
@@ -118486,10 +118782,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 876,
+      "line": 874,
       "sourceRange": {
-        "start": 31186,
-        "end": 31343
+        "start": 30991,
+        "end": 31148
       },
       "label": "编辑来源",
       "attributes": {
@@ -118507,13 +118803,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#5d4463e03e3aa18b.1",
       "signature": "5d4463e03e3aa18b",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "edit",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 374,
-          "endLine": 429
+          "line": 372,
+          "endLine": 427
         }
       ],
       "reviewStatus": "unreviewed",
@@ -118593,10 +118889,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 886,
+      "line": 884,
       "sourceRange": {
-        "start": 31372,
-        "end": 31395
+        "start": 31177,
+        "end": 31200
       },
       "label": "技术详情",
       "attributes": {},
@@ -118609,7 +118905,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#1c008f867673db60.1",
       "signature": "1c008f867673db60",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -118686,10 +118982,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 919,
+      "line": 917,
       "sourceRange": {
-        "start": 32284,
-        "end": 32356
+        "start": 32089,
+        "end": 32161
       },
       "label": "上一页",
       "attributes": {
@@ -118708,7 +119004,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#83d11b8719b1c99d.1",
       "signature": "83d11b8719b1c99d",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -118787,10 +119083,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 920,
+      "line": 918,
       "sourceRange": {
-        "start": 32365,
-        "end": 32445
+        "start": 32170,
+        "end": 32250
       },
       "label": "下一页",
       "attributes": {
@@ -118809,7 +119105,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#bd43d7b540116c32.1",
       "signature": "bd43d7b540116c32",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -118888,12 +119184,12 @@
       "kind": "event-binding",
       "tag": "div",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 923,
+      "line": 921,
       "sourceRange": {
-        "start": 32474,
-        "end": 51014
+        "start": 32279,
+        "end": 51330
       },
-      "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeText(form.access_mode) }} 应用技术模板 来源代码（技术标识） {{ formErrors.code }} 名称 {{ formErrors.name }} 目标 URL {{ formErrors.target_url }} 负责人 {{ formErrors.owner_label }} 接入模式 {{ accessModeText(v) }} 市场 {{ formErrors.markets }} 语言 {{ formErrors.languages }} 字段清单 {{ formErrors.fields }} 去重键 {{ formErrors.dedupe_key }} 解析器版本 {{ formErrors.parser_version }} 健康检查 URL {{ formErrors.healthcheck_url }} 频率（分钟） {{ formErrors.schedule_minutes }} 并发 {{ formErrors.concurrency_limit }} 超时 ms {{ formErrors.timeout_ms }} 重试 {{ formErrors.retry_limit }} 熔断阈值 {{ formErrors.circuit_failure_threshold }} 保留天数 {{ formErrors.retention_days }} 失败规则 {{ formErrors.failure_rules }} 平台条款复核 待复核 已批准 已拒绝 发布状态 草稿 未启用 已启用 条款参考 URL {{ formErrors.terms_reference_url }} 条款版本 {{ formErrors.terms_version }} 条款到期时间 {{ formErrors.terms_expires_at }} 发布预览 {{ form.name || \"未命名来源\" }} · {{ accessModeText(form.access_mode) }} {{ list(form.markets).join(\" · \") || \"未填写市场\" }} / {{ list(form.languages).join(\" · \") || \"未填写语言\" }} 每 {{ form.schedule_minutes }} 分钟 · 并发 {{ form.concurrency_limit }} · {{ providerStatusText(form.status) }} {{ message }} 技术详情 {{ editorRequestId }} 上一步 第 {{ editorStep }} / 4 步 · {{ currentStepErrors.length }} 项待修正 下一步 {{ saving ? pendingSaveGeneration === editorFocusGeneration ? \"保存中…\" : \"等待上一项保存…\" : editing ? \"保存新版本\" : \"创建来源\" }}",
+      "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeText(form.access_mode) }} 应用技术模板 来源代码（技术标识） {{ formErrors.code }} 名称 {{ formErrors.name }} 目标 URL {{ formErrors.target_url }} 负责人 {{ formErrors.owner_label }} 接入模式 {{ accessModeText(v) }} 市场 {{ formErrors.markets }} 语言 {{ formErrors.languages }} 字段清单 {{ formErrors.fields }} 去重键 {{ formErrors.dedupe_key }} 解析器版本 {{ formErrors.parser_version }} 健康检查 URL {{ formErrors.healthcheck_url }} 频率（分钟） {{ formErrors.schedule_minutes }} 并发 {{ formErrors.concurrency_limit }} 超时 ms {{ formErrors.timeout_ms }} 重试 {{ formErrors.retry_limit }} 熔断阈值 {{ formErrors.circuit_failure_threshold }} 保留天数 {{ formErrors.retention_days }} 失败规则 {{ formErrors.failure_rules }} 平台条款复核 待复核 已批准 已拒绝 {{ formErrors.terms_review_status }} 发布状态 草稿 未启用 已启用 条款参考 URL（可选） {{ formErrors.terms_reference_url }} 条款版本 {{ formErrors.terms_version }} 条款到期时间 {{ formErrors.terms_expires_at }} 发布预览 {{ form.name || \"未命名来源\" }} · {{ accessModeText(form.access_mode) }} {{ list(form.markets).join(\" · \") || \"未填写市场\" }} / {{ list(form.languages).join(\" · \") || \"未填写语言\" }} 每 {{ form.schedule_minutes }} 分钟 · 并发 {{ form.concurrency_limit }} · {{ providerStatusText(form.status) }} {{ message }} 技术详情 {{ editorRequestId }} 上一步 第 {{ editorStep }} / 4 步 · {{ currentStepErrors.length }} 项待修正 下一步 {{ saving ? pendingSaveGeneration === editorFocusGeneration ? \"保存中…\" : \"等待上一项保存…\" : editing ? \"保存新版本\" : \"创建来源\" }}",
       "attributes": {
         "v-if": "editorOpen",
         "class": "provider-editor-layer",
@@ -118909,15 +119205,15 @@
       "events": {
         "@mousedown.self.prevent": "closeEditor"
       },
-      "candidateId": "apps/web/src/components/ProviderRegistry.vue#51517865bc5117a4.1",
-      "signature": "51517865bc5117a4",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "candidateId": "apps/web/src/components/ProviderRegistry.vue#8fad861111d9338e.1",
+      "signature": "8fad861111d9338e",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "closeEditor",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 459,
-          "endLine": 496
+          "line": 457,
+          "endLine": 494
         }
       ],
       "reviewStatus": "unreviewed",
@@ -118995,12 +119291,12 @@
       "kind": "form-event",
       "tag": "form",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 929,
+      "line": 927,
       "sourceRange": {
-        "start": 32621,
-        "end": 51003
+        "start": 32426,
+        "end": 51319
       },
-      "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeText(form.access_mode) }} 应用技术模板 来源代码（技术标识） {{ formErrors.code }} 名称 {{ formErrors.name }} 目标 URL {{ formErrors.target_url }} 负责人 {{ formErrors.owner_label }} 接入模式 {{ accessModeText(v) }} 市场 {{ formErrors.markets }} 语言 {{ formErrors.languages }} 字段清单 {{ formErrors.fields }} 去重键 {{ formErrors.dedupe_key }} 解析器版本 {{ formErrors.parser_version }} 健康检查 URL {{ formErrors.healthcheck_url }} 频率（分钟） {{ formErrors.schedule_minutes }} 并发 {{ formErrors.concurrency_limit }} 超时 ms {{ formErrors.timeout_ms }} 重试 {{ formErrors.retry_limit }} 熔断阈值 {{ formErrors.circuit_failure_threshold }} 保留天数 {{ formErrors.retention_days }} 失败规则 {{ formErrors.failure_rules }} 平台条款复核 待复核 已批准 已拒绝 发布状态 草稿 未启用 已启用 条款参考 URL {{ formErrors.terms_reference_url }} 条款版本 {{ formErrors.terms_version }} 条款到期时间 {{ formErrors.terms_expires_at }} 发布预览 {{ form.name || \"未命名来源\" }} · {{ accessModeText(form.access_mode) }} {{ list(form.markets).join(\" · \") || \"未填写市场\" }} / {{ list(form.languages).join(\" · \") || \"未填写语言\" }} 每 {{ form.schedule_minutes }} 分钟 · 并发 {{ form.concurrency_limit }} · {{ providerStatusText(form.status) }} {{ message }} 技术详情 {{ editorRequestId }} 上一步 第 {{ editorStep }} / 4 步 · {{ currentStepErrors.length }} 项待修正 下一步 {{ saving ? pendingSaveGeneration === editorFocusGeneration ? \"保存中…\" : \"等待上一项保存…\" : editing ? \"保存新版本\" : \"创建来源\" }}",
+      "label": "{{ editing ? \"编辑定义版本\" : \"新建来源定义\" }} {{ editing ? \"编辑来源\" : \"登记来源\" }} × {{ index + 1 }} {{ label }} 当前模板： {{ accessModeText(form.access_mode) }} 应用技术模板 来源代码（技术标识） {{ formErrors.code }} 名称 {{ formErrors.name }} 目标 URL {{ formErrors.target_url }} 负责人 {{ formErrors.owner_label }} 接入模式 {{ accessModeText(v) }} 市场 {{ formErrors.markets }} 语言 {{ formErrors.languages }} 字段清单 {{ formErrors.fields }} 去重键 {{ formErrors.dedupe_key }} 解析器版本 {{ formErrors.parser_version }} 健康检查 URL {{ formErrors.healthcheck_url }} 频率（分钟） {{ formErrors.schedule_minutes }} 并发 {{ formErrors.concurrency_limit }} 超时 ms {{ formErrors.timeout_ms }} 重试 {{ formErrors.retry_limit }} 熔断阈值 {{ formErrors.circuit_failure_threshold }} 保留天数 {{ formErrors.retention_days }} 失败规则 {{ formErrors.failure_rules }} 平台条款复核 待复核 已批准 已拒绝 {{ formErrors.terms_review_status }} 发布状态 草稿 未启用 已启用 条款参考 URL（可选） {{ formErrors.terms_reference_url }} 条款版本 {{ formErrors.terms_version }} 条款到期时间 {{ formErrors.terms_expires_at }} 发布预览 {{ form.name || \"未命名来源\" }} · {{ accessModeText(form.access_mode) }} {{ list(form.markets).join(\" · \") || \"未填写市场\" }} / {{ list(form.languages).join(\" · \") || \"未填写语言\" }} 每 {{ form.schedule_minutes }} 分钟 · 并发 {{ form.concurrency_limit }} · {{ providerStatusText(form.status) }} {{ message }} 技术详情 {{ editorRequestId }} 上一步 第 {{ editorStep }} / 4 步 · {{ currentStepErrors.length }} 项待修正 下一步 {{ saving ? pendingSaveGeneration === editorFocusGeneration ? \"保存中…\" : \"等待上一项保存…\" : editing ? \"保存新版本\" : \"创建来源\" }}",
       "attributes": {
         "ref": "editorPanel",
         "class": "provider-editor",
@@ -119024,27 +119320,27 @@
         "@keydown.esc.stop.prevent": "closeEditor",
         "@submit.prevent": "save"
       },
-      "candidateId": "apps/web/src/components/ProviderRegistry.vue#eb72344b9c9f3d10.1",
-      "signature": "eb72344b9c9f3d10",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "candidateId": "apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1",
+      "signature": "f4f17798bbc8fc53",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "containEditorTab",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 430,
-          "endLine": 458
+          "line": 428,
+          "endLine": 456
         },
         {
           "name": "closeEditor",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 459,
-          "endLine": 496
+          "line": 457,
+          "endLine": 494
         },
         {
           "name": "save",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 536,
-          "endLine": 603
+          "line": 534,
+          "endLine": 601
         }
       ],
       "reviewStatus": "unreviewed",
@@ -119122,10 +119418,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 946,
+      "line": 944,
       "sourceRange": {
-        "start": 33140,
-        "end": 33315
+        "start": 32945,
+        "end": 33120
       },
       "label": "关闭来源设置编辑",
       "attributes": {
@@ -119145,13 +119441,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#e03ff4bf86eb6a89.1",
       "signature": "e03ff4bf86eb6a89",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "closeEditor",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 459,
-          "endLine": 496
+          "line": 457,
+          "endLine": 494
         }
       ],
       "reviewStatus": "unreviewed",
@@ -119231,10 +119527,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 957,
+      "line": 955,
       "sourceRange": {
-        "start": 33509,
-        "end": 33771
+        "start": 33314,
+        "end": 33576
       },
       "label": "{{ index + 1 }} {{ label }}",
       "attributes": {
@@ -119257,7 +119553,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#71fedaee68dde679.1",
       "signature": "71fedaee68dde679",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -119336,10 +119632,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 969,
+      "line": 967,
       "sourceRange": {
-        "start": 33923,
-        "end": 33983
+        "start": 33728,
+        "end": 33788
       },
       "label": "应用技术模板",
       "attributes": {
@@ -119357,13 +119653,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#83ffe5899e1ccfcf.1",
       "signature": "83ffe5899e1ccfcf",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "applyTemplate",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 497,
-          "endLine": 524
+          "line": 495,
+          "endLine": 522
         }
       ],
       "reviewStatus": "unreviewed",
@@ -119443,10 +119739,10 @@
       "kind": "control",
       "tag": "summary",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1338,
+      "line": 1348,
       "sourceRange": {
-        "start": 49888,
-        "end": 49911
+        "start": 50204,
+        "end": 50227
       },
       "label": "技术详情",
       "attributes": {},
@@ -119467,7 +119763,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#1c008f867673db60.2",
       "signature": "1c008f867673db60",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -119544,10 +119840,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1343,
+      "line": 1353,
       "sourceRange": {
-        "start": 50022,
-        "end": 50142
+        "start": 50338,
+        "end": 50458
       },
       "label": "上一步",
       "attributes": {
@@ -119571,7 +119867,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#4ba7742e75103fa4.1",
       "signature": "4ba7742e75103fa4",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -119650,10 +119946,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1351,
+      "line": 1361,
       "sourceRange": {
-        "start": 50335,
-        "end": 50409
+        "start": 50651,
+        "end": 50725
       },
       "label": "下一步",
       "attributes": {
@@ -119676,13 +119972,13 @@
       },
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#d0e6c4e6deaeab8a.1",
       "signature": "d0e6c4e6deaeab8a",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [
         {
           "name": "nextStep",
           "file": "apps/web/src/components/ProviderRegistry.vue",
-          "line": 525,
-          "endLine": 535
+          "line": 523,
+          "endLine": 533
         }
       ],
       "reviewStatus": "unreviewed",
@@ -119762,10 +120058,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "line": 1352,
+      "line": 1362,
       "sourceRange": {
-        "start": 50420,
-        "end": 50971
+        "start": 50736,
+        "end": 51287
       },
       "label": "{{ saving ? pendingSaveGeneration === editorFocusGeneration ? \"保存中…\" : \"等待上一项保存…\" : editing ? \"保存新版本\" : \"创建来源\" }}",
       "attributes": {
@@ -119787,7 +120083,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ProviderRegistry.vue#addbc979a88d3d3a.1",
       "signature": "addbc979a88d3d3a",
-      "sourceSha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0",
+      "sourceSha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -123281,7 +123577,7 @@
       "line": 64,
       "sourceRange": {
         "start": 1831,
-        "end": 8279
+        "end": 8336
       },
       "label": "来源采集 / 编辑设置 采集设置 · {{ editing.name }} 调整采集节奏和运行状态。系统会记录本次原因，并保留历史版本。 {{ editing.access_mode === \"authenticated_browser\" ? \"网页登录来源\" : \"公开来源\" }} {{ editing.provisioned?.status === \"enabled\" ? \"当前已启用\" : \"当前已停用\" }} 配置版本 {{ editing.provisioned?.version }} × {{ [\"saving\", \"saving_disabled\", \"smoke_testing\", \"enabling\"].includes(saveStage) ? \"正在处理\" : \"处理结果\" }} {{ saveTitle }} {{ saveDescription }} 技术详情 {{ saveRequestId }} 采集频率（分钟） 允许 1–10080 的整数。 单次超时（毫秒） 允许 1000–120000 毫秒的整数。 失败重试次数 允许 0–10 次。 {{ editing.availability === \"automatic\" ? \"运行状态\" : \"来源设置状态\" }} 启用 停用 网页登录来源仍需完成登录和来源验收后才能运行。 启用时会先以停用状态保存这版配置，再访问真实来源页面并验证解析结果；烟测失败不会启用来源。 保存前运行预估 调度同频与当前并发占用 同频来源 {{ preview.same_interval_enabled_count }} 个已启用来源配置为 {{ form.schedule_minutes }} 分钟 当前并发占用 {{ preview.active_count }} / {{ preview.configured_limit }} ， 剩余 {{ preview.available_count }} 个配置槽位 同频数量只提示可能进入同一调度窗口；系统未保存每个来源的独立相位，因此不把同频直接判定为必然冲突。并发占用来自当前待执行或执行中的真实子查询快照，不预测未来任务量。 变更原因 填写 2–500 个字符，说明这次调整的原因。 {{ saveStage === \"success\" || saveStage === \"partial\" || saveStage === \"conflict\" ? \"结果已确认，关闭后同步来源目录\" : requiresSmokeTest(editing, form) ? \"将先保存停用版，再进行烟测\" : \"保存后会生成新的配置版本\" }} {{ saveStage === \"success\" ? \"完成\" : saveStage === \"conflict\" ? \"关闭后重新读取\" : \"关闭\" }} 取消 {{ saving ? saveStage === \"smoke_testing\" ? \"正在烟测…\" : saveStage === \"enabling\" ? \"正在启用…\" : \"正在保存…\" : saveStage === \"idle\" ? requiresSmokeTest(editing, form) ? \"烟测并启用\" : \"保存配置\" : \"重新保存\" }}",
       "attributes": {
@@ -123305,7 +123601,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#fd96a0ddfd39623f.1",
       "signature": "fd96a0ddfd39623f",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -123385,7 +123681,7 @@
       "line": 74,
       "sourceRange": {
         "start": 2102,
-        "end": 8270
+        "end": 8327
       },
       "label": "来源采集 / 编辑设置 采集设置 · {{ editing.name }} 调整采集节奏和运行状态。系统会记录本次原因，并保留历史版本。 {{ editing.access_mode === \"authenticated_browser\" ? \"网页登录来源\" : \"公开来源\" }} {{ editing.provisioned?.status === \"enabled\" ? \"当前已启用\" : \"当前已停用\" }} 配置版本 {{ editing.provisioned?.version }} × {{ [\"saving\", \"saving_disabled\", \"smoke_testing\", \"enabling\"].includes(saveStage) ? \"正在处理\" : \"处理结果\" }} {{ saveTitle }} {{ saveDescription }} 技术详情 {{ saveRequestId }} 采集频率（分钟） 允许 1–10080 的整数。 单次超时（毫秒） 允许 1000–120000 毫秒的整数。 失败重试次数 允许 0–10 次。 {{ editing.availability === \"automatic\" ? \"运行状态\" : \"来源设置状态\" }} 启用 停用 网页登录来源仍需完成登录和来源验收后才能运行。 启用时会先以停用状态保存这版配置，再访问真实来源页面并验证解析结果；烟测失败不会启用来源。 保存前运行预估 调度同频与当前并发占用 同频来源 {{ preview.same_interval_enabled_count }} 个已启用来源配置为 {{ form.schedule_minutes }} 分钟 当前并发占用 {{ preview.active_count }} / {{ preview.configured_limit }} ， 剩余 {{ preview.available_count }} 个配置槽位 同频数量只提示可能进入同一调度窗口；系统未保存每个来源的独立相位，因此不把同频直接判定为必然冲突。并发占用来自当前待执行或执行中的真实子查询快照，不预测未来任务量。 变更原因 填写 2–500 个字符，说明这次调整的原因。 {{ saveStage === \"success\" || saveStage === \"partial\" || saveStage === \"conflict\" ? \"结果已确认，关闭后同步来源目录\" : requiresSmokeTest(editing, form) ? \"将先保存停用版，再进行烟测\" : \"保存后会生成新的配置版本\" }} {{ saveStage === \"success\" ? \"完成\" : saveStage === \"conflict\" ? \"关闭后重新读取\" : \"关闭\" }} 取消 {{ saving ? saveStage === \"smoke_testing\" ? \"正在烟测…\" : saveStage === \"enabling\" ? \"正在启用…\" : \"正在保存…\" : saveStage === \"idle\" ? requiresSmokeTest(editing, form) ? \"烟测并启用\" : \"保存配置\" : \"重新保存\" }}",
       "attributes": {
@@ -123404,7 +123700,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#683678bf384a1e42.1",
       "signature": "683678bf384a1e42",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -123504,7 +123800,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#004f04ff66f655ca.1",
       "signature": "004f04ff66f655ca",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [
         {
           "name": "closeEditDialog",
@@ -123612,7 +123908,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#1c008f867673db60.1",
       "signature": "1c008f867673db60",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -123692,7 +123988,7 @@
       "line": 127,
       "sourceRange": {
         "start": 3962,
-        "end": 4288
+        "end": 4307
       },
       "label": "",
       "attributes": {
@@ -123700,6 +123996,7 @@
         "type": "number",
         "min": "1",
         "max": "10080",
+        "step": "1",
         "required": "",
         ":disabled": "saving",
         "aria-describedby": "source-edit-schedule-help",
@@ -123714,9 +124011,9 @@
       "events": {
         "@input": "updateForm('schedule_minutes', Number(($event.target as HTMLInputElement).value))"
       },
-      "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#a3dad946584f7803.1",
-      "signature": "a3dad946584f7803",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#2e3324731e3cd339.1",
+      "signature": "2e3324731e3cd339",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [
         {
           "name": "updateForm",
@@ -123800,10 +124097,10 @@
       "kind": "event-binding",
       "tag": "input",
       "file": "apps/web/src/components/ProviderSourceEditDialog.vue",
-      "line": 139,
+      "line": 140,
       "sourceRange": {
-        "start": 4395,
-        "end": 4712
+        "start": 4414,
+        "end": 4750
       },
       "label": "",
       "attributes": {
@@ -123811,6 +124108,7 @@
         "type": "number",
         "min": "1000",
         "max": "120000",
+        "step": "1",
         "required": "",
         ":disabled": "saving",
         "aria-describedby": "source-edit-timeout-help",
@@ -123825,9 +124123,9 @@
       "events": {
         "@input": "updateForm('timeout_ms', Number(($event.target as HTMLInputElement).value))"
       },
-      "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#73764f74b8f1a61a.1",
-      "signature": "73764f74b8f1a61a",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#9e5fb1c87586c9b3.1",
+      "signature": "9e5fb1c87586c9b3",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [
         {
           "name": "updateForm",
@@ -123911,10 +124209,10 @@
       "kind": "event-binding",
       "tag": "input",
       "file": "apps/web/src/components/ProviderSourceEditDialog.vue",
-      "line": 151,
+      "line": 153,
       "sourceRange": {
-        "start": 4822,
-        "end": 5132
+        "start": 4860,
+        "end": 5189
       },
       "label": "",
       "attributes": {
@@ -123922,6 +124220,7 @@
         "type": "number",
         "min": "0",
         "max": "10",
+        "step": "1",
         "required": "",
         ":disabled": "saving",
         "aria-describedby": "source-edit-retry-help",
@@ -123936,9 +124235,9 @@
       "events": {
         "@input": "updateForm('retry_limit', Number(($event.target as HTMLInputElement).value))"
       },
-      "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#0d47ebf53fe0590e.1",
-      "signature": "0d47ebf53fe0590e",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#df27ce16947a3af7.1",
+      "signature": "df27ce16947a3af7",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [
         {
           "name": "updateForm",
@@ -124022,10 +124321,10 @@
       "kind": "event-binding",
       "tag": "select",
       "file": "apps/web/src/components/ProviderSourceEditDialog.vue",
-      "line": 164,
+      "line": 167,
       "sourceRange": {
-        "start": 5294,
-        "end": 5620
+        "start": 5351,
+        "end": 5677
       },
       "label": "启用 停用",
       "attributes": {
@@ -124045,7 +124344,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#c57686ba7c1f6588.1",
       "signature": "c57686ba7c1f6588",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [
         {
           "name": "updateForm",
@@ -124129,10 +124428,10 @@
       "kind": "event-binding",
       "tag": "textarea",
       "file": "apps/web/src/components/ProviderSourceEditDialog.vue",
-      "line": 205,
+      "line": 208,
       "sourceRange": {
-        "start": 6654,
-        "end": 6961
+        "start": 6711,
+        "end": 7018
       },
       "label": "",
       "attributes": {
@@ -124155,7 +124454,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#c0923c491565b4ef.1",
       "signature": "c0923c491565b4ef",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [
         {
           "name": "updateForm",
@@ -124239,10 +124538,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderSourceEditDialog.vue",
-      "line": 226,
+      "line": 229,
       "sourceRange": {
-        "start": 7359,
-        "end": 7640
+        "start": 7416,
+        "end": 7697
       },
       "label": "{{ saveStage === \"success\" ? \"完成\" : saveStage === \"conflict\" ? \"关闭后重新读取\" : \"关闭\" }}",
       "attributes": {
@@ -124265,7 +124564,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#c74c69289cda1b1c.1",
       "signature": "c74c69289cda1b1c",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [
         {
           "name": "closeEditDialog",
@@ -124349,10 +124648,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderSourceEditDialog.vue",
-      "line": 236,
+      "line": 239,
       "sourceRange": {
-        "start": 7677,
-        "end": 7754
+        "start": 7734,
+        "end": 7811
       },
       "label": "取消",
       "attributes": {
@@ -124375,7 +124674,7 @@
       },
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#a8cf70fb83e27873.1",
       "signature": "a8cf70fb83e27873",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [
         {
           "name": "closeEditDialog",
@@ -124459,10 +124758,10 @@
       "kind": "control",
       "tag": "button",
       "file": "apps/web/src/components/ProviderSourceEditDialog.vue",
-      "line": 237,
+      "line": 240,
       "sourceRange": {
-        "start": 7765,
-        "end": 8222
+        "start": 7822,
+        "end": 8279
       },
       "label": "{{ saving ? saveStage === \"smoke_testing\" ? \"正在烟测…\" : saveStage === \"enabling\" ? \"正在启用…\" : \"正在保存…\" : saveStage === \"idle\" ? requiresSmokeTest(editing, form) ? \"烟测并启用\" : \"保存配置\" : \"重新保存\" }}",
       "attributes": {
@@ -124481,7 +124780,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ProviderSourceEditDialog.vue#d166a16792084fe1.1",
       "signature": "d166a16792084fe1",
-      "sourceSha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296",
+      "sourceSha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -126776,7 +127075,7 @@
       },
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#2e6f5b1858278d74.1",
       "signature": "2e6f5b1858278d74",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [
         {
           "name": "load",
@@ -126882,7 +127181,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#7e7fceb8ddc95b63.1",
       "signature": "7e7fceb8ddc95b63",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -126982,7 +127281,7 @@
       },
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#a93553a3ba9aa8a6.1",
       "signature": "a93553a3ba9aa8a6",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [
         {
           "name": "load",
@@ -127089,7 +127388,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#5587941412d5210f.1",
       "signature": "5587941412d5210f",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -127194,7 +127493,7 @@
       },
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#0227b741c3d451ee.1",
       "signature": "0227b741c3d451ee",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [
         {
           "name": "load",
@@ -127300,7 +127599,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#9d42d660b274b4e7.1",
       "signature": "9d42d660b274b4e7",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -127399,7 +127698,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#e6f6630b9e002351.1",
       "signature": "e6f6630b9e002351",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -127498,7 +127797,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#0745c7ca1efdbdf9.1",
       "signature": "0745c7ca1efdbdf9",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -127591,7 +127890,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#cc981fe4f655ae81.1",
       "signature": "cc981fe4f655ae81",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -127688,7 +127987,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.1",
       "signature": "1c008f867673db60",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -127781,7 +128080,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.2",
       "signature": "1c008f867673db60",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,
@@ -127882,7 +128181,7 @@
       "events": {},
       "candidateId": "apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.3",
       "signature": "1c008f867673db60",
-      "sourceSha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205",
+      "sourceSha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e",
       "handlerDefinitions": [],
       "reviewStatus": "unreviewed",
       "actionId": null,

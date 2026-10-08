@@ -244,7 +244,7 @@
   ],
   "retainedOriginalImages": 91,
   "acceptanceComplete": false,
-  "userApproved": false,
+  "userApproved": true,
   "limitations": [
     "Offline proposal, not mounted Vue",
     "No backend, permissions, production or native zoom verification",

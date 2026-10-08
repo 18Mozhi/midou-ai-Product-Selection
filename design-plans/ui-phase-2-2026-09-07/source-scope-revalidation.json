@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "sourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591",
+  "sourceFingerprint": "1e0395e304f4a54ff6522d9b195f0056618e3404cffec35542d189cb1cb9506e",
   "status": "supporting-shell-source-revalidated-not-runtime-acceptance",
   "runtimeAcceptance": "partial-not-frozen",
   "bindings": [
     {
       "file": "apps/web/src/components/NavigationShell.vue",
-      "previousSha256": "993d7e1a7dc50f7dab6f839428afd3e5d15fac45b0eff9e762392024d47eab92",
-      "currentSha256": "4490c21cd477e2874dd9f2eb3c0cafafa2e88baf46620d2a0eb31a3f4e53d2bc",
-      "previousRevision": "b043fd7ff11a796f682e39fd869f898e9c2a9eb1",
-      "changeRevision": "243941a0620cd7444bd494a0242d471b343e58c5",
-      "reviewConclusion": "54 outside-route source sites remain in unchanged components. This supporting shell changed navigation request sequence/abort ownership and closes discovery/theme/menu on navigation or shell switch; no new development renderer or orphan consumer was introduced.",
-      "unchangedInitializers": [
-        "componentModules",
-        "surfaceComponents",
-        "selectedSurfaceComponent",
-        "activeSurface",
-        "activeCachePolicy"
-      ],
-      "templateUnchanged": true
+      "previousSha256": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9",
+      "currentSha256": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+      "previousRevision": null,
+      "changeRevision": "9468ded7bd05900eb22a9726893e5a8bb89d2d15",
+      "reviewConclusion": "The current shell moved surface registration into navigation-surface-registry, moved drawer behavior into useNavigationShellDrawer, and substantially changed its template. All 54 outside-route candidate IDs and their reviewed labels, events, conditions, handlers, route classification and partial runtime status still match the refreshed inventory; this does not prove runtime or production acceptance.",
+      "templateUnchanged": false,
+      "previousRevisionNote": "The recorded prior source hash is retained from the review artifact but was not present in available Git history; no commit is claimed.",
+      "reviewedCurrentStructure": [
+        "surfaceComponents and DiscoveryOverlay are imported from navigation-surface-registry",
+        "navigation drawer behavior is owned by useNavigationShellDrawer",
+        "the current shell template is covered by the refreshed inventory fingerprint"
+      ]
     }
   ],
   "limits": [
-    "Original source-scope-review.json and its historical hashes remain unchanged.",
-    "Git parent/current LF hashes and TypeScript initializers plus template compared during this review; only this exact current whole-file hash is accepted.",
-    "The broad component glob and six orphan sites retain their previous limitations; this is not production bundle removal or per-candidate runtime acceptance."
-  ]
+    "Historical source-scope fingerprint and the prior NavigationShell source hash are retained separately for traceability.",
+    "Current outside-route records are checked against exact IDs and current AST candidate fields.",
+    "The shell template changed; current inventory tracks the new controls, but this remains static classification and partial runtime evidence, not production acceptance."
+  ],
+  "previousSourceFingerprint": "fad2a485b462fd89b20dca92bda5b944683bea63cbc263c5ad3d64b4f60fb591"
 }

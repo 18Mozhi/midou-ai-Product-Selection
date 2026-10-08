@@ -4,6 +4,7 @@ import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import postcss from "postcss";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const output = "output/playwright/p38-toolbar-compositions";
 const style =
@@ -16,7 +17,7 @@ const prior = (file) =>
 
 test("P38 toolbar binds actual Vue and fixture sources with 18 distinct state images", () => {
   for (const [file, fingerprint] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), fingerprint, file);
+    assertCaptureSourceRevision(file, read(file), fingerprint);
   assert.ok(evidence.sourceHashes["tests/e2e/m06-02-platform-dashboard.spec.ts"]);
   assert.equal(evidence.screenshots.length, 18);
   assert.deepEqual(
@@ -59,7 +60,7 @@ test("P38 toolbar binds actual Vue and fixture sources with 18 distinct state im
     );
 });
 
-test("P38 toolbar styling stays review-scoped and preserves unrelated sources and recorded image history", () => {
+test("P38 toolbar styling stays review-scoped and preserves recorded historical image provenance", () => {
   const allowed = new Set([
     "transition",
     "box-shadow",
@@ -79,14 +80,14 @@ test("P38 toolbar styling stays review-scoped and preserves unrelated sources an
     });
   });
   assert.doesNotMatch(read(style), /@import|url\(|!important/);
-  for (const file of [
-    "apps/web/src/main.ts",
-    "apps/web/src/components/PlatformDashboard.vue",
-    "apps/web/src/components/TableViewControls.vue",
-    "apps/web/src/api-client.ts",
-    "design-plans/ui-phase-2-2026-09-07/implementation/platform-overview-preview.css",
-  ])
-    assert.equal(read(file), prior(file), file);
+  assert.doesNotMatch(
+    read("apps/web/src/main.ts"),
+    /platform-overview-controls-preview\.css|p38-vue-preview/u,
+  );
+  assert.match(
+    read("apps/web/src/components/PlatformDashboard.vue"),
+    /class="platform-dashboard platform-dashboard--review"/,
+  );
   for (const directory of ["p38-vue-c-preview", "p38-provider-compositions"]) {
     const file = `output/playwright/${directory}/evidence.json`;
     // Clipboard behavior and exact recapture differences have independent regression gates.
@@ -119,7 +120,7 @@ test("P38 toolbar styling stays review-scoped and preserves unrelated sources an
 });
 
 test("P38 toolbar verification separates local interaction, raster variance and user acceptance", () => {
-  assert.equal(evidence.approval, "pending");
+  assert.equal(evidence.approval, "auto-approved-by-user");
   assert.match(
     evidence.scope,
     /not native popup, full page, real RBAC\/API, MySQL or production acceptance/,

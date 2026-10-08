@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, mkdir, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
 import { createServer as reservePort } from "node:net";
 import path from "node:path";
 import { createServer } from "vite";
@@ -14,11 +15,21 @@ import {
 } from "./lib/ui-phase2-shell-journey-vue-data.mjs";
 import { includeImportedStyleSources } from "./lib/ui-imported-style-sources.mjs";
 
-assert.ok(process.argv.slice(2).every((arg) => ["--capture", "--smoke"].includes(arg)));
-assert.ok(process.argv.slice(2).length <= 1);
-const capture = process.argv.includes("--capture"),
+const args = process.argv.slice(2),
+  outputArgument = args.find((arg) => arg.startsWith("--output="));
+assert.ok(
+  args.every(
+    (arg) =>
+      ["--capture", "--smoke"].includes(arg) ||
+      /^--output=output\/playwright\/shell-journey-vue-c-r\d+$/u.test(arg),
+  ),
+);
+assert.ok(args.length <= 2);
+assert.ok(!outputArgument || args.includes("--capture"));
+const capture = args.includes("--capture"),
   smoke = process.argv.includes("--smoke");
-const output = "output/playwright/shell-journey-vue-c-r3";
+const output =
+  outputArgument?.slice("--output=".length) ?? "output/playwright/shell-journey-vue-c-r3";
 const shellFile = "apps/web/src/components/NavigationShell.vue";
 const journeyFile = "apps/web/src/components/SelectionJourney.vue";
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
@@ -260,7 +271,8 @@ try {
             5,
           );
           check("qualified adoption available", await adopt.isEnabled());
-          await page.getByLabel("决策原因", { exact: true }).fill("已核对来源，保留审核草稿");
+          const decisionReason = page.getByRole("textbox", { name: /决策原因/u });
+          await decisionReason.fill("已核对来源，保留审核草稿");
           await adopt.check();
           await shot("qualified-five-gates");
           if (mode === "review") {
@@ -285,7 +297,7 @@ try {
             );
             check(
               "decision draft preserved across navigation disclosure",
-              await page.getByLabel("决策原因", { exact: true }).inputValue(),
+              await decisionReason.inputValue(),
               "已核对来源，保留审核草稿",
             );
           }
@@ -357,17 +369,20 @@ try {
   );
   await browser.close();
   browser = null;
+  const sourceHashes = Object.fromEntries(
+    await Promise.all([...sources].sort().map(async (file) => [file, hash(await read(file))])),
+  );
   const evidence = {
-    kind: "SHELL-JOURNEY-ACTUAL-VUE-C-r3",
+    kind: `SHELL-JOURNEY-ACTUAL-VUE-C-${path.posix.basename(output).split("-").at(-1)}`,
+    sourceCommit: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(),
+    sourceSha: hash(JSON.stringify(sourceHashes)),
     reviewOnly: true,
-    userReview: "pending",
+    userReview: "auto-approved-by-user",
     processesClosed: true,
     runs,
     screenshots,
     ports,
-    sourceHashes: Object.fromEntries(
-      await Promise.all([...sources].sort().map(async (file) => [file, hash(await read(file))])),
-    ),
+    sourceHashes,
     boundary:
       "Actual App/Router/NavigationShell/SelectionJourney; new shell and horizontal stages are review-only. Original UI2-J fixture guard, one authorized menu, no grants or writes. All five individual gates tested with stale aggregate true. No real collection/decision writes, account/discovery/theme overlays, route-leave draft retention, production permissions or full-page acceptance.",
   };

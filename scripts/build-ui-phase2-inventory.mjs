@@ -280,6 +280,45 @@ const coverage = {
   productionExecutedActions: 0,
   userApprovedPages: 0,
 };
+// Inventory identity/count fields are generated; page review metadata is human-owned.
+// Preserve that metadata across inventory rebuilds, but fail closed if page identity changes.
+const coveragePath = `${output}/coverage.json`;
+if (existsSync(path.join(repo, coveragePath))) {
+  const previous = JSON.parse(await read(coveragePath));
+  const previousPages = new Map(previous.pages.map((page) => [page.id, page]));
+  const generatedKeys = new Set([
+    "id",
+    "path",
+    "title",
+    "component",
+    "batch",
+    "shell",
+    "acceptance",
+    "sessionRequired",
+    "capabilities",
+    "productionResolver",
+    "candidateControls",
+    "candidateDialogs",
+  ]);
+  if (previous.pages.length !== coverage.pages.length)
+    throw new Error("coverage_page_denominator_changed_review_required");
+  for (const page of coverage.pages) {
+    const reviewed = previousPages.get(page.id);
+    if (!reviewed || reviewed.path !== page.path)
+      throw new Error(`coverage_page_identity_changed_review_required:${page.id}`);
+    for (const [key, value] of Object.entries(reviewed))
+      if (!generatedKeys.has(key)) page[key] = value;
+  }
+  for (const key of [
+    "denominatorFrozen",
+    "gates",
+    "verifiedBusinessActions",
+    "verifiedDialogVariants",
+    "productionExecutedActions",
+    "userApprovedPages",
+  ])
+    if (Object.hasOwn(previous, key)) coverage[key] = previous[key];
+}
 const slim = (item) => ({
   id: item.candidateId,
   kind: item.kind,

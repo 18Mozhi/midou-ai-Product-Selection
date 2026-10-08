@@ -16,20 +16,20 @@ export function revalidatedScopeSources(review, revalidation) {
   const binding = revalidation.bindings[0];
   assert.equal(binding.file, "apps/web/src/components/NavigationShell.vue");
   assert.ok(!review.records.some((r) => r.file === binding.file));
-  assert.equal(binding.previousSha256, review.sources[binding.file]);
+  assert.equal(binding.previousSha256, review.previousSources[binding.file]);
   assert.match(binding.currentSha256, /^[a-f0-9]{64}$/);
-  assert.match(binding.previousRevision, /^[a-f0-9]{40}$/);
+  assert.equal(binding.currentSha256, review.sources[binding.file]);
+  assert.equal(binding.previousRevision, null);
+  assert.match(binding.previousRevisionNote, /not present in .*Git history/);
   assert.match(binding.changeRevision, /^[a-f0-9]{40}$/);
   assert.ok(binding.reviewConclusion);
-  assert.equal(binding.templateUnchanged, true);
-  assert.deepEqual(binding.unchangedInitializers, [
-    "componentModules",
-    "surfaceComponents",
-    "selectedSurfaceComponent",
-    "activeSurface",
-    "activeCachePolicy",
+  assert.equal(binding.templateUnchanged, false);
+  assert.deepEqual(binding.reviewedCurrentStructure, [
+    "surfaceComponents and DiscoveryOverlay are imported from navigation-surface-registry",
+    "navigation drawer behavior is owned by useNavigationShellDrawer",
+    "the current shell template is covered by the refreshed inventory fingerprint",
   ]);
-  return { ...review.sources, [binding.file]: binding.currentSha256 };
+  return { ...review.sources };
 }
 export function validateScopeRecords(review, candidates, fingerprint, sourceHashes) {
   assert.equal(review.schemaVersion, 1);
@@ -101,6 +101,7 @@ export async function verifySourceScope() {
   const review = await readJson(`${base}/source-scope-review.json`);
   const revalidation = await readJson(`${base}/source-scope-revalidation.json`);
   const reviewedSources = revalidatedScopeSources(review, revalidation);
+  assert.equal(revalidation.sourceFingerprint, review.sourceFingerprint);
   const baseline = await readJson(`${base}/baseline.json`);
   const actions = await readJson(`${base}/actions.json`);
   const dialogs = await readJson(`${base}/dialogs.json`);

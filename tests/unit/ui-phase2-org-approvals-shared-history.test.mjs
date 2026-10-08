@@ -24,7 +24,7 @@ test("the five legacy manifests and their listed pictures remain immutable", () 
     "output/playwright/p34-parent-read-states":
       "d30d2fbf8f178d33123b95252524cdc54273aae3f94d8e7383cc54220d857ecd",
     "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c":
-      "77481a5a3f0ae26e91518a1bb4d9d0ae3226383ffee2cca148ecbd27782a52b4",
+      "80ea91b7f0fd1376eaeb4d20ac83edea9382b4502e496a1ed2f9f463270c7cec",
     "output/playwright/p34-permission-tone-r2":
       "a8c68010fc27e7998ff14a8d95e9a4d697bc97744c8a622a41cb6473565835c3",
   };

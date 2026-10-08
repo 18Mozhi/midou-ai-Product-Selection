@@ -1,21 +1,21 @@
 {
   "schemaVersion": 1,
-  "sourceRevision": "fa3b31645f62eea7b3cd968a0c09394f70d5fc3a",
+  "sourceRevision": "835f046f89fc96e7f0ec1431aa8b5bf2dc788d9b",
   "legacyRevision": "a9460a99c9bce018e65c5bce357f592669fa0a0d",
-  "sourceFingerprint": "f06c86ae1cc022101b7cdd9fb795da32738748e407834870568cb5f9a2678776",
+  "sourceFingerprint": "1e0395e304f4a54ff6522d9b195f0056618e3404cffec35542d189cb1cb9506e",
   "status": "static-discovery-complete-runtime-inventory-pending",
   "denominatorFrozen": false,
   "counts": {
     "routes": 73,
-    "controls": 1640,
+    "controls": 1643,
     "dialogs": 118,
-    "nativeButtons": 854,
+    "nativeButtons": 855,
     "nativeDialogs": 62,
     "legacyButtons": 648,
     "legacyDialogs": 56,
     "legacySourceMatches": 550,
     "unmappedCandidates": 54,
-    "runtimeWarnings": 10
+    "runtimeWarnings": 12
   },
   "evidenceTypes": {
     "design-plans/ui-redesign-2026-09-05/screens/desktop": "concept-html-not-vue-not-production",
@@ -80,7 +80,7 @@
     },
     {
       "file": "apps/web/src/components/ApprovalWorkspace.vue",
-      "sha256": "c6c7b0b4bcb99532769499786e2e47752584fce0ee3fa0782278bef507215104"
+      "sha256": "acf305210c6ccdace8a9929fcde398e1cc45d9cc20f46f4516841c329db8bfd4"
     },
     {
       "file": "apps/web/src/components/AuditedReasonDialog.vue",
@@ -140,7 +140,7 @@
     },
     {
       "file": "apps/web/src/components/CompetitorMonitor.vue",
-      "sha256": "4bfbfb73e5b34f1d2333a58a6365ced4df01c57ce715ad1712eefb83afb9a3c4"
+      "sha256": "a68905d1b5d9811eb6fdcad646ec61b67cbcfc5ed8ce1d6ee1088351d752edcb"
     },
     {
       "file": "apps/web/src/components/ConfigBoundary.vue",
@@ -156,7 +156,7 @@
     },
     {
       "file": "apps/web/src/components/CrawlerSchedulerCenter.vue",
-      "sha256": "ef6c27a3f21b53d3b2a629ffb30d2052fa522a28aee0cf6efd755a899dbbdaee"
+      "sha256": "93ab861fd025a9cf3e0ce77b49d9e7c60b506b5ae03ba3ab339c5ed9681c50ea"
     },
     {
       "file": "apps/web/src/components/CrawlerSchedulerEvidence.vue",
@@ -332,7 +332,7 @@
     },
     {
       "file": "apps/web/src/components/OpportunityLineageSummary.vue",
-      "sha256": "a7eb194dcd23b7f4f98ffdeb1241e3dca8aecf60a7fc95f1100058695ade4cbe"
+      "sha256": "86de7931f3c1cc11d3d4eb0d4ed7005bfd2285d6169bb07d894e417892d4b331"
     },
     {
       "file": "apps/web/src/components/OpportunityListPanel.vue",
@@ -352,7 +352,7 @@
     },
     {
       "file": "apps/web/src/components/OpportunityWorkspace.vue",
-      "sha256": "33f3730b62c430510d1a55afcaff59c3866f4a753fa524322fe47f81f2987783"
+      "sha256": "90f39a67adf8e3606d402dc389b729f6ca03fc44313ebb20fc1260239c889cac"
     },
     {
       "file": "apps/web/src/components/OpportunityWorkspaceDialogs.vue",
@@ -360,7 +360,7 @@
     },
     {
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "sha256": "06dab52eb829532b1327f80b4bfe0821c78d84657c59483f53e0dd5986979ae0"
+      "sha256": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
     },
     {
       "file": "apps/web/src/components/OrganizationApprovalFirstFailure.vue",
@@ -479,8 +479,12 @@
       "sha256": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
     },
     {
+      "file": "apps/web/src/components/PlatformAccountDirectoryFilters.vue",
+      "sha256": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8"
+    },
+    {
       "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
-      "sha256": "bee80399a3beb012f7b114d95be365486e754fee03e2c307bee8c5432bad5c08"
+      "sha256": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051"
     },
     {
       "file": "apps/web/src/components/PlatformAccountGlobalRail.vue",
@@ -636,7 +640,7 @@
     },
     {
       "file": "apps/web/src/components/ProviderRegistry.vue",
-      "sha256": "da2af960845b2620b23b03879c6151515ada6039907236e6c14e2a11c42dedf0"
+      "sha256": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
     },
     {
       "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -656,7 +660,7 @@
     },
     {
       "file": "apps/web/src/components/ProviderSourceEditDialog.vue",
-      "sha256": "4387b56eb3b8954e8916f7e547ba932a51f6c06bf506db10ccec453fcf3e9296"
+      "sha256": "405979e599f71166ecfab68658d38f55ccd4aae326e5f67f0a7a4c9feba53303"
     },
     {
       "file": "apps/web/src/components/ProviderSourceFilters.vue",
@@ -688,7 +692,7 @@
     },
     {
       "file": "apps/web/src/components/ReleaseRolloutCenter.vue",
-      "sha256": "ffc3f1ebe0d7a63349eaebed2c5d583217e9441e4d6e80c91259fd9d66b4b205"
+      "sha256": "2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e"
     },
     {
       "file": "apps/web/src/components/ReportCenter.vue",
@@ -1161,7 +1165,17 @@
     },
     {
       "file": "apps/web/src/components/OrganizationAdminCenter.vue",
-      "line": 1107,
+      "line": 1237,
+      "reason": "dynamic-render-or-spread-requires-runtime-review"
+    },
+    {
+      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+      "line": 69,
+      "reason": "dynamic-render-or-spread-requires-runtime-review"
+    },
+    {
+      "file": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue",
+      "line": 122,
       "reason": "dynamic-render-or-spread-requires-runtime-review"
     },
     {

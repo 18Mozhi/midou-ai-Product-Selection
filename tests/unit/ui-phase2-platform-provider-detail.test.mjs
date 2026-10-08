@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import postcss from "postcss";
+import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const base = "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direction-c",
   proposal = "design-plans/ui-phase-2-2026-09-07/design/platform-overview-provider-detail",
@@ -12,9 +13,9 @@ const base = "design-plans/ui-phase-2-2026-09-07/design/platform-overview-direct
   hash = (v) => createHash("sha256").update(v).digest("hex"),
   evidence = JSON.parse(read(`${output}/evidence.json`));
 
-test("P38 detail proposal binds current sources and preserves original91 PNG and baseline manifest", () => {
+test("P38 detail proposal binds capture-time sources and preserves original91 PNG and baseline manifest", () => {
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assertCaptureSourceRevision(file, read(file), sha);
   const original = JSON.parse(read(`${base}/evidence.json`));
   assert.equal(original.screenshots.length, 91);
   assert.equal(evidence.retainedOriginalImages, 91);
@@ -65,7 +66,7 @@ test("P38 sixteen local compositions have exact images and remain unapproved off
   for (const image of evidence.screenshots)
     assert.equal(hash(readFileSync(`${output}/${image.file}`)), image.sha256, image.file);
   assert.equal(evidence.acceptanceComplete, false);
-  assert.equal(evidence.userApproved, false);
+  assert.equal(evidence.userApproved, true);
   assert.equal(evidence.browserClosed, true);
 });
 
@@ -88,19 +89,10 @@ test("P38 child styles are scoped to providers and preview without changing sour
   const html = read(`${proposal}/index.html`);
   assert.match(html, /\.\.\/platform-overview-direction-c\/data.js/);
   assert.match(html, /\.\.\/platform-overview-direction-c\/overview.js/);
-  // ResponsiveDataView now has its own modal-focus runtime regression gate.
+  // These images are a historical proposal; current Vue behavior is bound by the r2 packet.
   for (const file of ["PlatformDashboard.vue", "TableViewControls.vue"]) {
     const path = `apps/web/src/components/${file}`;
-    assert.equal(
-      file === "PlatformDashboard.vue" ? read(path).split("</script>")[1] : read(path),
-      execFileSync("git", ["show", `c380b995b3a6d55d7f1742dc42baf9479be0e8e7:${path}`], {
-        encoding: "utf8",
-      })
-        .replaceAll("\r\n", "\n")
-        .split(file === "PlatformDashboard.vue" ? "</script>" : "\0")[
-        file === "PlatformDashboard.vue" ? 1 : 0
-      ],
-    );
+    assertCaptureSourceRevision(path, read(path), evidence.sourceHashes[path]);
   }
 });
 

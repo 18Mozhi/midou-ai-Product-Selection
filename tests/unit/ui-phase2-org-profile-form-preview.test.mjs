@@ -182,10 +182,10 @@ test("profile conflict response comes from the original M06-01 fixture", async (
   });
 });
 test("profile packet binds current sources, visible errors and one local conflict PATCH per run", async () => {
-  const root = "output/playwright/org-profile-form-vue-c-r11",
+  const root = "output/playwright/org-profile-form-vue-c-r12",
     evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-  assert.equal(evidence.kind, "ORG-PROFILE-FORM-VUE-C-r11");
+  assert.equal(evidence.kind, "ORG-PROFILE-FORM-VUE-C-r12");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.userReview, "pending");
   assert.equal(evidence.visualApproval.decision, "user-approved-remaining-pages-auto");

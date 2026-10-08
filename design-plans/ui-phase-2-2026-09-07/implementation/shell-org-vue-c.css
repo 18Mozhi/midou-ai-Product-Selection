@@ -15,7 +15,7 @@ html
   margin: 0;
   color: #172d4c;
   font-family: "Microsoft YaHei", sans-serif;
-  :is(h2, h3, p, label, dd, dt, small, span, button) {
+  :is(h1, h2, h3, p, label, dd, dt, small, span, button) {
     font-family: inherit;
   }
   .org-admin-hero {
@@ -27,10 +27,10 @@ html
     box-shadow: none;
     color: white;
   }
-  .org-admin-hero :is(p, h2, span, small) {
+  .org-admin-hero :is(p, h1, h2, span, small) {
     color: white;
   }
-  .org-admin-hero h2 {
+  .org-admin-hero :is(h1, h2) {
     margin: 0;
     font-size: 30px;
   }
@@ -208,7 +208,7 @@ html
       align-items: stretch;
       gap: 20px;
     }
-    .org-admin-hero h2 {
+    .org-admin-hero :is(h1, h2) {
       font-size: 28px;
     }
     .org-admin-metrics {
