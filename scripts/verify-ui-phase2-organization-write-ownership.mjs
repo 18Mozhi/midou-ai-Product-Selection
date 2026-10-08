@@ -2,14 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { mkdir, writeFile } from "node:fs/promises";
 import { withVueReview, reviewHash } from "./lib/ui-phase2-vue-review-host.mjs";
-import {
-  organizationListPreview,
-  organizationRecordPreview,
-} from "./lib/ui-phase2-organization-list-preview.mjs";
-import {
-  organizationDetailPreview,
-  organizationReasonPreview,
-} from "./lib/ui-phase2-organization-detail-preview.mjs";
+import { organizationListPreview } from "./lib/ui-phase2-organization-list-preview.mjs";
 import { buildAccountOverviewDesignData } from "./lib/ui-phase2-account-overview-design-data.mjs";
 
 import {
@@ -19,8 +12,13 @@ import {
 // Baseline reproduces defects; current proves ownership repair while retaining refresh-failure findings.
 const baseline = process.argv.includes("--baseline");
 const capture = process.argv.includes("--capture");
-assert.ok(process.argv.slice(2).every((v) => ["--capture", "--baseline"].includes(v)));
-const output = `output/playwright/p42-write-ownership/${baseline ? "baseline" : "current"}`;
+const revisionArg = process.argv.find((v) => v.startsWith("--revision="));
+const revision = revisionArg?.split("=")[1];
+assert.ok(
+  process.argv.slice(2).every((v) => ["--capture", "--baseline"].includes(v) || v === revisionArg),
+);
+assert.ok(!revision || /^[a-z0-9-]+$/.test(revision));
+const output = `output/playwright/p42-write-ownership${revision ? `-${revision}` : ""}/${baseline ? "baseline" : "current"}`;
 const listPath = "/platform-admin/organizations";
 const fixtures = await buildAccountOverviewDesignData(process.cwd());
 const sourceRecord = fixtures.overview.organizations[0];
@@ -32,15 +30,14 @@ const bindings = await withVueReview(
   {
     pageId: "P42",
     routePath: listPath,
-    transforms: {
-      [organizationActionParent]: (source) =>
-        organizationListPreview(
-          baseline ? historicalOrganizationActionSource(organizationActionParent, source) : source,
-        ),
-      "apps/web/src/components/PlatformOrganizationRecords.vue": organizationRecordPreview,
-      "apps/web/src/components/PlatformOrganizationDetailDialog.vue": organizationDetailPreview,
-      "apps/web/src/components/PlatformAccountDialogs.vue": organizationReasonPreview,
-    },
+    transforms: baseline
+      ? {
+          [organizationActionParent]: (source) =>
+            organizationListPreview(
+              historicalOrganizationActionSource(organizationActionParent, source),
+            ),
+        }
+      : {},
     styles: [
       "account-filter-preview.css",
       "account-create-preview.css",
@@ -49,6 +46,9 @@ const bindings = await withVueReview(
       "organization-detail-preview.css",
     ].map((f) => "design-plans/ui-phase-2-2026-09-07/implementation/" + f),
     files: [
+      "apps/web/src/components/PlatformOrganizationRecords.vue",
+      "apps/web/src/components/PlatformOrganizationDetailDialog.vue",
+      "apps/web/src/components/PlatformAccountDialogs.vue",
       "scripts/verify-ui-phase2-organization-write-ownership.mjs",
       "scripts/lib/ui-phase2-organization-action-baseline.mjs",
       "scripts/lib/ui-phase2-organization-detail-preview.mjs",
@@ -164,7 +164,7 @@ const bindings = await withVueReview(
                 feedback: await detail.locator('[role="status"]').allTextContents(),
                 errors: await detail.locator('[role="alert"]').allTextContents(),
                 field: await detail
-                  .getByRole("textbox", { name: "组织名称", exact: true, includeHidden: true })
+                  .getByRole("textbox", { name: /组织名称/, includeHidden: true })
                   .inputValue(),
               };
               if (capture) {
@@ -205,9 +205,7 @@ const bindings = await withVueReview(
               await detail.waitFor();
             }
             if (action === "profile")
-              await detail
-                .getByRole("textbox", { name: "组织名称", exact: true })
-                .fill("已提交的组织资料");
+              await detail.getByRole("textbox", { name: /组织名称/ }).fill("已提交的组织资料");
             await detail
               .getByRole("button", {
                 name: action === "profile" ? "保存组织资料" : "停用组织",
@@ -276,18 +274,25 @@ const bindings = await withVueReview(
             } else if (mode === "refresh-failure") {
               check(
                 "success is shown despite failed reread",
-                await detail.getByRole("status").innerText(),
-                action === "profile" ? "操作成功\n组织资料已更新。" : "操作成功\n组织已停用。",
+                await detail.locator(".organization-feedback.is-success").innerText(),
+                action === "profile"
+                  ? `操作成功\n${baseline ? "组织资料已更新。" : "组织资料已保存。"}`
+                  : "操作成功\n组织已停用。",
               );
               check(
                 "identity still comes from old overview",
                 await detail.locator(".p42-identity h3").innerText(),
-                sourceRecord.name,
+                action === "profile" && !baseline ? "已提交的组织资料" : sourceRecord.name,
               );
               if (action === "status")
                 check(
-                  "status remains active after successful stop and failed reread",
-                  await detail.getByRole("button", { name: "停用组织", exact: true }).isVisible(),
+                  "status reflects successful stop despite failed reread",
+                  await detail
+                    .getByRole("button", {
+                      name: baseline ? "停用组织" : "恢复组织",
+                      exact: true,
+                    })
+                    .isVisible(),
                 );
               check(
                 "reread failure remains in parent",

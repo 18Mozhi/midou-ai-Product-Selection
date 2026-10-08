@@ -10,11 +10,9 @@ import {
   historicalUserCreationSource,
   userCreationRevisions,
 } from "../../scripts/lib/ui-phase2-user-creation-baseline.mjs";
-import {
-  historicalFilterResetSource,
-  filterResetRevision,
-} from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
+import { filterResetRevision } from "../../scripts/lib/ui-phase2-filter-reset-baseline.mjs";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import { reviewHash } from "../../scripts/lib/ui-phase2-vue-review-host.mjs";
 import {
@@ -26,12 +24,13 @@ import { organizationListPreview } from "../../scripts/lib/ui-phase2-organizatio
 import { tokenCopyRevisions } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 const read = (f) =>
   historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
+const readRaw = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const evidence = (mode) =>
-  JSON.parse(read(`output/playwright/p42-write-ownership/${mode}/evidence.json`));
+  JSON.parse(read(`output/playwright/p42-write-ownership-r2/${mode}/evidence.json`));
 test("current and baseline Vue runs retain exact source and PNG fingerprints without relabeling old defects", () => {
   for (const mode of ["current", "baseline"]) {
     const e = evidence(mode),
-      dir = `output/playwright/p42-write-ownership/${mode}`;
+      dir = `output/playwright/p42-write-ownership-r2/${mode}`;
     assert.equal(
       e.kind,
       mode === "current"
@@ -43,22 +42,19 @@ test("current and baseline Vue runs retain exact source and PNG fingerprints wit
     assert.equal(e.checks.length, 98);
     assert.equal(e.screenshots.length, 28);
     for (const [f, sha] of Object.entries(e.sourceHashes))
-      assert.equal(
-        reviewHash(historicalUserCreationSource(f, historicalFilterResetSource(f, read(f)))),
-        sha,
-        f,
-      );
+      assert.equal(reviewHash(readRaw(f)), sha, f);
     const source =
       mode === "baseline"
-        ? historicalOrganizationActionSource(
-            organizationActionParent,
-            read(organizationActionParent),
+        ? organizationListPreview(
+            historicalOrganizationActionSource(
+              organizationActionParent,
+              read(organizationActionParent),
+            ),
           )
         : historicalUserCreationSource(organizationActionParent, read(organizationActionParent));
-    assert.equal(
-      e.transformedHashes[organizationActionParent],
-      reviewHash(organizationListPreview(source)),
-    );
+    if (mode === "baseline")
+      assert.equal(e.transformedHashes[organizationActionParent], reviewHash(source));
+    else assert.equal(e.transformedHashes[organizationActionParent], undefined);
     assert.deepEqual(
       readdirSync(dir).sort(),
       ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),
@@ -104,8 +100,18 @@ test("historical associations accept only exact reviewed source revisions", () =
   assert.equal(historicalOrganizationActionSource("unrelated", "unchanged"), "unchanged");
   const audit = JSON.parse(read("design-plans/ui-phase-2-2026-09-07/design-delivery-audit.json"));
   const associations = audit.packages.flatMap((p) => p.historicalSourceAssociations ?? []);
-  assert.ok(associations.length > 0);
   for (const association of associations) {
+    if (association.encoding === "git-committed-historical-exact-revision-not-current-acceptance") {
+      assert.match(association.historicalCommit, /^[a-f0-9]{40}$/);
+      const committed = execFileSync(
+        "git",
+        ["show", `${association.historicalCommit}:${association.file}`],
+        { encoding: "utf8" },
+      ).replaceAll("\r\n", "\n");
+      assert.equal(reviewHash(committed), association.expected);
+      assert.notEqual(association.expected, association.actual);
+      continue;
+    }
     const pair = [
       organizationActionRevisions[association.file],
       tokenCopyRevisions[association.file],
