@@ -5,12 +5,12 @@
   "scope": "73 canonical routes plus C-direction local artifacts; no product runtime or production access",
   "inputHashes": {
     "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
-    "design-plans/ui-phase-2-2026-09-07/coverage.json": "8c41d0ad2d0e859e09c02aa28ff3c453270da20f40a12f3cbeb014445df23d16",
+    "design-plans/ui-phase-2-2026-09-07/coverage.json": "076382ebbb7012e0d1421b461b7e727f187751e75d565aa6cf55e944aa5be8f5",
     "design-plans/ui-phase-2-2026-09-07/DIRECTION-DECISION-C.md": "16922fb168a432d7d8e31572fafe82e8f10e3ca81c0c51c49fb6dffc3e3b2199",
     "design-plans/ui-phase-2-2026-09-07/PAGES.md": "403a7df799a0aace1f6f869b878c6ae835984241913ff031586efa5566b7448e",
     "scripts/audit-ui-phase2-design-delivery.mjs": "b9bde4bf4f6e6122e8b44d49a87fd1949fd9f364dd7e3120a11068fce6c33d21",
     "scripts/lib/ui-phase2-organization-action-baseline.mjs": "120bf0d7417c51e38c31b8dc38f009a32feb5553bcae49e6064c680fd178ba47",
-    "scripts/lib/ui-phase2-token-copy-baseline.mjs": "e632b6212b16077f502c7531d1062134c67c304ecf070f28159ea46be76592f1",
+    "scripts/lib/ui-phase2-token-copy-baseline.mjs": "56d8020215362fdebdaf5c6582d81db0f41116449952c690c0ae1f4c1740e23d",
     "scripts/lib/ui-phase2-filter-reset-baseline.mjs": "b16cce55c4f07892ecf8758578003dd75198092fa60421b388b6e1ca57580a27",
     "scripts/lib/ui-phase2-redis-review-baseline.mjs": "7a371088aad4c3b6d6fdae6d3b4a2daa597cf957279b6f901f4eb9214c5b6ec3",
     "scripts/lib/ui-phase2-modal-dialog-baseline.mjs": "7854be28b6dc0c927b8bee56ce14b9ca366354bae1fb11584799de368c876c58",
@@ -75,8 +75,8 @@
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P26.json": "820e3726e678c950d701daee14ed73d0e5b4b52ba81286b6bb593c1db61df10b",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P27.md": "09ee27c2a5bf18a101a88ad58f42eb4cf057a1978ed21efc81f7e59471e097aa",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P27.json": "41ddf546604f2888dfcc1701d5dd9e8980444a4db2dddc4c351092526fb1935c",
-    "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "f20c35839e97d775cd5dbc2ecb284ad7a1383c720e07ccf1909084be25577838",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "7568d208b28b827a19792fcc56d6aff3df03315b6d5e778d42063bfcfa55f092",
+    "design-plans/ui-phase-2-2026-09-07/page-specs/P28.md": "be53935bda0221a1bb54033a05e17a521c2d9d25fdee5907187912eb4e18deee",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P28.json": "a4f2454b0a09d7566044b332c9d2a37bb515e893e4319d785a5de2cba121f443",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P29.md": "448c7680ca0880d68b7c447f56926e8bbb59fd26ee3a5e21b4bfb3d270b70264",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P29.json": "cdcf16a6078d2466b5864ee52397f0194f848c9020f4b51835df882fa314cbb8",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P30.md": "d666be471a8ebd8c838d61e2d8facf969c867d6fa44e827b40bbeb4175ca0038",
@@ -116,7 +116,7 @@
     "design-plans/ui-phase-2-2026-09-07/page-specs/P47.md": "49007854be666b99e204721344df773f50621539b3b977b4779fa04890280ac2",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P47.json": "1656a87a74cc63d9cb60a759d77ae47111915954438f1801bd18e88e80129660",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P48.md": "62f68056937185ab592f755f4481cb3d11082a754fc1fcec5dc8e65f6e1f064e",
-    "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "09417abe2f56c49076daa39fbcd4078fa87190b49bb1ac72e76e63cb4c7e52cf",
+    "design-plans/ui-phase-2-2026-09-07/action-reviews/P48.json": "010072774e62cbde6b4e85c9dbd0adbb9f04467eeff2454828fcb213e33b966f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P49.md": "242f27618e2b314c7ba6aa8b7cc3873a9c037f34fdf99b1a477ef70c8cff19a0",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json": "0a96c4ac83e8bd5041709dcd8767f38fc75c6adfe5e3d94a3b250ca4b08adc8f",
     "design-plans/ui-phase-2-2026-09-07/page-specs/P50.md": "03ef86da619bd15bca7def3874da6f6b974170d9110ef00a1d615c24c66122e8",
@@ -179,7 +179,7 @@
     "sharedOnlyPackages": 3,
     "uniqueBoundFiles": 977,
     "sourceBindings": 2007,
-    "sourceDrift": 2,
+    "sourceDrift": 0,
     "pngs": 15097,
     "pngDrift": 0,
     "unmanifestedPng": 0,
@@ -4360,21 +4360,13 @@
       "folder": "org-approvals-parent-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/org-approvals-parent-direction-c/evidence.json",
-      "manifestHash": "77481a5a3f0ae26e91518a1bb4d9d0ae3226383ffee2cca148ecbd27782a52b4",
+      "manifestHash": "c64e205f4ed8826d114bfe586c796948af425a0fc6835e1c3067666ec89d4bcf",
       "readmeHash": "24d469c314ddf6413f4b3737200b3d46351b16d60fe90a50c178fae00176c747",
       "kind": "P34-PARENT-DIRECTION-C-r1",
       "approval": "pending-concrete-parent-section-review",
       "role": "page-or-section-proposal",
       "sourceCount": 31,
-      "sourceDrift": [
-        {
-          "file": "output/playwright/p34-parent-read-states/evidence.json",
-          "expected": "ba5ad6cbc27d466aad8bacb3c4ad5ed738bd114a97e38680e259165ef8f334ac",
-          "actual": "d30d2fbf8f178d33123b95252524cdc54273aae3f94d8e7383cc54220d857ecd",
-          "encoding": "raw",
-          "historicalCommit": null
-        }
-      ],
+      "sourceDrift": [],
       "screenshotCount": 74,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -4532,7 +4524,7 @@
       "folder": "organization-profile-controls-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/organization-profile-controls-direction-c/evidence.json",
-      "manifestHash": "01652b5efca4450d3340e52961daf79fcbc932bf283cc0cd6e6c129c5ea699b1",
+      "manifestHash": "4f11bb7ca6dbfd62d0918775320044bd7dcf276b999cb05047ec206bb85ebf49",
       "readmeHash": "f4f25bc4d3cd220fe6370469e885a5348e8d32aeedae52c6d776120296718e9a",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
@@ -4571,21 +4563,13 @@
       "folder": "organization-profile-direction-c",
       "readme": "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/README.md",
       "evidence": "design-plans/ui-phase-2-2026-09-07/design/organization-profile-direction-c/evidence.json",
-      "manifestHash": "7fb0b5808feb7ce56200eb5471be208469e702909a65be95533e5774f9b338e8",
+      "manifestHash": "195220c2033a7c6264f6da3142c0fc25c855630340ca621005db25c1859a7ec8",
       "readmeHash": "1a7a37d700f36046f84c53d685ea5da3c99ff74c6e6195031360bd713006d74c",
       "kind": null,
       "approval": "not-stated-pending-concrete-review",
       "role": "page-or-section-proposal",
       "sourceCount": 12,
-      "sourceDrift": [
-        {
-          "file": "scripts/lib/ui-phase2-organization-profile-design-data.mjs",
-          "expected": "519a68f8c2912a35769ad54419b7152fcab4b97787b8eeb93c86bd1899ae6572",
-          "actual": "0791e557e69969870a6220caf8ab2c7e8e1432c9c685797dd49cbc131cb93795",
-          "encoding": "raw",
-          "historicalCommit": null
-        }
-      ],
+      "sourceDrift": [],
       "screenshotCount": 74,
       "screenshotDrift": [],
       "unmanifestedPng": [],
@@ -6343,24 +6327,7 @@
       ]
     }
   ],
-  "sourceDrift": [
-    {
-      "package": "org-approvals-parent-direction-c",
-      "file": "output/playwright/p34-parent-read-states/evidence.json",
-      "expected": "ba5ad6cbc27d466aad8bacb3c4ad5ed738bd114a97e38680e259165ef8f334ac",
-      "actual": "d30d2fbf8f178d33123b95252524cdc54273aae3f94d8e7383cc54220d857ecd",
-      "encoding": "raw",
-      "historicalCommit": null
-    },
-    {
-      "package": "organization-profile-direction-c",
-      "file": "scripts/lib/ui-phase2-organization-profile-design-data.mjs",
-      "expected": "519a68f8c2912a35769ad54419b7152fcab4b97787b8eeb93c86bd1899ae6572",
-      "actual": "0791e557e69969870a6220caf8ab2c7e8e1432c9c685797dd49cbc131cb93795",
-      "encoding": "raw",
-      "historicalCommit": null
-    }
-  ],
+  "sourceDrift": [],
   "screenshotDrift": [],
   "unmanifested": [],
   "limits": [
