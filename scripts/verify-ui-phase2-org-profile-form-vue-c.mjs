@@ -347,7 +347,7 @@ try {
         await controls.name.fill("本地版本冲突草稿");
         await save.focus();
         await page.keyboard.press("Enter");
-        await page.waitForSelector(".org-admin-grid > form > button:disabled");
+        await page.waitForSelector(".org-admin-grid > form > fieldset > button:disabled");
         check("one versioned PATCH", requests.filter((r) => r.key.startsWith("PATCH ")).length, 1);
         const patch = requests.find((r) => r.key.startsWith("PATCH "));
         check("original PATCH payload", patch.body, {
@@ -376,7 +376,7 @@ try {
         await shot("saving", ".org-admin-grid > form");
         release();
         await page.waitForSelector('.org-admin-notice[data-kind="error"]');
-        await page.waitForSelector(".org-admin-grid > form > button:not(:disabled)");
+        await page.waitForSelector(".org-admin-grid > form > fieldset > button:not(:disabled)");
         check(
           "conflict keeps form ready",
           await page.locator(".org-admin-center").getAttribute("data-state"),
