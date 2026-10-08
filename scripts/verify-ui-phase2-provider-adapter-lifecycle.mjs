@@ -11,7 +11,7 @@ import { chromium, expect } from "@playwright/test";
 // Observe the actual preserve-cache route. No production transforms or lifecycle stubs.
 assert.ok(process.argv.slice(2).every((arg) => arg === "--capture"));
 const capture = process.argv.includes("--capture");
-const output = "output/playwright/p47-route-lifecycle";
+const output = "output/playwright/p47-route-lifecycle-r2";
 const read = async (file) => (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const fixture = "tests/e2e/m03-03-provider-adapter.spec.ts";
@@ -344,7 +344,7 @@ try {
       `${output}/evidence.json`,
       JSON.stringify(
         {
-          kind: "P47-PRESERVE-CACHE-LIFECYCLE-r1",
+          kind: "P47-PRESERVE-CACHE-LIFECYCLE-r2",
           runs,
           screenshots,
           sourceHashes: Object.fromEntries(

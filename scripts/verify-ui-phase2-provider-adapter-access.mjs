@@ -167,7 +167,11 @@ try {
             if (url.pathname.endsWith("navigation"))
               return route.fulfill({ json: { data: data.navigation, request_id: "nav" } });
             if (url.pathname.endsWith("session-status"))
-              return route.fulfill({ json: { data: { authenticated: true } } });
+              return route.fulfill({
+                json: {
+                  data: { authenticated: new URL(page.url()).pathname !== "/login" },
+                },
+              });
             reads++;
             if (recovering) {
               await recoveryGate;
@@ -236,20 +240,18 @@ try {
           await page.evaluate(() => document.fonts.ready);
           await picture(panel, "state");
           const accessState = scene.name !== "error-unchanged";
-          if (mode === "review" && scene.kind === "expired") {
+          if (scene.kind === "expired") {
             await page.keyboard.press("Enter");
-            await expect(page.locator(".identity-page[data-mode='login']")).toBeVisible();
+            await expect(page).toHaveURL(/\/login$/);
+            await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
             check("expired reaches verified login route", new URL(page.url()).pathname, "/login");
             check("expired does not reread adapters", reads, scene.attempts);
-            await picture(page.locator(".identity-card"), "action");
+            await picture(page.locator("body"), "action");
           } else {
             recovering = true;
             await page.keyboard.press("Enter");
             await expect.poll(() => reads).toBe(scene.attempts + 1);
-            const focus =
-              mode === "review" && accessState
-                ? center.locator(".adapter-heading")
-                : page.locator("body");
+            const focus = accessState ? center.locator(".adapter-heading") : page.locator("body");
             await expect(focus).toBeFocused();
             check(
               "pending focus target",
@@ -258,7 +260,7 @@ try {
                   ? "heading"
                   : document.activeElement?.tagName,
               ),
-              mode === "review" && accessState ? "heading" : "BODY",
+              accessState ? "heading" : "BODY",
             );
             await picture(center.locator(".adapter-heading"), "action");
             releaseRecovery();
@@ -298,7 +300,8 @@ try {
   if (capture) {
     const comparisonPage = await browser.newPage();
     for (const shot of screenshots.filter(
-      (item) => item.mode === "review" && item.scene === "error-unchanged",
+      (item) =>
+        item.mode === "review" && item.scene === "error-unchanged" && item.suffix === "action",
     )) {
       const before = screenshots.find(
           (item) =>

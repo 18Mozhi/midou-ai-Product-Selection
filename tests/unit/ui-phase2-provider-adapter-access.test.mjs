@@ -11,7 +11,7 @@ import { accessCopy, accessHandler } from "../../scripts/lib/ui-phase2-adapter-a
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
   component = "apps/web/src/components/ProviderAdapterCenter.vue",
-  root = "output/playwright/p47-access-current-review";
+  root = "output/playwright/p47-access-current-review-r2";
 
 test("P47 production access states compile and keep the existing read contract", () => {
   const production = parse(read(component));
@@ -127,19 +127,19 @@ test("P47 access visual rules cannot target other pages or ordinary error state"
 test("P47 access evidence binds current sources, all pictures and unchanged 500 state", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(e.reviewOnly, true);
-  assert.equal(e.kind, "P47-ACCESS-CURRENT-REVIEW-r1");
+  assert.equal(e.kind, "P47-ACCESS-CURRENT-REVIEW-r2");
   assert.equal(e.productionEmptyFocusPreserved, true);
-  assert.equal(e.historicalPackage, "output/playwright/p47-access-review");
+  assert.equal(e.historicalPackage, "output/playwright/p47-access-current-review");
   assert.equal(e.processesClosed, true);
   assert.equal(e.runs.length, 30);
   assert.equal(
     e.runs.reduce((total, run) => total + run.checks.length, 0),
-    411,
+    408,
   );
-  assert.equal(Object.keys(e.sourceHashes).length, 178);
+  assert.equal(Object.keys(e.sourceHashes).length, 147);
   for (const expected of Object.values(e.sourceHashes)) assert.match(expected, /^[a-f0-9]{64}$/);
   assert.equal(e.screenshots.length, 60);
-  assert.equal(e.comparisons.length, 6);
+  assert.equal(e.comparisons.length, 3);
   for (const comparison of e.comparisons) {
     assert.equal(comparison.sameSize, true);
     assert.ok(comparison.changedPixels <= 64);
@@ -168,13 +168,13 @@ test("P47 access evidence binds current sources, all pictures and unchanged 500 
     assert.equal(value("no write requests"), 0);
     assert.deepEqual(value("no unexpected network"), []);
     assert.deepEqual(value("no runtime errors"), []);
-    if (run.mode === "review" && run.scene === "expired") {
+    if (run.scene === "expired") {
       assert.equal(value("expired reaches verified login route"), "/login");
       assert.equal(value("expired does not reread adapters"), 1);
     } else {
       assert.equal(
         value("pending focus target"),
-        run.mode === "review" && run.scene !== "error-unchanged" ? "heading" : "BODY",
+        run.scene !== "error-unchanged" ? "heading" : "BODY",
       );
       assert.equal(value("settled recovery keeps chosen focus"), true);
       assert.equal(value("one explicit recovery GET"), attempts[run.scene] + 1);

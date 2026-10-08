@@ -4,14 +4,14 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 
-const root = "output/playwright/p47-route-lifecycle";
+const root = "output/playwright/p47-route-lifecycle-r2";
 const read = (file) =>
   historicalAdapterCSource(file, readFileSync(file, "utf8")).replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const evidence = JSON.parse(read(`${root}/evidence.json`));
 
 test("P47 lifecycle evidence uses current actual App sources and unchanged preserve route", () => {
-  assert.equal(evidence.kind, "P47-PRESERVE-CACHE-LIFECYCLE-r1");
+  assert.equal(evidence.kind, "P47-PRESERVE-CACHE-LIFECYCLE-r2");
   assert.equal(evidence.productionUntransformed, true);
   assert.equal(evidence.processesClosed, true);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))

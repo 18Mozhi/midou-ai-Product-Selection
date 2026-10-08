@@ -146,6 +146,23 @@ test("P47 C styles are approved composition rules rescaled only to the active pr
         .replaceAll("body.p47-adapter-review", "body")
         .replaceAll(".adapter-center", ".adapter-center--c"),
     );
+    if (current === "page")
+      expected.append(
+        postcss.atRule({
+          name: "media",
+          params: "(min-width: 761px) and (max-width: 840px)",
+          nodes: [
+            postcss.rule({
+              selector: "html body:has(#app .adapter-center--c) #app .adapter-center--c",
+              nodes: [postcss.decl({ prop: "gap", value: "16px" })],
+            }),
+            postcss.rule({
+              selector: "html body:has(#app .adapter-center--c) #app .role-content",
+              nodes: [postcss.decl({ prop: "padding-top", value: "12px" })],
+            }),
+          ],
+        }),
+      );
     const signature = (css, validateCurrentStatePanels = false) => {
       const rules = [],
         stateRules = [];

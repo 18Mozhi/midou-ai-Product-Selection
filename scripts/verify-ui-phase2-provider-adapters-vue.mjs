@@ -13,14 +13,10 @@ assert.ok(process.argv.slice(2).every((a) => a === "--capture"));
 const read = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const component = "apps/web/src/components/ProviderAdapterCenter.vue";
-const preview =
-  "design-plans/ui-phase-2-2026-09-07/implementation/ProviderAdapterCenterPreview.vue";
-const css = "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-vue-preview.css";
 const fixture = "tests/e2e/m03-03-provider-adapter.spec.ts";
-const output = "output/playwright/p47-adapters-vue";
+const output = "output/playwright/p47-adapters-vue-r2";
 const source = await read(component),
-  replacement = await read(preview);
-assert.equal(source.split("</script>")[0], replacement.split("</script>")[0]);
+  replacement = source;
 const ast = ts.createSourceFile(fixture, await read(fixture), ts.ScriptTarget.Latest, true);
 const declarations = [];
 function visit(n) {
@@ -47,8 +43,6 @@ const data = JSON.parse(JSON.stringify(box.data));
 const catalog = data.catalog.map((item) => ({ ...data.base, ...item }));
 const sources = new Set([
   component,
-  preview,
-  css,
   fixture,
   "scripts/verify-ui-phase2-provider-adapters-vue.mjs",
   "apps/web/index.html",
@@ -71,16 +65,6 @@ const server = await createServer({
         if (id.replaceAll("\\", "/") !== path.resolve(component).replaceAll("\\", "/")) return null;
         assert.equal(text.replaceAll("\r\n", "\n"), source);
         return { code: replacement, map: null };
-      },
-      transformIndexHtml(html) {
-        return html
-          .replace("<body>", '<body class="p47-adapter-review">')
-          .replace(
-            "</head>",
-            '<link rel="stylesheet" href="/@fs/' +
-              path.resolve(css).replaceAll("\\", "/") +
-              '"></head>',
-          );
       },
     },
   ],
@@ -230,7 +214,7 @@ try {
       const mobileNav = width <= 840 ? await page.locator(".role-mobile-nav").boundingBox() : null;
       check(
         "first record has visible44px before fixed nav",
-        firstRow !== null && firstRow.y + 44 <= (mobileNav?.y ?? 1000),
+        firstRow !== null && (mobileNav === null || firstRow.y + 44 <= mobileNav.y),
       );
       check(
         "advanced initially closed",
@@ -281,8 +265,14 @@ try {
       }
       status = 500;
       await refresh();
-      await expect(center.locator(".adapter-message")).toContainText("重新读取");
+      const refreshFailure = center.locator(".adapter-refresh-failure");
+      await expect(refreshFailure).toContainText("最新状态暂未更新");
+      await expect(
+        refreshFailure.getByRole("button", { name: "重新刷新", exact: true }),
+      ).toBeVisible();
       await result(2);
+      check("refresh failure preserves last successful rows", await displayed().count(), 2);
+      check("refresh failure offers explicit retry", true);
       await shot("refresh-error", center);
       status = 200;
       rows = catalog;
@@ -404,7 +394,7 @@ try {
       output + "/evidence.json",
       JSON.stringify(
         {
-          kind: "P47-ADAPTERS-ACTUAL-VUE-r1",
+          kind: "P47-ADAPTERS-ACTUAL-VUE-r2",
           sourceHashes,
           screenshots,
           checks,

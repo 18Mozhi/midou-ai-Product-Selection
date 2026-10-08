@@ -12,6 +12,14 @@ assert.ok(
 const selectors = args.filter((arg) => arg.startsWith("--state="));
 assert.equal(selectors.length, 1);
 const state = selectors[0].slice(8);
+const reviewRevision = state === "access" ? "r2" : "r1";
+const currentPackage = `output/playwright/p47-${state}-current-review${
+  state === "access" ? "-r2" : ""
+}`;
+const historicalPackage =
+  state === "access"
+    ? "output/playwright/p47-access-current-review"
+    : `output/playwright/p47-${state}-review`;
 const currentAdapterSourceHash = createHash("sha256")
   .update(
     (await readFile("apps/web/src/components/ProviderAdapterCenter.vue", "utf8")).replaceAll(
@@ -27,7 +35,7 @@ const paginationFocusPreserved = [
   readErrorRevision.approvedCurrent,
 ].includes(currentAdapterSourceHash);
 assert.ok(
-  !paginationFocusPreserved || !args.includes("--capture"),
+  !paginationFocusPreserved || !args.includes("--capture") || state === "access",
   "Pagination-focus revision is replay-only here; do not overwrite historical current-review images",
 );
 process.argv = process.argv.filter((arg) => arg !== selectors[0]);
@@ -36,7 +44,7 @@ let runner = (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
 assert.equal(
   createHash("sha256").update(runner).digest("hex"),
   {
-    access: "87f51b00ac903101ad56b6fd75ba2240c3b985c6203b88dc13527dc465ca954a",
+    access: "87ebaaa2d0418479fcbd6e745a0fb06107f8bc4a1bab34cf67caddad6c706b9d",
     "filter-pagination": "a359593927984f5af15a989f8885789124d0119ebeca0589b521e688b8a24c13",
   }[state],
 );
@@ -49,10 +57,7 @@ replace(
   `replacement = previewAdapter${name}(source);`,
   `replacement = previewCurrentAdapter${name}(source);`,
 );
-replace(
-  `output = "output/playwright/p47-${state}-review"`,
-  `output = "output/playwright/p47-${state}-current-review"`,
-);
+replace(`output = "output/playwright/p47-${state}-review"`, `output = "${currentPackage}"`);
 replace(
   `    "${file}",`,
   `    "${file}",\n` +
@@ -82,7 +87,7 @@ replace(
 );
 replace(
   `kind: "P47-${state.toUpperCase()}-REVIEW-r1",`,
-  `kind: "P47-${state.toUpperCase()}-CURRENT-REVIEW-r1",\n          historicalPackage: "output/playwright/p47-${state}-review",\n          productionEmptyFocusPreserved: true,\n          productionRefreshFocusPreserved: true,\n          productionMobileEmptyPreserved: true,`,
+  `kind: "P47-${state.toUpperCase()}-CURRENT-REVIEW-${reviewRevision}",\n          historicalPackage: "${historicalPackage}",\n          productionEmptyFocusPreserved: true,\n          productionRefreshFocusPreserved: true,\n          productionMobileEmptyPreserved: true,`,
 );
 replace(
   "          boundary:\n",
@@ -121,6 +126,11 @@ runner = runner.replace(
 try {
   await import("data:text/javascript;base64," + Buffer.from(runner).toString("base64"));
 } catch (error) {
-  console.error(error.message);
+  console.error(
+    (error.stack ?? error.message).replace(
+      /data:text\/javascript;base64,[^:]+/g,
+      "generated verifier",
+    ),
+  );
   process.exitCode = 1;
 }

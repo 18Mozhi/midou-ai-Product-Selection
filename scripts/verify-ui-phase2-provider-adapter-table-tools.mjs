@@ -10,7 +10,7 @@ import { chromium, expect } from "@playwright/test";
 
 assert.ok(process.argv.slice(2).every((arg) => arg === "--capture"));
 const capture = process.argv.includes("--capture"),
-  output = "output/playwright/p47-table-tools-review",
+  output = "output/playwright/p47-table-tools-review-r2",
   css =
     "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-table-tools-preview.css",
   fixture = "tests/e2e/m03-03-provider-adapter.spec.ts";
@@ -366,7 +366,7 @@ try {
       `${output}/evidence.json`,
       JSON.stringify(
         {
-          kind: "P47-TABLE-TOOLS-REVIEW-r1",
+          kind: "P47-TABLE-TOOLS-REVIEW-r2",
           reviewOnly: true,
           processesClosed: true,
           ports,

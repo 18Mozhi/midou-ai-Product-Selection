@@ -1181,3 +1181,11 @@ html
   i:last-child {
   width: 66%;
 }
+@media (min-width: 761px) and (max-width: 840px) {
+  html body:has(#app .adapter-center--c) #app .adapter-center--c {
+    gap: 16px;
+  }
+  html body:has(#app .adapter-center--c) #app .role-content {
+    padding-top: 12px;
+  }
+}

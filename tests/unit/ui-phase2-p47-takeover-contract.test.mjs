@@ -175,7 +175,7 @@ function declarations(source) {
 
 // Resolved ordered CSS AST fingerprints after the approved P47 access/refresh/loading states were added.
 for (const [name, expected] of Object.entries({
-  page: "bf27ec1b2d482fd6b92a75cb1f8e02bfd66881bcd6581d89f2d4bcc724a0abba",
+  page: "38b52a78126a46d900ed99e6c872d66b7d473afde9c3398653700bf9f88c7d9b",
   detail: "e73d569a9939c2ee2801d0707e7648918e5b06b3552bf7233542e98a14501a10",
   feedback: "32e9e6cd4dea0c2e53d8fa5b7102369156d784efdf44d4ee8bc571cd6a4e7fe1",
 }))

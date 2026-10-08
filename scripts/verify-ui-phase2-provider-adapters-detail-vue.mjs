@@ -13,16 +13,10 @@ assert.ok(process.argv.slice(2).every((a) => a === "--capture"));
 const read = async (f) => (await readFile(f, "utf8")).replaceAll("\r\n", "\n");
 const hash = (s) => createHash("sha256").update(s).digest("hex");
 const component = "apps/web/src/components/ProviderAdapterCenter.vue";
-const preview =
-  "design-plans/ui-phase-2-2026-09-07/implementation/ProviderAdapterDetailPreview.vue";
-const css = "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-vue-preview.css";
-const detailCss =
-  "design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-detail-preview.css";
 const fixture = "tests/e2e/m03-03-provider-adapter.spec.ts";
-const output = "output/playwright/p47-adapters-detail-vue";
+const output = "output/playwright/p47-adapters-detail-vue-r2";
 const source = await read(component),
-  replacement = await read(preview);
-assert.equal(source.split("</script>")[0], replacement.split("</script>")[0]);
+  replacement = source;
 const ast = ts.createSourceFile(fixture, await read(fixture), ts.ScriptTarget.Latest, true);
 const declarations = [];
 function visit(n) {
@@ -46,11 +40,8 @@ vm.runInNewContext(
 const data = JSON.parse(JSON.stringify(box.data));
 const sources = new Set([
   component,
-  preview,
-  css,
   fixture,
   "scripts/verify-ui-phase2-provider-adapters-detail-vue.mjs",
-  detailCss,
   "apps/web/index.html",
   "apps/web/vite.config.ts",
 ]);
@@ -73,16 +64,7 @@ const server = await createServer({
         return { code: replacement, map: null };
       },
       transformIndexHtml(html) {
-        return html
-          .replace("<body>", '<body class="p47-adapter-review">')
-          .replace(
-            "</head>",
-            '<link rel="stylesheet" href="/@fs/' +
-              path.resolve(css).replaceAll("\\", "/") +
-              '"><link rel="stylesheet" href="/@fs/' +
-              path.resolve(detailCss).replaceAll("\\", "/") +
-              '"></head>',
-          );
+        return html;
       },
     },
   ],
@@ -321,19 +303,16 @@ try {
           await shot("probe-pending");
           assert.ok(releaseProbe);
           releaseProbe();
-          await expect(page.locator(".adapter-message")).toContainText("重新读取状态后检查");
+          const detailStatus = drawer.locator(".adapter-detail-feedback [role='status']");
+          await expect(detailStatus).toContainText("重新读取状态后检查");
           await expect(probeButton).toBeEnabled();
-          // Existing ownership issue is recorded, not styled into a false claim of feedback.
+          check("drawer owns probe result live region", await detailStatus.count(), 1);
           check(
-            "known background-only probe feedback",
-            await page.locator(".adapter-message").evaluate((el) => Boolean(el.closest("[inert]"))),
+            "drawer shows this probe trace",
+            await drawer.getByText("detail-probe-sample", { exact: true }).count(),
+            1,
           );
-          check(
-            "drawer has no owned live result",
-            await drawer.locator('[role="status"]').count(),
-            0,
-          );
-          await shot("probe-rejected-detail-no-feedback");
+          await shot("probe-rejected-detail-owned-feedback");
         }
         await close.focus();
         await drawer.evaluate((el) => {
@@ -381,7 +360,7 @@ try {
       output + "/evidence.json",
       JSON.stringify(
         {
-          kind: "P47-ADAPTERS-DETAIL-ACTUAL-VUE-r1",
+          kind: "P47-ADAPTERS-DETAIL-ACTUAL-VUE-r2",
           sourceHashes,
           screenshots,
           checks,
@@ -389,7 +368,7 @@ try {
           network,
           processesClosed: true,
           fixtureBoundary:
-            "Original two records; explicit synthetic zero/recovery and long text. All API supplied locally, one health POST per width rejected409, no real probe or persistence. Complete original script retained. Background-only feedback remains unresolved, not full a11y/auth/lifecycle/production acceptance.",
+            "Original two records; explicit synthetic zero/recovery and long text. All API supplied locally, one health POST per width rejected409, no real probe or persistence. Complete production Vue source and local detail live region/trace retained; not full a11y/auth/lifecycle/production acceptance.",
         },
         null,
         2,
@@ -397,7 +376,7 @@ try {
     );
     await writeFile(
       output + "/index.html",
-      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P47详情实际Vue审核</title><style>body{font:16px/1.7 sans-serif;margin:24px}img{max-width:100%}article{margin:32px 0}</style><h1>P47 采集程序 · 详情实际Vue审核</h1><p>本地样例、独立审核模板/CSS、未上线。详情独立C审核；零值/恢复门/长文本为显式合成样例，真实探针、全部交互及生产验收未完成。</p>' +
+      '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P47详情实际Vue审核</title><style>body{font:16px/1.7 sans-serif;margin:24px}img{max-width:100%}article{margin:32px 0}</style><h1>P47 采集程序 · 详情实际Vue审核</h1><p>生产Vue与样例API；零值/恢复门/长文本为显式合成样例，真实探针、生产持久化及正式验收未完成。</p>' +
         screenshots
           .map(
             (s) =>

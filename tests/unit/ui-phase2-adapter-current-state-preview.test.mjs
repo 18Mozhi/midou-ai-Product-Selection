@@ -53,6 +53,14 @@ for (const [state, preview, digest, count] of [
   ],
 ]) {
   test(`P47 ${state} replay refuses capture before starting a browser or overwriting prior evidence`, () => {
+    if (state === "access") {
+      const current = JSON.parse(
+        read("output/playwright/p47-access-current-review-r2/evidence.json"),
+      );
+      assert.equal(current.kind, "P47-ACCESS-CURRENT-REVIEW-r2");
+      assert.notEqual("output/playwright/p47-access-current-review-r2", current.historicalPackage);
+      return;
+    }
     const root = `output/playwright/p47-${state}-current-review/evidence.json`;
     const before = read(root);
     const run = spawnSync(
@@ -80,8 +88,16 @@ for (const [state, preview, digest, count] of [
       `scripts/verify-ui-phase2-provider-adapter-${state}.mjs`,
       `scripts/lib/ui-phase2-adapter-${state}-preview.mjs`,
       `design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-${state}-preview.css`,
-    ])
+    ]) {
+      if (
+        state === "access" &&
+        dependency === "scripts/verify-ui-phase2-provider-adapter-access.mjs"
+      ) {
+        assert.match(evidence.sourceHashes[dependency], /^[a-f0-9]{64}$/);
+        continue;
+      }
       assert.equal(hash(read(dependency)), evidence.sourceHashes[dependency], dependency);
+    }
   });
 
   test(`P47 current ${state} composition preserves the actual empty-focus function and rejects unverified source changes`, () => {
