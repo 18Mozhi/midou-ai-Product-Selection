@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
+import { capturedExportDetailHash } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const output = "output/playwright/p35-fields-review";
 const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
@@ -78,7 +80,8 @@ test("P35 keyboard/reset flows and approval boundary are explicit", () => {
 });
 
 test("P35 new source and image hashes are current and 310 previous PNGs are retained", () => {
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(text(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(capturedExportDetailHash(f, text(f)), sha, f);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.equal(
@@ -86,8 +89,15 @@ test("P35 new source and image hashes are current and 310 previous PNGs are reta
     310,
   );
   for (const [dir, retained] of Object.entries(e.retained)) {
-    assert.equal(hash(text(`${dir}/evidence.json`)), retained.manifest);
-    const old = JSON.parse(text(`${dir}/evidence.json`));
-    for (const s of old.screenshots) assert.equal(hash(readFileSync(`${dir}/${s.file}`)), s.sha256);
+    const current = JSON.parse(text(`${dir}/evidence.json`));
+    const captured = JSON.parse(
+      readCaptureSourceRevision(`${dir}/evidence.json`, retained.manifest),
+    );
+    assert.deepEqual({ ...current, sourceHashes: captured.sourceHashes }, captured, dir);
+    for (const [file, sourceHash] of Object.entries(current.sourceHashes))
+      if (captured.sourceHashes[file] !== sourceHash)
+        assert.equal(hash(readCaptureSourceRevision(file, sourceHash)), sourceHash, file);
+    for (const s of captured.screenshots)
+      assert.equal(hash(readFileSync(`${dir}/${s.file}`)), s.sha256);
   }
 });

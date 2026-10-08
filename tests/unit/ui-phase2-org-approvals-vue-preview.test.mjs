@@ -1,14 +1,12 @@
 import test from "node:test";
-import {
-  beforeP34OwnerPath,
-  assertP34EvidenceSourceHash,
-} from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
+import { assertP34EvidenceSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { baseParse, NodeTypes } from "@vue/compiler-core";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import {
   approvalsVueFile,
   approvalsVueCss,
@@ -117,7 +115,11 @@ test("P34 historical six-width review binds source lineage, original contracts a
     assertP34EvidenceSourceHash(file, read(file), expected);
   assert.equal(
     e.transformedHashes[approvalsVueFile],
-    hash(beforeP34OwnerPath(approvalsVueFile, revised)),
+    hash(
+      previewApprovalsVue(
+        readCaptureSourceRevision(approvalsVueFile, e.sourceHashes[approvalsVueFile]),
+      ),
+    ),
   );
   assert.deepEqual(
     e.runs.filter((r) => r.mode === "baseline").map((r) => r.width),

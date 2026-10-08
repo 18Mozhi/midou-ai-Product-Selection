@@ -7,8 +7,10 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
+import vm from "node:vm";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
 import ts from "typescript";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import {
   approvalsParentFile,
   previewApprovalsParentFrame,
@@ -30,6 +32,14 @@ import {
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
+function capturedPreview(evidence, file, exportName) {
+  const source = readCaptureSourceRevision(file, evidence.sourceHashes[file])
+      .replace(/^import assert from "node:assert\/strict";\r?\n/u, "")
+      .replace(/^export /gmu, ""),
+    context = { assert };
+  vm.runInNewContext(`${source}\nglobalThis.preview = ${exportName};`, context);
+  return context.preview;
+}
 const original = previewApprovalsParentFrame(read(approvalsParentFile));
 const revised = previewApprovalsPermission(original);
 const baseDriver = approvalsParentCurrentDriver(read(approvalsParentBase));
@@ -137,9 +147,25 @@ test("historical permission packet binds source lineage, 56 recoveries and eight
   assert.equal(Object.keys(e.sourceHashes).length, 186);
   for (const [file, expected] of Object.entries(e.sourceHashes))
     assertP34EvidenceSourceHash(file, read(file), expected);
+  const capturedFramePreview = capturedPreview(
+    e,
+    "scripts/lib/ui-phase2-org-approvals-parent-frame-preview.mjs",
+    "previewApprovalsParentFrame",
+  );
+  const capturedPermissionPreview = capturedPreview(
+    e,
+    "scripts/lib/ui-phase2-org-approvals-permission-preview.mjs",
+    "previewApprovalsPermission",
+  );
   assert.equal(
     e.transformedHashes[approvalsParentFile],
-    hash(beforeP34OwnerPath(approvalsParentFile, revised)),
+    hash(
+      capturedPermissionPreview(
+        capturedFramePreview(
+          readCaptureSourceRevision(approvalsParentFile, e.sourceHashes[approvalsParentFile]),
+        ),
+      ),
+    ),
   );
   assert.equal(e.checks.length, 926);
   assert.equal(e.scenarios.length, 56);

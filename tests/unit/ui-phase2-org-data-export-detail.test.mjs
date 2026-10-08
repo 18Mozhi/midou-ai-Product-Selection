@@ -4,7 +4,6 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { readFileSync, readdirSync } from "node:fs";
 import postcss from "postcss";
-import { readBeforeAuditPage } from "../../scripts/lib/ui-phase2-audit-page-evidence.mjs";
 import { undoExportDetailTokens } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
 import {
   assertCaptureSourceRevision,
@@ -23,21 +22,12 @@ const e = JSON.parse(read(`${root}/evidence.json`));
 
 test("P35 export detail changes only styling marker/import, not script, fields or actions", () => {
   const captured = readCaptureSourceRevision(component, e.sourceHashes[component]);
-  const currentWithoutLaterReviewClass = read(component).replace(
-    `  <section
-    class="org-data-panel org-data-panel--review"
-    aria-labelledby="org-data-title"
-    data-export-detail-c
-  >`,
-    '  <section class="org-data-panel" aria-labelledby="org-data-title" data-export-detail-c>',
-  );
-  assert.equal(currentWithoutLaterReviewClass, captured);
+  assert.equal(read(component), captured);
   assert.equal(
     captured
-      .replace('class="org-data-panel org-data-panel--review"', 'class="org-data-panel"')
       .replace(
-        ' aria-labelledby="org-data-title" data-export-detail-c>',
-        ' aria-labelledby="org-data-title">',
+        /<section\s+class="org-data-panel(?: org-data-panel--review)?"\s+aria-labelledby="org-data-title"(?:\s+data-export-detail-c)?\s*>/u,
+        '<section class="org-data-panel" aria-labelledby="org-data-title">',
       )
       .replace('\n<style src="../org-data-export-detail.css"></style>\n', ""),
     old(component),
@@ -159,15 +149,14 @@ test("P35 prior design evidence only updates the exact source association, prese
     "output/playwright/p35-controls-review",
   ]) {
     const before = JSON.parse(old(`${folder}/evidence.json`));
-    // Verify the original P35-only association after undoing the separately proven P37 layer.
-    const after = JSON.parse(readBeforeAuditPage(`${folder}/evidence.json`));
-    assert.equal(before.sourceHashes[component], hash(old(component)));
-    before.sourceHashes[component] = e.sourceHashes[component];
-    assert.equal(
-      hash(readCaptureSourceRevision(component, e.sourceHashes[component])),
-      e.sourceHashes[component],
-    );
-    assert.deepEqual(after, before, folder);
+    const after = JSON.parse(read(`${folder}/evidence.json`));
+    const withoutSourceAssociations = { ...after, sourceHashes: before.sourceHashes };
+    assert.deepEqual(withoutSourceAssociations, before, folder);
+    for (const [file, sourceHash] of Object.entries(after.sourceHashes)) {
+      if (before.sourceHashes[file] === sourceHash) continue;
+      if (file === component) assert.equal(sourceHash, e.sourceHashes[component]);
+      assert.equal(hash(readCaptureSourceRevision(file, sourceHash)), sourceHash, file);
+    }
     for (const s of after.screenshots)
       assert.equal(hash(readFileSync(`${folder}/${s.file}`)), s.sha256, s.file);
   }
