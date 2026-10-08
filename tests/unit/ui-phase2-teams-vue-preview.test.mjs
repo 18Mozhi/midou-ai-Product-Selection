@@ -79,11 +79,16 @@ test("P33 native list and in-page regions are review-only and missing anchors fa
   );
 });
 
-test("P33 current capture binds every original source and screenshot without claiming production acceptance", () => {
-  const folder = "output/playwright/p33-teams-vue-c-r5";
+test("P33 current capture binds current sources, screenshots and visual approval without claiming production acceptance", () => {
+  const folder = "output/playwright/p33-teams-vue-c-r6";
   const e = JSON.parse(read(`${folder}/evidence.json`));
   assert.equal(e.reviewOnly, true);
   assert.equal(e.approval, "pending-user-review");
+  assert.deepEqual(e.visualApproval, {
+    decision: "user-approved-remaining-pages-auto",
+    source: "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json",
+    sha256: hash(read("design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json")),
+  });
   assert.equal(e.processesClosed, true);
   assert.deepEqual(
     e.runs.map((r) => [r.mode, r.width]),

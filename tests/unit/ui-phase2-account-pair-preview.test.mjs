@@ -84,14 +84,19 @@ test("whole App proposal remains review-only with no business writes or producti
   assert.equal(accountPairCss.length, 6);
 });
 
-const packet = "output/playwright/account-pair-app-c-r6";
-const manifestHash = "5969e0d469ef6877d986e8cb173f68155d525a5f2ef3cc832e98429fb734ade7";
+const packet = "output/playwright/account-pair-app-c-r7";
+const manifestHash = "e30ad22719022dd6f525d87e43c79773d624460a5232b3afb24dfaba11097ea7";
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-test("r6 packet binds four widths, real App composition, 180 checks and all 80 image bytes", () => {
+test("r7 packet binds current sources, four widths, real App composition and all 80 image bytes", () => {
   const bytes = readFileSync(`${packet}/evidence.json`);
   assert.equal(hash(bytes), manifestHash);
   const evidence = JSON.parse(bytes);
   assert.equal(evidence.approval, "pending");
+  assert.deepEqual(evidence.visualApproval, {
+    decision: "user-approved-remaining-pages-auto",
+    source: "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json",
+    sha256: hash(read("design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json")),
+  });
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.runs.length, 8);
@@ -100,12 +105,12 @@ test("r6 packet binds four widths, real App composition, 180 checks and all 80 i
     180,
   );
   assert.equal(evidence.screenshots.length, 80);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 152);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 154);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(
       hash(read(file)),
       sha,
-      `Current source drift: ${file}; preserve r6 and recapture as a new version`,
+      `Current source drift: ${file}; preserve r7 and recapture as a new version`,
     );
   for (const shot of evidence.screenshots) {
     assert.match(shot.file, /^[a-zA-Z0-9-]+\.png$/);
@@ -126,10 +131,10 @@ test("r6 packet binds four widths, real App composition, 180 checks and all 80 i
   }
 });
 
-test("r2 capture cannot overwrite an existing review packet or start a server", () => {
+test("r6 capture cannot overwrite an existing review packet or start a server", () => {
   const result = spawnSync(
     process.execPath,
-    ["scripts/verify-ui-phase2-account-pair-app.mjs", "--capture", "--revision", "r6"],
+    ["scripts/verify-ui-phase2-account-pair-app.mjs", "--capture", "--revision", "r7"],
     { encoding: "utf8", timeout: 20000 },
   );
   assert.equal(result.status, 1);
