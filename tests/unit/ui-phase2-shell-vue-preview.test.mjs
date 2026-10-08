@@ -70,7 +70,10 @@ test("production C shell preserves authorization, surface routing and primary ac
 });
 
 test("historical shell review stays isolated and is no longer the production transform", async () => {
-  assert.throws(() => previewShellVue(source));
+  const reviewSource = previewShellVue(source);
+  assert.notEqual(reviewSource, source);
+  assert.match(reviewSource, /role-shell--review/);
+  assert.ok(!reviewSource.includes("shell-vue-c-preview.css"));
   assert.ok(!source.includes("shell-review-navigation"));
   assert.ok(!source.includes("shell-vue-c-preview"));
   const css = await readFile(shellReviewCss, "utf8");

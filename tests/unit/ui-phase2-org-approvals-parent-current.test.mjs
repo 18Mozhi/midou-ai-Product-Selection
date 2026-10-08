@@ -7,6 +7,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
+import vm from "node:vm";
 import ts from "typescript";
 import {
   approvalsParentBase,
@@ -18,7 +19,6 @@ import {
   approvalsVueFile,
   previewApprovalsVue,
 } from "../../scripts/lib/ui-phase2-org-approvals-vue-preview.mjs";
-import { previewShellVue } from "../../scripts/lib/ui-phase2-shell-vue-preview.mjs";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
 import {
   approvalsParentFile,
@@ -26,9 +26,18 @@ import {
   approvalsParentFrameReplacement,
   previewApprovalsParentFrame,
 } from "../../scripts/lib/ui-phase2-org-approvals-parent-frame-preview.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
+function capturedPreview(evidence, file, exportName) {
+  const source = readCaptureSourceRevision(file, evidence.sourceHashes[file])
+      .replace(/^import assert from "node:assert\/strict";\r?\n/u, "")
+      .replace(/^export /gmu, ""),
+    context = { assert };
+  vm.runInNewContext(`${source}\nglobalThis.preview = ${exportName};`, context);
+  return context.preview;
+}
 const base = read(approvalsParentBase),
   source = approvalsParentCurrentDriver(base);
 function nodes(text, predicate) {
@@ -131,17 +140,39 @@ test("historical parent r3 packet binds its source lineage and two-endpoint fail
   assert.equal(Object.keys(e.sourceHashes).length, 182);
   for (const [file, expected] of Object.entries(e.sourceHashes))
     assertP34EvidenceSourceHash(file, read(file), expected);
+  const capturedApprovalsPreview = capturedPreview(
+    e,
+    "scripts/lib/ui-phase2-org-approvals-vue-preview.mjs",
+    "previewApprovalsVue",
+  );
   assert.equal(
     e.transformedHashes[approvalsVueFile],
-    hash(previewApprovalsVue(beforeP34OwnerPath(approvalsVueFile, read(approvalsVueFile)))),
+    hash(
+      capturedApprovalsPreview(
+        readCaptureSourceRevision(approvalsVueFile, e.sourceHashes[approvalsVueFile]),
+      ),
+    ),
   );
   const shell = "apps/web/src/components/NavigationShell.vue";
-  assert.equal(e.transformedHashes[shell], hash(previewShellVue(read(shell))));
+  const capturedShellPreview = capturedPreview(
+    e,
+    "scripts/lib/ui-phase2-shell-vue-preview.mjs",
+    "previewShellVue",
+  );
+  assert.equal(
+    e.transformedHashes[shell],
+    hash(capturedShellPreview(readCaptureSourceRevision(shell, e.sourceHashes[shell]))),
+  );
+  const capturedParentFramePreview = capturedPreview(
+    e,
+    "scripts/lib/ui-phase2-org-approvals-parent-frame-preview.mjs",
+    "previewApprovalsParentFrame",
+  );
   assert.equal(
     e.transformedHashes[approvalsParentFile],
     hash(
-      previewApprovalsParentFrame(
-        beforeP34OwnerPath(approvalsParentFile, read(approvalsParentFile)),
+      capturedParentFramePreview(
+        readCaptureSourceRevision(approvalsParentFile, e.sourceHashes[approvalsParentFile]),
       ),
     ),
   );

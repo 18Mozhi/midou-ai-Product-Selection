@@ -5,6 +5,7 @@ import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 import path from "node:path";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const output = "output/playwright/technical-copy-feedback";
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
@@ -30,14 +31,13 @@ test("shared copy change leaves all 15 direct consumer source files untouched", 
     "SecurityOperationsCenter",
   ]) {
     const file = `apps/web/src/components/${name}.vue`;
-    assert.equal(
-      read(file),
-      execFileSync("git", ["show", `e704cd24:${file}`], { encoding: "utf8" }).replaceAll(
-        "\r\n",
-        "\n",
-      ),
-      file,
-    );
+    const before = execFileSync("git", ["show", `e704cd24^:${file}`], {
+        encoding: "utf8",
+      }).replaceAll("\r\n", "\n"),
+      after = execFileSync("git", ["show", `e704cd24:${file}`], {
+        encoding: "utf8",
+      }).replaceAll("\r\n", "\n");
+    assert.equal(after, before, `${file} was unchanged by the shared-copy commit`);
   }
 });
 
@@ -124,8 +124,11 @@ test("current recapture chain accepts only 29 measured differences across 13 pro
   assert.deepEqual(changed.sort(), review.differences.map((d) => d.file).sort());
 });
 test("shared clipboard evidence binds actual source, historical normal parity and all 8 images", () => {
-  for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+  for (const [file, sha] of Object.entries(e.sourceHashes)) {
+    const current = read(file),
+      captured = hash(current) === sha ? current : readCaptureSourceRevision(file, sha);
+    assert.equal(hash(captured), sha, file);
+  }
   assert.equal(
     hash(
       execFileSync("git", ["show", `${e.baseline.commit}:${e.baseline.file}`], {

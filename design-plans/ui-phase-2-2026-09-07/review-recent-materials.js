@@ -560,7 +560,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "package-lock.json",
           "expected": "b916391ffc5df7de7a7fd720ad4f5ef62c0ad8bd1c820c7737a190938025c111",
-          "actual": "25fd72e8341cb3dc4063c31c87673910f76357e2aa9693fba3f27159f9c5303e"
+          "actual": "266a9483a1ad96f4541a439684a9f3939fc0fd20587f56b504e5f3646e5a018f"
         },
         {
           "file": "scripts/lib/platform-notification-shell-preview.mjs",
@@ -575,7 +575,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "scripts/verify-platform-notification-app.mjs",
           "expected": "e530e7e7dd2ab3ead0d13ccc988bc69e4e7bb1a7692357bdb54c22c766a2daa3",
-          "actual": "ec17290896ec64a0c6baeaa30e95633550cf16f3b24f4801fbac1250ca156ff8"
+          "actual": "268c41254cbb5875c1d711f78d879ff4a2f8376e8f5c19c929b757f57f5327c3"
         },
         {
           "file": "tests/e2e/platform-message-management.spec.ts",
@@ -1139,7 +1139,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "package-lock.json",
           "expected": "b916391ffc5df7de7a7fd720ad4f5ef62c0ad8bd1c820c7737a190938025c111",
-          "actual": "25fd72e8341cb3dc4063c31c87673910f76357e2aa9693fba3f27159f9c5303e"
+          "actual": "266a9483a1ad96f4541a439684a9f3939fc0fd20587f56b504e5f3646e5a018f"
         },
         {
           "file": "scripts/lib/platform-notification-shell-preview.mjs",
@@ -1150,6 +1150,11 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "file": "scripts/lib/ui-phase2-shell-vue-preview.mjs",
           "expected": "03a5317adb62d291b7127e65a6c67f04eff4d34b340a8bb7e6c1245cf43781c1",
           "actual": "d7729481848240cde71062ecd1507f725a24dfb626e2197ebbc6bed5441ff5ed"
+        },
+        {
+          "file": "scripts/verify-platform-notification-app.mjs",
+          "expected": "ec17290896ec64a0c6baeaa30e95633550cf16f3b24f4801fbac1250ca156ff8",
+          "actual": "268c41254cbb5875c1d711f78d879ff4a2f8376e8f5c19c929b757f57f5327c3"
         },
         {
           "file": "tests/e2e/platform-message-management.spec.ts",
@@ -1698,7 +1703,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "package-lock.json",
           "expected": "b916391ffc5df7de7a7fd720ad4f5ef62c0ad8bd1c820c7737a190938025c111",
-          "actual": "25fd72e8341cb3dc4063c31c87673910f76357e2aa9693fba3f27159f9c5303e"
+          "actual": "266a9483a1ad96f4541a439684a9f3939fc0fd20587f56b504e5f3646e5a018f"
         },
         {
           "file": "scripts/lib/platform-commercial-page-preview.mjs",
@@ -4035,7 +4040,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/provider-adapters-c-page.css",
           "expected": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
-          "actual": "dd77cdcd4286a095605f09f4c8003f23a659a6d41308d55d6db61181d5bb0c13"
+          "actual": "48f30865c89f8a42b5acbb3b132a4e7c8a59728d54e0e09761316c169a5b430e"
         },
         {
           "file": "apps/web/src/route-catalog.generated.json",
@@ -4071,6 +4076,11 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
           "file": "apps/web/src/use-modal-dialog.ts",
           "expected": "5f3488e444f30c86d9f7e7424cc0f5463118fac0d3e78422251167dbd571b2fc",
           "actual": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-provider-page-preview.mjs",
+          "expected": "162d4d2ab907809c3ddac597a8519c5011c7af7c49ed255fc77630b9b5ba2bf1",
+          "actual": "bb8be6c6585b36a7fa6635042e65e4ac0cc02cca69b7021db1c1e2752b097a0b"
         },
         {
           "file": "tests/e2e/m03-01-provider-registry.spec.ts",
@@ -4214,7 +4224,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/provider-adapters-c-page.css",
           "expected": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
-          "actual": "dd77cdcd4286a095605f09f4c8003f23a659a6d41308d55d6db61181d5bb0c13"
+          "actual": "48f30865c89f8a42b5acbb3b132a4e7c8a59728d54e0e09761316c169a5b430e"
         },
         {
           "file": "apps/web/src/signal-ledger.css",
@@ -4249,7 +4259,12 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "scripts/lib/ui-phase2-provider-async-baseline.mjs",
           "expected": "0e8faf253d25e298f0ae23bbf9f64b79d719ded0a5008960f40416e50a014b49",
-          "actual": "3a22eee518ba7ba4c05afde16da539fdf76f80bd784a01c29a6950d84eff3c6e"
+          "actual": "f319087fc4f480ecd35604ba1eee677e045d5c6c9de45497da0c14d6a61643bc"
+        },
+        {
+          "file": "scripts/lib/ui-phase2-provider-feedback-baseline.mjs",
+          "expected": "6ad5331a615e2c8b0f4773f10856ba63437e9304d79e78737d09c8316002cec6",
+          "actual": "f93bd28ccd6550c5b4738e5249703f328c21429bce51cb00e10fbb74864f9312"
         },
         {
           "file": "tests/e2e/m03-01-provider-registry.spec.ts",
@@ -4798,7 +4813,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/provider-adapters-c-page.css",
           "expected": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
-          "actual": "dd77cdcd4286a095605f09f4c8003f23a659a6d41308d55d6db61181d5bb0c13"
+          "actual": "48f30865c89f8a42b5acbb3b132a4e7c8a59728d54e0e09761316c169a5b430e"
         },
         {
           "file": "apps/web/src/route-catalog.generated.json",
@@ -5387,7 +5402,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/provider-adapters-c-page.css",
           "expected": "d1da284edaba49456ddafb02940874a5feacd812169f10b8d3790cbfdd6d019a",
-          "actual": "dd77cdcd4286a095605f09f4c8003f23a659a6d41308d55d6db61181d5bb0c13"
+          "actual": "48f30865c89f8a42b5acbb3b132a4e7c8a59728d54e0e09761316c169a5b430e"
         },
         {
           "file": "apps/web/src/route-catalog.generated.json",
