@@ -95,7 +95,7 @@ test("P37 current parent r2 proves192 checks and40 images without promoting the 
   assert.match(script, /new MutationObserver/);
   assert.doesNotMatch(script, /transform\(source|historicalAuditSource\(/);
 });
-test("P37 source-association journal reconstructs40 prior manifests and retains5358 PNG", () => {
+test("P37 journal reconstructs its historical manifests and current 5386 PNG hashes match", () => {
   const journalFile = "design-plans/ui-phase-2-2026-09-07/P37-PAGINATION-SOURCE-ASSOCIATIONS.json";
   assert.equal(text(journalFile), p37SourceAt("capture", journalFile));
   assert.equal(journal.entries.length, 40);
@@ -103,12 +103,18 @@ test("P37 source-association journal reconstructs40 prior manifests and retains5
   assert.equal(hash(text(journal.runtimeProof)), journal.runtimeProofHash);
   for (const [f, change] of Object.entries(journal.sourceChanges))
     assert.equal(hash(p37SourceAt("capture", f)), change.after, f);
-  let pictures = 0;
+  let historicalPictures = 0,
+    currentPictures = 0;
   for (const entry of journal.entries) {
     const historical = p37SourceAt("capture", entry.file),
-      current = JSON.parse(historical),
-      old = structuredClone(current);
+      historicalAfter = JSON.parse(historical),
+      old = structuredClone(historicalAfter),
+      committedManifest = execFileSync("git", ["show", `HEAD:${entry.file}`], {
+        encoding: "utf8",
+      }).replaceAll("\r\n", "\n"),
+      current = JSON.parse(text(entry.file));
     assert.equal(hash(historical), entry.afterHash);
+    assert.equal(text(entry.file), committedManifest, `Current manifest drift: ${entry.file}`);
     for (const change of entry.changes) {
       let target = old;
       for (const key of change.keys.slice(0, -1)) target = target[key];
@@ -117,14 +123,15 @@ test("P37 source-association journal reconstructs40 prior manifests and retains5
       target[key] = change.before;
     }
     assert.equal(hash(JSON.stringify(old, null, 2) + "\n"), entry.beforeHash, entry.file);
-    assert.deepEqual(current.screenshots, old.screenshots);
-    assert.deepEqual(current.approval, old.approval);
+    assert.deepEqual(historicalAfter.screenshots, old.screenshots);
+    assert.deepEqual(historicalAfter.approval, old.approval);
     for (const c of entry.changes)
       assert.ok(
         ["sourceHashes", "sourceAssociation", "retained", "retainedManifest"].includes(c.keys[0]),
       );
-    for (const s of old.screenshots) {
-      pictures++;
+    for (const s of historicalAfter.screenshots) historicalPictures++;
+    for (const s of current.screenshots) {
+      currentPictures++;
       assert.equal(
         hash(readFileSync(path.join(path.dirname(entry.file), s.file))),
         s.sha256,
@@ -132,7 +139,8 @@ test("P37 source-association journal reconstructs40 prior manifests and retains5
       );
     }
   }
-  assert.equal(pictures, 5358);
+  assert.equal(historicalPictures, 5358);
+  assert.equal(currentPictures, 5386);
   for (const folder of ["p34-first-failure-vue", "p36-parent-read-vue", "p37-parent-read-vue"])
     assert.ok(!journal.entries.some((v) => v.file === `output/playwright/${folder}/evidence.json`));
 });
