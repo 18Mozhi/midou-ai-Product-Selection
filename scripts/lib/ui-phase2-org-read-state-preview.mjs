@@ -30,8 +30,12 @@ export const orgReadStateReplacements = [
     "<template v-else><h3>正在读取组织资料</h3><p>读取完成后显示当前组织内容。</p></template>",
   ],
   [
+    ":role=\"view === 'approvals' ? 'status' : undefined\"",
+    ":role=\"state === 'loading' ? 'status' : undefined\"",
+  ],
+  [
     'class="org-admin-state"\n    >\n      <h3>',
-    'class="org-admin-state" :role="state === \'loading\' ? \'status\' : \'alert\'"\n    >\n      <h3>',
+    'class="org-admin-state" role="alert"\n    >\n      <h3>',
   ],
   ['? "无权管理当前组织"', '? "当前无法查看组织资料"'],
   [

@@ -92,21 +92,21 @@ test("organization unavailable CSS is review scoped and header facts require rea
   assert.ok(orgReadStateReplacements[0][1].includes('state === "ready"'));
   assert.ok(orgReadStateReplacements[1][1].includes("state === 'ready'"));
   assert.ok(orgReadStateReplacements[4][1].includes("state === 'loading'"));
-  assert.ok(orgReadStateReplacements[4][1].includes("'status' : 'alert'"));
-  assert.ok(orgReadStateReplacements[6][1].includes("{{ requestId }}"));
+  assert.equal(orgReadStateReplacements[5][1].includes('role="alert"'), true);
+  assert.ok(orgReadStateReplacements[7][1].includes("{{ requestId }}"));
 });
 test("organization read-state packet proves current images, redaction and original retry counts", async () => {
-  const root = "output/playwright/org-read-state-vue-c-r3";
+  const root = "output/playwright/org-read-state-vue-c-r9";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-  assert.equal(evidence.kind, "ORG-READ-STATE-VUE-C-r3");
+  assert.equal(evidence.kind, "ORG-READ-STATE-VUE-C-r9");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.userReview, "pending");
   assert.equal(evidence.visualApproval.decision, "user-approved-remaining-pages-auto");
   assert.equal(evidence.processesClosed, true);
   assert.equal(evidence.runs.length, 32);
   assert.equal(evidence.screenshots.length, 54);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 180);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 132);
   const cases = [401, 403, 409, 429, 500, 503]
     .map((status) => ({ status, entry: "initial" }))
     .concat([401, 403].map((status) => ({ status, entry: "background" })));
