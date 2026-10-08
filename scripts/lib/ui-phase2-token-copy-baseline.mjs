@@ -8,7 +8,9 @@ export const tokenCopyComponent = "apps/web/src/components/OrganizationTokenPane
 export const tokenCopyRevisions = {
   "scripts/lib/ui-phase2-org-token-design-data.mjs": {
     before: "408840ae6f80aa140d617544bdae231a418fe449ec6d96b9fa03402f3a2fe135",
-    after: "28a8951aa0bd373352df39ffb76d5ff936bdedad9444d3795989dda066b587c2",
+    // Exact current evidence-model delta: retain the original OG-G05 model while
+    // representing the newer write/read receipt state without changing the UI.
+    after: "0d0db09e6c418a0e4700c67847f8e8fa443a4d6df6146d644a98f352cdcb9a4f",
   },
   [tokenCopyComponent]: {
     before: "81ba6a86c80bdcdb1cfea7832b3c13b0d85a5a9bf8dd6922583a5ada5d0e326d",
