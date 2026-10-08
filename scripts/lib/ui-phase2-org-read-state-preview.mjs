@@ -31,7 +31,7 @@ export const orgReadStateReplacements = [
   ],
   [
     'class="org-admin-state"\n    >\n      <h3>',
-    'class="org-admin-state" role="alert"\n    >\n      <h3>',
+    'class="org-admin-state" :role="state === \'loading\' ? \'status\' : \'alert\'"\n    >\n      <h3>',
   ],
   ['? "无权管理当前组织"', '? "当前无法查看组织资料"'],
   [
