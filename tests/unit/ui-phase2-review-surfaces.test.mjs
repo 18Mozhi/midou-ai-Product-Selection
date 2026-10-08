@@ -56,6 +56,8 @@ test("caller inventory counts inline aside separately from a modal", () => {
   assert.deepEqual(validateReviewSurfaces(review, context), {
     callerFiles: 1,
     localModelBindings: 1,
+    reviewedInputBindings: 1,
+    sourceCallerContainers: 3,
     callerContainers: 3,
     consumerVariants: 3,
     runtimeAcceptance: "unproven",

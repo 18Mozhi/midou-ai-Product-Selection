@@ -330,8 +330,9 @@ export function buildReportReview(source, evidence) {
       "208图覆盖10代表控件和14明确变体，不是全部导出记录/状态/主题/密度/角色/缩放组合。",
     ],
     approval: "pending-user-review",
+    visualApproval: "user-approved-remaining-pages-auto",
     limits: [
-      "只有C总体方向已选择，P28未获得整页或按钮批准。",
+      "用户已批准P28视觉方向；这不等于整页、动作/弹窗、下载字节、Worker/数据库或生产验收。",
       "实际下载字节、Worker/数据库与宝塔部署另验，不将原型请求意图当成功。",
     ],
   };

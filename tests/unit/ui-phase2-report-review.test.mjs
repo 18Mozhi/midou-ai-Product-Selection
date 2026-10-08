@@ -65,7 +65,7 @@ test("P28 keeps zero inputs and one native dialog with distinct non-record failu
     ["detail_not_found", "detail_forbidden"],
   );
 });
-test("P28 208 screenshots bind 48 representative states and 14 additional variants without approval", () => {
+test("P28 208 screenshots bind 48 representative states and 14 additional variants while visual approval stays scoped", () => {
   const value = review(),
     evidence = packages.get("report-controls-direction-c");
   assert.equal(evidence.screenshots.length, 208);
@@ -82,6 +82,8 @@ test("P28 208 screenshots bind 48 representative states and 14 additional varian
   for (const type of ["opportunity", "trend", "team"])
     assert.ok(variants.some((v) => v.key === `P28-type-${type}-selected`));
   assert.equal(value.approval, "pending-user-review");
+  assert.equal(value.visualApproval, "user-approved-remaining-pages-auto");
+  assert.match(value.limits[0], /视觉方向.*不等于整页、动作\/弹窗/);
   assert.deepEqual(value, buildReportReview(source, evidence));
 });
 test("P28 refuses to omit the page technical control or a detail regeneration source", () => {
