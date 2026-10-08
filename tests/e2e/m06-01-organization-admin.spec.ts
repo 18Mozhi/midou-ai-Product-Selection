@@ -1199,7 +1199,9 @@ test("M06-01.A07/A08/A15 mobile member and invitation state", async ({ page }) =
   await setup(page);
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/org-admin/members");
-  await expect(page.getByRole("heading", { name: "成员与邀请", level: 1 })).toBeVisible();
+  await expect(
+    page.locator(".org-admin-center").getByRole("heading", { name: "成员与邀请", level: 1 }),
+  ).toBeVisible();
   await expect(page.getByText("new@example.test")).toBeVisible();
   await expect(page.getByText("admin@example.test")).toBeVisible();
   await page.getByRole("button", { name: /已失效/ }).click();
