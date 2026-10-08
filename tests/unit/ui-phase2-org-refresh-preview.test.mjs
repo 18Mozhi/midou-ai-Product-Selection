@@ -94,19 +94,20 @@ test("refresh CSS and disclosure remain in review host and use original notice",
 });
 
 test("refresh current captures bind sources, images, read lifecycle and no writes", async () => {
-  const root = "output/playwright/org-refresh-vue-c-r1";
+  const root = "output/playwright/org-refresh-vue-c-r6";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (data) => createHash("sha256").update(data).digest("hex");
-  assert.equal(evidence.kind, "ORG-REFRESH-VUE-C-r1");
+  assert.equal(evidence.kind, "ORG-REFRESH-VUE-C-r6");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.userReview, "pending");
+  assert.equal(evidence.visualApproval.decision, "user-approved-remaining-pages-auto");
   assert.equal(evidence.processesClosed, true);
   assert.deepEqual(
     evidence.runs.map((r) => `${r.mode}/${r.width}`),
     ["baseline/390", "baseline/1440", "review/390", "review/1440"],
   );
   assert.equal(evidence.screenshots.length, 14);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 176);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 130);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
   for (const shot of evidence.screenshots) {

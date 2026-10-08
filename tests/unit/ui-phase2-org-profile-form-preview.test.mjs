@@ -182,19 +182,20 @@ test("profile conflict response comes from the original M06-01 fixture", async (
   });
 });
 test("profile packet binds current sources, visible errors and one local conflict PATCH per run", async () => {
-  const root = "output/playwright/org-profile-form-vue-c-r3",
+  const root = "output/playwright/org-profile-form-vue-c-r11",
     evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-  assert.equal(evidence.kind, "ORG-PROFILE-FORM-VUE-C-r3");
+  assert.equal(evidence.kind, "ORG-PROFILE-FORM-VUE-C-r11");
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.userReview, "pending");
+  assert.equal(evidence.visualApproval.decision, "user-approved-remaining-pages-auto");
   assert.equal(evidence.processesClosed, true);
   assert.deepEqual(
     evidence.runs.map((r) => `${r.mode}/${r.width}`),
     ["baseline/390", "baseline/1440", "review/390", "review/1440"],
   );
   assert.equal(evidence.screenshots.length, 22);
-  assert.equal(Object.keys(evidence.sourceHashes).length, 180);
+  assert.equal(Object.keys(evidence.sourceHashes).length, 134);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
   for (const shot of evidence.screenshots) {
