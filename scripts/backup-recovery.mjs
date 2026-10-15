@@ -15,6 +15,49 @@ export const digestFile = async (path) => {
   for await (const chunk of createReadStream(path)) hash.update(chunk);
   return hash.digest("hex");
 };
+
+export async function recordFailedRecoveryRun(pool, input) {
+  const uuid = /^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/;
+  const validDate = (value) => value instanceof Date && Number.isFinite(value.getTime());
+  if (
+    ![input.id, input.requestId, input.traceId].every(
+      (value) => typeof value === "string" && uuid.test(value),
+    ) ||
+    !["backup", "restore_drill"].includes(input.runType) ||
+    !validDate(input.startedAt) ||
+    !validDate(input.finishedAt) ||
+    input.finishedAt < input.startedAt ||
+    (input.sourceCutoffAt != null &&
+      (!validDate(input.sourceCutoffAt) || input.sourceCutoffAt > input.finishedAt))
+  )
+    throw fail(
+      "backup_failure_record_invalid",
+      "Failure identity or execution timestamps are invalid",
+    );
+  const failureCode =
+    typeof input.failureCode === "string" &&
+    /^[A-Za-z][A-Za-z0-9_.:-]{0,99}$/.test(input.failureCode)
+      ? input.failureCode
+      : "baota_backup_drill_failed";
+  await pool.query(
+    "INSERT INTO backup_recovery_runs(id,run_type,scope_type,primary_region,recovery_region,status," +
+      "rpo_target_minutes,rto_target_minutes,source_cutoff_at,started_at,finished_at," +
+      "isolated,encrypted,integrity_verified,permission_boundary_verified,audit_chain_verified,evidence_hash_verified," +
+      "failure_code,request_id,trace_id,metadata) VALUES(?,?,'platform','惠州','惠州','failed',15,240,?,?,?,0,0,0,0,0,0,?,?,?,?)",
+    [
+      input.id,
+      input.runType,
+      input.sourceCutoffAt ?? null,
+      input.startedAt,
+      input.finishedAt,
+      failureCode,
+      input.requestId,
+      input.traceId,
+      JSON.stringify({ topology: "same_host_local_isolation", host_failure_protected: false }),
+    ],
+  );
+}
+
 const key = (secret, salt) => {
   if (!secret || secret.length < 32)
     throw fail("backup_key_invalid", "BACKUP_ENCRYPTION_KEY must contain at least 32 characters");

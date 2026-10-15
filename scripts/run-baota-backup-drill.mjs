@@ -17,7 +17,13 @@ import {
 import { basename, isAbsolute, join, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import mysql from "mysql2/promise";
-import { createBundle, decryptBundle, digestFile, verifyBundle } from "./backup-recovery.mjs";
+import {
+  createBundle,
+  decryptBundle,
+  digestFile,
+  verifyBundle,
+  recordFailedRecoveryRun,
+} from "./backup-recovery.mjs";
 import { validatePitrSql, rewritePitrSql, verifyPitrMarker } from "./lib/backup-pitr-sql.mjs";
 
 const args = process.argv.slice(2),
@@ -172,6 +178,7 @@ async function pruneExpired(root, retentionDays, now) {
 let runtime,
   databasePool,
   adminPool,
+  failureRun = null,
   probeId = "",
   restoreDatabase = "",
   drillRoot = "",
@@ -274,10 +281,12 @@ try {
     );
   const startedAt = new Date(),
     stamp = iso(startedAt);
+  failureRun = { id: randomUUID(), runType: "backup", startedAt, sourceCutoffAt: null };
   workingRoot = join(drillRoot, `run-${stamp}-${requestId.slice(0, 8)}`);
   await mkdir(workingRoot, { mode: 0o700 });
   const sourceCutoffAt = new Date(),
     dumpPath = join(workingRoot, "product_scout.sql");
+  failureRun.sourceCutoffAt = sourceCutoffAt;
   const [[binlogPolicy]] = await adminPool.query(
     "SELECT @@log_bin log_bin,@@binlog_format binlog_format,@@expire_logs_days expire_logs_days,@@datadir data_dir",
   );
@@ -397,6 +406,8 @@ try {
     actualRpoMinutes = Math.max(0.01, (backupFinishedAt - sourceCutoffAt) / 60000);
   const drillStartedAt = new Date(),
     restoreRoot = join(workingRoot, "restore");
+  failureRun.runType = "restore_drill";
+  failureRun.startedAt = drillStartedAt;
   await mkdir(restoreRoot, { recursive: true, mode: 0o700 });
   const restored = {};
   for (const asset of assets) {
@@ -652,6 +663,21 @@ try {
     (await pruneExpired(copyRoot, retentionDays, drillFinishedAt));
   process.stdout.write(`${JSON.stringify(result)}\n`);
 } catch (error) {
+  if (databasePool && failureRun) {
+    try {
+      await recordFailedRecoveryRun(databasePool, {
+        ...failureRun,
+        failureCode: error.code,
+        requestId,
+        traceId,
+        finishedAt: new Date(),
+      });
+    } catch {
+      process.stderr.write(
+        `${JSON.stringify({ module: "M07-04", code: "backup_failure_record_write_failed", request_id: requestId, trace_id: traceId })}\n`,
+      );
+    }
+  }
   process.stderr.write(
     `${JSON.stringify({ module: "M07-04", status: "blocked", code: error.code || "baota_backup_drill_failed", message: error.message, request_id: requestId, trace_id: traceId })}\n`,
   );

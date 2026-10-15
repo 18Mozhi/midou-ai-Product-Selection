@@ -17,6 +17,8 @@ P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs
 3. 恢复副本：将密文写入当前主机内独立的宝塔受控目录，再从该目录重新计算密文哈希。没有副本端验证不得写 `verified`；此副本不保护整机或磁盘故障。
 4. 记录：以系统审计身份写入 `backup_recovery_runs/assets`，关联 request_id 和 trace_id。失败写明确 failure_code，并由宝塔告警。
 
+失败记录补齐：仅在运行环境、既有表及发布身份检查通过并建立实际执行上下文后，有限任务才追加 `status=failed` 的现有运行记录；备份阶段使用 `backup`，进入隔离恢复后使用 `restore_drill`。保存真实开始、结束、快照截止时间及本次 request/trace，失败码仅接受有界标识，不保存异常正文、SQL、密码或路径。所有验证标志保持未验证，不改写历史成功；审计写入失败另报 `backup_failure_record_write_failed`，原失败及非零退出不变。随后仅清理本次 running 源探针与自有临时目录，不删除失败记录。历史文件失败因缺少原执行时间或 trace 不自动回填。此修正随固定部署包上传后供下一次有限任务加载，无新配置、迁移或常驻服务重启；部署不等于授权执行新备份或恢复。定向验证：`node --test tests/m07-04/backup-failure-record.test.mjs`。
+
 宝塔计划任务命令：`cd /www/wwwroot/ai选品/backend && node scripts/run-baota-backup-drill.mjs --run --env-file /www/wwwroot/ai选品/config/product_scout.env`。任务必须在宝塔中可见、可停用、可查看日志；不得另建系统 cron 或常驻进程。
 
 配置或 socket 路径变化不需要重启 MySQL；在宝塔中重新执行有限备份任务即可生效。若回滚本变更，先停用该任务并恢复受限环境与上一发布代码，再运行一次自检；不得以创建 TCP root 账号作为回滚手段。
