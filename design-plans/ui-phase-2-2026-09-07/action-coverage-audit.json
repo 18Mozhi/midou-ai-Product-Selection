@@ -501,7 +501,7 @@
     "scripts/verify-ui-phase2-organization-profile-c.mjs": "5a42e1a7baedabaab16a480f7304a59ba9ef6a2f667a127e280ae88ade6a8355",
     "scripts/verify-ui-phase2-organization-profile-controls-c.mjs": "517b5cf3e6640b2096123a1c36353f7ee3a194187b358d094107632227b4a64a",
     "scripts/verify-ui-phase2-organization-profile-fields-c.mjs": "1cd07eb755a37c342dd9e0477c2e18d5dcbfba89cbb6483319b3a9a190afcffb",
-    "tests/e2e/m06-01-organization-admin.spec.ts": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef",
+    "tests/e2e/m06-01-organization-admin.spec.ts": "5c536fabd9fe94c9a51127ab3972fe475f6b8e6c9d8cecea4ab6cc9cb50ea465",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P30.json": "2ad1e23af9e58aa42f9eb31a8ee48698f353535672c0d36ce1cdf5c7310dd7fd",
     "scripts/verify-ui-phase2-members-c.mjs": "4c49e066ccd290f59420f0e0e4f7ab7b2ae36709d67ddfd9d0620c5287106f91",
     "scripts/verify-ui-phase2-members-controls-c.mjs": "2af24e5b1ad27c940812a385a45486da0163c3df96c0efcd8d34500e9bc83c7d",
