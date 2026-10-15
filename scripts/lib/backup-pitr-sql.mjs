@@ -86,6 +86,16 @@ function crc32(bytes) {
   return (crc ^ 0xffffffff) >>> 0;
 }
 
+function eventChecksum(event) {
+  const payload = event.subarray(0, -4);
+  // MySQL 5.7 Log_event_footer::event_checksum_test masks only the FDE in-use bit.
+  // https://github.com/mysql/mysql-server/blob/5.7/libbinlogevents/src/binlog_event.cpp
+  if (event[4] !== 15 || !(event[17] & 1)) return crc32(payload);
+  const canonical = Buffer.from(payload);
+  canonical[17] &= ~1;
+  return crc32(canonical);
+}
+
 // Native 5.7 --rewrite-db can leave stale checksums. Accept only verified
 // original events, rewrite the table-map namespace and recalculate its CRC.
 function processPitrSql(source, inputDatabase, outputDatabase) {
@@ -185,7 +195,7 @@ function processPitrSql(source, inputDatabase, outputDatabase) {
         size = bytes.readUInt32LE(offset + 9);
       if (size < 23 || offset + size > bytes.length) fail();
       const event = bytes.subarray(offset, offset + size);
-      if (event.readUInt32LE(size - 4) !== crc32(event.subarray(0, size - 4))) fail();
+      if (event.readUInt32LE(size - 4) !== eventChecksum(event)) fail();
       let rewritten = event;
       if (type === 15) {
         if (

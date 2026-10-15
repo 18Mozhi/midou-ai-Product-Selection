@@ -36,6 +36,39 @@ const valid = binary(event(19), event(30));
 const rejects = (sql) =>
   assert.throws(() => validatePitrSql(sql, target), { code: "backup_pitr_sql_unsafe" });
 
+test("PITR verifies open-binlog FDE CRC with the MySQL57 in-use-bit rule without changing bytes", () => {
+  const fde = event(15);
+  fde[17] |= 1;
+  const source = `BINLOG '${Buffer.concat([fde, event(19, "product_scout"), event(30)]).toString("base64")}';`;
+  const result = rewritePitrSql(source, "product_scout", target);
+  assert.equal(result.boundary.eventChecksumsVerified, true);
+  const encoded = result.sql.match(/BINLOG '([^']+)'/)[1];
+  assert.deepEqual(Buffer.from(encoded, "base64").subarray(0, fde.length), fde);
+  assert.equal(validatePitrSql(result.sql, target).rowEvents, 1);
+});
+
+test("FDE normalization does not excuse other flag corruption, changed bytes, bad CRC or no-checksum mode", () => {
+  const open = event(15);
+  open[17] |= 1;
+  const otherFlag = Buffer.from(open);
+  otherFlag[17] |= 2;
+  const data = Buffer.from(open);
+  data[20] ^= 1;
+  const checksum = Buffer.from(open);
+  checksum[checksum.length - 1] ^= 1;
+  const noChecksum = event(15);
+  noChecksum[noChecksum.length - 5] = 0;
+  noChecksum.writeUInt32LE(crc(noChecksum.subarray(0, -4)), noChecksum.length - 4);
+  for (const fde of [otherFlag, data, checksum, noChecksum])
+    rejects(`BINLOG '${Buffer.concat([fde, event(19), event(30)]).toString("base64")}';`);
+  const map = event(19);
+  map[17] |= 1;
+  rejects(binary(map, event(30)));
+  const row = event(30);
+  row[17] |= 1;
+  rejects(binary(event(19), row));
+});
+
 test("PITR allows only the exact approved migration-ledger bootstrap and qualifies the isolated target", async () => {
   const deploy = await readFile("scripts/apply-deployment-migrations.mjs", "utf8");
   const ledger = deploy.match(

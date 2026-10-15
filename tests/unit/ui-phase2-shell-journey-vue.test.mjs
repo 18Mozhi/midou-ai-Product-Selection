@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
@@ -9,7 +10,36 @@ import {
   journeyCompositionCss,
   previewShellJourney,
 } from "../../scripts/lib/ui-phase2-shell-journey-vue-data.mjs";
-test("r4 capture binds current sources, browser checks and versioned images", async () => {
+function assertBlockedJourneyDelta(previous, current) {
+  let projected = previous;
+  for (const [before, after] of [
+    [
+      "  canAdopt = computed(() => eligibleForAdoption(selectedCandidate.value)),",
+      '  canAdopt = computed(\n    () => journey.value?.state !== "blocked" && eligibleForAdoption(selectedCandidate.value),\n  ),',
+    ],
+    [
+      'function adoptionHint(candidate: Journey["results"][number]) {',
+      'function adoptionHint(candidate: Journey["results"][number]) {\n  if (journey.value?.state === "blocked") return "当前旅程已受阻，不能采纳；可继续观察或驳回。";',
+    ],
+  ]) {
+    assert.equal(projected.split(before).length, 2);
+    projected = projected.replace(before, after);
+  }
+  assert.equal(
+    current,
+    projected,
+    "Only the exact blocked-adoption guard and explanation are covered; other changes need new evidence",
+  );
+  const prior = parse(previous).descriptor,
+    next = parse(current).descriptor;
+  assert.equal(next.template.content, prior.template.content);
+  assert.deepEqual(
+    next.styles.map((x) => x.content),
+    prior.styles.map((x) => x.content),
+  );
+}
+
+test("r4 preserves exact historical sources/images with a separately checked current blocked-guard delta", async () => {
   const root = "output/playwright/shell-journey-vue-c-r4";
   const hash = (value) => createHash("sha256").update(value).digest("hex");
   const manifest = await readFile(`${root}/evidence.json`);
@@ -31,7 +61,22 @@ test("r4 capture binds current sources, browser checks and versioned images", as
   assert.match(evidence.sourceCommit, /^[a-f0-9]{40}$/u);
   assert.equal(evidence.sourceSha, hash(JSON.stringify(evidence.sourceHashes)));
   for (const [file, sha] of Object.entries(evidence.sourceHashes)) {
-    assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
+    const current = (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
+    if (file === "apps/web/src/components/SelectionJourney.vue" && hash(current) !== sha) {
+      const previous = execFileSync(
+        "git",
+        ["show", `cc5d97de091b2b410787769493c62d54caaa92a8:${file}`],
+        { encoding: "utf8", maxBuffer: 1048576 },
+      ).replaceAll("\r\n", "\n");
+      assert.equal(
+        hash(previous),
+        sha,
+        "Capture-time component bytes must remain independently recoverable",
+      );
+      assertBlockedJourneyDelta(previous, current);
+      assert.throws(() => assertBlockedJourneyDelta(previous, current + "\n// unrelated change"));
+      assert.equal((await buildShellJourneyFixture()).journey.state, "result_ready");
+    } else assert.equal(hash(current), sha, file);
   }
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);

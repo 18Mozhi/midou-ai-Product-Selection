@@ -14,6 +14,8 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 ## 执行与判定
 
+前端同步：即使受阻前已有五项质量门通过的候选，`blocked` 旅程的原生“采纳合格机会”单选项仍禁用，并显示不能采纳的原因；继续观察、驳回及其保存流程不受影响。候选质量事实不改写，正常 `result_ready` 的五门采纳合同不变。双端实际 Vue 测试覆盖禁用、键盘跳过和观察提交；隔离响应不替代真实生产来源验收。
+
 2026-10-16：创建后的首次读取与后续读取，若真实来源熔断表为 `open` 且采集尚未终结，立即事务写入旅程 `blocked`、原因 `source_circuit_open`、系统事件与 Outbox，不等待 180 秒。重复读取不重复写入；来源后来关闭不撤销已形成终态。原因读取自持久事件，不受稍后采集错误覆盖。允许对受阻旅程继续观察或驳回，禁止采纳；五项质量门、组织范围、幂等、采集重试和 robots 限制不变。需固定部署并由宝塔重启 Node 项目；无迁移、新配置或前端请求结构变化。
 
 超时读取分支必须在同一事务中写入 blocked 状态、`selection.journey.blocked` 系统事件和 Outbox；事件语句使用九个绑定值及两个固定 actor 字面量。SQL 失败必须回滚，不允许只更新状态后忽略审计错误。定向回归：`npm run build:api` 后执行 `node --test tests/m07-06/selection-deadline-sql.test.mjs`。修复随后端运行包部署后由宝塔重启 Node 项目 `ai选品` 生效，不需要迁移、配置或前端改动；仍需重跑真实旅程验收。

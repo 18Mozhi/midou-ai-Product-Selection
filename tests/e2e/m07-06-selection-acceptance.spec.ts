@@ -277,6 +277,81 @@ test("selection journey resumes and adopts only the compared candidate", async (
   await expect(page.getByText("决策已保存 · 已采纳")).toBeVisible();
   await expect(page.getByRole("link", { name: "查看机会、证据与决策历史 ↗" })).toBeVisible();
 });
+test("blocked journey disables adoption despite complete quality gates while observe stays usable", async ({
+  page,
+}) => {
+  const candidate = {
+    raw_evidence_id: "55555555-5555-4555-8555-555555555552",
+    title: "熔断前的合格候选",
+    publisher: "测试来源",
+    canonical_url: "https://example.com/candidate",
+    observed_at: "2026-08-10T12:00:12Z",
+    topic_id: "66666666-6666-4666-8666-666666666666",
+    opportunity_id: "88888888-8888-4888-8888-888888888888",
+    selection_stage: "recommended",
+    quality_gates: {
+      score: true,
+      market: true,
+      competition: true,
+      cost: true,
+      risk: true,
+      all_passed: true,
+    },
+  };
+  const blocked = {
+    ...base,
+    state: "blocked",
+    task_status: "retry_scheduled",
+    results: [candidate],
+    first_result: candidate,
+    available_result_count: 1,
+    blocked_reason: "source_circuit_open",
+  };
+  await page.addInitScript(({ key, id }) => localStorage.setItem(key, id), {
+    key: "scoutops.selection-journey.active-id",
+    id: base.id,
+  });
+  await page.route(`**/api/v1/selection-journeys/${base.id}`, (r) =>
+    r.fulfill({ json: env(blocked) }),
+  );
+  let body: any = null;
+  await page.route(`**/api/v1/selection-journeys/${base.id}/decisions`, async (r) => {
+    body = r.request().postDataJSON();
+    await r.fulfill({
+      status: 201,
+      json: env({
+        ...blocked,
+        state: "decided",
+        decision: {
+          action: body.action,
+          reason: body.reason,
+          actor_id: "member",
+          created_at: "2026-08-10T12:00:20Z",
+        },
+      }),
+    });
+  });
+  await page.goto("/opportunities/start");
+  await page.getByText(candidate.title, { exact: true }).click();
+  await expect(page.getByRole("radio", { name: "采纳合格机会", exact: true })).toBeDisabled();
+  await expect(
+    page.getByText("当前旅程已受阻，不能采纳；可继续观察或驳回。", { exact: false }).first(),
+  ).toBeVisible();
+  const observe = page.getByRole("radio", { name: "继续观察", exact: true }),
+    reject = page.getByRole("radio", { name: "驳回", exact: true });
+  await expect(observe).toBeEnabled();
+  await expect(reject).toBeEnabled();
+  await observe.focus();
+  await page.keyboard.press("ArrowLeft");
+  await expect(reject).toBeChecked();
+  expect(body).toBeNull();
+  await observe.check();
+  await page.getByLabel("决策原因").fill("受阻后继续观察");
+  await page.getByRole("button", { name: "保存审计决策" }).click();
+  await expect.poll(() => body?.action).toBe("observe");
+  expect(body.selected_raw_evidence_id).toBeNull();
+});
+
 test("M07-06.A08/A16 shows succeeded_empty and forbidden without fake evidence", async ({
   page,
 }) => {

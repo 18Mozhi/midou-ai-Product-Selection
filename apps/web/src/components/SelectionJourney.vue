@@ -140,7 +140,9 @@ const terminal = computed(
   selectedCandidate = computed(() =>
     candidates.value.find((candidate) => candidate.raw_evidence_id === selectedResultId.value),
   ),
-  canAdopt = computed(() => eligibleForAdoption(selectedCandidate.value)),
+  canAdopt = computed(
+    () => journey.value?.state !== "blocked" && eligibleForAdoption(selectedCandidate.value),
+  ),
   currentPhase = computed(() =>
     !journey.value ? 1 : journey.value.state === "decided" ? 4 : terminal.value ? 3 : 2,
   ),
@@ -212,6 +214,7 @@ function eligibleForAdoption(candidate: Journey["results"][number] | undefined) 
   );
 }
 function adoptionHint(candidate: Journey["results"][number]) {
+  if (journey.value?.state === "blocked") return "当前旅程已受阻，不能采纳；可继续观察或驳回。";
   if (!candidate.opportunity_id) return "尚无已评估机会，暂不能采纳，可继续观察";
   if (!candidate.quality_gates) return "质量门状态未返回，刷新进度后再核对";
   const missing = (

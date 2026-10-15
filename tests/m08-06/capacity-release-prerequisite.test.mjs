@@ -37,6 +37,17 @@ const fixture = () => ({
   capturedAt: new Date(now).toISOString(),
 });
 const identity = { build_sha: head, version: "0.1.0", config_fingerprint: "c".repeat(64) };
+test("finite capacity release evidence path is documented and registered without a new API field", async () => {
+  const [schema, example, cli] = await Promise.all([
+    readFile("config/schema.json", "utf8").then(JSON.parse),
+    readFile("config/env.example", "utf8"),
+    readFile("scripts/capture-capacity-boundary-production.mjs", "utf8"),
+  ]);
+  const key = "CAPACITY_BOUNDARY_RELEASE_EVIDENCE_FILE";
+  assert.ok(schema.backendGroups.capacityBoundary.includes(key));
+  assert.ok(example.includes(key + "="));
+  assert.ok(cli.includes(key));
+});
 test("fixed BaoTa package includes the capacity CLI and its complete local import chain", async () => {
   const deploy = await readFile("scripts/deploy-baota.py", "utf8");
   for (const name of [

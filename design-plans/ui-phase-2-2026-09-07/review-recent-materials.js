@@ -400,7 +400,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+          "actual": "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00"
         },
         {
           "file": "apps/web/src/components/SourcingComparisonPanel.vue",
@@ -994,7 +994,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+          "actual": "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00"
         },
         {
           "file": "apps/web/src/components/SourcingComparisonPanel.vue",
@@ -1563,7 +1563,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+          "actual": "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00"
         },
         {
           "file": "apps/web/src/components/SourcingComparisonPanel.vue",
@@ -2216,7 +2216,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+          "actual": "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00"
         },
         {
           "file": "apps/web/src/components/SourcingComparisonPanel.vue",
@@ -2366,7 +2366,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "docs/openapi.yaml",
           "expected": "572fa523fd10401b9047cc6f98a379bfdf84df9d26ee47f00f5d2c7ee16badfe",
-          "actual": "d906c4c7ff85b7247e1a55ca372b84c2fc3adbfa854a84f0aa792097c7025d40"
+          "actual": "86f3628543d7d70fea80b68560dee27a130c93264efcaa46250fcf5b52291958"
         },
         {
           "file": "scripts/lib/ui-phase2-org-approvals-design-data.mjs",
@@ -2825,7 +2825,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "08e6c860cb5ebfec8f8a7999c9dcd32d6aaa8918b9e48c172507afff17965573",
-          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+          "actual": "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00"
         },
         {
           "file": "apps/web/src/components/SourcingComparisonPanel.vue",
@@ -2975,7 +2975,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "docs/openapi.yaml",
           "expected": "572fa523fd10401b9047cc6f98a379bfdf84df9d26ee47f00f5d2c7ee16badfe",
-          "actual": "d906c4c7ff85b7247e1a55ca372b84c2fc3adbfa854a84f0aa792097c7025d40"
+          "actual": "86f3628543d7d70fea80b68560dee27a130c93264efcaa46250fcf5b52291958"
         },
         {
           "file": "scripts/lib/ui-phase2-org-approvals-design-data.mjs",
@@ -3925,7 +3925,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+          "actual": "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00"
         },
         {
           "file": "apps/web/src/components/SourcingComparisonPanel.vue",
@@ -4698,7 +4698,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+          "actual": "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00"
         },
         {
           "file": "apps/web/src/components/SourcingComparisonPanel.vue",
@@ -5287,7 +5287,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/SelectionJourney.vue",
           "expected": "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-          "actual": "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf"
+          "actual": "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00"
         },
         {
           "file": "apps/web/src/components/SourcingComparisonPanel.vue",
