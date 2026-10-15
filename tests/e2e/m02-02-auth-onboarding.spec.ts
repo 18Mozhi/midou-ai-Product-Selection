@@ -137,7 +137,9 @@ test("M02-02.A07/A15 login brand and mobile auxiliary actions keep compact touch
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
-  const actions = await page.locator(".p02-login-actions > :is(button, a)").evaluateAll((nodes) =>
+  const actionControls = page.locator(".p02-login-actions > :is(button, a)");
+  await expect(actionControls).toHaveCount(3);
+  const actions = await actionControls.evaluateAll((nodes) =>
     nodes.map((node) => {
       const box = node.getBoundingClientRect();
       return { y: box.y, height: box.height };
