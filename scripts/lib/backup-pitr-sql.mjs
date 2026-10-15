@@ -122,8 +122,17 @@ function processPitrSql(source, inputDatabase, outputDatabase) {
     const binary = statement.match(/^BINLOG\s+'([A-Za-z0-9+/=\s]+)'$/);
     if (!binary) fail();
     const encoded = binary[1].replace(/\s/g, "");
-    const bytes = Buffer.from(encoded, "base64");
-    if (bytes.toString("base64") !== encoded) fail();
+    // mysqlbinlog may encode events separately inside one BINLOG literal;
+    // padding therefore can occur between events, not only at the very end.
+    const segments = encoded.match(/[A-Za-z0-9+/]+={0,2}/g) || [];
+    if (segments.join("") !== encoded) fail();
+    const bytes = Buffer.concat(
+      segments.map((segment) => {
+        const decoded = Buffer.from(segment, "base64");
+        if (decoded.toString("base64") !== segment) fail();
+        return decoded;
+      }),
+    );
     const events = [];
     let offset = 0;
     while (offset < bytes.length) {

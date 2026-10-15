@@ -100,3 +100,11 @@ test("PITR rejects corrupt original checksums and stale rewritten checksums", ()
   map[map.length - 1] ^= 1;
   rejects(binary(map, event(30)));
 });
+
+test("PITR accepts native separately padded event blocks without dropping subsequent rows", () => {
+  const events = [event(15), event(19, "product_scout"), event(31)];
+  const native = `BINLOG '\n${events.map((value) => value.toString("base64")).join("\n")}\n'/*!*/;`;
+  const result = rewritePitrSql(native, "product_scout", target);
+  assert.equal(result.boundary.rowEvents, 1);
+  assert.equal(validatePitrSql(result.sql, target).eventChecksumsVerified, true);
+});

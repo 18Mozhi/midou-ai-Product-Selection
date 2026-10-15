@@ -27,6 +27,8 @@ P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs
 
 事件布局和 CRC32 依据 [MySQL 5.7 官方事件定义](https://github.com/mysql/mysql-server/blob/5.7/libbinlogevents/include/binlog_event.h) 与 [table-map 定义](https://github.com/mysql/mysql-server/blob/5.7/libbinlogevents/include/rows_event.h)。这是恢复工具内部转换，不升级 MySQL、不调整其配置，也不把原始校验成功而重写失败误报为生产 binlog 损坏。真正执行前需先以现场原始日志完成只读转换及校验预检；本地夹具不是生产恢复通过证据。
 
+同一个原生 `BINLOG` 字面量可能包含多段分别填充的 base64 事件，不能直接当单段解码，否则会在首个填充处丢弃后续事件。转换器逐段严格解码、拼接事件并校验长度与 CRC，输出规范单段编码。现场只读候选检查曾覆盖 25 个映射与 25 个行事件；没有执行回放写入，不构成恢复通过证据。
+
 有限任务必须额外加载当前 `config/release.env` 中的 `BUILD_SHA`；主环境和备份专用受限环境可由 Node `--env-file` 与脚本既有 `--env-file` 参数组合加载。没有同提交发布身份、快照后探针、行事件范围或清理证据时，生产门拒绝签发。本修正需要下一次固定目录部署更新工具，不要求改变 MySQL 配置；本地单测不代表线上演练已通过。`mysqlbinlog` 的 rewrite-db 对行事件生效，过滤发生在重写之后，见 [MySQL 5.7 官方手册](https://docs.oracle.com/cd/E17952_01/mysql-5.7-en/mysqlbinlog.html)。
 
 至少每季度在当前主机的临时隔离数据库与隔离文件根目录执行：从本机恢复副本取回密文、验证、解密、恢复到新库；核对关键业务表行数和抽样事实、`audit_logs/platform_audit_events` 链、证据 SHA-256、跨组织拒绝；记录实际 RPO/RTO。不得连接生产 Worker/Crawler，不得覆盖生产库或主文件根目录。演练结束后由宝塔任务删除明文隔离库和临时文件，只保留密文及脱敏证据。
