@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { capacityReleasePrerequisite } from "../../scripts/lib/capacity-release-prerequisite.mjs";
 const head = "a".repeat(40),
   previous = "b".repeat(40),
@@ -36,6 +37,16 @@ const fixture = () => ({
   capturedAt: new Date(now).toISOString(),
 });
 const identity = { build_sha: head, version: "0.1.0", config_fingerprint: "c".repeat(64) };
+test("fixed BaoTa package includes the capacity CLI and its complete local import chain", async () => {
+  const deploy = await readFile("scripts/deploy-baota.py", "utf8");
+  for (const name of [
+    "capture-capacity-boundary-production.mjs",
+    "release-rollout-async-lag.mjs",
+    "single-backend-release-evidence.mjs",
+    "scripts/lib/capacity-release-prerequisite.mjs",
+  ])
+    assert.ok(deploy.includes(name), name);
+});
 test("capacity accepts current real single-backend release rollback recovery receipt", () => {
   const result = capacityReleasePrerequisite(JSON.stringify(fixture()), head, identity, now);
   assert.match(result.evidenceSha256, /^[a-f0-9]{64}$/);

@@ -16,6 +16,8 @@
 
 ## 受控基线
 
+固定运行包白名单必须包含容量 CLI、`release-rollout-async-lag.mjs`、`single-backend-release-evidence.mjs` 与 `lib/capacity-release-prerequisite.mjs` 完整导入链；部署后先核对文件哈希及真实回执前置，再执行测量。缺少任何依赖视为部署未完整，不得改用手工服务器构建。
+
 2026-10-16 所有者批准发布前置改接 M07-05 现行单后端真实发布／回滚／恢复回执，不再要求旧 5/25/100 灰度记录。全部性能、资源、归档、恢复与审计门保留，不新增候选实例、数据库 down 或数据备份。
 
 固定部署并完成 `--rollback-drill` 后，将本地生成且核验通过的 `single-backend-release-production-evidence.json` 原样上传至 `/www/wwwroot/ai选品/runtime/verification/`，权限 0600；`CAPACITY_BOUNDARY_RELEASE_EVIDENCE_FILE` 默认指向该文件。任务验证同提交、30 分钟内真实三阶段、不同回滚 SHA、单实例、清理和数据库未回退，并交叉核对 TLS 版本/配置指纹与当前迁移。容量输出 `CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE` 也须指向该固定目录。禁止手写或刷新旧时间。新变量仅由有限任务启动读取，不需单独重启服务。阈值改变后重新发布／回滚及测量，不再执行旧灰度程序。

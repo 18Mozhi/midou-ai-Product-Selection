@@ -374,11 +374,15 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
         "run-baota-selection-acceptance.mjs",
         "run-baota-backup-drill.mjs",
         "backup-recovery.mjs",
+        "capture-capacity-boundary-production.mjs",
+        "release-rollout-async-lag.mjs",
+        "single-backend-release-evidence.mjs",
     ):
         shutil.copy2(repo / f"scripts/{script}", script_target)
 
     (script_target / "lib").mkdir()
     shutil.copy2(repo / "scripts/lib/backup-pitr-sql.mjs", script_target / "lib/backup-pitr-sql.mjs")
+    shutil.copy2(repo / "scripts/lib/capacity-release-prerequisite.mjs", script_target / "lib/capacity-release-prerequisite.mjs")
 
     for relative in (
         "config/route-catalog.json",

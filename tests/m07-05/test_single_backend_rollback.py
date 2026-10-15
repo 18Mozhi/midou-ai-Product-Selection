@@ -6,12 +6,26 @@ from unittest.mock import patch
 from unittest.mock import Mock
 import json
 import inspect
+import tarfile
 
 helpers = runpy.run_path("scripts/single-backend-rollback.py")
 deployer = runpy.run_path("scripts/deploy-baota.py")
 
 
 class RollbackTests(unittest.TestCase):
+    def test_capacity_runtime_package_contains_complete_relative_import_chain(self):
+        with tempfile.TemporaryDirectory(prefix="scoutops-capacity-package-test-") as temp:
+            identity = dict(local_sha="a" * 40, remote_sha="a" * 40, remote_branch="main", repository="test")
+            def empty_tree(_source, target):
+                Path(target).mkdir(parents=True, exist_ok=True)
+            with patch.dict(deployer["build_package"].__globals__, verify_local_build_preflight=lambda _repo: None, copy_tree=empty_tree):
+                archive = deployer["build_package"](Path.cwd(), identity, True, Path(temp))
+            with tarfile.open(archive, "r:gz") as package:
+                names = set(package.getnames())
+                for relative in ("capture-capacity-boundary-production.mjs", "release-rollout-async-lag.mjs", "single-backend-release-evidence.mjs", "lib/capacity-release-prerequisite.mjs"):
+                    self.assertIn("backend/scripts/" + relative, names)
+                    self.assertGreater(package.getmember("backend/scripts/" + relative).size, 0)
+
     def test_rollback_audits_use_official_security_endpoint_without_changing_global_registry(self):
         for name in ("build_historical_rollback", "reverify_same_version"):
             source = inspect.getsource(deployer[name])
