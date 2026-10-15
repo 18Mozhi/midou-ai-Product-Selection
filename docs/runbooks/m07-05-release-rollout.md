@@ -15,6 +15,22 @@
 正式证据在 `.artifacts/verification/single-backend-release-production-evidence.json`，绑定完整当前 SHA，沿用 30 分钟新鲜度并实时核对公网 version/ready/available；未来时间不接受。
 普通部署仍使用原命令，不额外演练回滚；仅上传或重启不代表 M07-05 通过。
 
+### 同版本真实回滚复验
+
+当前版本已部署时，在相同的干净 `main`、远端同 SHA、变更归属和本地门通过后运行
+`python scripts/deploy-baota.py --reverify-rollback`，不能与其他部署或复用构建参数组合。
+从正式证据读取此前实际回滚过的完整历史 SHA，并验证历史证据结构和当时的时间顺序；
+这只证明来源，不把过期证据作为当前验收。历史 SHA 必须为批准仓库中当前版本的祖先。
+当前策略只接受部署器、相关测试和指定文档的差异；运行代码、依赖、迁移或配置变化即拒绝，未来兼容性须另行审查。
+
+历史源通过本地临时 detached Git worktree 重建并在结束时删除，临时目录复用 npm 离线缓存，缺缓存在连接生产前失败；
+执行本地构建、来源/产物预检及依赖审计。服务器只安装锁定生产依赖并审计，不执行 Git 或构建。
+不执行数据库迁移、不新建数据备份、不创建候选实例；只使用有界临时包和既有宝塔项目。
+先核验当前 SHA，再实际切换历史包核验，最后无论历史健康检查是否成功都尝试切回当前包并核验。
+失败不签发，保留锁和恢复材料；成功清理临时包及本人锁，并记录全新时间的三阶段证据。
+原证据按 SHA-256 留存为同目录 `rollback-provenance-<sha256>.json` 审计材料，不修改原时间或放宽 30 分钟门。
+无需新增环境变量或 API；命令通过宝塔短暂停止和启动既有 Node/Python 服务，须在维护窗口执行。
+
 > 本文以下双槽命令已停用，只用于历史审计。当前发布必须在本地提交且工作树干净后运行
 > `python scripts/deploy-baota.py`，生产只维护 `/www/wwwroot/ai选品/frontend`、
 > `/www/wwwroot/ai选品/backend`、`/www/wwwroot/ai选品/python`、`config`、`runtime`

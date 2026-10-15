@@ -11,6 +11,7 @@ import argparse
 import base64
 import ctypes
 import io
+import hashlib
 import json
 import os
 import shutil
@@ -151,6 +152,116 @@ def read_windows_credential() -> str:
         return raw.decode("utf-16-le")
     except UnicodeDecodeError:
         return raw.decode("utf-8")
+
+
+def rollback_reverify_source(repo: Path, identity: dict[str, str], receipt_path: Path) -> dict[str, str]:
+    """Historical receipt proves provenance, never freshness of the new drill."""
+    receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
+    captured = datetime.fromisoformat(str(receipt.get("capturedAt", "")).replace("Z", "+00:00"))
+    if captured.tzinfo is None or captured > datetime.now(timezone.utc):
+        raise RuntimeError("rollback provenance capture time is invalid")
+    subprocess.run([
+        local_node_executable(), "--input-type=module", "-e",
+        "import {readFileSync} from 'node:fs';"
+        "import {validateSingleBackendReleaseEvidence as validate} from './scripts/single-backend-release-evidence.mjs';"
+        "const e=JSON.parse(readFileSync(process.argv[1],'utf8'));"
+        "validate(e,process.argv[2],Date.parse(e.capturedAt));",
+        str(receipt_path.resolve()), identity["local_sha"],
+    ], cwd=repo, check=True)
+    previous = receipt.get("previousBuildSha", "")
+    if previous == identity["local_sha"] or len(previous) != 40 or any(c not in "0123456789abcdef" for c in previous):
+        raise RuntimeError("rollback provenance requires a different immutable full commit")
+    verify_production_sha_history(repo, previous, identity["local_sha"])
+    # Deliberately conservative: only tooling/docs/tests may differ. Any runtime,
+    # dependency, migration or configuration change requires separate review.
+    allowed = {
+        "scripts/deploy-baota.py", "tests/m07-05/test_single_backend_rollback.py",
+        "tests/m07-05/single-backend-release.test.mjs", "docs/feature-map.json",
+        "docs/runbooks/m07-05-release-rollout.md", "docs/architecture/m07-05-release-rollout.md",
+        "infra/baota/single-backend-release-manifest.json", "new-product-enterprise-blueprint.md",
+    }
+    changed = set(run(["git", "diff", "--name-only", previous, identity["local_sha"]], repo).splitlines())
+    if not changed or not changed.issubset(allowed) or receipt.get("migrationVersion") != DEPLOYMENT_MIGRATION_VERSION:
+        raise RuntimeError("historical rollback source is not runtime-identical under the reviewed compatibility policy")
+    return {**identity, "local_sha": previous, "remote_sha": previous}
+
+
+def build_historical_rollback(repo: Path, identity: dict[str, str], temp_root: Path) -> Path:
+    source = temp_root / "source"
+    subprocess.run(["git", "worktree", "add", "--detach", str(source), identity["local_sha"]], cwd=repo, check=True)
+    try:
+        subprocess.run([local_npm_executable(), "ci", "--offline", "--ignore-scripts"], cwd=source, check=True)
+        subprocess.run([local_npm_executable(), "audit", "--audit-level=moderate"], cwd=source, check=True)
+        verify_local_source_preflight(source)
+        return build_package(source, identity, False, temp_root / "built")
+    finally:
+        if source.resolve().parent != temp_root.resolve() or source.name != "source":
+            raise RuntimeError("unsafe temporary historical worktree cleanup")
+        subprocess.run(["git", "worktree", "remove", "--force", str(source)], cwd=repo, check=True)
+
+
+def reverify_same_version(repo: Path, identity: dict[str, str], receipt_path: Path) -> None:
+    previous_identity = rollback_reverify_source(repo, identity, receipt_path)
+    build_sha, previous_sha = identity["local_sha"], previous_identity["local_sha"]
+    with tempfile.TemporaryDirectory(prefix="scoutops-rollback-reverify-") as temp:
+        archive = build_historical_rollback(repo, previous_identity, Path(temp))
+        password = read_windows_credential()
+        client = paramiko.SSHClient()
+        client.set_missing_host_key_policy(paramiko.RejectPolicy())
+        client.load_host_keys(str(Path.home() / ".ssh/known_hosts"))
+        client.connect(HOST, username=SSH_USER, password=password, timeout=15)
+        owner, acquired, success = str(uuid4()), False, False
+        stage = f"{PROJECT_ROOT}/.deploy-stage-{build_sha}"
+        upload = f"{PROJECT_ROOT}/.deploy-upload-{build_sha}.tar.gz"
+        rollback = f"{PROJECT_ROOT}/.deploy-rollback-{build_sha}"
+        exchange = runpy.run_path(str(repo / "scripts/single-backend-rollback.py"))["exchange_source"]
+        try:
+            remote_python(client, deployment_lock_source(owner), timeout=30)
+            acquired = True
+            observed = remote_python(client, production_identity_source(), timeout=30)
+            if observed.get("build_sha") != build_sha or observed.get("migration_version") != DEPLOYMENT_MIGRATION_VERSION:
+                raise RuntimeError("same-version re-verification requires the exact current production SHA and migration")
+            # Never merge into unknown leftovers or overwrite recovery materials.
+            ssh_exec(client, f"test ! -e '{stage}' && test ! -L '{stage}' && test ! -e '{upload}' && test ! -L '{upload}' && test ! -e '{rollback}' && test ! -L '{rollback}'")
+            release_health = verify_public(build_sha)
+            with client.open_sftp() as sftp:
+                sftp.put(str(archive), upload)
+            ssh_exec(client, (
+                f"mkdir '{stage}' && {PANEL_PYTHON} -c \"import tarfile; t=tarfile.open('{upload}'); "
+                "assert all(not m.issym() and not m.islnk() and not m.name.startswith('/') and '..' not in m.name.split('/') for m in t.getmembers()); "
+                f"t.extractall('{stage}')\" && cd '{stage}/backend' && "
+                f"PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 PATH='/www/server/nodejs/{NODE_VERSION}/bin':$PATH '{NPM_BIN}' ci --omit=dev && "
+                f"'{NPM_BIN}' audit --omit=dev --audit-level=moderate && "
+                f"chown root:www '{stage}/release.env' && chmod 640 '{stage}/release.env' && mv '{stage}' '{rollback}'"
+            ), timeout=600)
+            try:
+                remote_python(client, exchange(PROJECT_ROOT, build_sha, build_sha), timeout=180)
+                rollback_health = verify_public(previous_sha)
+            finally:
+                observed = remote_python(client, production_identity_source(), timeout=30).get("build_sha")
+                if observed == previous_sha:
+                    remote_python(client, exchange(PROJECT_ROOT, build_sha, previous_sha), timeout=180)
+                elif observed != build_sha:
+                    raise RuntimeError("rollback recovery identity mismatch; retaining recovery materials")
+                recovery_health = verify_public(build_sha)
+            remote_python(client, cleanup_source(build_sha, False), timeout=180)
+            remote_python(client, transient_cleanup_source(build_sha), timeout=180)
+            evidence = dict(schemaVersion=1, module="M07-05", manager="baota", topology="single_backend_fixed_directories", buildSha=build_sha, previousBuildSha=previous_sha, nodeProject=NODE_PROJECT, pythonProject=PYTHON_PROJECT, nodePort=4101, candidateInstances=0, databaseRollback=False, migrationCompatible=True, migrationVersion=DEPLOYMENT_MIGRATION_VERSION, release=release_health, rollback=rollback_health, recovery=recovery_health, cleanupVerified=True, capturedAt=datetime.now(timezone.utc).isoformat(), mode="same_version_real_rollback", sourcePolicy="runtime_identical_tooling_only")
+            provenance = receipt_path.read_bytes()
+            provenance_path = receipt_path.with_name("rollback-provenance-" + hashlib.sha256(provenance).hexdigest() + ".json")
+            if provenance_path.exists() and provenance_path.read_bytes() != provenance:
+                raise RuntimeError("rollback provenance receipt collision")
+            provenance_path.write_bytes(provenance)
+            receipt_path.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            success = True
+        finally:
+            try:
+                if acquired and success:
+                    remote_python(client, deployment_lock_source(owner, True), timeout=30)
+                elif acquired:
+                    print("Re-verification failed closed; retain deployment lock and rollback materials for checked recovery.", file=sys.stderr)
+            finally:
+                client.close()
 
 
 def copy_tree(source: Path, target: Path) -> None:
@@ -954,7 +1065,10 @@ def main() -> None:
     parser.add_argument("--initialize-layout", action="store_true", help="initialize the fixed layout and migrate the bounded shared directory")
     parser.add_argument("--skip-build", action="store_true", help="reuse existing local dist outputs")
     parser.add_argument("--rollback-drill", action="store_true", help="verify previous packages then restore this build on the same BaoTa projects; additive migrations only")
+    parser.add_argument("--reverify-rollback", action="store_true", help="rebuild the proven runtime-identical historical package and perform a real rollback/recovery without deployment migrations or data backups")
     args = parser.parse_args()
+    if args.reverify_rollback and (args.rollback_drill or args.skip_build or args.initialize_layout):
+        parser.error("--reverify-rollback cannot be combined with deployment or build-reuse flags")
 
     repo = Path(__file__).resolve().parents[1]
     if run(["git", "status", "--porcelain"], repo):
@@ -965,6 +1079,11 @@ def main() -> None:
     if len(build_sha) != 40:
         raise RuntimeError("full Git build identity is unavailable")
     verify_release_change_ownership(repo)
+
+    if args.reverify_rollback:
+        reverify_same_version(repo, source_identity, repo / ".artifacts/verification/single-backend-release-production-evidence.json")
+        print(json.dumps({"status": "rollback_reverified", "build_sha": build_sha, "temporary_artifacts": "deleted"}))
+        return
 
     with tempfile.TemporaryDirectory(prefix="scoutops-deploy-") as temp:
         archive = build_package(repo, source_identity, args.skip_build, Path(temp))

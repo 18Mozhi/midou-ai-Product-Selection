@@ -3,12 +3,68 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from unittest.mock import Mock
+import json
 
 helpers = runpy.run_path("scripts/single-backend-rollback.py")
 deployer = runpy.run_path("scripts/deploy-baota.py")
 
 
 class RollbackTests(unittest.TestCase):
+    def test_reverification_rejects_runtime_changes_and_accepts_tooling_only(self):
+        function = deployer["rollback_reverify_source"]
+        identity = dict(local_sha="a" * 40, remote_sha="a" * 40)
+        with tempfile.TemporaryDirectory() as temp:
+            receipt = Path(temp) / "receipt.json"
+            receipt.write_text(json.dumps(dict(previousBuildSha="b" * 40, capturedAt="2026-10-15T00:00:00Z", migrationVersion=deployer["DEPLOYMENT_MIGRATION_VERSION"])))
+            with patch.dict(function.__globals__, {
+                "local_node_executable": lambda: "node",
+                "verify_production_sha_history": Mock(),
+                "run": Mock(return_value="scripts/deploy-baota.py"),
+            }), patch("subprocess.run", return_value=Mock(returncode=0)):
+                self.assertEqual(function(Path(temp), identity, receipt)["local_sha"], "b" * 40)
+                for changed in ("package-lock.json", "database/migrations/new.sql", "apps/api/src/server.ts"):
+                    function.__globals__["run"].return_value = changed
+                    with self.assertRaisesRegex(RuntimeError, "runtime-identical"):
+                        function(Path(temp), identity, receipt)
+
+    def test_reverification_restores_target_after_rollback_health_failure(self):
+        function = deployer["reverify_same_version"]
+        calls = []
+        def remote(client, source, **kwargs):
+            calls.append(source)
+            if source == "identity":
+                return dict(status=True, build_sha=("a" if calls.count("identity") == 1 else "b") * 40,
+                            migration_version=deployer["DEPLOYMENT_MIGRATION_VERSION"])
+            return dict(status=True)
+        client = Mock()
+        client.open_sftp.return_value.__enter__ = Mock(return_value=Mock())
+        client.open_sftp.return_value.__exit__ = Mock(return_value=False)
+        with tempfile.TemporaryDirectory() as temp, patch.dict(function.__globals__, {
+            "rollback_reverify_source": lambda *a: dict(local_sha="b" * 40),
+            "build_historical_rollback": lambda *a: Path(temp) / "archive",
+            "read_windows_credential": lambda: "test-only",
+            "remote_python": remote,
+            "production_identity_source": lambda: "identity",
+            "ssh_exec": Mock(),
+            "verify_public": Mock(side_effect=[{}, RuntimeError("probe failed"), {}]),
+            "runpy": Mock(run_path=Mock(return_value={"exchange_source": lambda root, build, expected: "exchange:" + expected})),
+        }), patch("paramiko.SSHClient", return_value=client):
+            with self.assertRaisesRegex(RuntimeError, "probe failed"):
+                function(Path(temp), dict(local_sha="a" * 40), Path(temp) / "receipt.json")
+        self.assertIn("exchange:" + "a" * 40, calls)
+        self.assertIn("exchange:" + "b" * 40, calls)
+        self.assertFalse(any("cleanup complete" in source for source in calls))
+        client.close.assert_called_once()
+
+    def test_historical_worktree_is_removed_even_when_offline_install_fails(self):
+        function = deployer["build_historical_rollback"]
+        with tempfile.TemporaryDirectory() as temp, patch("subprocess.run") as invoke:
+            invoke.side_effect = [Mock(returncode=0), RuntimeError("offline cache miss"), Mock(returncode=0)]
+            with self.assertRaisesRegex(RuntimeError, "offline cache miss"):
+                function(Path(temp), dict(local_sha="b" * 40), Path(temp))
+            self.assertEqual(invoke.call_args_list[-1].args[0][:4], ["git", "worktree", "remove", "--force"])
+
     def test_deployment_lock_is_exclusive_and_owner_bound(self):
         with tempfile.TemporaryDirectory(prefix="scoutops-lock-test-") as temp:
             root = Path(temp)

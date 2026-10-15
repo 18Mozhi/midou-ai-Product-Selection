@@ -2799,6 +2799,7 @@
     },
     "releaseRollout": {
       "module": "M07-05",
+      "sameVersionRollback": "python scripts/deploy-baota.py --reverify-rollback: validate historical real receipt provenance, require immutable ancestor and runtime-identical tooling-only diff, locally rebuild using offline cache, audit both dependency installations, then genuinely exchange current/prior/current packages on existing BaoTa objects. No migration, database rollback, new data backup or candidate. Original safety gates and fresh 30-minute production evidence remain mandatory.",
       "currentAcceptance": "Owner approved 2026-10-15: single_backend_fixed_directories, zero candidate instances. python scripts/deploy-baota.py --rollback-drill records real target release, prior package rollback and target recovery health on the same BaoTa projects. node scripts/verify-single-backend-release-production.mjs --production requires ordered same-HEAD evidence, compatible migration and cleanup; historical dual-slot evidence is not current acceptance.",
       "currentAcceptanceArtifacts": [
         "../infra/baota/single-backend-release-manifest.json",

@@ -1045,6 +1045,8 @@ M07-05 当前发布合同以 `infra/baota/service-manifest.json` 锁定固定目
 
 2026-10-15 所有者批准当前 M07-05 验收切换为固定目录单后端发布／回滚／恢复。活动矩阵使用 `scripts/verify-single-backend-release-production.mjs --production`，生产证据由 `python scripts/deploy-baota.py --rollback-drill` 真实核验后生成；不新增候选实例，不执行数据库 down，不把健康检查冒充真实回滚，其他安全和生产门不变。下面旧双槽细节及既有签发均为历史审计。历史宝塔发布任务仅手工触发；会话命名锁、`0027a_release_rollout_attempts_m07_05` 和追加事件保留历史事实，不能恢复为当前双槽任务。
 
+同版本真实复验使用 `python scripts/deploy-baota.py --reverify-rollback`：仅重建既有真实回滚证据中的不同祖先提交，要求运行源码、依赖、迁移和配置与当前相同，只允许指定部署工具、测试与文档差异。本地离线构建、来源/产物和依赖审计门不变，既有宝塔对象实际切换历史包再恢复当前包。不执行迁移、数据库回退，不新建数据备份或候选实例；新签发仍须真实三阶段探针及原有新鲜度，失败保留恢复材料。
+
 M07-05 发布中心只对带 `timing_schema=2` 的发布门展示迁移与自动回滚耗时：迁移从第一条迁移执行前到全部迁移完成，回滚从开始切回稳定流量到 Nginx reload 完成。旧记录、未发生动作和不完整或逆序时间区间必须显示未知，不得按 0 秒、观察时长或整轮发布时长代替。
 
 M07-05 的 MySQL 异步延迟只测量宝塔 Node Worker 实际可领取的显式队列到期工作与过期租约；没有当前消费者的领域审计/后续投递 Outbox 必须保留事实，但不冒充可执行队列。队列表由发布 manifest、`scripts/release-rollout-async-lag.mjs` 和自动测试共同锁定；队列 `DATETIME(3)` 与 Worker 统一使用 MySQL 会话 `NOW(3)` 判断到期，避免非 UTC MySQL 系统时区与 `UTC_TIMESTAMP(3)` 混用导致固定时差假积压。禁止动态扫描任意 `status + available_at` 表、删除审计记录或放宽 60 秒停止阈值。

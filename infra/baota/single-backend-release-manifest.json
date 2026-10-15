@@ -4,6 +4,8 @@
   "manager": "baota",
   "topology": "single_backend_fixed_directories",
   "entrypoint": "python scripts/deploy-baota.py --rollback-drill",
+  "reverificationEntrypoint": "python scripts/deploy-baota.py --reverify-rollback",
+  "reverificationPolicy": "Proven immutable ancestor; runtime-identical tooling-only diff; offline local rebuild and dependency audit; no migrations or new data backups; all production gates unchanged",
   "root": "/www/wwwroot/ai选品",
   "nodeProject": "ai选品",
   "pythonProject": "ai选品-python",
