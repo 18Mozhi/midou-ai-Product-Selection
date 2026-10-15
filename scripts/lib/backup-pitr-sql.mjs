@@ -1,3 +1,7 @@
+import { createHash } from "node:crypto";
+
+// Owner-approved exact deployment ledger bootstrap, not a general DDL allowlist.
+const ledgerBootstrapSha256 = "1ba4ef83bc85da841da8e9a194686c27475259f1d16198342a98c24c3f9fc4b2";
 const allowedVariables = new Set([
   "PSEUDO_SLAVE_MODE",
   "OLD_COMPLETION_TYPE",
@@ -96,6 +100,22 @@ function processPitrSql(source, inputDatabase, outputDatabase) {
   for (const raw of sql.split(";")) {
     const statement = raw.trim();
     if (!statement) continue;
+    const qualifiedLedgerPrefix = `CREATE TABLE IF NOT EXISTS \`${outputDatabase}\`.\`schema_migrations\``;
+    const ledgerStatement = statement.startsWith(qualifiedLedgerPrefix)
+      ? `CREATE TABLE IF NOT EXISTS schema_migrations${statement.slice(qualifiedLedgerPrefix.length)}`
+      : statement;
+    if (createHash("sha256").update(ledgerStatement).digest("hex") === ledgerBootstrapSha256) {
+      if (!/^product_scout_restore_m0704_[a-f0-9]{12}$/.test(outputDatabase)) fail();
+      output.push(
+        ledgerStatement.replace(
+          /^CREATE TABLE IF NOT EXISTS schema_migrations/,
+          `CREATE TABLE IF NOT EXISTS \`${outputDatabase}\`.\`schema_migrations\``,
+        ),
+      );
+      inTransaction = false;
+      savepoints = [];
+      continue;
+    }
     if (/^(?:BEGIN|COMMIT|ROLLBACK)$/i.test(statement)) {
       inTransaction = /^BEGIN$/i.test(statement);
       savepoints = [];

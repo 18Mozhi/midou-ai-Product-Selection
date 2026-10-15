@@ -2,6 +2,8 @@
 
 ## 2026-10-16 受限 SAVEPOINT 回放
 
+后续所有者另行批准唯一 DDL 例外：仅接受 `scripts/apply-deployment-migrations.mjs` 中已观察的 255 字节台账 bootstrap，规范语句 SHA-256 必须为 `1ba4ef83bc85da841da8e9a194686c27475259f1d16198342a98c24c3f9fc4b2`。输出强制限定到当前临时恢复库的 `schema_migrations`，并按 MySQL DDL 隐式提交语义清空保存点。表名、字段、类型、限定库、附加 SQL 或格式变动均拒绝；不修改生产表，不泛化 CREATE 或其他 DDL。恢复实际回放仍待独立验收。
+
 仅在 `BEGIN` 内接受 `SAVEPOINT`、`ROLLBACK TO [SAVEPOINT]` 与 `RELEASE SAVEPOINT`。名称只允许 ASCII 字母或下划线开头、后续字母/数字/下划线，1–64 字符，可带一对反引号；同一事务最多 1024 个有效名称。回退保留目标并移除之后的保存点，释放必须命中现存名称；事务结束或新 BEGIN 清空名称。未知名称、跨事务引用、表达式、额外参数和所有原先禁止的 SQL 仍失败关闭。ROW 事件 CRC、隔离命名空间和原字节检查不变。
 
 执行 `node --test tests/m07-04/backup-pitr-sql.test.mjs`。固定部署上传后，下一次宝塔有限恢复任务直接读取新版本，无需单独重启 MySQL/Redis；只复用已有密文，不运行新备份。软件回归不代表真实恢复已通过。

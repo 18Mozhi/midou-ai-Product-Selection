@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readFile } from "node:fs/promises";
 import { validatePitrSql, rewritePitrSql } from "../../scripts/lib/backup-pitr-sql.mjs";
 
 const target = "product_scout_restore_m0704_0123456789ab";
@@ -34,6 +35,32 @@ const binary = (...events) =>
 const valid = binary(event(19), event(30));
 const rejects = (sql) =>
   assert.throws(() => validatePitrSql(sql, target), { code: "backup_pitr_sql_unsafe" });
+
+test("PITR allows only the exact approved migration-ledger bootstrap and qualifies the isolated target", async () => {
+  const deploy = await readFile("scripts/apply-deployment-migrations.mjs", "utf8");
+  const ledger = deploy.match(
+    /pool\.query\(`(CREATE TABLE IF NOT EXISTS schema_migrations [\s\S]+?)`\)/,
+  )[1];
+  const result = rewritePitrSql(
+    `${ledger}; ${binary(event(19, "product_scout"), event(30))}`,
+    "product_scout",
+    target,
+  );
+  assert.ok(
+    result.sql.startsWith(`CREATE TABLE IF NOT EXISTS \`${target}\`.\`schema_migrations\``),
+  );
+  assert.equal(validatePitrSql(result.sql, target).rowEvents, 1);
+  for (const changed of [
+    ledger.replace("VARCHAR(255)", "VARCHAR(180)"),
+    ledger.replace("schema_migrations", "users"),
+    ledger.replace("schema_migrations", "product_scout.schema_migrations"),
+    ledger.replace("schema_migrations", "mysql.schema_migrations"),
+    ledger + " AS SELECT 1",
+    ledger.replace("schema_migrations", `\`${target}_other\`.\`schema_migrations\``),
+  ])
+    rejects(`${valid} ${changed};`);
+  rejects(`${valid} BEGIN; SAVEPOINT sp; ${ledger}; ROLLBACK TO sp;`);
+});
 
 test("PITR supports bounded transaction-local savepoint replay with MySQL semantics", () => {
   const sql = `BEGIN; SAVEPOINT \`sp_1\`; SAVEPOINT second; ROLLBACK TO SAVEPOINT SP_1;
