@@ -5,12 +5,19 @@ from pathlib import Path
 from unittest.mock import patch
 from unittest.mock import Mock
 import json
+import inspect
 
 helpers = runpy.run_path("scripts/single-backend-rollback.py")
 deployer = runpy.run_path("scripts/deploy-baota.py")
 
 
 class RollbackTests(unittest.TestCase):
+    def test_rollback_audits_use_official_security_endpoint_without_changing_global_registry(self):
+        for name in ("build_historical_rollback", "reverify_same_version"):
+            source = inspect.getsource(deployer[name])
+            self.assertIn("--registry=https://registry.npmjs.org", source)
+            self.assertNotIn("config set", source)
+
     def test_reverification_rejects_runtime_changes_and_accepts_tooling_only(self):
         function = deployer["rollback_reverify_source"]
         identity = dict(local_sha="a" * 40, remote_sha="a" * 40)

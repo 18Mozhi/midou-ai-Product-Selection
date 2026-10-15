@@ -191,7 +191,7 @@ def build_historical_rollback(repo: Path, identity: dict[str, str], temp_root: P
     subprocess.run(["git", "-c", "core.autocrlf=false", "worktree", "add", "--detach", str(source), identity["local_sha"]], cwd=repo, check=True)
     try:
         subprocess.run([local_npm_executable(), "ci", "--offline", "--ignore-scripts"], cwd=source, check=True)
-        subprocess.run([local_npm_executable(), "audit", "--audit-level=moderate"], cwd=source, check=True)
+        subprocess.run([local_npm_executable(), "audit", "--audit-level=moderate", "--registry=https://registry.npmjs.org"], cwd=source, check=True)
         verify_local_source_preflight(source)
         return build_package(source, identity, False, temp_root / "built")
     finally:
@@ -247,7 +247,7 @@ def reverify_same_version(repo: Path, identity: dict[str, str], receipt_path: Pa
                 "assert all(not m.issym() and not m.islnk() and not m.name.startswith('/') and '..' not in m.name.split('/') for m in t.getmembers()); "
                 f"t.extractall('{stage}')\" && cd '{stage}/backend' && "
                 f"PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 PATH='/www/server/nodejs/{NODE_VERSION}/bin':$PATH '{NPM_BIN}' ci --omit=dev && "
-                f"'{NPM_BIN}' audit --omit=dev --audit-level=moderate && "
+                f"PATH='/www/server/nodejs/{NODE_VERSION}/bin':$PATH '{NPM_BIN}' audit --omit=dev --audit-level=moderate --registry=https://registry.npmjs.org && "
                 f"chown root:www '{stage}/release.env' && chmod 640 '{stage}/release.env' && mv '{stage}' '{rollback}'"
             ), timeout=600)
             try:
