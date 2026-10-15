@@ -13,7 +13,9 @@
 
 ## 生产验收
 
-读取 `/api/v1/health/live`、`ready` 和 `version`，核对 build SHA、迁移版本、配置指纹与本次签发一致。宝塔日志中确认统一后端父进程、API 与 Worker 子进程都在运行、Worker 最近 60 秒内有结构化心跳，并确认 `ai选品-python` 持续输出脱敏心跳；MySQL 必须是 5.7/utf8mb4/product_scout 业务账号，Redis 不可公网访问。面板内确认站点、Node、Python、MySQL、Redis、发布任务和 M07-04 备份对象可查看、启停、重启和查看日志。
+按产品总纲与 M03-04/M08-05 当前合同，Python 无待处理作业时领取接口返回 204，不发送空闲心跳。此时应核对宝塔项目进程/版本、同进程发出的新鲜领取请求及真实 204 响应；只有执行期间才核对作业租约心跳与 `running/completed` 日志。长时间空闲时，最后一条 Python 日志可能早于本次重启，不能据此断言当前失败，也不能伪造持续心跳或把 PID 存在当作健康证明。领取请求仍失败时保持受阻；204 只证明空闲领取链路，不证明外部来源采集或登录成功。本条仅纠正文档，不要求重启服务。
+
+读取 `/api/v1/health/live`、`ready` 和 `version`，核对 build SHA、迁移版本、配置指纹与本次签发一致。宝塔日志中确认统一后端父进程、API 与 Worker 子进程都在运行、Worker 最近 60 秒内有结构化心跳；`ai选品-python` 按上述空闲/执行分支分别核验，不要求空闲心跳。MySQL 必须是 5.7/utf8mb4/product_scout 业务账号，Redis 不可公网访问。面板内确认站点、Node、Python、MySQL、Redis、发布任务和 M07-04 备份对象可查看、启停、重启和查看日志。
 
 需要同提交发布签发时，临时把上述非秘密事实写入 `.artifacts/verification/baota-production-evidence.json`，设置 `SCOUTOPS_REQUIRE_PRODUCTION_EVIDENCE=1` 后执行生产证据门；验收结束必须删除该临时文件。不得包含面板地址安全入口、用户名、密码、Cookie、API 密钥或环境值。日常 `npm run verify:functional` 始终执行部署结构预检，但不依赖必须被清理的临时证据。manifest 当前已签发为 `deploymentStatus=healthy`、`productionDeployed=true`；每次需要新 commit 发布签发时必须重新采集证据，使证据 commit 等于当前 Git HEAD，再执行 `node scripts/verify-baota-deployment.mjs --production`。若现场状态退化，立即撤销 healthy 签发或恢复稳定发布，不得沿用旧证据。
 
