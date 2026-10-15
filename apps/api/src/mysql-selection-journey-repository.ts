@@ -287,7 +287,7 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         await c.query(
           "INSERT INTO selection_journey_events (id,journey_id,organization_id,workspace_id," +
             "event_type,actor_type,actor_id,request_id,trace_id,payload_json,occurred_at) VALUES " +
-            "(?,?,?,?,?,'system','selection-timeout-monitor',?,?,?,?,?)",
+            "(?,?,?,?,?,'system','selection-timeout-monitor',?,?,?,?)",
           [
             eventId,
             i.journeyId,

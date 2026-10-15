@@ -14,6 +14,8 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 ## 执行与判定
 
+超时读取分支必须在同一事务中写入 blocked 状态、`selection.journey.blocked` 系统事件和 Outbox；事件语句使用九个绑定值及两个固定 actor 字面量。SQL 失败必须回滚，不允许只更新状态后忽略审计错误。定向回归：`npm run build:api` 后执行 `node --test tests/m07-06/selection-deadline-sql.test.mjs`。修复随后端运行包部署后由宝塔重启 Node 项目 `ai选品` 生效，不需要迁移、配置或前端改动；仍需重跑真实旅程验收。
+
 1. 先在宝塔确认 Node API、Node Worker、Python Crawler、MySQL、Redis 和网站均健康，当前版本 `/api/v1/health/version` 与发布 commit 一致。
 2. 确认 `google_news_search` 已由平台来源所有者复核并启用；普通成员不进入 Provider 配置页。
 3. 运行有限任务。它在每次新登录后先读取该专用账号唯一的有效组织和默认工作区，通过 `/auth/context` 绑定本次会话，再验证账号仅具备 `task:create`、`opportunity:read`、`opportunity:decide` 等成员权限，不具备 `provider:configure`、`collection:replay` 或 `platform:*`；缺少、多个或无有效工作区时直接阻断。
