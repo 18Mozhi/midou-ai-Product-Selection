@@ -135,8 +135,9 @@ export class MySqlProviderSourceVersionRepository {
         ["public_page", "public_rss"].includes(String(current.access_mode)) &&
         (current.terms_review_status !== "approved" ||
           !current.terms_version ||
-          !current.terms_expires_at ||
-          new Date(current.terms_expires_at) <= input.now)
+          (Number(current.terms_permanent) !== 1 &&
+            (!current.terms_expires_at ||
+              !(new Date(current.terms_expires_at).getTime() > input.now.getTime()))))
       )
         throw new ProviderSourceServiceError(
           "provider_source_compliance_required",
@@ -347,8 +348,9 @@ export class MySqlProviderSourceVersionRepository {
         ["public_page", "public_rss"].includes(String(current.access_mode)) &&
         (current.terms_review_status !== "approved" ||
           !current.terms_version ||
-          !current.terms_expires_at ||
-          new Date(current.terms_expires_at) <= input.now)
+          (Number(current.terms_permanent) !== 1 &&
+            (!current.terms_expires_at ||
+              !(new Date(current.terms_expires_at).getTime() > input.now.getTime()))))
       )
         throw new ProviderSourceServiceError(
           "provider_source_compliance_required",

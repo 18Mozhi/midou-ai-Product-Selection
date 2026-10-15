@@ -269,7 +269,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "7b86e25d7ed1f3a75400887b4ab6efa7f0585031",
       captured: "e98ec358ce10015bca5cac1ff9e5b433411bcdc49cb60654458ebed31e4c2a2e",
-      current: "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
+      current: "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22",
     },
   "apps/web/src/components/ReleaseRolloutCenter.vue#0fcdd0f1eb7e16423188350bbc1dee13fc036d7b51b0ee248a25f2edd54537d1":
     {

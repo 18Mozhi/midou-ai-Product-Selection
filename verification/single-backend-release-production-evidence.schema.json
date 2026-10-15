@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schemaVersion", "module", "manager", "topology", "buildSha", "previousBuildSha", "nodeProject", "pythonProject", "nodePort", "candidateInstances", "databaseRollback", "migrationCompatible", "migrationVersion", "release", "rollback", "recovery", "cleanupVerified", "capturedAt"],
+  "properties": {
+    "schemaVersion": {"const": 1}, "module": {"const": "M07-05"}, "manager": {"const": "baota"},
+    "topology": {"const": "single_backend_fixed_directories"},
+    "buildSha": {"$ref": "#/$defs/sha"}, "previousBuildSha": {"$ref": "#/$defs/sha"},
+    "nodeProject": {"const": "ai选品"}, "pythonProject": {"const": "ai选品-python"}, "nodePort": {"const": 4101}, "candidateInstances": {"const": 0},
+    "databaseRollback": {"const": false}, "migrationCompatible": {"const": true},
+    "migrationVersion": {"const": "0074_provider_terms_permanent.up.sql"},
+    "release": {"$ref": "#/$defs/health"}, "rollback": {"$ref": "#/$defs/health"}, "recovery": {"$ref": "#/$defs/health"},
+    "cleanupVerified": {"const": true}, "capturedAt": {"type": "string", "format": "date-time"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "health": {
+      "type": "object", "required": ["buildSha", "verifiedAt", "live", "ready", "available", "version", "knownRoute", "missingRoute", "browserHelper"],
+      "properties": {"buildSha": {"$ref": "#/$defs/sha"}, "verifiedAt": {"type": "string", "format": "date-time"}, "live": {"const": true}, "ready": {"const": true}, "available": {"const": true}, "version": {"const": true}, "knownRoute": {"const": true}, "missingRoute": {"const": true}, "browserHelper": {"const": true}},
+      "additionalProperties": false
+    }
+  }
+}

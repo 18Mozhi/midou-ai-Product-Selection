@@ -174,6 +174,18 @@ test("M03-01.P46 editor announces required fields without changing validation be
   await expect(field("terms_reference_url")).toHaveAttribute("aria-required", "false");
   for (const name of ["terms_version", "terms_expires_at"])
     await expect(field(name)).toHaveAttribute("aria-required", "true");
+  const permanent = editor.getByRole("checkbox", { name: "永久有效" });
+  const permanentBox = await permanent.boundingBox();
+  expect(permanentBox?.width).toBe(20);
+  expect(permanentBox?.height).toBe(20);
+  await permanent.focus();
+  await page.keyboard.press("Space");
+  await expect(permanent).toBeChecked();
+  await expect(field("terms_expires_at")).toBeDisabled();
+  await expect(field("terms_expires_at")).not.toHaveAttribute("aria-required", "true");
+  await expect(field("terms_version")).toHaveAttribute("aria-required", "true");
+  await page.keyboard.press("Space");
+  await expect(field("terms_expires_at")).toBeEnabled();
 
   await editor.getByRole("button", { name: "1 基本信息" }).click();
   await editor.getByRole("combobox", { name: "接入模式" }).selectOption("manual");
@@ -195,12 +207,13 @@ test.describe("P46 expiration timezone", () => {
   test.use({ timezoneId: "Asia/Shanghai" });
   test("preserves the expiry instant when editing", async ({ page }, testInfo) => {
     await nav(page);
+    let persisted: Record<string, unknown> = { ...definition };
     await page.route("**/api/v1/platform/providers", (route) =>
       route.fulfill({
         status: 200,
         contentType: "application/json",
         body: JSON.stringify({
-          data: definitions,
+          data: [persisted, ...definitions.slice(1)],
           request_id: "m03-01-expiry-read",
           trace_id: "m03-01-expiry-read",
         }),
@@ -210,11 +223,12 @@ test.describe("P46 expiration timezone", () => {
     await page.route("**/api/v1/platform/providers/*", async (route) => {
       if (route.request().method() !== "PUT") return route.fallback();
       updateBody = route.request().postDataJSON() as Record<string, unknown>;
+      persisted = { ...persisted, ...updateBody, version: Number(persisted.version) + 1 };
       return route.fulfill({
         status: 200,
         contentType: "application/json",
         body: JSON.stringify({
-          data: { ...definition, version: 2 },
+          data: persisted,
           request_id: "m03-01-expiry-write",
           trace_id: "m03-01-expiry-write",
         }),
@@ -244,6 +258,41 @@ test.describe("P46 expiration timezone", () => {
       terms_expires_at: "2027-08-07T17:00:00.000Z",
       expected_version: 1,
     });
+    const reopen = async () => {
+      if (testInfo.project.name === "mobile-390") {
+        await page.getByRole("button", { name: /公开趋势 RSS.*未进入调度/ }).click();
+        await page
+          .getByRole("dialog", { name: "公开趋势 RSS", exact: true })
+          .getByRole("button", { name: "编辑来源" })
+          .click();
+      } else {
+        await page
+          .getByRole("row", { name: /公开趋势 RSS/ })
+          .getByRole("button", { name: "编辑" })
+          .click();
+      }
+      await editor.getByRole("button", { name: "4 合规与发布" }).click();
+    };
+    await reopen();
+    await editor.getByRole("checkbox", { name: "永久有效" }).check();
+    await expect(expiry).toBeDisabled();
+    await expect(expiry).toHaveValue("");
+    await editor.screenshot({
+      path: `.artifacts/verification/provider-terms-permanent-${testInfo.project.name}.png`,
+    });
+    await editor.getByRole("button", { name: "保存新版本" }).click();
+    await expect(editor).toBeHidden();
+    expect(updateBody).toMatchObject({
+      terms_permanent: true,
+      terms_expires_at: null,
+      expected_version: 2,
+    });
+    await reopen();
+    await expect(editor.getByRole("checkbox", { name: "永久有效" })).toBeChecked();
+    await expect(expiry).toBeDisabled();
+    await expect(expiry).toHaveValue("");
+    await editor.getByRole("checkbox", { name: "永久有效" }).uncheck();
+    await expect(expiry).toBeEnabled();
   });
 });
 test("M03-01.A08/A16 empty, forbidden and dependency states stay actionable", async ({ page }) => {

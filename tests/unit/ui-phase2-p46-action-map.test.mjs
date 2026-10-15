@@ -43,7 +43,11 @@ const context = {
 
 test("P46 maps current provider-registry source candidates and keeps action approval pending", () => {
   const result = validateActionReview(review, context);
-  assert.equal(result.sourceSites, 37);
+  assert.equal(result.sourceSites, 38);
+  assert.equal(
+    review.actions.find((action) => action.actionId === "PR46-TERMS-PERMANENT").kind,
+    "local",
+  );
   assert.equal(review.route, "/platform-admin/providers");
   assert.equal(review.visualApproval, "user-approved-remaining-pages-auto");
   assert.equal(review.actionApproval, "pending-user-review");

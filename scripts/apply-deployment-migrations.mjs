@@ -48,6 +48,7 @@ const allowed = new Set([
   "0071_opportunity_migration_timestamp_timezone.up.sql",
   "0072_automatic_quality_evaluation.up.sql",
   "0073_automatic_selection_migration_timestamp_timezone.up.sql",
+  "0074_provider_terms_permanent.up.sql",
 ]);
 export function splitSqlStatements(source) {
   const statements = [];

@@ -382,6 +382,7 @@ export interface ProviderDefinition {
   terms_reference_url: string | null;
   terms_version: string | null;
   terms_expires_at: string | null;
+  terms_permanent?: boolean;
   terms_reviewed_at: string | null;
   status: "draft" | "disabled" | "enabled";
   version: number;

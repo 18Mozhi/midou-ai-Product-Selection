@@ -2,6 +2,12 @@
 
 ## 固定边界
 
+2026-10-15 所有者批准 MySQL 3306 公网访问例外。证据必须如实使用
+`host.privateServices=false`、`host.otherServicesPrivate=true`，并记录
+`host.publicAccessException={service:"mysql",port:3306,approvedBy:"project_owner",approvedOn:"2026-10-15"}`。
+仅在 API/Redis/Worker/Crawler/存储仍私有且 manifest 存在同一批准时接受；不能把全体服务私有伪写为 true。
+不改变实际 MySQL 配置、业务账号或防火墙；应用继续连接 127.0.0.1。
+
 - 拓扑：`single_host`
 - 主机数：1
 - 负载均衡：关闭

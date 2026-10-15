@@ -51,7 +51,12 @@ test("P46 required semantics compile and match only fields currently required by
             (prop.type === 7 && prop.name === "bind" && prop.arg?.content === "aria-required"),
         );
         if (required?.type === 6 && required.value.content === "true") foundStatic.add(field);
-        if (required?.type === 7 && required.exp.content === "publicTermsRequired")
+        if (
+          required?.type === 7 &&
+          ["publicTermsRequired", "publicTermsRequired && !form.terms_permanent"].includes(
+            required.exp.content,
+          )
+        )
           foundConditional.add(field);
       }
     }

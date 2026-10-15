@@ -22,6 +22,9 @@ import time
 import urllib.error
 import urllib.request
 import zipfile
+import runpy
+from uuid import uuid4
+from datetime import datetime, timezone
 from ctypes import wintypes
 from pathlib import Path
 
@@ -44,7 +47,7 @@ PYTHON_BIN = "/www/server/pyporject_evn/versions/3.12.13/bin/python3.12"
 PANEL_PYTHON = "/www/server/panel/pyenv/bin/python"
 PUBLIC_BASE_URL = "https://midouai.medouai.com"
 EXPECTED_GITHUB_REPOSITORY = "18Mozhi/midou-ai-Product-Selection"
-DEPLOYMENT_MIGRATION_VERSION = "0073_automatic_selection_migration_timestamp_timezone.up.sql"
+DEPLOYMENT_MIGRATION_VERSION = "0074_provider_terms_permanent.up.sql"
 NODE_START_COMMAND = (
     f"node --env-file={PROJECT_ROOT}/config/product_scout.env "
     f"--env-file={PROJECT_ROOT}/config/release.env apps/backend/dist/server.js"
@@ -855,20 +858,42 @@ from pathlib import Path
 v=json.loads({values!r}); root=Path(v["root"])
 if str(root)!="/www/wwwroot/ai选品" or not root.is_dir(): raise SystemExit("unexpected root")
 if os.fsencode(str(root)).decode(v["storage_encoding"]) != str(root): raise SystemExit("unexpected root encoding")
-release=root/"config"/"release.env"; build_sha=None
+release=root/"config"/"release.env"; build_sha=None; migration_version=None
 if release.is_file():
     for line in release.read_text(encoding="utf-8").splitlines():
         key, separator, value=line.partition("=")
         if separator and key=="BUILD_SHA": build_sha=value.strip()
-print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"production identity read","build_sha":build_sha}}))
+        if separator and key=="RELEASE_SOURCE_MIGRATION_VERSION": migration_version=value.strip()
+print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"production identity read","build_sha":build_sha,"migration_version":migration_version}}))
 '''
 
 
-def verify_public(build_sha: str) -> None:
+def deployment_lock_source(owner: str, release: bool = False) -> str:
+    values = json.dumps(dict(owner=owner, release=release))
+    return f'''import json, os
+from pathlib import Path
+v=json.loads({values!r})
+root=Path("/www/wwwroot/ai选品")
+config=root/"config"
+if root.is_symlink() or config.is_symlink() or config.resolve().parent!=root: raise RuntimeError("deploy_lock_path_invalid")
+lock=config/"deployment.lock"
+if v["release"]:
+    if lock.is_symlink() or not lock.is_file() or lock.read_text()!=v["owner"]: raise RuntimeError("deploy_lock_owner_invalid")
+    lock.unlink()
+else:
+    fd=os.open(str(lock),os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
+    with os.fdopen(fd,"w") as f: f.write(v["owner"])
+print("SCOUTOPS_RESULT="+json.dumps({{"status":True,"message":"deployment lock released" if v["release"] else "deployment lock acquired"}}))
+'''
+
+
+def verify_public(build_sha: str) -> dict:
     deadline = time.time() + 90
     last_error: Exception | None = None
     while time.time() < deadline:
         try:
+            with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/api/v1/health/live", timeout=10) as live_response:
+                live_ok = live_response.status == 200
             with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/api/v1/health/ready", timeout=10) as response:
                 ready = json.load(response)
             with urllib.request.urlopen(f"{PUBLIC_BASE_URL}/api/v1/health/available", timeout=10) as response:
@@ -915,8 +940,9 @@ def verify_public(build_sha: str) -> None:
                 and known_route_status == 200
                 and unknown_route_status == 404
                 and helper_valid
+                and live_ok
             ):
-                return
+                return dict(buildSha=build_sha, verifiedAt=datetime.now(timezone.utc).isoformat(), live=True, ready=True, available=True, version=True, knownRoute=True, missingRoute=True, browserHelper=True)
         except Exception as error:  # noqa: BLE001 - retain latest health failure for handoff
             last_error = error
         time.sleep(3)
@@ -927,6 +953,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Deploy this repository to its fixed BaoTa layout")
     parser.add_argument("--initialize-layout", action="store_true", help="initialize the fixed layout and migrate the bounded shared directory")
     parser.add_argument("--skip-build", action="store_true", help="reuse existing local dist outputs")
+    parser.add_argument("--rollback-drill", action="store_true", help="verify previous packages then restore this build on the same BaoTa projects; additive migrations only")
     args = parser.parse_args()
 
     repo = Path(__file__).resolve().parents[1]
@@ -953,9 +980,15 @@ def main() -> None:
         remote_archive = f"{PROJECT_ROOT}/.deploy-upload-{build_sha}.tar.gz"
         remote_stage = f"{PROJECT_ROOT}/.deploy-stage-{build_sha}"
         node_stopped_for_migration = False
+        lock_owner = str(uuid4())
+        lock_acquired = False
         try:
+            remote_python(client, deployment_lock_source(lock_owner), timeout=30)
+            lock_acquired = True
             production_identity = remote_python(client, production_identity_source(), timeout=30)
             verify_production_sha_history(repo, production_identity.get("build_sha"), build_sha)
+            if args.rollback_drill and (production_identity.get("migration_version") not in ("0073_automatic_selection_migration_timestamp_timezone.up.sql", DEPLOYMENT_MIGRATION_VERSION) or DEPLOYMENT_MIGRATION_VERSION != "0074_provider_terms_permanent.up.sql" or production_identity.get("build_sha") == build_sha):
+                raise RuntimeError("rollback drill requires a different known prior build with the explicitly compatible 0073/0074 schema")
             sftp = client.open_sftp()
             sftp.put(str(archive), remote_archive)
             sftp.close()
@@ -974,7 +1007,7 @@ def main() -> None:
             migrate = (
                 f"cd '{remote_stage}/backend' && "
                 f"'{NODE_BIN}' --env-file='{PROJECT_ROOT}/config/product_scout.env' "
-                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql 0071_opportunity_migration_timestamp_timezone.up.sql 0072_automatic_quality_evaluation.up.sql 0073_automatic_selection_migration_timestamp_timezone.up.sql"
+                "scripts/apply-deployment-migrations.mjs 0040_platform_messages.up.sql 0041_member_workspace_tasks.up.sql 0042_erp_product_import.up.sql 0043_trend_rule_collection_schedule.up.sql 0044a_competitor_soft_delete.up.sql 0044b_sourcing_soft_delete.up.sql 0044c_truthful_missing_metrics.up.sql 0044d_nullable_competitor_metrics.up.sql 0044e_core_collection_projection.up.sql 0044f_enable_amazon_public_crawler.up.sql 0045_operational_task_links.up.sql 0046_notification_workflow_root_cause.up.sql 0047_approval_decision_context_snapshot.up.sql 0048_browser_collection_jobs.up.sql 0049_credential_renewal_auto_replay.up.sql 0050_browser_evidence_artifacts.up.sql 0051a_provider_parser_samples.up.sql 0051b_provider_parser_sample_replay_runs.up.sql 0051c_provider_parser_sample_operations.up.sql 0052a_amazon_structured_parser.up.sql 0052b_provider_public_compliance.up.sql 0053_provider_configuration_versions.up.sql 0054_crawler_succeeded_empty.up.sql 0055_provider_runtime_circuits.up.sql 0056_provider_terms_version_expiry.up.sql 0057_data_quality_issue_workflow.up.sql 0058_opportunity_archive_stage.up.sql 0059_selection_journey_candidates.up.sql 0060_opportunity_workflow_visibility.up.sql 0061_crawler_completion_spool_status.up.sql 0062_runtime_process_restart_observations.up.sql 0063_runtime_health_endpoint_probes.up.sql 0064_governed_workflow_confirmations.up.sql 0065_opportunity_operating_feedback.up.sql 0066_automation_task_source_restore.up.sql 0067_usernames_login.up.sql 0068_automatic_selection_rule_matches.up.sql 0069_rule_based_recommendations.up.sql 0070_rule_candidates_quality_gate.up.sql 0071_opportunity_migration_timestamp_timezone.up.sql 0072_automatic_quality_evaluation.up.sql 0073_automatic_selection_migration_timestamp_timezone.up.sql 0074_provider_terms_permanent.up.sql"
             )
             remote_python(client, panel_node_action_source("stop"), timeout=90)
             node_stopped_for_migration = True
@@ -982,10 +1015,30 @@ def main() -> None:
             remote_python(client, panel_deploy_source(build_sha, args.initialize_layout), timeout=300)
             node_stopped_for_migration = False
             client.close()
-            verify_public(build_sha)
+            release_health = verify_public(build_sha)
 
             client.connect(HOST, username=SSH_USER, password=password, timeout=15)
+            rollback_health = None
+            recovery_health = None
+            if args.rollback_drill:
+                exchange = runpy.run_path(str(repo / "scripts/single-backend-rollback.py"))["exchange_source"]
+                previous_sha = production_identity["build_sha"]
+                try:
+                    remote_python(client, exchange(PROJECT_ROOT, build_sha, build_sha), timeout=180)
+                    rollback_health = verify_public(previous_sha)
+                finally:
+                    observed = remote_python(client, production_identity_source(), timeout=30).get("build_sha")
+                    if observed == previous_sha:
+                        remote_python(client, exchange(PROJECT_ROOT, build_sha, previous_sha), timeout=180)
+                    elif observed != build_sha:
+                        raise RuntimeError("rollback recovery identity mismatch; retaining recovery materials")
+                    recovery_health = verify_public(build_sha)
             remote_python(client, cleanup_source(build_sha, args.initialize_layout), timeout=180)
+            if args.rollback_drill:
+                evidence = dict(schemaVersion=1, module="M07-05", manager="baota", topology="single_backend_fixed_directories", buildSha=build_sha, previousBuildSha=previous_sha, nodeProject=NODE_PROJECT, pythonProject=PYTHON_PROJECT, nodePort=4101, candidateInstances=0, databaseRollback=False, migrationCompatible=True, migrationVersion=DEPLOYMENT_MIGRATION_VERSION, release=release_health, rollback=rollback_health, recovery=recovery_health, cleanupVerified=True, capturedAt=datetime.now(timezone.utc).isoformat())
+                evidence_path = repo / ".artifacts/verification/single-backend-release-production-evidence.json"
+                evidence_path.parent.mkdir(parents=True, exist_ok=True)
+                evidence_path.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
         finally:
             original_error = sys.exc_info()[1]
             cleanup_error = None
@@ -996,7 +1049,11 @@ def main() -> None:
                 if node_stopped_for_migration:
                     remote_python(client, panel_node_action_source("start"), timeout=60)
                     node_stopped_for_migration = False
-                remote_python(client, transient_cleanup_source(build_sha), timeout=180)
+                if lock_acquired:
+                    remote_python(client, transient_cleanup_source(build_sha), timeout=180)
+                if lock_acquired and not (args.rollback_drill and original_error is not None):
+                    remote_python(client, deployment_lock_source(lock_owner, True), timeout=30)
+                    lock_acquired = False
             except Exception as error:
                 cleanup_error = error
             finally:
@@ -1005,6 +1062,8 @@ def main() -> None:
                 if original_error is None:
                     raise cleanup_error
                 print(f"deployment transient cleanup failed: {cleanup_error}", file=sys.stderr)
+            if lock_acquired:
+                print("Deployment failed closed; retain /www/wwwroot/ai选品/config/deployment.lock and runtime rollback materials until checked recovery.", file=sys.stderr)
 
     print(json.dumps({
         "status": "deployed",

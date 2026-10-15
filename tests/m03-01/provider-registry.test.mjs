@@ -34,6 +34,15 @@ const actor = "00000000-0000-4000-8000-000000000701",
     terms_expires_at: null,
     status: "disabled",
   };
+test("permanent validity migration is additive, defaults old rows to false and never approves providers", async () => {
+  const up = await read("database/migrations/0074_provider_terms_permanent.up.sql");
+  assert.match(up, /ADD COLUMN `terms_permanent` TINYINT\(1\) NOT NULL DEFAULT 0/);
+  assert.doesNotMatch(up, /\bUPDATE\b|\bDELETE\b|\bDROP\b|utf8mb4_0900|\bCHECK\s*\(/i);
+  assert.match(
+    await read("scripts/apply-deployment-migrations.mjs"),
+    /"0074_provider_terms_permanent\.up\.sql"/,
+  );
+});
 test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical contract", async () => {
   let captured;
   const service = new ProviderRegistryService(
@@ -124,6 +133,35 @@ test("M03-01.A01/A02/A04/A05/A12 validates the complete synchronous technical co
   assert.equal(approved.terms_reviewed_at, now.toISOString());
   assert.equal(approved.terms_version, "2026-08");
   assert.equal(approved.terms_reference_url, null);
+  assert.equal(approved.terms_permanent, false);
+  const context = {
+    actorId: actor,
+    idempotencyKey: "permanent",
+    requestId: "permanent",
+    traceId: "permanent",
+  };
+  const permanent = {
+    ...valid,
+    status: "enabled",
+    terms_review_status: "approved",
+    terms_version: "2026-10",
+    terms_permanent: true,
+  };
+  const saved = await service.create(permanent, context);
+  assert.equal(saved.terms_permanent, true);
+  assert.equal(saved.terms_expires_at, null);
+  for (const patch of [
+    { terms_permanent: "true" },
+    { terms_permanent: 1 },
+    { terms_permanent: null },
+    { terms_expires_at: "2027-08-07T17:00:00.000Z" },
+    { terms_review_status: "pending" },
+    { terms_review_status: "rejected" },
+    { terms_version: null },
+    { terms_permanent: false },
+  ]) {
+    assert.throws(() => service.create({ ...permanent, ...patch }, context), ProviderRegistryError);
+  }
 });
 test("M03-01.A04/A06/A09/A11/A13 API enforces platform capability, origin, idempotency and correlation", async () => {
   const calls = [],

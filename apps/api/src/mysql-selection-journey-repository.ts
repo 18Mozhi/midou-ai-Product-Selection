@@ -79,7 +79,7 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         );
       const [providers] = await c.query<RowDataPacket[]>(
           "SELECT id,code,access_mode,terms_review_status,terms_version," +
-            "terms_expires_at FROM providers WHERE code=? AND status='enabled' LIMIT 1 FOR UPDATE",
+            "terms_expires_at,terms_permanent FROM providers WHERE code=? AND status='enabled' LIMIT 1 FOR UPDATE",
           [i.providerCode],
         ),
         provider = providers[0];
@@ -93,8 +93,9 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         ["public_page", "public_rss"].includes(String(provider.access_mode)) &&
         (provider.terms_review_status !== "approved" ||
           !provider.terms_version ||
-          !provider.terms_expires_at ||
-          new Date(provider.terms_expires_at).getTime() <= i.now.getTime())
+          (Number(provider.terms_permanent) !== 1 &&
+            (!provider.terms_expires_at ||
+              !(new Date(provider.terms_expires_at).getTime() > i.now.getTime()))))
       )
         throw new SelectionJourneyError(
           "selection_source_compliance_required",

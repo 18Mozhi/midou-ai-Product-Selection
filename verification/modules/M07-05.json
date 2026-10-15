@@ -1,89 +1,93 @@
 {
   "moduleId": "M07-05",
   "phaseId": "P07",
-  "name": "Release Rollout and Rollback",
-  "dependencies": ["M07-01", "M07-02", "M07-03", "M07-04"],
+  "name": "Single Backend Release and Rollback",
+  "dependencies": [
+    "M07-01",
+    "M07-02",
+    "M07-03",
+    "M07-04"
+  ],
   "atomicTasks": [
     {
       "id": "M07-05.A01",
-      "evidence": "frozen S0 same-host stable candidate scope and explicit no-backup-server boundary"
+      "evidence": "fixed-directory single BaoTa backend scope; no candidate instance or HA claim"
     },
     {
       "id": "M07-05.A02",
-      "evidence": "versioned release gate append-only event and state contracts"
+      "evidence": "current release rollback and recovery receipts with ordered health observations; historical events immutable"
     },
     {
       "id": "M07-05.A03",
-      "evidence": "MySQL57 utf8mb4 reversible 0026 gates 0027 signed probe and 0027a immutable per-attempt release index migrations"
+      "evidence": "MySQL57 utf8mb4 additive migration compatibility; no business database rollback"
     },
     {
       "id": "M07-05.A04",
-      "evidence": "release read model fails closed and proxy-safe signed write probe performs one idempotent durable audited statement in the compact MySQL57 sample table while historical probes remain immutable"
+      "evidence": "current public live ready available version route and helper checks fail closed"
     },
     {
       "id": "M07-05.A05",
-      "evidence": "manual-only finite Baota rollout task holds a MySQL session named lock, preserves immutable attempts, verifies candidate 202 and persistence parity, automatic stop and rollback; no daemon"
+      "evidence": "finite local deployer swaps packages only on the same BaoTa Node and Python projects during maintenance"
     },
     {
       "id": "M07-05.A06",
-      "evidence": "platform operate read-only route plus Baota-only HMAC signed write-probe OpenAPI contract and sanitized DTO"
+      "evidence": "existing platform operate read-only release API and sanitized historical DTO unchanged"
     },
     {
       "id": "M07-05.A07",
-      "evidence": "image-grounded dark release cockpit desktop and 390 layout"
+      "evidence": "approved current release cockpit desktop and mobile layout retained"
     },
     {
       "id": "M07-05.A08",
-      "evidence": "loading empty blocked stale verified stopped rolled-back forbidden and expired states"
+      "evidence": "loading empty blocked stale verified stopped rolled-back forbidden and expired read states retained"
     },
     {
       "id": "M07-05.A09",
-      "evidence": "platform operate browser guard HMAC probe guard and local-only stable candidate runtime boundary"
+      "evidence": "API loopback Redis private and precise owner-approved MySQL-only public exception"
     },
     {
       "id": "M07-05.A10",
-      "evidence": "schema env example and Baota restricted release probe key Nginx sampling variables"
+      "evidence": "existing restricted env secrets unchanged; explicit rollback-drill CLI documented"
     },
     {
       "id": "M07-05.A11",
-      "evidence": "proxy request trace release gates real migration and rollback duration Nginx P95 error queue lag durable write parity and blocker observability"
+      "evidence": "full-SHA release rollback recovery migration compatibility cleanup and timing evidence"
     },
     {
       "id": "M07-05.A12",
-      "evidence": "service missing metric proxy header rewrite probe rejection persistence mismatch current release threshold and state unit coverage"
+      "evidence": "missing stale wrong-SHA failed-health incompatible-schema and missing rollback rejected"
     },
     {
       "id": "M07-05.A13",
-      "evidence": "OpenAPI Feature Map manifest evidence schema and configuration contract coverage"
+      "evidence": "current fixed-runtime manifest evidence contract docs and map synchronized"
     },
     {
       "id": "M07-05.A14",
-      "evidence": "real MySQL57 migration verified blocked transition audit and cleanup"
+      "evidence": "actual additive migration and three public health phases required before production pass"
     },
     {
       "id": "M07-05.A15",
-      "evidence": "core 10 and concepts 61 64 69 desktop and 390 visual baselines"
+      "evidence": "existing desktop and mobile read-only release visual regression coverage"
     },
     {
       "id": "M07-05.A16",
-      "evidence": "concurrent-run lock busy insufficient samples null metric threshold automatic stop same-host rollback and recovery drills"
+      "evidence": "real same-instance package rollback and forward recovery; no candidate service or traffic split"
     },
     {
       "id": "M07-05.A17",
-      "evidence": "blueprint Feature Map OpenAPI env schema manifest architecture Runbook schema-v4 production evidence immutable attempt and rollback synchronized"
+      "evidence": "current verifier is single-backend only; historical dual-slot evidence never reused as current proof"
     }
   ],
   "commands": [
     "npm run build",
     "node --test tests/m07-05/release-rollout.test.mjs",
     "node --check scripts/release-rollout-async-lag.mjs",
-    "node --check scripts/run-baota-release-rollout.mjs",
-    "node scripts/run-baota-release-rollout.mjs --self-test",
-    "node scripts/verify-release-rollout-production.mjs",
-    "node scripts/verify-release-rollout-live.mjs",
     "node scripts/verify-playwright-host.mjs",
     "npx playwright test tests/e2e/m07-05-release-rollout.spec.ts",
     "npm run verify:docs",
-    "node scripts/verify-release-rollout-production.mjs --production"
+    "node --test tests/m07-05/single-backend-release.test.mjs",
+    "python tests/m07-05/test_single_backend_rollback.py",
+    "node scripts/verify-single-backend-release-production.mjs",
+    "node scripts/verify-single-backend-release-production.mjs --production"
   ]
 }

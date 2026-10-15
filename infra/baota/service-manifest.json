@@ -10,7 +10,8 @@
     "primaryRegion": "惠州",
     "recoveryRegion": "惠州",
     "publicPorts": [80, 443],
-    "privatePorts": [4101, 3306, 6379]
+    "privatePorts": [4101, 6379],
+    "publicAccessExceptions": [{"service": "mysql", "port": 3306, "approvedBy": "project_owner", "approvedOn": "2026-10-15"}]
   },
   "runtimeClaim": "惠州单机；宝塔分别管理网站、统一 Node 后端和 Python 采集运行时；只声明真实功能和当前运行健康，不声明负载均衡、多节点或硬件容量。",
   "objects": [
@@ -89,8 +90,10 @@
       "database": "product_scout",
       "account": "product_scout",
       "charset": "utf8mb4",
-      "bind": "127.0.0.1",
-      "public": false
+      "applicationHost": "127.0.0.1",
+      "bind": "*",
+      "public": true,
+      "publicAccessException": "mysql-owner-approved-2026-10-15"
     },
     {
       "name": "ai选品缓存",

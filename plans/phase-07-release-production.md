@@ -1122,6 +1122,12 @@
 - [x] `npm run verify:module -- M07-04` 返回 0；run_id/trace_id：`46a76ff6-6059-41e4-bfec-c5693209b604`。
 
 ### M07-05 原子任务索引
+
+2026-10-15 所有者明确批准：当前 M07-05 以固定目录单后端发布／回滚／恢复验收为准，不新增候选实例。
+活动执行矩阵为 `verification/modules/M07-05.json`，生产门为
+`scripts/verify-single-backend-release-production.mjs --production`，证据由
+`python scripts/deploy-baota.py --rollback-drill` 在维护窗口真实执行后生成。
+下方历史双槽细节及旧生产签发仅保留审计，不作为当前操作或通过依据；其余安全、权限、真实健康、迁移兼容、备份恢复和生产门保持不变。
 - 模块目标：发布与回滚。
 - 业务说明：版本、迁移、灰度、监控、自动停止与回滚 Runbook。
 - 生产写门：使用宝塔受限 HMAC 签名的 `/api/v1/platform/operations/releases/write-probe`；canonical 固定为 timestamp/nonce/release_id/sample_id，避免宝塔 Nginx 重写 request_id 破坏签名，同时保存代理实际 request/trace 审计。生产探针将 TCP 连接固定到本机 `127.0.0.1` 的宝塔 Nginx，但保留正式域名 TLS/SNI/Host 与证书校验，避免公网回环波动；不得直连 API 槽或关闭 TLS 验证。每个唯一样本只执行一次 MySQL 持久化提交；仅 Nginx 499 且没有 upstream_status 的到达上游前中断可用同一 sample_id 重试一次，证据单独计数，重试仍未送达即失败；不得重试候选拒绝。候选已到达上游的响应必须为 202，且候选 build 的持久化增量必须与候选已到达上游的 Nginx 写样本完全一致；默认 1 秒采样提高低流量 S0 的 P95 样本分辨率，不得用采样调整、幂等回放、密码重置多提交链、放宽 600ms 阈值或降低 1,800 秒观察替代。

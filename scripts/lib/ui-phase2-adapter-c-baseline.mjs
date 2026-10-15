@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
+import { historicalProviderTermsSource } from "./ui-phase2-provider-terms-history.mjs";
 
 export const adapterCRevisions = [
   {
@@ -13,7 +14,7 @@ const history = new Map();
 const hash = (source) => createHash("sha256").update(source).digest("hex");
 // Only link exact known edits to immutable earlier evidence. Never normalize unknown drift.
 export function historicalAdapterCSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = historicalProviderTermsSource(file, source);
   const revision = adapterCRevisions.find((entry) => entry.file === file);
   if (!revision || hash(source) !== revision.after) return source;
   if (!history.has(file)) {

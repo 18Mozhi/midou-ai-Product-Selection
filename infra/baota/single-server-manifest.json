@@ -14,7 +14,8 @@
   "host": {
     "identitySource": "baota_restricted_config",
     "roles": ["site", "api", "worker", "crawler", "mysql", "redis", "storage"],
-    "privateServices": ["api", "worker", "crawler", "mysql", "redis", "storage"]
+    "privateServices": ["api", "worker", "crawler", "redis", "storage"],
+    "publicAccessExceptions": [{"service": "mysql", "port": 3306, "approvedBy": "project_owner", "approvedOn": "2026-10-15"}]
   },
   "nginx": {
     "managedBy": "baota_site",
@@ -43,7 +44,7 @@
   "moduleAcceptanceGates": [
     "one fresh API heartbeat on the configured current BaoTa host",
     "BaoTa Nginx TLS and single-upstream reverse proxy probe",
-    "MySQL Redis Worker Crawler and storage remain private to the current host",
+    "API Redis Worker Crawler and storage remain private; MySQL port 3306 alone has explicit project-owner public-access approval dated 2026-10-15; application DB_HOST remains 127.0.0.1",
     "load balancing multi-node backup-server and capacity claims remain false"
   ],
   "rollback": [

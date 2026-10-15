@@ -16,6 +16,13 @@ Git 提交重新构建并部署回滚。`scripts/verify-runtime-doc-consistency.
 
 ## 只读刷新边界
 
+2026-10-15 当前验收以 `infra/baota/single-backend-release-manifest.json` 和
+`scripts/verify-single-backend-release-production.mjs --production` 为准。
+`python scripts/deploy-baota.py --rollback-drill` 在维护窗口发布目标包，核验公网健康后，
+停止同一组宝塔 Node/Python，将上一组固定目录包恢复并核验上一 SHA，再恢复目标包并重新核验。
+仅允许明确兼容的 0073→0074 加字段迁移；不执行 down、不回滚业务数据，不新增候选进程。
+任一步未验证，不签发通过证据。旧双槽命令不属于当前模块生产验收。
+
 `GET /api/v1/platform/operations/releases` 的服务端读取上限为 14 秒。一次读取在同一 MySQL 连接和事务内顺序读取最近发布、门禁事实并写入成功审计；客户端断开、超时或数据库失败时中止并回滚，避免超时响应之后继续形成“读取成功”审计。数据库连接和协议故障统一映射为脱敏 503，不返回 SQL、驱动、主机、账号、路径或凭证细节。该边界只适用于 GET；签名写探针的 HMAC、单语句 autocommit、202 和幂等合同不变。
 
 浏览器对刷新使用单飞控制和 15 秒等待上限。首次加载仍显示加载态；已有成功快照后遇到 429、超时、503 或网络失败时保留快照，显示 request_id、原因和重新核验入口。401/403 会清空受保护快照并进入登录失效或无权限状态，避免跨权限继续展示旧数据。

@@ -22,6 +22,24 @@ html body:has(#app .provider-registry) #app .provider-list-heading span,
 html body:has(#app .provider-registry) #app .provider-filters label {
   color: var(--p46-muted);
 }
+html body:has(#app .provider-registry) #app .provider-fields label:has(> input[type="checkbox"]) {
+  display: flex;
+  align-items: center;
+  align-self: end;
+  gap: 12px;
+  min-height: 48px;
+  cursor: pointer;
+}
+html body:has(#app .provider-registry) #app .provider-fields input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  min-height: 20px;
+  min-width: 20px;
+  max-width: 20px;
+  flex: 0 0 20px;
+  padding: 0;
+  accent-color: var(--p46-accent);
+}
 html body:has(#app .provider-registry) #app .provider-list-heading > button,
 html body:has(#app .provider-registry) #app .provider-reset,
 html body:has(#app .provider-registry) #app .provider-pagination button,

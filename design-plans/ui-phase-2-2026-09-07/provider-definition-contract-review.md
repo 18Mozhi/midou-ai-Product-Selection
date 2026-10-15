@@ -61,9 +61,9 @@ API的compatibility_matrix聚合留存HTML/DOM的页面指纹与解析版本，�
 | R    | 4ba7742e75103fa4.1 | PR46-STEP-PREV     | 上一步，内存字段保留                                                                             |
 | R    | d0e6c4e6deaeab8a.1 | PR46-STEP-NEXT     | 校验当前组再下一步                                                                               |
 | R    | addbc979a88d3d3a.1 | PR46-SAVE          | type=submit；创建POST/编辑PUT+expected_version，同一实例串行；新窗等待上一项保存，结果按代次归属 |
-| R | 8fad861111d9338e.1 | PR46-CLOSE | 自定义遮罩mousedown.self.prevent调用closeEditor，阻止默认鼠标焦点覆盖恢复目标 |
-| R | a862aba9d276c718.1 | PR46-EDITOR | role=dialog的现有来源编辑表单容器；沿用四步编辑窗与既有焦点/关闭处理 |
-| R | f4f17798bbc8fc53.1 | PR46-EDITOR-KEYBOARD-WIRING | Tab/Escape键盘约束与表单submit接线；分别转发至既有编辑器、关闭和保存动作 |
+| R | 217eba612afd96aa.1 | PR46-CLOSE | 自定义遮罩mousedown.self.prevent调用closeEditor，阻止默认鼠标焦点覆盖恢复目标 |
+| R | 63218fe82120788d.1 | PR46-EDITOR | role=dialog的现有来源编辑表单容器；沿用四步编辑窗与既有焦点/关闭处理 |
+| R | de994d999d645373.1 | PR46-EDITOR-KEYBOARD-WIRING | Tab/Escape键盘约束与表单submit接线；分别转发至既有编辑器、关闭和保存动作 |
 | A    | 3d1c1781d275b76d.1 | PR47-DEFINE        | 页头返回P46，仅导航                                                                              |
 | A    | 0da6a9c39b0f685c.1 | PR47-RESET         | 工具栏完整resetFilters                                                                           |
 | A    | d1614ad8db6bddf9.1 | PR47-DEFINE        | 无来源时“登记来源”去P46，不是登记程序                                                            |
@@ -210,11 +210,11 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1 | 682 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET并隐藏未接线secondary |
+| apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1 | 690 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET并隐藏未接线secondary |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue | 8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc |
+| apps/web/src/components/ProviderRegistry.vue | c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22 |
 
 ### PR46/PR47及共享详情旧身份归档
 
@@ -313,3 +313,14 @@ P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT
 | T | e2fd0d02cbd9f684.1 | — | PR47-CURRENT-COLUMNS-OPEN |
 | T | 921f4be18a3fe814.1 | — | PR47-CURRENT-COLUMN-TOGGLE |
 | T | d09cd5524db7bee5.1 | — | PR47-CURRENT-FREEZE |
+
+
+## 2026-10-15 永久有效增量
+
+所有者明确批准新增永久有效及兼容迁移；当前源码映射随之更新，不改原图或历史批准。此前当前指纹 `8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc` 保留为历史。新增字段导致容器标签签名承接：旧 8fad861111d9338e.1 / a862aba9d276c718.1 / f4f17798bbc8fc53.1 分别由 217eba612afd96aa.1 / 63218fe82120788d.1 / de994d999d645373.1 承接；关闭、焦点及提交仍使用原 handler。
+
+| 别名 | 当前签名 | 语义合同 |
+| --- | --- | --- |
+| R | d4a5f3c25bf2a345.1 | PR46-TERMS-PERMANENT · 原生checkbox修改form.terms_permanent，切换时清空日期；仅内存草稿，沿用原保存链与批准/版本/审计门 |
+
+这不是所有字段状态、全页、读屏器或生产保存验收；新永久字段由本次实际Vue键盘及保存/重新打开回归单独验证，历史截图不覆盖新增字段。

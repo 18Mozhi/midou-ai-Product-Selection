@@ -244,7 +244,7 @@ test("M07-06 rejects a non-compliant public source before scheduling collection 
   assert.match(repository, /terms_review_status !== "approved"/);
   assert.match(
     repository,
-    /new Date\(provider\.terms_expires_at\)\.getTime\(\) <= i\.now\.getTime\(\)/,
+    /Number\(provider\.terms_permanent\) !== 1[\s\S]*!\(new Date\(provider\.terms_expires_at\)\.getTime\(\) > i\.now\.getTime\(\)\)/,
   );
 
   const statements = [];
@@ -265,6 +265,7 @@ test("M07-06 rejects a non-compliant public source before scheduling collection 
               code: "google_news_search",
               access_mode: "public_rss",
               terms_review_status: "pending",
+              terms_permanent: 1,
               terms_reference_url: null,
               terms_version: null,
               terms_expires_at: null,

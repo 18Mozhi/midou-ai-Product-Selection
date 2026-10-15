@@ -155,7 +155,7 @@ try {
     [
       "SELECT id,code,parser_version FROM providers WHERE status='enabled' ",
       "AND terms_review_status='approved' AND terms_version IS NOT NULL ",
-      "AND terms_expires_at>NOW(3) AND parser_version IN ",
+      "AND (terms_permanent=1 OR terms_expires_at>NOW(3)) AND parser_version IN ",
       "('google-news-fixed-rss-v1','syndication-feed-v1','structured-public-page-v1') ",
       "ORDER BY code",
     ].join(""),

@@ -40,6 +40,7 @@ interface Provider {
   terms_reference_url: string | null;
   terms_version: string | null;
   terms_expires_at: string | null;
+  terms_permanent?: boolean;
   terms_reviewed_at: string | null;
   status: string;
   version: number;
@@ -95,6 +96,7 @@ const props = defineProps<{ apiBaseUrl: string }>(),
     terms_reference_url: "",
     terms_version: "",
     terms_expires_at: "",
+    terms_permanent: false,
     status: "disabled",
   });
 const steps = ["基本信息", "范围与字段", "执行策略", "合规与发布"],
@@ -159,8 +161,7 @@ const admission = (item: Provider): { state: AdmissionState; label: string; deta
       const complete =
         item.terms_review_status === "approved" &&
         Boolean(item.terms_version) &&
-        Number.isFinite(expiresAt) &&
-        expiresAt > Date.now();
+        (item.terms_permanent === true || (Number.isFinite(expiresAt) && expiresAt > Date.now()));
       return complete
         ? {
             state: "compliant",
@@ -296,8 +297,11 @@ const list = (v: string) =>
       if (form.terms_review_status !== "approved")
         errors.terms_review_status = "启用公开来源前必须由负责人批准条款。";
       if (!form.terms_version) errors.terms_version = "启用前必须登记条款版本。";
-      if (!form.terms_expires_at || new Date(form.terms_expires_at) <= new Date())
-        errors.terms_expires_at = "启用前必须登记未来的到期时间。";
+      if (
+        !form.terms_permanent &&
+        (!form.terms_expires_at || new Date(form.terms_expires_at) <= new Date())
+      )
+        errors.terms_expires_at = "请选择永久有效，或登记未来的到期时间。";
     }
     return errors;
   }),
@@ -396,6 +400,7 @@ function edit(item?: Provider, event?: Event) {
           terms_reference_url: item.terms_reference_url ?? "",
           terms_version: item.terms_version ?? "",
           terms_expires_at: toLocalDateTimeInput(item.terms_expires_at),
+          terms_permanent: item.terms_permanent === true,
         }
       : {
           code: "",
@@ -420,6 +425,7 @@ function edit(item?: Provider, event?: Event) {
           terms_reference_url: "",
           terms_version: "",
           terms_expires_at: "",
+          terms_permanent: false,
           status: "disabled",
         },
   );
@@ -561,9 +567,11 @@ async function save() {
       healthcheck_url: form.healthcheck_url || null,
       terms_reference_url: form.terms_reference_url || null,
       terms_version: form.terms_version || null,
-      terms_expires_at: form.terms_expires_at
-        ? new Date(form.terms_expires_at).toISOString()
-        : null,
+      terms_permanent: form.terms_permanent,
+      terms_expires_at:
+        !form.terms_permanent && form.terms_expires_at
+          ? new Date(form.terms_expires_at).toISOString()
+          : null,
       ...(editing.value ? { expected_version: editing.value.version } : {}),
     },
     path = editing.value ? `/platform/providers/${editing.value.id}` : "/platform/providers";
@@ -864,9 +872,11 @@ onActivated(() => {
             <dt>条款到期</dt>
             <dd>
               {{
-                row.terms_expires_at
-                  ? new Date(row.terms_expires_at).toLocaleString("zh-CN", { hour12: false })
-                  : "未登记"
+                row.terms_permanent
+                  ? "永久有效"
+                  : row.terms_expires_at
+                    ? new Date(row.terms_expires_at).toLocaleString("zh-CN", { hour12: false })
+                    : "未登记"
               }}
             </dd>
           </div>
@@ -1314,10 +1324,17 @@ onActivated(() => {
               formErrors.terms_version
             }}</small></label
           ><label
+            ><input
+              v-model="form.terms_permanent"
+              type="checkbox"
+              @change="form.terms_expires_at = ''"
+            />永久有效</label
+          ><label
             ><span id="provider-field-terms_expires_at-label">条款到期时间</span
             ><input
               aria-labelledby="provider-field-terms_expires_at-label"
-              :aria-required="publicTermsRequired"
+              :aria-required="publicTermsRequired && !form.terms_permanent"
+              :disabled="form.terms_permanent"
               :aria-invalid="Boolean(formErrors.terms_expires_at)"
               :aria-describedby="
                 formErrors.terms_expires_at ? 'provider-field-terms_expires_at-error' : undefined

@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 
 import { ProviderSourceExecutor } from "../../apps/worker/dist/provider-source-executor.js";
 
-test("public-page robots decisions retain the policy version and matched rule in subquery audit", async () => {
+test("permanent public-page approval still enforces robots and retains its matched-rule audit", async () => {
   const completed = [];
   const connection = {
     beginTransaction: async () => {},
@@ -35,7 +35,8 @@ test("public-page robots decisions retain the policy version and matched rule in
               terms_review_status: "approved",
               terms_reference_url: "https://robots-audit.test/terms",
               terms_version: "2026-08",
-              terms_expires_at: "2099-08-31T00:00:00.000Z",
+              terms_expires_at: null,
+              terms_permanent: 1,
               created_by: "actor-robots-audit",
             },
           ],

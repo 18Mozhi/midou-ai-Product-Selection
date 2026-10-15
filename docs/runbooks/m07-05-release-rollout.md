@@ -1,5 +1,20 @@
 # M07-05 宝塔发布与回滚 Runbook
 
+## 当前单后端验收（2026-10-15）
+
+当前模块使用 `node scripts/verify-single-backend-release-production.mjs --production`，不执行旧双槽生产验证器。
+维护窗口运行 `python scripts/deploy-baota.py --rollback-drill`：本地构建并上传后，
+依次记录目标发布、上一包回滚、目标包恢复的 live/ready/available/version、登录路由、未知路由和扩展包核验。
+三个阶段都只使用既有宝塔项目和固定目录；交换包前停止 Node/Python 并确认进程退出，再由宝塔启动。
+原包在短期部署回滚目录保存，全部阶段通过后清理；不保留长期 staging，不执行数据库 down。
+仅允许带明确 0073/0074 迁移身份的上一不同构建，当前增量仅为 0074 加字段。
+兼容条件变化时必须重新审查，不能把所有未来迁移自动认定兼容。
+失败不得补写通过证据；若恢复过程受阻，保留包与错误供人工恢复，不删除恢复材料。
+部署器通过 `config/deployment.lock` 的独占创建串行化整轮；冲突时在上传前退出。
+成功后删除本人锁；回滚演练异常保留锁，运维须核验当前 SHA、原包及临时交换目录并完成恢复后再解除，禁止盲删锁重试。
+正式证据在 `.artifacts/verification/single-backend-release-production-evidence.json`，绑定完整当前 SHA，沿用 30 分钟新鲜度并实时核对公网 version/ready/available；未来时间不接受。
+普通部署仍使用原命令，不额外演练回滚；仅上传或重启不代表 M07-05 通过。
+
 > 本文以下双槽命令已停用，只用于历史审计。当前发布必须在本地提交且工作树干净后运行
 > `python scripts/deploy-baota.py`，生产只维护 `/www/wwwroot/ai选品/frontend`、
 > `/www/wwwroot/ai选品/backend`、`/www/wwwroot/ai选品/python`、`config`、`runtime`

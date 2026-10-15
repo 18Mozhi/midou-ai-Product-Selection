@@ -345,7 +345,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -939,7 +939,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -1508,7 +1508,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -2161,7 +2161,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -2366,7 +2366,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "docs/openapi.yaml",
           "expected": "572fa523fd10401b9047cc6f98a379bfdf84df9d26ee47f00f5d2c7ee16badfe",
-          "actual": "9891ae0e3280f5398cebadc9155dee75d6049fcec54223ce978abeecd653b827"
+          "actual": "d906c4c7ff85b7247e1a55ca372b84c2fc3adbfa854a84f0aa792097c7025d40"
         },
         {
           "file": "scripts/lib/ui-phase2-org-approvals-design-data.mjs",
@@ -2770,7 +2770,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -2975,7 +2975,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "docs/openapi.yaml",
           "expected": "572fa523fd10401b9047cc6f98a379bfdf84df9d26ee47f00f5d2c7ee16badfe",
-          "actual": "9891ae0e3280f5398cebadc9155dee75d6049fcec54223ce978abeecd653b827"
+          "actual": "d906c4c7ff85b7247e1a55ca372b84c2fc3adbfa854a84f0aa792097c7025d40"
         },
         {
           "file": "scripts/lib/ui-phase2-org-approvals-design-data.mjs",
@@ -3870,7 +3870,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -4085,7 +4085,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "tests/e2e/m03-01-provider-registry.spec.ts",
           "expected": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f",
-          "actual": "cfb3e9d73709377ac4e013a6c6b68cf84752b003f380b330667945b7b74c77cf"
+          "actual": "a1de96732d1a0b858d288d55e13409b04a631c556221014aabfdf5f819310ff7"
         }
       ],
       "packetImages": 132,
@@ -4154,7 +4154,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -4269,7 +4269,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "tests/e2e/m03-01-provider-registry.spec.ts",
           "expected": "caaa0e2af2081675ab743e18d43e2526758604c84bd72aa925ae701454cf226f",
-          "actual": "cfb3e9d73709377ac4e013a6c6b68cf84752b003f380b330667945b7b74c77cf"
+          "actual": "a1de96732d1a0b858d288d55e13409b04a631c556221014aabfdf5f819310ff7"
         }
       ],
       "packetImages": 40,
@@ -4643,7 +4643,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",
@@ -5232,7 +5232,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "apps/web/src/components/ProviderRegistry.vue",
           "expected": "9822fd9a882dd61409420d414e1fcdaae4c8ce513d53c853c9bda9741c609c2c",
-          "actual": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc"
+          "actual": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22"
         },
         {
           "file": "apps/web/src/components/ProviderRuntimeSurface.vue",

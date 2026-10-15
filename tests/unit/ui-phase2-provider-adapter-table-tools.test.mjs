@@ -4,6 +4,7 @@ import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import postcss from "postcss";
+import { historicalProviderTermsSource } from "../../scripts/lib/ui-phase2-provider-terms-history.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
   hash = (value) => createHash("sha256").update(value).digest("hex"),
@@ -51,7 +52,7 @@ test("P47 table-tools CSS is isolated to the review body and active page", () =>
   });
 });
 
-test("P47 table-tools evidence binds current sources, images, and interaction boundaries", () => {
+test("P47 table-tools historical evidence binds exact pre-permanent sources, images, and interaction boundaries", () => {
   const evidence = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(evidence.kind, "P47-TABLE-TOOLS-REVIEW-r2");
   assert.equal(evidence.reviewOnly, true);
@@ -64,7 +65,7 @@ test("P47 table-tools evidence binds current sources, images, and interaction bo
   assert.equal(evidence.screenshots.length, 18);
   assert.ok(Object.keys(evidence.sourceHashes).length > 100);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(hash(historicalProviderTermsSource(file, read(file))), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

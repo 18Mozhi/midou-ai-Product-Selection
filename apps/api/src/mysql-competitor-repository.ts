@@ -430,7 +430,7 @@ export class MySqlCompetitorRepository implements CompetitorRepository {
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT id FROM providers WHERE code='amazon_product' AND status='enabled' AND access_mode='public_page' " +
         "AND terms_review_status='approved' AND terms_version IS NOT NULL " +
-        "AND terms_expires_at>NOW(3) LIMIT 1 FOR UPDATE",
+        "AND (terms_permanent=1 OR terms_expires_at>NOW(3)) LIMIT 1 FOR UPDATE",
     );
     if (!rows[0])
       throw new CompetitorServiceError(

@@ -243,7 +243,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         [
           "SELECT p.id,p.code,p.access_mode,p.target_url,p.parser_version,p.timeout_ms,p.fields_json,p.status",
           ",p.circuit_failure_threshold,c.state runtime_circuit_state",
-          ",p.terms_review_status,p.terms_version,p.terms_expires_at,t",
+          ",p.terms_review_status,p.terms_version,p.terms_expires_at,p.terms_permanent,t",
           ".created_by FROM providers p JOIN collection_tasks t ON t.id=? LEFT JOIN provider_runtime_circuits c ON c.provider_id=p.id WHERE p.id=? LIMIT 1",
         ].join(""),
         [task.id, query.providerId],
@@ -285,8 +285,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
         if (
           row.terms_review_status !== "approved" ||
           !row.terms_version ||
-          !row.terms_expires_at ||
-          new Date(row.terms_expires_at) <= new Date()
+          (Number(row.terms_permanent) !== 1 &&
+            (!row.terms_expires_at || !(new Date(row.terms_expires_at).getTime() > Date.now())))
         )
           throw new ProviderAdapterFailure("permission_denied", false);
         if (this.publicPolicyFetch)

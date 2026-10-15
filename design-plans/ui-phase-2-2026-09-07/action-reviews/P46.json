@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/provider-definition-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-    "apps/web/src/components/ProviderRegistry.vue": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
+    "apps/web/src/components/ProviderRegistry.vue": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
@@ -22,11 +22,22 @@
       "form.healthcheck_url", "form.schedule_minutes", "form.concurrency_limit", "form.timeout_ms",
       "form.retry_limit", "form.circuit_failure_threshold", "form.retention_days", "form.failure_rules",
       "form.terms_review_status", "form.status", "form.terms_reference_url", "form.terms_version",
-      "form.terms_expires_at"
+      "form.terms_expires_at", "form.terms_permanent"
     ],
     "apps/web/src/components/TableViewControls.vue": ["density"]
   },
   "actions": [
+    {
+      "actionId": "PR46-TERMS-PERMANENT", "label": "永久有效选择", "kind": "local",
+      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#d4a5f3c25bf2a345.1"],
+      "sourceContractKeys": ["PR46-TERMS-PERMANENT"],
+      "contractAliasReason": "所有者2026-10-15明确授权的有效期方式；本地选择不替代原保存与批准链。",
+      "condition": "来源编辑器合规步骤", "handler": "原生checkbox写form.terms_permanent并清空日期",
+      "variants": ["dated", "permanent"], "scenes": [],
+      "visualStates": {"default":"not-mapped","hover":"not-mapped","focus":"not-mapped","pressed":"not-mapped","disabled":"not-mapped","busy":"not-mapped"},
+      "testReferences": [{"file":"tests/e2e/m03-01-provider-registry.spec.ts","evidenceType":"actual-vue-local-interception"}],
+      "remaining": "历史截图不证明新字段；真实保存与普通成员生产旅程仍须执行。"
+    },
     {
       "actionId": "PR46-NAVIGATION",
       "label": "来源管理视图导航",
@@ -184,7 +195,7 @@
       "actionId": "PR46-CLOSE",
       "label": "关闭来源编辑器",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#8fad861111d9338e.1", "apps/web/src/components/ProviderRegistry.vue#e03ff4bf86eb6a89.1"],
+      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#217eba612afd96aa.1", "apps/web/src/components/ProviderRegistry.vue#e03ff4bf86eb6a89.1"],
       "contractAliasReason": "遮罩mousedown.self.prevent与带名称的关闭按钮都到同一closeEditor处理器；Escape由表单事件接线另行转发到此动作。",
       "condition": "编辑窗口开启且没有尚未结束的串行保存阻断。",
       "handler": "调用closeEditor清关闭选择/反馈，并按当前触发来源尝试返回焦点；不撤销已提交的网络写入。",
@@ -198,7 +209,7 @@
       "actionId": "PR46-EDITOR",
       "label": "创建/编辑四步模态编辑器容器",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#a862aba9d276c718.1"],
+      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#63218fe82120788d.1"],
       "condition": "由创建或编辑入口打开；同一模板定义承载两个模式和四个步骤。",
       "handler": "呈现现有role=dialog容器与页面内字段，不产生创建、更新或退出副作用。",
       "variants": ["create-step-1-to-4", "edit-step-1-to-4", "validation", "save-feedback"],
@@ -211,7 +222,7 @@
       "actionId": "PR46-EDITOR-KEYBOARD-WIRING",
       "label": "编辑器Tab/Escape/form提交事件接线",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1"],
+      "sourceCandidateIds": ["apps/web/src/components/ProviderRegistry.vue#de994d999d645373.1"],
       "contractAliasReason": "同一表单源位置转发Tab焦点处理、Escape关闭和submit保存三个事件；分别连接编辑器容器、PR46-CLOSE和PR46-SAVE，不重复计业务提交。",
       "condition": "来源编辑器form已挂载。",
       "handler": "@keydown调用containEditorTab；@keydown.esc.stop.prevent调用closeEditor；@submit.prevent调用save。",
@@ -222,9 +233,9 @@
       "remaining": "局部实际Vue用例不证明完整App叠层或真实读屏器键盘体验。",
       "forwardsTo": ["PR46-EDITOR", "PR46-CLOSE", "PR46-SAVE"],
       "forwardBindings": [
-        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1", "event": "@keydown", "handler": "containEditorTab", "targets": ["PR46-EDITOR"] },
-        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1", "event": "@keydown.esc.stop.prevent", "handler": "closeEditor", "targets": ["PR46-CLOSE"] },
-        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#f4f17798bbc8fc53.1", "event": "@submit.prevent", "handler": "save", "targets": ["PR46-SAVE"] }
+        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#de994d999d645373.1", "event": "@keydown", "handler": "containEditorTab", "targets": ["PR46-EDITOR"] },
+        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#de994d999d645373.1", "event": "@keydown.esc.stop.prevent", "handler": "closeEditor", "targets": ["PR46-CLOSE"] },
+        { "candidateId": "apps/web/src/components/ProviderRegistry.vue#de994d999d645373.1", "event": "@submit.prevent", "handler": "save", "targets": ["PR46-SAVE"] }
       ]
     },
     {
@@ -396,7 +407,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/ProviderRuntimeSurface.vue": "ffb1d37bf5fc95948569d9d0d55016412906be55c417705866e245b7c5f1b292",
-      "apps/web/src/components/ProviderRegistry.vue": "8d57edec7fe4b960e85854e2cad9e3c89376c2c1359f14d13e3806c9ee2ba8bc",
+      "apps/web/src/components/ProviderRegistry.vue": "c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
       "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
@@ -404,6 +415,7 @@
     "includeStructuralContainers": true,
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [
+      { "file": "apps/web/src/components/ProviderRegistry.vue", "binding": "form.terms_permanent", "meaning": "显式永久有效", "remaining": "仅有效期方式，不绕过复核、版本或原保存链；真实生产另验。" },
       { "file": "apps/web/src/components/ProviderRegistry.vue", "binding": "form.code", "meaning": "来源技术代码", "remaining": "保持现有code校验及创建/更新请求映射；PR-G03写入body字段残留仍待按真实合同复核。" },
       { "file": "apps/web/src/components/ProviderRegistry.vue", "binding": "form.name", "meaning": "来源显示名称", "remaining": "沿用当前必填语义与服务端校验。" },
       { "file": "apps/web/src/components/ProviderRegistry.vue", "binding": "form.target_url", "meaning": "来源目标URL", "remaining": "不推导或造出未提供的目标地址/采集授权。" },

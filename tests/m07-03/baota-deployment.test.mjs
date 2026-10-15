@@ -20,7 +20,10 @@ test("M07-03.A01-A05 manifest freezes fixed Node and Python BaoTa targets and he
   assert.equal(manifest.productionDeployed, true);
   assert.equal(manifest.deploymentStatus, "healthy");
   assert.equal(manifest.target.deployRoot, "/www/wwwroot/ai选品");
-  assert.deepEqual(manifest.target.privatePorts, [4101, 3306, 6379]);
+  assert.deepEqual(manifest.target.privatePorts, [4101, 6379]);
+  assert.deepEqual(manifest.target.publicAccessExceptions, [
+    { service: "mysql", port: 3306, approvedBy: "project_owner", approvedOn: "2026-10-15" },
+  ]);
   const nodeProjects = manifest.objects.filter((item) => item.kind === "baota-node-project");
   assert.equal(nodeProjects.length, 1);
   assert.equal(nodeProjects[0].name, "ai选品");
@@ -46,7 +49,11 @@ test("M07-03.A06-A11 site, runtime, permission, config and logging contracts fai
   assert.match(nginx, /error_page 404 \/index\.html/);
   assert.match(nginx, /try_files \$uri \$uri\/ =404/);
   assert.doesNotMatch(nginx, /try_files \$uri \$uri\/ \/index\.html/);
-  for (const name of ["ai选品", "ai选品数据库", "ai选品缓存"])
+  assert.equal(
+    manifest.objects.find((item) => item.name === "ai选品数据库").publicAccessException,
+    "mysql-owner-approved-2026-10-15",
+  );
+  for (const name of ["ai选品", "ai选品缓存"])
     assert.equal(manifest.objects.find((item) => item.name === name).public, false);
   assert.deepEqual(manifest.restrictedConfig.browserAllowlist, ["VITE_API_BASE_URL"]);
   assert.ok(manifest.logging.forbiddenFields.includes("master_key"));

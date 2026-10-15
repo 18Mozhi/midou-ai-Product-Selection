@@ -76,6 +76,25 @@ if (/systemctl|\bpm2\b|crontab|docker[ -]compose/i.test(commands))
   fail("external_manager_forbidden", "panel-external production manager found");
 for (const item of manifest.objects.filter((object) => !object.public && object.port))
   if (item.bind !== "127.0.0.1") fail("private_bind_invalid", item.name);
+const mysqlException = manifest.target.publicAccessExceptions;
+if (
+  !Array.isArray(mysqlException) ||
+  mysqlException.length !== 1 ||
+  mysqlException[0].service !== "mysql" ||
+  mysqlException[0].port !== 3306 ||
+  mysqlException[0].approvedBy !== "project_owner" ||
+  mysqlException[0].approvedOn !== "2026-10-15" ||
+  manifest.objects.find((item) => item.kind === "baota-mysql-service")?.publicAccessException !==
+    "mysql-owner-approved-2026-10-15" ||
+  manifest.objects.some(
+    (item) => item.public && !["baota-site", "baota-mysql-service"].includes(item.kind),
+  ) ||
+  manifest.objects.find((item) => item.kind === "baota-redis-service")?.public !== false
+)
+  fail(
+    "public_access_exception_invalid",
+    "Only the owner-approved MySQL 3306 exception is allowed; all other private services remain private",
+  );
 if (
   manifest.restrictedConfig?.secretValuesInManifest !== false ||
   manifest.restrictedConfig?.browserAllowlist?.join(",") !== "VITE_API_BASE_URL"

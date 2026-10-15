@@ -115,8 +115,9 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
         ["public_page", "public_rss"].includes(String(provider.access_mode)) &&
         (provider.terms_review_status !== "approved" ||
           !provider.terms_version ||
-          !provider.terms_expires_at ||
-          new Date(provider.terms_expires_at) <= input.now)
+          (Number(provider.terms_permanent) !== 1 &&
+            (!provider.terms_expires_at ||
+              !(new Date(provider.terms_expires_at).getTime() > input.now.getTime()))))
       )
         throw new ProviderSourceServiceError(
           "provider_source_compliance_required",
@@ -319,7 +320,7 @@ export class MySqlProviderSourceRepository implements ProviderSourceRepository {
       const [providers] = await c.query<RowDataPacket[]>(
         [
           "SELECT id,code FROM providers WHERE status='enabled' AND terms_review_status='approved' ",
-          "AND terms_version IS NOT NULL AND terms_expires_at>NOW(3) AND parser_version IN ",
+          "AND terms_version IS NOT NULL AND (terms_permanent=1 OR terms_expires_at>NOW(3)) AND parser_version IN ",
           "('google-news-fixed-rss-v1','syndication-feed-v1','structured-public-page-v1') ORDER BY updated_at ",
           "DESC,code LIMIT 100 FOR UPDATE",
         ].join(""),

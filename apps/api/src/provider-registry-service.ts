@@ -147,6 +147,11 @@ function validate(value: ProviderDefinitionInput, now: Date): ProviderDefinition
   const termsReferenceUrl = optionalHttpsUrl(value.terms_reference_url),
     termsVersion = value.terms_version == null ? null : String(value.terms_version).trim(),
     termsExpiry = value.terms_expires_at == null ? null : new Date(value.terms_expires_at);
+  if (value.terms_permanent !== undefined && typeof value.terms_permanent !== "boolean")
+    throw new ProviderRegistryError("terms_permanent_invalid", 400, "永久有效必须为布尔值。");
+  const termsPermanent = value.terms_permanent === true;
+  if (termsPermanent && termsExpiry !== null)
+    throw new ProviderRegistryError("terms_validity_conflict", 400, "永久有效时请清空到期时间。");
   if (termsVersion !== null && !/^[A-Za-z0-9._:-]{1,80}$/.test(termsVersion))
     throw new ProviderRegistryError(
       "terms_version_invalid",
@@ -160,13 +165,12 @@ function validate(value: ProviderDefinitionInput, now: Date): ProviderDefinition
     value.status === "enabled" &&
     (value.terms_review_status !== "approved" ||
       !termsVersion ||
-      !termsExpiry ||
-      termsExpiry <= now)
+      (!termsPermanent && (!termsExpiry || termsExpiry <= now)))
   )
     throw new ProviderRegistryError(
       "public_source_compliance_required",
       409,
-      "公开来源启用前必须由负责人批准条款，并登记版本和未来到期时间。",
+      "公开来源启用前必须由负责人批准条款、登记版本，并选择永久有效或未来到期时间。",
     );
   return {
     ...value,
@@ -181,6 +185,7 @@ function validate(value: ProviderDefinitionInput, now: Date): ProviderDefinition
     terms_reference_url: termsReferenceUrl,
     terms_version: termsVersion,
     terms_expires_at: termsExpiry?.toISOString() ?? null,
+    terms_permanent: termsPermanent,
   };
 }
 export class ProviderRegistryService {

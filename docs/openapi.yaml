@@ -8692,6 +8692,7 @@ components:
         terms_reference_url: { type: string, format: uri, maxLength: 1000, nullable: true, description: Optional HTTPS reference for audit convenience; not required for approval, enablement, scheduling, or execution. If supplied, it must be HTTPS. }
         terms_version: { type: string, pattern: "^[A-Za-z0-9._:-]{1,80}$", nullable: true }
         terms_expires_at: { type: string, format: date-time, nullable: true }
+        terms_permanent: { type: boolean, default: false, description: "Explicit permanent validity; omitted means false. True requires null expiry and does not bypass review or version requirements." }
         status: { type: string, enum: [draft, disabled, enabled], default: disabled }
     ProviderDefinitionUpdate:
       allOf:
