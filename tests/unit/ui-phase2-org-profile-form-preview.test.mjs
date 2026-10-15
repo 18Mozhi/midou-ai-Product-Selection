@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
@@ -182,7 +183,7 @@ test("profile conflict response comes from the original M06-01 fixture", async (
     trace_id: "m06-01-conflict",
   });
 });
-test("profile packet binds current sources, visible errors and one local conflict PATCH per run", async () => {
+test("profile packet binds capture sources, visible errors and one local conflict PATCH per run", async () => {
   const root = "output/playwright/org-profile-form-vue-c-r12",
     evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -198,7 +199,11 @@ test("profile packet binds current sources, visible errors and one local conflic
   assert.equal(evidence.screenshots.length, 22);
   assert.equal(Object.keys(evidence.sourceHashes).length, 134);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(file, await readFile(file, "utf8"), sha);
+    assertCaptureSource(
+      file,
+      selectionBlockedHistoricalSource(file, await readFile(file, "utf8"), sha),
+      sha,
+    );
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

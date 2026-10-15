@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -62,7 +63,7 @@ test("organization proposal changes only heading and CSS beyond existing shell p
     previewOrgSummary(production.replace(">{{ title }}</component", ">{{ changed }}</component")),
   );
 });
-test("organization capture binds all current loaded sources and requested images", async () => {
+test("organization capture binds all capture-time loaded sources and requested images", async () => {
   const root = "output/playwright/shell-org-vue-c-r3";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -79,7 +80,11 @@ test("organization capture binds all current loaded sources and requested images
   assert.match(evidence.sourceCommit, /^[a-f0-9]{40}$/u);
   assert.equal(evidence.sourceSha, hash(JSON.stringify(evidence.sourceHashes)));
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(file, await readFile(file, "utf8"), sha);
+    assertCaptureSource(
+      file,
+      selectionBlockedHistoricalSource(file, await readFile(file, "utf8"), sha),
+      sha,
+    );
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

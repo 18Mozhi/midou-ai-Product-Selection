@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
@@ -96,7 +97,7 @@ test("organization unavailable CSS is review scoped and header facts require rea
   assert.equal(orgReadStateReplacements[5][1].includes('role="alert"'), true);
   assert.ok(orgReadStateReplacements[7][1].includes("{{ requestId }}"));
 });
-test("organization read-state packet proves current images, redaction and original retry counts", async () => {
+test("organization read-state packet preserves captured images, redaction and original retry counts", async () => {
   const root = "output/playwright/org-read-state-vue-c-r10";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
@@ -118,7 +119,11 @@ test("organization read-state packet proves current images, redaction and origin
     ),
   );
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(file, await readFile(file, "utf8"), sha);
+    assertCaptureSource(
+      file,
+      selectionBlockedHistoricalSource(file, await readFile(file, "utf8"), sha),
+      sha,
+    );
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

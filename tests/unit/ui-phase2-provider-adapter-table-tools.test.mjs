@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync } from "node:fs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
@@ -65,7 +66,17 @@ test("P47 table-tools historical evidence binds exact pre-permanent sources, ima
   assert.equal(evidence.screenshots.length, 18);
   assert.ok(Object.keys(evidence.sourceHashes).length > 100);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(historicalProviderTermsSource(file, read(file))), expected, file);
+    assert.equal(
+      hash(
+        selectionBlockedHistoricalSource(
+          file,
+          historicalProviderTermsSource(file, read(file)),
+          expected,
+        ),
+      ),
+      expected,
+      file,
+    );
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

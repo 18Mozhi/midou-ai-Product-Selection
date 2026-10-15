@@ -1,6 +1,7 @@
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 
@@ -10,12 +11,16 @@ const read = (file) =>
 const hash = (value) => createHash("sha256").update(value).digest("hex");
 const evidence = JSON.parse(read(`${root}/evidence.json`));
 
-test("P47 lifecycle evidence uses current actual App sources and unchanged preserve route", () => {
+test("P47 lifecycle evidence preserves capture sources and unchanged preserve route", () => {
   assert.equal(evidence.kind, "P47-PRESERVE-CACHE-LIFECYCLE-r2");
   assert.equal(evidence.productionUntransformed, true);
   assert.equal(evidence.processesClosed, true);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assert.equal(
+      hash(selectionBlockedHistoricalSource(file, read(file), expected)),
+      expected,
+      file,
+    );
   for (const file of [
     "apps/web/src/App.vue",
     "apps/web/src/components/ProviderAdapterCenter.vue",

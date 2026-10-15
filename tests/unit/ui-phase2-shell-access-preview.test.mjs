@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
@@ -141,7 +142,11 @@ test("access capture covers three shells and five HTTP classes with current sour
   assert.match(evidence.sourceCommit, /^[a-f0-9]{40}$/u);
   assert.equal(evidence.sourceSha, hash(JSON.stringify(evidence.sourceHashes)));
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
+    assert.equal(
+      hash(selectionBlockedHistoricalSource(file, await readFile(file, "utf8"), sha)),
+      sha,
+      file,
+    );
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

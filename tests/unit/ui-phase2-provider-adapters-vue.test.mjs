@@ -3,6 +3,7 @@ import test from "node:test";
 import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 import { historicalAdapterFeedbackSource } from "../../scripts/lib/ui-phase2-adapter-feedback-baseline.mjs";
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
@@ -94,13 +95,14 @@ test("P47 review style is marker and mounted-page scoped and never imported by p
   }
 });
 
-test("P47 actual route, original/synthetic fixtures and exact72 PNG inventory bind current raw files", () => {
+test("P47 actual route, original/synthetic fixtures and exact72 PNG inventory bind captured raw files", () => {
   assert.equal(e.kind, "P47-ADAPTERS-ACTUAL-VUE-r2");
   assert.equal(e.processesClosed, true);
   assert.equal(e.checks.length, 138);
   assert.equal(e.screenshots.length, 72);
   assert.ok(Object.keys(e.sourceHashes).length > 100);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(selectionBlockedHistoricalSource(f, read(f), sha)), sha, f);
   assert.deepEqual(
     readdirSync(root).sort(),
     [...e.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),

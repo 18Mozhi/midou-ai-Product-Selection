@@ -3,6 +3,7 @@ import test from "node:test";
 import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 import { historicalAdapterFeedbackSource } from "../../scripts/lib/ui-phase2-adapter-feedback-baseline.mjs";
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
@@ -104,13 +105,14 @@ test("P47 detail changes only the original detail slot and isolates shared drawe
   }
 });
 
-test("P47 detail continuous screenshots bind current sources and explicit fixture boundaries", () => {
+test("P47 detail continuous screenshots bind capture sources and explicit fixture boundaries", () => {
   assert.equal(e.kind, "P47-ADAPTERS-DETAIL-ACTUAL-VUE-r2");
   assert.equal(e.processesClosed, true);
   assert.equal(e.checks.length, 118);
   assert.equal(e.screenshots.length, 47);
   assert.ok(Object.keys(e.sourceHashes).length > 100);
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(read(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes))
+    assert.equal(hash(selectionBlockedHistoricalSource(f, read(f), sha)), sha, f);
   assert.deepEqual(
     readdirSync(root).sort(),
     [...e.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),

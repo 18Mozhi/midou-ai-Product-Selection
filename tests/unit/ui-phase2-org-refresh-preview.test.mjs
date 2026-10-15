@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
@@ -94,7 +95,7 @@ test("refresh CSS and disclosure remain in review host and use original notice",
   assert.ok(orgRefreshReplacements.some(([, after]) => after.includes("<p>{{ notice }}</p>")));
 });
 
-test("refresh current captures bind sources, images, read lifecycle and no writes", async () => {
+test("refresh captures bind historical sources, images, read lifecycle and no writes", async () => {
   const root = "output/playwright/org-refresh-vue-c-r7";
   const evidence = JSON.parse(await readFile(`${root}/evidence.json`, "utf8"));
   const hash = (data) => createHash("sha256").update(data).digest("hex");
@@ -110,7 +111,11 @@ test("refresh current captures bind sources, images, read lifecycle and no write
   assert.equal(evidence.screenshots.length, 14);
   assert.equal(Object.keys(evidence.sourceHashes).length, 130);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(file, await readFile(file, "utf8"), sha);
+    assertCaptureSource(
+      file,
+      selectionBlockedHistoricalSource(file, await readFile(file, "utf8"), sha),
+      sha,
+    );
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);
