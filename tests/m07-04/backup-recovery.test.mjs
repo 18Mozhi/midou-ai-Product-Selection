@@ -2,19 +2,20 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
-import { runInNewContext } from "node:vm";
+import { verifyPitrMarker } from "../../scripts/lib/backup-pitr-sql.mjs";
 
 const read = (path) => readFile(path, "utf8");
 
 test("M07-04 refuses verified recovery before isolated binlog replay exists", async () => {
   const runner = await read("scripts/run-baota-backup-drill.mjs");
-  const guard = runner.match(/throw fail\(\s*"backup_pitr_replay_unverified",[\s\S]*?\n  \);/);
-  assert.ok(guard);
-  assert.ok(guard.index < runner.indexOf("const backupRunId ="));
-  assert.throws(
-    () => runInNewContext(guard[0], { fail: (code) => Object.assign(new Error(code), { code }) }),
-    { code: "backup_pitr_replay_unverified" },
+  assert.ok(
+    runner.indexOf("verifyPitrMarker(markerRows[0]?.marker, requestId)") <
+      runner.indexOf("const backupRunId ="),
   );
+  assert.throws(() => verifyPitrMarker("snapshot", "01234567-0123-0123-0123-0123456789ab"), {
+    code: "backup_pitr_replay_unverified",
+  });
+  verifyPitrMarker("01234567-0123-0123-0123-0123456789ab", "01234567-0123-0123-0123-0123456789ab");
 });
 
 test("M07-04 restore tooling ships with fixed project paths and owns only its cleanup", async () => {
@@ -32,6 +33,7 @@ test("M07-04 restore tooling ships with fixed project paths and owns only its cl
     "config/env.example",
     "config/schema.json",
     "infra/baota/backup-recovery-manifest.json",
+    "scripts/lib/backup-pitr-sql.mjs",
   ]) {
     assert.ok(deployer.includes(`"${file}"`), file);
   }

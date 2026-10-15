@@ -247,6 +247,9 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
     ):
         shutil.copy2(repo / f"scripts/{script}", script_target)
 
+    (script_target / "lib").mkdir()
+    shutil.copy2(repo / "scripts/lib/backup-pitr-sql.mjs", script_target / "lib/backup-pitr-sql.mjs")
+
     for relative in (
         "config/route-catalog.json",
         "config/api-coverage-metadata.json",

@@ -23,7 +23,9 @@ P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs
 
 ## 隔离恢复演练
 
-2026-10-15 执行器证据缺口：当前实现仅导入全量 SQL 并校验封闭 binlog 校验和，尚未执行隔离 binlog 回放；不能据此声明 PITR。执行器在任何 `verified` 记录或成功证据写入前，以 `backup_pitr_replay_unverified` 失败关闭。必须先实现并验证真实回放，才能签发恢复生产门；不得删除此保护以获得通过。
+2026-10-15 PITR 执行链修正：全量导出采用逐行 INSERT，从同一 SQL 快照计算表行数，不把持续变化的在线库行数误当快照。封闭 ROW binlog 使用现有 MySQL 5.7 工具重写到本次临时恢复库；执行前同时校验 SQL 控制语句和二进制 table-map/row-event，仅接受目标临时库，原始 DML/DDL、其他库映射及未知事件失败关闭。快照前创建的专用 `running` 探针在快照后更新，必须通过真实回放恢复更新值；失败仍报 `backup_pitr_replay_unverified`，不写 verified。成功签发前先删除准确探针、临时库和本次明文目录，并验证解密内容哈希。源库不新增表、账号或全局配置；根凭据仍仅从受限文件读取并通过 Unix socket 使用。
+
+有限任务必须额外加载当前 `config/release.env` 中的 `BUILD_SHA`；主环境和备份专用受限环境可由 Node `--env-file` 与脚本既有 `--env-file` 参数组合加载。没有同提交发布身份、快照后探针、行事件范围或清理证据时，生产门拒绝签发。本修正需要下一次固定目录部署更新工具，不要求改变 MySQL 配置；本地单测不代表线上演练已通过。`mysqlbinlog` 的 rewrite-db 对行事件生效，过滤发生在重写之后，见 [MySQL 5.7 官方手册](https://docs.oracle.com/cd/E17952_01/mysql-5.7-en/mysqlbinlog.html)。
 
 至少每季度在当前主机的临时隔离数据库与隔离文件根目录执行：从本机恢复副本取回密文、验证、解密、恢复到新库；核对关键业务表行数和抽样事实、`audit_logs/platform_audit_events` 链、证据 SHA-256、跨组织拒绝；记录实际 RPO/RTO。不得连接生产 Worker/Crawler，不得覆盖生产库或主文件根目录。演练结束后由宝塔任务删除明文隔离库和临时文件，只保留密文及脱敏证据。
 

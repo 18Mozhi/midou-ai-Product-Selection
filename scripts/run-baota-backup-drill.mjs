@@ -2,11 +2,23 @@
 import { createHash, randomUUID } from "node:crypto";
 import { spawn } from "node:child_process";
 import { closeSync, createReadStream, openSync } from "node:fs";
-import { copyFile, mkdir, readFile, readdir, rm, stat, unlink, writeFile } from "node:fs/promises";
+import {
+  copyFile,
+  lstat,
+  mkdir,
+  readFile,
+  readdir,
+  realpath,
+  rm,
+  stat,
+  unlink,
+  writeFile,
+} from "node:fs/promises";
 import { basename, isAbsolute, join, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import mysql from "mysql2/promise";
 import { createBundle, decryptBundle, digestFile, verifyBundle } from "./backup-recovery.mjs";
+import { validatePitrSql, verifyPitrMarker } from "./lib/backup-pitr-sql.mjs";
 
 const args = process.argv.slice(2),
   value = (name) => args[args.indexOf(name) + 1];
@@ -45,7 +57,7 @@ const run = (command, commandArgs, options = {}) =>
         : reject(
             fail(
               "backup_command_failed",
-              `${basename(command)} exited ${code}: ${errorTail.replaceAll(/password\s*=\s*\S+/gi, "password=[redacted]")}`,
+              `${basename(command)} exited ${code}: ${errorTail.match(/ERROR \d+ \([A-Z0-9]+\)/)?.[0] || "command failed; raw stderr suppressed"}`,
             ),
           ),
     );
@@ -89,6 +101,22 @@ async function readMasterCoordinates(dumpPath) {
     lines.close();
   }
   throw fail("backup_master_coordinates_missing", "mysqldump did not embed binary log coordinates");
+}
+
+async function snapshotCountsFromDump(dumpPath, tables) {
+  const counts = Object.fromEntries(tables.map((name) => [name, 0]));
+  const lines = createInterface({
+    input: createReadStream(dumpPath, { encoding: "utf8" }),
+    crlfDelay: Infinity,
+  });
+  for await (const line of lines) {
+    const match = line.match(/^INSERT INTO `((?:``|[^`])+)` VALUES \(/);
+    if (match) {
+      const table = match[1].replaceAll("``", "`");
+      if (Object.hasOwn(counts, table)) counts[table] += 1;
+    }
+  }
+  return counts;
 }
 
 async function ensureMigration(pool, releaseRoot) {
@@ -144,6 +172,7 @@ async function pruneExpired(root, retentionDays, now) {
 let runtime,
   databasePool,
   adminPool,
+  probeId = "",
   restoreDatabase = "",
   drillRoot = "",
   workingRoot = "";
@@ -166,11 +195,27 @@ try {
     )
   )
     throw fail("backup_path_overlap", "backup roots must not overlap");
+  for (const root of roots) {
+    let current = "";
+    for (const part of root.split("/").filter(Boolean)) {
+      current += `/${part}`;
+      const info = await lstat(current).catch((error) => {
+        if (error.code === "ENOENT") return null;
+        throw error;
+      });
+      if (!info) break;
+      if (info.isSymbolicLink())
+        throw fail("backup_path_symlink", "Backup paths must not traverse symbolic links");
+    }
+  }
   await Promise.all([
     mkdir(primaryRoot, { recursive: true, mode: 0o700 }),
     mkdir(copyRoot, { recursive: true, mode: 0o700 }),
     mkdir(drillRoot, { recursive: true, mode: 0o700 }),
   ]);
+  for (const root of roots)
+    if ((await realpath(root)) !== root)
+      throw fail("backup_path_symlink", "Backup path canonical identity changed");
   const mysqlClient = runtime.BACKUP_MYSQL_CLIENT || "/www/server/mysql/bin/mysql",
     dumpClient = runtime.BACKUP_MYSQLDUMP_CLIENT || "/www/server/mysql/bin/mysqldump",
     binlogClient = runtime.BACKUP_MYSQLBINLOG_CLIENT || "/www/server/mysql/bin/mysqlbinlog";
@@ -222,10 +267,15 @@ try {
     );
   const releaseRoot = resolve(runtime.BACKUP_RELEASE_ROOT || process.cwd());
   const migrationStatus = await ensureMigration(databasePool, releaseRoot);
+  if (!/^[a-f0-9]{40}$/.test(runtime.BUILD_SHA || ""))
+    throw fail(
+      "backup_release_identity_missing",
+      "Load the deployed release.env for the finite task",
+    );
   const startedAt = new Date(),
     stamp = iso(startedAt);
   workingRoot = join(drillRoot, `run-${stamp}-${requestId.slice(0, 8)}`);
-  await mkdir(workingRoot, { recursive: true, mode: 0o700 });
+  await mkdir(workingRoot, { mode: 0o700 });
   const sourceCutoffAt = new Date(),
     dumpPath = join(workingRoot, "product_scout.sql");
   const [[binlogPolicy]] = await adminPool.query(
@@ -236,6 +286,17 @@ try {
       "backup_pitr_unavailable",
       "MySQL binary logging and at least one day retention are required",
     );
+  if (binlogPolicy.binlog_format !== "ROW")
+    throw fail(
+      "backup_pitr_row_format_required",
+      "Isolated replay only supports existing ROW binlogs; do not change MySQL configuration",
+    );
+  probeId = randomUUID();
+  await databasePool.query(
+    "INSERT INTO backup_recovery_runs(id,run_type,scope_type,primary_region,recovery_region,status,rpo_target_minutes,rto_target_minutes,started_at,request_id,trace_id,metadata) VALUES(?,'restore_drill','platform','惠州','惠州','running',15,240,?,?,?,?)",
+    [probeId, startedAt, requestId, traceId, JSON.stringify({ pitr_marker: "snapshot" })],
+  );
+  const snapshotTables = Object.keys(await tableCounts(adminPool, db.database));
   await run(
     dumpClient,
     [
@@ -244,6 +305,7 @@ try {
       "--user",
       "root",
       "--single-transaction",
+      "--skip-extended-insert",
       "--master-data=2",
       "--flush-logs",
       "--routines",
@@ -257,6 +319,11 @@ try {
     { env: { ...process.env, MYSQL_PWD: adminPassword } },
   );
   const masterCoordinates = await readMasterCoordinates(dumpPath);
+  const sourceCounts = await snapshotCountsFromDump(dumpPath, snapshotTables);
+  await databasePool.query(
+    "UPDATE backup_recovery_runs SET metadata=? WHERE id=? AND request_id=?",
+    [JSON.stringify({ pitr_marker: requestId }), probeId, requestId],
+  );
   await adminPool.query("FLUSH BINARY LOGS");
   const [binaryLogs] = await adminPool.query("SHOW BINARY LOGS");
   const startIndex = binaryLogs.findIndex((row) => row.Log_name === masterCoordinates.file);
@@ -331,6 +398,11 @@ try {
     );
     restored[asset.kind] = output;
     await decryptBundle({ bundle: asset.copy, output, secret: runtime.BACKUP_ENCRYPTION_KEY });
+    if ((await digestFile(output)) !== asset.plaintextSha256)
+      throw fail(
+        "restore_plaintext_hash_mismatch",
+        "Restored plaintext differs from the encrypted asset manifest",
+      );
   }
   restoreDatabase = `product_scout_restore_m0704_${requestId.replaceAll("-", "").slice(0, 12)}`;
   await adminPool.query(
@@ -338,17 +410,25 @@ try {
   );
   const restoreSqlFd = openSync(restored.mysql_full, "r");
   try {
-    await run(mysqlClient, ["--socket", adminSocket, "--user", "root", restoreDatabase], {
-      env: { ...process.env, MYSQL_PWD: adminPassword },
-      stdio: [restoreSqlFd, "ignore", "pipe"],
-    });
+    await run(
+      mysqlClient,
+      [
+        "--socket",
+        adminSocket,
+        "--user",
+        "root",
+        "--init-command=SET SESSION sql_log_bin=0",
+        restoreDatabase,
+      ],
+      {
+        env: { ...process.env, MYSQL_PWD: adminPassword },
+        stdio: [restoreSqlFd, "ignore", "pipe"],
+      },
+    );
   } finally {
     closeSync(restoreSqlFd);
   }
-  const [sourceCounts, restoreCounts] = await Promise.all([
-    tableCounts(adminPool, db.database),
-    tableCounts(adminPool, restoreDatabase),
-  ]);
+  const restoreCounts = await tableCounts(adminPool, restoreDatabase);
   if (JSON.stringify(sourceCounts) !== JSON.stringify(restoreCounts))
     throw fail(
       "restore_business_data_mismatch",
@@ -362,6 +442,50 @@ try {
       for (const name of closedLogs)
         await run(binlogClient, ["--verify-binlog-checksum", join(target, name)]);
   }
+  const replayPath = join(workingRoot, "isolated-pitr.sql");
+  const replayOutput = openSync(replayPath, "wx", 0o600);
+  try {
+    await run(
+      binlogClient,
+      [
+        "--verify-binlog-checksum",
+        "--disable-log-bin",
+        `--rewrite-db=${db.database}->${restoreDatabase}`,
+        `--database=${restoreDatabase}`,
+        `--start-position=${masterCoordinates.position}`,
+        ...closedLogs.map((name) => join(restoreRoot, "mysql_binlog-files", name)),
+      ],
+      { stdio: ["ignore", replayOutput, "pipe"] },
+    );
+  } finally {
+    closeSync(replayOutput);
+  }
+  if ((await stat(replayPath)).size > 256 * 1024 * 1024)
+    throw fail("backup_pitr_sql_too_large", "Replay SQL exceeds the bounded validation limit");
+  const replayBoundary = validatePitrSql(await readFile(replayPath, "utf8"), restoreDatabase);
+  const replayInput = openSync(replayPath, "r");
+  try {
+    await run(
+      mysqlClient,
+      [
+        "--socket",
+        adminSocket,
+        "--user",
+        "root",
+        "--binary-mode=1",
+        "--init-command=SET SESSION sql_log_bin=0",
+        restoreDatabase,
+      ],
+      { env: { ...process.env, MYSQL_PWD: adminPassword }, stdio: [replayInput, "ignore", "pipe"] },
+    );
+  } finally {
+    closeSync(replayInput);
+  }
+  const [markerRows] = await adminPool.query(
+    `SELECT JSON_UNQUOTE(JSON_EXTRACT(metadata,'$.pitr_marker')) marker FROM ${sqlIdentifier(restoreDatabase)}.backup_recovery_runs WHERE id=? AND request_id=?`,
+    [probeId, requestId],
+  );
+  verifyPitrMarker(markerRows[0]?.marker, requestId);
   const requiredTables = [
     "audit_logs",
     "platform_audit_events",
@@ -394,12 +518,19 @@ try {
     actualRtoMinutes > Number(runtime.BACKUP_RTO_MINUTES || 240)
   )
     throw fail("recovery_objective_missed", "actual RPO or RTO exceeded target");
-  // Checksummed binlogs and a restored full dump do not prove a PITR replay.
-  // Keep the production gate closed before persisting any verified run or assets.
-  throw fail(
-    "backup_pitr_replay_unverified",
-    "Full dump restoration and binlog checksums were checked, but isolated binlog replay is not implemented; no verified recovery record was signed",
+  const [probeCleanup] = await databasePool.query(
+    "DELETE FROM backup_recovery_runs WHERE id=? AND request_id=? AND status='running'",
+    [probeId, requestId],
   );
+  if (probeCleanup.affectedRows !== 1)
+    throw fail("backup_probe_cleanup_failed", "Owned PITR probe cleanup was not confirmed");
+  probeId = "";
+  await adminPool.query(`DROP DATABASE ${sqlIdentifier(restoreDatabase)}`);
+  restoreDatabase = "";
+  if ((await realpath(workingRoot)) !== resolve(workingRoot))
+    throw fail("backup_path_symlink", "Working root canonical identity changed before cleanup");
+  await rm(workingRoot, { recursive: true, force: true });
+  workingRoot = "";
   const backupRunId = randomUUID(),
     drillRunId = randomUUID(),
     runSql =
@@ -460,6 +591,7 @@ try {
   const evidencePath = join(copyRoot, `${stamp}-evidence.json`);
   const result = {
     schemaVersion: 1,
+    releaseCommit: runtime.BUILD_SHA,
     module: "M07-04",
     manager: "baota",
     primaryRegion: "惠州",
@@ -471,6 +603,8 @@ try {
       encrypted: true,
       integrityVerified: true,
       pitrVerified: true,
+      replayBoundary,
+      postSnapshotProbeVerified: true,
       coordinatesEmbedded: true,
       binlogRetentionDays: Number(binlogPolicy.expire_logs_days),
       rpoMinutes: Number(actualRpoMinutes.toFixed(2)),
@@ -497,6 +631,7 @@ try {
     requestId,
     traceId,
     capturedAt: drillFinishedAt.toISOString(),
+    cleanup: { sourceProbeRemoved: true, isolatedDatabaseRemoved: true, plaintextRemoved: true },
   };
   await writeFile(evidencePath, `${JSON.stringify(result, null, 2)}\n`, { mode: 0o600 });
   result.prunedExpiredFiles =
@@ -509,12 +644,32 @@ try {
   );
   process.exitCode = 2;
 } finally {
+  if (probeId && databasePool) {
+    try {
+      await databasePool.query(
+        "DELETE FROM backup_recovery_runs WHERE id=? AND request_id=? AND status='running'",
+        [probeId, requestId],
+      );
+    } catch {
+      process.stderr.write(
+        `${JSON.stringify({ module: "M07-04", code: "backup_probe_cleanup_failed", request_id: requestId })}\n`,
+      );
+      process.exitCode = 2;
+    }
+  }
   if (restoreDatabase && adminPool)
     try {
       await adminPool.query(`DROP DATABASE IF EXISTS ${sqlIdentifier(restoreDatabase)}`);
-    } catch {}
+    } catch {
+      process.stderr.write(
+        `${JSON.stringify({ module: "M07-04", code: "backup_restore_database_cleanup_failed", request_id: requestId })}\n`,
+      );
+      process.exitCode = 2;
+    }
   if (workingRoot && drillRoot && resolve(workingRoot).startsWith(`${resolve(drillRoot)}/run-`)) {
     try {
+      if ((await realpath(workingRoot)) !== resolve(workingRoot))
+        throw fail("backup_path_symlink", "Working root canonical identity changed before cleanup");
       await rm(workingRoot, { recursive: true, force: true });
     } catch {
       process.stderr.write(
