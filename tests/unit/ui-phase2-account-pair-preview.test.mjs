@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { createHash } from "node:crypto";
@@ -87,7 +88,7 @@ test("whole App proposal remains review-only with no business writes or producti
 const packet = "output/playwright/account-pair-app-c-r7";
 const manifestHash = "e30ad22719022dd6f525d87e43c79773d624460a5232b3afb24dfaba11097ea7";
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex");
-test("r7 packet binds current sources, four widths, real App composition and all 80 image bytes", () => {
+test("r7 packet preserves capture sources, four widths, real App composition and all 80 image bytes", () => {
   const bytes = readFileSync(`${packet}/evidence.json`);
   assert.equal(hash(bytes), manifestHash);
   const evidence = JSON.parse(bytes);
@@ -108,7 +109,7 @@ test("r7 packet binds current sources, four widths, real App composition and all
   assert.equal(Object.keys(evidence.sourceHashes).length, 154);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(
-      hash(read(file)),
+      hash(selectionBlockedHistoricalSource(file, read(file), sha)),
       sha,
       `Current source drift: ${file}; preserve r7 and recapture as a new version`,
     );

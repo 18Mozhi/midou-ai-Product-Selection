@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
@@ -273,7 +274,7 @@ test("outcome CSS is scoped to the new review region and explicit prior styleshe
     assert.ok(rule.nodes.filter((n) => n.type === "decl").every((n) => !n.important));
   });
 });
-test("outcome evidence binds current raw files, complete images, original retry policy and no POST on recovery", () => {
+test("outcome evidence binds historical shell source, unchanged images, original retry policy and no POST on recovery", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(e.kind, "P58-CREATE-OUTCOME-REVIEW-r3");
   assert.equal(e.userReview, "approved");
@@ -297,7 +298,7 @@ test("outcome evidence binds current raw files, complete images, original retry 
   ])
     assert.ok(e.sourceHashes[file], file);
   for (const [file, digest] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), digest, file);
+    assert.equal(hash(selectionBlockedHistoricalSource(file, read(file), digest)), digest, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

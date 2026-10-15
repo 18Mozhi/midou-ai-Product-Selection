@@ -95,7 +95,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "7beac32e8309830c99d09eb5eb1d6197a4b84371",
       captured: "107a289ca488e7dfa6e7b6a2d1fa50b740294e5223fd3ab316653c3faf89685f",
-      current: "7a926cf2ced2b4234ab1f360155321ad01c5d32c66bc45cd4926d1f34f1d9faf",
+      current: "ee3863173db351cdf6d434d6509f729c4b84775ae5273d89e319dd7c2a9eae00",
     },
   "apps/web/src/components/use-platform-notification-list.ts#2e697d3a5f53cdfded5335bc693fcd9f7ed1a7d9f8b2dc0a543708269bfdc61b":
     {
