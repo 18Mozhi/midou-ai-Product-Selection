@@ -377,12 +377,20 @@ try {
       output: primary,
       secret: runtime.BACKUP_ENCRYPTION_KEY,
     });
-    await verifyBundle({ bundle: primary, secret: runtime.BACKUP_ENCRYPTION_KEY });
+    await verifyBundle({
+      bundle: primary,
+      secret: runtime.BACKUP_ENCRYPTION_KEY,
+      tempRoot: workingRoot,
+    });
     await copyFile(primary, copy, 0);
     const copyHash = await digestFile(copy);
     if (copyHash !== created.bundleSha256)
       throw fail("backup_copy_integrity_failed", `${item.kind} recovery copy hash mismatch`);
-    await verifyBundle({ bundle: copy, secret: runtime.BACKUP_ENCRYPTION_KEY });
+    await verifyBundle({
+      bundle: copy,
+      secret: runtime.BACKUP_ENCRYPTION_KEY,
+      tempRoot: workingRoot,
+    });
     assets.push({ kind: item.kind, file, primary, copy, ...created });
   }
   const backupFinishedAt = new Date(),

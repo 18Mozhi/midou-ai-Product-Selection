@@ -39,6 +39,8 @@ P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs
 
 ## 故障与回滚
 
+生产有限任务的密文核验明文临时文件也必须位于本次隔离 `workingRoot` 内；`verifyBundle` 的 `tempRoot` 由调用方传入，成功与认证失败均清理其临时目录。独立本地自检仍可使用操作系统临时目录，不改变 CLI 或环境变量。该工具修正需要下次固定目录部署，不影响已经启动并加载旧模块的任务；旧任务产生的明确临时路径需在其结束后核对已自然清理，不得删除来源不明目录。
+
 ### UI 第二阶段 B3a 展示修正
 
 2026-09-15 批次46：页面“快照读取追踪”只归属成功事实，“本次失败读取追踪”只归属当前失败；初次失败也可展开复制编号，401/403移除旧事实及其编号。超时仍使用原本次发送的请求编号，接口和服务契约未改。定向 `node --test tests/unit/backup-trace-ownership.test.mjs` 与 `node scripts/verify-backup-trace-ownership.mjs`，后者使用本地响应与clipboard桩，不写真实剪贴板，不执行恢复。仅Web交付，无新配置/Node重启需求，本轮未部署；范围见 `design-plans/ui-phase-2-2026-09-07/P64-TRACE-OWNERSHIP-BATCH46.md`。
