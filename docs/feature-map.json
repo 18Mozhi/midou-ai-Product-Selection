@@ -2967,7 +2967,9 @@
         "../apps/worker/src/evidence-persistence.ts",
         "../apps/web/src/components/SelectionJourney.vue",
         "../database/migrations/0059_selection_journey_candidates.up.sql",
-        "../scripts/run-baota-selection-acceptance.mjs"
+        "../scripts/run-baota-selection-acceptance.mjs",
+        "../infra/baota/selection-acceptance-manifest.json",
+        "../scripts/deploy-baota.py"
       ],
       "routes": [
         "/opportunities/start",

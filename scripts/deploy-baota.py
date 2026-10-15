@@ -241,6 +241,7 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
         "verify-production-api-coverage.mjs",
         "verify-production-core-e2e.mjs",
         "run-baota-production-acceptance.mjs",
+        "run-baota-selection-acceptance.mjs",
     ):
         shutil.copy2(repo / f"scripts/{script}", script_target)
 
@@ -248,6 +249,7 @@ def build_package(repo: Path, source_identity: dict[str, str], skip_build: bool,
         "config/route-catalog.json",
         "config/api-coverage-metadata.json",
         "infra/baota/production-acceptance-manifest.json",
+        "infra/baota/selection-acceptance-manifest.json",
         "verification/api-operation-evidence.schema.json",
         "docs/openapi.yaml",
     ):

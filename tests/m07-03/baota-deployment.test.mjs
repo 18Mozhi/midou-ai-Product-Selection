@@ -5,6 +5,15 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(path, "utf8");
 
+test("M07-06 finite selection acceptance runner and manifest ship together", async () => {
+  const deployer = await read("scripts/deploy-baota.py");
+  assert.match(deployer, /"run-baota-selection-acceptance\.mjs",/);
+  assert.match(deployer, /"infra\/baota\/selection-acceptance-manifest\.json",/);
+  const runner = await read("scripts/run-baota-selection-acceptance.mjs");
+  assert.match(runner, /infra\/baota\/selection-acceptance-manifest\.json/);
+  assert.doesNotMatch(runner, /from ["']\.\//);
+});
+
 test("M07-03.A01-A05 manifest freezes fixed Node and Python BaoTa targets and healthy state", async () => {
   const manifest = JSON.parse(await read("infra/baota/service-manifest.json"));
   assert.equal(manifest.schemaVersion, 4);
