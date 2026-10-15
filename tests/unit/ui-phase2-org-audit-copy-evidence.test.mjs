@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import { historicalTokenCopySource } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -60,7 +61,10 @@ test("P37 actual current parent/child/browser evidence binds62 checks and exact1
   assert.equal(e.screenshots.length, 16);
   const captureTransform = (file, source) =>
     capturedExportDetailHash(file, historicalTokenCopySource(file, source));
-  for (const [f, sha] of Object.entries(e.sourceHashes)) assert.equal(hash(text(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes)) {
+    if (f === "tests/e2e/m06-01-organization-admin.spec.ts") assertCaptureSource(f, text(f), sha);
+    else assert.equal(hash(text(f)), sha, f);
+  }
   for (const s of e.screenshots) {
     assert.equal(hash(readFileSync(dir + s.file)), s.sha256);
     assert.equal(s.approval, "runtime-observation-not-C-design-approval");

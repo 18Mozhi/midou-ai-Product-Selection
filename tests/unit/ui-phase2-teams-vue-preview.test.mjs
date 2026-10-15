@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -103,7 +104,7 @@ test("P33 current capture binds current sources, screenshots and visual approval
   );
   assert.equal(e.screenshots.length, 34);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(read(file)), sha, file);
+    assertCaptureSource(file, read(file), sha);
   for (const shot of e.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
   assert.equal(e.transformedHashes[teamsVueFile], hash(reviewed));

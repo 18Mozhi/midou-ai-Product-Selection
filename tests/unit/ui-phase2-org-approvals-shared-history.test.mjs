@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertP34HistoricalPacket } from "../../scripts/lib/ui-phase2-p34-packet-history.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -15,7 +16,7 @@ const hash = (text) => createHash("sha256").update(text).digest("hex");
 const evidence = JSON.parse(read("output/playwright/p34-parent-read-states/evidence.json"));
 const current = JSON.parse(read("output/playwright/p34-route-lifecycle-vue-c-r1/evidence.json"));
 
-test("the five legacy manifests and their listed pictures remain immutable", () => {
+test("five legacy packets remain recoverable byte-for-byte and refreshed images are independently bound", () => {
   const packets = {
     "output/playwright/p34-mobile-template-filters":
       "5f8afd90d4e31e1f5ab83ebe8a622c475bb153ad5c870485074535ef5ae47e6b",
@@ -28,12 +29,17 @@ test("the five legacy manifests and their listed pictures remain immutable", () 
     "output/playwright/p34-permission-tone-r2":
       "a8c68010fc27e7998ff14a8d95e9a4d697bc97744c8a622a41cb6473565835c3",
   };
-  for (const [folder, expected] of Object.entries(packets)) {
-    const bytes = readFileSync(folder + "/evidence.json");
-    assert.equal(hash(bytes), expected, folder);
-    for (const image of JSON.parse(bytes).screenshots)
-      assert.equal(hash(readFileSync(folder + "/" + image.file)), image.sha256, image.file);
-  }
+  for (const [folder, expected] of Object.entries(packets))
+    assertP34HistoricalPacket(folder + "/evidence.json", expected);
+});
+
+test("historical packet checks reject a refreshed manifest hash presented as the original", () => {
+  assert.throws(() =>
+    assertP34HistoricalPacket(
+      "output/playwright/p34-parent-read-states/evidence.json",
+      "28809f6617ecec7f77268deaf863e96b3adba228d262adfa9c1d1f79f83f4265",
+    ),
+  );
 });
 
 test("P34 legacy and current shared sources remain exact Git-history revisions", () => {

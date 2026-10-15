@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { assertCaptureSource } from "./lib/ui-phase2-capture-source-compatibility.mjs";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
@@ -462,8 +463,12 @@ export function validateOrgDataBindings(review, inputs) {
     assert.deepEqual(review[key], expected[key], `changed ${key}`);
   assert.deepEqual(review.surfaceReview.inputs, expected.surfaceReview.inputs);
   for (const [key, e] of Object.entries(inputs.external)) {
-    for (const [f, sha] of Object.entries(e.sourceHashes))
-      assert.equal(capturedExportDetailHash(f, text(f)), sha, `${key} stale capture source ${f}`);
+    for (const [f, sha] of Object.entries(e.sourceHashes)) {
+      if (f === "tests/e2e/m06-01-organization-admin.spec.ts")
+        assertCaptureSource(f, text(f), sha, `${key} stale capture source ${f}`);
+      else
+        assert.equal(capturedExportDetailHash(f, text(f)), sha, `${key} stale capture source ${f}`);
+    }
     for (const s of e.screenshots)
       assert.equal(
         hash(readFileSync(`${path.posix.dirname(externalPaths[key])}/${s.file}`)),

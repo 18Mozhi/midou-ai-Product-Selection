@@ -41,13 +41,13 @@ test("UI2-A01 theme preview and restore do not persist density or write preferen
     await route.fulfill({ json: envelope(preference()) });
   });
   await page.goto("/settings/theme");
-  const save = page.getByRole("button", { name: "保存主题", exact: true });
+  const save = page.getByRole("button", { name: "保存主题偏好", exact: true });
   await page.getByRole("radio", { name: /紧凑/ }).click();
   await expect(save).toBeDisabled();
   await page.getByRole("radio", { name: /档案纸/ }).press("Enter");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "aurora-purple");
   await expect(save).toBeEnabled();
-  await page.getByRole("button", { name: "撤销预览" }).click();
+  await page.getByRole("button", { name: "撤销主题预览", exact: true }).click();
   await expect(page.locator("html")).toHaveAttribute("data-theme", "deep-ocean");
   await expect(page.locator("html")).toHaveAttribute("data-density", "compact");
   await expect(save).toBeDisabled();
@@ -75,11 +75,11 @@ test("UI2-A02 theme saves exact versioned payloads and uses the returned revisio
   });
   await page.goto("/settings/theme");
   await page.getByRole("radio", { name: /档案纸/ }).click();
-  await page.getByRole("button", { name: "保存主题", exact: true }).click();
-  await expect(page.getByText("✓ 已保存", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
+  await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
   await page.getByRole("radio", { name: /净页白/ }).click();
-  await page.getByRole("button", { name: "保存主题", exact: true }).click();
-  await expect(page.getByText("✓ 已保存", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
+  await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
   expect(bodies).toEqual([
     { theme: "aurora-purple", expected_version: 5 },
     { theme: "cloud-white", expected_version: 6 },
@@ -118,15 +118,15 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
   });
   await page.goto("/settings/theme");
   await page.getByRole("radio", { name: /档案纸/ }).click();
-  await page.getByRole("button", { name: "保存主题", exact: true }).click();
-  await expect(page.getByText("主题偏好已在其他窗口更新", { exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "保存主题", exact: true })).toHaveCount(0);
+  await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
+  await expect(page.getByText("偏好已在其他窗口更新", { exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "保存主题偏好", exact: true })).toHaveCount(0);
   expect(bodies).toHaveLength(1);
-  await page.getByRole("button", { name: "刷新偏好" }).click();
+  await page.getByRole("button", { name: "重新读取", exact: true }).click();
   await expect(page.getByRole("radio", { name: /净页白/ })).toHaveAttribute("aria-checked", "true");
   await page.getByRole("radio", { name: /档案纸/ }).click();
-  await page.getByRole("button", { name: "保存主题", exact: true }).click();
-  await expect(page.getByText("✓ 已保存", { exact: true })).toBeVisible();
+  await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
+  await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
   expect(bodies).toEqual([
     { theme: "aurora-purple", expected_version: 5 },
     { theme: "aurora-purple", expected_version: 9 },

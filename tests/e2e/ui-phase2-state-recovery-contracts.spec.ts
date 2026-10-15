@@ -139,7 +139,9 @@ for (const stored of ["https://example.invalid/outside", "//example.invalid/outs
       "href",
       "/home",
     );
-    await expect(page.locator(".not-found-path code")).toHaveText("/missing/ui2-recovery");
+    await expect(page.getByRole("region", { name: "页面恢复信息" }).locator("code")).toHaveText(
+      "/missing/ui2-recovery",
+    );
     await expect(page.locator(".not-found-page")).not.toContainText("private-review");
     await expect(page.locator(".not-found-page")).not.toContainText("example.invalid");
     expect(

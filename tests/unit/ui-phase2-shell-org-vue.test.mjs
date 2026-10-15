@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import {
   buildShellOrgFixture,
@@ -78,7 +79,7 @@ test("organization capture binds all current loaded sources and requested images
   assert.match(evidence.sourceCommit, /^[a-f0-9]{40}$/u);
   assert.equal(evidence.sourceSha, hash(JSON.stringify(evidence.sourceHashes)));
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
+    assertCaptureSource(file, await readFile(file, "utf8"), sha);
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

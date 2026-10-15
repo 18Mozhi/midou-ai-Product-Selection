@@ -932,7 +932,8 @@ test("unmatched sourcing search can be reset without showing unrelated detail", 
 
 test("read-only sourcing role sees facts without write controls", async ({ page }) => {
   await setup(page, ["task:read", "sourcing:read"]);
-  await page.goto("/sourcing");
+  // Let the lazy page module finish loading before starting business assertions.
+  await page.goto("/sourcing", { waitUntil: "networkidle" });
   await expect(page.getByText("供应商报价对比历史")).toBeVisible();
   await expect(page.getByRole("button", { name: "发起供应商找货" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "重新采集" })).toHaveCount(0);

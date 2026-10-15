@@ -257,6 +257,13 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await page.getByRole("button", { name: "关注", exact: true }).click();
   await expect(page.getByRole("button", { name: "已关注", exact: true })).toBeVisible();
   await page.keyboard.press("Tab");
+  if ((page.viewportSize()?.width ?? 0) > 1100) {
+    await expect(page.getByRole("button", { name: "创建监控", exact: true })).toBeFocused();
+    // Full-page screenshots otherwise pin the sticky rail at an incidental
+    // scroll offset left by the preceding modal and keyboard interactions.
+    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
+  }
   await expect(page).toHaveScreenshot("m04-01-trends.png", { fullPage: true });
 });
 

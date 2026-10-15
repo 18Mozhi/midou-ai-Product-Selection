@@ -362,7 +362,9 @@ test("UI2-T07 edit preserves assignee and version; delete returns to the origina
   });
 });
 
-test("UI2-T07 closing a pending delete does not lose the submitted target", async ({ page }) => {
+test("UI2-T07 Escape cannot close a pending delete or lose the submitted target", async ({
+  page,
+}) => {
   const observed = await setup(page);
   const writes: { method: string; body: unknown }[] = [];
   const pageErrors: string[] = [];
@@ -393,7 +395,8 @@ test("UI2-T07 closing a pending delete does not lose the submitted target", asyn
   await expect(dialog.locator("button[type=submit]")).toBeDisabled();
 
   await page.keyboard.press("Escape");
-  await expect(dialog).toBeHidden();
+  await expect(dialog).toBeVisible();
+  await expect(dialog.getByLabel("删除原因")).toHaveValue("重复任务已合并");
   await pending!.fulfill({ json: env({ id: taskId, deleted: true }) });
   releaseRoute();
 

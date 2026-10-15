@@ -6,6 +6,7 @@ import { chromium } from "playwright";
 import {
   authorizedRoutesFor,
   readProtectedRouteCatalog,
+  readQuickCreateLinks,
   readRouteCatalogManifest,
   roleRouteMatrix,
 } from "./production-route-catalog.mjs";
@@ -230,13 +231,7 @@ async function verifyQuickActions(profile, session) {
   await page.getByRole("button").filter({ hasText: "创建" }).first().click();
   const dialog = page.getByRole("dialog", { name: "快捷创建" });
   await dialog.waitFor();
-  await dialog.locator('.discovery-results a[href^="/"]').first().waitFor();
-  const links = await dialog.locator('.discovery-results a[href^="/"]').evaluateAll((items) =>
-    items.map((item) => ({
-      href: item.getAttribute("href"),
-      label: item.textContent?.trim() ?? "",
-    })),
-  );
+  const links = await readQuickCreateLinks(dialog);
   assert(
     links.some((item) => item.href === "/tasks?create=1"),
     "member task action missing",

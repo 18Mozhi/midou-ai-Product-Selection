@@ -371,7 +371,7 @@ export const sharedReviewVariants = Object.freeze({
     {
       baseline: "ff46bfe9c620a422d95cab9689489b07fb6b95ea",
       captured: "ed45f8df2572d35492fe289a6de397b861dacee8d552fd9b77bc6bf0934c2dad",
-      current: "e778e82379e814664d85f8ad8862a36da4538db8aad539bfe8444e05d20d4c0e",
+      current: "0b30351050e7b2fe0533aef9ca328fb12f590127b770ff9de3f8f635e213758d",
     },
   "tests/e2e/m03-03-provider-adapter.spec.ts#f189c28a32f3d25bd0686379f9cfa978bd260df6085ea3650b0f1f5bedf28e74":
     {

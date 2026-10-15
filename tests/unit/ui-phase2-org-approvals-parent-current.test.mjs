@@ -7,6 +7,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
+import { assertP34HistoricalPacket } from "../../scripts/lib/ui-phase2-p34-packet-history.mjs";
 import vm from "node:vm";
 import ts from "typescript";
 import {
@@ -84,7 +85,7 @@ test("current-parent unknown and combined flags fail without starting a service"
   }
 });
 
-test("historical P34 evidence and previously reviewed r4 packet remain byte-identical", () => {
+test("historical P34 packets remain byte-identical in Git and refreshed packets keep their own images", () => {
   const historical = {
     "output/playwright/p34-parent-current-c-r2/evidence.json":
       "cbed8b21cdd66f8c102286afb242a04b445ec5a48cff55fed4fbd98fa6ffd9b7",
@@ -101,14 +102,8 @@ test("historical P34 evidence and previously reviewed r4 packet remain byte-iden
     "output/playwright/p34-approvals-vue-c-r4/evidence.json":
       "964863ad52207745c61d701db6dab99c02917d85c59f4cabea6819cc78b430a4",
   };
-  for (const [file, expected] of Object.entries(historical)) {
-    const bytes = readFileSync(file);
-    assert.equal(hash(bytes), expected, file);
-    for (const image of JSON.parse(bytes).screenshots) {
-      const imagePath = file.replace(/evidence\.json$/, image.file);
-      assert.equal(hash(readFileSync(imagePath)), image.sha256, imagePath);
-    }
-  }
+  for (const [file, expected] of Object.entries(historical))
+    assertP34HistoricalPacket(file, expected);
 });
 
 test("parent frame composition changes only a display hook, not error or permission logic", () => {

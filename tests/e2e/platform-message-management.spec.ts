@@ -210,7 +210,7 @@ for (const status of ["draft", "published", "cancelled"]) {
     await expect
       .poll(() => page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth))
       .toBeLessThanOrEqual(1);
-    await expect(page.getByRole("dialog")).toHaveCount(0);
+    await expect(page.getByRole("dialog", { name: "长正文审核通知", exact: true })).toHaveCount(0);
     expect(reads).toBe(1);
     expect(writes).toEqual([]);
   });

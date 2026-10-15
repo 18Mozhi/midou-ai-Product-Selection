@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import ts from "typescript";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { previewOrgRefresh } from "../../scripts/lib/ui-phase2-org-refresh-preview.mjs";
@@ -117,7 +118,7 @@ test("organization read-state packet proves current images, redaction and origin
     ),
   );
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
+    assertCaptureSource(file, await readFile(file, "utf8"), sha);
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

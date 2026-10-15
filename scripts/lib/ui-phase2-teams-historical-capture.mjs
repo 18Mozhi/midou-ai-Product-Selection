@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { parseProviderCaptureBlobs } from "./ui-phase2-provider-historical-capture.mjs";
+import { assertCaptureSource } from "./ui-phase2-capture-source-compatibility.mjs";
 
 const revision = "df4b7263b1684e94e4ecc8d46c856c202fd9ee7b";
 const base = "design-plans/ui-phase-2-2026-09-07/design";
@@ -92,13 +93,15 @@ export function teamsHistoricalCapture(name) {
   };
 }
 
-// Current checks remain separate: every source still matches, except the exact opt-in
-// maximumLength revision. Its default and caller contract is rendered in a separate test.
+// Current checks remain separate: runtime changes use exact audited revisions.
+// The shared compatibility guard also proves the known E2E assertion-only delta;
+// it does not alter capture-time sources, fixtures, images or approval records.
 export function assertTeamsCurrentSources(name, read = (file) => readFileSync(file)) {
   const evidence = JSON.parse(teamsHistoricalCapture(name).manifest);
   for (const [file, capturedHash] of Object.entries(evidence.sourceHashes)) {
-    assert.equal(
-      hash(normalize(read(file))),
+    assertCaptureSource(
+      file,
+      read(file),
       currentSourceHashes[file] ?? capturedHash,
       `Unverified current P33 source: ${file}`,
     );

@@ -1,5 +1,16 @@
 import { readFile } from "node:fs/promises";
 
+export async function readQuickCreateLinks(dialog) {
+  const links = dialog.getByRole("region", { name: "结果区", exact: true }).locator('a[href^="/"]');
+  await links.first().waitFor();
+  return links.evaluateAll((items) =>
+    items.map((item) => ({
+      href: item.getAttribute("href"),
+      label: item.textContent?.trim() ?? "",
+    })),
+  );
+}
+
 export async function readRouteCatalogManifest(file = "config/route-catalog.json") {
   const manifest = JSON.parse(await readFile(file, "utf8"));
   if (manifest?.schemaVersion !== 1 || !Array.isArray(manifest.routes))

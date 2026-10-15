@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -65,13 +66,7 @@ test("P32 control evidence has exact dual-viewport bindings and current image/so
     ],
   );
   for (const [file, sha] of Object.entries(controlsEvidence.sourceHashes))
-    assert.equal(
-      createHash("sha256")
-        .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
-        .digest("hex"),
-      sha,
-      file,
-    );
+    assertCaptureSource(file, readFileSync(file, "utf8"), sha);
   for (const shot of controlsEvidence.screenshots)
     assert.equal(
       createHash("sha256")

@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -14,7 +15,7 @@ const hash = (v) => createHash("sha256").update(v).digest("hex");
 
 test("P29 controls stay linked to current source and exact parent data/controller", () => {
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), expected, file);
+    assertCaptureSource(file, readFileSync(file, "utf8"), expected);
   const html = readFileSync(`${base}/index.html`, "utf8");
   for (const file of ["data.js", "profile.js", "profile.css"])
     assert.ok(html.includes(`../organization-profile-direction-c/${file}`));

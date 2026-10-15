@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
 import { execFileSync } from "node:child_process";
@@ -162,8 +163,7 @@ test("P34 pass-through props and zero child emits are checked against actual SFC
 });
 
 test("P34 implementation evidence and narrow approval records resolve without promoting design packages", () => {
-  const r = build(),
-    sha = (s) => createHash("sha256").update(s.replaceAll("\r\n", "\n")).digest("hex");
+  const r = build();
   for (const ref of r.implementationEvidence) {
     assert.ok(existsSync(`${base}/${ref.review}`));
     const e = JSON.parse(readFileSync(ref.evidence, "utf8"));
@@ -189,7 +189,7 @@ test("P34 implementation evidence and narrow approval records resolve without pr
       const source = ref.asOfCommit
         ? execFileSync("git", ["show", `${ref.asOfCommit}:${f}`], { encoding: "utf8" })
         : readFileSync(f, "utf8");
-      assert.equal(sha(source), h, f);
+      assertCaptureSource(f, source, h);
     }
   }
   for (const file of r.approvalRecords) assert.ok(existsSync(`${base}/${file}`));

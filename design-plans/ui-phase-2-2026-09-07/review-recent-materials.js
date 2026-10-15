@@ -580,7 +580,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "tests/e2e/platform-message-management.spec.ts",
           "expected": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
-          "actual": "e778e82379e814664d85f8ad8862a36da4538db8aad539bfe8444e05d20d4c0e"
+          "actual": "0b30351050e7b2fe0533aef9ca328fb12f590127b770ff9de3f8f635e213758d"
         }
       ],
       "packetImages": 16,
@@ -1159,7 +1159,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "tests/e2e/platform-message-management.spec.ts",
           "expected": "7111e8e7831a20b9a05030018384daa5000d632c9e488330d3cac1ff54d5d239",
-          "actual": "e778e82379e814664d85f8ad8862a36da4538db8aad539bfe8444e05d20d4c0e"
+          "actual": "0b30351050e7b2fe0533aef9ca328fb12f590127b770ff9de3f8f635e213758d"
         }
       ],
       "packetImages": 4,
@@ -2386,7 +2386,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "tests/e2e/m06-01-organization-admin.spec.ts",
           "expected": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-          "actual": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef"
+          "actual": "5c536fabd9fe94c9a51127ab3972fe475f6b8e6c9d8cecea4ab6cc9cb50ea465"
         }
       ],
       "packetImages": 82,
@@ -2995,7 +2995,7 @@ window.SCOUTOPS_PHASE2_RECENT_MATERIALS = {
         {
           "file": "tests/e2e/m06-01-organization-admin.spec.ts",
           "expected": "bd4bc2ba71b29c64ab69dd3238a832e4fa333adc9c32a596befc3428b21a25f4",
-          "actual": "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef"
+          "actual": "5c536fabd9fe94c9a51127ab3972fe475f6b8e6c9d8cecea4ab6cc9cb50ea465"
         }
       ],
       "packetImages": 18,

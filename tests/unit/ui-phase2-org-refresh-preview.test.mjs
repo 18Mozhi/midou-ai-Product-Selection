@@ -3,6 +3,7 @@ import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import ts from "typescript";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { previewOrgSummary } from "../../scripts/lib/ui-phase2-shell-org-fixture.mjs";
@@ -109,7 +110,7 @@ test("refresh current captures bind sources, images, read lifecycle and no write
   assert.equal(evidence.screenshots.length, 14);
   assert.equal(Object.keys(evidence.sourceHashes).length, 130);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash((await readFile(file, "utf8")).replaceAll("\r\n", "\n")), sha, file);
+    assertCaptureSource(file, await readFile(file, "utf8"), sha);
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

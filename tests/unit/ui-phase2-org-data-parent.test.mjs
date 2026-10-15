@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -12,12 +13,12 @@ test("P35 App/parent/child capture and128 images retain exact sources before equ
   assert.equal(e.kind, "P35-PARENT-READ-STATES");
   assert.equal(e.screenshots.length, 128);
   assert.equal(new Set(e.screenshots.map((s) => s.file)).size, 128);
-  for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(
-      capturedExportDetailHash(file, readFileSync(file, "utf8").replaceAll("\r\n", "\n")),
-      sha,
-      file,
-    );
+  for (const [file, sha] of Object.entries(e.sourceHashes)) {
+    const source = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+    if (file === "tests/e2e/m06-01-organization-admin.spec.ts")
+      assertCaptureSource(file, source, sha);
+    else assert.equal(capturedExportDetailHash(file, source), sha, file);
+  }
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.deepEqual(

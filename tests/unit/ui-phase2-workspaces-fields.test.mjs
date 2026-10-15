@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -67,7 +68,7 @@ test("P32 fields cover exact 34 states plus 8 dual-viewport compositions", () =>
 });
 test("P32 field evidence is source-bound and every permanent PNG matches", () => {
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assertCaptureSource(file, readFileSync(file, "utf8"), sha);
   for (const s of evidence.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
   assert.equal(

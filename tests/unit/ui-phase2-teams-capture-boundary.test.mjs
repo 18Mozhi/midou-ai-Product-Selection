@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import {
   teamsHistoricalCapture,
   assertTeamsCurrentSources,
@@ -34,7 +35,7 @@ test("P33 immutable historical packets stay in Git while current packets bind th
     }
     const current = JSON.parse(read(`${base}/design/${name}/evidence.json`));
     for (const [file, sha] of Object.entries(current.sourceHashes)) {
-      assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+      assertCaptureSource(file, readFileSync(file, "utf8"), sha);
       currentSources++;
     }
     for (const shot of current.screenshots) {

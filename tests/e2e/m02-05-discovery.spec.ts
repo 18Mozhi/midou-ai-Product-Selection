@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { readQuickCreateLinks } from "../../scripts/production-route-catalog.mjs";
 
 const navigation = {
   shell: "member",
@@ -172,6 +173,11 @@ test("M02-05.A07/A08/A09/A15 mobile quick create shows authorized entries only",
     "/sourcing?create=1",
   );
   await expect(dialog.getByText("邀请成员")).toHaveCount(0);
+  const productionLinks = await readQuickCreateLinks(dialog);
+  expect(productionLinks.map((link) => link.href)).toEqual([
+    "/tasks?create=1",
+    "/sourcing?create=1",
+  ]);
 
   await page.keyboard.press("Escape");
   await expect(dialog).toBeHidden();

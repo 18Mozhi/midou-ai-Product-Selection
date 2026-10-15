@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -104,7 +105,7 @@ test("P33 evidence rejects drift in source dependencies and all permanent screen
   for (const [file, sha] of Object.entries(historical.sourceHashes))
     assert.equal(hash(capture.source(file)), sha, file);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(readFileSync(file, "utf8").replaceAll("\r\n", "\n")), sha, file);
+    assertCaptureSource(file, readFileSync(file, "utf8"), sha);
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${root}/${s.file}`)), s.sha256, s.file);
 });

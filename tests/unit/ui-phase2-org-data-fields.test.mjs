@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -80,8 +81,10 @@ test("P35 keyboard/reset flows and approval boundary are explicit", () => {
 });
 
 test("P35 new source and image hashes are current and 310 previous PNGs are retained", () => {
-  for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(capturedExportDetailHash(f, text(f)), sha, f);
+  for (const [f, sha] of Object.entries(e.sourceHashes)) {
+    if (f === "tests/e2e/m06-01-organization-admin.spec.ts") assertCaptureSource(f, text(f), sha);
+    else assert.equal(capturedExportDetailHash(f, text(f)), sha, f);
+  }
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   assert.equal(

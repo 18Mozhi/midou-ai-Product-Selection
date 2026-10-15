@@ -1,4 +1,5 @@
 import test from "node:test";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -106,7 +107,7 @@ test("P35 read-only controls do not invent busy/disabled business rules or promo
 
 test("P35 verifier binds current source and new images without overwriting the original 94 images", () => {
   for (const [f, sha] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(readFileSync(f, "utf8").replaceAll("\r\n", "\n")), sha, f);
+    assertCaptureSource(f, readFileSync(f, "utf8"), sha);
   for (const s of evidence.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);
   const base = "design-plans/ui-phase-2-2026-09-07/design/org-data-direction-c";

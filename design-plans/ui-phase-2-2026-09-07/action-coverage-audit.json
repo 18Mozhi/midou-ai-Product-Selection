@@ -574,7 +574,7 @@
     "scripts/verify-ui-phase2-content-c.mjs": "de06af621213c8dbf1e4eb1d1d7eb77b40eef5ea882fa49ca3a772d285aafae2",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P57.json": "8d26797bc2f619681015dbe7992b20428c6278d817c7631a2ead513d6648caef",
     "tests/unit/ui-phase2-p57-action-map.test.mjs": "bc420daf54a31918e530c61375a444145e305aa90622551ec20f29793324960f",
-    "tests/e2e/platform-message-management.spec.ts": "e778e82379e814664d85f8ad8862a36da4538db8aad539bfe8444e05d20d4c0e",
+    "tests/e2e/platform-message-management.spec.ts": "0b30351050e7b2fe0533aef9ca328fb12f590127b770ff9de3f8f635e213758d",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P58.json": "6d70196383b8b39129e54a51eae149996259b8d251a7d38163f7eb192d9acf11",
     "tests/unit/ui-phase2-p58-action-review.test.mjs": "9d8f8c1c97bec57a3f26ebc6aca25f2d0ffb4a87798cfa7173ff1e8557e059f5",
     "design-plans/ui-phase-2-2026-09-07/action-reviews/P59.json": "fe2cc20e36b60d0bf11abb6c32d131d763ecab15377339b6f02b96dec213c228",
