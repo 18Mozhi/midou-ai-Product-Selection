@@ -23,7 +23,9 @@ P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs
 
 ## 隔离恢复演练
 
-2026-10-15 PITR 执行链修正：全量导出采用逐行 INSERT，从同一 SQL 快照计算表行数，不把持续变化的在线库行数误当快照。封闭 ROW binlog 使用现有 MySQL 5.7 工具重写到本次临时恢复库；执行前同时校验 SQL 控制语句和二进制 table-map/row-event，仅接受目标临时库，原始 DML/DDL、其他库映射及未知事件失败关闭。快照前创建的专用 `running` 探针在快照后更新，必须通过真实回放恢复更新值；失败仍报 `backup_pitr_replay_unverified`，不写 verified。成功签发前先删除准确探针、临时库和本次明文目录，并验证解密内容哈希。源库不新增表、账号或全局配置；根凭据仍仅从受限文件读取并通过 Unix socket 使用。
+2026-10-15 PITR 执行链修正：全量导出采用逐行 INSERT，从同一 SQL 快照计算表行数，不把持续变化的在线库行数误当快照。封闭 ROW binlog 先由现有 MySQL 5.7 工具校验原始 CRC 并按源业务库筛选；不使用现场已复现校验异常的原生 `--rewrite-db`。受控转换器验证原始事件 CRC，仅修改 table-map 的库名、事件长度及对应 CRC32，行事件原字节保持不变；转换后再次校验 CRC 与目标临时库。原始 DML/DDL、其他库映射及未知事件失败关闭，只补入真实输出中观测到的会话级 `SET TRANSACTION ISOLATION LEVEL READ COMMITTED` 控制语句。快照前创建的专用 `running` 探针在快照后更新，必须通过真实回放恢复更新值；失败仍报 `backup_pitr_replay_unverified`，不写 verified。成功签发前先删除准确探针、临时库和本次明文目录，并验证解密内容哈希。源库不新增表、账号或全局配置；根凭据仍仅从受限文件读取并通过 Unix socket 使用。
+
+事件布局和 CRC32 依据 [MySQL 5.7 官方事件定义](https://github.com/mysql/mysql-server/blob/5.7/libbinlogevents/include/binlog_event.h) 与 [table-map 定义](https://github.com/mysql/mysql-server/blob/5.7/libbinlogevents/include/rows_event.h)。这是恢复工具内部转换，不升级 MySQL、不调整其配置，也不把原始校验成功而重写失败误报为生产 binlog 损坏。真正执行前需先以现场原始日志完成只读转换及校验预检；本地夹具不是生产恢复通过证据。
 
 有限任务必须额外加载当前 `config/release.env` 中的 `BUILD_SHA`；主环境和备份专用受限环境可由 Node `--env-file` 与脚本既有 `--env-file` 参数组合加载。没有同提交发布身份、快照后探针、行事件范围或清理证据时，生产门拒绝签发。本修正需要下一次固定目录部署更新工具，不要求改变 MySQL 配置；本地单测不代表线上演练已通过。`mysqlbinlog` 的 rewrite-db 对行事件生效，过滤发生在重写之后，见 [MySQL 5.7 官方手册](https://docs.oracle.com/cd/E17952_01/mysql-5.7-en/mysqlbinlog.html)。
 

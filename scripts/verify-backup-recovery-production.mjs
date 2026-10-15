@@ -86,12 +86,16 @@ if (
   evidence.backup?.integrityVerified !== true ||
   evidence.backup?.pitrVerified !== true ||
   evidence.backup?.coordinatesEmbedded !== true ||
+  !Number.isInteger(evidence.backup?.binlogRetentionDays) ||
   evidence.backup?.binlogRetentionDays < 1 ||
+  !Number.isFinite(evidence.backup?.rpoMinutes) ||
+  evidence.backup?.rpoMinutes < 0 ||
   evidence.backup?.rpoMinutes > 15
 )
   fail("backup_objective_unverified", "加密、完整性、PITR 或 RPO 未达标", true);
 if (
   evidence.backup?.postSnapshotProbeVerified !== true ||
+  evidence.backup?.replayBoundary?.eventChecksumsVerified !== true ||
   !Number.isInteger(evidence.backup?.replayBoundary?.rowEvents) ||
   !Number.isInteger(evidence.backup?.replayBoundary?.mapEvents) ||
   evidence.backup?.replayBoundary?.rowEvents < 1 ||
@@ -114,13 +118,15 @@ if (
 const drill = evidence.restoreDrill;
 if (
   drill?.isolated !== true ||
+  !Number.isFinite(drill?.rtoMinutes) ||
+  drill?.rtoMinutes < 0 ||
   drill?.rtoMinutes > 240 ||
   ![
     drill?.businessDataVerified,
     drill?.auditChainVerified,
     drill?.evidenceHashVerified,
     drill?.permissionBoundaryVerified,
-  ].every(Boolean)
+  ].every((value) => value === true)
 )
   fail("isolated_restore_unverified", "隔离恢复检查未全部通过", true);
 const age = Date.now() - Date.parse(evidence.capturedAt);

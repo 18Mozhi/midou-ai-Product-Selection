@@ -18,7 +18,7 @@ import { basename, isAbsolute, join, resolve } from "node:path";
 import { createInterface } from "node:readline";
 import mysql from "mysql2/promise";
 import { createBundle, decryptBundle, digestFile, verifyBundle } from "./backup-recovery.mjs";
-import { validatePitrSql, verifyPitrMarker } from "./lib/backup-pitr-sql.mjs";
+import { validatePitrSql, rewritePitrSql, verifyPitrMarker } from "./lib/backup-pitr-sql.mjs";
 
 const args = process.argv.slice(2),
   value = (name) => args[args.indexOf(name) + 1];
@@ -458,8 +458,7 @@ try {
       [
         "--verify-binlog-checksum",
         "--disable-log-bin",
-        `--rewrite-db=${db.database}->${restoreDatabase}`,
-        `--database=${restoreDatabase}`,
+        `--database=${db.database}`,
         `--start-position=${masterCoordinates.position}`,
         ...closedLogs.map((name) => join(restoreRoot, "mysql_binlog-files", name)),
       ],
@@ -470,7 +469,13 @@ try {
   }
   if ((await stat(replayPath)).size > 256 * 1024 * 1024)
     throw fail("backup_pitr_sql_too_large", "Replay SQL exceeds the bounded validation limit");
-  const replayBoundary = validatePitrSql(await readFile(replayPath, "utf8"), restoreDatabase);
+  const rewrittenReplay = rewritePitrSql(
+    await readFile(replayPath, "utf8"),
+    db.database,
+    restoreDatabase,
+  );
+  const replayBoundary = validatePitrSql(rewrittenReplay.sql, restoreDatabase);
+  await writeFile(replayPath, rewrittenReplay.sql, { mode: 0o600 });
   const replayInput = openSync(replayPath, "r");
   try {
     await run(

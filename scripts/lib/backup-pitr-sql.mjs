@@ -71,20 +71,40 @@ function normalizeSql(source) {
   return result.replace(/^DELIMITER ;\s*$/gm, "");
 }
 
-// mysqlbinlog --rewrite-db rewrites row-event table maps, not arbitrary SQL.
-// Validate both the executable SQL and binary event targets before using root.
-export function validatePitrSql(source, restoreDatabase) {
-  if (!/^product_scout_restore_m0704_[a-f0-9]{12}$/.test(restoreDatabase)) fail();
+const crcTable = Uint32Array.from({ length: 256 }, (_, value) => {
+  let crc = value;
+  for (let bit = 0; bit < 8; bit += 1) crc = (crc >>> 1) ^ (crc & 1 ? 0xedb88320 : 0);
+  return crc >>> 0;
+});
+function crc32(bytes) {
+  let crc = 0xffffffff;
+  for (const value of bytes) crc = (crc >>> 8) ^ crcTable[(crc ^ value) & 255];
+  return (crc ^ 0xffffffff) >>> 0;
+}
+
+// Native 5.7 --rewrite-db can leave stale checksums. Accept only verified
+// original events, rewrite the table-map namespace and recalculate its CRC.
+function processPitrSql(source, inputDatabase, outputDatabase) {
   const sql = normalizeSql(source);
   const tableMaps = new Set();
+  const output = [];
+  let formatSeen = false;
   let rowEvents = 0,
     mapEvents = 0;
   for (const raw of sql.split(";")) {
     const statement = raw.trim();
     if (!statement) continue;
-    if (/^(?:BEGIN|COMMIT|ROLLBACK)$/i.test(statement)) continue;
-    if (statement === `use \`${restoreDatabase}\`` || statement === `USE \`${restoreDatabase}\``)
+    if (
+      /^(?:BEGIN|COMMIT|ROLLBACK)$/i.test(statement) ||
+      /^SET TRANSACTION ISOLATION LEVEL READ COMMITTED$/i.test(statement)
+    ) {
+      output.push(statement);
       continue;
+    }
+    if (statement === `use \`${inputDatabase}\`` || statement === `USE \`${inputDatabase}\``) {
+      output.push(`USE \`${outputDatabase}\``);
+      continue;
+    }
     if (/^SET\s/i.test(statement)) {
       for (const assignment of statement.slice(3).split(",")) {
         const match = assignment.trim().match(/^(?:@@(?:SESSION\.)?|@)?([A-Z_]+)\s*=\s*(.+)$/i);
@@ -96,6 +116,7 @@ export function validatePitrSql(source, restoreDatabase) {
         )
           fail();
       }
+      output.push(statement);
       continue;
     }
     const binary = statement.match(/^BINLOG\s+'([A-Za-z0-9+/=\s]+)'$/);
@@ -103,27 +124,79 @@ export function validatePitrSql(source, restoreDatabase) {
     const encoded = binary[1].replace(/\s/g, "");
     const bytes = Buffer.from(encoded, "base64");
     if (bytes.toString("base64") !== encoded) fail();
+    const events = [];
     let offset = 0;
     while (offset < bytes.length) {
       if (offset + 19 > bytes.length) fail();
       const type = bytes[offset + 4],
         size = bytes.readUInt32LE(offset + 9);
-      if (size < 19 || offset + size > bytes.length) fail();
+      if (size < 23 || offset + size > bytes.length) fail();
       const event = bytes.subarray(offset, offset + size);
-      if (type === 19) {
-        if (size < 30) fail();
+      if (event.readUInt32LE(size - 4) !== crc32(event.subarray(0, size - 4))) fail();
+      let rewritten = event;
+      if (type === 15) {
+        if (
+          size < 100 ||
+          event.readUInt16LE(19) !== 4 ||
+          event[75] !== 19 ||
+          event[94] !== 8 ||
+          event[size - 5] !== 1
+        )
+          fail();
+        formatSeen = true;
+        tableMaps.clear();
+      } else if (type === 19) {
+        if (!formatSeen || size < 34) fail();
         const schemaLength = event[27];
-        if (28 + schemaLength >= size || event[28 + schemaLength] !== 0) fail();
-        if (event.subarray(28, 28 + schemaLength).toString("utf8") !== restoreDatabase) fail();
+        if (28 + schemaLength >= size - 4 || event[28 + schemaLength] !== 0) fail();
+        if (event.subarray(28, 28 + schemaLength).toString("utf8") !== inputDatabase) fail();
         tableMaps.add(event.subarray(19, 25).toString("hex"));
         mapEvents += 1;
+        if (inputDatabase !== outputDatabase) {
+          const name = Buffer.from(outputDatabase, "utf8");
+          rewritten = Buffer.concat([
+            event.subarray(0, 27),
+            Buffer.from([name.length]),
+            name,
+            event.subarray(28 + schemaLength, size - 4),
+            Buffer.alloc(4),
+          ]);
+          rewritten.writeUInt32LE(rewritten.length, 9);
+          rewritten.writeUInt32LE(crc32(rewritten.subarray(0, -4)), rewritten.length - 4);
+        }
       } else if ([23, 24, 25, 30, 31, 32].includes(type)) {
         if (size < 27 || !tableMaps.has(event.subarray(19, 25).toString("hex"))) fail();
         rowEvents += 1;
-      } else if (type !== 15) fail();
+      } else fail();
+      events.push(rewritten);
       offset += size;
     }
+    output.push(`BINLOG '${Buffer.concat(events).toString("base64")}'`);
   }
   if (!mapEvents || !rowEvents) fail();
-  return { mapEvents, rowEvents, targetDatabase: restoreDatabase };
+  return {
+    sql: output.join(";\n") + ";\n",
+    boundary: {
+      mapEvents,
+      rowEvents,
+      targetDatabase: outputDatabase,
+      eventChecksumsVerified: true,
+    },
+  };
+}
+
+export function validatePitrSql(source, restoreDatabase) {
+  if (!/^product_scout_restore_m0704_[a-f0-9]{12}$/.test(restoreDatabase)) fail();
+  return processPitrSql(source, restoreDatabase, restoreDatabase).boundary;
+}
+
+export function rewritePitrSql(source, sourceDatabase, restoreDatabase) {
+  if (
+    sourceDatabase !== "product_scout" ||
+    !/^product_scout_restore_m0704_[a-f0-9]{12}$/.test(restoreDatabase)
+  )
+    fail();
+  const result = processPitrSql(source, sourceDatabase, restoreDatabase);
+  validatePitrSql(result.sql, restoreDatabase);
+  return result;
 }
