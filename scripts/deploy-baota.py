@@ -188,7 +188,7 @@ def rollback_reverify_source(repo: Path, identity: dict[str, str], receipt_path:
 
 def build_historical_rollback(repo: Path, identity: dict[str, str], temp_root: Path) -> Path:
     source = temp_root / "source"
-    subprocess.run(["git", "worktree", "add", "--detach", str(source), identity["local_sha"]], cwd=repo, check=True)
+    subprocess.run(["git", "-c", "core.autocrlf=false", "worktree", "add", "--detach", str(source), identity["local_sha"]], cwd=repo, check=True)
     try:
         subprocess.run([local_npm_executable(), "ci", "--offline", "--ignore-scripts"], cwd=source, check=True)
         subprocess.run([local_npm_executable(), "audit", "--audit-level=moderate"], cwd=source, check=True)
@@ -197,7 +197,23 @@ def build_historical_rollback(repo: Path, identity: dict[str, str], temp_root: P
     finally:
         if source.resolve().parent != temp_root.resolve() or source.name != "source":
             raise RuntimeError("unsafe temporary historical worktree cleanup")
-        subprocess.run(["git", "worktree", "remove", "--force", str(source)], cwd=repo, check=True)
+        for attempt in range(3):
+            result = subprocess.run(["git", "worktree", "remove", "--force", str(source)], cwd=repo, capture_output=True, text=True)
+            if result.returncode == 0:
+                break
+            # Git can unregister first and leave only locked ignored files.
+            # The path is still the exact owned temporary source checked above.
+            if "not a working tree" in result.stderr:
+                try:
+                    if source.exists():
+                        shutil.rmtree(source)
+                    break
+                except OSError:
+                    if attempt == 2:
+                        raise
+            if attempt == 2:
+                raise RuntimeError("temporary historical worktree cleanup failed: " + result.stderr.strip())
+            time.sleep(2)
 
 
 def reverify_same_version(repo: Path, identity: dict[str, str], receipt_path: Path) -> None:

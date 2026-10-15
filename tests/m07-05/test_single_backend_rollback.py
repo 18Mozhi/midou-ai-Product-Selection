@@ -63,7 +63,26 @@ class RollbackTests(unittest.TestCase):
             invoke.side_effect = [Mock(returncode=0), RuntimeError("offline cache miss"), Mock(returncode=0)]
             with self.assertRaisesRegex(RuntimeError, "offline cache miss"):
                 function(Path(temp), dict(local_sha="b" * 40), Path(temp))
+            self.assertEqual(invoke.call_args_list[0].args[0][:4], ["git", "-c", "core.autocrlf=false", "worktree"])
             self.assertEqual(invoke.call_args_list[-1].args[0][:4], ["git", "worktree", "remove", "--force"])
+
+    def test_historical_cleanup_retries_transient_windows_file_locks(self):
+        function = deployer["build_historical_rollback"]
+        with tempfile.TemporaryDirectory() as temp, patch("subprocess.run") as invoke, patch("time.sleep") as wait:
+            invoke.side_effect = [Mock(returncode=0), RuntimeError("offline cache miss"), Mock(returncode=255, stderr="Directory not empty"), Mock(returncode=0)]
+            with self.assertRaisesRegex(RuntimeError, "offline cache miss"):
+                function(Path(temp), dict(local_sha="b" * 40), Path(temp))
+            wait.assert_called_once_with(2)
+
+    def test_historical_cleanup_removes_only_owned_unregistered_leftovers(self):
+        function = deployer["build_historical_rollback"]
+        with tempfile.TemporaryDirectory() as temp, patch("subprocess.run") as invoke:
+            source = Path(temp) / "source"
+            source.mkdir()
+            invoke.side_effect = [Mock(returncode=0), RuntimeError("offline cache miss"), Mock(returncode=128, stderr="is not a working tree")]
+            with self.assertRaisesRegex(RuntimeError, "offline cache miss"):
+                function(Path(temp), dict(local_sha="b" * 40), Path(temp))
+            self.assertFalse(source.exists())
 
     def test_deployment_lock_is_exclusive_and_owner_bound(self):
         with tempfile.TemporaryDirectory(prefix="scoutops-lock-test-") as temp:
