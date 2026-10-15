@@ -5,6 +5,7 @@
   "status":"implementation_ready_production_pending",
   "manager":"baota",
   "mode":"single_host_measured_boundary",
+  "releasePrerequisite":{"module":"M07-05","topology":"single_backend_fixed_directories","realRollbackRequired":true,"candidateInstances":0,"databaseRollback":false,"maximumAgeMinutes":30,"evidenceEnvironment":"CAPACITY_BOUNDARY_RELEASE_EVIDENCE_FILE"},
   "productionRegion":"惠州",
   "planning":{"users":100,"concurrentUsers":{"minimum":5,"maximum":20},"promise":false},
   "measurement":{"stages":[5,10,20],"minimumSecondsPerStage":60,"boundaryRule":"last_passing_stage","publicProbe":"BaoTa Nginx TLS pinned to 127.0.0.1 with production SNI and Host"},

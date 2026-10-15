@@ -19,5 +19,5 @@
     {"id":"M08-06.A16","evidence":"deterministic local threshold queue stale archive recovery rollback and probe cleanup branches without production load or server-device gates"},
     {"id":"M08-06.A17","evidence":"blueprint plan Feature Map OpenAPI env manifest architecture Runbook software completion boundary and rollback synchronized"}
   ],
-  "commands":["npm run build","node --test tests/m08-06/capacity-boundary-closure.test.mjs tests/m08-06/software-completion-contract.test.mjs","node scripts/capture-capacity-boundary-production.mjs --self-test","node scripts/verify-capacity-boundary-production.mjs --preflight","npx playwright test tests/e2e/m08-06-capacity-boundary.spec.ts","npm run verify:docs"]
+  "commands":["npm run build","node --test tests/m08-06/capacity-boundary-closure.test.mjs tests/m08-06/capacity-release-prerequisite.test.mjs tests/m08-06/software-completion-contract.test.mjs","node scripts/capture-capacity-boundary-production.mjs --self-test","node scripts/verify-capacity-boundary-production.mjs --preflight","npx playwright test tests/e2e/m08-06-capacity-boundary.spec.ts","npm run verify:docs"]
 }

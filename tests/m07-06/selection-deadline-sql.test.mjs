@@ -2,9 +2,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { MySqlSelectionJourneyRepository } from "../../apps/api/dist/mysql-selection-journey-repository.js";
 
-function fixture({ expired = true, terminal = false, failEvent = false } = {}) {
+function fixture({ expired = true, terminal = false, failEvent = false, circuit = "closed" } = {}) {
   const calls = [];
   const now = new Date("2026-10-15T16:00:00Z");
+  let journeyState = "accepted";
   const connection = {
     async beginTransaction() {
       calls.push("begin");
@@ -24,7 +25,8 @@ function fixture({ expired = true, terminal = false, failEvent = false } = {}) {
         return [
           [
             {
-              state: "accepted",
+              state: journeyState,
+              circuit_state: circuit,
               deadline_at: new Date(now.getTime() + (expired ? -1 : 1)),
               task_status: terminal ? "succeeded_empty" : "scheduled",
               request_id: "original-request",
@@ -39,6 +41,7 @@ function fixture({ expired = true, terminal = false, failEvent = false } = {}) {
       );
       if (failEvent && sql.startsWith("INSERT INTO selection_journey_events"))
         throw new Error("event unavailable");
+      if (sql.startsWith("UPDATE selection_journeys")) journeyState = "blocked";
       return [{ affectedRows: 1 }];
     },
   };
@@ -52,6 +55,75 @@ function fixture({ expired = true, terminal = false, failEvent = false } = {}) {
   };
   return { repository, input, calls };
 }
+
+test("open source circuit blocks an unexpired journey immediately with its actual reason", async () => {
+  const { repository, input, calls } = fixture({ expired: false, circuit: "open" });
+  await repository.get(input);
+  await repository.get(input);
+  assert.equal(
+    calls.filter((call) => call.sql?.startsWith("INSERT INTO selection_journey_events")).length,
+    1,
+  );
+  const event = calls.find((call) => call.sql?.startsWith("INSERT INTO selection_journey_events"));
+  assert.equal(JSON.parse(event.values[7]).reason, "source_circuit_open");
+  assert.equal(JSON.parse(event.values[7]).deadline_ms, 180000);
+  assert.ok(
+    !calls.some((call) =>
+      /UPDATE (?:collection_tasks|provider_runtime_circuits)/.test(call.sql ?? ""),
+    ),
+  );
+});
+
+test("terminal collection result is not overridden by a subsequently open circuit", async () => {
+  const { repository, input, calls } = fixture({ expired: false, terminal: true, circuit: "open" });
+  await repository.get(input);
+  assert.equal(calls.filter((call) => typeof call === "object").length, 1);
+});
+
+test("persisted block reason and terminal time survive later task errors and an observe decision", async () => {
+  const at = "2026-10-16T01:00:01.000Z";
+  const db = {
+    query: async (sql) => {
+      if (sql.includes("JOIN providers p"))
+        return [
+          [
+            {
+              id: "j",
+              organization_id: "o",
+              workspace_id: "w",
+              task_id: "t",
+              state: "decided",
+              task_status: "retry_scheduled",
+              last_error_code: "later_network_error",
+              created_at: "2026-10-16T01:00:00Z",
+              updated_at: "2026-10-16T01:00:03Z",
+              deadline_at: "2026-10-16T01:03:00Z",
+              available_result_count: 0,
+              blocked_payload: JSON.stringify({ reason: "source_circuit_open", blocked_at: at }),
+            },
+          ],
+        ];
+      if (sql.includes("FROM selection_journey_decisions"))
+        return [
+          [
+            {
+              action: "observe",
+              reason: "观察",
+              actor_id: "member",
+              created_at: "2026-10-16T01:00:02Z",
+            },
+          ],
+        ];
+      return [[]];
+    },
+  };
+  const repository = new MySqlSelectionJourneyRepository(db);
+  const result = await repository.read(db, "j", "o", "w", new Date("2026-10-16T01:00:04Z"));
+  assert.equal(result.state, "decided");
+  assert.equal(result.blocked_reason, "source_circuit_open");
+  assert.equal(result.terminal_at, at);
+  assert.equal(result.within_deadline, true);
+});
 
 test("expired pending journey commits the deadline event and outbox with exact bindings", async () => {
   const { repository, input, calls } = fixture();

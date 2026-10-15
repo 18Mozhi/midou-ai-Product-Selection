@@ -35,6 +35,36 @@ const valid = binary(event(19), event(30));
 const rejects = (sql) =>
   assert.throws(() => validatePitrSql(sql, target), { code: "backup_pitr_sql_unsafe" });
 
+test("PITR supports bounded transaction-local savepoint replay with MySQL semantics", () => {
+  const sql = `BEGIN; SAVEPOINT \`sp_1\`; SAVEPOINT second; ROLLBACK TO SAVEPOINT SP_1;
+    SAVEPOINT second; RELEASE SAVEPOINT second; SAVEPOINT sp_1; ROLLBACK TO sp_1; ${valid} COMMIT;`;
+  assert.equal(validatePitrSql(sql, target).rowEvents, 1);
+  const source = `BEGIN; SAVEPOINT sp; ${binary(event(19, "product_scout"), event(30))} ROLLBACK TO sp; RELEASE SAVEPOINT sp; COMMIT;`;
+  assert.match(rewritePitrSql(source, "product_scout", target).sql, /SAVEPOINT sp/);
+});
+
+test("PITR rejects unknown, expired, malformed and cross-transaction savepoints", () => {
+  for (const control of [
+    "SAVEPOINT sp",
+    "ROLLBACK TO sp",
+    "BEGIN; ROLLBACK TO missing",
+    "BEGIN; SAVEPOINT a; SAVEPOINT b; ROLLBACK TO a; RELEASE SAVEPOINT b",
+    "BEGIN; SAVEPOINT a; RELEASE SAVEPOINT a; ROLLBACK TO a",
+    "BEGIN; SAVEPOINT a; COMMIT; BEGIN; ROLLBACK TO a",
+    "BEGIN; SAVEPOINT a; ROLLBACK; BEGIN; ROLLBACK TO a",
+    "BEGIN; SAVEPOINT `a.b`",
+    "BEGIN; SAVEPOINT @x",
+    "BEGIN; SAVEPOINT 'x'",
+    `BEGIN; SAVEPOINT ${"x".repeat(65)}`,
+    "BEGIN; SAVEPOINT sp extra",
+    "BEGIN; SAVEPOINT sp; DELETE FROM product_scout.users",
+  ])
+    rejects(`${valid} ${control};`);
+  rejects(
+    `${valid} BEGIN; ${Array.from({ length: 1025 }, (_, i) => `SAVEPOINT sp_${i};`).join("")}`,
+  );
+});
+
 test("PITR accepts only row events mapped to the exact isolated database", () => {
   const sql = `/*!50530 SET @@SESSION.PSEUDO_SLAVE_MODE=1*/;\nDELIMITER /*!*/;\n# comment\nSET @@SESSION.SQL_LOG_BIN=0/*!*/;\nBEGIN/*!*/;\n${valid}\nCOMMIT/*!*/;\nDELIMITER ;\n`;
   assert.equal(validatePitrSql(sql, target).rowEvents, 1);

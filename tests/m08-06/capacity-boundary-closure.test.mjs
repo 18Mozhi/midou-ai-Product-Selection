@@ -539,7 +539,8 @@ test("M08-06 BaoTa capacity capture verifies runtime identity without requiring 
   assert.doesNotMatch(source, /git[\s\S]{0,80}rev-parse|execFileSync/);
   assert.match(source, /BUILD_SHA/);
   assert.match(source, /health\/version/);
-  assert.match(source, /status='healthy'/);
+  assert.match(source, /capacityReleasePrerequisite/);
+  assert.doesNotMatch(source, /canary_5|canary_25|canary_100/);
 });
 
 test("M08-06 failed capacity capture preserves schema v1 stage and threshold evidence", async () => {
@@ -570,7 +571,7 @@ test("M08-06 signs only the last passing stage and preserves the failed next-sta
   );
   for (const token of ["boundaryStop", "lastPassingStage", "next_stage_gate_failed"])
     assert.match(source, new RegExp(token));
-  assert.match(verifier, /measuredConcurrentUsers===evidence\.stages\.at/);
+  assert.match(verifier, /measuredConcurrentUsers\s*===\s*evidence\.stages\.at/);
   assert.match(verifier, /boundaryStopValid/);
   assert.match(runbook, /最后通过档位/);
   assert.match(featureMap, /failedNextStage|last passing stage/i);
@@ -692,8 +693,11 @@ test("M08-06 schema v1 accepts ceiling, limited-boundary and blocked evidence on
 test("M08-06 production benchmark transaction has exact MySQL placeholders", async () => {
   const source = await readFile("scripts/capture-capacity-boundary-production.mjs", "utf8"),
     match = source.match(
-      /connection\.query\("(INSERT INTO capacity_boundary_observations[^\"]+)"\s*,\s*\[([^\]]+)\]\)/,
+      /connection\.query\(\s*"(INSERT INTO capacity_boundary_observations[^\"]+)"\s*,\s*\[([^\]]+)\]\s*,?\s*\)/,
     );
   assert.ok(match);
-  assert.equal((match[1].match(/\?/g) ?? []).length, match[2].split(",").length);
+  assert.equal(
+    (match[1].match(/\?/g) ?? []).length,
+    match[2].split(",").filter((v) => v.trim()).length,
+  );
 });

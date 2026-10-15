@@ -1,5 +1,11 @@
 # M07-04 宝塔备份与隔离恢复 Runbook
 
+## 2026-10-16 受限 SAVEPOINT 回放
+
+仅在 `BEGIN` 内接受 `SAVEPOINT`、`ROLLBACK TO [SAVEPOINT]` 与 `RELEASE SAVEPOINT`。名称只允许 ASCII 字母或下划线开头、后续字母/数字/下划线，1–64 字符，可带一对反引号；同一事务最多 1024 个有效名称。回退保留目标并移除之后的保存点，释放必须命中现存名称；事务结束或新 BEGIN 清空名称。未知名称、跨事务引用、表达式、额外参数和所有原先禁止的 SQL 仍失败关闭。ROW 事件 CRC、隔离命名空间和原字节检查不变。
+
+执行 `node --test tests/m07-04/backup-pitr-sql.test.mjs`。固定部署上传后，下一次宝塔有限恢复任务直接读取新版本，无需单独重启 MySQL/Redis；只复用已有密文，不运行新备份。软件回归不代表真实恢复已通过。
+
 P64读取状态（2026-09-15）：沿用原刷新/重新核验，命名标题及busy辅助识别状态，无新设置。`node scripts/verify-backup-read-states.mjs`四组256项/84本地GET，原真实15秒及安全重试不变；`--capture-review rN`当前r2/28图。16相关测试、97默认回归、类型/构建/253预算通过；仅前端语义变更，未来静态包生效，无Node/Python重启，本轮未部署/未提交。真实权限/恢复/保活待验，见P64-READ-STATES-BATCH43.md。
 
 P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs`实际Vue审核宿主97项/双端，默认无文件；`--capture-review rN`独占新目录，当前r3/31图/165来源。全部请求本地拦截，只读展示，不执行备份/恢复；15相关合同通过，不代表真实演练验收。业务script与生产文件/配置未改，无重启要求、未部署/未提交；详情见P64-PAGE-COMPOSITION-BATCH42.md。下文旧备份目录不能覆盖当前AGENTS固定根边界，本次不执行或迁移这些路径。

@@ -7246,7 +7246,7 @@ components:
                 deprecated: true,
                 description: Compatibility alias for the first item in results,
               }
-            blocked_reason: { type: string, nullable: true }
+            blocked_reason: { type: string, nullable: true, description: "Persisted reason; source_circuit_open blocks immediately for an actually open provider circuit. Observe/reject allowed; blocked adoption forbidden." }
             blocked_owner: { type: string, nullable: true }
             blocked_next_step: { type: string, nullable: true }
             timeline:

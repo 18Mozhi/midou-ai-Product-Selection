@@ -89,15 +89,39 @@ function processPitrSql(source, inputDatabase, outputDatabase) {
   const tableMaps = new Set();
   const output = [];
   let formatSeen = false;
+  let inTransaction = false;
+  let savepoints = [];
   let rowEvents = 0,
     mapEvents = 0;
   for (const raw of sql.split(";")) {
     const statement = raw.trim();
     if (!statement) continue;
-    if (
-      /^(?:BEGIN|COMMIT|ROLLBACK)$/i.test(statement) ||
-      /^SET TRANSACTION ISOLATION LEVEL READ COMMITTED$/i.test(statement)
-    ) {
+    if (/^(?:BEGIN|COMMIT|ROLLBACK)$/i.test(statement)) {
+      inTransaction = /^BEGIN$/i.test(statement);
+      savepoints = [];
+      output.push(statement);
+      continue;
+    }
+    const savepoint = statement.match(
+      /^(SAVEPOINT|ROLLBACK TO(?: SAVEPOINT)?|RELEASE SAVEPOINT)\s+(?:`([A-Za-z_][A-Za-z0-9_]{0,63})`|([A-Za-z_][A-Za-z0-9_]{0,63}))$/i,
+    );
+    if (savepoint) {
+      if (!inTransaction) fail();
+      const name = (savepoint[2] ?? savepoint[3]).toLowerCase();
+      const index = savepoints.indexOf(name);
+      if (savepoint[1].toUpperCase() === "SAVEPOINT") {
+        if (index >= 0) savepoints.splice(index, 1);
+        if (savepoints.length >= 1024) fail();
+        savepoints.push(name);
+      } else {
+        if (index < 0) fail();
+        if (/^ROLLBACK/i.test(savepoint[1])) savepoints = savepoints.slice(0, index + 1);
+        else savepoints.splice(index, 1);
+      }
+      output.push(statement);
+      continue;
+    }
+    if (/^SET TRANSACTION ISOLATION LEVEL READ COMMITTED$/i.test(statement)) {
       output.push(statement);
       continue;
     }

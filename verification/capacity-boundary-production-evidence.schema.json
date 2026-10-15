@@ -8,6 +8,7 @@
     "module":{"const":"M08-06"},
     "status":{"enum":["ready","blocked"]},
     "buildSha":{"type":"string","pattern":"^[a-f0-9]{40}$"},
+    "releaseEvidence":{"type":"object","required":["receipt","evidenceSha256"],"properties":{"receipt":{"type":"object"},"evidenceSha256":{"type":"string","pattern":"^[a-f0-9]{64}$"}}},
     "manager":{"const":"baota"},
     "mode":{"const":"single_host_measured_boundary"},
     "region":{"const":"惠州"},

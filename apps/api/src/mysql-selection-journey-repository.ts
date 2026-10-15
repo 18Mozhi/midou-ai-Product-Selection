@@ -242,7 +242,6 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         [randomUUID(), i.actorId, route, i.idempotencyKey, i.journeyId, i.now],
       );
       await c.commit();
-      return (await this.read(this.pool, i.journeyId, i.organizationId, i.workspaceId, i.now))!;
     } catch (error) {
       await c.rollback();
       if (error instanceof SelectionJourneyError) throw error;
@@ -256,14 +255,17 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
     } finally {
       c.release();
     }
+    return (await this.get(i))!;
   }
   async get(i: Parameters<SelectionJourneyRepository["get"]>[0]) {
     const c = await this.pool.getConnection();
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT j.*,t.status task_status FROM selection_journeys j JOIN collection_tasks t ON " +
-          "t.id=j.task_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? LIMIT 1 FOR " +
+        "SELECT j.*,t.status task_status,c.state circuit_state FROM selection_journeys j JOIN collection_tasks t ON " +
+          "t.id=j.task_id AND t.organization_id=j.organization_id AND t.workspace_id=j.workspace_id " +
+          "LEFT JOIN provider_runtime_circuits c ON c.provider_id=j.provider_id " +
+          "WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? LIMIT 1 FOR " +
           "UPDATE",
         [i.journeyId, i.organizationId, i.workspaceId],
       );
@@ -271,13 +273,15 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       if (
         row &&
         ["accepted", "running"].includes(String(row.state)) &&
-        new Date(row.deadline_at).getTime() <= i.now.getTime() &&
+        (row.circuit_state === "open" || new Date(row.deadline_at).getTime() <= i.now.getTime()) &&
         !terminal.has(String(row.task_status))
       ) {
         const eventId = randomUUID(),
           payload = JSON.stringify({
-            reason: "selection_deadline_exceeded",
+            reason:
+              row.circuit_state === "open" ? "source_circuit_open" : "selection_deadline_exceeded",
             deadline_ms: 180000,
+            blocked_at: i.now.toISOString(),
             task_status: row.task_status,
           });
         await c.query(
@@ -361,14 +365,14 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
           409,
           "该真实选品旅程已经完成决策。",
         );
-      if (!terminal.has(String(journey.task_status)))
+      if (journey.state !== "blocked" && !terminal.has(String(journey.task_status)))
         throw new SelectionJourneyError(
           "selection_result_pending",
           409,
           "真实任务仍在处理；保持页面打开并等待结果、空结果或明确受阻状态。",
         );
       const hasResult = Number(journey.available_result_count) > 0;
-      if (!hasResult && i.action === "adopt")
+      if ((!hasResult || journey.state === "blocked") && i.action === "adopt")
         throw new SelectionJourneyError(
           "selection_adopt_without_evidence",
           409,
@@ -586,7 +590,10 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
   ): Promise<SelectionJourneyResult | null> {
     const [journeys, results, decisions, events, verificationTasks] = await Promise.all([
       db.query<RowDataPacket[]>(
-        "SELECT j.*,p.owner_label,t.status task_status,t.coverage_status,t.available_result_count," +
+        "SELECT j.*,p.owner_label,(SELECT e.payload_json FROM selection_journey_events e " +
+          "WHERE e.journey_id=j.id AND e.organization_id=j.organization_id AND e.workspace_id=j.workspace_id " +
+          "AND e.event_type='selection.journey.blocked' ORDER BY e.occurred_at DESC,e.id DESC LIMIT 1) blocked_payload," +
+          "t.status task_status,t.coverage_status,t.available_result_count," +
           "t.last_error_code,t.finished_at FROM selection_journeys j JOIN providers p ON p.id=j.provider_id " +
           "JOIN collection_tasks t ON t.id=j.task_id AND t.organization_id=j.organization_id AND " +
           "t.workspace_id=j.workspace_id WHERE j.id=? AND j.organization_id=? AND j.workspace_id=? " +
@@ -650,7 +657,11 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
         candidates.length > 0,
         Boolean(decision),
       ),
-      terminalAt = row.finished_at ?? results[0][0]?.captured_at ?? null,
+      terminalAt =
+        json(row.blocked_payload ?? null)?.blocked_at ??
+        (row.state === "blocked"
+          ? row.updated_at
+          : (row.finished_at ?? results[0][0]?.captured_at ?? null)),
       end = decision?.created_at ?? terminalAt ?? now,
       elapsed = Math.max(0, new Date(end).getTime() - new Date(row.created_at).getTime());
     const taskEvents = events[0],
@@ -661,8 +672,9 @@ export class MySqlSelectionJourneyRepository implements SelectionJourneyReposito
       parsingAt = iso(first(["parsing", "validating", "persisted"])),
       decisionAt = iso(decision?.created_at ?? terminalAt);
     const blockedReason =
-      taskFailedOrBlocked || derived === "blocked" || derived === "failed"
-        ? (row.last_error_code ??
+      row.blocked_payload || taskFailedOrBlocked || derived === "blocked" || derived === "failed"
+        ? (json(row.blocked_payload ?? null)?.reason ??
+          row.last_error_code ??
           (row.state === "blocked" ? "selection_deadline_exceeded" : String(row.task_status)))
         : null;
     const nextStep =

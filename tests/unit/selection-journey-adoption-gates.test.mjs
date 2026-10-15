@@ -29,7 +29,7 @@ const complete = {
   profit_status: "calculated",
   risk_gate_passed: 1,
 };
-function harness(opportunity, { replay = false } = {}) {
+function harness(opportunity, { replay = false, blocked = false } = {}) {
   const statements = [];
   let commits = 0,
     rollbacks = 0,
@@ -47,8 +47,8 @@ function harness(opportunity, { replay = false } = {}) {
         return [
           [
             {
-              state: "result_ready",
-              task_status: "succeeded",
+              state: blocked ? "blocked" : "result_ready",
+              task_status: blocked ? "retry_scheduled" : "succeeded",
               available_result_count: 1,
               task_id: "task-A",
             },
@@ -69,6 +69,28 @@ function harness(opportunity, { replay = false } = {}) {
     statements,
     counts: () => ({ commits, rollbacks, releases }),
   };
+}
+
+for (const action of ["observe", "reject", "adopt"]) {
+  test(`persisted circuit-blocked journey ${action} preserves safe decision boundary`, async () => {
+    const h = harness(complete, { blocked: true });
+    if (action === "adopt") {
+      await assert.rejects(h.repository.decide({ ...context, action }), {
+        code: "selection_adopt_without_evidence",
+      });
+      assert.equal(
+        h.statements.some(({ sql }) => /^(INSERT|UPDATE)/.test(sql)),
+        false,
+      );
+    } else {
+      await h.repository.decide({ ...context, action });
+      assert.equal(h.counts().commits, 1);
+      assert.equal(
+        h.statements.some(({ sql }) => sql.startsWith("UPDATE opportunities")),
+        false,
+      );
+    }
+  });
 }
 
 for (const [name, row] of [

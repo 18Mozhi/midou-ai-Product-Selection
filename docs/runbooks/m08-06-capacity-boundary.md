@@ -9,19 +9,25 @@
 ## 部署
 
 1. 当前固定目录发布使用 `product_scout` 业务账号执行 `0035_capacity_boundary_m08_06.up.sql`，确认 MySQL 5.7 和三张 `capacity_boundary_*` 表。
-2. 在宝塔 Node API 受限环境同步 `CAPACITY_BOUNDARY_*` 配置；阈值变化必须重新构建、重新完成同提交灰度和容量证据，不能为了通过门禁临时放宽。
+2. 在宝塔 Node API 受限环境同步 `CAPACITY_BOUNDARY_*` 配置；阈值变化必须重新构建、重新完成同提交真实发布／回滚和容量证据，不能为了通过门禁临时放宽。
 3. 只通过宝塔启动既有 `ai选品` Node 项目、`ai选品-python` Python 项目和有限容量任务。不得使用 systemd、独立 PM2、宿主 crontab 或屏外 Docker Compose。
 4. 发布后按当前固定单后端门核验错误率、读写 P95 与异步滞后；任一门失败立即止损，不复用旧提交观察窗。
 5. 同提交容量基线、MySQL live、API、桌面与 390px 旅程、文档和生产证据全部通过后，才能显示实测单机有限边界。
 
 ## 受控基线
 
+2026-10-16 所有者批准发布前置改接 M07-05 现行单后端真实发布／回滚／恢复回执，不再要求旧 5/25/100 灰度记录。全部性能、资源、归档、恢复与审计门保留，不新增候选实例、数据库 down 或数据备份。
+
+固定部署并完成 `--rollback-drill` 后，将本地生成且核验通过的 `single-backend-release-production-evidence.json` 原样上传至 `/www/wwwroot/ai选品/runtime/verification/`，权限 0600；`CAPACITY_BOUNDARY_RELEASE_EVIDENCE_FILE` 默认指向该文件。任务验证同提交、30 分钟内真实三阶段、不同回滚 SHA、单实例、清理和数据库未回退，并交叉核对 TLS 版本/配置指纹与当前迁移。容量输出 `CAPACITY_BOUNDARY_PRODUCTION_EVIDENCE_FILE` 也须指向该固定目录。禁止手写或刷新旧时间。新变量仅由有限任务启动读取，不需单独重启服务。阈值改变后重新发布／回滚及测量，不再执行旧灰度程序。
+
+为保持 HMAC 写探针及外键合同，任务按真实回执追加同构建 `healthy` 发布记录，不创建任何灰度门；request_id/trace_id 属于本次任务。只删除该次发布 ID 下的临时样本并核对零剩余，保留真实发布记录与容量审计。最终证据包含发布回执与哈希；按实际容量捕获时间验证原新鲜度。失败不能签发 ready，缺失回执不能改用旧灰度事实。
+
 - 规划 100 用户、规划并发 5–20 仅用于安排测量；`scripts/capture-capacity-boundary-production.mjs` 固定按 5→10→20 逐档执行，每档不少于 `CAPACITY_BOUNDARY_STAGE_SECONDS=60` 秒，任何门失败即停止扩大，不能通过配置跳过档位。固定并发 5 失败时不签发容量；5 或 10 已通过而下一档失败时，只签发最后通过档位，失败下一档不计入容量。
 - 每个样本必须来自本机宝塔 Nginx TLS，分别记录核心读/写 P95、错误率、异步滞后、归一化负载、可用内存和磁盘。
 - 最新 `production_benchmark` 必须属于当前提交；`observed_at` 按 UTC 写入，并由容量仓储从 MySQL 5.7 `DATETIME(3)` 文本规范化为 UTC ISO 时间，不能受 MySQL `system_time_zone` 或驱动本地时区影响。页面和生产 verifier 会拒绝缺失、未来时间或超过配置时效的证据。
 - 归档与恢复只复用 M08-04 已验证的本机加密目录和隔离恢复库，不使用备用服务器，也不把客户数据移出中国境内。
 
-宝塔有限任务在当前已晋级 release 根目录运行 `node scripts/capture-capacity-boundary-production.mjs --run --env-file <宝塔受限环境文件>`。release 包不要求包含 `.git`；任务以环境中的 40 位 `BUILD_SHA` 为期望值，并通过本机宝塔 Nginx TLS 版本接口和 MySQL `healthy` 发布记录交叉确认同一提交。环境文件必须保持 0600，任务输出只留脱敏指标与 request_id/trace_id；真实数据库密码和签名密钥不得打印。任务开始即把旧证据标为 blocked。固定并发 5 未通过、持久写不匹配、资源门异常或归档/恢复未验证时保留 schema v1 blocked 证据；至少一个档位通过且其持久写、资源门、归档/恢复和事务审计全部通过时，原子签发 schema v1 ready 证据，其中 `measuredConcurrentUsers` 等于最后通过档位，`stages` 只包含连续通过档位，`boundaryStop` 保留规划上限结束或下一档失败的指标与失败码。失败证据必须原子保留已完成档位、原阈值、失败码和失败档位；不得只留下无指标占位、把失败档位算入容量或隐藏停止原因。
+宝塔有限任务在固定 `backend` 目录运行 `node scripts/capture-capacity-boundary-production.mjs --run --env-file <宝塔受限环境文件>`。包不要求包含 `.git`；任务以环境中的 40 位 `BUILD_SHA` 为期望值，通过本机宝塔 Nginx TLS 版本接口、真实单后端回执及 MySQL 当前迁移交叉确认。环境文件必须保持 0600，任务输出只留脱敏指标与 request_id/trace_id；真实数据库密码和签名密钥不得打印。任务开始即把旧证据标为 blocked。固定并发 5 未通过、持久写不匹配、资源门异常或归档/恢复未验证时保留 schema v1 blocked 证据；至少一个档位通过且其持久写、资源门、归档/恢复和事务审计全部通过时，原子签发 schema v1 ready 证据，其中 `measuredConcurrentUsers` 等于最后通过档位，`stages` 只包含连续通过档位，`boundaryStop` 保留规划上限结束或下一档失败的指标与失败码。失败证据必须原子保留已完成档位、原阈值、失败码和失败档位；不得只留下无指标占位、把失败档位算入容量或隐藏停止原因。
 
 ## 告警与降级
 

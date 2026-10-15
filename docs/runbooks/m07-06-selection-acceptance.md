@@ -14,6 +14,8 @@ node scripts/run-baota-selection-acceptance.mjs --production
 
 ## 执行与判定
 
+2026-10-16：创建后的首次读取与后续读取，若真实来源熔断表为 `open` 且采集尚未终结，立即事务写入旅程 `blocked`、原因 `source_circuit_open`、系统事件与 Outbox，不等待 180 秒。重复读取不重复写入；来源后来关闭不撤销已形成终态。原因读取自持久事件，不受稍后采集错误覆盖。允许对受阻旅程继续观察或驳回，禁止采纳；五项质量门、组织范围、幂等、采集重试和 robots 限制不变。需固定部署并由宝塔重启 Node 项目；无迁移、新配置或前端请求结构变化。
+
 超时读取分支必须在同一事务中写入 blocked 状态、`selection.journey.blocked` 系统事件和 Outbox；事件语句使用九个绑定值及两个固定 actor 字面量。SQL 失败必须回滚，不允许只更新状态后忽略审计错误。定向回归：`npm run build:api` 后执行 `node --test tests/m07-06/selection-deadline-sql.test.mjs`。修复随后端运行包部署后由宝塔重启 Node 项目 `ai选品` 生效，不需要迁移、配置或前端改动；仍需重跑真实旅程验收。
 
 1. 先在宝塔确认 Node API、Node Worker、Python Crawler、MySQL、Redis 和网站均健康，当前版本 `/api/v1/health/version` 与发布 commit 一致。

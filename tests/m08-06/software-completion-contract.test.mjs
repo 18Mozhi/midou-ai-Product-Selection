@@ -13,7 +13,7 @@ test("M08-06 software completion excludes server capacity and production evidenc
 
   assert.deepEqual(registry.commands, [
     "npm run build",
-    "node --test tests/m08-06/capacity-boundary-closure.test.mjs tests/m08-06/software-completion-contract.test.mjs",
+    "node --test tests/m08-06/capacity-boundary-closure.test.mjs tests/m08-06/capacity-release-prerequisite.test.mjs tests/m08-06/software-completion-contract.test.mjs",
     "node scripts/capture-capacity-boundary-production.mjs --self-test",
     "node scripts/verify-capacity-boundary-production.mjs --preflight",
     "npx playwright test tests/e2e/m08-06-capacity-boundary.spec.ts",
