@@ -6,6 +6,8 @@ P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs
 
 ## 配置
 
+2026-10-15 固定目录修正：下述早期 `/www/backup/product-scout/` 和面板 data 密码文件说明已被当前合同取代。生产备份三个互不嵌套的目录必须位于 `/www/wwwroot/ai选品/backups/` 内；受限管理员密码文件必须位于 `/www/wwwroot/ai选品/config/` 内，不能提交或打印。部署包包含有限演练脚本、加密库、迁移引导、非秘密配置模板与清单。清理只针对本次创建的 `workingRoot`，不遍历删除其他 `run-*` 目录。部署这些修正后才可更新宝塔任务路径并演练；它们不改变 MySQL 配置或公网访问，不代表恢复已经通过。
+
 在宝塔受限环境配置 `BACKUP_ENCRYPTION_KEY`（至少 32 字符）、`BACKUP_PRIMARY_REGION=惠州`、`BACKUP_RECOVERY_REGION=惠州`、`BACKUP_PRIMARY_ROOT`、`BACKUP_LOCAL_COPY_ROOT` 和 `BACKUP_DRILL_ROOT`。密钥不得复制到命令行历史、日志或仓库。三个根目录都在当前主机、生产必须位于 `/www/backup/product-scout/` 下，且不得互相重叠或与在线证据/导出目录重叠。`BACKUP_MYSQL_CLIENT`、`BACKUP_MYSQLDUMP_CLIENT`、`BACKUP_MYSQLBINLOG_CLIENT`、`BACKUP_MYSQL_SOCKET` 和 `BACKUP_MYSQL_ADMIN_PASSWORD_FILE` 指向宝塔管理的 MySQL 工具、本机 Unix socket 与受限管理员密码文件；启动检查要求 socket 是存在的绝对路径。API 运行和恢复元数据只使用 `product_scout@127.0.0.1` 业务账号；为了让 MySQL 5.7 全量备份嵌入精确 binlog 坐标并验证 PITR，有限备份任务仅通过 Unix socket 从宝塔受限文件读取 `root@localhost` 凭据。该凭据不得进入进程参数、日志、数据库或备份包，禁止新增 `root@127.0.0.1`，也不能授予业务账号全局管理员权限。
 
 ## 宝塔任务

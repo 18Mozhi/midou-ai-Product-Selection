@@ -5,6 +5,26 @@ import { readFile } from "node:fs/promises";
 
 const read = (path) => readFile(path, "utf8");
 
+test("M07-04 restore tooling ships with fixed project paths and owns only its cleanup", async () => {
+  const runner = await read("scripts/run-baota-backup-drill.mjs");
+  const deployer = await read("scripts/deploy-baota.py");
+  assert.match(runner, /\/www\/wwwroot\/ai选品\/backups\//);
+  assert.match(runner, /\/www\/wwwroot\/ai选品\/config\//);
+  assert.doesNotMatch(runner, /\/www\/backup\/product-scout\//);
+  assert.doesNotMatch(runner, /entries\.filter\(\(name\) => name\.startsWith\("run-"\)/);
+  assert.match(runner, /await rm\(workingRoot,/);
+  for (const file of [
+    "run-baota-backup-drill.mjs",
+    "backup-recovery.mjs",
+    "database/bootstrap/schema_migrations.sql",
+    "config/env.example",
+    "config/schema.json",
+    "infra/baota/backup-recovery-manifest.json",
+  ]) {
+    assert.ok(deployer.includes(`"${file}"`), file);
+  }
+});
+
 test("M07-04.A01-A05 freezes encrypted S0 backup and isolated restore contracts", async () => {
   const manifest = JSON.parse(await read("infra/baota/backup-recovery-manifest.json"));
   assert.equal(manifest.schemaVersion, 1);
