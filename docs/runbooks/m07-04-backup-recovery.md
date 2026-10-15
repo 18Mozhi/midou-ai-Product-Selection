@@ -23,6 +23,8 @@ P64本地UI审核（2026-09-15）：`node scripts/verify-backup-page-preview.mjs
 
 ## 隔离恢复演练
 
+2026-10-15 执行器证据缺口：当前实现仅导入全量 SQL 并校验封闭 binlog 校验和，尚未执行隔离 binlog 回放；不能据此声明 PITR。执行器在任何 `verified` 记录或成功证据写入前，以 `backup_pitr_replay_unverified` 失败关闭。必须先实现并验证真实回放，才能签发恢复生产门；不得删除此保护以获得通过。
+
 至少每季度在当前主机的临时隔离数据库与隔离文件根目录执行：从本机恢复副本取回密文、验证、解密、恢复到新库；核对关键业务表行数和抽样事实、`audit_logs/platform_audit_events` 链、证据 SHA-256、跨组织拒绝；记录实际 RPO/RTO。不得连接生产 Worker/Crawler，不得覆盖生产库或主文件根目录。演练结束后由宝塔任务删除明文隔离库和临时文件，只保留密文及脱敏证据。
 
 最小本地验证：`node scripts/backup-recovery.mjs --self-test`；MySQL 5.7 集成：`node scripts/verify-backup-recovery-live.mjs`；生产门：`node scripts/verify-backup-recovery-production.mjs --production`。MySQL 集成探针先读取现有恢复记录的最大开始时间，再在其后构造两条随机 ID 探针记录并按 ID 清理，防止真实生产演练覆盖 fail-closed 状态断言；不得为验收改写或删除既有生产备份记录。生产证据放在 Git 忽略的 `.artifacts/verification/backup-recovery-production-evidence.json`。

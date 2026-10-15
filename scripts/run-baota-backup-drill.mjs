@@ -394,6 +394,12 @@ try {
     actualRtoMinutes > Number(runtime.BACKUP_RTO_MINUTES || 240)
   )
     throw fail("recovery_objective_missed", "actual RPO or RTO exceeded target");
+  // Checksummed binlogs and a restored full dump do not prove a PITR replay.
+  // Keep the production gate closed before persisting any verified run or assets.
+  throw fail(
+    "backup_pitr_replay_unverified",
+    "Full dump restoration and binlog checksums were checked, but isolated binlog replay is not implemented; no verified recovery record was signed",
+  );
   const backupRunId = randomUUID(),
     drillRunId = randomUUID(),
     runSql =

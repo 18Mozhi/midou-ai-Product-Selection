@@ -2,8 +2,20 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { readFile } from "node:fs/promises";
+import { runInNewContext } from "node:vm";
 
 const read = (path) => readFile(path, "utf8");
+
+test("M07-04 refuses verified recovery before isolated binlog replay exists", async () => {
+  const runner = await read("scripts/run-baota-backup-drill.mjs");
+  const guard = runner.match(/throw fail\(\s*"backup_pitr_replay_unverified",[\s\S]*?\n  \);/);
+  assert.ok(guard);
+  assert.ok(guard.index < runner.indexOf("const backupRunId ="));
+  assert.throws(
+    () => runInNewContext(guard[0], { fail: (code) => Object.assign(new Error(code), { code }) }),
+    { code: "backup_pitr_replay_unverified" },
+  );
+});
 
 test("M07-04 restore tooling ships with fixed project paths and owns only its cleanup", async () => {
   const runner = await read("scripts/run-baota-backup-drill.mjs");
