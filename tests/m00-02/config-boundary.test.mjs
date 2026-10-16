@@ -70,3 +70,24 @@ test("M00-02.A05/A16 worker and crawler startup sources call validated loaders",
   assert.match(await readFile("apps/worker/src/index.ts", "utf8"), /loadRuntimeConfig/);
   assert.match(await readFile("apps/crawler/scoutops_crawler/__main__.py", "utf8"), /load_config/);
 });
+
+test("periodic competitor refresh interval has a server-only bounded default", () => {
+  assert.equal(
+    loadRuntimeConfig({ NODE_ENV: "test" }, "worker").competitorMonitor.refreshIntervalSeconds,
+    3600,
+  );
+  assert.equal(
+    loadRuntimeConfig({ NODE_ENV: "test", COMPETITOR_REFRESH_INTERVAL_SECONDS: "300" }, "worker")
+      .competitorMonitor.refreshIntervalSeconds,
+    300,
+  );
+  for (const value of ["0", "299", "604801", "bad"])
+    assert.throws(
+      () =>
+        loadRuntimeConfig(
+          { NODE_ENV: "test", COMPETITOR_REFRESH_INTERVAL_SECONDS: value },
+          "worker",
+        ),
+      (e) => e instanceof ConfigError && e.key === "COMPETITOR_REFRESH_INTERVAL_SECONDS",
+    );
+});

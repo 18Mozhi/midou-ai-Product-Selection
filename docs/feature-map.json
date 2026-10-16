@@ -1,4 +1,20 @@
 {
+  "selectionProductRefresh20261017": {
+    "status": "implemented",
+    "statusDetail": "110_related_checks_and_mysql57_readonly_query_passed_not_deployed",
+    "requirements": "docs/selection-product-refresh.md",
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/trend-projection-worker.ts",
+      "apps/worker/src/index.ts",
+      "packages/config/src/index.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/m00-02/config-boundary.test.mjs"
+    ],
+    "contract": "Periodic same-scope active primary/competitor detail refresh via existing queue, bounded interval, per-organization active-task exclusion, existing global backlog and recent-request cooldown. No source enablement, new API, migration or production writes."
+  },
   "selectionPrimaryDetailScoring20261017": {
     "status": "implemented",
     "statusDetail": "98_related_checks_and_mysql57_readonly_passed_not_deployed",

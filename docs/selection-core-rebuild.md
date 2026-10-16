@@ -54,3 +54,5 @@
 最小验证：Web 类型检查；API/Worker/Config 编译；`tests/unit/lan-1688-image-search.test.mjs`；原有自动评分/核心采集回归。浏览器验证：`node scripts/run-playwright-projects.mjs tests/e2e/m04-02-opportunities.spec.ts --grep 'commerce catalogue|failed product image'`，覆盖桌面和 390px 手机的图卡/列表切换、详情链接、无横向溢出和图片缺失状态。后续需要完整视觉与端到端链路验证，不能以这些定向测试代替。
 
 当前定向及样式/采集/找货回归共 114 项通过；成员、组织后台、平台后台的桌面/手机导航另有独立浏览器回归。Web/Backend 构建、静态分析、文档/路由地图与前端包体门禁通过。截图是实际 Vue 测试夹具的临时渲染检查，已用于修复标题对比度，不属于生产数据验收或最终视觉签收。测试服务由 Playwright 退出时停止，临时截图不作为交付物保留。
+
+- 主品与竞品详情已补周期刷新，复用采集队列、冷却与积压限制；见 `docs/selection-product-refresh.md`。未部署，真实持续更新仍未验收。

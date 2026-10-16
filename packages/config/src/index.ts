@@ -203,7 +203,7 @@ export interface RuntimeConfig {
   opportunities: { refreshPollMs: number; refreshLeaseSeconds: number };
   scoring: { pollMs: number; leaseSeconds: number };
   profit: { pollMs: number; leaseSeconds: number };
-  competitorMonitor: { pollMs: number; leaseSeconds: number };
+  competitorMonitor: { pollMs: number; leaseSeconds: number; refreshIntervalSeconds: number };
   sourcing: { pollMs: number; leaseSeconds: number };
   businessTasks: { pollMs: number; leaseSeconds: number };
   approvals: { escalationPollMs: number; escalationLeaseSeconds: number };
@@ -705,6 +705,13 @@ export function loadRuntimeConfig(
     competitorMonitor: {
       pollMs: integer(env, "COMPETITOR_MONITOR_POLL_MS", 2000, 250, 60000),
       leaseSeconds: integer(env, "COMPETITOR_MONITOR_LEASE_SECONDS", 120, 30, 3600),
+      refreshIntervalSeconds: integer(
+        env,
+        "COMPETITOR_REFRESH_INTERVAL_SECONDS",
+        3600,
+        300,
+        604800,
+      ),
     },
     sourcing: {
       pollMs: integer(env, "SOURCING_PROJECTION_POLL_MS", 2000, 250, 60000),

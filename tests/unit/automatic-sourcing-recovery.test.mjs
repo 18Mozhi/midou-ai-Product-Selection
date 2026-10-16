@@ -15,7 +15,7 @@ const row = {
   primary_image_url: image,
 };
 
-function setup(rows, providers = [{ id: "lan", code: "1688_search" }]) {
+function setup(rows, providers = [{ id: "lan", code: "1688_search" }], refreshRows = []) {
   const calls = [],
     tasks = [];
   const connection = {
@@ -27,6 +27,7 @@ function setup(rows, providers = [{ id: "lan", code: "1688_search" }]) {
       calls.push([sql, values]);
       if (sql.startsWith("SELECT id,code FROM providers")) return [providers];
       if (sql.startsWith("SELECT o.id opportunity_id")) return [rows];
+      if (sql.startsWith("SELECT c.id,c.organization_id")) return [refreshRows];
       if (sql.startsWith("UPDATE sourcing_searches")) return [{ affectedRows: 1 }];
       throw new Error(`unexpected query: ${sql}`);
     },
@@ -176,4 +177,86 @@ test("first automatic sourcing also uses only 1688 and preserves a missing-image
       assert.ok(JSON.parse(update[1][0]).includes("image_url"));
     }
   }
+});
+
+const refreshRow = {
+  id: "competitor-1",
+  organization_id: "org-1",
+  workspace_id: "workspace-1",
+  created_by: "user-1",
+  external_id: "B000000001",
+  product_url: "https://www.amazon.com/dp/B000000001",
+};
+test("stale primary or competitor refresh uses the existing detail queue with scoped cooldown and backpressure", async () => {
+  const { worker, calls, tasks } = setup(
+    [],
+    [{ id: "amazon", code: "amazon_product" }],
+    [refreshRow],
+  );
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(tasks.length, 1);
+  assert.deepEqual(tasks[0].queries, [
+    {
+      providerId: "amazon",
+      required: true,
+      target: {
+        page_url: refreshRow.product_url,
+        asin: refreshRow.external_id,
+        projection_type: "competitor_snapshot",
+        competitor_id: refreshRow.id,
+      },
+    },
+  ]);
+  assert.equal(tasks[0].context.organizationId, "org-1");
+  assert.equal(tasks[0].context.workspaceId, "workspace-1");
+  const read = calls.find(([sql]) => sql.startsWith("SELECT c.id,c.organization_id"));
+  assert.deepEqual(read[1], [
+    new Date("2026-10-16T23:00:00Z"),
+    new Date("2026-10-16T23:00:00Z"),
+    1000,
+  ]);
+  assert.match(
+    read[0],
+    /s\.organization_id=c\.organization_id AND s\.workspace_id=c\.workspace_id/,
+  );
+  assert.match(read[0], /busy\.organization_id=c\.organization_id/);
+  assert.match(
+    read[0],
+    /recent\.organization_id=c\.organization_id AND recent\.workspace_id=c\.workspace_id/,
+  );
+  assert.match(read[0], /q\.created_at>\?/);
+  assert.match(read[0], /ORDER BY s\.captured_at,c\.id LIMIT 1 FOR UPDATE/);
+  assert.deepEqual(calls.slice(-2), [["commit"], ["release"]]);
+});
+test("missing downstream work is served before periodic refresh", async () => {
+  const { worker, calls } = setup(
+    [row],
+    [
+      { id: "amazon", code: "amazon_product" },
+      { id: "lan", code: "1688_search" },
+    ],
+    [refreshRow],
+  );
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(
+    calls.some(([sql]) => sql.startsWith("SELECT c.id,c.organization_id")),
+    false,
+  );
+});
+test("refresh queue failure rolls back atomically", async () => {
+  const { worker, calls } = setup([], [{ id: "amazon", code: "amazon_product" }], [refreshRow]);
+  worker.scheduleCoreCollection = async () => {
+    throw Error("queue unavailable");
+  };
+  await assert.rejects(worker.enqueueMissingAutomaticDownstream(), /queue unavailable/);
+  assert.deepEqual(calls.slice(-2), [["rollback"], ["release"]]);
+});
+test("refresh defensively rejects a different Amazon product identity", async () => {
+  const { worker, tasks } = setup(
+    [],
+    [{ id: "amazon", code: "amazon_product" }],
+    [{ ...refreshRow, product_url: "https://www.amazon.com/dp/B000000002" }],
+  );
+  await worker.enqueueMissingAutomaticDownstream();
+  assert.equal(tasks.length, 0);
 });

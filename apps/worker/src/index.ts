@@ -94,6 +94,8 @@ const trendProjection = new MySqlTrendProjectionWorker(
     config.ai.apiKey,
     config.ai.timeoutMs,
   ),
+  config.competitorMonitor.refreshIntervalSeconds,
+  config.automaticSources.queueBacklogLimit,
 );
 const opportunityRefresh = new MySqlOpportunityRefreshWorker(
   pool,

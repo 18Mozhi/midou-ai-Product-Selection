@@ -466,7 +466,12 @@ test("automatic downstream tasks use crawler contracts and recover malformed his
   assert.match(worker, /GROUP BY q\.organization_id,q\.workspace_id,search_id/);
   assert.match(worker, /cq\.organization_id=o\.organization_id/);
   assert.match(worker, /sq\.organization_id=o\.organization_id/);
-  assert.doesNotMatch(worker, /NOT EXISTS \([\s\S]*FROM collection_subqueries q/);
+  // The historical repair scan retains its pre-aggregated joins. Periodic
+  // refresh has a separate bounded cooldown lookup, not that legacy scan.
+  const repair = worker
+    .split("async enqueueMissingAutomaticDownstream()")[1]
+    .split("private async enqueueDueCompetitorRefresh")[0];
+  assert.doesNotMatch(repair, /NOT EXISTS \([\s\S]*FROM collection_subqueries q/);
   assert.match(worker, /JSON_EXTRACT\(q\.target_json,'\$\.page_url'\).*IS NOT NULL/s);
   assert.match(
     worker,

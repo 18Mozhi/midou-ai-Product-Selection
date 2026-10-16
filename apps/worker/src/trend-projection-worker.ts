@@ -41,8 +41,16 @@ export class MySqlTrendProjectionWorker {
     private readonly leaseSeconds: number,
     private readonly now: () => Date = () => new Date(),
     private readonly intelligence?: IntelligenceProductClassifier,
+    refreshIntervalSeconds = 3600,
+    queueBacklogLimit = 1000,
   ) {
-    this.persistence = new TrendProjectionPersistence(pool, workerId, now);
+    this.persistence = new TrendProjectionPersistence(
+      pool,
+      workerId,
+      now,
+      refreshIntervalSeconds,
+      queueBacklogLimit,
+    );
   }
 
   async processOnce(): Promise<TrendProjectionResult> {

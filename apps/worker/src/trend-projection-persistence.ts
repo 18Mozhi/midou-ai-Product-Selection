@@ -20,6 +20,8 @@ export class TrendProjectionPersistence {
     private readonly pool: Pool,
     private readonly workerId: string,
     private readonly now: () => Date,
+    private readonly refreshIntervalSeconds = 3600,
+    private readonly queueBacklogLimit = 1000,
   ) {
     this.alerts = new TrendProjectionAlerts(workerId, now);
   }
@@ -381,6 +383,8 @@ export class TrendProjectionPersistence {
           scheduledSearches.add(searchKey);
         }
       }
+      if (!rows.length && providers.amazon)
+        await this.enqueueDueCompetitorRefresh(c, providers.amazon, now);
       await c.commit();
     } catch (error) {
       await c.rollback();
@@ -388,6 +392,64 @@ export class TrendProjectionPersistence {
     } finally {
       c.release();
     }
+  }
+
+  private async enqueueDueCompetitorRefresh(c: PoolConnection, providerId: string, now: Date) {
+    const before = new Date(now.getTime() - this.refreshIntervalSeconds * 1000);
+    const [rows] = await c.query<RowDataPacket[]>(
+      `SELECT c.id,c.organization_id,c.workspace_id,c.external_id,c.product_url,o.created_by
+       FROM competitors c JOIN opportunities o ON o.id=c.opportunity_id
+         AND o.organization_id=c.organization_id AND o.workspace_id=c.workspace_id
+       JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id AND s.competitor_id=c.id
+         AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id
+       LEFT JOIN (SELECT organization_id,COUNT(*) active_count FROM collection_tasks
+         WHERE status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited')
+         GROUP BY organization_id) busy ON busy.organization_id=c.organization_id
+       LEFT JOIN (SELECT q.organization_id,q.workspace_id,
+         JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id')) competitor_id
+         FROM collection_subqueries q WHERE q.created_at>?
+         AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='competitor_snapshot'
+         GROUP BY q.organization_id,q.workspace_id,competitor_id) recent
+         ON recent.organization_id=c.organization_id AND recent.workspace_id=c.workspace_id
+         AND recent.competitor_id=CONVERT(c.id USING utf8mb4) COLLATE utf8mb4_bin
+       WHERE c.status='active' AND c.deleted_at IS NULL AND c.source_site='Amazon'
+         AND c.external_id REGEXP '^[A-Z0-9]{10}$'
+         AND c.product_url REGEXP CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',c.external_id,'([/?#]|$)')
+         AND o.source_type='trend_topic' AND o.lifecycle_status NOT IN ('archived','deleted')
+         AND s.captured_at<=?
+         AND (SELECT COUNT(*) FROM collection_tasks backlog
+           WHERE backlog.status IN ('scheduled','queued','leased','running','parsing','validating','retry_scheduled','rate_limited'))<?
+         AND busy.active_count IS NULL AND recent.competitor_id IS NULL
+       ORDER BY s.captured_at,c.id LIMIT 1 FOR UPDATE`,
+      [before, before, this.queueBacklogLimit],
+    );
+    const row = rows[0];
+    if (!row || !amazonAsin({ asin: row.external_id }, String(row.product_url))) return;
+    await this.scheduleCoreCollection(
+      c,
+      {
+        organizationId: String(row.organization_id),
+        workspaceId: String(row.workspace_id),
+        actorId: String(row.created_by),
+        requestId: `auto-refresh-${randomUUID()}`,
+        traceId: `auto-refresh-${String(row.id)}`,
+      },
+      randomUUID(),
+      [
+        {
+          providerId,
+          required: true,
+          target: {
+            page_url: String(row.product_url),
+            asin: String(row.external_id),
+            projection_type: "competitor_snapshot",
+            competitor_id: String(row.id),
+          },
+        },
+      ],
+      "competitor.collection.auto_scheduled",
+      now,
+    );
   }
 
   private async downstreamProviders(c: PoolConnection) {
