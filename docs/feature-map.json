@@ -1,4 +1,10 @@
 {
+  "selectionRuntimePreparation20261017": {
+    "status": "implemented",
+    "statusDetail": "restricted_lan_authorization_saved_six_nodes_and_synthetic_model_probe_passed_not_deployed",
+    "requirements": "docs/selection-runtime-preparation.md",
+    "contract": "Production restricted environment now contains supplied LAN authorization with original ownership and permissions retained. Six fixed-node read probes passed; existing model defaults verified with models list and synthetic association/relevance requests. No source enablement, restart, deployment, database writes or historical replay. Secret value and raw responses are never committed."
+  },
   "selectionHomeLayout20261017": {
     "status": "implemented",
     "statusDetail": "79_related_checks_and_24_browser_cases_passed_not_deployed",
