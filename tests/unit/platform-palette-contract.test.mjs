@@ -177,7 +177,7 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
     ].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 25);
+  assert.equal(names.size, 23);
   assert.equal(declarations.length, names.size, "no duplicate palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),

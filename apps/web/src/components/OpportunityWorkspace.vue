@@ -27,7 +27,7 @@ const OpportunityWorkspaceDialogs = defineAsyncComponent(
 import { createOpportunityWorkspaceForms } from "./opportunity-workspace-forms";
 import UiStatePanel from "./UiStatePanel.vue";
 import AuditedReasonDialog from "./AuditedReasonDialog.vue";
-import { durationLabel, statusLabel } from "../ui/status-labels";
+import SelectionProductHeader from "./SelectionProductHeader.vue";
 import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
@@ -716,7 +716,6 @@ useOpportunityWorkspaceLifecycle({
     </header>
     <nav v-else class="opportunity-detail-return" aria-label="机会详情返回路径">
       <RouterLink :to="returnPath">← 返回来源列表</RouterLink>
-      <span>机会详情</span>
     </nav>
     <p v-if="message" class="opportunity-message" role="status">
       {{ message }} <code v-if="requestId">{{ requestId }}</code>
@@ -757,28 +756,9 @@ useOpportunityWorkspaceLifecycle({
         @secondary="returnToOpportunityList"
       />
       <article v-else class="opportunity-detail opportunity-detail--c">
-        <OpportunityDetailNavigation :active-tab="tab" :items="detailTabs" @select="setTab" />
         <main class="opportunity-detail-main">
-          <header class="opportunity-detail-heading">
-            <p class="opportunity-detail-heading__eyebrow">
-              {{ statusLabel(detail.lifecycle_status) }} · {{ detail.market }} ·
-              {{ detail.category || "未分类" }}
-            </p>
-            <h1>{{ detail.name }}</h1>
-            <div class="opportunity-detail-heading__meta">
-              <span>更新 {{ freshness(detail.updated_at) }}</span>
-              <span>来源 {{ opportunityStatusLabel(detail.source_type) }}</span>
-            </div>
-            <details class="opportunity-technical-details">
-              <summary>运行信息</summary>
-              <small
-                >当前阶段已停留 {{ durationLabel(detail.lifecycle_dwell_seconds) }} · 数据版本 v{{
-                  detail.version
-                }}
-                · 评分规则 {{ detail.score_rule_version ?? "尚未计算" }}</small
-              >
-            </details>
-          </header>
+          <SelectionProductHeader :detail="detail" />
+          <OpportunityDetailNavigation :active-tab="tab" :items="detailTabs" @select="setTab" />
           <div class="opportunity-detail-workface">
             <OpportunityDecisionPanel
               :detail="detail"

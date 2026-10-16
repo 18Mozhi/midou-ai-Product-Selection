@@ -1,177 +1,165 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, ref, watch } from "vue";
 import type { OpportunityTab } from "./opportunity-workspace-types";
 
 const props = defineProps<{
   activeTab: OpportunityTab;
   items: ReadonlyArray<readonly [OpportunityTab, string]>;
 }>();
-
-const emit = defineEmits<{
-  select: [tab: OpportunityTab];
-}>();
-
-const activeLabel = computed(
-  () => props.items.find(([tab]) => tab === props.activeTab)?.[1] ?? "结论",
+const emit = defineEmits<{ select: [tab: OpportunityTab] }>();
+const primaryOrder: OpportunityTab[] = [
+  "overview",
+  "competition",
+  "profit",
+  "evidence",
+  "risk",
+  "decisions",
+];
+const primary = computed(() =>
+  primaryOrder.flatMap((key) => props.items.filter(([tab]) => tab === key)),
+);
+const secondary = computed(() => props.items.filter(([tab]) => !primaryOrder.includes(tab)));
+const more = ref<HTMLDetailsElement | null>(null);
+const secondaryLabel = computed(
+  () => secondary.value.find(([tab]) => tab === props.activeTab)?.[1],
+);
+function closeMore(restoreFocus = false) {
+  if (!more.value?.open) return;
+  more.value.open = false;
+  if (restoreFocus) more.value.querySelector("summary")?.focus();
+}
+function select(tab: OpportunityTab) {
+  closeMore(!primaryOrder.includes(tab));
+  emit("select", tab);
+}
+watch(
+  () => props.activeTab,
+  () => closeMore(),
 );
 </script>
 
 <template>
-  <aside class="opportunity-detail-directory" aria-label="机会详情目录">
-    <p class="opportunity-detail-directory__eyebrow">核对机会</p>
-    <h2>先看依据，<br />再作判断</h2>
-
-    <nav aria-label="机会详情分区">
-      <button
-        v-for="([tab, label], index) in items"
-        :key="tab"
-        type="button"
-        :aria-current="activeTab === tab ? 'page' : undefined"
-        @click="emit('select', tab)"
-      >
-        <span aria-hidden="true">{{ String(index + 1).padStart(2, "0") }}</span>
-        {{ label }}
-      </button>
-    </nav>
-  </aside>
-
-  <details class="opportunity-detail-directory-mobile">
-    <summary>
-      <span>机会详情分区</span>
-      <strong>{{ activeLabel }}</strong>
-    </summary>
-    <nav aria-label="机会详情分区">
-      <button
-        v-for="([tab, label], index) in items"
-        :key="tab"
-        type="button"
-        :aria-current="activeTab === tab ? 'page' : undefined"
-        @click="emit('select', tab)"
-      >
-        <span aria-hidden="true">{{ String(index + 1).padStart(2, "0") }}</span>
-        {{ label }}
-      </button>
-    </nav>
-  </details>
+  <nav class="selection-detail-navigation" aria-label="机会详情分区">
+    <button
+      v-for="[tab, label] in primary"
+      :key="tab"
+      type="button"
+      :aria-current="activeTab === tab ? 'page' : undefined"
+      @click="select(tab)"
+    >
+      {{ label }}
+    </button>
+    <details
+      v-if="secondary.length"
+      ref="more"
+      class="selection-detail-more"
+      @keydown.esc.prevent="closeMore(true)"
+    >
+      <summary :data-active="Boolean(secondaryLabel)">
+        {{ secondaryLabel ?? "更多记录" }} <span aria-hidden="true">⌄</span>
+      </summary>
+      <div>
+        <button
+          v-for="[tab, label] in secondary"
+          :key="tab"
+          type="button"
+          :aria-current="activeTab === tab ? 'page' : undefined"
+          @click="select(tab)"
+        >
+          {{ label }}
+        </button>
+      </div>
+    </details>
+  </nav>
 </template>
 
 <style scoped>
-.opportunity-detail-directory {
-  position: sticky;
-  top: 16px;
-  min-width: 0;
-  padding: 24px 18px;
-  color: var(--so-opportunity-review-surface);
-  background: var(--so-opportunity-review-blue);
+.selection-detail-navigation {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  gap: 0 20px;
+  padding: 0 24px;
+  border-bottom: 1px solid var(--so-border);
+  background: var(--so-panel);
 }
-
-.opportunity-detail-directory__eyebrow {
-  color: var(--so-opportunity-review-directory-label);
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
-
-.opportunity-detail-directory h2 {
-  margin: 10px 0 12px;
-  font-size: 24px;
-  line-height: 1.45;
-}
-
-.opportunity-detail-directory__note {
-  color: var(--so-opportunity-review-directory-note);
+.selection-detail-navigation button,
+.selection-detail-more summary {
+  min-height: 48px;
+  padding: 8px 4px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  color: var(--so-text-muted);
+  background: transparent;
+  font: inherit;
   font-size: 14px;
-  line-height: 1.7;
+  font-weight: 600;
+  cursor: pointer;
 }
-
-.opportunity-detail-directory nav,
-.opportunity-detail-directory-mobile nav {
-  display: grid;
-  gap: 4px;
-  margin-top: 20px;
+.selection-detail-navigation button:hover,
+.selection-detail-more summary:hover {
+  color: var(--so-primary);
 }
-
-.opportunity-detail-directory button,
-.opportunity-detail-directory-mobile button {
-  min-width: 0;
-  min-height: 46px;
-  padding: 8px 10px;
+.selection-detail-navigation button[aria-current="page"],
+.selection-detail-more summary[data-active="true"] {
+  color: var(--so-primary);
+  border-bottom-color: var(--so-primary);
+}
+.selection-detail-navigation :is(button, summary):focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 2px;
+}
+.selection-detail-more {
+  position: relative;
+  margin-left: auto;
+}
+.selection-detail-more summary {
   display: flex;
   align-items: center;
   gap: 10px;
-  border: 1px solid transparent;
-  color: inherit;
-  background: transparent;
-  font: inherit;
-  font-weight: 650;
-  text-align: left;
-  cursor: pointer;
+  list-style: none;
 }
-
-.opportunity-detail-directory button > span,
-.opportunity-detail-directory-mobile button > span {
-  flex: 0 0 24px;
-  color: var(--so-opportunity-review-directory-label);
-  font-size: 13px;
-  font-variant-numeric: tabular-nums;
-}
-
-.opportunity-detail-directory button:hover,
-.opportunity-detail-directory-mobile button:hover {
-  border-color: var(--so-opportunity-review-directory-label);
-}
-
-.opportunity-detail-directory button[aria-current="page"],
-.opportunity-detail-directory-mobile button[aria-current="page"] {
-  border-color: var(--so-opportunity-review-surface);
-  color: var(--so-opportunity-review-blue);
-  background: var(--so-opportunity-review-surface);
-}
-
-.opportunity-detail-directory button[aria-current="page"] > span,
-.opportunity-detail-directory-mobile button[aria-current="page"] > span {
-  color: var(--so-opportunity-review-blue);
-}
-
-.opportunity-detail-directory-mobile {
+.selection-detail-more summary::-webkit-details-marker {
   display: none;
 }
-
-@media (max-width: 900px) {
-  .opportunity-detail-directory {
-    display: none;
+.selection-detail-more > div {
+  position: absolute;
+  z-index: 5;
+  top: 100%;
+  right: 0;
+  display: grid;
+  min-width: 148px;
+  padding: 6px;
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
+}
+.selection-detail-more > div button {
+  padding: 8px 14px;
+  text-align: left;
+}
+@media (max-width: 760px) {
+  .selection-detail-navigation {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0;
+    padding: 0 12px;
   }
-
-  .opportunity-detail-directory-mobile {
-    display: block;
-    color: var(--so-opportunity-review-surface);
-    background: var(--so-opportunity-review-blue);
+  .selection-detail-navigation > button {
+    min-width: 0;
   }
-
-  .opportunity-detail-directory-mobile > summary {
-    min-height: 52px;
-    padding: 8px 14px;
-    display: flex;
-    align-items: center;
+  .selection-detail-more {
+    grid-column: 1/-1;
+    margin-left: 0;
+    border-top: 1px solid var(--so-border);
+  }
+  .selection-detail-more summary {
     justify-content: space-between;
-    gap: 12px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-
-  .opportunity-detail-directory-mobile > summary strong {
-    font-size: 16px;
-  }
-
-  .opportunity-detail-directory-mobile nav {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin: 0;
-    padding: 0 10px 10px;
-  }
-
-  .opportunity-detail-directory-mobile button {
     min-height: 44px;
-    font-size: 14px;
+  }
+  .selection-detail-more > div {
+    right: 0;
+    left: 0;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 </style>

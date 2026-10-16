@@ -49,10 +49,77 @@ const emit = defineEmits<{
   <section v-if="tab === 'overview'" class="opportunity-insights">
     <header class="opportunity-insights-heading">
       <p>分析概览</p>
-      <h3>先看关联事实，再核对质量门</h3>
+      <h3>评分与采集进度</h3>
     </header>
 
     <div class="opportunity-insight-grid">
+      <article class="opportunity-insight-card opportunity-insight-card--wide">
+        <header class="opportunity-insight-card__heading">
+          <div>
+            <p>评分解释</p>
+            <h4>最近一次运行</h4>
+          </div>
+          <span class="opportunity-insight-badge"
+            >规则 {{ detail.score_rule_version ?? "未计算" }}</span
+          >
+        </header>
+        <strong class="opportunity-insight-score">{{ detail.overall_score ?? "数据不足" }}</strong>
+        <span v-if="detail.latest_score_run" class="opportunity-insight-support">
+          覆盖 {{ detail.latest_score_run.coverage_percent }}% ·
+          {{ formatOpportunityTime(detail.latest_score_run.scored_at) }}
+        </span>
+        <span v-else class="opportunity-insight-support">暂无评分记录。</span>
+        <div class="selection-score-table-wrap">
+          <table class="selection-score-table">
+            <caption>
+              评分维度明细
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">维度</th>
+                <th scope="col">权重</th>
+                <th scope="col">得分</th>
+                <th scope="col">加权分</th>
+                <th scope="col">依据</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detail.score_components" :key="item.dimension_code">
+                <th scope="row">{{ opportunityScoreDimensionLabel(item.dimension_code) }}</th>
+                <td>{{ item.weight_percent }}%</td>
+                <td>{{ item.input_score ?? "缺失" }}</td>
+                <td>{{ item.weighted_score ?? "—" }}</td>
+                <td>
+                  <span>{{ item.evidence_ids.length }} 条证据</span>
+                  <details v-if="item.missing_fields.length">
+                    <summary>缺失项</summary>
+                    <span>{{ item.missing_fields.join("、") }}</span>
+                  </details>
+                </td>
+              </tr>
+              <tr v-if="!detail.score_components.length">
+                <td colspan="5">尚无评分输入</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p v-if="detail.latest_score_run?.missing_fields.length" class="opportunity-insight-note">
+          缺失：{{ detail.latest_score_run.missing_fields.join("、") }}
+        </p>
+        <div class="opportunity-insight-actions">
+          <RouterLink to="/opportunities/scoring-rules">规则版本</RouterLink>
+          <button
+            v-if="canDecide"
+            type="button"
+            class="opportunity-insight-button"
+            :disabled="busy"
+            @click="emit('queueScore')"
+          >
+            重新评分
+          </button>
+        </div>
+      </article>
+
       <article class="opportunity-insight-card opportunity-insight-card--wide">
         <header class="opportunity-insight-card__heading">
           <div>
@@ -143,53 +210,6 @@ const emit = defineEmits<{
               <RouterLink v-if="canOpenSourcingWorkspace" to="/sourcing">供应链工作台</RouterLink>
             </div>
           </section>
-        </div>
-      </article>
-
-      <article class="opportunity-insight-card">
-        <header class="opportunity-insight-card__heading">
-          <div>
-            <p>评分解释</p>
-            <h4>最近一次运行</h4>
-          </div>
-          <span class="opportunity-insight-badge"
-            >规则 {{ detail.score_rule_version ?? "未计算" }}</span
-          >
-        </header>
-        <strong class="opportunity-insight-score">{{ detail.overall_score ?? "数据不足" }}</strong>
-        <span v-if="detail.latest_score_run" class="opportunity-insight-support">
-          覆盖 {{ detail.latest_score_run.coverage_percent }}% ·
-          {{ formatOpportunityTime(detail.latest_score_run.scored_at) }}
-        </span>
-        <span v-else class="opportunity-insight-support">暂无评分记录。</span>
-        <dl class="opportunity-score-breakdown">
-          <div v-for="item in detail.score_components" :key="item.dimension_code">
-            <dt>
-              {{ opportunityScoreDimensionLabel(item.dimension_code) }} · {{ item.weight_percent }}%
-            </dt>
-            <dd>
-              {{ item.input_score ?? "缺失" }} <small>{{ item.evidence_ids.length }} 条证据</small>
-            </dd>
-          </div>
-          <div v-if="!detail.score_components.length">
-            <dt>缺失项</dt>
-            <dd>尚无评分输入</dd>
-          </div>
-        </dl>
-        <p v-if="detail.latest_score_run?.missing_fields.length" class="opportunity-insight-note">
-          缺失：{{ detail.latest_score_run.missing_fields.join("、") }}
-        </p>
-        <div class="opportunity-insight-actions">
-          <RouterLink to="/opportunities/scoring-rules">规则版本</RouterLink>
-          <button
-            v-if="canDecide"
-            type="button"
-            class="opportunity-insight-button"
-            :disabled="busy"
-            @click="emit('queueScore')"
-          >
-            重新评分
-          </button>
         </div>
       </article>
 
@@ -445,7 +465,9 @@ const emit = defineEmits<{
 .opportunity-insight-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 0;
+  border: 1px solid var(--so-opportunity-review-line);
+  background: var(--so-opportunity-review-surface);
 }
 
 .opportunity-insight-card {
@@ -454,7 +476,8 @@ const emit = defineEmits<{
   display: grid;
   align-content: start;
   gap: 16px;
-  border: 1px solid var(--so-opportunity-review-line);
+  border: 0;
+  border-bottom: 1px solid var(--so-opportunity-review-line);
   background: var(--so-opportunity-review-surface);
 }
 
@@ -571,25 +594,12 @@ const emit = defineEmits<{
   display: block;
 }
 
-.opportunity-score-breakdown,
 .opportunity-status-pair,
 .opportunity-fact-explainer dl {
   margin: 0;
   display: grid;
 }
 
-.opportunity-score-breakdown {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
-}
-
-.opportunity-score-breakdown > div {
-  min-width: 0;
-  padding: 10px;
-  background: var(--so-opportunity-review-canvas);
-}
-
-.opportunity-score-breakdown dt,
 .opportunity-status-pair dt,
 .opportunity-market-facts dt,
 .opportunity-competitor-snapshot dt {
@@ -597,7 +607,6 @@ const emit = defineEmits<{
   font-size: 13px;
 }
 
-.opportunity-score-breakdown dd,
 .opportunity-status-pair dd,
 .opportunity-market-facts dd,
 .opportunity-competitor-snapshot dd {
@@ -607,12 +616,51 @@ const emit = defineEmits<{
   overflow-wrap: anywhere;
 }
 
-.opportunity-score-breakdown small {
-  display: block;
-  margin-top: 3px;
-  color: var(--so-opportunity-review-muted);
+.selection-score-table-wrap {
+  min-width: 0;
+  overflow-x: auto;
+}
+.selection-score-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.selection-score-table caption {
+  text-align: left;
+  padding-bottom: 10px;
+  color: var(--so-text-muted);
   font-size: 13px;
-  font-weight: 400;
+}
+.selection-score-table th,
+.selection-score-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--so-border);
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+.selection-score-table thead {
+  background: var(--so-panel-soft);
+  color: var(--so-text-muted);
+}
+.selection-score-table th {
+  font-weight: 600;
+}
+.selection-score-table td {
+  font-variant-numeric: tabular-nums;
+}
+.selection-score-table details {
+  margin-top: 4px;
+  font-size: 13px;
+}
+.selection-score-table summary {
+  cursor: pointer;
+  min-height: 32px;
+  color: var(--so-primary);
+}
+.selection-score-table summary:focus-visible {
+  outline: 2px solid var(--so-primary);
+  outline-offset: 2px;
 }
 
 .opportunity-insight-note,
@@ -805,7 +853,6 @@ const emit = defineEmits<{
     align-items: flex-start;
   }
 
-  .opportunity-score-breakdown,
   .opportunity-status-pair,
   .opportunity-market-facts,
   .opportunity-competitor-snapshot {

@@ -111,6 +111,12 @@ async function ready(
       ),
     }),
   );
+  await page.route("**/api/v1/opportunities/member-options", (route) =>
+    route.fulfill({ json: envelope([{ id: base.owner_id, label: "选品成员" }]) }),
+  );
+  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, (route) =>
+    route.fulfill({ json: envelope([]) }),
+  );
   await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, (route) => {
     decided = true;
     return route.fulfill({
@@ -423,13 +429,11 @@ async function switchOpportunityInPlace(page: Page, id: string, query = "") {
 }
 
 async function openDetailTab(page: Page, label: string) {
-  const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
-  if ((page.viewportSize()?.width ?? 0) <= 900) {
-    const isOpen = await mobileDirectory.evaluate(
-      (element) => (element as HTMLDetailsElement).open,
-    );
-    if (!isOpen) await mobileDirectory.locator("summary").click();
-  }
+  const more = page.locator(".selection-detail-more");
+  const target = page
+    .getByRole("navigation", { name: "机会详情分区" })
+    .getByRole("button", { name: label, exact: true });
+  if (!(await target.isVisible())) await more.locator("summary").click();
   await page.getByRole("button", { name: label }).click();
 }
 
@@ -487,7 +491,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
     .toBe(true);
   await page.evaluate(() => window.scrollTo(0, 0));
   await expect(page).toHaveScreenshot("m04-02-opportunity-list.png", { fullPage: true });
-  await page.getByRole("button", { name: "全部机会" }).click();
+  await page.getByRole("button", { name: "全部商品" }).click();
   await expect(page.locator(".opportunity-row-select")).toHaveCount(1);
   const createButton = page.getByRole("button", { name: "手工添加", exact: true });
   await createButton.click();
@@ -672,13 +676,71 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
       .toBe(true);
     if (competitorCount === 5 && detailCollected && sourceEnabled)
       await comparison.screenshot({ path: testInfo.outputPath("selection-comparison.png") });
-    if ((page.viewportSize()?.width ?? 0) <= 760)
-      await page.locator(".opportunity-detail-directory-mobile > summary").click();
     await page.getByRole("button", { name: "结论", exact: true }).click();
     await expect(page.getByText(`${competitorCount} 个关联竞品`, { exact: true })).toBeVisible();
     await expect(page.getByText(`${competitorCount}个快照`, { exact: true })).toBeVisible();
   });
 }
+
+test("selection detail presents product identity and factual score rows without the legacy directory", async ({
+  page,
+}, testInfo) => {
+  await ready(page, evidence, {
+    name: "便携式桌面风扇",
+    main_asin: "B000000001",
+    image_url: "https://images.example.test/header-product.jpg",
+    score_rule_version: "verified-rule-v4",
+    score_components: [
+      {
+        dimension_code: "market_demand",
+        weight_percent: 25,
+        input_score: 75,
+        weighted_score: 18.75,
+        evidence_ids: ["evidence-1"],
+        missing_fields: [],
+      },
+      {
+        dimension_code: "data_quality",
+        weight_percent: 10,
+        input_score: null,
+        weighted_score: null,
+        evidence_ids: [],
+        missing_fields: ["评价明细"],
+      },
+    ],
+  });
+  await page.route("https://images.example.test/header-product.jpg", (route) =>
+    route.fulfill({ status: 404, body: "missing" }),
+  );
+  await page.goto(`/opportunities/${opportunityId}`);
+  const header = page.locator(".selection-product-header");
+  await expect(header.getByRole("heading", { name: "便携式桌面风扇" })).toBeVisible();
+  await expect(header.getByText("图片暂不可用", { exact: true })).toBeVisible();
+  await expect(header.getByRole("link", { name: "B000000001" })).toHaveAttribute(
+    "href",
+    "https://www.amazon.com/dp/B000000001",
+  );
+  await expect(header.locator(".selection-product-header__score > div").first()).toContainText("—");
+  const table = page.getByRole("table", { name: "评分维度明细" });
+  await expect(table.getByRole("row", { name: "市场需求 25% 75 18.75 1 条证据" })).toBeVisible();
+  await expect(table.getByRole("row", { name: /数据质量/ })).toContainText("缺失");
+  await table.getByText("缺失项", { exact: true }).click();
+  await expect(table.getByText("评价明细", { exact: true })).toBeVisible();
+  const more = page.locator(".selection-detail-more");
+  await more.locator("summary").click();
+  await more.getByRole("button", { name: "业务血缘" }).focus();
+  await page.keyboard.press("Escape");
+  await expect(more).not.toHaveAttribute("open", "");
+  await expect(more.locator("summary")).toBeFocused();
+  await expect(
+    page.locator(".opportunity-detail-directory, .opportunity-detail-directory-mobile"),
+  ).toHaveCount(0);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: testInfo.outputPath("selection-detail.png") });
+});
 
 test("commerce catalogue switches layouts and keeps product navigation and missing images", async ({
   page,
@@ -756,31 +818,21 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   const decisionSurface = page.locator(".opportunity-decision-summary");
   await expect(decisionSurface).toHaveCSS("border-radius", "0px");
   await expect(decisionSurface).toHaveCSS("background-color", "rgb(255, 255, 255)");
-  const mobileDirectory = page.locator(".opportunity-detail-directory-mobile");
-  if ((page.viewportSize()?.width ?? 0) <= 900) {
-    await expect(mobileDirectory).toBeVisible();
-    await expect(mobileDirectory).not.toHaveAttribute("open", "");
-    await mobileDirectory.locator("summary").click();
-  } else {
-    await expect(page.locator(".opportunity-detail-directory")).toBeVisible();
-    await expect(page.locator(".opportunity-detail-directory-mobile")).toBeHidden();
-  }
+  await expect(page.locator(".selection-detail-navigation > button")).toHaveText([
+    "结论",
+    "竞争",
+    "利润与成本",
+    "证据",
+    "风险",
+    "决策历史",
+  ]);
+  await expect(page.locator(".selection-detail-more")).not.toHaveAttribute("open", "");
+  await expect(
+    page.locator(".opportunity-detail-directory, .opportunity-detail-directory-mobile"),
+  ).toHaveCount(0);
   await expect(page.locator("body")).not.toContainText(
     /trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
-  await expect(page.locator(".opportunity-detail-directory nav button")).toHaveText([
-    "01 结论",
-    "02 证据",
-    "03 利润与成本",
-    "04 风险",
-    "05 市场",
-    "06 竞争",
-    "07 AI 辅助",
-    "08 业务血缘",
-    "09 经营复盘",
-    "10 决策历史",
-  ]);
-  await expect(page.locator(".opportunity-detail-directory-mobile nav button")).toHaveCount(10);
   await expect(page.getByText("暂无评分记录。")).toBeVisible();
   await expect(page.getByText("0/5 已通过", { exact: true })).toBeVisible();
   await expect(page.getByText("当前无需你处理", { exact: true })).toBeVisible();
@@ -794,10 +846,10 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
       exact: true,
     }),
   ).toBeVisible();
-  await page.getByRole("button", { name: "业务血缘" }).click();
+  await openDetailTab(page, "业务血缘");
   await expect(page.getByRole("heading", { name: "业务血缘追踪" })).toBeVisible();
   await expect(page.getByText("部分环节降级", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "经营复盘" }).click();
+  await openDetailTab(page, "经营复盘");
   await expect(page.getByRole("heading", { name: "决策后反馈" })).toBeVisible();
   await expect(page.getByText("尚无已返回的经营复盘记录。", { exact: true })).toBeVisible();
   await page.getByRole("button", { name: "利润与成本" }).click();
@@ -815,9 +867,20 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   const earlyDecision = page.getByText("提前人工处理", { exact: true });
   const earlyDecisionDetails = page.locator(".opportunity-decision-waiting details");
   await earlyDecision.hover();
-  await expect(earlyDecision).toHaveCSS("color", "rgb(9, 108, 85)");
+  const palette = await page.locator(".opportunity-workspace").evaluate((element) => {
+    const probe = document.createElement("span");
+    probe.style.transition = "none";
+    element.append(probe);
+    probe.style.color = "var(--so-opportunity-review-blue)";
+    const blue = getComputedStyle(probe).color;
+    probe.style.color = "var(--so-opportunity-review-ink)";
+    const ink = getComputedStyle(probe).color;
+    probe.remove();
+    return { blue, ink };
+  });
+  await expect(earlyDecision).toHaveCSS("color", palette.blue);
   await page.mouse.down();
-  await expect(earlyDecision).toHaveCSS("color", "rgb(24, 53, 46)");
+  await expect(earlyDecision).toHaveCSS("color", palette.ink);
   await page.mouse.up();
   await expect(earlyDecisionDetails).toHaveAttribute("open", "");
   await earlyDecision.focus();
@@ -844,12 +907,6 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await dialog.getByLabel("原因（必填）").fill("补齐成本与竞品后再判断");
   await dialog.getByRole("button", { name: "确认记录" }).click();
   await expect(page.getByText("决策已记录；原始评分与证据未被改写。")).toBeVisible();
-  if (
-    (await mobileDirectory.isVisible()) &&
-    !(await mobileDirectory.evaluate((element) => (element as HTMLDetailsElement).open))
-  ) {
-    await mobileDirectory.locator("summary").click();
-  }
   await page.getByRole("button", { name: "决策历史" }).click();
   await expect(page.getByText("补齐成本与竞品后再判断")).toBeVisible();
   await expect(
@@ -858,7 +915,6 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await expect(page.locator("body")).not.toContainText(
     /\bobserve\b|trend_topic|insufficient_data|\bpartial\b|\bunknown\b/,
   );
-  if (await mobileDirectory.isVisible()) await mobileDirectory.locator("summary").click();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
@@ -1087,8 +1143,10 @@ test("P18 eligible recommendation completes the audited adoption flow without ch
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: "建议采纳" })).toBeVisible();
   await expect(page.getByText("5/5 已通过", { exact: true })).toBeVisible();
-  await expect(page.getByLabel("推荐判断摘要").getByText("86", { exact: true })).toBeVisible();
-  await expect(page.getByText("8 条 · 3 源", { exact: true })).toBeVisible();
+  await expect(
+    page.locator(".selection-product-header__score").getByText("86 / 100", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("8", { exact: true })).toBeVisible();
 
   await page.getByRole("button", { name: "采纳建议" }).click();
   const dialog = page.getByRole("dialog", { name: "记录采纳决定" });
@@ -1114,8 +1172,10 @@ test("P18 eligible recommendation completes the audited adoption flow without ch
     "决策已记录；原始评分与证据未被改写。",
   );
   await expect(page.getByRole("heading", { name: base.name, level: 1 })).toBeVisible();
-  await expect(page.getByLabel("推荐判断摘要").getByText("86", { exact: true })).toBeVisible();
-  await expect(page.getByText("8 条 · 3 源", { exact: true })).toBeVisible();
+  await expect(
+    page.locator(".selection-product-header__score").getByText("86 / 100", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText("8", { exact: true })).toBeVisible();
   await expect(page.getByText("5/5 已通过", { exact: true })).toBeVisible();
 });
 
@@ -2056,7 +2116,7 @@ test("changing between the opportunity list and detail closes open list dialogs"
     await expect(page.getByRole("heading", { name: "待我采纳", level: 2 })).toBeVisible();
     await expect(page.getByRole("dialog", { name: "创建机会候选" })).toHaveCount(0);
     await expect(page.getByRole("dialog", { name: "从米豆 ERP 商品列表导入" })).toHaveCount(0);
-    await page.getByRole("button", { name: "全部机会" }).click();
+    await page.getByRole("button", { name: "全部商品" }).click();
     await expect(page.getByRole("heading", { name: "全部机会", level: 2 })).toBeVisible();
   };
 
@@ -2887,12 +2947,7 @@ test("opportunity URL state and source return path survive list-detail navigatio
 test("opportunity detail tab supports a direct URL", async ({ page }) => {
   await ready(page);
   await page.goto(`/opportunities/${opportunityId}?tab=evidence`);
-  const directory = page.locator(
-    (page.viewportSize()?.width ?? 0) <= 900
-      ? ".opportunity-detail-directory-mobile"
-      : ".opportunity-detail-directory",
-  );
-  if ((page.viewportSize()?.width ?? 0) <= 900) await directory.locator("summary").click();
+  const directory = page.locator(".selection-detail-navigation");
   await expect(directory.getByRole("button", { name: "证据", exact: true })).toHaveAttribute(
     "aria-current",
     "page",

@@ -73,20 +73,6 @@ const recommendationCopy = computed(() =>
         <h3 id="opportunity-decision-summary-title">{{ recommendationTitle }}</h3>
         <span>{{ recommendationCopy }}</span>
       </div>
-      <dl aria-label="推荐判断摘要">
-        <div>
-          <dt>综合评分</dt>
-          <dd>{{ detail.overall_score ?? "—" }}</dd>
-        </div>
-        <div>
-          <dt>证据</dt>
-          <dd>{{ detail.evidence_count }} 条 · {{ detail.source_count }} 源</dd>
-        </div>
-        <div>
-          <dt>风险</dt>
-          <dd>{{ opportunityStatusLabel(detail.risk_level) }}</dd>
-        </div>
-      </dl>
       <div class="opportunity-gate-progress" :data-ready="qualityGates.all_passed">
         <span>
           <b>五项质量门</b>
