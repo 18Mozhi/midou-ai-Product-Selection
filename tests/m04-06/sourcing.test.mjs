@@ -142,10 +142,9 @@ test("M04-06 saved comparisons align specification MOQ price and lead time witho
   assert.match(uiSurface, /规格、最小起订量与交期对比[\s\S]*最小起订量[\s\S]*报价[\s\S]*交期/);
   assert.match(uiSurface, /规格归一化提示/);
   assert.match(uiSurface, /系统不会自动换算或判断等价/);
-  assert.match(
-    uiSurface,
-    /找货流程[\s\S]*搜索货源[\s\S]*确认报价[\s\S]*对比供应商[\s\S]*创建采购任务/,
-  );
+  assert.doesNotMatch(ui, /sourcing-journey|journeyStage|sourcing-tabs/);
+  assert.match(ui, /刷新记录/);
+  assert.match(ui, /aria-pressed="selected\?\.id === item.id"/);
   assert.match(
     uiSurface,
     /到岸价[\s\S]*待费用规则计算[\s\S]*已选 \{\{ selectedQuotes\.length \}\} \/ 5 家供应商/,

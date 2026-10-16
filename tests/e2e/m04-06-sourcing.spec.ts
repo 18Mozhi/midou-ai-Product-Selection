@@ -287,10 +287,11 @@ test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and
   await expect(
     page.getByText("当前候选仍缺：规格、交期、所在地、可信度、稳定性、风险。"),
   ).toBeVisible();
-  await expect(page.getByLabel("找货流程").getByText("3 对比供应商")).toHaveAttribute(
-    "aria-current",
-    "step",
-  );
+  await expect(page.getByLabel("找货流程")).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "刷新记录", exact: true })).toBeVisible();
+  await expect(
+    page.getByRole("complementary", { name: "找货记录" }).getByRole("button", { pressed: true }),
+  ).toHaveCount(1);
   await expect(page.getByText(/证据 00000000-0000-4000-8000-000000000603/)).toBeVisible();
   await expect(supplierCandidates.getByText("CNY 12.8")).toBeVisible();
   await expect(supplierCandidates.getByText("待费用规则计算").first()).toBeVisible();
@@ -1327,4 +1328,30 @@ test("P21 KeepAlive return reloads list, detail and comparisons and ignores pre-
   expect(listReads).toBe(2);
   expect(comparisonReads).toBe(2);
   await expect(page.getByText("离页前的对比快照")).toHaveCount(0);
+});
+
+test("sourcing workspace uses compact catalogue layout and read-only refresh", async ({ page }) => {
+  await setup(page);
+  const writes: string[] = [];
+  page.on("request", (request) => {
+    if (request.method() !== "GET" && request.url().includes("/api/v1/sourcing/"))
+      writes.push(request.url());
+  });
+  await page.goto("/sourcing");
+  const root = page.locator(".sourcing-workspace");
+  await expect(root.getByRole("heading", { name: "供应链找货", level: 1 })).toBeVisible();
+  await expect(root.locator(".sourcing-summary dt")).toHaveCount(4);
+  await expect(root.locator(".sourcing-journey,.sourcing-tabs,.member-module-guide")).toHaveCount(
+    0,
+  );
+  const records = root.getByRole("complementary", { name: "找货记录" });
+  await expect(records.getByRole("button", { pressed: true })).toHaveCount(1);
+  await expect(root.locator(".supplier-cards").getByText("CNY 12.8")).toBeVisible();
+  await root.getByRole("button", { name: "刷新记录", exact: true }).click();
+  await expect(root.locator(".supplier-cards").getByText("CNY 12.8")).toBeVisible();
+  expect(writes).toEqual([]);
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+  await expect(page).toHaveScreenshot("sourcing-workspace-layout.png", { fullPage: false });
 });

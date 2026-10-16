@@ -42,7 +42,6 @@ const {
   summary,
   missingText,
   evidenceOptions,
-  journeyStage,
   erpCosts,
   inputTypeText,
   candidateMissingText,
@@ -75,40 +74,39 @@ const {
 </script>
 <template>
   <section class="sourcing-workspace sourcing-workspace--review">
-    <nav class="sourcing-tabs">
-      <RouterLink to="/sourcing" aria-current="page">供应商找货</RouterLink
-      ><RouterLink to="/sourcing/cost-rules">费用与利润规则</RouterLink>
-    </nav>
-    <ol class="sourcing-journey" aria-label="找货流程">
-      <li :aria-current="journeyStage === 1 ? 'step' : undefined">1 搜索货源</li>
-      <li :aria-current="journeyStage === 2 ? 'step' : undefined">2 确认报价</li>
-      <li :aria-current="journeyStage === 3 ? 'step' : undefined">3 对比供应商</li>
-      <li>4 创建采购任务</li>
-    </ol>
     <header class="sourcing-head">
       <div>
-        <p>供应商发现</p>
         <h1 id="sourcing-page-title" tabindex="-1">供应链找货</h1>
       </div>
-      <button v-if="canManage" type="button" @click="openSearch">发起供应商找货</button>
+      <div class="sourcing-heading-actions">
+        <RouterLink to="/sourcing/cost-rules">费用与利润规则</RouterLink>
+        <button type="button" class="ghost" :disabled="state === 'loading' || busy" @click="load">
+          刷新记录
+        </button>
+        <button v-if="canManage" type="button" @click="openSearch">发起供应商找货</button>
+      </div>
     </header>
     <p v-if="notice" class="sourcing-notice">
       {{ notice }} <code v-if="requestId">{{ requestId }}</code>
     </p>
-    <section class="sourcing-summary" aria-label="供应链找货数据总览">
-      <article>
-        <span>找货任务</span><b>{{ summary.total }}</b>
-      </article>
-      <article>
-        <span>采集中</span><b>{{ summary.running }}</b>
-      </article>
-      <article>
-        <span>真实候选</span><b>{{ summary.candidates }}</b>
-      </article>
-      <article>
-        <span>已有结果</span><b>{{ summary.ready }}</b>
-      </article>
-    </section>
+    <dl class="sourcing-summary" aria-label="供应链找货数据总览">
+      <div>
+        <dt>找货任务</dt>
+        <dd>{{ summary.total }}</dd>
+      </div>
+      <div>
+        <dt>采集中</dt>
+        <dd>{{ summary.running }}</dd>
+      </div>
+      <div>
+        <dt>真实候选</dt>
+        <dd>{{ summary.candidates }}</dd>
+      </div>
+      <div>
+        <dt>已有结果</dt>
+        <dd>{{ summary.ready }}</dd>
+      </div>
+    </dl>
     <div class="sourcing-toolbar">
       <label
         >搜索找货记录<input
@@ -137,16 +135,18 @@ const {
       @secondary="canManage ? openSearch() : load()"
     />
     <div v-else class="sourcing-layout">
-      <aside>
+      <aside aria-label="找货记录">
         <button
           v-for="item in filteredItems"
           :key="item.id"
+          type="button"
+          :aria-pressed="selected?.id === item.id"
           :class="{ selected: selected?.id === item.id }"
           @click="detail(item)"
         >
           <b>{{ searchName(item) }}</b
           ><small>{{ inputTypeText(item.input_type) }} · {{ statusText(item.status) }}</small
-          ><em>{{ item.candidate_count }} 个候选</em><strong>查看详情 →</strong>
+          ><em>{{ item.candidate_count }} 个候选</em>
         </button>
       </aside>
       <section v-if="selected" class="sourcing-detail" aria-label="找货记录详情">

@@ -136,11 +136,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
         });
       return [...new Map(options.map((option) => [option.id, option])).values()];
     }),
-    journeyStage = computed(() => {
-      if (!selected.value || !candidates.value.length) return 1;
-      if (!candidates.value.some((item) => item.quote)) return 2;
-      return 3;
-    }),
     erpCosts = computed(() => {
       const reference = selected.value?.erp_reference;
       if (!reference) return [];
@@ -660,7 +655,6 @@ export function useSourcingWorkspace(props: SourcingWorkspaceProps & { capabilit
     summary,
     missingText,
     evidenceOptions,
-    journeyStage,
     erpCosts,
     inputTypeText,
     candidateMissingText,

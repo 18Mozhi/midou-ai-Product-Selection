@@ -5,7 +5,6 @@ import { createServer as reservePort } from "node:net";
 import path from "node:path";
 import { chromium } from "playwright";
 import { createServer } from "vite";
-import { sourcingPagePlugin, sourcingReviewCss } from "./lib/sourcing-page-preview.mjs";
 
 const args = process.argv.slice(2);
 assert.ok(
@@ -127,7 +126,6 @@ const server = await createServer({
   configFile: path.resolve("apps/web/vite.config.ts"),
   logLevel: "error",
   define: { "import.meta.env.VITE_API_BASE_URL": JSON.stringify("/api/v1") },
-  plugins: [sourcingPagePlugin()],
   server: { host: "127.0.0.1", port, strictPort: true, proxy: {}, hmr: false, open: false },
 });
 let browser;
@@ -255,9 +253,7 @@ try {
     "apps/web/src/components/SourcingWorkspace.vue",
     "apps/web/src/components/SourcingComparisonPanel.vue",
     "apps/web/src/sourcing.css",
-    "scripts/lib/sourcing-page-preview.mjs",
     "scripts/verify-sourcing-page-preview.mjs",
-    sourcingReviewCss,
   ];
   if (output)
     await writeFile(

@@ -1,4 +1,22 @@
 {
+  "selectionSourcingLayout20261017": {
+    "status": "implemented",
+    "statusDetail": "54_browser_cases_and_30_related_tests_passed_not_deployed",
+    "requirements": "docs/selection-sourcing-layout.md",
+    "sourceFiles": [
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/composables/useSourcingWorkspace.ts",
+      "apps/web/src/sourcing.css",
+      "scripts/verify-sourcing-page-preview.mjs"
+    ],
+    "routes": ["/sourcing"],
+    "testFiles": [
+      "tests/e2e/m04-06-sourcing.spec.ts",
+      "tests/m04-06/sourcing.test.mjs",
+      "tests/unit/sourcing-page-preview.test.mjs"
+    ],
+    "contract": "Compact commerce workspace with real read-only refresh, source-backed quotes and accessible selected records. Retired instructional layout and preview-only CSS injection removed; API, permissions and quote business rules unchanged."
+  },
   "selectionProductPriceEvidence20261017": {
     "status": "implemented",
     "statusDetail": "68_related_tests_and_8_browser_cases_passed_not_deployed",
