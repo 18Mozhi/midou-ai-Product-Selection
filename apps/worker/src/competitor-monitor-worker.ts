@@ -89,7 +89,7 @@ export class MySqlCompetitorMonitorWorker {
     try {
       await c.beginTransaction();
       const [rows] = await c.query<RowDataPacket[]>(
-        "SELECT c.latest_snapshot_id,c.opportunity_id,s.* FROM competitors c JOIN competitor_snapshots s ON s.id=? AND s.competitor_id=c.id WHERE c.id=? AND c.organization_id=? AND c.workspace_id=? FOR UPDATE",
+        "SELECT c.latest_snapshot_id,c.opportunity_id,s.* FROM competitors c JOIN competitor_snapshots s ON s.id=? AND s.competitor_id=c.id AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id WHERE c.id=? AND c.organization_id=? AND c.workspace_id=? FOR UPDATE",
         [job.snapshotId, job.competitorId, job.organizationId, job.workspaceId],
       );
       const current = rows[0];
@@ -97,10 +97,28 @@ export class MySqlCompetitorMonitorWorker {
       let previous: RowDataPacket | undefined;
       if (current.latest_snapshot_id && String(current.latest_snapshot_id) !== job.snapshotId) {
         const [p] = await c.query<RowDataPacket[]>(
-          "SELECT * FROM competitor_snapshots WHERE id=? AND competitor_id=?",
-          [current.latest_snapshot_id, job.competitorId],
+          "SELECT * FROM competitor_snapshots WHERE id=? AND competitor_id=? AND organization_id=? AND workspace_id=?",
+          [current.latest_snapshot_id, job.competitorId, job.organizationId, job.workspaceId],
         );
         previous = p[0];
+      }
+      const capturedAt = new Date(current.captured_at).getTime(),
+        previousAt = previous ? new Date(previous.captured_at).getTime() : null;
+      // Delayed or replayed jobs must not move the current product backwards.
+      // Equal timestamps use the same deterministic ID order as evidence reads.
+      if (
+        String(current.latest_snapshot_id) === job.snapshotId ||
+        (previous &&
+          previousAt !== null &&
+          (capturedAt < previousAt ||
+            (capturedAt === previousAt && job.snapshotId <= String(previous.id))))
+      ) {
+        await c.query(
+          "UPDATE competitor_snapshot_jobs SET status='succeeded',lease_owner=NULL,lease_expires_at=NULL,last_error_code=NULL,updated_at=? WHERE id=? AND lease_owner=?",
+          [now, job.id, this.workerId],
+        );
+        await c.commit();
+        return { change_count: 0 };
       }
       const changes: Record<string, { old: string; now: string }> = {};
       if (previous) {

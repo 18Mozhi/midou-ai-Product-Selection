@@ -1,4 +1,12 @@
 {
+  "selectionSnapshotOrder20261017": {
+    "status": "implemented",
+    "statusDetail": "local_snapshot_order_tests_passed_not_deployed",
+    "requirements": "docs/selection-product-refresh.md",
+    "sourceFiles": ["apps/worker/src/competitor-monitor-worker.ts"],
+    "testFiles": ["tests/unit/competitor-snapshot-order.test.mjs"],
+    "contract": "Current immutable snapshot pointer advances by capture time and stable ID only. Older and duplicate jobs finish without reverse changes, alerts or repeated evaluation; newer snapshots retain transactional score enqueue. No API, schema, configuration or production write."
+  },
   "selectionProductRefresh20261017": {
     "status": "implemented",
     "statusDetail": "110_related_checks_and_mysql57_readonly_query_passed_not_deployed",
