@@ -1,5 +1,7 @@
+// UNFIXED assertions describe only the initial b30fb8a2 review epoch, never current runtime.
+// Historical retired competitor UI checks, not current production acceptance.
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readOriginalCompetitorReviewSource } from "./lib/retired-competitor-surface.mjs";
 import ts from "typescript";
 import { ref, reactive, computed, watch, nextTick, effectScope } from "vue";
 
@@ -7,7 +9,7 @@ import { ref, reactive, computed, watch, nextTick, effectScope } from "vue";
 export async function verifyCompetitorSource() {
   const checks = [],
     scopes = [];
-  const source = await readFile("apps/web/src/components/CompetitorMonitor.vue", "utf8");
+  const source = readOriginalCompetitorReviewSource();
   let script = source.match(/<script setup lang="ts">([\s\S]*?)<\/script>/)[1];
   const ast = ts.createSourceFile("setup.ts", script, ts.ScriptTarget.Latest, true);
   for (const node of [...ast.statements].reverse())
@@ -34,6 +36,16 @@ export async function verifyCompetitorSource() {
       watch,
       nextTick,
       ApiClientError,
+      useModalDialog: (_, requestClose) => ({
+        dialogElement: ref(null),
+        handleCancel(event) {
+          event.preventDefault();
+          requestClose();
+        },
+        discardReturnFocus() {},
+      }),
+      onActivated() {},
+      onDeactivated() {},
       defineProps: () => ({ mode, capabilities, apiBaseUrl: "inert" }),
       withDefaults: (p) => p,
       useRoute: () => route,
@@ -278,6 +290,7 @@ export async function verifyCompetitorSource() {
       "deep-linked selected item remains visible despite search; new search clears competitor/create query",
     );
     return {
+      historical_surface: "original_competitor_review_b30fb8a2",
       checks,
       limits:
         "Real setup functions only; readiness helper inert, no template mount, HTTP, authorization, SQL, worker, notification, history lifecycle or race closure.",

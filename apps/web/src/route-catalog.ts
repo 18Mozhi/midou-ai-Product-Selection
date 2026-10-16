@@ -58,7 +58,9 @@ const runtimeRoutes = manifest.routes.filter(
 export const appRoutes: RouteRecordRaw[] = runtimeRoutes.map((entry) => ({
   path: entry.path,
   name: entry.name,
-  ...(entry.redirect ? { redirect: entry.redirect } : { component: ApplicationSurface }),
+  ...(entry.redirect
+    ? { redirect: { path: entry.redirect, query: {}, hash: "" } }
+    : { component: ApplicationSurface }),
   meta: {
     title: entry.title,
     breadcrumb: [...entry.breadcrumb],

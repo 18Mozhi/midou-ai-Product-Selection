@@ -79,7 +79,7 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/api/src/mysql-platform-dashboard-collection-metrics.ts | dc37e16179b6c8d57d2b6ffcb23fcfce7d44d950bbfc9263104be1d6d74c438d |
 | apps/api/src/mysql-platform-dashboard-risk-metrics.ts | e49abd8f317094b4b34b5fb31f8cb47e9d3cc1dc9cffcd945035c8ecd648f094 |
 | apps/api/src/mysql-platform-dashboard-storage-metrics.ts | 16b1b6b5e04ae7b3f4438914cd88b7e985d4a836db42c6e6c1855567de0ca808 |
-| config/route-catalog.json | 95ee96f697a7c8bd3c0a12e4160023ea9f15641cb92f7ef09f1823bdcb18b20c |
+| config/route-catalog.json | f6f7bf4f9b2be4794418e1d4bf5a0ff31f805a75eee8f3c72dba2a105d74e0b0 |
 | apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
 | apps/web/src/components/PlatformAdminComparisonMobile.css | ecffaa62f1f555c0aad971ba27bc8073d4f86f9907b3ff86e8bb6a1a9911e765 |

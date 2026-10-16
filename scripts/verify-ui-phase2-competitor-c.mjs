@@ -1,6 +1,10 @@
+// Historical design artifact review; capture must not regenerate a retired production surface.
+if (process.argv.includes("--capture"))
+  throw new Error("competitor_surface_retired: historical captures are read-only");
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile, writeFile } from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
+import { readCompetitorReviewFile as readFile } from "./lib/retired-competitor-surface.mjs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import { chromium } from "playwright";

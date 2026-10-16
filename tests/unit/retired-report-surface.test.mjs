@@ -21,7 +21,7 @@ test("member report surface and its runtime styles are removed", () => {
     assert.equal(existsSync(file), false, file);
   assert.match(
     readFileSync("apps/web/src/route-catalog.ts", "utf8"),
-    /entry.redirect \? \{ redirect: entry.redirect \}/,
+    /redirect: \{ path: entry.redirect, query: \{\}, hash: "" \}/,
   );
 });
 

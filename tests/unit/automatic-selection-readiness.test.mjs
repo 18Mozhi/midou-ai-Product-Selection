@@ -31,7 +31,7 @@ const activeCostRule = {
 };
 
 test("automatic selection readiness exposes every missing initial rule without defaults", () => {
-  const result = resolveAutomaticSelectionReadiness([], [], []);
+  const result = resolveAutomaticSelectionReadiness([], []);
   assert.equal(result.available, true);
   assert.equal(result.readyCount, 0);
   assert.equal(result.allReady, false);
@@ -49,21 +49,13 @@ test("automatic selection readiness exposes every missing initial rule without d
   assert.equal(result.steps[3].route, "/sourcing/cost-rules");
 });
 
-test("automatic selection readiness requires active score cost and competitor rules", () => {
-  const incomplete = resolveAutomaticSelectionReadiness(
-    [activeScoreRule],
-    [{ status: "draft" }],
-    [{ status: "disabled" }],
-  );
-  assert.equal(incomplete.readyCount, 3);
-  assert.equal(incomplete.steps.find((step) => step.code === "competition")?.ready, false);
+test("automatic selection readiness requires score evidence dimensions and applicable costs without monitoring rules", () => {
+  const incomplete = resolveAutomaticSelectionReadiness([activeScoreRule], [{ status: "draft" }]);
+  assert.equal(incomplete.readyCount, 4);
+  assert.equal(incomplete.steps.find((step) => step.code === "competition")?.ready, true);
   assert.equal(incomplete.steps.find((step) => step.code === "cost")?.ready, false);
 
-  const complete = resolveAutomaticSelectionReadiness(
-    [activeScoreRule],
-    [activeCostRule],
-    [{ status: "enabled" }],
-  );
+  const complete = resolveAutomaticSelectionReadiness([activeScoreRule], [activeCostRule]);
   assert.equal(complete.readyCount, 5);
   assert.equal(complete.allReady, true);
 });
@@ -77,19 +69,15 @@ test("automatic selection readiness reports an independent read failure", () => 
   });
 });
 
-test("automatic selection readiness loads all three rule surfaces and fails closed", async () => {
+test("automatic selection readiness loads only scoring and cost configuration and fails closed", async () => {
   const paths = [];
   const loaded = await loadAutomaticSelectionReadiness(async (path) => {
     paths.push(path);
     if (path === "/opportunity-score-rules") return { data: [activeScoreRule] };
     if (path === "/cost-rules") return { data: [activeCostRule] };
-    return { data: [{ status: "enabled" }] };
+    throw new Error("legacy monitoring configuration must not be requested");
   });
-  assert.deepEqual(paths.sort(), [
-    "/competitor-monitor-rules",
-    "/cost-rules",
-    "/opportunity-score-rules",
-  ]);
+  assert.deepEqual(paths.sort(), ["/cost-rules", "/opportunity-score-rules"]);
   assert.equal(loaded.allReady, true);
 
   const unavailable = await loadAutomaticSelectionReadiness(async (path) => {
@@ -106,6 +94,6 @@ test("automatic selection readiness forwards the page read cancellation signal",
     signals.push(options.signal);
     return { data: [] };
   }, controller.signal);
-  assert.equal(signals.length, 3);
+  assert.equal(signals.length, 2);
   assert.ok(signals.every((signal) => signal === controller.signal));
 });

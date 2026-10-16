@@ -32,7 +32,7 @@ const props = defineProps<{
   canManageSuppliers: boolean;
   canReadCompetitors: boolean;
   canReadSourcing: boolean;
-  canOpenCompetitorWorkspace: boolean;
+  canOpenCompetitorComparison: boolean;
   canOpenSourcingWorkspace: boolean;
 }>();
 
@@ -164,9 +164,13 @@ const emit = defineEmits<{
               >
                 采集 Amazon 竞品
               </button>
-              <RouterLink v-if="canOpenCompetitorWorkspace" to="/competitors"
-                >竞品工作台</RouterLink
+              <button
+                v-if="canOpenCompetitorComparison"
+                type="button"
+                @click="emit('selectTab', 'competition')"
               >
+                查看竞品对比
+              </button>
             </div>
           </section>
 
@@ -312,7 +316,6 @@ const emit = defineEmits<{
         >
           采集 Amazon 竞品
         </button>
-        <RouterLink v-if="canOpenCompetitorWorkspace" to="/competitors">竞品工作台 ↗</RouterLink>
       </div>
     </article>
   </section>

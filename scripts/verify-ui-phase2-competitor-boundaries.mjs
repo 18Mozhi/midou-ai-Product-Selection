@@ -1,6 +1,7 @@
+// Historical retired competitor UI checks, not current production acceptance.
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { readFile } from "node:fs/promises";
+import { readCompetitorReviewFile as readFile } from "./lib/retired-competitor-surface.mjs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
 import ts from "typescript";
@@ -304,6 +305,7 @@ export async function verifyCompetitorBoundaries() {
     return {
       source: file,
       sourceSha256: createHash("sha256").update(source).digest("hex"),
+      historical_surface: "retired_competitor",
       checks,
       limits:
         "Actual setup with inert router/transport/timers; no Vue mount, real permission/HTTP/idempotency/SQL/Worker/production assertion. UNFIXED indicates a reproduced open gap; fixed-source-regression is only a local source check.",

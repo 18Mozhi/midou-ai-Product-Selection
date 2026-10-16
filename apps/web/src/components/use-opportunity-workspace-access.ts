@@ -32,7 +32,7 @@ export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAcces
       capabilities()?.includes("supplier_quote:manage") ||
       false,
   );
-  const canOpenCompetitorWorkspace = computed(
+  const canOpenCompetitorComparison = computed(
     () => capabilities()?.includes("competitor:read") ?? false,
   );
   const canOpenSourcingWorkspace = computed(
@@ -77,7 +77,7 @@ export function useOpportunityWorkspaceAccess(options: OpportunityWorkspaceAcces
     canReadCompetitors,
     canManageSuppliers,
     canReadSourcing,
-    canOpenCompetitorWorkspace,
+    canOpenCompetitorComparison,
     canOpenSourcingWorkspace,
     canConfirmCost,
     returnPath,

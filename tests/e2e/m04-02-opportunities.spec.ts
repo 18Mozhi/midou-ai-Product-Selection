@@ -1398,7 +1398,7 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByText("暂无竞品查看权限。", { exact: true })).toBeVisible();
   await expect(page.getByText("暂无供应链查看权限。", { exact: true })).toBeVisible();
-  await expect(page.getByRole("link", { name: "竞品工作台", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "查看竞品对比", exact: true })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toHaveCount(0);
   expect(competitorReads).toBe(0);
   expect(sourcingReads).toBe(0);
@@ -1451,7 +1451,7 @@ test("P18 discovery actions require their matching manage capabilities", async (
 
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
-  await expect(page.getByRole("link", { name: "竞品工作台", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "查看竞品对比", exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "采集 Amazon 竞品" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "采集公开供应商" })).toHaveCount(0);
@@ -1618,7 +1618,7 @@ test("P18 delayed discovery receipts stay scoped to their originating opportunit
   await expect(page.locator(".opportunity-message")).toHaveCount(0);
 });
 
-test("P18 overview links match the exact read capabilities required by their destination routes", async ({
+test("P18 overview competition action stays in the detail and respects read permissions", async ({
   page,
 }) => {
   await ready(page);
@@ -1657,18 +1657,21 @@ test("P18 overview links match the exact read capabilities required by their des
     capabilities = scenario.capabilities;
     await page.goto(`/opportunities/${opportunityId}`);
     await expect(page.getByRole("heading", { name: base.name })).toBeVisible();
-    await expect(page.getByRole("link", { name: "竞品工作台", exact: true })).toHaveCount(
+    await expect(page.getByRole("button", { name: "查看竞品对比", exact: true })).toHaveCount(
       scenario.competitor ? 1 : 0,
     );
     await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toHaveCount(
       scenario.sourcing ? 1 : 0,
     );
+    if (scenario.competitor) {
+      await page.getByRole("button", { name: "查看竞品对比", exact: true }).click();
+      await expect(page).toHaveURL(/tab=competition/);
+      await expect(page.getByRole("heading", { name: "可追溯的竞品快照" })).toBeVisible();
+    }
 
     await page.goto(`/opportunities/${opportunityId}?tab=competition`);
     await expect(page.getByRole("heading", { name: "可追溯的竞品快照" })).toBeVisible();
-    await expect(page.getByRole("link", { name: "竞品工作台 ↗", exact: true })).toHaveCount(
-      scenario.competitor ? 1 : 0,
-    );
+    await expect(page.getByRole("link", { name: /竞品工作台/ })).toHaveCount(0);
   }
 });
 

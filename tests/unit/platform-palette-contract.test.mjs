@@ -1,11 +1,14 @@
 import { readArchivedReportSource } from "../../scripts/lib/retired-report-surface.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile, readdir } from "node:fs/promises";
+import { readdir } from "node:fs/promises";
+import { readCompetitorReviewFile as readFile } from "../../scripts/lib/retired-competitor-surface.mjs";
 
 // Retained exclusively for archived sidebar review styles. Production no longer
 // renders those rules; every live reference must still resolve exactly.
+// The compact sourcing layout now uses the shared muted role; retain its historical declaration for archived captures.
 const historicalSidebarTokens = new Set([
+  "--so-sourcing-review-muted",
   "--so-backup-c-active",
   "--so-capacity-c-canvas",
   "--so-capacity-c-mobile-nav-active",
@@ -292,7 +295,7 @@ test("collection task palette resolves the reviewed workspace colors", async () 
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("competitor review palette resolves P19/P20 colors and scoped cascade overrides", async () => {
+test("archived competitor review palette resolves P19/P20 colors and scoped cascade overrides", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/competitor-review-tokens.css", "utf8"),
     readFile("apps/web/src/competitor.css", "utf8"),

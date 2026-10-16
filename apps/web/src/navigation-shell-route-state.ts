@@ -121,12 +121,6 @@ export function surfaceProps(input: {
       };
     case "score-rule-console":
       return { ...common, capabilities: input.capabilities };
-    case "competitor-monitor":
-      return {
-        ...common,
-        mode: input.path.endsWith("/monitoring-rules") ? "rules" : "list",
-        capabilities: input.capabilities,
-      };
     case "sourcing-workspace":
       return { ...common, capabilities: input.capabilities };
     case "cost-rule-console":
@@ -174,8 +168,7 @@ export function pageSummary(shell: NavigationShellKind, path: string) {
     return "把选品工作拆成具体任务，查看负责人、期限、运行进度和处理记录。";
   if (path === "/sourcing")
     return "供应链候选、版本化报价、最多五家对比和采购任务均保留来源与缺失项。";
-  if (path.startsWith("/competitors"))
-    return "持续记录竞品价格、评分、页面变化和告警，点击记录可查看详情。";
+
   if (path.startsWith("/sourcing/cost-rules"))
     return "维护费用和汇率规则，计算商品利润并明确展示缺失成本。";
   if (path === "/opportunities" || path.startsWith("/opportunities/"))

@@ -129,7 +129,7 @@ const {
   canReadCompetitors,
   canManageSuppliers,
   canReadSourcing,
-  canOpenCompetitorWorkspace,
+  canOpenCompetitorComparison,
   canOpenSourcingWorkspace,
   canConfirmCost,
   returnPath,
@@ -668,7 +668,7 @@ useOpportunityWorkspaceLifecycle({
                 :can-manage-suppliers="canManageSuppliers"
                 :can-read-competitors="canReadCompetitors"
                 :can-read-sourcing="canReadSourcing"
-                :can-open-competitor-workspace="canOpenCompetitorWorkspace"
+                :can-open-competitor-comparison="canOpenCompetitorComparison"
                 :can-open-sourcing-workspace="canOpenSourcingWorkspace"
                 @discover-competitors="discoverCompetitors"
                 @discover-suppliers="discoverSuppliers"

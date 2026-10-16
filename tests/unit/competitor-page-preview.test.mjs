@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readCompetitorReviewFile as readFile } from "../../scripts/lib/retired-competitor-surface.mjs";
 import test from "node:test";
 
-test("P19 keeps incomplete collection facts distinct from a zero-valued snapshot", async () => {
+test("Archived P19 keeps incomplete collection facts distinct from a zero-valued snapshot", async () => {
   const source = await readFile("apps/web/src/components/CompetitorMonitor.vue", "utf8");
   assert.match(source, /snapshot\?\.current_price == null/);
   assert.match(source, /等待首次采集/);
@@ -10,7 +10,7 @@ test("P19 keeps incomplete collection facts distinct from a zero-valued snapshot
   assert.match(source, /isCollectionPending\(latestCollection\.value\)/);
 });
 
-test("P19 retains explicit permissions for monitoring and validation work", async () => {
+test("Archived P19 retains explicit permissions for monitoring and validation work", async () => {
   const source = await readFile("apps/web/src/components/CompetitorMonitor.vue", "utf8");
   assert.match(source, /competitor:manage/);
   assert.match(source, /task:create/);

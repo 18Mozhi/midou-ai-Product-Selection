@@ -1,4 +1,24 @@
 {
+  "selectionRetiredMemberCompetitors20261017": {
+    "status": "implemented",
+    "statusDetail": "related_236_checks_and_144_browser_cases_passed_not_deployed",
+    "requirements": "docs/selection-retired-member-competitors.md",
+    "sourceFiles": [
+      "config/route-catalog.json",
+      "apps/web/src/route-catalog.ts",
+      "apps/web/src/components/navigation-surface-registry.ts",
+      "apps/web/src/components/OpportunityDetailInsights.vue",
+      "apps/web/src/automatic-selection-readiness.ts"
+    ],
+    "routes": ["/competitors", "/competitors/monitoring-rules", "/opportunities/:id"],
+    "testFiles": [
+      "tests/unit/retired-competitor-surface.test.mjs",
+      "tests/e2e/m04-05-competitors.spec.ts",
+      "tests/e2e/ui-phase2-competitor-races.spec.ts",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Standalone competitor UI/styles/preview injection removed; fixed old links enter the guarded selection library with stale query/hash cleared. Current detail comparison and backend collection/data retained. No monitor-rule requirement for competition configuration. Historical tests explicitly pinned; no production or data deletion."
+  },
   "selectionDailyProduction20261017": {
     "status": "implemented",
     "statusDetail": "55_related_tests_24_browser_cases_and_display_retest_passed_not_deployed",
@@ -2183,7 +2203,7 @@
         "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/worker/src/business-task-projection-worker.ts",
         "../apps/worker/src/notification-outbox-worker.ts",
-        "../apps/web/src/components/CompetitorMonitor.vue",
+        "../apps/web/src/components/SelectionProductComparison.vue",
         "../apps/web/src/components/shared/MonitoringReadinessStrip.vue",
         "../apps/web/src/components/shared/monitoring-readiness.ts"
       ],
@@ -2214,7 +2234,7 @@
       ],
       "verificationRunId": "2e64e54e-620b-4396-848b-223329b916f3",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "backend_retained_member_standalone_ui_retired_use_selection_comparison"
     },
     "sourcingDiscovery": {
       "module": "M04-06",
@@ -4058,17 +4078,17 @@
     },
     {
       "path": "/competitors",
-      "view": "CompetitorMonitor",
+      "view": "OpportunityWorkspace",
       "domain": "competitors",
-      "status": "verified",
-      "statusDetail": "M04-05_module_verified"
+      "status": "implemented",
+      "statusDetail": "retired_member_competitor_workspace_redirect_to_selection_library"
     },
     {
       "path": "/competitors/monitoring-rules",
-      "view": "CompetitorMonitor",
+      "view": "OpportunityWorkspace",
       "domain": "competitor-monitoring-rules",
-      "status": "verified",
-      "statusDetail": "M04-05_module_verified"
+      "status": "implemented",
+      "statusDetail": "retired_member_competitor_workspace_redirect_to_selection_library"
     },
     {
       "path": "/sourcing",

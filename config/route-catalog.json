@@ -379,42 +379,44 @@
     {
       "path": "/competitors",
       "name": "competitors",
-      "title": "竞品监控",
-      "breadcrumb": ["洞察与选品", "竞品监控"],
+      "title": "选品库",
+      "breadcrumb": ["选品库"],
       "shell": "member",
       "view": null,
-      "capabilities": ["competitor:read"],
+      "capabilities": ["opportunity:read"],
       "notFound": false,
-      "surface": "competitor-monitor",
-      "cachePolicy": "reset_on_scope",
+      "surface": "",
+      "cachePolicy": "none",
       "acceptance": "protected",
       "featureMap": {
         "path": "/competitors",
-        "view": "CompetitorMonitor",
+        "view": "OpportunityWorkspace",
         "domain": "competitors",
-        "status": "verified",
-        "statusDetail": "M04-05_module_verified"
-      }
+        "status": "implemented",
+        "statusDetail": "retired_member_competitor_workspace_redirect_to_selection_library"
+      },
+      "redirect": "/opportunities"
     },
     {
       "path": "/competitors/monitoring-rules",
       "name": "competitor-monitoring-rules",
-      "title": "竞品监控规则",
-      "breadcrumb": ["洞察与选品", "竞品监控", "监控规则"],
+      "title": "选品库",
+      "breadcrumb": ["选品库"],
       "shell": "member",
       "view": null,
-      "capabilities": ["competitor:read"],
+      "capabilities": ["opportunity:read"],
       "notFound": false,
-      "surface": "competitor-monitor",
-      "cachePolicy": "reset_on_scope",
+      "surface": "",
+      "cachePolicy": "none",
       "acceptance": "protected",
       "featureMap": {
         "path": "/competitors/monitoring-rules",
-        "view": "CompetitorMonitor",
+        "view": "OpportunityWorkspace",
         "domain": "competitor-monitoring-rules",
-        "status": "verified",
-        "statusDetail": "M04-05_module_verified"
-      }
+        "status": "implemented",
+        "statusDetail": "retired_member_competitor_workspace_redirect_to_selection_library"
+      },
+      "redirect": "/opportunities"
     },
     {
       "path": "/sourcing",

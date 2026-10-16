@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readCompetitorReviewFile as readFile } from "../../scripts/lib/retired-competitor-surface.mjs";
 import {
   CompetitorServiceError,
   validateCompetitor,
@@ -50,7 +50,7 @@ test("M04-05.A01/A02/A04/A12 requires identity provenance metrics and explicit t
     (e) => e instanceof CompetitorServiceError && e.code === "competitor_rule_invalid",
   );
 });
-test("M04-05.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
+test("M04-05 backend evidence and archived retired UI evidence remain available", async () => {
   const paths = [
     "database/migrations/0017e_competitor_monitoring_m04_05.up.sql",
     "database/migrations/0017e_competitor_monitoring_m04_05.down.sql",

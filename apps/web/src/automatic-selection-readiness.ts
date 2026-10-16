@@ -45,29 +45,22 @@ export async function loadAutomaticSelectionReadiness(
   request: ReturnType<typeof createApiClient>,
   signal?: AbortSignal,
 ): Promise<AutomaticSelectionReadiness> {
-  const [scoreRules, costRules, competitorRules] = await Promise.allSettled([
+  const [scoreRules, costRules] = await Promise.allSettled([
     request<ScoreRuleLike[]>("/opportunity-score-rules", { signal }),
     request<StatusRuleLike[]>("/cost-rules", { signal }),
-    request<StatusRuleLike[]>("/competitor-monitor-rules", { signal }),
   ]);
-  if (
-    scoreRules.status !== "fulfilled" ||
-    costRules.status !== "fulfilled" ||
-    competitorRules.status !== "fulfilled"
-  ) {
+  if (scoreRules.status !== "fulfilled" || costRules.status !== "fulfilled") {
     return unavailableAutomaticSelectionReadiness();
   }
   return resolveAutomaticSelectionReadiness(
     Array.isArray(scoreRules.value.data) ? scoreRules.value.data : [],
     Array.isArray(costRules.value.data) ? costRules.value.data : [],
-    Array.isArray(competitorRules.value.data) ? competitorRules.value.data : [],
   );
 }
 
 export function resolveAutomaticSelectionReadiness(
   scoreRules: ScoreRuleLike[],
   costRules: StatusRuleLike[],
-  competitorRules: StatusRuleLike[],
 ): AutomaticSelectionReadiness {
   const activeScoreRule = scoreRules.find((rule) => rule.status === "active"),
     activeDimensions = (activeScoreRule?.dimensions ?? []).filter(
@@ -90,7 +83,6 @@ export function resolveAutomaticSelectionReadiness(
         (item) => item.base_currency === "CNY" && item.quote_currency === logisticsLine.currency,
       ),
     ),
-    hasEnabledCompetitorRule = competitorRules.some((rule) => rule.status === "enabled"),
     steps: SelectionSetupStep[] = [
       {
         code: "score",
@@ -113,13 +105,11 @@ export function resolveAutomaticSelectionReadiness(
       {
         code: "competition",
         label: "竞争质量门",
-        description:
-          hasEvidenceGroup("competition") && hasEnabledCompetitorRule
-            ? "竞争维度和竞品监控规则均已启用。"
-            : "启用竞争证据维度，并创建竞品监控规则。",
-        ready:
-          Boolean(activeScoreRule) && hasEvidenceGroup("competition") && hasEnabledCompetitorRule,
-        route: "/competitors/monitoring-rules",
+        description: hasEvidenceGroup("competition")
+          ? "竞争证据维度已启用；具体商品仍需实际竞品详情。"
+          : "在评分规则中启用竞争证据维度。",
+        ready: Boolean(activeScoreRule) && hasEvidenceGroup("competition"),
+        route: scoreRuleRoute,
       },
       {
         code: "cost",

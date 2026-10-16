@@ -13,6 +13,8 @@
 
 ## 当前已实现范围
 
+- 独立竞品监控和告警规则成员 UI 已删除，旧链接转选品库，竞品对比与采集留在当前商品详情；见 `docs/selection-retired-member-competitors.md`。
+
 - 工作台显示北京时间当天新增主品 ASIN 去重数与当前通过既有质量门的目标进度，不拿累计记录凑每日百品；见 `docs/selection-daily-production.md`。这是快照，真实每日验收仍未完成。
 
 - 自动评估保留租约期间的新通知，证据、评分规则和费用规则共用策略，执行结束后继续排队；见 `docs/selection-evaluation-wakeup.md`。不代表生产持续采集验收。

@@ -16,7 +16,7 @@ ProviderRuntimeSurface五个RouterLink已随[来源定义合同](provider-defini
 
 | 别名 | 源文件（首轮快照）                                                                                           | 候选数 / v-model数 |
 | ---- | ------------------------------------------------------------------------------------------------------------ | ------------------ |
-| S    | [ProviderSourceCenter.vue](../../apps/web/src/components/ProviderSourceCenter.vue)                           | 21 / 7             |
+| S    | [ProviderSourceCenter.vue](../../apps/web/src/components/ProviderSourceCenter.vue)                           | 21 / 7             [历史身份，仅追溯] |
 | A    | [Alibaba1688AcceptanceCenter.vue](../../apps/web/src/components/Alibaba1688AcceptanceCenter.vue)             | 12 / 3             |
 | C    | [CredentialAssetCenter.vue](../../apps/web/src/components/CredentialAssetCenter.vue)                         | 33 / 14            |
 | F    | [ProviderSourceConfigurationDialog.vue](../../apps/web/src/components/ProviderSourceConfigurationDialog.vue) | 14 / 0             |
@@ -36,27 +36,27 @@ ProviderRuntimeSurface五个RouterLink已随[来源定义合同](provider-defini
 
 | 位置键（别名:签名.同签名序号） | 类型 / 行                   | 语义归属                                  |
 | ------------------------------ | --------------------------- | ----------------------------------------- |
-| S:9287eb0473b9ee05.1           | control / 606               | SC48-LOAD / 刷新目录                      |
-| S:436e3971cada0a0b.1           | control / 706               | SC48-DEFINE / 跳来源定义                  |
-| S:93ca4e5e94727229.1           | form-event / 638            | SC48-FILTER / 阻止原生表单提交            |
-| S:66725db5db9a8fe8.1           | control / 688               | SC48-FILTER / 重置七条件                  |
-| S:25214adce9760897.1           | control / 706               | SC48-LOAD / 空目录重读                    |
-| S:825fda3d056d6a41.1           | control / 740               | SC48-LINK / HTTPS外链                     |
-| S:cd642bd4e8591939.1           | control / 790               | SC48-PROBE / testSource匿名烟测           |
-| S:c45fa10015518a56.1           | control / 801               | SC48-CONFIG / beginEdit                   |
-| S:ba6b745768e7ce7a.1           | control / 803               | SC48-COMPAT / loadCompatibility           |
-| S:d76e5df18057ffbc.1           | control / 812               | SC48-VERSIONS / loadConfigurationVersions |
-| S:7f3b2921d6d294b5.1           | control / 818               | SC48-LOGIN / 指定来源登录深链             |
-| S:33df1c327ad3e80c.1           | control / 822               | SC48-SAMPLES / loadParserSamples          |
-| S:b9ce58d9e8408695.1           | control / 828               | SC48-ACCEPT / 1688检查链接                |
-| S:d08df5663e79fcd3.1           | control / 841               | SC48-PAGE / 上页                          |
-| S:326dc9fb6fb8f079.1           | control / 847               | SC48-PAGE / 下页                          |
-| S:b33f05a20390eaad.1           | event-binding / 852         | SC48-CONFIG/VERSIONS / 子窗事件与表单更新 |
-| S:6fc08db08d269bea.1           | dialog-component-call / 852 | SC48-CONFIG/VERSIONS / 两窗调用           |
-| S:aed401fdf4d5bd52.1           | event-binding / 869         | SC48-SAMPLES / 关闭、创建、回放、审批事件 |
-| S:f00736f4664ddd07.1           | dialog-component-call / 869 | SC48-SAMPLES / 样本窗调用                 |
-| S:f28e29bf843d5823.1           | event-binding / 884         | SC48-COMPAT / 关闭事件                    |
-| S:ad3654482438f488.1           | dialog-component-call / 884 | SC48-COMPAT / 矩阵窗调用                  |
+| S:9287eb0473b9ee05.1           | control / 606               | SC48-LOAD / 刷新目录                      [历史身份，仅追溯] |
+| S:436e3971cada0a0b.1           | control / 706               | SC48-DEFINE / 跳来源定义                  [历史身份，仅追溯] |
+| S:93ca4e5e94727229.1           | form-event / 638            | SC48-FILTER / 阻止原生表单提交            [历史身份，仅追溯] |
+| S:66725db5db9a8fe8.1           | control / 688               | SC48-FILTER / 重置七条件                  [历史身份，仅追溯] |
+| S:25214adce9760897.1           | control / 706               | SC48-LOAD / 空目录重读                    [历史身份，仅追溯] |
+| S:825fda3d056d6a41.1           | control / 740               | SC48-LINK / HTTPS外链                     [历史身份，仅追溯] |
+| S:cd642bd4e8591939.1           | control / 790               | SC48-PROBE / testSource匿名烟测           [历史身份，仅追溯] |
+| S:c45fa10015518a56.1           | control / 801               | SC48-CONFIG / beginEdit                   [历史身份，仅追溯] |
+| S:ba6b745768e7ce7a.1           | control / 803               | SC48-COMPAT / loadCompatibility           [历史身份，仅追溯] |
+| S:d76e5df18057ffbc.1           | control / 812               | SC48-VERSIONS / loadConfigurationVersions [历史身份，仅追溯] |
+| S:7f3b2921d6d294b5.1           | control / 818               | SC48-LOGIN / 指定来源登录深链             [历史身份，仅追溯] |
+| S:33df1c327ad3e80c.1           | control / 822               | SC48-SAMPLES / loadParserSamples          [历史身份，仅追溯] |
+| S:b9ce58d9e8408695.1           | control / 828               | SC48-ACCEPT / 1688检查链接                [历史身份，仅追溯] |
+| S:d08df5663e79fcd3.1           | control / 841               | SC48-PAGE / 上页                          [历史身份，仅追溯] |
+| S:326dc9fb6fb8f079.1           | control / 847               | SC48-PAGE / 下页                          [历史身份，仅追溯] |
+| S:b33f05a20390eaad.1           | event-binding / 852         | SC48-CONFIG/VERSIONS / 子窗事件与表单更新 [历史身份，仅追溯] |
+| S:6fc08db08d269bea.1           | dialog-component-call / 852 | SC48-CONFIG/VERSIONS / 两窗调用           [历史身份，仅追溯] |
+| S:aed401fdf4d5bd52.1           | event-binding / 869         | SC48-SAMPLES / 关闭、创建、回放、审批事件 [历史身份，仅追溯] |
+| S:f00736f4664ddd07.1           | dialog-component-call / 869 | SC48-SAMPLES / 样本窗调用                 [历史身份，仅追溯] |
+| S:f28e29bf843d5823.1           | event-binding / 884         | SC48-COMPAT / 关闭事件                    [历史身份，仅追溯] |
+| S:ad3654482438f488.1           | dialog-component-call / 884 | SC48-COMPAT / 矩阵窗调用                  [历史身份，仅追溯] |
 | A:617a39a925d1099c.1           | control / 300               | SC49-LOAD / 主刷新                        |
 | A:ff6d5fbc586803ed.1           | control / 186               | SC49-TECH / 故障详情                      |
 | A:5587941412d5210f.1           | control / 190               | SC49-AUTH / 登录链接                      |
@@ -229,7 +229,7 @@ SC50规格中的02–06用例在此细化归属；永久测试只新增SC50-01�
 
 | 源文件                                                         | SHA256（UTF-8，CRLF归一为LF）                                    |
 | -------------------------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/ProviderSourceCenter.vue               | 70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6 |
+| apps/web/src/components/ProviderSourceCenter.vue               | 70fb94b0c529b7a644287e183e7b24909f3dff1ae952360f9b31c78246e382d6 [历史身份，仅追溯] |
 | apps/web/src/components/Alibaba1688AcceptanceCenter.vue        | 4cd83fa5b9483996cbe6ada429b48202a7c83796fbf83e774844c938f918ba3f |
 | apps/web/src/components/CredentialAssetCenter.vue              | 4c4064c119242a6d7023767f796e70634f71fd0832eca1b2ddd62de56206e1be |
 | apps/web/src/components/ProviderSourceConfigurationDialog.vue  | 0786175eeec5c01f9126b3a3bf709805c03110bc15646c2ed205f835cd8d4a01 |
@@ -346,42 +346,42 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前位置键 | 类型 / 行 | 既有语义归属 |
 | --- | --- | --- |
-| S:8b5b066073993a3a.1 | control / 702 | SC48-LOAD / 刷新来源目录 |
-| S:436e3971cada0a0b.1 | control / 705 | SC48-DEFINE / 导航至既有来源规则目录 |
-| S:090fa072a224b63e.1 | event-binding / 734 | SC48-FILTER / 七条件、排序与重置事件转发 |
-| S:1c008f867673db60.1 | control / 772 | SC48-CONFIG / 配置保存后目录同步失败的技术详情 |
-| S:b1a60fde5d6ec9d6.1 | control / 775 | SC48-CONFIG / 保存结果后的目录重读 |
-| S:1c008f867673db60.2 | control / 834 | SC48-LOAD / 登录、权限或目录读取失败的技术详情 |
-| S:adb5a27ee7e15104.1 | control / 837 | SC48-LOAD/LOGIN / 按当前失败态重新加载或重新登录 |
-| S:1c008f867673db60.3 | control / 896 | SC48-LOAD / 目录刷新结果的技术详情 |
-| S:22e451664b4ba746.1 | control / 899 | SC48-LOAD / 刷新失败后重新加载 |
-| S:52eea605d2c84eb0.1 | event-binding / 909 | SC48-PAGE/PROBE/CONFIG/COMPAT/VERSIONS/LOGIN/SAMPLES / 目录子组件与既有处理函数的事件转发 |
-| S:0d05b40ba4543887.1 | event-binding / 932 | SC48-CONFIG/VERSIONS / 配置弹窗属性与既有事件转发 |
-| S:7f36e42eb80bca2d.1 | dialog-component-call / 932 | SC48-CONFIG/VERSIONS / 配置与版本弹窗调用 |
-| S:aebc04fe71463aa3.1 | event-binding / 960 | SC48-SAMPLES / 样本弹窗读写、复核与恢复事件转发 |
-| S:e86a06afbe712ab0.1 | dialog-component-call / 960 | SC48-SAMPLES / 固定样本弹窗调用 |
-| S:26dd5da19bf14533.1 | event-binding / 981 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗关闭事件转发 |
-| S:db583a9e271b4426.1 | dialog-component-call / 981 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗调用 |
+| S:8b5b066073993a3a.1 | control / 702 | SC48-LOAD / 刷新来源目录 [历史身份，仅追溯] |
+| S:436e3971cada0a0b.1 | control / 705 | SC48-DEFINE / 导航至既有来源规则目录 [历史身份，仅追溯] |
+| S:090fa072a224b63e.1 | event-binding / 734 | SC48-FILTER / 七条件、排序与重置事件转发 [历史身份，仅追溯] |
+| S:1c008f867673db60.1 | control / 772 | SC48-CONFIG / 配置保存后目录同步失败的技术详情 [历史身份，仅追溯] |
+| S:b1a60fde5d6ec9d6.1 | control / 775 | SC48-CONFIG / 保存结果后的目录重读 [历史身份，仅追溯] |
+| S:1c008f867673db60.2 | control / 834 | SC48-LOAD / 登录、权限或目录读取失败的技术详情 [历史身份，仅追溯] |
+| S:adb5a27ee7e15104.1 | control / 837 | SC48-LOAD/LOGIN / 按当前失败态重新加载或重新登录 [历史身份，仅追溯] |
+| S:1c008f867673db60.3 | control / 896 | SC48-LOAD / 目录刷新结果的技术详情 [历史身份，仅追溯] |
+| S:22e451664b4ba746.1 | control / 899 | SC48-LOAD / 刷新失败后重新加载 [历史身份，仅追溯] |
+| S:52eea605d2c84eb0.1 | event-binding / 909 | SC48-PAGE/PROBE/CONFIG/COMPAT/VERSIONS/LOGIN/SAMPLES / 目录子组件与既有处理函数的事件转发 [历史身份，仅追溯] |
+| S:0d05b40ba4543887.1 | event-binding / 932 | SC48-CONFIG/VERSIONS / 配置弹窗属性与既有事件转发 [历史身份，仅追溯] |
+| S:7f36e42eb80bca2d.1 | dialog-component-call / 932 | SC48-CONFIG/VERSIONS / 配置与版本弹窗调用 [历史身份，仅追溯] |
+| S:aebc04fe71463aa3.1 | event-binding / 960 | SC48-SAMPLES / 样本弹窗读写、复核与恢复事件转发 [历史身份，仅追溯] |
+| S:e86a06afbe712ab0.1 | dialog-component-call / 960 | SC48-SAMPLES / 固定样本弹窗调用 [历史身份，仅追溯] |
+| S:26dd5da19bf14533.1 | event-binding / 981 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗关闭事件转发 [历史身份，仅追溯] |
+| S:db583a9e271b4426.1 | dialog-component-call / 981 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗调用 [历史身份，仅追溯] |
 
 ### D
 
 | 当前位置键 | 类型 / 行 | 既有语义归属 |
 | --- | --- | --- |
-| D:2d157da14935d5c1.1 | control / 110 | 目录本地详情展开；无API或持久化副作用 |
-| D:7d1dbd0396d36c73.1 | control / 120 | 目录本地详情收起并返回触发点 |
-| D:825fda3d056d6a41.1 | control / 125 | SC48-LINK / 打开HTTPS来源页面 |
-| D:2379d17cd7b2d01d.1 | control / 172 | SC48-PROBE / 对符合条件的已登记公开来源发起匿名烟测 |
-| D:130f527eb216a92c.1 | control / 184 | SC48-CONFIG / 打开来源采集设置 |
-| D:e6b03d1f68d67db6.1 | control / 187 | SC48-COMPAT / 打开解析兼容矩阵 |
-| D:7209e2bc02cd1433.1 | control / 197 | SC48-VERSIONS / 打开版本与回滚记录 |
-| D:7f3b2921d6d294b5.1 | control / 200 | SC48-LOGIN / 指定来源网页登录凭证深链 |
-| D:d0be2fd8fba97ff5.1 | control / 205 | SC48-SAMPLES / 打开1688固定样本回放 |
-| D:b9ce58d9e8408695.1 | control / 212 | SC48-ACCEPT / 打开1688登录准备页 |
-| D:6f7e71d427cb36b9.1 | control / 227 | SC48-PAGE / 上一页 |
-| D:f3f3456654086e7b.1 | control / 239 | SC48-PAGE / 下一页 |
+| D:2d157da14935d5c1.1 | control / 110 | 目录本地详情展开；无API或持久化副作用 [历史身份，仅追溯] |
+| D:7d1dbd0396d36c73.1 | control / 120 | 目录本地详情收起并返回触发点 [历史身份，仅追溯] |
+| D:825fda3d056d6a41.1 | control / 125 | SC48-LINK / 打开HTTPS来源页面 [历史身份，仅追溯] |
+| D:2379d17cd7b2d01d.1 | control / 172 | SC48-PROBE / 对符合条件的已登记公开来源发起匿名烟测 [历史身份，仅追溯] |
+| D:130f527eb216a92c.1 | control / 184 | SC48-CONFIG / 打开来源采集设置 [历史身份，仅追溯] |
+| D:e6b03d1f68d67db6.1 | control / 187 | SC48-COMPAT / 打开解析兼容矩阵 [历史身份，仅追溯] |
+| D:7209e2bc02cd1433.1 | control / 197 | SC48-VERSIONS / 打开版本与回滚记录 [历史身份，仅追溯] |
+| D:7f3b2921d6d294b5.1 | control / 200 | SC48-LOGIN / 指定来源网页登录凭证深链 [历史身份，仅追溯] |
+| D:d0be2fd8fba97ff5.1 | control / 205 | SC48-SAMPLES / 打开1688固定样本回放 [历史身份，仅追溯] |
+| D:b9ce58d9e8408695.1 | control / 212 | SC48-ACCEPT / 打开1688登录准备页 [历史身份，仅追溯] |
+| D:6f7e71d427cb36b9.1 | control / 227 | SC48-PAGE / 上一页 [历史身份，仅追溯] |
+| D:f3f3456654086e7b.1 | control / 239 | SC48-PAGE / 下一页 [历史身份，仅追溯] |
 
-| apps/web/src/components/ProviderSourceCenter.vue | d7dce7fd0fb0f4bb6d31113b33cfa9101273539bbddb6675d09987140be174c3 |
-| apps/web/src/components/ProviderSourceDirectory.vue | ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34 |
+| apps/web/src/components/ProviderSourceCenter.vue | d7dce7fd0fb0f4bb6d31113b33cfa9101273539bbddb6675d09987140be174c3 [历史身份，仅追溯] |
+| apps/web/src/components/ProviderSourceDirectory.vue | ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34 [历史身份，仅追溯] |
 
 两文件身份和当前LF归一指纹可由定向审计与单测复验。此处不代表真实API、来源权限、匿名外发烟测、数据库写入或M07-03生产签收通过。
 
@@ -511,7 +511,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.2 | 165 | control | SC48-SAMPLES / 展开候选采集解析器版本 |
 | apps/web/src/components/ProviderParserSampleReview.vue#915c93b75eb41a91.1 | 47 | control | SC48-SAMPLES / 提交既有审批通过决策 |
 | apps/web/src/components/ProviderParserSampleReview.vue#35b9cb8eaccc4d26.1 | 54 | control | SC48-SAMPLES / 提交既有驳回决策 |
-| apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1 | 705 | control | SC48-DEFINE / 导航至既有来源规则目录 |
+| apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1 | 705 | control | SC48-DEFINE / 导航至既有来源规则目录 [历史身份，仅追溯] |
 来源页面入口身份不证明真实登录、固定样本审批、浏览器采集、来源启用、角色隔离或生产结果。
 
 ## 15. P50 当前凭证台账与表单候选补映射（2026-09-25）
@@ -589,3 +589,54 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 `action-reviews/P50.json` 将 `CredentialAssetCenter.vue` 的39个当前源码候选逐项映射到既有SC50合同，覆盖三项读取、资产新建/轮换、运行档案引用、登录材料导入、撤销、来源登录跳转及助手Cookie请求，并区分字段事件、父子接线、共享确认窗和本地披露。登录导入仍明确为先提交既有加密资产、成功后再提交档案；撤销仍遵循既有版本与原因合同。该映射只记录当前代码语义，不触发真实凭证操作，不证明服务端权限、加密、浏览器扩展或生产运行结果。
 
 `tests/unit/ui-phase2-p50-action-map.test.mjs` 锁定候选全覆盖、外部副作用边界及actionApproval保持pending。来源候选引用和页面规格审计通过；其结果不等于真实凭证、RBAC、MySQL、读屏或M07-03正式验收。
+
+
+## 19. P48 选品核心重制后的当前静态归属（2026-10-17）
+
+来源启用已区分 LAN 1688 服务与浏览器来源，旧指纹及行号已失效。下列按真实 Vue 重建当前静态归属，旧 P48 映射保留为历史；不改变来源、权限、API 或启用状态，不构成生产采集验收。
+
+### ProviderSourceCenter
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/ProviderSourceCenter.vue#8b5b066073993a3a.1 | 706 | control | SC48-CURRENT / handleSourceRefresh |
+| apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1 | 709 | control | SC48-CURRENT / 管理来源规则 |
+| apps/web/src/components/ProviderSourceCenter.vue#090fa072a224b63e.1 | 738 | event-binding | SC48-CURRENT / query = $event；category = $event；availability = $event；market = $event；language = $event；accessMode = $event；sort = $event；resetFilters |
+| apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.1 | 776 | control | SC48-CURRENT / 技术详情 |
+| apps/web/src/components/ProviderSourceCenter.vue#b1a60fde5d6ec9d6.1 | 779 | control | SC48-CURRENT / refreshAfterConfigurationResult |
+| apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.2 | 838 | control | SC48-CURRENT / 技术详情 |
+| apps/web/src/components/ProviderSourceCenter.vue#adb5a27ee7e15104.1 | 841 | control | SC48-CURRENT / handleSourceStatePrimary |
+| apps/web/src/components/ProviderSourceCenter.vue#1c008f867673db60.3 | 900 | control | SC48-CURRENT / 技术详情 |
+| apps/web/src/components/ProviderSourceCenter.vue#22e451664b4ba746.1 | 903 | control | SC48-CURRENT / handleSourceRefresh |
+| apps/web/src/components/ProviderSourceCenter.vue#52eea605d2c84eb0.1 | 913 | event-binding | SC48-CURRENT / changePage；testSource；beginEdit；loadCompatibility；loadConfigurationVersions；openParserSamples |
+| apps/web/src/components/ProviderSourceCenter.vue#0d05b40ba4543887.1 | 936 | event-binding | SC48-CURRENT / closeEdit；acknowledgeConfigurationSave；save；closeConfigurationVersions；retryConfigurationVersions；rollbackConfiguration；Object.assign(form, $event)；rollbackReason = $event |
+| apps/web/src/components/ProviderSourceCenter.vue#7f36e42eb80bca2d.1 | 936 | dialog-component-call | SC48-CURRENT / closeEdit；acknowledgeConfigurationSave；save；closeConfigurationVersions；retryConfigurationVersions；rollbackConfiguration；Object.assign(form, $event)；rollbackReason = $event |
+| apps/web/src/components/ProviderSourceCenter.vue#aebc04fe71463aa3.1 | 964 | event-binding | SC48-CURRENT / closeParserSamples；createParserSample；replayParserSample；reviewParserSample；retryParserSamples |
+| apps/web/src/components/ProviderSourceCenter.vue#e86a06afbe712ab0.1 | 964 | dialog-component-call | SC48-CURRENT / closeParserSamples；createParserSample；replayParserSample；reviewParserSample；retryParserSamples |
+| apps/web/src/components/ProviderSourceCenter.vue#26dd5da19bf14533.1 | 985 | event-binding | SC48-CURRENT / closeCompatibility |
+| apps/web/src/components/ProviderSourceCenter.vue#db583a9e271b4426.1 | 985 | dialog-component-call | SC48-CURRENT / closeCompatibility |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ProviderSourceCenter.vue | 150053a0a4820f82efdc5883b2ab98abb08077f0a9dab6105de32c294af1ac9d |
+
+### ProviderSourceDirectory
+
+| 当前candidateId | 行 | 类型 | 当前语义归属 |
+| --- | ---: | --- | --- |
+| apps/web/src/components/ProviderSourceDirectory.vue#2d157da14935d5c1.1 | 110 | control | SC48-CURRENT / openDetail(item, $event) |
+| apps/web/src/components/ProviderSourceDirectory.vue#7d1dbd0396d36c73.1 | 120 | control | SC48-CURRENT / closeDetail |
+| apps/web/src/components/ProviderSourceDirectory.vue#825fda3d056d6a41.1 | 125 | control | SC48-CURRENT / 查看来源页面 ↗ |
+| apps/web/src/components/ProviderSourceDirectory.vue#2379d17cd7b2d01d.1 | 172 | control | SC48-CURRENT / emit('test', item) |
+| apps/web/src/components/ProviderSourceDirectory.vue#130f527eb216a92c.1 | 184 | control | SC48-CURRENT / emit('edit', item) |
+| apps/web/src/components/ProviderSourceDirectory.vue#e6b03d1f68d67db6.1 | 187 | control | SC48-CURRENT / emit('compatibility', item) |
+| apps/web/src/components/ProviderSourceDirectory.vue#7209e2bc02cd1433.1 | 197 | control | SC48-CURRENT / emit('versions', item) |
+| apps/web/src/components/ProviderSourceDirectory.vue#41d7de0fd9df8fe5.1 | 200 | control | SC48-CURRENT / 配置网页登录 |
+| apps/web/src/components/ProviderSourceDirectory.vue#4cb6a1d6dddabaa3.1 | 205 | control | SC48-CURRENT / emit('samples', item) |
+| apps/web/src/components/ProviderSourceDirectory.vue#557f5d8ae75cf3bb.1 | 212 | control | SC48-CURRENT / 浏览器历史检查 |
+| apps/web/src/components/ProviderSourceDirectory.vue#6f7e71d427cb36b9.1 | 227 | control | SC48-CURRENT / emit('pageChange', props.page - 1) |
+| apps/web/src/components/ProviderSourceDirectory.vue#f3f3456654086e7b.1 | 239 | control | SC48-CURRENT / emit('pageChange', props.page + 1) |
+
+| 当前源文件 | 当前LF SHA-256 |
+| --- | --- |
+| apps/web/src/components/ProviderSourceDirectory.vue | 59dda1f9e08fc868fa20800fd648338801b1811591a3c10802d507f7e53351f5 |
