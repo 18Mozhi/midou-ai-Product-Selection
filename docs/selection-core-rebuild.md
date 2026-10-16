@@ -60,3 +60,5 @@
 - 工作台首页已重制白底工具栏、顶层统计、紧凑日目标和推荐/待办分区；清除主题旧首页覆盖及预览模板注入。见 `docs/selection-home-layout.md`。不代表全站视觉验收。
 
 - 运行准备实测：用户给定 1688 授权已写入生产受限配置并从主机验证六节点图搜；模型列表及合成合同探测可用。来源仍停用、代码未部署，历史死信未重放。见 `docs/selection-runtime-preparation.md`。
+
+- 发布启动一致性已修复：不变来源不再推进烟测时间门，Worker 在 API 完成目录同步并就绪后启动。见 `docs/selection-startup-consistency.md`；未做宝塔真实重启验收。

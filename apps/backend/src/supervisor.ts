@@ -83,6 +83,7 @@ export class BackendSupervisor {
   private readonly readinessProbe: NonNullable<SupervisorOptions["readinessProbe"]>;
   private readonly runtime = new Map<string, ProcessRuntime>();
   private stopping = false;
+  private workerWaitingForApi = false;
 
   constructor(
     private readonly processes: ManagedProcess[] = DEFAULT_PROCESSES,
@@ -169,6 +170,14 @@ export class BackendSupervisor {
 
   private startProcess(managed: ManagedProcess): void {
     if (this.stopping) return;
+    if (managed.name === "worker") {
+      if (this.runtime.has("api") && this.runtime.get("api")!.status !== "running") {
+        this.workerWaitingForApi = true;
+        this.publishState();
+        return;
+      }
+      this.workerWaitingForApi = false;
+    }
     const runtime = this.runtime.get(managed.name)!;
     runtime.status = runtime.restartCount ? "restarting" : "starting";
     runtime.readyAt = null;
@@ -228,6 +237,10 @@ export class BackendSupervisor {
       runtime.lastFailure = null;
       this.publishState();
       this.log("ready", managed.name, child.pid);
+      if (managed.name === "api" && this.workerWaitingForApi) {
+        const worker = this.processes.find((item) => item.name === "worker");
+        if (worker && !this.children.has("worker")) this.startProcess(worker);
+      }
     });
   }
 

@@ -1,4 +1,18 @@
 {
+  "selectionStartupConsistency20261017": {
+    "status": "implemented",
+    "statusDetail": "51_related_checks_passed_not_deployed",
+    "requirements": "docs/selection-startup-consistency.md",
+    "sourceFiles": [
+      "apps/api/src/mysql-provider-source-catalog-repository.ts",
+      "apps/backend/src/supervisor.ts"
+    ],
+    "testFiles": [
+      "tests/unit/provider-catalog-sync.test.mjs",
+      "tests/unit/backend-supervisor.test.mjs"
+    ],
+    "contract": "Unchanged builtin metadata preserves updated_at and valid smoke evidence. Actual changes retain original transactional update and smoke requirement. Unified Worker waits for API readiness after catalog synchronization. No source enablement, API/schema/config change or production mutation."
+  },
   "selectionRuntimePreparation20261017": {
     "status": "implemented",
     "statusDetail": "restricted_lan_authorization_saved_six_nodes_and_synthetic_model_probe_passed_not_deployed",

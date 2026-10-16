@@ -50,8 +50,7 @@ test("catalog synchronization honors the declared source status for ERP and manu
     query: async (sql, values = []) => {
       if (sql.includes("FROM platform_role_assignments"))
         return [[{ user_id: "00000000-0000-4000-8000-000000000001" }], []];
-      if (sql === "SELECT id,status,version FROM providers WHERE code=? FOR UPDATE")
-        return [[], []];
+      if (sql.startsWith("SELECT id,status,version,")) return [[], []];
       if (sql.startsWith("INSERT INTO providers")) inserted.set(values[1], values[19]);
       return [[], []];
     },

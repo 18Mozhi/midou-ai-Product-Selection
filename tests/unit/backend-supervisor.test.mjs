@@ -70,7 +70,7 @@ test("unified backend forwards graceful stop and does not restart children", asy
   });
 
   supervisor.start();
-  assert.equal(children.length, 2);
+  await waitFor(() => children.length === 2);
   await supervisor.stop("SIGTERM");
   await new Promise((resolve) => setTimeout(resolve, 10));
   assert.deepEqual(
@@ -158,5 +158,76 @@ test("unified backend keeps supervising when the state file cannot be written", 
   } finally {
     await supervisor.stop("SIGTERM");
     await rm(root, { recursive: true, force: true });
+  }
+});
+
+test("worker waits for API readiness even when listed before API", async () => {
+  let release;
+  const gate = new Promise((r) => {
+    release = r;
+  });
+  const spawned = [];
+  const supervisor = new BackendSupervisor(
+    [
+      { name: "worker", entrypoint: "apps/worker/dist/index.js" },
+      { name: "api", entrypoint: "apps/api/dist/server.js" },
+    ],
+    {
+      readinessProbe: async (m) => (m.name === "api" ? gate : true),
+      spawnProcess: (_command, args) => {
+        spawned.push(args[0]);
+        return new FakeChild(800 + spawned.length);
+      },
+    },
+  );
+  try {
+    supervisor.start();
+    assert.equal(spawned.length, 1);
+    assert.match(spawned[0], /api/);
+    release(true);
+    await waitFor(() => spawned.length === 2);
+    assert.match(spawned[1], /worker/);
+  } finally {
+    release(true);
+    await supervisor.stop("SIGTERM");
+  }
+});
+test("shutdown during API readiness never starts the waiting worker", async () => {
+  let release;
+  const gate = new Promise((r) => {
+    release = r;
+  });
+  let spawned = 0;
+  const supervisor = new BackendSupervisor(undefined, {
+    readinessProbe: async () => gate,
+    spawnProcess: () => new FakeChild(900 + spawned++),
+  });
+  supervisor.start();
+  assert.equal(spawned, 1);
+  await supervisor.stop("SIGTERM");
+  release(true);
+  await new Promise((r) => setImmediate(r));
+  assert.equal(spawned, 1);
+});
+test("API readiness failure leaves worker unstarted while API recovery is scheduled", async () => {
+  const children = [];
+  const supervisor = new BackendSupervisor(undefined, {
+    readinessProbe: async () => false,
+    readinessTimeoutMs: 2,
+    readinessPollMs: 1,
+    restartDelayMs: 1000,
+    spawnProcess: () => {
+      const c = new FakeChild(1000 + children.length);
+      children.push(c);
+      return c;
+    },
+  });
+  try {
+    supervisor.start();
+    await waitFor(() => children[0].signals.includes("SIGTERM"));
+    assert.equal(children.length, 1);
+    assert.equal(supervisor.children.has("worker"), false);
+  } finally {
+    await supervisor.stop("SIGTERM");
   }
 });

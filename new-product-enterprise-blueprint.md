@@ -1,3 +1,5 @@
+> 2026-10-17 启动一致性：来源目录无变化不再改写时间戳，Worker 等 API 同步完成并就绪后启动，保留来源开关与审批。见 `docs/selection-startup-consistency.md`。
+
 > 2026-10-17 首页重制：实际参考已登录 Ecom168 页面，改为紧凑工具栏、顶层统计和推荐/待办分区，删除旧主题首页覆盖与预览模板注入。见 `docs/selection-home-layout.md`。
 
 > 2026-10-17 快照顺序：延迟旧任务和重复任务不再覆盖当前商品快照或产生反向变化；新快照仍事务更新并触发评分。见 `docs/selection-product-refresh.md`。

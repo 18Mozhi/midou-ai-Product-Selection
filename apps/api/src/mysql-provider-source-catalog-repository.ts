@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import { isDeepStrictEqual } from "node:util";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { ProviderSourceRepository, ProvisionedSource } from "./provider-source-service.js";
 import { ProviderSourceServiceError } from "./provider-source-service.js";
@@ -54,11 +55,35 @@ export class MySqlProviderSourceCatalogRepository {
         automatic = 0;
       for (const d of input.definitions) {
         const [rows] = await c.query<RowDataPacket[]>(
-          "SELECT id,status,version FROM providers WHERE code=? FOR UPDATE",
+          "SELECT id,status,version,name,target_url,access_mode,markets_json,languages_json,fields_json,dedupe_key,failure_rules_json,parser_version,healthcheck_url,owner_label FROM providers WHERE code=? FOR UPDATE",
           [d.code],
         );
         const current = rows[0];
         if (current) {
+          const expected = {
+            name: d.name,
+            target_url: d.target_url,
+            access_mode: d.access_mode,
+            markets_json: d.markets,
+            languages_json: d.languages,
+            fields_json: d.fields,
+            dedupe_key: d.dedupe_key,
+            failure_rules_json: d.failure_rules,
+            parser_version: d.parser_version,
+            healthcheck_url: d.healthcheck_url,
+            owner_label: d.owner_label,
+          };
+          const changed = Object.entries(expected).some(([key, value]) => {
+            const actual =
+              key.endsWith("_json") && typeof current[key] === "string"
+                ? JSON.parse(current[key])
+                : current[key];
+            return !isDeepStrictEqual(actual, value);
+          });
+          if (!changed) {
+            if (current.status === "enabled" && d.availability === "automatic") automatic += 1;
+            continue;
+          }
           await c.query(
             [
               "UPDATE providers SET name=?,target_url=?,access_mode=?,markets_json=?,languages_json=?,fields_json=?",
