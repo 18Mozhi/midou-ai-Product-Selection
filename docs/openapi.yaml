@@ -3508,7 +3508,7 @@ paths:
   /reports/{reportType}:
     get:
       summary: Aggregate current scoped opportunity trend or team facts
-      description: Aggregates all persisted records in the active workspace and returns the latest factual observed_at; no selectable time window or inferred value is applied.
+      description: Aggregates all persisted records in the active workspace and returns the latest factual observed_at; no selectable time window or inferred value is applied. Retained scoped backend compatibility endpoint. The standalone member frontend report page is retired and its old browser URL redirects to the selection library; this API and historical export records are not deleted.
       x-required-capability: report:read
       parameters:
         [

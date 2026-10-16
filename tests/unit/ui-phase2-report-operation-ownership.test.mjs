@@ -1,12 +1,14 @@
+// Historical report lifecycle regression; not current member UI acceptance.
+import { readArchivedReportSource } from "../../scripts/lib/retired-report-surface.mjs";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import test from "node:test";
 import vm from "node:vm";
 import ts from "typescript";
 import { computed, reactive, ref, watch as vueWatch } from "vue";
-import { buildReportDesignData } from "../../scripts/lib/ui-phase2-report-design-data.mjs";
+import { buildArchivedReportDesignData } from "../../scripts/lib/ui-phase2-report-design-data.mjs";
 
-const source = (await readFile("apps/web/src/components/ReportCenter.vue", "utf8"))
+const source = readArchivedReportSource("apps/web/src/components/ReportCenter.vue")
   .split('<script setup lang="ts">')[1]
   .split("</script>")[0];
 const ast = ts.createSourceFile("report.ts", source, ts.ScriptTarget.Latest, true);
@@ -19,7 +21,7 @@ const code = ts.transpileModule(
     "\nreturn {createExport,download,refresh,load,syncDetailFromRoute,closeDetail,type,state,report,rows:exports,selectedExport,notice,requestId,busy,refreshing,downloadingId};})();",
   { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } },
 ).outputText;
-const data = await buildReportDesignData(process.cwd()),
+const data = await buildArchivedReportDesignData(process.cwd()),
   a = data.exports[0],
   b = data.exports[2];
 const plain = (value) => JSON.parse(JSON.stringify(value));

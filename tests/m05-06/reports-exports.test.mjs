@@ -252,7 +252,7 @@ test("M05-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
       "apps/api/src/mysql-report-repository.ts",
       "apps/api/src/report-routes.ts",
       "apps/worker/src/report-export-worker.ts",
-      "apps/web/src/components/ReportCenter.vue",
+      "apps/web/src/components/navigation-surface-registry.ts",
       "docs/architecture/m05-06-reports-exports.md",
       "docs/runbooks/m05-06-reports-exports.md",
       "docs/openapi.yaml",
@@ -266,9 +266,8 @@ test("M05-06.A03/A05-A11/A13-A17 delivery evidence exists", async () => {
   assert.match(v[1], /queue_position[\s\S]*estimated_completion_at[\s\S]*TIMESTAMPDIFF/);
   assert.match(v[2], /report:read[\s\S]*regenerate[\s\S]*text\/csv/);
   assert.match(v[3], /row_limit_exceeded[\s\S]*expired/);
-  assert.match(v[4], /数据不足[\s\S]*重新生成|到期后由 Worker 清理/);
+  assert.doesNotMatch(v[4], /ReportCenter|report-center/);
   assert.match(v[5], /全部已落库记录[\s\S]*observed_at/);
-  assert.match(v[4], /结论摘要[\s\S]*在任务中心查看/);
-  assert.match(v[4], /队列第[\s\S]*预计完成[\s\S]*估算依据/);
+
   assert.equal(JSON.parse(v.at(-1)).atomicTasks.length, 17);
 });

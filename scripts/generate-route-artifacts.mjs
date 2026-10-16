@@ -45,6 +45,25 @@ export function validateRouteCatalog(manifest) {
     if (route.featureMap && route.featureMap.path !== normalizeFeaturePath(route.path))
       throw new Error(`route_feature_path_mismatch:${route.path}`);
   }
+  for (const route of manifest.routes) {
+    if (route.redirect === undefined) continue;
+    const target = manifest.routes.find((candidate) => candidate.path === route.redirect);
+    if (
+      typeof route.redirect !== "string" ||
+      !target ||
+      target === route ||
+      target.path.includes(":") ||
+      target.redirect !== undefined ||
+      JSON.stringify([...route.capabilities].sort()) !==
+        JSON.stringify([...target.capabilities].sort()) ||
+      route.shell !== target.shell ||
+      route.acceptance !== target.acceptance ||
+      route.surface ||
+      route.view ||
+      route.navigation
+    )
+      throw new Error(`route_catalog_redirect_invalid:${route.path}`);
+  }
   if (manifest.productionAcceptance.roles.length !== 6)
     throw new Error("production_acceptance_requires_six_roles");
   const roleKeys = new Set();

@@ -1,4 +1,24 @@
 {
+  "selectionRetiredReports20261017": {
+    "status": "implemented",
+    "statusDetail": "member_reports_removed_182_tests_six_browser_cases_and_bundle_verified_not_deployed",
+    "requirements": "docs/selection-retired-member-reports.md",
+    "sourceFiles": [
+      "apps/web/src/route-catalog.ts",
+      "config/route-catalog.json",
+      "apps/web/src/components/navigation-surface-registry.ts",
+      "scripts/generate-route-artifacts.mjs",
+      "scripts/production-route-catalog.mjs",
+      "scripts/verify-production-product.mjs"
+    ],
+    "routes": ["/reports", "/opportunities"],
+    "testFiles": [
+      "tests/unit/retired-report-surface.test.mjs",
+      "tests/e2e/m05-06-reports.spec.ts",
+      "tests/m05-06/reports-exports.test.mjs"
+    ],
+    "contract": "Retired member reports route redirects to selection library with target permissions. ReportCenter and dedicated CSS/tokens/preview template are deleted from runtime sources. No report API requests or writes are made by the retired route. Backend reports and export persistence remain scoped and unchanged. Historical tests bind explicit Git bytes rather than reintroducing runtime code; preview capture commands fail before creating services. Redirect manifests permit only direct same-shell registered targets with matching capability metadata and no retired surface."
+  },
   "selectionLanSourceEnablement20261017": {
     "status": "implemented",
     "statusDetail": "local_113_tests_and_four_browser_cases_passed_not_deployed",
@@ -4003,10 +4023,10 @@
     },
     {
       "path": "/reports",
-      "view": "ReportCenter",
+      "view": "OpportunityWorkspace",
       "domain": "reports-exports",
-      "status": "verified",
-      "statusDetail": "M05-06_module_verified"
+      "status": "implemented",
+      "statusDetail": "retired_member_reports_redirect_to_selection_library"
     },
     {
       "path": "/org-admin",

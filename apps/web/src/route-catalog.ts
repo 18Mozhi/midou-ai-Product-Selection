@@ -24,6 +24,7 @@ export interface ShellNavigationItem {
 }
 
 interface RouteCatalogEntry {
+  redirect?: string;
   path: string;
   name: string;
   title: string;
@@ -57,7 +58,7 @@ const runtimeRoutes = manifest.routes.filter(
 export const appRoutes: RouteRecordRaw[] = runtimeRoutes.map((entry) => ({
   path: entry.path,
   name: entry.name,
-  component: ApplicationSurface,
+  ...(entry.redirect ? { redirect: entry.redirect } : { component: ApplicationSurface }),
   meta: {
     title: entry.title,
     breadcrumb: [...entry.breadcrumb],

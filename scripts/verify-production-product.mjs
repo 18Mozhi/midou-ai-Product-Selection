@@ -101,6 +101,11 @@ function verifyRoleBoundary(profile, guard) {
     `${profile.key} must have exactly the ${profile.role} role`,
   );
   assert(Array.isArray(capabilities), `${profile.key} guard returned no capability list`);
+  if (profile.shell !== "platform_admin")
+    assert(
+      guard?.organization_id && guard?.workspace_id,
+      `${profile.key} has no persisted tenant context`,
+    );
   assert(
     !profile.forbidden.some((capability) => capabilities.includes(capability)),
     `${profile.key} contains a forbidden capability`,
@@ -208,6 +213,10 @@ async function checkRoutes(profile, session) {
     const path = await concreteRoute(page, route);
     const failureStart = apiFailures.length;
     await page.goto(`${baseUrl}${path}`, { waitUntil: "networkidle" });
+    assert(
+      new URL(page.url()).pathname === (route.redirect ?? path),
+      `${profile.key}:${path} did not reach its declared target`,
+    );
     const text = await page.locator("body").innerText();
     const heading =
       (await page.getByRole("heading").allTextContents()).find((value) => value.trim()) ?? "";

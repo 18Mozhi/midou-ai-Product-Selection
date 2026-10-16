@@ -1,9 +1,12 @@
+import { assertReportSurfaceActive } from "./lib/retired-report-surface.mjs";
 import assert from "node:assert/strict";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createServer } from "vite";
 import { chromium } from "playwright";
-import { buildReportDesignData } from "./lib/ui-phase2-report-design-data.mjs";
+import { buildArchivedReportDesignData } from "./lib/ui-phase2-report-design-data.mjs";
+
+assertReportSurfaceActive();
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const entry = "/__p28_read_ownership.js";
@@ -20,7 +23,7 @@ snapshot:()=>read(shown.value?child.value.$.setupState:retired),query:()=>router
 destroy:async()=>{retired=child.value.$.setupState;shown.value=false;await nextTick();}};
 return()=>h('main',[shown.value?h(ReportCenter,{ref:child,apiBaseUrl:'/api/v1'}):h('p',{id:'destroyed'},'Destroyed')]);}};
 await router.push('/reports');await router.isReady();createApp(Host).use(router).mount('#host');`;
-const data = await buildReportDesignData(repo),
+const data = await buildArchivedReportDesignData(repo),
   a = data.exports[0],
   b = data.exports[2];
 const server = await createServer({

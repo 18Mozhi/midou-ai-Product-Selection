@@ -1,3 +1,4 @@
+import { assertReportSurfaceActive } from "./lib/retired-report-surface.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFile, writeFile, readdir } from "node:fs/promises";
@@ -5,8 +6,10 @@ import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import vm from "node:vm";
 import { chromium } from "playwright";
-import { buildReportDesignData } from "./lib/ui-phase2-report-design-data.mjs";
+import { buildArchivedReportDesignData } from "./lib/ui-phase2-report-design-data.mjs";
 import { checkPrototypeMetrics } from "./lib/ui-phase2-prototype-metrics.mjs";
+
+assertReportSurfaceActive();
 
 const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
   relative = "design-plans/ui-phase-2-2026-09-07/design/report-direction-c",
@@ -14,7 +17,7 @@ const repo = path.resolve(path.dirname(fileURLToPath(import.meta.url)), ".."),
   hash = (v) => createHash("sha256").update(v).digest("hex"),
   capture = process.argv.includes("--capture");
 assert.ok(process.argv.slice(2).every((v) => v === "--capture"));
-const data = await buildReportDesignData(repo),
+const data = await buildArchivedReportDesignData(repo),
   sources = [
     ...["index.html", "report.css", "report.js", "data.js"].map((f) => `${relative}/${f}`),
     "apps/web/src/components/ReportCenter.vue",

@@ -1,5 +1,7 @@
 # M05-06 报表与导出运维和回滚
 
+> 2026-10-17：用户端独立报表页面已退役，旧 `/reports` 前端链接转至选品库。下文页面交互保留为历史说明；后端 API、导出 Worker 和历史数据保持当前合同。见 `docs/selection-retired-member-reports.md`。
+
 ## 宝塔配置
 
 生产验收探针使用 `python scripts/verify-live-baota.py reports`；临时导出文件限定写入项目 `runtime/verification`，探针完成或失败时清理该请求目录，不向用户导出真实客户数据。

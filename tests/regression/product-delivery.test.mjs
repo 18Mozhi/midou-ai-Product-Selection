@@ -164,7 +164,11 @@ test("production product QA waits for the selected tenant context and never embe
     read("scripts/verify-production-product.mjs"),
     read("config/route-catalog.json").then(JSON.parse),
   ]);
-  assert.match(source, /getByText\("工作范围已就绪", \{ exact: true \}\)\.waitFor\(\)/);
+  assert.match(
+    source,
+    /await page.waitForURL\(profile.landing\)[\s\S]*await readGuard\(profile, context\)/,
+  );
+  assert.match(source, /guard\?\.organization_id && guard\?\.workspace_id/);
   assert.match(source, /readRouteCatalogManifest/);
   assert.match(source, /credentials\(profile\.credentialPrefix\)/);
   assert.equal(catalog.productionAcceptance.roles.length, 6);

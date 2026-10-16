@@ -1,3 +1,4 @@
+import { assertReportSurfaceActive } from "./lib/retired-report-surface.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -338,6 +339,7 @@ export function buildReportReview(source, evidence) {
   };
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  assertReportSurfaceActive();
   assert.ok(process.argv.slice(2).every((arg) => ["--write", "--check"].includes(arg)));
   const value = buildReportReview(
     readFileSync(sourceFile, "utf8"),

@@ -1,3 +1,4 @@
+import { readArchivedReportSource } from "../../scripts/lib/retired-report-surface.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
@@ -778,10 +779,10 @@ test("P67 Redis palette resolves route colors from one page-scoped source", asyn
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(/i);
 });
 
-test("report center palette resolves its approved colors only on the review route", async () => {
+test("archived report palette resolves its approved colors only on its historical review route", async () => {
   const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/report-center-tokens.css", "utf8"),
-    readFile("apps/web/src/report-center.css", "utf8"),
+    readArchivedReportSource("apps/web/src/design/report-center-tokens.css"),
+    readArchivedReportSource("apps/web/src/report-center.css"),
   ]);
   const declarations = [
     ...tokens.matchAll(

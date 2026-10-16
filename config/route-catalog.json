@@ -568,22 +568,23 @@
     {
       "path": "/reports",
       "name": "reports",
-      "title": "报表与导出",
-      "breadcrumb": ["运营工具", "报表与导出"],
+      "title": "选品库",
+      "breadcrumb": ["选品库"],
       "shell": "member",
       "view": null,
-      "capabilities": ["report:read"],
+      "capabilities": ["opportunity:read"],
       "notFound": false,
-      "surface": "report-center",
-      "cachePolicy": "reset_on_scope",
+      "surface": "",
+      "cachePolicy": "none",
       "acceptance": "protected",
       "featureMap": {
         "path": "/reports",
-        "view": "ReportCenter",
+        "view": "OpportunityWorkspace",
         "domain": "reports-exports",
-        "status": "verified",
-        "statusDetail": "M05-06_module_verified"
-      }
+        "status": "implemented",
+        "statusDetail": "retired_member_reports_redirect_to_selection_library"
+      },
+      "redirect": "/opportunities"
     },
     {
       "path": "/org-admin",

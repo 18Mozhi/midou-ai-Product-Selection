@@ -29,6 +29,7 @@ export async function readProtectedRouteCatalog(file = "config/route-catalog.jso
       capabilities: [...route.capabilities],
       dynamic: route.path.includes(":"),
       resolver: route.productionResolver ?? null,
+      redirect: route.redirect ?? null,
     }));
   const duplicates = routes.filter(
     (route, index) => routes.findIndex((candidate) => candidate.path === route.path) !== index,

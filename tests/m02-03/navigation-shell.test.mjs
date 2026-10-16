@@ -201,7 +201,7 @@ test("M02-03 route shell lazily imports only registered surfaces and page-owned 
   );
   const routeSurfaces = new Set(
     JSON.parse(catalogRaw)
-      .routes.filter((route) => route.shell && route.acceptance !== "internal")
+      .routes.filter((route) => route.shell && route.acceptance !== "internal" && !route.redirect)
       .map((route) => route.surface),
   );
   const surfaceBindings = new Set(
@@ -235,7 +235,7 @@ test("M02-03 aggregate surfaces defer their inactive route views and dialogs", a
     assert.deepEqual(
       staticChildImports,
       name === "OpportunityWorkspace.vue"
-        ? ["UiStatePanel.vue", "AuditedReasonDialog.vue"]
+        ? ["UiStatePanel.vue", "SelectionProductHeader.vue"]
         : name === "PlatformAccountCenter.vue"
           ? ["AppIcon.vue"]
           : [],
@@ -384,7 +384,11 @@ test("M02-03.A01/A07/A08/A10/A15/A16/A17 frontend and delivery contracts stay ex
   assert.match(routeCatalog, /const runtimeRoutes = manifest\.routes\.filter/);
   assert.match(routeCatalog, /entry\.acceptance !== "internal"/);
   assert.match(routeCatalog, /runtimeRoutes\.map/);
-  assert.ok(routeCatalogManifest.routes.every((entry) => entry.surface && entry.cachePolicy));
+  assert.ok(
+    routeCatalogManifest.routes.every(
+      (entry) => (entry.surface || entry.redirect) && entry.cachePolicy,
+    ),
+  );
   assert.ok(routeCatalogManifest.routes.some((entry) => entry.acceptance === "internal"));
   assert.match(routeCatalog, /cachePolicy/);
   assert.match(component, /selectedSurfaceComponent/);

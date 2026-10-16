@@ -1,12 +1,20 @@
-import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { readArchivedReportSource } from "./retired-report-surface.mjs";
+import assert from "node:assert/strict";
 import vm from "node:vm";
 import ts from "typescript";
 
 const plain = (v) => JSON.parse(JSON.stringify(v));
-export async function buildReportDesignData(repo) {
-  const read = (f) => readFile(path.join(repo, f), "utf8");
+export async function buildArchivedReportDesignData(repo) {
+  const retainedBackend = new Set([
+    "apps/api/src/mysql-report-repository.ts",
+    "apps/api/src/report-service.ts",
+  ]);
+  const read = (f) =>
+    retainedBackend.has(f)
+      ? readFile(path.join(repo, f), "utf8")
+      : readArchivedReportSource(f, repo);
   function extract(source, name, kind = "variable") {
     const ast = ts.createSourceFile("source.ts", source, ts.ScriptTarget.Latest, true),
       found = [];
