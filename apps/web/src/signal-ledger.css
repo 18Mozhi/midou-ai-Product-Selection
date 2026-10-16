@@ -178,87 +178,6 @@ html[data-design="signal-ledger"]
   box-shadow: inset 3px 0 currentColor;
 }
 
-/* Member decision ledger */
-html[data-design="signal-ledger"] .home-dashboard {
-  display: grid;
-  gap: 0;
-}
-
-html[data-design="signal-ledger"] .home-command-bar {
-  min-height: 82px;
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: stretch;
-  border-block: 2px solid var(--so-text);
-  background: var(--so-panel);
-}
-
-html[data-design="signal-ledger"] .home-command-bar > :first-child {
-  padding: 16px 18px;
-}
-
-html[data-design="signal-ledger"] .home-command-bar :where(button, a) {
-  align-self: stretch;
-  min-height: 100%;
-  padding-inline: 18px;
-  border: 0;
-  border-left: 1px solid var(--so-border);
-}
-
-html[data-design="signal-ledger"] .home-system-state,
-html[data-design="signal-ledger"] .home-setup-callout,
-html[data-design="signal-ledger"] .home-rule-setup,
-html[data-design="signal-ledger"] .home-truth {
-  margin: 0;
-  padding: 14px 16px;
-  border: 0;
-  border-bottom: 1px solid var(--so-border);
-  border-left: 6px solid var(--so-signal);
-  background: var(--so-panel);
-}
-
-html[data-design="signal-ledger"] .home-main-grid {
-  margin-top: 24px;
-  gap: 0;
-  border: 1px solid var(--so-text);
-  background: var(--so-panel);
-}
-
-html[data-design="signal-ledger"] .home-main-grid > * + * {
-  border-left: 1px solid var(--so-text);
-}
-
-html[data-design="signal-ledger"] .home-review-queue {
-  border: 0;
-  background: var(--so-panel);
-}
-
-html[data-design="signal-ledger"] .home-review-row {
-  margin: 0;
-  padding: 14px 0;
-  border: 0;
-  border-top: 1px solid var(--so-border);
-  background: transparent;
-}
-
-html[data-design="signal-ledger"] .home-review-row:hover {
-  background: var(--so-signal-soft);
-}
-
-html[data-design="signal-ledger"] .home-operations-strip {
-  margin-top: 24px;
-  display: grid;
-  gap: 0;
-  border-block: 2px solid var(--so-text);
-  background: var(--so-panel);
-}
-
-html[data-design="signal-ledger"] .home-operations-strip > * {
-  border-right: 1px solid var(--so-border);
-}
-
 /* Recurrent feature page structures */
 html[data-design="signal-ledger"]
   body
@@ -634,21 +553,6 @@ html[data-design="signal-ledger"] .role-theme-menu button[aria-pressed="true"] {
   }
 
   html[data-design="signal-ledger"] .theme-preview {
-    border-top: 1px solid var(--so-text);
-    border-left: 0;
-  }
-
-  html[data-design="signal-ledger"] .home-command-bar {
-    grid-template-columns: 1fr;
-  }
-
-  html[data-design="signal-ledger"] .home-command-bar :where(button, a) {
-    min-height: 50px;
-    border-top: 1px solid var(--so-border);
-    border-left: 0;
-  }
-
-  html[data-design="signal-ledger"] .home-main-grid > * + * {
     border-top: 1px solid var(--so-text);
     border-left: 0;
   }

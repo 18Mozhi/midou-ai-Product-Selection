@@ -1,4 +1,18 @@
 {
+  "selectionHomeLayout20261017": {
+    "status": "implemented",
+    "statusDetail": "79_related_checks_and_24_browser_cases_passed_not_deployed",
+    "requirements": "docs/selection-home-layout.md",
+    "routes": ["/home"],
+    "sourceFiles": [
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/home-dashboard.css",
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/signal-ledger.css"
+    ],
+    "testFiles": ["tests/e2e/m02-06-home-mobile.spec.ts", "tests/unit/home-page-preview.test.mjs"],
+    "contract": "Compact white toolbar, top-level actual statistics and primary recommendation queue. Remove old home theme overrides and template/CSS preview injection. Existing reads, writes, polling, RBAC, daily data and unknown states retained; no API or configuration change."
+  },
   "selectionSnapshotOrder20261017": {
     "status": "implemented",
     "statusDetail": "local_snapshot_order_tests_passed_not_deployed",

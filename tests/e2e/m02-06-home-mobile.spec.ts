@@ -202,6 +202,22 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.getByText("推荐需人工采纳")).toBeHidden();
   await page.getByText("数据说明", { exact: true }).click();
   await expect(page.getByText("推荐需人工采纳")).toBeVisible();
+  const layout = await page.evaluate(() => {
+    const header = document.querySelector(".home-command-bar")!;
+    const metrics = document.querySelector(".home-automation-overview")!;
+    const queue = document.querySelector(".home-review-queue")!;
+    return {
+      headerColor: getComputedStyle(header).backgroundColor,
+      queueColor: getComputedStyle(queue).backgroundColor,
+      headerHeight: header.getBoundingClientRect().height,
+      metricsAboveQueue: metrics.getBoundingClientRect().top < queue.getBoundingClientRect().top,
+      metricsInSidebar: Boolean(metrics.closest("aside")),
+    };
+  });
+  expect(layout.headerColor).toBe(layout.queueColor);
+  expect(layout.headerHeight).toBeLessThan(testInfo.project.name === "mobile-390" ? 260 : 160);
+  expect(layout.metricsAboveQueue).toBe(true);
+  expect(layout.metricsInSidebar).toBe(false);
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
@@ -210,6 +226,9 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     await markOcclusionProbe(firstRecommendation);
     await expectAboveMobileNavigation(page, firstRecommendation);
   }
+  await page.getByText("运行详情", { exact: true }).click();
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.screenshot({ path: testInfo.outputPath("home-workspace.png"), fullPage: true });
 });
 
 test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 contract", async ({
@@ -371,10 +390,7 @@ test("M02-06.A08/A16 empty then blocked recovery never fabricates metrics", asyn
   await page.getByRole("button", { name: "设置关键词监控", exact: true }).click();
   await expect(page.getByRole("heading", { name: "添加关键词监控" })).toBeVisible();
   await page.getByText("运行详情", { exact: true }).click();
-  await expect(page.locator(".home-runtime-panel li").first()).toHaveAttribute(
-    "data-done",
-    "false",
-  );
+  await expect(page.locator(".home-runtime-panel li")).toHaveCount(0);
   const emptyRecommendation = page.getByText("系统会在五项质量门全部通过后自动加入这里。");
   await expect(emptyRecommendation).toBeVisible();
   if (testInfo.project.name === "mobile-390") {
@@ -719,7 +735,14 @@ test.describe("daily snapshots retain Beijing time in overseas browsers", () => 
       await expect
         .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
         .toBe(true);
-      if (qualified === 87) await expect(daily).toHaveScreenshot("daily-product-production.png");
+      if (qualified === 87) {
+        await daily.evaluate((element) => element.scrollIntoView({ block: "center" }));
+        if (test.info().project.name === "mobile-390") {
+          await markOcclusionProbe(daily);
+          await expectAboveMobileNavigation(page, daily);
+        }
+        await expect(daily).toHaveScreenshot("daily-product-production.png");
+      }
     });
   }
 });

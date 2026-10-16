@@ -162,69 +162,6 @@ html[data-design="commerce"] #app .opportunity-hero-actions > .secondary {
   border: 1px solid var(--so-border);
   border-radius: 5px;
 }
-html[data-design="commerce"]
-  #app
-  :is(.home-hero, .opportunity-hero, .opportunity-workspace-header) {
-  background: var(--commerce-color-0);
-  color: var(--so-text);
-  border: 1px solid var(--so-border);
-  border-radius: 7px;
-  box-shadow: none;
-}
-html[data-design="commerce"] #app :is(.home-dashboard, .home-discovery-layout) {
-  min-width: 0;
-}
-html[data-design="commerce"] #app .home-discovery-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 290px;
-  gap: 20px;
-}
-html[data-design="commerce"] #app .home-monitoring-rail {
-  display: grid;
-  gap: 16px;
-  align-content: start;
-}
-html[data-design="commerce"]
-  #app
-  .home-monitoring-rail
-  :is(.home-runtime-panel, .home-runtime-panel ol, .home-runtime-panel dl) {
-  grid-template-columns: minmax(0, 1fr);
-}
-html[data-design="commerce"] #app .home-monitoring-rail .home-runtime-panel dd {
-  overflow-wrap: anywhere;
-}
-html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip {
-  min-width: 0;
-  margin-top: 0;
-  padding: 16px;
-}
-html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip > div:last-child {
-  grid-template-columns: minmax(0, 1fr);
-}
-html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip a {
-  grid-template-columns: 24px minmax(0, 1fr);
-  gap: 8px;
-  padding: 10px;
-}
-html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip a > span {
-  min-width: 0;
-  overflow-wrap: anywhere;
-}
-html[data-design="commerce"] #app .home-monitoring-rail .home-operations-strip a em {
-  grid-column: 2;
-}
-html[data-design="commerce"] #app .home-discovery-layout:has(> aside:empty) {
-  grid-template-columns: minmax(0, 1fr);
-}
-html[data-design="commerce"] #app .home-status-facts {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-}
-html[data-design="commerce"] #app .home-review-queue {
-  border: 1px solid var(--so-border);
-  border-radius: 7px;
-  overflow: hidden;
-  background: var(--commerce-color-0);
-}
 html[data-design="commerce"] #app .opportunity-view-bar {
   padding: 14px 16px;
   background: var(--commerce-color-0);
@@ -433,9 +370,6 @@ html[data-design="commerce"] #app .product-catalog[data-display="list"] .opportu
   border: 0;
 }
 @media (max-width: 1100px) {
-  html[data-design="commerce"] #app .home-discovery-layout {
-    grid-template-columns: 1fr;
-  }
   .role-workspace-identity > a,
   .role-workspace-identity > span {
     display: none;

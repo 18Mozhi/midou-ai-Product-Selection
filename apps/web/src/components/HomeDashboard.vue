@@ -386,6 +386,7 @@ onBeforeUnmount(deactivate);
           >
         </nav>
       </header>
+      <HomeAutomationOverview v-if="selection" :selection="selection" />
       <section class="home-daily-production" aria-label="每日选品产出">
         <header>
           <h3>今日新增商品</h3>
@@ -544,7 +545,7 @@ onBeforeUnmount(deactivate);
           <section class="home-review-queue so-ledger-surface">
             <header>
               <div>
-                <span>01 / 人工决策</span>
+                <span>待采纳商品</span>
                 <h3 id="home-review-title">推荐清单</h3>
               </div>
               <RouterLink v-if="selection" to="/opportunities">
@@ -561,7 +562,9 @@ onBeforeUnmount(deactivate);
                 <strong>{{ item.title }}</strong
                 ><small>{{ item.reason }}</small>
               </div>
-              <span v-if="item.value_score !== null">{{ score(item.value_score) }} 分</span
+              <span>{{
+                item.value_score === null ? "评分未读取" : `${score(item.value_score)} 分`
+              }}</span
               ><b>查看 →</b>
             </RouterLink>
             <div v-if="!selection" class="home-quiet-empty" role="status">
@@ -592,14 +595,13 @@ onBeforeUnmount(deactivate);
         </section>
 
         <aside class="home-monitoring-rail" aria-label="监听与待办">
-          <HomeAutomationOverview v-if="selection" :selection="selection" />
           <section
             v-if="otherActions.length || data?.health.length"
             class="home-operations-strip so-ledger-surface"
           >
             <header>
               <div>
-                <span>02 / 本人事项</span>
+                <span>工作事项</span>
                 <h3>其他待办与异常</h3>
               </div>
               <span>只显示与你有关的事项</span>
