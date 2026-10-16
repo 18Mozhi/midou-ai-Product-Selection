@@ -215,7 +215,8 @@ export class MySqlAutomaticSelectionEvaluationWorker {
             "ORDER BY published_at DESC,id DESC LIMIT 1",
           [job.organizationId, job.workspaceId, opportunity.market],
         );
-      if (!scoreRules[0] || !costRules[0])
+      const scoreRule = scoreRules[0];
+      if (!scoreRule)
         return await this.waiting(
           connection,
           job,
@@ -250,19 +251,6 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           },
           now,
         );
-      const automaticScope = parse<{ product_family?: string }>(
-        costRules[0].automatic_scope_json,
-        {},
-      );
-      if (automaticScope.product_family !== "phone_case" || !isPhoneCase(amazonTitle))
-        return await this.waiting(
-          connection,
-          job,
-          "automatic_cost_scope_mismatch",
-          { configured_product_family: automaticScope.product_family ?? null },
-          now,
-        );
-
       const [competitors] = await connection.query<RowDataPacket[]>(
         "SELECT s.* FROM competitors c JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id " +
           "WHERE c.opportunity_id=? AND c.organization_id=? AND c.workspace_id=? AND c.status='active' " +
@@ -278,6 +266,157 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       const competitor = competitors[0];
       if (!competitor)
         return await this.waiting(connection, job, "amazon_competitor_snapshot_missing", {}, now);
+
+      // Evidence scoring is independent of category-specific cost eligibility.
+      // Null profit is explicit missing data, never an assumed zero margin.
+      const publishScores = async (
+        netMarginPercent: number | null,
+        currentCostEvidenceIds: string[],
+        costFingerprint: string,
+        missingProfitReason?: string,
+      ) => {
+        const evidenceIds = [
+            String(amazon.raw_evidence_id),
+            ...currentCostEvidenceIds,
+            String(competitor.evidence_id),
+          ],
+          qualityBlocked = await this.qualityBlocked(connection, job, evidenceIds),
+          product: ProductFacts = {
+            title: amazonTitle,
+            price: amazonPrice,
+            currency: amazonCurrency,
+            reviewCount: number(fields.review_count ?? competitor.review_count),
+            rating: number(fields.rating_value ?? fields.rating ?? competitor.rating_value),
+            availability: competitor.availability,
+            observedAt: date(amazon.observed_at),
+            evidenceId: String(amazon.raw_evidence_id),
+            providerHealthy:
+              amazon.provider_status === "enabled" &&
+              competitor.source_status === "healthy" &&
+              competitor.freshness === "fresh",
+            qualityBlocked,
+          },
+          facts = calculateAutomaticScoreFacts({
+            product,
+            netMarginPercent,
+            evidenceAgeHours: Math.max(
+              0,
+              (now.getTime() - product.observedAt.getTime()) / 3_600_000,
+            ),
+            requiredFieldsPresent: [
+              amazonTitle,
+              amazonPrice,
+              product.reviewCount,
+              product.rating,
+              competitor.availability,
+            ].filter((item) => item != null && item !== "").length,
+            requiredFieldCount: 5,
+          }),
+          dimensions = parse<ScoreDimension[]>(scoreRule.dimensions_json, []),
+          scoreEvidence: Record<string, string[]> = {
+            market_demand: [String(amazon.raw_evidence_id)],
+            competition: [String(competitor.evidence_id)],
+            profit: currentCostEvidenceIds,
+            risk: [String(amazon.raw_evidence_id), String(competitor.evidence_id)],
+            data_quality: evidenceIds,
+          },
+          scoreValues = facts as unknown as Record<string, number | string | null>;
+        let scoreInputsChanged = false;
+        for (const dimension of dimensions) {
+          const value =
+              typeof scoreValues[dimension.code] === "number"
+                ? Number(scoreValues[dimension.code])
+                : null,
+            supported = Object.hasOwn(scoreEvidence, dimension.code);
+          scoreInputsChanged =
+            (await this.upsertScoreInput(connection, {
+              job,
+              dimension,
+              score: supported && !qualityBlocked ? value : null,
+              evidenceIds: scoreEvidence[dimension.code] ?? evidenceIds,
+              missingFields:
+                supported && value != null && !qualityBlocked
+                  ? []
+                  : [
+                      qualityBlocked
+                        ? "automatic_evaluation.quality_blocked"
+                        : dimension.code === "profit" && missingProfitReason
+                          ? `automatic_evaluation.profit.${missingProfitReason}`
+                          : `automatic_evaluation.${dimension.code}.unsupported`,
+                    ],
+              sourceRef: `automatic:${AUTOMATIC_SELECTION_FORMULA_VERSION}:${costFingerprint.slice(0, 16)}`,
+              observedAt: now,
+              requestId,
+              traceId,
+              now,
+            })) || scoreInputsChanged;
+        }
+        if (scoreInputsChanged || !opportunity.score_rule_version)
+          await this.queueScore(connection, job, String(scoreRule.id), requestId, traceId, now);
+        await connection.query(
+          "UPDATE opportunities SET risk_level=?,recommendation_status=IF(?,'insufficient_data'," +
+            "recommendation_status),version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
+          [
+            facts.riskLevel,
+            qualityBlocked || Boolean(missingProfitReason),
+            now,
+            job.opportunityId,
+            job.organizationId,
+            job.workspaceId,
+          ],
+        );
+        if (missingProfitReason && scoreInputsChanged)
+          await this.event(
+            connection,
+            job,
+            "opportunity.automatic_quality_evaluated",
+            {
+              formula_version: AUTOMATIC_SELECTION_FORMULA_VERSION,
+              evidence_fingerprint: costFingerprint,
+              missing_profit_reason: missingProfitReason,
+            },
+            requestId,
+            traceId,
+            now,
+          );
+        return { scoreInputsChanged, qualityBlocked };
+      };
+      const waitForCost = async (code: string, payload: Record<string, unknown>) => {
+        const result = await publishScores(
+          null,
+          [],
+          fingerprint({
+            formula_version: AUTOMATIC_SELECTION_FORMULA_VERSION,
+            amazon_evidence: amazon.raw_evidence_id,
+            competitor_evidence: competitor.evidence_id,
+            missing_profit: code,
+          }),
+          code,
+        );
+        return this.waiting(
+          connection,
+          job,
+          code,
+          {
+            ...payload,
+            score_inputs_changed: result.scoreInputsChanged,
+          },
+          now,
+        );
+      };
+      if (!costRules[0])
+        return await waitForCost("automatic_rules_not_active", {
+          score_rule: true,
+          cost_rule: false,
+        });
+      const automaticScope = parse<{ product_family?: string }>(
+        costRules[0].automatic_scope_json,
+        {},
+      );
+      if (automaticScope.product_family !== "phone_case" || !isPhoneCase(amazonTitle))
+        return await waitForCost("automatic_cost_scope_mismatch", {
+          configured_product_family: automaticScope.product_family ?? null,
+        });
 
       const [supplyRows] = await connection.query<RowDataPacket[]>(automaticSupplyEvidenceSql, [
         job.opportunityId,
@@ -308,13 +447,11 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         }),
         supplyMatch = selectConservativeSupplyMatch(amazonTitle, supplies);
       if (!supplyMatch)
-        return await this.waiting(
-          connection,
-          job,
-          "high_confidence_1688_match_missing",
-          { evaluated_supply_records: supplies.length, minimum_samples: 3, minimum_confidence: 80 },
-          now,
-        );
+        return await waitForCost("high_confidence_1688_match_missing", {
+          evaluated_supply_records: supplies.length,
+          minimum_samples: 3,
+          minimum_confidence: 80,
+        });
 
       const feeLines = parse<FeeLine[]>(costRules[0].fee_lines_json, []),
         conversionRates = parse<ConversionRate[]>(costRules[0].conversion_rates_json, []),
@@ -328,16 +465,10 @@ export class MySqlAutomaticSelectionEvaluationWorker {
               item.effective_on <= now.toISOString().slice(0, 10),
           );
       if (!logisticsConfigured || !conversionConfigured)
-        return await this.waiting(
-          connection,
-          job,
-          "automatic_cost_policy_incomplete",
-          {
-            logistics_configured: logisticsConfigured,
-            conversion_configured: conversionConfigured,
-          },
-          now,
-        );
+        return await waitForCost("automatic_cost_policy_incomplete", {
+          logistics_configured: logisticsConfigured,
+          conversion_configured: conversionConfigured,
+        });
 
       const saleChanged = await this.upsertCostInput(connection, {
           job,
@@ -375,13 +506,13 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         currentSale = currentCosts.get("sale_price"),
         currentPurchase = currentCosts.get("purchase_price");
       if (!currentSale || !currentPurchase)
-        return await this.waiting(connection, job, "automatic_cost_inputs_missing", {}, now);
+        return await waitForCost("automatic_cost_inputs_missing", {});
       const currentCostEvidenceIds = [currentSale.evidence_id, currentPurchase.evidence_id]
           .map((item) => text(item))
           .filter(Boolean),
         costFingerprint = fingerprint({
           formula: AUTOMATIC_SELECTION_FORMULA_VERSION,
-          score_rule: scoreRules[0].id,
+          score_rule: scoreRule.id,
           cost_rule: costRules[0].id,
           current_cost_inputs: [currentSale, currentPurchase].map((item) => ({
             id: String(item.id),
@@ -409,6 +540,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         date(profitRun.calculated_at).getTime() < newestCostInputAt
       ) {
         await this.queueProfit(connection, job, String(costRules[0].id), requestId, traceId, now);
+        await publishScores(null, [], costFingerprint, "profit_calculation_pending");
         await this.complete(
           connection,
           job,
@@ -428,98 +560,14 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         };
       }
       if (profitRun.status !== "calculated")
-        return await this.waiting(
-          connection,
-          job,
-          "profit_calculation_incomplete",
-          { missing_fields: parse(profitRun.missing_fields_json, []) },
-          now,
-        );
+        return await waitForCost("profit_calculation_incomplete", {
+          missing_fields: parse(profitRun.missing_fields_json, []),
+        });
 
-      const evidenceIds = [
-          String(amazon.raw_evidence_id),
-          ...currentCostEvidenceIds,
-          String(competitor.evidence_id),
-        ],
-        qualityBlocked = await this.qualityBlocked(connection, job, evidenceIds),
-        product: ProductFacts = {
-          title: amazonTitle,
-          price: amazonPrice,
-          currency: amazonCurrency,
-          reviewCount: number(fields.review_count ?? competitor.review_count),
-          rating: number(fields.rating_value ?? fields.rating ?? competitor.rating_value),
-          availability: competitor.availability,
-          observedAt: date(amazon.observed_at),
-          evidenceId: String(amazon.raw_evidence_id),
-          providerHealthy:
-            amazon.provider_status === "enabled" &&
-            competitor.source_status === "healthy" &&
-            competitor.freshness === "fresh",
-          qualityBlocked,
-        },
-        facts = calculateAutomaticScoreFacts({
-          product,
-          netMarginPercent: number(profitRun.net_margin_percent),
-          evidenceAgeHours: Math.max(0, (now.getTime() - product.observedAt.getTime()) / 3_600_000),
-          requiredFieldsPresent: [
-            amazonTitle,
-            amazonPrice,
-            product.reviewCount,
-            product.rating,
-            competitor.availability,
-          ].filter((item) => item != null && item !== "").length,
-          requiredFieldCount: 5,
-        }),
-        dimensions = parse<ScoreDimension[]>(scoreRules[0].dimensions_json, []),
-        scoreEvidence: Record<string, string[]> = {
-          market_demand: [String(amazon.raw_evidence_id)],
-          competition: [String(competitor.evidence_id)],
-          profit: currentCostEvidenceIds,
-          risk: [String(amazon.raw_evidence_id), String(competitor.evidence_id)],
-          data_quality: evidenceIds,
-        },
-        scoreValues = facts as unknown as Record<string, number | string | null>;
-      let scoreInputsChanged = false;
-      for (const dimension of dimensions) {
-        const value =
-            typeof scoreValues[dimension.code] === "number"
-              ? Number(scoreValues[dimension.code])
-              : null,
-          supported = Object.hasOwn(scoreEvidence, dimension.code);
-        scoreInputsChanged =
-          (await this.upsertScoreInput(connection, {
-            job,
-            dimension,
-            score: supported && !qualityBlocked ? value : null,
-            evidenceIds: scoreEvidence[dimension.code] ?? evidenceIds,
-            missingFields:
-              supported && value != null && !qualityBlocked
-                ? []
-                : [
-                    qualityBlocked
-                      ? "automatic_evaluation.quality_blocked"
-                      : `automatic_evaluation.${dimension.code}.unsupported`,
-                  ],
-            sourceRef: `automatic:${AUTOMATIC_SELECTION_FORMULA_VERSION}:${costFingerprint.slice(0, 16)}`,
-            observedAt: now,
-            requestId,
-            traceId,
-            now,
-          })) || scoreInputsChanged;
-      }
-      if (scoreInputsChanged || !opportunity.score_rule_version)
-        await this.queueScore(connection, job, String(scoreRules[0].id), requestId, traceId, now);
-      await connection.query(
-        "UPDATE opportunities SET risk_level=?,recommendation_status=IF(?,'insufficient_data'," +
-          "recommendation_status),version=version+1,updated_at=? WHERE id=? AND organization_id=? AND workspace_id=?",
-        [
-          facts.riskLevel,
-          qualityBlocked,
-          now,
-          job.opportunityId,
-          job.organizationId,
-          job.workspaceId,
-        ],
+      const { scoreInputsChanged, qualityBlocked } = await publishScores(
+        number(profitRun.net_margin_percent),
+        currentCostEvidenceIds,
+        costFingerprint,
       );
       await this.complete(
         connection,

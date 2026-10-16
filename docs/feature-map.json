@@ -1,7 +1,23 @@
 {
+  "selectionEvidenceScoring20261017": {
+    "status": "implemented",
+    "statusDetail": "evidence_scores_decoupled_local_113_tests_passed_requires_production_acceptance",
+    "requirements": "docs/selection-evidence-scoring.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/worker/src/automatic-selection-evaluation.ts",
+      "apps/worker/src/opportunity-scoring-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs",
+      "tests/m04-03/scoring.test.mjs"
+    ],
+    "contract": "Active scoring and primary Amazon snapshot remain required. Cost absence, scope mismatch, missing supply or pending profit no longer suppress factual non-profit dimensions. Unknown profit stays null with reason and empty cost evidence; existing versioned formulas, active weights, recommendation gates and cost eligibility are unchanged. Partial scores queue existing scoring jobs and persist existing quality-evaluated audit events; stale pending recommendations are withheld. No API/schema/env/dependency change."
+  },
   "selectionUiValidationBoundary20261017": {
     "status": "implemented",
-    "statusDetail": "scoped_archival_checks_migrated_full_project_validation_still_pending",
+    "statusDetail": "full_2948_case_coverage_and_single_failure_retest_passed_not_production_acceptance",
     "requirements": "docs/selection-ui-validation-boundary.md",
     "sourceFiles": [
       "scripts/lib/ui-phase2-token-copy-baseline.mjs",

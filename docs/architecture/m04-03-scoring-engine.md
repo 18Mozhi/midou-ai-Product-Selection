@@ -38,3 +38,7 @@
 ## 补采触发与重新决策提醒
 
 人工在机会详情创建的 `evidence_completion` 任务完成时，任务事务只在当前工作区存在活动评分规则时创建评分 Job，并把任务 ID 写入 `opportunity_score_jobs.trigger_task_id`。评分 Worker 完成该 Job 后，除既有不可变评分运行、组件、事件和 Outbox 外，还向全局 `outbox_events` 写 `task.evidence_completion.redecision_ready`；收件人优先使用机会负责人，无负责人时回退到补采任务执行人。通知只说明补采与重新评分已完成并要求人工重新决策，不自动采纳、观察或驳回。
+
+## 2026-10-17 自动证据评分与费用解耦
+
+见 `docs/selection-evidence-scoring.md`。费用规则缺失、不适用品类、货源不足或利润待算时，既有自动评估事务继续写入有事实依据的评分维度，并将利润记为带缺失原因的 null；使用现有评分任务和审计事件，不新增规则、权重、费用或自动采纳。部署后需宝塔重启唯一 Node 项目，Python 无需重启，无新配置或迁移。
