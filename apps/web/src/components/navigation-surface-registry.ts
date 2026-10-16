@@ -1,4 +1,5 @@
-import { defineAsyncComponent, type Component } from "vue";
+import type { Component } from "vue";
+import { asyncSurface } from "../ui/async-surface";
 
 const componentModules: Record<string, () => Promise<{ default: Component }>> = {
   "./DiscoveryOverlay.vue": () => import("./DiscoveryOverlay.vue"),
@@ -41,7 +42,7 @@ const componentModules: Record<string, () => Promise<{ default: Component }>> = 
 const lazy = (name: string) => {
   const loader = componentModules[`./${name}.vue`];
   if (!loader) throw new Error(`missing lazy component: ${name}`);
-  return defineAsyncComponent(loader);
+  return asyncSurface(loader);
 };
 
 export const DiscoveryOverlay = lazy("DiscoveryOverlay");

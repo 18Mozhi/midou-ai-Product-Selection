@@ -1,7 +1,7 @@
 /* Approved P27 C colors, scoped to the automation rules page. */
 .automation-center--review {
   --so-automation-rule-primary: #1748a0;
-  --so-automation-rule-primary-strong: #123d8a;
+  --so-automation-rule-primary-strong: var(--glass-primary-strong);
   --so-automation-rule-ink: #17263c;
   --so-automation-rule-muted: #5d6d82;
   --so-automation-rule-line: #dce4ee;

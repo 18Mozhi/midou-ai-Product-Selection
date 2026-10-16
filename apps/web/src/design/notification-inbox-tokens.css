@@ -1,16 +1,16 @@
 .notification-center--review {
-  --review-blue: #1748a0;
+  --review-blue: var(--glass-primary);
   --review-blue-strong: #123d8a;
   --review-danger-text: #842f29;
-  --review-ink: #182d4a;
-  --review-muted: #52647b;
-  --review-line: #dce4ee;
+  --review-ink: var(--glass-text);
+  --review-muted: var(--glass-text-muted);
+  --review-line: var(--glass-border);
   --review-pale: #edf4ff;
   --review-white: #fff;
-  --review-light-blue: #d8e5ff;
+  --review-light-blue: var(--glass-primary-soft);
   --review-hover: #f3f7ff;
-  --review-focus: #2465d7;
-  --review-badge-border: #9ebaff;
+  --review-focus: var(--glass-focus);
+  --review-badge-border: var(--glass-border);
   --review-warning: #ffe2ae;
   --review-paper: #fbfdff;
   --review-overlay: rgb(24 45 74 / 42%);

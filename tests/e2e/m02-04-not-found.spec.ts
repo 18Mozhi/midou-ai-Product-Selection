@@ -24,6 +24,7 @@ test("M02-04 fallback returns to a valid recent route without exposing its query
   page,
 }) => {
   await page.goto("/ui-states?state=blocked");
+  await expect(page.locator(".state-showcase")).toBeVisible();
   await page.goto("/unknown/recent-return");
   await expect(page.getByText("将返回：界面状态")).toBeVisible();
   await expect(page.getByText("state=blocked")).toHaveCount(0);
@@ -52,6 +53,7 @@ test("M02-04 fallback fails closed when the stored recent route is no longer reg
 
 test("M02-04 fallback remains truthful across refresh and browser history", async ({ page }) => {
   await page.goto("/ui-states");
+  await expect(page.locator(".state-showcase")).toBeVisible();
   await page.goto("/unknown/history-check");
   await page.reload();
   await expect(page.getByRole("heading", { name: "没有找到这个页面" })).toBeVisible();

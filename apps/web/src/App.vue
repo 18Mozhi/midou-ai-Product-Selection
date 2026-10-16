@@ -1,41 +1,32 @@
 <script setup lang="ts">
 import { computed, defineAsyncComponent } from "vue";
 import { useRoute } from "vue-router";
+import { asyncSurface } from "./ui/async-surface";
 import { publicConfig } from "./config";
 
 const VerificationFramework = import.meta.env.DEV
   ? defineAsyncComponent(() => import("./components/VerificationFramework.vue"))
   : null;
-const ConfigBoundary = defineAsyncComponent(() => import("./components/ConfigBoundary.vue"));
-const RedisFoundation = defineAsyncComponent(() => import("./components/RedisFoundation.vue"));
-const MySqlFoundation = defineAsyncComponent(() => import("./components/MySqlFoundation.vue"));
-const ApiFoundation = defineAsyncComponent(() => import("./components/ApiFoundation.vue"));
-const FileAuditFoundation = defineAsyncComponent(
-  () => import("./components/FileAuditFoundation.vue"),
-);
-const DeploymentFoundation = defineAsyncComponent(
-  () => import("./components/DeploymentFoundation.vue"),
-);
-const LocalIdentity = defineAsyncComponent(() => import("./components/LocalIdentity.vue"));
-const TenancyChooser = defineAsyncComponent(() => import("./components/TenancyChooser.vue"));
-const AuthorizationCenter = defineAsyncComponent(
-  () => import("./components/AuthorizationCenter.vue"),
-);
-const ResourceGrantCenter = defineAsyncComponent(
-  () => import("./components/ResourceGrantCenter.vue"),
-);
-const AuditSecurityCenter = defineAsyncComponent(
-  () => import("./components/AuditSecurityCenter.vue"),
-);
-const ThemeStudio = defineAsyncComponent(() => import("./components/ThemeStudio.vue"));
-const OnboardingGuide = defineAsyncComponent(() => import("./components/OnboardingGuide.vue"));
-const NavigationShell = defineAsyncComponent(() => import("./components/NavigationShell.vue"));
-const AccountShell = defineAsyncComponent(() => import("./components/AccountShell.vue"));
+const ConfigBoundary = asyncSurface(() => import("./components/ConfigBoundary.vue"));
+const RedisFoundation = asyncSurface(() => import("./components/RedisFoundation.vue"));
+const MySqlFoundation = asyncSurface(() => import("./components/MySqlFoundation.vue"));
+const ApiFoundation = asyncSurface(() => import("./components/ApiFoundation.vue"));
+const FileAuditFoundation = asyncSurface(() => import("./components/FileAuditFoundation.vue"));
+const DeploymentFoundation = asyncSurface(() => import("./components/DeploymentFoundation.vue"));
+const LocalIdentity = asyncSurface(() => import("./components/LocalIdentity.vue"));
+const TenancyChooser = asyncSurface(() => import("./components/TenancyChooser.vue"));
+const AuthorizationCenter = asyncSurface(() => import("./components/AuthorizationCenter.vue"));
+const ResourceGrantCenter = asyncSurface(() => import("./components/ResourceGrantCenter.vue"));
+const AuditSecurityCenter = asyncSurface(() => import("./components/AuditSecurityCenter.vue"));
+const ThemeStudio = asyncSurface(() => import("./components/ThemeStudio.vue"));
+const OnboardingGuide = asyncSurface(() => import("./components/OnboardingGuide.vue"));
+const NavigationShell = asyncSurface(() => import("./components/NavigationShell.vue"));
+const AccountShell = asyncSurface(() => import("./components/AccountShell.vue"));
 const UiStateShowcase = import.meta.env.DEV
   ? defineAsyncComponent(() => import("./components/UiStateShowcase.vue"))
   : null;
-const NotFoundPage = defineAsyncComponent(() => import("./components/NotFoundPage.vue"));
-const LandingRedirect = defineAsyncComponent(() => import("./components/LandingRedirect.vue"));
+const NotFoundPage = asyncSurface(() => import("./components/NotFoundPage.vue"));
+const LandingRedirect = asyncSurface(() => import("./components/LandingRedirect.vue"));
 
 const apiBase = publicConfig.apiBaseUrl;
 const route = useRoute();

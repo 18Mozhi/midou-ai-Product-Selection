@@ -663,9 +663,9 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   const earlyDecision = page.getByText("提前人工处理", { exact: true });
   const earlyDecisionDetails = page.locator(".opportunity-decision-waiting details");
   await earlyDecision.hover();
-  await expect(earlyDecision).toHaveCSS("color", "rgb(23, 72, 160)");
+  await expect(earlyDecision).toHaveCSS("color", "rgb(9, 108, 85)");
   await page.mouse.down();
-  await expect(earlyDecision).toHaveCSS("color", "rgb(24, 45, 74)");
+  await expect(earlyDecision).toHaveCSS("color", "rgb(24, 53, 46)");
   await page.mouse.up();
   await expect(earlyDecisionDetails).toHaveAttribute("open", "");
   await earlyDecision.focus();

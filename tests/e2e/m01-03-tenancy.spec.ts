@@ -117,9 +117,9 @@ test("M01-03.A08/A16 empty state gives a next action", async ({ page }) => {
   await expect(
     page.getByText("可以创建仅属于本人的“我的选品空间”和默认工作区，也可以先查看账号安全。"),
   ).toBeVisible();
-  await expect(page.locator(".tenancy-page")).toHaveCSS("background-color", "rgb(234, 240, 246)");
+  await expect(page.locator(".tenancy-page")).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await expect(page.locator(".p08-scope")).toHaveCSS("border-radius", "20px");
-  await expect(page.locator(".p08-primary")).toHaveCSS("background-color", "rgb(41, 79, 159)");
+  await expect(page.locator(".p08-primary")).toHaveCSS("background-color", "rgb(9, 108, 85)");
   await expect(page.getByRole("link", { name: "进入个人中心" })).toHaveAttribute("href", "/me");
   await expect(page.getByRole("link", { name: "管理 MFA" })).toHaveAttribute(
     "href",

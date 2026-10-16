@@ -1235,7 +1235,7 @@ dialog form {
   border-radius: 0;
 }
 /* Preserve the active design tokens when the detail moves into the native top layer. */
-html[data-design="signal-ledger"] .approval-workspace dialog.approval-detail[open] {
+html[data-design="glass-atlas"] .approval-workspace dialog.approval-detail[open] {
   border: 2px solid var(--so-text);
   border-top: 8px solid var(--so-primary);
   background: var(--so-panel);

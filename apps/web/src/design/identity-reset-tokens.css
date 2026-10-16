@@ -1,10 +1,10 @@
 html:has(body #app .p06-reset-page) {
-  --p06-blue: #1748a0;
-  --p06-ink: #182d4a;
-  --p06-muted: #52647b;
-  --p06-line: #dce4ee;
-  --p06-canvas: #f3f6fb;
-  --p06-focus: #2465d7;
+  --p06-blue: var(--glass-primary);
+  --p06-ink: var(--glass-text);
+  --p06-muted: var(--glass-text-muted);
+  --p06-line: var(--glass-border);
+  --p06-canvas: var(--glass-bg);
+  --p06-focus: var(--glass-focus);
   --p06-surface: #fff;
   --p06-hero-muted: #dce8ff;
   --p06-hero-subtle: #e2ecff;
@@ -15,9 +15,9 @@ html:has(body #app .p06-reset-page) {
   --p06-success-soft: #effaf4;
   --p06-danger: #b42318;
   --p06-danger-soft: #fff6f5;
-  --p06-control-border: #9cacbf;
-  --p06-primary-hover: #123b86;
-  --p06-primary-pressed: #0f326f;
+  --p06-control-border: var(--glass-border);
+  --p06-primary-hover: var(--glass-primary-strong);
+  --p06-primary-pressed: var(--glass-primary-strong);
   --p06-disabled-border: #bdc8d7;
   --p06-disabled-surface: #e8edf4;
   --p06-disabled-ink: #697a90;

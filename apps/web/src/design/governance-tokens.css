@@ -1,20 +1,20 @@
 /* Current C palette, scoped to its page and detached overlays. */
 .platform-governance {
-  --so-governance-canvas: #f3f6fb;
+  --so-governance-canvas: var(--glass-bg);
   --so-governance-surface: #ffffff;
   --so-governance-surface-soft: #edf2f9;
-  --so-governance-text: #17243d;
-  --so-governance-text-muted: #627089;
-  --so-governance-border: #cfd9e8;
-  --so-governance-field-border: #a8b7cd;
-  --so-governance-primary: #2d63cd;
-  --so-governance-primary-strong: #214da8;
+  --so-governance-text: var(--glass-text);
+  --so-governance-text-muted: var(--glass-text-muted);
+  --so-governance-border: var(--glass-border);
+  --so-governance-field-border: var(--glass-border);
+  --so-governance-primary: var(--glass-primary);
+  --so-governance-primary-strong: var(--glass-primary-strong);
   --so-governance-success: #147a55;
   --so-governance-warning: #996000;
   --so-governance-danger: #b53229;
-  --so-governance-rail: #15346d;
-  --so-governance-review-border: #dce4ee;
-  --so-governance-review-ink: #182d4a;
-  --so-governance-review-primary: #1748a0;
-  --so-governance-review-focus: #2465d7;
+  --so-governance-rail: var(--glass-primary-strong);
+  --so-governance-review-border: var(--glass-border);
+  --so-governance-review-ink: var(--glass-text);
+  --so-governance-review-primary: var(--glass-primary);
+  --so-governance-review-focus: var(--glass-focus);
 }

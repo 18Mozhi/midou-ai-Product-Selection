@@ -1,9 +1,9 @@
 .source-filter {
-  --source-filter-border: #cfd9e7;
+  --source-filter-border: var(--glass-border);
   --source-filter-white: #fff;
-  --source-filter-muted: #52657e;
-  --source-filter-control-border: #9eb1ca;
-  --source-filter-ink: #142a46;
-  --source-filter-focus: #185adb;
-  --source-filter-accent: #294caf;
+  --source-filter-muted: var(--glass-text-muted);
+  --source-filter-control-border: var(--glass-border);
+  --source-filter-ink: var(--glass-text);
+  --source-filter-focus: var(--glass-focus);
+  --source-filter-accent: var(--glass-primary);
 }

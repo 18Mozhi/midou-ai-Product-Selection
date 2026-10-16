@@ -91,7 +91,21 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       .filter((path) => path !== "apps/web/src/design/tokens.css"),
     sources = await Promise.all(paths.map((path) => readFile(path, "utf8")));
 
-  for (const [index, source] of sources.entries()) {
+  for (const [index, originalSource] of sources.entries()) {
+    // Theme aliases may replace literal palette values without changing the scoped token boundary.
+    const source =
+      paths[index].includes("/design/") && paths[index].endsWith("-tokens.css")
+        ? originalSource.replace(
+            /var\(--(?:so|glass)-(?:primary(?:-strong|-soft)?|text(?:-muted)?|border|bg|focus|panel)\)/g,
+            "#000000",
+          )
+        : originalSource;
+    if (paths[index] === "apps/web/src/design/glass-atlas-tokens.css") {
+      assert.match(source, /^html\[data-design="glass-atlas"\]/);
+      assert.doesNotMatch(source, /(?:^|[;{])\s*[a-z][a-z-]*\s*:/m);
+      assert.match(source, /--glass-surface:/);
+      continue;
+    }
     if (paths[index] === "apps/web/src/design/provider-registry-tokens.css") {
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
@@ -119,7 +133,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         new RegExp(
-          '^@media\\s*\\(max-width:\\s*760px\\)\\s*\\{\\s*html\\[data-design="signal-ledger"\\]\\s*#app\\s*\\.account-center:has\\(\\.account-tabs\\s*a\\[href="/platform-admin/admins"\\]\\[aria-current="page"\\]\\)\\s*\\{(?:\\s*--so-admin-mobile-[a-z-]+:\\s*#[0-9a-f]{3,6};)+\\s*\\}\\s*\\}$',
+          '^@media\\s*\\(max-width:\\s*760px\\)\\s*\\{\\s*html\\[data-design="glass-atlas"\\]\\s*#app\\s*\\.account-center:has\\(\\.account-tabs\\s*a\\[href="/platform-admin/admins"\\]\\[aria-current="page"\\]\\)\\s*\\{(?:\\s*--so-admin-mobile-[a-z-]+:\\s*#[0-9a-f]{3,6};)+\\s*\\}\\s*\\}$',
         ),
       );
       continue;
@@ -647,4 +661,19 @@ test("icon-only production actions expose hover and focus names", async () => {
   assert.match(registry, /关闭来源设置编辑/);
   assert.match(sourcingDialogs, /关闭供应商搜索/);
   assert.match(sourcingDialogs, /关闭报价编辑/);
+});
+
+test("theme palette has no self references and material colors stay independent of page aliases", async () => {
+  const paths = (await readdir("apps/web/src/design")).filter((path) =>
+    path.endsWith("tokens.css"),
+  );
+  for (const path of paths) {
+    const source = await readFile(`apps/web/src/design/${path}`, "utf8");
+    for (const match of source.matchAll(/(--[a-z0-9-]+):\s*var\((--[a-z0-9-]+)\)/g)) {
+      assert.notEqual(match[1], match[2], `${path}: cyclic ${match[1]}`);
+    }
+    if (path === "glass-atlas-tokens.css") {
+      assert.doesNotMatch(source, /--glass-[a-z-]+:\s*[^;]*var\(--so-/);
+    }
+  }
 });

@@ -12,7 +12,7 @@
   --so-platform-notification-border: #c7d3e4;
   --so-platform-notification-field-border: #94a8c4;
   --so-platform-notification-primary: #1f55bd;
-  --so-platform-notification-primary-strong: #143b88;
+  --so-platform-notification-primary-strong: var(--glass-primary-strong);
   --so-platform-notification-success: #187052;
   --so-platform-notification-success-soft: #e6f3ed;
   --so-platform-notification-warning: #8f5a00;
@@ -20,7 +20,7 @@
   --so-platform-notification-danger: #ad3935;
   --so-platform-notification-danger-soft: #f9e9e8;
   --so-platform-notification-overlay: #0c1830;
-  --so-platform-notification-rail: #112f69;
+  --so-platform-notification-rail: var(--glass-primary-strong);
   --so-platform-notification-focus: #2f6ee5;
   --so-platform-notification-field-bg: #f7f9fc;
   --so-platform-notification-warning-border: #d7b36a;

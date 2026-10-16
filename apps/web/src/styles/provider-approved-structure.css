@@ -46,18 +46,6 @@ html
   ) {
   color: var(--p46-ink);
 }
-html body:has(#app .provider-registry) #app .role-menu-search input {
-  background: var(--p46-canvas);
-  border-color: var(--p46-border);
-}
-html body:has(#app .provider-registry) #app .role-menu-search {
-  background: var(--p46-canvas);
-  border-color: var(--p46-border);
-}
-html body:has(#app .provider-registry) #app .role-nav-groups details > summary {
-  background: var(--p46-panel);
-  border-color: var(--p46-border);
-}
 html
   body:has(#app .provider-registry)
   #app
@@ -282,7 +270,6 @@ html:has(#app .provider-registry) {
 }
 html body:has(#app .provider-registry) {
   margin: 0;
-  background: var(--p46-canvas);
   background-image: none;
   color: var(--p46-ink);
   font-family: "Microsoft YaHei", sans-serif;
@@ -292,36 +279,6 @@ html body:has(#app .provider-registry) #app {
   margin: 0;
   padding: 0;
 }
-html body:has(#app .provider-registry) #app .role-shell {
-  display: block;
-  padding: 0;
-  background: var(--p46-canvas);
-}
-html body:has(#app .provider-registry) #app .role-topbar {
-  position: relative;
-  inset: auto;
-  height: auto;
-  min-height: 72px;
-  padding: 12px 28px;
-  border: 0;
-  border-bottom: 1px solid var(--p46-border);
-  background: var(--p46-panel);
-}
-html body:has(#app .provider-registry) #app .role-brand > span {
-  width: 36px;
-  height: 36px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--p46-accent);
-  font-size: 20px;
-}
-html body:has(#app .provider-registry) #app .role-brand > b {
-  font-family: "Microsoft YaHei", sans-serif;
-  letter-spacing: 0.04em;
-}
-html body:has(#app .provider-registry) #app .role-top-actions {
-  gap: 8px;
-}
 html body:has(#app .provider-registry) #app .role-top-actions :is(button, a),
 html body:has(#app .provider-registry) #app .role-menu-toggle {
   min-height: 44px;
@@ -330,102 +287,16 @@ html body:has(#app .provider-registry) #app .role-menu-toggle {
   color: var(--p46-accent);
   background: var(--p46-panel);
 }
-html body:has(#app .provider-registry) #app .role-sidebar {
-  top: 0;
-  border: 0;
-  border-bottom: 1px solid var(--p46-border);
-  background: var(--p46-panel);
-}
 html body:has(#app .provider-registry) #app .role-sidebar :is(input, summary, a) {
   color: var(--p46-secondary-ink);
-}
-html body:has(#app .provider-registry) #app .role-nav-menu {
-  border: 1px solid var(--p46-border);
-  border-radius: 8px;
-  background: var(--p46-panel);
-}
-html body:has(#app .provider-registry) #app .role-nav-menu a[aria-current="page"] {
-  color: var(--p46-accent);
-  background: var(--p46-accent-soft);
-}
-html body:has(#app .provider-registry) #app .role-content {
-  max-width: 1600px;
-  margin: auto;
-  padding: 24px 28px 40px;
-}
-html body:has(#app .provider-registry) #app .role-page-breadcrumb {
-  min-height: 32px;
-  margin: 0 0 12px;
-  color: var(--p46-muted);
-}
-html body:has(#app .provider-registry) #app .role-page-title {
-  display: block;
-  min-height: 0;
-  margin: 0 0 20px;
-  padding: 0;
-  border: 0;
-  background: none;
-}
-html body:has(#app .provider-registry) #app .role-page-folio,
-html body:has(#app .provider-registry) #app .role-page-title p {
-  display: none;
-}
-html body:has(#app .provider-registry) #app .role-page-title h1 {
-  margin: 0;
-  font-size: 30px;
-  font-weight: 700;
-  font-family: "Microsoft YaHei", sans-serif;
-}
-html body:has(#app .provider-registry) #app .role-context-rail {
-  margin: 0 0 28px;
-  border: 1px solid var(--p46-border);
-  border-radius: 8px;
-  background: var(--p46-panel);
-}
-html body:has(#app .provider-registry) #app .role-context-rail > div {
-  padding: 12px 20px;
-  border-color: var(--p46-border);
-}
-html body:has(#app .provider-registry) #app .role-context-rail strong {
-  font-size: 14px;
-}
-html body:has(#app .provider-registry) #app .role-context-drawer {
-  margin: 0 0 24px;
-  border: 1px solid var(--p46-border);
-  border-radius: 8px;
-  background: var(--p46-panel);
-}
-html body:has(#app .provider-registry) #app .role-context-drawer > summary {
-  border: 0;
 }
 html body:has(#app .provider-registry) #app .provider-registry :is(h2, h3),
 html body:has(#app .provider-registry) .responsive-data-view__drawer > header strong {
   font-family: "Microsoft YaHei", sans-serif;
   font-weight: 700;
 }
-html body:has(#app .provider-registry) #app .role-mobile-nav {
-  border-top: 1px solid var(--p46-border);
-  background: var(--p46-panel);
-}
 html body:has(#app .provider-registry) #app .role-mobile-nav :is(a, button) {
   border: 0;
-}
-html body:has(#app .provider-registry) #app .role-mobile-nav [aria-current="page"] {
-  border-radius: 8px;
-  color: var(--p46-accent);
-  background: var(--p46-accent-soft);
-}
-html body:has(#app .provider-registry) #app .role-shell > .role-theme-menu {
-  border: 1px solid var(--p46-border);
-  border-radius: 8px;
-  background: var(--p46-panel);
-}
-html body:has(#app .provider-registry) #app .role-shell > .role-theme-menu button {
-  color: var(--p46-secondary-ink);
-  background: var(--p46-panel);
-}
-html body:has(#app .provider-registry) #app .role-shell > .role-theme-menu [aria-pressed="true"] {
-  background: var(--p46-accent-soft);
 }
 html
   body:has(#app .provider-registry)
@@ -435,45 +306,6 @@ html
   :is(button, a, input, summary):focus-visible {
   outline: 3px solid var(--p46-focus);
   outline-offset: 3px;
-}
-@media (max-width: 840px) {
-  html body:has(#app .provider-registry) #app .role-shell {
-    padding-top: 64px;
-    padding-bottom: calc(88px + env(safe-area-inset-bottom));
-  }
-  html body:has(#app .provider-registry) #app .role-topbar {
-    position: fixed;
-    inset: 0 0 auto;
-    height: 64px;
-    box-sizing: border-box;
-    z-index: 45;
-    padding: 10px 16px;
-    min-height: 64px;
-  }
-  html body:has(#app .provider-registry) #app .role-sidebar {
-    top: 64px;
-    height: calc(100dvh - 64px);
-    border-right: 1px solid var(--p46-border);
-  }
-  html body:has(#app .provider-registry) #app .role-content {
-    padding: 20px 16px 32px;
-  }
-  html body:has(#app .provider-registry) #app .role-page-title h1 {
-    font-size: 26px;
-  }
-  html body:has(#app .provider-registry) #app .role-page-title {
-    margin-bottom: 16px;
-  }
-}
-@media (min-width: 841px) {
-  html body:has(#app .provider-registry) #app .role-sidebar-head {
-    display: none;
-  }
-  html body:has(#app .provider-registry) #app .role-sidebar-utility a {
-    width: auto;
-    min-width: 176px;
-    overflow: visible;
-  }
 }
 
 @media (max-width: 760px) {

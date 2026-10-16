@@ -44,7 +44,7 @@ test("UI2-A01 theme preview and restore do not persist density or write preferen
   const save = page.getByRole("button", { name: "保存主题偏好", exact: true });
   await page.getByRole("radio", { name: /紧凑/ }).click();
   await expect(save).toBeDisabled();
-  await page.getByRole("radio", { name: /档案纸/ }).press("Enter");
+  await page.getByRole("radio", { name: /暮砂/ }).press("Enter");
   await expect(page.locator("html")).toHaveAttribute("data-theme", "aurora-purple");
   await expect(save).toBeEnabled();
   await page.getByRole("button", { name: "撤销主题预览", exact: true }).click();
@@ -74,10 +74,10 @@ test("UI2-A02 theme saves exact versioned payloads and uses the returned revisio
     await route.fulfill({ json: envelope(saved) });
   });
   await page.goto("/settings/theme");
-  await page.getByRole("radio", { name: /档案纸/ }).click();
+  await page.getByRole("radio", { name: /暮砂/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
-  await page.getByRole("radio", { name: /净页白/ }).click();
+  await page.getByRole("radio", { name: /晨雾/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
   expect(bodies).toEqual([
@@ -87,7 +87,7 @@ test("UI2-A02 theme saves exact versioned payloads and uses the returned revisio
   expect(keys.every((key) => key.length > 0)).toBe(true);
   expect(new Set(keys).size).toBe(2);
   await page.reload();
-  await expect(page.getByRole("radio", { name: /净页白/ })).toHaveAttribute("aria-checked", "true");
+  await expect(page.getByRole("radio", { name: /晨雾/ })).toHaveAttribute("aria-checked", "true");
   expect(bodies).toHaveLength(2);
 });
 
@@ -117,14 +117,14 @@ test("UI2-A03 theme conflict requires fresh preference before the next versioned
     await route.fulfill({ json: envelope(preference(body.theme, 10)) });
   });
   await page.goto("/settings/theme");
-  await page.getByRole("radio", { name: /档案纸/ }).click();
+  await page.getByRole("radio", { name: /暮砂/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByText("偏好已在其他窗口更新", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "保存主题偏好", exact: true })).toHaveCount(0);
   expect(bodies).toHaveLength(1);
   await page.getByRole("button", { name: "重新读取", exact: true }).click();
-  await expect(page.getByRole("radio", { name: /净页白/ })).toHaveAttribute("aria-checked", "true");
-  await page.getByRole("radio", { name: /档案纸/ }).click();
+  await expect(page.getByRole("radio", { name: /晨雾/ })).toHaveAttribute("aria-checked", "true");
+  await page.getByRole("radio", { name: /暮砂/ }).click();
   await page.getByRole("button", { name: "保存主题偏好", exact: true }).click();
   await expect(page.getByRole("button", { name: "已保存", exact: true })).toBeVisible();
   expect(bodies).toEqual([

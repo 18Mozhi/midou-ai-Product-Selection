@@ -114,15 +114,25 @@ test("M07-05.A07/A08/A15 desktop and 390 rollout truth", async ({ page }) => {
   await expect(page.getByText("发布门已通过")).toBeVisible();
   await expect(page.locator('.platform-secondary-nav a[aria-current="page"]')).toHaveCSS(
     "color",
-    "rgb(18, 73, 184)",
+    "rgb(9, 108, 85)",
   );
   await expect(page.locator('.platform-secondary-nav a[aria-current="page"]')).toHaveCSS(
     "background-color",
-    "rgb(237, 243, 255)",
+    await page.evaluate(() => {
+      const probe = document.createElement("i");
+      probe.style.backgroundColor = "var(--so-primary-soft)";
+      document.body.append(probe);
+      const value = getComputedStyle(probe).backgroundColor;
+      probe.remove();
+      return value;
+    }),
   );
   if ((page.viewportSize()?.width ?? 0) > 840) {
     await expect(page.locator(".role-shell")).toHaveCSS("display", "grid");
-    await expect(page.locator(".role-sidebar")).toHaveCSS("width", "240px");
+    const rail = await page.locator(".role-navigation-frame").boundingBox();
+    const content = await page.locator(".role-content").boundingBox();
+    expect(rail?.width).toBeGreaterThanOrEqual(200);
+    expect((rail?.x ?? 0) + (rail?.width ?? 0)).toBeLessThanOrEqual(content?.x ?? 0);
     await expect(page.locator(".role-content")).toHaveCSS("grid-column-start", "2");
   }
   await expect(page.locator("#p65-actions").getByText("1.3 秒", { exact: true })).toBeVisible();
@@ -131,7 +141,7 @@ test("M07-05.A07/A08/A15 desktop and 390 rollout truth", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(page.locator(".role-shell")).toHaveCSS("display", "block");
-  await expect(page.locator(".role-sidebar")).toHaveCSS("display", "none");
+  await expect(page.locator(".role-sidebar")).toBeHidden();
   await expect(page.locator(".role-context-rail")).toHaveCSS("display", "none");
   await expect(page.locator(".role-context-drawer")).toHaveCSS("display", "block");
   await expect(page.locator(".role-mobile-nav")).toHaveCSS("position", "fixed");

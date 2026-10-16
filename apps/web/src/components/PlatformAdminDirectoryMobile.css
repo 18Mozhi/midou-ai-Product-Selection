@@ -5,7 +5,7 @@
   display: none;
 }
 @media (max-width: 760px) {
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"]) {
     .account-page-layout--admins .account-page-main .admin-directory-heading {

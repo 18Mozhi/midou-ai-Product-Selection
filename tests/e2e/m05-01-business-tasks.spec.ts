@@ -811,7 +811,7 @@ test("member workspace shows Chinese context theme switch and task progress with
     return `${style.backgroundColor}|${style.borderColor}`;
   });
   await page.getByRole("button", { name: "切换界面主题" }).click();
-  await page.getByRole("button", { name: /档案纸/ }).click();
+  await page.getByRole("button", { name: /暮砂/ }).click();
   await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("aurora-purple");
   await expect(page.getByText("主题已应用到全部模块。")).toBeVisible();
   const afterTheme = await page.locator(".task-focus-strip").evaluate((element) => {
@@ -842,7 +842,7 @@ test("task status and pagination restore from the URL", async ({ page }) => {
 
 test("P23 pagination preserves applied filters, clears page selection and exposes both boundaries", async ({
   page,
-}) => {
+}, testInfo) => {
   const viewport =
     page.viewportSize()?.width === 390
       ? { width: 390, height: 844 }
@@ -894,9 +894,11 @@ test("P23 pagination preserves applied filters, clears page selection and expose
   });
   expect(firstPageStyle.scrollWidth).toBeLessThanOrEqual(firstPageStyle.width);
   expect(
-    firstPageStyle.buttons.every((button) => button.height >= 44 && button.radius === "0px"),
+    firstPageStyle.buttons.every(
+      (button) => button.height >= 44 && parseFloat(button.radius) >= 10,
+    ),
   ).toBe(true);
-  await saveP23PaginationReviewImage(page, viewport.width, "first");
+  await saveP23PaginationReviewImage(page, viewport.width, "first", testInfo);
 
   await page.getByRole("checkbox", { name: "选择本页 10 项" }).check();
   await expect(page.getByRole("button", { name: "批量暂停" })).toBeVisible();
@@ -920,7 +922,7 @@ test("P23 pagination preserves applied filters, clears page selection and expose
   await expect(page.getByRole("button", { name: "批量暂停" })).toHaveCount(0);
   await expect(previous).toBeEnabled();
   await expect(next).toBeDisabled();
-  await saveP23PaginationReviewImage(page, viewport.width, "last");
+  await saveP23PaginationReviewImage(page, viewport.width, "last", testInfo);
 
   const firstPageAgain = page.waitForResponse((response) => {
     const url = new URL(response.url());
@@ -1221,19 +1223,19 @@ test("approval notification and real-selection surfaces follow every member them
     {
       path: "/tasks/approvals",
       selector: ".approval-focus-strip",
-      theme: "档案纸",
+      theme: "暮砂",
       expected: "aurora-purple",
     },
     {
       path: "/notifications",
       selector: ".notification-state",
-      theme: "净页白",
+      theme: "晨雾",
       expected: "cloud-white",
     },
     {
       path: "/opportunities/start",
       selector: ".selection-start",
-      theme: "信号纸",
+      theme: "雾林",
       expected: "deep-ocean",
     },
   ];

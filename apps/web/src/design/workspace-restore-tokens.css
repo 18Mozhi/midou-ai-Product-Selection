@@ -2,15 +2,15 @@
 html #app dialog.workspace-restore-reason {
   --so-font-meta: 16px;
   --so-restore-surface: #ffffff;
-  --so-restore-text: #202c3d;
+  --so-restore-text: var(--glass-text);
   --so-restore-target: #f3f6fc;
-  --so-restore-line: #d5dfed;
-  --so-restore-input-border: #6680a2;
+  --so-restore-line: var(--glass-border);
+  --so-restore-input-border: var(--glass-border);
   --so-restore-help: #5d708b;
-  --so-restore-primary: #254a9c;
+  --so-restore-primary: var(--glass-primary);
   --so-restore-on-primary: #ffffff;
   --so-restore-disabled-bg: #e6ebf1;
   --so-restore-disabled-text: #526176;
   --so-restore-disabled-border: #a1aec0;
-  --so-restore-focus: #285ec7;
+  --so-restore-focus: var(--glass-focus);
 }

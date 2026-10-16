@@ -150,8 +150,8 @@
   text-wrap: balance;
 }
 
-html[data-design="signal-ledger"] body .platform-content :is(h1, h2, h3, h4),
-html[data-design="signal-ledger"] body .platform-content-review h3 {
+html[data-design="glass-atlas"] body .platform-content :is(h1, h2, h3, h4),
+html[data-design="glass-atlas"] body .platform-content-review h3 {
   font-family: var(--so-font-ui);
 }
 

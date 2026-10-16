@@ -174,7 +174,7 @@ test("M03-02.A07/A08/A15 masked credential vault is responsive and visual", asyn
     pageHeader = page.locator(".credential-center > header");
   await expect
     .poll(() => pageHeader.evaluate((element) => getComputedStyle(element).backgroundColor))
-    .toBe("rgb(41, 76, 175)");
+    .toBe("rgb(9, 108, 85)");
   const loginButton = page.getByRole("button", { name: "配置网页登录" });
   await loginButton.click();
   const loginEditor = page.getByRole("dialog", { name: "导入已经登录的浏览器档案" }),

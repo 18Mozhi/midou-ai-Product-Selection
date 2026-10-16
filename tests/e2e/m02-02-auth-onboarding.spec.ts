@@ -142,12 +142,21 @@ test("M02-02.A07/A15 login brand and mobile auxiliary actions keep compact touch
   const actions = await actionControls.evaluateAll((nodes) =>
     nodes.map((node) => {
       const box = node.getBoundingClientRect();
-      return { y: box.y, height: box.height };
+      return { x: box.x, y: box.y, width: box.width, height: box.height };
     }),
   );
   expect(actions).toHaveLength(3);
-  expect(actions[1].y).toBeGreaterThanOrEqual(actions[0].y + actions[0].height);
-  expect(actions[2].y).toBeGreaterThanOrEqual(actions[1].y + actions[1].height);
+  for (let index = 0; index < actions.length; index += 1) {
+    const box = actions[index];
+    expect(box.width).toBeGreaterThanOrEqual(44);
+    for (const other of actions.slice(index + 1)) {
+      const overlapX =
+        Math.min(box.x + box.width, other.x + other.width) - Math.max(box.x, other.x);
+      const overlapY =
+        Math.min(box.y + box.height, other.y + other.height) - Math.max(box.y, other.y);
+      expect(overlapX <= 0 || overlapY <= 0).toBe(true);
+    }
+  }
   for (const action of actions) expect(action.height).toBeGreaterThanOrEqual(44);
 });
 test("M02-02.A07/A08/A15 login uses the real contract and continues to tenancy by keyboard", async ({
@@ -288,7 +297,7 @@ test("P05 verification uses one token-gated confirmation and explicit return", a
   await expect(returnButton).toBeVisible();
   expect((await returnButton.boundingBox())?.height).toBeGreaterThanOrEqual(44);
   expect(await returnButton.evaluate((element) => getComputedStyle(element).backgroundColor)).toBe(
-    "rgb(23, 72, 160)",
+    "rgb(9, 108, 85)",
   );
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
@@ -359,7 +368,7 @@ test("P04 recovery validates the email and submits one generic reset request", a
   await expect(page.getByRole("status")).toContainText("如账号存在，重置邮件会进入受控投递队列。");
   expect(writes).toEqual([{ method: "POST", body: { email: "member@example.test" } }]);
   await page.mouse.move(8, 8);
-  await expect(submit).toHaveCSS("background-color", "rgb(23, 72, 160)");
+  await expect(submit).toHaveCSS("background-color", "rgb(9, 108, 85)");
   expect((await submit.boundingBox())?.height).toBeGreaterThanOrEqual(44);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,
@@ -625,4 +634,34 @@ test("M02-02 P09 onboarding clamps query state, does not persist progress, and k
   expect(apiRequests).toEqual([]);
   await page.getByRole("link", { name: "跳过引导" }).click();
   await expect(page).toHaveURL(/\/$/);
+});
+
+test("Glass Atlas shows actual lazy loading and honors reduced motion", async ({ page }) => {
+  let release!: () => void;
+  const pending = new Promise<void>((resolve) => {
+    release = resolve;
+  });
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.route("**/src/components/LocalIdentity.vue*", async (route) => {
+    await pending;
+    await route.continue();
+  });
+  await page.goto("/login", { waitUntil: "domcontentloaded" });
+  const loading = page.locator(".ui-state-panel[data-kind='loading']");
+  await expect(loading).toBeVisible();
+  await expect(loading).toHaveAttribute("aria-busy", "true");
+  await expect(loading.locator(".ui-state-skeleton i").first()).toHaveCSS("animation-name", "none");
+  release();
+  await expect(page.getByRole("heading", { name: "安全登录", exact: true })).toBeVisible();
+  await expect(loading).toHaveCount(0);
+  await expect(page.locator(".p02-login-shell")).toHaveCSS("border-radius", /2[4-9]px|30px/);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test("Glass Atlas failed page chunk offers a working reload", async ({ page }) => {
+  await page.route("**/src/components/LocalIdentity.vue*", (route) => route.abort(), { times: 1 });
+  await page.goto("/login");
+  await expect(page.getByRole("heading", { name: "页面资源未能加载" })).toBeVisible();
+  await page.getByRole("button", { name: "重新加载页面" }).click();
+  await expect(page.getByRole("heading", { name: "安全登录", exact: true })).toBeVisible();
 });

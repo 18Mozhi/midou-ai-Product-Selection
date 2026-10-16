@@ -2,7 +2,7 @@
 
 /* P44 approved mobile controls, role facts and unfiltered same-role results. */
 @media (max-width: 760px) {
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])
     .role-comparison {
@@ -109,7 +109,7 @@
       }
     }
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -121,7 +121,7 @@
     color: var(--so-admin-mobile-text-muted);
     background: var(--so-admin-mobile-surface-soft);
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -132,7 +132,7 @@
     color: var(--so-admin-mobile-text);
     background: var(--so-admin-mobile-surface);
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -146,7 +146,7 @@
     color: var(--so-admin-mobile-text);
     background: var(--so-admin-mobile-surface);
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -156,7 +156,7 @@
     font-size: 16px;
     font-weight: 700;
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -165,7 +165,7 @@
     grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -175,7 +175,7 @@
     line-height: 1.6;
     color: var(--so-admin-mobile-text-muted);
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -184,7 +184,7 @@
     font-size: 14px;
     line-height: 1.7;
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -192,7 +192,7 @@
     dd[data-enabled="true"] {
     color: var(--so-admin-mobile-primary);
   }
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center
     .role-comparison.role-comparison--same-role-result
@@ -208,7 +208,7 @@
 
 /* Role facts use backend names, descriptions and counts without changing their content. */
 @media (max-width: 760px) {
-  html[data-design="signal-ledger"]
+  html[data-design="glass-atlas"]
     #app
     .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])
     .role-comparison__summaries {

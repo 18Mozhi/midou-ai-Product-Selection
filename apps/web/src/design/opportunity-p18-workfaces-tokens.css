@@ -1,7 +1,7 @@
 html:has(#app .opportunity-workspace--review) {
-  --so-opportunity-p18-bg: #edf1f6;
-  --so-opportunity-p18-ink: #202c3d;
-  --so-opportunity-p18-muted: #58677b;
+  --so-opportunity-p18-bg: var(--glass-bg);
+  --so-opportunity-p18-ink: var(--glass-text);
+  --so-opportunity-p18-muted: var(--glass-text-muted);
   --so-opportunity-p18-secondary: #35445a;
   --so-opportunity-p18-surface: #fff;
   --so-opportunity-p18-danger-border: #e2b8b4;
@@ -12,12 +12,12 @@ html:has(#app .opportunity-workspace--review) {
   --so-opportunity-p18-warning-text: #765315;
   --so-opportunity-p18-danger-accent: #9b342e;
   --so-opportunity-p18-danger-copy: #762f2b;
-  --so-opportunity-p18-divider: #e0e5eb;
+  --so-opportunity-p18-divider: var(--glass-border);
   --so-opportunity-p18-surface-subtle: #f9fafc;
-  --so-opportunity-p18-info-bg: #edf3ff;
-  --so-opportunity-p18-info-text: #263b5c;
-  --so-opportunity-p18-control-border: #aeb8c5;
+  --so-opportunity-p18-info-bg: var(--glass-primary-soft);
+  --so-opportunity-p18-info-text: var(--glass-text);
+  --so-opportunity-p18-control-border: var(--glass-border);
   --so-opportunity-p18-disabled-bg: #e7ebf0;
   --so-opportunity-p18-disabled-text: #667386;
-  --so-opportunity-p18-fieldset-border: #dbe1e8;
+  --so-opportunity-p18-fieldset-border: var(--glass-border);
 }

@@ -647,3 +647,19 @@ test("M02-03 personal center uses an account shell without the organization navi
   await expect(page.getByRole("complementary", { name: "个人中心分区" })).toHaveCount(0);
   await expect(page.getByRole("heading", { name: "选品成员" })).toBeVisible();
 });
+
+test("Glass Atlas organization overview fits phone tablet and desktop widths", async ({ page }) => {
+  await allow(page, "organization_admin");
+  for (const width of [390, 768, 1024, 1440]) {
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/org-admin");
+    await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+    const form = page.locator("form.org-admin-card");
+    const box = await form.boundingBox();
+    expect(box).not.toBeNull();
+    expect((box?.x ?? 0) + (box?.width ?? 0)).toBeLessThanOrEqual(width);
+  }
+});

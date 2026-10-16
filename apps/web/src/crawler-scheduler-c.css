@@ -2,50 +2,8 @@
 
 /* P68 route-scoped C layout; inherited shell composition is isolated to this page. */
 html body:has(#app .crawler-scheduler--c) {
-  background: var(--p70-canvas);
   color: var(--p70-shell-ink);
   font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-shell {
-  display: grid;
-  grid-template-columns: 240px minmax(0, 1fr);
-  grid-template-rows: 76px minmax(0, 1fr);
-  min-height: 100dvh;
-  padding: 0;
-  background: var(--p70-canvas);
-  color: var(--p70-shell-ink);
-  font-family: inherit;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-topbar {
-  grid-column: 1 / -1;
-  position: relative;
-  inset: auto;
-  height: 76px;
-  min-height: 0;
-  padding: 0 24px;
-  border: 0;
-  border-bottom: 1px solid var(--p70-shell-border);
-  background: var(--p70-white);
-}
-html body:has(#app .crawler-scheduler--c) #app .role-brand {
-  gap: 12px;
-  color: var(--p70-shell-ink);
-}
-html body:has(#app .crawler-scheduler--c) #app .role-brand > span {
-  border: 0;
-  border-radius: 8px;
-  background: var(--p70-sidebar);
-  color: var(--p70-white);
-}
-html body:has(#app .crawler-scheduler--c) #app .role-brand > b {
-  font-family: inherit;
-  font-size: 16px;
-  letter-spacing: 0.06em;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-brand > em {
-  color: var(--p70-sidebar-muted);
-  font-size: 13px;
-  letter-spacing: 0;
 }
 html body:has(#app .crawler-scheduler--c) #app .role-top-actions :is(a, button) {
   min-height: 44px;
@@ -54,170 +12,6 @@ html body:has(#app .crawler-scheduler--c) #app .role-top-actions :is(a, button) 
   border-radius: 7px;
   background: var(--p70-white);
   color: var(--p70-shell-ink);
-}
-html body:has(#app .crawler-scheduler--c) #app .role-sidebar {
-  grid-column: 1;
-  grid-row: 2;
-  position: sticky;
-  inset: auto;
-  top: 0;
-  align-self: start;
-  box-sizing: border-box;
-  width: 240px;
-  height: calc(100dvh - 76px);
-  padding: 22px 16px;
-  overflow-y: auto;
-  border: 0;
-  border-radius: 0;
-  background: var(--p70-sidebar);
-  color: var(--p70-white);
-  transform: none;
-  transition: none;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-sidebar-head {
-  width: auto;
-  padding: 0 8px 20px;
-  gap: 7px;
-  border: 0;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-sidebar-head strong {
-  color: var(--p70-white);
-  font:
-    700 18px/1.5 "Microsoft YaHei",
-    sans-serif;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-sidebar-head small {
-  color: var(--p70-sidebar-subtitle);
-  font:
-    13px/1.7 "Microsoft YaHei",
-    sans-serif;
-  white-space: normal;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-menu-search {
-  box-sizing: border-box;
-  width: 100%;
-  min-height: 44px;
-  margin-bottom: 16px;
-  padding: 0 10px;
-  border: 1px solid var(--p70-sidebar-input-border);
-  border-radius: 7px;
-  background: var(--p70-white);
-  color: var(--p70-shell-ink);
-}
-html body:has(#app .crawler-scheduler--c) #app .role-menu-search input {
-  width: 100%;
-  min-width: 0;
-  min-height: 44px;
-  border: 0;
-  background: var(--p70-white);
-  color: var(--p70-shell-ink);
-  font:
-    16px/1.5 "Microsoft YaHei",
-    sans-serif;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-nav-groups {
-  display: grid;
-  flex: none;
-  gap: 8px;
-  overflow: visible;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-nav-groups details,
-html body:has(#app .crawler-scheduler--c) #app .role-nav-menu {
-  border: 0;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-nav-groups details > summary {
-  height: auto;
-  min-height: 44px;
-  padding: 8px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--p70-white);
-  font-size: 14px;
-  letter-spacing: 0;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-nav-groups summary:hover,
-html body:has(#app .crawler-scheduler--c) #app .role-nav-menu a:hover {
-  background: var(--p70-sidebar-hover);
-}
-html body:has(#app .crawler-scheduler--c) #app .role-nav-menu {
-  position: static;
-  width: 100%;
-  padding: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-nav-menu a {
-  min-width: 0;
-  min-height: 44px;
-  margin: 3px 0;
-  padding: 10px 12px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--p70-sidebar-link);
-  font-size: 14px;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-nav-menu a[aria-current="page"] {
-  background: var(--p70-white);
-  color: var(--p70-sidebar);
-  font-weight: 700;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-sidebar-utility {
-  display: grid;
-  margin: 24px 0 0;
-  border: 0;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-sidebar-utility a {
-  width: auto;
-  min-height: 44px;
-  padding: 10px 8px;
-  border: 0;
-  border-top: 1px solid var(--p70-sidebar-divider);
-  border-radius: 0;
-  background: transparent;
-  color: var(--p70-white);
-  font-size: 14px;
-  white-space: normal;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-content {
-  grid-column: 2;
-  grid-row: 2;
-  min-width: 0;
-  max-width: none;
-  margin: 0;
-  padding: 24px 32px 48px;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-context-rail {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 16px;
-  margin: 0 0 24px;
-  padding: 12px 0;
-  border: 0;
-  border-block: 1px solid var(--p70-shell-border);
-  border-radius: 0;
-  background: transparent;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-context-rail > div {
-  padding: 0;
-  border: 0;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-context-rail small {
-  color: var(--p70-sidebar-muted);
-  font:
-    13px/1.5 "Microsoft YaHei",
-    sans-serif;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-context-rail strong {
-  margin-top: 3px;
-  color: var(--p70-shell-ink);
-  font-size: 14px;
-}
-html body:has(#app .crawler-scheduler--c) #app .role-context-drawer,
-html body:has(#app .crawler-scheduler--c) #app .role-mobile-nav {
-  display: none;
 }
 html body:has(#app .crawler-scheduler--c) #app .platform-secondary-nav {
   gap: 0;
@@ -245,89 +39,16 @@ html
   outline: 3px solid var(--p70-shell-focus);
   outline-offset: 3px;
 }
-@media (max-width: 1100px) and (min-width: 841px) {
-  html body:has(#app .crawler-scheduler--c) #app .role-shell {
-    grid-template-columns: 220px minmax(0, 1fr);
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-sidebar {
-    width: 220px;
-    padding-inline: 12px;
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-content {
-    padding-inline: 20px;
-  }
-}
 @media (max-width: 840px) {
-  html body:has(#app .crawler-scheduler--c) #app .role-shell {
-    display: block;
-    padding: 0 0 calc(80px + env(safe-area-inset-bottom));
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-topbar {
-    height: 64px;
-    padding: 0 12px;
-    gap: 8px;
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-brand {
-    margin-right: auto;
-    gap: 0;
-  }
   html body:has(#app .crawler-scheduler--c) #app .role-brand > :is(b, em) {
     display: none;
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-menu-toggle {
-    display: inline-flex;
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-content {
-    padding: 18px 16px 32px;
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-context-rail {
-    display: none;
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-context-drawer {
-    display: block;
-    margin-bottom: 20px;
-    border: 1px solid var(--p70-shell-border);
-    border-radius: 7px;
-    background: var(--p70-white);
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-context-drawer > div {
-    grid-template-columns: 1fr 1fr;
   }
   html body:has(#app .crawler-scheduler--c) #app .platform-secondary-nav {
     display: flex;
     overflow-x: auto;
   }
-  html body:has(#app .crawler-scheduler--c) #app .role-sidebar {
-    position: fixed;
-    inset: 0 auto 0 0;
-    z-index: 100;
-    width: min(340px, calc(100vw - 32px));
-    height: 100dvh;
-    max-height: 100dvh;
-    padding: 16px;
-    overflow-y: auto;
-    box-shadow: 12px 0 32px var(--p70-shell-shadow);
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-sidebar:not(.is-open) {
-    display: none;
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-mobile-nav {
-    position: fixed;
-    inset: auto 0 0;
-    z-index: 90;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    min-height: 72px;
-    border: 0;
-    border-top: 1px solid var(--p70-shell-border);
-    background: var(--p70-white);
-  }
   html body:has(#app .crawler-scheduler--c) #app .role-mobile-nav :is(a, button, i) {
     color: var(--p70-sidebar-muted);
-  }
-  html body:has(#app .crawler-scheduler--c) #app .role-mobile-nav [aria-current="page"] {
-    background: var(--p70-mobile-nav-active);
-    color: var(--p70-sidebar);
   }
 }
 

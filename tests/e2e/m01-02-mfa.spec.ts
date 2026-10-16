@@ -101,15 +101,15 @@ test("P07 enrollment and confirmation validate locally and keep exact requests s
   await expect(root.getByText("认证器当前未启用")).toBeVisible();
   const start = root.locator(".p07-mfa-primary");
   await start.hover();
-  await expect(start).toHaveCSS("background-color", "rgb(18, 59, 134)");
+  await expect(start).toHaveCSS("background-color", "rgb(5, 80, 62)");
   await page.mouse.down();
-  await expect(start).toHaveCSS("background-color", "rgb(15, 50, 111)");
+  await expect(start).toHaveCSS("background-color", "rgb(5, 80, 62)");
   await page.mouse.up();
   await page.getByLabel("当前密码").focus();
   await page.keyboard.press("Tab");
   await expect(start).toBeFocused();
   await expect(start).toHaveCSS("outline-width", "3px");
-  await expect(start).toHaveCSS("outline-color", "rgb(36, 101, 215)");
+  await expect(start).toHaveCSS("outline-color", "rgb(7, 134, 106)");
   await start.click();
   await expect(page.getByLabel("当前密码")).toBeFocused();
   expect(writes).toEqual([]);

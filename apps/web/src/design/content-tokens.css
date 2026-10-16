@@ -3,27 +3,27 @@
 .platform-content-review,
 .responsive-filter-drawer--content,
 .responsive-data-view__overlay--content {
-  --so-content-canvas: #f3f6fb;
+  --so-content-canvas: var(--glass-bg);
   --so-content-surface: #ffffff;
   --so-content-surface-soft: #edf2f9;
-  --so-content-text: #14223b;
-  --so-content-text-muted: #60708a;
-  --so-content-border: #ccd8e8;
-  --so-content-field-border: #9fb0c8;
-  --so-content-primary: #2558bd;
-  --so-content-primary-strong: #173f91;
+  --so-content-text: var(--glass-text);
+  --so-content-text-muted: var(--glass-text-muted);
+  --so-content-border: var(--glass-border);
+  --so-content-field-border: var(--glass-border);
+  --so-content-primary: var(--glass-primary);
+  --so-content-primary-strong: var(--glass-primary-strong);
   --so-content-success: #157452;
   --so-content-success-soft: #e6f5ee;
   --so-content-warning: #986000;
   --so-content-warning-soft: #fff3d6;
   --so-content-danger: #b33a34;
   --so-content-danger-soft: #fbeceb;
-  --so-content-rail: #15346d;
-  --so-content-dialog-border: #aebdd1;
-  --so-content-field-bg: #f8faff;
-  --so-content-review-border: #dce4ee;
-  --so-content-review-ink: #182d4a;
-  --so-content-review-primary: #1748a0;
+  --so-content-rail: var(--glass-primary-strong);
+  --so-content-dialog-border: var(--glass-border);
+  --so-content-field-bg: var(--glass-bg);
+  --so-content-review-border: var(--glass-border);
+  --so-content-review-ink: var(--glass-text);
+  --so-content-review-primary: var(--glass-primary);
   --so-content-review-primary-soft: #edf4ff;
-  --so-content-review-focus: #2465d7;
+  --so-content-review-focus: var(--glass-focus);
 }

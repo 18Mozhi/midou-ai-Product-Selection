@@ -1,17 +1,14 @@
-import { resolve } from "node:path";
-import type { Page } from "@playwright/test";
+import type { Page, TestInfo } from "@playwright/test";
 
-// These are design-review assets from an isolated fixture, not E2E screenshot coverage.
+// Fixture review images belong to this test run; never overwrite historical design assets.
 export async function saveP23PaginationReviewImage(
   page: Page,
   width: number,
   state: "first" | "last",
+  testInfo: TestInfo,
 ) {
   await page.screenshot({
-    path: resolve(
-      "design-plans/ui-phase-2-2026-09-07/design/tasks",
-      `${width}-P23-pagination-${state}.png`,
-    ),
+    path: testInfo.outputPath(`${width}-P23-pagination-${state}.png`),
     fullPage: true,
     animations: "disabled",
   });

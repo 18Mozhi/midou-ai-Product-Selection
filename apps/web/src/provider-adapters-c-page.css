@@ -3,18 +3,6 @@
 /* P47 C composition, active only while its component is mounted. */
 /* Local C identity tokens; existing theme IDs/preferences and non-P47 palettes remain unchanged. */
 /* Approved P47 frame and source directory, scoped to the active adapter page. */
-html body:has(#app .adapter-center--c) #app .role-menu-search input {
-  background: var(--p47-canvas);
-  border-color: var(--p47-border);
-}
-html body:has(#app .adapter-center--c) #app .role-menu-search {
-  background: var(--p47-canvas);
-  border-color: var(--p47-border);
-}
-html body:has(#app .adapter-center--c) #app .role-nav-groups details > summary {
-  background: var(--p47-panel);
-  border-color: var(--p47-border);
-}
 html body:has(#app .adapter-center--c) #app .role-mobile-nav :is(a, button, i) {
   color: var(--p47-accent);
 }
@@ -86,7 +74,6 @@ html:has(body #app .adapter-center--c) {
 }
 html body:has(#app .adapter-center--c) {
   margin: 0;
-  background: var(--p47-canvas);
   background-image: none;
   color: var(--p47-ink);
   font-family: "Microsoft YaHei", sans-serif;
@@ -96,36 +83,6 @@ html body:has(#app .adapter-center--c) #app {
   margin: 0;
   padding: 0;
 }
-html body:has(#app .adapter-center--c) #app .role-shell {
-  display: block;
-  padding: 0;
-  background: var(--p47-canvas);
-}
-html body:has(#app .adapter-center--c) #app .role-topbar {
-  position: relative;
-  inset: auto;
-  height: auto;
-  min-height: 72px;
-  padding: 12px 28px;
-  border: 0;
-  border-bottom: 1px solid var(--p47-border);
-  background: var(--p47-panel);
-}
-html body:has(#app .adapter-center--c) #app .role-brand > span {
-  width: 36px;
-  height: 36px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--p47-accent);
-  font-size: 20px;
-}
-html body:has(#app .adapter-center--c) #app .role-brand > b {
-  font-family: "Microsoft YaHei", sans-serif;
-  letter-spacing: 0.04em;
-}
-html body:has(#app .adapter-center--c) #app .role-top-actions {
-  gap: 8px;
-}
 html body:has(#app .adapter-center--c) #app .role-top-actions :is(button, a),
 html body:has(#app .adapter-center--c) #app .role-menu-toggle {
   min-height: 44px;
@@ -134,139 +91,11 @@ html body:has(#app .adapter-center--c) #app .role-menu-toggle {
   color: var(--p47-accent);
   background: var(--p47-panel);
 }
-html body:has(#app .adapter-center--c) #app .role-sidebar {
-  top: 0;
-  border: 0;
-  border-bottom: 1px solid var(--p47-border);
-  background: var(--p47-panel);
-}
 html body:has(#app .adapter-center--c) #app .role-sidebar :is(input, summary, a) {
   color: var(--p47-secondary-ink);
 }
-html body:has(#app .adapter-center--c) #app .role-nav-menu {
-  border: 1px solid var(--p47-border);
-  border-radius: 8px;
-  background: var(--p47-panel);
-}
-html body:has(#app .adapter-center--c) #app .role-nav-menu a[aria-current="page"] {
-  color: var(--p47-accent);
-  background: var(--p47-accent-soft);
-}
-html body:has(#app .adapter-center--c) #app .role-content {
-  max-width: 1600px;
-  margin: auto;
-  padding: 24px 28px 40px;
-}
-html body:has(#app .adapter-center--c) #app .role-page-breadcrumb {
-  min-height: 32px;
-  margin: 0 0 12px;
-  color: var(--p47-muted);
-}
-html body:has(#app .adapter-center--c) #app .role-page-title {
-  display: block;
-  min-height: 0;
-  margin: 0 0 20px;
-  padding: 0;
-  border: 0;
-  background: none;
-}
-html body:has(#app .adapter-center--c) #app .role-page-folio,
-html body:has(#app .adapter-center--c) #app .role-page-title p {
-  display: none;
-}
-html body:has(#app .adapter-center--c) #app .role-page-title h1 {
-  margin: 0;
-  font-size: 30px;
-  font-weight: 700;
-  font-family: "Microsoft YaHei", sans-serif;
-}
-html body:has(#app .adapter-center--c) #app .role-context-rail {
-  margin: 0 0 28px;
-  border: 1px solid var(--p47-border);
-  border-radius: 8px;
-  background: var(--p47-panel);
-}
-html body:has(#app .adapter-center--c) #app .role-context-rail > div {
-  padding: 12px 20px;
-  border-color: var(--p47-border);
-}
-html body:has(#app .adapter-center--c) #app .role-context-rail strong {
-  font-size: 14px;
-}
-html body:has(#app .adapter-center--c) #app .role-context-drawer {
-  margin: 0 0 24px;
-  border: 1px solid var(--p47-border);
-  border-radius: 8px;
-  background: var(--p47-panel);
-}
-html body:has(#app .adapter-center--c) #app .role-context-drawer > summary {
-  border: 0;
-}
-html body:has(#app .adapter-center--c) #app .role-mobile-nav {
-  border-top: 1px solid var(--p47-border);
-  background: var(--p47-panel);
-}
 html body:has(#app .adapter-center--c) #app .role-mobile-nav :is(a, button) {
   border: 0;
-}
-html body:has(#app .adapter-center--c) #app .role-mobile-nav [aria-current="page"] {
-  border-radius: 8px;
-  color: var(--p47-accent);
-  background: var(--p47-accent-soft);
-}
-html body:has(#app .adapter-center--c) #app .role-shell > .role-theme-menu {
-  border: 1px solid var(--p47-border);
-  border-radius: 8px;
-  background: var(--p47-panel);
-}
-html body:has(#app .adapter-center--c) #app .role-shell > .role-theme-menu button {
-  color: var(--p47-secondary-ink);
-  background: var(--p47-panel);
-}
-html body:has(#app .adapter-center--c) #app .role-shell > .role-theme-menu [aria-pressed="true"] {
-  background: var(--p47-accent-soft);
-}
-@media (max-width: 840px) {
-  html body:has(#app .adapter-center--c) #app .role-shell {
-    padding-top: 64px;
-    padding-bottom: calc(88px + env(safe-area-inset-bottom));
-  }
-  html body:has(#app .adapter-center--c) #app .role-topbar {
-    position: fixed;
-    inset: 0 0 auto;
-    height: 64px;
-    box-sizing: border-box;
-    z-index: 45;
-    padding: 10px 16px;
-    min-height: 64px;
-  }
-  html body:has(#app .adapter-center--c) #app .role-sidebar {
-    top: 64px;
-    height: calc(100dvh - 64px);
-    border-right: 1px solid var(--p47-border);
-  }
-  html body:has(#app .adapter-center--c) #app .role-content {
-    padding: 20px 16px 32px;
-  }
-  html body:has(#app .adapter-center--c) #app .role-page-title h1 {
-    font-size: 26px;
-  }
-  html body:has(#app .adapter-center--c) #app .role-page-title {
-    margin-bottom: 16px;
-  }
-}
-@media (min-width: 841px) {
-  html body:has(#app .adapter-center--c) #app .role-sidebar-head {
-    display: none;
-  }
-  html body:has(#app .adapter-center--c) #app .role-sidebar-utility a {
-    width: auto;
-    min-width: 176px;
-    overflow: visible;
-  }
-}
-
-@media (max-width: 760px) {
 }
 
 @media (max-width: 840px) {
@@ -1184,8 +1013,5 @@ html
 @media (min-width: 761px) and (max-width: 840px) {
   html body:has(#app .adapter-center--c) #app .adapter-center--c {
     gap: 16px;
-  }
-  html body:has(#app .adapter-center--c) #app .role-content {
-    padding-top: 12px;
   }
 }

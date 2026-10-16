@@ -440,6 +440,6 @@
   }
 }
 
-html[data-design="signal-ledger"] body .redis-resilience--c :is(h1, h2, h3) {
+html[data-design="glass-atlas"] body .redis-resilience--c :is(h1, h2, h3) {
   font-family: "Microsoft YaHei", sans-serif;
 }

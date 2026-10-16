@@ -1,9 +1,14 @@
 export const themeIds = ["deep-ocean", "aurora-purple", "cloud-white"] as const;
 export type ThemeId = (typeof themeIds)[number];
 export const themes: ReadonlyArray<{ id: ThemeId; name: string; caption: string; mode: string }> = [
-  { id: "deep-ocean", name: "信号纸", caption: "暖白纸张与朱砂信号，适合持续决策", mode: "纸张" },
-  { id: "aurora-purple", name: "档案纸", caption: "偏暖档案底色，适合高密度复核", mode: "纸张" },
-  { id: "cloud-white", name: "净页白", caption: "清晰白底，适合高照度环境", mode: "纸张" },
+  { id: "deep-ocean", name: "雾林", caption: "青绿光晕与雾面玻璃，适合日常工作", mode: "玻璃" },
+  {
+    id: "aurora-purple",
+    name: "暮砂",
+    caption: "暖砂光晕与柔和玻璃，适合长时间复核",
+    mode: "玻璃",
+  },
+  { id: "cloud-white", name: "晨雾", caption: "轻盈中性玻璃，适合高照度环境", mode: "玻璃" },
 ];
 
 export const densityIds = ["standard", "compact"] as const;

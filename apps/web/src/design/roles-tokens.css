@@ -1,6 +1,6 @@
 /* P31 approved controls: page-lazy semantic tokens, not a global theme change. */
 html #app .org-admin-center:has(> .org-role-page) {
-  --so-roles-focus: #153e92;
+  --so-roles-focus: var(--glass-focus);
   --so-roles-focus-gap: #ffffff;
   --so-roles-danger: #9b342e;
   --so-roles-on-danger: #ffffff;
@@ -8,8 +8,8 @@ html #app .org-admin-center:has(> .org-role-page) {
   --so-roles-disabled-bg: #e6ebf1;
   --so-roles-disabled-border: #bac5d2;
   --so-roles-disabled-selected-border: #526d9d;
-  --so-roles-field-text: #18365f;
-  --so-roles-field-border: #667f9e;
+  --so-roles-field-text: var(--glass-text);
+  --so-roles-field-border: var(--glass-border);
   --so-roles-field-help: #485e78;
   --so-roles-field-error: #9b2634;
 }

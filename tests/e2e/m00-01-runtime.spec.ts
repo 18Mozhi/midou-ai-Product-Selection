@@ -106,17 +106,17 @@ test("P01 failure offers one safe retry and does not claim a destination", async
   await expect
     .poll(() => retry.evaluate((node) => node.getBoundingClientRect().height >= 44))
     .toBe(true);
-  await expect(retry).toHaveCSS("background-color", "rgb(23, 72, 160)");
+  await expect(retry).toHaveCSS("background-color", "rgb(9, 108, 85)");
   await retry.hover();
   await expect
     .poll(() => retry.evaluate((node) => getComputedStyle(node).backgroundColor))
-    .toBe("rgb(16, 59, 133)");
+    .toBe("rgb(5, 80, 62)");
   await retry.focus();
   await expect
     .poll(() => retry.evaluate((node) => getComputedStyle(node).outlineWidth))
     .toBe("3px");
   await page.mouse.down();
-  await expect(retry).toHaveCSS("background-color", "rgb(14, 52, 116)");
+  await expect(retry).toHaveCSS("background-color", "rgb(5, 80, 62)");
   await page.mouse.move(0, 0);
   await page.mouse.up();
   await expect(surface).toHaveAttribute("data-state", "blocked");

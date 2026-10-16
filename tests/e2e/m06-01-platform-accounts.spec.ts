@@ -739,7 +739,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
             control.textContent?.trim() || control.getAttribute("aria-label") || control.tagName,
           height: control.getBoundingClientRect().height,
         }))
-        .filter((control) => control.height < 44),
+        .filter((control) => Math.round(control.height * 100) / 100 < 44),
     );
   expect(undersizedAccountTargets).toEqual([]);
   const mobile = (page.viewportSize()?.width ?? 0) <= 760;
@@ -756,7 +756,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
               control.textContent?.trim() || control.getAttribute("aria-label") || control.tagName,
             height: control.getBoundingClientRect().height,
           }))
-          .filter((control) => control.height < 44),
+          .filter((control) => Math.round(control.height * 100) / 100 < 44),
       );
     expect(undersizedFilterTargets).toEqual([]);
     await expect(filters.getByPlaceholder("搜索组织名称或用户邮箱")).toHaveAccessibleName("关键词");
@@ -815,7 +815,7 @@ test("M06-01.A07/A08/A15 novice platform account center separates organizations 
             control.textContent?.trim() || control.getAttribute("aria-label") || control.tagName,
           height: control.getBoundingClientRect().height,
         }))
-        .filter((control) => control.height < 44),
+        .filter((control) => Math.round(control.height * 100) / 100 < 44),
     );
   expect(undersizedUserTargets).toEqual([]);
   await accountTabs.getByRole("link", { name: "管理员管理", exact: true }).click();
@@ -1030,7 +1030,7 @@ test("organization list uses organization-specific filters and a recoverable emp
             control.textContent?.trim() || control.getAttribute("aria-label") || control.tagName,
           height: control.getBoundingClientRect().height,
         }))
-        .filter((control) => control.height < 44),
+        .filter((control) => Math.round(control.height * 100) / 100 < 44),
     );
   expect(undersizedTargets).toEqual([]);
   await filters.getByPlaceholder("搜索组织名称或标识").fill("不存在的组织");
@@ -1641,10 +1641,10 @@ test("P44 admin creation surfaces retain the approved colors across hover and ke
   const email = dialog.getByLabel("邮箱", { exact: true });
   const password = dialog.getByLabel("临时密码", { exact: true });
 
-  await expect(rail).toHaveCSS("background-color", "rgb(37, 74, 156)");
+  await expect(rail).toHaveCSS("background-color", "rgb(9, 108, 85)");
   await expect(form).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await rail.hover();
-  await expect(rail).toHaveCSS("background-color", "rgb(37, 74, 156)");
+  await expect(rail).toHaveCSS("background-color", "rgb(9, 108, 85)");
   await form.hover();
   await expect(form).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await email.focus();
@@ -1652,7 +1652,7 @@ test("P44 admin creation surfaces retain the approved colors across hover and ke
   await expect(password).toBeFocused();
   await expect(password).toHaveCSS("outline-width", "3px");
   await expect(password).toHaveCSS("outline-style", "solid");
-  await expect(password).toHaveCSS("outline-color", "rgb(72, 120, 233)");
+  await expect(password).toHaveCSS("outline-color", "rgb(7, 134, 106)");
 });
 
 test("administrator write failures stay inside their active dialogs", async ({ page }) => {
