@@ -11,25 +11,6 @@
 .opportunity-workspace textarea {
   font: inherit;
 }
-.opportunity-hero {
-  min-height: 140px;
-  padding: 27px 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  border: 1px solid var(--so-border);
-  border-radius: 22px;
-  background:
-    radial-gradient(
-      circle at 80% 18%,
-      color-mix(in srgb, var(--so-chart-2) 18%, transparent),
-      transparent 30%
-    ),
-    linear-gradient(135deg, var(--so-panel), var(--so-bg-elevated));
-  box-shadow: var(--so-shadow);
-}
-.opportunity-hero p,
 .opportunity-list header p,
 .opportunity-detail p,
 .opportunity-overview p,
@@ -43,16 +24,6 @@
   font-weight: 850;
   letter-spacing: 0.16em;
 }
-.opportunity-hero h2 {
-  font-size: 34px;
-}
-.opportunity-hero span {
-  display: block;
-  margin-top: 8px;
-  color: var(--so-text-muted);
-}
-.opportunity-hero button,
-.opportunity-hero > a,
 .opportunity-modal footer button:last-child {
   padding: 11px 17px;
   border: 0;
@@ -740,16 +711,6 @@
   }
   .opportunity-workspace {
     margin-top: 18px;
-  }
-  .opportunity-hero {
-    padding: 20px 16px;
-    align-items: flex-start;
-    flex-direction: column;
-  }
-  .opportunity-hero button,
-  .opportunity-hero > a {
-    width: 100%;
-    text-align: center;
   }
   .opportunity-filters {
     grid-template-columns: 1fr 1fr;

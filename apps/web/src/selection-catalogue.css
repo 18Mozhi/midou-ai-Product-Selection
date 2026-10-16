@@ -1,0 +1,186 @@
+/* Catalogue controls are independent of the retired promotional hero styles. */
+html[data-design="commerce"] #app .catalogue-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 16px;
+  padding: 0;
+  min-height: 40px;
+  border: 0;
+  background: transparent;
+  color: var(--so-text);
+  box-shadow: none;
+}
+html[data-design="commerce"] #app .catalogue-toolbar h2 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.4;
+  color: var(--so-text);
+}
+.catalogue-toolbar-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+html[data-design="commerce"] #app .catalogue-toolbar-actions > :is(a, button) {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 36px;
+  padding: 7px 12px;
+  border: 1px solid var(--so-border);
+  border-radius: 4px;
+  background: var(--so-panel);
+  color: var(--so-text);
+  text-decoration: none;
+  font-size: 13px;
+}
+html[data-design="commerce"] #app .catalogue-toolbar-actions > .primary {
+  color: var(--commerce-color-0);
+  background: var(--so-primary);
+  border-color: var(--so-primary);
+}
+html[data-design="commerce"] #app .catalogue-controls {
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 14px 16px;
+  border: 1px solid var(--so-border);
+  border-radius: 4px;
+  background: var(--so-panel);
+}
+.catalogue-controls > nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  border-bottom: 1px solid var(--so-border);
+}
+html[data-design="commerce"] #app .catalogue-controls > nav button {
+  padding: 10px 16px;
+  min-height: 40px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  color: var(--so-text-muted);
+  box-shadow: none;
+}
+html[data-design="commerce"] #app .catalogue-controls > nav button[aria-current="page"] {
+  border-bottom-color: var(--so-primary);
+  color: var(--so-primary);
+  font-weight: 600;
+}
+html[data-design="commerce"] #app .catalogue-controls .opportunity-filters {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+html[data-design="commerce"] #app .catalogue-controls .opportunity-filters :is(input, select) {
+  min-height: 34px;
+  padding: 7px 10px;
+  border-radius: 4px;
+  background: var(--so-panel);
+  font-size: 13px;
+}
+html[data-design="commerce"] #app .catalogue-controls .opportunity-filter-actions {
+  display: flex;
+  gap: 8px;
+  align-items: end;
+  grid-column: auto;
+  padding: 0;
+}
+html[data-design="commerce"] #app .catalogue-controls .opportunity-filter-actions button {
+  flex: 1;
+  min-height: 34px;
+  padding: 7px 12px;
+}
+html[data-design="commerce"] #app .catalogue-readiness {
+  margin: 12px 0 0;
+  padding: 10px 14px;
+  border: 1px solid var(--so-border);
+  border-radius: 4px;
+  background: var(--so-panel);
+}
+html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-readiness__summary {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+}
+html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-readiness__copy {
+  flex: 1;
+  min-width: 180px;
+}
+html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-readiness__copy h3 {
+  margin: 0;
+  font-size: 13px;
+}
+html[data-design="commerce"]
+  #app
+  .catalogue-readiness
+  .automatic-selection-readiness__copy
+  > :is(span, p) {
+  display: none;
+}
+html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-readiness__progress {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+html[data-design="commerce"]
+  #app
+  .catalogue-readiness
+  .automatic-selection-readiness__progress
+  strong {
+  font-size: 16px;
+}
+html[data-design="commerce"]
+  #app
+  .catalogue-readiness
+  .automatic-selection-readiness__progress
+  > i {
+  display: none;
+}
+html[data-design="commerce"] #app .catalogue-readiness .automatic-selection-readiness__details {
+  margin-top: 8px;
+  padding-top: 8px;
+}
+@media (max-width: 1100px) {
+  html[data-design="commerce"] #app .catalogue-controls .opportunity-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 640px) {
+  html[data-design="commerce"] #app .catalogue-toolbar {
+    align-items: start;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 12px;
+  }
+  html[data-design="commerce"] #app .catalogue-toolbar h2 {
+    font-size: 20px;
+  }
+  html[data-design="commerce"] #app .catalogue-controls {
+    padding: 10px;
+    gap: 10px;
+  }
+  .catalogue-controls > nav {
+    flex-wrap: nowrap;
+  }
+  html[data-design="commerce"] #app .catalogue-controls > nav button {
+    flex: 1;
+    padding: 9px 4px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+  html[data-design="commerce"] #app .catalogue-controls .opportunity-filters {
+    grid-template-columns: 1fr;
+  }
+}

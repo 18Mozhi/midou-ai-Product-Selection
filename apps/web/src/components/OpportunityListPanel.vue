@@ -237,7 +237,7 @@ watch(imageFailureResetSources, (items) => {
 </script>
 
 <template>
-  <section class="opportunity-view-bar" aria-label="推荐清单视图">
+  <section class="catalogue-controls" aria-label="推荐清单视图">
     <nav>
       <button
         v-for="option in viewOptions"
@@ -304,6 +304,7 @@ watch(imageFailureResetSources, (items) => {
     </ResponsiveFilterDrawer>
   </section>
   <AutomaticSelectionReadinessPanel
+    class="catalogue-readiness"
     v-if="showAutomationReadiness && automationReadiness"
     :readiness="automationReadiness"
   />

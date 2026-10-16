@@ -44,7 +44,7 @@ import { useOpportunityWorkspaceCollectionActions } from "./use-opportunity-work
 import { useOpportunityWorkspaceListState } from "./use-opportunity-workspace-list-state";
 import "../opportunities.css";
 import "../opportunity-profit.css";
-import "../opportunity-selection-entry.css";
+import "../selection-catalogue.css";
 import "../automatic-selection.css";
 const route = useRoute(),
   router = useRouter();
@@ -536,9 +536,8 @@ useOpportunityWorkspaceLifecycle({
 </script>
 <template>
   <section class="opportunity-workspace opportunity-workspace--review">
-    <header v-if="!opportunityId" class="opportunity-hero">
+    <header v-if="!opportunityId" class="catalogue-toolbar">
       <div>
-        <p>自动选品</p>
         <h2>
           {{
             selectionView === "recommended"
@@ -551,7 +550,7 @@ useOpportunityWorkspaceLifecycle({
           }}
         </h2>
       </div>
-      <div v-if="canDecide" class="opportunity-hero-actions">
+      <div v-if="canDecide" class="catalogue-toolbar-actions">
         <RouterLink class="primary so-action-primary" to="/opportunities/start"
           >创建选品 →</RouterLink
         ><RouterLink class="secondary so-action-secondary" to="/trends?section=rules"
@@ -792,5 +791,3 @@ useOpportunityWorkspaceLifecycle({
     </dialog>
   </section>
 </template>
-
-<style scoped src="./OpportunityWorkspace.css"></style>

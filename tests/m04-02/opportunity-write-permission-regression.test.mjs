@@ -15,7 +15,7 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(access, /includes\("opportunity:decide"\)/);
   assert.match(access, /includes\("competitor:manage"\)/);
   assert.match(access, /includes\("supplier_quote:manage"\)/);
-  assert.match(workspace, /v-if="canDecide" class="opportunity-hero-actions"/);
+  assert.match(workspace, /v-if="canDecide" class="catalogue-toolbar-actions"/);
   assert.match(workspace, /:can-decide="canDecide"/);
   assert.match(workspace, /v-if="canManageCompetitors"[\s\S]*discoverCompetitors/);
   assert.match(workspace, /v-if="canManageSuppliers"[\s\S]*discoverSuppliers/);

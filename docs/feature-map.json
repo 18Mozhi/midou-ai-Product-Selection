@@ -1,4 +1,20 @@
 {
+  "selectionCatalogueLayout20261017": {
+    "status": "implemented",
+    "statusDetail": "19_related_checks_and_126_browser_cases_passed_not_deployed",
+    "requirements": "docs/selection-catalogue-layout.md",
+    "routes": ["/opportunities"],
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/web/src/selection-catalogue.css"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/m04-02/opportunity-write-permission-regression.test.mjs"
+    ],
+    "contract": "Compact catalogue toolbar, four-view controls and real readiness summary; old hero/view-bar styles and two obsolete CSS files deleted. Existing reads/writes, permissions, filter contracts, unknown states and detail workflow retained. No API/schema/config/dependency/runtime service change."
+  },
   "selectionCatalogueFacts20261017": {
     "status": "implemented",
     "statusDetail": "61_related_checks_and_126_browser_cases_passed_not_deployed",
@@ -2104,7 +2120,7 @@
         "../apps/api/src/erp-product-import-routes.ts",
         "../apps/worker/src/core-collection-projection-worker.ts",
         "../apps/web/src/components/OpportunityWorkspace.vue",
-        "../apps/web/src/components/OpportunityWorkspace.css",
+        "../apps/web/src/selection-catalogue.css",
         "../apps/web/src/components/opportunity-workspace-types.ts",
         "../apps/web/src/components/OpportunityEvidencePanel.vue",
         "../apps/web/src/components/OpportunityDecisionPanel.vue",

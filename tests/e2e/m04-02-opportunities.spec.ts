@@ -424,7 +424,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
     manageSelectionRules.evaluate((element) => getComputedStyle(element).backgroundColor),
   ]);
   expect(primaryBackground).not.toBe(secondaryBackground);
-  expect(secondaryBackground).toBe("rgba(0, 0, 0, 0)");
+  expect(secondaryBackground).toBe("rgb(255, 255, 255)");
   if ((page.viewportSize()?.width ?? 0) <= 760)
     await page.getByRole("button", { name: "高级筛选" }).click();
   await page.getByLabel("证据完整度").selectOption("partial");
@@ -438,7 +438,7 @@ test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthf
   );
   await filterButton.click();
   await filtered;
-  await expect(manageSelectionRules).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  await expect(manageSelectionRules).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(manageSelectionRules).toHaveCSS("background-image", "none");
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
@@ -746,6 +746,14 @@ test("commerce catalogue switches layouts and keeps product navigation and missi
   const catalogue = page.locator(".product-catalog");
   await expect(catalogue).toHaveAttribute("data-display", "grid");
   await expect(page.locator(".catalog-product")).toHaveCount(1);
+  await expect(page.locator(".opportunity-hero, .opportunity-view-bar")).toHaveCount(0);
+  const toolbar = page.locator(".catalogue-toolbar");
+  await expect(toolbar).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
+  const firstProduct = await page.locator(".catalog-product").first().boundingBox();
+  expect(firstProduct!.y).toBeLessThan(page.viewportSize()!.height);
+  await expect(
+    page.locator(".catalogue-controls").getByRole("button", { name: "推荐商品", exact: true }),
+  ).toHaveAttribute("aria-current", "page");
   await expect(page.getByRole("group", { name: "商品展示方式" })).toBeVisible();
   await page.getByRole("button", { name: "列表", exact: true }).click();
   await expect(catalogue).toHaveAttribute("data-display", "list");
@@ -2685,7 +2693,7 @@ test("selection views send explicit truthful recommendation filters", async ({ p
     "aria-current",
     "page",
   );
-  const queueButtons = page.locator(".opportunity-view-bar > nav button");
+  const queueButtons = page.locator(".catalogue-controls > nav button");
   await expect(queueButtons).toHaveCount(4);
   if ((page.viewportSize()?.width ?? 0) > 760) {
     await expect

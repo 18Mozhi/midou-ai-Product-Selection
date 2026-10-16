@@ -1,3 +1,5 @@
+> 2026-10-17 选品库布局重制：移除大蓝横幅与旧渐变标题，采用紧凑工具栏、商品视图与筛选分区、实际配置摘要，删除旧标题/视图栏 CSS 和两个废弃样式文件。见 `docs/selection-catalogue-layout.md`，本地未部署。
+
 > 2026-10-17 选品库主品资料：图卡/列表展示真实售价、评价、购买下限、排名和采集时间；图片与资料限定同租户同主品，缺失不推测。见 `docs/selection-catalogue-product-facts.md`，本地实现未部署。
 
 > 2026-10-17 启动一致性：来源目录无变化不再改写时间戳，Worker 等 API 同步完成并就绪后启动，保留来源开关与审批。见 `docs/selection-startup-consistency.md`。
