@@ -90,6 +90,21 @@ test("recovery scans are scoped, exclude retired searches and qualify actionable
   assert.match(sql, /n_image\.workspace_id=l_image\.workspace_id/);
   assert.match(sql, /BINARY UPPER[\s\S]*n_primary\.payload_json/);
   assert.match(sql, /BINARY o\.primary_asin/);
+  assert.match(
+    sql,
+    /COALESCE\(\(SELECT[\s\S]*FROM competitors c_detail JOIN competitor_snapshots s_detail/,
+  );
+  assert.match(sql, /s_detail\.organization_id=c_detail\.organization_id/);
+  assert.match(sql, /s_detail\.workspace_id=c_detail\.workspace_id/);
+  assert.match(sql, /n_detail\.raw_evidence_id=s_detail\.evidence_id/);
+  assert.match(sql, /n_detail\.organization_id=s_detail\.organization_id/);
+  assert.match(sql, /n_detail\.workspace_id=s_detail\.workspace_id/);
+  assert.match(sql, /c_detail\.opportunity_id=o\.id[\s\S]*c_detail\.deleted_at IS NULL/);
+  assert.match(sql, /BINARY UPPER\(c_detail\.external_id\)=BINARY o\.primary_asin/);
+  assert.match(
+    sql,
+    /BINARY UPPER\(JSON_UNQUOTE\(JSON_EXTRACT\(n_detail\.payload_json,'\$\.asin'\)\)\)=BINARY o\.primary_asin/,
+  );
   assert.match(sql, /primary_asin FROM opportunities o[\s\S]*LIMIT 18446744073709551615/);
   assert.match(sql, /HAVING[\s\S]*primary_image_url IS NOT NULL[\s\S]*LIMIT 20 FOR UPDATE/);
 });

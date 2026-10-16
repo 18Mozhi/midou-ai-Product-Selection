@@ -23,3 +23,11 @@ MySQL 5.7 将主品身份在派生表中物化一次；其中最大无符号 LIM
 `/www/server/panel/pyenv/bin/python /www/server/panel/script/restart_project.py nodejs ai选品`
 
 Python 不因本项重启。本轮未部署；此前阻止提交的旧 UI 校验已逐项修复，整套覆盖与失败复测结果见 `docs/selection-ui-validation-boundary.md`。此修复不能作为全站重制、连续自动运行或每日百品的完成证据。
+
+## 主品详情图片补偿（2026-10-17）
+
+首次 Amazon 搜索没有主图、后续详情已经采到图片时，原查询仅扫描 opportunity_evidence_links，无法看到独立投影的 competitor_snapshots。现保留原情报关联图片优先级，缺失时从同组织、同工作区、同机会且 external_id 与载荷 asin 均等于主品的详情快照原始 normalized_records 读取图片；排除已删除商品、非活动记录、其他来源及非既有 Amazon 图片主机。最新可用详情图片按 captured_at、快照和记录 ID 稳定排序。无需手动重试：既有补偿轮询发现图片后按原事务、来源开关、搜索去重和任务重试策略排队。
+
+这不新增机会证据链接、不改变快照格式或 API，不拿别的竞品图片代替主品；详情尚未采到图时仍保持缺失。原有有效图片任务不会被自动无限重放。
+
+验证：Worker 编译、64 项相关找货/趋势/评分/LAN 单元与合同检查通过；真实 MySQL 5.7 只读内联样例选中主品详情图并排除竞品及其他工作区图片，未写入夹具。真实数据有界 20 行查询与 EXPLAIN 共约 1617ms，当前样本 0 张可用图片；该读取不证明生产已有可恢复图或找货完成。未部署、未改来源开关、未调用设备、未写生产数据。发布仍需本地构建、固定部署脚本及宝塔 Node 重启，Python 无需因本项重启。

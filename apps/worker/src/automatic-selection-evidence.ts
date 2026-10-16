@@ -2,7 +2,7 @@ import { selectionPrimaryAsinSql } from "@scoutops/database";
 
 /** Correlated to materialized opportunity alias o with its resolved primary_asin. */
 export const automaticPrimaryImageSql =
-  "(SELECT JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.image_url')) " +
+  "COALESCE((SELECT JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.image_url')) " +
   "FROM opportunity_evidence_links l_image JOIN normalized_records n_image " +
   "ON n_image.raw_evidence_id=l_image.raw_evidence_id AND n_image.organization_id=l_image.organization_id " +
   "AND n_image.workspace_id=l_image.workspace_id AND n_image.status='active' " +
@@ -12,7 +12,24 @@ export const automaticPrimaryImageSql =
   "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.asin')))=BINARY o.primary_asin " +
   "AND JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.image_url')) REGEXP " +
   "'^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/' " +
-  "ORDER BY n_image.created_at DESC,n_image.id DESC LIMIT 1)";
+  "ORDER BY n_image.created_at DESC,n_image.id DESC LIMIT 1)," +
+  // Main-product detail snapshots are projected independently of trend evidence links.
+  // Read their original normalized evidence, never a different competitor's image.
+  "(SELECT JSON_UNQUOTE(JSON_EXTRACT(n_detail.payload_json,'$.image_url')) " +
+  "FROM competitors c_detail JOIN competitor_snapshots s_detail " +
+  "ON s_detail.competitor_id=c_detail.id AND s_detail.organization_id=c_detail.organization_id " +
+  "AND s_detail.workspace_id=c_detail.workspace_id " +
+  "JOIN normalized_records n_detail ON n_detail.raw_evidence_id=s_detail.evidence_id " +
+  "AND n_detail.organization_id=s_detail.organization_id AND n_detail.workspace_id=s_detail.workspace_id " +
+  "AND n_detail.status='active' " +
+  "JOIN providers p_detail ON p_detail.id=n_detail.provider_id AND p_detail.code='amazon_product' " +
+  "WHERE c_detail.opportunity_id=o.id AND c_detail.organization_id=o.organization_id " +
+  "AND c_detail.workspace_id=o.workspace_id AND c_detail.deleted_at IS NULL " +
+  "AND BINARY UPPER(c_detail.external_id)=BINARY o.primary_asin " +
+  "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n_detail.payload_json,'$.asin')))=BINARY o.primary_asin " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(n_detail.payload_json,'$.image_url')) REGEXP " +
+  "'^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/' " +
+  "ORDER BY s_detail.captured_at DESC,s_detail.id DESC,n_detail.created_at DESC,n_detail.id DESC LIMIT 1))";
 
 /** Resolve the same primary used by the catalogue, rather than the latest linked competitor. */
 export const automaticPrimaryEvidenceSql =

@@ -1,4 +1,15 @@
 {
+  "selectionPrimaryDetailImageRecovery20261017": {
+    "status": "implemented",
+    "statusDetail": "64_related_checks_and_mysql57_readonly_validation_passed_not_deployed",
+    "requirements": "docs/selection-sourcing-recovery.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "apps/worker/src/trend-projection-persistence.ts"
+    ],
+    "testFiles": ["tests/unit/automatic-sourcing-recovery.test.mjs"],
+    "contract": "Retain linked primary image priority; fallback to active normalized Amazon evidence of same-tenant same-opportunity same-primary detail snapshots. No rival images, data migration, new config, API or production writes. Existing sourcing repair schedules only after a usable image exists."
+  },
   "selectionRetiredMemberCompetitors20261017": {
     "status": "implemented",
     "statusDetail": "related_236_checks_and_144_browser_cases_passed_not_deployed",
