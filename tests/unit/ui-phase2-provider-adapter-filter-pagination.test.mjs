@@ -2,8 +2,9 @@ import { spawnSync } from "node:child_process";
 import { gunzipSync } from "node:zlib";
 import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
+import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
 import ts from "typescript";
@@ -140,7 +141,12 @@ test("P47 approved independent replay preserves original provenance, incident re
   assert.equal(e.screenshots.length, 36);
   for (const [file, expected] of Object.entries(e.sourceHashes)) {
     assert.match(expected, /^[a-f0-9]{64}$/);
-    assert.ok(readFileSync(file), `missing captured dependency: ${file}`);
+    // Preserve the original presence guard; the component's exact historical
+    // reconstruction is checked below, not inferred from an existing file.
+    assert.ok(
+      existsSync(file) ? readFileSync(file) : readEvidenceSourceBytes(file, expected),
+      `missing captured dependency: ${file}`,
+    );
   }
   assert.ok(
     hash(p47HistoricalSource(component, read(component), "pre-refresh")) ===

@@ -4,7 +4,7 @@ import {
   assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
@@ -109,7 +109,11 @@ test("historical expired packet verifies source lineage, recovery matrix and key
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 190);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34EvidenceSourceHash(file, read(file), expected);
+    assertP34EvidenceSourceHash(
+      file,
+      existsSync(file) ? read(file) : readCaptureSourceRevision(file, expected),
+      expected,
+    );
   const capturedParent = previewApprovalsExpired(
     previewApprovalsPermission(
       previewApprovalsParentFrame(

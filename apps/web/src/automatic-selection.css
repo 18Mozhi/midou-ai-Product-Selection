@@ -126,9 +126,7 @@
     .opportunity-overview > article,
     .opportunity-section,
     .opportunity-evidence,
-    .opportunity-decisions,
-    .opportunity-lineage,
-    .opportunity-feedback
+    .opportunity-decisions
   ) {
   border-color: var(--l);
   border-radius: 0;

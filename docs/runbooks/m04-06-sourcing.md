@@ -1,5 +1,7 @@
 # M04-06 供应链找货运维与回滚
 
+> 六节点单图实测、来源报价条件与发布步骤见 `docs/selection-lan-1688-validation.md`。`source_price_description` 是只读来源说明，无新配置或迁移；发布后重启唯一宝塔 Node 项目 `ai选品` 并刷新浏览器，Python 不变。
+
 重复采集后，DHgate 的新观测应生成下一版规范记录，`sourcing_candidates` 仍按来源外部 ID 保持唯一；Made-in-China 的验证码和 EC21 的 robots 禁止必须继续显示为受阻，禁止绕过后宣称通过。
 
 ## 宝塔上线

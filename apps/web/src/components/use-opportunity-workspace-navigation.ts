@@ -21,7 +21,6 @@ interface OpportunityWorkspaceNavigationOptions {
   tab: Ref<OpportunityTypes.OpportunityTab>;
   showCreate: Ref<boolean>;
   load: () => Promise<void>;
-  advanceTabIntent: () => void;
 }
 
 export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceNavigationOptions) {
@@ -39,7 +38,6 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
     tab,
     showCreate,
     load,
-    advanceTabIntent,
   } = options;
 
   function syncListRoute() {
@@ -112,7 +110,6 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
   }
 
   async function setTab(nextTab: OpportunityTypes.OpportunityTab) {
-    if (tab.value !== nextTab) advanceTabIntent();
     tab.value = nextTab;
     await router.replace({
       query: { ...route.query, tab: nextTab === "overview" ? undefined : nextTab },
@@ -121,8 +118,11 @@ export function useOpportunityWorkspaceNavigation(options: OpportunityWorkspaceN
 
   function syncTabFromRoute() {
     const nextTab = resolveOpportunityTab(route.query.tab);
-    if (tab.value !== nextTab) advanceTabIntent();
     tab.value = nextTab;
+    if (["market", "ai", "lineage", "feedback"].includes(String(route.query.tab)))
+      void router.replace({
+        query: { ...route.query, tab: nextTab === "overview" ? undefined : nextTab },
+      });
   }
 
   function syncCreateRouteIntent() {

@@ -1,3 +1,7 @@
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { readFileSync } from "node:fs";
@@ -10,6 +14,9 @@ import {
   auditContracts,
   auditPageSpecs,
 } from "../../scripts/lib/ui-phase2-contract-audit.mjs";
+
+const runPreRebuildAudit = () =>
+  runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
 
 const file = "apps/web/src/components/Example.vue";
 const source = '<template><button @click="save">保存</button></template>';
@@ -256,7 +263,7 @@ test("route audit requires exact route tokens and accepts documented plain-text 
   assert.equal(audit("/logs", "/logs-old").issues.length, 1);
 });
 
-test("real repository audit is deterministic and preserves historical inventories and approvals", () => {
+test("pre-rebuild real repository audit is deterministic and preserves historical inventories and approvals", () => {
   const folder = new URL("../../design-plans/ui-phase-2-2026-09-07/", import.meta.url);
   const protectedFiles = [
     "baseline.json",
@@ -268,8 +275,8 @@ test("real repository audit is deterministic and preserves historical inventorie
   ];
   const snapshot = () => protectedFiles.map((name) => digest(readFileSync(new URL(name, folder))));
   const before = snapshot();
-  const report = runContractAudit();
-  assert.deepEqual(report, runContractAudit());
+  const report = runPreRebuildAudit();
+  assert.deepEqual(report, runPreRebuildAudit());
   assert.deepEqual(snapshot(), before);
   assert.deepEqual(report.pages.issues, []);
   assert.equal(report.pages.specs, report.pages.routes);
@@ -286,6 +293,38 @@ test("real repository audit is deterministic and preserves historical inventorie
   );
   assert.equal(report.denominatorFrozen, false);
   assert.ok(report.records.some((record) => record.temporalScope === "historical"));
+});
+
+test("historical inventory overrides reject unsafe or duplicate inputs before reading sources", () => {
+  const file = "apps/web/src/App.vue";
+  for (const files of [
+    [],
+    [file, file],
+    ["../outside.vue"],
+    ["apps/web/src/../outside.vue"],
+    ["apps/web/src//App.vue"],
+  ])
+    assert.throws(
+      () =>
+        runContractAudit(() => {
+          throw new Error("must not read");
+        }, files),
+      /invalid_source_inventory/,
+    );
+});
+
+test("current audit reports live source identities instead of borrowing the pre-rebuild map", () => {
+  const file = "apps/web/src/components/HomeDashboard.vue";
+  const text = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8");
+  const actual = scanSource(text, file).candidates;
+  const report = runContractAudit();
+  for (const row of report.records.filter(
+    (row) => row.sourceFile === file && row.temporalScope !== "historical",
+  )) {
+    const match = actual.find((candidate) => candidate.candidateId === row.candidateId);
+    if (match) assert.equal(row.currentLine, match.line);
+    else assert.equal(row.status, "identity-not-found");
+  }
 });
 
 test("CLI emits parseable full JSON and rejects write or extra arguments", () => {
@@ -310,8 +349,8 @@ test("CLI emits parseable full JSON and rejects write or extra arguments", () =>
   }
 });
 
-test("task and scoring stable tables cover the exact current local source set without promoting historical line rows", () => {
-  const report = runContractAudit();
+test("pre-rebuild task and scoring stable tables cover the exact current local source set without promoting historical line rows", () => {
+  const report = runPreRebuildAudit();
   const groups = [
     {
       document: "task-contract-review.md",
@@ -347,10 +386,10 @@ test("task and scoring stable tables cover the exact current local source set wi
     const historical = records.filter((record) => record.temporalScope === "historical");
     const candidates = group.names.flatMap((name) => {
       const file = `apps/web/src/components/${name}.vue`;
-      const text = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
-        "\r\n",
-        "\n",
-      );
+      const text = readPreSelectionRebuild(
+        new URL(`../../${file}`, import.meta.url),
+        "utf8",
+      ).replaceAll("\r\n", "\n");
       return scanSource(text, file).candidates;
     });
     assert.equal(current.length, group.controls + group.dialogs);
@@ -407,8 +446,8 @@ test("task and scoring stable tables cover the exact current local source set wi
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("shared shell role and state contract binds every current source site without collapsing business variants", () => {
-  const report = runContractAudit();
+test("pre-rebuild shared shell role and state contract binds every current source site without collapsing business variants", () => {
+  const report = runPreRebuildAudit();
   const document = "shared-shell-role-state-contract-review.md";
   const files = [
     "apps/web/src/components/NavigationShell.vue",
@@ -423,7 +462,10 @@ test("shared shell role and state contract binds every current source site witho
     (record) => record.document.endsWith(`/${document}`) && files.includes(record.sourceFile),
   );
   const source = (file) =>
-    readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll("\r\n", "\n");
+    readPreSelectionRebuild(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
+      "\r\n",
+      "\n",
+    );
   const candidates = files.flatMap((file) => scanSource(source(file), file).candidates);
   assert.equal(records.length, 82);
   assert.deepEqual(
@@ -892,14 +934,14 @@ test("current provider source filter map covers local query, facets, sorting and
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("current home dashboard map covers all current routes, form actions and evidence disclosure", () => {
+test("pre-rebuild current home dashboard map covers all current routes, form actions and evidence disclosure", () => {
   const file = "apps/web/src/components/HomeDashboard.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
-    "\r\n",
-    "\n",
-  );
+  const source = readPreSelectionRebuild(
+    new URL(`../../${file}`, import.meta.url),
+    "utf8",
+  ).replaceAll("\r\n", "\n");
   const document = "account-home-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const currentRows = report.records.filter(
     (record) =>
@@ -929,14 +971,14 @@ test("current home dashboard map covers all current routes, form actions and evi
   assert.equal(report.denominatorFrozen, false);
 });
 
-test("P10-P12 baseline rows remain historical while current automation overview candidates stay bound", () => {
+test("pre-rebuild P10-P12 baseline rows remain historical while current automation overview candidates stay bound", () => {
   const file = "apps/web/src/components/HomeAutomationOverview.vue";
-  const source = readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll(
-    "\r\n",
-    "\n",
-  );
+  const source = readPreSelectionRebuild(
+    new URL(`../../${file}`, import.meta.url),
+    "utf8",
+  ).replaceAll("\r\n", "\n");
   const document = "account-home-contract-review.md";
-  const report = runContractAudit();
+  const report = runPreRebuildAudit();
   const candidates = scanSource(source, file).candidates;
   const historicalRows = report.records.filter(
     (record) =>

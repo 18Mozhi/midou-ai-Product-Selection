@@ -34,10 +34,10 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | --- | --- |
 | apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
-| apps/web/src/components/PlatformAdminComparisonMobile.css | 49f3822fd8716bd5905f5a29fb877c897a6a29d77cab1a7a4e3c2fe361f6d5f6 |
-| apps/web/src/components/PlatformAdminDirectoryMobile.css | 624273e72a9af1c981c5e26f1ba6526ec603266a77002e35ceceffd2bc6cf273 |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | ecffaa62f1f555c0aad971ba27bc8073d4f86f9907b3ff86e8bb6a1a9911e765 |
+| apps/web/src/components/PlatformAdminDirectoryMobile.css | bf911b79ce665a55505f01b11e2208979806594598c93435f32e9d1209c9fa3a |
 | apps/web/src/design/platform-overlay-tokens.css | eb00768ad144315547668d595ef081e216729e6c36ab81aed5e86beff339bf90 |
-| apps/web/src/design/platform-admin-mobile-tokens.css | 743fb75106f17d85714bfdb0f066c1213bc6726c765ee71a547a7e83cfddcc8e |
+| apps/web/src/design/platform-admin-mobile-tokens.css | bfa2efcbebd55d37e480a6d16cbaa66822eb1a9c89d19515f3c658f379a39185 |
 
 ## 当前41个来源的LF指纹（2026-10-04）
 
@@ -67,7 +67,7 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/web/src/use-platform-user-detail.ts | 8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e |
 | apps/web/src/platform-account-types.ts | 7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2 |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
-| apps/web/src/components/NavigationShell.vue | 596cef4389d9ecf77b4eb433d0954031880a962ec0346c9455cc0c4790c5f933 |
+| apps/web/src/components/NavigationShell.vue | 2632dfb3a80b900d7bf1b2a8048cb861f64edd695064a3dfc1f36f9384ce42ce |
 | apps/api/src/authorization-routes.ts | 83b506243defb771e5e659e4c42e52a242c300f08033c89cc9885b4aa3c4b920 |
 | apps/api/src/platform-account-routes.ts | 79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226 |
 | apps/api/src/platform-account-service.ts | 189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d |
@@ -79,13 +79,13 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/api/src/mysql-platform-dashboard-collection-metrics.ts | dc37e16179b6c8d57d2b6ffcb23fcfce7d44d950bbfc9263104be1d6d74c438d |
 | apps/api/src/mysql-platform-dashboard-risk-metrics.ts | e49abd8f317094b4b34b5fb31f8cb47e9d3cc1dc9cffcd945035c8ecd648f094 |
 | apps/api/src/mysql-platform-dashboard-storage-metrics.ts | 16b1b6b5e04ae7b3f4438914cd88b7e985d4a836db42c6e6c1855567de0ca808 |
-| config/route-catalog.json | b7a590249385ae35adbd413ef72e1be03b88b09cbee90ad82ca5bbf0604dfa93 |
+| config/route-catalog.json | f02cfc9a11fa268774252601c6bead0697bf299631d58d6c2dffc38ad43c9a54 |
 | apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
-| apps/web/src/components/PlatformAdminComparisonMobile.css | 49f3822fd8716bd5905f5a29fb877c897a6a29d77cab1a7a4e3c2fe361f6d5f6 |
-| apps/web/src/components/PlatformAdminDirectoryMobile.css | 624273e72a9af1c981c5e26f1ba6526ec603266a77002e35ceceffd2bc6cf273 |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | ecffaa62f1f555c0aad971ba27bc8073d4f86f9907b3ff86e8bb6a1a9911e765 |
+| apps/web/src/components/PlatformAdminDirectoryMobile.css | bf911b79ce665a55505f01b11e2208979806594598c93435f32e9d1209c9fa3a |
 | apps/web/src/design/platform-overlay-tokens.css | eb00768ad144315547668d595ef081e216729e6c36ab81aed5e86beff339bf90 |
-| apps/web/src/design/platform-admin-mobile-tokens.css | 743fb75106f17d85714bfdb0f066c1213bc6726c765ee71a547a7e83cfddcc8e |
+| apps/web/src/design/platform-admin-mobile-tokens.css | bfa2efcbebd55d37e480a6d16cbaa66822eb1a9c89d19515f3c658f379a39185 |
 
 ## 运行与失败边界
 

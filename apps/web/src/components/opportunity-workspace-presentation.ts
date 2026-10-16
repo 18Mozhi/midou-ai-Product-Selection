@@ -64,34 +64,13 @@ const profitComponentLabels: Record<string, string> = {
 export const opportunityProfitComponentLabel = (value: string) =>
   profitComponentLabels[value] ?? value;
 
-const aiErrorLabels: Record<string, string> = {
-  ai_provider_timeout: "模型服务超时",
-  ai_provider_unavailable: "模型服务不可用",
-  ai_invalid_response: "模型返回格式无效",
-};
-
-export const opportunityAiErrorLabel = (value: string | null | undefined) =>
-  value ? (aiErrorLabels[value] ?? value) : "未记录错误码";
-
-export const opportunityPrimaryTabs: [OpportunityTab, string][] = [
-  ["overview", "结论"],
-  ["evidence", "证据"],
-  ["profit", "利润与成本"],
-  ["risk", "风险"],
-];
-
-export const opportunitySecondaryTabs: [OpportunityTab, string][] = [
-  ["market", "市场"],
-  ["competition", "竞争"],
-  ["ai", "AI 辅助"],
-  ["lineage", "业务血缘"],
-  ["feedback", "经营复盘"],
-  ["decisions", "决策历史"],
-];
-
 export const opportunityTabs: [OpportunityTab, string][] = [
-  ...opportunityPrimaryTabs,
-  ...opportunitySecondaryTabs,
+  ["overview", "商品与评分"],
+  ["competition", "竞品对比"],
+  ["profit", "货源与利润"],
+  ["evidence", "情报证据"],
+  ["risk", "风险"],
+  ["decisions", "决策记录"],
 ];
 
 export const formatOpportunityTime = (value: string) =>
@@ -111,4 +90,6 @@ export const safeOpportunityReturnPath = (value: unknown) =>
 export const resolveOpportunityTab = (value: unknown): OpportunityTab =>
   typeof value === "string" && opportunityTabs.some(([tab]) => tab === value)
     ? (value as OpportunityTab)
-    : "overview";
+    : value === "market"
+      ? "evidence"
+      : "overview";

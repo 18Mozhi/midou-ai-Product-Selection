@@ -1,7 +1,8 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import { assertP34EvidenceSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import ts from "typescript";
@@ -77,7 +78,11 @@ test("historical read-order evidence binds24response orders and its original pre
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 200);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34EvidenceSourceHash(file, read(file), expected);
+    assertP34EvidenceSourceHash(
+      file,
+      existsSync(file) ? read(file) : readCaptureSourceRevision(file, expected),
+      expected,
+    );
   const old = JSON.parse(read("output/playwright/p34-loading-vue-c-r2/evidence.json"));
   assert.deepEqual(e.transformedHashes, old.transformedHashes);
   assert.deepEqual(e.scenarios, old.scenarios);

@@ -8,6 +8,7 @@ import path from "node:path";
 const packet = "output/playwright/p16-c-r2-review";
 const manifestHash = "4cb80b9e75aee2d4cb355ca8897a2e0960e66c82b398f720ef10cf1b4ac532ac";
 const sourceVersions = new Map([
+  ["apps/web/src/signal-ledger-workflows.css", "c26e2b522bc616cbc2a67b01185d832f93789174"],
   ["apps/web/src/components/SelectionJourney.vue", "7beac32e8309830c99d09eb5eb1d6197a4b84371"],
   ["apps/web/src/components/NavigationShell.vue", "243941a0620cd7444bd494a0242d471b343e58c5"],
   ["scripts/verify-ui-phase2-journey-vue.mjs", "329451c94ce006e132d679f308f571b757eb022e"],

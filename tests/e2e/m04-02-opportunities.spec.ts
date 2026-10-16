@@ -114,9 +114,6 @@ async function ready(
   await page.route("**/api/v1/opportunities/member-options", (route) =>
     route.fulfill({ json: envelope([{ id: base.owner_id, label: "选品成员" }]) }),
   );
-  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, (route) =>
-    route.fulfill({ json: envelope([]) }),
-  );
   await page.route(`**/api/v1/opportunities/${opportunityId}/decisions`, (route) => {
     decided = true;
     return route.fulfill({
@@ -188,29 +185,6 @@ async function ready(
           scored_at: null,
           latest_score_run: null,
           score_components: [],
-          lineage: {
-            freshness: { observed_at: detailEvidence[0].observed_at, age_seconds: 3600 },
-            failure_impact: {
-              level: "degraded",
-              codes: ["insufficient_data"],
-              affected_stages: ["score"],
-            },
-            request_ids: ["m04-02-e2e-request"],
-            trace_ids: ["m04-02-e2e-trace"],
-            nodes: [
-              {
-                kind: "opportunity",
-                id: opportunityId,
-                label: base.name,
-                status: "pending",
-                occurred_at: base.updated_at,
-                request_id: "m04-02-e2e-request",
-                trace_id: "m04-02-e2e-trace",
-                route: `/opportunities/${opportunityId}?tab=lineage`,
-              },
-            ],
-          },
-          operating_feedback: { facts: [], calibration: null },
           adoption_blockers: [
             {
               code: "evidence_insufficient",
@@ -382,14 +356,6 @@ const nextOpportunity = {
   id: nextOpportunityId,
   name: "当前机会：防晒产品趋势",
   source_ref_id: "00000000-0000-4000-8000-000000000433",
-  lineage: {
-    freshness: { observed_at: "2026-08-08T00:00:00.000Z", age_seconds: 60 },
-    failure_impact: { level: "healthy", codes: [], affected_stages: [] },
-    request_ids: ["current-opportunity-request"],
-    trace_ids: ["current-opportunity-trace"],
-    nodes: [],
-  },
-  operating_feedback: { facts: [], calibration: null },
   adoption_blockers: [],
   score_components: [],
   latest_score_run: null,
@@ -405,15 +371,12 @@ const nextOpportunity = {
   },
 };
 
-async function readyForNextOpportunity(page: Page, analyses: any[] = []) {
+async function readyForNextOpportunity(page: Page) {
   await page.route(`**/api/v1/opportunities/${nextOpportunityId}`, (route) =>
     route.fulfill({ json: envelope(nextOpportunity) }),
   );
   await page.route(`**/api/v1/opportunities/${nextOpportunityId}/profit-analysis`, (route) =>
     route.fulfill({ json: envelope({ latest_run: null, current_inputs: [] }) }),
-  );
-  await page.route(`**/api/v1/opportunities/${nextOpportunityId}/ai-analyses`, (route) =>
-    route.fulfill({ json: envelope(analyses) }),
   );
 }
 
@@ -426,15 +389,6 @@ async function switchOpportunityInPlace(page: Page, id: string, query = "") {
     },
     `${id}${query ? `?${query.replace(/^\?/, "")}` : ""}`,
   );
-}
-
-async function openDetailTab(page: Page, label: string) {
-  const more = page.locator(".selection-detail-more");
-  const target = page
-    .getByRole("navigation", { name: "机会详情分区" })
-    .getByRole("button", { name: label, exact: true });
-  if (!(await target.isVisible())) await more.locator("summary").click();
-  await page.getByRole("button", { name: label }).click();
 }
 
 test("M04-02.A07/A08/A15 opportunity list and creation are responsive and truthful", async ({
@@ -676,7 +630,7 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
       .toBe(true);
     if (competitorCount === 5 && detailCollected && sourceEnabled)
       await comparison.screenshot({ path: testInfo.outputPath("selection-comparison.png") });
-    await page.getByRole("button", { name: "结论", exact: true }).click();
+    await page.getByRole("button", { name: "商品与评分", exact: true }).click();
     await expect(page.getByText(`${competitorCount} 个关联竞品`, { exact: true })).toBeVisible();
     await expect(page.getByText(`${competitorCount}个快照`, { exact: true })).toBeVisible();
   });
@@ -726,12 +680,7 @@ test("selection detail presents product identity and factual score rows without 
   await expect(table.getByRole("row", { name: /数据质量/ })).toContainText("缺失");
   await table.getByText("缺失项", { exact: true }).click();
   await expect(table.getByText("评价明细", { exact: true })).toBeVisible();
-  const more = page.locator(".selection-detail-more");
-  await more.locator("summary").click();
-  await more.getByRole("button", { name: "业务血缘" }).focus();
-  await page.keyboard.press("Escape");
-  await expect(more).not.toHaveAttribute("open", "");
-  await expect(more.locator("summary")).toBeFocused();
+  await expect(page.locator(".selection-detail-more")).toHaveCount(0);
   await expect(
     page.locator(".opportunity-detail-directory, .opportunity-detail-directory-mobile"),
   ).toHaveCount(0);
@@ -819,14 +768,14 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await expect(decisionSurface).toHaveCSS("border-radius", "0px");
   await expect(decisionSurface).toHaveCSS("background-color", "rgb(255, 255, 255)");
   await expect(page.locator(".selection-detail-navigation > button")).toHaveText([
-    "结论",
-    "竞争",
-    "利润与成本",
-    "证据",
+    "商品与评分",
+    "竞品对比",
+    "货源与利润",
+    "情报证据",
     "风险",
-    "决策历史",
+    "决策记录",
   ]);
-  await expect(page.locator(".selection-detail-more")).not.toHaveAttribute("open", "");
+  await expect(page.locator(".selection-detail-more")).toHaveCount(0);
   await expect(
     page.locator(".opportunity-detail-directory, .opportunity-detail-directory-mobile"),
   ).toHaveCount(0);
@@ -846,15 +795,9 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
       exact: true,
     }),
   ).toBeVisible();
-  await openDetailTab(page, "业务血缘");
-  await expect(page.getByRole("heading", { name: "业务血缘追踪" })).toBeVisible();
-  await expect(page.getByText("部分环节降级", { exact: true })).toBeVisible();
-  await openDetailTab(page, "经营复盘");
-  await expect(page.getByRole("heading", { name: "决策后反馈" })).toBeVisible();
-  await expect(page.getByText("尚无已返回的经营复盘记录。", { exact: true })).toBeVisible();
-  await page.getByRole("button", { name: "利润与成本" }).click();
+  await page.getByRole("button", { name: "货源与利润" }).click();
   await expect(page.getByText("数据不足，不能生成可靠 ROI")).toBeVisible();
-  await page.getByRole("button", { name: "证据", exact: true }).click();
+  await page.getByRole("button", { name: "情报证据", exact: true }).click();
   await expect(page.getByText("Example News")).toBeVisible();
   const decisionWrites: string[] = [];
   page.on("request", (request) => {
@@ -907,7 +850,12 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
   await dialog.getByLabel("原因（必填）").fill("补齐成本与竞品后再判断");
   await dialog.getByRole("button", { name: "确认记录" }).click();
   await expect(page.getByText("决策已记录；原始评分与证据未被改写。")).toBeVisible();
-  await page.getByRole("button", { name: "决策历史" }).click();
+  await page.getByRole("button", { name: "决策记录" }).click();
+  await expect(page.locator(".opportunity-decisions")).toHaveCSS("border-radius", "0px");
+  await expect(page.locator(".opportunity-decisions")).toHaveCSS(
+    "background-color",
+    "rgb(255, 255, 255)",
+  );
   await expect(page.getByText("补齐成本与竞品后再判断")).toBeVisible();
   await expect(
     page.locator(".opportunity-decisions").getByText("继续观察", { exact: true }),
@@ -1179,163 +1127,6 @@ test("P18 eligible recommendation completes the audited adoption flow without ch
   await expect(page.getByText("5/5 已通过", { exact: true })).toBeVisible();
 });
 
-test("operating feedback date defaults use the browser's local calendar day", async ({
-  browser,
-}) => {
-  const context = await browser.newContext({
-    baseURL: `http://127.0.0.1:${process.env.PLAYWRIGHT_WEB_PORT ?? 5173}`,
-    timezoneId: "Asia/Tokyo",
-  });
-  try {
-    const page = await context.newPage();
-    await page.clock.setFixedTime(new Date("2026-08-26T15:30:00.000Z"));
-    await ready(page);
-    await page.goto(`/opportunities/${opportunityId}`);
-    await openDetailTab(page, "经营复盘");
-    await page.getByRole("button", { name: "录入经营复盘" }).click();
-    await expect(page.getByLabel("周期开始")).toHaveValue("2026-08-27");
-    await expect(page.getByLabel("周期结束")).toHaveValue("2026-08-27");
-  } finally {
-    await context.close();
-  }
-});
-
-test("P18 lineage preserves raw status and unknown age while feedback uses the same idempotency key after an unknown write", async ({
-  page,
-}) => {
-  const fact = {
-    id: "00000000-0000-4000-8000-000000000433",
-    period_start: "2026-08-01",
-    period_end: "2026-08-07",
-    sales_units: 8,
-    revenue_amount: 120,
-    ad_spend_amount: 30,
-    returned_units: 0,
-    purchase_lead_time_days: 12,
-    actual_profit_amount: -8,
-    currency: "USD",
-    source_ref: "ERP-REPORT-28",
-    notes: "扣除额外履约成本后为负值。",
-    score_rule_version_snapshot: "score-v6",
-    profit_rule_version_snapshot: "profit-v4",
-    decision_status_snapshot: "observing",
-    predicted_profit_amount: null,
-    predicted_currency: null,
-    quoted_lead_time_days: null,
-    observed_at: "2026-08-08T02:00:00.000Z",
-    request_id: "feedback-request-old",
-    trace_id: "feedback-trace-old",
-    created_at: "2026-08-08T02:01:00.000Z",
-  };
-  const initialFeedback = {
-    facts: [fact],
-    calibration: {
-      fact_id: fact.id,
-      return_rate_percent: 0,
-      ad_spend_ratio_percent: 25.5,
-      profit_variance_amount: -8,
-      profit_variance_currency: "USD",
-      lead_time_variance_days: 0,
-      score_rule_version: "score-v6",
-      profit_rule_version: "profit-v4",
-      decision_status_snapshot: "observing",
-      human_review_required: true,
-      automatic_rule_update: false,
-      automatic_decision: false,
-    },
-  };
-  await ready(page, evidence, {
-    lineage: {
-      freshness: { observed_at: evidence[0].observed_at, age_seconds: null },
-      failure_impact: {
-        level: "blocked",
-        codes: ["failed_terminal:parser_failed"],
-        affected_stages: ["collection_task"],
-      },
-      request_ids: [],
-      trace_ids: [],
-      nodes: [
-        {
-          kind: "collection_task",
-          id: "00000000-0000-4000-8000-000000000432",
-          label: "供应来源采集",
-          status: "failed_terminal:parser_failed",
-          occurred_at: "2026-08-08T02:00:00.000Z",
-          request_id: null,
-          trace_id: null,
-          route: "/collection-tasks?task_id=00000000-0000-4000-8000-000000000432",
-        },
-      ],
-    },
-    operating_feedback: initialFeedback,
-  });
-
-  const idempotencyKeys: string[] = [];
-  const submittedBodies: Array<Record<string, unknown>> = [];
-  await page.route(`**/api/v1/opportunities/${opportunityId}/operating-feedback`, async (route) => {
-    idempotencyKeys.push(route.request().headers()["idempotency-key"] ?? "");
-    submittedBodies.push(route.request().postDataJSON());
-    if (idempotencyKeys.length === 1)
-      return route.fulfill({
-        status: 503,
-        json: {
-          error: {
-            code: "service_unavailable",
-            message: "暂不可用",
-            action_hint: "服务端提交结果尚未确认。",
-          },
-          request_id: "feedback-write-unknown",
-          trace_id: "feedback-write-unknown",
-        },
-      });
-    return route.fulfill({
-      status: 201,
-      json: envelope({
-        facts: [
-          fact,
-          { ...fact, id: "00000000-0000-4000-8000-000000000434", source_ref: "ERP-NEW-29" },
-        ],
-        calibration: null,
-      }),
-    });
-  });
-
-  await page.goto(`/opportunities/${opportunityId}`);
-  await openDetailTab(page, "业务血缘");
-  await expect(page.getByText("距今时间未提供")).toBeVisible();
-  await expect(page.getByText("failed_terminal:parser_failed", { exact: true })).toHaveCount(2);
-  await openDetailTab(page, "经营复盘");
-  await expect(page.getByText("0%", { exact: true })).toBeVisible();
-  await expect(page.getByText("25.5%", { exact: true })).toBeVisible();
-  await expect(page.getByText("-8 USD", { exact: true })).toHaveCount(2);
-  await expect(page.getByText("0 天", { exact: true })).toBeVisible();
-  await page.getByText("不可变快照与审计链路", { exact: true }).click();
-  await expect(page.getByText("score-v6", { exact: true })).toBeVisible();
-  await expect(page.getByText("feedback-trace-old", { exact: true })).toBeVisible();
-
-  await page.getByRole("button", { name: "录入经营复盘" }).click();
-  await page.getByLabel("周期开始").fill("2026-08-08");
-  await page.getByLabel("周期结束").fill("2026-08-14");
-  await page.getByRole("spinbutton", { name: "实际销量 按本周期实际销售件数填写。" }).fill("5");
-  await page.getByLabel("实际销售额").fill("95");
-  await page.getByLabel("实际广告花费").fill("12");
-  await page.getByRole("spinbutton", { name: "实际退货量 不能高于实际销量。" }).fill("1");
-  await page.getByLabel("实际采购交期（天）").fill("14");
-  await page.getByLabel("实际利润").fill("-3");
-  await page.getByRole("textbox", { name: "币种 使用大写货币代码。" }).fill("USD");
-  await page.getByLabel("事实来源").fill("ERP-NEW-29");
-  await page.getByRole("button", { name: "提交新的经营事实" }).click();
-  await expect(page.getByRole("alert")).toContainText("提交结果暂未确认");
-  await expect(page.getByLabel("事实来源")).toBeDisabled();
-  await page.getByRole("button", { name: "使用同一请求标识恢复提交" }).click();
-  await expect(page.locator(".opportunity-message")).toContainText("经营复盘事实已写入");
-  await expect(page.locator(".opportunity-feedback-facts")).toContainText("ERP-NEW-29");
-  expect(idempotencyKeys).toHaveLength(2);
-  expect(idempotencyKeys[0]).toBeTruthy();
-  expect(idempotencyKeys[1]).toBe(idempotencyKeys[0]);
-  expect(submittedBodies[1]).toEqual(submittedBodies[0]);
-});
-
 test("P18 expired detail state routes to login with the current opportunity as a safe return target", async ({
   page,
 }) => {
@@ -1570,8 +1361,8 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
   await expect(page.getByText("暂无竞品查看权限。", { exact: true })).toBeVisible();
 
   await page.goto(`/opportunities/${opportunityId}?tab=market`);
-  await expect(page.getByRole("heading", { name: "市场信息" })).toBeVisible();
-  await expect(page.getByText("机会关联证据总数", { exact: true })).toBeVisible();
+  await expect(page.locator(".opportunity-evidence")).toContainText("Example News");
+  await expect(page.locator(".opportunity-evidence > header")).toContainText("2 条");
   await page.goto(`/opportunities/${opportunityId}?tab=risk`);
   await expect(page.getByRole("heading", { name: "风险等级，不等于完整评估" })).toBeVisible();
   await expect(page.getByText("风险评估资料不完整", { exact: true })).toBeVisible();
@@ -2425,77 +2216,6 @@ test("expired profit analysis response still restores the page-level login state
   await expect(page.locator(".ui-state-panel")).toContainText("expired-profit-request");
 });
 
-test("a late AI analysis success remains scoped to the opportunity that requested it", async ({
-  page,
-}) => {
-  const analysis = (id: string, summary: string) => ({
-    id,
-    status: "succeeded",
-    attempt_count: 1,
-    last_error_code: null,
-    created_at: "2026-08-08T00:00:00.000Z",
-    input_sha256: "0123456789abcdef0123456789abcdef",
-    prompt_contract_version: "v1",
-    result: {
-      id: `${id}-result`,
-      review_status: "approved",
-      content: { summary, classifications: [], missing_fields: [] },
-      ai_generated: true,
-      model_name: "isolated-e2e-model",
-      provider_request_id: null,
-      review: {
-        outcome: "approved",
-        notes: "本地测试抽检",
-        reviewed_by: "00000000-0000-4000-8000-000000000421",
-        reviewed_at: "2026-08-08T01:00:00.000Z",
-      },
-    },
-  });
-  await ready(page);
-  await readyForNextOpportunity(page, [analysis("current-analysis", "当前机会的 AI 摘要")]);
-  let releaseOldAnalysis!: () => void;
-  let markOldAnalysisStarted!: () => void;
-  const oldAnalysisGate = new Promise<void>((resolve) => (releaseOldAnalysis = resolve));
-  const oldAnalysisStarted = new Promise<void>((resolve) => (markOldAnalysisStarted = resolve));
-  await page.route(`**/api/v1/opportunities/${opportunityId}/ai-analyses`, async (route) => {
-    markOldAnalysisStarted();
-    await oldAnalysisGate;
-    await route
-      .fulfill({ json: envelope([analysis("old-analysis", "旧机会的迟到 AI 摘要")]) })
-      .catch(() => {});
-  });
-
-  await page.goto(`/opportunities/${opportunityId}?tab=ai`);
-  await oldAnalysisStarted;
-  const currentDetailRequest = page.waitForRequest((request) =>
-    request.url().includes(`/api/v1/opportunities/${nextOpportunityId}`),
-  );
-  const oldAnalysisAbort = page.waitForEvent(
-    "requestfailed",
-    (request) =>
-      request.url().includes(`/api/v1/opportunities/${opportunityId}/ai-analyses`) &&
-      request.failure()?.errorText.includes("ERR_ABORTED"),
-  );
-  const currentAnalysisResponse = page.waitForResponse(
-    (response) =>
-      response.url().includes(`/api/v1/opportunities/${nextOpportunityId}/ai-analyses`) &&
-      response.status() === 200,
-  );
-  await switchOpportunityInPlace(page, nextOpportunityId, "tab=ai");
-  await currentDetailRequest;
-  await currentAnalysisResponse;
-  await expect(page.getByRole("heading", { name: nextOpportunity.name, level: 1 })).toBeVisible();
-  await openDetailTab(page, "AI 辅助");
-  await expect(page.locator(".opportunity-ai")).toBeVisible();
-  await expect(page.getByText("当前机会的 AI 摘要", { exact: true })).toBeVisible();
-
-  const failedAnalysisRequest = await oldAnalysisAbort;
-  expect(failedAnalysisRequest.failure()?.errorText).toContain("ERR_ABORTED");
-  releaseOldAnalysis();
-  await expect(page.getByText("当前机会的 AI 摘要", { exact: true })).toBeVisible();
-  await expect(page.getByText("旧机会的迟到 AI 摘要", { exact: true })).toHaveCount(0);
-});
-
 test("late competitor data stays scoped to the opportunity that requested it", async ({ page }) => {
   const oldCompetitor = {
       id: "old-competitor",
@@ -2789,58 +2509,6 @@ for (const decision of [
   });
 }
 
-test("P18 operating feedback rejects repeated form submissions while the first POST is pending", async ({
-  page,
-}) => {
-  let feedbackRequests = 0;
-  let releaseFeedback!: () => void;
-  let markFeedbackStarted!: () => void;
-  const feedbackGate = new Promise<void>((resolve) => (releaseFeedback = resolve));
-  const feedbackStarted = new Promise<void>((resolve) => (markFeedbackStarted = resolve));
-  await ready(page);
-  await page.route(`**/api/v1/opportunities/${opportunityId}/operating-feedback`, async (route) => {
-    feedbackRequests += 1;
-    markFeedbackStarted();
-    await feedbackGate;
-    return route.fulfill({
-      status: 201,
-      json: envelope({ facts: [], calibration: null }),
-    });
-  });
-
-  await page.goto(`/opportunities/${opportunityId}`);
-  await openDetailTab(page, "经营复盘");
-  await page.getByRole("button", { name: "录入经营复盘" }).click();
-  await page.getByLabel("周期开始").fill("2026-08-08");
-  await page.getByLabel("周期结束").fill("2026-08-14");
-  await page.getByRole("spinbutton", { name: "实际销量 按本周期实际销售件数填写。" }).fill("5");
-  await page.getByLabel("实际销售额").fill("95");
-  await page.getByLabel("实际广告花费").fill("12");
-  await page.getByRole("spinbutton", { name: "实际退货量 不能高于实际销量。" }).fill("1");
-  await page.getByLabel("实际采购交期（天）").fill("14");
-  await page.getByLabel("实际利润").fill("-3");
-  await page.getByRole("textbox", { name: "币种 使用大写货币代码。" }).fill("USD");
-  await page.getByLabel("事实来源").fill("ERP-REENTRY-01");
-  const form = page.locator(".opportunity-feedback-form");
-  await form.evaluate((element) => {
-    (element as HTMLFormElement).requestSubmit();
-    (element as HTMLFormElement).requestSubmit();
-  });
-  await feedbackStarted;
-  await page.waitForTimeout(100);
-
-  expect(feedbackRequests).toBe(1);
-  await expect(page.getByRole("button", { name: "正在写入…" })).toBeDisabled();
-  const response = page.waitForResponse(
-    (candidate) =>
-      candidate.url().includes(`/api/v1/opportunities/${opportunityId}/operating-feedback`) &&
-      candidate.request().method() === "POST",
-  );
-  releaseFeedback();
-  await response;
-  await expect(page.locator(".opportunity-message")).toContainText("经营复盘事实已写入");
-});
-
 test("mobile opportunity filters preserve selected adoption blocker inside the drawer", async ({
   page,
 }) => {
@@ -2948,7 +2616,7 @@ test("opportunity detail tab supports a direct URL", async ({ page }) => {
   await ready(page);
   await page.goto(`/opportunities/${opportunityId}?tab=evidence`);
   const directory = page.locator(".selection-detail-navigation");
-  await expect(directory.getByRole("button", { name: "证据", exact: true })).toHaveAttribute(
+  await expect(directory.getByRole("button", { name: "情报证据", exact: true })).toHaveAttribute(
     "aria-current",
     "page",
   );

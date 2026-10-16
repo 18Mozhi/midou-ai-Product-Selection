@@ -1,15 +1,11 @@
 <script setup lang="ts">
-import { defineAsyncComponent, ref, shallowRef } from "vue";
+import { defineAsyncComponent, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { ApiClientError, createApiClient } from "../api-client";
 const OpportunityListPanel = defineAsyncComponent(() => import("./OpportunityListPanel.vue"));
 const OpportunityDecisionPanel = defineAsyncComponent(
   () => import("./OpportunityDecisionPanel.vue"),
 );
-const OpportunityFeedbackPanel = defineAsyncComponent(
-  () => import("./OpportunityFeedbackPanel.vue"),
-);
-const OpportunityLineagePanel = defineAsyncComponent(() => import("./OpportunityLineagePanel.vue"));
 const OpportunityProfitPanel = defineAsyncComponent(() => import("./OpportunityProfitPanel.vue"));
 const OpportunityEvidencePanel = defineAsyncComponent(
   () => import("./OpportunityEvidencePanel.vue"),
@@ -20,15 +16,12 @@ const OpportunityDetailInsights = defineAsyncComponent(
 const OpportunityDetailNavigation = defineAsyncComponent(
   () => import("./OpportunityDetailNavigation.vue"),
 );
-const OpportunityAiPanel = defineAsyncComponent(() => import("./OpportunityAiPanel.vue"));
 const OpportunityWorkspaceDialogs = defineAsyncComponent(
   () => import("./OpportunityWorkspaceDialogs.vue"),
 );
 import { createOpportunityWorkspaceForms } from "./opportunity-workspace-forms";
 import UiStatePanel from "./UiStatePanel.vue";
-import AuditedReasonDialog from "./AuditedReasonDialog.vue";
 import SelectionProductHeader from "./SelectionProductHeader.vue";
-import { useAuditedReason } from "../use-audited-reason";
 import { useModalDialog } from "../use-modal-dialog";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import {
@@ -43,7 +36,6 @@ import {
 } from "./use-opportunity-workspace-reads";
 import { useOpportunityWorkspaceNavigation } from "./use-opportunity-workspace-navigation";
 import { useOpportunityWorkspaceAccess } from "./use-opportunity-workspace-access";
-import { useOpportunityWorkspaceFeedbackWrites } from "./use-opportunity-workspace-feedback-writes";
 import { useOpportunityWorkspaceErpImport } from "./use-opportunity-workspace-erp-import";
 import { useOpportunityWorkspaceDecisionFocus } from "./use-opportunity-workspace-decision-focus";
 import { useOpportunityWorkspaceLifecycle } from "./use-opportunity-workspace-lifecycle";
@@ -53,8 +45,6 @@ import { useOpportunityWorkspaceListState } from "./use-opportunity-workspace-li
 import "../opportunities.css";
 import "../opportunity-profit.css";
 import "../opportunity-selection-entry.css";
-import "../opportunity-ai.css";
-import "../opportunity-p18-workfaces.css";
 import "../automatic-selection.css";
 const route = useRoute(),
   router = useRouter();
@@ -77,16 +67,6 @@ const props = defineProps<{
   profitLoadState = ref<"loading" | "ready" | "error">("loading"),
   profitErrorMessage = ref(""),
   profitRequestId = ref(""),
-  aiAnalyses = ref<OpportunityTypes.OpportunityAiAnalysis[]>([]),
-  aiLoadState = ref<OpportunityTypes.OpportunityPartialLoadState>("loading"),
-  aiLoadErrorMessage = ref(""),
-  aiRequestId = ref(""),
-  pendingFeedbackWrites = ref<
-    Record<string, { idempotencyKey: string; body: Record<string, unknown> }>
-  >({}),
-  feedbackWriteStates = ref<
-    Record<string, { unknown: boolean; message: string; requestId: string }>
-  >({}),
   downstreamLoadState = ref<OpportunityDownstreamStates>({
     competitors: "loading",
     sourcing: "loading",
@@ -114,11 +94,6 @@ const props = defineProps<{
   batchAssigneeId = ref(""),
   decisionAction = ref<"adopt" | "observe" | "reject">("observe"),
   decisionReason = ref("");
-const aiReviewError = ref("");
-const aiReviewSubmission = shallowRef<{
-  resultId: string;
-  stage: "submitting" | "refreshing";
-} | null>(null);
 let workspaceActive = true;
 const { pendingDecisionFocus, captureDecisionFocus, restoreDecisionFocus } =
   useOpportunityWorkspaceDecisionFocus({
@@ -135,28 +110,19 @@ let decisionDialogGeneration = 0;
 let erpDialogGeneration = 0;
 let erpBridgeGeneration = 0;
 let writeScopeGeneration = 0;
-let tabIntentGeneration = 0;
-let aiReviewIntentGeneration = 0;
 const { writeScopeKey, beginScopedWrite, finishScopedWrite, pendingWriteCount } =
   useOpportunityWorkspaceWriteScopes({
     opportunityId: () => props.opportunityId,
     workspaceActive: () => workspaceActive,
     busy,
   });
-const { filters, form, costForm, feedbackForm } = createOpportunityWorkspaceForms();
+const { filters, form, costForm } = createOpportunityWorkspaceForms();
 const { dialogElement: batchDialogElement, handleCancel: handleBatchCancel } = useModalDialog(
   () => showBatch.value,
   () => (showBatch.value = false),
   undefined,
   { trapFocus: true },
 );
-const {
-  request: aiReviewReasonRequest,
-  open: aiReviewReasonOpen,
-  ask: askAiReviewReason,
-  submit: submitAiReviewReason,
-  cancel: cancelAiReviewReason,
-} = useAuditedReason();
 const {
   canDecide,
   canManageCompetitors,
@@ -182,7 +148,6 @@ const {
 const {
   invalidateReads,
   load,
-  loadAi,
   loadDownstream,
   retryDownstream,
   loadAutomationReadiness,
@@ -190,7 +155,6 @@ const {
   retryCostReviewers,
   loadProfitAnalysis,
   retryProfitAnalysis,
-  getReadSignal: getWorkspaceReadSignal,
 } = useOpportunityWorkspaceReads({
   request,
   opportunityId: () => props.opportunityId,
@@ -206,10 +170,6 @@ const {
   profitLoadState,
   profitErrorMessage,
   profitRequestId,
-  aiAnalyses,
-  aiLoadState,
-  aiLoadErrorMessage,
-  aiRequestId,
   downstreamLoadState,
   competitorItems,
   total,
@@ -250,25 +210,7 @@ const {
   tab,
   showCreate,
   load,
-  advanceTabIntent: () => {
-    tabIntentGeneration += 1;
-  },
 });
-const { submitOperatingFeedback, retryUnknownOperatingFeedback, markPendingFeedbackWritesUnknown } =
-  useOpportunityWorkspaceFeedbackWrites({
-    request,
-    detail,
-    feedbackForm,
-    busy,
-    pendingFeedbackWrites,
-    feedbackWriteStates,
-    requestId,
-    message,
-    currentWriteScopeGeneration: () => writeScopeGeneration,
-    writeScopeKey,
-    beginScopedWrite,
-    finishScopedWrite,
-  });
 const { importFromErpBrowser, importErpFile } = useOpportunityWorkspaceErpImport({
   route,
   opportunityId: () => props.opportunityId,
@@ -289,7 +231,7 @@ const { discoverCompetitors, discoverSuppliers } = useOpportunityWorkspaceCollec
   write,
   message,
 });
-async function write(path: string, body: unknown, refreshOnStaleReceipt = true) {
+async function write(path: string, body: unknown) {
   if (busy.value) return null;
   const generation = writeScopeGeneration;
   const scopeKey = writeScopeKey();
@@ -301,10 +243,8 @@ async function write(path: string, body: unknown, refreshOnStaleReceipt = true) 
     if (!ownsScope()) {
       if (workspaceActive && scopeKey === writeScopeKey()) {
         requestId.value = response.request_id;
-        if (refreshOnStaleReceipt) {
-          await load();
-          message.value = "页面切换期间写入回执已到达；已刷新当前工作区，请核对最新状态。";
-        }
+        await load();
+        message.value = "页面切换期间写入回执已到达；已刷新当前工作区，请核对最新状态。";
       }
       return null;
     }
@@ -532,79 +472,6 @@ async function queueProfit() {
     message.value = "利润计算已进入宝塔 Node Worker 队列；刷新后查看不可变运行快照。";
   }
 }
-async function queueAi() {
-  if (!detail.value) return;
-  const opportunityId = detail.value.id;
-  const routePath = route.path;
-  const tabGeneration = tabIntentGeneration;
-  const result = await write(`/opportunities/${opportunityId}/ai-analyses`, {
-    expected_version: detail.value.version,
-  });
-  if (result) {
-    if (detail.value?.id !== opportunityId || route.path !== routePath) return;
-    if (tabIntentGeneration === tabGeneration) await setTab("ai");
-    message.value = "AI 辅助分析已进入宝塔 Node Worker 队列；不会自动修改评分或决策。";
-    await loadAi(
-      opportunityId,
-      () => detail.value?.id === opportunityId && route.path === routePath,
-      getWorkspaceReadSignal(),
-    );
-  }
-}
-async function reviewAi(resultId: string, outcome: "approved" | "rejected") {
-  if (busy.value || aiReviewSubmission.value) return;
-  const opportunityId = detail.value?.id;
-  if (!opportunityId) return;
-  const intentGeneration = aiReviewIntentGeneration;
-  const reasonRequest = {
-    title: outcome === "approved" ? "填写抽检通过说明" : "填写驳回原因",
-    description: "说明会写入 AI 分析人工复核记录，原始输出不会被改写。",
-    minimumLength: 2,
-    maximumLength: 1000,
-  };
-  aiReviewError.value = "";
-  let notes = await askAiReviewReason(reasonRequest);
-  try {
-    while (notes) {
-      if (intentGeneration !== aiReviewIntentGeneration || detail.value?.id !== opportunityId)
-        return;
-      if (busy.value || aiReviewSubmission.value) return;
-      aiReviewError.value = "";
-      aiReviewSubmission.value = { resultId, stage: "submitting" };
-      const result = await write(`/ai-analyses/${resultId}/reviews`, { outcome, notes }, false);
-      if (detail.value?.id !== opportunityId) return;
-      if (intentGeneration !== aiReviewIntentGeneration) {
-        if (route.path === `/opportunities/${opportunityId}`) {
-          aiReviewSubmission.value = { resultId, stage: "refreshing" };
-          message.value = "页面切换期间抽检回执未在原操作面板确认；正在重新读取最新状态。";
-          await loadAi(
-            opportunityId,
-            () => detail.value?.id === opportunityId,
-            getWorkspaceReadSignal(),
-          );
-        }
-        return;
-      }
-      if (result) {
-        aiReviewSubmission.value = { resultId, stage: "refreshing" };
-        message.value = "人工抽检已记录，AI 原始输出未被改写。";
-        await loadAi(
-          opportunityId,
-          () => detail.value?.id === opportunityId,
-          getWorkspaceReadSignal(),
-        );
-        return;
-      }
-      aiReviewSubmission.value = null;
-      if (detail.value?.id !== opportunityId || tab.value !== "ai") return;
-      aiReviewError.value = message.value || "本次抽检未能确认，请核对记录后再决定是否重试。";
-      notes = await askAiReviewReason({ ...reasonRequest, initialValue: notes });
-    }
-  } finally {
-    aiReviewSubmission.value = null;
-    if (!notes) aiReviewError.value = "";
-  }
-}
 function closeTransientDialogs() {
   showCreate.value = false;
   showErpImport.value = false;
@@ -624,8 +491,6 @@ useOpportunityWorkspaceLifecycle({
   decisionReason,
   selectedOpportunityIds,
   createFeedback,
-  aiReviewError,
-  aiReviewSubmission,
   erpBridgeBusy,
   busy,
   detail,
@@ -635,8 +500,6 @@ useOpportunityWorkspaceLifecycle({
   profitRequestId,
   invalidateReads,
   pendingWriteCount,
-  closeAiReviewReason: cancelAiReviewReason,
-  markPendingFeedbackWritesUnknown,
   syncTabFromRoute,
   syncListRoute,
   syncCreateRouteIntent,
@@ -668,9 +531,6 @@ useOpportunityWorkspaceLifecycle({
   },
   advanceWriteScope: () => {
     writeScopeGeneration += 1;
-  },
-  advanceAiReviewIntent: () => {
-    aiReviewIntentGeneration += 1;
   },
 });
 </script>
@@ -795,7 +655,7 @@ useOpportunityWorkspaceLifecycle({
             </section>
             <div class="opportunity-detail-section-content">
               <OpportunityDetailInsights
-                v-if="['overview', 'market', 'competition', 'risk'].includes(tab)"
+                v-if="['overview', 'competition', 'risk'].includes(tab)"
                 :tab="tab"
                 :detail="detail"
                 :profit="profit"
@@ -816,19 +676,6 @@ useOpportunityWorkspaceLifecycle({
                 @retry-downstream="retryDownstream($event)"
                 @select-tab="setTab"
               />
-              <OpportunityLineagePanel v-else-if="tab === 'lineage'" :lineage="detail.lineage" />
-              <OpportunityFeedbackPanel
-                v-else-if="tab === 'feedback'"
-                :feedback="detail.operating_feedback"
-                :form="feedbackForm"
-                :busy="busy"
-                :can-write="canDecide"
-                :error-message="feedbackWriteStates[detail.id]?.message || ''"
-                :request-id="feedbackWriteStates[detail.id]?.requestId || ''"
-                :unknown-write="Boolean(feedbackWriteStates[detail.id]?.unknown)"
-                @submit="submitOperatingFeedback"
-                @retry-unknown="retryUnknownOperatingFeedback"
-              />
               <OpportunityProfitPanel
                 v-else-if="tab === 'profit'"
                 :profit="profit"
@@ -847,20 +694,6 @@ useOpportunityWorkspaceLifecycle({
                 @retry-profit="retryProfitAnalysis"
                 @review-cost="reviewCost"
                 @queue-profit="queueProfit"
-              />
-              <OpportunityAiPanel
-                v-else-if="tab === 'ai'"
-                :analyses="aiAnalyses"
-                :load-state="aiLoadState"
-                :load-error-message="aiLoadErrorMessage"
-                :request-id="aiRequestId"
-                :busy="busy"
-                :reviewing-result-id="aiReviewSubmission?.resultId ?? ''"
-                :review-stage="aiReviewSubmission?.stage ?? ''"
-                :can-decide="canDecide"
-                @queue="queueAi"
-                @retry="loadAi"
-                @review="reviewAi"
               />
               <OpportunityEvidencePanel
                 v-else-if="tab === 'evidence'"
@@ -957,17 +790,6 @@ useOpportunityWorkspaceLifecycle({
         </footer>
       </form>
     </dialog>
-    <AuditedReasonDialog
-      :open="aiReviewReasonOpen"
-      :title="aiReviewReasonRequest?.title || '填写复核说明'"
-      :description="aiReviewReasonRequest?.description || ''"
-      :initial-value="aiReviewReasonRequest?.initialValue"
-      :error="aiReviewError"
-      :minimum-length="aiReviewReasonRequest?.minimumLength"
-      :maximum-length="aiReviewReasonRequest?.maximumLength"
-      @submit="submitAiReviewReason"
-      @cancel="cancelAiReviewReason"
-    />
   </section>
 </template>
 

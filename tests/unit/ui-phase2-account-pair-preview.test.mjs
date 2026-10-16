@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
+import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 import { createHash } from "node:crypto";
@@ -109,9 +109,9 @@ test("r7 packet preserves capture sources, four widths, real App composition and
   assert.equal(Object.keys(evidence.sourceHashes).length, 154);
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
     assert.equal(
-      hash(selectionBlockedHistoricalSource(file, read(file), sha)),
+      hash(readEvidenceSourceBytes(file, sha)),
       sha,
-      `Current source drift: ${file}; preserve r7 and recapture as a new version`,
+      `Capture source drift: ${file}; preserve r7`,
     );
   for (const shot of evidence.screenshots) {
     assert.match(shot.file, /^[a-zA-Z0-9-]+\.png$/);

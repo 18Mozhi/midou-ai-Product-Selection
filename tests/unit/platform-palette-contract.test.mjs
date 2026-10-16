@@ -188,58 +188,6 @@ test("opportunity queue and detail colors resolve from their route-scoped palett
   assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|!important/i);
 });
 
-test("opportunity AI colors resolve from a review-route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/opportunity-ai-tokens.css", "utf8"),
-    readFile("apps/web/src/opportunity-ai.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--so-opportunity-ai-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi,
-    ),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...css.matchAll(/var\((--so-opportunity-ai-[a-z-]+)\)/g)].map((match) => match[1]),
-  );
-
-  assert.equal(names.size, 12);
-  assert.equal(declarations.length, names.size, "no duplicate opportunity AI palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(#app \.opportunity-workspace--review\)\s*\{/,
-  );
-  assert.ok(css.startsWith('@import "./design/opportunity-ai-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(/i);
-});
-
-test("opportunity feedback and lineage colors resolve from a review-route-scoped palette", async () => {
-  const [tokens, css] = await Promise.all([
-    readFile("apps/web/src/design/opportunity-p18-workfaces-tokens.css", "utf8"),
-    readFile("apps/web/src/opportunity-p18-workfaces.css", "utf8"),
-  ]);
-  const declarations = [
-    ...tokens.matchAll(
-      /(--so-opportunity-p18-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\));/gi,
-    ),
-  ];
-  const names = new Set(declarations.map((match) => match[1]));
-  const references = new Set(
-    [...css.matchAll(/var\((--so-opportunity-p18-[a-z-]+)\)/g)].map((match) => match[1]),
-  );
-
-  assert.equal(names.size, 21);
-  assert.equal(declarations.length, names.size, "no duplicate P18 workface palette declarations");
-  assert.match(
-    tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
-    /^html:has\(#app \.opportunity-workspace--review\)\s*\{/,
-  );
-  assert.ok(css.startsWith('@import "./design/opportunity-p18-workfaces-tokens.css";'));
-  assertPaletteUsage(references, names);
-  assert.doesNotMatch(css, /#[0-9a-f]{3,8}\b|rgba?\(|rgb\(|!important/i);
-});
-
 test("automation rules palette resolves every page-local color reference", async () => {
   const [tokens, css] = await Promise.all([
     readFile("apps/web/src/design/automation-rule-tokens.css", "utf8"),

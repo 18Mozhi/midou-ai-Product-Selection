@@ -242,13 +242,6 @@ const emit = defineEmits<{
           >
             查看机会证据
           </button>
-          <button
-            type="button"
-            class="opportunity-insight-button opportunity-insight-button--secondary"
-            @click="emit('selectTab', 'market')"
-          >
-            核对市场事实
-          </button>
         </div>
       </article>
 
@@ -270,47 +263,6 @@ const emit = defineEmits<{
         </dl>
       </article>
     </div>
-  </section>
-
-  <section v-else-if="tab === 'market'" class="opportunity-insights">
-    <article class="opportunity-insight-card">
-      <header class="opportunity-insight-card__heading">
-        <div>
-          <p>市场证据</p>
-          <h3>市场信息</h3>
-        </div>
-        <span class="opportunity-insight-badge">{{
-          opportunityStatusLabel(detail.section_status.market)
-        }}</span>
-      </header>
-      <div class="opportunity-insight-callout">
-        <strong>市场覆盖：{{ opportunityStatusLabel(detail.section_status.market) }}</strong>
-      </div>
-      <dl class="opportunity-market-facts">
-        <div>
-          <dt>机会关联证据总数</dt>
-          <dd>{{ detail.evidence_count }}</dd>
-        </div>
-        <div>
-          <dt>机会关联来源数</dt>
-          <dd>{{ detail.source_count }}</dd>
-        </div>
-        <div>
-          <dt>目标市场</dt>
-          <dd>{{ detail.market || "未提供" }}</dd>
-        </div>
-      </dl>
-
-      <div class="opportunity-insight-actions">
-        <button
-          type="button"
-          class="opportunity-insight-button opportunity-insight-button--secondary"
-          @click="emit('selectTab', 'evidence')"
-        >
-          查看机会证据 →
-        </button>
-      </div>
-    </article>
   </section>
 
   <section v-else-if="tab === 'competition'" class="opportunity-insights">
@@ -594,22 +546,17 @@ const emit = defineEmits<{
   display: block;
 }
 
-.opportunity-status-pair,
-.opportunity-fact-explainer dl {
+.opportunity-status-pair {
   margin: 0;
   display: grid;
 }
 
-.opportunity-status-pair dt,
-.opportunity-market-facts dt,
-.opportunity-competitor-snapshot dt {
+.opportunity-status-pair dt {
   color: var(--so-opportunity-review-muted);
   font-size: 13px;
 }
 
-.opportunity-status-pair dd,
-.opportunity-market-facts dd,
-.opportunity-competitor-snapshot dd {
+.opportunity-status-pair dd {
   margin: 5px 0 0;
   font-size: 16px;
   font-weight: 650;
@@ -688,17 +635,13 @@ const emit = defineEmits<{
 }
 
 .opportunity-metric-pair,
-.opportunity-market-facts,
-.opportunity-risk-facts,
-.opportunity-competitor-snapshot {
+.opportunity-risk-facts {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .opportunity-metric-pair > div,
-.opportunity-market-facts > div,
-.opportunity-risk-facts > section,
-.opportunity-competitor-snapshot > div {
+.opportunity-risk-facts > section {
   min-width: 0;
   padding: 4px 14px;
   display: grid;
@@ -708,15 +651,12 @@ const emit = defineEmits<{
 }
 
 .opportunity-metric-pair > div:first-child,
-.opportunity-market-facts > div:first-child,
-.opportunity-risk-facts > section:first-child,
-.opportunity-competitor-snapshot > div:first-child {
+.opportunity-risk-facts > section:first-child {
   padding-left: 0;
   border-left: 0;
 }
 
 .opportunity-metric-pair strong,
-.opportunity-market-facts dd,
 .opportunity-risk-facts strong {
   font-size: 27px;
   line-height: 1.25;
@@ -736,87 +676,6 @@ const emit = defineEmits<{
 .opportunity-status-pair > div {
   padding: 10px;
   background: var(--so-opportunity-review-canvas);
-}
-
-.opportunity-fact-explainer {
-  display: grid;
-  gap: 10px;
-}
-
-.opportunity-fact-explainer h4 {
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--so-opportunity-review-line);
-}
-
-.opportunity-fact-explainer dl {
-  grid-template-columns: 1fr;
-}
-
-.opportunity-fact-explainer dl > div {
-  padding: 11px 0;
-  display: grid;
-  grid-template-columns: minmax(130px, 0.32fr) minmax(0, 1fr);
-  gap: 12px;
-  border-bottom: 1px solid var(--so-opportunity-review-line);
-}
-
-.opportunity-fact-explainer dt {
-  color: var(--so-opportunity-review-muted);
-}
-
-.opportunity-fact-explainer dd {
-  margin: 0;
-  line-height: 1.6;
-}
-
-.opportunity-competitor-list {
-  display: grid;
-  gap: 10px;
-}
-
-.opportunity-competitor-card {
-  min-width: 0;
-  padding: 16px;
-  display: grid;
-  gap: 12px;
-  border: 1px solid var(--so-opportunity-review-line);
-  background: var(--so-opportunity-review-surface);
-}
-
-.opportunity-competitor-card > header {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-}
-
-.opportunity-competitor-card > header small {
-  color: var(--so-opportunity-review-muted);
-}
-
-.opportunity-competitor-card > h4 {
-  overflow-wrap: anywhere;
-}
-
-.opportunity-technical-details {
-  padding-top: 10px;
-  border-top: 1px solid var(--so-opportunity-review-line);
-}
-
-.opportunity-technical-details > summary {
-  min-height: 44px;
-  display: flex;
-  align-items: center;
-  color: var(--so-opportunity-review-blue);
-  cursor: pointer;
-}
-
-.opportunity-technical-details > small {
-  display: block;
-  padding: 8px 0;
-  color: var(--so-opportunity-review-muted);
-  overflow-wrap: anywhere;
 }
 
 @media (max-width: 760px) {
@@ -853,9 +712,7 @@ const emit = defineEmits<{
     align-items: flex-start;
   }
 
-  .opportunity-status-pair,
-  .opportunity-market-facts,
-  .opportunity-competitor-snapshot {
+  .opportunity-status-pair {
     grid-template-columns: minmax(0, 1fr);
   }
 
@@ -864,23 +721,14 @@ const emit = defineEmits<{
   }
 
   .opportunity-metric-pair > div:nth-child(odd),
-  .opportunity-market-facts > div,
-  .opportunity-risk-facts > section,
-  .opportunity-competitor-snapshot > div {
+  .opportunity-risk-facts > section {
     padding: 12px 0;
     border-left: 0;
     border-top: 1px solid var(--so-opportunity-review-line);
   }
 
-  .opportunity-market-facts > div:first-child,
-  .opportunity-risk-facts > section:first-child,
-  .opportunity-competitor-snapshot > div:first-child {
+  .opportunity-risk-facts > section:first-child {
     border-top: 0;
-  }
-
-  .opportunity-fact-explainer dl > div {
-    grid-template-columns: minmax(0, 1fr);
-    gap: 5px;
   }
 }
 </style>

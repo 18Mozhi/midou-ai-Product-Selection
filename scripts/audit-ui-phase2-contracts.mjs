@@ -221,7 +221,25 @@ const history = {
   },
 };
 
-export function runContractAudit(readOverride) {
+export function runContractAudit(readOverride, sourceFilesOverride) {
+  if (sourceFilesOverride !== undefined) {
+    if (
+      !Array.isArray(sourceFilesOverride) ||
+      !sourceFilesOverride.length ||
+      new Set(sourceFilesOverride).size !== sourceFilesOverride.length
+    )
+      throw new Error("invalid_source_inventory_override");
+    for (const file of sourceFilesOverride) {
+      if (
+        typeof file !== "string" ||
+        !file.startsWith("apps/web/src/") ||
+        file.includes("\\") ||
+        file.split("/").some((part) => !part || part === "." || part === "..") ||
+        !/\.(vue|ts)$/.test(file)
+      )
+        throw new Error("invalid_source_inventory_path");
+    }
+  }
   const read = (file) =>
     (readOverride
       ? readOverride(resolve(root, file))
@@ -289,7 +307,10 @@ export function runContractAudit(readOverride) {
       else if (/\.(vue|ts)$/.test(entry.name)) sources.set(file, read(file));
     }
   }
-  collect("apps/web/src");
+  if (sourceFilesOverride === undefined) collect("apps/web/src");
+  else {
+    for (const file of sourceFilesOverride) sources.set(file, read(file));
+  }
   const report = auditContracts({ documents, sources });
   const specs = new Map(
     readdirSync(resolve(root, folder, "page-specs"))

@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
@@ -298,7 +298,7 @@ test("outcome evidence binds historical shell source, unchanged images, original
   ])
     assert.ok(e.sourceHashes[file], file);
   for (const [file, digest] of Object.entries(e.sourceHashes))
-    assert.equal(hash(selectionBlockedHistoricalSource(file, read(file), digest)), digest, file);
+    assert.equal(hash(readCaptureSourceRevision(file, digest)), digest, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((s) => s.file)].sort(),

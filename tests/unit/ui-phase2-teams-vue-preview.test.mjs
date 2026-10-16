@@ -2,7 +2,6 @@ import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-cop
 import test from "node:test";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
-import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
@@ -106,7 +105,7 @@ test("P33 preserved capture binds historical sources, screenshots and visual app
   );
   assert.equal(e.screenshots.length, 34);
   for (const [file, sha] of Object.entries(e.sourceHashes))
-    assertCaptureSource(file, selectionBlockedHistoricalSource(file, read(file), sha), sha);
+    assertCaptureSource(file, readCaptureSourceRevision(file, sha), sha);
   for (const shot of e.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
   assert.equal(

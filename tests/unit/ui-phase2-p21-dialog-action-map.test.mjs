@@ -5,6 +5,11 @@ import test from "node:test";
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 import { scanSource } from "../../scripts/lib/ui-phase2-inventory.mjs";
 
+import {
+  readPreSelectionRebuild,
+  preSelectionRebuildSourceFiles,
+} from "../fixtures/pre-selection-rebuild-snapshot.mjs";
+
 const sourceFile = "apps/web/src/components/SourcingWorkspaceDialogs.vue";
 const reviewPath = "design-plans/ui-phase-2-2026-09-07/action-reviews/P21.json";
 const source = readFileSync(sourceFile, "utf8").replaceAll("\r\n", "\n");
@@ -82,7 +87,7 @@ test("P21 maps all current native sourcing dialog candidates to their existing a
   );
 });
 
-test("P21 maps current workspace and cost-panel retries and controls", () => {
+test("P21 maps pre-rebuild workspace and cost-panel retries and controls", () => {
   const expected = new Map([
     ["apps/web/src/components/SourcingWorkspace.vue#1e3fc27654fc0776.1", "SC-DELETE-OPEN"],
     ["apps/web/src/components/SourcingWorkspace.vue#0e42b816192eb48e.1", "SC-DIALOG-WIRING"],
@@ -112,7 +117,7 @@ test("P21 maps current workspace and cost-panel retries and controls", () => {
     "apps/web/src/components/SourcingCostConfirmationPanel.vue",
     "apps/web/src/components/OpportunityProfitPanel.vue",
   ]) {
-    const currentSource = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+    const currentSource = readPreSelectionRebuild(file);
     const currentHash = createHash("sha256").update(currentSource).digest("hex");
     assert.equal(review.sourceHashes[file], currentHash);
     assert.equal(review.surfaceReview.dependencyHashes[file], currentHash);
@@ -135,7 +140,7 @@ test("P21 maps current workspace and cost-panel retries and controls", () => {
   assert.equal(reviewerRetry.kind, "read");
   assert.match(reviewerRetry.handler, /loadReviewers/);
 
-  const audit = runContractAudit();
+  const audit = runContractAudit(readPreSelectionRebuild, preSelectionRebuildSourceFiles());
   assert.equal(
     audit.unreferenced.some((item) => [...expected.keys()].includes(item.candidateId)),
     false,

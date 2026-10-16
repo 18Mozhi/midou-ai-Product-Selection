@@ -14,8 +14,6 @@ interface OpportunityWorkspaceLifecycleOptions {
   decisionReason: Ref<string>;
   selectedOpportunityIds: Ref<string[]>;
   createFeedback: Ref<OpportunityWorkspaceCreateFeedback>;
-  aiReviewError: Ref<string>;
-  aiReviewSubmission: Ref<{ resultId: string; stage: "submitting" | "refreshing" } | null>;
   erpBridgeBusy: Ref<boolean>;
   busy: Ref<boolean>;
   detail: Ref<OpportunityTypes.OpportunityDetail | null>;
@@ -25,8 +23,6 @@ interface OpportunityWorkspaceLifecycleOptions {
   profitRequestId: Ref<string>;
   invalidateReads: () => void;
   pendingWriteCount: () => number;
-  closeAiReviewReason: () => void;
-  markPendingFeedbackWritesUnknown: () => void;
   syncTabFromRoute: () => void;
   syncListRoute: () => void;
   syncCreateRouteIntent: () => void;
@@ -41,7 +37,6 @@ interface OpportunityWorkspaceLifecycleOptions {
   advanceBatchIntent: () => void;
   advanceBatchSelection: () => void;
   advanceWriteScope: () => void;
-  advanceAiReviewIntent: () => void;
 }
 
 export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLifecycleOptions) {
@@ -56,8 +51,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     decisionReason,
     selectedOpportunityIds,
     createFeedback,
-    aiReviewError,
-    aiReviewSubmission,
     erpBridgeBusy,
     busy,
     detail,
@@ -67,8 +60,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     profitRequestId,
     invalidateReads,
     pendingWriteCount,
-    closeAiReviewReason,
-    markPendingFeedbackWritesUnknown,
     syncTabFromRoute,
     syncListRoute,
     syncCreateRouteIntent,
@@ -83,7 +74,6 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     advanceBatchIntent,
     advanceBatchSelection,
     advanceWriteScope,
-    advanceAiReviewIntent,
   } = options;
   let loadQueued = false;
   let wasDeactivated = false;
@@ -130,11 +120,11 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
   onDeactivated(() => {
     setWorkspaceActive(false);
     closeTransientDialogs();
-    if (aiReviewSubmission.value) advanceAiReviewIntent();
+
     invalidateReads();
     advanceErpBridge();
     erpBridgeBusy.value = false;
-    markPendingFeedbackWritesUnknown();
+
     advanceWriteScope();
     busy.value = false;
     wasDeactivated = true;
@@ -160,18 +150,15 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     opportunityId,
     (currentOpportunityId, previousOpportunityId) => {
       if (currentOpportunityId !== previousOpportunityId) {
-        advanceAiReviewIntent();
         closeTransientDialogs();
-        closeAiReviewReason();
-        aiReviewError.value = "";
       }
       invalidateReads();
       advanceErpBridge();
       erpBridgeBusy.value = false;
-      markPendingFeedbackWritesUnknown();
+
       advanceWriteScope();
       busy.value = pendingWriteCount() > 0;
-      aiReviewSubmission.value = null;
+
       detail.value = null;
       profit.value = null;
       profitLoadState.value = "loading";
@@ -215,6 +202,5 @@ export function useOpportunityWorkspaceLifecycle(options: OpportunityWorkspaceLi
     advanceErpBridge();
     erpBridgeBusy.value = false;
     advanceWriteScope();
-    aiReviewSubmission.value = null;
   });
 }

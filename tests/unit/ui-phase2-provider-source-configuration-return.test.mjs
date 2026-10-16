@@ -1,3 +1,4 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -107,7 +108,14 @@ test("P48 configuration-return evidence binds acknowledgement, reread, recovery,
   assert.equal(evidence.screenshots.length, 35);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(file, read(file), expected, file);
+    assertCaptureSource(
+      file,
+      file === "packages/config/dist/browser.js"
+        ? read(file)
+        : readCaptureSourceRevision(file, expected),
+      expected,
+      file,
+    );
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

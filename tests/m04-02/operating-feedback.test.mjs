@@ -110,14 +110,14 @@ test("operating feedback calculates only comparable persisted deviations", async
   assert.equal(result.calibration.automatic_decision, false);
 });
 
-test("operating feedback migration, API, UI and deployment remain synchronized", async () => {
+test("operating feedback historical migration and retained backend contracts remain synchronized", async () => {
   const [migration, rollback, routes, repository, web, deploy, openapi] = await Promise.all(
     [
       "database/migrations/0065_opportunity_operating_feedback.up.sql",
       "database/migrations/0065_opportunity_operating_feedback.down.sql",
       "apps/api/src/opportunity-routes.ts",
       "apps/api/src/mysql-opportunity-repository.ts",
-      "apps/web/src/components/OpportunityFeedbackPanel.vue",
+      "apps/web/src/components/OpportunityWorkspace.vue",
       "scripts/apply-deployment-migrations.mjs",
       "docs/openapi.yaml",
     ].map((path) => readFile(path, "utf8")),
@@ -136,7 +136,7 @@ test("operating feedback migration, API, UI and deployment remain synchronized",
   assert.match(routes, /operating-feedback/);
   assert.match(repository, /automatic_rule_update: false/);
   assert.match(repository, /automatic_decision: false/);
-  assert.match(web, /校准不会自动更新规则或决定/);
+  assert.doesNotMatch(web, /OpportunityFeedbackPanel|operating-feedback/);
   assert.match(deploy, /0065_opportunity_operating_feedback/);
   assert.match(openapi, /OpportunityOperatingFeedbackInput/);
 });

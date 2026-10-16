@@ -5,7 +5,10 @@ import { createHash } from "node:crypto";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
 import { baseParse } from "@vue/compiler-dom";
 import postcss from "postcss";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  readEvidenceSourceBytes,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import {
   previewCommercialConfirm,
   commercialConfirmScenarios,
@@ -138,7 +141,7 @@ test("P58 confirmation packet binds sixty current-source runs and every continuo
   assert.equal(e.screenshots.length, 76);
   assert.equal(Object.keys(e.sourceHashes).length, 163);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertCaptureSourceRevision(file, read(file), expected);
+    assertCaptureSourceRevision(file, readEvidenceSourceBytes(file, expected), expected);
   for (const f of [
     component,
     "scripts/verify-ui-phase2-commercial-confirm.mjs",

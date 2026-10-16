@@ -1,7 +1,13 @@
 import {
   accountPairLifecycleDriver,
   loadOriginalAccountLifecycleSource,
+  pairLifecycleOutput,
 } from "./lib/ui-phase2-account-pair-lifecycle-driver.mjs";
+import { existsSync } from "node:fs";
+
+// Reject an immutable completed packet before compiling a historical composition.
+if (process.argv.length === 3 && process.argv[2] === "--capture" && existsSync(pairLifecycleOutput))
+  throw new Error(`EEXIST: capture packet already exists: ${pairLifecycleOutput}`);
 
 const source = loadOriginalAccountLifecycleSource();
 // In-memory module: no scratch script or second copy of the test flow on disk.

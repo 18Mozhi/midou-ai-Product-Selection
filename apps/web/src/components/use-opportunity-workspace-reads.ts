@@ -35,10 +35,6 @@ interface OpportunityWorkspaceReadOptions {
   profitLoadState: Ref<OpportunityTypes.OpportunityPartialLoadState>;
   profitErrorMessage: Ref<string>;
   profitRequestId: Ref<string>;
-  aiAnalyses: Ref<OpportunityTypes.OpportunityAiAnalysis[]>;
-  aiLoadState: Ref<OpportunityTypes.OpportunityPartialLoadState>;
-  aiLoadErrorMessage: Ref<string>;
-  aiRequestId: Ref<string>;
   downstreamLoadState: Ref<OpportunityDownstreamStates>;
   competitorItems: Ref<OpportunityTypes.OpportunityCompetitorSummary[]>;
   total: Ref<number>;
@@ -73,10 +69,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     profitLoadState,
     profitErrorMessage,
     profitRequestId,
-    aiAnalyses,
-    aiLoadState,
-    aiLoadErrorMessage,
-    aiRequestId,
     downstreamLoadState,
     competitorItems,
     total,
@@ -95,8 +87,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     restoreDecisionFocus,
   } = options;
   let readGeneration = 0;
-  let aiRequestGeneration = 0;
-  let aiSnapshotOpportunityId = "";
   let workspaceReadController: AbortController | null = null;
 
   const stateFrom = (kind: ApiFailureKind): OpportunityTypes.OpportunityWorkspaceState =>
@@ -124,44 +114,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
         state.value = stateFrom(error.kind);
       }
       throw error;
-    }
-  }
-
-  async function loadAi(
-    currentOpportunityId = getOpportunityId(),
-    isCurrent?: () => boolean,
-    signal?: AbortSignal,
-  ) {
-    const generation = readGeneration;
-    const requestGeneration = ++aiRequestGeneration;
-    const ownsRead = () => !signal?.aborted && (isCurrent?.() ?? generation === readGeneration);
-    aiLoadState.value = "loading";
-    aiLoadErrorMessage.value = "";
-    aiRequestId.value = "";
-    try {
-      const response = await request<unknown>(
-        `/opportunities/${currentOpportunityId}/ai-analyses`,
-        { signal },
-      );
-      if (!ownsRead() || requestGeneration !== aiRequestGeneration) return;
-      if (!Array.isArray(response.data))
-        throw new Error("AI 分析接口返回格式异常，不能将其解释为没有分析记录。");
-      aiAnalyses.value = response.data as OpportunityTypes.OpportunityAiAnalysis[];
-      aiSnapshotOpportunityId = currentOpportunityId ?? "";
-      aiLoadState.value = "ready";
-    } catch (error) {
-      if (!ownsRead() || requestGeneration !== aiRequestGeneration) return;
-      aiLoadState.value = "error";
-      if (error instanceof ApiClientError) {
-        aiRequestId.value = error.requestId;
-        aiLoadErrorMessage.value = error.actionHint;
-      } else {
-        aiLoadErrorMessage.value =
-          error instanceof Error
-            ? error.message
-            : "AI 分析记录读取失败；当前数据保留为上次成功快照。";
-      }
-      if (aiRequestId.value) requestId.value = aiRequestId.value;
     }
   }
 
@@ -368,15 +320,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
       pendingDecisionFocus.value = null;
     captureDecisionFocus(currentOpportunityId);
     const isCurrent = () => generation === readGeneration && !controller.signal.aborted;
-    const nextAiOwner = currentOpportunityId ?? "";
-    if (aiSnapshotOpportunityId !== nextAiOwner) {
-      aiAnalyses.value = [];
-      aiSnapshotOpportunityId = nextAiOwner;
-    }
-    aiRequestGeneration += 1;
-    aiLoadState.value = "loading";
-    aiLoadErrorMessage.value = "";
-    aiRequestId.value = "";
     state.value = "loading";
     message.value = "";
     try {
@@ -407,10 +350,7 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
           costReviewerRequestId.value = "";
         }
         if (!isCurrent()) return;
-        await Promise.all([
-          loadAi(currentOpportunityId, isCurrent, controller.signal),
-          loadDownstream(currentOpportunityId, isCurrent, undefined, controller.signal),
-        ]);
+        await loadDownstream(currentOpportunityId, isCurrent, undefined, controller.signal);
         if (!isCurrent()) return;
         state.value = "ready";
         await restoreDecisionFocus(currentOpportunityId);
@@ -451,7 +391,6 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
   return {
     invalidateReads,
     load,
-    loadAi,
     loadDownstream,
     retryDownstream,
     loadAutomationReadiness,
@@ -459,6 +398,5 @@ export function useOpportunityWorkspaceReads(options: OpportunityWorkspaceReadOp
     retryCostReviewers,
     loadProfitAnalysis,
     retryProfitAnalysis,
-    getReadSignal: () => workspaceReadController?.signal,
   };
 }

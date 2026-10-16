@@ -3,11 +3,10 @@ import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 
 test("opportunity write controls follow their existing API capabilities", async () => {
-  const [workspace, list, decision, feedback, styles, access, navigation] = await Promise.all([
+  const [workspace, list, decision, styles, access, navigation] = await Promise.all([
     readFile("apps/web/src/components/OpportunityWorkspace.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityListPanel.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityDecisionPanel.vue", "utf8"),
-    readFile("apps/web/src/components/OpportunityFeedbackPanel.vue", "utf8"),
     readFile("apps/web/src/opportunities.css", "utf8"),
     readFile("apps/web/src/components/use-opportunity-workspace-access.ts", "utf8"),
     readFile("apps/web/src/components/use-opportunity-workspace-navigation.ts", "utf8"),
@@ -18,7 +17,6 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(access, /includes\("supplier_quote:manage"\)/);
   assert.match(workspace, /v-if="canDecide" class="opportunity-hero-actions"/);
   assert.match(workspace, /:can-decide="canDecide"/);
-  assert.match(workspace, /:can-write="canDecide"/);
   assert.match(workspace, /v-if="canManageCompetitors"[\s\S]*discoverCompetitors/);
   assert.match(workspace, /v-if="canManageSuppliers"[\s\S]*discoverSuppliers/);
   assert.match(list, /v-if="canDecide && selectionView === 'all' && selectedIds\.length"/);
@@ -36,7 +34,6 @@ test("opportunity write controls follow their existing API capabilities", async 
   assert.match(decision, /v-if="canDecide && canAdopt"[\s\S]*aria-label="机会决策操作"/);
   assert.match(decision, /v-else-if="canDecide"[\s\S]*opportunity-decision-waiting/);
   assert.match(decision, /v-else-if="canDecide"[\s\S]*emit\('createEvidenceTask'\)/);
-  assert.match(feedback, /<form\s+v-if="canWrite && showForm"/);
   assert.match(
     styles,
     /@media \(max-width: 1100px\)[\s\S]*\.opportunity-filters[\s\S]*repeat\(2, minmax\(0, 1fr\)\)/,

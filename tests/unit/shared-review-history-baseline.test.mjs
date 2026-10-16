@@ -3,6 +3,7 @@ import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import {
   historicalSharedReviewSource,
   historicalSharedReviewVariantSource,
@@ -23,7 +24,7 @@ test("message reader revision changes only the closed-dialog assertion scope", (
 
 for (const [file, revision] of Object.entries(sharedReviewRevisions)) {
   test("shared historical review source is exact and fail-closed: " + file, () => {
-    const current = read(file);
+    const current = readCaptureSourceRevision(file, revision.current);
     const captured = execFileSync("git", ["show", revision.baseline + ":" + file], {
       encoding: "utf8",
     }).replaceAll("\r\n", "\n");
@@ -40,7 +41,7 @@ for (const [key, revision] of Object.entries(sharedReviewVariants)) {
   const file = key.slice(0, split);
   const expected = key.slice(split + 1);
   test("shared historical review variant is exact and fail-closed: " + file, () => {
-    const current = read(file);
+    const current = readCaptureSourceRevision(file, revision.current);
     const captured = execFileSync("git", ["show", revision.baseline + ":" + file], {
       encoding: "utf8",
     }).replaceAll("\r\n", "\n");

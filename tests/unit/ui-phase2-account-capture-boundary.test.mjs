@@ -2,7 +2,10 @@ import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  readEvidenceSourceBytes,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import ts from "typescript";
 import { parse } from "@vue/compiler-sfc";
@@ -115,8 +118,9 @@ test("P39 current replay keeps raw source hashes, original checks, images and re
     88,
   );
   for (const [file, sha] of Object.entries(e.sourceHashes)) {
-    if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, read(file), sha);
-    else assertCaptureSource(file, read(file), sha, file);
+    if (file.startsWith("tests/e2e/"))
+      assertCaptureSourceRevision(file, readEvidenceSourceBytes(file, sha), sha);
+    else assertCaptureSource(file, readEvidenceSourceBytes(file, sha), sha, file);
   }
   for (const item of e.summaries) {
     const bytes = readFileSync(item.manifest);
@@ -129,8 +133,9 @@ test("P39 current replay keeps raw source hashes, original checks, images and re
       original.requestsByWidth ?? original.observations,
     );
     for (const [file, sha] of Object.entries(current.sourceHashes)) {
-      if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, read(file), sha);
-      else assertCaptureSource(file, read(file), sha, file);
+      if (file.startsWith("tests/e2e/"))
+        assertCaptureSourceRevision(file, readEvidenceSourceBytes(file, sha), sha);
+      else assertCaptureSource(file, readEvidenceSourceBytes(file, sha), sha, file);
     }
     for (const image of item.images) {
       assert.equal(

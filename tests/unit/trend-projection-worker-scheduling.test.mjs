@@ -85,7 +85,7 @@ test("projection worker serves a queued job before running downstream repair", a
   assert.ok(calls.indexOf("claim") < calls.indexOf("project"));
 });
 
-test("projection worker runs downstream repair only after finding the queue idle", async () => {
+test("projection worker also repairs immediately when the queue is idle", async () => {
   const { pool, calls } = createPool(null);
   const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
   worker.persistence.enqueueMissingAutomaticDownstream = async () => calls.push("repair");
@@ -94,4 +94,44 @@ test("projection worker runs downstream repair only after finding the queue idle
 
   assert.deepEqual(result, { status: "idle" });
   assert.ok(calls.indexOf("claim") < calls.indexOf("repair"));
+});
+
+test("a continuously busy projection queue gives historical repair a bounded turn", async () => {
+  const { pool, calls } = createPool({
+    id: "job-1",
+    organization_id: "organization-1",
+    workspace_id: "workspace-1",
+    normalized_record_id: "record-1",
+    attempt_count: 0,
+  });
+  const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => calls.push("repair");
+  worker.persistence.project = async () => {
+    calls.push("project");
+    return "topic-1";
+  };
+  for (let index = 0; index < 20; index += 1) await worker.processOnce();
+  assert.equal(calls.includes("repair"), false);
+  await worker.processOnce();
+  const repair = calls.indexOf("repair");
+  assert.equal(calls.slice(0, repair).filter((value) => value === "project").length, 20);
+  assert.equal(calls.slice(repair).filter((value) => value === "project").length, 1);
+});
+
+test("failed bounded repair does not permanently block fresh projection work", async () => {
+  const { pool } = createPool({
+    id: "job-1",
+    organization_id: "organization-1",
+    workspace_id: "workspace-1",
+    normalized_record_id: "record-1",
+    attempt_count: 0,
+  });
+  const worker = new MySqlTrendProjectionWorker(pool, "worker-1", 120, () => now);
+  worker.persistence.project = async () => "topic-1";
+  worker.persistence.enqueueMissingAutomaticDownstream = async () => {
+    throw new Error("repair failed");
+  };
+  for (let index = 0; index < 20; index += 1) await worker.processOnce();
+  await assert.rejects(worker.processOnce(), /repair failed/);
+  assert.equal((await worker.processOnce()).status, "succeeded");
 });

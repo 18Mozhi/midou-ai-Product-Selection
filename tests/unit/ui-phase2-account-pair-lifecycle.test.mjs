@@ -15,7 +15,10 @@ import {
   pairCompositionPacket,
   pairCompositionHash,
 } from "../../scripts/lib/ui-phase2-account-pair-lifecycle-preview.mjs";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  readEvidenceSourceBytes,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const capturedSources = new Map([
@@ -88,6 +91,11 @@ test("C composition preserves original flow apart from explicit navigation-aware
 const packet = "output/playwright/account-pair-c-lifecycle-r6";
 const manifestHash = "8a932ce97a375b8a5a8cce78a34b3163a2321d6c3ae68cba0695b0250d10d3e6";
 const hash = (value) => createHash("sha256").update(value).digest("hex");
+const compositionEvidence = JSON.parse(read(pairCompositionPacket));
+const readCompositionCapture = (file) =>
+  Object.hasOwn(compositionEvidence.sourceHashes, file)
+    ? readEvidenceSourceBytes(file, compositionEvidence.sourceHashes[file])
+    : read(file);
 test("C lifecycle capture retains every original result plus strict desktop navigation inventory", () => {
   const bytes = readFileSync(`${packet}/evidence.json`);
   assert.equal(hash(bytes), manifestHash);
@@ -158,7 +166,7 @@ test("completed C lifecycle packet rejects capture before starting a service", (
 
 test("preview plugin produces the exact four pending r6 components and same CSS host", async () => {
   const sources = new Set();
-  const review = await accountPairLifecyclePreview(read, sources);
+  const review = await accountPairLifecyclePreview(readCompositionCapture, sources);
   const evidence = JSON.parse(read(pairCompositionPacket));
   assert.equal(review.metadata.sha256, pairCompositionHash);
   assert.deepEqual(review.metadata.transformedHashes, evidence.transformedHashes);
@@ -173,7 +181,10 @@ test("preview plugin produces the exact four pending r6 components and same CSS 
 test("composition rejects changed review metadata or any source drift before browser startup", async () => {
   await assert.rejects(
     accountPairLifecyclePreview(
-      (file) => (file === pairCompositionPacket ? read(file) + " " : read(file)),
+      (file) =>
+        file === pairCompositionPacket
+          ? readCompositionCapture(file) + " "
+          : readCompositionCapture(file),
       new Set(),
     ),
     /Original C r4 review packet changed/,
@@ -181,7 +192,9 @@ test("composition rejects changed review metadata or any source drift before bro
   await assert.rejects(
     accountPairLifecyclePreview(
       (file) =>
-        file.endsWith("account-pair-app-preview.css") ? read(file) + "\n/* drift */" : read(file),
+        file.endsWith("account-pair-app-preview.css")
+          ? readCompositionCapture(file) + "\n/* drift */"
+          : readCompositionCapture(file),
       new Set(),
     ),
     /C r4 composition source drift/,

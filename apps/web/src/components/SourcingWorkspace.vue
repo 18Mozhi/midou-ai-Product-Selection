@@ -75,21 +75,6 @@ const {
 </script>
 <template>
   <section class="sourcing-workspace sourcing-workspace--review">
-    <section class="member-module-guide">
-      <div>
-        <p>供应链与利润怎么用</p>
-        <h3>从机会或商品出发，查找真实货源并比较到岸利润</h3>
-        <span
-          >先发起货源搜索，再确认供应商报价；系统最多并排比较五家，并明确标出缺少运费、税费或平台费的项目。</span
-        >
-      </div>
-      <ol>
-        <li>输入关键词、图片或商品链接</li>
-        <li>爬取货源候选</li>
-        <li>确认报价与起订量</li>
-        <li>补齐费用后比较利润</li>
-      </ol>
-    </section>
     <nav class="sourcing-tabs">
       <RouterLink to="/sourcing" aria-current="page">供应商找货</RouterLink
       ><RouterLink to="/sourcing/cost-rules">费用与利润规则</RouterLink>
@@ -286,6 +271,10 @@ const {
               <div data-priority="primary">
                 <dt>报价</dt>
                 <dd>{{ item.currency }} {{ item.quoted_price }}</dd>
+              </div>
+              <div v-if="!item.quote && item.source_price_description" data-priority="primary">
+                <dt>采集价格说明</dt>
+                <dd>{{ item.source_price_description }}</dd>
               </div>
               <div data-priority="primary">
                 <dt>最小起订量（MOQ）</dt>

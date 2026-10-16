@@ -4,6 +4,7 @@ import {
 } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
+import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 
 // Historical capture/diagnosis only, never a substitute for current runtime acceptance.
@@ -132,4 +133,14 @@ export function readCaptureSourceRevision(file, expectedHash, transform = (value
     }
   }
   assert.fail(`capture-time source is not present in Git history: ${file}`);
+}
+
+/** Immutable evidence bytes, not current-UI approval. Ignored build inputs may
+ * still exist verbatim; changed or retired files require an exact Git version. */
+export function readEvidenceSourceBytes(file, expectedHash) {
+  if (existsSync(file)) {
+    const bytes = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+    if (hash(bytes) === expectedHash) return bytes;
+  }
+  return readCaptureSourceRevision(file, expectedHash);
 }

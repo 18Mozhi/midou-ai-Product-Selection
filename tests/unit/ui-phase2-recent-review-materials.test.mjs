@@ -153,6 +153,10 @@ test("all fourteen packets retain original506 and add37 images without promoting
         : "source-matched-at-index-build",
     );
     for (const difference of material.sourceDifferences) {
+      if (difference.actual === null) {
+        await assert.rejects(readFile(difference.file), { code: "ENOENT" });
+        continue;
+      }
       const bytes = await readFile(difference.file);
       assert.ok(
         [hash(bytes), hash(bytes.toString("utf8").replaceAll("\r\n", "\n"))].includes(

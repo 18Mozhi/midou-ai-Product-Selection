@@ -1,4 +1,8 @@
-import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
+import {
+  beforePublishedPresentation,
+  publishedPresentationRevisions,
+} from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
+import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -6,9 +10,11 @@ import { createHash } from "node:crypto";
 import postcss from "postcss";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+const readRegistered = (file) =>
+  readEvidenceSourceBytes(file, publishedPresentationRevisions[file].before);
 const palette = beforePublishedPresentation(
   "apps/web/src/design/platform-admin-mobile-tokens.css",
-  read("apps/web/src/design/platform-admin-mobile-tokens.css"),
+  readRegistered("apps/web/src/design/platform-admin-mobile-tokens.css"),
 );
 const prefix = '@import "../design/platform-admin-mobile-tokens.css";\n\n';
 const scope =
@@ -47,7 +53,7 @@ function values(source) {
 function verify(
   name,
   tokens = palette,
-  source = read(`apps/web/src/components/PlatformAdmin${name}Mobile.css`),
+  source = readRegistered(`apps/web/src/components/PlatformAdmin${name}Mobile.css`),
 ) {
   source = beforePublishedPresentation(
     `apps/web/src/components/PlatformAdmin${name}Mobile.css`,
@@ -65,7 +71,7 @@ function verify(
   assert.equal(createHash("sha256").update(expanded).digest("hex"), originals[name]);
 }
 
-test("P44 colors are restricted to the original mobile C admins scope", () => {
+test("historical P44 colors are restricted to the original mobile C admins scope", () => {
   assert.equal(values(palette).size, 11);
   const parent = read("apps/web/src/components/PlatformAccountCenter.vue");
   for (const name of Object.keys(originals))
@@ -85,7 +91,7 @@ test("equivalence gate rejects color drift, scope expansion, layout changes and 
   assert.throws(() =>
     verify("Comparison", palette.replace("--so-admin-mobile-primary:", "color:")),
   );
-  const source = read("apps/web/src/components/PlatformAdminDirectoryMobile.css");
+  const source = readRegistered("apps/web/src/components/PlatformAdminDirectoryMobile.css");
   assert.throws(() => verify("Directory", palette, source.replace("44px", "43px")));
   assert.throws(() =>
     verify(

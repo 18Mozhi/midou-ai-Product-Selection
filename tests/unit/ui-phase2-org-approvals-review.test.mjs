@@ -1,4 +1,5 @@
 import test from "node:test";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
@@ -187,7 +188,7 @@ test("P34 implementation evidence and narrow approval records resolve without pr
     for (const [f, h] of Object.entries(e.sourceHashes)) {
       const source = ref.asOfCommit
         ? execFileSync("git", ["show", `${ref.asOfCommit}:${f}`], { encoding: "utf8" })
-        : readFileSync(f, "utf8");
+        : readCaptureSourceRevision(f, h);
       assertCaptureSource(f, source, h);
     }
   }

@@ -3,7 +3,10 @@ import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  readEvidenceSourceBytes,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import vm from "node:vm";
 import { parse } from "@vue/compiler-sfc";
@@ -85,7 +88,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
       );
     }
     for (const [file, sha] of Object.entries(e.sourceHashes)) {
-      const source = capture ? capture.source(file) : read(file);
+      const source = capture ? capture.source(file) : readEvidenceSourceBytes(file, sha);
       if (mode === "baseline")
         assert.equal(hash(historicalAdminResultsSource(file, source)), sha, file);
       else if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, source, sha);
@@ -231,7 +234,7 @@ test("unknown historical result revisions fail closed; approved result PNGs rema
   for (const file of Object.keys(adminResultsRevisions)) {
     const source = implemented.source(file);
     assert.equal(hash(source), adminResultsRevisions[file].after);
-    const current = read(file);
+    const current = readEvidenceSourceBytes(file, adminResultsRevisions[file].current);
     assert.equal(
       hash(beforePublishedPresentation(file, current)),
       adminResultsRevisions[file].current,

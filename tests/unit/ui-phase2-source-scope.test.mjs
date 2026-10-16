@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { readPreSelectionRebuild } from "../fixtures/pre-selection-rebuild-snapshot.mjs";
 import { readFile } from "node:fs/promises";
 import {
   validateScopeRecords,
@@ -52,14 +53,18 @@ test("scope revalidation cannot waive a new source, different history or runtime
     assert.throws(() => revalidatedScopeSources(review, copy));
   }
 });
-test("all outside-route source candidates retain exact IDs and partial runtime status", async () => {
-  assert.deepEqual(await verifySourceScope(), {
+test("pre-rebuild outside-route source candidates retain exact IDs and partial runtime status", async () => {
+  assert.deepEqual(await verifySourceScope(readPreSelectionRebuild), {
     sourceCandidates: 54,
     semanticActions: 42,
     dialogCalls: 1,
     orphanCandidates: 6,
     runtimeAcceptance: "partial-not-frozen",
   });
+});
+
+test("the old scope review cannot approve the redesigned current source", async () => {
+  await assert.rejects(verifySourceScope(), /stale source review/);
 });
 test("duplicate or missing source candidates cannot silently reduce the denominator", () => {
   const copy = structuredClone(review);

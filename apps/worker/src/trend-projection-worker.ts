@@ -33,6 +33,7 @@ export type TrendProjectionResult =
 
 export class MySqlTrendProjectionWorker {
   private readonly persistence: TrendProjectionPersistence;
+  private claimedSinceRepair = 0;
 
   constructor(
     private readonly pool: Pool,
@@ -46,11 +47,21 @@ export class MySqlTrendProjectionWorker {
 
   async processOnce(): Promise<TrendProjectionResult> {
     await this.enqueueMissing();
+    // A permanently busy projection queue must not starve historical sourcing.
+    // Match the recovery batch bound, while still serving fresh work first.
+    let repaired = false;
+    if (this.claimedSinceRepair >= 20) {
+      this.claimedSinceRepair = 0;
+      await this.persistence.enqueueMissingAutomaticDownstream();
+      repaired = true;
+    }
     const job = await this.claim();
     if (!job) {
-      await this.persistence.enqueueMissingAutomaticDownstream();
+      this.claimedSinceRepair = 0;
+      if (!repaired) await this.persistence.enqueueMissingAutomaticDownstream();
       return { status: "idle" };
     }
+    this.claimedSinceRepair += 1;
     if (!projectedTrendProviderContext(job.providerCode).accepted) {
       await this.finish(job, "succeeded_empty", null);
       return { status: "succeeded_empty", job_id: job.id };

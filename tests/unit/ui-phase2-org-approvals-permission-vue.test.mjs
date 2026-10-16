@@ -4,7 +4,7 @@ import {
   assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import vm from "node:vm";
@@ -146,7 +146,11 @@ test("historical permission packet binds source lineage, 56 recoveries and eight
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 186);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34EvidenceSourceHash(file, read(file), expected);
+    assertP34EvidenceSourceHash(
+      file,
+      existsSync(file) ? read(file) : readCaptureSourceRevision(file, expected),
+      expected,
+    );
   const capturedFramePreview = capturedPreview(
     e,
     "scripts/lib/ui-phase2-org-approvals-parent-frame-preview.mjs",

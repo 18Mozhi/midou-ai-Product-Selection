@@ -1,5 +1,7 @@
 # M04-06 供应链找货架构
 
+> 当前重制以 `docs/selection-sourcing-recovery.md` 和 `docs/selection-lan-1688-validation.md` 为准。自动找货已只走 1688 主品图片；下文多站关键词链描述仍保留的历史和人工兼容通道。候选只读价格说明绑定同一证据，保留新人价条件，不改人工报价或成本规则。
+
 供应链页面把“用户输入”与“来源事实”分开保存。成员提交关键词或机会后，API 创建现有 `collection_tasks`，由 `dhgate_supplier_search`、`made_in_china_search` 与 `ec21_supplier_search` 三个独立适配器并行抓取公开供应商商品页；无需官方 API。当前 DHgate 批发页提供 robots 允许的可执行主链，Made-in-China 验证码与 EC21 robots 403 分别保留为真实受阻子查询；单一站点失败不能阻断其他公开来源形成候选。`CoreCollectionProjectionWorker` 只投影规范记录里的真实供应商、商品、价格、币种、图片、原页和观测时间。机会型找货列表用关联的机会名称作为 `display_name`，内部 `input_ref` UUID 只在详情中作为追溯编号，不再充当用户可读标题。ERP 导入还可形成带同一原始证据的历史成本候选。来源没有 MOQ、规格、交期、所在地、可信度、稳定性和风险时，候选保持 `incomplete`，缺失项明确展示。
 
 公开供应商重复采集使用任务级原始证据键和稳定外部商品记录键。后续观测生成可审计的 `normalized_records.record_version` 并关联 `supersedes_record_id`，候选仍按来源外部 ID 更新，不因刷新产生重复候选。

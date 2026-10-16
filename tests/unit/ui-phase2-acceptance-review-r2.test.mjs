@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import {
   acceptanceReviewImagePath,
   buildAcceptanceReviewR2,
@@ -33,7 +33,8 @@ test("P49 review binds 143 captured images and distinguishes confirmed from unve
     assert.ok(section.sourceChanges.length > 0);
     for (const change of section.sourceChanges) {
       assert.match(change.capturedSha, /^[a-f0-9]{64}$/);
-      assert.match(change.currentSha, /^[a-f0-9]{64}$/);
+      if (change.currentSha === null) assert.equal(existsSync(change.file), false);
+      else assert.match(change.currentSha, /^[a-f0-9]{64}$/);
       assert.ok(
         [
           "captured-git-source",
@@ -104,6 +105,21 @@ test("P49 capture verifier rejects unknown source and revision drift without alt
     assert.equal(verifiedDrift.lineage, "locked-patch-reconstruction");
     assert.notEqual(verifiedDrift.currentSha, verifiedDrift.capturedSha);
   }
+});
+
+test("missing current source is explicit and cannot become verified current content", () => {
+  const file = "apps/web/src/components/RetiredExample.vue";
+  const result = verifyAcceptanceCapturedSource(file, "0".repeat(64), null, {
+    allowUnverified: true,
+  });
+  assert.equal(result.currentSha, null);
+  assert.equal(result.lineage, "capture-source-unverified");
+  assert.equal(result.capturedCommit, null);
+  assert.throws(() => verifyAcceptanceCapturedSource(file, "0".repeat(64), null));
+  assert.throws(
+    () => verifyAcceptanceCapturedSource(file, "0".repeat(64), {}),
+    /Invalid current source/,
+  );
 });
 
 test("P49 all original manifests remain pinned; edits and unknown stages fail closed", () => {

@@ -3,10 +3,9 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 
 test("opportunity detail keeps partial dependency failures distinct from real empty data", async () => {
-  const [workspace, insights, ai, reads] = await Promise.all([
+  const [workspace, insights, reads] = await Promise.all([
     readFile("apps/web/src/components/OpportunityWorkspace.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityDetailInsights.vue", "utf8"),
-    readFile("apps/web/src/components/OpportunityAiPanel.vue", "utf8"),
     readFile("apps/web/src/components/use-opportunity-workspace-reads.ts", "utf8"),
   ]);
 
@@ -14,23 +13,18 @@ test("opportunity detail keeps partial dependency failures distinct from real em
     reads,
     /downstreamLoadState\.value = \{ \.\.\.downstreamLoadState\.value, \[source\]: "error" \}/,
   );
-  assert.match(reads, /aiLoadState\.value = "error"/);
-  assert.doesNotMatch(reads, /catch\s*\{\s*aiAnalyses\.value = \[\]/);
   assert.match(
     insights,
     /downstreamState\.competitors === 'error'[\s\S]*竞品数据暂不可用[\s\S]*retryDownstream/,
   );
   assert.match(insights, /downstreamState\.sourcing === 'error'[\s\S]*供应链数据暂不可用/);
-  assert.match(ai, /不能据此判定记录为空/);
   assert.match(insights, /retryDownstream/);
-  assert.match(ai, /\$emit\('retry'\)/);
 });
 
 test("opportunity detail renders persisted status and competitor facts without raw domain codes", async () => {
-  const [presentation, insights, ai, profit] = await Promise.all([
+  const [presentation, insights, profit] = await Promise.all([
     readFile("apps/web/src/components/opportunity-workspace-presentation.ts", "utf8"),
     readFile("apps/web/src/components/OpportunityDetailInsights.vue", "utf8"),
-    readFile("apps/web/src/components/OpportunityAiPanel.vue", "utf8"),
     readFile("apps/web/src/components/OpportunityProfitPanel.vue", "utf8"),
   ]);
 
@@ -41,9 +35,7 @@ test("opportunity detail renders persisted status and competitor facts without r
   );
   assert.doesNotMatch(insights, /三类未齐全时不能自动推荐/);
   assert.match(presentation, /measured: "已测量"/);
-  assert.match(presentation, /ai_provider_timeout: "模型服务超时"/);
   assert.match(insights, /评估覆盖/);
   assert.match(insights, /opportunity-association-grid/);
-  assert.match(ai, /opportunityAiErrorLabel/);
   assert.match(profit, /opportunityProfitComponentLabel/);
 });

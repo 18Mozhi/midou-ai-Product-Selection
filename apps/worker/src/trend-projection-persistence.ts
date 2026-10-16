@@ -4,6 +4,8 @@ import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluat
 import { refreshRuleRecommendation } from "./rule-recommendation.js";
 import { TrendProjectionAlerts } from "./trend-projection-alerts.js";
 import { amazonAsin } from "./competitor-discovery-policy.js";
+import { automaticPrimaryImageSql } from "./automatic-selection-evidence.js";
+import { selectionPrimaryAsinSql } from "@scoutops/database";
 import {
   buildSupplierSearchQuery,
   calculateTrendProjection,
@@ -224,24 +226,44 @@ export class TrendProjectionPersistence {
       now = this.now();
     try {
       await c.beginTransaction();
-      const providers = await this.downstreamProviders(c),
-        [rows] = await c.query<RowDataPacket[]>(
-          `SELECT o.id opportunity_id,o.organization_id,o.workspace_id,o.name,o.market,o.created_by,
+      const providers = await this.downstreamProviders(c);
+      if (!providers.amazon && !providers.alibaba1688) {
+        await c.commit();
+        return;
+      }
+      // The derived-table LIMIT prevents MySQL 5.7 from merging away the primary
+      // identity cache and recomputing its correlated lookup for every image row.
+      const [rows] = await c.query<RowDataPacket[]>(
+        `SELECT o.id opportunity_id,o.organization_id,o.workspace_id,o.name,o.market,o.created_by,
                   c.id competitor_id,c.external_id,c.product_url,c.latest_snapshot_id,
-                  se.resource_id search_id,
+                  ss.id search_id,
+                  ${automaticPrimaryImageSql} primary_image_url,
                   (c.latest_snapshot_id IS NULL AND cq.competitor_id IS NULL) competitor_task_missing,
-                  (se.resource_id IS NOT NULL AND sq.search_id IS NULL) sourcing_task_missing
-           FROM opportunities o
+                  (ss.id IS NOT NULL AND sq.search_id IS NULL) sourcing_task_missing
+           FROM (
+             SELECT o.*,${selectionPrimaryAsinSql} primary_asin FROM opportunities o
+             WHERE o.source_type='trend_topic' AND o.lifecycle_status<>'deleted'
+             LIMIT 18446744073709551615
+           ) o
            JOIN competitors c
              ON c.opportunity_id=o.id
             AND c.organization_id=o.organization_id
             AND c.workspace_id=o.workspace_id
             AND c.deleted_at IS NULL
-           LEFT JOIN sourcing_events se
+           LEFT JOIN (
+             SELECT organization_id,workspace_id,resource_id,
+                    JSON_UNQUOTE(JSON_EXTRACT(payload_json,'$.opportunity_id')) opportunity_id
+             FROM sourcing_events
+             WHERE event_type='sourcing.search.seeded_from_opportunity'
+             GROUP BY organization_id,workspace_id,resource_id,opportunity_id
+           ) se
              ON se.organization_id=o.organization_id
             AND se.workspace_id=o.workspace_id
-            AND se.event_type='sourcing.search.seeded_from_opportunity'
-            AND JSON_UNQUOTE(JSON_EXTRACT(se.payload_json,'$.opportunity_id'))=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_bin
+            AND se.opportunity_id=CONVERT(o.id USING utf8mb4) COLLATE utf8mb4_bin
+           LEFT JOIN sourcing_searches ss
+             ON ss.id=se.resource_id AND ss.organization_id=o.organization_id
+            AND ss.workspace_id=o.workspace_id AND ss.input_type='opportunity'
+            AND ss.input_ref=o.id AND ss.deleted_at IS NULL
            LEFT JOIN (
              SELECT q.organization_id,q.workspace_id,
                     JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.competitor_id')) competitor_id
@@ -257,24 +279,30 @@ export class TrendProjectionPersistence {
              SELECT q.organization_id,q.workspace_id,
                     JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.search_id')) search_id
              FROM collection_subqueries q
+             JOIN providers p_supply ON p_supply.id=q.provider_id AND p_supply.code='1688_search'
              WHERE JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.projection_type'))='sourcing_search'
+               AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.image_url')) IS NOT NULL
                AND CHAR_LENGTH(JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query'))) BETWEEN 1 AND 300
                AND JSON_UNQUOTE(JSON_EXTRACT(q.target_json,'$.query_contract'))='supplier-keywords-v2'
              GROUP BY q.organization_id,q.workspace_id,search_id
            ) sq
              ON sq.organization_id=o.organization_id
             AND sq.workspace_id=o.workspace_id
-            AND sq.search_id=CONVERT(se.resource_id USING utf8mb4) COLLATE utf8mb4_bin
+            AND sq.search_id=CONVERT(ss.id USING utf8mb4) COLLATE utf8mb4_bin
            WHERE o.source_type='trend_topic'
              AND o.lifecycle_status<>'deleted'
              AND (
                (c.latest_snapshot_id IS NULL AND cq.competitor_id IS NULL)
                OR
-               (se.resource_id IS NOT NULL AND sq.search_id IS NULL)
+               (ss.id IS NOT NULL AND sq.search_id IS NULL)
              )
+           HAVING (competitor_task_missing=1 AND ? IS NOT NULL)
+               OR (sourcing_task_missing=1 AND ? IS NOT NULL AND primary_image_url IS NOT NULL)
            ORDER BY o.created_at,o.id
            LIMIT 20 FOR UPDATE`,
-        );
+        [providers.amazon, providers.alibaba1688],
+      );
+      const scheduledSearches = new Set<string>();
       for (const row of rows) {
         const context = {
           organizationId: String(row.organization_id),
@@ -311,10 +339,15 @@ export class TrendProjectionPersistence {
           );
         }
         const searchId = row.search_id == null ? null : String(row.search_id),
-          supplierProviderIds = [providers.dhgate, providers.madeInChina, providers.ec21].filter(
-            (value): value is string => Boolean(value),
-          );
-        if (searchId && Boolean(row.sourcing_task_missing) && supplierProviderIds.length) {
+          imageUrl = row.primary_image_url ? String(row.primary_image_url) : null,
+          supplierProviderIds = providers.alibaba1688 && imageUrl ? [providers.alibaba1688] : [];
+        const searchKey = `${context.organizationId}:${context.workspaceId}:${searchId}`;
+        if (
+          searchId &&
+          Boolean(row.sourcing_task_missing) &&
+          supplierProviderIds.length &&
+          !scheduledSearches.has(searchKey)
+        ) {
           const taskId = randomUUID();
           await this.scheduleCoreCollection(
             c,
@@ -325,6 +358,7 @@ export class TrendProjectionPersistence {
               required: false,
               target: {
                 query: buildSupplierSearchQuery(String(row.name)),
+                image_url: imageUrl,
                 query_contract: "supplier-keywords-v2",
                 projection_type: "sourcing_search",
                 search_id: searchId,
@@ -344,6 +378,7 @@ export class TrendProjectionPersistence {
               context.workspaceId,
             ],
           );
+          scheduledSearches.add(searchKey);
         }
       }
       await c.commit();
@@ -357,15 +392,12 @@ export class TrendProjectionPersistence {
 
   private async downstreamProviders(c: PoolConnection) {
     const [rows] = await c.query<RowDataPacket[]>(
-      "SELECT id,code FROM providers WHERE code IN ('amazon_product','1688_search','dhgate_supplier_search','made_in_china_search','ec21_supplier_search') AND status='enabled' AND (code='1688_search' OR access_mode='public_page')",
+      "SELECT id,code FROM providers WHERE code IN ('amazon_product','1688_search') AND status='enabled' AND (code='1688_search' OR access_mode='public_page')",
     );
     const values = new Map(rows.map((row) => [String(row.code), String(row.id)]));
     return {
       amazon: values.get("amazon_product") ?? null,
       alibaba1688: values.get("1688_search") ?? null,
-      dhgate: values.get("dhgate_supplier_search") ?? null,
-      madeInChina: values.get("made_in_china_search") ?? null,
-      ec21: values.get("ec21_supplier_search") ?? null,
     };
   }
 
@@ -645,11 +677,7 @@ export class TrendProjectionPersistence {
     const searchId = randomUUID(),
       providers = await this.downstreamProviders(c),
       imageUrl = typeof job.payload.image_url === "string" ? job.payload.image_url : null,
-      supplierProviderIds = (
-        providers.alibaba1688 && imageUrl
-          ? [providers.alibaba1688]
-          : [providers.madeInChina, providers.ec21]
-      ).filter((value): value is string => Boolean(value)),
+      supplierProviderIds = providers.alibaba1688 && imageUrl ? [providers.alibaba1688] : [],
       supplierTaskId = supplierProviderIds.length ? randomUUID() : job.collectionTaskId;
     if (supplierProviderIds.length)
       await this.scheduleCoreCollection(
@@ -746,7 +774,7 @@ export class TrendProjectionPersistence {
     if (!supplierProviderIds.length) {
       await c.query(
         "UPDATE sourcing_searches SET status='succeeded_empty',missing_fields_json=?,updated_at=? WHERE id=?",
-        [JSON.stringify(["supplier_crawler"]), now, searchId],
+        [JSON.stringify(["supplier_crawler", ...(!imageUrl ? ["image_url"] : [])]), now, searchId],
       );
     }
     await c.query(

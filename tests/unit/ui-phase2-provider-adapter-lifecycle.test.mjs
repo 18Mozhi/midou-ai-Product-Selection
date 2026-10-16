@@ -1,7 +1,7 @@
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 
@@ -16,11 +16,7 @@ test("P47 lifecycle evidence preserves capture sources and unchanged preserve ro
   assert.equal(evidence.productionUntransformed, true);
   assert.equal(evidence.processesClosed, true);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(
-      hash(selectionBlockedHistoricalSource(file, read(file), expected)),
-      expected,
-      file,
-    );
+    assert.equal(hash(readCaptureSourceRevision(file, expected)), expected, file);
   for (const file of [
     "apps/web/src/App.vue",
     "apps/web/src/components/ProviderAdapterCenter.vue",

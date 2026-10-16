@@ -1,5 +1,7 @@
 # M04-01 热点与监控运行、故障与回滚
 
+> 当前自动找货以 `docs/selection-sourcing-recovery.md` 为准：首次及补偿只向已启用 1688 排队，使用主品图片；不再自动分流其他供应商。无新增配置或迁移，需通过固定部署脚本发布并由宝塔重启唯一 Node 项目 `ai选品`，Python 不变。下文独立 Worker 部署步骤为历史说明。
+
 ## 宝塔部署顺序
 
 1. 在宝塔受限发布任务备份 MySQL，按发布清单执行 `database/migrations/0017a_trends_m04_01.up.sql`、`0043_trend_rule_collection_schedule.up.sql`、`0064_governed_workflow_confirmations.up.sql`、`0068_automatic_selection_rule_matches.up.sql`、`0069_rule_based_recommendations.up.sql`、`0070_rule_candidates_quality_gate.up.sql` 与 `0071_opportunity_migration_timestamp_timezone.up.sql`；迁移兼容 MySQL 5.7、`utf8mb4`，不得使用 root 运行常驻服务。

@@ -98,8 +98,9 @@ export function verifyAcceptanceCapturedSource(
   currentText,
   { allowUnverified = false } = {},
 ) {
-  const source = currentText.replaceAll("\r\n", "\n");
-  const currentSha = hash(source);
+  assert.ok(currentText === null || typeof currentText === "string", "Invalid current source");
+  const source = currentText === null ? null : currentText.replaceAll("\r\n", "\n");
+  const currentSha = source === null ? null : hash(source);
   if (currentSha === capturedSha) return null;
   let captured;
   try {
@@ -160,12 +161,16 @@ export async function buildAcceptanceReviewR2(repo) {
     assert.equal(Object.keys(evidence.sourceHashes).length, sources);
     const sourceChanges = [];
     for (const [source, sha] of Object.entries(evidence.sourceHashes)) {
-      const change = verifyAcceptanceCapturedSource(
-        source,
-        sha,
-        await readFile(path.join(repo, source), "utf8"),
-        { allowUnverified: true },
-      );
+      let currentText;
+      try {
+        currentText = await readFile(path.join(repo, source), "utf8");
+      } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+        currentText = null;
+      }
+      const change = verifyAcceptanceCapturedSource(source, sha, currentText, {
+        allowUnverified: true,
+      });
       if (change) sourceChanges.push(change);
     }
     assert.ok(evidence.sourceHashes["scripts/lib/ui-imported-style-sources.mjs"]);
@@ -225,9 +230,12 @@ export async function buildAcceptanceReviewR2(repo) {
       (change) => change.lineage !== "capture-source-unverified",
     ).length,
     unverifiedCount = driftCount - verifiedCount,
+    missingCount = [...uniqueChanges.values()].filter(
+      (change) => change.currentSha === null,
+    ).length,
     versionNote = summary.sourceMatchesCurrent
       ? "捕获来源与当前源码一致；这仍是待审设计图，不代表生产验收。"
-      : `${verifiedCount}项捕获来源已由锁定补丁核验，${unverifiedCount}项无法按当前溯源规则确认；${driftCount}项来源与当前源码不同。原图未重拍，只表示捕获时提案，不证明当前实现或生产验收。`;
+      : `${verifiedCount}项捕获来源已由锁定补丁核验，${unverifiedCount}项无法按当前溯源规则确认；${driftCount}项来源与当前源码不同，其中${missingCount}项引用对应的运行文件已删除。原图未重拍，只表示捕获时提案，不证明当前实现或生产验收。`;
   const visualStatus = visualApproval ? "视觉方向已按用户授权通过" : "视觉方向待审核";
   const html = `<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>P49 · 设计图审核 r2</title>
 <style>

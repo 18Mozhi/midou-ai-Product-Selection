@@ -1,4 +1,70 @@
 {
+  "selectionUiValidationBoundary20261017": {
+    "status": "implemented",
+    "statusDetail": "scoped_archival_checks_migrated_full_project_validation_still_pending",
+    "requirements": "docs/selection-ui-validation-boundary.md",
+    "sourceFiles": [
+      "scripts/lib/ui-phase2-token-copy-baseline.mjs",
+      "scripts/lib/ui-phase2-capture-source-compatibility.mjs"
+    ],
+    "testFiles": [
+      "tests/unit/ui-phase2-org-refresh-preview.test.mjs",
+      "tests/unit/ui-phase2-org-approvals-loading-vue.test.mjs",
+      "tests/unit/ui-phase2-org-data-parent.test.mjs",
+      "tests/unit/ui-phase2-provider-source-configuration.test.mjs",
+      "tests/unit/ui-phase2-capture-source-compatibility.test.mjs",
+      "tests/unit/ui-phase2-export-detail-tokens.test.mjs"
+    ],
+    "contract": "Historical packets bind exact capture-time Git bytes rather than freezing current runtime modules. Original hashes, images and approval records stay immutable. P34 explicit inverses remain guarded. The single ignored browser config build artifact must still match its original hash. Current Vue, permissions and workflow tests remain separate; no production or whole-project acceptance is inferred."
+  },
+  "selectionLanValidation20261017": {
+    "status": "implemented",
+    "statusDetail": "six_nodes_single_image_live_http_and_parser_verified_not_production_task_acceptance",
+    "requirements": "docs/selection-lan-1688-validation.md",
+    "sourceFiles": [
+      "apps/api/src/mysql-sourcing-repository.ts",
+      "apps/web/src/components/SourcingWorkspace.vue",
+      "apps/web/src/components/sourcing-workspace-types.ts"
+    ],
+    "testFiles": [
+      "tests/unit/sourcing-price-description.test.mjs",
+      "tests/e2e/m04-06-sourcing.spec.ts"
+    ],
+    "contract": "All six fixed nodes returned ten offers for one live image. Candidate source_price_description is a bounded read-only string from exactly linked active scoped 1688 evidence; unknown remains null. UI displays source price conditions only before an explicit quote exists and removes the obsolete instructional hero. Confirmed quote numbers and automatic promotional-price exclusion remain unchanged. Commerce accent selection and KeepAlive reads use current navigation."
+  },
+  "selectionSourcingRecovery20261017": {
+    "status": "implemented",
+    "statusDetail": "local_recovery_verified_mysql57_read_only_not_production_execution",
+    "requirements": "docs/selection-sourcing-recovery.md",
+    "sourceFiles": [
+      "apps/worker/src/trend-projection-persistence.ts",
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "apps/worker/src/trend-projection-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-sourcing-recovery.test.mjs",
+      "tests/unit/trend-projection-worker-scheduling.test.mjs"
+    ],
+    "contract": "Automatic sourcing uses enabled 1688 only. Repair binds the primary image, excludes deleted or foreign searches, deduplicates searches in a batch and schedules transactionally. MySQL 5.7 materializes primary identity; actionable eligibility precedes the batch limit. A busy queue gives repair a turn after 20 claims; repair failure cannot permanently block new work. Valid image tasks keep existing retry/dead-letter behavior. No new API fields or schema."
+  },
+  "selectionMemberSimplification20261017": {
+    "status": "implemented",
+    "statusDetail": "member_detail_panels_removed_local_delivery_requires_production_deployment",
+    "requirements": "docs/selection-member-simplification.md",
+    "sourceFiles": [
+      "apps/web/src/components/OpportunityWorkspace.vue",
+      "apps/web/src/components/OpportunityDetailNavigation.vue",
+      "apps/web/src/components/use-opportunity-workspace-reads.ts",
+      "apps/web/src/components/use-opportunity-workspace-navigation.ts",
+      "scripts/verify-opportunity-page-preview.mjs"
+    ],
+    "testFiles": [
+      "tests/e2e/m04-02-opportunities.spec.ts",
+      "tests/e2e/m04-07-ai-analysis.spec.ts",
+      "tests/m04-07/ai-analysis.test.mjs"
+    ],
+    "contract": "Member detail retains six core sections. Manual AI, review, operating feedback and lineage UI, writers, state, extra reads, CSS and historical preview template injection are deleted. Retired tab URLs normalize without writes and preserve from. Backend automatic intelligence, historical records and compatibility APIs remain unchanged."
+  },
   "selectionDetailLayout20261017": {
     "status": "implemented",
     "statusDetail": "local_detail_layout_rebuild_not_whole_site_acceptance",
@@ -13,7 +79,7 @@
     ],
     "routes": ["/opportunities/:id"],
     "testFiles": ["tests/e2e/m04-02-opportunities.spec.ts"],
-    "contract": "Product-first header, one responsive navigation with six direct sections, factual score table and no duplicated decision counters. Legacy record sections are temporarily secondary, not removed. Existing query/API/authorization contracts are preserved. Frontend-only static deployment."
+    "contract": "Product-first header, six direct responsive core sections, factual score table, no legacy record menu. Retired frontend tab URLs normalize to overview/evidence. No backend API, permission or schema change."
   },
   "selectionCostEvidence20261017": {
     "status": "implemented",
@@ -185,13 +251,13 @@
   "uiPhase2P31GrantCreateFieldFeedback": "P31 /org-admin/roles resource-grant creation now has nearby help, submit-attempt field errors, aria-invalid/aria-describedby associations and first-invalid focus in OrganizationRolePanel. Valid submission still emits the existing createGrant event to OrganizationAdminCenter; resource IDs must still be copied from detail pages, with existing API payload, actions, member scope, expiry bound and RBAC unchanged. Resource-grant revocation snapshots its organization, route, target ID and expected version before the audited-reason dialog; changing organization or route cancels the stale confirmation, and in-place version changes cannot silently upgrade its expected_version. M06-01 actual-Vue desktop/mobile-390 regression verifies invalid input causes no write and correction preserves the existing single POST contract; the P31 source-level interaction test covers stale-context cancellation and the original version contract. Local interception does not prove live server validation, RBAC, MySQL audit or M07-03. Evidence: design-plans/ui-phase-2-2026-09-07/P31-CREATE-FORM-IMPLEMENTATION.md; whole-site completion remains open.",
   "uiPhase2P32WorkspaceNativeList": "P32工作区目录使用原生ul/li组织与保留原生button语义，选择/aria-current保持不变；桌面/手机布局与审阅图已重新核对。M06-01组织管理E2E桌面49/49、手机48通过/1跳过；组件源合同与13项工作区审阅单测通过；未改变接口、权限、数据库或写入行为。页面业务动作与生产验收仍按原状态独立记录，见page-specs/P32.md。",
   "uiPhase2P18ScoreQueueRefreshFailure": "P18 OP-SCORE-QUEUE now preserves the accepted score-job receipt when the follow-up opportunity detail GET fails: status feedback includes queue acceptance, refresh failure, the existing server action hint and request_id. Actual-Vue desktop/mobile-390 E2E injects a 202 score POST followed by three 503 detail reads and proves the POST occurs once. No API, payload, permission or Worker rule change; fixtures do not prove live SQL/RBAC/Worker completion.",
-  "uiPhase2P18AiReadFailureRecovery": "P18 OP-AI-RETRY actual-Vue regression: three consecutive 503s after enqueue acceptance preserve the last successful AI snapshot, mark it stale, show the server action hint/request ID, and disable sampling; explicit retry performs only the directory GET and leaves the accepted enqueue POST single. Full M04-07 desktop Chromium and mobile-390 suites pass 14/14 each. Evidence is in tests/e2e/m04-07-ai-analysis.spec.ts and P18-PAGE-COMPOSITION-IMPLEMENTATION.md. Local interception does not prove live API, RBAC, Worker or production availability.",
-  "uiPhase2P18AiQueueCrossOpportunityIsolation": "P18 OP-AI-QUEUE actual-Vue regression holds the AI enqueue POST, switches to a different opportunity, then releases the old 202 receipt; it must not switch the new detail tab, show the old success message, or trigger an extra AI GET for the new opportunity. Desktop Chromium and 390px mobile pass 1/1 each. Existing write-scope guard is unchanged; local interception does not prove server task acceptance/completion, RBAC, Worker execution, or M07-03 production acceptance.",
+  "uiPhase2P18AiReadFailureRecovery": "Historical manual-AI UI evidence superseded by 2026-10-17 member simplification. The user panel and its reads/writes are removed; current verification covers absent controls, canonical legacy links and no legacy requests. Backend automatic intelligence and historical compatibility APIs remain.",
+  "uiPhase2P18AiQueueCrossOpportunityIsolation": "Historical manual-AI UI evidence superseded by 2026-10-17 member simplification. The user panel and its reads/writes are removed; current verification covers absent controls, canonical legacy links and no legacy requests. Backend automatic intelligence and historical compatibility APIs remain.",
   "uiPhase2P18OverviewRouteLinkCapabilities": "P18分析概览中的竞品与供应链工作台入口按目标路由元数据分别要求 competitor:read / sourcing:read；竞争分区的竞品入口同样要求 competitor:read。真实Vue双端E2E覆盖无读取权、各自读取权、仅管理能力和双读取能力组合；不改变服务端RBAC、路由或API。",
   "uiPhase2P22DialogLifecycle": "P22 CostRuleConsole 新建草稿与费用规则动作弹窗已接入 C 方向分组字段、可滚动正文与固定底栏；提交中禁用字段/关闭/取消，原生模态开启 Tab/Shift+Tab 环绕并在原触发器消失时回到页面标题。草稿 409 在原窗保留字段与 request_id，仅显式重试再次 POST；动作冲突同样保留原因。双端实际 Vue 新增覆盖草稿忙碌锁/单 POST/冲突重试、动作键盘/忙碌/返焦和组织管理员拒绝；UI2-SC01-SC03、四种流程及两种角色拒绝继续验证。API、payload、费用/审批/权限合同、数据库与依赖均未变；本地夹具不证明真实 RBAC/SQL/生产审批或正式 M07-03。见 design-plans/ui-phase-2-2026-09-07/P22-PAGE-COMPOSITION-IMPLEMENTATION.md。",
   "uiPhase2OpportunityErpBridgeIntentOwnership": "P15 ignores a delayed ERP browser-helper result if its import dialog was closed/replaced, the OpportunityWorkspace route changed, or the KeepAlive page was deactivated; the helper result cannot start POST /imports/erp-products in a stale page or dialog context. ERP file parsing is also checked after the asynchronous file read. Actual-Vue desktop Chromium and 390px mobile regressions cover stale bridge results producing zero writes and a delayed file-import POST whose success refreshes the list without closing a newer import dialog or starting a second POST. Existing endpoint, payload, permissions and immediate-import behavior remain unchanged; local browser bridge/API fixtures are not real ERP, RBAC, database or production acceptance.",
   "uiPhase2OpportunityQueueBarLayout": "P15 C workspace now stacks the four queue buttons above the advanced-filter form from 761px through 1440px, preventing fixed filter-column minimums from shrinking/overlapping the queue navigation. An actual-DOM hit-test checks the center of all four buttons at desktop widths; full M04-02 passes 21/21 desktop Chromium and 21/21 390px mobile. Current C-direction list snapshots were refreshed. Filter fields, URL/query behavior, selection-view semantics, API and mobile drawer behavior are unchanged; this does not establish 200% zoom, screen-reader or live RBAC acceptance.",
-  "uiPhase2P18DetailDirectoryProduction": "Superseded locally on 2026-10-17 by docs/selection-detail-layout.md: product-image/identity header, six direct horizontal sections and one responsive navigation DOM; remaining four record sections are temporarily secondary. The old blue numbered desktop directory, duplicated mobile directory, duplicate decision counters and two directory palette tokens were removed. Existing tab/from URLs, capability checks, reason-required decisions and quality gates remain. This is not a production deployment or whole-site/old-module deletion acceptance.",
+  "uiPhase2P18DetailDirectoryProduction": "2026-10-17 local member detail now exposes only six core sections. The numbered directory, secondary record menu, manual AI, operating feedback and lineage frontend panels are removed. See docs/selection-member-simplification.md. Backend historical compatibility and core automatic intelligence remain; no production deployment claimed.",
   "uiPhase2P48CompatibilityAsyncOwnership": "P48 ProviderSourceCenter compatibility-matrix reads are guarded by an operation generation and provisioned source ID; closing the matrix or unmounting invalidates pending responses, and stale success/failure cannot replace the current matrix/error/request trace. Local controlled Vue E2E passes on desktop and 390px mobile, including late success after newer success and late success after newer 409; full M03-07 E2E and web typecheck pass. No API, payload, permissions, schema, environment, dependency or source-state rule change. These fixtures do not prove production RBAC, real source observations or formal M07-03; other P48 async, SC48/PR-G01 and full 73-page closure remain open. See design-plans/ui-phase-2-2026-09-07/P48-COMPATIBILITY-ASYNC-OWNERSHIP-IMPLEMENTATION.md.",
   "uiPhase2P47AccessStatesProduction": "P47 expired/forbidden/blocked now use page-scoped gentle copy and state styling. 401 primary routes to /login without another provider-adapters GET; 403/429/503 preserve the existing safe read retry and focus the persistent page heading before retry; ordinary 500 retains existing copy/action. Real Vue SFC/unit contract and desktop/mobile fixture E2E plus deployment evidence are in design-plans/ui-phase-2-2026-09-07/P47-ACCESS-IMPLEMENTATION.md. No API/OpenAPI/schema/env/dependency/RBAC/probe-policy change. Local fixtures do not prove real authentication, permissions, rate limiting, external probes or formal M07-03; full 73-page goal remains open.",
   "uiPhase2P47RefreshFailureProduction": "P47 refresh failure with a retained snapshot now renders a page-scoped inline status between filters and directory, with gentle freshness copy, unchanged server actionHint/request ID, and explicit retry. Existing items, filters, pagination, details, GET/12s timeout/safe retry and probe behavior remain; retry moves focus to the persistent page heading. No API/OpenAPI/schema/environment/dependency/RBAC change. Production Vue unit, desktop/mobile M03-03, web build and release checks are recorded in design-plans/ui-phase-2-2026-09-07/P47-REFRESH-FAILURE-IMPLEMENTATION.md. Local fixtures do not prove real provider permissions/probes or formal M07-03; full 73-page goal remains open.",
@@ -1752,7 +1818,7 @@
       "uiPhase2FilterCount": "P15 OpportunityListPanel derives the advanced-filter trigger count from the seven URL-applied query keys; mutable v-model drafts do not appear as applied. Empty-state clearing still recognizes unapplied drafts. The mobile M04-02 E2E covers edit, close/reopen, pre-apply count, and post-apply count. No API/filter semantics changed; non-all deep-link decision_status handling remains as-is.",
       "uiPhase2ImageFallback": "P15 OpportunityListPanel distinguishes a missing image URL (accessible label 商品主图待采集) from an image request failure (商品主图加载失败), retaining the existing same-size placeholder. Failed state is keyed by opportunity ID and image URL, and obsolete failures are cleared when the current list image source changes. Isolated actual-Vue E2E returns 404 for the image and verifies both states in desktop Chromium and mobile-390, 1/1 each. No business retry, API, or data contract changed.",
       "uiPhase2CreateRouteReactivate": "P15 UI2-OP07: when the member NavigationShell keeps OpportunityWorkspace alive, reactivating /opportunities with create=1 or source_topic_id now applies the route's existing name/market/category/source prefill and opens the create dialog only when opportunity:decide is available. Controlled actual-Vue E2E verifies same-scope draft retention, source-prefill replacement, and the no-decision-capability path; desktop Chromium and mobile-390 pass 2/2 each. No API, route shape, permission rule, or automatic creation/adoption changed. Other OP07 stale async/write lifecycle cases and real RBAC/production acceptance remain open.",
-      "uiPhase2ReviewCImplementation": "P18 REVIEW-C actual Vue implementation: OpportunityAiPanel now separates returned-record navigation from the selected immutable output, preserves stale snapshots on read/malformed-response errors, blocks review while stale, separates accepted queue feedback from its follow-up GET, and retains full request/hash/prompt/model/review provenance. OpportunityLineagePanel groups only by returned kind, preserves raw status suffixes and null age, and exposes returned routes/correlation IDs without inferred edges. OpportunityFeedbackPanel separates current server calibration, immutable facts and the eleven-field entry form; unknown POST outcomes retain the exact body/idempotency key and require an explicit same-key retry. AI review reason maximum follows the existing 1000-character backend contract. Actual Vue regressions cover malformed AI response and stale recovery, raw lineage/unknown age, ratio-vs-delta formatting, audit details, and same-key feedback recovery. No API/OpenAPI/DB/schema/permission/dependency contract change; locally controlled browser responses do not prove production RBAC, real writes or M07-03. Remaining opportunity actions, full P18 access/async lifecycle, 200% zoom/screen-reader/real-device verification, and 73-page closure remain open.",
+      "uiPhase2ReviewCImplementation": "Historical P18 AI/lineage/feedback user panels retired by the current core-selection scope. Frontend components, writers, reads and styles are deleted; backend records and compatibility APIs remain. See docs/selection-member-simplification.md.",
       "entrypoints": [
         "../apps/api/src/opportunity-service.ts",
         "../apps/api/src/mysql-opportunity-repository.ts",
@@ -1765,16 +1831,10 @@
         "../apps/web/src/components/OpportunityWorkspace.vue",
         "../apps/web/src/components/OpportunityWorkspace.css",
         "../apps/web/src/components/opportunity-workspace-types.ts",
-        "../apps/web/src/components/OpportunityAiPanel.vue",
         "../apps/web/src/components/OpportunityEvidencePanel.vue",
         "../apps/web/src/components/OpportunityDecisionPanel.vue",
         "../apps/web/src/components/opportunity-decision-presentation.ts",
-        "../apps/web/src/components/OpportunityFeedbackPanel.vue",
-        "../apps/web/src/components/OpportunityLineagePanel.vue",
-        "../apps/web/src/components/OpportunityLineageSummary.vue",
         "../apps/web/src/components/OpportunityWorkspaceDialogs.vue",
-        "../apps/web/src/opportunity-ai.css",
-        "../apps/web/src/opportunity-p18-workfaces.css",
         "../apps/web/src/use-audited-reason.ts",
         "../apps/web/src/components/OpportunityListPanel.vue",
         "../apps/web/src/components/AutomaticSelectionReadinessPanel.vue",
@@ -2062,15 +2122,13 @@
         "../apps/api/src/ai-analysis-service.ts",
         "../apps/api/src/mysql-ai-analysis-repository.ts",
         "../apps/api/src/ai-analysis-routes.ts",
-        "../apps/worker/src/ai-analysis-worker.ts",
-        "../apps/web/src/components/OpportunityWorkspace.vue"
+        "../apps/worker/src/ai-analysis-worker.ts"
       ],
       "routes": [
-        "/opportunities/{opportunityId}",
         "/api/v1/opportunities/{opportunityId}/ai-analyses",
         "/api/v1/ai-analyses/{resultId}/reviews"
       ],
-      "scope": "organization and workspace scoped immutable input snapshots requests results reviews events outbox and idempotency operations",
+      "scope": "Retained scoped immutable backend snapshots/results/reviews and historical compatibility APIs. No member-side manual AI panel. Automatic product association uses its separate worker classifier.",
       "truthBoundary": "AI only summarizes classifies and points out missing fields from persisted facts; ai_generated output cannot create or overwrite prices scores profits qualifications risk conclusions or decisions",
       "permission": "opportunity:read for scoped results; opportunity:decide for queueing and human sampling review",
       "audit": "input SHA prompt contract model provider request id request_id trace_id events outbox and separate human review remain correlated without logging secrets",
@@ -2095,7 +2153,7 @@
       ],
       "verificationRunId": "1b290819-ac45-4e21-99f0-7d84d844d25e",
       "status": "verified",
-      "statusDetail": "module_verified"
+      "statusDetail": "backend_compatibility_retained_member_ui_removed"
     },
     "businessTaskCenter": {
       "module": "M05-01",
@@ -4489,7 +4547,7 @@
   "uiPhase2TrendRelevanceFailureRecovery": "P14 relatedness writes now keep the reason/dialog on API failure, disable close/cancel/submit while the request is pending, and close only after success. Desktop/390px Vue E2E reproduces the previous loss and covers retry. This does not establish production RBAC/database acceptance; see PROGRESS.md and page-specs/P14.md.",
   "uiPhase2TrendRelevanceModalKeyboard": "P14 relevance, monitoring-rule and anomaly dialogs now use native modal lifecycles with autofocus, shared forward/reverse Tab boundary wrapping, Escape dismissal only while idle, and focus return after dismissal. Rule cancel/reopen resets the same default form values. Anomaly success focuses the still-present current-view navigation after its trigger changes. Desktop Chromium and 390px actual-Vue E2E cover the rule/anomaly lifecycle; unrelated shared filter drawer and accessibility-wide/production acceptance remain pending.",
   "uiPhase2P18AiReviewReasonFailureRecovery": "OpportunityWorkspace AI review now restores the audited-reason modal with the exact submitted notes and the server action hint after a failed POST, only while the same opportunity and AI section remain active. It does not auto-replay; the user must explicitly resubmit, and cancel exits. Existing /ai-analyses/{id}/reviews payload, permission, server idempotency and audit behavior are unchanged. Approved/rejected actual-Vue desktop and mobile-390 E2E pass 4/4; the M04-07 suite passes 10/10. Local fixtures do not prove real database/RBAC or production acceptance. See design-plans/ui-phase-2-2026-09-07/P18-AI-REVIEW-FAILURE-RECOVERY.md.",
-  "uiPhase2P18AiReviewInFlightFeedback": "OpportunityWorkspace.reviewAi now synchronously rejects review submission while another write/AI review is busy, tracks the current result ID through submitting and refreshing stages, and clears that local state on result, opportunity, KeepAlive, or unmount boundaries. OpportunityAiPanel displays an aria-live status only for the selected result; existing approved/rejected controls remain disabled while busy. Actual-Vue delayed-POST E2E verifies submitting/refreshing feedback, both buttons locked, a second synthetic action event cannot start a second reason flow, and successful list refresh; desktop and mobile-390 targeted runs pass 1/1 each. Existing API body, permission, source output and explicit failure-retry behavior are unchanged. Local fixtures do not prove real RBAC, server commit, or M07-03. See design-plans/ui-phase-2-2026-09-07/P18-PAGE-COMPOSITION-IMPLEMENTATION.md.",
+  "uiPhase2P18AiReviewInFlightFeedback": "Historical manual-AI UI evidence superseded by 2026-10-17 member simplification. The user panel and its reads/writes are removed; current verification covers absent controls, canonical legacy links and no legacy requests. Backend automatic intelligence and historical compatibility APIs remain.",
   "uiPhase2P18DecisionDialogAccessibleName": "OpportunityDecisionPanel summary and the native decision dialog now use distinct heading IDs; the dialog's aria-labelledby points to its own action-specific heading, so browser E2E can locate it by its accessible name. No API, permission, form, write, or decision behavior changed. Browser automation is not real screen-reader acceptance; see design-plans/ui-phase-2-2026-09-07/page-specs/P18.md.",
   "uiPhase2P18DecisionReasonAccessibleValidation": "P18 observe/reject decision dialogs preserve native required submission blocking and now expose an inline required-reason error through aria-describedby and aria-invalid; entering a value clears the error and reopening resets it. Actual-Vue desktop Chromium and 390px mobile UI2-OP03 cases pass 4/4 with zero POST on empty submission. API, payload, permission, reason limit and decision rules are unchanged. This is not screen-reader, adopt/AI variant, real RBAC/database or M07-03 production acceptance; see design-plans/ui-phase-2-2026-09-07/P18-PAGE-COMPOSITION-IMPLEMENTATION.md.",
   "uiPhase2P18DecisionSubmissionSingleFlight": "OpportunityWorkspace.decide now rejects synchronous re-entry while a write is busy and snapshots opportunity ID, action, reason, and expected_version before awaiting the existing POST. Actual Vue M04-02 E2E reproduces the duplicate request under delayed response and passes desktop Chromium plus 390px mobile in the full suite (27/27 each). The API, payload, permission, quality gates, and close/reopen behavior are unchanged; fixtures do not prove real RBAC, database transactions/audit, or M07-03. See design-plans/ui-phase-2-2026-09-07/P18-PAGE-COMPOSITION-IMPLEMENTATION.md.",

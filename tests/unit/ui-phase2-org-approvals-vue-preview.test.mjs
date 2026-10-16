@@ -2,7 +2,7 @@ import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-publish
 import test from "node:test";
 import { assertP34EvidenceSourceHash } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileScript, compileTemplate } from "@vue/compiler-sfc";
@@ -114,7 +114,11 @@ test("P34 historical six-width review binds source lineage, original contracts a
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 179);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34EvidenceSourceHash(file, read(file), expected);
+    assertP34EvidenceSourceHash(
+      file,
+      existsSync(file) ? read(file) : readCaptureSourceRevision(file, expected),
+      expected,
+    );
   assert.equal(
     e.transformedHashes[approvalsVueFile],
     hash(

@@ -3,7 +3,7 @@ import test from "node:test";
 import { historicalAdapterReadSource } from "../../scripts/lib/ui-phase2-adapter-read-baseline.mjs";
 import { historicalAdapterFeedbackSource } from "../../scripts/lib/ui-phase2-adapter-feedback-baseline.mjs";
 import assert from "node:assert/strict";
-import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { parse } from "@vue/compiler-sfc";
@@ -112,7 +112,7 @@ test("P47 detail continuous screenshots bind capture sources and explicit fixtur
   assert.equal(e.screenshots.length, 47);
   assert.ok(Object.keys(e.sourceHashes).length > 100);
   for (const [f, sha] of Object.entries(e.sourceHashes))
-    assert.equal(hash(selectionBlockedHistoricalSource(f, read(f), sha)), sha, f);
+    assert.equal(hash(readCaptureSourceRevision(f, sha)), sha, f);
   assert.deepEqual(
     readdirSync(root).sort(),
     [...e.screenshots.map((s) => s.file), "evidence.json", "index.html"].sort(),

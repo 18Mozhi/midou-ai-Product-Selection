@@ -3,7 +3,10 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  assertCaptureSourceRevision,
+  readEvidenceSourceBytes,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 const signalLedger = readFileSync("apps/web/src/signal-ledger.css", "utf8").replaceAll(
   "\r\n",
   "\n",
@@ -18,7 +21,7 @@ test("P43 create dialog resets the global create-alias palette bleed", () => {
   assert.match(signalLedger, /\[class\*="-create"\]/);
   assert.match(
     accountDialogs,
-    /html\[data-design="glass-atlas"\] body dialog\.p43-create-user-dialog,[\s\S]*?background-color: var\(--account-org-surface\)/,
+    /html\[data-design="commerce"\] body dialog\.p43-create-user-dialog,[\s\S]*?background-color: var\(--account-org-surface\)/,
   );
 });
 
@@ -89,7 +92,7 @@ for (const [folder, kind, checks, images, palette] of [
         assert.match(fingerprint, /^[a-f0-9]{64}$/);
     } else {
       for (const [source, expected] of Object.entries(evidence.sourceHashes)) {
-        const text = readFileSync(source, "utf8").replaceAll("\r\n", "\n");
+        const text = readEvidenceSourceBytes(source, expected);
         if (source.startsWith("tests/e2e/")) assertCaptureSourceRevision(source, text, expected);
         else assertCaptureSource(source, text, expected, source);
       }

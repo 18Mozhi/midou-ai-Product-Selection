@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
 import ts from "typescript";
@@ -9,6 +10,7 @@ import { validateReviewSurfaces } from "../../scripts/lib/ui-phase2-review-surfa
 import { runContractAudit } from "../../scripts/audit-ui-phase2-contracts.mjs";
 import {
   base,
+  hash,
   sourceFiles,
   parentFiles,
   contractFile,
@@ -36,7 +38,20 @@ test("P38 exact30 sites map to19 interactions and one dialog definition without 
   assert.equal(result.wiringGroups, 1);
   assert.equal(result.writeActions, 0);
   assert.equal(result.unmappedVisualSlots, 114);
-  assert.deepEqual(JSON.parse(readFileSync(base + "/action-reviews/P38.json", "utf8")), build());
+  const saved = JSON.parse(readFileSync(base + "/action-reviews/P38.json", "utf8"));
+  const current = build();
+  const localReview = (review) => ({
+    ...review,
+    parentWiring: { ...review.parentWiring, dependencyHashes: undefined },
+  });
+  assert.deepEqual(localReview(saved), localReview(current));
+  for (const file of parentFiles) {
+    const archived = readEvidenceSourceBytes(file, saved.parentWiring.dependencyHashes[file]);
+    assert.equal(hash(archived), saved.parentWiring.dependencyHashes[file]);
+    assert.equal(current.parentWiring.dependencyHashes[file], hash(inputs.sources[file]));
+  }
+  assert.equal(current.approval, "pending-user-review");
+  assert.equal(current.status, "source-reviewed-not-runtime-accepted");
   assert.equal(
     readFileSync(contractFile, "utf8").replaceAll("\r\n", "\n"),
     renderPlatformContract(build(), inputs),

@@ -44,7 +44,9 @@ export const responsiveFocusRevision = Object.freeze({
       "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
     "apps/web/src/ui/state-contract.ts":
       "913cf51719f372302e1900ac99c4b46c1baaa3632d7bcca7e234700f483d2ac8",
-    "apps/web/src/main.ts": "33598925c7d12382152f1398ae48dcc27297afbef339aba6dd8dcc49770ba2f2",
+    // Current entrypoint from c42a0996: commerce styling and its default density.
+    // Capture-time source hashes above remain bound to their original Git revision.
+    "apps/web/src/main.ts": "e45e9dafaa6d839ad40b2d2d00ae3bb664d3a2a05c3444eb1c17614f7d08b3ab",
     "apps/web/src/styles.css": "c881ac3d5e718bcd59272210d703991150556406ad09a90cd7d9c35742d97586",
     "apps/web/src/styles/access-governance.css":
       "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",

@@ -97,7 +97,7 @@ export function validateScopeRecords(review, candidates, fingerprint, sourceHash
     runtimeAcceptance: "partial-not-frozen",
   };
 }
-export async function verifySourceScope() {
+export async function verifySourceScope(readSource = (file) => readFile(file, "utf8")) {
   const review = await readJson(`${base}/source-scope-review.json`);
   const revalidation = await readJson(`${base}/source-scope-revalidation.json`);
   const reviewedSources = revalidatedScopeSources(review, revalidation);
@@ -110,7 +110,7 @@ export async function verifySourceScope() {
     assert.ok(/^(apps\/web\/src\/|config\/route-catalog\.json$)/.test(file));
     assert.ok(!file.split("/").includes(".."));
     sourceHashes[file] = createHash("sha256")
-      .update((await readFile(path.join(repo, file), "utf8")).replace(/\r\n/g, "\n"))
+      .update((await readSource(path.join(repo, file))).replace(/\r\n/g, "\n"))
       .digest("hex");
   }
   for (const file of new Set(review.records.map((row) => row.testFile).filter(Boolean)))

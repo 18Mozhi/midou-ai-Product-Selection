@@ -8,6 +8,7 @@ export interface SourcingCandidate {
   specification: string | null;
   moq: number | null;
   quoted_price: number;
+  source_price_description?: string | null;
   currency: string;
   lead_time_days: number | null;
   location: string | null;

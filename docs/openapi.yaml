@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: ScoutOps selection workflow and administration API. Backend intelligence classification can schedule evidence-linked Amazon searches and select a real primary record; model associations remain hypotheses, never sales facts or recommendations. Automatic recommendations require an identified primary product and at least five independently verified Amazon competitor detail snapshots. Existing sourcing searches support backend-only LAN 1688 image transport. Read-only evidence fields never replace source facts or human adoption. Organization-visible endpoints require scoped server-side authorization.
+  description: ScoutOps selection workflow and administration API. Backend intelligence classification can schedule evidence-linked Amazon searches and select a real primary record; model associations remain hypotheses, never sales facts or recommendations. Automatic recommendations require an identified primary product and at least five independently verified Amazon competitor detail snapshots. Existing sourcing searches support backend-only LAN 1688 image transport. Automatic sourcing and missing-task recovery use enabled 1688 and the primary product image, without automatic fallback to other supplier sites. Missing images remain explicitly missing. Read-only evidence fields never replace source facts or human adoption. Organization-visible endpoints require scoped server-side authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:
@@ -2677,6 +2677,7 @@ paths:
   /sourcing/searches/{searchId}:
     get:
       summary: Read supplier candidates, ERP catalog references, evidence references and explicit missing fields
+      description: Each candidate includes nullable read-only source_price_description, trimmed to 200 characters from its exactly linked active 1688 normalized evidence. Missing or non-string conditions remain null. This describes the source observation, not a subsequent confirmed quote, and does not change quoted_price or cost confirmation rules.
       security: [{ HttpOnlySession: [] }]
       x-required-capability: sourcing:read
       parameters:

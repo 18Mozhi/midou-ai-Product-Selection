@@ -4,7 +4,7 @@ import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { capturedExportDetailHash } from "./lib/ui-phase2-export-detail-token-delta.mjs";
+import { readEvidenceSourceBytes } from "./lib/ui-phase2-token-copy-baseline.mjs";
 
 export const base = "design-plans/ui-phase-2-2026-09-07";
 export const parentFile = "apps/web/src/components/OrganizationAdminCenter.vue";
@@ -464,10 +464,12 @@ export function validateOrgDataBindings(review, inputs) {
   assert.deepEqual(review.surfaceReview.inputs, expected.surfaceReview.inputs);
   for (const [key, e] of Object.entries(inputs.external)) {
     for (const [f, sha] of Object.entries(e.sourceHashes)) {
-      if (f === "tests/e2e/m06-01-organization-admin.spec.ts")
-        assertCaptureSource(f, text(f), sha, `${key} stale capture source ${f}`);
-      else
-        assert.equal(capturedExportDetailHash(f, text(f)), sha, `${key} stale capture source ${f}`);
+      assertCaptureSource(
+        f,
+        readEvidenceSourceBytes(f, sha),
+        sha,
+        `${key} stale capture source ${f}`,
+      );
     }
     for (const s of e.screenshots)
       assert.equal(

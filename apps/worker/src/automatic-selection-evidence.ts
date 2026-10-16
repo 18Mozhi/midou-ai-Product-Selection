@@ -1,5 +1,19 @@
 import { selectionPrimaryAsinSql } from "@scoutops/database";
 
+/** Correlated to materialized opportunity alias o with its resolved primary_asin. */
+export const automaticPrimaryImageSql =
+  "(SELECT JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.image_url')) " +
+  "FROM opportunity_evidence_links l_image JOIN normalized_records n_image " +
+  "ON n_image.raw_evidence_id=l_image.raw_evidence_id AND n_image.organization_id=l_image.organization_id " +
+  "AND n_image.workspace_id=l_image.workspace_id AND n_image.status='active' " +
+  "JOIN providers p_image ON p_image.id=n_image.provider_id AND p_image.code='amazon_product' " +
+  "WHERE l_image.opportunity_id=o.id AND l_image.organization_id=o.organization_id " +
+  "AND l_image.workspace_id=o.workspace_id " +
+  "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.asin')))=BINARY o.primary_asin " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(n_image.payload_json,'$.image_url')) REGEXP " +
+  "'^https://(m[.]media-amazon[.]com|images-na[.]ssl-images-amazon[.]com)/' " +
+  "ORDER BY n_image.created_at DESC,n_image.id DESC LIMIT 1)";
+
 /** Resolve the same primary used by the catalogue, rather than the latest linked competitor. */
 export const automaticPrimaryEvidenceSql =
   "SELECT n.raw_evidence_id,l.observed_at,n.payload_json,p.status provider_status " +

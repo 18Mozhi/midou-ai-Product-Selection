@@ -4,7 +4,7 @@ import {
   assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { parse, compileTemplate } from "@vue/compiler-sfc";
@@ -110,7 +110,11 @@ test("historical loading packet binds source lineage, busy behavior and motion p
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 198);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34EvidenceSourceHash(file, read(file), expected);
+    assertP34EvidenceSourceHash(
+      file,
+      existsSync(file) ? read(file) : readCaptureSourceRevision(file, expected),
+      expected,
+    );
   const capturedParent = previewApprovalsLoading(
     previewApprovalsReadFeedback(
       previewApprovalsExpired(

@@ -1,9 +1,9 @@
 import test from "node:test";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { capturedExportDetailHash } from "../../scripts/lib/ui-phase2-export-detail-token-delta.mjs";
 
 const output = "output/playwright/p35-parent-read-states";
 const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
@@ -14,10 +14,8 @@ test("P35 App/parent/child capture and128 images retain exact sources before equ
   assert.equal(e.screenshots.length, 128);
   assert.equal(new Set(e.screenshots.map((s) => s.file)).size, 128);
   for (const [file, sha] of Object.entries(e.sourceHashes)) {
-    const source = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-    if (file === "tests/e2e/m06-01-organization-admin.spec.ts")
-      assertCaptureSource(file, source, sha);
-    else assert.equal(capturedExportDetailHash(file, source), sha, file);
+    const source = readCaptureSourceRevision(file, sha);
+    assertCaptureSource(file, source, sha);
   }
   for (const s of e.screenshots)
     assert.equal(hash(readFileSync(`${output}/${s.file}`)), s.sha256, s.file);

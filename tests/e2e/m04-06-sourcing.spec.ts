@@ -223,22 +223,50 @@ async function rejectSourcingRequest(page: Page, path: string, method: string, r
   });
 }
 
-async function navigateMemberMenu(page: Page, label: "全部任务" | "供应链与利润") {
+async function navigateMemberMenu(page: Page, label: "选品工作台" | "1688 找货") {
+  const sidebar = page.getByRole("complementary", { name: "工作区导航" });
+  if (await sidebar.isVisible()) {
+    await sidebar.getByRole("link", { name: label, exact: true }).click();
+    return;
+  }
   const toggle = page.getByRole("button", { name: "打开导航菜单" });
   if (await toggle.isVisible()) await toggle.click();
-  const navigation = page.getByRole("navigation", { name: "成员工作台导航" }),
-    target = navigation.getByRole("link", { name: label, exact: true });
-  if (!(await target.isVisible()))
-    await navigation
-      .getByText(label === "全部任务" ? "工作台" : "洞察与选品", { exact: true })
-      .click();
-  await navigation
-    .getByRole("link", {
-      name: label === "全部任务" ? "任务中心" : label,
-      exact: true,
-    })
-    .click();
+  const navigation = page.getByRole("navigation", { name: "成员工作台导航" });
+  await navigation.getByRole("link", { name: label, exact: true }).click();
 }
+
+test("source price conditions remain visible without relabelling confirmed quotes", async ({
+  page,
+}) => {
+  await setup(page);
+  await page.route(`**/api/v1/sourcing/searches/${searchId}`, (route) =>
+    route.fulfill({
+      json: envelope({
+        id: searchId,
+        input_type: "image",
+        input_ref: "image",
+        status: "completed_with_warnings",
+        candidate_count: 2,
+        missing_fields: [],
+        created_at: "2026-10-17T00:00:00Z",
+        candidates: [
+          { ...readyCandidate, source_price_description: "旧采集新人价" },
+          { ...incompleteCandidate, source_price_description: "新人价" },
+        ],
+      }),
+    }),
+  );
+  await page.goto("/sourcing");
+  const cards = page.locator(".supplier-cards");
+  const raw = cards.locator("article").filter({ hasText: incompleteCandidate.supplier_name });
+  await expect(raw.getByText("采集价格说明", { exact: true })).toBeVisible();
+  await expect(raw.getByText("新人价", { exact: true })).toBeVisible();
+  const confirmed = cards.locator("article").filter({ hasText: readyCandidate.supplier_name });
+  await expect(confirmed.getByText("CNY 12.8", { exact: true })).toBeVisible();
+  await expect(confirmed.getByText("旧采集新人价", { exact: true })).toHaveCount(0);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await expect(page.locator(".member-module-guide")).toHaveCount(0);
+});
 
 test("M04-06.A07/A08/A09/A15 renders source-backed suppliers, missing fields and responsive actions", async ({
   page,
@@ -625,22 +653,25 @@ test("cost write re-entry is blocked and its receipt survives a failed profit re
   });
 });
 
-test("供应链详情完整跟随暮砂与晨雾主题", async ({ page }) => {
+test("commerce sourcing keeps white surfaces while changing the selected accent", async ({
+  page,
+}) => {
   await setup(page);
   await page.goto("/sourcing");
   const surface = page.locator(".sourcing-detail");
   await expect(surface).toBeVisible();
-  const deepBackground = await surface.evaluate(
-    (element) => getComputedStyle(element).backgroundColor,
-  );
-  expect(deepBackground).not.toBe("rgb(255, 255, 255)");
+  await expect(surface).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  const primary = () =>
+    page
+      .locator("html")
+      .evaluate((element) => getComputedStyle(element).getPropertyValue("--so-primary").trim());
+  const previousAccent = await primary();
   await page.getByRole("button", { name: "切换界面主题" }).click();
-  await page.getByRole("button", { name: /晨雾/ }).click();
+  await page.getByRole("button", { name: /青蓝/ }).click();
   await expect.poll(() => page.locator("html").getAttribute("data-theme")).toBe("cloud-white");
-  const lightBackground = await surface.evaluate(
-    (element) => getComputedStyle(element).backgroundColor,
-  );
-  expect(lightBackground).not.toBe(deepBackground);
+  await expect.poll(primary).not.toBe(previousAccent);
+  await expect(surface).toHaveCSS("background-color", "rgb(255, 255, 255)");
+  await expect(surface).toHaveCSS("background-image", "none");
 });
 
 test("empty state opens the real sourcing form", async ({ page }) => {
@@ -1286,11 +1317,11 @@ test("P21 KeepAlive return reloads list, detail and comparisons and ignores pre-
   await page.goto("/sourcing");
   await firstComparisonStarted;
   await expect(page.locator(".sourcing-detail h3")).toHaveText("离开前找货快照");
-  await navigateMemberMenu(page, "全部任务");
-  await expect(page).toHaveURL(/\/tasks/);
+  await navigateMemberMenu(page, "选品工作台");
+  await expect(page).toHaveURL(/\/home/);
   releaseFirstComparison();
 
-  await navigateMemberMenu(page, "供应链与利润");
+  await navigateMemberMenu(page, "1688 找货");
   await expect(page.locator(".sourcing-detail h3")).toHaveText("返回后的找货快照");
   await expect(page.getByText("返回后重新读取的对比")).toBeVisible();
   expect(listReads).toBe(2);

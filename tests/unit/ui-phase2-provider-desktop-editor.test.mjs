@@ -1,7 +1,8 @@
 import { historicalAdapterCSource } from "../../scripts/lib/ui-phase2-adapter-c-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import { readEvidenceSourceBytes } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { createHash } from "node:crypto";
 import { createRequire } from "node:module";
 import path from "node:path";
@@ -37,7 +38,8 @@ test("P46 desktop review has no production import and every CSS rule is desktop 
   for (const f of Object.keys(evidence("current").sourceHashes).filter((f) =>
     f.startsWith("apps/"),
   )) {
-    assert.ok(!read(f).includes("provider-desktop-editor-preview"), f);
+    if (existsSync(f)) assert.ok(!read(f).includes("provider-desktop-editor-preview"), f);
+    else assert.ok(readEvidenceSourceBytes(f, evidence("current").sourceHashes[f]), f);
   }
 });
 

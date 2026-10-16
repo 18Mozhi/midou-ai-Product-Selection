@@ -17,7 +17,7 @@ export function previewShellVue(source) {
       'class="role-shell role-shell--c"',
       'ref="navigationDialog"',
       "useNavigationShellDrawer(menuOpen)",
-      'class="role-workspace-tabs"',
+      'id="role-navigation"',
     ])
       assert.ok(result.includes(anchor), `Current shell contract missing: ${anchor}`);
     return result.replace(

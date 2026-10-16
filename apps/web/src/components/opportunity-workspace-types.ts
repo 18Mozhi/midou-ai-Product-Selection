@@ -5,34 +5,6 @@ export type OpportunityWorkspaceState =
 
 export type OpportunityPartialLoadState = "loading" | "ready" | "error";
 
-export interface OpportunityAiAnalysis {
-  id: string;
-  status: string;
-  attempt_count: number;
-  last_error_code: string | null;
-  input_sha256: string;
-  prompt_contract_version: string | null;
-  created_at: string;
-  result: null | {
-    id: string;
-    content: {
-      summary: string;
-      classifications: Array<{ label: string; rationale: string; source_refs: string[] }>;
-      missing_fields: Array<{ field: string; reason: string; source_refs: string[] }>;
-    };
-    ai_generated: boolean;
-    model_name: string;
-    provider_request_id: string | null;
-    review_status: string;
-    review: null | {
-      outcome: "approved" | "rejected";
-      notes: string;
-      reviewed_by: string;
-      reviewed_at: string;
-    };
-  };
-}
-
 export interface OpportunityCompetitorSummary {
   id: string;
   opportunity_id: string | null;
@@ -56,16 +28,7 @@ export interface OpportunityCompetitorSummary {
 }
 
 export type OpportunityTab =
-  | "overview"
-  | "lineage"
-  | "feedback"
-  | "market"
-  | "competition"
-  | "profit"
-  | "risk"
-  | "ai"
-  | "evidence"
-  | "decisions";
+  "overview" | "competition" | "profit" | "risk" | "evidence" | "decisions";
 
 export interface OpportunitySummary {
   id: string;
@@ -109,66 +72,6 @@ export interface OpportunitySummary {
 }
 
 export interface OpportunityDetail extends OpportunitySummary {
-  operating_feedback: {
-    facts: Array<{
-      id: string;
-      period_start: string;
-      period_end: string;
-      sales_units: number;
-      revenue_amount: number;
-      ad_spend_amount: number;
-      returned_units: number;
-      purchase_lead_time_days: number;
-      actual_profit_amount: number;
-      currency: string;
-      source_ref: string;
-      notes: string | null;
-      score_rule_version_snapshot: string | null;
-      profit_rule_version_snapshot: string | null;
-      decision_status_snapshot: string;
-      predicted_profit_amount: number | null;
-      predicted_currency: string | null;
-      quoted_lead_time_days: number | null;
-      observed_at: string;
-      request_id: string;
-      trace_id: string;
-      created_at: string;
-    }>;
-    calibration: null | {
-      fact_id: string;
-      return_rate_percent: number | null;
-      ad_spend_ratio_percent: number | null;
-      profit_variance_amount: number | null;
-      profit_variance_currency: string | null;
-      lead_time_variance_days: number | null;
-      score_rule_version: string | null;
-      profit_rule_version: string | null;
-      decision_status_snapshot: string;
-      human_review_required: true;
-      automatic_rule_update: false;
-      automatic_decision: false;
-    };
-  };
-  lineage: {
-    freshness: { observed_at: string | null; age_seconds: number | null };
-    failure_impact: {
-      level: "none" | "degraded" | "blocked";
-      codes: string[];
-      affected_stages: string[];
-    };
-    request_ids: string[];
-    trace_ids: string[];
-    nodes: Array<{
-      kind: string;
-      id: string;
-      label: string;
-      status: string;
-      occurred_at: string;
-      request_id: string | null;
-      trace_id: string | null;
-      route: string;
-    }>;
-  };
   adoption_blockers: Array<{
     code: "evidence_insufficient" | "recommendation_insufficient";
     status: "blocked" | "in_progress" | "cleared";

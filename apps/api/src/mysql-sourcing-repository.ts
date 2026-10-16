@@ -38,11 +38,18 @@ export class MySqlSourcingRepository implements SourcingRepository {
           "SELECT c.*,q.id quote_id,q.quote_version,q.specification quote_specification," +
             "q.moq quote_moq,q.quoted_price quote_price,q.currency quote_currency," +
             "q.lead_time_days quote_lead_time_days,q.location quote_location,q.confidence_value quote_confidence," +
-            "q.observed_at quote_observed_at,q.evidence_id quote_evidence_id,q.stability_status,q.risk_level " +
+            "q.observed_at quote_observed_at,q.evidence_id quote_evidence_id,q.stability_status,q.risk_level," +
+            "n_offer.payload_json source_offer_payload " +
             "FROM sourcing_candidates c LEFT JOIN supplier_quotes " +
-            "q ON q.candidate_id=c.id AND q.is_current=1 WHERE c.search_id=? ORDER BY c.created_at," +
+            "q ON q.candidate_id=c.id AND q.is_current=1 " +
+            "LEFT JOIN normalized_records n_offer ON n_offer.id=c.normalized_record_id " +
+            "AND n_offer.raw_evidence_id=c.raw_evidence_id AND n_offer.provider_id=c.provider_id " +
+            "AND n_offer.organization_id=c.organization_id AND n_offer.workspace_id=c.workspace_id " +
+            "AND n_offer.status='active' AND EXISTS (SELECT 1 FROM providers p_offer " +
+            "WHERE p_offer.id=n_offer.provider_id AND p_offer.code='1688_search') " +
+            "WHERE c.search_id=? AND c.organization_id=? AND c.workspace_id=? ORDER BY c.created_at," +
             "c.id",
-          [i.searchId],
+          [i.searchId, i.organizationId, i.workspaceId],
         ),
         this.pool.query<RowDataPacket[]>(
           "SELECT t.status,t.available_at,t.successful_subquery_count,t.failed_subquery_count," +
@@ -581,6 +588,11 @@ export class MySqlSourcingRepository implements SourcingRepository {
     };
   }
   private candidate(r: RowDataPacket) {
+    const source = parse<Record<string, unknown>>(r.source_offer_payload ?? {}) ?? {},
+      fields =
+        source.fields && typeof source.fields === "object" && !Array.isArray(source.fields)
+          ? (source.fields as Record<string, unknown>)
+          : source;
     return {
       id: String(r.id),
       supplier_name: String(r.supplier_name),
@@ -588,6 +600,10 @@ export class MySqlSourcingRepository implements SourcingRepository {
       specification: r.quote_specification ?? r.specification,
       moq: r.quote_moq == null ? (r.moq == null ? null : Number(r.moq)) : Number(r.quote_moq),
       quoted_price: Number(r.quote_price ?? r.quoted_price),
+      source_price_description:
+        typeof fields.price_description === "string"
+          ? fields.price_description.trim().slice(0, 200) || null
+          : null,
       currency: String(r.quote_currency ?? r.currency),
       lead_time_days: r.quote_lead_time_days == null ? null : Number(r.quote_lead_time_days),
       location: r.quote_location ?? r.location,

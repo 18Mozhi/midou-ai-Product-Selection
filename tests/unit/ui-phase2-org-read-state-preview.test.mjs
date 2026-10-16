@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { selectionBlockedHistoricalSource } from "../fixtures/selection-blocked-historical-source.mjs";
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import vm from "node:vm";
@@ -119,11 +119,7 @@ test("organization read-state packet preserves captured images, redaction and or
     ),
   );
   for (const [file, sha] of Object.entries(evidence.sourceHashes))
-    assertCaptureSource(
-      file,
-      selectionBlockedHistoricalSource(file, await readFile(file, "utf8"), sha),
-      sha,
-    );
+    assertCaptureSource(file, readCaptureSourceRevision(file, sha), sha);
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256, shot.file);

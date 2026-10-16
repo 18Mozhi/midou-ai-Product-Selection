@@ -4,7 +4,7 @@ import {
   assertP34EvidenceSourceHash,
 } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { assertP34HistoricalPacket } from "../../scripts/lib/ui-phase2-p34-packet-history.mjs";
@@ -134,7 +134,11 @@ test("historical parent r3 packet binds its source lineage and two-endpoint fail
   assert.equal(e.processesClosed, true);
   assert.equal(Object.keys(e.sourceHashes).length, 182);
   for (const [file, expected] of Object.entries(e.sourceHashes))
-    assertP34EvidenceSourceHash(file, read(file), expected);
+    assertP34EvidenceSourceHash(
+      file,
+      existsSync(file) ? read(file) : readCaptureSourceRevision(file, expected),
+      expected,
+    );
   const capturedApprovalsPreview = capturedPreview(
     e,
     "scripts/lib/ui-phase2-org-approvals-vue-preview.mjs",

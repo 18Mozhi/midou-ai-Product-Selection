@@ -22,10 +22,12 @@ import {
   organizationActionParent,
 } from "../../scripts/lib/ui-phase2-organization-action-baseline.mjs";
 import { organizationListPreview } from "../../scripts/lib/ui-phase2-organization-list-preview.mjs";
-import { tokenCopyRevisions } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
+import {
+  tokenCopyRevisions,
+  readCaptureSourceRevision,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 const read = (f) =>
   historicalAdminResultsSource(f, readFileSync(f, "utf8").replaceAll("\r\n", "\n"));
-const readRaw = (f) => readFileSync(f, "utf8").replaceAll("\r\n", "\n");
 const evidence = (mode) =>
   JSON.parse(read(`output/playwright/p42-write-ownership-r2/${mode}/evidence.json`));
 test("current and baseline Vue runs retain exact source and PNG fingerprints without relabeling old defects", () => {
@@ -42,7 +44,8 @@ test("current and baseline Vue runs retain exact source and PNG fingerprints wit
     assert.equal(e.scenarios.length, 16);
     assert.equal(e.checks.length, 98);
     assert.equal(e.screenshots.length, 28);
-    for (const [f, sha] of Object.entries(e.sourceHashes)) assertCaptureSource(f, readRaw(f), sha);
+    for (const [f, sha] of Object.entries(e.sourceHashes))
+      assertCaptureSource(f, readCaptureSourceRevision(f, sha), sha);
     const source =
       mode === "baseline"
         ? organizationListPreview(
