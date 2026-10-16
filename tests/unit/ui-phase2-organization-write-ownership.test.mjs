@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import {
   historicalAdminResultsSource,
   adminResultsRevisions,
@@ -41,8 +42,7 @@ test("current and baseline Vue runs retain exact source and PNG fingerprints wit
     assert.equal(e.scenarios.length, 16);
     assert.equal(e.checks.length, 98);
     assert.equal(e.screenshots.length, 28);
-    for (const [f, sha] of Object.entries(e.sourceHashes))
-      assert.equal(reviewHash(readRaw(f)), sha, f);
+    for (const [f, sha] of Object.entries(e.sourceHashes)) assertCaptureSource(f, readRaw(f), sha);
     const source =
       mode === "baseline"
         ? organizationListPreview(

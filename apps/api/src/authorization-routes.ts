@@ -5,7 +5,9 @@ import {
   AuthorizationService,
   type NavigationShell,
 } from "@scoutops/authorization";
+import type { TenancyService } from "@scoutops/tenancy";
 export interface AuthorizationRouteOptions {
+  tenancy?: TenancyService;
   service: AuthorizationService;
   auth: LocalAuthService;
   secureCookie: boolean;
@@ -43,6 +45,11 @@ export function registerAuthorizationRoutes(
   });
   app.get("/api/v1/me/landing", async (request, reply) => {
     const authenticated = await current(request);
+    await options.tenancy?.restoreLandingContext({
+      actorId: authenticated.user.id,
+      sessionId: authenticated.session.id,
+      ...ids(request),
+    });
     reply.header("cache-control", "private, no-store");
     return envelope(
       await options.service.resolveLanding(

@@ -174,7 +174,7 @@ const statusText = (item: SourceItem) => {
     return item.provisioned?.status === "enabled"
       ? automaticProductSourceCodes.has(item.code)
         ? "自动采集"
-        : "生产可用"
+        : "来源已启用"
       : item.provisioned
         ? "待配置"
         : "等待同步";
@@ -708,11 +708,11 @@ onMounted(load);
     <div class="source-metrics">
       <article>
         <small>全部来源</small><strong>{{ counts.all }}</strong
-        ><span>代码目录</span>
+        ><span>来源目录</span>
       </article>
       <article>
         <small>自动采集</small><strong>{{ counts.automatic }}</strong
-        ><span>已进入调度</span>
+        ><span>支持自动采集</span>
       </article>
       <article>
         <small>非谷歌自动源</small><strong>{{ counts.nonGoogle }}</strong
@@ -726,7 +726,7 @@ onMounted(load);
     <aside class="source-help">
       <strong>已经替你配置好的部分</strong>
       <ol>
-        <li>公开信息订阅和论坛频道会自动采集，不需要密钥。</li>
+        <li>公开订阅与页面支持免密钥采集；需先完成来源准入与运行检查。</li>
         <li>频率、超时、重试、启停可直接在本页修改。</li>
         <li>网页登录型平台需要先完成网页登录配置。</li>
       </ol>

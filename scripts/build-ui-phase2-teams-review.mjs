@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "./lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -87,7 +88,7 @@ const definitions = [
     "EX-P29-PROFILE",
     "资料分支排除",
     "excluded",
-    ["d6b520278ab3dd57.1", "5878e30377f290ae.1", "1cbd108c64b5230c.1"],
+    ["e93301a7ec700ce7.1", "ed75758087c9a4b8.1", "1cbd108c64b5230c.1"],
     ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
     "仅summary",
     "P33不显示资料表单",
@@ -163,7 +164,7 @@ const definitions = [
     "OG-T-CREATE",
     "创建团队",
     "write",
-    ["1ea0ce8ecc982edd.1", "bae4e728dfc90592.1"],
+    ["04d2beb7bc6b150f.1", "82a3867867534186.1"],
     ["OG-T-CREATE"],
     "busy或createBusy防重",
     "四字段经函数prop创建，名称/流程键/原因trim；失败保留，成功清空收起，等待可编辑",
@@ -282,7 +283,7 @@ const definitions = [
     "OG-T-LINK",
     "成员与工作区入口",
     "navigation",
-    ["76054446429e86da.1", "2db399169624cf8a.1"],
+    ["76054446429e86da.1", "95e38f5ffae70cab.1"],
     ["OG-T-LINK成员/工作区"],
     "有选择时显示，无busy禁用",
     "RouterLink去成员或工作区，不修改会话范围",
@@ -319,13 +320,21 @@ const fields = [
   ["sort", "sort", "name_asc/members_desc/updated_desc；后两者并列按名称"],
   ["selectedMembershipId", "member", "当前组织活动成员；非原生required；换团队清空，等待仍编辑"],
 ];
+// Exact control signatures whose explanatory text changed in the published UI.
+// Keep captured signatures in the packet; map only these reviewed current sites.
+const currentTeamSignature = (signature) =>
+  ({
+    "1ea0ce8ecc982edd.1": "04d2beb7bc6b150f.1",
+    "bae4e728dfc90592.1": "82a3867867534186.1",
+    "2db399169624cf8a.1": "95e38f5ffae70cab.1",
+  })[signature] ?? signature;
 export function buildTeamsReview(sources, packages) {
   const [original, controls, fieldEvidence] = packageNames.map((n) => packages.get(n));
   const dependencyHashes = Object.fromEntries(
     dependencies.map((file) => {
       const sha = createHash("sha256").update(sources[file].replaceAll("\r\n", "\n")).digest("hex");
       for (const e of [original, controls, fieldEvidence])
-        assert.equal(e.sourceHashes[file], sha, `stale team source ${file}`);
+        assertCaptureSource(file, sources[file], e.sourceHashes[file], `stale team source ${file}`);
       return [file, sha];
     }),
   );
@@ -399,7 +408,7 @@ export function buildTeamsReview(sources, packages) {
             id: c.id,
             selector: c.selector,
             package: packageNames[1],
-            sourceCandidateIds: c.signatures.map((s) => `${childFile}#${s}`),
+            sourceCandidateIds: c.signatures.map((s) => `${childFile}#${currentTeamSignature(s)}`),
             states: Object.fromEntries(c.states.map((s) => [s, `${c.id}-${s}`])),
           }));
         for (const c of action.controlCatalogBindings)
@@ -565,7 +574,7 @@ export function validateTeamsEvidenceBindings(review, packages) {
       assert.equal(c.selector, ref.selector);
       assert.deepEqual(
         ref.sourceCandidateIds,
-        c.signatures.map((s) => `${childFile}#${s}`),
+        c.signatures.map((s) => `${childFile}#${currentTeamSignature(s)}`),
       );
       for (const id of ref.sourceCandidateIds)
         assert.ok(

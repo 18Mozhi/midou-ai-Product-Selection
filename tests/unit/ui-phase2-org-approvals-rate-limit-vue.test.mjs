@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import { beforeP34OwnerPath } from "../../scripts/lib/ui-phase2-org-approvals-owner-path-history.mjs";
 import { assertP34LegacySourceHash } from "../../scripts/lib/ui-phase2-org-approvals-shared-history.mjs";
@@ -58,7 +59,7 @@ test("P34 historical rate-limit delta excludes subsequent audit and owner-path f
     "apps/web/src/design/approval-read-failure-tokens.css",
   ])
     assert.equal(
-      readFileSync(file, "utf8").replaceAll("\r\n", "\n"),
+      beforePublishedPresentation(file, readFileSync(file, "utf8")),
       original(file).replaceAll("\r\n", "\n"),
     );
 });

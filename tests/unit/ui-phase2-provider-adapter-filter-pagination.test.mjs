@@ -1,3 +1,6 @@
+import { spawnSync } from "node:child_process";
+import { gunzipSync } from "node:zlib";
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -111,7 +114,7 @@ test("P47 filter/page CSS remains isolated to review P47 controls", () => {
   });
 });
 
-test("P47 45-row review preserves committed capture provenance and all images", () => {
+test("P47 approved independent replay preserves original provenance, incident records and successor images", () => {
   const e = JSON.parse(read(`${root}/evidence.json`));
   assert.equal(e.reviewOnly, true);
   assert.equal(e.kind, "P47-FILTER-PAGINATION-CURRENT-REVIEW-r1");
@@ -144,18 +147,78 @@ test("P47 45-row review preserves committed capture provenance and all images", 
       e.sourceHashes[component],
     "captured Vue revision must match the deterministic historical replay",
   );
-  assert.equal(hash(read(component)), readErrorRevision.approvedCurrent);
+  assert.equal(
+    hash(beforePublishedPresentation(component, read(component))),
+    readErrorRevision.approvedCurrent,
+  );
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...e.screenshots.map((shot) => shot.file)].sort(),
   );
+  const successorRoot = "design-plans/ui-phase-2-2026-09-07/evidence/p47-historical-recovery-r2";
+  const approval = JSON.parse(read(`${successorRoot}/approval-and-incident.json`));
+  const successorBytes = readFileSync(`${successorRoot}/evidence.json`);
+  const successor = JSON.parse(successorBytes);
+  assert.equal(approval.decision, "user-approved-independent-successor");
+  assert.equal(approval.authorization, "允许独立新图包接续测试，保留旧记录。");
+  assert.equal(hash(readFileSync(`${root}/evidence.json`)), approval.originalManifestSha256);
+  assert.equal(
+    hash(readFileSync(`${successorRoot}/original-evidence.json`)),
+    approval.originalManifestSha256,
+  );
+  assert.equal(hash(successorBytes), approval.successorManifestSha256);
+  assert.equal(successor.kind, "P47-HISTORICAL-RECOVERY-REPLAY-r2");
+  assert.equal(successor.historicalOnly, true);
+  assert.equal(successor.reviewOnly, true);
+  assert.equal(successor.processesClosed, true);
+  // Original capture-time approval stays untouched; successor authorization is separate.
+  assert.equal(successor.approval, "pending-user-review");
+  assert.equal(successor.runs.length, 6);
+  assert.equal(
+    successor.runs.reduce((n, run) => n + run.checks.length, 0),
+    162,
+  );
+  const compressed = readFileSync(`${successorRoot}/browser-inputs.json.gz`);
+  assert.equal(hash(compressed), approval.browserInputsGzipSha256);
+  const pinned = JSON.parse(gunzipSync(compressed).toString("utf8"));
+  assert.equal(Object.keys(pinned).length, 170);
+  assert.deepEqual(Object.keys(pinned).sort(), Object.keys(successor.pinnedInputHashes).sort());
+  for (const [file, text] of Object.entries(pinned))
+    assert.equal(hash(text), successor.pinnedInputHashes[file], file);
+  assert.deepEqual(approval.affectedImages.map((x) => x.file).sort(), [
+    "baseline-390-filters-open.png",
+    "baseline-390-page-1.png",
+    "baseline-390-page-2.png",
+  ]);
   for (const shot of e.screenshots) {
     const bytes = readFileSync(`${root}/${shot.file}`);
+    const incident = approval.affectedImages.find((x) => x.file === shot.file);
+    if (incident) {
+      assert.equal(incident.originalSha256, shot.sha256);
+      assert.notEqual(
+        hash(bytes),
+        shot.sha256,
+        "Do not pretend overwritten originals were restored",
+      );
+      assert.equal(hash(bytes), incident.overwrittenSha256);
+      assert.equal(
+        hash(readFileSync(`${successorRoot}/incident-overwritten/${shot.file}`)),
+        incident.overwrittenSha256,
+      );
+      assert.equal(
+        successor.screenshots.find((x) => x.file === shot.file).sha256,
+        incident.successorSha256,
+      );
+    } else assert.equal(hash(bytes), shot.sha256);
+  }
+  assert.equal(successor.screenshots.length, 36);
+  for (const shot of successor.screenshots) {
+    const bytes = readFileSync(`${successorRoot}/${shot.file}`);
     assert.equal(hash(bytes), shot.sha256);
     assert.equal(bytes.readUInt32BE(16), shot.pixelWidth);
     assert.equal(bytes.readUInt32BE(20), shot.pixelHeight);
   }
-  for (const run of e.runs) {
+  for (const run of [...e.runs, ...successor.runs]) {
     const value = (name) => run.checks.find((check) => check.name === name)?.actual;
     assert.equal(value("one initial catalog GET"), 1);
     assert.equal(value("page one has20 rows"), 20);
@@ -188,4 +251,17 @@ test("P47 45-row review preserves committed capture provenance and all images", 
       assert.equal(value("page status announced politely"), "status");
     }
   }
+});
+
+test("P47 approved historical replay rejects capture before starting services or changing evidence", () => {
+  const folder = "design-plans/ui-phase-2-2026-09-07/evidence/p47-historical-recovery-r2";
+  const before = hash(readFileSync(`${folder}/evidence.json`));
+  const result = spawnSync(
+    process.execPath,
+    ["scripts/verify-p47-approved-historical-replay.mjs", "--capture"],
+    { encoding: "utf8", windowsHide: true },
+  );
+  assert.notEqual(result.status, 0);
+  assert.match(result.stderr, /Read-only historical replay/);
+  assert.equal(hash(readFileSync(`${folder}/evidence.json`)), before);
 });

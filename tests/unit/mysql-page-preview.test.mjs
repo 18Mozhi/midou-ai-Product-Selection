@@ -30,8 +30,8 @@ test("P68 C review separates runtime evidence, recovery and actual-to-target dur
   ])
     assert.ok(template.includes(id), id);
   assert.match(template, /未知不填0/);
-  assert.match(template, /不新增读副本、负载均衡或备用服务器/);
-  assert.match(template, /不发起备份或恢复/);
+  assert.match(template, /同机恢复证据/);
+  assert.doesNotMatch(original.scriptSetup.content, /method:\s*"(?:POST|PUT|PATCH|DELETE)"/);
 });
 
 test("P68 C review exposes the same visible focus treatment for native actions", () => {

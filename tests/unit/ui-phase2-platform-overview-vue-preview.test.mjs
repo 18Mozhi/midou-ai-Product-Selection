@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -18,7 +19,7 @@ const historicalEvidence = JSON.parse(read(`${historicalOutput}/evidence.json`))
 
 test("P38 actual Vue preview binds current source and every permanent review image", () => {
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.ok(hash(read(file)) === expected || hash(readFileSync(file, "utf8")) === expected, file);
+    assertCaptureSource(file, read(file), expected);
   assert.equal(evidence.screenshots.length, 42);
   assert.deepEqual(
     readdirSync(output)

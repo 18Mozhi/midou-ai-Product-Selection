@@ -7,7 +7,7 @@
     {
       "file": "apps/web/src/components/NavigationShell.vue",
       "previousSha256": "da0d7785c445651b0cf2b0f0bcdd457dd9cf24efcadeb2e1efeb322c492411c9",
-      "currentSha256": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+      "currentSha256": "596cef4389d9ecf77b4eb433d0954031880a962ec0346c9455cc0c4790c5f933",
       "previousRevision": null,
       "changeRevision": "9468ded7bd05900eb22a9726893e5a8bb89d2d15",
       "reviewConclusion": "The current shell moved surface registration into navigation-surface-registry, moved drawer behavior into useNavigationShellDrawer, and substantially changed its template. All 54 outside-route candidate IDs and their reviewed labels, events, conditions, handlers, route classification and partial runtime status still match the refreshed inventory; this does not prove runtime or production acceptance.",
@@ -17,7 +17,9 @@
         "surfaceComponents and DiscoveryOverlay are imported from navigation-surface-registry",
         "navigation drawer behavior is owned by useNavigationShellDrawer",
         "the current shell template is covered by the refreshed inventory fingerprint"
-      ]
+      ],
+      "currentRevision": null,
+      "currentRevisionNote": "2026-10-16 workspace rebuild working tree; changeRevision retains the earlier recorded registration commit and is not the revision of this new layout. Current action coverage is in workspace-rebuild-contract-review.md and shared-shell-role-state-contract-review.md; no old screenshot is current acceptance."
     }
   ],
   "limits": [

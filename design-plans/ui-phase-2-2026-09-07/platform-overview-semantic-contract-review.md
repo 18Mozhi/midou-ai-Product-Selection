@@ -6,7 +6,7 @@
 
 | 文件 | LF SHA256 |
 | --- | --- |
-| apps/web/src/components/PlatformDashboard.vue | 902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e |
+| apps/web/src/components/PlatformDashboard.vue | dd3fee43d66fe14bbd83c66bd3b1b4f369468ef15f4da66210faa526c9742d3a |
 | apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
 | apps/web/src/components/TableViewControls.vue | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
@@ -15,26 +15,26 @@
 
 | 来源身份 | 行 | 类别 | 含义 | 合同组 |
 | --- | --- | --- | --- | --- |
-| apps/web/src/components/PlatformDashboard.vue#41083a84c60ec185.1 | 246 | event-binding | 切换查看范围 | PA38-WINDOW |
-| apps/web/src/components/PlatformDashboard.vue#15e83f4e8898e4d7.1 | 252 | control | 刷新与两类重试 | PA38-REFRESH |
-| apps/web/src/components/PlatformDashboard.vue#17f7411f1727355d.1 | 261 | control | 刷新与两类重试 | PA38-REFRESH |
-| apps/web/src/components/PlatformDashboard.vue#5587941412d5210f.1 | 267 | control | 重新登录入口 | PA38-LOGIN |
-| apps/web/src/components/PlatformDashboard.vue#3569d8f0f015857e.1 | 272 | control | 刷新与两类重试 | PA38-REFRESH |
-| apps/web/src/components/PlatformDashboard.vue#65c09ba74ca8870b.1 | 275 | control | 等待处理与查看任务 | PA38-COLLECTION |
-| apps/web/src/components/PlatformDashboard.vue#d1c0b626714a7ff9.1 | 279 | control | 需要关注入口 | PA38-ROOTCAUSE |
-| apps/web/src/components/PlatformDashboard.vue#52444eba9c2a98bc.1 | 295 | control | 查看组织与管理组织和用户 | PA38-ORGANIZATIONS |
-| apps/web/src/components/PlatformDashboard.vue#c4dfc8f822a18263.1 | 303 | control | 查看用户 | PA38-USERS |
-| apps/web/src/components/PlatformDashboard.vue#06b4b917d7a90e96.1 | 311 | control | 来源导航的三处变体 | PA38-SOURCES |
-| apps/web/src/components/PlatformDashboard.vue#348b42f6f4eb388b.1 | 315 | control | 等待处理与查看任务 | PA38-COLLECTION |
-| apps/web/src/components/PlatformDashboard.vue#9ae1b37e258dde35.1 | 319 | control | 查看数据 | PA38-DATA |
-| apps/web/src/components/PlatformDashboard.vue#f84b8209be451866.1 | 329 | control | 查看组织与管理组织和用户 | PA38-ORGANIZATIONS |
-| apps/web/src/components/PlatformDashboard.vue#5074531b9e5b8a16.1 | 333 | control | 来源导航的三处变体 | PA38-SOURCES |
-| apps/web/src/components/PlatformDashboard.vue#1ce54f6253c32ad1.1 | 335 | control | 采集进度与无趋势恢复 | PA38-QUEUE |
-| apps/web/src/components/PlatformDashboard.vue#ba487bb14816185a.1 | 351 | control | 来源导航的三处变体 | PA38-SOURCES |
-| apps/web/src/components/PlatformDashboard.vue#2e8c2f831b1b02a5.1 | 353 | control | 采集进度与无趋势恢复 | PA38-QUEUE |
-| apps/web/src/components/PlatformDashboard.vue#1c008f867673db60.1 | 463 | control | 来源与告警原生技术折叠 | PA38-TECH |
-| apps/web/src/components/PlatformDashboard.vue#d604390773d9cd06.1 | 477 | control | 来源展开收起 | PA38-PROVIDERS |
-| apps/web/src/components/PlatformDashboard.vue#1c008f867673db60.2 | 543 | control | 来源与告警原生技术折叠 | PA38-TECH |
+| apps/web/src/components/PlatformDashboard.vue#41083a84c60ec185.1 | 243 | event-binding | 切换查看范围 | PA38-WINDOW |
+| apps/web/src/components/PlatformDashboard.vue#15e83f4e8898e4d7.1 | 249 | control | 刷新与两类重试 | PA38-REFRESH |
+| apps/web/src/components/PlatformDashboard.vue#17f7411f1727355d.1 | 258 | control | 刷新与两类重试 | PA38-REFRESH |
+| apps/web/src/components/PlatformDashboard.vue#5587941412d5210f.1 | 264 | control | 重新登录入口 | PA38-LOGIN |
+| apps/web/src/components/PlatformDashboard.vue#3569d8f0f015857e.1 | 269 | control | 刷新与两类重试 | PA38-REFRESH |
+| apps/web/src/components/PlatformDashboard.vue#65c09ba74ca8870b.1 | 272 | control | 等待处理与查看任务 | PA38-COLLECTION |
+| apps/web/src/components/PlatformDashboard.vue#d1c0b626714a7ff9.1 | 276 | control | 需要关注入口 | PA38-ROOTCAUSE |
+| apps/web/src/components/PlatformDashboard.vue#52444eba9c2a98bc.1 | 292 | control | 查看组织与管理组织和用户 | PA38-ORGANIZATIONS |
+| apps/web/src/components/PlatformDashboard.vue#c4dfc8f822a18263.1 | 300 | control | 查看用户 | PA38-USERS |
+| apps/web/src/components/PlatformDashboard.vue#06b4b917d7a90e96.1 | 308 | control | 来源导航的三处变体 | PA38-SOURCES |
+| apps/web/src/components/PlatformDashboard.vue#348b42f6f4eb388b.1 | 312 | control | 等待处理与查看任务 | PA38-COLLECTION |
+| apps/web/src/components/PlatformDashboard.vue#9ae1b37e258dde35.1 | 316 | control | 查看数据 | PA38-DATA |
+| apps/web/src/components/PlatformDashboard.vue#f84b8209be451866.1 | 326 | control | 查看组织与管理组织和用户 | PA38-ORGANIZATIONS |
+| apps/web/src/components/PlatformDashboard.vue#5074531b9e5b8a16.1 | 330 | control | 来源导航的三处变体 | PA38-SOURCES |
+| apps/web/src/components/PlatformDashboard.vue#1ce54f6253c32ad1.1 | 332 | control | 采集进度与无趋势恢复 | PA38-QUEUE |
+| apps/web/src/components/PlatformDashboard.vue#ba487bb14816185a.1 | 348 | control | 来源导航的三处变体 | PA38-SOURCES |
+| apps/web/src/components/PlatformDashboard.vue#2e8c2f831b1b02a5.1 | 350 | control | 采集进度与无趋势恢复 | PA38-QUEUE |
+| apps/web/src/components/PlatformDashboard.vue#1c008f867673db60.1 | 460 | control | 来源与告警原生技术折叠 | PA38-TECH |
+| apps/web/src/components/PlatformDashboard.vue#d604390773d9cd06.1 | 474 | control | 来源展开收起 | PA38-PROVIDERS |
+| apps/web/src/components/PlatformDashboard.vue#1c008f867673db60.2 | 540 | control | 来源与告警原生技术折叠 | PA38-TECH |
 | apps/web/src/components/ResponsiveDataView.vue#6da4dad42cb34c8d.1 | 165 | control | 手机记录预览 | PA38-PREVIEW-OPEN |
 | apps/web/src/components/ResponsiveDataView.vue#c182428cb2c0ed66.1 | 172 | event-binding | 关闭与焦点循环 | PA38-PREVIEW-CLOSE |
 | apps/web/src/components/ResponsiveDataView.vue#988131834dc4bd6f.1 | 184 | control | 关闭与焦点循环 | PA38-PREVIEW-CLOSE |

@@ -166,19 +166,19 @@ SelectionJourney.vue LF SHA-256：8e0103bfda31bed992d91c61b9d84d873f73d29e1564cc
 
 | 当前行 | 当前候选尾键       | 核对边界                                                   | 稳定语义ID        |
 | ------ | ------------------ | ---------------------------------------------------------- | ----------------- |
-| 454 | feb47750cbf8d6c2.1 | 返回列表，原路由不变                                       | J-NAV-LIST        |
-| 456 | 8026812b48a68031.1 | 恢复主次事件保持                                           | J-STATE-RECOVERY  |
-| 465 | 69918daed1d2ab6a.1 | 三输入创建form与本地存储失败状态提示保持                   | J-CREATE          |
-| 513 | 8471b8c4a13a52ef.1 | 创建busy/reading禁用保持                                   | J-CREATE          |
-| 527 | 702f405d1496d1cd.1 | 原生summary切换details.open，零请求/持久化，不新增业务写入 | J-TIMELINE        |
-| 592 | ffaf47bf1a32fcaf.1 | 原文外链属性与click.stop保持                               | J-SOURCE          |
+| 451 | feb47750cbf8d6c2.1 | 返回列表，原路由不变                                       | J-NAV-LIST        |
+| 453 | 8026812b48a68031.1 | 恢复主次事件保持                                           | J-STATE-RECOVERY  |
+| 462 | 69918daed1d2ab6a.1 | 三输入创建form与本地存储失败状态提示保持                   | J-CREATE          |
+| 510 | 8471b8c4a13a52ef.1 | 创建busy/reading禁用保持                                   | J-CREATE          |
+| 524 | 702f405d1496d1cd.1 | 原生summary切换details.open，零请求/持久化，不新增业务写入 | J-TIMELINE        |
+| 589 | ffaf47bf1a32fcaf.1 | 原文外链属性与click.stop保持                               | J-SOURCE          |
 | 575 | 5d5700a54ddffff7.1 | 质量门只读说明进入原form；decide处理器不变                 | J-DECIDE [历史身份，仅追溯] |
-| 707 | 56c9199d58a1af94.1 | 保存禁用与五门规则保持                                     | J-DECIDE          |
-| 622 | ec0ddd60475ad5dd.1 | 保存表单提交及原生必填错误处理                             | J-DECIDE          |
-| 685 | b8d4d47a1d529682.1 | 空原因就地错误事件，填入后清除；busy/reading时冻结原因输入 | J-DECIDE          |
-| 718 | 2982f925c629be51.1 | 机会链接按原返回ID                                         | J-NAV-OPPORTUNITY |
-| 723 | d3e6b84b6df72d56.1 | 任务链接按原返回ID                                         | J-NAV-TASK        |
-| 733 | 283a41d530253e0d.1 | reset草稿/活动ID/读取失效语义保持                          | J-RESET           |
+| 704 | 56c9199d58a1af94.1 | 保存禁用与五门规则保持                                     | J-DECIDE          |
+| 619 | 9e94da9671f20109.1 | 保存表单提交及原生必填错误处理                             | J-DECIDE          |
+| 682 | b8d4d47a1d529682.1 | 空原因就地错误事件，填入后清除；busy/reading时冻结原因输入 | J-DECIDE          |
+| 715 | 2982f925c629be51.1 | 机会链接按原返回ID                                         | J-NAV-OPPORTUNITY |
+| 720 | d3e6b84b6df72d56.1 | 任务链接按原返回ID                                         | J-NAV-TASK        |
+| 730 | 283a41d530253e0d.1 | reset草稿/活动ID/读取失效语义保持                          | J-RESET           |
 
 阶段栏是只读aside，输入→处理→终态审阅→已决定，不以本地时间假装进度。五项质量门未选中/对象未返回显示“待核对/未返回”，严格true才“已通过”；5/5仍由原canAdopt核对topic/opportunity/recommended/all_passed，服务器保存时再验。候选报告总数与本页返回数分别展示。时间轴默认收起，Enter展开/Space收起无新增旅程HTTP；字段忙碌冻结仅保护当前提交快照，不新增关闭弹窗、取消任务或重置原因逻辑。
 

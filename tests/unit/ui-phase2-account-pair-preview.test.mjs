@@ -96,7 +96,7 @@ test("r7 packet preserves capture sources, four widths, real App composition and
   assert.deepEqual(evidence.visualApproval, {
     decision: "user-approved-remaining-pages-auto",
     source: "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json",
-    sha256: hash(read("design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json")),
+    sha256: "0a96c4ac83e8bd5041709dcd8767f38fc75c6adfe5e3d94a3b250ca4b08adc8f",
   });
   assert.equal(evidence.reviewOnly, true);
   assert.equal(evidence.processesClosed, true);

@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
@@ -14,8 +15,11 @@ import {
 const root = "design-plans/ui-phase-2-2026-09-07/design/teams-controls-direction-c";
 const e = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
 const hash = (v) => createHash("sha256").update(v).digest("hex");
-test("P33 individual controls cover every actual child candidate once without counting variants as new source actions", () => {
-  const candidates = scanSource(readFileSync(e.sourceFile, "utf8"), e.sourceFile).candidates;
+test("P33 individual controls cover every captured child candidate once without counting variants as new source actions", () => {
+  const candidates = scanSource(
+    beforePublishedPresentation(e.sourceFile, readFileSync(e.sourceFile, "utf8")),
+    e.sourceFile,
+  ).candidates;
   assert.equal(candidates.length, 20);
   const signatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
   assert.deepEqual(e.sourceSignatures, signatures);
@@ -59,7 +63,7 @@ test("P33 all control variants and reason compositions have exact dual-viewport 
 test("P33 post-capture Vue additions have current source and E2E evidence", () => {
   const capture = teamsHistoricalCapture("teams-controls-direction-c"),
     historical = scanSource(capture.source(e.sourceFile), e.sourceFile).candidates,
-    currentSource = readFileSync(e.sourceFile, "utf8"),
+    currentSource = beforePublishedPresentation(e.sourceFile, readFileSync(e.sourceFile, "utf8")),
     current = scanSource(currentSource, e.sourceFile).candidates,
     historicalIds = new Set(historical.map((c) => c.candidateId.split("#")[1])),
     additions = current.filter((c) => !historicalIds.has(c.candidateId.split("#")[1]));

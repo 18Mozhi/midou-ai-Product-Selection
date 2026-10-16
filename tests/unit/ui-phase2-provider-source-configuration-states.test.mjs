@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -114,7 +115,7 @@ test("P48 configuration-state evidence binds every state, write order, and image
   assert.equal(evidence.screenshots.length, 49);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assertCaptureSource(file, read(file), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

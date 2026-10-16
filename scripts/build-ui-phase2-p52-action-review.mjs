@@ -203,7 +203,7 @@ const definitions = [
   },
   {
     actionId: "CL52-DEAD-OPEN-TASK",
-    candidates: ["9ebd065e5010fd46.1"],
+    candidates: ["dd9928fbcb6f85f9.1"],
     label: "进入原任务详情核验死信并受控重放",
     kind: "navigation",
     condition: "当前死信记录提供单任务核查入口时。",

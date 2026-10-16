@@ -22,7 +22,8 @@ test("P01 C review separates loading and retry boundaries", async () => {
   ]);
   assert.match(reviewed, /<LandingRedirectSurface/);
   assert.match(surface, /state === 'loading' \? 'loading' : 'blocked'/);
-  assert.match(surface, /加载时不展示可重复动作/);
+  assert.match(surface, /:hide-secondary="true"/);
+  assert.match(surface, /@primary="emit\('retry'\)"/);
   assert.match(
     surface,
     /:primary-label="props\.state === 'loading' \? '正在进入工作台' : '重新检查'"/,

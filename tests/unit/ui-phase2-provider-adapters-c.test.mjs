@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -118,8 +119,13 @@ test("P47 C template retains original actions, all six models, conditions and di
   assert.ok(!source.includes("Preview"));
 });
 
-test("P47 C styles are approved composition rules rescaled only to the active production marker", () => {
-  const palette = postcss.parse(read("apps/web/src/design/provider-adapter-tokens.css"));
+test("P47 historical C styles preserve their captured composition separately from the current workspace", () => {
+  const palette = postcss.parse(
+    beforePublishedPresentation(
+      "apps/web/src/design/provider-adapter-tokens.css",
+      read("apps/web/src/design/provider-adapter-tokens.css"),
+    ),
+  );
   const values = new Map();
   palette.walkRules((rule) => {
     assert.equal(rule.selector, "html:has(body #app .adapter-center--c)");
@@ -140,7 +146,12 @@ test("P47 C styles are approved composition rules rescaled only to the active pr
     ["detail", "detail-preview"],
     ["feedback", "feedback-review"],
   ]) {
-    const actual = postcss.parse(read(`apps/web/src/provider-adapters-c-${current}.css`));
+    const actual = postcss.parse(
+      beforePublishedPresentation(
+        `apps/web/src/provider-adapters-c-${current}.css`,
+        read(`apps/web/src/provider-adapters-c-${current}.css`),
+      ),
+    );
     const expected = postcss.parse(
       read(`design-plans/ui-phase-2-2026-09-07/implementation/provider-adapters-${reference}.css`)
         .replaceAll("body.p47-adapter-review", "body")

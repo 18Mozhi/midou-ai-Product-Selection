@@ -1,3 +1,4 @@
+import { createHash } from "node:crypto";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -45,12 +46,21 @@ test("P49 review binds 143 captured images and distinguishes confirmed from unve
       assert.equal(change.currentCommit, "not-resolved");
     }
   }
-  assert.equal(html, readFileSync(`${acceptanceCaptureRoot}/index.html`, "utf8"));
-  assert.deepEqual(
-    summary,
-    JSON.parse(readFileSync(`${acceptanceCaptureRoot}/review.json`, "utf8")),
+  // The saved index is immutable capture-time evidence. A newly computed
+  // current-source comparison must not overwrite or impersonate that snapshot.
+  assert.equal(
+    createHash("sha256")
+      .update(readFileSync(`${acceptanceCaptureRoot}/index.html`))
+      .digest("hex"),
+    "00537397ec1133ba7c09cff36c0fee4838bc7736a9ba1b2912218147105fbc4f",
   );
-  assert.match(html, /现有导航壳尚未重构/);
+  assert.equal(
+    createHash("sha256")
+      .update(readFileSync(`${acceptanceCaptureRoot}/review.json`))
+      .digest("hex"),
+    "353cddb75449c601f41198a2c71d9dc9d976f2a8866ebcf3034413665c3fd8dc",
+  );
+  assert.match(html, /图包捕获时的导航壳尚未重构/);
   assert.match(html, /提交双反馈与缓存返回修复仍是提案/);
   assert.match(html, /项无法按当前溯源规则确认/);
   assert.match(html, /原图未重拍/);

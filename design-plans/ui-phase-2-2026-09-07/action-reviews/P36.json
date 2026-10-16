@@ -7,20 +7,26 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-    "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+    "apps/web/src/components/OrganizationTokenPanel.vue": "9cbca41698db90eac2ede64e0e064acbe2aad656476e5ee0448180dafbd29011"
   },
   "actions": [
     {
       "actionId": "OG-REFRESH",
       "label": "刷新令牌数据",
       "kind": "read",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"],
-      "sourceContractKeys": ["OG-REFRESH"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
+      ],
+      "sourceContractKeys": [
+        "OG-REFRESH"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "loading或refreshing禁用",
       "handler": "load({background:true})读取summary和tokens；真实GET会处理到期状态，不是数据库纯读",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -47,12 +53,18 @@
       "actionId": "OG-RETRY",
       "label": "重新读取",
       "kind": "read",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"],
-      "sourceContractKeys": ["OG-RETRY"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+      ],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "父error/blocked/expired/forbidden/rate_limited/conflict分支",
       "handler": "load()重读，保留原重试策略；不套用P34专有白区",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -83,11 +95,15 @@
         "apps/web/src/components/OrganizationAdminCenter.vue#5ae31bc55551b1dc.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#08a59be6f793cde6.1"
       ],
-      "sourceContractKeys": ["OG-RETRY"],
+      "sourceContractKeys": [
+        "OG-RETRY"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅approvals首次500/429",
       "handler": "P36不挂载这两个专有失败组件",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -114,12 +130,18 @@
       "actionId": "EX-P34-READ-FEEDBACK",
       "label": "审批读取反馈分支排除",
       "kind": "excluded",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"],
-      "sourceContractKeys": ["WIRE-P34-RETRY"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#ca4fa7a0220842a9.1"
+      ],
+      "sourceContractKeys": [
+        "WIRE-P34-RETRY"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅view===approvals且approvalReadFeedbackMode非空",
       "handler": "P36 /org-admin/tokens 不渲染该分支",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -147,15 +169,20 @@
       "label": "资料表单排除",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#e93301a7ec700ce7.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#ed75758087c9a4b8.1"
       ],
-      "sourceContractKeys": ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
+      "sourceContractKeys": [
+        "OG-PROFILE-SAVE",
+        "OG-PROFILE-LOGO浏览器有效性"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅summary",
       "handler": "保存资料/Logo检查不属本页",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -182,12 +209,18 @@
       "actionId": "EX-P29-PROFILE-TRACE",
       "label": "资料追踪披露排除",
       "kind": "excluded",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"],
-      "sourceContractKeys": ["OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"
+      ],
+      "sourceContractKeys": [
+        "OG-PROFILE-TRACE 保存请求与后续资料读取编号的原生折叠披露；不新增请求"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅summary",
       "handler": "既有资料请求/读取追踪披露不属本页",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -214,12 +247,18 @@
       "actionId": "EX-P30-MEMBERS",
       "label": "成员转发排除",
       "kind": "excluded",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"],
-      "sourceContractKeys": ["P30全部成员事件父转发，复用M语义"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#6a563eeaa67fea90.1"
+      ],
+      "sourceContractKeys": [
+        "P30全部成员事件父转发，复用M语义"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅members",
       "handler": "不计成员邀请、角色或成员变更",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -246,12 +285,18 @@
       "actionId": "EX-P31-ROLES",
       "label": "资源授权转发排除",
       "kind": "excluded",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"],
-      "sourceContractKeys": ["P31资源授权父转发，复用已有合同"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#b09d7923228aabe6.1"
+      ],
+      "sourceContractKeys": [
+        "P31资源授权父转发，复用已有合同"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "仅roles",
       "handler": "不计资源授权创建/延期/撤销",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -278,12 +323,18 @@
       "actionId": "EX-GENERIC-REASON",
       "label": "他页原因入口排除",
       "kind": "excluded",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1"],
-      "sourceContractKeys": ["D-OG-REASON通用成员/邀请/工作区/团队及P31调用"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#ab6191688d424055.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON通用成员/邀请/工作区/团队及P31调用"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "非tokenAction路径",
       "handler": "令牌调用独立ask入口，不复用通用初始原因action值",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -314,11 +365,16 @@
         "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1"
       ],
-      "sourceContractKeys": ["D-OG-REASON提交/取消父转发", "D-OG-REASON组件调用"],
+      "sourceContractKeys": [
+        "D-OG-REASON提交/取消父转发",
+        "D-OG-REASON组件调用"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "共享窗口挂载",
       "handler": "submit/cancel解析等待的原因请求，取消不发令牌POST",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -340,31 +396,46 @@
         }
       ],
       "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-      "forwardsTo": ["OG-K-ROTATE", "OG-K-REVOKE"],
+      "forwardsTo": [
+        "OG-K-ROTATE",
+        "OG-K-REVOKE"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
           "event": "@submit",
           "handler": "submitAuditedReason",
-          "targets": ["OG-K-ROTATE", "OG-K-REVOKE"]
+          "targets": [
+            "OG-K-ROTATE",
+            "OG-K-REVOKE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#773c2105d1d0d008.1",
           "event": "@cancel",
           "handler": "cancelAuditedReason",
-          "targets": ["OG-K-ROTATE", "OG-K-REVOKE"]
+          "targets": [
+            "OG-K-ROTATE",
+            "OG-K-REVOKE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
           "event": "@submit",
           "handler": "submitAuditedReason",
-          "targets": ["OG-K-ROTATE", "OG-K-REVOKE"]
+          "targets": [
+            "OG-K-ROTATE",
+            "OG-K-REVOKE"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/OrganizationAdminCenter.vue#35233f910d34fac6.1",
           "event": "@cancel",
           "handler": "cancelAuditedReason",
-          "targets": ["OG-K-ROTATE", "OG-K-REVOKE"]
+          "targets": [
+            "OG-K-ROTATE",
+            "OG-K-REVOKE"
+          ]
         }
       ]
     },
@@ -372,12 +443,18 @@
       "actionId": "W-K-ASK",
       "label": "轮换/撤销原因调用",
       "kind": "wiring",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"],
-      "sourceContractKeys": ["D-OG-REASON令牌轮换/撤销调用"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#e828f4ab0fdb0415.1"
+      ],
+      "sourceContractKeys": [
+        "D-OG-REASON令牌轮换/撤销调用"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "tokenAction调用",
       "handler": "initialValue空，未覆写minimumLength；分别标题/描述后复用原POST",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -399,19 +476,28 @@
         }
       ],
       "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-      "forwardsTo": ["OG-K-ROTATE", "OG-K-REVOKE"],
+      "forwardsTo": [
+        "OG-K-ROTATE",
+        "OG-K-REVOKE"
+      ],
       "forwardBindings": []
     },
     {
       "actionId": "OG-K-COPY",
       "label": "复制明文",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"],
-      "sourceContractKeys": ["OG-K-COPY"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-COPY"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "secret非空",
       "handler": "copySecret调用浏览器剪贴板；旧Promise反馈归属问题OG-G05仍待，不从提案推断已修复",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -438,12 +524,18 @@
       "actionId": "OG-K-DISMISS",
       "label": "关闭本次明文",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"],
-      "sourceContractKeys": ["OG-K-DISMISS"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-DISMISS"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "secret非空",
       "handler": "dismissSecret→dismissTokenSecret增加generation并清secret，不是服务器撤销",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -471,14 +563,18 @@
       "label": "创建组织令牌",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ed5969fa99d64044.1",
-        "apps/web/src/components/OrganizationTokenPanel.vue#073eb5c8ded40aa0.1"
+        "apps/web/src/components/OrganizationTokenPanel.vue#b6acefddadc9cdbb.1",
+        "apps/web/src/components/OrganizationTokenPanel.vue#40fb5f370e50828d.1"
       ],
-      "sourceContractKeys": ["OG-K-CREATE"],
+      "sourceContractKeys": [
+        "OG-K-CREATE"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "原生required/范围及scope自校验；submit由busy禁用",
       "handler": "submitCreate调用createToken精确name/scopes/ttl_days/reason；失败留草稿，成功重置90和空scope",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -505,12 +601,18 @@
       "actionId": "OG-K-SCOPE",
       "label": "选择读取范围",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
-      "sourceContractKeys": ["OG-K-SCOPE四种"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-SCOPE四种"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "四固定复选框，等待时仍可编辑",
       "handler": "toggleScope只编辑草稿scope数组，不直接发授权请求",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -537,12 +639,18 @@
       "actionId": "OG-K-TTL",
       "label": "有效期快捷选择",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
-      "sourceContractKeys": ["OG-K-TTL四快捷"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-TTL四快捷"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "30/90/180/365与aria-pressed",
       "handler": "只赋createForm.ttl_days，等待仍可编辑",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -569,12 +677,18 @@
       "actionId": "OG-K-FILTER",
       "label": "重置筛选",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"],
-      "sourceContractKeys": ["OG-K-FILTER重置"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-FILTER重置"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "本地四条件，等待可用",
       "handler": "resetFilters清四条件；条件变化watch才回第一页，默认条件不强制翻页",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -601,12 +715,18 @@
       "actionId": "OG-TECH",
       "label": "技术详情",
       "kind": "local",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"],
-      "sourceContractKeys": ["OG-TECH"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
+      ],
+      "sourceContractKeys": [
+        "OG-TECH"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "可见记录的原生details",
       "handler": "展示记录ID/版本/时间，不请求、复制或打开业务弹窗",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -633,12 +753,18 @@
       "actionId": "OG-K-ROTATE",
       "label": "轮换密钥",
       "kind": "write",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"],
-      "sourceContractKeys": ["OG-K-ROTATE"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-ROTATE"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "active且非busy",
       "handler": "performTokenAction(item,'rotate')→tokenAction；原因确认后POST action/expected_version/reason",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -665,12 +791,18 @@
       "actionId": "OG-K-REVOKE",
       "label": "撤销访问",
       "kind": "write",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"],
-      "sourceContractKeys": ["OG-K-REVOKE"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"
+      ],
+      "sourceContractKeys": [
+        "OG-K-REVOKE"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "active且非busy",
       "handler": "performTokenAction(item,'revoke')→tokenAction；取消返回false，不发POST",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -701,11 +833,15 @@
         "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1",
         "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
       ],
-      "sourceContractKeys": ["OG-K-PAGE"],
+      "sourceContractKeys": [
+        "OG-K-PAGE"
+      ],
       "contractAliasReason": "复用F04完整合同单元格，变体不重复计源动作。",
       "condition": "首尾按钮禁用",
       "handler": "本地6条一页，更新原URL，不新增服务端分页",
-      "variants": ["source-current"],
+      "variants": [
+        "source-current"
+      ],
       "scenes": [
         {
           "package": "org-token-direction-c",
@@ -772,19 +908,26 @@
     {
       "prop": "createToken",
       "parentHandler": "createOrganizationToken",
-      "actions": ["OG-K-CREATE"],
+      "actions": [
+        "OG-K-CREATE"
+      ],
       "effect": "清旧secret后POST /org/admin/tokens，原value和preserveForm:true"
     },
     {
       "prop": "performTokenAction",
       "parentHandler": "tokenAction",
-      "actions": ["OG-K-ROTATE", "OG-K-REVOKE"],
+      "actions": [
+        "OG-K-ROTATE",
+        "OG-K-REVOKE"
+      ],
       "effect": "空初始原因，确认后POST /org/admin/tokens/:id/actions含action/expected_version/reason"
     },
     {
       "prop": "dismissSecret",
       "parentHandler": "dismissTokenSecret",
-      "actions": ["OG-K-DISMISS"],
+      "actions": [
+        "OG-K-DISMISS"
+      ],
       "effect": "generation加一并清明文，不请求服务器"
     }
   ],
@@ -806,8 +949,16 @@
     {
       "id": "catalog-nav",
       "selector": "[data-anchor=\"catalog-title\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -861,8 +1012,16 @@
     {
       "id": "create-nav",
       "selector": "[data-anchor=\"create-name\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -916,13 +1075,24 @@
     {
       "id": "refresh",
       "selector": "#refresh",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "busy"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": true,
       "actionId": "OG-REFRESH",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#a1fb5dc1b30f9733.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -981,13 +1151,23 @@
     {
       "id": "retry",
       "selector": "#retry",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": true,
       "actionId": "OG-RETRY",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1036,8 +1216,16 @@
     {
       "id": "create-jump",
       "selector": "#new-token",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -1091,13 +1279,23 @@
     {
       "id": "reset",
       "selector": "#reset",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-FILTER",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#66725db5db9a8fe8.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1146,8 +1344,16 @@
     {
       "id": "clear",
       "selector": "#clear-filter",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -1201,13 +1407,23 @@
     {
       "id": "technical-closed",
       "selector": ".technical summary",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-TECH",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1256,13 +1472,23 @@
     {
       "id": "technical-open",
       "selector": ".technical summary",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-TECH",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#1c008f867673db60.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1311,13 +1537,23 @@
     {
       "id": "previous",
       "selector": "[data-page=\"-1\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-PAGE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1366,13 +1602,20 @@
     {
       "id": "previous-disabled",
       "selector": "[data-page=\"-1\"]",
-      "widths": [1440, 390],
-      "states": ["disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "disabled"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-PAGE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#d27cb4f69e0d30d7.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1391,13 +1634,23 @@
     {
       "id": "next",
       "selector": "[data-page=\"1\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-PAGE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1446,13 +1699,20 @@
     {
       "id": "next-disabled",
       "selector": "[data-page=\"1\"]",
-      "widths": [1440, 390],
-      "states": ["disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "disabled"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-PAGE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#169268616bd2a69a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1471,15 +1731,24 @@
     {
       "id": "create",
       "selector": "#create-submit",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "busy"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-CREATE",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTokenPanel.vue#ed5969fa99d64044.1",
-        "apps/web/src/components/OrganizationTokenPanel.vue#073eb5c8ded40aa0.1"
+        "apps/web/src/components/OrganizationTokenPanel.vue#b6acefddadc9cdbb.1",
+        "apps/web/src/components/OrganizationTokenPanel.vue#40fb5f370e50828d.1"
       ],
       "sharedSourceIds": [],
       "screenshots": [
@@ -1539,13 +1808,23 @@
     {
       "id": "ttl-30-unselected",
       "selector": "[data-ttl=\"30\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1594,13 +1873,23 @@
     {
       "id": "ttl-30-selected",
       "selector": "[data-ttl=\"30\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1649,13 +1938,23 @@
     {
       "id": "ttl-90-unselected",
       "selector": "[data-ttl=\"90\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1704,13 +2003,23 @@
     {
       "id": "ttl-90-selected",
       "selector": "[data-ttl=\"90\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1759,13 +2068,23 @@
     {
       "id": "ttl-180-unselected",
       "selector": "[data-ttl=\"180\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1814,13 +2133,23 @@
     {
       "id": "ttl-180-selected",
       "selector": "[data-ttl=\"180\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1869,13 +2198,23 @@
     {
       "id": "ttl-365-unselected",
       "selector": "[data-ttl=\"365\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1924,13 +2263,23 @@
     {
       "id": "ttl-365-selected",
       "selector": "[data-ttl=\"365\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-TTL",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ee181e5ac85b01ec.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -1979,13 +2328,23 @@
     {
       "id": "scope-0-unchecked",
       "selector": "#scope-0",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2034,13 +2393,23 @@
     {
       "id": "scope-0-checked",
       "selector": "#scope-0",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2089,13 +2458,23 @@
     {
       "id": "scope-1-unchecked",
       "selector": "#scope-1",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2144,13 +2523,23 @@
     {
       "id": "scope-1-checked",
       "selector": "#scope-1",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2199,13 +2588,23 @@
     {
       "id": "scope-2-unchecked",
       "selector": "#scope-2",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2254,13 +2653,23 @@
     {
       "id": "scope-2-checked",
       "selector": "#scope-2",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2309,13 +2718,23 @@
     {
       "id": "scope-3-unchecked",
       "selector": "#scope-3",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2364,13 +2783,23 @@
     {
       "id": "scope-3-checked",
       "selector": "#scope-3",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-SCOPE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#ab0838b07b48fd2a.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2419,13 +2848,23 @@
     {
       "id": "copy",
       "selector": "#copy",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-COPY",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2474,13 +2913,23 @@
     {
       "id": "copy-copied",
       "selector": "#copy",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-COPY",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2529,13 +2978,23 @@
     {
       "id": "copy-failed",
       "selector": "#copy",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-COPY",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#6d8d1a59210a6ea0.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2584,13 +3043,23 @@
     {
       "id": "dismiss",
       "selector": "#dismiss",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-DISMISS",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#b3a4e8d62ca470a9.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2639,13 +3108,24 @@
     {
       "id": "rotate",
       "selector": "[data-action=\"rotate\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "busy"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#00a635020f530ba8.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2704,14 +3184,24 @@
     {
       "id": "rotate-close",
       "selector": "#reason-close",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"
+      ],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/rotate-close-default-1440.png",
@@ -2759,14 +3249,24 @@
     {
       "id": "rotate-cancel",
       "selector": "#reason-cancel",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"
+      ],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/rotate-cancel-default-1440.png",
@@ -2814,14 +3314,25 @@
     {
       "id": "rotate-submit",
       "selector": "#reason-submit",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-ROTATE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
+      ],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/rotate-submit-default-1440.png",
@@ -2879,13 +3390,24 @@
     {
       "id": "revoke",
       "selector": "[data-action=\"revoke\"]",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "busy"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "busy"
+      ],
       "proposalOnly": false,
       "sharedReason": false,
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
-      "sourceCandidateIds": ["apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"],
+      "sourceCandidateIds": [
+        "apps/web/src/components/OrganizationTokenPanel.vue#5b6c117ef94cbbb0.1"
+      ],
       "sharedSourceIds": [],
       "screenshots": [
         {
@@ -2944,14 +3466,24 @@
     {
       "id": "revoke-close",
       "selector": "#reason-close",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#f850a4abcc7ccc3a.1"
+      ],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/revoke-close-default-1440.png",
@@ -2999,14 +3531,24 @@
     {
       "id": "revoke-cancel",
       "selector": "#reason-cancel",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#8724bc1f65aaf63a.1"
+      ],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/revoke-cancel-default-1440.png",
@@ -3054,14 +3596,25 @@
     {
       "id": "revoke-submit",
       "selector": "#reason-submit",
-      "widths": [1440, 390],
-      "states": ["default", "hover", "focus", "pressed", "disabled"],
+      "widths": [
+        1440,
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed",
+        "disabled"
+      ],
       "proposalOnly": false,
       "sharedReason": true,
       "parentReference": false,
       "actionId": "OG-K-REVOKE",
       "sourceCandidateIds": [],
-      "sharedSourceIds": ["apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"],
+      "sharedSourceIds": [
+        "apps/web/src/components/AuditedReasonDialog.vue#e7e63c4215a43738.1"
+      ],
       "screenshots": [
         {
           "file": "output/playwright/p36-controls-review/revoke-submit-default-1440.png",
@@ -3119,8 +3672,15 @@
     {
       "id": "filters-closed",
       "selector": "#filters-toggle",
-      "widths": [390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -3154,8 +3714,15 @@
     {
       "id": "filters-open",
       "selector": "#filters-toggle",
-      "widths": [390],
-      "states": ["default", "hover", "focus", "pressed"],
+      "widths": [
+        390
+      ],
+      "states": [
+        "default",
+        "hover",
+        "focus",
+        "pressed"
+      ],
       "proposalOnly": true,
       "sharedReason": false,
       "parentReference": false,
@@ -3780,8 +4347,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-      "apps/web/src/components/OrganizationTokenPanel.vue": "f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+      "apps/web/src/components/OrganizationTokenPanel.vue": "9cbca41698db90eac2ede64e0e064acbe2aad656476e5ee0448180dafbd29011"
     },
     "inputs": [
       {
@@ -4572,48 +5139,6 @@
       },
       {
         "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-        "tag": "aside",
-        "ordinal": 1,
-        "shape": "inline-aside",
-        "sourceBehavior": "顶部固定只读scope和明文边界说明",
-        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-        "variants": [
-          {
-            "name": "security",
-            "evidenceScope": "related-scene-only",
-            "scenes": [
-              {
-                "package": "org-token-direction-c",
-                "scene": "normal"
-              }
-            ],
-            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
-          }
-        ]
-      },
-      {
-        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
-        "tag": "aside",
-        "ordinal": 2,
-        "shape": "inline-aside",
-        "sourceBehavior": "组织权限说明，非弹窗/关闭通知",
-        "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
-        "variants": [
-          {
-            "name": "truth",
-            "evidenceScope": "related-scene-only",
-            "scenes": [
-              {
-                "package": "org-token-direction-c",
-                "scene": "normal"
-              }
-            ],
-            "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。"
-          }
-        ]
-      },
-      {
-        "file": "apps/web/src/components/OrganizationTokenPanel.vue",
         "tag": "form",
         "ordinal": 1,
         "shape": "form-container",
@@ -4658,7 +5183,7 @@
       {
         "file": "apps/web/src/components/OrganizationTokenPanel.vue",
         "tag": "aside",
-        "ordinal": 3,
+        "ordinal": 1,
         "shape": "inline-aside",
         "sourceBehavior": "创建预览只解释草稿范围和预计到期，不是真实响应",
         "remaining": "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
@@ -4677,14 +5202,22 @@
         ]
       }
     ],
-    "sharedRemaining": ["6处caller结构不等于6个业务弹窗；共享原生原因窗仅两种上下文。", "共享reason字段和6个源位置单独登记，原提案max500、busy草稿锁与复制归属保护不冒充实际Vue。"]
+    "sharedRemaining": [
+      "4处现行caller结构不等于4个业务弹窗；原顶部说明框与权限说明框已从当前界面移除，旧图包仅保留历史；共享原生原因窗仅两种上下文。",
+      "共享reason字段和6个源位置单独登记，原提案max500、busy草稿锁与复制归属保护不冒充实际Vue。"
+    ]
   },
-  "approvalRecords": ["P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"],
+  "approvalRecords": [
+    "P36-MOBILE-FILTER-COMPOSITION-APPROVAL.md"
+  ],
   "compositionGaps": [
     "本页仅手机四筛选字段/帮助/底部重置获局部批准并有真实子Vue证据；创建及其他控件问题仍待答。",
     "原662PNG与10实图分别关联，独立schema不强充统一六态slot，72个路由动作槽仍not-mapped。",
     "父级完整错误/刷新、URL历史、路由/组织/KeepAlive生命周期、OG-G05、真实MySQL/权限/审计/幂等与全73页部署验收仍待。",
     "既有P35颜色门失败仍未获修复授权；不以本登记通过代替完整测试或自动提交。"
   ],
-  "limits": ["源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。", "本登记不改生产代码/API/env/依赖/权限或数据库，不授予批准。"]
+  "limits": [
+    "源码/独立图关联，不是完整C、父级生命周期、真实权限/API或生产验收。",
+    "本登记不改生产代码/API/env/依赖/权限或数据库，不授予批准。"
+  ]
 }

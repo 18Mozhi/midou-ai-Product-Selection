@@ -497,3 +497,165 @@ test("M02-06 home state errors expose only the wired retry action", async ({ pag
   await expect(page.getByText("重新读取后可见")).toBeVisible();
   expect(reads).toBeGreaterThan(readsBeforeRetry);
 });
+
+test("home continuously reads new results and stops when cached off route", async ({
+  page,
+}, testInfo) => {
+  await nav(page);
+  await page.clock.install();
+  let reads = 0;
+  await page.route("**/api/v1/me/home-dashboard", (route) => {
+    reads++;
+    return route.fulfill({
+      json: envelope({
+        automatic_selection: {
+          state: "running",
+          enabled_rule_count: 1,
+          candidate_count: reads,
+          rule_candidate_count: reads,
+          recommended_count: 1,
+          awaiting_evidence_count: 0,
+          adopted_count: 0,
+          recommended_items: [item("live", "action", `最新结果 ${reads}`, "/opportunities")],
+          last_collection_at: at,
+          next_collection_at: at,
+        },
+        actions: [],
+        changes: [],
+        follows: [],
+        health: [],
+        scope: { organization_id: org, workspace_id: workspace },
+        generated_at: at,
+      }),
+    });
+  });
+  await page.goto("/home");
+  await expect(page.getByText("最新结果 1", { exact: true })).toBeVisible();
+  await page.clock.runFor(5100);
+  await expect(page.getByText("最新结果 2", { exact: true })).toBeVisible();
+  await page.route("**/api/v1/notifications**", (route) =>
+    route.fulfill({ json: envelope({ items: [], total: 0 }) }),
+  );
+  if (testInfo.project.name === "mobile-390")
+    await page.getByRole("button", { name: "打开导航菜单", exact: true }).click();
+  await page
+    .locator(
+      testInfo.project.name === "mobile-390"
+        ? ".role-navigation-frame"
+        : ".role-desktop-navigation",
+    )
+    .getByRole("link", { name: "通知中心", exact: true })
+    .click();
+  await expect(page).toHaveURL(/notifications/);
+  const paused = reads;
+  await page.clock.runFor(16000);
+  expect(reads).toBe(paused);
+  await page.goBack();
+  await expect(page.getByText(`最新结果 ${paused + 1}`, { exact: true })).toBeVisible();
+});
+
+test("home background expiry clears protected cached results", async ({ page }) => {
+  await nav(page);
+  await page.clock.install();
+  let reads = 0;
+  let expired = true;
+  await page.route("**/api/v1/me/home-dashboard", (route) => {
+    reads++;
+    return reads === 1 || !expired
+      ? route.fulfill({
+          json: envelope({
+            automatic_selection: {
+              state: "running",
+              enabled_rule_count: 1,
+              candidate_count: 1,
+              rule_candidate_count: 1,
+              recommended_count: 1,
+              awaiting_evidence_count: 0,
+              adopted_count: 0,
+              recommended_items: [item("secret", "action", "工作区受保护结果", "/opportunities")],
+              last_collection_at: at,
+              next_collection_at: at,
+            },
+            actions: [],
+            changes: [],
+            follows: [],
+            health: [],
+            scope: { organization_id: org, workspace_id: workspace },
+            generated_at: at,
+          }),
+        })
+      : route.fulfill({
+          status: 401,
+          json: { error: { code: "session_expired", action_hint: "请重新登录" } },
+        });
+  });
+  await page.goto("/home");
+  await expect(page.getByText("工作区受保护结果", { exact: true })).toBeVisible();
+  await page.clock.runFor(5100);
+  await expect(page.getByText("工作区受保护结果", { exact: true })).toHaveCount(0);
+  const stopped = reads;
+  await page.clock.runFor(15000);
+  expect(reads).toBe(stopped);
+  expired = false;
+  await page
+    .locator(".ui-state-panel")
+    .getByRole("button", { name: "重新读取", exact: true })
+    .click();
+  await expect(page.getByText("工作区受保护结果", { exact: true })).toBeVisible();
+  await page.clock.runFor(5100);
+  await expect.poll(() => reads).toBeGreaterThan(stopped + 1);
+});
+
+test("home polling keeps a closed setup and unsaved keyword draft without overlapping reads", async ({
+  page,
+}) => {
+  await nav(page);
+  await page.clock.install();
+  let reads = 0;
+  let release: (() => void) | undefined;
+  const summary = {
+    actions: [],
+    changes: [],
+    follows: [],
+    health: [],
+    scope: { organization_id: org, workspace_id: workspace },
+    generated_at: at,
+    automatic_selection: {
+      state: "not_configured",
+      enabled_rule_count: 0,
+      candidate_count: 0,
+      rule_candidate_count: 0,
+      recommended_count: 0,
+      awaiting_evidence_count: 0,
+      adopted_count: 0,
+      recommended_items: [],
+      last_collection_at: null,
+      next_collection_at: null,
+    },
+  };
+  await page.route("**/api/v1/me/home-dashboard", async (route) => {
+    reads++;
+    if (reads === 2)
+      await new Promise<void>((resolve) => {
+        release = resolve;
+      });
+    await route.fulfill({ json: envelope(summary) });
+  });
+  await page.goto("/home");
+  await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeVisible();
+  await page
+    .getByRole("textbox", { name: "想找的商品关键词 多个关键词用逗号分隔。", exact: true })
+    .fill("保留未提交的关键词");
+  await page.getByRole("button", { name: "收起设置", exact: true }).click();
+  await page.clock.runFor(5100);
+  await expect.poll(() => reads).toBe(2);
+  await page.clock.runFor(16000);
+  expect(reads).toBe(2);
+  release?.();
+  await expect(page.getByRole("button", { name: "刷新", exact: true })).toBeEnabled();
+  await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeHidden();
+  await page.getByRole("button", { name: "开始设置", exact: true }).click();
+  await expect(
+    page.getByRole("textbox", { name: "想找的商品关键词 多个关键词用逗号分隔。", exact: true }),
+  ).toHaveValue("保留未提交的关键词");
+});

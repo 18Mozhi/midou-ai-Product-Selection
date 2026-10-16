@@ -1,3 +1,5 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import { adminHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-historical-capture.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
@@ -42,7 +44,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
       if (mode === "baseline")
         assert.equal(hash(historicalAdminControlsSource(file, source)), sha, file);
       else if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, source, sha);
-      else assert.equal(hash(source), sha, file);
+      else assertCaptureSource(file, source, sha, file);
       assert.ok(!file.includes("-preview.css"), file);
     }
     assert.deepEqual(
@@ -164,7 +166,10 @@ test("historical P44 controls-only parent appends stylesheet; script/template an
 
 test("historical association fails closed for an unregistered source and preserves CRLF equivalence", () => {
   const current = read(adminControlsRevision.file);
-  assert.equal(hash(current), adminControlsRevision.after);
+  assert.equal(
+    hash(beforePublishedPresentation(adminControlsRevision.file, current)),
+    adminControlsRevision.after,
+  );
   assert.equal(
     hash(historicalAdminControlsSource(adminControlsRevision.file, current)),
     adminControlsRevision.before,

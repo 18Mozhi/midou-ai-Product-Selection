@@ -7,8 +7,8 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-    "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+    "apps/web/src/components/OrganizationDataPanel.vue": "bfb7f0f4360642e247db0640696c113678bb00309b36fd0c361f447297424969"
   },
   "actions": [
     {
@@ -207,9 +207,9 @@
       "label": "组织资料排除",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#e93301a7ec700ce7.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#ed75758087c9a4b8.1"
       ],
       "sourceContractKeys": [
         "OG-PROFILE-SAVE",
@@ -2397,8 +2397,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-      "apps/web/src/components/OrganizationDataPanel.vue": "00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+      "apps/web/src/components/OrganizationDataPanel.vue": "bfb7f0f4360642e247db0640696c113678bb00309b36fd0c361f447297424969"
     },
     "inputs": [
       {

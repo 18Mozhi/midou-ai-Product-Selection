@@ -389,37 +389,31 @@ export class AuthorizationService {
       isSuper = subject.platform_capabilities.includes("platform:superadmin"),
       canOperate = subject.platform_capabilities.includes("platform:operate"),
       canSecure = subject.platform_capabilities.includes("platform:secure");
-    const landing = subject.platform_role_codes.length
-      ? {
-          shell: "platform_admin" as const,
-          route: (isSuper || canOperate
-            ? "/platform-admin"
-            : canSecure
-              ? "/platform-admin/security"
-              : "/platform-admin") as "/platform-admin" | "/platform-admin/security",
-          reason:
-            canSecure && !isSuper && !canOperate
-              ? "landing_platform_security"
-              : "landing_platform_admin",
-          capability: (isSuper
-            ? "platform:superadmin"
-            : canOperate
-              ? "platform:operate"
-              : "platform:secure") as Capability,
-        }
-      : context && subject.membership_active && subject.role_codes.includes("organization_admin")
+    const landing =
+      context && subject.membership_active
         ? {
-            shell: "organization_admin" as const,
-            route: "/org-admin" as const,
-            reason: "landing_organization_admin",
-            capability: "organization:manage" as Capability,
+            shell: "member" as const,
+            route: "/home" as const,
+            reason: "landing_member",
+            capability: "task:read" as Capability,
           }
-        : context && subject.membership_active
+        : subject.platform_role_codes.length
           ? {
-              shell: "member" as const,
-              route: "/home" as const,
-              reason: "landing_member",
-              capability: "task:read" as Capability,
+              shell: "platform_admin" as const,
+              route: (isSuper || canOperate
+                ? "/platform-admin"
+                : canSecure
+                  ? "/platform-admin/security"
+                  : "/platform-admin") as "/platform-admin" | "/platform-admin/security",
+              reason:
+                canSecure && !isSuper && !canOperate
+                  ? "landing_platform_security"
+                  : "landing_platform_admin",
+              capability: (isSuper
+                ? "platform:superadmin"
+                : canOperate
+                  ? "platform:operate"
+                  : "platform:secure") as Capability,
             }
           : (await this.repository.hasActiveMembership(actorId))
             ? {

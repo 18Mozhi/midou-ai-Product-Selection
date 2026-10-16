@@ -7,8 +7,8 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-    "apps/web/src/components/OrganizationTeamPanel.vue": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+    "apps/web/src/components/OrganizationTeamPanel.vue": "18d06e5aad5b485ee277ef457f2e58de10c50ff1be922417033572cf33510eea"
   },
   "actions": [
     {
@@ -525,8 +525,8 @@
       "label": "资料分支排除",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#e93301a7ec700ce7.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ed75758087c9a4b8.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
       ],
       "sourceContractKeys": [
@@ -1145,8 +1145,8 @@
       "label": "创建团队",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationTeamPanel.vue#1ea0ce8ecc982edd.1",
-        "apps/web/src/components/OrganizationTeamPanel.vue#bae4e728dfc90592.1"
+        "apps/web/src/components/OrganizationTeamPanel.vue#04d2beb7bc6b150f.1",
+        "apps/web/src/components/OrganizationTeamPanel.vue#82a3867867534186.1"
       ],
       "sourceContractKeys": [
         "OG-T-CREATE"
@@ -1274,8 +1274,8 @@
           "selector": "#create-submit",
           "package": "teams-controls-direction-c",
           "sourceCandidateIds": [
-            "apps/web/src/components/OrganizationTeamPanel.vue#1ea0ce8ecc982edd.1",
-            "apps/web/src/components/OrganizationTeamPanel.vue#bae4e728dfc90592.1"
+            "apps/web/src/components/OrganizationTeamPanel.vue#04d2beb7bc6b150f.1",
+            "apps/web/src/components/OrganizationTeamPanel.vue#82a3867867534186.1"
           ],
           "states": {
             "default": "create-default",
@@ -2634,7 +2634,7 @@
       "kind": "navigation",
       "sourceCandidateIds": [
         "apps/web/src/components/OrganizationTeamPanel.vue#76054446429e86da.1",
-        "apps/web/src/components/OrganizationTeamPanel.vue#2db399169624cf8a.1"
+        "apps/web/src/components/OrganizationTeamPanel.vue#95e38f5ffae70cab.1"
       ],
       "sourceContractKeys": [
         "OG-T-LINK成员/工作区"
@@ -2752,7 +2752,7 @@
           "selector": "a[href='/org-admin/workspaces']",
           "package": "teams-controls-direction-c",
           "sourceCandidateIds": [
-            "apps/web/src/components/OrganizationTeamPanel.vue#2db399169624cf8a.1"
+            "apps/web/src/components/OrganizationTeamPanel.vue#95e38f5ffae70cab.1"
           ],
           "states": {
             "default": "workspaces-default",
@@ -2963,8 +2963,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-      "apps/web/src/components/OrganizationTeamPanel.vue": "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+      "apps/web/src/components/OrganizationTeamPanel.vue": "18d06e5aad5b485ee277ef457f2e58de10c50ff1be922417033572cf33510eea",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"
     },

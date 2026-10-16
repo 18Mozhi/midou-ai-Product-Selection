@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CollectionRuntimeCenter.vue": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
+    "apps/web/src/components/CollectionRuntimeCenter.vue": "c701d060832d9bae60976657890b9f6c58376b077dd6725517df684255aee5e9"
   },
   "inputs": {
     "apps/web/src/components/CollectionRuntimeCenter.vue": [
@@ -375,7 +375,7 @@
       "apps/web/src/components/CollectionRuntimeCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CollectionRuntimeCenter.vue": "7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381"
+      "apps/web/src/components/CollectionRuntimeCenter.vue": "c701d060832d9bae60976657890b9f6c58376b077dd6725517df684255aee5e9"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

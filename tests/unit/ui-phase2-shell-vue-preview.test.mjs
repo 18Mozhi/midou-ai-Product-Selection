@@ -37,9 +37,11 @@ test("production C shell colors stay inside its page-scoped semantic token sheet
     readFile("apps/web/src/design/navigation-shell-c-tokens.css", "utf8"),
   ]);
   const names = new Set(
-    [...tokens.matchAll(/(--shell-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|rgb\([^;]+\));/gi)].map(
-      (match) => match[1],
-    ),
+    [
+      ...tokens.matchAll(
+        /(--shell-[a-z-]+):\s*(?:#[0-9a-f]{3,6}|var\(--glass-[a-z-]+\)|rgb\([^;]+\));/gi,
+      ),
+    ].map((match) => match[1]),
   );
   const references = new Set(
     [...css.matchAll(/var\((--shell-[a-z-]+)\)/g)].map((match) => match[1]),

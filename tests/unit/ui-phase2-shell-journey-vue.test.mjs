@@ -1,3 +1,5 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
@@ -61,7 +63,8 @@ test("r4 preserves exact historical sources/images with a separately checked cur
   assert.match(evidence.sourceCommit, /^[a-f0-9]{40}$/u);
   assert.equal(evidence.sourceSha, hash(JSON.stringify(evidence.sourceHashes)));
   for (const [file, sha] of Object.entries(evidence.sourceHashes)) {
-    const current = (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
+    const raw = (await readFile(file, "utf8")).replaceAll("\r\n", "\n");
+    const current = beforePublishedPresentation(file, raw);
     if (file === "apps/web/src/components/SelectionJourney.vue" && hash(current) !== sha) {
       const previous = execFileSync(
         "git",
@@ -76,7 +79,7 @@ test("r4 preserves exact historical sources/images with a separately checked cur
       assertBlockedJourneyDelta(previous, current);
       assert.throws(() => assertBlockedJourneyDelta(previous, current + "\n// unrelated change"));
       assert.equal((await buildShellJourneyFixture()).journey.state, "result_ready");
-    } else assert.equal(hash(current), sha, file);
+    } else assertCaptureSource(file, raw, sha, file);
   }
   for (const shot of evidence.screenshots) {
     const bytes = await readFile(`${root}/${shot.file}`);

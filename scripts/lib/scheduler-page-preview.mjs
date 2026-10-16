@@ -26,16 +26,17 @@ const once = (value, before, after) => {
 // Review-only transformation: source request, filter, pagination and recovery handlers remain byte-for-byte intact.
 export function previewSchedulerPage(input) {
   const source = input.replaceAll("\r\n", "\n");
-  if (source.includes('class="crawler-scheduler crawler-scheduler--c"'))
-    return once(
-      once(
-        source,
-        'class="crawler-scheduler crawler-scheduler--c"',
-        'class="crawler-scheduler crawler-scheduler--review"',
-      ),
-      '<aside class="p70-boundary"',
-      '<p class="p70-review-note">实际 Vue C 审核版 · 本地样例 · 不发送恢复或健康检查 · 尚未部署</p><aside class="p70-boundary"',
+  if (source.includes('class="crawler-scheduler crawler-scheduler--c"')) {
+    const reviewed = once(
+      source,
+      'class="crawler-scheduler crawler-scheduler--c"',
+      'class="crawler-scheduler crawler-scheduler--review"',
     );
+    return reviewed.replace(
+      /(<section\s+class="crawler-scheduler crawler-scheduler--review"[^>]*>)/,
+      '$1<p class="p70-review-note">实际 Vue C 审核版 · 本地样例 · 不发送恢复或健康检查 · 尚未部署</p>',
+    );
+  }
   const template = source.slice(
     source.indexOf("<template>") + 10,
     source.lastIndexOf("</template>"),

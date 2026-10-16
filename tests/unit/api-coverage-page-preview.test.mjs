@@ -16,7 +16,7 @@ test("P63 C review separates catalog state and five-dimensional operation eviden
   const template = preview.template.content;
   for (const id of ["p63-truth", "p63-summary", "p63-breakdowns", "p63-operations"])
     assert.ok(template.includes(id), id);
-  assert.match(template, /报告本身不等于全量生产验收/);
+  assert.match(template, /报告仅适用于其对应的构建版本，请核对下方验证结果。/);
   assert.match(operationCard, /查看五维证据/);
   assert.match(operationCard, /item\.test_id/);
   assert.match(operationCard, /item\.latest_result/);

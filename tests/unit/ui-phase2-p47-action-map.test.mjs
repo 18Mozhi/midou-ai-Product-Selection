@@ -72,5 +72,5 @@ test("P47 keeps external probe and runtime acceptance boundaries explicit", () =
     packages: context.packages,
   });
   assert.equal(surface.runtimeAcceptance, "unproven");
-  assert.equal(surface.callerContainers, 2);
+  assert.equal(surface.callerContainers, 1);
 });

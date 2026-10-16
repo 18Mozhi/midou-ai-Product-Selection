@@ -26,16 +26,17 @@ const once = (value, before, after) => {
 // Review-only transformation: production request, attestation and snapshot code remain byte-for-byte intact.
 export function previewCapacityPage(input) {
   const source = input.replaceAll("\r\n", "\n");
-  if (source.includes('class="capacity-boundary capacity-boundary--c"'))
-    return once(
-      once(
-        source,
-        'class="capacity-boundary capacity-boundary--c"',
-        'class="capacity-boundary capacity-boundary--review"',
-      ),
-      '<aside class="p71-boundary"',
-      '<p class="p71-review-note">实际 Vue C 审核版 · 本地样例 · 不签认演练或读取生产测量 · 尚未部署</p><aside class="p71-boundary"',
+  if (source.includes('class="capacity-boundary capacity-boundary--c"')) {
+    const reviewed = once(
+      source,
+      'class="capacity-boundary capacity-boundary--c"',
+      'class="capacity-boundary capacity-boundary--review"',
     );
+    return reviewed.replace(
+      /(<section\s+class="capacity-boundary capacity-boundary--review"[^>]*>)/,
+      '$1<p class="p71-review-note">实际 Vue C 审核版 · 本地样例 · 不签认演练或读取生产测量 · 尚未部署</p>',
+    );
+  }
   const template = source.slice(
     source.indexOf("<template>") + 10,
     source.lastIndexOf("</template>"),

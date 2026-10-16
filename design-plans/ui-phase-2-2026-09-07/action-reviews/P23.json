@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TaskWorkspace.vue": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25",
+    "apps/web/src/components/TaskWorkspace.vue": "5d5eb4c4fda461aecfd9dd5beaf4481d6ba1c41cb6d9b510379be6c936f84045",
     "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
     "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b",
     "apps/web/src/components/TaskExportJobsPanel.vue": "40175f5b0cf7f7d1d9b24a7c5ca1746b0327654bb01996ffec8bf5f8bfd561c4"
@@ -142,8 +142,7 @@
         "later-page",
         "loading-old-total"
       ],
-      "scenes": [
-      ],
+      "scenes": [],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-task-list-review.mjs",
@@ -182,8 +181,7 @@
         "next",
         "last-disabled"
       ],
-      "scenes": [
-      ],
+      "scenes": [],
       "testReferences": [
         {
           "file": "scripts/verify-ui-phase2-task-list-review.mjs",
@@ -333,7 +331,7 @@
       "kind": "local",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#8acacf9139ac6dfa.1",
+        "apps/web/src/components/TaskWorkspace.vue#4c8a77ea02302912.1",
         "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1",
         "apps/web/src/components/TaskWorkspace.vue#a51d0235ae15a867.1"
       ],
@@ -382,7 +380,7 @@
       "kind": "write",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#8761299256f1d051.1",
+        "apps/web/src/components/TaskWorkspace.vue#53dd07a6ae88b4ba.1",
         "apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1"
       ],
       "sourceContractKeys": [
@@ -1728,7 +1726,7 @@
       "kind": "wiring",
       "routeApplicability": "P23 mode=all、无taskId；business列表与report:read导出视图分别核对；非P13本人范围或P24详情",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#6c7534a24387a114.1"
+        "apps/web/src/components/TaskWorkspace.vue#98beaf0a6d35c75b.1"
       ],
       "sourceContractKeys": [
         "task.delete：显示目标、影响、原因及保留审计的事实"
@@ -2011,7 +2009,7 @@
       "apps/web/src/components/TaskExportJobsPanel.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TaskWorkspace.vue": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25",
+      "apps/web/src/components/TaskWorkspace.vue": "5d5eb4c4fda461aecfd9dd5beaf4481d6ba1c41cb6d9b510379be6c936f84045",
       "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
       "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b",
       "apps/web/src/components/TaskExportJobsPanel.vue": "40175f5b0cf7f7d1d9b24a7c5ca1746b0327654bb01996ffec8bf5f8bfd561c4"

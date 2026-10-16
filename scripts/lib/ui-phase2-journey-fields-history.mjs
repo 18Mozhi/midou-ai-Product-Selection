@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
@@ -40,7 +41,7 @@ export async function verifyJourneyFieldsHistory(repo) {
     const source = version
       ? execFileSync("git", ["show", `${version}:${file}`], { cwd: repo, encoding: "utf8" })
       : await readFile(path.join(repo, file), "utf8");
-    assert.equal(hash(source.replaceAll("\r\n", "\n")), expected, file);
+    assert.equal(hash(beforePublishedPresentation(file, source)), expected, file);
   }
   assert.equal(evidence.screenshots.length, 24);
   for (const shot of evidence.screenshots) {

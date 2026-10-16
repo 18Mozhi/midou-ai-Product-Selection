@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CostRuleConsole.vue": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b"
+    "apps/web/src/components/CostRuleConsole.vue": "f132630134363996555dcefba50158704eb5c427ab98c55719af59311fb6a1f5"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -776,7 +776,7 @@
       "kind": "wiring",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#f7f89c631a4cfd69.1"
+        "apps/web/src/components/CostRuleConsole.vue#61f4dec540b5a487.1"
       ],
       "sourceContractKeys": [
         "SC-R-CREATE-DEFINITION 新建草稿弹窗"
@@ -828,7 +828,7 @@
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#5db2d0d00a28d18b.1",
+        "apps/web/src/components/CostRuleConsole.vue#d3e2bedcf5e6a39b.1",
         "apps/web/src/components/CostRuleConsole.vue#f2cd423a0267e8bf.1",
         "apps/web/src/components/CostRuleConsole.vue#4fa3694ad39564c9.1"
       ],
@@ -885,7 +885,7 @@
       "kind": "write",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#c099eb06e95d2212.1",
+        "apps/web/src/components/CostRuleConsole.vue#a2e57d481a9212c1.1",
         "apps/web/src/components/CostRuleConsole.vue#bdb318fcff422d4c.1"
       ],
       "sourceContractKeys": [
@@ -955,7 +955,7 @@
       "kind": "wiring",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#5de98ef30653ebcb.1"
+        "apps/web/src/components/CostRuleConsole.vue#aeb9bee71a92cc21.1"
       ],
       "sourceContractKeys": [
         "SC-R-ACTION-DEFINITION 七类动作弹窗"
@@ -1032,7 +1032,7 @@
       "kind": "local",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#6c29bff30f6c9e9d.1",
+        "apps/web/src/components/CostRuleConsole.vue#73a339ebf8df288f.1",
         "apps/web/src/components/CostRuleConsole.vue#89388d2e7acd060d.1",
         "apps/web/src/components/CostRuleConsole.vue#ca4f082d1ca76f11.1"
       ],
@@ -1089,7 +1089,7 @@
       "kind": "write",
       "routeApplicability": "P22 /sourcing/cost-rules；仅CostRuleConsole局部及其明确共享调用，非P21成本复核",
       "sourceCandidateIds": [
-        "apps/web/src/components/CostRuleConsole.vue#b65ab0647ba3d0fd.1",
+        "apps/web/src/components/CostRuleConsole.vue#f256a658ea3a35c3.1",
         "apps/web/src/components/CostRuleConsole.vue#1b870bc1240e4ab6.1"
       ],
       "sourceContractKeys": [
@@ -1176,9 +1176,9 @@
       "apps/web/src/components/CostRuleConsole.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CostRuleConsole.vue": "c08edf5c70df4534d340fb78923149b9ff11d34068105eed0e2b07993f23660b",
-      "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
-      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a",
+      "apps/web/src/components/CostRuleConsole.vue": "f132630134363996555dcefba50158704eb5c427ab98c55719af59311fb6a1f5",
+      "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c",
+      "apps/web/src/ui/state-contract.ts": "913cf51719f372302e1900ac99c4b46c1baaa3632d7bcca7e234700f483d2ac8",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/components/shared/QualityGateSetupSummary.vue": "b606e4ff8d5e05da982f720ab73c0607022e105a15c82fc78ac401beeb00561b",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458"

@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OpenPlatformCenter.vue": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+    "apps/web/src/components/OpenPlatformCenter.vue": "19ea6965bcc5c1f3ae8d80f99831615da9c14198d2fa809fce0beb92bc70c810"
   },
   "inputs": {
     "apps/web/src/components/OpenPlatformCenter.vue": [
@@ -223,7 +223,7 @@
       "kind": "local",
       "label": "打开Client或Webhook填写与确认流程",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpenPlatformCenter.vue#4fe0f29d19fbaf47.1"
+        "apps/web/src/components/OpenPlatformCenter.vue#49365f7453236aac.1"
       ],
       "sourceContractKeys": [
         "OP60-CURRENT-CREATE / 调用新增Client/Webhook共享创建确认窗，不直接写入"
@@ -744,7 +744,7 @@
       "apps/web/src/components/OpenPlatformCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/OpenPlatformCenter.vue": "f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859"
+      "apps/web/src/components/OpenPlatformCenter.vue": "19ea6965bcc5c1f3ae8d80f99831615da9c14198d2fa809fce0beb92bc70c810"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],
@@ -753,7 +753,7 @@
     "sharedRemaining": [
       "本映射覆盖OpenPlatformCenter.vue页面候选；OpenCreateDialog、OpenActionReasonDialog、ConfirmDialog、ResponsiveDataView、TechnicalDetails与NavigationShell内部交互沿各自共享合同验收。"
     ],
-    "remaining": "源码映射不证明真实platform_token:manage、Client/Webhook的MySQL事务与审计、Worker外部投递、签名/密钥安全或M06-05生产验收。来源指纹SHA-256 f5d9611a732b6c1d360b23d039c3c307876e36637a12130eb76db0db57041859。"
+    "remaining": "源码映射不证明真实platform_token:manage、Client/Webhook的MySQL事务与审计、Worker外部投递、签名/密钥安全或M06-05生产验收。来源指纹SHA-256 19ea6965bcc5c1f3ae8d80f99831615da9c14198d2fa809fce0beb92bc70c810。"
   },
   "compositionGaps": [
     "逐项覆盖OpenPlatformCenter.vue的44个当前候选；共享创建、原因、确认与详情子组件内部控件只交叉引用其自身合同。",

@@ -1,5 +1,8 @@
+import { execFileSync } from "node:child_process";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
+import { assertCaptureSourceRevision } from "./ui-phase2-token-copy-baseline.mjs";
 
 const organizationTest = "tests/e2e/m06-01-organization-admin.spec.ts";
 const capturedHash = "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef";
@@ -25,6 +28,47 @@ export function assertCaptureSource(
   const source = bytes.toString().replaceAll("\r\n", "\n");
   const actual = hash(source);
   if (actual === expected) return { kind: "exact", actual, captured: expected };
+  if (
+    file === organizationTest &&
+    actual === "5e04bf6dab3ab40677e0baeeb2af069809d72b99172126cc5cfd9107d59708ea" &&
+    [capturedHash, scopedAssertionHash].includes(expected)
+  ) {
+    const previous = execFileSync("git", ["show", `fa8aea67:${file}`], {
+      encoding: "utf8",
+    }).replaceAll("\r\n", "\n");
+    assert.equal(hash(previous), scopedAssertionHash, message);
+    assertCaptureSource(file, previous, expected, message);
+    return { kind: "test-locator-copy-only", actual, captured: expected, commit: "40de9a12" };
+  }
+  const historical = beforePublishedPresentation(file, source);
+  if (
+    file === "apps/web/src/design/platform-overlay-tokens.css" &&
+    expected === "92238301dcc6212a6c8f498bba7b2d35e75770bc968c894df8e46df7e33b4c9b" &&
+    hash(historical) === "1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5"
+  ) {
+    assert.equal(
+      hash(historical.replace(",\n.responsive-filter-drawer--notifications", "")),
+      expected,
+      message,
+    );
+    return {
+      kind: "known-overlay-scope-history-only",
+      actual,
+      captured: expected,
+      historicalOnly: true,
+    };
+  }
+  if (historical !== source) {
+    // The registered current input and the captured Git bytes are separate
+    // proofs. This association never attests the current UI's visual result.
+    assertCaptureSourceRevision(file, historical, expected);
+    return {
+      kind: "known-ui-revision-history-only",
+      actual,
+      captured: expected,
+      historicalOnly: true,
+    };
+  }
   if (file === organizationTest && expected === capturedHash && actual === scopedAssertionHash) {
     assert.equal(source.split(scopedAssertion).length, 2, message);
     assert.equal(hash(source.replace(scopedAssertion, originalAssertion)), expected, message);

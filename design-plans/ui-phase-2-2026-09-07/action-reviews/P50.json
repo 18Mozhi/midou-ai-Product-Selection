@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/source-channel-credential-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CredentialAssetCenter.vue": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+    "apps/web/src/components/CredentialAssetCenter.vue": "6b249a07af6f66fb0eaf7fbe16e290699bbb85693756b429affbe59162687c4f"
   },
   "inputs": {
     "apps/web/src/components/CredentialAssetCenter.vue": [
@@ -203,8 +203,8 @@
       "label": "承载资产、轮换、档案与登录编辑窗",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#efc208b3291dd2c0.1",
-        "apps/web/src/components/CredentialAssetCenter.vue#f9aa4f7cabe04961.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#6382b6ffc02c91ce.1",
+        "apps/web/src/components/CredentialAssetCenter.vue#f32f303a69cd2f76.1"
       ],
       "sourceContractKeys": [
         "SC50-ASSET/ROTATE/PROFILE/LOGIN / 资产、档案和网页登录共用原生模态容器",
@@ -238,7 +238,7 @@
       "label": "校验并提交凭证创建或轮换表单",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/CredentialAssetCenter.vue#fcfad5327d89010f.1"
+        "apps/web/src/components/CredentialAssetCenter.vue#ceb36c98ed59e41f.1"
       ],
       "sourceContractKeys": [
         "SC50-ASSET/ROTATE / 字段无效反馈、Tab循环与既有保存提交"
@@ -769,7 +769,7 @@
       "apps/web/src/components/CredentialAssetCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CredentialAssetCenter.vue": "26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9"
+      "apps/web/src/components/CredentialAssetCenter.vue": "6b249a07af6f66fb0eaf7fbe16e290699bbb85693756b429affbe59162687c4f"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

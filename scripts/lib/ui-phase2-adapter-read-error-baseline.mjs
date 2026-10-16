@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -24,6 +25,8 @@ const hash = (source) => createHash("sha256").update(source).digest("hex");
 // Historical comparison only. Current App renders must continue using the unmodified SFC.
 export function beforeAdapterReadError(source) {
   source = source.replaceAll("\r\n", "\n");
+  source = beforePublishedPresentation(componentPath, source);
+
   if (hash(source) === readErrorRevision.approvedCurrent) {
     source = execFileSync("git", ["show", `${readErrorRevision.approvedCommit}:${componentPath}`], {
       encoding: "utf8",

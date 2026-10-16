@@ -15,8 +15,8 @@
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 322a4ac62ce3a305.1 | PA-REFRESH · 首次读取失败时发出 load 重试 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 9c9141422bfd2c11.1 | PA-REFRESH · 组织记录区触发 load；刷新中或父级 busy 时禁用 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 9c9141422bfd2c11.2 | PA-REFRESH · P40 organizationListRoute 标题栏刷新；P39分支不渲染 |
-| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 3c4dea26ac48746f.1 | PA-FILTER-DRAWER · ResponsiveFilterDrawer 组件调用，承载筛选字段，不另计业务动作 |
-| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 128119f3fb311b09.1 | PA-FILTER · 表单 submit 转发 `apply-filters`，接线至父级既有筛选处理 |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | a93a93cd1300da76.1 | PA-FILTER-DRAWER · ResponsiveFilterDrawer 组件调用，承载筛选字段，不另计业务动作 |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 75a75712d75441cb.1 | PA-FILTER · 表单 submit 转发 `apply-filters`，接线至父级既有筛选处理 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e064834276405c23.1 | PA-FILTER-WIRING · query/status 与筛选/重置意图接至父级既有状态和处理器 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 86ea70e081f1f8e3.1 | PA-RESET · 组织空结果清除筛选 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | f68d2406f8c1db70.1 | PA-ORG-CREATE · 组织列表空态发出 create-organization |
@@ -36,7 +36,7 @@
 | 文件 | LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051 |
-| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8 |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 6fcae623a9d39e389662185204fd43a38ccf9b30db06d2fcbc1490ef0420062f |
 | apps/web/src/components/PlatformAccountGlobalRail.vue | cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e |
 
 由 `scripts/audit-ui-phase2-contracts.mjs` 的只读合同扫描验证精确候选身份与源码哈希。源变更后必须按真实模板和 handler 更新映射；不可只刷新哈希。

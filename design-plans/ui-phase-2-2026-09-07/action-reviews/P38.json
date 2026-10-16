@@ -7,7 +7,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-overview-semantic-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformDashboard.vue": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e",
+    "apps/web/src/components/PlatformDashboard.vue": "dd3fee43d66fe14bbd83c66bd3b1b4f369468ef15f4da66210faa526c9742d3a",
     "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
     "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
     "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d"
@@ -803,7 +803,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/PlatformDashboard.vue": "902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e",
+      "apps/web/src/components/PlatformDashboard.vue": "dd3fee43d66fe14bbd83c66bd3b1b4f369468ef15f4da66210faa526c9742d3a",
       "apps/web/src/components/ResponsiveDataView.vue": "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
       "apps/web/src/components/TableViewControls.vue": "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
       "apps/web/src/components/TechnicalDetails.vue": "4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d"
@@ -881,10 +881,10 @@
       "apps/web/src/components/navigation-surface-registry.ts"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/NavigationShell.vue": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+      "apps/web/src/components/NavigationShell.vue": "596cef4389d9ecf77b4eb433d0954031880a962ec0346c9455cc0c4790c5f933",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
-      "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b",
-      "apps/web/src/components/navigation-surface-registry.ts": "e0f1161dd5da43df09b2710972ac431d746eb32fc7020c55502d020ef501486d"
+      "config/route-catalog.json": "b7a590249385ae35adbd413ef72e1be03b88b09cbee90ad82ca5bbf0604dfa93",
+      "apps/web/src/components/navigation-surface-registry.ts": "ab6fa8d9bfac58f1b3da4c004bc1c29048cbe465ba3fb7af1edc7ab34d03dbf4"
     },
     "routeName": "platform-overview",
     "surface": "platform-dashboard",

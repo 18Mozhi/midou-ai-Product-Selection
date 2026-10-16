@@ -346,22 +346,22 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前位置键 | 类型 / 行 | 既有语义归属 |
 | --- | --- | --- |
-| S:8b5b066073993a3a.1 | control / 703 | SC48-LOAD / 刷新来源目录 |
-| S:436e3971cada0a0b.1 | control / 706 | SC48-DEFINE / 导航至既有来源规则目录 |
-| S:090fa072a224b63e.1 | event-binding / 735 | SC48-FILTER / 七条件、排序与重置事件转发 |
-| S:1c008f867673db60.1 | control / 773 | SC48-CONFIG / 配置保存后目录同步失败的技术详情 |
-| S:b1a60fde5d6ec9d6.1 | control / 776 | SC48-CONFIG / 保存结果后的目录重读 |
-| S:1c008f867673db60.2 | control / 835 | SC48-LOAD / 登录、权限或目录读取失败的技术详情 |
-| S:adb5a27ee7e15104.1 | control / 838 | SC48-LOAD/LOGIN / 按当前失败态重新加载或重新登录 |
-| S:1c008f867673db60.3 | control / 897 | SC48-LOAD / 目录刷新结果的技术详情 |
-| S:22e451664b4ba746.1 | control / 900 | SC48-LOAD / 刷新失败后重新加载 |
-| S:52eea605d2c84eb0.1 | event-binding / 910 | SC48-PAGE/PROBE/CONFIG/COMPAT/VERSIONS/LOGIN/SAMPLES / 目录子组件与既有处理函数的事件转发 |
-| S:0d05b40ba4543887.1 | event-binding / 933 | SC48-CONFIG/VERSIONS / 配置弹窗属性与既有事件转发 |
-| S:7f36e42eb80bca2d.1 | dialog-component-call / 933 | SC48-CONFIG/VERSIONS / 配置与版本弹窗调用 |
-| S:aebc04fe71463aa3.1 | event-binding / 961 | SC48-SAMPLES / 样本弹窗读写、复核与恢复事件转发 |
-| S:e86a06afbe712ab0.1 | dialog-component-call / 961 | SC48-SAMPLES / 固定样本弹窗调用 |
-| S:26dd5da19bf14533.1 | event-binding / 982 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗关闭事件转发 |
-| S:db583a9e271b4426.1 | dialog-component-call / 982 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗调用 |
+| S:8b5b066073993a3a.1 | control / 702 | SC48-LOAD / 刷新来源目录 |
+| S:436e3971cada0a0b.1 | control / 705 | SC48-DEFINE / 导航至既有来源规则目录 |
+| S:090fa072a224b63e.1 | event-binding / 734 | SC48-FILTER / 七条件、排序与重置事件转发 |
+| S:1c008f867673db60.1 | control / 772 | SC48-CONFIG / 配置保存后目录同步失败的技术详情 |
+| S:b1a60fde5d6ec9d6.1 | control / 775 | SC48-CONFIG / 保存结果后的目录重读 |
+| S:1c008f867673db60.2 | control / 834 | SC48-LOAD / 登录、权限或目录读取失败的技术详情 |
+| S:adb5a27ee7e15104.1 | control / 837 | SC48-LOAD/LOGIN / 按当前失败态重新加载或重新登录 |
+| S:1c008f867673db60.3 | control / 896 | SC48-LOAD / 目录刷新结果的技术详情 |
+| S:22e451664b4ba746.1 | control / 899 | SC48-LOAD / 刷新失败后重新加载 |
+| S:52eea605d2c84eb0.1 | event-binding / 909 | SC48-PAGE/PROBE/CONFIG/COMPAT/VERSIONS/LOGIN/SAMPLES / 目录子组件与既有处理函数的事件转发 |
+| S:0d05b40ba4543887.1 | event-binding / 932 | SC48-CONFIG/VERSIONS / 配置弹窗属性与既有事件转发 |
+| S:7f36e42eb80bca2d.1 | dialog-component-call / 932 | SC48-CONFIG/VERSIONS / 配置与版本弹窗调用 |
+| S:aebc04fe71463aa3.1 | event-binding / 960 | SC48-SAMPLES / 样本弹窗读写、复核与恢复事件转发 |
+| S:e86a06afbe712ab0.1 | dialog-component-call / 960 | SC48-SAMPLES / 固定样本弹窗调用 |
+| S:26dd5da19bf14533.1 | event-binding / 981 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗关闭事件转发 |
+| S:db583a9e271b4426.1 | dialog-component-call / 981 | SC48-COMPAT-DIALOG-WIRING / 当前来源兼容矩阵弹窗调用 |
 
 ### D
 
@@ -380,7 +380,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | D:6f7e71d427cb36b9.1 | control / 227 | SC48-PAGE / 上一页 |
 | D:f3f3456654086e7b.1 | control / 239 | SC48-PAGE / 下一页 |
 
-| apps/web/src/components/ProviderSourceCenter.vue | c99c8671786fbb677426da9bb415c9a367568079143263c8c20fc7e549b131e0 |
+| apps/web/src/components/ProviderSourceCenter.vue | d7dce7fd0fb0f4bb6d31113b33cfa9101273539bbddb6675d09987140be174c3 |
 | apps/web/src/components/ProviderSourceDirectory.vue | ef10bdd7df7e4887d0c158a0b251caaffe4648afb66895e0c02f6408e10e7c34 |
 
 两文件身份和当前LF归一指纹可由定向审计与单测复验。此处不代表真实API、来源权限、匿名外发烟测、数据库写入或M07-03生产签收通过。
@@ -446,10 +446,10 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 | A:708367f1d5691c04.1 | control / 129 | SC49-LOGIN / 打开本来源凭证导入深链 |
 | A:16f98bc87eeb7bf3.1 | control / 130 | SC49-SAMPLE / 打开本来源固定样本入口 |
 | A:191135a63725390b.1 | control / 133 | 检查门口径说明折叠；不新增业务动作 |
-| A:b39d5c4a0f3599f8.1 | control / 150 | SC49-LOAD / 重新读取登录验收检查 |
-| A:71ad1e14ab5adcdd.1 | control / 174 | SC49-TECH / 本次读取追踪折叠 |
-| A:a1d4481c811f2e52.1 | control / 193 | SC49-LOAD / 按既有读取流程重试 |
-| A:d7d20d959f3300b0.1 | event-binding / 210 | SC49-SCOPE/RUN / 范围、表单与既有验收提交子组件事件转发 |
+| A:b39d5c4a0f3599f8.1 | control / 148 | SC49-LOAD / 重新读取登录验收检查 |
+| A:71ad1e14ab5adcdd.1 | control / 172 | SC49-TECH / 本次读取追踪折叠 |
+| A:a1d4481c811f2e52.1 | control / 191 | SC49-LOAD / 按既有读取流程重试 |
+| A:d7d20d959f3300b0.1 | event-binding / 208 | SC49-SCOPE/RUN / 范围、表单与既有验收提交子组件事件转发 |
 
 ### E
 
@@ -457,18 +457,18 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前位置键 | 类型 / 行 | 既有语义归属 |
 | --- | --- | --- |
-| E:9dc337a873726e6c.1 | form-event / 46 | SC49-RUN / 阻止原生表单并转交父级提交意图 |
+| E:9d3b97920285ef14.1 | form-event / 46 | SC49-RUN / 阻止原生表单并转交父级提交意图 |
 | E:6b7a113037c90aeb.1 | event-binding / 49 | SC49-SCOPE / 组织选择变化交给父级协调范围 |
 | E:df6130602862326a.1 | event-binding / 67 | SC49-SCOPE / 工作区受控选择更新 |
-| E:e941099000a6691d.1 | event-binding / 81 | SC49-RUN / 验收关键词受控输入 |
-| E:4d5599c177edbee1.1 | control / 92 | SC49-RUN / 发起一次既有受控登录验收提交 |
+| E:aa58789f5c2446ef.1 | event-binding / 81 | SC49-RUN / 验收关键词受控输入 |
+| E:f87be36857afeadf.1 | control / 92 | SC49-RUN / 发起一次既有受控登录验收提交 |
 | E:91f41f7556925861.1 | control / 104 | SC49-SCOPE / 请求父级重新读取组织与工作区范围 |
 | E:78c1c9ecc2d9214c.1 | control / 108 | SC49-TRACE / 展开组织范围读取关联编号 |
 | E:f617d68579969564.1 | control / 125 | SC49-TRACE / 展开本次提交任务/关联编号 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderAcceptanceExecution.vue | 8845f961637e96dedb38d9aa362560410eabffea7ab97f80ca64ff9d54fb2422 |
+| apps/web/src/components/ProviderAcceptanceExecution.vue | 1491d9aa903ab874ec12c0c9641be21f8ad704ece6b5822d68b657cacb9dedfc |
 
 候选映射只证明本子组件当前静态位置与父子意图归属；不替代 P49 GET/POST、服务端 `collection:replay` 权限、幂等键、范围校验或真实浏览器采集验收。
 
@@ -476,7 +476,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 `ProviderParserSampleReview.vue` 的审批通过/驳回仍是既有SC48-SAMPLES动作；其当前源身份在第14节重新登记，避免依赖第2节旧快照。四个文件的当前LF归一指纹单独记录如下。
 
-| apps/web/src/components/Alibaba1688AcceptanceCenter.vue | f749b3fd435a0475ff15f77f7969d4beeaa37588fe164474d00023f8a1ea77da |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue | 6ab9d0e32c1a66d2ff752c2bca3ae39e5c565b85eeb02424a83ef1e2ba815407 |
 | apps/web/src/components/ProviderParserSampleDialog.vue | 28095c0a0470cf2ca7a51640879771fe7be0591597f91a4417fbb56b28017fc6 |
 | apps/web/src/components/ProviderParserSampleReview.vue | 9cf19af8b947735405dd68dc2087cc01f0dc237916126af496f903fa905987d8 |
 | apps/web/src/components/ProviderCompatibilityMatrixDialog.vue | 0b60f47b37e4571498abaf60a06025683d329184bd72defe14d7790c94a1a2b9 |
@@ -493,7 +493,7 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderAcceptanceOperations.vue | 12724a3fa2359a87e48748313448f7eece817fa3f8d6423f9faf409fd4a99f8f |
+| apps/web/src/components/ProviderAcceptanceOperations.vue | c58ffae170ea357cbf161bfbd798b45aef4567a78bd02fb2178f9d1a2e398a14 |
 
 ## 14. P48/P49 旧快照候选的当前身份补列（2026-09-24）
 
@@ -501,17 +501,17 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前candidateId | 行 | 类型 | 既有语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#ff6d5fbc586803ed.1 | 186 | control | SC49-TECH / 展开本次检查故障编号 |
-| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#5587941412d5210f.1 | 190 | control | SC49-AUTH / 检查会话过期时返回登录 |
-| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#441fd57e4a421b3a.1 | 191 | control | SC49-AUTH / 无权时返回平台概览 |
-| apps/web/src/components/CredentialAssetCenter.vue#889e842f4791c19d.1 | 1004 | control | SC50-BRIDGE / 下载浏览器助手 |
-| apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1 | 1231 | control | SC50-TECH / 展开来源代码技术详情 |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#ff6d5fbc586803ed.1 | 184 | control | SC49-TECH / 展开本次检查故障编号 |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#5587941412d5210f.1 | 188 | control | SC49-AUTH / 检查会话过期时返回登录 |
+| apps/web/src/components/Alibaba1688AcceptanceCenter.vue#441fd57e4a421b3a.1 | 189 | control | SC49-AUTH / 无权时返回平台概览 |
+| apps/web/src/components/CredentialAssetCenter.vue#889e842f4791c19d.1 | 1001 | control | SC50-BRIDGE / 下载浏览器助手 |
+| apps/web/src/components/CredentialAssetCenter.vue#1c008f867673db60.1 | 1226 | control | SC50-TECH / 展开来源代码技术详情 |
 | apps/web/src/components/ProviderCompatibilityMatrixDialog.vue#1c008f867673db60.1 | 84 | control | SC48-COMPAT / 展开兼容观测读取失败编号 |
 | apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.1 | 132 | control | SC48-SAMPLES / 展开本次样本操作编号 |
 | apps/web/src/components/ProviderParserSampleDialog.vue#1c008f867673db60.2 | 165 | control | SC48-SAMPLES / 展开候选采集解析器版本 |
 | apps/web/src/components/ProviderParserSampleReview.vue#915c93b75eb41a91.1 | 47 | control | SC48-SAMPLES / 提交既有审批通过决策 |
 | apps/web/src/components/ProviderParserSampleReview.vue#35b9cb8eaccc4d26.1 | 54 | control | SC48-SAMPLES / 提交既有驳回决策 |
-| apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1 | 706 | control | SC48-DEFINE / 导航至既有来源规则目录 |
+| apps/web/src/components/ProviderSourceCenter.vue#436e3971cada0a0b.1 | 705 | control | SC48-DEFINE / 导航至既有来源规则目录 |
 来源页面入口身份不证明真实登录、固定样本审批、浏览器采集、来源启用、角色隔离或生产结果。
 
 ## 15. P50 当前凭证台账与表单候选补映射（2026-09-25）
@@ -520,50 +520,50 @@ P48当前真实目录由 `ProviderSourceCenter.vue` 保持读取、URL筛选、�
 
 | 当前candidateId | 行 | 类型 | 既有语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/CredentialAssetCenter.vue#4cff98e257b4af2d.1 | 999 | control | SC50-LOAD / 按既有读取函数刷新安全资产与运行档案 |
-| apps/web/src/components/CredentialAssetCenter.vue#3216d7209881fb86.1 | 1009 | control | SC50-LOGIN / 打开网页登录档案导入窗 |
-| apps/web/src/components/CredentialAssetCenter.vue#da51ee773f1eb5e2.1 | 1010 | control | SC50-PROFILE / 打开既有运行档案关联窗 |
-| apps/web/src/components/CredentialAssetCenter.vue#07c8680b127235e2.1 | 1011 | control | SC50-ASSET / 打开凭证资产新建窗 |
-| apps/web/src/components/CredentialAssetCenter.vue#52a1f163b96c6a4f.1 | 1035 | event-binding | SC50-LOAD / 读取失败面板仅显示已接线主操作并转发到既有读取函数 |
-| apps/web/src/components/CredentialAssetCenter.vue#343034ee456c8020.1 | 1062 | control | SC50-ASSET / 空资产状态打开新建窗 |
-| apps/web/src/components/CredentialAssetCenter.vue#99e8924082a7d684.1 | 1111 | control | SC50-ROTATE / 将当前资产设为凭证轮换目标 |
-| apps/web/src/components/CredentialAssetCenter.vue#a244801ec79346ec.1 | 1117 | control | SC50-REVOKE / 将当前资产设为撤销确认目标 |
-| apps/web/src/components/CredentialAssetCenter.vue#f9aa4f7cabe04961.1 | 1240 | dialog-definition | SC50-ASSET/ROTATE/PROFILE/LOGIN / 资产、档案和网页登录共用原生模态容器 |
-| apps/web/src/components/CredentialAssetCenter.vue#efc208b3291dd2c0.1 | 1240 | event-binding | SC50-CLOSE / 原生取消与遮罩关闭转发到既有 closeEditor |
-| apps/web/src/components/CredentialAssetCenter.vue#fcfad5327d89010f.1 | 1254 | form-event | SC50-ASSET/ROTATE / 字段无效反馈、Tab循环与既有保存提交 |
-| apps/web/src/components/CredentialAssetCenter.vue#a75910143d18b017.1 | 1271 | control | SC50-CLOSE / 关闭资产新建或轮换编辑器 |
-| apps/web/src/components/CredentialAssetCenter.vue#3b5333f821fbebcc.1 | 1284 | event-binding | SC50-ASSET/VALIDATION / 来源选择变化后清理该字段的原生错误 |
-| apps/web/src/components/CredentialAssetCenter.vue#f0de1dd230399061.1 | 1305 | event-binding | SC50-ASSET/VALIDATION / 资产名称变化后清理该字段的原生错误 |
-| apps/web/src/components/CredentialAssetCenter.vue#db8f358359d81455.1 | 1341 | event-binding | SC50-ASSET/VALIDATION / 秘密输入变化后清理该字段的原生错误 |
-| apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.1 | 1369 | control | SC50-CLOSE / 取消资产新建或轮换编辑器 |
-| apps/web/src/components/CredentialAssetCenter.vue#584e25b2c7498fe2.1 | 1372 | control | SC50-ASSET/ROTATE / 按原资产表单保存或轮换加密资料 |
-| apps/web/src/components/CredentialAssetCenter.vue#49e83794fc69aec5.1 | 1377 | form-event | SC50-PROFILE / 字段无效反馈、Tab循环与既有档案关联提交 |
-| apps/web/src/components/CredentialAssetCenter.vue#785d60d74b62708a.1 | 1390 | control | SC50-CLOSE / 关闭运行档案关联编辑器 |
-| apps/web/src/components/CredentialAssetCenter.vue#56cda485ff9a67e1.1 | 1403 | event-binding | SC50-PROFILE/VALIDATION / 所选加密档案同步既有来源并清理字段错误 |
-| apps/web/src/components/CredentialAssetCenter.vue#118e781b0120c4b2.1 | 1429 | event-binding | SC50-PROFILE/VALIDATION / 内部标识变化后清理该字段的原生错误 |
-| apps/web/src/components/CredentialAssetCenter.vue#2ddf54204f452511.1 | 1446 | event-binding | SC50-PROFILE/VALIDATION / 档案名称变化后清理该字段的原生错误 |
-| apps/web/src/components/CredentialAssetCenter.vue#6bd7eed22ff8851d.1 | 1462 | event-binding | SC50-PROFILE/VALIDATION / 页面语言变化后清理该字段的原生错误 |
-| apps/web/src/components/CredentialAssetCenter.vue#7550a9de2696128b.1 | 1478 | event-binding | SC50-PROFILE/VALIDATION / 时区变化后清理该字段的原生错误 |
-| apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.2 | 1504 | control | SC50-CLOSE / 取消运行档案关联编辑器 |
-| apps/web/src/components/CredentialAssetCenter.vue#98e4c1aff937289a.1 | 1507 | control | SC50-PROFILE / 按原档案表单保存关联 |
-| apps/web/src/components/CredentialAssetCenter.vue#92da9f015f800722.1 | 1512 | form-event | SC50-LOGIN / 登录材料窗Tab循环与既有两步保存提交 |
-| apps/web/src/components/CredentialAssetCenter.vue#d86a0656a93bd973.1 | 1525 | control | SC50-CLOSE / 关闭网页登录档案导入窗 |
-| apps/web/src/components/CredentialAssetCenter.vue#148e132f8526cb9d.1 | 1623 | control | SC50-CLOSE / 取消网页登录档案导入 |
-| apps/web/src/components/CredentialAssetCenter.vue#a6de35af2d13a51e.1 | 1624 | control | SC50-LOGIN / 按当前来源、材料与阶段状态提交既有加密导入流程 |
-| apps/web/src/components/CredentialAssetCenter.vue#5eca67d4ff8b7b15.1 | 1646 | event-binding | SC50-REVOKE / 取消与确认事件交给父级现有撤销处理函数 |
-| apps/web/src/components/CredentialAssetCenter.vue#cb14d6dea1ed210f.1 | 1646 | dialog-component-call | SC50-REVOKE / 调用共享危险确认窗；不另计撤销写动作 |
-| apps/web/src/components/CredentialAssetCenter.vue#d2a64908945092ff.1 | 1549 | event-binding | SC50-LOGIN / 来源选择及材料上下文重置 |
-| apps/web/src/components/CredentialAssetCenter.vue#1430f57a236d6ea1.1 | 1561 | event-binding | SC50-LOGIN / 导入方式切换及材料上下文重置 |
-| apps/web/src/components/CredentialAssetCenter.vue#6a8beb16368d130f.1 | 1572 | event-binding | SC50-FILE / 受控文件选择 |
+| apps/web/src/components/CredentialAssetCenter.vue#4cff98e257b4af2d.1 | 996 | control | SC50-LOAD / 按既有读取函数刷新安全资产与运行档案 |
+| apps/web/src/components/CredentialAssetCenter.vue#3216d7209881fb86.1 | 1006 | control | SC50-LOGIN / 打开网页登录档案导入窗 |
+| apps/web/src/components/CredentialAssetCenter.vue#da51ee773f1eb5e2.1 | 1007 | control | SC50-PROFILE / 打开既有运行档案关联窗 |
+| apps/web/src/components/CredentialAssetCenter.vue#07c8680b127235e2.1 | 1008 | control | SC50-ASSET / 打开凭证资产新建窗 |
+| apps/web/src/components/CredentialAssetCenter.vue#52a1f163b96c6a4f.1 | 1032 | event-binding | SC50-LOAD / 读取失败面板仅显示已接线主操作并转发到既有读取函数 |
+| apps/web/src/components/CredentialAssetCenter.vue#343034ee456c8020.1 | 1059 | control | SC50-ASSET / 空资产状态打开新建窗 |
+| apps/web/src/components/CredentialAssetCenter.vue#99e8924082a7d684.1 | 1108 | control | SC50-ROTATE / 将当前资产设为凭证轮换目标 |
+| apps/web/src/components/CredentialAssetCenter.vue#a244801ec79346ec.1 | 1114 | control | SC50-REVOKE / 将当前资产设为撤销确认目标 |
+| apps/web/src/components/CredentialAssetCenter.vue#f32f303a69cd2f76.1 | 1235 | dialog-definition | SC50-ASSET/ROTATE/PROFILE/LOGIN / 资产、档案和网页登录共用原生模态容器 |
+| apps/web/src/components/CredentialAssetCenter.vue#6382b6ffc02c91ce.1 | 1235 | event-binding | SC50-CLOSE / 原生取消与遮罩关闭转发到既有 closeEditor |
+| apps/web/src/components/CredentialAssetCenter.vue#ceb36c98ed59e41f.1 | 1249 | form-event | SC50-ASSET/ROTATE / 字段无效反馈、Tab循环与既有保存提交 |
+| apps/web/src/components/CredentialAssetCenter.vue#a75910143d18b017.1 | 1266 | control | SC50-CLOSE / 关闭资产新建或轮换编辑器 |
+| apps/web/src/components/CredentialAssetCenter.vue#3b5333f821fbebcc.1 | 1279 | event-binding | SC50-ASSET/VALIDATION / 来源选择变化后清理该字段的原生错误 |
+| apps/web/src/components/CredentialAssetCenter.vue#f0de1dd230399061.1 | 1300 | event-binding | SC50-ASSET/VALIDATION / 资产名称变化后清理该字段的原生错误 |
+| apps/web/src/components/CredentialAssetCenter.vue#db8f358359d81455.1 | 1336 | event-binding | SC50-ASSET/VALIDATION / 秘密输入变化后清理该字段的原生错误 |
+| apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.1 | 1363 | control | SC50-CLOSE / 取消资产新建或轮换编辑器 |
+| apps/web/src/components/CredentialAssetCenter.vue#584e25b2c7498fe2.1 | 1366 | control | SC50-ASSET/ROTATE / 按原资产表单保存或轮换加密资料 |
+| apps/web/src/components/CredentialAssetCenter.vue#49e83794fc69aec5.1 | 1371 | form-event | SC50-PROFILE / 字段无效反馈、Tab循环与既有档案关联提交 |
+| apps/web/src/components/CredentialAssetCenter.vue#785d60d74b62708a.1 | 1384 | control | SC50-CLOSE / 关闭运行档案关联编辑器 |
+| apps/web/src/components/CredentialAssetCenter.vue#56cda485ff9a67e1.1 | 1397 | event-binding | SC50-PROFILE/VALIDATION / 所选加密档案同步既有来源并清理字段错误 |
+| apps/web/src/components/CredentialAssetCenter.vue#118e781b0120c4b2.1 | 1423 | event-binding | SC50-PROFILE/VALIDATION / 内部标识变化后清理该字段的原生错误 |
+| apps/web/src/components/CredentialAssetCenter.vue#2ddf54204f452511.1 | 1440 | event-binding | SC50-PROFILE/VALIDATION / 档案名称变化后清理该字段的原生错误 |
+| apps/web/src/components/CredentialAssetCenter.vue#6bd7eed22ff8851d.1 | 1456 | event-binding | SC50-PROFILE/VALIDATION / 页面语言变化后清理该字段的原生错误 |
+| apps/web/src/components/CredentialAssetCenter.vue#7550a9de2696128b.1 | 1472 | event-binding | SC50-PROFILE/VALIDATION / 时区变化后清理该字段的原生错误 |
+| apps/web/src/components/CredentialAssetCenter.vue#2f453887d0cc66db.2 | 1498 | control | SC50-CLOSE / 取消运行档案关联编辑器 |
+| apps/web/src/components/CredentialAssetCenter.vue#98e4c1aff937289a.1 | 1501 | control | SC50-PROFILE / 按原档案表单保存关联 |
+| apps/web/src/components/CredentialAssetCenter.vue#92da9f015f800722.1 | 1506 | form-event | SC50-LOGIN / 登录材料窗Tab循环与既有两步保存提交 |
+| apps/web/src/components/CredentialAssetCenter.vue#d86a0656a93bd973.1 | 1519 | control | SC50-CLOSE / 关闭网页登录档案导入窗 |
+| apps/web/src/components/CredentialAssetCenter.vue#148e132f8526cb9d.1 | 1617 | control | SC50-CLOSE / 取消网页登录档案导入 |
+| apps/web/src/components/CredentialAssetCenter.vue#a6de35af2d13a51e.1 | 1618 | control | SC50-LOGIN / 按当前来源、材料与阶段状态提交既有加密导入流程 |
+| apps/web/src/components/CredentialAssetCenter.vue#5eca67d4ff8b7b15.1 | 1640 | event-binding | SC50-REVOKE / 取消与确认事件交给父级现有撤销处理函数 |
+| apps/web/src/components/CredentialAssetCenter.vue#cb14d6dea1ed210f.1 | 1640 | dialog-component-call | SC50-REVOKE / 调用共享危险确认窗；不另计撤销写动作 |
+| apps/web/src/components/CredentialAssetCenter.vue#d2a64908945092ff.1 | 1543 | event-binding | SC50-LOGIN / 来源选择及材料上下文重置 |
+| apps/web/src/components/CredentialAssetCenter.vue#1430f57a236d6ea1.1 | 1555 | event-binding | SC50-LOGIN / 导入方式切换及材料上下文重置 |
+| apps/web/src/components/CredentialAssetCenter.vue#6a8beb16368d130f.1 | 1566 | event-binding | SC50-FILE / 受控文件选择 |
 | apps/web/src/components/CredentialAssetCenter.vue#7443d228a98eebd4.1 | 1569 | event-binding | SC50-FILE / 受控文件选择 [历史身份，仅追溯] |
-| apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1 | 1596 | control | SC50-EXTERNAL / 打开来源登录页 |
-| apps/web/src/components/CredentialAssetCenter.vue#f176fdb4640192de.1 | 1599 | control | SC50-BRIDGE / 请求助手Cookie |
+| apps/web/src/components/CredentialAssetCenter.vue#e22b7ca36f2434d7.1 | 1590 | control | SC50-EXTERNAL / 打开来源登录页 |
+| apps/web/src/components/CredentialAssetCenter.vue#f176fdb4640192de.1 | 1593 | control | SC50-BRIDGE / 请求助手Cookie |
 
 以上候选逐项来自当前Vue的真实按钮、原生表单、字段事件和对话框标签；本节与第14节仍有效的其他文件映射共同覆盖当前扫描器识别的全部P50候选。该静态覆盖不提升P50的真实屏幕阅读器、后端权限、加密材料、MySQL或正式生产验收状态。
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/CredentialAssetCenter.vue | 26e415ad7bd0a1222397868648340c53f86faaa756025e32026d1c75797381c9 |
+| apps/web/src/components/CredentialAssetCenter.vue | 6b249a07af6f66fb0eaf7fbe16e290699bbb85693756b429affbe59162687c4f |
 
 ## 16. P50 凭证台账被替代的旧身份
 

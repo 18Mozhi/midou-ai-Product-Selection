@@ -2,6 +2,7 @@
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import PersonalCenter from "./PersonalCenter.vue";
+import SessionLogout from "./SessionLogout.vue";
 
 defineProps<{ apiBaseUrl: string }>();
 
@@ -28,6 +29,7 @@ const activeSection = computed(() => {
       </RouterLink>
       <span class="p11-current-page">个人中心</span>
       <RouterLink class="p11-scope-link" to="/select-context">组织与工作区</RouterLink>
+      <SessionLogout :api-base-url="apiBaseUrl" />
     </header>
 
     <section class="p11-hero" aria-labelledby="p11-title">

@@ -374,7 +374,7 @@
 }
 .approval-workspace header > div:last-child,
 .approval-detail section > div,
-dialog form > div {
+.approval-workspace dialog form > div {
   display: flex;
   gap: 10px;
 }
@@ -505,7 +505,7 @@ dialog form > div {
 }
 .approval-list small,
 .approval-detail small,
-.template-list small {
+.approval-workspace .template-list small {
   color: var(--so-text-muted);
   font-weight: 500;
 }
@@ -870,16 +870,16 @@ dialog form > div {
   font-style: normal;
 }
 .approval-detail label,
-dialog label {
+.approval-workspace dialog label {
   display: grid;
   gap: 7px;
   color: var(--so-text-muted);
   font-size: 13px;
 }
 .approval-detail textarea,
-dialog input,
-dialog select,
-dialog textarea {
+.approval-workspace dialog input,
+.approval-workspace dialog select,
+.approval-workspace dialog textarea {
   background: var(--so-panel-strong);
   border: 1px solid var(--so-border-strong);
   color: var(--so-text);
@@ -897,13 +897,13 @@ dialog textarea {
   background: var(--so-panel-strong);
   color: var(--so-danger);
 }
-.readonly {
+.approval-workspace .readonly {
   padding: 14px;
   background: var(--so-panel-strong);
   color: var(--so-text-muted);
   border-radius: 8px;
 }
-dialog[open] {
+.approval-workspace dialog[open] {
   position: fixed;
   inset: 8vh auto auto 50%;
   transform: translateX(-50%);
@@ -918,22 +918,22 @@ dialog[open] {
   padding: 24px;
   box-shadow: 0 25px 80px var(--so-shadow-color);
 }
-dialog form {
+.approval-workspace dialog form {
   display: grid;
   gap: 13px;
 }
-.template-list {
+.approval-workspace .template-list {
   border-top: 1px solid var(--so-border-strong);
   margin-top: 20px;
   padding-top: 10px;
 }
-.template-list article {
+.approval-workspace .template-list article {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 9px 0;
 }
-.template-list article span {
+.approval-workspace .template-list article span {
   display: grid;
   gap: 4px;
 }

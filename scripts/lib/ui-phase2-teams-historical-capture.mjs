@@ -22,7 +22,7 @@ const currentSourceHashes = Object.freeze({
   "scripts/lib/ui-phase2-teams-design-data.mjs":
     "a688df5e899deb362efbea2e8633327e6a3ce1559c89bb9db83746033434adbc",
   "apps/web/src/components/OrganizationAdminCenter.vue":
-    "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
+    "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
   "apps/web/src/components/OrganizationTeamPanel.vue":
     "2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee",
   "design-plans/ui-phase-2-2026-09-07/design/teams-direction-c/teams.css":

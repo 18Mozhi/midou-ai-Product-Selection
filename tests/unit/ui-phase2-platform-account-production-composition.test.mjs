@@ -64,7 +64,7 @@ test("P40 organization page keeps global summaries separate and labels mobile fa
   assert.match(accountSurface, /account-page-layout--organizations/);
   assert.match(accountSurface, /organization-directory-heading/);
   assert.match(accountSurface, /组织名称或标识/);
-  assert.match(accountSurface, /仅筛选组织状态，不代表成员账号状态/);
+  assert.match(accountSurface, /organizationListRoute.value \? "组织状态"/);
   assert.match(organizationRecords, /class="p40-record-status"/);
   assert.match(organizationRecords, /class="p40-record-counts"/);
   assert.match(styles, /\.account-center \.account-page-layout--organizations/);

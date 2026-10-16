@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
@@ -17,7 +18,7 @@ export const adminDirectoryHeading = `      <header v-if="tab === 'admins'" clas
 let cached;
 // Exact association for prior captures; current directory acceptance reads raw source.
 export function historicalAdminDirectorySource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = beforePublishedPresentation(file, source);
   const r = adminDirectoryRevision;
   if (file !== r.file || hash(source) !== r.after) return source;
   if (!cached) {

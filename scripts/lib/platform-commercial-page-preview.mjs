@@ -68,6 +68,7 @@ ${lookup[0]}      <p v-if="!organizationId" class="p58-unselected">尚未读取�
   return text;
 }
 export function previewCommercialShell(source) {
+  if (source.includes('class="role-workspace-identity"')) return previewShellVue(source);
   const text = previewShellVue(source),
     anchor = "            routePath !== '/platform-admin/redis'";
   return once(text, anchor, `${anchor} &&\n            routePath !== '/platform-admin/commercial'`);

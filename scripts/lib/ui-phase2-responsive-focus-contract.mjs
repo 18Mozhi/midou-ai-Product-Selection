@@ -1,3 +1,7 @@
+import {
+  beforePublishedPresentation,
+  publishedPresentationRevisions,
+} from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -26,8 +30,24 @@ export const responsiveFocusRevision = Object.freeze({
   reasonFile: "apps/web/src/components/AuditedReasonDialog.vue",
   reasonAfter: "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
   currentDependencyHashes: Object.freeze({
-    "apps/web/src/main.ts": "adb50f723b75b22d7bf959f6d956a0e08e6afba952f118f354a2a86ec88b9671",
-    "apps/web/src/styles.css": "4b8ffc6064ffe512f88b64fcb50df01b5f0ca1c66633fecb1e6c8f928b830016",
+    "scripts/verify-responsive-data-view-focus.mjs":
+      "f891a55fde3c5732f05e19266a4396a25280308d322cdbd3aba5bf2bfd6ae2ef",
+    "apps/web/src/components/ResponsiveDataView.vue":
+      "e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7",
+    "apps/web/src/components/TableViewControls.vue":
+      "b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b",
+    "apps/web/src/components/ConfirmDialog.vue":
+      "3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424",
+    "apps/web/src/components/AuditedReasonDialog.vue":
+      "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
+    "apps/web/src/use-modal-dialog.ts":
+      "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
+    "apps/web/src/ui/state-contract.ts":
+      "913cf51719f372302e1900ac99c4b46c1baaa3632d7bcca7e234700f483d2ac8",
+    "apps/web/src/main.ts": "33598925c7d12382152f1398ae48dcc27297afbef339aba6dd8dcc49770ba2f2",
+    "apps/web/src/styles.css": "c881ac3d5e718bcd59272210d703991150556406ad09a90cd7d9c35742d97586",
+    "apps/web/src/styles/access-governance.css":
+      "4d72fca094271626fa64c5f866b0a02e555e837787b77b9a24b4e763991af57c",
     "apps/web/src/styles/onboarding-navigation.css":
       "214bdd85af89612037b7e8e4c9ebbead9aea5c69441ecbb109b37bdf251a3e26",
     "apps/web/src/styles/platform-operations.css":
@@ -35,9 +55,11 @@ export const responsiveFocusRevision = Object.freeze({
     "apps/web/src/styles/platform-dashboard.css":
       "15a6cd561dfbeba6b756bbcbd8da3ea2534b6900ee90b05f4236d6f70d1db8be",
     "apps/web/src/design/tokens.css":
-      "47c568bd3a9e52e838a07200c05450eb4fdee5528a27b0be46fefd5f6aafa19a",
-    "apps/web/src/use-modal-dialog.ts":
-      "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
+      "e519e16a6983f5cb1eb67cdb939efabe429a4dbbed4fe07b0f13a69bd3ce4278",
+    "apps/web/src/accessibility.css":
+      "f1b19e1c04ed9c6a963fac44edc12c32a8b324638d5f444b898144db2158e835",
+    "apps/web/src/responsive-baselines.css":
+      "8e1ea14910599ce87869bb18e02b031551a5bdf2b4423d169c6ded1eeb1cc829",
     "apps/web/src/signal-ledger.css":
       "ecaaab4825b30336e00986ce4477554064939b73a110e5c6c11416c8598ca276",
   }),
@@ -54,7 +76,12 @@ export function verifyResponsivePalette(source = read) {
   const revision = responsiveFocusRevision,
     current = source(revision.file),
     extracted = at(revision.paletteCommit, revision.file),
-    palette = source(revision.paletteFile);
+    palette = beforePublishedPresentation(revision.paletteFile, source(revision.paletteFile));
+  assert.equal(
+    hash(source(revision.paletteFile)),
+    publishedPresentationRevisions[revision.paletteFile].current,
+    "unreviewed overlay palette",
+  );
   assert.equal(hash(current), revision.currentAfter, "unreviewed current responsive source");
   assert.equal(hash(extracted), revision.paletteAfter, "unreviewed extracted palette revision");
   assert.equal(hash(palette), revision.paletteSha256, "unreviewed overlay palette");

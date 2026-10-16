@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "./lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -82,7 +83,7 @@ const definitions = [
     "EX-P29-PROFILE",
     "组织资料排除",
     "excluded",
-    C("d6b520278ab3dd57.1", "1cbd108c64b5230c.1", "5878e30377f290ae.1"),
+    C("e93301a7ec700ce7.1", "1cbd108c64b5230c.1", "ed75758087c9a4b8.1"),
     ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
     "仅summary非approvals",
     "不计P29资料保存与Logo校验",
@@ -239,21 +240,22 @@ export function buildOrgApprovalsReview(sources, packages) {
   assert.equal(currentEvidence.kind, "P34-READ-FEEDBACK-IMPLEMENTATION-r2");
   assert.equal(currentEvidence.reviewOnly, true);
   for (const file of dependencies)
-    assert.equal(
+    assertCaptureSource(
+      file,
+      sources[file],
       currentEvidence.sourceHashes[file],
-      dependencyHashes[file],
       `stale current P34 evidence: ${file}`,
     );
   for (const evidence of packages.values())
     for (const file of historicalDependencies) {
       const recordedHash = evidence.sourceHashes[file];
       if (!recordedHash) continue;
-      const isOriginalProposal = recordedHash === hash(proposalSources[file]),
-        isExplicitlyRefreshedCurrent = recordedHash === dependencyHashes[file];
-      assert.ok(
-        isOriginalProposal || isExplicitlyRefreshedCurrent,
-        `stale historical P34 proposal: ${file}`,
-      );
+      // Preserve the proposal's own source hash; prove its exact Git bytes separately.
+      try {
+        assertCaptureSource(file, sources[file], recordedHash);
+      } catch (error) {
+        assert.fail(`stale historical P34 proposal: ${file}: ${error.message}`);
+      }
     }
   const actions = structuredClone(definitions).map(
     ([
@@ -374,7 +376,7 @@ export function buildOrgApprovalsReview(sources, packages) {
     dialogs: {
       kind: "local-callers-and-listed-shared-only",
       remaining:
-        "P34无业务弹窗。共享父原因窗无本页发起入口；模板详情article、技术details和aside说明都不是弹窗。",
+        "P34无业务弹窗。共享父原因窗无本页发起入口；模板详情article与技术details都不是弹窗。",
     },
     inputs: {
       "OrganizationAdminCenter.vue": parentInputs,
@@ -463,25 +465,9 @@ export function buildOrgApprovalsReview(sources, packages) {
             },
           ],
         },
-        {
-          file: childFile,
-          tag: "aside",
-          ordinal: 1,
-          shape: "inline-aside",
-          sourceBehavior: "持续的只读组织治理说明，无关闭动作；不是抽屉或对话框",
-          remaining,
-          variants: [
-            {
-              name: "readonly-notice",
-              evidenceScope: "related-scene-only",
-              scenes: [scene("normal"), scene("templates")],
-              remaining,
-            },
-          ],
-        },
       ],
       sharedRemaining: [
-        "三个结构记录不等于三个本页弹窗；本页业务弹窗为0。",
+        "两个父结构为本页排除引用；本页业务弹窗为0。已删除的说明aside仅保留在历史图包中。",
         "模板详情article不被结构扫描当dialog；首版/无变化/差异阅读保持只读。",
       ],
     },

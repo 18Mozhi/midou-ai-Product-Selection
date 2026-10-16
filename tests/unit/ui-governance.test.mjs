@@ -36,9 +36,9 @@ test("UI governance keeps responsive, status, dialog and error boundaries shared
   assert.match(apiClient, /rethrowUnexpectedError/);
   assert.match(routeCatalog, /surface[\s\S]*cachePolicy/);
   assert.match(shell, /selectedSurfaceComponent[\s\S]*surfaceCacheKey/);
-  assert.match(shell, /class="role-page-title"[\s\S]*<h1>{{ pageTitle }}<\/h1>/);
+  assert.match(shell, /class="role-workspace-identity"[\s\S]*<h1>{{ pageTitle }}<\/h1>/);
   assert.doesNotMatch(shell, /role-page-folio|SIGNAL LEDGER|role-signal-status/);
-  assert.match(shell, /class="role-context-rail"[\s\S]*当前范围[\s\S]*任务域[\s\S]*当前角色/);
+  assert.match(shell, /class="role-workspace-tabs"[\s\S]*class="role-page-tabs"/);
   assert.doesNotMatch(shell, /class="role-identity"/);
   assert.match(tokens, /--so-content-max:\s*1440px/);
   assert.doesNotMatch(accessibility, /transition:\s*all/);

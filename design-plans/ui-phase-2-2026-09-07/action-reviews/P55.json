@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/data-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformGovernanceCenter.vue": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+    "apps/web/src/components/PlatformGovernanceCenter.vue": "a19e66b55b001c86a36e4ff124574f7d2007a4f06bd18d9ca9fb8472fba10c63"
   },
   "implementationSourceHashes": {
     "apps/web/src/components/ResponsiveDataView.vue": "739ac85b109ec7c2557909d1f267d1b67a8384aa385afb80f2fd512502d17f7a",
@@ -207,8 +207,8 @@
       "kind": "read",
       "routeApplicability": "P55-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformGovernanceCenter.vue#adbd9ecccfb8b14c.1",
-        "apps/web/src/components/PlatformGovernanceCenter.vue#7967356d90bb2be5.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#9eef1b6fb3de37ee.1",
+        "apps/web/src/components/PlatformGovernanceCenter.vue#1f3495029cfc2caf.1",
         "apps/web/src/components/PlatformGovernanceCenter.vue#84ddf55965c63e53.1",
         "apps/web/src/components/PlatformGovernanceCenter.vue#d2bd484790411f68.1"
       ],
@@ -403,7 +403,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/PlatformGovernanceCenter.vue": "65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9"
+      "apps/web/src/components/PlatformGovernanceCenter.vue": "a19e66b55b001c86a36e4ff124574f7d2007a4f06bd18d9ca9fb8472fba10c63"
     },
     "inputs": [
       {

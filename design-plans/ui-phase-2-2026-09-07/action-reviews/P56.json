@@ -5,8 +5,8 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformContentCenter.vue": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993",
-    "apps/web/src/components/PlatformContentReviewDialog.vue": "7183474efd2f6fdb6080d3273855b69c742675b5aa36ae026d9cd82f6a6726f4"
+    "apps/web/src/components/PlatformContentCenter.vue": "6312bb4c36b55b9c30675c774686c457c67ad6d8edf600087d4312b75d61bb49",
+    "apps/web/src/components/PlatformContentReviewDialog.vue": "a4e0f2c82b225f33eabb7bd7201fefc3ad6bac2670a894a430686c4c40e76389"
   },
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
@@ -128,7 +128,7 @@
       "routeApplicability": "P56-local-caller-only",
       "sourceCandidateIds": [
         "apps/web/src/components/PlatformContentCenter.vue#6a03af01ac2673c0.1",
-        "apps/web/src/components/PlatformContentReviewDialog.vue#d419717a1daa53bd.1"
+        "apps/web/src/components/PlatformContentReviewDialog.vue#c3088973ee4c5864.1"
       ],
       "condition": "记录存在且目标为 active、irrelevant 或 stale；当前状态的行内直达按钮禁用。",
       "handler": "固定记录 id、标题、组织、工作区、原状态和版本后打开原生审核 dialog。",
@@ -275,7 +275,7 @@
       "kind": "local",
       "routeApplicability": "P56-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformContentReviewDialog.vue#419cf34d6cd8c9bd.1",
+        "apps/web/src/components/PlatformContentReviewDialog.vue#27887d42b9d12fc9.1",
         "apps/web/src/components/PlatformContentReviewDialog.vue#d92091d153d481b8.1",
         "apps/web/src/components/PlatformContentReviewDialog.vue#7daff9e4a017f8c0.1"
       ],
@@ -326,7 +326,7 @@
       "kind": "write",
       "routeApplicability": "P56-local-caller-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformContentReviewDialog.vue#1fd70ea9da24ddfa.1",
+        "apps/web/src/components/PlatformContentReviewDialog.vue#7a61e0aa406d9acb.1",
         "apps/web/src/components/PlatformContentReviewDialog.vue#182a80a4144bf185.1"
       ],
       "condition": "原因 trim 后 2–300 字且没有正在提交；同状态按既有合同仍可提交。",
@@ -393,8 +393,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/PlatformContentCenter.vue": "f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993",
-      "apps/web/src/components/PlatformContentReviewDialog.vue": "7183474efd2f6fdb6080d3273855b69c742675b5aa36ae026d9cd82f6a6726f4"
+      "apps/web/src/components/PlatformContentCenter.vue": "6312bb4c36b55b9c30675c774686c457c67ad6d8edf600087d4312b75d61bb49",
+      "apps/web/src/components/PlatformContentReviewDialog.vue": "a4e0f2c82b225f33eabb7bd7201fefc3ad6bac2670a894a430686c4c40e76389"
     },
     "inputs": [
       {

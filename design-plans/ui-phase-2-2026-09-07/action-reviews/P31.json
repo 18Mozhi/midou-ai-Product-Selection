@@ -5,8 +5,8 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/roles-semantic-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-    "apps/web/src/components/OrganizationRolePanel.vue": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+    "apps/web/src/components/OrganizationRolePanel.vue": "abe9097a581c2bf16f179405dbafa393f5ca775c91c06e33ad11c0925491aac2"
   },
   "actions": [
     {
@@ -179,9 +179,9 @@
       "label": "组织资料分支排除",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#e93301a7ec700ce7.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ed75758087c9a4b8.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#bd677fb7d2212a2b.1"
       ],
       "sourceContractKeys": [
@@ -1411,8 +1411,8 @@
       "label": "创建授权",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationRolePanel.vue#29016e256374347e.1",
-        "apps/web/src/components/OrganizationRolePanel.vue#b75d50f1f8f0cc17.1"
+        "apps/web/src/components/OrganizationRolePanel.vue#368ab9e71467bdc8.1",
+        "apps/web/src/components/OrganizationRolePanel.vue#b6a3974b194ba639.1"
       ],
       "sourceContractKeys": [
         "grant.create.submit"
@@ -2874,8 +2874,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-      "apps/web/src/components/OrganizationRolePanel.vue": "4afab8dcf5373036556f8f0c127422fd728c265e82f32d00b89e614316877809",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+      "apps/web/src/components/OrganizationRolePanel.vue": "abe9097a581c2bf16f179405dbafa393f5ca775c91c06e33ad11c0925491aac2",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957"

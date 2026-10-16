@@ -35,7 +35,7 @@ test("P61 review mounts production Vue without changing the page script", () => 
     parse(pageSource).descriptor.scriptSetup.content,
   );
   assert.match(reviewSource, /'platform-management--status-review': domain === 'status'/);
-  assert.match(reviewSource, /P61 \/ 运行观测/);
+  assert.match(reviewSource, /PlatformStatusCenterView/);
   assert.match(reviewSource, /<h1 v-if="domain === 'status'">系统状态<\/h1>/);
 });
 

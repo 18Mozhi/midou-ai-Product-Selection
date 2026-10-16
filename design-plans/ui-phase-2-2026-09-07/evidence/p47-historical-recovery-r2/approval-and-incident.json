@@ -1,0 +1,33 @@
+{
+  "schemaVersion": 1,
+  "decision": "user-approved-independent-successor",
+  "scope": "Historical P47 test evidence only; no current UI or production acceptance",
+  "authorization": "允许独立新图包接续测试，保留旧记录。",
+  "date": "2026-10-16",
+  "originalPacket": "output/playwright/p47-filter-pagination-current-review",
+  "originalManifestSha256": "c490eea1b7b0cc9adf65308b90cbbc8071f96e3e5e955bf4d057b70902ba2ed8",
+  "successorManifestSha256": "36218270c9731f021f4e932be9320a25504772160b86186c3f099ae242cc0c3b",
+  "browserInputsGzipSha256": "571800182e1cc85b03a11b22ce6ae84f257da23f4c9bb78f2bba439ac4634ae8",
+  "browserInputCount": 170,
+  "originalBackupStatus": "No verified original backup found; overwritten copies are incident records, not original backups.",
+  "affectedImages": [
+    {
+      "file": "baseline-390-filters-open.png",
+      "originalSha256": "cfedcca262f370e5518dad3339d60b3ad3a9b13a7c7a17dadecb9ec29b5e52a7",
+      "overwrittenSha256": "d98c1061715bacf0d30aa0df3b780926c90a10d04a50b118f49e7b6201c9f22c",
+      "successorSha256": "e52d5dee1ed88a7fe53b3e404b3b4096eb28a00eca72cd24eb251b5f0f665dc8"
+    },
+    {
+      "file": "baseline-390-page-1.png",
+      "originalSha256": "006c5d0a527ae5da9aac67f9b017445d7f57af94fc90fbb5f48ed1eae8b10af1",
+      "overwrittenSha256": "fcbda82c4fc6a6aa0a12da50d76f0a013ae14372ad258d18ee13f91ed40d4ee3",
+      "successorSha256": "d3bc289d8414f1dfc01db17c1f519004b1543424936160a667ca7306f2ce41d5"
+    },
+    {
+      "file": "baseline-390-page-2.png",
+      "originalSha256": "0d8f27f3721363ac23c1a56f1c7e85a616a518e8fe680cb3a72891d66feaf0ac",
+      "overwrittenSha256": "0f0d3a637ffa12fc41f2e3721d6f72e32fb821c5f7d253182e6a75f66605f0ec",
+      "successorSha256": "b354d8eee1130c3c0dc7698c9cda9ce180461adfd9abceb5807d6d6fca38c117"
+    }
+  ]
+}

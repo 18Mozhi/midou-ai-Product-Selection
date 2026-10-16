@@ -5,11 +5,11 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/sourcing-cost-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
+    "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b",
     "apps/web/src/components/SourcingWorkspaceDialogs.vue": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0",
     "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
     "apps/web/src/components/SourcingCostConfirmationPanel.vue": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6",
-    "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
+    "apps/web/src/components/OpportunityProfitPanel.vue": "6026b558f0947a1ed83fe35da044d6fbbccd8d171a2befeee253802a556a86de",
     "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
   },
   "dialogs": {
@@ -261,7 +261,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#32fc6740cd676281.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+          "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b"
         }
       },
       "label": "发起找货",
@@ -374,8 +374,8 @@
           "apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
-          "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
+          "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b",
+          "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c"
         }
       },
       "label": "整页状态主次操作",
@@ -854,8 +854,8 @@
           "apps/web/src/components/UiStatePanel.vue#e75816bb76644822.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
-          "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
+          "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b",
+          "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c"
         }
       },
       "label": "空筛选恢复",
@@ -1048,7 +1048,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#95c07db60d43a586.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+          "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b"
         }
       },
       "label": "选择找货记录",
@@ -1418,7 +1418,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#1e3fc27654fc0776.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+          "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b"
         }
       },
       "label": "打开删除确认",
@@ -1682,7 +1682,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#8fb00fc320cdc059.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+          "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b"
         }
       },
       "label": "选择报价对比",
@@ -1967,7 +1967,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#1a57994baa2329f6.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+          "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b"
         }
       },
       "label": "打开报价确认",
@@ -2071,7 +2071,7 @@
           "apps/web/src/components/SourcingWorkspace.vue#6ec48a1f9259ef0d.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346"
+          "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b"
         }
       },
       "label": "打开采购任务",
@@ -2307,11 +2307,19 @@
         "apps/web/src/components/SourcingWorkspace.vue#e60a87b8bebccb4b.1",
         "apps/web/src/components/SourcingComparisonPanel.vue#49464ad9054e6202.1"
       ],
-      "sourceContractKeys": ["SC-G02 独立读取对比历史失败及重试事件转发", "SC-G02 重试对比历史 GET 按钮"],
+      "sourceContractKeys": [
+        "SC-G02 独立读取对比历史失败及重试事件转发",
+        "SC-G02 重试对比历史 GET 按钮"
+      ],
       "contractAliasReason": "两个独立源码候选分别对应父层重试事件绑定与面板内真实GET按钮，按源码合同逐一映射；两者只触发既有GET读取。",
       "condition": "仅比较历史读取失败且未过期/无权时呈现重试；请求中禁用。",
       "handler": "只重新发送 GET /sourcing/comparisons，不刷新找货目录，也不写入。",
-      "variants": ["initial-error", "retained-snapshot-error", "retry-loading", "retry-success"],
+      "variants": [
+        "initial-error",
+        "retained-snapshot-error",
+        "retry-loading",
+        "retry-success"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-mapped",
@@ -4197,7 +4205,7 @@
         }
       ]
     },
-        {
+    {
       "actionId": "SC-COST-REVIEWER-RETRY",
       "label": "P21成本复核人名单失败重试",
       "kind": "read",
@@ -4238,7 +4246,7 @@
       "kind": "write",
       "routeApplicability": "P21 /sourcing；共享成本组件仅在selected.input_type=opportunity时挂载，不混同P18或P22父处理器",
       "sourceCandidateIds": [
-        "apps/web/src/components/OpportunityProfitPanel.vue#21c282e197f8be16.1",
+        "apps/web/src/components/OpportunityProfitPanel.vue#d8a4bac11b7b8530.1",
         "apps/web/src/components/OpportunityProfitPanel.vue#d25bbd68583e5a3d.1"
       ],
       "sourceContractKeys": [
@@ -4462,12 +4470,12 @@
         "reason": "两个入口由item.can_review控制可见，均无disabled/aria-busy；beginReview清原因并切换结论，不立即审批。",
         "handlerBoundary": "item.can_review控制两个入口；beginReview绑定id/version并清reason，不立即审批",
         "sourceCandidateIds": [
-      "apps/web/src/components/OpportunityCostReviewQueue.vue#fa1b671cb5e1bc8c.1",
-      "apps/web/src/components/OpportunityCostReviewQueue.vue#224f4955ed7d6f48.1"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#fa1b671cb5e1bc8c.1",
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#224f4955ed7d6f48.1"
         ],
         "renderedControlIds": [
-      "apps/web/src/components/OpportunityCostReviewQueue.vue#fa1b671cb5e1bc8c.1",
-      "apps/web/src/components/OpportunityCostReviewQueue.vue#224f4955ed7d6f48.1"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#fa1b671cb5e1bc8c.1",
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#224f4955ed7d6f48.1"
         ],
         "sourceHashes": {
           "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
@@ -4754,12 +4762,12 @@
           "busy"
         ],
         "reason": "只按review.id显示并清空该ID，无disabled/aria-busy；取消不撤销在途请求。",
-    "handlerBoundary": "清除review id/version/reason，不发请求；取消后返回原驳回/通过触发器，触发器卸载则聚焦队列；刷新变更id可复核状态或版本也会清除旧草稿",
+        "handlerBoundary": "清除review id/version/reason，不发请求；取消后返回原驳回/通过触发器，触发器卸载则聚焦队列；刷新变更id可复核状态或版本也会清除旧草稿",
         "sourceCandidateIds": [
-      "apps/web/src/components/OpportunityCostReviewQueue.vue#66ceb3eced93eb5b.1"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#66ceb3eced93eb5b.1"
         ],
         "renderedControlIds": [
-      "apps/web/src/components/OpportunityCostReviewQueue.vue#66ceb3eced93eb5b.1"
+          "apps/web/src/components/OpportunityCostReviewQueue.vue#66ceb3eced93eb5b.1"
         ],
         "sourceHashes": {
           "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
@@ -4931,11 +4939,11 @@
       "apps/web/src/components/OpportunityCostReviewQueue.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/SourcingWorkspace.vue": "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
+      "apps/web/src/components/SourcingWorkspace.vue": "91f643ad51b005dee32301b21671f7792961610aeee8c81857e8068a93a3b78b",
       "apps/web/src/components/SourcingWorkspaceDialogs.vue": "291b46c28f8f14fdb3a3477b17d06dee7d18bd561fbc854bf76cd36d7f2b96b0",
       "apps/web/src/components/SourcingComparisonPanel.vue": "5513507982cab3db9388917868feae9fe3d9e28eb423abc8065c679b414914bd",
       "apps/web/src/components/SourcingCostConfirmationPanel.vue": "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6",
-      "apps/web/src/components/OpportunityProfitPanel.vue": "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
+      "apps/web/src/components/OpportunityProfitPanel.vue": "6026b558f0947a1ed83fe35da044d6fbbccd8d171a2befeee253802a556a86de",
       "apps/web/src/components/OpportunityCostReviewQueue.vue": "1f31c9e58475d9c3ef81b2d47300dd775233a5865a26aa4a7560b5235d90cd4a"
     },
     "inputs": [
@@ -5178,7 +5186,10 @@
             "name": "search-keyword",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "search-keyword" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-keyword"
+              }
             ],
             "remaining": "已关联弹窗主场景；全部输入态、主题和真实键盘交互仍待验"
           },
@@ -5186,7 +5197,10 @@
             "name": "search-error",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "search-error" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-error"
+              }
             ],
             "remaining": "已关联弹窗错误态；真实错误回焦与读屏仍待验"
           },
@@ -5194,7 +5208,10 @@
             "name": "search-busy",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "search-busy" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "search-busy"
+              }
             ],
             "remaining": "已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验"
           }
@@ -5309,7 +5326,10 @@
             "name": "quote",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "quote" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "quote"
+              }
             ],
             "remaining": "已关联弹窗主场景；完整字段约束及真实键盘交互仍待验"
           },
@@ -5317,7 +5337,10 @@
             "name": "quote-error",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "quote-error" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "quote-error"
+              }
             ],
             "remaining": "已关联弹窗错误态；真实错误回焦与读屏仍待验"
           },
@@ -5325,7 +5348,10 @@
             "name": "quote-busy",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "quote-busy" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "quote-busy"
+              }
             ],
             "remaining": "已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验"
           }
@@ -5397,7 +5423,10 @@
             "name": "purchase",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "purchase" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "purchase"
+              }
             ],
             "remaining": "已关联弹窗主场景；真实数量边界与键盘交互仍待验"
           },
@@ -5405,7 +5434,10 @@
             "name": "purchase-error",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "purchase-error" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "purchase-error"
+              }
             ],
             "remaining": "已关联弹窗错误态；真实错误回焦与读屏仍待验"
           },
@@ -5413,7 +5445,10 @@
             "name": "purchase-busy",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "purchase-busy" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "purchase-busy"
+              }
             ],
             "remaining": "已关联弹窗忙碌态；真实提交归属与禁用反馈仍待验"
           }
@@ -5474,7 +5509,10 @@
             "name": "delete",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "delete" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "delete"
+              }
             ],
             "remaining": "已关联弹窗主场景；原因校验及真实键盘交互仍待验"
           },
@@ -5482,7 +5520,10 @@
             "name": "delete-error",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "delete-error" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "delete-error"
+              }
             ],
             "remaining": "已关联弹窗错误态；真实错误回焦与读屏仍待验"
           },
@@ -5490,7 +5531,10 @@
             "name": "delete-busy",
             "evidenceScope": "matching-dialog-scene",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "delete-busy" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "delete-busy"
+              }
             ],
             "remaining": "已关联弹窗忙碌态；真实软删副作用仍待验"
           }
@@ -5594,7 +5638,10 @@
             "name": "profit-loading",
             "evidenceScope": "related-scene-only",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "loading" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "loading"
+              }
             ],
             "remaining": "仅关联加载类参考场景；利润专属实际状态仍未正式验收"
           }
@@ -5612,7 +5659,10 @@
             "name": "profit-error",
             "evidenceScope": "related-scene-only",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "cost-error" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-error"
+              }
             ],
             "remaining": "已关联错误提示参考；真实保留快照、重读和权限仍待验"
           }
@@ -5630,7 +5680,10 @@
             "name": "cost-missing",
             "evidenceScope": "related-scene-only",
             "scenes": [
-              { "package": "sourcing-direction-c", "scene": "cost-missing" }
+              {
+                "package": "sourcing-direction-c",
+                "scene": "cost-missing"
+              }
             ],
             "remaining": "主场景或表单对应，不抵扣全部控件适用态/主题/角色"
           }

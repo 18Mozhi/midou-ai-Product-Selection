@@ -1,3 +1,7 @@
+import {
+  assertCurrentSourceRevision,
+  assertCaptureSourceRevision,
+} from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { existsSync, readFileSync } from "node:fs";
@@ -31,22 +35,19 @@ const fieldEvidence = JSON.parse(
 const buildRolesReview = (sources, evidence) =>
   buildReview(sources, evidence, controlsEvidence, fieldEvidence);
 test(
-  "P31 mounted controls and extension evidence bind twenty-two Vue screenshots without approving the page",
-  { skip: !existsSync(`${base}/output/playwright/p31-approved-controls-review/evidence.json`) },
+  "P31 preserved controls and extension evidence bind twenty-two Vue screenshots separately from production acceptance",
+  { skip: !existsSync("output/playwright/p31-approved-controls-review/evidence.json") },
   () => {
     const entry = buildRolesReview(sources, evidence).actualVueControlEvidence;
     const proof = JSON.parse(readFileSync(entry.evidence, "utf8"));
     assert.equal(proof.checks.length, 54);
     assert.equal(proof.screenshots.length, 22);
-    assert.match(entry.scope, /not C layout or production acceptance/);
-    for (const [file, expected] of Object.entries(proof.sourceHashes))
-      assert.equal(
-        createHash("sha256")
-          .update(readFileSync(file, "utf8").replaceAll("\r\n", "\n"))
-          .digest("hex"),
-        expected,
-        file,
-      );
+    assert.match(entry.scope, /actual Vue and production acceptance remain pending/);
+    for (const [file, expected] of Object.entries(proof.sourceHashes)) {
+      const current = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
+      assertCurrentSourceRevision(file, current);
+      assertCaptureSourceRevision(file, current, expected);
+    }
     const directory = entry.evidence.slice(0, -"evidence.json".length);
     const scenes = [
       "keyboard-focus",

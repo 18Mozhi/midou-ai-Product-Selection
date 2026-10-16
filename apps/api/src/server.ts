@@ -244,6 +244,7 @@ const authorization = new AuthorizationService(
   undefined,
   resourceGrants,
 );
+const tenancyService = new TenancyService(new MySqlTenancyRepository(pool));
 const audit = new AuditQueryService(new MySqlAuditRepository(pool));
 const providerAdapterRegistry = new ProviderAdapterRegistry({
   healthTimeoutMs: config.providerAdapters.healthTimeoutMs,
@@ -314,13 +315,14 @@ const app = buildApp({
     sessionTtlMinutes: config.auth.sessionTtlMinutes,
   },
   tenancy: {
-    service: new TenancyService(new MySqlTenancyRepository(pool)),
+    service: tenancyService,
     auth: localAuth,
     idempotency,
     webOrigin: config.app.webOrigin,
     secureCookie: config.nodeEnv === "production",
   },
   authorization: {
+    tenancy: tenancyService,
     service: authorization,
     auth: localAuth,
     secureCookie: config.nodeEnv === "production",

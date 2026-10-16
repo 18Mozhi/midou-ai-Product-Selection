@@ -48,8 +48,8 @@ test("P65 C verdict labels do not infer an automatic stop or an audited stable r
   assert.doesNotMatch(template, /发布已自动停止|已回滚到稳定版本|回滚事实已审计/);
   assert.match(template, /服务返回停止结论/);
   assert.match(template, /服务返回回滚结论/);
-  assert.match(template, /服务返回观察门通过结论/);
-  assert.match(template, /请结合下方回滚记录与证据标记核对/);
+  assert.match(template, /发布门已通过/);
+  assert.match(template, /请核对下方回滚记录与构建版本。/);
 });
 test("P65 read feedback has named headings, busy regions and separate trace consumers", () => {
   const t = parse(original).descriptor.template.content;
@@ -86,7 +86,7 @@ test("P65 original six-column table and complete mobile slots are unchanged", ()
 test("P65 removes old layout from render and shows full source identities with fallback caveat", () => {
   assert.match(template, /v-if="false" class="identity-grid"/);
   assert.match(template, /v-if="false" class="panel p65-legacy-stages"/);
-  assert.match(template, /返回文本一致不代表独立核验/);
+  assert.match(template, /当前展示部署时记录的版本信息。/);
   for (const key of ["local", "remote", "production"])
     assert.ok(template.includes(`data.versions?.${key}?.build_sha`));
   assert.match(template, /data\.versions\?\.production\?\.config_fingerprint/);

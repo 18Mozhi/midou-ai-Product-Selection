@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 
 export const approvalsVueFile = "apps/web/src/components/OrganizationApprovalPanel.vue";
@@ -31,7 +32,7 @@ export const approvalsVueChanges = [
   ],
 ];
 export function previewApprovalsVue(source) {
-  let result = source.replaceAll("\r\n", "\n");
+  let result = beforePublishedPresentation(approvalsVueFile, source);
   for (const [before, after] of approvalsVueChanges) {
     assert.equal(result.split(before).length, 2, `Inspect P34 C anchor: ${before}`);
     result = result.replace(before, after);

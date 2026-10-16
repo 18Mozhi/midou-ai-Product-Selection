@@ -5,8 +5,8 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-    "apps/web/src/components/OrganizationWorkspacePanel.vue": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+    "apps/web/src/components/OrganizationWorkspacePanel.vue": "cd8fd06e5b939435c74aa1406ade6cbe6bfaf3724cd3676bcd1598c2e28c3b93"
   },
   "actions": [
     {
@@ -382,8 +382,8 @@
       "label": "资料分支排除",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#e93301a7ec700ce7.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ed75758087c9a4b8.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
       ],
       "sourceContractKeys": [
@@ -955,8 +955,8 @@
       "label": "创建并审计",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationWorkspacePanel.vue#7c1ff142d1b797a2.1",
-        "apps/web/src/components/OrganizationWorkspacePanel.vue#bae4e728dfc90592.1"
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#332d388d401153e6.1",
+        "apps/web/src/components/OrganizationWorkspacePanel.vue#82a3867867534186.1"
       ],
       "sourceContractKeys": [
         "OG-W-CREATE"
@@ -2463,8 +2463,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-      "apps/web/src/components/OrganizationWorkspacePanel.vue": "6fd890d68d970d4012289c4c590b40dbc446499c93fbb2ea572d0c7dae31d65e",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+      "apps/web/src/components/OrganizationWorkspacePanel.vue": "cd8fd06e5b939435c74aa1406ade6cbe6bfaf3724cd3676bcd1598c2e28c3b93",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9",
       "apps/web/src/use-audited-reason.ts": "90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007"
     },

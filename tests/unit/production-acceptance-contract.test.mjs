@@ -177,3 +177,16 @@ test("production acceptance preflight is read-only and reports the current machi
     },
   );
 });
+
+test("production QA expects organization members at the workbench and preserves platform-only fallbacks", async () => {
+  const catalog = JSON.parse(await read("config/route-catalog.json"));
+  const roles = catalog.productionAcceptance.roles;
+  for (const key of ["member", "selection_manager", "organization_admin"])
+    assert.equal(roles.find((item) => item.key === key).landingPath, "/home", key);
+  assert.equal(
+    roles.find((item) => item.key === "platform_security_admin").landingPath,
+    "/platform-admin/security",
+  );
+  for (const key of ["platform_operations_admin", "platform_super_admin"])
+    assert.equal(roles.find((item) => item.key === key).landingPath, "/platform-admin", key);
+});

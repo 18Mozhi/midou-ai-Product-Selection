@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -22,7 +23,10 @@ export const exportDetailPalette = Object.freeze({
   technical: "#f3f5f9",
 });
 export function undoExportDetailTokens(source) {
-  const sheet = postcss.parse(readFileSync(exportDetailTokens, "utf8")),
+  source = beforePublishedPresentation(exportDetailStyle, source);
+  const sheet = postcss.parse(
+      beforePublishedPresentation(exportDetailTokens, readFileSync(exportDetailTokens, "utf8")),
+    ),
     rules = sheet.nodes.filter((n) => n.type !== "comment");
   assert.equal(rules.length, 1);
   assert.equal(rules[0].type, "rule");
@@ -49,6 +53,7 @@ export function undoExportDetailTokens(source) {
 // Historical manifests keep their captured hashes. This permits only the proven byte-exact
 // palette extraction, not arbitrary CSS drift, and must not be described as a new capture.
 export function capturedExportDetailSource(file, source) {
+  source = beforePublishedPresentation(file, source);
   return file === exportDetailStyle ? undoExportDetailTokens(source) : source;
 }
 export function capturedExportDetailHash(file, source) {

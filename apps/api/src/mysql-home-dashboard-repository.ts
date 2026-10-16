@@ -12,6 +12,12 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       `SELECT
          (SELECT COUNT(*) FROM trend_monitoring_rules r
+          JOIN collection_tasks t ON t.id=r.last_collection_task_id
+            AND t.organization_id=r.organization_id AND t.workspace_id=r.workspace_id
+          WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled'
+            AND (t.blocked_subquery_count>0 OR t.failed_subquery_count>0
+              OR t.status IN ('dead_letter','blocked_robots','blocked_login'))) last_task_problem_count,
+         (SELECT COUNT(*) FROM trend_monitoring_rules r
           WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled') enabled_rule_count,
          (SELECT MAX(r.last_collection_at) FROM trend_monitoring_rules r
           WHERE r.organization_id=? AND r.workspace_id=? AND r.status='enabled') last_collection_at,
@@ -57,6 +63,8 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
         input.workspaceId,
         input.organizationId,
         input.workspaceId,
+        input.organizationId,
+        input.workspaceId,
       ],
     );
     const row = rows[0] ?? ({} as RowDataPacket),
@@ -67,7 +75,7 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
       state:
         enabled === 0
           ? ("not_configured" as const)
-          : next
+          : next && Number(row.last_task_problem_count ?? 0) === 0
             ? ("running" as const)
             : ("attention" as const),
       enabled_rule_count: enabled,

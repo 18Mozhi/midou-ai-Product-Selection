@@ -145,7 +145,7 @@ export class MySqlAuthorizationRepository implements AuthorizationRepository {
       "SELECT c.organization_id,c.workspace_id,o.name organization_name,w.name workspace_name " +
         "FROM user_session_contexts c JOIN organizations o ON o.id=c.organization_id JOIN workspaces " +
         "w ON w.id=c.workspace_id AND w.organization_id=c.organization_id WHERE c.session_id=? " +
-        "AND c.user_id=? LIMIT 1",
+        "AND c.user_id=? AND o.status='active' AND w.status='active' LIMIT 1",
       [sessionId, userId],
     );
     return rows[0]

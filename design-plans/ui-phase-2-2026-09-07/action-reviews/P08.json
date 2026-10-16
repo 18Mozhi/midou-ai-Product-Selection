@@ -6,7 +6,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/identity-onboarding-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TenancyChooser.vue": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18"
+    "apps/web/src/components/TenancyChooser.vue": "8ba690dfe3ce645883978d5176e1cb6c47a2428a0d59c5934dc9d7e87fa23f4d"
   },
   "dialogs": {
     "kind": "none-in-current-source",
@@ -600,8 +600,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/TenancyChooser.vue": "db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18",
-      "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+      "apps/web/src/components/TenancyChooser.vue": "8ba690dfe3ce645883978d5176e1cb6c47a2428a0d59c5934dc9d7e87fa23f4d",
+      "apps/web/src/App.vue": "df9ff52c97017408361f35cb947ee6a2935ecba89d38818ce12e1cdf2b12fea2",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
       "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",

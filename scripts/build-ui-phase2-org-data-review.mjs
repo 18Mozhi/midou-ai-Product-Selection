@@ -73,7 +73,7 @@ const definitions = [
     "EX-P29-PROFILE",
     "组织资料排除",
     "excluded",
-    C("d6b520278ab3dd57.1", "1cbd108c64b5230c.1", "5878e30377f290ae.1"),
+    C("e93301a7ec700ce7.1", "1cbd108c64b5230c.1", "ed75758087c9a4b8.1"),
     ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
     "仅summary分支",
     "不计资料保存或Logo有效性事件",

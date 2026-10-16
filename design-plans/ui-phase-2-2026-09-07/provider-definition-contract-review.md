@@ -182,25 +182,25 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 | A:343 | 4d3ea4004d92534e.1 | control / 343 | PR47-CURRENT-LOAD 页头刷新状态 |
 | A:346 | 3d1c1781d275b76d.1 | control / 346 | PR47-CURRENT-NAV 返回来源定义页 |
 | A:349 | ec27f1ab7441f3a6.1 | event-binding / 349 | PR47-CURRENT-ACCESS-PRIMARY 状态主操作条件接线：expired导航登录，其余受阻态沿用GET，隐藏未接线secondary |
-| A:478 | 8dbb02bd869e9eab.1 | control / 478 | PR47-CURRENT-TRACE 展开保留快照刷新失败的读取关联编号 |
-| A:481 | d5aef91ff7434dd6.1 | control / 481 | PR47-CURRENT-LOAD 保留快照失败后重新执行当前GET |
-| A:414 | 0da6a9c39b0f685c.1 | control / 414 | PR47-CURRENT-RESET 工具栏重置全部本地筛选/排序 |
-| A:416 | 17cbcae80442585d.1 | control / 416 | PR47-CURRENT-FILTER 展开本地筛选与排序 |
-| A:495 | d1614ad8db6bddf9.1 | control / 495 | PR47-CURRENT-DEFINE 空目录跳转来源定义页 |
-| A:508 | ccc2aafd70f9653e.1 | control / 508 | PR47-CURRENT-RESET 空结果清筛选并恢复搜索焦点 |
-| A:585 | 96211fe8b4dfe48d.1 | control / 585 | PR47-CURRENT-RECOVER 条件满足时导航至P70，不执行恢复 |
-| A:592 | b02f109125f46ed4.1 | control / 592 | PR47-CURRENT-PROBE 桌面探针入口，探针在途时禁用 |
-| A:658 | 741e7ec7cc13dbe8.1 | control / 658 | PR47-CURRENT-PROBE 移动详情探针入口，同一探针语义 |
-| A:674 | 1f36f7b562d00630.1 | control / 674 | PR47-CURRENT-TRACE 展开本来源探针关联编号 |
-| A:726 | 2cf3eb393d8269a0.1 | control / 726 | PR47-CURRENT-RECOVER 条件满足时导航至采集调度 |
-| A:733 | 1c008f867673db60.1 | control / 733 | PR47-CURRENT-TECH 展开移动来源身份与技术字段 |
-| A:769 | b2c6d3f8f6a9e8a9.1 | control / 769 | PR47-CURRENT-PAGE 本地上一页及边界焦点处理 |
-| A:773 | 822e3d6d7bce849d.1 | control / 773 | PR47-CURRENT-PAGE 本地下一页及边界焦点处理 |
-| A:780 | 1c008f867673db60.2 | control / 780 | PR47-CURRENT-TRACE 展开页级读取关联编号 |
+| A:477 | 8dbb02bd869e9eab.1 | control / 478 | PR47-CURRENT-TRACE 展开保留快照刷新失败的读取关联编号 |
+| A:480 | d5aef91ff7434dd6.1 | control / 481 | PR47-CURRENT-LOAD 保留快照失败后重新执行当前GET |
+| A:413 | 0da6a9c39b0f685c.1 | control / 414 | PR47-CURRENT-RESET 工具栏重置全部本地筛选/排序 |
+| A:415 | 17cbcae80442585d.1 | control / 416 | PR47-CURRENT-FILTER 展开本地筛选与排序 |
+| A:491 | d1614ad8db6bddf9.1 | control / 495 | PR47-CURRENT-DEFINE 空目录跳转来源定义页 |
+| A:504 | ccc2aafd70f9653e.1 | control / 508 | PR47-CURRENT-RESET 空结果清筛选并恢复搜索焦点 |
+| A:581 | 96211fe8b4dfe48d.1 | control / 585 | PR47-CURRENT-RECOVER 条件满足时导航至P70，不执行恢复 |
+| A:588 | b02f109125f46ed4.1 | control / 592 | PR47-CURRENT-PROBE 桌面探针入口，探针在途时禁用 |
+| A:652 | 741e7ec7cc13dbe8.1 | control / 658 | PR47-CURRENT-PROBE 移动详情探针入口，同一探针语义 |
+| A:668 | 1f36f7b562d00630.1 | control / 674 | PR47-CURRENT-TRACE 展开本来源探针关联编号 |
+| A:720 | 2cf3eb393d8269a0.1 | control / 726 | PR47-CURRENT-RECOVER 条件满足时导航至采集调度 |
+| A:727 | 1c008f867673db60.1 | control / 733 | PR47-CURRENT-TECH 展开移动来源身份与技术字段 |
+| A:763 | b2c6d3f8f6a9e8a9.1 | control / 769 | PR47-CURRENT-PAGE 本地上一页及边界焦点处理 |
+| A:767 | 822e3d6d7bce849d.1 | control / 773 | PR47-CURRENT-PAGE 本地下一页及边界焦点处理 |
+| A:774 | 1c008f867673db60.2 | control / 780 | PR47-CURRENT-TRACE 展开页级读取关联编号 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderAdapterCenter.vue | 1a98c8463bf4922f42c2376294e830cce83d7dbfb6f8e0a15a793c520ac69c9b |
+| apps/web/src/components/ProviderAdapterCenter.vue | 73d59ce92d9800e51a8c74ac95f3fbac001cd1140e4799227ba2eea90b5a5df4 |
 
 本节只登记当前源码身份及已有事实合同归属，不代表运行时全状态、真实 `provider:configure` 探针授权、采集执行、停用恢复或生产验收已通过。
 
@@ -210,11 +210,11 @@ R编辑器为一个自建form role=dialog，两业务模式×四步骤，另叠�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1 | 690 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET并隐藏未接线secondary |
+| apps/web/src/components/ProviderRegistry.vue#d5d54f49106b55f0.1 | 688 | event-binding | PR01-CURRENT-RETRY / 受阻态重读转发到现有列表GET并隐藏未接线secondary |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ProviderRegistry.vue | c97497796c891fe8d11219c1678db0bfb692b0a7642cb5ecb74abbb12f012d22 |
+| apps/web/src/components/ProviderRegistry.vue | 4bf02f190f890a3be639e0104a050bc193198e624c46a2624e49f4145e2848e6 |
 
 ### PR46/PR47及共享详情旧身份归档
 
@@ -282,7 +282,7 @@ P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT
 | --- | --- | --- | --- |
 | S | 7d0657958d2afe06.1 | — | PR47-CURRENT-NAV-REGISTRY |
 | A:346 | 3d1c1781d275b76d.1 | control / 346 | PR47-CURRENT-NAV |
-| A:495 | d1614ad8db6bddf9.1 | control / 495 | PR47-CURRENT-DEFINE |
+| A:491 | d1614ad8db6bddf9.1 | control / 495 | PR47-CURRENT-DEFINE |
 | S | c91c2e71e426b739.1 | — | PR47-CURRENT-NAV-ADAPTERS |
 | S | d6812914ba6d07da.1 | — | PR47-CURRENT-NAV-SOURCES |
 | S | c56767a09d40c33b.1 | — | PR47-CURRENT-NAV-1688 |
@@ -290,21 +290,21 @@ P46 当前逐候选动作表见 `action-reviews/P46.json`。以下 `PR46-CURRENT
 | A:343 | 4d3ea4004d92534e.1 | control / 343 | PR47-CURRENT-LOAD |
 | U | 589e8eedc7c9c864.1 | — | PR47-CURRENT-LOAD |
 | A:349 | ec27f1ab7441f3a6.1 | event-binding / 349 | PR47-CURRENT-ACCESS-PRIMARY |
-| A:478 | 8dbb02bd869e9eab.1 | control / 478 | PR47-CURRENT-TRACE |
-| A:481 | d5aef91ff7434dd6.1 | control / 481 | PR47-CURRENT-LOAD |
+| A:477 | 8dbb02bd869e9eab.1 | control / 478 | PR47-CURRENT-TRACE |
+| A:480 | d5aef91ff7434dd6.1 | control / 481 | PR47-CURRENT-LOAD |
 | U | e75816bb76644822.1 | — | PR47-CURRENT-SECONDARY-UNBOUND |
-| A:414 | 0da6a9c39b0f685c.1 | control / 414 | PR47-CURRENT-RESET |
-| A:508 | ccc2aafd70f9653e.1 | control / 508 | PR47-CURRENT-RESET |
-| A:416 | 17cbcae80442585d.1 | control / 416 | PR47-CURRENT-FILTER |
-| A:585 | 96211fe8b4dfe48d.1 | control / 585 | PR47-CURRENT-RECOVER |
-| A:726 | 2cf3eb393d8269a0.1 | control / 726 | PR47-CURRENT-RECOVER |
-| A:592 | b02f109125f46ed4.1 | control / 592 | PR47-CURRENT-PROBE |
-| A:658 | 741e7ec7cc13dbe8.1 | control / 658 | PR47-CURRENT-PROBE |
-| A:674 | 1f36f7b562d00630.1 | control / 674 | PR47-CURRENT-TRACE |
-| A:780 | 1c008f867673db60.2 | control / 780 | PR47-CURRENT-TRACE |
-| A:733 | 1c008f867673db60.1 | control / 733 | PR47-CURRENT-TECH |
-| A:769 | b2c6d3f8f6a9e8a9.1 | control / 769 | PR47-CURRENT-PAGE |
-| A:773 | 822e3d6d7bce849d.1 | control / 773 | PR47-CURRENT-PAGE |
+| A:413 | 0da6a9c39b0f685c.1 | control / 414 | PR47-CURRENT-RESET |
+| A:504 | ccc2aafd70f9653e.1 | control / 508 | PR47-CURRENT-RESET |
+| A:415 | 17cbcae80442585d.1 | control / 416 | PR47-CURRENT-FILTER |
+| A:581 | 96211fe8b4dfe48d.1 | control / 585 | PR47-CURRENT-RECOVER |
+| A:720 | 2cf3eb393d8269a0.1 | control / 726 | PR47-CURRENT-RECOVER |
+| A:588 | b02f109125f46ed4.1 | control / 592 | PR47-CURRENT-PROBE |
+| A:652 | 741e7ec7cc13dbe8.1 | control / 658 | PR47-CURRENT-PROBE |
+| A:668 | 1f36f7b562d00630.1 | control / 674 | PR47-CURRENT-TRACE |
+| A:774 | 1c008f867673db60.2 | control / 780 | PR47-CURRENT-TRACE |
+| A:727 | 1c008f867673db60.1 | control / 733 | PR47-CURRENT-TECH |
+| A:763 | b2c6d3f8f6a9e8a9.1 | control / 769 | PR47-CURRENT-PAGE |
+| A:767 | 822e3d6d7bce849d.1 | control / 773 | PR47-CURRENT-PAGE |
 | D | 6da4dad42cb34c8d.1 | — | PR47-CURRENT-PREVIEW-OPEN |
 | D | c182428cb2c0ed66.1 | — | PR47-CURRENT-PREVIEW-CLOSE |
 | D | 988131834dc4bd6f.1 | — | PR47-CURRENT-PREVIEW-CLOSE |

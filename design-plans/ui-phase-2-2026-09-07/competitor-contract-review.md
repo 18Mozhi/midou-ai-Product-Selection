@@ -38,31 +38,31 @@ config/route-catalog.json → NavigationShell.vue → navigation-shell-route-sta
 | 1148 | 6bc70845bac2b99a.1 | CP-MORE / P19移动 | 原生details开合 |
 | 1149 | d176f11e3e762c47.2 | CP-TOGGLE / P19移动 | 与桌面同一合同，独立可达性 |
 | 1151 | 219a5337696882de.2 | CP-DELETE-OPEN / P19移动 | 同上，不能漏移动入口 |
-| 1216 | c14a7d89545c4bbd.1 | CP-SOURCE-FIRST / P19 | 无快照时外部来源补充入口 |
-| 1283 | 3edcc1c1730d78dd.1 | CP-TASK-LINK / P19 | 本次已建任务/tasks?task=id |
-| 1287 | 9f03a53fb65e7c6b.1 | CP-TASK-CREATE / P19 | task:create，按变化建验证任务 |
-| 1318 | 9deedc4f8d67733e.1 | CP-HELP / P19 | 原生帮助details开合 |
-| 1336 | e6be6aad71e6c32f.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | 前两步本地，第三步POST |
-| 1342 | 933d6f0c73f9a623.1 | CP-CREATE-CLOSE / 创建表单 | 关闭、step归1、去create query |
-| 1408 | 76ebcf7c57bc49e4.1 | CP-CREATE-CLOSE / 创建表单 | 第一步取消 |
-| 1410 | 4ae114e438c807d5.1 | CP-CREATE-PREVIOUS / 创建表单 | 第2/3步本地回退 |
-| 1411 | d32ececd9e3b4c22.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | submit按钮，表单handler驱动 |
-| 1327 | 225c721c3e09266a.1 | CP-CREATE / P19 | 三步；无/有机会ID；字段非法、busy、失败/重试；取消归step1但实例字段保留 |
-| 1327 | 0a5942425b87d8da.1 | CP-CREATE-OPEN/CLOSE / P19 | 原生具名dialog；cancel与Tab边界键盘事件 |
-| 1426 | 0effcb12f0e7344b.1 | CP-RULE-SUBMIT / 规则表单 | POST明确阈值 |
-| 1432 | ad5c3e206797e35f.1 | CP-RULE-CLOSE / 规则表单 | 关闭且去competitor query |
-| 1475 | c40c87a6e5ef3e66.1 | CP-RULE-CLOSE / 规则表单 | 取消同合同 |
-| 1476 | 108089b4d17a2d6e.1 | CP-RULE-SUBMIT / 规则表单 | busy禁用的submit |
-| 1417 | 9538d57155059acf.1 | CP-RULE / P20 | 全局/指定对象×数值/库存；方向约束、数值0/小数、错误/busy；取消清query，新打开重置默认 |
-| 1417 | eaaea75753101b7d.1 | CP-RULE-OPEN/CLOSE / P20 | 原生具名dialog；cancel与Tab边界键盘事件 |
-| 1489 | 33765167c1ac37f5.1 | CP-DELETE-SUBMIT / 删除表单 | DELETE + trim原因/revision |
+| 1214 | c14a7d89545c4bbd.1 | CP-SOURCE-FIRST / P19 | 无快照时外部来源补充入口 |
+| 1279 | 3edcc1c1730d78dd.1 | CP-TASK-LINK / P19 | 本次已建任务/tasks?task=id |
+| 1283 | 9f03a53fb65e7c6b.1 | CP-TASK-CREATE / P19 | task:create，按变化建验证任务 |
+| 1314 | 9deedc4f8d67733e.1 | CP-HELP / P19 | 原生帮助details开合 |
+| 1332 | 1170d254f3b72ba2.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | 前两步本地，第三步POST |
+| 1338 | 933d6f0c73f9a623.1 | CP-CREATE-CLOSE / 创建表单 | 关闭、step归1、去create query |
+| 1404 | 76ebcf7c57bc49e4.1 | CP-CREATE-CLOSE / 创建表单 | 第一步取消 |
+| 1406 | 4ae114e438c807d5.1 | CP-CREATE-PREVIOUS / 创建表单 | 第2/3步本地回退 |
+| 1407 | d32ececd9e3b4c22.1 | CP-CREATE-STEP/SUBMIT / 创建表单 | submit按钮，表单handler驱动 |
+| 1323 | c48e81d75a90c3a4.1 | CP-CREATE / P19 | 三步；无/有机会ID；字段非法、busy、失败/重试；取消归step1但实例字段保留 |
+| 1323 | df0f43e1fcda5d6b.1 | CP-CREATE-OPEN/CLOSE / P19 | 原生具名dialog；cancel与Tab边界键盘事件 |
+| 1422 | 0effcb12f0e7344b.1 | CP-RULE-SUBMIT / 规则表单 | POST明确阈值 |
+| 1428 | ad5c3e206797e35f.1 | CP-RULE-CLOSE / 规则表单 | 关闭且去competitor query |
+| 1471 | c40c87a6e5ef3e66.1 | CP-RULE-CLOSE / 规则表单 | 取消同合同 |
+| 1472 | 108089b4d17a2d6e.1 | CP-RULE-SUBMIT / 规则表单 | busy禁用的submit |
+| 1413 | 9538d57155059acf.1 | CP-RULE / P20 | 全局/指定对象×数值/库存；方向约束、数值0/小数、错误/busy；取消清query，新打开重置默认 |
+| 1413 | eaaea75753101b7d.1 | CP-RULE-OPEN/CLOSE / P20 | 原生具名dialog；cancel与Tab边界键盘事件 |
+| 1485 | 33765167c1ac37f5.1 | CP-DELETE-SUBMIT / 删除表单 | DELETE + trim原因/revision |
 | 1125 | 8436b1677c6263f6.1 | CP-DELETE-CLOSE / 删除表单 | 删除选择归null，无DELETE [历史身份，仅追溯] |
 | 1147 | a94cde21d7759e06.1 | CP-DELETE-CLOSE / 删除表单 | 取消同合同 [历史身份，仅追溯] |
-| 1513 | 9d23c498e72940a2.1 | CP-DELETE-SUBMIT / 删除表单 | busy禁用的submit |
-| 1480 | 6a4b5c16df993837.1 | CP-DELETE / P19 | 原因空白/有效、当前/冲突revision、失败/重试；取消不写、重开清原因；已用标题关联提供可访问名称 |
-| 1480 | ef60f454df6c8376.1 | CP-DELETE-OPEN/CLOSE / P19 | 原生具名dialog；cancel与Tab边界键盘事件 |
-| 1495 | 9738acdb81108bf8.1 | CP-DELETE-CLOSE / 删除表单 | 删除选择归null，无DELETE |
-| 1512 | 5433acf9dddc7c6a.1 | CP-DELETE-CLOSE / 删除表单 | 取消同合同 |
+| 1509 | 9d23c498e72940a2.1 | CP-DELETE-SUBMIT / 删除表单 | busy禁用的submit |
+| 1476 | 6a4b5c16df993837.1 | CP-DELETE / P19 | 原因空白/有效、当前/冲突revision、失败/重试；取消不写、重开清原因；已用标题关联提供可访问名称 |
+| 1476 | ef60f454df6c8376.1 | CP-DELETE-OPEN/CLOSE / P19 | 原生具名dialog；cancel与Tab边界键盘事件 |
+| 1491 | 9738acdb81108bf8.1 | CP-DELETE-CLOSE / 删除表单 | 删除选择归null，无DELETE |
+| 1508 | 5433acf9dddc7c6a.1 | CP-DELETE-CLOSE / 删除表单 | 取消同合同 |
 
 v-model分别为695 query；954 URL、962 market、970 opportunity_id、978 title；1037规则目标、1044 metric、1051 direction、1061 threshold；1105 deleteReason。全局keydown还支持Escape按删除→规则→创建顺序关闭，不在36个模板候选中；需单独验键盘及缓存生命周期，不能漏计。
 

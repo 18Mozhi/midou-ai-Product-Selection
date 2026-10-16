@@ -7,8 +7,8 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-    "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+    "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+    "apps/web/src/components/OrganizationApprovalPanel.vue": "16736108ab97e26b4a37e59b68a04648f8a6f1412b4d3e52f21052e33f03f004",
     "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
     "apps/web/src/components/OrganizationApprovalReadFeedback.vue": "f20b3891d31459b30e6dfa5621819c4bbbaaa6523130d33f9395804def25bf52"
   },
@@ -421,9 +421,9 @@
       "label": "组织资料排除",
       "kind": "excluded",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#e93301a7ec700ce7.1",
         "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#ed75758087c9a4b8.1"
       ],
       "sourceContractKeys": [
         "OG-PROFILE-SAVE",
@@ -1690,7 +1690,7 @@
   ],
   "dialogs": {
     "kind": "local-callers-and-listed-shared-only",
-    "remaining": "P34无业务弹窗。共享父原因窗无本页发起入口；模板详情article、技术details和aside说明都不是弹窗。"
+    "remaining": "P34无业务弹窗。共享父原因窗无本页发起入口；模板详情article与技术details都不是弹窗。"
   },
   "inputs": {
     "OrganizationAdminCenter.vue": [
@@ -2085,8 +2085,8 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2",
-      "apps/web/src/components/OrganizationApprovalPanel.vue": "332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b",
+      "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489",
+      "apps/web/src/components/OrganizationApprovalPanel.vue": "16736108ab97e26b4a37e59b68a04648f8a6f1412b4d3e52f21052e33f03f004",
       "apps/web/src/components/OrganizationApprovalFirstFailure.vue": "b134ea4f6de7ca1a7e996917a2fd78b722bd1a75b1e5fc434bbc4806841b5a36",
       "apps/web/src/components/OrganizationApprovalReadFeedback.vue": "f20b3891d31459b30e6dfa5621819c4bbbaaa6523130d33f9395804def25bf52"
     },
@@ -2369,35 +2369,10 @@
             "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
           }
         ]
-      },
-      {
-        "file": "apps/web/src/components/OrganizationApprovalPanel.vue",
-        "tag": "aside",
-        "ordinal": 1,
-        "shape": "inline-aside",
-        "sourceBehavior": "持续的只读组织治理说明，无关闭动作；不是抽屉或对话框",
-        "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。",
-        "variants": [
-          {
-            "name": "readonly-notice",
-            "evidenceScope": "related-scene-only",
-            "scenes": [
-              {
-                "package": "org-approvals-direction-c",
-                "scene": "normal"
-              },
-              {
-                "package": "org-approvals-direction-c",
-                "scene": "templates"
-              }
-            ],
-            "remaining": "源语义/离线图关联，不是整页C、完整生命周期、真实后端、权限或生产验收；局部批准另记。"
-          }
-        ]
       }
     ],
     "sharedRemaining": [
-      "三个结构记录不等于三个本页弹窗；本页业务弹窗为0。",
+      "两个父结构为本页排除引用；本页业务弹窗为0。已删除的说明aside仅保留在历史图包中。",
       "模板详情article不被结构扫描当dialog；首版/无变化/差异阅读保持只读。"
     ]
   },

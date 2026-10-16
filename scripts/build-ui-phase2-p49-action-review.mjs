@@ -82,7 +82,7 @@ const definitions = [
   },
   {
     actionId: "SC49-EXECUTION-WIRING",
-    candidates: ["9dc337a873726e6c.1", "d7d20d959f3300b0.1"],
+    candidates: ["9d3b97920285ef14.1", "d7d20d959f3300b0.1"],
     label: "验收表单意图与既有父级处理器接线",
     kind: "wiring",
     sourceContractKeys: ["SC49-SCOPE/RUN / 范围、表单与既有验收提交子组件事件转发"],
@@ -119,26 +119,29 @@ const definitions = [
   },
   {
     actionId: "SC49-QUERY",
-    candidates: ["e941099000a6691d.1"],
+    candidates: ["aa58789f5c2446ef.1"],
     label: "编辑本次验收关键词",
     kind: "local",
     sourceContractKeys: ["SC49-RUN / 验收关键词受控输入"],
-    contractAliasReason: "合同将关键词作为受控表单字段；编辑值本身不调用 API，只有显式提交才安排验收运行。",
+    contractAliasReason:
+      "合同将关键词作为受控表单字段；编辑值本身不调用 API，只有显式提交才安排验收运行。",
     condition: "验收表单可编辑且任务不在提交中。",
     handler: "保留最多 200 字的受控输入，交由父级提交时 trim；编辑不触发检查 GET 或任务 POST。",
     remaining: "源映射不替代真实浏览器输入法、错误提示和服务端字段验证。",
   },
   {
     actionId: "SC49-RUN",
-    candidates: ["4d5599c177edbee1.1"],
+    candidates: ["f87be36857afeadf.1"],
     label: "发起一次受控 1688 登录验收运行",
     kind: "write",
     sourceContractKeys: ["SC49-RUN / 发起一次既有受控登录验收提交"],
-    contractAliasReason: "此按钮只映射既有人工验收 POST；202 仅代表排队，不能合并为来源启用或采集成功。",
+    contractAliasReason:
+      "此按钮只映射既有人工验收 POST；202 仅代表排队，不能合并为来源启用或采集成功。",
     condition: "provider、有效组织/工作区和非空关键词齐备，范围读取结束且不在提交中。",
     handler:
       "调用既有 scheduleAcceptanceRun，保留 organization_id、workspace_id、trim 后 query、acceptance_run:true、Origin 与 Idempotency-Key；仅接受排队/提交结果，不自动启用、轮询或在未知结果时重复 POST。",
-    remaining: "此审计不批准真实外部浏览器任务；真实 RBAC、幂等、MySQL、队列终态和生产采集仍未验收。",
+    remaining:
+      "此审计不批准真实外部浏览器任务；真实 RBAC、幂等、MySQL、队列终态和生产采集仍未验收。",
   },
   {
     actionId: "SC49-SCOPE-READ",
@@ -165,8 +168,8 @@ export function buildP49ActionReview() {
       createHash("sha256").update(source).digest("hex"),
     ]),
   );
-  const candidates = Object.entries(sourceText).flatMap(([file, source]) =>
-    scanSource(source, file).candidates,
+  const candidates = Object.entries(sourceText).flatMap(
+    ([file, source]) => scanSource(source, file).candidates,
   );
   const candidateById = new Map(candidates.map((candidate) => [candidate.candidateId, candidate]));
   const records = runContractAudit().records.filter(
@@ -181,8 +184,16 @@ export function buildP49ActionReview() {
     const previous = recordsById.get(record.candidateId);
     if (previous)
       assert.equal(
-        previous.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1),
-        record.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1),
+        previous.claim
+          .split("|")
+          .map((cell) => cell.trim())
+          .filter(Boolean)
+          .at(-1),
+        record.claim
+          .split("|")
+          .map((cell) => cell.trim())
+          .filter(Boolean)
+          .at(-1),
         `conflicting current P49 contract for ${record.candidateId}`,
       );
     else recordsById.set(record.candidateId, record);
@@ -206,7 +217,11 @@ export function buildP49ActionReview() {
     const actionId = ownerBySignature.get(signature);
     assert.ok(actionId, `unmapped P49 candidate ${record.candidateId}`);
     groups.get(actionId).push(record.candidateId);
-    const claim = record.claim.split("|").map((cell) => cell.trim()).filter(Boolean).at(-1);
+    const claim = record.claim
+      .split("|")
+      .map((cell) => cell.trim())
+      .filter(Boolean)
+      .at(-1);
     claimsByGroup.get(actionId).push(claim);
   }
 

@@ -6,7 +6,7 @@
   "status": "implemented-user-auto-approved-production-smoke-verified-not-formally-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/account-home-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/HomeDashboard.vue": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5",
+    "apps/web/src/components/HomeDashboard.vue": "0161f338f31f909cf116f0e11e116ec2b1e6e74e78d4d201a40364e904773355",
     "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4"
   },
   "dialogs": {
@@ -208,7 +208,9 @@
     },
     {
       "actionId": "HD-START",
-      "sourceContractKeys": ["HD-CURRENT-START / 导航至独立创建选品流程"],
+      "sourceContractKeys": [
+        "HD-CURRENT-START / 导航至独立创建选品流程"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节确认导航到独立创建选品流程。",
       "label": "创建选品入口",
       "kind": "navigation",
@@ -255,7 +257,9 @@
     },
     {
       "actionId": "HD-RESUME",
-      "sourceContractKeys": ["HD-CURRENT-RESUME / 仅恢复第一条已暂停规则；提交中禁用"],
+      "sourceContractKeys": [
+        "HD-CURRENT-RESUME / 仅恢复第一条已暂停规则；提交中禁用"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节限定只恢复第一条已暂停规则。",
       "label": "恢复第一条暂停规则",
       "kind": "write",
@@ -313,7 +317,9 @@
     },
     {
       "actionId": "HD-SETUP",
-      "sourceContractKeys": ["HD-CURRENT-SETUP / 在符合状态及能力条件时展开或收起本地首次设置表单"],
+      "sourceContractKeys": [
+        "HD-CURRENT-SETUP / 在符合状态及能力条件时展开或收起本地首次设置表单"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节确认该入口只展开/收起本地首次设置表单。",
       "label": "展开或收起首次设置",
       "kind": "local",
@@ -379,7 +385,7 @@
       "kind": "write",
       "routeApplicability": "P12-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/HomeDashboard.vue#26550e015743f49c.1",
+        "apps/web/src/components/HomeDashboard.vue#1e5a04529a609636.1",
         "apps/web/src/components/HomeDashboard.vue#a3f78d5afc916240.1"
       ],
       "condition": "setupOpen&&canManageRules；按钮setupBusy禁用；handler检查关键词与manage但无busy早退",
@@ -441,7 +447,9 @@
     },
     {
       "actionId": "HD-RECOMMENDATION",
-      "sourceContractKeys": ["HD-CURRENT-RECOMMENDATION / 按服务端返回的item.route打开单条推荐"],
+      "sourceContractKeys": [
+        "HD-CURRENT-RECOMMENDATION / 按服务端返回的item.route打开单条推荐"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节要求使用服务端提供的item.route打开单条推荐。",
       "label": "进入推荐条目",
       "kind": "navigation",
@@ -598,7 +606,9 @@
     },
     {
       "actionId": "HD-WORK-HEALTH",
-      "sourceContractKeys": ["HD-CURRENT-WORK / 使用本人事项或健康记录提供的原始路由"],
+      "sourceContractKeys": [
+        "HD-CURRENT-WORK / 使用本人事项或健康记录提供的原始路由"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节规定使用当前事项/健康记录各自的原始路由。",
       "label": "打开本人其他待办和异常",
       "kind": "navigation",
@@ -648,7 +658,9 @@
     },
     {
       "actionId": "HD-TRUTH",
-      "sourceContractKeys": ["HD-CURRENT-TRUTH / 原生details披露来源计数/时间和非自动采纳说明，不发请求"],
+      "sourceContractKeys": [
+        "HD-CURRENT-TRUTH / 原生details披露来源计数/时间和非自动采纳说明，不发请求"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节确认原生details仅披露来源时间/数量和非自动采纳说明。",
       "label": "展开数据说明",
       "kind": "local",
@@ -696,7 +708,9 @@
     },
     {
       "actionId": "HD-RECOMMENDED-VIEW",
-      "sourceContractKeys": ["HD-AUTO-CURRENT-RECOMMENDED / 进入既有推荐队列"],
+      "sourceContractKeys": [
+        "HD-AUTO-CURRENT-RECOMMENDED / 进入既有推荐队列"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节的自动化概览推荐入口到既有推荐队列。",
       "label": "按推荐view查看机会",
       "kind": "navigation",
@@ -743,7 +757,9 @@
     },
     {
       "actionId": "HD-RUNTIME",
-      "sourceContractKeys": ["HD-AUTO-CURRENT-RUNTIME / 原生 details 展开运行进度与时间，无请求"],
+      "sourceContractKeys": [
+        "HD-AUTO-CURRENT-RUNTIME / 原生 details 展开运行进度与时间，无请求"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节限定运行详情为原生details披露且不请求服务。",
       "label": "展开自动运行详情",
       "kind": "local",
@@ -795,25 +811,74 @@
       "remaining": "四步骤标记依据不同计数>0，不是每个商品已通过流程的证明；candidate_count与rule_candidate_count字段不能互换。"
     },
     {
-      "actionId": "HD-LOAD-WIRING", "label": "首页读取状态事件转交", "kind": "wiring", "routeApplicability": "P12-home-read-status",
-      "sourceContractKeys": ["HD-CURRENT-READ / UiStatePanel仅呈现主操作并转给首页load；:hide-secondary=true抑制无监听次操作"],
+      "actionId": "HD-LOAD-WIRING",
+      "label": "首页读取状态事件转交",
+      "kind": "wiring",
+      "routeApplicability": "P12-home-read-status",
+      "sourceContractKeys": [
+        "HD-CURRENT-READ / UiStatePanel仅呈现主操作并转给首页load；:hide-secondary=true抑制无监听次操作"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节确认共享读取状态仅呈现主操作并通过load事件交回首页；本页隐藏未接线secondary，不另增按钮动作。",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#5a213ad1d3b14030.1"],
-      "condition": "UiStatePanel呈现读取状态", "handler": "@primary -> load",
-      "forwardsTo": ["HD-LOAD"],
-      "forwardBindings": [{"candidateId":"apps/web/src/components/HomeDashboard.vue#5a213ad1d3b14030.1","event":"@primary","handler":"load","targets":["HD-LOAD"]}],
-      "variants": ["primary-read"], "scenes": [], "testReferences": [],
-      "visualStates": {"default":"not-applicable-wiring","hover":"not-applicable-wiring","focus":"not-applicable-wiring","pressed":"not-applicable-wiring","disabled":"not-applicable-wiring","busy":"not-applicable-wiring"},
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#5a213ad1d3b14030.1"
+      ],
+      "condition": "UiStatePanel呈现读取状态",
+      "handler": "@primary -> load",
+      "forwardsTo": [
+        "HD-LOAD"
+      ],
+      "forwardBindings": [
+        {
+          "candidateId": "apps/web/src/components/HomeDashboard.vue#5a213ad1d3b14030.1",
+          "event": "@primary",
+          "handler": "load",
+          "targets": [
+            "HD-LOAD"
+          ]
+        }
+      ],
+      "variants": [
+        "primary-read"
+      ],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-applicable-wiring",
+        "hover": "not-applicable-wiring",
+        "focus": "not-applicable-wiring",
+        "pressed": "not-applicable-wiring",
+        "disabled": "not-applicable-wiring",
+        "busy": "not-applicable-wiring"
+      },
       "remaining": "只记录共享组件事件接线，不单独增加按钮数量。"
     },
     {
-      "actionId": "HD-RULES-READ", "label": "重读规则列表", "kind": "read", "routeApplicability": "P12-rules-section",
-      "sourceContractKeys": ["HD-CURRENT-RULES-READ / 规则读取错误时由有管理能力者重读"],
+      "actionId": "HD-RULES-READ",
+      "label": "重读规则列表",
+      "kind": "read",
+      "routeApplicability": "P12-rules-section",
+      "sourceContractKeys": [
+        "HD-CURRENT-RULES-READ / 规则读取错误时由有管理能力者重读"
+      ],
       "contractAliasReason": "account-home-contract-review.md第2.1节限定规则错误态重读入口需具备既有管理能力。",
-      "sourceCandidateIds": ["apps/web/src/components/HomeDashboard.vue#473fa4f4d2c5e48b.1"],
-      "condition": "规则读取失败且具备管理能力", "handler": "调用既有规则列表重读处理器",
-      "variants": ["rules-read-error"], "scenes": [], "testReferences": [],
-      "visualStates": {"default":"not-mapped","hover":"not-mapped","focus":"not-mapped","pressed":"not-mapped","disabled":"not-mapped","busy":"not-mapped"},
+      "sourceCandidateIds": [
+        "apps/web/src/components/HomeDashboard.vue#473fa4f4d2c5e48b.1"
+      ],
+      "condition": "规则读取失败且具备管理能力",
+      "handler": "调用既有规则列表重读处理器",
+      "variants": [
+        "rules-read-error"
+      ],
+      "scenes": [],
+      "testReferences": [],
+      "visualStates": {
+        "default": "not-mapped",
+        "hover": "not-mapped",
+        "focus": "not-mapped",
+        "pressed": "not-mapped",
+        "disabled": "not-mapped",
+        "busy": "not-mapped"
+      },
       "remaining": "不推断真实RBAC或规则服务可用性。"
     }
   ],
@@ -825,16 +890,16 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/HomeDashboard.vue": "e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5",
+      "apps/web/src/components/HomeDashboard.vue": "0161f338f31f909cf116f0e11e116ec2b1e6e74e78d4d201a40364e904773355",
       "apps/web/src/components/HomeAutomationOverview.vue": "5225f927a256b5daafba29a4dce15a391cf4c0c05dca6aeb6264e396d88a45c4",
-      "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
+      "apps/web/src/App.vue": "df9ff52c97017408361f35cb947ee6a2935ecba89d38818ce12e1cdf2b12fea2",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
       "apps/web/src/api-client.ts": "953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff",
-      "apps/web/src/components/NavigationShell.vue": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+      "apps/web/src/components/NavigationShell.vue": "596cef4389d9ecf77b4eb433d0954031880a962ec0346c9455cc0c4790c5f933",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
-      "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de",
-      "apps/web/src/ui/state-contract.ts": "9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a"
+      "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c",
+      "apps/web/src/ui/state-contract.ts": "913cf51719f372302e1900ac99c4b46c1baaa3632d7bcca7e234700f483d2ac8"
     },
     "inputs": [
       {

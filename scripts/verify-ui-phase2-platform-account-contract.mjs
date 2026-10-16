@@ -1,3 +1,7 @@
+import {
+  beforePublishedPresentation,
+  publishedPresentationRevisions,
+} from "./lib/ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { existsSync, readFileSync } from "node:fs";
@@ -264,10 +268,17 @@ export function verifyPlatformAccountContract(read = (file) => readFileSync(file
     [responsiveFile],
     "responsive supplement hash files",
   );
+  assert.equal(
+    createHash("sha256").update(source(overlayPalette)).digest("hex"),
+    publishedPresentationRevisions[overlayPalette].current,
+    "overlay palette hash drift",
+  );
   const paletteValues = new Map(
-    [...source(overlayPalette).matchAll(/(--so-workspace-overlay-[\w-]+):\s*(#[0-9a-f]{6});/g)].map(
-      (match) => [match[1], match[2]],
-    ),
+    [
+      ...beforePublishedPresentation(overlayPalette, source(overlayPalette)).matchAll(
+        /(--so-workspace-overlay-[\w-]+):\s*(#[0-9a-f]{6});/g,
+      ),
+    ].map((match) => [match[1], match[2]]),
   );
   const responsiveSource = source(responsiveFile);
   const paletteImport = '@import "../design/platform-overlay-tokens.css";\n\n';

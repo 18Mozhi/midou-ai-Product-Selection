@@ -98,38 +98,38 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/RuntimeTopologyCenter.vue#5587941412d5210f.1 | 520 | control | RT66-LOGIN：expired才显示，/login跳转 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#dac6cbc2991374ba.1 | 645 | control | RT66-PROCESS：last_failure原生披露 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#1c45c779df2fcc7f.1 | 789 | control | RT66-QUEUES：只改本地showAllQueues |
-| apps/web/src/components/RuntimeTopologyCenter.vue#e41c915a9e93bf55.1 | 890 | control | RT66-POLICY：每个已显示队列原生披露 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#fcf7c9f746bc706b.1 | 903 | control | RT66-SNAPSHOT：发布失败计数非零才出现 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#d9de878e4de4767e.1 | 944 | control | RT66-OBJECT：仅真实object.href跳转，目标重新授权 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.1 | 952 | control | RT66-ALERT：告警码/根因/业务ID原生披露 |
-| apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.2 | 975 | control | RT66-BLOCKER：阻断code原生披露 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#5587941412d5210f.1 | 518 | control | RT66-LOGIN：expired才显示，/login跳转 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#dac6cbc2991374ba.1 | 643 | control | RT66-PROCESS：last_failure原生披露 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#1c45c779df2fcc7f.1 | 787 | control | RT66-QUEUES：只改本地showAllQueues |
+| apps/web/src/components/RuntimeTopologyCenter.vue#e41c915a9e93bf55.1 | 888 | control | RT66-POLICY：每个已显示队列原生披露 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#fcf7c9f746bc706b.1 | 901 | control | RT66-SNAPSHOT：发布失败计数非零才出现 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#d9de878e4de4767e.1 | 942 | control | RT66-OBJECT：仅真实object.href跳转，目标重新授权 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.1 | 950 | control | RT66-ALERT：告警码/根因/业务ID原生披露 |
+| apps/web/src/components/RuntimeTopologyCenter.vue#1c008f867673db60.2 | 973 | control | RT66-BLOCKER：阻断code原生披露 |
 
 ### apps/web/src/components/RedisResilienceCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1 | 308 | control | RD67-LOGIN：expired登录 |
+| apps/web/src/components/RedisResilienceCenter.vue#5587941412d5210f.1 | 303 | control | RD67-LOGIN：expired登录 |
 
 ### apps/web/src/components/MySqlResilienceCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/MySqlResilienceCenter.vue#99e387027e98dda9.1 | 181 | control | MY68-LOAD：顶部单飞GET |
-| apps/web/src/components/MySqlResilienceCenter.vue#21c66441891be768.1 | 200 | control | MY68-RETRY：刷新失败重试 |
-| apps/web/src/components/MySqlResilienceCenter.vue#5587941412d5210f.1 | 224 | control | MY68-LOGIN：expired登录 |
-| apps/web/src/components/MySqlResilienceCenter.vue#6a87ca890e2cd293.1 | 225 | control | MY68-RETRY：首次错误重试 |
+| apps/web/src/components/MySqlResilienceCenter.vue#99e387027e98dda9.1 | 180 | control | MY68-LOAD：顶部单飞GET |
+| apps/web/src/components/MySqlResilienceCenter.vue#21c66441891be768.1 | 196 | control | MY68-RETRY：刷新失败重试 |
+| apps/web/src/components/MySqlResilienceCenter.vue#5587941412d5210f.1 | 220 | control | MY68-LOGIN：expired登录 |
+| apps/web/src/components/MySqlResilienceCenter.vue#6a87ca890e2cd293.1 | 221 | control | MY68-RETRY：首次错误重试 |
 
 ### apps/web/src/components/FileResilienceCenter.vue
 
 | candidateId | 行 | 类型 | 语义与副作用 |
 | --- | --- | --- | --- |
-| apps/web/src/components/FileResilienceCenter.vue#cdc9d1538d58eb3c.1 | 155 | control | FL69-LOAD：顶部单飞GET |
-| apps/web/src/components/FileResilienceCenter.vue#21c66441891be768.1 | 174 | control | FL69-RETRY：刷新失败重试 |
-| apps/web/src/components/FileResilienceCenter.vue#5587941412d5210f.1 | 198 | control | FL69-LOGIN：expired登录 |
-| apps/web/src/components/FileResilienceCenter.vue#6a87ca890e2cd293.1 | 199 | control | FL69-RETRY：首次错误重试 |
+| apps/web/src/components/FileResilienceCenter.vue#cdc9d1538d58eb3c.1 | 154 | control | FL69-LOAD：顶部单飞GET |
+| apps/web/src/components/FileResilienceCenter.vue#21c66441891be768.1 | 170 | control | FL69-RETRY：刷新失败重试 |
+| apps/web/src/components/FileResilienceCenter.vue#5587941412d5210f.1 | 194 | control | FL69-LOGIN：expired登录 |
+| apps/web/src/components/FileResilienceCenter.vue#6a87ca890e2cd293.1 | 195 | control | FL69-RETRY：首次错误重试 |
 
 ### apps/web/src/components/TechnicalDetails.vue
 
@@ -180,26 +180,26 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 
 | 当前位置键 | candidate sig | 类型 / 行 | 当前语义 |
 | --- | --- | --- | --- |
-| apps/web/src/components/RuntimeTopologyCenter.vue:416 | 58a7337b2cdfab3b.1 | control / 416 | RT66-CURRENT-LOAD 页头刷新运行事实；保留焦点的aria-disabled/busy状态 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:433 | ba9adc29c8482881.1 | control / 433 | RT66-CURRENT-NAV 锚点跳至节点与进程区段 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:433 | e9f9ec4727623c2c.1 | control / 433 | RT66-CURRENT-NAV 锚点跳至健康探测区段 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:434 | 937f81b359ccaf21.1 | control / 434 | RT66-CURRENT-NAV 锚点跳至队列调度区段 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:434 | 276f8658e371a562.1 | control / 434 | RT66-CURRENT-NAV 锚点跳至告警与阻断区段 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:488 | a93553a3ba9aa8a6.1 | control / 488 | RT66-CURRENT-RETRY 有快照刷新失败提示中的重新核验 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:520 | 5587941412d5210f.1 | control / 520 | RT66-CURRENT-LOGIN 仅expired状态导航到登录 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:521 | d45ddc5db7a2701f.1 | control / 521 | RT66-CURRENT-RETRY expired以外列举错误状态中的重新核验 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:645 | dac6cbc2991374ba.1 | control / 645 | RT66-CURRENT-PROCESS 展开进程最近失败文本 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:654 | cc99c7c8b16ccff2.1 | control / 654 | RT66-CURRENT-RESTART 展开Node API/Worker重启观测摘要 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:789 | 1c45c779df2fcc7f.1 | control / 789 | RT66-CURRENT-QUEUES 切换仅运行/异常与全部队列本地视图 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:890 | e41c915a9e93bf55.1 | control / 890 | RT66-CURRENT-POLICY 展开单个队列调度参数 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:903 | fcf7c9f746bc706b.1 | control / 903 | RT66-CURRENT-SNAPSHOT 有发布失败计数时披露状态文件错误 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:944 | d9de878e4de4767e.1 | control / 944 | RT66-CURRENT-OBJECT 仅对返回真实href的关联对象导航 |
-| apps/web/src/components/RuntimeTopologyCenter.vue:952 | 1c008f867673db60.1 | control / 952 | RT66-CURRENT-ALERT 展开告警码、根因及关联业务ID |
-| apps/web/src/components/RuntimeTopologyCenter.vue:975 | 1c008f867673db60.2 | control / 975 | RT66-CURRENT-BLOCKER 展开阻断项技术码 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:414 | 58a7337b2cdfab3b.1 | control / 416 | RT66-CURRENT-LOAD 页头刷新运行事实；保留焦点的aria-disabled/busy状态 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:431 | ba9adc29c8482881.1 | control / 433 | RT66-CURRENT-NAV 锚点跳至节点与进程区段 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:431 | e9f9ec4727623c2c.1 | control / 433 | RT66-CURRENT-NAV 锚点跳至健康探测区段 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:432 | 937f81b359ccaf21.1 | control / 434 | RT66-CURRENT-NAV 锚点跳至队列调度区段 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:432 | 276f8658e371a562.1 | control / 434 | RT66-CURRENT-NAV 锚点跳至告警与阻断区段 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:486 | a93553a3ba9aa8a6.1 | control / 488 | RT66-CURRENT-RETRY 有快照刷新失败提示中的重新核验 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:518 | 5587941412d5210f.1 | control / 520 | RT66-CURRENT-LOGIN 仅expired状态导航到登录 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:519 | d45ddc5db7a2701f.1 | control / 521 | RT66-CURRENT-RETRY expired以外列举错误状态中的重新核验 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:643 | dac6cbc2991374ba.1 | control / 645 | RT66-CURRENT-PROCESS 展开进程最近失败文本 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:652 | cc99c7c8b16ccff2.1 | control / 654 | RT66-CURRENT-RESTART 展开Node API/Worker重启观测摘要 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:787 | 1c45c779df2fcc7f.1 | control / 789 | RT66-CURRENT-QUEUES 切换仅运行/异常与全部队列本地视图 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:888 | e41c915a9e93bf55.1 | control / 890 | RT66-CURRENT-POLICY 展开单个队列调度参数 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:901 | fcf7c9f746bc706b.1 | control / 903 | RT66-CURRENT-SNAPSHOT 有发布失败计数时披露状态文件错误 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:942 | d9de878e4de4767e.1 | control / 944 | RT66-CURRENT-OBJECT 仅对返回真实href的关联对象导航 |
+| apps/web/src/components/RuntimeTopologyCenter.vue:950 | 1c008f867673db60.1 | control / 952 | RT66-CURRENT-ALERT 展开告警码、根因及关联业务ID |
+| apps/web/src/components/RuntimeTopologyCenter.vue:973 | 1c008f867673db60.2 | control / 975 | RT66-CURRENT-BLOCKER 展开阻断项技术码 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/RuntimeTopologyCenter.vue | d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd |
+| apps/web/src/components/RuntimeTopologyCenter.vue | 30811effde28c40a5eda285ad50dc053aa500e81cb1f321b9abcdaf18ed2a58f |
 
 当前位置/类型/指纹只证明静态归属；不替代运行时焦点、服务拓扑GET、权限、进程采样、新建重启或真实宝塔验收。
 
@@ -209,13 +209,13 @@ probe用statfs blocks/bavail/bsize和可读写检查取三根所在文件系统�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/RedisResilienceCenter.vue#58a7337b2cdfab3b.1 | 247 | control | RD67-CURRENT-LOAD / 刷新运行事实，忙碌时用ARIA状态保留焦点 |
-| apps/web/src/components/RedisResilienceCenter.vue#a93553a3ba9aa8a6.1 | 277 | control | RD67-CURRENT-RETRY / 已有成功快照且刷新失败时重新核验 |
-| apps/web/src/components/RedisResilienceCenter.vue#d45ddc5db7a2701f.1 | 309 | control | RD67-CURRENT-RETRY / 非expired错误区重试既有读取流程 |
+| apps/web/src/components/RedisResilienceCenter.vue#58a7337b2cdfab3b.1 | 245 | control | RD67-CURRENT-LOAD / 刷新运行事实，忙碌时用ARIA状态保留焦点 |
+| apps/web/src/components/RedisResilienceCenter.vue#a93553a3ba9aa8a6.1 | 272 | control | RD67-CURRENT-RETRY / 已有成功快照且刷新失败时重新核验 |
+| apps/web/src/components/RedisResilienceCenter.vue#d45ddc5db7a2701f.1 | 304 | control | RD67-CURRENT-RETRY / 非expired错误区重试既有读取流程 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/RedisResilienceCenter.vue | 72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec |
+| apps/web/src/components/RedisResilienceCenter.vue | 635b042e419377c89248eaa2e1999095eb58f2391e00a7abb6f113603c63aa2f |
 
 第6节旧指纹仍标记历史；当前映射不代替真实 Redis、MySQL、权限、采样、宝塔进程或生产恢复验收。
 

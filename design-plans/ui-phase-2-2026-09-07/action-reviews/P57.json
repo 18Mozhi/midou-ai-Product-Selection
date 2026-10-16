@@ -8,11 +8,11 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/content-notification-evidence-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformNotificationManagement.vue": "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
-    "apps/web/src/components/PlatformMessageWorkbench.vue": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5",
+    "apps/web/src/components/PlatformNotificationManagement.vue": "3529c6d00aa8a61ff693eb08c745f75fd403a18d2323356fe2e9324b868590ea",
+    "apps/web/src/components/PlatformMessageWorkbench.vue": "169ebe30b870f932fd49e108c876eb98e50a61f995eabefdef5371bc1555fe33",
     "apps/web/src/components/PlatformNotificationOperations.vue": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
     "apps/web/src/components/PlatformNotificationPagination.vue": "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
-    "apps/web/src/components/PlatformMessageEditor.vue": "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
+    "apps/web/src/components/PlatformMessageEditor.vue": "59da5cc2554778c81bf065c36418b623d12dca3ccb6f0fabca2ecb5e5530ee6e",
     "apps/web/src/components/PlatformNotificationActionDialog.vue": "2dc6d2a4c543b985859ff6f9ddbec8331ab0d8d22a76331efd80b22d0fcc35ca"
   },
   "inputs": {
@@ -568,7 +568,7 @@
       "label": "将新建/编辑表单submit意图转发给父保存所有者",
       "kind": "wiring",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformMessageEditor.vue#174bcbcaa3c52308.1"
+        "apps/web/src/components/PlatformMessageEditor.vue#c927a57375828b6a.1"
       ],
       "sourceContractKeys": [
         "PN57-CURRENT-SAVE / form submit向父级发出save，不在本组件直接请求API"
@@ -600,7 +600,7 @@
       ],
       "forwardBindings": [
         {
-          "candidateId": "apps/web/src/components/PlatformMessageEditor.vue#174bcbcaa3c52308.1",
+          "candidateId": "apps/web/src/components/PlatformMessageEditor.vue#c927a57375828b6a.1",
           "event": "@submit.prevent",
           "handler": "$emit('save')",
           "targets": [
@@ -953,11 +953,11 @@
       "apps/web/src/components/PlatformNotificationActionDialog.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/PlatformNotificationManagement.vue": "7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8",
-      "apps/web/src/components/PlatformMessageWorkbench.vue": "689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5",
+      "apps/web/src/components/PlatformNotificationManagement.vue": "3529c6d00aa8a61ff693eb08c745f75fd403a18d2323356fe2e9324b868590ea",
+      "apps/web/src/components/PlatformMessageWorkbench.vue": "169ebe30b870f932fd49e108c876eb98e50a61f995eabefdef5371bc1555fe33",
       "apps/web/src/components/PlatformNotificationOperations.vue": "73bfa7089471ce53ea44f747727211684cb840df62a22a86b70dbaa4c9ba5e07",
       "apps/web/src/components/PlatformNotificationPagination.vue": "56968271bcfcf600901782eea6601eaae49a5a84bc5d3ab7bc0a9618596f0849",
-      "apps/web/src/components/PlatformMessageEditor.vue": "299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a",
+      "apps/web/src/components/PlatformMessageEditor.vue": "59da5cc2554778c81bf065c36418b623d12dca3ccb6f0fabca2ecb5e5530ee6e",
       "apps/web/src/components/PlatformNotificationActionDialog.vue": "2dc6d2a4c543b985859ff6f9ddbec8331ab0d8d22a76331efd80b22d0fcc35ca"
     },
     "inputScope": "reviewed-subset-of-shared-source",

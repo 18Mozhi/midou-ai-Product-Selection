@@ -8,7 +8,7 @@ export const redisReviewRevisions = Object.freeze({
   "apps/web/src/components/RedisResilienceCenter.vue": {
     baseline: "66bea9b6dfa514c19df8607daa173efddd26de74",
     captured: "75744285930910ebf412bd8a9587a7889bfa1892439b5be8405891a589bce04d",
-    current: "72e0d8cdf041d84d6b83052348dda3c8045b4eb7cc037dfc94865f65d91f40ec",
+    current: "635b042e419377c89248eaa2e1999095eb58f2391e00a7abb6f113603c63aa2f",
   },
   "scripts/lib/ui-phase2-redis-design-data.mjs": {
     baseline: "1dd2520607a33c1879cf4b5968f25911e1e26f9d",

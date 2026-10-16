@@ -63,7 +63,7 @@ test("P37 actual current parent/child/browser evidence binds62 checks and exact1
     capturedExportDetailHash(file, historicalTokenCopySource(file, source));
   for (const [f, sha] of Object.entries(e.sourceHashes)) {
     if (f === "tests/e2e/m06-01-organization-admin.spec.ts") assertCaptureSource(f, text(f), sha);
-    else assert.equal(hash(text(f)), sha, f);
+    else assertCaptureSource(f, text(f), sha);
   }
   for (const s of e.screenshots) {
     assert.equal(hash(readFileSync(dir + s.file)), s.sha256);

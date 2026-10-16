@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
@@ -51,7 +52,7 @@ const readCapturedSource = (file) => {
         "\r\n",
         "\n",
       )
-    : read(file);
+    : beforePublishedPresentation(file, read(file));
 };
 function neutralImports(source) {
   const ast = ts.createSourceFile("driver.mjs", source, ts.ScriptTarget.Latest, true);

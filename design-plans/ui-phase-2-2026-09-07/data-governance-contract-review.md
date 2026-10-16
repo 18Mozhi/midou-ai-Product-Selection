@@ -87,24 +87,24 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 
 | 源签名.序号        | 行  | 类型                  | 语义归属                        |
 | ------------------ | --- | --------------------- | ------------------------------- |
-| d8576e9119c47e48.1 | 465 | control               | DG54-VIEW · 近期记录            |
-| 3d3b85cc3453eef2.1 | 472 | control               | DG54-VIEW · 证据与质量          |
-| 318d604dd4996018.1 | 486 | control               | DG54-ENTITY · 四类目标选择      |
-| 7266ebf634d2b8b9.1 | 506 | control               | DG54-EXPORT · 桌面导出入口/禁用 |
-| b1ba73fd44155bb1.1 | 523 | dialog-component-call | DG54-FILTER · 共享筛选抽屉      |
-| 0ca9483df3aea355.1 | 524 | form-event            | DG54-FILTER · 表单提交          |
-| 791084433fb5ad25.1 | 527 | event-binding         | DG54-FILTER · Enter提交         |
-| 6bb29ec0529e0e59.1 | 543 | control               | DG54-FILTER · 提交按钮          |
-| 7d45674378db30da.1 | 544 | control               | DG54-FILTER · 重置              |
-| 7939e0d7813a93ae.1 | 551 | control               | DG54-EXPORT · 手机导出入口/禁用 |
-| fa3fbd7bf13eae52.1 | 610 | control               | DG54-LOAD · 重新加载            |
-| 84e7596199967f7e.1 | 659 | control               | DG54-TECH · 桌面打开记录详情    |
-| 1c008f867673db60.1 | 682 | control               | DG54-TECH · 桌面记录标识        |
-| 1c008f867673db60.2 | 724 | control               | DG54-TECH · 移动记录标识        |
-| 55d3fe91022d0dbb.1 | 730 | control               | DG54-PAGE · 上一页              |
-| 97d75da3f85810f7.1 | 740 | control               | DG54-PAGE · 下一页              |
-| 29f3caf3dd5ff454.1 | 759 | event-binding         | DG54-EXPORT · 原因提交/取消事件 |
-| 6d8eee10bf038ef3.1 | 759 | dialog-component-call | DG54-EXPORT · 原因dialog调用    |
+| d8576e9119c47e48.1 | 464 | control               | DG54-VIEW · 近期记录            |
+| 3d3b85cc3453eef2.1 | 471 | control               | DG54-VIEW · 证据与质量          |
+| 318d604dd4996018.1 | 485 | control               | DG54-ENTITY · 四类目标选择      |
+| 7266ebf634d2b8b9.1 | 504 | control               | DG54-EXPORT · 桌面导出入口/禁用 |
+| b1ba73fd44155bb1.1 | 521 | dialog-component-call | DG54-FILTER · 共享筛选抽屉      |
+| 0ca9483df3aea355.1 | 522 | form-event            | DG54-FILTER · 表单提交          |
+| 791084433fb5ad25.1 | 525 | event-binding         | DG54-FILTER · Enter提交         |
+| 6bb29ec0529e0e59.1 | 541 | control               | DG54-FILTER · 提交按钮          |
+| 7d45674378db30da.1 | 542 | control               | DG54-FILTER · 重置              |
+| 7939e0d7813a93ae.1 | 549 | control               | DG54-EXPORT · 手机导出入口/禁用 |
+| fa3fbd7bf13eae52.1 | 608 | control               | DG54-LOAD · 重新加载            |
+| 84e7596199967f7e.1 | 657 | control               | DG54-TECH · 桌面打开记录详情    |
+| 1c008f867673db60.1 | 680 | control               | DG54-TECH · 桌面记录标识        |
+| 1c008f867673db60.2 | 722 | control               | DG54-TECH · 移动记录标识        |
+| 55d3fe91022d0dbb.1 | 728 | control               | DG54-PAGE · 上一页              |
+| 97d75da3f85810f7.1 | 738 | control               | DG54-PAGE · 下一页              |
+| 29f3caf3dd5ff454.1 | 757 | event-binding         | DG54-EXPORT · 原因提交/取消事件 |
+| 6d8eee10bf038ef3.1 | 757 | dialog-component-call | DG54-EXPORT · 原因dialog调用    |
 | f65c3340e428d8ed.1 | 299 | dialog-script-call    | DG54-EXPORT · ask脚本调用       |
 
 字段绑定：
@@ -118,45 +118,45 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 
 | 源签名.序号        | 行   | 类型                  | 语义归属                        |
 | ------------------ | ---- | --------------------- | ------------------------------- |
-| 372262b9b8d3cad6.1 | 769 | event-binding         | Q54-LOAD · 首次状态恢复，仅保留已接线主操作 |
-| 0c3266c5e4ec717f.1 | 842 | control               | Q54-LOAD · 工作区刷新           |
-| 3c02110a0877635d.1 | 852 | control               | Q54-TAB · 证据                  |
-| b2556958fd8ef037.1 | 858 | control               | Q54-TAB · 质量问题              |
-| aa2356189420d59b.1 | 864 | control               | Q54-TAB · 核对运行              |
-| 50981bed37222bb6.1 | 890 | event-binding         | Q54-SEARCH · 检索变更同步       |
-| 2310ecf26c0ac332.1 | 897 | control               | Q54-SEARCH · 清除检索           |
-| c56baf2a56445da0.1 | 947 | control               | Q54-EVIDENCE · 桌面完整溯源     |
-| 5443375c8e9e7547.1 | 949 | control               | Q54-DOWNLOAD · 桌面受控下载     |
-| 0703818483f3ea40.1 | 1004 | control               | Q54-EVIDENCE · 移动完整溯源     |
-| 203fccdcb63ff0e1.1 | 1007 | control               | Q54-DOWNLOAD · 移动受控下载     |
-| 1c008f867673db60.1 | 1020 | control               | Q54-TECH · 证据标识             |
-| f2fe7b9e26309877.1 | 1063 | control               | Q54-RUN · 返回全部问题          |
-| 91f486fb0dc95d45.1 | 1077 | control               | Q54-SELECT · 清除选择           |
-| c0a8ac3c192bbfe4.1 | 1107 | control               | Q54-BATCH · 影响预览            |
-| 89c4ebef359431bf.1 | 1142 | event-binding         | Q54-SELECT · 桌面问题选择       |
-| 1abe71571b4dfe5d.1 | 1180 | control               | Q54-EVIDENCE · 桌面关联证据     |
-| eb0caf70507d0ae7.1 | 1188 | control               | Q54-RESOLVE · 桌面解决表单      |
-| a59648cf951ee036.1 | 1222 | event-binding         | Q54-SELECT · 移动问题选择       |
-| c8ae47474adb97d3.1 | 1280 | control               | Q54-EVIDENCE · 移动关联证据     |
-| 37daad70b2e75d59.1 | 1288 | control               | Q54-RESOLVE · 移动解决表单      |
-| 1c008f867673db60.2 | 1299 | control               | Q54-TECH · 问题标识             |
-| 6b65e8ff40f32c66.1 | 1329 | control               | Q54-RUN · 异常字段样本下钻      |
-| 6318a60e090bab69.1 | 1339 | control               | Q54-PAGE · 上一页               |
-| 36fa4dddd2d51dd7.1 | 1343 | control               | Q54-PAGE · 下一页               |
-| 2c714917657e61eb.1 | 1352 | dialog-definition     | Q54-EVIDENCE · 完整溯源原生窗   |
-| 4b8b7c1b554343b3.1 | 1352 | event-binding         | Q54-EVIDENCE · 完整溯源取消     |
-| 8a6a073e931655a9.1 | 1365 | control               | Q54-EVIDENCE · 关闭完整溯源     |
-| 2fa1de5ac75409c9.1 | 1376 | control               | Q54-EVIDENCE · 失败后重读       |
-| 495e04b542eaa8d6.1 | 1436 | control               | Q54-TECH · 溯源技术标识         |
-| bfa0dacb9030e23d.1 | 1458 | dialog-definition     | Q54-RESOLVE · 原因原生窗        |
-| f662156f502d2ebe.1 | 1458 | event-binding         | Q54-RESOLVE · 原因窗取消        |
-| 9c1ba8320560a191.1 | 1471 | control               | Q54-RESOLVE · 顶部关闭原因窗    |
-| 2798723322952c96.1 | 1507 | control               | Q54-RESOLVE · 底部取消原因窗    |
-| cb0cfd08fa44e9c8.1 | 1508 | control               | Q54-RESOLVE · 确认前检查        |
-| d3df84c3780de261.1 | 1523 | event-binding         | Q54-RESOLVE · 确认/取消事件     |
-| 5a462ae4421ffff4.1 | 1523 | dialog-component-call | Q54-RESOLVE · ConfirmDialog调用 |
-| d0581b00f2b934eb.1 | 1537 | event-binding         | Q54-BATCH · 确认/取消事件       |
-| 05d2e10fd98621ac.1 | 1537 | dialog-component-call | Q54-BATCH · ConfirmDialog调用   |
+| 372262b9b8d3cad6.1 | 767 | event-binding         | Q54-LOAD · 首次状态恢复，仅保留已接线主操作 |
+| 0c3266c5e4ec717f.1 | 840 | control               | Q54-LOAD · 工作区刷新           |
+| 3c02110a0877635d.1 | 850 | control               | Q54-TAB · 证据                  |
+| b2556958fd8ef037.1 | 856 | control               | Q54-TAB · 质量问题              |
+| aa2356189420d59b.1 | 862 | control               | Q54-TAB · 核对运行              |
+| 50981bed37222bb6.1 | 888 | event-binding         | Q54-SEARCH · 检索变更同步       |
+| 2310ecf26c0ac332.1 | 895 | control               | Q54-SEARCH · 清除检索           |
+| c56baf2a56445da0.1 | 945 | control               | Q54-EVIDENCE · 桌面完整溯源     |
+| 1da1b3c20c1615d1.1 | 947 | control               | Q54-DOWNLOAD · 桌面受控下载     |
+| 0703818483f3ea40.1 | 1002 | control               | Q54-EVIDENCE · 移动完整溯源     |
+| a3c1edf8c36c65f0.1 | 1005 | control               | Q54-DOWNLOAD · 移动受控下载     |
+| 1c008f867673db60.1 | 1018 | control               | Q54-TECH · 证据标识             |
+| f2fe7b9e26309877.1 | 1061 | control               | Q54-RUN · 返回全部问题          |
+| 91f486fb0dc95d45.1 | 1075 | control               | Q54-SELECT · 清除选择           |
+| c0a8ac3c192bbfe4.1 | 1105 | control               | Q54-BATCH · 影响预览            |
+| 89c4ebef359431bf.1 | 1140 | event-binding         | Q54-SELECT · 桌面问题选择       |
+| 1abe71571b4dfe5d.1 | 1178 | control               | Q54-EVIDENCE · 桌面关联证据     |
+| eb0caf70507d0ae7.1 | 1186 | control               | Q54-RESOLVE · 桌面解决表单      |
+| a59648cf951ee036.1 | 1220 | event-binding         | Q54-SELECT · 移动问题选择       |
+| c8ae47474adb97d3.1 | 1278 | control               | Q54-EVIDENCE · 移动关联证据     |
+| 37daad70b2e75d59.1 | 1286 | control               | Q54-RESOLVE · 移动解决表单      |
+| 1c008f867673db60.2 | 1297 | control               | Q54-TECH · 问题标识             |
+| 6b65e8ff40f32c66.1 | 1327 | control               | Q54-RUN · 异常字段样本下钻      |
+| 6318a60e090bab69.1 | 1337 | control               | Q54-PAGE · 上一页               |
+| 36fa4dddd2d51dd7.1 | 1341 | control               | Q54-PAGE · 下一页               |
+| 40ce981a9289197e.1 | 1350 | dialog-definition     | Q54-EVIDENCE · 完整溯源原生窗   |
+| 9f3088a79922ed19.1 | 1350 | event-binding         | Q54-EVIDENCE · 完整溯源取消     |
+| 8a6a073e931655a9.1 | 1363 | control               | Q54-EVIDENCE · 关闭完整溯源     |
+| 2fa1de5ac75409c9.1 | 1374 | control               | Q54-EVIDENCE · 失败后重读       |
+| 495e04b542eaa8d6.1 | 1433 | control               | Q54-TECH · 溯源技术标识         |
+| 6172421bb88ab137.1 | 1455 | dialog-definition     | Q54-RESOLVE · 原因原生窗        |
+| 0e769920891912de.1 | 1455 | event-binding         | Q54-RESOLVE · 原因窗取消        |
+| 9c1ba8320560a191.1 | 1468 | control               | Q54-RESOLVE · 顶部关闭原因窗    |
+| 2798723322952c96.1 | 1504 | control               | Q54-RESOLVE · 底部取消原因窗    |
+| cb0cfd08fa44e9c8.1 | 1505 | control               | Q54-RESOLVE · 确认前检查        |
+| d3df84c3780de261.1 | 1520 | event-binding         | Q54-RESOLVE · 确认/取消事件     |
+| 5a462ae4421ffff4.1 | 1520 | dialog-component-call | Q54-RESOLVE · ConfirmDialog调用 |
+| d0581b00f2b934eb.1 | 1534 | event-binding         | Q54-BATCH · 确认/取消事件       |
+| 05d2e10fd98621ac.1 | 1534 | dialog-component-call | Q54-BATCH · ConfirmDialog调用   |
 
 字段绑定：
 
@@ -174,27 +174,27 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | ------------------ | --: | --------------------- | --------------------------------- |
 | da39e75f0c29a10d.1 | 374 | control               | DG55-SECTION · 五分类选择         |
 | 763f45cd6b7c3560.1 | 403 | control               | DG55-PROVIDER · 桌面来源版本      |
-| 08baa16283bd4f61.1 | 415 | control               | DG55-LOAD · 刷新事实              |
-| a5bd47ee42556f27.1 | 418 | control               | DG55-WORKBENCH · 目标分类顶部入口 |
-| adbd9ecccfb8b14c.1 | 424 | dialog-component-call | DG55-FILTER · 共享筛选抽屉        |
-| 7967356d90bb2be5.1 | 429 | form-event            | DG55-FILTER · 表单提交            |
-| 84ddf55965c63e53.1 | 446 | control               | DG55-FILTER · 应用                |
-| d2bd484790411f68.1 | 447 | control               | DG55-FILTER · 重置                |
-| 98e49bfa8722733e.1 | 488 | control               | DG55-LOAD · 首错重试              |
-| e6fe66816eb31ec7.1 | 578 | control               | DG55-DETAIL · 桌面原生详情        |
-| 339a9f00e20513ad.1 | 579 | control               | DG55-WORKBENCH · 桌面所属入口     |
-| 495e04b542eaa8d6.1 | 584 | control               | DG55-TECH · 桌面技术标识          |
-| 1c008f867673db60.1 | 656 | control               | DG55-TECH · 移动技术详情          |
-| e06a7289ed736f28.1 | 668 | control               | DG55-WORKBENCH · 移动所属入口     |
-| 053cd828dd3324d8.1 | 677 | control               | DG55-PAGE · 上一页                |
-| b7a08810a69e9930.1 | 685 | control               | DG55-PAGE · 下一页                |
-| 763f45cd6b7c3560.2 | 709 | control               | DG55-PROVIDER · 手机来源版本      |
-| a96089c835f25daa.1 | 722 | dialog-definition     | DG55-DETAIL · 原生dialog定义      |
-| 78a618fc321fc7ea.1 | 722 | event-binding         | DG55-DETAIL · 原生cancel事件      |
-| a9ad4a103838db20.1 | 734 | control               | DG55-DETAIL · 顶部关闭            |
-| 1c008f867673db60.2 | 793 | control               | DG55-TECH · 原生详情标识          |
-| ef25aec09f768729.1 | 806 | control               | DG55-DETAIL · 底部关闭            |
-| 25ff23ae940dd1c3.1 | 807 | control               | DG55-WORKBENCH · 原生详情所属入口 |
+| 08baa16283bd4f61.1 | 414 | control               | DG55-LOAD · 刷新事实              |
+| a5bd47ee42556f27.1 | 417 | control               | DG55-WORKBENCH · 目标分类顶部入口 |
+| 9eef1b6fb3de37ee.1 | 423 | dialog-component-call | DG55-FILTER · 共享筛选抽屉        |
+| 1f3495029cfc2caf.1 | 428 | form-event            | DG55-FILTER · 表单提交            |
+| 84ddf55965c63e53.1 | 445 | control               | DG55-FILTER · 应用                |
+| d2bd484790411f68.1 | 446 | control               | DG55-FILTER · 重置                |
+| 98e49bfa8722733e.1 | 487 | control               | DG55-LOAD · 首错重试              |
+| e6fe66816eb31ec7.1 | 577 | control               | DG55-DETAIL · 桌面原生详情        |
+| 339a9f00e20513ad.1 | 578 | control               | DG55-WORKBENCH · 桌面所属入口     |
+| 495e04b542eaa8d6.1 | 583 | control               | DG55-TECH · 桌面技术标识          |
+| 1c008f867673db60.1 | 655 | control               | DG55-TECH · 移动技术详情          |
+| e06a7289ed736f28.1 | 667 | control               | DG55-WORKBENCH · 移动所属入口     |
+| 053cd828dd3324d8.1 | 676 | control               | DG55-PAGE · 上一页                |
+| b7a08810a69e9930.1 | 684 | control               | DG55-PAGE · 下一页                |
+| 763f45cd6b7c3560.2 | 708 | control               | DG55-PROVIDER · 手机来源版本      |
+| a96089c835f25daa.1 | 720 | dialog-definition     | DG55-DETAIL · 原生dialog定义      |
+| 78a618fc321fc7ea.1 | 720 | event-binding         | DG55-DETAIL · 原生cancel事件      |
+| a9ad4a103838db20.1 | 732 | control               | DG55-DETAIL · 顶部关闭            |
+| 1c008f867673db60.2 | 791 | control               | DG55-TECH · 原生详情标识          |
+| ef25aec09f768729.1 | 804 | control               | DG55-DETAIL · 底部关闭            |
+| 25ff23ae940dd1c3.1 | 805 | control               | DG55-WORKBENCH · 原生详情所属入口 |
 
 字段绑定：
 
@@ -209,9 +209,9 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 
 | 文件                                                 | LF SHA-256                                                       |
 | ---------------------------------------------------- | ---------------------------------------------------------------- |
-| apps/web/src/components/PlatformDataCenter.vue       | 904a2a43131dc1ba2e92a21ae973b83f7a13d7ec4c3fdeb041c7fed0943b5e08 |
-| apps/web/src/components/PlatformGovernanceCenter.vue | 65b3075c9cf1def3934540fbf792721419d5b3764873d473860e5ec8c1cd00f9 |
-| apps/web/src/components/DataQualityCenter.vue        | dedfc36642f22b0a510c8751e9814dfab07ea3d973a604b664268e353f3cb536 |
+| apps/web/src/components/PlatformDataCenter.vue       | 8d4b3e6d3c660d48e759c7e69dd51df6ebd84b170556cc600c161d228a814b38 |
+| apps/web/src/components/PlatformGovernanceCenter.vue | a19e66b55b001c86a36e4ff124574f7d2007a4f06bd18d9ca9fb8472fba10c63 |
+| apps/web/src/components/DataQualityCenter.vue        | 3418bc286cc612e05f7ad82a1ff7ff281fb171ed80919f4ca2a3daf465635a0f |
 | apps/api/src/platform-dashboard-routes.ts            | 1b84b99708bf4610259b42dd48987831229560cf5653b15b98b3cc1d30284f30 |
 | apps/api/src/platform-dashboard-service.ts           | 568938e88c90615410a7c43224004930936165e91a4172afafc7ce2ff4d8428e |
 | apps/api/src/mysql-platform-dashboard-repository.ts  | b290af1c03b2767c79bb565f9ec256550250acc4be0cc787de12b81e9b8dcd28 |
@@ -221,14 +221,14 @@ UI2-DG54：在旧热点成功后挂起供应商读取，旧实现立即丢失信
 | apps/web/src/api-client.ts                           | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | apps/web/src/use-audited-reason.ts                   | 90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007 |
 | apps/web/src/use-modal-dialog.ts                     | c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957 |
-| apps/web/src/ui/state-contract.ts                    | 9c912b4c0507506484cf04b623839869022fdc68eb6ee332e3cb638dee3b267a |
+| apps/web/src/ui/state-contract.ts                    | 913cf51719f372302e1900ac99c4b46c1baaa3632d7bcca7e234700f483d2ac8 |
 | apps/web/src/components/ResponsiveDataView.vue       | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue   | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
 | apps/web/src/components/TableViewControls.vue        | b02687c66f5705252518e3e87f4f437a33adfd943fdbc032845e68aeba2d652b |
 | apps/web/src/components/TechnicalDetails.vue         | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/components/AuditedReasonDialog.vue      | 0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9 |
 | apps/web/src/components/ConfirmDialog.vue            | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
-| apps/web/src/components/UiStatePanel.vue             | 54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de |
+| apps/web/src/components/UiStatePanel.vue             | 2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c |
 | config/route-catalog.json                            | d02ade33d087f133ddada8c087085e12c1d321b72f35cd1ef6ffb155076e8150 |
 | tests/e2e/m06-02-platform-dashboard.spec.ts          | a39d80a78761cd4382bbc2d8684f5334af4f6b3285c0c719932bf83f4da72069 |
 | tests/e2e/m03-06-evidence-data-quality.spec.ts       | e5a582642e3b35d2ccfa82872cc91bc00412a1521893508433c31cfaad3b45cb |

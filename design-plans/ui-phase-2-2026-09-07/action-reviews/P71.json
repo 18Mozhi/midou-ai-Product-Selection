@@ -8,8 +8,8 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/scheduler-capacity-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/CapacityBoundaryCenter.vue": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2",
-    "apps/web/src/components/CapacityBoundaryEvidence.vue": "b815e48915ae9a72d1972d7ef7eebda8b91f5299041ca3028b8af65ef933fbd9"
+    "apps/web/src/components/CapacityBoundaryCenter.vue": "4bd5bc4283d2621bdd66b90e465243e823a7e38d237d1e3ab83b5eb013fa317f",
+    "apps/web/src/components/CapacityBoundaryEvidence.vue": "232b4525bfabd64f08239ebdb5350570dc36acde12cba15171b4578fca96828b"
   },
   "inputs": {},
   "actions": [
@@ -161,8 +161,8 @@
       "apps/web/src/components/CapacityBoundaryEvidence.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/CapacityBoundaryCenter.vue": "b03af4791efd1ebd97a954285eaf067f0aafd8e8d782cf5ac367a186e1ec61f2",
-      "apps/web/src/components/CapacityBoundaryEvidence.vue": "b815e48915ae9a72d1972d7ef7eebda8b91f5299041ca3028b8af65ef933fbd9"
+      "apps/web/src/components/CapacityBoundaryCenter.vue": "4bd5bc4283d2621bdd66b90e465243e823a7e38d237d1e3ab83b5eb013fa317f",
+      "apps/web/src/components/CapacityBoundaryEvidence.vue": "232b4525bfabd64f08239ebdb5350570dc36acde12cba15171b4578fca96828b"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

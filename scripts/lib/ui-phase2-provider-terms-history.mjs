@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 // Test/review provenance only. Never use this adapter to validate the current runtime.
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -17,7 +18,7 @@ export const providerTermsHistory = [
 const hash = (value) => createHash("sha256").update(value).digest("hex"),
   cache = new Map();
 export function historicalProviderTermsSource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = beforePublishedPresentation(file, source);
   const revision = providerTermsHistory.find(
     (item) => item.file === file && item.after === hash(source),
   );

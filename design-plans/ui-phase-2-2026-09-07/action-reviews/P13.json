@@ -5,7 +5,7 @@
   "status": "user-approved-visual-direction-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/task-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/TaskWorkspace.vue": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25",
+    "apps/web/src/components/TaskWorkspace.vue": "5d5eb4c4fda461aecfd9dd5beaf4481d6ba1c41cb6d9b510379be6c936f84045",
     "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
     "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b"
   },
@@ -436,7 +436,7 @@
       "kind": "local",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#8acacf9139ac6dfa.1",
+        "apps/web/src/components/TaskWorkspace.vue#4c8a77ea02302912.1",
         "apps/web/src/components/TaskWorkspace.vue#a51d0235ae15a867.1",
         "apps/web/src/components/TaskWorkspace.vue#060b9320f351ee05.1"
       ],
@@ -487,7 +487,7 @@
       "kind": "write",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#8761299256f1d051.1",
+        "apps/web/src/components/TaskWorkspace.vue#53dd07a6ae88b4ba.1",
         "apps/web/src/components/TaskWorkspace.vue#e2b1aba214c4cb9e.1"
       ],
       "sourceContractKeys": [
@@ -1939,7 +1939,7 @@
       "kind": "wiring",
       "routeApplicability": "P13-today-local-callers-only",
       "sourceCandidateIds": [
-        "apps/web/src/components/TaskWorkspace.vue#6c7534a24387a114.1"
+        "apps/web/src/components/TaskWorkspace.vue#98beaf0a6d35c75b.1"
       ],
       "sourceContractKeys": [
         "task.delete：显示目标、影响、原因及保留审计的事实"
@@ -2019,12 +2019,12 @@
       "apps/web/src/components/TaskBatchActions.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/TaskWorkspace.vue": "d6841151cac4bf227b335a3253dff1dea1138712e6afc95de97d993672f77c25",
+      "apps/web/src/components/TaskWorkspace.vue": "5d5eb4c4fda461aecfd9dd5beaf4481d6ba1c41cb6d9b510379be6c936f84045",
       "apps/web/src/components/TaskListPanel.vue": "b38e915146cf5b96f7ee9895bd9942eefaacee8913fa2872f83e575f334af72f",
       "apps/web/src/components/TaskBatchActions.vue": "cf05762a175f484638c85d25d3437f772eae534ed7d961a26d19c9e34056162b",
       "apps/web/src/use-modal-dialog.ts": "c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957",
       "apps/web/src/navigation-shell-route-state.ts": "7ee28da06808a7412389a7e5c4423d960ea32658bd64a3b29bcfde2838ebe458",
-      "apps/web/src/components/NavigationShell.vue": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+      "apps/web/src/components/NavigationShell.vue": "596cef4389d9ecf77b4eb433d0954031880a962ec0346c9455cc0c4790c5f933",
       "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
       "apps/web/src/route-catalog.ts": "6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956",
       "apps/web/src/components/task-workspace-types.ts": "be914dacd68e7d4c163605082e74b9ee1ac91b07429ab68b6c08139903091b0a"

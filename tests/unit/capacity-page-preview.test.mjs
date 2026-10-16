@@ -29,9 +29,9 @@ test("P71 C review distinguishes returned stop facts from absolute resources", (
   ])
     assert.ok(evidence.includes(id), id);
   assert.match(template, /capacity-boundary--review/);
-  assert.match(evidence, /不绘制误导性水位条/);
-  assert.match(evidence, /不构成压测授权或扩容承诺/);
-  assert.match(evidence, /不执行恢复/);
+  assert.doesNotMatch(evidence.slice(evidence.indexOf('class="p71-resources')), /<progress/);
+  assert.match(evidence, /缺失不补成承诺/);
+  assert.doesNotMatch(evidence, /fetch\(|apiJson\(/);
 });
 
 test("P71 C review gives keyboard focus a visible shared treatment", () => {
@@ -39,5 +39,5 @@ test("P71 C review gives keyboard focus a visible shared treatment", () => {
   const tokens = readFileSync("apps/web/src/design/capacity-boundary-tokens.css", "utf8");
   assert.match(css, /capacity-boundary--c :is\(button,\s*summary\):focus-visible/);
   assert.match(css, /outline:\s*3px solid var\(--so-capacity-c-focus\)/);
-  assert.match(tokens, /--so-capacity-c-focus:\s*#2465d7/);
+  assert.match(tokens, /--so-capacity-c-focus:\s*var\(--glass-focus\)/);
 });

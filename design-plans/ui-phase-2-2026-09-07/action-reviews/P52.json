@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/collection-runtime-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
-    "apps/web/src/components/CollectionOperationsConsole.vue": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+    "apps/web/src/components/CollectionOperationsConsole.vue": "8882cc3b58271a95b39dab4f72d11beb769db478c589155b22c7a88aabb9d252"
   },
   "inputs": {
     "apps/web/src/components/CollectionOperationsConsole.vue": [
@@ -680,7 +680,7 @@
       "label": "进入原任务详情核验死信并受控重放",
       "kind": "navigation",
       "sourceCandidateIds": [
-        "apps/web/src/components/CollectionOperationsConsole.vue#9ebd065e5010fd46.1"
+        "apps/web/src/components/CollectionOperationsConsole.vue#dd9928fbcb6f85f9.1"
       ],
       "sourceContractKeys": [
         "CL52-DEAD / 链接单任务详情重放"
@@ -855,7 +855,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/CollectionRuntimeSurface.vue": "4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f",
-      "apps/web/src/components/CollectionOperationsConsole.vue": "2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f"
+      "apps/web/src/components/CollectionOperationsConsole.vue": "8882cc3b58271a95b39dab4f72d11beb769db478c589155b22c7a88aabb9d252"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

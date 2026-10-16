@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/organization-governance-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
+    "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489"
   },
   "actions": [
     {
@@ -503,7 +503,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#97ed4772fb320d6c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489"
         }
       }
     },
@@ -512,8 +512,8 @@
       "label": "保存并审计",
       "kind": "write",
       "sourceCandidateIds": [
-        "apps/web/src/components/OrganizationAdminCenter.vue#d6b520278ab3dd57.1",
-        "apps/web/src/components/OrganizationAdminCenter.vue#5878e30377f290ae.1"
+        "apps/web/src/components/OrganizationAdminCenter.vue#e93301a7ec700ce7.1",
+        "apps/web/src/components/OrganizationAdminCenter.vue#ed75758087c9a4b8.1"
       ],
       "sourceContractKeys": [
         "OG-PROFILE-SAVE"
@@ -803,7 +803,7 @@
           "apps/web/src/components/OrganizationAdminCenter.vue#1cbd108c64b5230c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
+          "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489"
         }
       }
     },
@@ -1019,7 +1019,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/OrganizationAdminCenter.vue": "08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2"
+      "apps/web/src/components/OrganizationAdminCenter.vue": "d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489"
     },
     "inputs": [
       {

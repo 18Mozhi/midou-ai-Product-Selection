@@ -68,17 +68,17 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号          | 行  | 类型                  | 语义/消费者                      |
 | ------------------ | --- | --------------------- | -------------------------------- |
-| e4314256fea2aeac.1 | 380 | dialog-component-call | LG62-FILTER 移动筛选消费者       |
-| ef169b3c5b08be4e.1 | 381 | form-event            | LG62-APPLY 查询form              |
-| d2bd484790411f68.1 | 400 | control               | LG62-RESET 重置                  |
-| 280c88beee4f3de8.1 | 403 | control               | LG62-APPLY 同form提交            |
-| d7ff6351cbc06807.1 | 528 | control               | LG62-TRACE 展开完整链编号        |
-| af1fa7b422aa7bcd.1 | 577 | control               | LG62-TASK 桌面异常任务跳转       |
-| c4b53a994d00ca34.1 | 580 | control               | LG62-PROVIDER 桌面异常来源跳转   |
-| 5d0b99550cb761b8.1 | 591 | control               | LG62-IDS 桌面记录编号            |
-| 1b10ffebcf6798fe.1 | 637 | control               | LG62-TASK 移动异常任务跳转       |
-| ec46ae5cddba062a.1 | 638 | control               | LG62-PROVIDER 移动异常来源跳转   |
-| 1c008f867673db60.1 | 644 | control               | LG62-IDS 移动技术展开            |
+| e4314256fea2aeac.1 | 378 | dialog-component-call | LG62-FILTER 移动筛选消费者       |
+| ef169b3c5b08be4e.1 | 379 | form-event            | LG62-APPLY 查询form              |
+| d2bd484790411f68.1 | 398 | control               | LG62-RESET 重置                  |
+| 280c88beee4f3de8.1 | 401 | control               | LG62-APPLY 同form提交            |
+| d7ff6351cbc06807.1 | 526 | control               | LG62-TRACE 展开完整链编号        |
+| af1fa7b422aa7bcd.1 | 575 | control               | LG62-TASK 桌面异常任务跳转       |
+| c4b53a994d00ca34.1 | 578 | control               | LG62-PROVIDER 桌面异常来源跳转   |
+| 5d0b99550cb761b8.1 | 589 | control               | LG62-IDS 桌面记录编号            |
+| 1b10ffebcf6798fe.1 | 635 | control               | LG62-TASK 移动异常任务跳转       |
+| ec46ae5cddba062a.1 | 636 | control               | LG62-PROVIDER 移动异常来源跳转   |
+| 1c008f867673db60.1 | 642 | control               | LG62-IDS 移动技术展开            |
 | 5d23ad02d6538b9c.1 | 276 | dialog-script-call    | LG62-EXPORT 同一原因窗的脚本请求 |
 
 | v-model | 属性行 | 元素   |
@@ -90,20 +90,20 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 签名.序号          | 行  | 类型    | 语义/消费者         |
 | ------------------ | --- | ------- | ------------------- |
-| 5587941412d5210f.1 | 241 | control | BR64-LOGIN 过期登录 |
-| 1c008f867673db60.1 | 428 | control | BR64-TECH 桌面资产  |
-| 1c008f867673db60.2 | 484 | control | BR64-TECH 移动资产  |
-| 1c008f867673db60.3 | 506 | control | BR64-TECH 阻断代码  |
+| 5587941412d5210f.1 | 238 | control | BR64-LOGIN 过期登录 |
+| 1c008f867673db60.1 | 425 | control | BR64-TECH 桌面资产  |
+| 1c008f867673db60.2 | 481 | control | BR64-TECH 移动资产  |
+| 1c008f867673db60.3 | 503 | control | BR64-TECH 阻断代码  |
 
 ### apps/web/src/components/ReleaseRolloutCenter.vue
 
 | 签名.序号          | 行  | 类型    | 语义/消费者                    |
 | ------------------ | --- | ------- | ------------------------------ |
-| 7e7fceb8ddc95b63.1 | 199 | control | RL65-COVERAGE 超管查看接口证据 |
-| 5587941412d5210f.1 | 252 | control | RL65-LOGIN 过期登录            |
-| 1c008f867673db60.1 | 530 | control | RL65-TECH 桌面门指标           |
-| 1c008f867673db60.2 | 588 | control | RL65-TECH 移动门指标           |
-| 1c008f867673db60.3 | 714 | control | RL65-TECH 阻断代码             |
+| 7e7fceb8ddc95b63.1 | 197 | control | RL65-COVERAGE 超管查看接口证据 |
+| 5587941412d5210f.1 | 250 | control | RL65-LOGIN 过期登录            |
+| 1c008f867673db60.1 | 525 | control | RL65-TECH 桌面门指标           |
+| 1c008f867673db60.2 | 583 | control | RL65-TECH 移动门指标           |
+| 1c008f867673db60.3 | 709 | control | RL65-TECH 阻断代码             |
 
 ### apps/web/src/components/AuditedReasonDialog.vue
 
@@ -209,18 +209,18 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/PlatformLogCenter.vue#f457c74d5cac0e80.1 | 353 | control | LG62-CURRENT-EXPORT / 打开当前筛选CSV的审计原因流程；忙碌状态以禁用/ARIA状态呈现 |
-| apps/web/src/components/PlatformLogCenter.vue#d37ca26c235aab7a.1 | 363 | control | LG62-CURRENT-LOAD / 重读日志；单飞读取时以ARIA状态表达刷新中 |
-| apps/web/src/components/PlatformLogCenter.vue#fa83b88a7082fbd5.1 | 482 | control | LG62-CURRENT-RETRY / 错误/保留快照时复用同一load重读 |
-| apps/web/src/components/PlatformLogCenter.vue#8189528db997f296.1 | 659 | control | LG62-CURRENT-TRACE / 原生披露最近成功快照读取编号 |
-| apps/web/src/components/PlatformLogCenter.vue#f71cf4e0c63914cf.1 | 663 | control | LG62-CURRENT-TRACE / 原生披露最近一次读取失败编号 |
-| apps/web/src/components/PlatformLogCenter.vue#be642d45b3e34274.1 | 667 | control | LG62-CURRENT-TRACE / 原生披露最近一次导出请求编号 |
-| apps/web/src/components/PlatformLogCenter.vue#13b398e8ab4b93d3.1 | 671 | event-binding | LG62-CURRENT-EXPORT-REASON / 向当前导出所有者转发原因提交或取消 |
-| apps/web/src/components/PlatformLogCenter.vue#2c239372ff0167e8.1 | 671 | dialog-component-call | LG62-CURRENT-EXPORT-REASON / 调用日志导出审计原因窗，最多300字符 |
+| apps/web/src/components/PlatformLogCenter.vue#f457c74d5cac0e80.1 | 351 | control | LG62-CURRENT-EXPORT / 打开当前筛选CSV的审计原因流程；忙碌状态以禁用/ARIA状态呈现 |
+| apps/web/src/components/PlatformLogCenter.vue#d37ca26c235aab7a.1 | 361 | control | LG62-CURRENT-LOAD / 重读日志；单飞读取时以ARIA状态表达刷新中 |
+| apps/web/src/components/PlatformLogCenter.vue#fa83b88a7082fbd5.1 | 480 | control | LG62-CURRENT-RETRY / 错误/保留快照时复用同一load重读 |
+| apps/web/src/components/PlatformLogCenter.vue#8189528db997f296.1 | 657 | control | LG62-CURRENT-TRACE / 原生披露最近成功快照读取编号 |
+| apps/web/src/components/PlatformLogCenter.vue#f71cf4e0c63914cf.1 | 661 | control | LG62-CURRENT-TRACE / 原生披露最近一次读取失败编号 |
+| apps/web/src/components/PlatformLogCenter.vue#be642d45b3e34274.1 | 665 | control | LG62-CURRENT-TRACE / 原生披露最近一次导出请求编号 |
+| apps/web/src/components/PlatformLogCenter.vue#13b398e8ab4b93d3.1 | 669 | event-binding | LG62-CURRENT-EXPORT-REASON / 向当前导出所有者转发原因提交或取消 |
+| apps/web/src/components/PlatformLogCenter.vue#2c239372ff0167e8.1 | 669 | dialog-component-call | LG62-CURRENT-EXPORT-REASON / 调用日志导出审计原因窗，最多300字符 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformLogCenter.vue | 029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518 |
+| apps/web/src/components/PlatformLogCenter.vue | 34d1b8cb21e3a1fdcaf720ff05edf6e76e76e25b955cc5333df888dc26b1d7b5 |
 
 ### 7.1 P62调用链目录本地选择（2026-09-24）
 
@@ -232,7 +232,7 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformLogWorkspace.vue | 7d85fd1776991284de17d06f6f3f9350888a988f00fd9ee61210bf409b1a8a9a |
+| apps/web/src/components/PlatformLogWorkspace.vue | 8d6387e64e1519264ab75396ed8b68d160485b3a590e4ae75606365b80c074ba |
 
 此节只补当前源位置及哈希；CSV真实下载/审计落库、读取RBAC、移动记录细节和生产行为仍以原合同/独立运行证据为准。
 
@@ -250,22 +250,22 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/ReleaseRolloutCenter.vue#2e6f5b1858278d74.1 | 189 | control | RL65-CURRENT-LOAD / 刷新当前发布事实，复用单飞只读load |
-| apps/web/src/components/ReleaseRolloutCenter.vue#7e7fceb8ddc95b63.1 | 199 | control | RL65-CURRENT-COVERAGE / 超管查看接口覆盖证据 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#a93553a3ba9aa8a6.1 | 221 | control | RL65-CURRENT-RETRY / 保留成功快照时重试失败读取 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#5587941412d5210f.1 | 252 | control | RL65-CURRENT-LOGIN / expired状态重新登录 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#0227b741c3d451ee.1 | 253 | control | RL65-CURRENT-RETRY / 非forbidden且未显示登录链接的错误态重读 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#9d42d660b274b4e7.1 | 269 | control | RL65-CURRENT-NAV / 跳转到运行身份页内锚点 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#e6f6630b9e002351.1 | 270 | control | RL65-CURRENT-NAV / 跳转到历史观察页内锚点 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#0745c7ca1efdbdf9.1 | 271 | control | RL65-CURRENT-NAV / 跳转到动作与历史页内锚点 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#cc981fe4f655ae81.1 | 335 | control | RL65-CURRENT-TECH / 展开生产配置指纹 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.1 | 530 | control | RL65-CURRENT-TECH / 展开桌面发布门指标 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.2 | 588 | control | RL65-CURRENT-TECH / 展开移动发布门指标 |
-| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.3 | 714 | control | RL65-CURRENT-TECH / 展开阻断原因技术详情 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#2e6f5b1858278d74.1 | 187 | control | RL65-CURRENT-LOAD / 刷新当前发布事实，复用单飞只读load |
+| apps/web/src/components/ReleaseRolloutCenter.vue#7e7fceb8ddc95b63.1 | 197 | control | RL65-CURRENT-COVERAGE / 超管查看接口覆盖证据 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#a93553a3ba9aa8a6.1 | 219 | control | RL65-CURRENT-RETRY / 保留成功快照时重试失败读取 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#5587941412d5210f.1 | 250 | control | RL65-CURRENT-LOGIN / expired状态重新登录 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#0227b741c3d451ee.1 | 251 | control | RL65-CURRENT-RETRY / 非forbidden且未显示登录链接的错误态重读 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#9d42d660b274b4e7.1 | 267 | control | RL65-CURRENT-NAV / 跳转到运行身份页内锚点 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#e6f6630b9e002351.1 | 268 | control | RL65-CURRENT-NAV / 跳转到历史观察页内锚点 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#0745c7ca1efdbdf9.1 | 269 | control | RL65-CURRENT-NAV / 跳转到动作与历史页内锚点 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#cc981fe4f655ae81.1 | 330 | control | RL65-CURRENT-TECH / 展开生产配置指纹 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.1 | 525 | control | RL65-CURRENT-TECH / 展开桌面发布门指标 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.2 | 583 | control | RL65-CURRENT-TECH / 展开移动发布门指标 |
+| apps/web/src/components/ReleaseRolloutCenter.vue#1c008f867673db60.3 | 709 | control | RL65-CURRENT-TECH / 展开阻断原因技术详情 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ReleaseRolloutCenter.vue | 2975ec8768a231086a2e15a3723c31e82dafca786eadc2c245c1a993d7c1e91e |
+| apps/web/src/components/ReleaseRolloutCenter.vue | 6a4ddb8162142712f5eebad9421da1b811fa73fef5b02d0db5c1db98d850ce27 |
 
 此映射只证明静态源码候选位置，不等同于真实发布/回滚执行、GET权限、数据库审计、完整键盘/读屏、浏览器全状态或生产验收。历史双槽部署说明仍不得作为当前单后端部署指令。
 
@@ -275,13 +275,13 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/BackupRecoveryCenter.vue#32472f95c82e1a43.1 | 184 | control | BR64-CURRENT-LOAD / 请求刷新当前备份与恢复只读事实 |
-| apps/web/src/components/BackupRecoveryCenter.vue#a93553a3ba9aa8a6.1 | 213 | control | BR64-CURRENT-RETRY / 已有数据且最近刷新失败时重新核验 |
-| apps/web/src/components/BackupRecoveryCenter.vue#0227b741c3d451ee.1 | 242 | control | BR64-CURRENT-RETRY / 首次错误等非forbidden且未进入登录分支的状态重读 |
+| apps/web/src/components/BackupRecoveryCenter.vue#32472f95c82e1a43.1 | 182 | control | BR64-CURRENT-LOAD / 请求刷新当前备份与恢复只读事实 |
+| apps/web/src/components/BackupRecoveryCenter.vue#a93553a3ba9aa8a6.1 | 211 | control | BR64-CURRENT-RETRY / 已有数据且最近刷新失败时重新核验 |
+| apps/web/src/components/BackupRecoveryCenter.vue#0227b741c3d451ee.1 | 239 | control | BR64-CURRENT-RETRY / 首次错误等非forbidden且未进入登录分支的状态重读 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/BackupRecoveryCenter.vue | f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de |
+| apps/web/src/components/BackupRecoveryCenter.vue | 8e9638859947e9a147f68d9a03c2f8dc7d5209277620f1295bf542e1bb489452 |
 
 旧第6节整表已明确是原始源码快照，按历史范围保留，不能覆盖本节当前指纹。映射不扩大页面能力：页面仍只读真实恢复事实，不由按钮文字推断恢复可执行、真实权限或数据库验收。
 
@@ -309,7 +309,7 @@ BR64有效期标题此前固定90，接口已有policy.maximum_drill_age_days。
 
 | 当前源文件 | 当前LF SHA-256 | 当前候选 |
 | --- | --- | ---: |
-| apps/web/src/components/PlatformLogCenter.vue | 029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518 | 20 |
+| apps/web/src/components/PlatformLogCenter.vue | 34d1b8cb21e3a1fdcaf720ff05edf6e76e76e25b955cc5333df888dc26b1d7b5 | 20 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f | 6 |
 | apps/web/src/components/AuditedReasonDialog.vue | 0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9 | 6 |
 

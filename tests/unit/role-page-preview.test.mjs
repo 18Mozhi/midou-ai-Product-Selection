@@ -8,7 +8,7 @@ test("P31 review retains distinct RBAC and resource-grant boundaries", async () 
     readFile("apps/web/src/components/OrganizationAdminCenter.vue", "utf8"),
   ]);
   for (const item of [
-    "角色分配在“成员与邀请”页完成",
+    "请在“成员与邀请”中分配角色。",
     "从资源详情页复制 UUID",
     "resource-grants",
     "expected_version",

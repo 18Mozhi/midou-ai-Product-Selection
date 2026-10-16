@@ -48,39 +48,39 @@
 | S:3c465962052e3b24.1 | control / 16 | CL-NAV / 总览 |
 | S:ebad8fdaf536f0e3.1 | control / 20 | CL-NAV / 任务页 |
 | S:404044c1ac23071f.1 | control / 24 | CL-NAV / 浏览器运行 |
-| T:d1849db8e18799fd.1 | control / 597 | CL51-LOAD / 保留快照刷新 |
-| T:a0dc06b99ac90370.1 | control / 600 | CL51-LINK / 浏览器运行 |
-| T:4ec44b3c83794aca.1 | control / 613 | CL51-LOAD / 错误重读 |
-| T:7e6436ac5e8e9b15.1 | event-binding / 649 | CL51-FILTER / changeStatus |
-| T:dfaa056b9550313b.1 | control / 728 | CL51-DETAIL / 桌面查看push task |
-| T:5efbd64729e57af0.1 | control / 773 | CL51-DETAIL / 关闭移动记录后开完整详情 |
-| T:1c008f867673db60.1 | control / 783 | CL51-TECH / 移动技术详情 |
-| T:680ca05fdeabfdbf.1 | control / 826 | CL51-PAGE / 前页 |
-| T:cda5e997a43d64c9.1 | control / 830 | CL51-PAGE / 后页 |
-| T:33bc529b8390aa3d.1 | control / 888 | CL51-DETAIL / 失败后读取当前task |
-| T:30e32a01e61d8558.1 | control / 869 | CL51-DETAIL / loading、error、loaded共用关闭详情 |
-| T:96164ff76e31b8d8.1 | control / 912 | CL51-RECOVER / 重放原因区锚点 |
-| T:9334ac0d41264e22.1 | control / 913 | CL51-RECOVER / 凭证、来源或总览链接 |
-| T:d499af7185a1f039.1 | control / 936 | CL51-TECH / robots判定展开 |
-| T:79686f2d00e174f0.1 | control / 995 | CL51-TECH / 完整技术标识 |
-| T:5046ae27ac1c3e07.1 | control / 1044 | CL51-REPLAY / 确认预览 |
-| T:acbca874b622fd25.1 | event-binding / 1056 | CL51-REPLAY / cancel、replay |
-| T:e9f14f18f727a992.1 | dialog-component-call / 1056 | CL51-REPLAY / 共享确认调用 |
-| O:2506d9788c717641.1 | dialog-component-call / 586 | CL52-SCOPE / 移动筛选抽屉 |
-| O:9ba7fa048065cd28.1 | form-event / 587 | CL52-SCOPE / applyScope |
-| O:3a14c060674cdbaa.1 | control / 670 | CL52-LINK / 响应links六类目标 |
-| O:f6229375f6be78df.1 | control / 713 | CL52-SOURCE / 桌面技术展开 |
-| O:1c008f867673db60.1 | control / 756 | CL52-SOURCE / 移动技术展开 |
-| O:1c008f867673db60.2 | control / 831 | CL52-ROOT / 原始错误码 |
-| O:f6229375f6be78df.2 | control / 869 | CL52-ATTEMPT / 桌面技术展开 |
-| O:1c008f867673db60.3 | control / 916 | CL52-ATTEMPT / 移动技术展开 |
-| O:660c7a198b93551d.1 | control / 972 | CL52-BATCH / 安全重放区展开 |
-| O:9ebd065e5010fd46.1 | control / 1022 | CL52-DEAD / 链接单任务详情重放 |
-| O:1c008f867673db60.4 | control / 1026 | CL52-DEAD / 技术详情 |
-| R:a761c6ac4e81b553.1 | event-binding / 433| CL53-LOAD / 状态面仅保留已接线primary，隐藏未接线secondary |
-| R:a9a0bd7b83bfaa17.1 | control / 517| CL53-RENEW / blocked_login任务链接 |
-| R:cbea42c5b9e6a6b3.1 | form-event / 531| CL53-FILTER / applyFilters |
-| R:1c008f867673db60.1 | control / 649| CL53-DETAIL / 移动技术展开 |
+| T:d1849db8e18799fd.1 | control / 596 | CL51-LOAD / 保留快照刷新 |
+| T:a0dc06b99ac90370.1 | control / 599 | CL51-LINK / 浏览器运行 |
+| T:4ec44b3c83794aca.1 | control / 612 | CL51-LOAD / 错误重读 |
+| T:7e6436ac5e8e9b15.1 | event-binding / 648 | CL51-FILTER / changeStatus |
+| T:dfaa056b9550313b.1 | control / 727 | CL51-DETAIL / 桌面查看push task |
+| T:5efbd64729e57af0.1 | control / 772 | CL51-DETAIL / 关闭移动记录后开完整详情 |
+| T:1c008f867673db60.1 | control / 782 | CL51-TECH / 移动技术详情 |
+| T:680ca05fdeabfdbf.1 | control / 825 | CL51-PAGE / 前页 |
+| T:cda5e997a43d64c9.1 | control / 829 | CL51-PAGE / 后页 |
+| T:33bc529b8390aa3d.1 | control / 887 | CL51-DETAIL / 失败后读取当前task |
+| T:30e32a01e61d8558.1 | control / 868 | CL51-DETAIL / loading、error、loaded共用关闭详情 |
+| T:96164ff76e31b8d8.1 | control / 911 | CL51-RECOVER / 重放原因区锚点 |
+| T:9334ac0d41264e22.1 | control / 912 | CL51-RECOVER / 凭证、来源或总览链接 |
+| T:d499af7185a1f039.1 | control / 935 | CL51-TECH / robots判定展开 |
+| T:79686f2d00e174f0.1 | control / 994 | CL51-TECH / 完整技术标识 |
+| T:5046ae27ac1c3e07.1 | control / 1043 | CL51-REPLAY / 确认预览 |
+| T:acbca874b622fd25.1 | event-binding / 1055 | CL51-REPLAY / cancel、replay |
+| T:e9f14f18f727a992.1 | dialog-component-call / 1055 | CL51-REPLAY / 共享确认调用 |
+| O:2506d9788c717641.1 | dialog-component-call / 583 | CL52-SCOPE / 移动筛选抽屉 |
+| O:9ba7fa048065cd28.1 | form-event / 584 | CL52-SCOPE / applyScope |
+| O:3a14c060674cdbaa.1 | control / 667 | CL52-LINK / 响应links六类目标 |
+| O:f6229375f6be78df.1 | control / 710 | CL52-SOURCE / 桌面技术展开 |
+| O:1c008f867673db60.1 | control / 753 | CL52-SOURCE / 移动技术展开 |
+| O:1c008f867673db60.2 | control / 828 | CL52-ROOT / 原始错误码 |
+| O:f6229375f6be78df.2 | control / 866 | CL52-ATTEMPT / 桌面技术展开 |
+| O:1c008f867673db60.3 | control / 913 | CL52-ATTEMPT / 移动技术展开 |
+| O:660c7a198b93551d.1 | control / 969 | CL52-BATCH / 安全重放区展开 |
+| O:dd9928fbcb6f85f9.1 | control / 1019 | CL52-DEAD / 链接单任务详情重放 |
+| O:1c008f867673db60.4 | control / 1023 | CL52-DEAD / 技术详情 |
+| R:a761c6ac4e81b553.1 | event-binding / 432| CL53-LOAD / 状态面仅保留已接线primary，隐藏未接线secondary |
+| R:a9a0bd7b83bfaa17.1 | control / 516| CL53-RENEW / blocked_login任务链接 |
+| R:cbea42c5b9e6a6b3.1 | form-event / 529| CL53-FILTER / applyFilters |
+| R:1c008f867673db60.1 | control / 647| CL53-DETAIL / 移动技术展开 |
 
 ## 3. 输入绑定和弹窗变体
 
@@ -163,11 +163,11 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/CollectionTaskCenter.vue#43ae05ac7ae508fe.1 | 603 | event-binding | CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load并隐藏未接线secondary |
-| apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1 | 821 | control | CL51-CURRENT-EMPTY-RECOVERY / 全部状态重读；筛选空态返回全部状态并重读 |
-| apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1 | 839 | event-binding | CL51-CURRENT-DETAIL-DISMISS / 仅详情遮罩本身mousedown时关闭详情 |
-| apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1 | 840 | dialog-definition | CL51-CURRENT-DETAIL-SEMANTICS / 当前详情面板role=dialog、aria-modal与标题/描述关联 |
-| apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1 | 840 | event-binding | CL51-CURRENT-DETAIL-KEYBOARD / 将详情keydown转发给既有Escape与Tab边界处理 |
+| apps/web/src/components/CollectionTaskCenter.vue#43ae05ac7ae508fe.1 | 602 | event-binding | CL51-CURRENT-STATE-PRIMARY / 非ready与非empty时将状态面primary接到列表load并隐藏未接线secondary |
+| apps/web/src/components/CollectionTaskCenter.vue#16620352511db5c2.1 | 820 | control | CL51-CURRENT-EMPTY-RECOVERY / 全部状态重读；筛选空态返回全部状态并重读 |
+| apps/web/src/components/CollectionTaskCenter.vue#6b55734308f206c3.1 | 838 | event-binding | CL51-CURRENT-DETAIL-DISMISS / 仅详情遮罩本身mousedown时关闭详情 |
+| apps/web/src/components/CollectionTaskCenter.vue#ed8b70dc2e6170f2.1 | 839 | dialog-definition | CL51-CURRENT-DETAIL-SEMANTICS / 当前详情面板role=dialog、aria-modal与标题/描述关联 |
+| apps/web/src/components/CollectionTaskCenter.vue#d3da42ac8f789e3b.1 | 839 | event-binding | CL51-CURRENT-DETAIL-KEYBOARD / 将详情keydown转发给既有Escape与Tab边界处理 |
 
 本节仅补候选定位，不将列表/详情读取、人工重放的API合同、RBAC、真实任务事实、键盘实机或生产部署验收重新声明为通过；原5个失效签名仍保持identity-not-found。
 
@@ -208,9 +208,9 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/CollectionRuntimeSurface.vue | 4808a94cc01371c373139a6134a6f46f0936d82f1ccb263d58bb98dafdbf7f5f |
-| apps/web/src/components/CollectionTaskCenter.vue | 02b210d183bff5db344f33551cf1405ba7b5a912e026126c172ed8f1838623d8 |
-| apps/web/src/components/CollectionOperationsConsole.vue | 2072fc208c456f08f3c325c36eae87413048ba93c0b2e50c07dad438eb69e01f |
-| apps/web/src/components/CollectionRuntimeCenter.vue | 7ac6860fe5860c5b27d764e38567320440c67c726b99ff22dec685b03cf61381 |
+| apps/web/src/components/CollectionTaskCenter.vue | 333d58152ca4dac7b548951d6fdc3a97c3ae791c13bbd9c1688096d266f7744b |
+| apps/web/src/components/CollectionOperationsConsole.vue | 8882cc3b58271a95b39dab4f72d11beb769db478c589155b22c7a88aabb9d252 |
+| apps/web/src/components/CollectionRuntimeCenter.vue | c701d060832d9bae60976657890b9f6c58376b077dd6725517df684255aee5e9 |
 | apps/web/src/collection-tasks.css | e2bcf0f176fdf670efc402c104fdac4dd2eabbafbbdc4a9d7a21e3c04d90e85f |
 | apps/web/src/collection-task-detail.css | cdeb6209781acc6ff747fb4728f9675d69479c53fd3a97dfdb9e0b5c17130544 |
 | apps/web/src/styles/platform-operations.css | 2a0a0936d6132cd3fdeb74def417edfd7a038dda43ece9f010b125b62698281b |
@@ -218,13 +218,13 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 | apps/web/src/components/ConfirmDialog.vue | 3fbdb1841fe1426ecb6a4d808d05d9da8216e501c251b5bf3704b5680af35424 |
 | apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
-| apps/web/src/components/UiStatePanel.vue | 8f0c147245627493cf5d235162b9dc00424875d0296e710f180a3365c603c164 |
+| apps/web/src/components/UiStatePanel.vue | 2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c |
 | apps/web/src/components/TechnicalDetails.vue | 4e2443f3f7f901c3d1cf14243523956e8705bbd39aed8e0a19d54063220fe82d |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
 | config/route-catalog.json | eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b |
 | apps/web/src/route-catalog.ts | 6b0d6c7770f26ebf09017c32ce8dec08179d1a9ec1c532b6066ed8efed807956 |
 | apps/web/src/router.ts | 67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4 |
-| apps/web/src/App.vue | e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531 |
+| apps/web/src/App.vue | df9ff52c97017408361f35cb947ee6a2935ecba89d38818ce12e1cdf2b12fea2 |
 | apps/api/src/collection-task-routes.ts | 74a9af17287692ed20d99b3f5993ad49b07a43ba967801748025a3640a078fbd |
 | apps/api/src/collection-task-service.ts | e2be97bceb32547991fe08c629d5459b686bd1672278366e7e3919321af81684 |
 | apps/api/src/mysql-collection-task-repository.ts | f2941278cff537ad1d6688989a159b8398db759373bc51379c1f8e7302fcfc47 |
@@ -237,24 +237,24 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/CollectionOperationsConsole.vue#6d3f7d591719f19f.1 | 582 | control | CL52-LOAD / 刷新读取当前固定范围 |
-| apps/web/src/components/CollectionOperationsConsole.vue#e0774dcb9c606eef.1 | 625 | control | CL52-SCOPE / resetScope：清除局部范围筛选 |
-| apps/web/src/components/CollectionOperationsConsole.vue#002b24e1d917d4a4.1 | 632 | control | CL52-SCOPE / applyScope：提交现有API范围查询 |
-| apps/web/src/components/CollectionOperationsConsole.vue#a397ba517c409773.1 | 641 | control | CL52-LOAD / refreshNotice中的重试，复用load |
-| apps/web/src/components/CollectionOperationsConsole.vue#c7e32d5d2ec42619.1 | 660 | control | CL52-LOAD / 受状态门控制的重新读取，不显示loading/失权重试 |
-| apps/web/src/components/CollectionOperationsConsole.vue#a9b7552ee181c72f.1 | 762 | control | CL52-SOURCE / 展开全部来源或收回前8条，控制对应结果区 |
-| apps/web/src/components/CollectionOperationsConsole.vue#4509211b46b0337c.1 | 804 | control | CL52-ROOT / 当前根因存在时清除精确根因筛选 |
-| apps/web/src/components/CollectionOperationsConsole.vue#644b6cd23fdb966a.1 | 820 | control | CL52-ROOT / 选择具体真实错误码进入根因下钻，按pressed显当前选择 |
-| apps/web/src/components/CollectionOperationsConsole.vue#e4688d99cdaed726.1 | 931 | control | CL52-ATTEMPT / 最近尝试前页；依API总页数及busy禁用 |
-| apps/web/src/components/CollectionOperationsConsole.vue#5c6a30d3ce827bee.1 | 942 | control | CL52-ATTEMPT / 最近尝试后页；依API总页数及busy禁用 |
-| apps/web/src/components/CollectionOperationsConsole.vue#65c7916ab5f0b4d9.1 | 964 | control | CL52-BATCH / 展开已确认失败与结果未知条目，只披露现有结算事实 |
-| apps/web/src/components/CollectionOperationsConsole.vue#3d7519a5ffaadf88.1 | 978 | event-binding | CL52-BATCH / 死信选择change转toggleDeadLetter；单项状态、busy、unknown及20条上限由既有逻辑裁决 |
-| apps/web/src/components/CollectionOperationsConsole.vue#935c6c8171139c6b.1 | 988 | event-binding | CL52-BATCH / batchReason受控输入；maxlength/错误清理不另算写操作 |
-| apps/web/src/components/CollectionOperationsConsole.vue#9233c1fc5a4723d0.1 | 1013 | control | CL52-BATCH / previewBatchReplay：先校验并冻结目标、影响和原因，再打开确认 |
-| apps/web/src/components/CollectionOperationsConsole.vue#ead51c4255c6e1f0.1 | 1043 | control | CL52-DEAD / 开放与已重放死信前页，清当前页外选择 |
-| apps/web/src/components/CollectionOperationsConsole.vue#19e60ba8660b9f22.1 | 1054 | control | CL52-DEAD / 开放与已重放死信后页，清当前页外选择 |
-| apps/web/src/components/CollectionOperationsConsole.vue#9215901b5115628c.1 | 1072 | event-binding | CL52-BATCH / ConfirmDialog cancel与confirm分别走现有取消/确认所有者 |
-| apps/web/src/components/CollectionOperationsConsole.vue#4640753c7de49660.1 | 1072 | dialog-component-call | CL52-BATCH / 破坏性影响确认共享调用；要求确认短语与影响勾选 |
+| apps/web/src/components/CollectionOperationsConsole.vue#6d3f7d591719f19f.1 | 579 | control | CL52-LOAD / 刷新读取当前固定范围 |
+| apps/web/src/components/CollectionOperationsConsole.vue#e0774dcb9c606eef.1 | 622 | control | CL52-SCOPE / resetScope：清除局部范围筛选 |
+| apps/web/src/components/CollectionOperationsConsole.vue#002b24e1d917d4a4.1 | 629 | control | CL52-SCOPE / applyScope：提交现有API范围查询 |
+| apps/web/src/components/CollectionOperationsConsole.vue#a397ba517c409773.1 | 638 | control | CL52-LOAD / refreshNotice中的重试，复用load |
+| apps/web/src/components/CollectionOperationsConsole.vue#c7e32d5d2ec42619.1 | 657 | control | CL52-LOAD / 受状态门控制的重新读取，不显示loading/失权重试 |
+| apps/web/src/components/CollectionOperationsConsole.vue#a9b7552ee181c72f.1 | 759 | control | CL52-SOURCE / 展开全部来源或收回前8条，控制对应结果区 |
+| apps/web/src/components/CollectionOperationsConsole.vue#4509211b46b0337c.1 | 801 | control | CL52-ROOT / 当前根因存在时清除精确根因筛选 |
+| apps/web/src/components/CollectionOperationsConsole.vue#644b6cd23fdb966a.1 | 817 | control | CL52-ROOT / 选择具体真实错误码进入根因下钻，按pressed显当前选择 |
+| apps/web/src/components/CollectionOperationsConsole.vue#e4688d99cdaed726.1 | 928 | control | CL52-ATTEMPT / 最近尝试前页；依API总页数及busy禁用 |
+| apps/web/src/components/CollectionOperationsConsole.vue#5c6a30d3ce827bee.1 | 939 | control | CL52-ATTEMPT / 最近尝试后页；依API总页数及busy禁用 |
+| apps/web/src/components/CollectionOperationsConsole.vue#65c7916ab5f0b4d9.1 | 961 | control | CL52-BATCH / 展开已确认失败与结果未知条目，只披露现有结算事实 |
+| apps/web/src/components/CollectionOperationsConsole.vue#3d7519a5ffaadf88.1 | 975 | event-binding | CL52-BATCH / 死信选择change转toggleDeadLetter；单项状态、busy、unknown及20条上限由既有逻辑裁决 |
+| apps/web/src/components/CollectionOperationsConsole.vue#935c6c8171139c6b.1 | 985 | event-binding | CL52-BATCH / batchReason受控输入；maxlength/错误清理不另算写操作 |
+| apps/web/src/components/CollectionOperationsConsole.vue#9233c1fc5a4723d0.1 | 1010 | control | CL52-BATCH / previewBatchReplay：先校验并冻结目标、影响和原因，再打开确认 |
+| apps/web/src/components/CollectionOperationsConsole.vue#ead51c4255c6e1f0.1 | 1040 | control | CL52-DEAD / 开放与已重放死信前页，清当前页外选择 |
+| apps/web/src/components/CollectionOperationsConsole.vue#19e60ba8660b9f22.1 | 1051 | control | CL52-DEAD / 开放与已重放死信后页，清当前页外选择 |
+| apps/web/src/components/CollectionOperationsConsole.vue#9215901b5115628c.1 | 1069 | event-binding | CL52-BATCH / ConfirmDialog cancel与confirm分别走现有取消/确认所有者 |
+| apps/web/src/components/CollectionOperationsConsole.vue#4640753c7de49660.1 | 1069 | dialog-component-call | CL52-BATCH / 破坏性影响确认共享调用；要求确认短语与影响勾选 |
 
 静态回归应核对当前29个candidateId、行号、类型及console当前hash；其中11个沿用第2节原语义并更新行号，本节补18个原先未归属位置。第8.1节将17个已被当前候选替代的旧O身份单独归档，不覆盖新分母。静态对账、源hash与历史隔离均不代表浏览器交互、服务端权限/审计、真实Worker重放或生产验收；第5/6节所有既有限制和CL-G退出条件仍有效。
 
@@ -290,14 +290,14 @@ UI2-CL52按可见桌面/移动区域定位来源；旧9项测试的strict定位�
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/CollectionRuntimeCenter.vue#b3aff7d1ec82177c.1 | 417 | control | CL53-CURRENT-LOAD / 手动重读；刷新或回收中禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#7287ecd28dcaceb5.1 | 420 | control | CL53-CURRENT-RECOVER / 打开过期租约全局回收确认；状态未知、无快照风险或忙碌时禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#764f755fb3d8ba7c.1 | 554 | control | CL53-CURRENT-FILTER / 提交当前状态与搜索草稿；读写忙碌时禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#06482162d2eef909.1 | 555 | control | CL53-CURRENT-FILTER / 恢复全部状态和空搜索并按第一页重读 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#7219dcd9d87bc4b0.1 | 681 | control | CL53-CURRENT-PAGE / 读取前页；首末边界或忙碌时禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#28a360589b0e3c7f.1 | 689 | control | CL53-CURRENT-PAGE / 读取后页；服务端total_pages边界或忙碌时禁用 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#b917496c3d588d7b.1 | 701 | event-binding | CL53-CURRENT-RECOVER / 转发共享确认窗取消/确认至本页状态所有者 |
-| apps/web/src/components/CollectionRuntimeCenter.vue#bc8824b8df3a0c77.1 | 701 | dialog-component-call | CL53-CURRENT-RECOVER / 共享确认窗声明仅回收服务端确认为过期的档案租约 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#b3aff7d1ec82177c.1 | 416 | control | CL53-CURRENT-LOAD / 手动重读；刷新或回收中禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#7287ecd28dcaceb5.1 | 419 | control | CL53-CURRENT-RECOVER / 打开过期租约全局回收确认；状态未知、无快照风险或忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#764f755fb3d8ba7c.1 | 552 | control | CL53-CURRENT-FILTER / 提交当前状态与搜索草稿；读写忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#06482162d2eef909.1 | 553 | control | CL53-CURRENT-FILTER / 恢复全部状态和空搜索并按第一页重读 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#7219dcd9d87bc4b0.1 | 679 | control | CL53-CURRENT-PAGE / 读取前页；首末边界或忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#28a360589b0e3c7f.1 | 687 | control | CL53-CURRENT-PAGE / 读取后页；服务端total_pages边界或忙碌时禁用 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#b917496c3d588d7b.1 | 699 | event-binding | CL53-CURRENT-RECOVER / 转发共享确认窗取消/确认至本页状态所有者 |
+| apps/web/src/components/CollectionRuntimeCenter.vue#bc8824b8df3a0c77.1 | 699 | dialog-component-call | CL53-CURRENT-RECOVER / 共享确认窗声明仅回收服务端确认为过期的档案租约 |
 
 同一ConfirmDialog位置分别形成事件绑定和弹窗调用两个候选；因此本节8个候选落在7个不同源码位置。当前LF指纹仍以第8节对应文件行绑定，不重复制造哈希声明。
 

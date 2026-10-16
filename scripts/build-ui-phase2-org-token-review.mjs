@@ -70,7 +70,7 @@ const definitions = [
     "EX-P29-PROFILE",
     "资料表单排除",
     "excluded",
-    C("d6b520278ab3dd57.1", "1cbd108c64b5230c.1", "5878e30377f290ae.1"),
+    C("e93301a7ec700ce7.1", "1cbd108c64b5230c.1", "ed75758087c9a4b8.1"),
     ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
     "仅summary",
     "保存资料/Logo检查不属本页",
@@ -160,7 +160,7 @@ const definitions = [
     "OG-K-CREATE",
     "创建组织令牌",
     "write",
-    K("ed5969fa99d64044.1", "073eb5c8ded40aa0.1"),
+    K("b6acefddadc9cdbb.1", "40fb5f370e50828d.1"),
     ["OG-K-CREATE"],
     "原生required/范围及scope自校验；submit由busy禁用",
     "submitCreate调用createToken精确name/scopes/ttl_days/reason；失败留草稿，成功重置90和空scope",
@@ -586,12 +586,6 @@ export function buildOrgTokenReview({ sources, external }) {
             ["revoke", "matching-dialog-scene", ["reason_revoke"]],
           ],
         ),
-        container(childFile, "aside", 1, "inline-aside", "顶部固定只读scope和明文边界说明", [
-          ["security", "related-scene-only", ["normal"]],
-        ]),
-        container(childFile, "aside", 2, "inline-aside", "组织权限说明，非弹窗/关闭通知", [
-          ["truth", "related-scene-only", ["normal"]],
-        ]),
         container(
           childFile,
           "form",
@@ -607,14 +601,14 @@ export function buildOrgTokenReview({ sources, external }) {
         container(
           childFile,
           "aside",
-          3,
+          1,
           "inline-aside",
           "创建预览只解释草稿范围和预计到期，不是真实响应",
           [["preview", "related-scene-only", ["create_draft"]]],
         ),
       ],
       sharedRemaining: [
-        "6处caller结构不等于6个业务弹窗；共享原生原因窗仅两种上下文。",
+        "4处现行caller结构不等于4个业务弹窗；原顶部说明框与权限说明框已从当前界面移除，旧图包仅保留历史；共享原生原因窗仅两种上下文。",
         "共享reason字段和6个源位置单独登记，原提案max500、busy草稿锁与复制归属保护不冒充实际Vue。",
       ],
     },

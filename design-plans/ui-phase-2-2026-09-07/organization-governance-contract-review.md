@@ -53,7 +53,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | A | 87f27ee40744d069.1 | OG-A-REQUEST-FILTER · 当前审批记录下一页 |
 | A | 688 / 25d2be8fec5c35cd.1 | OG-A-CURRENT-PAGINATION / 模板上一页 |
 | A | 691 / 62fcf758cc715685.1 | OG-A-CURRENT-PAGINATION / 模板下一页 |
-| C | d6b520278ab3dd57.1,5878e30377f290ae.1 | OG-PROFILE-SAVE |
+| C | e93301a7ec700ce7.1,ed75758087c9a4b8.1 | OG-PROFILE-SAVE |
 | C | 1cbd108c64b5230c.1 | OG-PROFILE-LOGO浏览器有效性 |
 | C | 6a563eeaa67fea90.1 | P30全部成员事件父转发，复用M语义 |
 | C | b09d7923228aabe6.1 | P31资源授权父转发，复用已有合同 |
@@ -72,7 +72,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | M | 01c67ff42b0489fa.1 | OG-M-STATE禁用/恢复 |
 | M | bc843bc08e306aa8.1,de6415e79bea088d.1 | OG-M-PAGE |
 | W | ee38194d65edc8d9.1,ea9b5ddcd4502f15.1 | OG-W-OPEN头部/空态 |
-| W | 7c1ff142d1b797a2.1,bae4e728dfc90592.1 | OG-W-CREATE |
+| W | 332d388d401153e6.1,82a3867867534186.1 | OG-W-CREATE |
 | W | 617ab4a17066056a.1 | OG-W-CANCEL |
 | W | 9aeabb6f832c875d.1,18ece981bcb15fca.1,56fb9bb2ac849bf0.1,66725db5db9a8fe8.1,009754681935b22a.1 | OG-W-FILTER状态/重置/清除 |
 | W | 1db61553e299f9aa.1 | OG-W-SELECT |
@@ -81,7 +81,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | W | 8300243a415c8c66.1,01af8fcac461a03d.1 | OG-W-LINK团队/概览 |
 | W | 1c008f867673db60.1 | OG-TECH |
 | T | dea8d744b50ed1f0.1,9f5ea38e58a26f78.1 | OG-T-OPEN头部/空态 |
-| T | 1ea0ce8ecc982edd.1,bae4e728dfc90592.1 | OG-T-CREATE |
+| T | 04d2beb7bc6b150f.1,82a3867867534186.1 | OG-T-CREATE |
 | T | 617ab4a17066056a.1 | OG-T-CANCEL |
 | T | cde0a7cecbbc9a09.1,18ece981bcb15fca.1,56fb9bb2ac849bf0.1,66725db5db9a8fe8.1,83a359c9f404cb11.1 | OG-T-FILTER状态/重置/清除 |
 | T | 95629c96c6d7c41b.1 | OG-T-SELECT |
@@ -89,7 +89,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | T | be579efd97f36382.1 | OG-T-CREATE-RECOVERY-TRACE |
 | T | 8c30506a17605129.1 | OG-T-CREATE-RECOVERY-READ |
 | T | 9fbd42d272c62579.1,917ad4e4a5730305.1 | OG-T-MEMBER分配/移除 |
-| T | 76054446429e86da.1,2db399169624cf8a.1 | OG-T-LINK成员/工作区 |
+| T | 76054446429e86da.1,95e38f5ffae70cab.1 | OG-T-LINK成员/工作区 |
 | T | 1c008f867673db60.1 | OG-TECH |
 | A | 00f81ad5e8a2f732.1,86f59f25b64551b6.1 | OG-A-VIEW |
 | A | f376017b5e1818c0.1 | OG-A-REQUEST-FILTER重置 |
@@ -106,7 +106,7 @@ F04b后续：AuditedReasonDialog局部Tab循环修复后，仅刷新该共享文
 | D | 1c008f867673db60.1 | OG-TECH |
 | K | 6d8d1a59210a6ea0.1 | OG-K-COPY |
 | K | b3a4e8d62ca470a9.1 | OG-K-DISMISS |
-| K | ed5969fa99d64044.1,073eb5c8ded40aa0.1 | OG-K-CREATE |
+| K | b6acefddadc9cdbb.1,40fb5f370e50828d.1 | OG-K-CREATE |
 | K | ab0838b07b48fd2a.1 | OG-K-SCOPE四种 |
 | K | ee181e5ac85b01ec.1 | OG-K-TTL四快捷 |
 | K | 66725db5db9a8fe8.1 | OG-K-FILTER重置 |
@@ -195,13 +195,13 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| `apps/web/src/components/OrganizationAdminCenter.vue` | `08ca45c702c440b88d10157e3695e74fcffcde236833db43e534db72df0598b2` |
+| `apps/web/src/components/OrganizationAdminCenter.vue` | `d26940620e9f41bac3f405cf6c1473458701aefce11cf3daef3dd4b861881489` |
 | `apps/web/src/components/OrganizationMemberPanel.vue` | `33448357ad210cccbdcbf50227e476ca07dc09c338235eec561628db357531b7` |
-| `apps/web/src/components/OrganizationWorkspacePanel.vue` | `63687f982e54a1e02af06db82a6d053f644458d7d4648e8e0aeaf3225e7226c7` |
-| `apps/web/src/components/OrganizationTeamPanel.vue` | `2135e9325188348639af75445aa5b8d4066ed401f9fda3663c096aa915c97eee` |
-| `apps/web/src/components/OrganizationDataPanel.vue` | `00532c5cc3f421f67d4792baee6fa2c75c965fce93f3ec69d86c673edb238270` |
-| `apps/web/src/components/OrganizationTokenPanel.vue` | `f1e3167ae749d8e7c3469fe6a3b766793f68838feda467eb5010bb8bf4c4669c` |
-| `apps/web/src/components/OrganizationAuditPanel.vue` | `e05b6fb1071f3cb99fedd815346b91522e02dde284d3c146548c59c24ea76b9d` |
+| `apps/web/src/components/OrganizationWorkspacePanel.vue` | `cd8fd06e5b939435c74aa1406ade6cbe6bfaf3724cd3676bcd1598c2e28c3b93` |
+| `apps/web/src/components/OrganizationTeamPanel.vue` | `18d06e5aad5b485ee277ef457f2e58de10c50ff1be922417033572cf33510eea` |
+| `apps/web/src/components/OrganizationDataPanel.vue` | `bfb7f0f4360642e247db0640696c113678bb00309b36fd0c361f447297424969` |
+| `apps/web/src/components/OrganizationTokenPanel.vue` | `9cbca41698db90eac2ede64e0e064acbe2aad656476e5ee0448180dafbd29011` |
+| `apps/web/src/components/OrganizationAuditPanel.vue` | `c5ee576bcafa09216e7dbab602d1debd48ee52f1385b7e10f9bc6bf353126ef5` |
 | `apps/web/src/components/AuditedReasonDialog.vue` | 0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9 |
 | `apps/web/src/use-audited-reason.ts` | `90ecbeee533b314296e49d6a6769f498af3671659135ef8e477a3b4246b15007` |
 | `apps/web/src/use-modal-dialog.ts` | c9d4ddd1f2e1839169edd6bae5f5e6f0cf81af4fb0d9ffb85287805cd7796957 |
@@ -223,13 +223,13 @@ UI2-OG01三实例同时核对精确创建body/幂等键、单POST、两次GET（
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/OrganizationApprovalPanel.vue#95030381fd924d2b.1 | 547 | control | OG-A-CURRENT-PAGINATION / 审批记录上一页及边界焦点交接 |
-| apps/web/src/components/OrganizationApprovalPanel.vue#87f27ee40744d069.1 | 550 | control | OG-A-CURRENT-PAGINATION / 审批记录下一页及边界焦点交接 |
-| apps/web/src/components/OrganizationApprovalPanel.vue#25d2be8fec5c35cd.1 | 688 | control | OG-A-CURRENT-PAGINATION / 模板目录上一页及边界焦点交接 |
-| apps/web/src/components/OrganizationApprovalPanel.vue#62fcf758cc715685.1 | 691 | control | OG-A-CURRENT-PAGINATION / 模板目录下一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#95030381fd924d2b.1 | 541 | control | OG-A-CURRENT-PAGINATION / 审批记录上一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#87f27ee40744d069.1 | 544 | control | OG-A-CURRENT-PAGINATION / 审批记录下一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#25d2be8fec5c35cd.1 | 681 | control | OG-A-CURRENT-PAGINATION / 模板目录上一页及边界焦点交接 |
+| apps/web/src/components/OrganizationApprovalPanel.vue#62fcf758cc715685.1 | 684 | control | OG-A-CURRENT-PAGINATION / 模板目录下一页及边界焦点交接 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/OrganizationApprovalPanel.vue | `332425d1b75e66f4f313f949eac92b4a635b2fb544ac6ea746e2ab32ebb8d22b` |
+| apps/web/src/components/OrganizationApprovalPanel.vue | `16736108ab97e26b4a37e59b68a04648f8a6f1412b4d3e52f21052e33f03f004` |
 
 映射仅记录当前静态位置及可见焦点行为；不证明父级保活、多实例路由生命周期、读屏体验、真实API/权限或生产验收。旧指纹在第6节单独保留为历史，避免覆盖当前哈希绑定。

@@ -64,6 +64,7 @@ ${summary[0]}
   return result;
 }
 export function previewSecurityShell(source) {
+  if (source.includes('class="role-workspace-identity"')) return previewShellVue(source);
   const result = previewShellVue(source);
   if (result.includes("routePath !== '/platform-admin/security'")) return result;
   return once(

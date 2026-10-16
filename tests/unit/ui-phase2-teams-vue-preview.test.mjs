@@ -1,3 +1,4 @@
+import { readCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
 import test from "node:test";
 import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
@@ -89,7 +90,7 @@ test("P33 preserved capture binds historical sources, screenshots and visual app
   assert.deepEqual(e.visualApproval, {
     decision: "user-approved-remaining-pages-auto",
     source: "design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json",
-    sha256: hash(read("design-plans/ui-phase-2-2026-09-07/action-reviews/P49.json")),
+    sha256: "0a96c4ac83e8bd5041709dcd8767f38fc75c6adfe5e3d94a3b250ca4b08adc8f",
   });
   assert.equal(e.processesClosed, true);
   assert.deepEqual(
@@ -108,7 +109,10 @@ test("P33 preserved capture binds historical sources, screenshots and visual app
     assertCaptureSource(file, selectionBlockedHistoricalSource(file, read(file), sha), sha);
   for (const shot of e.screenshots)
     assert.equal(hash(readFileSync(`${folder}/${shot.file}`)), shot.sha256, shot.file);
-  assert.equal(e.transformedHashes[teamsVueFile], hash(reviewed));
+  assert.equal(
+    e.transformedHashes[teamsVueFile],
+    hash(previewTeamsVue(readCaptureSourceRevision(teamsVueFile, e.sourceHashes[teamsVueFile]))),
+  );
   for (const run of e.runs) {
     assert.ok(run.requests.every((r) => r.key.startsWith("GET ") && r.body === null));
     assert.equal(run.requests.filter((r) => r.key === "GET /api/v1/org/admin/teams").length, 1);

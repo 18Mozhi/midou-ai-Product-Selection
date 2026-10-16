@@ -104,28 +104,28 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| 68febff0d855d919.1 | 267 | control | HD-CURRENT-READ / 已有快照读取失败时由用户显式重读 |
-| 5a213ad1d3b14030.1 | 270 | event-binding | HD-CURRENT-READ / UiStatePanel仅呈现主操作并转给首页load；`:hide-secondary=true`抑制无监听次操作 |
-| 5d17be0355b745f2.1 | 298 | control | HD-CURRENT-RULES / 打开既有规则页 |
-| 2fdb8b56f02fb5d4.1 | 301 | control | HD-CURRENT-OPPORTUNITIES / 查看完整推荐清单 |
-| 169dd3f4eac94585.1 | 304 | control | HD-CURRENT-START / 导航至独立创建选品流程 |
-| cb01c1a61d2872cd.1 | 319 | control | HD-CURRENT-RESUME / 仅恢复第一条已暂停规则；提交中禁用 |
-| 094ecf5aedd69025.1 | 327 | control | HD-CURRENT-SETUP / 在符合状态及能力条件时展开或收起本地首次设置表单 |
-| 473fa4f4d2c5e48b.1 | 336 | control | HD-CURRENT-RULES-READ / 规则读取错误时由有管理能力者重读 |
-| eb4229f8bc621174.1 | 337 | control | HD-CURRENT-RULES / 无管理能力时只提供规则页查看入口 |
-| 68febff0d855d919.2 | 341 | control | HD-CURRENT-READ / 首页/规则状态不完整时显式重新读取 |
-| 26550e015743f49c.1 | 347 | form-event | HD-CURRENT-CREATE / 受控首次规则表单阻止原生提交并调用既有createRule |
-| a3f78d5afc916240.1 | 436 | control | HD-CURRENT-CREATE / 表单提交按钮；提交中禁用 |
-| 8386b9138fc27b68.1 | 449 | control | HD-CURRENT-OPPORTUNITIES / 查看全部推荐数量对应的列表 |
-| 9a0707498a265485.1 | 453 | control | HD-CURRENT-RECOMMENDATION / 按服务端返回的item.route打开单条推荐 |
-| 673c9efc952a0fcb.1 | 479 | control | HD-CURRENT-CANDIDATES / 仅存在规则候选时进入候选进度视图 |
-| e7ad539389d8518c.1 | 484 | control | HD-CURRENT-EVIDENCE / 无推荐/规则候选且有待采集证据时进入采集进度视图 |
-| 7a7b103459397eaa.1 | 505 | control | HD-CURRENT-WORK / 使用本人事项或健康记录提供的原始路由 |
-| d033e930df518c8e.1 | 522 | control | HD-CURRENT-TRUTH / 原生details披露来源计数/时间和非自动采纳说明，不发请求 |
+| 68febff0d855d919.1 | 340 | control | HD-CURRENT-READ / 已有快照读取失败时由用户显式重读 |
+| 5a213ad1d3b14030.1 | 343 | event-binding | HD-CURRENT-READ / UiStatePanel仅呈现主操作并转给首页load；`:hide-secondary=true`抑制无监听次操作 |
+| 5d17be0355b745f2.1 | 382 | control | HD-CURRENT-RULES / 打开既有规则页 |
+| 2fdb8b56f02fb5d4.1 | 385 | control | HD-CURRENT-OPPORTUNITIES / 查看完整推荐清单 |
+| 169dd3f4eac94585.1 | 388 | control | HD-CURRENT-START / 导航至独立创建选品流程 |
+| cb01c1a61d2872cd.1 | 403 | control | HD-CURRENT-RESUME / 仅恢复第一条已暂停规则；提交中禁用 |
+| 094ecf5aedd69025.1 | 411 | control | HD-CURRENT-SETUP / 在符合状态及能力条件时展开或收起本地首次设置表单 |
+| 473fa4f4d2c5e48b.1 | 420 | control | HD-CURRENT-RULES-READ / 规则读取错误时由有管理能力者重读 |
+| eb4229f8bc621174.1 | 421 | control | HD-CURRENT-RULES / 无管理能力时只提供规则页查看入口 |
+| 68febff0d855d919.2 | 425 | control | HD-CURRENT-READ / 首页/规则状态不完整时显式重新读取 |
+| 1e5a04529a609636.1 | 431 | form-event | HD-CURRENT-CREATE / 受控首次规则表单阻止原生提交并调用既有createRule |
+| a3f78d5afc916240.1 | 519 | control | HD-CURRENT-CREATE / 表单提交按钮；提交中禁用 |
+| 8386b9138fc27b68.1 | 533 | control | HD-CURRENT-OPPORTUNITIES / 查看全部推荐数量对应的列表 |
+| 9a0707498a265485.1 | 537 | control | HD-CURRENT-RECOMMENDATION / 按服务端返回的item.route打开单条推荐 |
+| 673c9efc952a0fcb.1 | 563 | control | HD-CURRENT-CANDIDATES / 仅存在规则候选时进入候选进度视图 |
+| e7ad539389d8518c.1 | 568 | control | HD-CURRENT-EVIDENCE / 无推荐/规则候选且有待采集证据时进入采集进度视图 |
+| 7a7b103459397eaa.1 | 591 | control | HD-CURRENT-WORK / 使用本人事项或健康记录提供的原始路由 |
+| d033e930df518c8e.1 | 608 | control | HD-CURRENT-TRUTH / 原生details披露来源计数/时间和非自动采纳说明，不发请求 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/HomeDashboard.vue | e54608bcb9d3b72b2f482b1f47d8559eb7d44b1649f0898a74bb1825e3eacad5 |
+| apps/web/src/components/HomeDashboard.vue | 0161f338f31f909cf116f0e11e116ec2b1e6e74e78d4d201a40364e904773355 |
 
 ### 2.2 P11 PersonalProfilePanel 当前源码位置（2026-09-24）
 
@@ -135,19 +135,19 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| eb06bfc56733f195.1 | 27 | form-event | PC-CURRENT-SAVE / 阻止原生表单提交并向父级发出submit意图 |
+| edf117b7ec0498f3.1 | 27 | form-event | PC-CURRENT-SAVE / 阻止原生表单提交并向父级发出submit意图 |
 | a009961494d9e9f6.1 | 45 | event-binding | PC-CURRENT-USERNAME / 更新登录用户名草稿；保存中禁用 |
 | 85e98ee3a227ab53.1 | 62 | event-binding | PC-CURRENT-DISPLAY-NAME / 更新必填显示名称草稿；保存中禁用 |
 | c3282a4a6e5e0694.1 | 76 | event-binding | PC-CURRENT-AVATAR / 更新头像HTTPS地址草稿；保存中禁用 |
 | 606f704e56cefdda.1 | 91 | event-binding | PC-CURRENT-PHONE / 更新手机号草稿；验证状态单独显示且不由输入伪造 |
-| 710e66a207790a9d.1 | 108 | event-binding | PC-CURRENT-LOCALE / 更新当前语言选项草稿；保存中禁用 |
-| dabba198cd2f2993.1 | 122 | event-binding | PC-CURRENT-TIMEZONE / 更新必填时区草稿；保存中禁用 |
-| 927fb4495afb35c9.1 | 135 | event-binding | PC-CURRENT-REASON / 更新必填修改原因草稿，输入上限300字符 |
-| 9f646e1e9f714001.1 | 161 | control | PC-CURRENT-SAVE / 提交资料；保存中禁用并显示处理中状态 |
+| 710e66a207790a9d.1 | 106 | event-binding | PC-CURRENT-LOCALE / 更新当前语言选项草稿；保存中禁用 |
+| dabba198cd2f2993.1 | 120 | event-binding | PC-CURRENT-TIMEZONE / 更新必填时区草稿；保存中禁用 |
+| 927fb4495afb35c9.1 | 133 | event-binding | PC-CURRENT-REASON / 更新必填修改原因草稿，输入上限300字符 |
+| 9f646e1e9f714001.1 | 159 | control | PC-CURRENT-SAVE / 提交资料；保存中禁用并显示处理中状态 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/personal-center/PersonalProfilePanel.vue | 5342047bd8fe79d5756cf13b86d2481bc329f279d0900da69a067845bd2cccf5 |
+| apps/web/src/components/personal-center/PersonalProfilePanel.vue | 09de3d84ed5c17072838183399084a31eb076a349cf25767c9b474b27b85bb4f |
 
 本节只提供当前静态位置和既有父子事件边界；API字段、expected_version、服务端验证与资料读写合同仍以第3节和真实路由/服务为准，不由子组件映射推导新业务行为。
 
@@ -159,18 +159,18 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| 71a3428b56c7ab21.1 | 53 | control | PC-CENTER-CURRENT-LOAD / 顶部重读资料；读取中或任一写操作忙碌时禁用 |
-| c68e6bb8fa382242.1 | 82 | control | PC-CENTER-CURRENT-PROFILE-RETRY / profile读取失败时调用独立重试 |
-| bdd76d306d559c2e.1 | 94 | control | PC-CENTER-CURRENT-SECTION / 五个query分区之一的本地切换按钮实例 |
-| 39f57fafe8eea828.1 | 105 | event-binding | PC-CENTER-CURRENT-PROFILE / 传递资料快照/草稿/忙碌反馈并转发更新与保存意图 |
-| 97130ec443ea7f94.1 | 114 | event-binding | PC-CENTER-CURRENT-PERMISSIONS / 传递授权分区状态与token管理能力，转发重读 |
-| 9de3424951fed3cd.1 | 120 | event-binding | PC-CENTER-CURRENT-SECURITY / 传递会话/密码及忙碌状态，转发读取和写入意图 |
-| c0f9f5a7f78f133b.1 | 134 | event-binding | PC-CENTER-CURRENT-NOTIFICATIONS / 传递偏好状态/草稿并转发重读、字段更新及保存意图 |
-| efda8df42e4c8c1a.1 | 144 | event-binding | PC-CENTER-CURRENT-ASSETS / 传递本人资产分区状态并转发重读 |
+| 71a3428b56c7ab21.1 | 52 | control | PC-CENTER-CURRENT-LOAD / 顶部重读资料；读取中或任一写操作忙碌时禁用 |
+| c68e6bb8fa382242.1 | 81 | control | PC-CENTER-CURRENT-PROFILE-RETRY / profile读取失败时调用独立重试 |
+| bdd76d306d559c2e.1 | 93 | control | PC-CENTER-CURRENT-SECTION / 五个query分区之一的本地切换按钮实例 |
+| 39f57fafe8eea828.1 | 104 | event-binding | PC-CENTER-CURRENT-PROFILE / 传递资料快照/草稿/忙碌反馈并转发更新与保存意图 |
+| 97130ec443ea7f94.1 | 113 | event-binding | PC-CENTER-CURRENT-PERMISSIONS / 传递授权分区状态与token管理能力，转发重读 |
+| 9de3424951fed3cd.1 | 119 | event-binding | PC-CENTER-CURRENT-SECURITY / 传递会话/密码及忙碌状态，转发读取和写入意图 |
+| c0f9f5a7f78f133b.1 | 133 | event-binding | PC-CENTER-CURRENT-NOTIFICATIONS / 传递偏好状态/草稿并转发重读、字段更新及保存意图 |
+| efda8df42e4c8c1a.1 | 143 | event-binding | PC-CENTER-CURRENT-ASSETS / 传递本人资产分区状态并转发重读 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PersonalCenter.vue | 5fb05c5704d0e07613489d368603986455453868912edd7616f2c4f0490de1ee |
+| apps/web/src/components/PersonalCenter.vue | 7f03b0170d0e5a8ae00840b31f8df29fb4e48f37d1c04d836af46954319d34c8 |
 
 这组位置描述父级的本地导航/状态接线，不宣称query深链、浏览器历史、异步竞态或服务端权限已由静态映射验收。
 
@@ -206,13 +206,13 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | b393d51f01c0a4b5.1 | 28 | event-binding | PC-NOTIFY-CURRENT-READ / 呈现读取状态并将重试交给父级 |
-| 1f4978a7de74c364.1 | 37 | form-event | PC-NOTIFY-CURRENT-SAVE / 有已读偏好和草稿时阻止原生提交并转发保存意图 |
-| 0309f99060d6927c.1 | 49 | event-binding | PC-NOTIFY-CURRENT-OPTIONS / 循环呈现五项布尔偏好并向父级转发更新值 |
-| 76ed759dc2d23330.1 | 74 | control | PC-NOTIFY-CURRENT-SAVE / 提交既有偏好草稿；非ready或保存中禁用 |
+| e42c863987402d25.1 | 37 | form-event | PC-NOTIFY-CURRENT-SAVE / 有已读偏好和草稿时阻止原生提交并转发保存意图 |
+| 0309f99060d6927c.1 | 48 | event-binding | PC-NOTIFY-CURRENT-OPTIONS / 循环呈现五项布尔偏好并向父级转发更新值 |
+| 76ed759dc2d23330.1 | 73 | control | PC-NOTIFY-CURRENT-SAVE / 提交既有偏好草稿；非ready或保存中禁用 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/personal-center/PersonalNotificationsPanel.vue | 1cfaa3f20d85c1d895e48ce7f535318662a8dbf375417ba55cb55b891b5f8e86 |
+| apps/web/src/components/personal-center/PersonalNotificationsPanel.vue | 42c5c2da6718fd13ad056c349df42908f80a02672216a7ade522f156a3d03fc1 |
 
 此静态映射不改变通知API、开关字段或投递能力，不把本地checkbox更新视为已保存。
 
@@ -248,7 +248,7 @@ P11的五个分区来自query section；AccountShell只接受profile/permissions
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/personal-center/PersonalPermissionsPanel.vue | 8502b930452a500af44b0e3762732f2d00a879886ae075294d107dd80996a2bb |
+| apps/web/src/components/personal-center/PersonalPermissionsPanel.vue | 20c6d93089709b9783354e223b90a05660697c302cfdd3cf196848193b4020ad |
 
 本节仅映射可见入口和读取事件，不构成角色、组织数据范围或真实RBAC验收。
 
@@ -280,18 +280,18 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 | T:147 | 4a092ea79d6c2f5a.1 | control / 147 | TH-CURRENT-PROFILE 导航至本人资料 |
 | T:148 | ad505ab637ba2e57.1 | control / 148 | TH-CURRENT-MFA 导航至安全设置/MFA |
 | T:149 | 9c6219bf774c7860.1 | control / 149 | TH-CURRENT-ROUTE 当前外观偏好入口及aria-current |
-| T:216 | 6bb5f6a1584a9db0.1 | control / 216 | TH-CURRENT-TRACE 展开当前主题偏好关联编号 |
-| T:220 | 5587941412d5210f.1 | control / 220 | TH-CURRENT-LOGIN 仅expired状态导航登录 |
-| T:226 | 78d551a8e1f6be17.1 | control / 226 | TH-CURRENT-CONTEXT blocked状态选择工作区 |
-| T:232 | abd6f3613ef299ad.1 | control / 232 | TH-CURRENT-READ 其它可重读错误状态请求刷新偏好 |
-| T:285 | e08941698ff33588.1 | event-binding / 285 | TH-CURRENT-PREVIEW 主题radio选择转给即时预览handler |
-| T:300 | 0ddae1cee09564f0.1 | event-binding / 300 | TH-CURRENT-DENSITY 密度radio选择只更新当前会话 |
-| T:314 | 1aa1d23b0fd6f31f.1 | control / 314 | TH-CURRENT-RESTORE 仅恢复已保存主题预览，不恢复密度 |
-| T:322 | b77160ecd730473a.1 | control / 322 | TH-CURRENT-SAVE 主题dirty时保存偏好；密度不在PUT字段中 |
+| T:215 | 6bb5f6a1584a9db0.1 | control / 216 | TH-CURRENT-TRACE 展开当前主题偏好关联编号 |
+| T:219 | 5587941412d5210f.1 | control / 220 | TH-CURRENT-LOGIN 仅expired状态导航登录 |
+| T:225 | 78d551a8e1f6be17.1 | control / 226 | TH-CURRENT-CONTEXT blocked状态选择工作区 |
+| T:231 | abd6f3613ef299ad.1 | control / 232 | TH-CURRENT-READ 其它可重读错误状态请求刷新偏好 |
+| T:283 | e08941698ff33588.1 | event-binding / 285 | TH-CURRENT-PREVIEW 主题radio选择转给即时预览handler |
+| T:298 | 0ddae1cee09564f0.1 | event-binding / 300 | TH-CURRENT-DENSITY 密度radio选择只更新当前会话 |
+| T:312 | 1aa1d23b0fd6f31f.1 | control / 314 | TH-CURRENT-RESTORE 仅恢复已保存主题预览，不恢复密度 |
+| T:320 | b77160ecd730473a.1 | control / 322 | TH-CURRENT-SAVE 主题dirty时保存偏好；密度不在PUT字段中 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/ThemeStudio.vue | fa5220912b53c97cd597ec4b0b629055033d3fa8e20a4f9303ea9ed053c9d06f |
+| apps/web/src/components/ThemeStudio.vue | 40a04a354a6ea28521cd248b6d86f9d43e4b2ee4227b9bdeb24d244304d9f2cb |
 
 该映射只证明源码位置与既有状态/请求边界；不代表错误态、焦点、radio方向键、保存竞态、主题完整浏览器验收或生产验收已关闭。
 
@@ -315,15 +315,15 @@ P11多个子面板复用该共享反馈组件。它在error状态下显示“重
 
 | 当前签名.序号 | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| b832de42f3091adf.1 | 26 | control | AC-CURRENT-BRAND / ScoutOps品牌入口导航至应用首页 |
-| 0f58e919e43acff5.1 | 30 | control | AC-CURRENT-CONTEXT / 导航至现有组织与工作区选择页 |
+| b832de42f3091adf.1 | 27 | control | AC-CURRENT-BRAND / ScoutOps品牌入口导航至应用首页 |
+| 0f58e919e43acff5.1 | 31 | control | AC-CURRENT-CONTEXT / 导航至现有组织与工作区选择页 |
 | 257559b0b0a3692f.1 | 40 | control | AC-CURRENT-SECTIONS / 按个人中心分区数据生成`/me?section=…`导航并标记当前分区 |
 | aa62e5d933afce98.1 | 58 | control | AC-CURRENT-BREADCRUMB / 面包屑导航至应用首页 |
 | 2ea362a7d2584a88.1 | 50 | control | AC-CURRENT-THEME / 导航至外观偏好页 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/AccountShell.vue | f436ac84b9f3859a147afe8a0074bc14f892068d01a8655334eae74749b9ac39 |
+| apps/web/src/components/AccountShell.vue | 2dce02f4df060836b057ad539d4c0850d7dff06b841375cbfab2d7defdb7f869 |
 
 本表登记当前五个入口；所有可见入口都单独定位，但不推导新增分区或改变导航权限。分区状态仍由route query的既有映射驱动；当前源码位置核对不替代P11移动可访问名、焦点或真实会话验证。
 
@@ -374,3 +374,9 @@ PersonalCenter先请求profile，成功立即ready，再Promise.allSettled等四
 - **数据范围与层级**：P11没有申请权限、取消收藏、最近浏览或免打扰实际控件；P12没有逐条变化/关注区，资产任务链接也未指向详情。明确缺口后审核相应现有入口呈现，不凭蓝图添加业务字段/能力。
 
 正式图应分别覆盖P10三主题/两密度、P11五分区及资料成功/部分失败、P12运行/需检查/未配置/暂停/表单/空队列与错误。全部桌面/移动，控件和内联表单状态另计。三个页面的最终图、Vue新布局和生产验证仍待完成；本批只增加规格、合同、测试及索引，不改生产源码、主题令牌、API、数据库、依赖或配置。
+
+## 2026-10-16 新增当前入口
+
+| 当前候选 | 行 | 类型 | 语义 | 说明 | 验证范围 |
+| --- | --- | --- | --- | --- | --- |
+| apps/web/src/components/HomeDashboard.vue#2acf0c9a00edf394.1 | 374 | control | HD-CURRENT-LIVE-REFRESH / 用户手动刷新当前工作台摘要；可见页面每5秒自动读取；不触发采集写入 |

@@ -194,7 +194,7 @@ export function summarizeCoverage(outcomes: readonly SubqueryOutcome[]): Coverag
     hasWarnings = failed > 0 || blocked > 0 || missing.size > 0 || requiredUnmet;
   if (available === 0)
     return {
-      terminalStatus: "succeeded_empty",
+      terminalStatus: failed > 0 || blocked > 0 ? "completed_with_warnings" : "succeeded_empty",
       coverageStatus: "insufficient",
       successfulSubqueryCount: successful,
       failedSubqueryCount: failed,

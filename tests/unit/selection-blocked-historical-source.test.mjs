@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -13,9 +14,12 @@ const hash = (source) => createHash("sha256").update(source).digest("hex");
 test("historical shell source is exact while current blocked guard remains a separate runtime change", () => {
   const historical = selectionBlockedHistoricalSource(file, current, before);
   assert.equal(hash(historical), before);
-  assert.equal(hash(current), after);
+  assert.equal(hash(beforePublishedPresentation(file, current)), after);
   assert.notEqual(historical, current);
-  assert.equal(selectionBlockedHistoricalSource(file, current, after), current);
+  assert.equal(
+    selectionBlockedHistoricalSource(file, current, after),
+    beforePublishedPresentation(file, current),
+  );
   assert.equal(
     selectionBlockedHistoricalSource(file, current.replaceAll("\n", "\r\n"), before),
     historical,

@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -135,7 +136,7 @@ test("r7 App capture remains a historical source snapshot after verifier formatt
   }
 });
 
-test("r8 App source inventory binds current and capture-time router/KeepAlive sources", () => {
+test("r8 App inventory preserves capture-time router/KeepAlive sources separately from the current shell", () => {
   const bytes = readFileSync(`${currentRoot}/evidence.json`),
     evidence = JSON.parse(bytes);
   assert.equal(evidence.kind, "P43-ACTUAL-APP-LIFECYCLE-r8");
@@ -146,9 +147,10 @@ test("r8 App source inventory binds current and capture-time router/KeepAlive so
   assert.equal(Object.keys(evidence.sourceHashes).length, 142);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
     assertCaptureSourceRevision(file, read(file), expected);
-  assert.equal(
+  assertCaptureSource(
+    "apps/web/src/components/AccountShell.vue",
+    read("apps/web/src/components/AccountShell.vue"),
     evidence.sourceHashes["apps/web/src/components/AccountShell.vue"],
-    hash(read("apps/web/src/components/AccountShell.vue")),
   );
   for (const shot of evidence.screenshots) {
     const png = readFileSync(`${currentRoot}/${shot.file}`);

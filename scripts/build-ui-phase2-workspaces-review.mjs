@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "./lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -56,7 +57,7 @@ const definitions = [
     "EX-P29-PROFILE",
     "资料分支排除",
     "excluded",
-    ["d6b520278ab3dd57.1", "5878e30377f290ae.1", "1cbd108c64b5230c.1"],
+    ["e93301a7ec700ce7.1", "ed75758087c9a4b8.1", "1cbd108c64b5230c.1"],
     ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
     "仅summary分支",
     "P32不显示资料表单或Logo检查",
@@ -137,7 +138,7 @@ const definitions = [
     "OG-W-CREATE",
     "创建并审计",
     "write",
-    ["7c1ff142d1b797a2.1", "bae4e728dfc90592.1"],
+    ["332d388d401153e6.1", "82a3867867534186.1"],
     ["OG-W-CREATE"],
     "原生required/pattern；busy或createBusy拒绝重复",
     "submitCreate捕获trim三字段，经函数prop到createWorkspace；成功清空/收起，失败保留；等待期间输入仍可编辑",
@@ -327,7 +328,12 @@ export function buildWorkspacesReview(sources, evidence, controlsEvidence) {
     dependencies.map((file) => {
       assert.equal(typeof sources[file], "string", `missing source ${file}`);
       const sha = createHash("sha256").update(sources[file].replaceAll("\r\n", "\n")).digest("hex");
-      assert.equal(evidence.sourceHashes[file], sha, `stale workspace source ${file}`);
+      assertCaptureSource(
+        file,
+        sources[file],
+        evidence.sourceHashes[file],
+        `stale workspace source ${file}`,
+      );
       return [file, sha];
     }),
   );
@@ -497,9 +503,10 @@ export function buildWorkspacesReview(sources, evidence, controlsEvidence) {
   };
   const controlsPackage = "workspaces-controls-direction-c";
   for (const file of dependencies)
-    assert.equal(
+    assertCaptureSource(
+      file,
+      sources[file],
       controlsEvidence.sourceHashes[file],
-      dependencyHashes[file],
       "stale controls source",
     );
   assert.deepEqual(

@@ -102,9 +102,9 @@ test("P34 registers16 model sites but excludes6 parent fields and does not inven
     callerFiles: 4,
     localModelBindings: 16,
     reviewedInputBindings: 16,
-    sourceCallerContainers: 3,
-    callerContainers: 3,
-    consumerVariants: 3,
+    sourceCallerContainers: 2,
+    callerContainers: 2,
+    consumerVariants: 2,
     runtimeAcceptance: "unproven",
   });
   assert.equal(r.surfaceReview.inputs.filter((i) => i.file === childFile).length, 10);
@@ -118,12 +118,11 @@ test("P34 registers16 model sites but excludes6 parent fields and does not inven
     [
       ["form", "route-excluded-reference"],
       ["AuditedReasonDialog", "route-excluded-reference"],
-      ["aside", "related-scene-only"],
     ],
   );
   assert.match(r.dialogs.remaining, /P34无业务弹窗/);
   const changed = copy(r);
-  changed.surfaceReview.containers[2].shape = "native-dialog";
+  changed.surfaceReview.containers[1].shape = "inline-aside";
   assert.throws(
     () => validateReviewSurfaces(changed.surfaceReview, { sources, packages }),
     /shape mismatch/,

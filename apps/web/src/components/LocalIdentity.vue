@@ -154,13 +154,13 @@ async function request<T = unknown>(
   }
 }
 async function enterApplication() {
-  const redirect = params.get("redirect");
-  if (redirect?.startsWith("/") && !redirect.startsWith("//")) {
-    await router.replace(redirect);
-    return;
-  }
+  // Every new session restores its authorized tenant before a deep-link redirect.
   const result = await request<{ route: string }>("/me/landing", undefined, "GET");
-  if (result?.data?.route) await router.replace(result.data.route);
+  if (!result?.data?.route) return;
+  const redirect = params.get("redirect");
+  await router.replace(
+    redirect?.startsWith("/") && !redirect.startsWith("//") ? redirect : result.data.route,
+  );
 }
 async function confirmEmail() {
   const token = params.get("token") || "";

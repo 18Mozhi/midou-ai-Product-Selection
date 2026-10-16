@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import { assertOrganizationReasonContract } from "../../scripts/lib/ui-phase2-organization-reason-contract.mjs";
 import { assertCaptureSourceRevision } from "../../scripts/lib/ui-phase2-token-copy-baseline.mjs";
@@ -11,8 +12,11 @@ const e = JSON.parse(readFileSync(`${output}/evidence.json`, "utf8"));
 const file = "apps/web/src/components/OrganizationTokenPanel.vue";
 const hash = (v) => createHash("sha256").update(v).digest("hex");
 
-test("P36 maps all12 current child source sites exactly once without counting convenience controls", () => {
-  const candidates = scanSource(readFileSync(file, "utf8"), file).candidates;
+test("P36 maps all12 captured child source sites exactly once without counting convenience controls", () => {
+  const candidates = scanSource(
+    beforePublishedPresentation(file, readFileSync(file, "utf8")),
+    file,
+  ).candidates;
   const signatures = candidates.map((c) => c.candidateId.split("#")[1]).sort();
   assert.equal(signatures.length, 12);
   assert.deepEqual(e.sourceSignatures, signatures);

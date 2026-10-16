@@ -6,14 +6,14 @@ import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-
 const file = "tests/e2e/m06-01-organization-admin.spec.ts";
 const source = readFileSync(file, "utf8");
 const before = "8751561100b8dd01b51e86baabb3f7fc562c012e3592bd39fea0bb508af18cef";
-const after = "5c536fabd9fe94c9a51127ab3972fe475f6b8e6c9d8cecea4ab6cc9cb50ea465";
+const after = "5e04bf6dab3ab40677e0baeeb2af069809d72b99172126cc5cfd9107d59708ea";
 
 test("capture compatibility records the exact test-only locator delta without rebinding old hashes", () => {
   assert.deepEqual(assertCaptureSource(file, source, before), {
-    kind: "test-assertion-only",
+    kind: "test-locator-copy-only",
     actual: after,
     captured: before,
-    commit: "fa8aea67",
+    commit: "40de9a12",
   });
   assert.equal(assertCaptureSource(file, source, after).kind, "exact");
 });

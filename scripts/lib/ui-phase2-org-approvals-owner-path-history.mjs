@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -75,6 +76,7 @@ export function assertP34EvidenceSourceHash(file, source, expected) {
     }
   }
   if (file === responsiveFocusRevision.paletteFile) {
+    source = beforePublishedPresentation(file, source);
     const notificationSelector = ",\n.responsive-filter-drawer--notifications";
     assert.equal(expected, responsiveFocusRevision.paletteBeforeNotifications);
     assert.equal(source.split(notificationSelector).length, 2);

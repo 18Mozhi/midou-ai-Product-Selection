@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import {
@@ -28,7 +29,7 @@ import { beforeAdapterP47ReadAndTableTools } from "./ui-phase2-adapter-historica
 
 // Preserve all verified production focus fixes when composing the archived proposals.
 function compose(source, preview, handler, needsTick) {
-  source = source.replaceAll("\r\n", "\n");
+  source = beforePublishedPresentation("apps/web/src/components/ProviderAdapterCenter.vue", source);
   const revision = createHash("sha256").update(source).digest("hex");
   const hasPaginationFocus = [
     paginationFocusRevision.current,

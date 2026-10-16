@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/FileResilienceCenter.vue": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
+    "apps/web/src/components/FileResilienceCenter.vue": "87e6a567fc98be634a6205a62f5e69f931d53ba3501a2cc5b5e83f724d957578"
   },
   "inputs": {},
   "actions": [
@@ -137,7 +137,7 @@
       "apps/web/src/components/FileResilienceCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/FileResilienceCenter.vue": "7c0d6cb0ca68698eb1acd1336b68d47fe538c2210d81c750d53c91b66b0a4914"
+      "apps/web/src/components/FileResilienceCenter.vue": "87e6a567fc98be634a6205a62f5e69f931d53ba3501a2cc5b5e83f724d957578"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

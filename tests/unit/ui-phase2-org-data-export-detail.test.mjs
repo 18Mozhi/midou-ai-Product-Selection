@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -22,7 +23,7 @@ const e = JSON.parse(read(`${root}/evidence.json`));
 
 test("P35 export detail changes only styling marker/import, not script, fields or actions", () => {
   const captured = readCaptureSourceRevision(component, e.sourceHashes[component]);
-  assert.equal(read(component), captured);
+  assert.equal(beforePublishedPresentation(component, read(component)), captured);
   assert.equal(
     captured
       .replace(

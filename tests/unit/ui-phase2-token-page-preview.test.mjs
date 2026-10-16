@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -11,7 +12,7 @@ const file = "apps/web/src/components/OrganizationTokenPanel.vue";
 const folder = "output/playwright/p36-page-vue-preview";
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
 const hash = (value) => createHash("sha256").update(value).digest("hex");
-const original = read(file),
+const original = beforePublishedPresentation(file, read(file)),
   transformed = tokenPagePreview(original);
 const evidence = JSON.parse(read(`${folder}/evidence.json`));
 function structure(source) {

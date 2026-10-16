@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
@@ -239,7 +240,7 @@ test("P44 current replay keeps raw source hashes, original checks, images and re
   );
   for (const [file, sha] of Object.entries(e.sourceHashes)) {
     if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, read(file), sha);
-    else assert.equal(hash(read(file)), sha, file);
+    else assertCaptureSource(file, read(file), sha, file);
   }
   for (const item of e.summaries) {
     const bytes = readFileSync(item.manifest);
@@ -253,7 +254,7 @@ test("P44 current replay keeps raw source hashes, original checks, images and re
     );
     for (const [file, sha] of Object.entries(current.sourceHashes)) {
       if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, read(file), sha);
-      else assert.equal(hash(read(file)), sha, file);
+      else assertCaptureSource(file, read(file), sha, file);
     }
     for (const image of item.images) {
       assert.equal(

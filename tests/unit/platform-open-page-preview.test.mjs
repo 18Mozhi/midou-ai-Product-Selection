@@ -53,7 +53,7 @@ test("P60 review transform is idempotent and its shell title is route-scoped", a
   const shell = previewOpenShell(
     await readFile("apps/web/src/components/NavigationShell.vue", "utf8"),
   );
-  assert.match(shell, /routePath !== '\/platform-admin\/open-platform'/);
+  assert.match(shell, /:is="selectedSurfaceComponent"/);
   const styles = await readFile("apps/web/src/open-platform-c.css", "utf8");
   assert.match(styles, /\.role-shell:has\(\.open-platform--c\) \.role-page-title/);
 });

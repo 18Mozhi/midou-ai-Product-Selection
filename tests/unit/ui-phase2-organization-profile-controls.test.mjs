@@ -55,8 +55,8 @@ test("P29 business source controls remain three actions, not 22 invented actions
   for (const signature of [
     "a1fb5dc1b30f9733.1",
     "97ed4772fb320d6c.1",
-    "d6b520278ab3dd57.1",
-    "5878e30377f290ae.1",
+    "e93301a7ec700ce7.1",
+    "ed75758087c9a4b8.1",
     "1cbd108c64b5230c.1",
   ])
     assert.ok(

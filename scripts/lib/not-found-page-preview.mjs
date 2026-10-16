@@ -15,7 +15,11 @@ export function previewNotFoundPage(input) {
       source.lastIndexOf("</template>") + "</template>".length,
     );
   assert.ok(template.includes("p73-workspace"), "P73 recovery workspace");
-  assert.ok(template.includes("公开兜底 / 不读业务数据"), "P73 public fallback boundary");
+  assert.doesNotMatch(
+    source,
+    /apiJson\(|fetch\(/,
+    "P73 public fallback does not read business data",
+  );
   assert.ok(!/not-found-orbit|not-found-satellite/.test(template), "P73 removes orbit decoration");
   return source;
 }

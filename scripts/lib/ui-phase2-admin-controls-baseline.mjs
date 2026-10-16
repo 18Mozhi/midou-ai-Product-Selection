@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { historicalAdminDirectorySource } from "./ui-phase2-admin-directory-baseline.mjs";
 import { createHash } from "node:crypto";
@@ -14,6 +15,7 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 let cached;
 // Exact old-capture association only. Never substitutes source for current UI acceptance.
 export function historicalAdminControlsSource(file, source) {
+  source = beforePublishedPresentation(file, source);
   source = historicalAdminDirectorySource(file, source);
   if (file !== adminControlsRevision.file || hash(source) === adminControlsRevision.before)
     return source;

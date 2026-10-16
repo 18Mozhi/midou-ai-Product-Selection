@@ -56,7 +56,7 @@ const definitions = [
     "OG-PROFILE-SAVE",
     "保存并审计",
     "write",
-    ["d6b520278ab3dd57.1", "5878e30377f290ae.1"],
+    ["e93301a7ec700ce7.1", "ed75758087c9a4b8.1"],
     ["OG-PROFILE-SAVE"],
     "summary内联表单；原生校验，busy或已接受保存但资料重读失败时禁用字段与按钮；submit亦busy早退",
     "既有内联submit继续调用PATCH /org/admin/profile及expected_version；写后GET自动重试仍失败时展示分开的写入/读取请求编号并锁定字段组，手动刷新只重读、不重放PATCH（OG-G02已修复）",
@@ -370,7 +370,10 @@ export function buildOrganizationProfileReview(source, evidence, fieldEvidence) 
     ],
     approval: "pending-user-review",
     visualApproval: "user-approved-remaining-pages-auto",
-    limits: [remaining, "全页视觉方向已按用户全局批准记录；动作验收与生产验收仍独立待完成。本批未部署、未改变API或业务规则。"],
+    limits: [
+      remaining,
+      "全页视觉方向已按用户全局批准记录；动作验收与生产验收仍独立待完成。本批未部署、未改变API或业务规则。",
+    ],
   };
 }
 if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {

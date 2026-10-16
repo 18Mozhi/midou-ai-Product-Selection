@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import { paginationFocusRevision } from "./lib/ui-phase2-adapter-pagination-focus-baseline.mjs";
 import { readErrorRevision } from "./lib/ui-phase2-adapter-read-error-baseline.mjs";
@@ -12,10 +12,23 @@ assert.ok(
 const selectors = args.filter((arg) => arg.startsWith("--state="));
 assert.equal(selectors.length, 1);
 const state = selectors[0].slice(8);
+// A changed runtime hash must never turn a completed historical packet back
+// into a writable capture target. Reject before loading a browser or runner.
+assert.ok(
+  state !== "filter-pagination" || !args.includes("--capture"),
+  "Pagination-focus revision is replay-only here; do not overwrite historical current-review images",
+);
 const reviewRevision = state === "access" ? "r2" : "r1";
 const currentPackage = `output/playwright/p47-${state}-current-review${
   state === "access" ? "-r2" : ""
 }`;
+if (args.includes("--capture")) {
+  const existing = await stat(currentPackage).catch((error) => {
+    if (error.code === "ENOENT") return null;
+    throw error;
+  });
+  assert.ok(!existing, `EEXIST: preserve historical capture ${currentPackage}`);
+}
 const historicalPackage =
   state === "access"
     ? "output/playwright/p47-access-current-review"

@@ -8,11 +8,11 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+    "apps/web/src/components/PlatformAccountCenter.vue": "d1dd7edb1a0551a88b1fb250e7b8b1e2d23cfbae8d2228cb6f62553e8e2904aa",
     "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
-    "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+    "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "6fcae623a9d39e389662185204fd43a38ccf9b30db06d2fcbc1490ef0420062f",
     "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
-    "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "efccee8bdf9b4fdb1e8b1b9e2386a049bfbcd38bed1d3cae718be980a6eb63e6",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
     "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
   },
@@ -30,7 +30,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "仅平台权限页面显示此入口",
       "handler": "此用户页不触发管理员导航；保留共享父组件的P45路由归属。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -73,7 +75,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "仅权限目录页面有该刷新或错误重试",
       "handler": "这些按钮只作用于角色目录，不属于用户列表。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -114,7 +118,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "组织目录或组织管理路由可达",
       "handler": "组织创建继续归属P41，不从用户页触发。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -382,7 +388,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "向导只在P41路由挂载",
       "handler": "本用户页不挂载或提交组织向导。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -606,7 +614,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "组织详情或组织行出现",
       "handler": "组织详情及行打开事件不属于用户管理页。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -878,7 +888,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "仅组织记录区域渲染",
       "handler": "P43用户目录不显示此组织专属读取按钮。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -917,7 +929,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "仅组织列表路由渲染",
       "handler": "P43用户目录不显示此组织专属读取按钮。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -948,10 +962,10 @@
       "label": "移动端筛选抽屉容器",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#3c4dea26ac48746f.1"
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#a93a93cd1300da76.1"
       ],
       "sourceContractKeys": [
-        "P43-CURRENT-3c4dea26ac48746f.1"
+        "P43-CURRENT-a93a93cd1300da76.1"
       ],
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "窄视口用户筛选打开",
@@ -997,11 +1011,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1"
       ],
-      "sourceContractKeys": ["P43-CURRENT-e064834276405c23.1"],
+      "sourceContractKeys": [
+        "P43-CURRENT-e064834276405c23.1"
+      ],
       "contractAliasReason": "父工作区只连接子组件筛选与重置意图，不执行额外业务动作。",
       "condition": "P43用户筛选区域挂载时",
       "handler": "父工作区将query/status v-model与apply/reset事件连接到现有状态和处理器。",
-      "variants": ["users-filter-forwarding"],
+      "variants": [
+        "users-filter-forwarding"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -1018,19 +1036,26 @@
         }
       ],
       "remaining": "接线映射不代表完整交互、读屏、权限或生产验收。",
-      "forwardsTo": ["PA43-FILTER", "PA43-RESET"],
+      "forwardsTo": [
+        "PA43-FILTER",
+        "PA43-RESET"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
           "event": "@apply-filters",
           "handler": "emit('apply-filters')",
-          "targets": ["PA43-FILTER"]
+          "targets": [
+            "PA43-FILTER"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
           "event": "@reset-filters",
           "handler": "emit('reset-filters')",
-          "targets": ["PA43-RESET"]
+          "targets": [
+            "PA43-RESET"
+          ]
         }
       ]
     },
@@ -1039,11 +1064,11 @@
       "label": "提交邮箱/组织/状态筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#128119f3fb311b09.1",
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#75a75712d75441cb.1",
         "apps/web/src/components/PlatformAccountDirectoryFilters.vue#e9658d470d4cbeaf.1"
       ],
       "sourceContractKeys": [
-        "P43-CURRENT-128119f3fb311b09.1",
+        "P43-CURRENT-75a75712d75441cb.1",
         "P43-CURRENT-e9658d470d4cbeaf.1"
       ],
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
@@ -1157,7 +1182,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "仅管理员列表模式渲染",
       "handler": "管理员空态、创建与行详情从P43范围排除。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -2614,7 +2641,7 @@
     "kind": "local-callers-and-listed-shared-only",
     "remaining": "四个原生dialog分别为用户详情、新建、密码、共享原因；移动记录预览由ResponsiveDataView另行实现。动作映射不等同于全状态浏览器或读屏验收。"
   },
-  "surfaceReview":   {
+  "surfaceReview": {
     "status": "source-reviewed-not-runtime-accepted",
     "files": [
       "apps/web/src/components/PlatformAccountCenter.vue",
@@ -2626,11 +2653,11 @@
       "apps/web/src/components/PlatformAccountDialogs.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-      "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+      "apps/web/src/components/PlatformAccountCenter.vue": "d1dd7edb1a0551a88b1fb250e7b8b1e2d23cfbae8d2228cb6f62553e8e2904aa",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "6fcae623a9d39e389662185204fd43a38ccf9b30db06d2fcbc1490ef0420062f",
       "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "apps/web/src/components/PlatformUserRecords.vue": "a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228",
-      "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
+      "apps/web/src/components/PlatformUserDetailDialog.vue": "efccee8bdf9b4fdb1e8b1b9e2386a049bfbcd38bed1d3cae718be980a6eb63e6",
       "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
       "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
     },
@@ -3121,8 +3148,7 @@
       "自动视觉批准、局部容器组合、动作审核与真实RBAC/MySQL/审计验收仍是不同证据层。"
     ],
     "remaining": "静态容器和设计证据没有证明完整浏览器、读屏器、真实权限、审计或生产账号写入。"
-  }
-  ,
+  },
   "compositionGaps": [
     "移动用户预览到账号详情、三路由共享父组件条件、四个原生dialog与11种原因目标仍需按真实App组合回归；静态候选和图稿不证明每条状态时序。",
     "新建/密码回调的跨窗口归属与原因窗自动关闭仍按已有业务合同核验；创建/改密取消及成功清空前端临时密码已按实际Vue和定向单测实现。",

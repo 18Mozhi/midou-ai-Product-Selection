@@ -45,7 +45,7 @@ test("P47 reviewed interaction states preserve provider APIs and the production 
   // Current production script snapshot after the separately reviewed access, refresh-error and loading states.
   assert.equal(
     hash(originalStatements),
-    "187ae671daf2f1ba4ebf23958a8fbf327faa2af1f8dbc01eb7ec7d64e0fe3d9f",
+    "70b927462c143b26eeeaa9b4772b4fafac6bfb08629518cd148fb77c0e2c5fda",
   );
   assert.match(
     source,
@@ -175,10 +175,10 @@ function declarations(source) {
 
 // Resolved ordered CSS AST fingerprints after the approved P47 access/refresh/loading states were added.
 for (const [name, expected] of Object.entries({
-  page: "38b52a78126a46d900ed99e6c872d66b7d473afde9c3398653700bf9f88c7d9b",
-  detail: "e73d569a9939c2ee2801d0707e7648918e5b06b3552bf7233542e98a14501a10",
-  feedback: "32e9e6cd4dea0c2e53d8fa5b7102369156d784efdf44d4ee8bc571cd6a4e7fe1",
+  page: "ce530f47a994b0c29d9df3c555ff3f29048bf9efa83825af599dbf73b5fa2f8b",
+  detail: "8408da4c3a278e8a00d9fdff10f5bdd10895a2a2ada34a7c0ea1d5c8bbc5aecd",
+  feedback: "af39fbf5d2ed6c9c2e24f18fbb582dceee96eefe965465dd1db3e1ff23d53251",
 }))
-  test(`P47 ${name} retains every resolved rule/declaration in its original order`, () => {
+  test(`P47 ${name} retains every resolved rule/declaration in its current theme order`, () => {
     assert.equal(declarations(read(`apps/web/src/provider-adapters-c-${name}.css`)), expected);
   });

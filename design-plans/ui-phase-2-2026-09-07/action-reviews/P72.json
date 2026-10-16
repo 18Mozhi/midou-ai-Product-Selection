@@ -9,7 +9,7 @@
   "contract": "design-plans/ui-phase-2-2026-09-07/shared-shell-role-state-contract-review.md",
   "sourceHashes": {
     "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
-    "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
+    "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c"
   },
   "inputs": {},
   "actions": [
@@ -177,7 +177,7 @@
     ],
     "dependencyHashes": {
       "apps/web/src/components/UiStateShowcase.vue": "91516b515879d10891156405efabed857e2e14bf5b4e6a481e46f516f5594f09",
-      "apps/web/src/components/UiStatePanel.vue": "54bc7c9b64af8a2968c63c901ad82b398f0751d36a4c79a99c389a1a289292de"
+      "apps/web/src/components/UiStatePanel.vue": "2969566dd1069b24e474fc729eeef7c06907dc6a06c398af12cc9b1c8b6e705c"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

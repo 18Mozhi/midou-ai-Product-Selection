@@ -76,14 +76,6 @@ const report = {
   trace_id: qaTraceId,
 };
 
-async function selectContextIfNeeded(profile, page) {
-  if (profile.shell === "platform_admin" || !/\/select-context$/.test(page.url())) return;
-  await page.getByRole("button").filter({ hasText: organizationLabel }).click();
-  await page.getByRole("button").filter({ hasText: workspaceLabel }).click();
-  await page.getByText("工作范围已就绪", { exact: true }).waitFor();
-  await page.goto(`${baseUrl}/`, { waitUntil: "networkidle" });
-}
-
 async function readGuard(profile, context) {
   const response = await context.request.get(
     `${baseUrl}/api/v1/me/navigation?shell=${profile.shell}`,
@@ -122,7 +114,7 @@ function verifyRoleBoundary(profile, guard) {
   return capabilities;
 }
 
-async function createRoleSession(profile) {
+async function createRoleSession(profile, loginPath = "/login") {
   const context = await browser.newContext({
     ignoreHTTPSErrors: false,
     viewport: { width: 1440, height: 1000 },
@@ -140,16 +132,42 @@ async function createRoleSession(profile) {
   page.on("console", (message) => {
     if (message.type() === "error") consoleErrors.push(message.text());
   });
-  await page.goto(`${baseUrl}/login`, { waitUntil: "networkidle" });
+  await page.goto(`${baseUrl}${loginPath}`, { waitUntil: "networkidle" });
   await page.getByLabel("账号（邮箱或用户名）").fill(profile.account.email);
   await page.locator('input[type="password"]').fill(profile.account.password);
   await page.locator('button[type="submit"]').click();
   await page.waitForURL((url) => url.pathname !== "/login");
-  await selectContextIfNeeded(profile, page);
   await page.waitForURL(profile.landing);
   const guard = await readGuard(profile, context);
   const capabilities = verifyRoleBoundary(profile, guard);
-  return { context, page, apiFailures, consoleErrors, guard, capabilities };
+  return {
+    context,
+    page,
+    apiFailures,
+    consoleErrors,
+    guard,
+    capabilities,
+    initialLanding: new URL(page.url()).pathname,
+  };
+}
+
+async function verifySessionLogout(profile, session) {
+  await session.page.goto(`${baseUrl}/account`, { waitUntil: "networkidle" });
+  const response = session.page.waitForResponse(
+    (item) => item.url() === `${baseUrl}/api/v1/auth/logout` && item.request().method() === "POST",
+  );
+  await session.page.getByRole("button", { name: "退出登录", exact: true }).click();
+  const logoutResponse = await response;
+  assert(logoutResponse.status() === 204, `${profile.key} logout was not accepted`);
+  await session.page.waitForURL((url) => url.pathname === "/login");
+  await session.page.getByLabel("账号（邮箱或用户名）").waitFor();
+  const protectedRead = await session.context.request.get(`${baseUrl}/api/v1/me/sessions`);
+  assert(protectedRead.status() === 401, `${profile.key} protected session survived logout`);
+  return {
+    logout_status: logoutResponse.status(),
+    protected_read_status: protectedRead.status(),
+    route: "/login",
+  };
 }
 
 async function concreteRoute(page, route) {
@@ -272,6 +290,7 @@ try {
         `${profile.key} route allow matrix drifted from traversal`,
       );
       const quickActions = await verifyQuickActions(profile, session);
+      const logout = await verifySessionLogout(profile, session);
       assert(
         session.consoleErrors.length === 0,
         `${profile.key} console errors: ${JSON.stringify(session.consoleErrors)}`,
@@ -279,6 +298,7 @@ try {
       report.roles[profile.key] = {
         role: profile.role,
         shell: profile.shell,
+        initial_landing: session.initialLanding,
         capabilities: [...session.capabilities].sort(),
         routes,
         route_count: routes.length,
@@ -286,12 +306,29 @@ try {
         allow_count: routeMatrix.filter((entry) => entry.decision === "allow").length,
         deny_count: routeMatrix.filter((entry) => entry.decision === "deny").length,
         quick_actions: quickActions,
+        logout,
         api_failures: session.apiFailures,
         console_errors: session.consoleErrors,
       };
     } finally {
       await session.context.close();
     }
+  }
+  const redirectProfile = profiles.find((profile) => profile.key === "organization_admin");
+  assert(redirectProfile, "organization admin redirect profile is missing");
+  const redirectSession = await createRoleSession(redirectProfile, "/login?redirect=%2Fhome");
+  try {
+    await redirectSession.page.getByRole("heading", { name: "选品控制台", exact: true }).waitFor();
+    assert(
+      redirectSession.initialLanding === "/home",
+      "deep-link login did not enter the restored workbench",
+    );
+    report.redirect_login = {
+      initial_landing: redirectSession.initialLanding,
+      logout: await verifySessionLogout(redirectProfile, redirectSession),
+    };
+  } finally {
+    await redirectSession.context.close();
   }
   const coveredTemplates = new Set(
     Object.values(report.roles).flatMap((role) => role.routes.map((route) => route.template)),

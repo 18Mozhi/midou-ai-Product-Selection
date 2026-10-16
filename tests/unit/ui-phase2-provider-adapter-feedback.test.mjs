@@ -150,7 +150,10 @@ for (const [revision, input] of [
     h.requests[2].reject(new Error("transport"));
     await second;
     assert.equal(h.probeFeedback.value.providerId, "source-b");
-    assert.equal(h.probeFeedback.value.message, "依赖不可用，未伪造健康结果");
+    assert.equal(
+      h.probeFeedback.value.message,
+      revision === "current-raw" ? "检查暂不可用，请稍后重试。" : "依赖不可用，未伪造健康结果",
+    );
     assert.equal(h.probeFeedback.value.requestId, "");
   });
 }

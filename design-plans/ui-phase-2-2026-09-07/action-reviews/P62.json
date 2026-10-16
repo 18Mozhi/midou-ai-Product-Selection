@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformLogCenter.vue": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518",
+    "apps/web/src/components/PlatformLogCenter.vue": "34d1b8cb21e3a1fdcaf720ff05edf6e76e76e25b955cc5333df888dc26b1d7b5",
     "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
     "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
   },
@@ -531,7 +531,7 @@
       "apps/web/src/components/AuditedReasonDialog.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/PlatformLogCenter.vue": "029d06e79ebde16ed4268dd57a0f7cdfe0713a2d90e62c6606e6deb0709dd518",
+      "apps/web/src/components/PlatformLogCenter.vue": "34d1b8cb21e3a1fdcaf720ff05edf6e76e76e25b955cc5333df888dc26b1d7b5",
       "apps/web/src/components/ResponsiveFilterDrawer.vue": "5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f",
       "apps/web/src/components/AuditedReasonDialog.vue": "0d144160f6e5209a71ccef1eaa4e8313f734039db7b10a75f789917bc37d7af9"
     },

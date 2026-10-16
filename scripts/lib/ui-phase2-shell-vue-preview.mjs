@@ -10,6 +10,21 @@ export const shellReviewSetup =
 // Review-host transformation only. Keep the actual dispatcher, requests, capabilities and handlers.
 export function previewShellVue(source) {
   let result = source.replaceAll("\r\n", "\n");
+  // The workspace layout owns its responsive dialog already. Historical review
+  // styling may be mounted on it, but must not recreate the removed sidebar.
+  if (result.includes('class="role-workspace-identity"')) {
+    for (const anchor of [
+      'class="role-shell role-shell--c"',
+      'ref="navigationDialog"',
+      "useNavigationShellDrawer(menuOpen)",
+      'class="role-workspace-tabs"',
+    ])
+      assert.ok(result.includes(anchor), `Current shell contract missing: ${anchor}`);
+    return result.replace(
+      'class="role-shell role-shell--c"',
+      'class="role-shell role-shell--c role-shell--review"',
+    );
+  }
   const replace = (before, after, alreadyCurrent) => {
     const count = result.split(before).length - 1;
     if (count === 1) result = result.replace(before, after);

@@ -8,13 +8,13 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/platform-user-design-contract.md",
   "sourceHashes": {
-    "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
+    "apps/web/src/components/PlatformAccountCenter.vue": "d1dd7edb1a0551a88b1fb250e7b8b1e2d23cfbae8d2228cb6f62553e8e2904aa",
     "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
-    "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+    "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "6fcae623a9d39e389662185204fd43a38ccf9b30db06d2fcbc1490ef0420062f",
     "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
     "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
-    "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
-    "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
+    "apps/web/src/components/PlatformRoleComparison.vue": "510cc00985908fbb541961c303bee3a9934f59a1be99c561ed87082899dff54c",
+    "apps/web/src/components/PlatformUserDetailDialog.vue": "efccee8bdf9b4fdb1e8b1b9e2386a049bfbcd38bed1d3cae718be980a6eb63e6",
     "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
     "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
   },
@@ -924,7 +924,9 @@
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "仅组织列表路由渲染",
       "handler": "P44管理员目录不显示此组织专属读取按钮。",
-      "variants": ["route-specific-excluded"],
+      "variants": [
+        "route-specific-excluded"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-excluded",
@@ -955,10 +957,10 @@
       "label": "移动端筛选抽屉容器",
       "kind": "local",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#3c4dea26ac48746f.1"
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#a93a93cd1300da76.1"
       ],
       "sourceContractKeys": [
-        "P43-CURRENT-3c4dea26ac48746f.1"
+        "P43-CURRENT-a93a93cd1300da76.1"
       ],
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
       "condition": "窄视口用户筛选打开",
@@ -1004,11 +1006,15 @@
       "sourceCandidateIds": [
         "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1"
       ],
-      "sourceContractKeys": ["P43-CURRENT-e064834276405c23.1"],
+      "sourceContractKeys": [
+        "P43-CURRENT-e064834276405c23.1"
+      ],
       "contractAliasReason": "父工作区只连接子组件筛选与重置意图，不执行额外业务动作。",
       "condition": "P44管理员筛选区域挂载时",
       "handler": "父工作区将query/status v-model与apply/reset事件连接到现有状态和处理器。",
-      "variants": ["admins-filter-forwarding"],
+      "variants": [
+        "admins-filter-forwarding"
+      ],
       "scenes": [],
       "visualStates": {
         "default": "not-applicable-wiring",
@@ -1025,19 +1031,26 @@
         }
       ],
       "remaining": "接线映射不代表完整交互、读屏、权限或生产验收。",
-      "forwardsTo": ["PA44-FILTER", "PA44-RESET"],
+      "forwardsTo": [
+        "PA44-FILTER",
+        "PA44-RESET"
+      ],
       "forwardBindings": [
         {
           "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
           "event": "@apply-filters",
           "handler": "emit('apply-filters')",
-          "targets": ["PA44-FILTER"]
+          "targets": [
+            "PA44-FILTER"
+          ]
         },
         {
           "candidateId": "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue#e064834276405c23.1",
           "event": "@reset-filters",
           "handler": "emit('reset-filters')",
-          "targets": ["PA44-RESET"]
+          "targets": [
+            "PA44-RESET"
+          ]
         }
       ]
     },
@@ -1046,11 +1059,11 @@
       "label": "提交管理员邮箱/状态筛选",
       "kind": "read",
       "sourceCandidateIds": [
-        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#128119f3fb311b09.1",
+        "apps/web/src/components/PlatformAccountDirectoryFilters.vue#75a75712d75441cb.1",
         "apps/web/src/components/PlatformAccountDirectoryFilters.vue#e9658d470d4cbeaf.1"
       ],
       "sourceContractKeys": [
-        "P43-CURRENT-128119f3fb311b09.1",
+        "P43-CURRENT-75a75712d75441cb.1",
         "P43-CURRENT-e9658d470d4cbeaf.1"
       ],
       "contractAliasReason": "按当前源码候选逐项保留合同键；仅把同一表单、同一窗口或同一真实意图的多处入口归并。",
@@ -2877,13 +2890,13 @@
       "apps/web/src/components/PlatformAccountDialogs.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/PlatformAccountCenter.vue": "ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a",
-      "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8",
+      "apps/web/src/components/PlatformAccountCenter.vue": "d1dd7edb1a0551a88b1fb250e7b8b1e2d23cfbae8d2228cb6f62553e8e2904aa",
+      "apps/web/src/components/PlatformAccountDirectoryFilters.vue": "6fcae623a9d39e389662185204fd43a38ccf9b30db06d2fcbc1490ef0420062f",
       "apps/web/src/components/PlatformAccountDirectoryWorkspace.vue": "d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051",
       "apps/web/src/components/PlatformAccountGlobalRail.vue": "cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e",
       "apps/web/src/components/PlatformAdminRecords.vue": "74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297",
-      "apps/web/src/components/PlatformRoleComparison.vue": "a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309",
-      "apps/web/src/components/PlatformUserDetailDialog.vue": "43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b",
+      "apps/web/src/components/PlatformRoleComparison.vue": "510cc00985908fbb541961c303bee3a9934f59a1be99c561ed87082899dff54c",
+      "apps/web/src/components/PlatformUserDetailDialog.vue": "efccee8bdf9b4fdb1e8b1b9e2386a049bfbcd38bed1d3cae718be980a6eb63e6",
       "apps/web/src/components/PlatformUserMembershipForm.vue": "553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644",
       "apps/web/src/components/PlatformAccountDialogs.vue": "e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec"
     },

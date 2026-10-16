@@ -188,9 +188,9 @@ for (const item of [
     await expect(page.locator(".role-topbar .role-context")).toHaveCount(0);
     if (testInfo.project.name === "mobile-390") {
       await expect(page.locator(".role-context-rail")).toBeHidden();
-      await expect(page.locator(".role-context-drawer")).toBeVisible();
+      await expect(page.locator(".role-context-drawer")).toHaveCount(0);
     } else {
-      await expect(page.locator(".role-context-rail")).toBeVisible();
+      await expect(page.locator(".role-workspace-identity")).toBeVisible();
       await expect(page.locator(".role-context-drawer")).toBeHidden();
     }
     await expect(page.locator(".role-sidebar")).toHaveAttribute(
@@ -221,9 +221,9 @@ for (const item of [
       await expect(toggle).toBeFocused();
       await toggle.evaluate((element: HTMLButtonElement) => element.blur());
     } else {
-      await expect(page.locator(".role-nav-groups details[open]").first()).toBeVisible();
-      await expect(page.locator(".role-nav-menu").first()).toBeVisible();
-      await expect(page.locator(".role-sidebar").getByText(roleLabel)).toBeVisible();
+      await expect(page.locator(".role-desktop-navigation")).toBeVisible();
+      await expect(page.locator(".role-page-tabs a").first()).toBeVisible();
+      await expect(page.locator(".role-navigation-frame")).toBeHidden();
     }
     await expect(
       page
@@ -235,21 +235,26 @@ for (const item of [
     await expect(page).toHaveScreenshot(item.snapshot, { fullPage: true });
   });
 
-test("platform navigation searches grouped business and advanced operations menus", async ({
+test("platform navigation exposes grouped menus on desktop and searchable mobile drawer", async ({
   page,
 }) => {
   await allow(page, "platform_admin");
   await page.goto("/platform-admin");
-  if ((page.viewportSize()?.width ?? 1000) <= 840)
+  if ((page.viewportSize()?.width ?? 1000) <= 840) {
     await page.getByRole("button", { name: "打开导航菜单" }).click();
-  const sidebar = page.locator(".role-sidebar");
-  const search = sidebar.getByRole("searchbox", { name: "搜索导航菜单" });
-  await search.fill("高级运维");
-  await expect(sidebar.getByText("高级运维", { exact: true })).toBeVisible();
-  await expect(sidebar.getByRole("link", { name: "系统运维" })).toBeVisible();
-  await expect(sidebar.getByText("业务运营", { exact: true })).toHaveCount(0);
-  await search.fill("不存在的菜单");
-  await expect(sidebar.getByText("没有匹配的菜单或分组。")).toBeVisible();
+    const sidebar = page.locator(".role-sidebar");
+    await sidebar.getByRole("searchbox", { name: "搜索导航菜单" }).fill("高级运维");
+    await expect(sidebar.getByRole("link", { name: "系统运维" })).toBeVisible();
+    await sidebar.getByRole("searchbox", { name: "搜索导航菜单" }).fill("不存在的菜单");
+    await expect(sidebar.getByText("没有匹配的菜单或分组。")).toBeVisible();
+  } else {
+    const desktop = page.locator(".role-desktop-navigation");
+    await desktop.getByRole("button", { name: "高级运维", exact: true }).click();
+    await expect(desktop.getByRole("link", { name: "系统运维" })).toBeVisible();
+    await desktop.getByRole("button", { name: "业务运营", exact: true }).click();
+    await expect(desktop.getByRole("link", { name: "组织管理" })).toBeVisible();
+    await expect(desktop.getByRole("link", { name: "系统运维" })).toHaveCount(0);
+  }
 });
 
 test("M02-03.A08 mobile drawer is keyboard operable", async ({ page }) => {
@@ -286,8 +291,9 @@ test("mobile navigation closes and restores focus when crossing to desktop", asy
   await toggle.click();
   await expect(page.locator(".role-navigation-frame")).toBeVisible();
   await page.setViewportSize({ width: 1000, height: 900 });
-  await expect(page.locator(".role-navigation-frame")).toBeVisible();
-  await expect(page.locator(".role-navigation-frame")).toHaveJSProperty("open", true);
+  await expect(page.locator(".role-navigation-frame")).toBeHidden();
+  await expect(page.locator(".role-navigation-frame")).toHaveJSProperty("open", false);
+  await expect(page.locator(".role-desktop-navigation")).toBeVisible();
   await expect(toggle).toBeHidden();
   await expect(page.getByRole("link", { name: "SCOUTOPS 智能选品" })).toBeFocused();
 });
@@ -307,15 +313,8 @@ for (const item of [
     const themeButton = page.getByRole("button", { name: "切换界面主题" });
     await expect(themeButton).toBeVisible();
     await expect(themeButton).toBeInViewport();
-    const contextDrawer = page.locator(".role-context-drawer");
-    await expect(page.locator(".role-context-rail")).toBeHidden();
-    await expect(contextDrawer).toBeVisible();
-    await expect(contextDrawer).not.toHaveAttribute("open");
-    await contextDrawer.locator("summary").click();
-    await expect(contextDrawer).toHaveAttribute("open", "");
-    await expect(contextDrawer.getByText("任务域", { exact: true })).toBeVisible();
-    await expect(contextDrawer.getByText("信号状态", { exact: true })).toHaveCount(0);
-    await expect(contextDrawer.getByText("当前角色", { exact: true })).toBeVisible();
+    await expect(page.locator(".role-context-rail")).toHaveCount(0);
+    await expect(page.locator(".role-context-drawer")).toHaveCount(0);
     await expect(navigation.locator(":scope > *")).toHaveCount(5);
     await expect(navigation.getByRole("link")).toHaveCount(4);
     const more = navigation.getByRole("button", { name: "更多" });
@@ -359,7 +358,8 @@ for (const item of [
       .evaluateAll((elements) =>
         elements.flatMap((element) => {
           const box = element.getBoundingClientRect();
-          return box.width < 44 || box.height < 44
+          // DOMRect can represent an exact 44 CSS pixels as 43.99998.
+          return Math.round(box.width * 100) / 100 < 44 || Math.round(box.height * 100) / 100 < 44
             ? [
                 {
                   tag: element.tagName,
@@ -425,13 +425,13 @@ test("M02-03 platform shell exposes management navigation without member-only sh
 }) => {
   await allow(page, "platform_admin");
   await page.goto("/platform-admin");
-  const sidebar = page.locator(".role-sidebar");
+  const sidebar = page.locator(
+    (page.viewportSize()?.width ?? 1000) <= 840 ? ".role-sidebar" : ".role-desktop-navigation",
+  );
   if ((page.viewportSize()?.width ?? 1000) <= 840)
     await page.getByRole("button", { name: "更多" }).click();
   else {
-    const summary = sidebar.getByText("业务运营", { exact: true });
-    const isOpen = await summary.evaluate((node) => node.closest("details")?.hasAttribute("open"));
-    if (!isOpen) await summary.click();
+    await sidebar.getByRole("button", { name: "业务运营", exact: true }).click();
   }
   await expect(page.getByRole("button", { name: /搜索/ })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "通知中心" })).toHaveCount(0);
@@ -470,17 +470,12 @@ test("M02-03 explicit routes keep internal navigation reactive and unknown route
   await allow(page, "member");
   await page.goto("/home");
   await page.evaluate(() => ((window as any).__scoutopsRouteMarker = "kept"));
-  if ((page.viewportSize()?.width ?? 1000) > 840) {
-    const summary = page.locator(".role-sidebar").getByText("工作台", { exact: true });
-    const isOpen = await summary.evaluate((node) => node.closest("details")?.hasAttribute("open"));
-    if (!isOpen) await summary.click();
-  }
   const routeLink =
     (page.viewportSize()?.width ?? 1000) <= 840
       ? page
           .getByRole("navigation", { name: "移动快捷导航" })
           .getByRole("link", { name: "今日工作" })
-      : page.locator(".role-sidebar").getByRole("link", { name: "今日工作" });
+      : page.locator(".role-desktop-navigation").getByRole("link", { name: "今日工作" });
   await routeLink.click();
   await expect(page).toHaveURL(/\/work$/);
   expect(await page.evaluate(() => (window as any).__scoutopsRouteMarker)).toBe("kept");

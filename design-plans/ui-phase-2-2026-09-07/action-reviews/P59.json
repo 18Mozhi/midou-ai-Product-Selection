@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/commercial-security-open-platform-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+    "apps/web/src/components/SecurityOperationsCenter.vue": "a19263fe198eedc039ffe25a6e59917c8b12d27c0b89fca43b02773c89c1bd6f"
   },
   "inputs": {
     "apps/web/src/components/SecurityOperationsCenter.vue": [
@@ -366,7 +366,7 @@
       "apps/web/src/components/SecurityOperationsCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/SecurityOperationsCenter.vue": "24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4"
+      "apps/web/src/components/SecurityOperationsCenter.vue": "a19263fe198eedc039ffe25a6e59917c8b12d27c0b89fca43b02773c89c1bd6f"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],
@@ -375,7 +375,7 @@
     "sharedRemaining": [
       "本映射覆盖SecurityOperationsCenter.vue页面局部候选；五处ResponsiveDataView、TechnicalDetails、TableViewControls与NavigationShell内部交互沿各自共享合同验收。"
     ],
-    "remaining": "静态映射不证明真实platform:secure最小角色、GET事务写入security_operations_views/platform.security.operations.read、MySQL审计、完整读屏或M06-04生产验收。来源指纹SHA-256 24082cc2a1e1dcaacba3c35825592f778964e655e686d23297d0ce2199fad5f4。"
+    "remaining": "静态映射不证明真实platform:secure最小角色、GET事务写入security_operations_views/platform.security.operations.read、MySQL审计、完整读屏或M06-04生产验收。来源指纹SHA-256 a19263fe198eedc039ffe25a6e59917c8b12d27c0b89fca43b02773c89c1bd6f。"
   },
   "compositionGaps": [
     "逐项覆盖SecurityOperationsCenter.vue的29个当前扫描候选；ResponsiveDataView五消费者作为共享合同交叉引用，不另计局部源按钮。",

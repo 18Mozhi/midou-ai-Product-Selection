@@ -425,7 +425,7 @@ test("shared shell role and state contract binds every current source site witho
   const source = (file) =>
     readFileSync(new URL(`../../${file}`, import.meta.url), "utf8").replaceAll("\r\n", "\n");
   const candidates = files.flatMap((file) => scanSource(source(file), file).candidates);
-  assert.equal(records.length, 75);
+  assert.equal(records.length, 82);
   assert.deepEqual(
     records.map((record) => record.candidateId).sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
@@ -448,7 +448,11 @@ test("shared shell role and state contract binds every current source site witho
     ["OrganizationRolePanel.vue", "grant.create.submit"],
     ["OrganizationRolePanel.vue", "grant.expiry.submit"],
   ])
-    assert.equal(semantics(file, semantic).length, 2, `${file}:${semantic}`);
+    assert.equal(
+      semantics(file, semantic).length,
+      semantic === "shell.navigation.item" ? 3 : 2,
+      `${file}:${semantic}`,
+    );
   assert.equal(semantics("NavigationShell.vue", "discovery.open.search").length, 2);
   assert.equal(semantics("NavigationShell.vue", "discovery.open.create").length, 2);
   const helper = semantics("use-modal-dialog.ts", "modal.native.lifecycle");
@@ -905,7 +909,7 @@ test("current home dashboard map covers all current routes, form actions and evi
       record.claim.includes("HD-CURRENT-") &&
       record.temporalScope !== "historical",
   );
-  assert.equal(candidates.length, 18);
+  assert.equal(candidates.length, 19);
   assert.deepEqual(
     [...new Set(currentRows.map((record) => record.candidateId))].sort(),
     candidates.map((candidate) => candidate.candidateId).sort(),
@@ -1532,7 +1536,7 @@ test("current P42 organization detail dialog reconciles every candidate and curr
   }
   const additionIds = [
     "106fea94b943db73.1",
-    "ed675af42a95eee6.1",
+    "b77a4ace55afa0da.1",
     "e9b3a32bc524be8e.1",
     "e2d410a205d6addc.1",
     "f5028ff7b6963e7c.1",
@@ -2146,7 +2150,7 @@ test("current P51 task center maps missing state recovery and detail shell candi
       record.document.endsWith(document) && record.candidateId === `${file}#30e32a01e61d8558.1`,
   );
   assert.equal(sharedClose?.status, "identity-current");
-  assert.equal(sharedClose?.recordedLine, 869);
+  assert.equal(sharedClose?.recordedLine, 868);
   assert.match(sharedClose?.claim ?? "", /loading、error、loaded共用关闭详情/);
   const hashes = report.sourceClaims.filter(
     (claim) => claim.document.endsWith(document) && claim.file === file,
@@ -2570,7 +2574,7 @@ test("current P16 decision form map refreshes its line while isolating the super
   const document = "selection-journey-contract-review.md";
   const report = runContractAudit();
   const oldId = `${file}#5704caf4d4e8cd9d.1`;
-  const currentId = `${file}#ec0ddd60475ad5dd.1`;
+  const currentId = `${file}#9e94da9671f20109.1`;
   const historicalRow = report.records.find(
     (record) =>
       record.document.endsWith(document) &&
@@ -2587,8 +2591,8 @@ test("current P16 decision form map refreshes its line while isolating the super
   assert.equal(historicalRow?.currentLine, null);
   assert.equal(currentRow?.status, "identity-current");
   assert.equal(currentRow?.sourceBinding, "unrecorded");
-  assert.equal(currentRow?.recordedLine, 622);
-  assert.equal(currentRow?.currentLine, 622);
+  assert.equal(currentRow?.recordedLine, 619);
+  assert.equal(currentRow?.currentLine, 619);
   assert.equal(
     report.unreferenced.some((candidate) => candidate.candidateId === currentId),
     false,
@@ -2725,7 +2729,7 @@ test("P01 pre-split retry signature remains historical beside current parent-chi
   assert.equal(oldRow?.temporalScope, "historical");
   for (const candidateId of [
     "apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1",
-    "apps/web/src/components/LandingRedirectSurface.vue#2b603370ce085d16.1",
+    "apps/web/src/components/LandingRedirectSurface.vue#c8436fa6b897a54c.1",
   ]) {
     const record = report.records.find(
       (item) =>

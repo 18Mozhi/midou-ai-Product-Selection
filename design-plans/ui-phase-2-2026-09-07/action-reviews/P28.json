@@ -5,7 +5,7 @@
   "status": "source-reviewed-not-runtime-accepted",
   "contract": "design-plans/ui-phase-2-2026-09-07/automation-report-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+    "apps/web/src/components/ReportCenter.vue": "c3528d45365a2b13b62e2bf85ac89b773ce3a00c5ba6ed286bd184a2abed9661"
   },
   "readOwnershipEvidence": {
     "scope": "source-and-mounted-Vue-isolated-reads-not-service-or-full-page-acceptance",
@@ -576,7 +576,7 @@
           "apps/web/src/components/ReportCenter.vue#1c008f867673db60.2"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+          "apps/web/src/components/ReportCenter.vue": "c3528d45365a2b13b62e2bf85ac89b773ce3a00c5ba6ed286bd184a2abed9661"
         }
       },
       "additionalControlVariants": [
@@ -772,7 +772,7 @@
           "apps/web/src/components/ReportCenter.vue#97ed4772fb320d6c.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+          "apps/web/src/components/ReportCenter.vue": "c3528d45365a2b13b62e2bf85ac89b773ce3a00c5ba6ed286bd184a2abed9661"
         }
       },
       "additionalControlVariants": [
@@ -1432,7 +1432,7 @@
           "apps/web/src/components/ReportCenter.vue#9455978516828e94.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+          "apps/web/src/components/ReportCenter.vue": "c3528d45365a2b13b62e2bf85ac89b773ce3a00c5ba6ed286bd184a2abed9661"
         }
       }
     },
@@ -1535,7 +1535,7 @@
           "apps/web/src/components/ReportCenter.vue#ec6fb3ba685c67a6.1"
         ],
         "sourceHashes": {
-          "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+          "apps/web/src/components/ReportCenter.vue": "c3528d45365a2b13b62e2bf85ac89b773ce3a00c5ba6ed286bd184a2abed9661"
         }
       }
     },
@@ -1614,7 +1614,7 @@
     ],
     "includeStructuralContainers": true,
     "dependencyHashes": {
-      "apps/web/src/components/ReportCenter.vue": "9eaa7ae589fb1158a2cfe872641c2bb2a570d0ccf50c27f18d7fd0b3edc3691f"
+      "apps/web/src/components/ReportCenter.vue": "c3528d45365a2b13b62e2bf85ac89b773ce3a00c5ba6ed286bd184a2abed9661"
     },
     "inputs": [],
     "containers": [

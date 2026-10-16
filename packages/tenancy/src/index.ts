@@ -84,6 +84,8 @@ export interface TenancyRepository {
   listWorkspaces(organizationId: string): Promise<Workspace[]>;
   listTeams(organizationId: string): Promise<Team[]>;
   saveContext(context: SessionContext, audit: TenancyAuditEvent): Promise<void>;
+  findContext(sessionId: string, userId: string): Promise<SessionContext | null>;
+  findLatestContext(userId: string): Promise<SessionContext | null>;
 }
 export interface TenancyAuditEvent {
   id: string;
@@ -186,6 +188,36 @@ export class TenancyService {
       ),
     });
     return { organization, workspace };
+  }
+  async restoreLandingContext(context: TenancyContext) {
+    if (await this.repository.findContext(context.sessionId, context.actorId)) return;
+    const recent = await this.repository.findLatestContext(context.actorId);
+    if (recent) {
+      await this.selectContext(
+        { organizationId: recent.organization_id, workspaceId: recent.workspace_id },
+        context,
+      );
+      return;
+    }
+    const memberships = await this.repository.listOrganizations(context.actorId);
+    const active = memberships.filter(
+      ({ organization, membership }) =>
+        organization.status === "active" && membership.status === "active",
+    );
+    // Multiple organizations without history require the user's explicit default policy.
+    if (active.length !== 1) return;
+    const organization = active[0]!.organization;
+    const workspaces = (await this.repository.listWorkspaces(organization.id)).filter(
+      (workspace) => workspace.status === "active",
+    );
+    const workspace =
+      workspaces.find((item) => item.id === organization.default_workspace_id) ??
+      (workspaces.length === 1 ? workspaces[0] : undefined);
+    if (workspace)
+      await this.selectContext(
+        { organizationId: organization.id, workspaceId: workspace.id },
+        context,
+      );
   }
   async provisionPersonalWorkspace(context: TenancyContext) {
     const memberships = await this.repository.listOrganizations(context.actorId);
@@ -389,6 +421,37 @@ export class InMemoryTenancyRepository implements TenancyRepository {
   }
   async listTeams(o: string) {
     return this.teams.filter((x) => x.organization_id === o);
+  }
+  private validContexts(userId: string) {
+    return this.contexts.filter(
+      (c) =>
+        c.user_id === userId &&
+        this.organizations.some((o) => o.id === c.organization_id && o.status === "active") &&
+        this.workspaces.some(
+          (w) =>
+            w.id === c.workspace_id &&
+            w.organization_id === c.organization_id &&
+            w.status === "active",
+        ) &&
+        this.memberships.some(
+          (m) =>
+            m.user_id === userId &&
+            m.organization_id === c.organization_id &&
+            m.status === "active",
+        ),
+    );
+  }
+  async findContext(sessionId: string, userId: string) {
+    return this.validContexts(userId).find((c) => c.session_id === sessionId) ?? null;
+  }
+  async findLatestContext(userId: string) {
+    return (
+      this.validContexts(userId).sort(
+        (a, b) =>
+          b.selected_at.getTime() - a.selected_at.getTime() ||
+          a.session_id.localeCompare(b.session_id),
+      )[0] ?? null
+    );
   }
   async saveContext(c: SessionContext, a: TenancyAuditEvent) {
     this.contexts = this.contexts.filter((x) => x.session_id !== c.session_id);

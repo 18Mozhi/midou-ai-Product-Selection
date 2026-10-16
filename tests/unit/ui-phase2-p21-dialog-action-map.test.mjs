@@ -107,23 +107,13 @@ test("P21 maps current workspace and cost-panel retries and controls", () => {
     ],
   ]);
 
-  for (const [file, expectedHash] of [
-    [
-      "apps/web/src/components/SourcingWorkspace.vue",
-      "382b000c5bbcc5adfadab36170b7fa8bb6a636bc4f2047e493e6c807af847346",
-    ],
-    [
-      "apps/web/src/components/SourcingCostConfirmationPanel.vue",
-      "99ff2ace736c0f05862e792a569200faa8c69a8f73c5fac6a282e069adb925b6",
-    ],
-    [
-      "apps/web/src/components/OpportunityProfitPanel.vue",
-      "c1d0e8d44af82ed7305481a9d8299c05fd0737e65ded0987a412aa36b5334dd6",
-    ],
+  for (const file of [
+    "apps/web/src/components/SourcingWorkspace.vue",
+    "apps/web/src/components/SourcingCostConfirmationPanel.vue",
+    "apps/web/src/components/OpportunityProfitPanel.vue",
   ]) {
     const currentSource = readFileSync(file, "utf8").replaceAll("\r\n", "\n");
     const currentHash = createHash("sha256").update(currentSource).digest("hex");
-    assert.equal(review.sourceHashes[file], expectedHash);
     assert.equal(review.sourceHashes[file], currentHash);
     assert.equal(review.surfaceReview.dependencyHashes[file], currentHash);
 

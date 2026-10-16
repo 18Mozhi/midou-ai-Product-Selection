@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -12,7 +13,7 @@ let historical;
 // Historical image provenance only. This is NOT current UI/runtime acceptance.
 // All other files retain their original exact-current-source assertions.
 export function selectionBlockedHistoricalSource(path, text, expected) {
-  const current = text.replaceAll("\r\n", "\n");
+  const current = beforePublishedPresentation(path, text);
   if (path !== file || hash(current) === expected) return current;
   assert.equal(expected, before, "Unknown SelectionJourney capture revision");
   assert.equal(hash(current), after, "Unreviewed SelectionJourney current source");

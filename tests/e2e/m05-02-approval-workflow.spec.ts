@@ -848,3 +848,39 @@ test("UI2-AN04 approval conflict stays visible in the modal and preserves the au
   await expect(dialog.getByRole("alert")).toHaveCount(0);
   await expect(dialog.getByLabel("审批原因（批准与驳回均必填）")).toHaveValue("");
 });
+
+for (const width of [1440, 1024, 768, 390]) {
+  test(`approval lazy styles never move or enlarge navigation at ${width}px`, async ({
+    page,
+  }, testInfo) => {
+    test.skip(
+      testInfo.project.name === "mobile-390" ? width !== 390 : width === 390,
+      "Viewport covered by its matching project",
+    );
+    await setup(page);
+    await page.setViewportSize({ width, height: 900 });
+    await page.goto("/tasks/approvals");
+    await expect(page.locator(".approval-workspace")).toBeVisible();
+    const compact = width <= 840;
+    if (compact) await page.getByRole("button", { name: "打开导航菜单" }).click();
+    const navigation = page.locator(
+      compact ? ".role-navigation-frame" : ".role-desktop-navigation",
+    );
+    await expect(navigation).toBeVisible();
+    const box = await navigation.boundingBox();
+    expect(box!.x).toBeGreaterThanOrEqual(0);
+    expect(box!.x + box!.width).toBeLessThanOrEqual(width);
+    await expect(navigation).toHaveCSS("transform", "none");
+    await navigation.getByRole("link", { name: "今日行动", exact: true }).click();
+    await expect(page).toHaveURL(/\/home$/);
+    if (compact) await page.getByRole("button", { name: "打开导航菜单" }).click();
+    await expect(navigation).toBeVisible();
+    await expect(navigation).toHaveCSS("transform", "none");
+    const after = await navigation.boundingBox();
+    expect(after!.x).toBeGreaterThanOrEqual(0);
+    expect(after!.width).toBeCloseTo(box!.width, 0);
+    expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
+      true,
+    );
+  });
+}

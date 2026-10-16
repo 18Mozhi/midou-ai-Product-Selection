@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -5,7 +6,10 @@ import { createHash } from "node:crypto";
 import postcss from "postcss";
 
 const read = (file) => readFileSync(file, "utf8").replaceAll("\r\n", "\n");
-const palette = read("apps/web/src/design/platform-admin-mobile-tokens.css");
+const palette = beforePublishedPresentation(
+  "apps/web/src/design/platform-admin-mobile-tokens.css",
+  read("apps/web/src/design/platform-admin-mobile-tokens.css"),
+);
 const prefix = '@import "../design/platform-admin-mobile-tokens.css";\n\n';
 const scope =
   'html[data-design="signal-ledger"] #app .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"])';
@@ -45,6 +49,10 @@ function verify(
   tokens = palette,
   source = read(`apps/web/src/components/PlatformAdmin${name}Mobile.css`),
 ) {
+  source = beforePublishedPresentation(
+    `apps/web/src/components/PlatformAdmin${name}Mobile.css`,
+    source,
+  );
   const colors = values(tokens);
   assert.ok(source.startsWith(prefix));
   const expanded = source

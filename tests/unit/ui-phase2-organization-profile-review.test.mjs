@@ -158,7 +158,7 @@ test("P29 exclusion conditions stay bound to exact child branches and source rea
   );
   assert.ok(find("b09d7923228aabe6.1").conditions.some((c) => c.expression === "view === 'roles'"));
   assert.ok(
-    find("d6b520278ab3dd57.1").conditions.some((c) => c.expression === "view === 'summary'"),
+    find("e93301a7ec700ce7.1").conditions.some((c) => c.expression === "view === 'summary'"),
   );
   assert.deepEqual(Object.keys(find("1cbd108c64b5230c.1").events), ["@invalid", "@input"]);
   const submit = source.slice(

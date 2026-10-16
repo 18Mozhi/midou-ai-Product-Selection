@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/runtime-resilience-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+    "apps/web/src/components/RuntimeTopologyCenter.vue": "30811effde28c40a5eda285ad50dc053aa500e81cb1f321b9abcdaf18ed2a58f"
   },
   "inputs": {},
   "actions": [
@@ -440,7 +440,7 @@
       "apps/web/src/components/RuntimeTopologyCenter.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/RuntimeTopologyCenter.vue": "d3f1ba56a9d303e2c40d09fb8c07caaaddf80bb4d4207f69185539aae61125dd"
+      "apps/web/src/components/RuntimeTopologyCenter.vue": "30811effde28c40a5eda285ad50dc053aa500e81cb1f321b9abcdaf18ed2a58f"
     },
     "inputScope": "reviewed-subset-of-shared-source",
     "inputs": [],

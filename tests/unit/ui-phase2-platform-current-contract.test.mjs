@@ -132,7 +132,7 @@ test("rejects a missing, duplicated or unrelated supersession", () => {
 });
 test("rejects historical, current and cross-document fingerprint mismatches", () => {
   rejectsChange(current, (s) => replaced(s, "7935e4c", "0935e4c"), /historical hash drift/);
-  rejectsChange(current, (s) => replaced(s, "902ade12", "002ade12"), /current hash drift/);
+  rejectsChange(current, (s) => replaced(s, "dd3fee43", "00000000"), /current hash drift/);
   rejectsChange(
     responsive,
     (s) => replaced(s, "e848f34", "09e635a"),
@@ -231,12 +231,12 @@ test("requires the imported palette and pins the current expanded source", () =>
   );
   rejectsChange(
     "apps/web/src/design/platform-overlay-tokens.css",
-    (s) => replaced(s, "#f3f6fb", "#f4f6fb"),
-    /current palette expansion drift/,
+    (s) => replaced(s, "var(--glass-bg)", "var(--glass-primary)"),
+    /overlay palette hash drift/,
   );
   rejectsChange(
     "apps/web/src/design/platform-overlay-tokens.css",
     (s) => replaced(s, "--so-workspace-overlay-canvas:", "--so-workspace-overlay-other:"),
-    /missing overlay palette role/,
+    /overlay palette hash drift/,
   );
 });

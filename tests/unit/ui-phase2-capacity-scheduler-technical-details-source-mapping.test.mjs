@@ -17,7 +17,7 @@ const mappings = [
     file: "apps/web/src/components/CapacityBoundaryEvidence.vue",
     contract: "P71-CAPACITY-FINDING-TECH",
     candidateId: "apps/web/src/components/CapacityBoundaryEvidence.vue#1c008f867673db60.1",
-    line: 192,
+    line: 189,
   },
 ];
 

@@ -40,22 +40,22 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 
 | 候选键 | 行 | actionId / 分类 | 条件、行为与验收卡 |
 | --- | --- | --- | --- |
-| L#9b4b982bf643379f.1 | 1276 | ID-ROOT | 品牌→`/`；I01/I02 |
-| L#4ea44facc4e04130.1 | 736 | ID-SHOW-FORGOT | login→局部 forgot，无请求/URL变化；I02 |
-| L#dc876249a8119b09.1 | 854 | ID-SHOW-LOGIN | verify结果返回；I04/I05 |
-| L#dc876249a8119b09.2 | 867 | ID-SHOW-LOGIN | 首次设置结束、恢复码后返回；I07 |
-| L#f29375268246ac09.1 | 1349 | ID-LEGACY-SESSION-REVOKE | 旧sessions模板行，暂无公开模式入口；源码保留、运行入口待归并P11 |
-| L#ba3feba8b42af0bf.1 | 555 | ID-ACCOUNT-SECURITY | RouterLink→`/me?section=security`；I09 |
-| L#df188704ef470c64.1 | 1359 | ID-MFA-ROUTE | RouterLink→P07，会话守卫适用；I09 |
-| T#5587941412d5210f.1 | 239 | ID-LOGIN-ROUTE | expired→`/login`；I10 |
-| T#222cadb1072dc1d8.1 | 242 | ID-ORG-RELOAD | error/forbidden→loadOrganizations；I10 |
-| T#9dde30dd57699c01.1 | 256 | ID-ORG-RELOAD | 无工作区→loadOrganizations；I10 |
-| T#ecd9e9dbd8b34d05.1 | 265 | ID-PERSONAL-PROVISION | 无组织→创建本人空间、成功replace；I11 |
-| T#d29e9f25fe7a5452.1 | 268 | ID-ACCOUNT-ROUTE | 无组织→`/me`；I11 |
-| T#df188704ef470c64.1 | 269 | ID-MFA-ROUTE | 无组织→P07；I09/I11 |
-| T#72a9593314273d39.1 | 282 | ID-CONTEXT-CONTINUE | selectedContext就绪→safeReturnTo；I10 |
-| T#04d5594b96977687.1 | 287 | ID-ORG-RELOAD | 已选组织时返回组织，重新读目录；I10 |
-| T#087b197306ae2192.1 | 329 | ID-ORG-CLEAR | 搜索无结果→清空query，无写请求；I10 |
+| L#9b4b982bf643379f.1 | 1186 | ID-ROOT | 品牌→`/`；I01/I02 |
+| L#4ea44facc4e04130.1 | 678 | ID-SHOW-FORGOT | login→局部 forgot，无请求/URL变化；I02 |
+| L#dc876249a8119b09.1 | 796 | ID-SHOW-LOGIN | verify结果返回；I04/I05 |
+| L#dc876249a8119b09.2 | 809 | ID-SHOW-LOGIN | 首次设置结束、恢复码后返回；I07 |
+| L#f29375268246ac09.1 | 1246 | ID-LEGACY-SESSION-REVOKE | 旧sessions模板行，暂无公开模式入口；源码保留、运行入口待归并P11 |
+| L#ba3feba8b42af0bf.1 | 554 | ID-ACCOUNT-SECURITY | RouterLink→`/me?section=security`；I09 |
+| L#df188704ef470c64.1 | 1256 | ID-MFA-ROUTE | RouterLink→P07，会话守卫适用；I09 |
+| T#5587941412d5210f.1 | 237 | ID-LOGIN-ROUTE | expired→`/login`；I10 |
+| T#222cadb1072dc1d8.1 | 240 | ID-ORG-RELOAD | error/forbidden→loadOrganizations；I10 |
+| T#9dde30dd57699c01.1 | 254 | ID-ORG-RELOAD | 无工作区→loadOrganizations；I10 |
+| T#ecd9e9dbd8b34d05.1 | 263 | ID-PERSONAL-PROVISION | 无组织→创建本人空间、成功replace；I11 |
+| T#d29e9f25fe7a5452.1 | 266 | ID-ACCOUNT-ROUTE | 无组织→`/me`；I11 |
+| T#df188704ef470c64.1 | 267 | ID-MFA-ROUTE | 无组织→P07；I09/I11 |
+| T#72a9593314273d39.1 | 280 | ID-CONTEXT-CONTINUE | selectedContext就绪→safeReturnTo；I10 |
+| T#04d5594b96977687.1 | 285 | ID-ORG-RELOAD | 已选组织时返回组织，重新读目录；I10 |
+| T#087b197306ae2192.1 | 327 | ID-ORG-CLEAR | 搜索无结果→清空query，无写请求；I10 |
 | O#7142f76fc59ad9ee.1 | 39 | ID-GUIDE-SKIP | 跳过→P01，不写完成状态；I12 |
 
 ### 2.1 当前 LocalIdentity 源标识补记
@@ -66,13 +66,13 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | --- | --- | --- |
 | ID-ROOT | L#d545c6b53ab2b2a8.1；L#77c47b63bed1a205.1；L#77c47b63bed1a205.2；L#77c47b63bed1a205.3；L#77c47b63bed1a205.4；L#77c47b63bed1a205.5 | 身份路由各实际模式中的品牌根入口 |
 | ID-MFA-RELOAD | L#9734082c2e28b39f.1 | MFA 读取失败后显式重读 |
-| ID-MFA-START | L#24e4d3a67a2b28f1.1；L#3a0dc4e3156efd96.1；L#05351529fe9e3358.1；L#f068679ed044d696.1 | MFA 独立绑定及首次安全设置绑定；表单提交与按钮归并 |
+| ID-MFA-START | L#8425d718624cf134.1；L#3a0dc4e3156efd96.1；L#05351529fe9e3358.1；L#f068679ed044d696.1 | MFA 独立绑定及首次安全设置绑定；表单提交与按钮归并 |
 | ID-MFA-CONFIRM | L#4ce7b78a016bd6b5.1；L#7d20870a6b6ed73c.1；L#d9c0ff91de01c471.1；L#e7030ff0d08dfdb7.1 | MFA 绑定确认及首次安全设置确认；表单提交与按钮归并 |
 | ID-MFA-DISABLE | L#29abd90f9774564d.1；L#6735871aaf8e0556.1 | MFA 停用表单提交与确认按钮，沿用撤销全部会话边界 |
 | ID-MFA-RETURN-LOGIN | L#e4840b8a830571e2.1 | MFA 管理页返回登录路由 |
-| ID-FORM-SUBMIT | L#3d0185dcb1b90a38.1；L#55432de3fcde4409.1；L#62294b45ceb45f22.1；L#a8e9d7ee5148dbe5.1；L#be82854e01e5e049.1；L#4b32d082f043e0da.1；L#e448c4ea094171f6.1；L#8cc6c6d54ed246f6.1；L#d145d1bc092202b5.1 | login、MFA challenge、reset、forgot、register 的当前模式表单及提交按钮；不是一个业务请求 |
+| ID-FORM-SUBMIT | L#3d0185dcb1b90a38.1；L#55432de3fcde4409.1；L#e0bc52831b06d893.1；L#a8e9d7ee5148dbe5.1；L#9903cdeefaf37eb8.1；L#4b32d082f043e0da.1；L#01179b83b00b88fc.1；L#8cc6c6d54ed246f6.1；L#b9a54c4564b29459.1 | login、MFA challenge、reset、forgot、register 的当前模式表单及提交按钮；不是一个业务请求 |
 | ID-SEED-PASSWORD | L#9fb8524110a1038f.1；L#7d98b83b16e631e4.1 | 首次安全设置中的改密提交与按钮；提交期间单飞并锁定字段 |
-| ID-SHOW-REGISTER | L#f3edcccf9be30a1b.1；L#f3edcccf9be30a1b.2 | 登录/旧 sessions 模式切换到注册 |
+| ID-SHOW-REGISTER | L#f3e4e894bac947c4.1；L#f3e4e894bac947c4.2 | 登录/旧 sessions 模式切换到注册 |
 | ID-ACCOUNT-SECURITY | L#ba3feba8b42af0bf.2；L#ba3feba8b42af0bf.3 | 跳转本人 `/me?section=security`；旧 sessions 入口不等于该组件内会话撤销 |
 | ID-MFA-ROUTE | L#dce7dc58cd80c932.1；L#341395d9a1567247.1；L#e0691d9aef4aa1e2.1；L#e0691d9aef4aa1e2.2；L#393c4351ab80bac7.1 | 跳转 `/security/mfa` 的说明/管理入口，仍受该路由会话守卫约束 |
 | ID-SHOW-LOGIN | L#dc876249a8119b09.3；L#6f57070c49bdbca1.1；L#dc876249a8119b09.4；L#dc876249a8119b09.5；L#dc876249a8119b09.6；L#dc876249a8119b09.7 | 注册、验证、找回、重置、MFA 与旧 sessions 模式返回登录 |
@@ -103,12 +103,12 @@ PAGES.md纳入全局sourceFingerprint，改文字也会使既有图源合同过�
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | apps/web/src/components/TenancyChooser.vue#07db575ab56f90da.1 | 176 | control | P08-CURRENT-ROOT / 品牌链接返回根路径 |
-| apps/web/src/components/TenancyChooser.vue#51f99d2206301d80.1 | 306 | control | P08-CURRENT-ORG-CHOOSE / 选择组织并读取工作区、团队；不写会话范围 |
-| apps/web/src/components/TenancyChooser.vue#9d6c9b22e4716bb9.1 | 341 | control | P08-CURRENT-WORKSPACE-CHOOSE / 仅活动工作区可用；调用既有 `/auth/context` 更新会话范围 |
+| apps/web/src/components/TenancyChooser.vue#51f99d2206301d80.1 | 304 | control | P08-CURRENT-ORG-CHOOSE / 选择组织并读取工作区、团队；不写会话范围 |
+| apps/web/src/components/TenancyChooser.vue#9d6c9b22e4716bb9.1 | 339 | control | P08-CURRENT-WORKSPACE-CHOOSE / 仅活动工作区可用；调用既有 `/auth/context` 更新会话范围 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/TenancyChooser.vue | db6e49a67a016a4c40f0adde2495212d3a4bec82656100e4abb0f3e17d328b18 |
+| apps/web/src/components/TenancyChooser.vue | 8ba690dfe3ce645883978d5176e1cb6c47a2428a0d59c5934dc9d7e87fa23f4d |
 
 本映射只确认当前静态候选与既有局部导航规则，不表示完成记录、持久化进度、真实身份/工作区、完整焦点读屏或生产状态已新增或验收。
 
@@ -222,9 +222,9 @@ MFA和首次设置按钮是 form 外的 type=button，输入虽然部分有minle
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
 | apps/web/src/components/LandingRedirect.vue#0f7c864f959a1c13.1 | 41 | event-binding | ID-LANDING-RETRY-PARENT / 子事件转发至现有入口解析与重读处理函数 |
-| apps/web/src/components/LandingRedirectSurface.vue#2b603370ce085d16.1 | 44 | event-binding | ID-LANDING-RETRY-SURFACE / 将通用状态主操作转发为retry事件并隐藏未接线secondary |
+| apps/web/src/components/LandingRedirectSurface.vue#c8436fa6b897a54c.1 | 37 | event-binding | ID-LANDING-RETRY-SURFACE / 将通用状态主操作转发为retry事件并隐藏未接线secondary |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
 | apps/web/src/components/LandingRedirect.vue | bdaf47a55416ebfe563dcd2affe9b578bb22644832b39d79289c64de542372e5 |
-| apps/web/src/components/LandingRedirectSurface.vue | 754c42fa9e95c98ae2e1086e74c2326507370e4a14e70e45ade38f11aaf2827d |
+| apps/web/src/components/LandingRedirectSurface.vue | fb2b7e4ae3456472c9313145b7da17716c8cb3b42dd7b2639b6035a904fcb241 |

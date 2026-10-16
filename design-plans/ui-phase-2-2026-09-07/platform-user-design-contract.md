@@ -52,20 +52,20 @@
 | 03bf338e0dc8663a.1 | 58 | control | PA43-CURRENT-SECTION / 滚动到组织关系分区 |
 | f575608b4ce38790.1 | 59 | control | PA43-CURRENT-SECTION / 滚动到平台权限分区 |
 | 04d8d432043cc06f.1 | 60 | control | PA43-CURRENT-SECTION / 滚动到登录安全分区 |
-| 2086f54419d742e3.1 | 69 | control | PA43-CURRENT-CLOSE / 工具栏关闭详情 |
-| 2964730aa12dbf82.1 | 115 | event-binding | PA43-CURRENT-MEMBERSHIP / 转发加入组织表单提交和当前用户ID |
-| d7a92de7086fdce6.1 | 148 | control | PA43-CURRENT-ROLE / 授予或撤销一个固定平台角色，busy/非活动账号禁用 |
-| 86b2bcafa2c5529c.1 | 185 | control | PA43-CURRENT-SESSION / 撤销单个活动会话 |
-| a187b4fc34f4ab4e.1 | 199 | control | PA43-CURRENT-STATUS / 停用或恢复登录 |
-| 8406f17273df6864.1 | 207 | control | PA43-CURRENT-PASSWORD / 打开既有强制改密确认流程 |
-| f1dd7ea535b03340.1 | 210 | control | PA43-CURRENT-SESSION / 撤销当前用户全部会话 |
-| 138b8370ecdca0d1.1 | 218 | control | PA43-CURRENT-CLOSE / 页尾关闭详情 |
-| 2a92366d39ac198e.1 | 226 | control | PA43-CURRENT-RETRY / 详情加载失败后重试现有读取 |
-| 02668382bdda9d3b.1 | 227 | control | PA43-CURRENT-CLOSE / 详情加载错误态关闭窗口 |
+| 2086f54419d742e3.1 | 66 | control | PA43-CURRENT-CLOSE / 工具栏关闭详情 |
+| 2964730aa12dbf82.1 | 112 | event-binding | PA43-CURRENT-MEMBERSHIP / 转发加入组织表单提交和当前用户ID |
+| d7a92de7086fdce6.1 | 145 | control | PA43-CURRENT-ROLE / 授予或撤销一个固定平台角色，busy/非活动账号禁用 |
+| 86b2bcafa2c5529c.1 | 182 | control | PA43-CURRENT-SESSION / 撤销单个活动会话 |
+| a187b4fc34f4ab4e.1 | 196 | control | PA43-CURRENT-STATUS / 停用或恢复登录 |
+| 8406f17273df6864.1 | 204 | control | PA43-CURRENT-PASSWORD / 打开既有强制改密确认流程 |
+| f1dd7ea535b03340.1 | 207 | control | PA43-CURRENT-SESSION / 撤销当前用户全部会话 |
+| 138b8370ecdca0d1.1 | 215 | control | PA43-CURRENT-CLOSE / 页尾关闭详情 |
+| 2a92366d39ac198e.1 | 223 | control | PA43-CURRENT-RETRY / 详情加载失败后重试现有读取 |
+| 02668382bdda9d3b.1 | 224 | control | PA43-CURRENT-CLOSE / 详情加载错误态关闭窗口 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformUserDetailDialog.vue | 43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b |
+| apps/web/src/components/PlatformUserDetailDialog.vue | efccee8bdf9b4fdb1e8b1b9e2386a049bfbcd38bed1d3cae718be980a6eb63e6 |
 
 ### PA43旧用户详情身份归档
 
@@ -161,16 +161,16 @@ P43动作映射使用本合同作为单一语义源。下表接续共享父组�
 
 | 当前签名 | P43当前语义合同键 |
 | --- | --- |
-| 3c4dea26ac48746f.1 | P43-CURRENT-3c4dea26ac48746f.1 · 响应式筛选抽屉容器 |
-| 128119f3fb311b09.1 | P43-CURRENT-128119f3fb311b09.1 · 筛选表单提交到父级applyFilters |
+| a93a93cd1300da76.1 | P43-CURRENT-a93a93cd1300da76.1 · 响应式筛选抽屉容器 |
+| 75a75712d75441cb.1 | P43-CURRENT-75a75712d75441cb.1 · 筛选表单提交到父级applyFilters |
 | e9658d470d4cbeaf.1 | P43-CURRENT-e9658d470d4cbeaf.1 · 搜索按钮提交同一用户筛选表单 |
 | 20080e701de7f5cb.1 | P43-CURRENT-20080e701de7f5cb.1 · 重置用户query/status |
 
 | 当前父/工作区源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
+| apps/web/src/components/PlatformAccountCenter.vue | d1dd7edb1a0551a88b1fb250e7b8b1e2d23cfbae8d2228cb6f62553e8e2904aa |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051 |
-| apps/web/src/components/PlatformAccountDirectoryFilters.vue | aec53b882c4ace65d368fdd9352d40a3debf0b50f55cfb61365506991caea16b |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 6fcae623a9d39e389662185204fd43a38ccf9b30db06d2fcbc1490ef0420062f |
 
 其余四个直接页面组件沿用本合同已有当前候选记录；P43.json另固定六个组件的当前LF指纹。源位置数不等于唯一按钮或业务动作数。
 ## P44 当前来源补映射

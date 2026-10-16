@@ -214,7 +214,7 @@
   ],
   "pageScopeExclusions": {
     "sharedParent": "apps/web/src/components/PlatformManagementCenter.vue",
-    "sharedParentSha256": "33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00",
+    "sharedParentSha256": "6835fcf831099e531e9d86c3e9a39ed2c8ef827e28c000d964a83fa71398baeb",
     "sharedCurrentCandidates": [
       {
         "candidateId": "apps/web/src/components/PlatformManagementCenter.vue#62c28f83dd77541b.1",

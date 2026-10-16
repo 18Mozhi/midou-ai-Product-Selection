@@ -77,14 +77,14 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 5eebd25c337b0a2c.1 | 455 | control | EMAIL-CLOSED 关闭路由保留分支 |
-| 62c28f83dd77541b.1 | 456 | control | CT56/PN57/AC63/P61-LOAD 按域刷新 |
-| 79f3cfdde95076be.1 | 502 | control | CT56/PN57/AC63/P61-RETRY 非loading重读 |
-| dd1ae8b1dd3126a2.1 | 514 | event-binding | EMAIL-CLOSED 草稿转发 |
-| 1cb3318f1d3fb321.1 | 523 | event-binding | EMAIL-CLOSED 邮件行转发 |
-| 1c008f867673db60.1 | 551 | control | SHARED-TECH 请求编号披露 |
-| 2c3cf7108ad053c1.1 | 576 | event-binding | SHARED-REASON 原因提交/取消转发 |
-| 4b3a546a74b4e7c1.1 | 576 | dialog-component-call | SHARED-REASON 同组件调用候选，不重复业务计数 |
+| 5eebd25c337b0a2c.1 | 452 | control | EMAIL-CLOSED 关闭路由保留分支 |
+| 62c28f83dd77541b.1 | 453 | control | CT56/PN57/AC63/P61-LOAD 按域刷新 |
+| 79f3cfdde95076be.1 | 499 | control | CT56/PN57/AC63/P61-RETRY 非loading重读 |
+| dd1ae8b1dd3126a2.1 | 511 | event-binding | EMAIL-CLOSED 草稿转发 |
+| 1cb3318f1d3fb321.1 | 520 | event-binding | EMAIL-CLOSED 邮件行转发 |
+| 1c008f867673db60.1 | 548 | control | SHARED-TECH 请求编号披露 |
+| 2c3cf7108ad053c1.1 | 573 | event-binding | SHARED-REASON 原因提交/取消转发 |
+| 4b3a546a74b4e7c1.1 | 573 | dialog-component-call | SHARED-REASON 同组件调用候选，不重复业务计数 |
 | b285a03c301c82db.1 | 260 | dialog-script-call | EMAIL-CLOSED 重试/抑制原因变体 |
 | f85ae0968844933a.1 | 343 | dialog-script-call | PN57-PUBLISH/CANCEL 发布/取消原因变体 |
 
@@ -166,21 +166,21 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| 9f8a46068562150e.1 | 92 | control | CT56-LOAD 刷新当前内容快照 |
-| 5ac8ba0a1715c083.1 | 109 | control | CT56-LOAD 首次读取失败后重新加载 |
-| 4a3f771edf9d117c.1 | 140 | event-binding | CT56-FILTER 转发筛选应用与重置 |
-| 6a03af01ac2673c0.1 | 157 | event-binding | CT56-REVIEW 转发当前记录与目标状态 |
-| 2b1baa06888c105d.1 | 174 | control | CT56-FILTER 空结果清除筛选 |
-| d44cbeebe40f60b2.1 | 179 | event-binding | CT56-PAGE 转发服务端分页目标 |
-| 71ad1e14ab5adcdd.1 | 190 | control | CT56-TRACE 展开本次读取追踪编号 |
+| 9f8a46068562150e.1 | 91 | control | CT56-LOAD 刷新当前内容快照 |
+| 5ac8ba0a1715c083.1 | 108 | control | CT56-LOAD 首次读取失败后重新加载 |
+| 4a3f771edf9d117c.1 | 138 | event-binding | CT56-FILTER 转发筛选应用与重置 |
+| 6a03af01ac2673c0.1 | 155 | event-binding | CT56-REVIEW 转发当前记录与目标状态 |
+| 2b1baa06888c105d.1 | 172 | control | CT56-FILTER 空结果清除筛选 |
+| d44cbeebe40f60b2.1 | 177 | event-binding | CT56-PAGE 转发服务端分页目标 |
+| 71ad1e14ab5adcdd.1 | 188 | control | CT56-TRACE 展开本次读取追踪编号 |
 
 ### apps/web/src/components/PlatformContentReviewDialog.vue
 
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
-| d419717a1daa53bd.1 | 43 | dialog-definition | CT56-REVIEW 审核热点内容原生窗口定义 |
-| 419cf34d6cd8c9bd.1 | 43 | event-binding | CT56-CANCEL Escape取消审核 |
-| 1fd70ea9da24ddfa.1 | 49 | form-event | CT56-CONFIRM 审核表单提交 |
+| c3088973ee4c5864.1 | 43 | dialog-definition | CT56-REVIEW 审核热点内容原生窗口定义 |
+| 27887d42b9d12fc9.1 | 43 | event-binding | CT56-CANCEL Escape取消审核 |
+| 7a61e0aa406d9acb.1 | 49 | form-event | CT56-CONFIRM 审核表单提交 |
 | d92091d153d481b8.1 | 56 | control | CT56-CANCEL 顶部关闭审核 |
 | 7daff9e4a017f8c0.1 | 117 | control | CT56-CANCEL 底部取消或等待中关闭窗口 |
 | 182a80a4144bf185.1 | 120 | control | CT56-CONFIRM 确认审核；原因不足或提交中禁用 |
@@ -189,8 +189,8 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 文件 | LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformContentCenter.vue | f365a97c14c6d5420e908982ff96c008866e369fcb2e609ddf7ce0c3ab533993 |
-| apps/web/src/components/PlatformContentReviewDialog.vue | 7183474efd2f6fdb6080d3273855b69c742675b5aa36ae026d9cd82f6a6726f4 |
+| apps/web/src/components/PlatformContentCenter.vue | 6312bb4c36b55b9c30675c774686c457c67ad6d8edf600087d4312b75d61bb49 |
+| apps/web/src/components/PlatformContentReviewDialog.vue | a4e0f2c82b225f33eabb7bd7201fefc3ad6bac2670a894a430686c4c40e76389 |
 
 ### P56 当前父级与共享筛选转发
 
@@ -201,8 +201,8 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | 签名.序号 | 行 | 类型 | 语义/范围 |
 | --- | --- | --- | --- |
 | bfe687b5e3775fab.1 | 419 | event-binding | CT56-LOAD/FILTER/PAGE/REVIEW 将P56专用工作台事件转发到当前组合式状态 |
-| f5cb087b206b4a60.1 | 556 | event-binding | CT56-CANCEL/CONFIRM 将P56审核窗事件转发到单飞提交状态 |
-| 6ac3264cbd6eac5b.1 | 556 | dialog-component-call | CT56-REVIEW P56专用审核窗组件调用；与同节点事件候选不重复计数 |
+| f5cb087b206b4a60.1 | 553 | event-binding | CT56-CANCEL/CONFIRM 将P56审核窗事件转发到单飞提交状态 |
+| 6ac3264cbd6eac5b.1 | 553 | dialog-component-call | CT56-REVIEW P56专用审核窗组件调用；与同节点事件候选不重复计数 |
 
 #### apps/web/src/components/PlatformManagementFilter.vue
 
@@ -236,21 +236,21 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 当前candidateId | 行 | 类型 | 语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/PlatformMessageWorkbench.vue#4e8bc7691dd553a7.1 | 68 | control | PN57-SELECT / 选择消息；手机按视口打开全文阅读窗，不新增读取请求 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#f095166e216904be.1 | 96 | control | PN57-BODY / 原生details展开或收起当前消息全文 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#16110d36bb2ca486.1 | 121 | control | PN57-EDIT / 桌面读取窗编辑草稿入口，转发既有消息对象 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#ce596c13606836a9.1 | 124 | control | PN57-PUBLISH / 桌面发布草稿入口；仅忙碌时禁用并显示处理中 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#32d17b035b89285e.1 | 132 | control | PN57-CANCEL / 取消未发布草稿，不是撤回已发布消息 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#eb47900365f5d70b.1 | 152 | dialog-definition | PN57-MOBILE-READ / 原生移动全文阅读窗口定义 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#e4f2d5b4b2005a5b.1 | 152 | event-binding | PN57-MOBILE-READ / Escape取消交由当前读取窗口处理 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#3d875f94d4ab83b0.1 | 165 | control | PN57-MOBILE-CLOSE / 关闭移动全文阅读窗口 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#bffdaadbcab11ecf.1 | 191 | control | PN57-MOBILE-EDIT / 编辑草稿并关闭当前移动读取窗口 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#ed205b81aa906e59.1 | 201 | control | PN57-MOBILE-PUBLISH / 发布草稿并关闭当前移动读取窗口 |
-| apps/web/src/components/PlatformMessageWorkbench.vue#b90d52fcfbfbd947.1 | 212 | control | PN57-MOBILE-CANCEL / 取消草稿并关闭当前移动读取窗口 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#4e8bc7691dd553a7.1 | 67 | control | PN57-SELECT / 选择消息；手机按视口打开全文阅读窗，不新增读取请求 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#f095166e216904be.1 | 95 | control | PN57-BODY / 原生details展开或收起当前消息全文 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#16110d36bb2ca486.1 | 120 | control | PN57-EDIT / 桌面读取窗编辑草稿入口，转发既有消息对象 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#ce596c13606836a9.1 | 123 | control | PN57-PUBLISH / 桌面发布草稿入口；仅忙碌时禁用并显示处理中 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#32d17b035b89285e.1 | 131 | control | PN57-CANCEL / 取消未发布草稿，不是撤回已发布消息 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#eb47900365f5d70b.1 | 151 | dialog-definition | PN57-MOBILE-READ / 原生移动全文阅读窗口定义 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#e4f2d5b4b2005a5b.1 | 151 | event-binding | PN57-MOBILE-READ / Escape取消交由当前读取窗口处理 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#3d875f94d4ab83b0.1 | 164 | control | PN57-MOBILE-CLOSE / 关闭移动全文阅读窗口 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#bffdaadbcab11ecf.1 | 190 | control | PN57-MOBILE-EDIT / 编辑草稿并关闭当前移动读取窗口 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#ed205b81aa906e59.1 | 200 | control | PN57-MOBILE-PUBLISH / 发布草稿并关闭当前移动读取窗口 |
+| apps/web/src/components/PlatformMessageWorkbench.vue#b90d52fcfbfbd947.1 | 211 | control | PN57-MOBILE-CANCEL / 取消草稿并关闭当前移动读取窗口 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformMessageWorkbench.vue | 689531d215e8878405c53ae55a4b157066cde2e9a1455242da7262079e27b2a5 |
+| apps/web/src/components/PlatformMessageWorkbench.vue | 169ebe30b870f932fd49e108c876eb98e50a61f995eabefdef5371bc1555fe33 |
 
 ## 5.3 P57 当前 PlatformNotificationCenter 源码绑定（2026-09-24）
 
@@ -258,20 +258,20 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 当前candidateId | 行 | 类型 | 语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/PlatformNotificationCenter.vue#9a3e50bd9098f5ff.1 | 125 | control | PN57-EDITOR / 打开新建草稿编辑器，不自动发布 |
-| apps/web/src/components/PlatformNotificationCenter.vue#b21beeb9130a0703.1 | 126 | control | PN57-LOAD / 重读通知快照；读取中禁用并反映现有刷新态 |
-| apps/web/src/components/PlatformNotificationCenter.vue#79e01b786f15fc7c.1 | 139 | control | PN57-SECTION / 切换人工消息、投递观测或系统事实的本地分区 |
-| apps/web/src/components/PlatformNotificationCenter.vue#13f96bd10b210d6d.1 | 168 | control | PN57-LOAD / 首次读取错误后的显式重新加载 |
-| apps/web/src/components/PlatformNotificationCenter.vue#cdc8e3a40be55ae9.1 | 182 | event-binding | PN57-CHILD / 接收管理子组件编辑、操作、筛选和双分页事件并交给现有所有者 |
-| apps/web/src/components/PlatformNotificationCenter.vue#8189528db997f296.1 | 203 | control | PN57-TRACE / 展开成功快照的读取关联编号 |
-| apps/web/src/components/PlatformNotificationCenter.vue#f12e9c39fb00c6a7.1 | 210 | control | PN57-TRACE / 展开本次失败读取的关联编号 |
-| apps/web/src/components/PlatformNotificationCenter.vue#4adfbf3f43a170a4.1 | 216 | event-binding | PN57-EDITOR / 接收编辑窗关闭与保存事件，交给既有草稿所有者 |
-| apps/web/src/components/PlatformNotificationCenter.vue#337effd8182c0fce.1 | 226 | event-binding | PN57-ACTION / 接收原因确认窗关闭与提交事件，交给既有消息操作所有者 |
-| apps/web/src/components/PlatformNotificationCenter.vue#e7062443e1147900.1 | 226 | dialog-component-call | PN57-ACTION / 调用共享发布或取消原因对话框，不新增写入接口 |
+| apps/web/src/components/PlatformNotificationCenter.vue#9a3e50bd9098f5ff.1 | 123 | control | PN57-EDITOR / 打开新建草稿编辑器，不自动发布 |
+| apps/web/src/components/PlatformNotificationCenter.vue#b21beeb9130a0703.1 | 124 | control | PN57-LOAD / 重读通知快照；读取中禁用并反映现有刷新态 |
+| apps/web/src/components/PlatformNotificationCenter.vue#79e01b786f15fc7c.1 | 137 | control | PN57-SECTION / 切换人工消息、投递观测或系统事实的本地分区 |
+| apps/web/src/components/PlatformNotificationCenter.vue#13f96bd10b210d6d.1 | 166 | control | PN57-LOAD / 首次读取错误后的显式重新加载 |
+| apps/web/src/components/PlatformNotificationCenter.vue#cdc8e3a40be55ae9.1 | 180 | event-binding | PN57-CHILD / 接收管理子组件编辑、操作、筛选和双分页事件并交给现有所有者 |
+| apps/web/src/components/PlatformNotificationCenter.vue#8189528db997f296.1 | 201 | control | PN57-TRACE / 展开成功快照的读取关联编号 |
+| apps/web/src/components/PlatformNotificationCenter.vue#f12e9c39fb00c6a7.1 | 208 | control | PN57-TRACE / 展开本次失败读取的关联编号 |
+| apps/web/src/components/PlatformNotificationCenter.vue#4adfbf3f43a170a4.1 | 214 | event-binding | PN57-EDITOR / 接收编辑窗关闭与保存事件，交给既有草稿所有者 |
+| apps/web/src/components/PlatformNotificationCenter.vue#337effd8182c0fce.1 | 224 | event-binding | PN57-ACTION / 接收原因确认窗关闭与提交事件，交给既有消息操作所有者 |
+| apps/web/src/components/PlatformNotificationCenter.vue#e7062443e1147900.1 | 224 | dialog-component-call | PN57-ACTION / 调用共享发布或取消原因对话框，不新增写入接口 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformNotificationCenter.vue | 8dd089c006eeb5c731f0d040da20436e2958613657776373b2872fe6adde52b4 |
+| apps/web/src/components/PlatformNotificationCenter.vue | bb33ae7996b077f7c0c4add737ccaa75296be9197c185c147a99db9704380060 |
 
 ## 6. 引用版本指纹
 
@@ -323,14 +323,14 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | --- | ---: | --- | --- |
 | apps/web/src/components/PlatformMessageEditor.vue#ee9651365376028e.1 | 40 | dialog-definition | PN57-CURRENT-DIALOG / 受控新建或编辑草稿原生dialog定义 |
 | apps/web/src/components/PlatformMessageEditor.vue#b1b60a9027feacfb.1 | 40 | event-binding | PN57-CURRENT-DIALOG-KEYBOARD / 转发Escape关闭及dialog内Tab循环处理 |
-| apps/web/src/components/PlatformMessageEditor.vue#174bcbcaa3c52308.1 | 48 | form-event | PN57-CURRENT-SAVE / form submit向父级发出save，不在本组件直接请求API |
-| apps/web/src/components/PlatformMessageEditor.vue#d2cc265c8fd1ae47.1 | 61 | control | PN57-CURRENT-CLOSE / 顶部带可访问名称的关闭按钮发出close |
-| apps/web/src/components/PlatformMessageEditor.vue#02668382bdda9d3b.1 | 190 | control | PN57-CURRENT-CLOSE / 底部关闭按钮发出close |
-| apps/web/src/components/PlatformMessageEditor.vue#e94ca4c02d75da69.1 | 191 | control | PN57-CURRENT-SAVE / 保存草稿submit按钮，saving时禁用 |
+| apps/web/src/components/PlatformMessageEditor.vue#c927a57375828b6a.1 | 48 | form-event | PN57-CURRENT-SAVE / form submit向父级发出save，不在本组件直接请求API |
+| apps/web/src/components/PlatformMessageEditor.vue#d2cc265c8fd1ae47.1 | 57 | control | PN57-CURRENT-CLOSE / 顶部带可访问名称的关闭按钮发出close |
+| apps/web/src/components/PlatformMessageEditor.vue#02668382bdda9d3b.1 | 186 | control | PN57-CURRENT-CLOSE / 底部关闭按钮发出close |
+| apps/web/src/components/PlatformMessageEditor.vue#e94ca4c02d75da69.1 | 187 | control | PN57-CURRENT-SAVE / 保存草稿submit按钮，saving时禁用 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformMessageEditor.vue | 299031770711240b20ded18c86d6eb2dae9081fb44a732e06efa3317b540041a |
+| apps/web/src/components/PlatformMessageEditor.vue | 59da5cc2554778c81bf065c36418b623d12dca3ccb6f0fabca2ecb5e5530ee6e |
 
 此静态映射不替代父组件/API合同、受众选择与字段值的完整校验、真实保存、焦点读屏或生产验收；系统邮件Provider和用户邮件偏好边界保持不变。
 
@@ -392,12 +392,12 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 | --- | ---: | --- | --- |
 | apps/web/src/components/PlatformNotificationManagement.vue#a84b9b74f461a608.1 | 37 | event-binding | PN57-MANAGEMENT-CURRENT-MESSAGE / 工作台编辑与发布/取消动作转发 |
 | apps/web/src/components/PlatformNotificationManagement.vue#22aeb336eb22dffc.1 | 46 | event-binding | PN57-MANAGEMENT-CURRENT-MESSAGE-PAGE / 草稿分页变化转发 |
-| apps/web/src/components/PlatformNotificationManagement.vue#70cfd76c23fd89d4.1 | 63 | event-binding | PN57-MANAGEMENT-CURRENT-FILTER / 投递筛选查询与状态双向绑定、apply/reset转发 |
-| apps/web/src/components/PlatformNotificationManagement.vue#ae1971e3fd4a8474.1 | 77 | event-binding | PN57-MANAGEMENT-CURRENT-NOTIFICATION-PAGE / 投递分页变化转发 |
+| apps/web/src/components/PlatformNotificationManagement.vue#70cfd76c23fd89d4.1 | 62 | event-binding | PN57-MANAGEMENT-CURRENT-FILTER / 投递筛选查询与状态双向绑定、apply/reset转发 |
+| apps/web/src/components/PlatformNotificationManagement.vue#ae1971e3fd4a8474.1 | 76 | event-binding | PN57-MANAGEMENT-CURRENT-NOTIFICATION-PAGE / 投递分页变化转发 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformNotificationManagement.vue | 7cced021643a3af6a23a07f8afca71d943cabcd13cf963d97ac3b698a3dfe2e8 |
+| apps/web/src/components/PlatformNotificationManagement.vue | 3529c6d00aa8a61ff693eb08c745f75fd403a18d2323356fe2e9324b868590ea |
 
 上述映射是Vue源码静态边界，不证明父级API、真实发送/投递、幂等审计、角色权限或生产行为。
 
@@ -420,12 +420,12 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/PlatformManagementCenter.vue#3e86a7a4cbf4b231.1 | 461 | event-binding | PM-CURRENT-GENERIC-FILTER-WIRING / 旧通用域过滤器的apply→load、reset→resetGenericFilters与query/status受控接线 |
-| apps/web/src/components/PlatformManagementCenter.vue#5b14488b26b010e3.1 | 566 | event-binding | EMAIL-CURRENT-EDITOR-WIRING / 邮件域编辑器关闭清空局部编辑态、保存转发给父级saveMessage |
+| apps/web/src/components/PlatformManagementCenter.vue#3e86a7a4cbf4b231.1 | 458 | event-binding | PM-CURRENT-GENERIC-FILTER-WIRING / 旧通用域过滤器的apply→load、reset→resetGenericFilters与query/status受控接线 |
+| apps/web/src/components/PlatformManagementCenter.vue#5b14488b26b010e3.1 | 563 | event-binding | EMAIL-CURRENT-EDITOR-WIRING / 邮件域编辑器关闭清空局部编辑态、保存转发给父级saveMessage |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformManagementCenter.vue | 33eeaae57a3d16bbaabd216b90fbb49fad17e4e4a48be7c6c479ee464a008b00 |
+| apps/web/src/components/PlatformManagementCenter.vue | 6835fcf831099e531e9d86c3e9a39ed2c8ef827e28c000d964a83fa71398baeb |
 
 ## 13. PlatformNotificationFacts 当前目录链接（2026-09-24）
 
@@ -433,12 +433,12 @@ P63额外只读内存检查直接转译当前TypeScript，不读取可能陈旧d
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/PlatformNotificationFacts.vue#9c897f6109cc18aa.1 | 83 | control | PN57-FACTS-CURRENT-PREFERENCES / 导航至已有个人中心 `/me` 查看通知偏好 |
-| apps/web/src/components/PlatformNotificationFacts.vue#b57765191bc5cdc3.1 | 97 | control | PN57-FACTS-CURRENT-GOVERNANCE / 导航至已有平台规则总览 `/platform-admin/governance` |
+| apps/web/src/components/PlatformNotificationFacts.vue#9c897f6109cc18aa.1 | 81 | control | PN57-FACTS-CURRENT-PREFERENCES / 导航至已有个人中心 `/me` 查看通知偏好 |
+| apps/web/src/components/PlatformNotificationFacts.vue#b57765191bc5cdc3.1 | 95 | control | PN57-FACTS-CURRENT-GOVERNANCE / 导航至已有平台规则总览 `/platform-admin/governance` |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformNotificationFacts.vue | 35db0f9393a0d21154ddd3a0b3d6da4077fe1c47d3408c878cdd1d53ff7ebd6e |
+| apps/web/src/components/PlatformNotificationFacts.vue | 0b9ad7084f4d4fa94143634a692820ec830caa90a6a314249213cc49e2a93ad7 |
 
 ## 14. PlatformNotificationOperations 当前规则导航（2026-09-24）
 

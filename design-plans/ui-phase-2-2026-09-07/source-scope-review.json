@@ -6,18 +6,18 @@
   "sourceFingerprint": "1e0395e304f4a54ff6522d9b195f0056618e3404cffec35542d189cb1cb9506e",
   "sources": {
     "apps/web/src/components/ApiFoundation.vue": "8329bdc20aa1d9f905c11ab81bce0ca1281a295b5d5732f16aeb65a0f2ea7b32",
-    "apps/web/src/components/AuditSecurityCenter.vue": "49e2dfcdc9e12cd7efcc7311b259daffb4fbb703187f2c1a026acabcb5a87a80",
-    "apps/web/src/components/AuthorizationCenter.vue": "accb7cbfe2f0dc35466a81de506d0ca60223db49f13fa32ebd40ba38ee038920",
+    "apps/web/src/components/AuditSecurityCenter.vue": "24a7afb0f57338733d49b69b7885c24c0295bf9db0213f286c137c1e8f5bec52",
+    "apps/web/src/components/AuthorizationCenter.vue": "7268df0ab334cf8b1b86e06443c9814bd25a83c5dea7ed5aa1c6c3a1f305ee92",
     "apps/web/src/components/DeploymentFoundation.vue": "8298a3e984f49ab5a7bcf4799dcfe4348f66c25bea65ca335a7eb233c2aa36a8",
     "apps/web/src/components/FileAuditFoundation.vue": "430edf42d733087abe6628a89214516d17b5afc8cc921ce148b7003f3392b184",
     "apps/web/src/components/MySqlFoundation.vue": "b7d39ddfda7ddcd69ed1ca77290b074846b80acb933e7cdf1ef4467f0e3e73f3",
-    "apps/web/src/components/OpportunityMobileShell.vue": "093aafdd1b27c39b89b8fac76aa90f9ac61337bd062607a51800b82c3938f934",
+    "apps/web/src/components/OpportunityMobileShell.vue": "2f516d0e6c2d01f806531894db5c211f3b9c368bc73e2073f7e0460322959b62",
     "apps/web/src/components/RedisFoundation.vue": "c39e3eecfad2441d0ca0bf157d59c7b507dbeb709051b39de7fded1982da4dea",
-    "apps/web/src/components/ResourceGrantCenter.vue": "80a3164ccef4a3c2f0e547f01ea0789c7f0c6b50f07858e07a2721ca8e196970",
-    "apps/web/src/App.vue": "e8ed64e10e641a7988c999c3965c917d4640cd3a4eab213b8f23131641bac531",
-    "apps/web/src/components/NavigationShell.vue": "6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b",
+    "apps/web/src/components/ResourceGrantCenter.vue": "420948e6e4028d4f84c2995e7d92ec5127b09a7bf1a00cb917ffbd34d5739f18",
+    "apps/web/src/App.vue": "df9ff52c97017408361f35cb947ee6a2935ecba89d38818ce12e1cdf2b12fea2",
+    "apps/web/src/components/NavigationShell.vue": "596cef4389d9ecf77b4eb433d0954031880a962ec0346c9455cc0c4790c5f933",
     "apps/web/src/router.ts": "67dc541e1856fd5bd30688f9bf64d9e32d66491bb9a1a19d8ce5ef81679162f4",
-    "config/route-catalog.json": "eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b"
+    "config/route-catalog.json": "b7a590249385ae35adbd413ef72e1be03b88b09cbee90ad82ca5bbf0604dfa93"
   },
   "limitations": [
     "Development view selection is gated in App.selectedView; requestedInternalView itself only parses the query.",

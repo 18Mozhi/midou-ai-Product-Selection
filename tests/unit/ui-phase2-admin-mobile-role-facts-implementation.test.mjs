@@ -1,3 +1,5 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
 import { adminHistoricalCapture } from "../../scripts/lib/ui-phase2-admin-historical-capture.mjs";
 import assert from "node:assert/strict";
@@ -90,7 +92,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
       if (mode === "baseline")
         assert.equal(hash(historicalAdminRoleFactsSource(file, source)), sha, file);
       else if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, source, sha);
-      else assert.equal(hash(source), sha, file);
+      else assertCaptureSource(file, source, sha, file);
       assert.ok(!file.includes("-preview.css"));
     }
     assert.deepEqual(
@@ -211,7 +213,12 @@ test("historical role-facts stage appends only scoped CSS; original controls/res
 });
 
 test("current P44 comparison CSS expands exactly to the complete role-facts implementation", () => {
-  const palette = postcss.parse(read("apps/web/src/design/platform-admin-mobile-tokens.css"));
+  const palette = postcss.parse(
+    beforePublishedPresentation(
+      "apps/web/src/design/platform-admin-mobile-tokens.css",
+      read("apps/web/src/design/platform-admin-mobile-tokens.css"),
+    ),
+  );
   const values = new Map();
   palette.walkDecls((decl) => {
     assert.match(decl.prop, /^--so-admin-mobile-/);
@@ -219,7 +226,10 @@ test("current P44 comparison CSS expands exactly to the complete role-facts impl
     values.set(decl.prop, decl.value);
   });
   assert.equal(values.size, 11);
-  const source = read(adminRoleFactsRevision.file);
+  const source = beforePublishedPresentation(
+    adminRoleFactsRevision.file,
+    read(adminRoleFactsRevision.file),
+  );
   const prefix = '@import "../design/platform-admin-mobile-tokens.css";\n\n';
   assert.ok(source.startsWith(prefix));
   const expanded = source

@@ -169,7 +169,7 @@ export async function buildOrganizationProfileDesignData(repo) {
     true,
   );
   assert.equal(failedRead.noticeKind.value, "error");
-  assert.match(failedRead.notice.value, /已保存并写入审计/);
+  assert.match(failedRead.notice.value, /组织资料已保存/);
   assert.match(failedRead.notice.value, /不要再次提交/);
   assert.deepEqual(plain(failedRead.profileSaveReadFailure.value), {
     writeRequestId: "synthetic-write-accepted",

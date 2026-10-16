@@ -63,7 +63,7 @@ const definitions = [
   },
   {
     actionId: "SC50-EDITOR-DIALOG",
-    candidates: ["f9aa4f7cabe04961.1", "efc208b3291dd2c0.1"],
+    candidates: ["f32f303a69cd2f76.1", "6382b6ffc02c91ce.1"],
     label: "承载资产、轮换、档案与登录编辑窗",
     kind: "local",
     sourceContractKeys: [
@@ -78,7 +78,7 @@ const definitions = [
   },
   {
     actionId: "SC50-ASSET-FORM",
-    candidates: ["fcfad5327d89010f.1"],
+    candidates: ["ceb36c98ed59e41f.1"],
     label: "校验并提交凭证创建或轮换表单",
     kind: "write",
     sourceContractKeys: ["SC50-ASSET/ROTATE / 字段无效反馈、Tab循环与既有保存提交"],

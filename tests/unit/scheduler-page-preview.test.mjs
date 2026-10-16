@@ -25,9 +25,9 @@ test("P70 C review separates providers from resource and receipt evidence", () =
     assert.ok(template.includes(id), id);
   for (const id of ["p70-evidence", "p70-receipts", "p70-leases", "p70-trend"])
     assert.ok(evidence.template.content.includes(id), id);
-  assert.match(template, /宝塔受管/);
+  assert.match(template, /只允许通过宝塔/);
   assert.match(evidence.template.content, /不授权自动删除/);
   const css = readFileSync("apps/web/src/crawler-scheduler-c.css", "utf8");
   assert.match(css, /\.crawler-scheduler--c/);
-  assert.match(css, /\.role-sidebar/);
+  assert.doesNotMatch(css, /\.role-sidebar/);
 });

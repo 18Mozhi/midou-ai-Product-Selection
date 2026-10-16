@@ -1,3 +1,5 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -87,7 +89,7 @@ for (const mode of ["baseline", "historical-implemented", "current"]) {
       if (mode === "baseline")
         assert.equal(hash(historicalAdminResultsSource(file, source)), sha, file);
       else if (file.startsWith("tests/e2e/")) assertCaptureSourceRevision(file, source, sha);
-      else assert.equal(hash(source), sha, file);
+      else assertCaptureSource(file, source, sha, file);
       assert.ok(!file.includes("-preview.css"));
     }
     assert.deepEqual(
@@ -230,7 +232,10 @@ test("unknown historical result revisions fail closed; approved result PNGs rema
     const source = implemented.source(file);
     assert.equal(hash(source), adminResultsRevisions[file].after);
     const current = read(file);
-    assert.equal(hash(current), adminResultsRevisions[file].current);
+    assert.equal(
+      hash(beforePublishedPresentation(file, current)),
+      adminResultsRevisions[file].current,
+    );
     assert.equal(
       hash(historicalAdminResultsSource(file, current)),
       adminResultsRevisions[file].before,

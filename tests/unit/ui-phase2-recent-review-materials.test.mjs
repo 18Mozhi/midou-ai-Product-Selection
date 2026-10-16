@@ -135,7 +135,32 @@ test("all fourteen packets retain original506 and add37 images without promoting
     await readFile("design-plans/ui-phase-2-2026-09-07/review-recent-materials.js", "utf8"),
     box,
   );
-  assert.deepEqual(JSON.parse(JSON.stringify(box.window.SCOUTOPS_PHASE2_RECENT_MATERIALS)), result);
+  const saved = JSON.parse(JSON.stringify(box.window.SCOUTOPS_PHASE2_RECENT_MATERIALS));
+  assert.equal(
+    hash(await readFile("design-plans/ui-phase-2-2026-09-07/review-recent-materials.js")),
+    "ba4e3f206239410be7d7324a035692fcabbaabefaf32b233d8cd7a8a9f3d64bb",
+  );
+  const capturedFields = (value) => ({
+    ...value,
+    materials: value.materials.map(({ sourceStatus, sourceDifferences, ...material }) => material),
+  });
+  assert.deepEqual(capturedFields(saved), capturedFields(result));
+  for (const material of result.materials) {
+    assert.equal(
+      material.sourceStatus,
+      material.sourceDifferences.length
+        ? "historical-source-differs"
+        : "source-matched-at-index-build",
+    );
+    for (const difference of material.sourceDifferences) {
+      const bytes = await readFile(difference.file);
+      assert.ok(
+        [hash(bytes), hash(bytes.toString("utf8").replaceAll("\r\n", "\n"))].includes(
+          difference.actual,
+        ),
+      );
+    }
+  }
   assert.ok(result.materials.every((m) => m.approval === "not-full-page-acceptance"));
 });
 

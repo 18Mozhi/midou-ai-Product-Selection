@@ -791,7 +791,7 @@ paths:
   /me/landing:
     get:
       summary: Resolve the authenticated user's preferred application landing
-      description: Platform administrators land in the platform console without an organization context. Otherwise the active organization context selects the organization-admin or member workspace. Users with an active membership but no selected context are sent to context selection; accounts with no active organization membership land in the account center, where account-level profile and security functions remain available without granting business-data access. Every resolution writes an authorization decision.
+      description: Restores a still-authorized current or most recent organization/workspace to the authenticated session; without history, a sole active organization uses its active default or sole workspace. An active selected membership lands in /home, including organization and platform administrators. Platform-only accounts retain their console fallback. Ambiguous multiple organizations without history retain context selection; accounts without membership land in the account center. Restored selections and every authorization resolution are audited; response is private, no-store.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":
@@ -868,7 +868,7 @@ paths:
   /me/home-dashboard:
     get:
       summary: Read the current user's scoped automatic-selection control dashboard
-      description: Requires an active selected context and task:read. The response derives automatic-selection configuration, collection timing, rule-created candidates, evidence-backed recommendations and human adoption counts from persisted organization-and-workspace facts. Secondary actions merge active tasks assigned to the user, pending approval nodes assigned to the user, and pending opportunities owned by or created unassigned by the user; stored projection items remain capability and audience scoped. Health items must target the authenticated user.
+      description: Requires an active selected context and task:read. The response derives automatic-selection configuration, collection timing, rule-created candidates, evidence-backed recommendations and human adoption counts from persisted organization-and-workspace facts. Secondary actions merge active tasks assigned to the user, pending approval nodes assigned to the user, and pending opportunities owned by or created unassigned by the user; stored projection items remain capability and audience scoped. Health items must target the authenticated user. An enabled rule whose latest task has blocked or failed subqueries, or a dead_letter/blocked_robots/blocked_login status, reports automatic_selection.state=attention. The active visible web dashboard refreshes this read every five seconds and on focus; leaving the page stops background reads.
       security: [{ HttpOnlySession: [] }]
       responses:
         "200":
@@ -9306,6 +9306,7 @@ components:
         trace_id: { type: string }
     TaskStatus:
       type: string
+      description: Zero available results use succeeded_empty only when there are no failed or blocked subqueries. A zero-result task containing failures or source blocks ends completed_with_warnings with insufficient coverage and the original per-source reasons retained.
       enum:
         [
           draft,

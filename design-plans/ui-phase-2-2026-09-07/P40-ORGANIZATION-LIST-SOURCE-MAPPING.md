@@ -28,8 +28,8 @@
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e400286c7cd59e44.1 | PA40-OVERVIEW-TABS-OUT · overview分支二级导航，组织目录路由不渲染 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 9c9141422bfd2c11.1 | PA-REFRESH · P39账号概览的记录区按钮；P40组织列表路由不渲染 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | 9c9141422bfd2c11.2 | PA-REFRESH · P40组织记录区标题栏刷新，refreshing/busy时禁用 |
-| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 3c4dea26ac48746f.1 | PA40-FILTER-DRAWER · 移动筛选抽屉容器，不另计筛选请求 |
-| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 128119f3fb311b09.1 | PA-FILTER · 组织查询表单提交至父级applyFilters |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | a93a93cd1300da76.1 | PA40-FILTER-DRAWER · 移动筛选抽屉容器，不另计筛选请求 |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 75a75712d75441cb.1 | PA-FILTER · 组织查询表单提交至父级applyFilters |
 | apps/web/src/components/PlatformAccountDirectoryFilters.vue | e9658d470d4cbeaf.1 | PA-FILTER · 搜索按钮提交同一组织查询表单 |
 | apps/web/src/components/PlatformAccountDirectoryFilters.vue | 20080e701de7f5cb.1 | PA-RESET · 重置query/status；无筛选或读取中禁用 |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | e064834276405c23.1 | PA40-FILTER-WIRING · query/status绑定和筛选/重置事件接至父级既有状态与处理器 |

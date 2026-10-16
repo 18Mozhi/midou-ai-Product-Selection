@@ -188,6 +188,25 @@ export class MySqlTenancyRepository implements TenancyRepository {
     );
     return rows.map(asTeam);
   }
+  private async validContext(userId: string, sessionId?: string): Promise<SessionContext | null> {
+    const [rows] = await this.pool.query<RowDataPacket[]>(
+      "SELECT c.* FROM user_session_contexts c " +
+        "JOIN organizations o ON o.id=c.organization_id AND o.status='active' " +
+        "JOIN workspaces w ON w.id=c.workspace_id AND w.organization_id=c.organization_id AND w.status='active' " +
+        "JOIN memberships m ON m.organization_id=c.organization_id AND m.user_id=c.user_id AND m.status='active' " +
+        "WHERE c.user_id=? " +
+        (sessionId ? "AND c.session_id=? " : "") +
+        "ORDER BY c.selected_at DESC,c.session_id ASC LIMIT 1",
+      sessionId ? [userId, sessionId] : [userId],
+    );
+    return rows[0] ? (rows[0] as SessionContext) : null;
+  }
+  async findContext(sessionId: string, userId: string) {
+    return this.validContext(userId, sessionId);
+  }
+  async findLatestContext(userId: string) {
+    return this.validContext(userId);
+  }
   async saveContext(context: SessionContext, audit: TenancyAuditEvent) {
     await withTransaction(this.pool, async (connection) => {
       await connection.query(

@@ -15,7 +15,7 @@
 | 5ae31bc55551b1dc.1 | P34首次500恢复转发，P31不渲染该分支 | EX-P34-FIRST-FAILURE |
 | 08a59be6f793cde6.1 | P34首次429恢复转发，P31不渲染该分支 | EX-P34-FIRST-FAILURE |
 | ca4fa7a0220842a9.1 | P34审批恢复反馈reload转发至现有load()，P31不渲染审批分支 | EX-P34-READ-RECOVERY |
-| d6b520278ab3dd57.1、1cbd108c64b5230c.1、5878e30377f290ae.1、bd677fb7d2212a2b.1 | summary资料三位置及只读保存/读取追踪披露排除 | EX-P29-PROFILE |
+| e93301a7ec700ce7.1、1cbd108c64b5230c.1、ed75758087c9a4b8.1、bd677fb7d2212a2b.1 | summary资料三位置及只读保存/读取追踪披露排除 | EX-P29-PROFILE |
 | 6a563eeaa67fea90.1 | members事件转发排除 | EX-P30-MEMBERS |
 | b09d7923228aabe6.1 | 六事件转发八目标；父busy或refreshing均传子busy | WIRE-ROLES |
 | 773c2105d1d0d008.1、35233f910d34fac6.1、ab6191688d424055.1 | 通用原因调用及确认/取消转发；本页仅撤销发起 | D-OG-REASON |
@@ -31,7 +31,7 @@
 | be3f3fa4fcf2fb2c.1 | 清能力query/group，不清角色查询 | role.capability.filter.reset |
 | 5235116f7947ac74.1 | 清成员范围query/filter | role.scope.filter.reset |
 | 670d77735585203d.1 | 创建授权/取消创建切换表单可见；尝试后错误由现有草稿值即时派生 | grant.create.form.toggle |
-| 29016e256374347e.1、b75d50f1f8f0cc17.1 | 原生表单无效事件拦截提交、标记尝试态并聚焦首个无效字段；有效表单与按钮沿用同一既有createGrant提交路径，busy或无actions禁按钮 | grant.create.submit |
+| 368ab9e71467bdc8.1、b6a3974b194ba639.1 | 原生表单无效事件拦截提交、标记尝试态并聚焦首个无效字段；有效表单与按钮沿用同一既有createGrant提交路径，busy或无actions禁按钮 | grant.create.submit |
 | 4aa69073e388c5f4.1 | 受控资源类型选择项 | grant.create.type.change |
 | 8bd3f7b2e5dcb44f.1 | 状态筛选重置page1并重读 | grant.status.select.{status} |
 | a162032f86484b89.1 | 当前页本地选择，watch可能重置延期草稿 | grant.select.{grantId} |

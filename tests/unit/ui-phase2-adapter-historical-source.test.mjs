@@ -1,3 +1,7 @@
+import {
+  beforePublishedPresentation,
+  publishedPresentationRevisions,
+} from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
@@ -21,7 +25,11 @@ const hash = (s) => createHash("sha256").update(s).digest("hex");
 
 test("P47 read-error inverse removes only its exact approved current presentation change", () => {
   const latest = read(files.component);
-  assert.equal(hash(latest), readErrorRevision.approvedCurrent);
+  assert.equal(hash(latest), publishedPresentationRevisions[files.component].current);
+  assert.equal(
+    hash(beforePublishedPresentation(files.component, latest)),
+    readErrorRevision.approvedCurrent,
+  );
   assert.equal(hash(beforeAdapterReadError(latest)), readErrorRevision.before);
   const source = execFileSync(
     "git",
@@ -69,7 +77,11 @@ test("P47 archive resolver recovers only the two complete verified capture revis
 });
 test("P47 archive resolver restores the exact 37-role palette without accepting unknown colors", () => {
   const source = read(files.palette);
-  assert.equal(hash(source), p47PaletteRevisions.approvedCurrent);
+  assert.equal(hash(source), publishedPresentationRevisions[files.palette].current);
+  assert.equal(
+    hash(beforePublishedPresentation(files.palette, source)),
+    p47PaletteRevisions.approvedCurrent,
+  );
   const mobileSource = execFileSync(
     "git",
     ["show", `${p47PaletteRevisions.mobileCommit}:${files.palette}`],

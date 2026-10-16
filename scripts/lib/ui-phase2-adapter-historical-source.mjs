@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -36,6 +37,8 @@ const mobileColors =
 // Remove only later approved presentation layers before applying older exact inverses.
 export function beforeAdapterP47ReadAndTableTools(source) {
   source = source.replaceAll("\r\n", "\n");
+  source = beforePublishedPresentation(p47HistoricalSourceFiles.component, source);
+
   if ([p47ReadErrorCurrent, readErrorRevision.approvedCurrent].includes(hash(source)))
     source = beforeAdapterReadError(source);
   if (hash(source) === tableToolsRevision.current) source = beforeAdapterTableTools(source);
@@ -54,6 +57,7 @@ export function p47HistoricalSource(file, source, stage) {
     return stage === "pre-refresh" ? beforeAdapterRefreshFocus(preMobile) : preMobile;
   }
   if (file === p47HistoricalSourceFiles.palette) {
+    source = beforePublishedPresentation(file, source);
     if (hash(source) === p47PaletteRevisions.approvedCurrent) {
       source = execFileSync("git", ["show", `${p47PaletteRevisions.mobileCommit}:${file}`], {
         encoding: "utf8",

@@ -34,10 +34,10 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | --- | --- |
 | apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
-| apps/web/src/components/PlatformAdminComparisonMobile.css | 03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae |
-| apps/web/src/components/PlatformAdminDirectoryMobile.css | ad2e47e9e4030dd65c40c6567b0443c5fd809d31eadd0768f3e5e277766982ea |
-| apps/web/src/design/platform-overlay-tokens.css | 1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5 |
-| apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | 49f3822fd8716bd5905f5a29fb877c897a6a29d77cab1a7a4e3c2fe361f6d5f6 |
+| apps/web/src/components/PlatformAdminDirectoryMobile.css | 624273e72a9af1c981c5e26f1ba6526ec603266a77002e35ceceffd2bc6cf273 |
+| apps/web/src/design/platform-overlay-tokens.css | eb00768ad144315547668d595ef081e216729e6c36ab81aed5e86beff339bf90 |
+| apps/web/src/design/platform-admin-mobile-tokens.css | 743fb75106f17d85714bfdb0f066c1213bc6726c765ee71a547a7e83cfddcc8e |
 
 ## 当前41个来源的LF指纹（2026-10-04）
 
@@ -45,19 +45,19 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformDashboard.vue | 902ade12da39276dd7151410ba8bc1058fc4deef3bf941c8c6e502769028391e |
-| apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
-| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 0f790cd1b71f949663df7ae516f6fd0811c2199643737cd713bfb10598ea63e8 |
+| apps/web/src/components/PlatformDashboard.vue | dd3fee43d66fe14bbd83c66bd3b1b4f369468ef15f4da66210faa526c9742d3a |
+| apps/web/src/components/PlatformAccountCenter.vue | d1dd7edb1a0551a88b1fb250e7b8b1e2d23cfbae8d2228cb6f62553e8e2904aa |
+| apps/web/src/components/PlatformAccountDirectoryFilters.vue | 6fcae623a9d39e389662185204fd43a38ccf9b30db06d2fcbc1490ef0420062f |
 | apps/web/src/components/PlatformAccountDirectoryWorkspace.vue | d15972da928a66b0f41eafb7d29d3349ec91d76d2d26fee92ed52f2f35380051 |
 | apps/web/src/components/PlatformAccountGlobalRail.vue | cd78737a45e97087bb7c90df185296bf5f5b7483053a9d66f6e758823e9b738e |
 | apps/web/src/components/PlatformOrganizationRecords.vue | 392654a2d2e17045725a98dcf28d25c7381a024c54ad47063ed6035c9a8f065a |
 | apps/web/src/components/PlatformAdminRecords.vue | 74cf97193f666c9a712ab12e69e450c9cf59297a12fe9c9b8e350aa74560b297 |
 | apps/web/src/components/OrganizationCreationWizard.vue | 11c33345a07cfcc6bf64142b14478e02fa8976c33c8b835df892a7bbb75c4314 |
-| apps/web/src/components/PlatformOrganizationDetailDialog.vue | 47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43 |
-| apps/web/src/components/PlatformRoleComparison.vue | a043421e37ecc7d82f87854b06874bf4874cf1f3786e8917b9a85b4166268309 |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue | fa73cec1f1bd78462a06a87e6c55cc575e05c491a258da661f8c985c152d7a57 |
+| apps/web/src/components/PlatformRoleComparison.vue | 510cc00985908fbb541961c303bee3a9934f59a1be99c561ed87082899dff54c |
 | apps/web/src/components/PlatformAccountDialogs.vue | e8cddf1d9b1ee43160997c6946d1fb1a5aca9bed2a66b6b1e302f3d3cf88b0ec |
 | apps/web/src/components/PlatformUserRecords.vue | a0c8ac35238ff4541ef8f699593d15c8f8ae9c2b85c87c1896f08689d668e228 |
-| apps/web/src/components/PlatformUserDetailDialog.vue | 43637fe74837f2c979960a198c1419c13d2d8895c83ab1e8bde7b67c3079e32b |
+| apps/web/src/components/PlatformUserDetailDialog.vue | efccee8bdf9b4fdb1e8b1b9e2386a049bfbcd38bed1d3cae718be980a6eb63e6 |
 | apps/web/src/components/PlatformUserMembershipForm.vue | 553a0f8ac7e42ac7665785f8701a64c41dec7469c2380e3dd087a11ad7e6f644 |
 | apps/web/src/components/ResponsiveDataView.vue | e848f34bb7500017279b5e39db5b29bad29d222183923cc63ffce164c44b40c7 |
 | apps/web/src/components/ResponsiveFilterDrawer.vue | 5eff0a117552e22bf31a0d3761b0613428c777721b8e230b10e76bab39ee0a5f |
@@ -67,8 +67,8 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/web/src/use-platform-user-detail.ts | 8e07ab5f36fb989082d43cda2082e2cafdedadba8ec5c5f5ba3e055859e39e8e |
 | apps/web/src/platform-account-types.ts | 7c78cdfd603d8419ee18d7bd5feb12b1d40cbb7bdf102aeaf17a919a7003afe2 |
 | apps/web/src/api-client.ts | 953c3da783121a797a86ff82e03a968067ae2c694a4fb5f883187b04569fa9ff |
-| apps/web/src/components/NavigationShell.vue | 6ff17f60af1ebfd7f3edf3f3f8e679c812f8fb9c7f07218e9138df9cb811e86b |
-| apps/api/src/authorization-routes.ts | f670a9e21650e2fedd3ea691049de840cb2a47c9c6add471c38eb7e71e208975 |
+| apps/web/src/components/NavigationShell.vue | 596cef4389d9ecf77b4eb433d0954031880a962ec0346c9455cc0c4790c5f933 |
+| apps/api/src/authorization-routes.ts | 83b506243defb771e5e659e4c42e52a242c300f08033c89cc9885b4aa3c4b920 |
 | apps/api/src/platform-account-routes.ts | 79c273a1492f2cc157c72d82ac6ab2b8a950ccb789696c2329d7a6206fefe226 |
 | apps/api/src/platform-account-service.ts | 189fb1cbcafdc119da64433ac1acd9735d4f1a296b2a243c250733df2b08966d |
 | apps/api/src/mysql-platform-account-repository.ts | 96cc13077b24ba17643adc9b13ca14cd2e71ea49d3e13d3abceb7b86ed7b87c5 |
@@ -79,13 +79,13 @@ PlatformAccountCenter 的组织操作、创建归属及P44手机样式四个新�
 | apps/api/src/mysql-platform-dashboard-collection-metrics.ts | dc37e16179b6c8d57d2b6ffcb23fcfce7d44d950bbfc9263104be1d6d74c438d |
 | apps/api/src/mysql-platform-dashboard-risk-metrics.ts | e49abd8f317094b4b34b5fb31f8cb47e9d3cc1dc9cffcd945035c8ecd648f094 |
 | apps/api/src/mysql-platform-dashboard-storage-metrics.ts | 16b1b6b5e04ae7b3f4438914cd88b7e985d4a836db42c6e6c1855567de0ca808 |
-| config/route-catalog.json | eb7071f2a0ced2733110ff51e4852757a8eea5757fe31d399003be5e63e6917b |
+| config/route-catalog.json | b7a590249385ae35adbd413ef72e1be03b88b09cbee90ad82ca5bbf0604dfa93 |
 | apps/web/src/use-platform-organization-actions.ts | 233d53f196475f976422f7e7ee6867eba3550c89118cee142e500db0069391ae |
 | apps/web/src/use-user-creation-owner.ts | cda28435c0fc6633efd72a0ba27f204f617c70dc70cbb242da96650571bde39e |
-| apps/web/src/components/PlatformAdminComparisonMobile.css | 03de4183b646dcb09140a4b9028c0e3d0a6f1d8b05f2dad43f5d6790e51cf3ae |
-| apps/web/src/components/PlatformAdminDirectoryMobile.css | ad2e47e9e4030dd65c40c6567b0443c5fd809d31eadd0768f3e5e277766982ea |
-| apps/web/src/design/platform-overlay-tokens.css | 1ac279a72962b120c1f5153a9abb30e258e84be9c1519df1b7944f7190dd69b5 |
-| apps/web/src/design/platform-admin-mobile-tokens.css | 3c878a3060007abd8bb51a0bf626833a9e8ac7ab4a62c3fcbcd587e9c52b7e68 |
+| apps/web/src/components/PlatformAdminComparisonMobile.css | 49f3822fd8716bd5905f5a29fb877c897a6a29d77cab1a7a4e3c2fe361f6d5f6 |
+| apps/web/src/components/PlatformAdminDirectoryMobile.css | 624273e72a9af1c981c5e26f1ba6526ec603266a77002e35ceceffd2bc6cf273 |
+| apps/web/src/design/platform-overlay-tokens.css | eb00768ad144315547668d595ef081e216729e6c36ab81aed5e86beff339bf90 |
+| apps/web/src/design/platform-admin-mobile-tokens.css | 743fb75106f17d85714bfdb0f066c1213bc6726c765ee71a547a7e83cfddcc8e |
 
 ## 运行与失败边界
 

@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
@@ -66,7 +67,7 @@ test("P48 configuration-return copy preserves saved, partial, and conflict facts
   assert.equal(configurationReturnCopy.conflict.success, "已读取最新配置");
   const parentReview = previewProviderSourceConfigurationReturnParent(read(parent));
   assert.ok(parentReview.includes("刚才的写入不会撤销"));
-  assert.ok(parentReview.includes("不会把旧内容当作最新配置"));
+  assert.ok(parentReview.includes("当前显示上次读取的配置"));
   assert.ok(parentReview.includes("return true"));
   assert.ok(parentReview.includes("return false"));
 });
@@ -106,7 +107,7 @@ test("P48 configuration-return evidence binds acknowledgement, reread, recovery,
   assert.equal(evidence.screenshots.length, 35);
   assert.ok(Object.keys(evidence.sourceHashes).length >= 50);
   for (const [file, expected] of Object.entries(evidence.sourceHashes))
-    assert.equal(hash(read(file)), expected, file);
+    assertCaptureSource(file, read(file), expected, file);
   assert.deepEqual(
     readdirSync(root).sort(),
     ["evidence.json", "index.html", ...evidence.screenshots.map((shot) => shot.file)].sort(),

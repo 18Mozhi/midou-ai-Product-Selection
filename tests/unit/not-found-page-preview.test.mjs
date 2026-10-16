@@ -18,6 +18,6 @@ test("P73 C view removes old orbital decoration", async () => {
     reviewed.lastIndexOf("</template>"),
   );
   assert.doesNotMatch(template, /not-found-orbit|not-found-satellite/);
-  assert.match(template, /公开兜底 \/ 不读业务数据/);
+  assert.doesNotMatch(reviewed, /apiJson\(|fetch\(/);
   assert.match(reviewed, /<style scoped>/);
 });

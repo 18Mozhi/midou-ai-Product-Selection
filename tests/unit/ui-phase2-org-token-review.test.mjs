@@ -69,14 +69,14 @@ test("P36 reason forwards target only rotate/revoke and other-page origins remai
   changed.actions.find((a) => a.actionId === "W-K-REASON").forwardBindings[0].handler = "load()";
   assert.throws(() => validateActionReview(changed, context), /forward event omitted or changed/);
 });
-test("P36 all seven child models,six excluded models,six structures and nine contexts are registered", () => {
+test("P36 all seven child models,six excluded models,four current structures and seven contexts are registered", () => {
   assert.deepEqual(validateReviewSurfaces(build().surfaceReview, inputs), {
     callerFiles: 2,
     localModelBindings: 13,
     reviewedInputBindings: 13,
-    sourceCallerContainers: 6,
-    callerContainers: 6,
-    consumerVariants: 9,
+    sourceCallerContainers: 4,
+    callerContainers: 4,
+    consumerVariants: 7,
     runtimeAcceptance: "unproven",
   });
   assert.equal(build().surfaceReview.inputs.filter((f) => f.file === childFile).length, 7);
@@ -130,7 +130,7 @@ test("P36 every control/field/composition/implementation image is bound without 
     localFields: 7,
     nonModelGroups: 1,
     sharedReasonContexts: 2,
-    callerContainers: 6,
+    callerContainers: 4,
     controlImages: 354,
     fieldImages: 196,
     implementationImages: 10,

@@ -60,7 +60,7 @@ const definitions = [
     "EX-P29-PROFILE",
     "组织资料分支排除",
     "excluded",
-    ["d6b520278ab3dd57.1", "1cbd108c64b5230c.1", "5878e30377f290ae.1"],
+    ["e93301a7ec700ce7.1", "1cbd108c64b5230c.1", "ed75758087c9a4b8.1"],
     ["OG-PROFILE-SAVE", "OG-PROFILE-LOGO浏览器有效性"],
     "summary专属，P30 view为members",
     "排除profile submit、Logo有效性和保存按钮，不扩大P29批准",

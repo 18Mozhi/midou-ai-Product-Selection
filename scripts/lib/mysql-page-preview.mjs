@@ -25,16 +25,17 @@ const once = (value, before, after) => {
 // Review-only transformation: the production script, request and lifecycle stay byte-for-byte intact.
 export function previewMysqlPage(input) {
   const source = input.replaceAll("\r\n", "\n");
-  if (source.includes('class="mysql-resilience mysql-resilience--c"'))
-    return once(
-      once(
-        source,
-        'class="mysql-resilience mysql-resilience--c"',
-        'class="mysql-resilience mysql-resilience--review"',
-      ),
-      '<aside class="p68-boundary"',
-      '<p class="p68-review-note">实际 Vue C 审核版 · 本地样例 · 未连接 MySQL 或执行恢复 · 尚未部署</p><aside class="p68-boundary"',
+  if (source.includes('class="mysql-resilience mysql-resilience--c"')) {
+    const reviewed = once(
+      source,
+      'class="mysql-resilience mysql-resilience--c"',
+      'class="mysql-resilience mysql-resilience--review"',
     );
+    return reviewed.replace(
+      /(<section\s+class="mysql-resilience mysql-resilience--review"[^>]*>)/,
+      '$1<p class="p68-review-note">实际 Vue C 审核版 · 本地样例 · 未连接 MySQL 或执行恢复 · 尚未部署</p>',
+    );
+  }
   const template = source.slice(
     source.indexOf("<template>") + 10,
     source.lastIndexOf("</template>"),

@@ -1,3 +1,4 @@
+import { beforePublishedPresentation } from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -47,7 +48,7 @@ export async function accountPairLifecyclePreview(read, sources) {
   const originals = {},
     transformed = {};
   for (const file of [...accountPairSupport, ...Object.keys(targets)]) {
-    const source = await capturedSource(read, file);
+    const source = beforePublishedPresentation(file, await capturedSource(read, file));
     assert.equal(
       hash(source),
       evidence.sourceHashes[file],
@@ -84,7 +85,7 @@ export async function accountPairLifecyclePreview(read, sources) {
           (file) => path.resolve(file).replaceAll("\\", "/") === id.replaceAll("\\", "/"),
         );
         if (!file) return null;
-        assert.equal(source.replaceAll("\r\n", "\n"), originals[file]);
+        assert.equal(beforePublishedPresentation(file, source), originals[file]);
         return { code: transformed[file], map: null };
       },
       transformIndexHtml(html) {

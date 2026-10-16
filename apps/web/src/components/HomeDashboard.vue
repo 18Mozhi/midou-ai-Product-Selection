@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, onBeforeUnmount, onMounted, reactive, ref } from "vue";
+import {
+  computed,
+  onBeforeUnmount,
+  onMounted,
+  onActivated,
+  onDeactivated,
+  reactive,
+  ref,
+} from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
 import HomeAutomationOverview from "./HomeAutomationOverview.vue";
 import UiStatePanel from "./UiStatePanel.vue";
@@ -85,6 +93,13 @@ const setupForm = reactive({
   recommendation_min_source_count: 1,
 });
 let loadGeneration = 0;
+let readController: AbortController | null = null;
+let active = false;
+let refreshTimer: ReturnType<typeof setTimeout> | null = null;
+let liveReadPending = false;
+const HOME_REFRESH_INTERVAL_MS = 5000;
+const refreshing = ref(false);
+const lastRefreshedAt = ref("");
 const total = computed(() =>
     data.value
       ? data.value.actions.length +
@@ -118,20 +133,27 @@ const failure = (kind: ApiFailureKind): State =>
       : kind === "blocked" || kind === "rate_limited"
         ? "blocked"
         : "error";
-async function load(options: { keepMutationFeedback?: boolean } = {}) {
+async function load(options: { keepMutationFeedback?: boolean; background?: boolean } = {}) {
+  readController?.abort();
+  const controller = new AbortController();
+  readController = controller;
   const generation = ++loadGeneration;
+  refreshing.value = true;
   if (!data.value) state.value = "loading";
-  rulesState.value = "loading";
-  rulesError.value = "";
-  rules.value = [];
+  if (!options.background || rulesState.value !== "ready") {
+    rulesState.value = "loading";
+    rulesError.value = "";
+    rules.value = [];
+  }
   actionHint.value = "";
   if (!options.keepMutationFeedback) mutationFeedback.value = "";
   try {
-    const response = await request<Summary>("/me/home-dashboard");
+    const response = await request<Summary>("/me/home-dashboard", { signal: controller.signal });
     if (generation !== loadGeneration) return;
     requestId.value = response.request_id;
     traceId.value = response.trace_id;
     data.value = response.data;
+    lastRefreshedAt.value = new Date().toLocaleTimeString("zh-CN");
     state.value =
       response.data.actions.length +
         response.data.changes.length +
@@ -140,17 +162,23 @@ async function load(options: { keepMutationFeedback?: boolean } = {}) {
         ? "ready"
         : "empty";
     try {
-      const ruleResponse = await request<Rule[]>("/trends/monitoring-rules");
-      if (generation !== loadGeneration) return;
-      rules.value = ruleResponse.data;
-      rulesState.value = "ready";
+      if (!options.background || rulesState.value !== "ready") {
+        const ruleResponse = await request<Rule[]>("/trends/monitoring-rules", {
+          signal: controller.signal,
+        });
+        if (generation !== loadGeneration) return;
+        rules.value = ruleResponse.data;
+        rulesState.value = "ready";
+      }
     } catch (error) {
+      if (controller.signal.aborted) return;
       if (generation !== loadGeneration) return;
       rulesState.value = "error";
       rulesError.value =
         error instanceof ApiClientError ? error.actionHint : "规则暂时无法读取，请稍后重试。";
     }
     if (
+      !options.background &&
       rulesState.value === "ready" &&
       canManageRules.value &&
       selection.value?.state === "not_configured" &&
@@ -158,7 +186,7 @@ async function load(options: { keepMutationFeedback?: boolean } = {}) {
     )
       setupOpen.value = true;
   } catch (error) {
-    if (generation !== loadGeneration) return;
+    if (controller.signal.aborted || generation !== loadGeneration) return;
     if (error instanceof ApiClientError) {
       requestId.value = error.requestId;
       traceId.value = error.traceId;
@@ -179,6 +207,12 @@ async function load(options: { keepMutationFeedback?: boolean } = {}) {
     rulesState.value = "error";
     rulesError.value = actionHint.value;
     if (!data.value) state.value = "blocked";
+  } finally {
+    if (generation === loadGeneration) {
+      refreshing.value = false;
+      if (active) scheduleRefresh();
+    }
+    if (readController === controller) readController = null;
   }
 }
 const keywordList = (value: string) =>
@@ -254,10 +288,49 @@ async function resumeRule(item: Rule | undefined) {
     setupBusy.value = false;
   }
 }
-onMounted(() => void load());
-onBeforeUnmount(() => {
+function scheduleRefresh() {
+  if (refreshTimer) clearTimeout(refreshTimer);
+  if (active && !["expired", "forbidden"].includes(state.value))
+    refreshTimer = setTimeout(() => void refreshLive(), HOME_REFRESH_INTERVAL_MS);
+}
+async function refreshLive() {
+  if (!active || liveReadPending) return;
+  if (document.visibilityState !== "visible" || setupBusy.value || refreshing.value) {
+    scheduleRefresh();
+    return;
+  }
+  liveReadPending = true;
+  try {
+    await load({ background: true, keepMutationFeedback: true });
+  } finally {
+    liveReadPending = false;
+  }
+}
+function resumeVisible() {
+  if (document.visibilityState === "visible") void refreshLive();
+}
+function activate() {
+  if (active) return;
+  active = true;
+  document.addEventListener("visibilitychange", resumeVisible);
+  window.addEventListener("focus", resumeVisible);
+  void load({ background: Boolean(data.value), keepMutationFeedback: Boolean(data.value) });
+}
+function deactivate() {
+  active = false;
   loadGeneration += 1;
-});
+  readController?.abort();
+  readController = null;
+  refreshing.value = false;
+  if (refreshTimer) clearTimeout(refreshTimer);
+  refreshTimer = null;
+  document.removeEventListener("visibilitychange", resumeVisible);
+  window.removeEventListener("focus", resumeVisible);
+}
+onMounted(activate);
+onActivated(activate);
+onDeactivated(deactivate);
+onBeforeUnmount(deactivate);
 </script>
 <template>
   <section class="home-dashboard" :data-state="state">
@@ -294,6 +367,18 @@ onBeforeUnmount(() => {
           <h2>选品控制台</h2>
         </div>
         <nav>
+          <div class="home-live-status" role="status" aria-live="off">
+            <span>{{
+              refreshing ? "正在更新" : lastRefreshedAt ? `已更新 ${lastRefreshedAt}` : "等待数据"
+            }}</span>
+            <button
+              type="button"
+              :disabled="refreshing"
+              @click="load({ keepMutationFeedback: true })"
+            >
+              刷新
+            </button>
+          </div>
           <RouterLink class="home-secondary-action so-action-secondary" to="/trends?section=rules"
             >管理规则</RouterLink
           >
@@ -437,84 +522,87 @@ onBeforeUnmount(() => {
         </footer>
       </form>
 
-      <section class="home-main-grid" aria-labelledby="home-review-title">
-        <section class="home-review-queue so-ledger-surface">
-          <header>
-            <div>
-              <span>01 / 人工决策</span>
-              <h3 id="home-review-title">推荐清单</h3>
-            </div>
-            <RouterLink v-if="selection" to="/opportunities">
-              全部 {{ selection.recommended_count }} 条 →
+      <div class="home-discovery-layout">
+        <section class="home-main-grid" aria-labelledby="home-review-title">
+          <section class="home-review-queue so-ledger-surface">
+            <header>
+              <div>
+                <span>01 / 人工决策</span>
+                <h3 id="home-review-title">推荐清单</h3>
+              </div>
+              <RouterLink v-if="selection" to="/opportunities">
+                全部 {{ selection.recommended_count }} 条 →
+              </RouterLink>
+            </header>
+            <RouterLink
+              v-for="item in decisionActions"
+              :key="item.id"
+              :to="item.route"
+              class="home-review-row"
+            >
+              <div>
+                <strong>{{ item.title }}</strong
+                ><small>{{ item.reason }}</small>
+              </div>
+              <span v-if="item.value_score !== null">{{ score(item.value_score) }} 分</span
+              ><b>查看 →</b>
             </RouterLink>
-          </header>
-          <RouterLink
-            v-for="item in decisionActions"
-            :key="item.id"
-            :to="item.route"
-            class="home-review-row"
-          >
-            <div>
-              <strong>{{ item.title }}</strong
-              ><small>{{ item.reason }}</small>
+            <div v-if="!selection" class="home-quiet-empty" role="status">
+              <b>自动选品数据暂不可用</b>
+              <span>推荐与运行统计暂不可用，待办仍可查看。</span>
             </div>
-            <span v-if="item.value_score !== null">{{ score(item.value_score) }} 分</span
-            ><b>查看 →</b>
-          </RouterLink>
-          <div v-if="!selection" class="home-quiet-empty" role="status">
-            <b>自动选品数据暂不可用</b>
-            <span>推荐与运行统计暂不可用，待办仍可查看。</span>
-          </div>
-          <div v-else-if="!decisionActions.length" class="home-quiet-empty">
-            <b>当前没有待人工采纳的推荐</b
-            ><span>{{
-              selection.rule_candidate_count > 0
-                ? `${selection.rule_candidate_count} 条规则命中候选正在完成五项质量门校验。`
-                : selection.awaiting_evidence_count > 0
-                  ? `${selection.awaiting_evidence_count} 条商品仍在采集。`
-                  : "系统会在五项质量门全部通过后自动加入这里。"
-            }}</span>
-            <RouterLink
-              v-if="selection.rule_candidate_count > 0"
-              to="/opportunities?view=rule_candidates"
-              >查看候选进度</RouterLink
-            >
-            <RouterLink
-              v-else-if="selection.awaiting_evidence_count > 0"
-              to="/opportunities?view=evidence_pending"
-              >查看采集进度</RouterLink
-            >
-          </div>
+            <div v-else-if="!decisionActions.length" class="home-quiet-empty">
+              <b>当前没有待人工采纳的推荐</b
+              ><span>{{
+                selection.rule_candidate_count > 0
+                  ? `${selection.rule_candidate_count} 条规则命中候选正在完成五项质量门校验。`
+                  : selection.awaiting_evidence_count > 0
+                    ? `${selection.awaiting_evidence_count} 条商品仍在采集。`
+                    : "系统会在五项质量门全部通过后自动加入这里。"
+              }}</span>
+              <RouterLink
+                v-if="selection.rule_candidate_count > 0"
+                to="/opportunities?view=rule_candidates"
+                >查看候选进度</RouterLink
+              >
+              <RouterLink
+                v-else-if="selection.awaiting_evidence_count > 0"
+                to="/opportunities?view=evidence_pending"
+                >查看采集进度</RouterLink
+              >
+            </div>
+          </section>
         </section>
-      </section>
 
-      <section
-        v-if="otherActions.length || data?.health.length"
-        class="home-operations-strip so-ledger-surface"
-      >
-        <header>
-          <div>
-            <span>02 / 本人事项</span>
-            <h3>其他待办与异常</h3>
-          </div>
-          <span>只显示与你有关的事项</span>
-        </header>
-        <div>
-          <RouterLink
-            v-for="item in [...otherActions, ...(data?.health ?? [])]"
-            :key="`${item.kind}-${item.id}`"
-            :to="item.route"
+        <aside class="home-monitoring-rail" aria-label="监听与待办">
+          <HomeAutomationOverview v-if="selection" :selection="selection" />
+          <section
+            v-if="otherActions.length || data?.health.length"
+            class="home-operations-strip so-ledger-surface"
           >
-            <i :data-severity="item.severity">{{ item.severity === "critical" ? "!" : "·" }}</i
-            ><span
-              ><b>{{ item.title }}</b
-              ><small>{{ item.reason }}</small></span
-            ><em>{{ priorityLabel(item.priority) }} →</em>
-          </RouterLink>
-        </div>
-      </section>
-
-      <HomeAutomationOverview v-if="selection" :selection="selection" />
+            <header>
+              <div>
+                <span>02 / 本人事项</span>
+                <h3>其他待办与异常</h3>
+              </div>
+              <span>只显示与你有关的事项</span>
+            </header>
+            <div>
+              <RouterLink
+                v-for="item in [...otherActions, ...(data?.health ?? [])]"
+                :key="`${item.kind}-${item.id}`"
+                :to="item.route"
+              >
+                <i :data-severity="item.severity">{{ item.severity === "critical" ? "!" : "·" }}</i
+                ><span
+                  ><b>{{ item.title }}</b
+                  ><small>{{ item.reason }}</small></span
+                ><em>{{ priorityLabel(item.priority) }} →</em>
+              </RouterLink>
+            </div>
+          </section>
+        </aside>
+      </div>
 
       <details v-if="selection" class="home-truth">
         <summary>数据说明</summary>

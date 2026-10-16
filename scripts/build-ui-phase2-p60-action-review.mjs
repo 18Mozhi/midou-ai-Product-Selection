@@ -78,7 +78,7 @@ const definitions = [
     "OP60-OPEN-CREATE",
     "local",
     "打开Client或Webhook填写与确认流程",
-    ["4fe0f29d19fbaf47.1"],
+    ["49365f7453236aac.1"],
     "用户在当前组织范围下启动对应创建流程时。",
     "调用既有共享创建容器和真实Client/Webhook表单；组件调用本身不创建对象。",
     "表单打开不证明组织有效、创建权限或密钥已生成。",

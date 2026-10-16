@@ -165,7 +165,7 @@ const definitions = [
   },
   {
     actionId: "PN57-EDITOR-SAVE-WIRING",
-    candidates: ["174bcbcaa3c52308.1"],
+    candidates: ["c927a57375828b6a.1"],
     label: "将新建/编辑表单submit意图转发给父保存所有者",
     kind: "wiring",
     forwardsTo: ["PN57-EDITOR-SAVE"],

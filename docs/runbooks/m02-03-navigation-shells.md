@@ -137,3 +137,15 @@ P57 的 `PlatformNotificationFacts`、`PlatformNotificationActionDialog`、
 ## 回滚
 
 在宝塔回退统一 Node 项目和 Web 到上一提交并重启“ai选品”。无需 down 迁移；现有允许/拒绝审计保留。回滚时必须同时回退 `/me/landing` 的 API 与 Web 消费代码。
+
+## 2026-10-16 工作区重构与退出（待完整门禁后发布）
+
+本次生产源码采用顶部工作区身份、权限导航组和页签，移除旧桌面侧栏；移动端仍使用原生对话框导航。首页结果工作区和监听待办分区，主题、权限过滤、原路由分派和KeepAlive边界保留。审批样式限定在 `.approval-workspace`，防止异步加载后裸dialog规则改变导航尺寸和位置。验收须覆盖390/768/1024/1440px进入审批再返回其他页面，以及对话框、键盘和焦点。
+
+角色壳层顶栏和个人中心接入共享 `SessionLogout`，复用既有 `POST /auth/logout` 和同一幂等键重试。204或401后完整跳到 `/login`，销毁缓存的受保护视图；其他失败保留重试提示，不伪称退出。登录默认上下文恢复见M01-03；后台仍通过已有权限入口进入，没有增加角色权限。
+
+双端定向用例为 `tests/e2e/m02-03-navigation-shell.spec.ts`、`tests/e2e/session-logout.spec.ts`，审批切页回归在 `tests/e2e/m05-02-approval-workflow.spec.ts`。完整验收及历史图包事故边界见 `docs/ui-rebuild-acceptance-20261016.md`；旧截图、设计批准和隔离用例都不能替代此次生产验收。
+
+全部检查通过并提交、确认部署工作树干净后，只执行 `python scripts/deploy-baota.py`。静态资源上传后刷新浏览器，API/Worker随固定宝塔Node项目重启加载；本次无新增环境变量、数据库迁移或Python运行逻辑。
+
+生产QA角色落点与真实登录合同同步：`config/route-catalog.json` 中组织管理员的验收落点为 `/home`，生成的前端路由目录和Feature Map由 `node scripts/generate-route-artifacts.mjs --write` 同步；纯平台账号回退不变。生产路由验收还会对每个隔离QA会话实际点击个人中心的退出，核验POST为204、回到登录页，以及原会话读取 `/me/sessions` 返回401，不退出用户正在使用的浏览器会话。

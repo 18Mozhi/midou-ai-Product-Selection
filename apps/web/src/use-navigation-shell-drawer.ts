@@ -47,7 +47,7 @@ export function useNavigationShellDrawer(menuOpen: Ref<boolean>) {
         dialog.close();
         restoreFocus();
       }
-      dialog.open = true;
+      dialog.open = false;
       return;
     }
 

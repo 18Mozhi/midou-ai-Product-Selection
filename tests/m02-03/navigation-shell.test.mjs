@@ -77,7 +77,7 @@ test("M02-03.A03/A05/A09 platform shell works without organization context and c
   assert.equal(migrations.filter((name) => name.includes("m02_03")).length, 0);
 });
 
-test("M02-03 regression: preferred landing sends platform and organization admins to their operation panels", async () => {
+test("M02-03 regression: preferred landing restores member workbench for an organization context and retains platform-only fallback", async () => {
   const platformRepo = new InMemoryAuthorizationRepository();
   platformRepo.subjects.set(platformRepo.key(actor), {
     ...orgSubject(),
@@ -133,9 +133,9 @@ test("M02-03 regression: preferred landing sends platform and organization admin
     { requestId: "landing-organization", traceId: "landing-organization" },
   );
   assert.deepEqual(organization, {
-    shell: "organization_admin",
-    route: "/org-admin",
-    reason: "landing_organization_admin",
+    shell: "member",
+    route: "/home",
+    reason: "landing_member",
   });
 });
 

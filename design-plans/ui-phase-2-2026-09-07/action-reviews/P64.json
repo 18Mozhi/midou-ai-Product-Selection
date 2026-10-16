@@ -8,7 +8,7 @@
   "visualApproval": "user-approved-remaining-pages-auto",
   "contract": "design-plans/ui-phase-2-2026-09-07/log-backup-release-contract-review.md",
   "sourceHashes": {
-    "apps/web/src/components/BackupRecoveryCenter.vue": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
+    "apps/web/src/components/BackupRecoveryCenter.vue": "8e9638859947e9a147f68d9a03c2f8dc7d5209277620f1295bf542e1bb489452",
     "apps/web/src/components/BackupRecoveryDirectory.vue": "0539b4adcbf1793d337dbefff0ccfa36d45295f1d35d8ac0c4f3e8bac1e237b7"
   },
   "inputs": {},
@@ -221,7 +221,7 @@
       "apps/web/src/components/BackupRecoveryDirectory.vue"
     ],
     "dependencyHashes": {
-      "apps/web/src/components/BackupRecoveryCenter.vue": "f84cc90e5fdfd3d0cb1f88a1308c55bad282718ba7e9e4c51d3a17dabde761de",
+      "apps/web/src/components/BackupRecoveryCenter.vue": "8e9638859947e9a147f68d9a03c2f8dc7d5209277620f1295bf542e1bb489452",
       "apps/web/src/components/BackupRecoveryDirectory.vue": "0539b4adcbf1793d337dbefff0ccfa36d45295f1d35d8ac0c4f3e8bac1e237b7"
     },
     "inputScope": "reviewed-subset-of-shared-source",

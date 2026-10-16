@@ -65,8 +65,8 @@
 | G:31 | 452d85f008176563.1 | event-binding | PA42-CLOSE Escape→父关闭/回列表 |
 | G:58 | e86ba35d079de0d3.1 | control | PA42-CLOSE missing返回列表 |
 | G:94 | 305725c44ab6a8ed.1 | control | PA42-CLOSE 页首关闭 |
-| G:165 | 1c008f867673db60.1 | control | PA42-TECH slug/UUID展开 |
-| G:193 | 02668382bdda9d3b.1 | control | PA42-CLOSE 页尾关闭 |
+| G:163 | 1c008f867673db60.1 | control | PA42-TECH slug/UUID展开 |
+| G:191 | 02668382bdda9d3b.1 | control | PA42-CLOSE 页尾关闭 |
 | R | e4a2fbf8875f3488.1 | PA45-RESET 比较重置：P45清除查询参数并恢复固定默认角色；P44共享实例不写URL |
 
 ### 1.2 共享16候选及调用差异
@@ -98,19 +98,19 @@ S/T本族四类消费者为D来源健康、O组织记录、U用户记录、M管�
 | 组件行 | candidate sig | kind | 当前语义 |
 | --- | --- | --- | --- |
 | G:50 | 106fea94b943db73.1 | control | PA42-RETRY missing态重新加载组织列表 |
-| G:62 | ed675af42a95eee6.1 | form-event | PA42-SAVE 表单提交意图，实际保存由父级处理 |
+| G:62 | b77a4ace55afa0da.1 | form-event | PA42-SAVE 表单提交意图，实际保存由父级处理 |
 | G:102 | e9b3a32bc524be8e.1 | event-binding | PA42-INPUT 组织名称受控输入并清理旧反馈 |
 | G:116 | e2d410a205d6addc.1 | event-binding | PA42-INPUT 时区受控输入并清理旧反馈 |
-| G:129 | f5028ff7b6963e7c.1 | event-binding | PA42-INPUT 保留天数受控输入并清理旧反馈 |
-| G:155 | 9135d46a904a737d.1 | control | PA42-RETRY 保存成功后重新读取组织资料 |
-| G:182 | c912786107f1a3c8.1 | control | PA42-STATUS 将停用/恢复目标交给父级原因窗 |
-| G:194 | 1c447b2a32d2d030.1 | control | PA42-SAVE submit按钮，与form提交归并 |
+| G:127 | f5028ff7b6963e7c.1 | event-binding | PA42-INPUT 保留天数受控输入并清理旧反馈 |
+| G:153 | 9135d46a904a737d.1 | control | PA42-RETRY 保存成功后重新读取组织资料 |
+| G:180 | c912786107f1a3c8.1 | control | PA42-STATUS 将停用/恢复目标交给父级原因窗 |
+| G:192 | 1c447b2a32d2d030.1 | control | PA42-SAVE submit按钮，与form提交归并 |
 
 #### PlatformOrganizationDetailDialog.vue 当前源码指纹
 
 | 文件 | SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformOrganizationDetailDialog.vue | 47bf733f5e1afde00cf58d569b5f6cf1132926f96d94be21b8d4cbb95b0f7e43 |
+| apps/web/src/components/PlatformOrganizationDetailDialog.vue | fa73cec1f1bd78462a06a87e6c55cc575e05c491a258da661f8c985c152d7a57 |
 
 #### 1.5 P42旧组织详情身份（历史）
 
@@ -379,12 +379,12 @@ P38–P45八份规格都有文件；全站规格48/73，W06八份、W07八份、
 
 | 当前candidateId | 行 | 类型 | 当前语义归属 |
 | --- | ---: | --- | --- |
-| apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1 | 695 | control | P39-ACCOUNT-CURRENT-REFRESH / PA-REFRESH；页头账号目录读取，刷新中或写入繁忙时禁用 |
-| apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1 | 738 | event-binding | P39-ACCOUNT-CURRENT-WIRING / PA-REFRESH-WIRING；将目录子组件的 load 意图连接到父级既有读取处理，不另计读取动作 |
+| apps/web/src/components/PlatformAccountCenter.vue#8f18fbff9e2c1c99.1 | 684 | control | P39-ACCOUNT-CURRENT-REFRESH / PA-REFRESH；页头账号目录读取，刷新中或写入繁忙时禁用 |
+| apps/web/src/components/PlatformAccountCenter.vue#8458edc51af426a6.1 | 727 | event-binding | P39-ACCOUNT-CURRENT-WIRING / PA-REFRESH-WIRING；将目录子组件的 load 意图连接到父级既有读取处理，不另计读取动作 |
 
 | 当前源文件 | 当前LF SHA-256 |
 | --- | --- |
-| apps/web/src/components/PlatformAccountCenter.vue | ec1f396132c0c7376b4e69290ca4198e64533fd93522fcafb55d3b5fcc36cb4a |
+| apps/web/src/components/PlatformAccountCenter.vue | d1dd7edb1a0551a88b1fb250e7b8b1e2d23cfbae8d2228cb6f62553e8e2904aa |
 
 ## 10. P41 创建向导逐页动作映射（2026-09-25）
 

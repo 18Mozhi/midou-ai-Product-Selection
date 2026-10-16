@@ -21,6 +21,7 @@ const once = (text, from, to) => {
 };
 
 export function notificationShellPreview(source) {
+  if (source.includes('class="role-workspace-identity"')) return previewShellVue(source);
   const text = previewShellVue(source),
     anchor = "            routePath !== '/platform-admin/redis'";
   return once(

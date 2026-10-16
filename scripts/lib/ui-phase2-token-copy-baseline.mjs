@@ -1,3 +1,7 @@
+import {
+  beforePublishedPresentation,
+  publishedPresentationRevisions,
+} from "./ui-phase2-published-presentation-baseline.mjs";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
@@ -19,10 +23,10 @@ export const tokenCopyRevisions = {
 };
 const hash = (source) => createHash("sha256").update(source).digest("hex");
 const cache = new Map();
-const captureRevisionCache = new Map();
+const committedSourceCache = new Map();
 const captureSourceCache = new Map();
 export function historicalTokenCopySource(file, source) {
-  source = source.replaceAll("\r\n", "\n");
+  source = beforePublishedPresentation(file, source);
   const revision = tokenCopyRevisions[file];
   if (!revision || hash(source) === revision.before) return source;
   assert.equal(hash(source), revision.after, `Unreviewed token copy source: ${file}`);
@@ -34,6 +38,47 @@ export function historicalTokenCopySource(file, source) {
     cache.set(file, old);
   }
   return cache.get(file);
+}
+
+// Read versions in one bounded Git batch. Repeated checks still verify the
+// complete transformed bytes; cached history never substitutes a current hash.
+function committedSources(file) {
+  if (committedSourceCache.has(file)) return committedSourceCache.get(file);
+  const commits = execFileSync("git", ["log", "--all", "--format=%H", "--", file], {
+    encoding: "utf8",
+  })
+    .trim()
+    .split(/\r?\n/u)
+    .filter(Boolean);
+  if (!commits.length) return [];
+  const bytes = execFileSync("git", ["cat-file", "--batch"], {
+    input: commits.map((commit) => `${commit}:${file}\n`).join(""),
+    maxBuffer: 64 * 1024 * 1024,
+  });
+  const sources = [];
+  let offset = 0;
+  for (const commit of commits) {
+    const end = bytes.indexOf(10, offset);
+    assert.ok(end >= offset, "Incomplete historical Git header");
+    const header = bytes.subarray(offset, end).toString("utf8");
+    offset = end + 1;
+    if (header === `${commit}:${file} missing`) continue;
+    const match = /^([a-f0-9]{40,64}) blob (\d+)$/.exec(header);
+    assert.ok(match, "Unexpected historical Git object");
+    const size = Number(match[2]);
+    assert.ok(Number.isSafeInteger(size) && size >= 0 && offset + size < bytes.length);
+    assert.equal(bytes[offset + size], 10, "Incomplete historical Git blob");
+    sources.push(
+      bytes
+        .subarray(offset, offset + size)
+        .toString("utf8")
+        .replaceAll("\r\n", "\n"),
+    );
+    offset += size + 1;
+  }
+  assert.equal(offset, bytes.length, "Unexpected trailing historical Git bytes");
+  committedSourceCache.set(file, sources);
+  return sources;
 }
 
 export function assertCaptureSourceRevision(
@@ -50,40 +95,21 @@ export function assertCaptureSourceRevision(
     // Older capture inputs may predate changes outside the reviewed token-copy delta.
   }
   if (currentCandidates.some((candidate) => hash(transform(candidate)) === expectedHash)) return;
-  const key = `${file}:${expectedHash}`;
-  if (!captureRevisionCache.has(key)) {
-    const commits = execFileSync("git", ["log", "--all", "--format=%H", "--", file], {
-      encoding: "utf8",
-    })
-      .trim()
-      .split(/\r?\n/u)
-      .filter(Boolean);
-    const found = commits.some((commit) => {
-      try {
-        const captured = execFileSync("git", ["show", `${commit}:${file}`], {
-          encoding: "utf8",
-          maxBuffer: 16 * 1024 * 1024,
-        }).replaceAll("\r\n", "\n");
-        if (hash(transform(captured)) === expectedHash) return true;
-        try {
-          return hash(transform(historicalTokenCopySource(file, captured))) === expectedHash;
-        } catch {
-          return false;
-        }
-      } catch {
-        return false;
-      }
-    });
-    captureRevisionCache.set(key, found);
-  }
-  assert.equal(
-    captureRevisionCache.get(key),
-    true,
-    `capture-time source is not present in Git history: ${file}`,
-  );
+  const found = committedSources(file).some((captured) => {
+    try {
+      if (hash(transform(captured)) === expectedHash) return true;
+      return hash(transform(historicalTokenCopySource(file, captured))) === expectedHash;
+    } catch {
+      // Unknown historical deltas cannot satisfy this exact capture binding.
+      return false;
+    }
+  });
+  assert.equal(found, true, `capture-time source is not present in Git history: ${file}`);
 }
 
 export function assertCurrentSourceRevision(file, source) {
+  const registered = publishedPresentationRevisions[file];
+  if (registered && hash(source.replaceAll("\r\n", "\n")) === registered.current) return;
   const head = execFileSync("git", ["show", `HEAD:${file}`], {
     encoding: "utf8",
     stdio: ["ignore", "pipe", "ignore"],
@@ -93,25 +119,16 @@ export function assertCurrentSourceRevision(file, source) {
 
 export function readCaptureSourceRevision(file, expectedHash, transform = (value) => value) {
   const key = `${file}:${expectedHash}`;
-  if (captureSourceCache.has(key)) return captureSourceCache.get(key);
-  const commits = execFileSync("git", ["log", "--all", "--format=%H", "--", file], {
-    encoding: "utf8",
-  })
-    .trim()
-    .split(/\r?\n/u)
-    .filter(Boolean);
-  for (const commit of commits) {
+  const cached = captureSourceCache.get(key);
+  if (cached && hash(transform(cached)) === expectedHash) return cached;
+  for (const captured of committedSources(file)) {
     try {
-      const captured = execFileSync("git", ["show", `${commit}:${file}`], {
-        encoding: "utf8",
-        maxBuffer: 16 * 1024 * 1024,
-      }).replaceAll("\r\n", "\n");
       if (hash(transform(captured)) === expectedHash) {
         captureSourceCache.set(key, captured);
         return captured;
       }
     } catch {
-      // The path may not exist at every historical revision.
+      // A transformation may only apply to its explicitly registered revision.
     }
   }
   assert.fail(`capture-time source is not present in Git history: ${file}`);

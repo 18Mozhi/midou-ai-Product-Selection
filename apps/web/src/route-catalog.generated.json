@@ -28,7 +28,7 @@
         "key": "organization_admin",
         "role": "organization_admin",
         "shell": "organization_admin",
-        "landingPath": "/org-admin",
+        "landingPath": "/home",
         "credentialPrefix": "SCOUTOPS_QA_ORGANIZATION_ADMIN",
         "forbiddenCapabilities": ["platform:operate", "platform:secure", "platform:superadmin"]
       },

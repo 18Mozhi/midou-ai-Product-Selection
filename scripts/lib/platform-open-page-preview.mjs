@@ -101,6 +101,7 @@ export function previewOpenPage(source) {
   return result;
 }
 export function previewOpenShell(source) {
+  if (source.includes('class="role-workspace-identity"')) return previewShellVue(source);
   return once(
     previewShellVue(source),
     "routePath !== '/platform-admin/redis'",

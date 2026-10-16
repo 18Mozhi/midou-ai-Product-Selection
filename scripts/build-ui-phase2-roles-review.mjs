@@ -68,7 +68,7 @@ const definitions = [
     "EX-P29-PROFILE",
     "组织资料分支排除",
     "excluded",
-    ["d6b520278ab3dd57.1", "1cbd108c64b5230c.1", "5878e30377f290ae.1", "bd677fb7d2212a2b.1"],
+    ["e93301a7ec700ce7.1", "1cbd108c64b5230c.1", "ed75758087c9a4b8.1", "bd677fb7d2212a2b.1"],
     [
       "OG-PROFILE-SAVE",
       "OG-PROFILE-LOGO浏览器有效性",
@@ -198,7 +198,7 @@ const definitions = [
     "grant.create.submit",
     "创建授权",
     "write",
-    ["29016e256374347e.1", "b75d50f1f8f0cc17.1"],
+    ["368ab9e71467bdc8.1", "b6a3974b194ba639.1"],
     [],
     "canManage内联表单；busy或actions空禁按钮；父函数busy早退",
     "POST /org/:organizationId/resource-grants；spread原form、去重actions、trim reason、ISO expires_at；成功清当前草稿部分字段并重读；提交中新增编辑可能被清",

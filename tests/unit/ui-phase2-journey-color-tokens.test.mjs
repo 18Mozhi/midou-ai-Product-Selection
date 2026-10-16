@@ -1,14 +1,18 @@
+import { beforePublishedPresentation } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 
-test("P16 semantic tokens preserve approved colors and use the shared theme-aware surface", async () => {
-  const css = (await readFile("apps/web/src/selection-journey.css", "utf8")).replaceAll(
-    "\r\n",
-    "\n",
+test("P16 historical token expansion preserves its original colors separately from the current theme", async () => {
+  const css = beforePublishedPresentation(
+    "apps/web/src/selection-journey.css",
+    await readFile("apps/web/src/selection-journey.css", "utf8"),
+  ).replaceAll("\r\n", "\n");
+  const tokens = beforePublishedPresentation(
+    "apps/web/src/design/selection-tokens.css",
+    await readFile("apps/web/src/design/selection-tokens.css", "utf8"),
   );
-  const tokens = await readFile("apps/web/src/design/selection-tokens.css", "utf8");
   const block = tokens.match(/html #app \.selection-journey \{([^}]+)\}/);
   assert.ok(block, "P16 palette must stay scoped, not override global theme roles");
   const values = new Map(

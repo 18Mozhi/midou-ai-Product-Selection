@@ -1,3 +1,4 @@
+import { assertCaptureSource } from "../../scripts/lib/ui-phase2-capture-source-compatibility.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -17,7 +18,7 @@ test("P43 create dialog resets the global create-alias palette bleed", () => {
   assert.match(signalLedger, /\[class\*="-create"\]/);
   assert.match(
     accountDialogs,
-    /html\[data-design="signal-ledger"\] body dialog\.p43-create-user-dialog,[\s\S]*?background-color: var\(--account-org-surface\)/,
+    /html\[data-design="glass-atlas"\] body dialog\.p43-create-user-dialog,[\s\S]*?background-color: var\(--account-org-surface\)/,
   );
 });
 
@@ -66,7 +67,7 @@ for (const [folder, kind, checks, images, palette] of [
   ],
 ]) {
   const p46Historical = folder.startsWith("p46-");
-  test(`${folder} ${p46Historical ? "pre-refresh captured" : "current"} evidence binds its imported palette, sources and images`, () => {
+  test(`${folder} ${p46Historical ? "pre-refresh captured" : "captured before workspace rebuild"} evidence binds its imported palette, sources and images`, () => {
     const root = `output/playwright/${folder}`;
     const evidence = JSON.parse(readFileSync(`${root}/evidence.json`, "utf8"));
     if (p46Historical)
@@ -90,7 +91,7 @@ for (const [folder, kind, checks, images, palette] of [
       for (const [source, expected] of Object.entries(evidence.sourceHashes)) {
         const text = readFileSync(source, "utf8").replaceAll("\r\n", "\n");
         if (source.startsWith("tests/e2e/")) assertCaptureSourceRevision(source, text, expected);
-        else assert.equal(hash(text), expected, source);
+        else assertCaptureSource(source, text, expected, source);
       }
     }
     for (const shot of evidence.screenshots)

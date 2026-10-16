@@ -1,3 +1,4 @@
+import { publishedPresentationRevisions } from "../../scripts/lib/ui-phase2-published-presentation-baseline.mjs";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
@@ -63,11 +64,15 @@ test("P36 historical proof allows only exact reviewed revisions and rejects unkn
     const captured = readCaptureSourceRevision(file, pair.after);
     assert.equal(hash(captured), pair.after);
     assert.equal(hash(historicalTokenCopySource(file, captured)), pair.before);
-    if (hash(read(file)) !== pair.after)
-      assert.throws(
-        () => historicalTokenCopySource(file, read(file)),
-        /Unreviewed token copy source/,
-      );
+    const current = read(file);
+    if (![pair.after, pair.before].includes(hash(current))) {
+      assert.equal(hash(current), publishedPresentationRevisions[file]?.current);
+      assert.equal(hash(historicalTokenCopySource(file, current)), pair.before);
+    }
+    assert.throws(
+      () => historicalTokenCopySource(file, current + "\n// unknown current change"),
+      /Unreviewed token copy source/,
+    );
     assert.throws(
       () => historicalTokenCopySource(file, captured + "\n// unknown change"),
       /Unreviewed token copy source/,
