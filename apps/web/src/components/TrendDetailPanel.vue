@@ -91,7 +91,15 @@ const freshness = (value: string) =>
         </div>
         <div>
           <dt>数据状态</dt>
-          <dd>{{ detail.data_quality.coverage_status }}</dd>
+          <dd>
+            {{
+              detail.data_quality.coverage_status === "covered"
+                ? "已覆盖"
+                : detail.data_quality.coverage_status === "insufficient_data"
+                  ? "数据不足"
+                  : detail.data_quality.coverage_status
+            }}
+          </dd>
         </div>
         <div>
           <dt>环比</dt>

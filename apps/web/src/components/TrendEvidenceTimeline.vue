@@ -44,7 +44,6 @@ watch(
   <section class="trend-evidence">
     <header>
       <div>
-        <p>主要证据</p>
         <h4>主要证据</h4>
       </div>
       <span>来源 {{ detail.source_count }} · 最新 {{ freshness(detail.source_fresh_at) }}</span>
@@ -94,7 +93,6 @@ watch(
     <section>
       <header>
         <div>
-          <p>信号时间线</p>
           <h4>信号时间线</h4>
         </div>
         <label class="timeline-source-filter"
@@ -124,7 +122,6 @@ watch(
     </section>
     <section>
       <header>
-        <p>关键词</p>
         <h4>关键词</h4>
       </header>
       <div class="keyword-cloud">

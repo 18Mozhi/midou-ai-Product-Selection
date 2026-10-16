@@ -211,13 +211,28 @@ async function ready(
 test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", async ({ page }) => {
   await ready(page);
   await page.goto("/trends");
-  await expect(
-    page.getByRole("heading", { name: "市场信号正在持续进入选品链", level: 2 }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: /市场情报/, level: 2 })).toBeVisible();
+  const status = page.locator(".trend-collection-status");
+  await expect(status).not.toHaveAttribute("open");
+  await expect(status.locator("summary")).toContainText("1 条监控启用");
+  await expect(page.getByRole("button", { name: "立即刷新来源", exact: true })).toBeVisible();
+  await expect(page.getByRole("button", { name: "新建监控", exact: true })).toBeVisible();
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  if ((page.viewportSize()?.width ?? 0) > 1100) {
+    await expect(page.getByRole("button", { name: "保存视图链接", exact: true })).toHaveCSS(
+      "white-space",
+      "nowrap",
+    );
+    const metric = await page.locator(".trend-conclusion dl div").first().boundingBox();
+    expect(metric?.width).toBeGreaterThan(90);
+  }
+  await expect(page).toHaveScreenshot("m04-01-market-list.png", { fullPage: true });
+  await status.locator("summary").click();
   const readiness = page.getByLabel("市场质量门 · 证据就绪");
   await expect(readiness.getByText("1 条启用")).toBeVisible();
   await expect(readiness.getByText("1 个")).toBeVisible();
-  await expect(readiness.getByText("持续监控中")).toBeVisible();
+  await expect(readiness.getByText("记录已读取")).toBeVisible();
+  await status.locator("summary").click();
   const trendList = page.locator(".trend-list");
   await expect(trendList.getByText("2 个来源")).toBeVisible();
   await expect(trendList.getByText(/新鲜度/)).toBeVisible();
@@ -259,11 +274,10 @@ test("M04-01.A07/A08/A15 trend dashboard is responsive, truthful and visual", as
   await page.keyboard.press("Tab");
   if ((page.viewportSize()?.width ?? 0) > 1100) {
     await expect(page.getByRole("button", { name: "创建监控", exact: true })).toBeFocused();
-    // Full-page screenshots otherwise pin the sticky rail at an incidental
-    // scroll offset left by the preceding modal and keyboard interactions.
-    await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
-    await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   }
+  // Both viewports capture fixed navigation at a deliberate scroll position.
+  await page.evaluate(() => window.scrollTo({ top: 0, left: 0, behavior: "instant" }));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBe(0);
   await expect(page).toHaveScreenshot("m04-01-trends.png", { fullPage: true });
 });
 

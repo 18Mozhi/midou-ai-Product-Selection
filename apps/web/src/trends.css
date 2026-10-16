@@ -203,27 +203,6 @@
   background: color-mix(in srgb, var(--so-primary) 10%, var(--so-panel-soft));
   box-shadow: inset 3px 0 var(--so-primary);
 }
-.topic-mark {
-  display: grid;
-  place-items: center;
-  width: 40px;
-  height: 40px;
-  border-radius: 11px;
-  color: var(--so-primary);
-  background: color-mix(in srgb, var(--so-primary) 12%, transparent);
-}
-.topic-mark::after {
-  width: 10px;
-  height: 10px;
-  border-radius: 3px;
-  background: var(--so-primary);
-  content: "";
-  transform: rotate(45deg);
-}
-.topic-mark[data-followed="true"]::after {
-  background: var(--so-warning);
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--so-warning) 18%, transparent);
-}
 .trend-list button strong,
 .trend-list button small {
   display: block;
@@ -832,83 +811,75 @@
   outline: 3px solid var(--trend-focus);
   outline-offset: 2px;
 }
+.trend-market-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 4px 0 8px;
+}
+.trend-market-heading h2 {
+  margin: 0;
+  font-size: 22px;
+  font-weight: 650;
+}
+.trend-market-heading h2 span {
+  margin-left: 12px;
+  color: var(--trend-muted);
+  font-size: 13px;
+  font-weight: 400;
+}
+.trend-market-heading p {
+  margin: 8px 0 0;
+  color: var(--trend-muted);
+  font-size: 13px;
+}
+.trend-market-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.trend-market-actions button {
+  min-height: 40px;
+  padding: 9px 14px;
+  border: 1px solid var(--trend-line);
+  border-radius: 4px;
+}
+.trend-collection-status {
+  border: 1px solid var(--trend-line);
+  background: var(--trend-surface);
+}
+.trend-collection-status > summary {
+  min-height: 44px;
+  padding: 12px 16px;
+  cursor: pointer;
+  color: var(--trend-muted);
+  font-size: 13px;
+}
+.trend-collection-status > summary span {
+  margin-left: 14px;
+  color: var(--trend-ink);
+}
 .trend-dashboard--review .monitoring-readiness {
-  min-height: 188px;
-  padding: 28px 32px 25px;
-  grid-template-columns: minmax(0, 1.35fr) minmax(360px, 1fr);
-  align-items: stretch;
-  gap: 22px 32px;
+  margin: 0;
+  padding: 16px;
   border: 0;
+  border-top: 1px solid var(--trend-line);
   border-radius: 0;
-  background: var(--trend-blue);
-  color: var(--trend-on-blue);
   box-shadow: none;
 }
-.trend-dashboard--review .monitoring-readiness__summary {
-  display: grid;
-  align-content: center;
-  gap: 8px;
-}
-.trend-dashboard--review .monitoring-readiness :is(p, h2, span, dt, small) {
-  color: var(--trend-on-blue-muted);
-}
-.trend-dashboard--review .monitoring-readiness p {
-  letter-spacing: 0.14em;
-}
 .trend-dashboard--review .monitoring-readiness h2 {
-  color: var(--trend-on-blue);
-  font-size: clamp(26px, 3.2vw, 40px);
-  line-height: 1.1;
-}
-.trend-dashboard--review .monitoring-readiness__summary span {
-  color: var(--trend-on-blue-subtle);
-}
-.trend-dashboard--review .monitoring-readiness__summary > strong {
-  justify-self: start;
-  min-height: 0;
-  padding: 0;
-  color: var(--trend-on-blue);
-  background: transparent;
-  font-size: 15px;
+  font-size: 18px;
 }
 .trend-dashboard--review .monitoring-readiness dl {
-  align-self: stretch;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0;
+  margin: 0;
 }
-.trend-dashboard--review .monitoring-readiness dl > div {
-  min-height: 84px;
-  padding: 12px 18px;
-  display: grid;
-  align-content: center;
-  border: 0;
-  border-left: 1px solid var(--trend-on-blue-divider);
-  border-radius: 0;
-  background: transparent;
-}
-.trend-dashboard--review .monitoring-readiness dd,
-.trend-dashboard--review .monitoring-readiness dl > div[data-state] dd {
-  color: var(--trend-on-blue);
-  font-size: 20px;
-}
-.trend-dashboard--review .monitoring-readiness footer {
-  grid-column: 1 / -1;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 8px;
-}
-.trend-dashboard--review .monitoring-readiness footer :is(button, a) {
-  min-height: 42px;
-  padding-inline: 16px;
-  border: 1px solid var(--trend-on-blue-outline);
-  border-radius: 4px;
-  color: var(--trend-on-blue);
-  background: transparent;
-}
-.trend-dashboard--review .monitoring-readiness footer .primary {
-  border-color: var(--trend-on-blue);
-  color: var(--trend-blue-strong);
-  background: var(--trend-surface);
+.topic-index {
+  align-self: start;
+  padding-top: 3px;
+  color: var(--trend-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
 }
 .trend-dashboard--review .trend-tabs {
   padding: 0;
@@ -919,7 +890,9 @@
 }
 .trend-dashboard--review .trend-tabs button {
   min-height: 48px;
-  flex: 1 1 0;
+  flex: 0 1 auto;
+  min-width: 120px;
+  padding-inline: 18px;
   border-radius: 0;
   border-bottom: 3px solid transparent;
   color: var(--trend-muted);
@@ -951,8 +924,8 @@
 }
 .trend-dashboard--review .trend-filters {
   margin: 0;
-  padding: 22px 24px;
-  grid-template-columns: 112px minmax(140px, 1fr) 132px minmax(220px, 1.6fr) 140px repeat(3, auto);
+  padding: 16px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
   border: 1px solid var(--trend-line);
   border-radius: 0;
@@ -983,10 +956,10 @@
   background: var(--trend-surface-selected);
 }
 .trend-dashboard--review .trend-workbench {
-  height: auto;
-  min-height: 620px;
+  height: clamp(580px, calc(100dvh - 310px), 860px);
+  min-height: 0;
   max-height: none;
-  grid-template-columns: minmax(340px, 38%) minmax(0, 1fr);
+  grid-template-columns: minmax(340px, 44%) minmax(0, 1fr);
   border: 1px solid var(--trend-line);
   border-radius: 0;
   background: var(--trend-surface);
@@ -1009,7 +982,7 @@
 .trend-dashboard--review .trend-list > button {
   min-height: 102px;
   padding: 15px 22px;
-  grid-template-columns: 12px minmax(0, 1fr) 66px auto;
+  grid-template-columns: 22px minmax(0, 1fr) 54px auto;
   gap: 14px;
   border: 0;
   border-top: 1px solid transparent;
@@ -1024,18 +997,6 @@
   border-bottom-color: var(--trend-selected-border);
   box-shadow: inset 3px 0 var(--trend-blue);
   background: var(--trend-surface-selected);
-}
-.trend-dashboard--review .topic-mark {
-  width: 10px;
-  height: 10px;
-  border-radius: 0;
-  background: var(--trend-blue);
-}
-.trend-dashboard--review .topic-mark::after {
-  display: none;
-}
-.trend-dashboard--review .topic-mark[data-followed="true"] {
-  background: var(--trend-followed);
 }
 .trend-dashboard--review .trend-list button strong {
   color: var(--trend-ink);
@@ -1073,7 +1034,9 @@
 .trend-dashboard--review .trend-detail h3 {
   margin: 9px 0 8px;
   color: var(--trend-ink);
-  font-size: clamp(26px, 3vw, 38px);
+  font-size: 22px;
+  line-height: 1.45;
+  font-weight: 650;
 }
 .trend-dashboard--review .trend-detail > header :is(p, span) {
   color: var(--trend-muted);
@@ -1115,8 +1078,9 @@
   background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-conclusion {
-  padding: 20px;
-  background: var(--trend-subtle-surface);
+  padding: 16px;
+  grid-template-columns: 1fr;
+  background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-conclusion p,
 .trend-dashboard--review .trend-evidence > header p,
@@ -1141,8 +1105,11 @@
   background: var(--trend-surface);
 }
 .trend-dashboard--review .trend-explainer {
-  border: 0;
-  color: var(--trend-blue);
+  padding: 0 14px;
+  border: 1px solid var(--trend-line);
+  border-radius: 4px;
+  background: var(--trend-surface);
+  color: var(--trend-muted);
 }
 .trend-dashboard--review .trend-explainer summary {
   width: fit-content;
@@ -1208,45 +1175,24 @@
   background: var(--trend-blue);
 }
 @media (max-width: 1100px) {
-  .trend-dashboard--review .monitoring-readiness {
-    grid-template-columns: 1fr;
-  }
-  .trend-dashboard--review .monitoring-readiness footer {
-    grid-column: auto;
-    justify-content: flex-start;
-  }
   .trend-dashboard--review .trend-workbench {
+    height: auto;
+    min-height: 0;
+    grid-template-columns: 1fr;
     border: 1px solid var(--trend-line);
   }
 }
 @media (max-width: 640px) {
-  .trend-dashboard--review .monitoring-readiness {
-    min-height: 0;
-    padding: 22px 18px;
+  .trend-market-heading {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 12px;
   }
-  .trend-dashboard--review .monitoring-readiness h2 {
-    font-size: 28px;
+  .trend-market-heading h2 {
+    font-size: 20px;
   }
-  .trend-dashboard--review .monitoring-readiness dl {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-  .trend-dashboard--review .monitoring-readiness dl > div {
-    min-height: 72px;
-    padding: 8px 10px;
-  }
-  .trend-dashboard--review .monitoring-readiness dd,
-  .trend-dashboard--review .monitoring-readiness dl > div[data-state] dd {
-    font-size: 16px;
-  }
-  .trend-dashboard--review .monitoring-readiness footer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-  }
-  .trend-dashboard--review .monitoring-readiness footer :is(button, a) {
-    width: 100%;
-  }
-  .trend-dashboard--review .monitoring-readiness footer :last-child {
-    grid-column: 1 / -1;
+  .trend-market-actions button {
+    flex: 1;
   }
   .trend-dashboard--review .trend-tabs button {
     padding-inline: 8px;
@@ -1261,7 +1207,7 @@
   .trend-dashboard--review .trend-list > button {
     min-height: 94px;
     padding: 14px 15px;
-    grid-template-columns: 10px minmax(0, 1fr) 52px;
+    grid-template-columns: 22px minmax(0, 1fr) 44px;
   }
   .trend-dashboard--review .trend-list > button em {
     display: none;
@@ -1283,4 +1229,43 @@
   .trend-dashboard--review .trend-actions :last-child {
     grid-column: 1 / -1;
   }
+}
+
+.trend-dashboard--review .trend-filter-actions {
+  grid-column: span 3;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.trend-dashboard--review .trend-filter-actions button {
+  white-space: nowrap;
+  min-height: 44px;
+}
+.trend-dashboard--review .trend-conclusion dl {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+.trend-dashboard--review .trend-conclusion dl div {
+  min-width: 0;
+}
+@media (max-width: 1100px) {
+  .trend-dashboard--review .trend-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .trend-dashboard--review .trend-filter-actions {
+    grid-column: 1 / -1;
+  }
+}
+@media (max-width: 640px) {
+  .trend-dashboard--review .trend-tabs button {
+    min-width: 0;
+    flex: 1 1 0;
+    padding-inline: 8px;
+  }
+  .trend-dashboard--review .trend-filter-actions {
+    flex-wrap: wrap;
+  }
+}
+
+.trend-dashboard--review .keyword-cloud > span {
+  color: var(--trend-ink);
 }

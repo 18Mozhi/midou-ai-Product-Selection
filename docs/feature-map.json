@@ -1,4 +1,26 @@
 {
+  "selectionMarketIntelligenceLayout20261017": {
+    "status": "implemented",
+    "statusDetail": "market_layout_66_tests_18_browser_cases_plus_copy_retest_passed_not_deployed",
+    "requirements": "docs/selection-market-intelligence-layout.md",
+    "sourceFiles": [
+      "apps/web/src/components/TrendDashboard.vue",
+      "apps/web/src/components/TrendDetailPanel.vue",
+      "apps/web/src/components/TrendFilterPanel.vue",
+      "apps/web/src/components/TrendEvidenceTimeline.vue",
+      "apps/web/src/trends.css",
+      "apps/web/src/design/trend-dashboard-tokens.css",
+      "scripts/verify-trend-page-preview.mjs"
+    ],
+    "routes": ["/trends"],
+    "testFiles": [
+      "tests/e2e/m04-01-trends.spec.ts",
+      "tests/unit/trend-page-preview.test.mjs",
+      "tests/m04-01/trends.test.mjs",
+      "tests/unit/platform-palette-contract.test.mjs"
+    ],
+    "contract": "Market intelligence uses compact factual header and direct actions, a collapsed collection-status disclosure, readable filters, ranked current-page rows and bounded desktop master/detail panes with single-pane mobile navigation. Blue instructional hero and decorative marks/unused palette tokens are removed. Existing scoped reads, filters, evidence, monitoring, quality, governance, decisions and permissions remain. Preview runs the real Vue route rather than injecting a replacement historical template. No API/schema/env/dependency change."
+  },
   "selectionRetiredReports20261017": {
     "status": "implemented",
     "statusDetail": "member_reports_removed_182_tests_six_browser_cases_and_bundle_verified_not_deployed",

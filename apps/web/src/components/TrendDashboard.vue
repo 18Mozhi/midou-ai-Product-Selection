@@ -599,27 +599,48 @@ onBeforeUnmount(() => {
 
 <template>
   <section class="trend-dashboard trend-dashboard--review">
-    <MonitoringReadinessStrip
-      eyebrow="市场质量门 · 证据就绪"
-      :title="trendReadiness.summary.title"
-      description="这里确认市场证据是否持续产出；单个商品是否通过市场质量门，仍以机会详情中的真实评分输入为准。"
-      :status="trendReadiness.summary.status"
-      :tone="trendReadiness.summary.tone"
-      :facts="trendReadiness.facts"
-    >
-      <button
-        v-if="canManageTrends"
-        class="primary so-action-primary"
-        type="button"
-        @click="showRule = true"
-      >
-        {{ enabledRules.length ? "创建趋势监控" : "创建第一条监控规则" }}
-      </button>
-      <button class="secondary" type="button" :disabled="Boolean(busy)" @click="refreshHotspots">
-        {{ busy === "/provider-sources/refresh" ? "正在启动…" : "立即刷新来源" }}
-      </button>
-      <button type="button" @click="setTab('rules')">管理监控规则</button>
-    </MonitoringReadinessStrip>
+    <header class="trend-market-heading">
+      <div>
+        <h2>
+          市场情报 <span v-if="state === 'ready' || state === 'empty'">{{ total }} 个主题</span>
+        </h2>
+        <p>查看来源证据，追踪商品需求线索</p>
+      </div>
+      <div class="trend-market-actions">
+        <button
+          type="button"
+          class="so-action-secondary"
+          :disabled="Boolean(busy)"
+          @click="refreshHotspots"
+        >
+          {{ busy === "/provider-sources/refresh" ? "正在启动…" : "立即刷新来源" }}
+        </button>
+        <button
+          v-if="canManageTrends"
+          class="so-action-primary"
+          type="button"
+          @click="showRule = true"
+        >
+          新建监控
+        </button>
+      </div>
+    </header>
+    <details class="trend-collection-status">
+      <summary>
+        采集与证据状态
+        <span v-if="state === 'ready' || state === 'empty'"
+          >{{ enabledRules.length }} 条监控启用</span
+        ><span v-else>状态待确认</span>
+      </summary>
+      <MonitoringReadinessStrip
+        eyebrow="市场质量门 · 证据就绪"
+        title="监控与来源记录"
+        description="状态来自当前监控规则和来源记录；商品评分请查看对应选品证据。"
+        :status="state === 'ready' || state === 'empty' ? '记录已读取' : '状态待确认'"
+        :tone="trendReadiness.summary.tone"
+        :facts="trendReadiness.facts"
+      />
+    </details>
     <nav class="trend-tabs" aria-label="热点趋势视图">
       <button :aria-current="tab === 'topics' ? 'page' : undefined" @click="setTab('topics')">
         趋势主题</button
@@ -659,18 +680,18 @@ onBeforeUnmount(() => {
         <section id="trend-list" class="trend-list">
           <header>
             <div>
-              <strong>趋势列表</strong><span>共 {{ total }} 个主题</span>
+              <strong>情报列表</strong><span>共 {{ total }} 个主题</span>
             </div>
             <small>{{ sort === "impact" ? "按影响程度排序" : "按所选视图排序" }}</small>
           </header>
           <button
-            v-for="topic in sortedTopics"
+            v-for="(topic, index) in sortedTopics"
             :key="topic.id"
             type="button"
             :aria-pressed="selected?.id === topic.id"
             @click="selectTopic(topic)"
           >
-            <span class="topic-mark" :data-followed="topic.followed" aria-hidden="true"></span
+            <span class="topic-index" aria-hidden="true">{{ (page - 1) * 20 + index + 1 }}</span
             ><span
               ><strong>{{ topic.title }}</strong
               ><small
@@ -685,7 +706,7 @@ onBeforeUnmount(() => {
               ></span
             ><span class="topic-heat"
               ><b>{{ topic.heat.value }}</b
-              ><small>热度 / 条信号</small></span
+              ><small>条信号</small></span
             ><em :data-status="topic.status">{{ statusLabel(topic.status) }}</em>
           </button>
           <footer class="trend-pagination" aria-label="趋势分页">

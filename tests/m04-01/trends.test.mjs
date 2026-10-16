@@ -513,8 +513,8 @@ test("M04-01.A03/A05-A11/A13-A17 delivery evidence covers the complete module", 
   assert.match(webSurface, /合并主题[\s\S]*拆分主题[\s\S]*待确认/);
   assert.match(webSurface, /提议原因[\s\S]*驳回原因/);
   assert.match(webSurface, /下次采集[\s\S]*上次失败来源/);
-  assert.match(web, /class="primary[^"]*"[\s\S]*创建趋势监控/);
-  assert.match(web, /class="secondary"[\s\S]*refreshHotspots/);
+  assert.match(web, /class="so-action-primary"[\s\S]*新建监控/);
+  assert.match(web, /class="so-action-secondary"[\s\S]*refreshHotspots/);
   for (const fact of ["个来源", "新鲜度", "可信度"]) assert.match(webSurface, new RegExp(fact));
   assert.match(webSurface, /市场质量门[\s\S]*持续监控中/);
   assert.match(webSurface, /候选不等于建议采纳[\s\S]*五项质量门/);

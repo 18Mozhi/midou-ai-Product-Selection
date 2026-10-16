@@ -57,3 +57,7 @@ M04-01 生产探针只读预检全部趋势迁移表，缺表即停止，不会�
 规则周期允许 15–10080 分钟。迁移前已经启用且 `next_collection_at` 为空的规则会在 Worker 下一次轮询时立即进入首批采集。没有运行时依次检查 `trend_monitoring_rules.next_collection_at`、`collection_interval_minutes`、`source_cursor`、`last_collection_task_id` 和 Worker 的 `queue=automatic_hotspot_sources` 日志。Google、非 Google RSS/论坛及公开榜单均应进入趋势投影；商品型榜单随后还应出现高优先级 Amazon 商品快照和 Made-in-China/EC21 供应商任务。只回滚本扩展时先停止后端，再执行 `0043_trend_rule_collection_schedule.down.sql` 并回滚代码；已生成的任务、证据、机会、竞品和找货记录必须保留。
 
 主题治理验收需要两个不同的活动趋势管理员：甲提交提案后只能等待，乙按当前版本确认或驳回。合并前若关联超过一个机会，接口必须返回冲突且不迁移任何主题；拆分必须逐条选择信号且原主题至少保留一条。回滚 0064 前先停止统一 Node 后端并确认没有待处理治理请求；down 会把已归档主题恢复为 `stale` 并删除治理请求历史，必须先导出审计。应用迁移或回滚后只需通过宝塔重启统一 Node 后端，Python、MySQL 和 Redis 不重启。
+
+## 2026-10-17 市场情报工作区
+
+当前页面布局与真实 Vue 预览按 `docs/selection-market-intelligence-layout.md` 执行；不再注入历史模板。来源、规则、证据、治理权限与 API 合同不因布局重制改变。仅发布前端静态包，无新配置或 Node/Python 重启要求。

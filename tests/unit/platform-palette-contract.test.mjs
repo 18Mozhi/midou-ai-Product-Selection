@@ -959,7 +959,7 @@ test("P14 trend desk colors resolve from its route-scoped palette", async () => 
     [...css.matchAll(/var\((--trend-[a-z-]+)\)/g)].map((match) => match[1]),
   );
 
-  assert.equal(names.size, 23);
+  assert.equal(names.size, 17);
   assert.equal(declarations.length, names.size, "no duplicate trend palette declarations");
   assert.match(
     tokens.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
