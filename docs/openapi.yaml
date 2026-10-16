@@ -7577,7 +7577,17 @@ components:
       type: object
       readOnly: true
       additionalProperties: false
-      required: [review_id, title, text, rating, date_text, variation_text, verified_purchase, helpful_votes]
+      required:
+        [
+          review_id,
+          title,
+          text,
+          rating,
+          date_text,
+          variation_text,
+          verified_purchase,
+          helpful_votes,
+        ]
       properties:
         review_id: { type: string, maxLength: 80, pattern: "^R[A-Z0-9]+$" }
         title: { type: string, maxLength: 300 }
@@ -8073,7 +8083,8 @@ components:
               nullable: true
               additionalProperties: false
               description: Current snapshot for newly created workspace primary ASINs on the Beijing calendar date; deduplicated across records and excludes identities resolvable from earlier opportunities. Qualified count reuses all existing quality gates. Missing measurement is null or absent, never a measured zero. This is not a historical completion ledger or continuous-runtime acceptance.
-              required: [date, timezone, discovered_count, qualified_count, target_minimum, measured_at]
+              required:
+                [date, timezone, discovered_count, qualified_count, target_minimum, measured_at]
               properties:
                 date: { type: string, format: date }
                 timezone: { type: string, enum: [Asia/Shanghai] }
@@ -11087,6 +11098,21 @@ components:
                   version: { type: integer, minimum: 1 }
         request_id: { type: string }
         trace_id: { type: string }
+    SelectionPrimaryProductFacts:
+      type: object
+      readOnly: true
+      required: [price, currency, rating_value, review_count, captured_at, public_signals]
+      description: Lightweight facts from the latest scoped primary Amazon record. No raw HTML, review bodies or inferred private advertising metrics.
+      properties:
+        price: { type: number, minimum: 0, nullable: true }
+        currency: { type: string, pattern: "^[A-Z]{3}$", nullable: true }
+        rating_value: { type: number, minimum: 0, maximum: 5, nullable: true }
+        review_count: { type: integer, minimum: 0, nullable: true }
+        captured_at: { type: string, format: date-time }
+        public_signals:
+          allOf: [{ $ref: "#/components/schemas/AmazonPublicSignals" }]
+          nullable: true
+          description: Public badges and BSR only; this list projection never includes review_samples.
     OpportunitySummary:
       type: object
       required:
@@ -11121,12 +11147,23 @@ components:
       properties:
         id: { type: string, format: uuid }
         name: { type: string, maxLength: 200 }
+        image_url:
+          type: string
+          format: uri
+          nullable: true
+          readOnly: true
+          description: Image from the selected matching primary Amazon evidence only; null when absent or invalid. Never a news or unrelated competitor image.
         main_asin:
           type: string
           nullable: true
           pattern: "^[A-Z0-9]{10}$"
           readOnly: true
           description: Primary Amazon product identity from scoped persisted source evidence; null when unidentified.
+        primary_product:
+          allOf: [{ $ref: "#/components/schemas/SelectionPrimaryProductFacts" }]
+          nullable: true
+          readOnly: true
+          description: Optional for older clients; null when no matching active primary evidence exists. Latest capture time wins, with detail winning ties.
         market: { type: string }
         category: { type: string, nullable: true }
         source_type: { type: string, enum: [manual, trend_topic] }

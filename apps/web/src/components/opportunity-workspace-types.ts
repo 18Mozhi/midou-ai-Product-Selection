@@ -1,4 +1,4 @@
-import type { AmazonPublicSignals } from "@scoutops/contracts";
+import type { AmazonPublicSignals, SelectionPrimaryProductFacts } from "@scoutops/contracts";
 
 export type OpportunityWorkspaceState =
   "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
@@ -35,6 +35,7 @@ export interface OpportunitySummary {
   name: string;
   image_url: string | null;
   main_asin?: string | null;
+  primary_product?: SelectionPrimaryProductFacts | null;
   market: string;
   category: string | null;
   source_type: "manual" | "trend_topic";

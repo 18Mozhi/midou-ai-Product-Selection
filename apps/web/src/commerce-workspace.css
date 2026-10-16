@@ -432,3 +432,82 @@ html[data-design="commerce"] #app .product-catalog[data-display="list"] .opportu
     transition-duration: 0.01ms;
   }
 }
+
+.catalog-public-facts {
+  padding: 10px 14px;
+  border-block: 1px solid var(--so-border);
+}
+html[data-design="commerce"] #app .catalog-public-facts dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+}
+.catalog-public-facts dt {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.catalog-public-facts dd {
+  margin: 3px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.catalog-public-facts p {
+  display: flex;
+  gap: 8px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 10px 0 0;
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.catalog-public-facts > p:first-child {
+  margin: 0;
+}
+.catalog-public-facts small {
+  display: block;
+  margin-top: 6px;
+  color: var(--so-text-muted);
+  font-size: 11px;
+}
+.product-catalog[data-display="list"] .catalog-product-identity {
+  grid-column: 2;
+  grid-row: 1;
+}
+.product-catalog[data-display="list"] .catalog-product-metrics {
+  grid-column: 3;
+  grid-row: 1;
+}
+.product-catalog[data-display="list"] .catalog-public-facts {
+  grid-column: 2 / -1;
+  grid-row: 2;
+}
+html[data-design="commerce"] #app .product-catalog[data-display="list"] .catalog-public-facts dl {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.product-catalog[data-display="list"] .catalog-product-coverage {
+  grid-row: 3;
+}
+@media (max-width: 1100px) {
+  .product-catalog[data-display="list"] .catalog-product-metrics {
+    grid-column: 2;
+    grid-row: 2;
+  }
+  .product-catalog[data-display="list"] .catalog-public-facts {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+  html[data-design="commerce"] #app .product-catalog[data-display="list"] .catalog-public-facts dl {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .product-catalog[data-display="list"] .catalog-product-coverage {
+    grid-column: 1 / -1;
+    grid-row: 4;
+  }
+  .product-catalog[data-display="list"] .catalog-product > a > b {
+    grid-column: 2;
+    grid-row: 5;
+  }
+}

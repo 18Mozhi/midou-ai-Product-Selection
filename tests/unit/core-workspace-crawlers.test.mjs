@@ -385,8 +385,10 @@ test("core list pages expose explicit detail and operational actions", async () 
 
 test("opportunity summaries reuse crawled Amazon images and real downstream counts", async () => {
   const repository = await readFile("apps/api/src/mysql-opportunity-repository.ts", "utf8");
-  assert.match(repository, /RIGHT\(s\.source_ref_id,36\)/);
-  assert.match(repository, /JSON_EXTRACT\(n\.payload_json,'\$\.image_url'\)/);
+  assert.match(repository, /opportunityPrimaryRecordsSql/);
+  const primary = await readFile("apps/api/src/opportunity-primary-product.ts", "utf8");
+  assert.match(primary, /"image_url"/);
+  assert.match(primary, /n\.raw_evidence_id=s\.evidence_id/);
   assert.match(repository, /competitor_count/);
   assert.match(repository, /supplier_candidate_count/);
 });

@@ -1,4 +1,5 @@
 import { randomUUID } from "node:crypto";
+import type { SelectionPrimaryProductFacts } from "@scoutops/contracts";
 
 export type OpportunityDecision = "pending" | "adopted" | "observing" | "rejected";
 export type OpportunityCoverageStatus = "insufficient" | "partial" | "complete";
@@ -31,6 +32,7 @@ export interface OpportunitySummary {
   name: string;
   image_url: string | null;
   main_asin?: string | null;
+  primary_product?: SelectionPrimaryProductFacts | null;
   market: string;
   category: string | null;
   source_type: "manual" | "trend_topic";

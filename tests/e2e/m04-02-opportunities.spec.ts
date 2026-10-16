@@ -768,6 +768,78 @@ test("commerce catalogue switches layouts and keeps product navigation and missi
   await page.screenshot({ path: testInfo.outputPath("commerce-catalogue.png"), fullPage: true });
 });
 
+test("catalogue shows original primary facts without inventing sales or private ads", async ({
+  page,
+}, testInfo) => {
+  await ready(page);
+  await page.route("**/api/v1/opportunities?*", (route) =>
+    route.fulfill({
+      json: envelope(
+        [
+          {
+            ...base,
+            image_url: null,
+            main_asin: "B000000001",
+            primary_product: {
+              price: 29,
+              currency: "USD",
+              rating_value: 4.7,
+              review_count: 1200,
+              captured_at: "2026-10-17T00:00:00Z",
+              public_signals: {
+                sales_badge: {
+                  text: "100+ bought in past month",
+                  quantity_lower_bound: 100,
+                  period: "past_month",
+                },
+                best_seller_rank: { rank: 123, text: "#123 in Kitchen" },
+                sponsored: true,
+              },
+            },
+          },
+          {
+            ...base,
+            id: "00000000-0000-4000-8000-000000000499",
+            name: "资料缺失商品",
+            image_url: null,
+            primary_product: null,
+          },
+        ],
+        { page: 1, page_size: 20, total: 2 },
+      ),
+    }),
+  );
+  await page.goto("/opportunities");
+  const facts = page.locator(".catalog-product").first().locator(".catalog-public-facts");
+  await expect(facts).toContainText("USD 29.00");
+  await expect
+    .poll(() =>
+      facts
+        .locator("dl")
+        .evaluate((el) => getComputedStyle(el).gridTemplateColumns.split(" ").length),
+    )
+    .toBe(2);
+  await expect(facts).toContainText("4.7 / 1200 条");
+  await expect(facts).toContainText("近月 ≥ 100");
+  await expect(facts).toContainText("#123");
+  await expect(facts).toContainText("已观察到广告标记");
+  await expect(facts).toContainText("不等于精确销量");
+  await expect(page.locator(".catalog-product").nth(1).locator(".catalog-public-facts")).toHaveText(
+    "商品资料待采集",
+  );
+  await page.getByRole("button", { name: "列表", exact: true }).click();
+  await expect(facts).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+  await page.getByRole("button", { name: "图卡", exact: true }).click();
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.screenshot({
+    path: testInfo.outputPath("catalogue-primary-facts.png"),
+    fullPage: true,
+  });
+});
+
 test("opportunity list distinguishes a failed product image from one not yet collected", async ({
   page,
 }) => {

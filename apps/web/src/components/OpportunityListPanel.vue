@@ -115,6 +115,33 @@ const props = defineProps<{
       })[props.selectionView],
   );
 
+const productFacts = (item: Opportunity) => {
+  const p = item.primary_product;
+  const sales = p?.public_signals?.sales_badge;
+  return [
+    {
+      label: "售价",
+      value: p?.price != null && p.currency ? `${p.currency} ${p.price.toFixed(2)}` : "未采集",
+    },
+    {
+      label: "评分 / 评价",
+      value: `${p?.rating_value != null ? p.rating_value.toFixed(1) : "—"} / ${p?.review_count != null ? `${p.review_count} 条` : "未采集"}`,
+    },
+    {
+      label: "购买提示",
+      value: sales
+        ? `${sales.period === "past_month" ? "近月" : "近周"} ≥ ${sales.quantity_lower_bound}`
+        : "未采集",
+    },
+    {
+      label: "类目排名",
+      value: p?.public_signals?.best_seller_rank
+        ? `#${p.public_signals.best_seller_rank.rank}`
+        : "未采集",
+    },
+  ];
+};
+
 const opportunityStatus = (value: string) =>
     (
       ({
@@ -412,6 +439,28 @@ watch(imageFailureResetSources, (items) => {
               ></em
             ></span
           >
+          <div class="catalog-public-facts" :aria-label="`${item.name} 商品资料`">
+            <template v-if="item.primary_product">
+              <dl>
+                <div v-for="fact in productFacts(item)" :key="fact.label">
+                  <dt>{{ fact.label }}</dt>
+                  <dd>{{ fact.value }}</dd>
+                </div>
+              </dl>
+              <p>
+                <span>{{
+                  item.primary_product.public_signals?.sponsored
+                    ? "已观察到广告标记"
+                    : "广告标记未提供"
+                }}</span
+                ><time :datetime="item.primary_product.captured_at"
+                  >资料 {{ freshness(item.primary_product.captured_at) }}</time
+                >
+              </p>
+              <small>购买提示为公开下限，不等于精确销量。</small>
+            </template>
+            <p v-else>商品资料待采集</p>
+          </div>
           <dl class="catalog-product-metrics" :aria-label="`${item.name} 决策摘要`">
             <div v-for="fact in rowFacts(item)" :key="fact.label">
               <dt>{{ fact.label }}</dt>

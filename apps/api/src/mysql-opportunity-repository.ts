@@ -1,3 +1,7 @@
+import {
+  opportunityPrimaryRecordsSql,
+  readOpportunityPrimaryProduct,
+} from "./opportunity-primary-product.js";
 import { randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
@@ -35,21 +39,6 @@ const numberOrNull = (value: unknown) => (value == null ? null : Number(value));
 const parse = <T>(value: unknown): T =>
   typeof value === "string" ? (JSON.parse(value) as T) : (value as T);
 const sqlText = (...parts: string[]) => parts.join(" ");
-const opportunityImageSql = sqlText(
-  "COALESCE((SELECT JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url'))",
-  "FROM opportunity_evidence_links l",
-  "JOIN normalized_records n ON n.raw_evidence_id=l.raw_evidence_id AND n.status='active'",
-  "WHERE l.opportunity_id=o.id",
-  "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) LIKE 'http%'",
-  "ORDER BY n.created_at DESC LIMIT 1),",
-  "(SELECT JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url'))",
-  "FROM competitors c",
-  "JOIN competitor_snapshots s ON s.id=c.latest_snapshot_id",
-  "JOIN normalized_records n ON n.id=RIGHT(s.source_ref_id,36) AND n.status='active'",
-  "WHERE c.opportunity_id=o.id AND c.deleted_at IS NULL",
-  "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) LIKE 'http%'",
-  "ORDER BY s.captured_at DESC LIMIT 1))",
-);
 const opportunityCountsSql = sqlText(
   "(SELECT COUNT(DISTINCT UPPER(c.external_id)) FROM competitors c",
   `WHERE c.opportunity_id=o.id AND c.organization_id=o.organization_id AND c.workspace_id=o.workspace_id AND c.deleted_at IS NULL AND c.source_site='Amazon' AND c.external_id REGEXP '^[A-Za-z0-9]{10}$' AND BINARY UPPER(c.external_id)<>BINARY COALESCE(${opportunityPrimaryAsinSql},'')) competitor_count,`,
@@ -63,45 +52,52 @@ const opportunityCountsSql = sqlText(
 );
 const opportunityLifecycleSql =
   "GREATEST(0,TIMESTAMPDIFF(SECOND,o.lifecycle_entered_at,UTC_TIMESTAMP(3))) lifecycle_dwell_seconds";
-const summary = (row: RowDataPacket): OpportunitySummary => ({
-  id: String(row.id),
-  name: String(row.name),
-  image_url: row.image_url ? String(row.image_url) : null,
-  main_asin: row.main_asin ? String(row.main_asin) : null,
-  market: String(row.market),
-  category: row.category == null ? null : String(row.category),
-  source_type: row.source_type,
-  source_ref_id: row.source_ref_id == null ? null : String(row.source_ref_id),
-  owner_id: row.owner_id == null ? null : String(row.owner_id),
-  lifecycle_status: String(row.lifecycle_status),
-  lifecycle_entered_at: iso(row.lifecycle_entered_at ?? row.updated_at),
-  lifecycle_dwell_seconds: Number(row.lifecycle_dwell_seconds ?? 0),
-  recommendation_status: row.recommendation_status,
-  overall_score: numberOrNull(row.overall_score),
-  trend_score: numberOrNull(row.trend_score),
-  competition_score: numberOrNull(row.competition_score),
-  profit_status: row.profit_status,
-  risk_level: row.risk_level,
-  confidence: { status: row.confidence_status, score: numberOrNull(row.confidence_score) },
-  evidence_count: Number(row.evidence_count),
-  source_count: Number(row.source_count),
-  competitor_count: Number(row.competitor_count ?? 0),
-  supplier_candidate_count: Number(row.supplier_candidate_count ?? 0),
-  matched_rule_count: Number(row.matched_rule_count ?? 0),
-  ...evaluateOpportunitySelection(row),
-  coverage_status: row.coverage_status,
-  blocking_reasons: [
-    ...(Number(row.evidence_count) === 0 || row.coverage_status === "insufficient"
-      ? ["evidence_insufficient" as const]
-      : []),
-    ...(!evaluateOpportunitySelection(row).quality_gates.all_passed
-      ? ["recommendation_insufficient" as const]
-      : []),
-  ],
-  decision_status: row.decision_status,
-  version: Number(row.version),
-  updated_at: iso(row.updated_at),
-});
+const summary = (row: RowDataPacket): OpportunitySummary => {
+  const primary = readOpportunityPrimaryProduct(
+    row.primary_linked_record,
+    row.primary_detail_record,
+  );
+  return {
+    id: String(row.id),
+    name: String(row.name),
+    image_url: primary.imageUrl,
+    primary_product: primary.facts,
+    main_asin: row.main_asin ? String(row.main_asin) : null,
+    market: String(row.market),
+    category: row.category == null ? null : String(row.category),
+    source_type: row.source_type,
+    source_ref_id: row.source_ref_id == null ? null : String(row.source_ref_id),
+    owner_id: row.owner_id == null ? null : String(row.owner_id),
+    lifecycle_status: String(row.lifecycle_status),
+    lifecycle_entered_at: iso(row.lifecycle_entered_at ?? row.updated_at),
+    lifecycle_dwell_seconds: Number(row.lifecycle_dwell_seconds ?? 0),
+    recommendation_status: row.recommendation_status,
+    overall_score: numberOrNull(row.overall_score),
+    trend_score: numberOrNull(row.trend_score),
+    competition_score: numberOrNull(row.competition_score),
+    profit_status: row.profit_status,
+    risk_level: row.risk_level,
+    confidence: { status: row.confidence_status, score: numberOrNull(row.confidence_score) },
+    evidence_count: Number(row.evidence_count),
+    source_count: Number(row.source_count),
+    competitor_count: Number(row.competitor_count ?? 0),
+    supplier_candidate_count: Number(row.supplier_candidate_count ?? 0),
+    matched_rule_count: Number(row.matched_rule_count ?? 0),
+    ...evaluateOpportunitySelection(row),
+    coverage_status: row.coverage_status,
+    blocking_reasons: [
+      ...(Number(row.evidence_count) === 0 || row.coverage_status === "insufficient"
+        ? ["evidence_insufficient" as const]
+        : []),
+      ...(!evaluateOpportunitySelection(row).quality_gates.all_passed
+        ? ["recommendation_insufficient" as const]
+        : []),
+    ],
+    decision_status: row.decision_status,
+    version: Number(row.version),
+    updated_at: iso(row.updated_at),
+  };
+};
 
 export class MySqlOpportunityRepository implements OpportunityRepository {
   constructor(private readonly pool: Pool) {}
@@ -177,11 +173,13 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
         `SELECT COUNT(*) total FROM opportunities o WHERE ${sql}`,
         values,
       ),
+      // LIMIT prevents MySQL 5.7 derived merging: resolve identity once per paged row,
+      // rather than once per candidate evidence record. The outer sort preserves paging order.
       [rows] = await this.pool.query<RowDataPacket[]>(
         sqlText(
-          `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
-          `FROM opportunities o WHERE ${sql}`,
-          "ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?",
+          `SELECT o.*,${opportunityPrimaryRecordsSql},${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
+          `FROM (SELECT o.*,${opportunityPrimaryAsinSql} primary_fact_asin FROM (SELECT o.* FROM opportunities o WHERE ${sql} ORDER BY o.updated_at DESC,o.id DESC LIMIT ? OFFSET ?) o LIMIT 18446744073709551615) o`,
+          "ORDER BY o.updated_at DESC,o.id DESC",
         ),
         [...values, input.pageSize, (input.page - 1) * input.pageSize],
       );
@@ -582,9 +580,8 @@ export class MySqlOpportunityRepository implements OpportunityRepository {
   }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       sqlText(
-        `SELECT o.*,${opportunityImageSql} image_url,${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
-        "FROM opportunities o",
-        "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1",
+        `SELECT o.*,${opportunityPrimaryRecordsSql},${opportunityCountsSql},${opportunityLifecycleSql},${opportunitySelectionProjectionSql}`,
+        `FROM (SELECT o.*,${opportunityPrimaryAsinSql} primary_fact_asin FROM opportunities o WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? LIMIT 1) o`,
       ),
       [input.opportunityId, input.organizationId, input.workspaceId],
     );

@@ -1,4 +1,21 @@
 {
+  "selectionCatalogueFacts20261017": {
+    "status": "implemented",
+    "statusDetail": "61_related_checks_and_126_browser_cases_passed_not_deployed",
+    "requirements": "docs/selection-catalogue-product-facts.md",
+    "routes": ["/opportunities", "/opportunities/:id"],
+    "sourceFiles": [
+      "apps/api/src/opportunity-primary-product.ts",
+      "apps/api/src/mysql-opportunity-repository.ts",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "packages/contracts/src/selection-core.ts"
+    ],
+    "testFiles": [
+      "tests/unit/opportunity-primary-product.test.mjs",
+      "tests/e2e/m04-02-opportunities.spec.ts"
+    ],
+    "contract": "Scoped latest primary Amazon facts only; unknown stays unknown. Public sales lower bounds and observed ads never imply exact sales or ad spend. Page before materialized primary identity. No schema/config/source enablement or production write."
+  },
   "selectionStartupConsistency20261017": {
     "status": "implemented",
     "statusDetail": "51_related_checks_passed_not_deployed",
