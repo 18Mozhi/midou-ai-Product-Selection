@@ -1,7 +1,11 @@
 import { createHash, randomUUID } from "node:crypto";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import { amazonAsin } from "./competitor-discovery-policy.js";
-import { selectionCandidateSql } from "@scoutops/database";
+import {
+  selectionCandidateSql,
+  automaticEvaluationPendingSql,
+  automaticEvaluationEnqueueUpdateSql,
+} from "@scoutops/database";
 import {
   automaticPrimaryEvidenceSql,
   automaticSupplyEvidenceSql,
@@ -78,10 +82,8 @@ export async function queueAutomaticSelectionEvaluation(
   await connection.query(
     "INSERT INTO automatic_selection_evaluations " +
       "(opportunity_id,organization_id,workspace_id,status,attempt_count,available_at,created_at,updated_at) " +
-      "VALUES (?,?,?,'queued',0,?,?,?) ON DUPLICATE KEY UPDATE " +
-      "status=IF(status='leased',status,'queued'),attempt_count=IF(status='leased',attempt_count,0)," +
-      "available_at=IF(status='leased',available_at,VALUES(available_at))," +
-      "last_error_code=IF(status='leased',last_error_code,NULL),updated_at=VALUES(updated_at)",
+      "VALUES (?,?,?,'queued',0,?,?,?) " +
+      automaticEvaluationEnqueueUpdateSql,
     [input.opportunityId, input.organizationId, input.workspaceId, input.now, input.now, input.now],
   );
 }
@@ -158,6 +160,7 @@ export class MySqlAutomaticSelectionEvaluationWorker {
       }
       await connection.query(
         "UPDATE automatic_selection_evaluations SET status='leased',attempt_count=attempt_count+1," +
+          "result_json=JSON_REMOVE(result_json,'$.requeue_requested')," +
           "lease_owner=?,lease_expires_at=?,updated_at=? WHERE opportunity_id=?",
         [this.workerId, expires, now, row.opportunity_id],
       );
@@ -893,11 +896,13 @@ export class MySqlAutomaticSelectionEvaluationWorker {
     now: Date,
   ) {
     await connection.query(
-      "UPDATE automatic_selection_evaluations SET status=?,attempt_count=0,lease_owner=NULL," +
-        "lease_expires_at=NULL,last_error_code=?,evidence_fingerprint=?,result_json=?,evaluated_at=?," +
+      `UPDATE automatic_selection_evaluations SET status=IF(${automaticEvaluationPendingSql},'queued',?),attempt_count=0,lease_owner=NULL,` +
+        `available_at=IF(${automaticEvaluationPendingSql},?,available_at),` +
+        `lease_expires_at=NULL,last_error_code=IF(${automaticEvaluationPendingSql},NULL,?),evidence_fingerprint=?,result_json=?,evaluated_at=?,` +
         "updated_at=? WHERE opportunity_id=? AND lease_owner=?",
       [
         status,
+        now,
         typeof result.error_code === "string" ? result.error_code : null,
         evidenceFingerprint,
         JSON.stringify(result),
@@ -918,9 +923,11 @@ export class MySqlAutomaticSelectionEvaluationWorker {
           ? new Date(now.getTime() + delays[Math.min(job.attemptCount - 1, 2)]!)
           : now;
     await this.pool.query(
-      "UPDATE automatic_selection_evaluations SET status=?,available_at=?,lease_owner=NULL," +
-        "lease_expires_at=NULL,last_error_code=?,updated_at=? WHERE opportunity_id=? AND lease_owner=?",
-      [stored, available, code, now, job.opportunityId, this.workerId],
+      `UPDATE automatic_selection_evaluations SET status=IF(${automaticEvaluationPendingSql},'queued',?),` +
+        `available_at=IF(${automaticEvaluationPendingSql},?,?),attempt_count=IF(${automaticEvaluationPendingSql},0,attempt_count),lease_owner=NULL,` +
+        `lease_expires_at=NULL,last_error_code=IF(${automaticEvaluationPendingSql},NULL,?),updated_at=?,` +
+        "result_json=JSON_REMOVE(result_json,'$.requeue_requested') WHERE opportunity_id=? AND lease_owner=?",
+      [stored, now, available, code, now, job.opportunityId, this.workerId],
     );
   }
 

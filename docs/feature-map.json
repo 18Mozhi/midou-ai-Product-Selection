@@ -1,4 +1,22 @@
 {
+  "selectionEvaluationWakeup20261017": {
+    "status": "implemented",
+    "statusDetail": "local_60_related_tests_and_mysql57_27_read_only_transitions_passed_not_deployed",
+    "requirements": "docs/selection-evaluation-wakeup.md",
+    "sourceFiles": [
+      "packages/database/src/automatic-evaluation-queue-sql.ts",
+      "packages/database/src/index.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts",
+      "apps/api/src/mysql-scoring-repository.ts",
+      "apps/api/src/mysql-profit-repository.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-evaluation-queue.test.mjs",
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs"
+    ],
+    "contract": "Coalesce one internal leased evaluation wakeup in existing result_json, consume on claim, preserve on completion/failure via queued without lease takeover. All three producers share policy. No external API/schema/config change. No production writes or deployment."
+  },
   "selectionSourcingLayout20261017": {
     "status": "implemented",
     "statusDetail": "54_browser_cases_and_30_related_tests_passed_not_deployed",

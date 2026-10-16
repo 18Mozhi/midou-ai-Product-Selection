@@ -28,3 +28,8 @@
 ## 回滚
 
 先在宝塔关闭机会入口并停止 Node Worker，回滚应用版本。若需要撤销时间校正，先在相同服务器时区下执行 `0071_opportunity_migration_timestamp_timezone.down.sql`；它仍只匹配 0070 的批量时间戳。经营复盘表包含业务事实，只有完成受控归档并确认可删除后才能执行 `0065_opportunity_operating_feedback.down.sql`；随后按需执行 `0060_opportunity_workflow_visibility.down.sql`，完整移除机会域时再执行 `0017b_opportunities_m04_02.down.sql`。下迁移会移除阶段进入时间与评分 Job 的补采任务关联，已经投递的通知和审计事实保留。恢复时重新应用迁移、启动 API/Worker，并运行 `npm run verify:module -- M04-02`。
+
+
+## 2026-10-17 执行期间的新通知
+
+自动评估的证据、评分规则和费用规则生产者通过共享策略保留 leased 期间通知，当前执行结束后 queued，租约不抢占。内部 result_json 标记、兼容、回归及 API/Worker 同包重启要求见 `docs/selection-evaluation-wakeup.md`。本轮无生产写入或部署。

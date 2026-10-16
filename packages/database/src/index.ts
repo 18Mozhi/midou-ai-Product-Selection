@@ -227,3 +227,8 @@ export async function applyMigration(
   );
   return "applied";
 }
+
+export {
+  automaticEvaluationPendingSql,
+  automaticEvaluationEnqueueUpdateSql,
+} from "./automatic-evaluation-queue-sql.js";

@@ -1,5 +1,5 @@
 import { randomUUID } from "node:crypto";
-import { selectionCandidateSql } from "@scoutops/database";
+import { selectionCandidateSql, automaticEvaluationEnqueueUpdateSql } from "@scoutops/database";
 import type { Pool, PoolConnection, RowDataPacket } from "mysql2/promise";
 import {
   calculateScoreProjection,
@@ -557,9 +557,7 @@ export class MySqlScoringRepository implements ScoringRepository {
         "SELECT o.id,o.organization_id,o.workspace_id,'queued',0,?,?,? FROM opportunities o WHERE " +
         "o.organization_id=? AND o.workspace_id=? AND o.decision_status='pending' " +
         `AND ${selectionCandidateSql} ` +
-        "ON DUPLICATE KEY UPDATE " +
-        "status=IF(status='leased',status,'queued'),available_at=IF(status='leased',available_at,VALUES(available_at))," +
-        "last_error_code=IF(status='leased',last_error_code,NULL),updated_at=VALUES(updated_at)",
+        automaticEvaluationEnqueueUpdateSql,
       [now, now, now, input.organizationId, input.workspaceId],
     );
   }
