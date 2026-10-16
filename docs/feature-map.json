@@ -1,4 +1,18 @@
 {
+  "selectionPrimaryDetailScoring20261017": {
+    "status": "implemented",
+    "statusDetail": "98_related_checks_and_mysql57_readonly_passed_not_deployed",
+    "requirements": "docs/selection-evidence-scoring.md",
+    "sourceFiles": [
+      "apps/worker/src/automatic-selection-evidence.ts",
+      "apps/worker/src/automatic-selection-evaluation-worker.ts"
+    ],
+    "testFiles": [
+      "tests/unit/automatic-evidence-scoring.test.mjs",
+      "tests/unit/automatic-selection-evaluation.test.mjs"
+    ],
+    "contract": "Choose newer original primary evidence from linked trend records and same-tenant same-opportunity same-ASIN detail snapshots; detail wins equal capture time. Preserve provenance, missing facts, human prices, idempotency, cost policies and quality gates. No new API, configuration or migration."
+  },
   "selectionPrimaryDetailImageRecovery20261017": {
     "status": "implemented",
     "statusDetail": "64_related_checks_and_mysql57_readonly_validation_passed_not_deployed",

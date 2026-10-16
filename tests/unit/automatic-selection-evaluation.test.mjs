@@ -4,6 +4,7 @@ import test from "node:test";
 import { MySqlAutomaticSelectionEvaluationWorker } from "../../apps/worker/dist/automatic-selection-evaluation-worker.js";
 import {
   automaticPrimaryEvidenceSql,
+  automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
 } from "../../apps/worker/dist/automatic-selection-evidence.js";
 import { selectionPrimaryAsinSql } from "../../packages/database/dist/index.js";
@@ -191,6 +192,7 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
             },
           ],
         ];
+      if (sql === automaticPrimaryDetailEvidenceSql) return [[]];
       if (sql === automaticPrimaryEvidenceSql)
         return [
           [
@@ -248,13 +250,34 @@ test("automatic evaluation binds primary identity and supply tasks to the curren
   };
   const result = await worker.evaluate(job);
   assert.equal(result.payload.error_code, "high_confidence_1688_match_missing");
-  for (const sql of [automaticPrimaryEvidenceSql, automaticSupplyEvidenceSql])
+  for (const sql of [
+    automaticPrimaryEvidenceSql,
+    automaticPrimaryDetailEvidenceSql,
+    automaticSupplyEvidenceSql,
+  ])
     assert.deepEqual(calls.find((call) => call.sql === sql).params, [
       "opportunity",
       "org",
       "workspace",
     ]);
   assert.ok(automaticPrimaryEvidenceSql.includes(selectionPrimaryAsinSql));
+  assert.match(
+    automaticPrimaryEvidenceSql,
+    /ORDER BY l\.observed_at DESC,n\.created_at DESC,n\.id DESC LIMIT 1/,
+  );
+  assert.ok(automaticPrimaryDetailEvidenceSql.includes(selectionPrimaryAsinSql));
+  assert.match(
+    automaticPrimaryDetailEvidenceSql,
+    /s\.organization_id=c\.organization_id AND s\.workspace_id=c\.workspace_id/,
+  );
+  assert.match(
+    automaticPrimaryDetailEvidenceSql,
+    /n\.organization_id=s\.organization_id AND n\.workspace_id=s\.workspace_id AND n\.status='active'/,
+  );
+  assert.match(
+    automaticPrimaryDetailEvidenceSql,
+    /BINARY UPPER\(JSON_UNQUOTE\(JSON_EXTRACT\(n\.payload_json,'\$\.asin'\)\)\)=BINARY UPPER\(c\.external_id\)/,
+  );
   assert.match(automaticSupplyEvidenceSql, /ss.input_type='opportunity' AND ss.input_ref=\?/);
   assert.match(automaticSupplyEvidenceSql, /n.raw_evidence_id=l.raw_evidence_id/);
   const priceWrites = calls.filter((call) =>

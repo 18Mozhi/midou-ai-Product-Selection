@@ -5,6 +5,7 @@ import { calculateScoreProjection } from "../../packages/contracts/dist/index.js
 import { MySqlAutomaticSelectionEvaluationWorker } from "../../apps/worker/dist/automatic-selection-evaluation-worker.js";
 import {
   automaticPrimaryEvidenceSql,
+  automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
 } from "../../apps/worker/dist/automatic-selection-evidence.js";
 
@@ -75,26 +76,30 @@ function fixture(options = {}) {
                 },
               ],
         ];
+      if (sql === automaticPrimaryDetailEvidenceSql)
+        return [options.detail ? [options.detail] : []];
       if (sql === automaticPrimaryEvidenceSql)
         return [
-          [
-            {
-              raw_evidence_id: "amazon-evidence",
-              observed_at: now,
-              provider_status: "enabled",
-              payload_json: {
-                asin: "B000000001",
-                title: options.phone
-                  ? "Magnetic case for iPhone 17 Pro Max"
-                  : "Stainless steel kitchen storage rack",
-                price: 25,
-                currency: "USD",
-                review_count: 300,
-                rating_value: 4.5,
-                ...options.fields,
-              },
-            },
-          ],
+          options.noLinked
+            ? []
+            : [
+                {
+                  raw_evidence_id: "amazon-evidence",
+                  observed_at: options.linkedAt ?? now,
+                  provider_status: "enabled",
+                  payload_json: {
+                    asin: "B000000001",
+                    title: options.phone
+                      ? "Magnetic case for iPhone 17 Pro Max"
+                      : "Stainless steel kitchen storage rack",
+                    price: 25,
+                    currency: "USD",
+                    review_count: 300,
+                    rating_value: 4.5,
+                    ...options.fields,
+                  },
+                },
+              ],
         ];
       if (sql.startsWith("SELECT s.* FROM competitors"))
         return [
@@ -483,4 +488,88 @@ test("profit API returns sourced prices even without a profit run or fee rule", 
   );
   for (const read of reads)
     assert.deepEqual(read.params, [job.opportunityId, job.organizationId, job.workspaceId]);
+});
+
+const detailEvidence = (observedAt = now, fields = {}) => ({
+  raw_evidence_id: "detail-evidence",
+  observed_at: observedAt,
+  provider_status: "enabled",
+  payload_json: {
+    asin: "B000000001",
+    canonical_url: "https://www.amazon.com/dp/B000000001",
+    title: "Stainless steel kitchen storage rack",
+    price: 29,
+    currency: "USD",
+    review_count: 1200,
+    rating_value: 4.8,
+    ...fields,
+  },
+});
+
+for (const [label, linkedAt, noLinked, expectedEvidence, expectedPrice] of [
+  ["newer detail", new Date(now.getTime() - 60000), false, "detail-evidence", 29],
+  ["same-time detail", now, false, "detail-evidence", 29],
+  ["detail without trend link", now, true, "detail-evidence", 29],
+  ["newer search", new Date(now.getTime() + 60000), false, "amazon-evidence", 25],
+]) {
+  test(`automatic scoring and sale input use ${label} with original provenance`, async () => {
+    const f = fixture({
+      noHumanCosts: true,
+      noCostRule: true,
+      linkedAt,
+      noLinked,
+      detail: detailEvidence(),
+    });
+    const result = await f.worker.evaluate(job);
+    assert.equal(result.status, "waiting_evidence");
+    assert.equal(result.payload.error_code, "automatic_rules_not_active");
+    const sale = f.prices.find((p) => p.input_type === "sale_price");
+    assert.equal(sale.amount_value, expectedPrice);
+    assert.equal(sale.evidence_id, expectedEvidence);
+    assert.deepEqual(JSON.parse(f.inputs.get("market_demand").evidence_ids_json), [
+      expectedEvidence,
+    ]);
+    const qualityRead = f.calls.find(({ sql }) => sql.startsWith("SELECT COUNT(*) blocked"));
+    assert.ok(qualityRead.params.includes(expectedEvidence));
+    assert.equal(f.inputs.get("profit").score_value, null);
+    f.calls.length = 0;
+    await f.worker.evaluate(job);
+    assert.equal(
+      f.calls.some(({ sql }) => sql.startsWith("INSERT INTO opportunity_cost_inputs")),
+      false,
+    );
+    assert.equal(
+      f.calls.some(({ sql }) => sql.startsWith("INSERT INTO opportunity_score_inputs")),
+      false,
+    );
+  });
+}
+
+test("newer incomplete detail does not borrow the old search price to make scoring pass", async () => {
+  const f = fixture({
+    noHumanCosts: true,
+    linkedAt: new Date(now.getTime() - 60000),
+    detail: detailEvidence(now, { price: null }),
+  });
+  const result = await f.worker.evaluate(job);
+  assert.equal(result.payload.error_code, "amazon_sale_facts_incomplete");
+  assert.deepEqual(result.payload.missing, ["price"]);
+  assert.equal(f.prices.length, 0);
+  assert.equal(f.inputs.size, 0);
+});
+
+test("newer detail evidence cannot overwrite human-confirmed sale or purchase prices", async () => {
+  const f = fixture({ detail: detailEvidence() });
+  await f.worker.evaluate(job);
+  assert.equal(
+    f.calls.some(({ sql }) => sql.startsWith("INSERT INTO opportunity_cost_inputs")),
+    false,
+  );
+  assert.deepEqual(
+    f.prices.map((p) => p.confirmation_mode),
+    ["human_review", "human_review"],
+  );
+  assert.deepEqual(JSON.parse(f.inputs.get("market_demand").evidence_ids_json), [
+    "detail-evidence",
+  ]);
 });

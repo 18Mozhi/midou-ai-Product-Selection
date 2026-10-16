@@ -43,7 +43,25 @@ export const automaticPrimaryEvidenceSql =
   `AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY ${selectionPrimaryAsinSql} ` +
   "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.canonical_url')) REGEXP " +
   "CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')),'([/?#]|$)') " +
-  "ORDER BY n.created_at DESC,n.id DESC LIMIT 1";
+  "ORDER BY l.observed_at DESC,n.created_at DESC,n.id DESC LIMIT 1";
+
+/** Detail projections do not create trend links; resolve their original primary evidence separately. */
+export const automaticPrimaryDetailEvidenceSql =
+  "SELECT n.raw_evidence_id,s.captured_at observed_at,n.payload_json,p.status provider_status " +
+  "FROM opportunities o JOIN competitors c ON c.opportunity_id=o.id " +
+  "AND c.organization_id=o.organization_id AND c.workspace_id=o.workspace_id " +
+  "AND c.status='active' AND c.deleted_at IS NULL AND c.source_site='Amazon' " +
+  "JOIN competitor_snapshots s ON s.competitor_id=c.id " +
+  "AND s.organization_id=c.organization_id AND s.workspace_id=c.workspace_id " +
+  "JOIN normalized_records n ON n.raw_evidence_id=s.evidence_id " +
+  "AND n.organization_id=s.organization_id AND n.workspace_id=s.workspace_id AND n.status='active' " +
+  "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
+  "WHERE o.id=? AND o.organization_id=? AND o.workspace_id=? " +
+  `AND BINARY UPPER(c.external_id)=BINARY ${selectionPrimaryAsinSql} ` +
+  "AND BINARY UPPER(JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')))=BINARY UPPER(c.external_id) " +
+  "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.canonical_url')) REGEXP " +
+  "CONCAT('^https://www[.]amazon[.]com/([^?#]*/)?(dp|gp/product)/',JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.asin')),'([/?#]|$)') " +
+  "ORDER BY s.captured_at DESC,s.id DESC,n.created_at DESC,n.id DESC LIMIT 1";
 
 /** Only records produced by this opportunity's sourcing tasks can establish its purchase cost. */
 export const automaticSupplyEvidenceSql =

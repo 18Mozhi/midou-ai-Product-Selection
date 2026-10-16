@@ -8,6 +8,7 @@ import {
 } from "@scoutops/database";
 import {
   automaticPrimaryEvidenceSql,
+  automaticPrimaryDetailEvidenceSql,
   automaticSupplyEvidenceSql,
 } from "./automatic-selection-evidence.js";
 import {
@@ -233,7 +234,17 @@ export class MySqlAutomaticSelectionEvaluationWorker {
         job.organizationId,
         job.workspaceId,
       ]);
-      const amazon = amazonRows[0];
+      const [detailRows] = await connection.query<RowDataPacket[]>(
+        automaticPrimaryDetailEvidenceSql,
+        [job.opportunityId, job.organizationId, job.workspaceId],
+      );
+      const linked = amazonRows[0],
+        detail = detailRows[0],
+        amazon =
+          detail &&
+          (!linked || date(detail.observed_at).getTime() >= date(linked.observed_at).getTime())
+            ? detail
+            : linked;
       if (!amazon)
         return await this.waiting(connection, job, "amazon_product_evidence_missing", {}, now);
       const fields = normalizedProductFields(parse(amazon.payload_json, {})),
