@@ -9,6 +9,7 @@ import {
 } from "@scoutops/provider-sources";
 import { createRedisConnection, ScopedRedisStore } from "@scoutops/redis";
 import { MySqlAiAnalysisWorker, OpenAiCompatibleAnalysisAdapter } from "./ai-analysis-worker.js";
+import { OpenAiIntelligenceProductClassifier } from "./intelligence-product-association.js";
 import { ApprovalEscalationWorker } from "./approval-escalation-worker.js";
 import {
   PendingMailProvider,
@@ -85,7 +86,14 @@ const executor = new ProviderSourceExecutor(
 const trendProjection = new MySqlTrendProjectionWorker(
   pool,
   config.identity.workerId,
-  config.trends.projectionLeaseSeconds,
+  Math.max(config.trends.projectionLeaseSeconds, Math.ceil(config.ai.timeoutMs / 1000) + 30),
+  () => new Date(),
+  new OpenAiIntelligenceProductClassifier(
+    config.ai.model,
+    config.ai.baseUrl,
+    config.ai.apiKey,
+    config.ai.timeoutMs,
+  ),
 );
 const opportunityRefresh = new MySqlOpportunityRefreshWorker(
   pool,

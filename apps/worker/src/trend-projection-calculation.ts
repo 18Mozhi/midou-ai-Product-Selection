@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { BUILTIN_PROVIDER_SOURCES } from "@scoutops/provider-sources";
+import type { IntelligenceProductAssociation } from "./intelligence-product-association.js";
 
 export interface TrendProjectionJob {
   id: string;
@@ -17,6 +18,11 @@ export interface TrendProjectionJob {
   requestId: string;
   traceId: string;
   attemptCount: number;
+  intelligenceAssociation?: IntelligenceProductAssociation;
+  intelligenceSourceRecordId?: string;
+  intelligenceQuery?: string;
+  primarySelectionRationale?: string;
+  intelligenceModel?: string;
 }
 
 export function readRuleProductDiscoveryProvenance(value: unknown) {

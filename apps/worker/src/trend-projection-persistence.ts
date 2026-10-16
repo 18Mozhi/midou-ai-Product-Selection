@@ -3,10 +3,10 @@ import type { Pool, PoolConnection, ResultSetHeader, RowDataPacket } from "mysql
 import { queueAutomaticSelectionEvaluation } from "./automatic-selection-evaluation-worker.js";
 import { refreshRuleRecommendation } from "./rule-recommendation.js";
 import { TrendProjectionAlerts } from "./trend-projection-alerts.js";
+import { amazonAsin } from "./competitor-discovery-policy.js";
 import {
   buildSupplierSearchQuery,
   calculateTrendProjection,
-  isConcreteProductEvidence,
   TrendProjectionError,
   type TrendProjectionJob,
 } from "./trend-projection-calculation.js";
@@ -38,6 +38,11 @@ export class TrendProjectionPersistence {
     let stage = "begin";
     try {
       await c.beginTransaction();
+      const [lease] = await c.query<RowDataPacket[]>(
+        "SELECT id FROM trend_projection_jobs WHERE id=? AND status='leased' AND lease_owner=? AND lease_expires_at>? FOR UPDATE",
+        [job.id, this.workerId, now],
+      );
+      if (!lease[0]) throw new TrendProjectionError("trend_projection_lease_lost", true);
       stage = "topic_lookup";
       const [topics] = await c.query<RowDataPacket[]>(
         "SELECT id FROM trend_topics WHERE organization_id=? AND workspace_id=? AND topic_key=? FOR UPDATE",
@@ -132,7 +137,52 @@ export class TrendProjectionPersistence {
           language: providerContext.language,
           heat_unit: "signals",
         });
-        if (matchedRuleIds.length && isConcreteProductEvidence(job.payload, canonicalUrl)) {
+        if (job.intelligenceAssociation) {
+          await this.alerts.writeTrendEvent(
+            c,
+            job,
+            "trend.intelligence.associated",
+            "trend_topic",
+            topicId,
+            {
+              normalized_record_id: job.normalizedRecordId,
+              association: job.intelligenceAssociation,
+              model: job.intelligenceModel,
+              contract: "intelligence-product-v1",
+              evidence_status: "hypothesis",
+            },
+          );
+          if (job.intelligenceAssociation.queries.length) {
+            const [providers] = await c.query<RowDataPacket[]>(
+              "SELECT id FROM providers WHERE code='amazon_product' LIMIT 1",
+            );
+            if (!providers[0])
+              throw new TrendProjectionError("intelligence_amazon_provider_missing", true);
+            for (const query of job.intelligenceAssociation.queries)
+              await this.scheduleCoreCollection(
+                c,
+                job,
+                randomUUID(),
+                [
+                  {
+                    providerId: String(providers[0].id),
+                    required: true,
+                    target: {
+                      query,
+                      projection_type: "intelligence_product_discovery",
+                      intelligence_source_record_id: job.normalizedRecordId,
+                    },
+                  },
+                ],
+                "intelligence.product_search.auto_scheduled",
+                now,
+              );
+          }
+        }
+        if (
+          (matchedRuleIds.length || job.primarySelectionRationale) &&
+          amazonAsin(job.payload, canonicalUrl)
+        ) {
           stage = "automatic_product_discovery";
           await this.discoverOpportunity(
             c,
@@ -453,6 +503,37 @@ export class TrendProjectionPersistence {
         now,
       ],
     );
+    if (job.intelligenceSourceRecordId && job.primarySelectionRationale) {
+      await c.query(
+        "INSERT IGNORE INTO opportunity_evidence_links (id,organization_id,workspace_id,opportunity_id,evidence_type,evidence_id,provider_id,raw_evidence_id,observed_at,created_at) " +
+          "SELECT UUID(),s.organization_id,s.workspace_id,?,'trend_signal',s.id,s.provider_id,s.raw_evidence_id,s.observed_at,? " +
+          "FROM trend_signals s WHERE s.normalized_record_id=? AND s.organization_id=? AND s.workspace_id=?",
+        [
+          persistedOpportunityId,
+          now,
+          job.intelligenceSourceRecordId,
+          job.organizationId,
+          job.workspaceId,
+        ],
+      );
+      await this.alerts.writeTrendEvent(
+        c,
+        job,
+        "trend.intelligence.primary_selected",
+        "trend_topic",
+        topicId,
+        {
+          normalized_record_id: job.normalizedRecordId,
+          intelligence_source_record_id: job.intelligenceSourceRecordId,
+          query: job.intelligenceQuery,
+          rationale: job.primarySelectionRationale,
+          opportunity_id: persistedOpportunityId,
+          evidence_status: "hypothesis",
+          model: job.intelligenceModel,
+          contract: "intelligence-product-v1",
+        },
+      );
+    }
     await c.query(
       "UPDATE opportunities o SET evidence_count=(SELECT COUNT(*) FROM opportunity_evidence_links l WHERE l.opportunity_id=o.id),source_count=(SELECT COUNT(DISTINCT provider_id) FROM opportunity_evidence_links l WHERE l.opportunity_id=o.id),coverage_status='partial',lifecycle_status=IF(lifecycle_status='candidate','ready',lifecycle_status),version=IF(?,version,version+1),updated_at=? WHERE o.id=?",
       [insert.affectedRows, now, persistedOpportunityId],
