@@ -1,4 +1,5 @@
 import { loadRuntimeConfig } from "@scoutops/config";
+import { Lan1688ImageSearch } from "./lan-1688-image-search.js";
 import { createDatabasePool } from "@scoutops/database";
 import { ProviderAdapterRegistry } from "@scoutops/provider-adapters";
 import {
@@ -76,6 +77,10 @@ const executor = new ProviderSourceExecutor(
     config.playwright.runTimeoutSeconds * 1000,
   ),
   providerFetch,
+  new Lan1688ImageSearch(
+    config.providerAdapters.lan1688Token,
+    config.providerAdapters.lan1688TimeoutMs,
+  ),
 );
 const trendProjection = new MySqlTrendProjectionWorker(
   pool,

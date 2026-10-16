@@ -13,7 +13,7 @@
 .p07-mfa-page :is(h1, h2, p) {
   margin: 0;
 }
-html[data-design="glass-atlas"] body .p07-mfa-page :is(button, input, a):focus-visible {
+html[data-design="commerce"] body .p07-mfa-page :is(button, input, a):focus-visible {
   outline: 3px solid var(--p07-focus);
   outline-offset: 3px;
 }
@@ -135,7 +135,7 @@ html[data-design="glass-atlas"] body .p07-mfa-page :is(button, input, a):focus-v
   color: var(--p07-ink);
   font-weight: 700;
 }
-html[data-design="glass-atlas"] body .p07-mfa-workspace input {
+html[data-design="commerce"] body .p07-mfa-workspace input {
   width: 100%;
   min-height: 44px;
   border: 1px solid var(--p07-control-border);
@@ -145,12 +145,12 @@ html[data-design="glass-atlas"] body .p07-mfa-workspace input {
   color: var(--p07-ink);
   font: inherit;
 }
-html[data-design="glass-atlas"] body .p07-mfa-workspace input:focus-visible {
+html[data-design="commerce"] body .p07-mfa-workspace input:focus-visible {
   border-color: var(--p07-blue);
 }
-html[data-design="glass-atlas"] body .p07-mfa-primary,
-html[data-design="glass-atlas"] body .p07-mfa-danger-button,
-html[data-design="glass-atlas"] body .p07-mfa-secondary {
+html[data-design="commerce"] body .p07-mfa-primary,
+html[data-design="commerce"] body .p07-mfa-danger-button,
+html[data-design="commerce"] body .p07-mfa-secondary {
   min-height: 44px;
   border: 1px solid var(--p07-blue);
   border-radius: 0;
@@ -159,44 +159,44 @@ html[data-design="glass-atlas"] body .p07-mfa-secondary {
   font-weight: 800;
   cursor: pointer;
 }
-html[data-design="glass-atlas"] body .p07-mfa-primary {
+html[data-design="commerce"] body .p07-mfa-primary {
   background: var(--p07-blue);
   color: var(--p07-surface);
 }
-html[data-design="glass-atlas"] body .p07-mfa-danger-button {
+html[data-design="commerce"] body .p07-mfa-danger-button {
   border-color: var(--p07-danger);
   background: var(--p07-danger);
   color: var(--p07-surface);
 }
-html[data-design="glass-atlas"] body .p07-mfa-secondary {
+html[data-design="commerce"] body .p07-mfa-secondary {
   background: var(--p07-surface);
   color: var(--p07-blue);
 }
-html[data-design="glass-atlas"] body .p07-mfa-primary:hover:not(:disabled) {
+html[data-design="commerce"] body .p07-mfa-primary:hover:not(:disabled) {
   border-color: var(--p07-primary-hover);
   background: var(--p07-primary-hover);
 }
-html[data-design="glass-atlas"] body .p07-mfa-danger-button:hover:not(:disabled) {
+html[data-design="commerce"] body .p07-mfa-danger-button:hover:not(:disabled) {
   border-color: var(--p07-danger-hover);
   background: var(--p07-danger-hover);
 }
-html[data-design="glass-atlas"] body .p07-mfa-secondary:hover:not(:disabled) {
+html[data-design="commerce"] body .p07-mfa-secondary:hover:not(:disabled) {
   background: var(--p07-info);
 }
-html[data-design="glass-atlas"] body .p07-mfa-primary:active:not(:disabled) {
+html[data-design="commerce"] body .p07-mfa-primary:active:not(:disabled) {
   border-color: var(--p07-primary-pressed);
   background: var(--p07-primary-pressed);
 }
-html[data-design="glass-atlas"] body .p07-mfa-danger-button:active:not(:disabled) {
+html[data-design="commerce"] body .p07-mfa-danger-button:active:not(:disabled) {
   border-color: var(--p07-danger-pressed);
   background: var(--p07-danger-pressed);
 }
-html[data-design="glass-atlas"] body .p07-mfa-secondary:active:not(:disabled) {
+html[data-design="commerce"] body .p07-mfa-secondary:active:not(:disabled) {
   background: var(--p07-info-selected);
 }
-html[data-design="glass-atlas"] body .p07-mfa-primary:disabled,
-html[data-design="glass-atlas"] body .p07-mfa-danger-button:disabled,
-html[data-design="glass-atlas"] body .p07-mfa-secondary:disabled {
+html[data-design="commerce"] body .p07-mfa-primary:disabled,
+html[data-design="commerce"] body .p07-mfa-danger-button:disabled,
+html[data-design="commerce"] body .p07-mfa-secondary:disabled {
   border-color: var(--p07-disabled-border);
   background: var(--p07-disabled-surface);
   color: var(--p07-disabled-ink);

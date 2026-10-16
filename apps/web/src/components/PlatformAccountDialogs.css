@@ -219,8 +219,8 @@ button {
   background: var(--account-org-soft);
   opacity: 1;
 }
-html[data-design="glass-atlas"] body dialog.p43-create-user-dialog,
-html[data-design="glass-atlas"] body dialog.p43-create-user-dialog:hover {
+html[data-design="commerce"] body dialog.p43-create-user-dialog,
+html[data-design="commerce"] body dialog.p43-create-user-dialog:hover {
   border-color: var(--account-org-dialog-border);
   color: var(--account-org-ink);
   background-color: var(--account-org-surface);
@@ -266,40 +266,40 @@ html[data-design="glass-atlas"] body dialog.p43-create-user-dialog:hover {
   padding: 24px;
   background: var(--account-org-surface);
 }
-html[data-design="glass-atlas"] body form.p44-admin-create-form,
-html[data-design="glass-atlas"] body form.p44-admin-create-form:hover {
+html[data-design="commerce"] body form.p44-admin-create-form,
+html[data-design="commerce"] body form.p44-admin-create-form:hover {
   border-color: var(--account-org-admin-border);
   color: var(--account-org-ink);
   background-color: var(--account-org-surface);
   font-weight: 400;
 }
-html[data-design="glass-atlas"] body dialog.p44-admin-create-dialog,
-html[data-design="glass-atlas"] body dialog.p44-admin-create-dialog:hover {
+html[data-design="commerce"] body dialog.p44-admin-create-dialog,
+html[data-design="commerce"] body dialog.p44-admin-create-dialog:hover {
   border-color: var(--account-org-dialog-border);
   color: var(--account-org-ink);
   background-color: var(--account-org-surface);
   font-weight: 400;
 }
-html[data-design="glass-atlas"] body .p44-admin-create-layout,
-html[data-design="glass-atlas"] body .p44-admin-create-layout:hover,
-html[data-design="glass-atlas"] body .p44-admin-create-group,
-html[data-design="glass-atlas"] body .p44-admin-create-group:hover,
-html[data-design="glass-atlas"] body .p44-admin-create-group-head,
-html[data-design="glass-atlas"] body .p44-admin-create-group-head:hover {
+html[data-design="commerce"] body .p44-admin-create-layout,
+html[data-design="commerce"] body .p44-admin-create-layout:hover,
+html[data-design="commerce"] body .p44-admin-create-group,
+html[data-design="commerce"] body .p44-admin-create-group:hover,
+html[data-design="commerce"] body .p44-admin-create-group-head,
+html[data-design="commerce"] body .p44-admin-create-group-head:hover {
   border-color: var(--account-org-line);
   color: var(--account-org-ink);
   background-color: transparent;
   font-weight: 400;
 }
-html[data-design="glass-atlas"] body aside.p44-admin-create-rail,
-html[data-design="glass-atlas"] body aside.p44-admin-create-rail:hover {
+html[data-design="commerce"] body aside.p44-admin-create-rail,
+html[data-design="commerce"] body aside.p44-admin-create-rail:hover {
   border-color: var(--account-org-blue);
   color: var(--account-org-on-blue);
   background-color: var(--account-org-blue);
   font-weight: 400;
 }
-html[data-design="glass-atlas"] body small.p44-admin-create-help,
-html[data-design="glass-atlas"] body small.p44-admin-create-help:hover {
+html[data-design="commerce"] body small.p44-admin-create-help,
+html[data-design="commerce"] body small.p44-admin-create-help:hover {
   border-color: transparent;
   color: var(--account-org-muted);
   background-color: transparent;

@@ -94,19 +94,6 @@ const menuGroups = computed(() => {
     groups.set(item.group, [...(groups.get(item.group) ?? []), item]);
   return [...groups].map(([label, groupItems]) => ({ label, items: groupItems }));
 });
-const chosenNavigationGroup = ref("");
-const desktopGroup = computed(
-  () => chosenNavigationGroup.value || activeItem.value?.group || menuGroups.value[0]?.label || "",
-);
-const desktopItems = computed(() =>
-  items.value.filter((item) => item.group === desktopGroup.value),
-);
-watch(
-  () => activeItem.value?.group,
-  () => {
-    chosenNavigationGroup.value = "";
-  },
-);
 const shellTitle = computed(() =>
   props.shell === "member"
     ? "成员工作台"
@@ -382,54 +369,35 @@ onUnmounted(() => {
         <SessionLogout :api-base-url="apiBaseUrl" />
       </div>
     </header>
-    <div v-if="state === 'ready'" class="role-desktop-navigation">
-      <div class="role-workspace-tabs" aria-label="功能分区">
-        <button
-          v-for="group in menuGroups"
-          :key="group.label"
-          type="button"
-          :aria-pressed="desktopGroup === group.label"
-          @click="chosenNavigationGroup = group.label"
-        >
-          {{ group.label }}
-        </button>
-      </div>
-      <nav class="role-page-tabs" :aria-label="`${shellTitle}导航`">
+    <aside v-if="state === 'ready'" class="commerce-sidebar" aria-label="工作区导航">
+      <section v-for="group in menuGroups" :key="group.label">
+        <h2>{{ group.label }}</h2>
         <RouterLink
-          v-for="item in desktopItems"
+          v-for="item in group.items"
           :key="item.path"
           :to="item.path"
           :aria-current="activeItem?.path === item.path ? 'page' : undefined"
-          ><AppIcon :name="item.icon" :size="17" /><span>{{ item.label }}</span></RouterLink
         >
-      </nav>
-      <div class="role-shell-links">
+          <AppIcon :name="item.icon" :size="18" /><span>{{ item.label }}</span>
+        </RouterLink>
+      </section>
+      <footer>
         <RouterLink
           v-if="shell === 'member' && guard?.roles?.includes('organization_admin')"
           to="/org-admin"
-          aria-label="进入组织管理后台"
           >组织后台</RouterLink
         >
-        <RouterLink
-          v-if="shell === 'member' && guard?.platform_roles?.length"
-          to="/platform-admin"
-          aria-label="进入管理后台"
+        <RouterLink v-if="shell === 'member' && guard?.platform_roles?.length" to="/platform-admin"
           >平台后台</RouterLink
         >
-        <RouterLink
-          v-if="shell === 'organization_admin'"
-          :to="memberReturnPath()"
-          aria-label="返回成员工作台"
-          >返回工作台</RouterLink
+        <RouterLink v-if="shell === 'organization_admin'" :to="memberReturnPath()"
+          >返回选品工作台</RouterLink
         >
-        <RouterLink
-          v-if="shell === 'platform_admin'"
-          :to="contextSwitchTarget"
-          aria-label="选择组织与工作区后进入用户工作台"
-          >返回工作台</RouterLink
+        <RouterLink v-if="shell === 'platform_admin'" :to="contextSwitchTarget"
+          >返回选品工作台</RouterLink
         >
-      </div>
-    </div>
+      </footer>
+    </aside>
     <dialog
       ref="navigationDialog"
       class="role-navigation-frame"

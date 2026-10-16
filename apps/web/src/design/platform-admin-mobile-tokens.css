@@ -1,6 +1,6 @@
 /* Existing local C palette; no global theme aliases or layout declarations. */
 @media (max-width: 760px) {
-  html[data-design="glass-atlas"]
+  html[data-design="commerce"]
     #app
     .account-center:has(.account-tabs a[href="/platform-admin/admins"][aria-current="page"]) {
     --so-admin-mobile-primary: var(--glass-primary);

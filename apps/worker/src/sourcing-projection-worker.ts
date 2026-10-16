@@ -86,7 +86,7 @@ export class MySqlSourcingProjectionWorker {
       );
       if (!s[0]) throw new SourcingProjectionError("sourcing_search_missing", false);
       const [records] = await c.query<RowDataPacket[]>(
-        "SELECT n.*,e.canonical_url,e.captured_at FROM collection_task_evidence_links l JOIN normalized_records n ON n.id=l.normalized_record_id JOIN raw_evidence e ON e.id=l.raw_evidence_id WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? AND n.status='active' AND n.schema_version='product-supply-csv-v1'",
+        "SELECT n.*,e.canonical_url,e.captured_at FROM collection_task_evidence_links l JOIN normalized_records n ON n.id=l.normalized_record_id AND n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id JOIN raw_evidence e ON e.id=l.raw_evidence_id WHERE l.collection_task_id=? AND l.organization_id=? AND l.workspace_id=? AND n.status='active' AND (n.schema_version='product-supply-csv-v1' OR (n.schema_version='provider-source-v1' AND EXISTS (SELECT 1 FROM providers p WHERE p.id=n.provider_id AND p.code='1688_search')))",
         [s[0].collection_task_id, j.org, j.ws],
       );
       let count = 0;

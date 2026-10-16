@@ -43,7 +43,7 @@ test("design tokens keep the signal-ledger contract and all shells share it", as
   assert.doesNotMatch(`${shell}\n${account}`, /applyTheme\("cloud-white"\)/);
   assert.match(shell, /SCOUTOPS/);
   assert.match(shell, /<h1>\{\{ pageTitle \}\}<\/h1>/);
-  assert.match(shell, /class="role-desktop-navigation"/);
+  assert.match(shell, /class="commerce-sidebar"/);
   assert.doesNotMatch(shell, /class="role-page-title"/);
   assert.doesNotMatch(shell, /<aside\s+id="role-navigation"/);
   assert.match(account, /<nav class="account-sidebar(?:\s|[">])/);

@@ -100,8 +100,8 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
             "#000000",
           )
         : originalSource;
-    if (paths[index] === "apps/web/src/design/glass-atlas-tokens.css") {
-      assert.match(source, /^html\[data-design="glass-atlas"\]/);
+    if (paths[index] === "apps/web/src/design/commerce-tokens.css") {
+      assert.match(source, /^html\[data-design="commerce"\]/);
       assert.doesNotMatch(source, /(?:^|[;{])\s*[a-z][a-z-]*\s*:/m);
       assert.match(source, /--glass-surface:/);
       continue;
@@ -133,7 +133,7 @@ test("production CSS and Vue scoped styles use shared semantic color roles", asy
       assert.match(
         source.replace(/\/\*[\s\S]*?\*\//g, "").trim(),
         new RegExp(
-          '^@media\\s*\\(max-width:\\s*760px\\)\\s*\\{\\s*html\\[data-design="glass-atlas"\\]\\s*#app\\s*\\.account-center:has\\(\\.account-tabs\\s*a\\[href="/platform-admin/admins"\\]\\[aria-current="page"\\]\\)\\s*\\{(?:\\s*--so-admin-mobile-[a-z-]+:\\s*#[0-9a-f]{3,6};)+\\s*\\}\\s*\\}$',
+          '^@media\\s*\\(max-width:\\s*760px\\)\\s*\\{\\s*html\\[data-design="commerce"\\]\\s*#app\\s*\\.account-center:has\\(\\.account-tabs\\s*a\\[href="/platform-admin/admins"\\]\\[aria-current="page"\\]\\)\\s*\\{(?:\\s*--so-admin-mobile-[a-z-]+:\\s*#[0-9a-f]{3,6};)+\\s*\\}\\s*\\}$',
         ),
       );
       continue;
@@ -672,7 +672,7 @@ test("theme palette has no self references and material colors stay independent 
     for (const match of source.matchAll(/(--[a-z0-9-]+):\s*var\((--[a-z0-9-]+)\)/g)) {
       assert.notEqual(match[1], match[2], `${path}: cyclic ${match[1]}`);
     }
-    if (path === "glass-atlas-tokens.css") {
+    if (path === "commerce-tokens.css") {
       assert.doesNotMatch(source, /--glass-[a-z-]+:\s*[^;]*var\(--so-/);
     }
   }

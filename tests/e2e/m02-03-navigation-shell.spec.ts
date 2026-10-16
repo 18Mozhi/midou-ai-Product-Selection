@@ -1,5 +1,49 @@
 import { expect, test } from "@playwright/test";
 
+for (const shell of ["member", "organization_admin", "platform_admin"] as const) {
+  test(`commerce navigation retains ${shell} access and a usable responsive menu`, async ({
+    page,
+  }) => {
+    await allow(page, shell);
+    await page.goto(
+      shell === "member"
+        ? "/home"
+        : shell === "organization_admin"
+          ? "/org-admin"
+          : "/platform-admin",
+    );
+    const mobile = (page.viewportSize()?.width ?? 1000) <= 840;
+    if (mobile) await page.getByRole("button", { name: "打开导航菜单" }).click();
+    const nav = page.locator(mobile ? ".role-sidebar" : ".commerce-sidebar");
+    await expect(nav).toBeVisible();
+    if (shell === "member") {
+      await expect(nav.locator(mobile ? ".role-nav-menu a" : "section a")).toHaveCount(4);
+      await expect(nav.getByRole("link", { name: "选品库", exact: true })).toHaveAttribute(
+        "href",
+        "/opportunities",
+      );
+      await expect(nav.getByRole("link", { name: "1688 找货", exact: true })).toHaveAttribute(
+        "href",
+        "/sourcing",
+      );
+      await expect(nav.locator('a[href^="/platform-admin"]')).toHaveCount(0);
+    } else if (shell === "platform_admin") {
+      await expect(nav.locator('a[href="/platform-admin/organizations"]')).toHaveCount(1);
+      await expect(nav.locator('a[href="/platform-admin/users"]')).toHaveCount(1);
+      await expect(nav.locator('a[href="/platform-admin/providers"]')).toHaveCount(1);
+    } else {
+      await expect(nav.locator('a[href="/org-admin/members"]')).toHaveCount(1);
+    }
+    if (mobile) {
+      await page.keyboard.press("Escape");
+      await expect(page.getByRole("dialog", { name: "工作台导航" })).toBeHidden();
+    }
+    await expect
+      .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+      .toBe(true);
+  });
+}
+
 const summary = (shell: "member" | "organization_admin" | "platform_admin") => ({
   shell,
   organization_id: shell === "platform_admin" ? null : "00000000-0000-4000-8000-000000000103",

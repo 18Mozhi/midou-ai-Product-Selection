@@ -557,6 +557,36 @@ test("a late create success does not close or navigate away from a reopened crea
   await expect(dialog.getByRole("button", { name: "创建机会", exact: true })).toBeEnabled();
 });
 
+test("commerce catalogue switches layouts and keeps product navigation and missing images", async ({
+  page,
+}, testInfo) => {
+  await ready(page);
+  await page.goto("/opportunities");
+  const catalogue = page.locator(".product-catalog");
+  await expect(catalogue).toHaveAttribute("data-display", "grid");
+  await expect(page.locator(".catalog-product")).toHaveCount(1);
+  await expect(page.getByRole("group", { name: "商品展示方式" })).toBeVisible();
+  await page.getByRole("button", { name: "列表", exact: true }).click();
+  await expect(catalogue).toHaveAttribute("data-display", "list");
+  await expect(page.locator(".catalog-product > a")).toHaveAttribute(
+    "href",
+    new RegExp(`/opportunities/${opportunityId}`),
+  );
+  await page.getByRole("button", { name: "图卡", exact: true }).click();
+  await expect(catalogue).toHaveAttribute("data-display", "grid");
+  await expect
+    .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+    .toBe(true);
+  if ((page.viewportSize()?.width ?? 0) > 840) {
+    await expect(page.getByRole("complementary", { name: "工作区导航" })).toBeVisible();
+    const sidebar = await page.locator(".commerce-sidebar").boundingBox();
+    const content = await page.locator(".role-content").boundingBox();
+    expect(content!.x).toBeGreaterThanOrEqual(sidebar!.width);
+  }
+  await page.evaluate(() => scrollTo(0, 0));
+  await page.screenshot({ path: testInfo.outputPath("commerce-catalogue.png"), fullPage: true });
+});
+
 test("opportunity list distinguishes a failed product image from one not yet collected", async ({
   page,
 }) => {

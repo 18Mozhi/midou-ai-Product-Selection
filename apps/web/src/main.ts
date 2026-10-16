@@ -7,12 +7,11 @@ import "./styles/onboarding-navigation.css";
 import "./design/tokens.css";
 import "./accessibility.css";
 import "./responsive-baselines.css";
-import "./glass-atlas.css";
-import "./workspace-atlas.css";
+import "./commerce-workspace.css";
 import { applyCachedTheme, applyShellDensity } from "./design/theme";
 import { router } from "./router";
 
-document.documentElement.dataset.design = "glass-atlas";
+document.documentElement.dataset.design = "commerce";
 applyCachedTheme();
 applyShellDensity(false);
 createApp({ render: () => h(RouterView) })

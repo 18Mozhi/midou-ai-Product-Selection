@@ -1,0 +1,202 @@
+import test from "node:test";
+import assert from "node:assert/strict";
+import {
+  Lan1688ImageSearch,
+  LAN_1688_ENDPOINTS,
+  parseLan1688Result,
+} from "../../apps/worker/dist/lan-1688-image-search.js";
+import { MySqlSourcingProjectionWorker } from "../../apps/worker/dist/sourcing-projection-worker.js";
+import { MySqlSourcingRepository } from "../../apps/api/dist/mysql-sourcing-repository.js";
+
+const image = "https://m.media-amazon.com/images/I/test.jpg";
+const result = {
+  success: true,
+  items: [
+    {
+      offerId: "835520608338",
+      title: "旅行化妆包",
+      shop_name: "箱包厂",
+      price: "3.8",
+      price_description: "新人价",
+      min_order_quantity: 1,
+      monthly_sales: null,
+      shipping_fee: null,
+      sales_quantity: "19200",
+    },
+  ],
+};
+test("1688 keeps actual quote qualifications and unknown fields", () => {
+  const [record] = parseLan1688Result(result, "2026-10-16T00:00:00.000Z");
+  assert.equal(record.payload.fields.quoted_price, 3.8);
+  assert.equal(record.payload.fields.price_description, "新人价");
+  assert.equal(record.payload.fields.monthly_sales, null);
+  assert.equal(record.payload.fields.shipping_fee, null);
+  assert.equal(record.payload.fields.sales_quantity, 19200);
+  assert.equal(record.payload.canonical_url, "https://detail.1688.com/offer/835520608338.html");
+  assert.throws(() => parseLan1688Result({ success: false, items: [] }, "2026-10-16"));
+  assert.throws(() => parseLan1688Result({ success: true, items: [{}] }, "2026-10-16"));
+});
+test("1688 rotates nodes and fails over without changing the request contract", async () => {
+  const calls = [];
+  let heartbeats = 0;
+  const client = new Lan1688ImageSearch("test-only", 1000, async (url, options) => {
+    calls.push({ url, options });
+    if (calls.length === 1) throw new Error("connection refused");
+    return Response.json(result);
+  });
+  assert.equal(
+    (
+      await client.collect(image, async () => {
+        heartbeats++;
+      })
+    ).records.length,
+    1,
+  );
+  assert.deepEqual(
+    calls.map((c) => c.url),
+    LAN_1688_ENDPOINTS.slice(0, 2),
+  );
+  assert.equal(calls[1].options.redirect, "error");
+  assert.deepEqual(JSON.parse(calls[1].options.body), {
+    image_url: image,
+    begin_page: 1,
+    page_size: 60,
+    result_limit: 10,
+  });
+  assert.equal(heartbeats, 3);
+});
+test("1688 never transmits tokens to user-supplied endpoints or redirects", async () => {
+  let calls = 0;
+  const client = new Lan1688ImageSearch("test-only", 1000, async () => {
+    calls++;
+    return new Response(null, { status: 401 });
+  });
+  await assert.rejects(client.collect("http://127.0.0.1/private", async () => {}));
+  assert.equal(calls, 0);
+  await assert.rejects(
+    client.collect(image, async () => {}),
+    { code: "permission_denied" },
+  );
+  assert.equal(calls, 1);
+});
+test("1688 bounds malformed and excessive responses", async () => {
+  const client = new Lan1688ImageSearch(
+    "test-only",
+    1000,
+    async () => new Response("x".repeat(2 * 1024 * 1024 + 1)),
+  );
+  await assert.rejects(
+    client.collect(image, async () => {}),
+    { code: "invalid_payload" },
+  );
+});
+test("1688 uses another appliance for concurrent calls", async () => {
+  let release;
+  const hold = new Promise((resolve) => {
+    release = resolve;
+  });
+  const urls = [];
+  const client = new Lan1688ImageSearch("test-only", 1000, async (url) => {
+    urls.push(url);
+    if (urls.length === 1) await hold;
+    return Response.json(result);
+  });
+  const first = client.collect(image, async () => {});
+  await new Promise((resolve) => setImmediate(resolve));
+  await client.collect(image, async () => {});
+  release();
+  await first;
+  assert.equal(new Set(urls).size, 2);
+});
+test("1688 evidence projects to supplier candidates through the scoped current task", async () => {
+  const calls = [];
+  const now = new Date("2026-10-16T00:00:00Z");
+  const [record] = parseLan1688Result(result, now.toISOString());
+  const connection = {
+    beginTransaction: async () => {},
+    commit: async () => {},
+    rollback: async () => {},
+    release() {},
+    async query(sql, args) {
+      calls.push({ sql, args });
+      if (sql.startsWith("SELECT * FROM sourcing_projection_jobs"))
+        return [
+          [
+            {
+              id: "job",
+              organization_id: "org",
+              workspace_id: "workspace",
+              search_id: "search",
+              request_id: "request",
+              trace_id: "trace",
+              attempt_count: 0,
+            },
+          ],
+        ];
+      if (sql.startsWith("SELECT collection_task_id")) return [[{ collection_task_id: "task" }]];
+      if (sql.startsWith("SELECT n.*"))
+        return [
+          [
+            {
+              id: "normalized",
+              provider_id: "1688",
+              raw_evidence_id: "evidence",
+              payload_json: record.payload.fields,
+            },
+          ],
+        ];
+      return [{ affectedRows: 1 }];
+    },
+  };
+  const worker = new MySqlSourcingProjectionWorker(
+    { getConnection: async () => connection },
+    "worker",
+    120,
+    () => now,
+  );
+  const projected = await worker.processOnce();
+  assert.equal(projected.candidate_count, 1);
+  const query = calls.find((c) => c.sql.startsWith("SELECT n.*"));
+  assert.match(query.sql, /p.code='1688_search'/);
+  assert.match(query.sql, /n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id/);
+  assert.deepEqual(query.args, ["task", "org", "workspace"]);
+  const insert = calls.find((c) => c.sql.startsWith("INSERT IGNORE INTO sourcing_candidates"));
+  assert.equal(insert.args[11], 3.8);
+  assert.equal(insert.args[12], "CNY");
+});
+test("image searches dispatch only to enabled 1688 and never silently substitute another supplier", async () => {
+  const calls = [];
+  const pool = {
+    query: async () => [[]],
+    getConnection: async () => ({
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release() {},
+      query: async (sql, args) => {
+        calls.push({ sql, args });
+        return [
+          sql.startsWith("SELECT id FROM providers") ? [{ id: "lan-source" }] : { affectedRows: 1 },
+        ];
+      },
+    }),
+  };
+  const repository = new MySqlSourcingRepository(pool);
+  await repository.createSearch({
+    id: "search",
+    taskId: "task",
+    organizationId: "org",
+    workspaceId: "workspace",
+    actorId: "actor",
+    route: "/sourcing",
+    idempotencyKey: "key",
+    requestId: "request",
+    traceId: "trace",
+    value: { input_type: "image", input_ref: image },
+  });
+  const inserted = calls.find((c) => c.sql.startsWith("INSERT INTO collection_subqueries"));
+  assert.ok(inserted);
+  assert.ok(inserted.args.includes("lan-source"));
+  const target = inserted.args.find((v) => typeof v === "string" && v.startsWith("{"));
+  assert.equal(JSON.parse(target).image_url, image);
+});

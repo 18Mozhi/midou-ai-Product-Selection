@@ -2,7 +2,7 @@
 
 /* P46: only the two approved mobile feedback regions; no page/editor layout import. */
 @media (max-width: 760px) {
-  html[data-design="glass-atlas"]
+  html[data-design="commerce"]
     body
     #app
     .provider-registry
@@ -20,12 +20,12 @@
     cursor: not-allowed;
   }
 
-  html[data-design="glass-atlas"]
+  html[data-design="commerce"]
     body
     #app
     .provider-registry
     > .provider-feedback[data-refresh-incomplete="true"],
-  html[data-design="glass-atlas"]
+  html[data-design="commerce"]
     body
     #app
     .provider-registry
@@ -40,7 +40,7 @@
     font-family: "Microsoft YaHei", sans-serif;
   }
 
-  html[data-design="glass-atlas"]
+  html[data-design="commerce"]
     body
     #app
     .provider-registry

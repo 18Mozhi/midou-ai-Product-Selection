@@ -132,7 +132,8 @@ export class MySqlSourcingRepository implements SourcingRepository {
             throw new SourcingServiceError("opportunity_not_found", 404, "选择当前工作区机会。");
           query = String(opportunities[0].name);
         }
-        const providers = await this.supplierProviders(c);
+        const imageUrl = await this.searchImage(c, i.value.input_type, i.value.input_ref, i);
+        const providers = await this.supplierProviders(c, Boolean(imageUrl));
         if (!providers.length)
           throw new SourcingServiceError(
             "supplier_crawler_unavailable",
@@ -143,7 +144,12 @@ export class MySqlSourcingRepository implements SourcingRepository {
           c,
           i,
           providers,
-          { query, projection_type: "sourcing_search", search_id: i.id },
+          {
+            query,
+            ...(imageUrl ? { image_url: imageUrl } : {}),
+            projection_type: "sourcing_search",
+            search_id: i.id,
+          },
           now,
         );
       }
@@ -385,7 +391,8 @@ export class MySqlSourcingRepository implements SourcingRepository {
         );
         if (opportunities[0]) query = String(opportunities[0].name);
       }
-      const providers = await this.supplierProviders(c);
+      const imageUrl = await this.searchImage(c, searches[0].input_type, searches[0].input_ref, i);
+      const providers = await this.supplierProviders(c, Boolean(imageUrl));
       if (!providers.length)
         throw new SourcingServiceError(
           "supplier_crawler_unavailable",
@@ -396,7 +403,12 @@ export class MySqlSourcingRepository implements SourcingRepository {
         c,
         i,
         providers,
-        { query, projection_type: "sourcing_search", search_id: i.searchId },
+        {
+          query,
+          ...(imageUrl ? { image_url: imageUrl } : {}),
+          projection_type: "sourcing_search",
+          search_id: i.searchId,
+        },
         now,
       );
       await c.query(
@@ -515,7 +527,38 @@ export class MySqlSourcingRepository implements SourcingRepository {
       ],
     );
   }
-  private async supplierProviders(c: PoolConnection) {
+  private async searchImage(
+    c: PoolConnection,
+    inputType: string,
+    inputRef: string,
+    context: SourcingContext,
+  ) {
+    if (inputType === "image") return inputRef;
+    if (inputType !== "opportunity") return null;
+    const [rows] = await c.query<RowDataPacket[]>(
+      "SELECT JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) image_url " +
+        "FROM opportunity_evidence_links l JOIN normalized_records n ON n.raw_evidence_id=l.raw_evidence_id " +
+        "AND n.organization_id=l.organization_id AND n.workspace_id=l.workspace_id AND n.status='active' " +
+        "JOIN providers p ON p.id=n.provider_id AND p.code='amazon_product' " +
+        "WHERE l.opportunity_id=? AND l.organization_id=? AND l.workspace_id=? " +
+        "AND JSON_UNQUOTE(JSON_EXTRACT(n.payload_json,'$.image_url')) LIKE 'https://%' " +
+        "ORDER BY n.created_at DESC LIMIT 1",
+      [inputRef, context.organizationId, context.workspaceId],
+    );
+    return rows[0]?.image_url ? String(rows[0].image_url) : null;
+  }
+  private async supplierProviders(c: PoolConnection, imageSearch = false) {
+    if (imageSearch) {
+      const [rows] = await c.query<RowDataPacket[]>(
+        "SELECT id FROM providers WHERE code='1688_search' AND status='enabled' LIMIT 1",
+      );
+      if (rows.length) return [String(rows[0]!.id)];
+      throw new SourcingServiceError(
+        "supplier_crawler_unavailable",
+        409,
+        "1688 图搜来源尚未启用，请在采集来源中检查。",
+      );
+    }
     const [rows] = await c.query<RowDataPacket[]>(
       "SELECT id FROM providers WHERE code IN ('dhgate_supplier_search','made_in_china_search','ec21_supplier_search') " +
         "AND status='enabled' AND access_mode='public_page' AND terms_review_status='approved' " +

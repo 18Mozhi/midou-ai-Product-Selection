@@ -111,6 +111,8 @@ export interface RuntimeConfig {
     crawlerServiceToken: string;
   };
   providerAdapters: {
+    lan1688Token: string;
+    lan1688TimeoutMs: number;
     healthTimeoutMs: number;
     maxResponseBytes: number;
     maxItemsPerBatch: number;
@@ -564,6 +566,8 @@ export function loadRuntimeConfig(
       crawlerServiceToken: secret(env, "CRAWLER_SERVICE_TOKEN", production && target === "api", 32),
     },
     providerAdapters: {
+      lan1688Token: text(env, "LAN_1688_TOKEN"),
+      lan1688TimeoutMs: integer(env, "LAN_1688_TIMEOUT_MS", 45000, 1000, 60000),
       healthTimeoutMs: integer(env, "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS", 10000, 100, 120000),
       maxResponseBytes: integer(
         env,
@@ -935,6 +939,7 @@ export function loadRuntimeConfig(
     },
     providerAdapters: {
       ...base.providerAdapters,
+      lan1688Token: Boolean(base.providerAdapters.lan1688Token),
       ...(base.providerAdapters.proxy
         ? {
             proxy: {

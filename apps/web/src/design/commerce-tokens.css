@@ -1,0 +1,123 @@
+html[data-design="commerce"] {
+  --glass-bg: #f5f6f8;
+  --so-bg: var(--glass-bg);
+  --glass-bg-elevated: #ffffff;
+  --so-bg-elevated: var(--glass-bg-elevated);
+  --glass-panel: #ffffff;
+  --so-panel: var(--glass-panel);
+  --glass-panel-soft: #f1f4f8;
+  --so-panel-soft: var(--glass-panel-soft);
+  --glass-text: #202936;
+  --so-text: var(--glass-text);
+  --glass-text-muted: #687484;
+  --so-text-muted: var(--glass-text-muted);
+  --glass-border: #e1e5eb;
+  --so-border: var(--glass-border);
+  --glass-primary: #2468d4;
+  --so-primary: var(--glass-primary);
+  --glass-primary-strong: #1856b5;
+  --so-primary-strong: var(--glass-primary-strong);
+  --so-on-primary: #ffffff;
+  --glass-focus: #2468d4;
+  --so-focus: var(--glass-focus);
+  --glass-info: #2468d4;
+  --so-info: var(--glass-info);
+  --glass-signal: #ddeaff;
+  --so-signal: var(--glass-signal);
+  --so-control-radius: 12px;
+  --so-card-radius: 22px;
+  --so-dialog-radius: 24px;
+  --so-radius-sm: 10px;
+  --so-radius-md: 16px;
+  --so-radius-lg: 24px;
+  --so-font-display: var(--so-font-ui);
+  --so-transition: 180ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  --glass-primary-soft: color-mix(in srgb, var(--glass-primary) 10%, var(--glass-panel));
+  --so-primary-soft: var(--glass-primary-soft);
+  --glass-surface: #ffffff;
+  --glass-line: #e1e5eb;
+  --glass-shadow: none;
+  --glass-dark: #253b61;
+  --glass-halo: transparent;
+  --glass-warm: transparent;
+  --glass-control: #ffffff;
+  --glass-action-shadow: none;
+  --glass-dialog-shadow: rgb(20 30 50 / 18%);
+  --glass-scrim: rgb(15 37 31 / 42%);
+  --glass-identity-shadow: none;
+  --glass-hero-glow: transparent;
+  --glass-orbit-line: rgb(220 255 235 / 20%);
+  --glass-orbit-inner: rgb(220 255 235 / 4%);
+  --glass-orbit-outer: rgb(220 255 235 / 3%);
+  --glass-nav-line: rgb(255 255 255 / 18%);
+  --glass-nav-shadow: none;
+  --glass-nav-selected-ink: #2468d4;
+  --glass-nav-selected-bg: #edf4ff;
+  --glass-selected-shadow: none;
+  --glass-mobile-surface: rgb(250 254 252 / 94%);
+  --glass-hero-line: rgb(255 255 255 / 24%);
+  --glass-command-glow: #428574;
+  --glass-command-shadow: rgb(24 60 51 / 12%);
+  --glass-skeleton-base: #dbe9e2;
+  --glass-skeleton-highlight: #f5faf7;
+  --glass-mobile-shadow: rgb(25 66 52 / 8%);
+  --glass-footer-surface: rgb(255 255 255 / 45%);
+  --glass-notice-surface: #edf5f1;
+  --glass-identity-copy: #d0e9de;
+  --glass-nav-copy: #d2e5dd;
+  --glass-nav-muted: #c1d8cc;
+  --glass-nav-hover: rgb(255 255 255 / 12%);
+  --glass-translucent: #ffffff;
+}
+
+html[data-design="commerce"] {
+  --so-bg: #f5f6f8;
+  --so-bg-elevated: #ffffff;
+  --so-panel: #ffffff;
+  --so-panel-soft: #f1f4f8;
+  --so-text: #202936;
+  --so-text-muted: #687484;
+  --so-border: #e1e5eb;
+  --so-primary: #2468d4;
+  --so-primary-strong: #1856b5;
+  --so-primary-soft: #edf4ff;
+  --so-on-primary: #ffffff;
+  --so-focus: #2468d4;
+  --so-signal: #ddeaff;
+  --so-control-radius: 5px;
+  --so-card-radius: 7px;
+  --so-dialog-radius: 9px;
+  --so-radius-sm: 4px;
+  --so-radius-md: 6px;
+  --so-radius-lg: 8px;
+  --so-font-ui: "Microsoft YaHei", "PingFang SC", sans-serif;
+  --so-font-display: var(--so-font-ui);
+  --shell-canvas: var(--so-bg);
+  --shell-paper: #ffffff;
+  --shell-ink: var(--so-text);
+  --shell-muted: var(--so-text-muted);
+  --shell-blue: var(--so-primary);
+  --shell-border: var(--so-border);
+}
+html[data-design="commerce"][data-theme="aurora-purple"] {
+  --so-primary: #465365;
+  --so-primary-strong: #303d50;
+  --so-primary-soft: #eef1f5;
+}
+html[data-design="commerce"][data-theme="cloud-white"] {
+  --so-primary: #147e97;
+  --so-primary-strong: #09667c;
+  --so-primary-soft: #eaf7fa;
+}
+
+html[data-design="commerce"] {
+  --commerce-color-0: #fff;
+  --commerce-color-1: #8b94a0;
+  --commerce-color-2: #56616e;
+  --commerce-color-3: #f5f7fa;
+  --commerce-color-4: #aabfdf;
+  --commerce-color-5: #fafbfc;
+  --commerce-color-6: #f0f2f5;
+  --commerce-color-7: #a2aab4;
+  --commerce-color-8: #edf0f4;
+}

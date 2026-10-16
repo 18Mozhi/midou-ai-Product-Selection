@@ -237,9 +237,9 @@
         "status": "implemented"
       },
       "navigation": {
-        "label": "今日行动",
+        "label": "选品工作台",
         "icon": "home",
-        "group": "工作台"
+        "group": "选品工作区"
       }
     },
     {
@@ -260,11 +260,6 @@
         "domain": "tasks",
         "status": "verified",
         "statusDetail": "M05-01_module_verified"
-      },
-      "navigation": {
-        "label": "今日工作",
-        "icon": "check",
-        "group": "工作台"
       }
     },
     {
@@ -287,9 +282,9 @@
         "statusDetail": "M04-01_module_verified"
       },
       "navigation": {
-        "label": "热点趋势",
+        "label": "市场情报",
         "icon": "trend",
-        "group": "洞察与选品"
+        "group": "选品工作区"
       }
     },
     {
@@ -312,9 +307,9 @@
         "statusDetail": "M04-02_module_verified"
       },
       "navigation": {
-        "label": "选品机会",
+        "label": "选品库",
         "icon": "diamond",
-        "group": "洞察与选品"
+        "group": "选品工作区"
       }
     },
     {
@@ -399,11 +394,6 @@
         "domain": "competitors",
         "status": "verified",
         "statusDetail": "M04-05_module_verified"
-      },
-      "navigation": {
-        "label": "竞品监控",
-        "icon": "target",
-        "group": "洞察与选品"
       }
     },
     {
@@ -446,9 +436,9 @@
         "statusDetail": "M04-06_module_verified"
       },
       "navigation": {
-        "label": "供应链与利润",
+        "label": "1688 找货",
         "icon": "box",
-        "group": "洞察与选品"
+        "group": "选品工作区"
       }
     },
     {
@@ -489,11 +479,6 @@
         "domain": "tasks",
         "status": "verified",
         "statusDetail": "M05-01_module_verified"
-      },
-      "navigation": {
-        "label": "任务中心",
-        "icon": "list",
-        "group": "工作台"
       }
     },
     {
@@ -538,11 +523,6 @@
         "domain": "approvals",
         "status": "verified",
         "statusDetail": "M05-02_module_verified"
-      },
-      "navigation": {
-        "label": "审批中心",
-        "icon": "check",
-        "group": "工作台"
       }
     },
     {
@@ -563,11 +543,6 @@
         "domain": "notifications",
         "status": "verified",
         "statusDetail": "M05-03_module_verified"
-      },
-      "navigation": {
-        "label": "通知中心",
-        "icon": "bell",
-        "group": "工作台"
       }
     },
     {
@@ -588,11 +563,6 @@
         "domain": "automation-rules",
         "status": "verified",
         "statusDetail": "M05-05_module_verified"
-      },
-      "navigation": {
-        "label": "自动化规则",
-        "icon": "automation",
-        "group": "运营工具"
       }
     },
     {
@@ -613,11 +583,6 @@
         "domain": "reports-exports",
         "status": "verified",
         "statusDetail": "M05-06_module_verified"
-      },
-      "navigation": {
-        "label": "报表与导出",
-        "icon": "chart",
-        "group": "运营工具"
       }
     },
     {

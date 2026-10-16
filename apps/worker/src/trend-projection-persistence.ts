@@ -307,11 +307,12 @@ export class TrendProjectionPersistence {
 
   private async downstreamProviders(c: PoolConnection) {
     const [rows] = await c.query<RowDataPacket[]>(
-      "SELECT id,code FROM providers WHERE code IN ('amazon_product','dhgate_supplier_search','made_in_china_search','ec21_supplier_search') AND status='enabled' AND access_mode='public_page'",
+      "SELECT id,code FROM providers WHERE code IN ('amazon_product','1688_search','dhgate_supplier_search','made_in_china_search','ec21_supplier_search') AND status='enabled' AND (code='1688_search' OR access_mode='public_page')",
     );
     const values = new Map(rows.map((row) => [String(row.code), String(row.id)]));
     return {
       amazon: values.get("amazon_product") ?? null,
+      alibaba1688: values.get("1688_search") ?? null,
       dhgate: values.get("dhgate_supplier_search") ?? null,
       madeInChina: values.get("made_in_china_search") ?? null,
       ec21: values.get("ec21_supplier_search") ?? null,
@@ -577,9 +578,12 @@ export class TrendProjectionPersistence {
     }
     const searchId = randomUUID(),
       providers = await this.downstreamProviders(c),
-      supplierProviderIds = [providers.madeInChina, providers.ec21].filter(
-        (value): value is string => Boolean(value),
-      ),
+      imageUrl = typeof job.payload.image_url === "string" ? job.payload.image_url : null,
+      supplierProviderIds = (
+        providers.alibaba1688 && imageUrl
+          ? [providers.alibaba1688]
+          : [providers.madeInChina, providers.ec21]
+      ).filter((value): value is string => Boolean(value)),
       supplierTaskId = supplierProviderIds.length ? randomUUID() : job.collectionTaskId;
     if (supplierProviderIds.length)
       await this.scheduleCoreCollection(
@@ -597,6 +601,7 @@ export class TrendProjectionPersistence {
           required: false,
           target: {
             query: buildSupplierSearchQuery(title),
+            ...(providerId === providers.alibaba1688 ? { image_url: imageUrl } : {}),
             query_contract: "supplier-keywords-v2",
             projection_type: "sourcing_search",
             search_id: searchId,

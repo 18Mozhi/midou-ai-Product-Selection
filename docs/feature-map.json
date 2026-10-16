@@ -1,4 +1,25 @@
 {
+  "selectionCoreRebuild20261016": {
+    "status": "planned",
+    "statusDetail": "in_progress_partial_delivery",
+    "requirements": "docs/selection-core-rebuild.md",
+    "sourceFiles": [
+      "apps/web/src/commerce-workspace.css",
+      "apps/web/src/design/commerce-tokens.css",
+      "apps/web/src/components/OpportunityListPanel.vue",
+      "apps/worker/src/lan-1688-image-search.ts"
+    ],
+    "runtimeConfig": ["LAN_1688_TOKEN", "LAN_1688_TIMEOUT_MS"],
+    "completedScope": "Commerce shell and catalogue layout; LAN transport and current supplier projection integration. Not full pipeline acceptance.",
+    "pendingScope": [
+      "intelligence-to-Amazon automatic association",
+      "main product and 5-10 distinct competitors",
+      "general category scoring and source-qualified procurement cost",
+      "100 qualified products per day sustained runtime",
+      "remove superseded user modules after call-chain replacement",
+      "all pages visual verification and deployment"
+    ]
+  },
   "workspaceRebuildAndLiveDiscovery20261016": "Substantive desktop top workspace/navigation layout with preserved mobile dialog and permission filtering; HomeDashboard result queue plus bounded monitoring rail, 5-second visible active-page summary refresh, focus/activation re-read and abort/deactivation cleanup. Shared SessionLogout reuses POST /auth/logout and destroys cached views on success/401. Approval dialog CSS scoped to approval-workspace prevents navigation translation. GET /me/landing restores valid current/recent tenant context, or a sole active organization default, then prefers /home for active members including admins; LocalIdentity resolves landing before safe internal redirects as well as default and MFA navigation; ambiguous first multi-organization accounts retain selection pending explicit policy. Blocked/failed zero-result tasks end completed_with_warnings rather than succeeded_empty; latest blocked/failed rule task makes home automatic_selection attention. Existing public product sources require explicit approval and real parse/health checks; robots/rate/circuit protections and all matching/quality gates retained. See docs/ui-rebuild-acceptance-20261016.md.",
   "productionUiCopy20261016": "Production copy cleanup across identity, role shells, business/admin pages, dialogs and shared state-contract.ts. Remove design IDs, decorative eyebrows, implementation narration and repetitive introductions; retain practical constraints, unknown-write warnings, MFA recovery safety, AI limitations and real operator diagnostics. No API, RBAC, persistence, dependencies or runtime configuration change. See docs/production-ui-copy.md; regression tests in tests/unit/production-ui-copy.test.mjs.",
   "glassAtlasUi20261016": "User-authorized shared UI redesign: apps/web/src/glass-atlas.css, main.ts, design/*tokens.css and design/theme.ts; compatible theme IDs with 雾林/暮砂/晨雾 labels, glass identity and role-specific navigation, responsive controls and reduced-motion support. Independent --glass-* palette prevents reverse page-alias cycles. ui/async-surface.ts shows the existing UiStatePanel after 120ms of actual lazy loading and offers safe chunk-failure reload in App.vue and navigation-surface-registry.ts. No API, RBAC, database, dependency or runtime configuration change. See docs/ui-glass-atlas.md; historical design captures remain historical, not current visual approval.",

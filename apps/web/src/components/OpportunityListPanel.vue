@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, reactive, watch } from "vue";
+import { computed, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import type { AutomaticSelectionReadiness } from "../automatic-selection-readiness";
 import AutomaticSelectionReadinessPanel from "./AutomaticSelectionReadinessPanel.vue";
@@ -19,11 +19,12 @@ interface OpportunityFilters {
   owner_id: string;
 }
 type Opportunity = OpportunitySummary;
+const displayMode = ref<"grid" | "list">("grid");
 const viewOptions: Array<{ value: SelectionView; label: string }> = [
-  { value: "recommended", label: "待我采纳" },
-  { value: "rule_candidates", label: "规则命中候选" },
+  { value: "recommended", label: "推荐商品" },
+  { value: "rule_candidates", label: "候选商品" },
   { value: "evidence_pending", label: "采集中" },
-  { value: "all", label: "全部机会" },
+  { value: "all", label: "全部商品" },
 ];
 const filterQueryKeys = [
   "q",
@@ -311,13 +312,21 @@ watch(imageFailureResetSources, (items) => {
     "
     @secondary="state === 'empty' ? clearOrShowAll() : emit('reset')"
   />
-  <section v-else class="opportunity-list">
+  <section v-else class="opportunity-list product-catalog" :data-display="displayMode">
     <header>
       <div>
         <h3>{{ viewCopy.title }}</h3>
         <small>{{ viewCopy.description }}</small>
       </div>
-      <span>按更新时间排序</span>
+      <div class="catalog-display" role="group" aria-label="商品展示方式">
+        <span>按更新时间排序</span>
+        <button type="button" :aria-pressed="displayMode === 'grid'" @click="displayMode = 'grid'">
+          图卡
+        </button>
+        <button type="button" :aria-pressed="displayMode === 'list'" @click="displayMode = 'list'">
+          列表
+        </button>
+      </div>
     </header>
     <nav
       v-if="canDecide && selectionView === 'all' && selectedIds.length"
@@ -357,63 +366,74 @@ watch(imageFailureResetSources, (items) => {
         批量归档
       </button>
     </nav>
-    <article
-      v-for="item in items"
-      :key="item.id"
-      class="opportunity-list-row"
-      :class="{ 'is-selectable': canDecide && selectionView === 'all' }"
-    >
-      <label v-if="canDecide && selectionView === 'all'" class="opportunity-row-select">
-        <input
-          type="checkbox"
-          :checked="selectedIds.includes(item.id)"
-          :aria-label="`选择机会：${item.name}`"
-          @change="
-            emit(
-              'update:selectedIds',
-              selectedIds.includes(item.id)
-                ? selectedIds.filter((id) => id !== item.id)
-                : [...selectedIds, item.id],
-            )
-          "
-        />
-      </label>
-      <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }"
-        ><span
-          class="opportunity-picture"
-          :role="imageFallbackLabel(item) ? 'img' : undefined"
-          :aria-label="imageFallbackLabel(item)"
-          ><img
-            v-if="hasUsableImage(item)"
-            :src="item.image_url ?? undefined"
-            :alt="`${item.name} 商品图`"
-            loading="lazy"
-            referrerpolicy="no-referrer"
-            @error="onImageError(item)"
-          /><span v-else aria-hidden="true">图</span></span
-        ><span
-          ><strong>{{ item.name }}</strong
-          ><small
-            >{{ item.market }} · {{ item.category || "未分类" }} ·
-            {{ freshness(item.updated_at) }}</small
-          ><em
-            >{{ sourceLabel(item)
-            }}<template v-if="item.matched_rule_count">
-              · 命中 {{ item.matched_rule_count }} 条规则</template
-            ></em
-          ></span
-        >
-        <dl :aria-label="`${item.name} 决策摘要`">
-          <div v-for="fact in rowFacts(item)" :key="fact.label">
-            <dt>{{ fact.label }}</dt>
-            <dd>{{ fact.value }}</dd>
-          </div>
-        </dl>
-        <b :data-status="item.decision_status"
-          >{{ selectionStage(item) === "recommended" ? "审阅并采纳" : "查看进度" }} →</b
-        ></RouterLink
+    <div class="catalog-products">
+      <article
+        v-for="item in items"
+        :key="item.id"
+        class="catalog-product"
+        :class="{ 'is-selectable': canDecide && selectionView === 'all' }"
       >
-    </article>
+        <label v-if="canDecide && selectionView === 'all'" class="opportunity-row-select">
+          <input
+            type="checkbox"
+            :checked="selectedIds.includes(item.id)"
+            :aria-label="`选择机会：${item.name}`"
+            @change="
+              emit(
+                'update:selectedIds',
+                selectedIds.includes(item.id)
+                  ? selectedIds.filter((id) => id !== item.id)
+                  : [...selectedIds, item.id],
+              )
+            "
+          />
+        </label>
+        <RouterLink :to="{ path: `/opportunities/${item.id}`, query: { from: route.fullPath } }"
+          ><span
+            class="opportunity-picture"
+            :role="imageFallbackLabel(item) ? 'img' : undefined"
+            :aria-label="imageFallbackLabel(item)"
+            ><img
+              v-if="hasUsableImage(item)"
+              :src="item.image_url ?? undefined"
+              :alt="`${item.name} 商品图`"
+              loading="lazy"
+              referrerpolicy="no-referrer"
+              @error="onImageError(item)"
+            /><span v-else aria-hidden="true">图</span></span
+          ><span class="catalog-product-identity"
+            ><strong>{{ item.name }}</strong
+            ><small
+              >{{ item.market }} · {{ item.category || "未分类" }} ·
+              {{ freshness(item.updated_at) }}</small
+            ><em
+              >{{ sourceLabel(item)
+              }}<template v-if="item.matched_rule_count">
+                · 命中 {{ item.matched_rule_count }} 条规则</template
+              ></em
+            ></span
+          >
+          <dl class="catalog-product-metrics" :aria-label="`${item.name} 决策摘要`">
+            <div v-for="fact in rowFacts(item)" :key="fact.label">
+              <dt>{{ fact.label }}</dt>
+              <dd>{{ fact.value }}</dd>
+            </div>
+          </dl>
+          <div class="catalog-product-coverage">
+            <span
+              >竞品 <strong>{{ item.competitor_count }}</strong></span
+            >
+            <span
+              >货源 <strong>{{ item.supplier_candidate_count }}</strong></span
+            >
+            <span>{{ opportunityStatus(item.profit_status) }}</span>
+          </div>
+          <b :data-status="item.decision_status"
+            >{{ selectionStage(item) === "recommended" ? "审阅并采纳" : "查看进度" }} →</b
+          ></RouterLink
+        >
+      </article>
+    </div>
     <footer class="opportunity-pagination" aria-label="机会分页">
       <button type="button" :disabled="page <= 1" @click="emit('page', page - 1)">上一页</button>
       <span>第 {{ page }} / {{ pageCount }} 页</span>

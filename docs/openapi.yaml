@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: Production UI copy cleanup (2026-10-16) changes no endpoint, request, response or permission contract. Glass Atlas (2026-10-16) changes only client presentation and lazy-loading feedback; API payloads, theme IDs and authorization remain unchanged. P00 foundation, P01 identity/tenancy/RBAC, and P02 scoped UI preference contracts. Organization-visible endpoints require server-side authorization.
+  description: Commerce rebuild adds backend-only LAN 1688 image transport to existing sourcing searches without changing HTTP fields, methods or RBAC. Production UI copy cleanup (2026-10-16) changes no endpoint, request, response or permission contract. Glass Atlas (2026-10-16) changes only client presentation and lazy-loading feedback; API payloads, theme IDs and authorization remain unchanged. P00 foundation, P01 identity/tenancy/RBAC, and P02 scoped UI preference contracts. Organization-visible endpoints require server-side authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:
@@ -5999,7 +5999,8 @@ paths:
       responses:
         "201":
           {
-            description: Organization membership, role and data scope created and audited,
+            description: Organization membership,
+            role and data scope created and audited,
             content:
               { application/json: { schema: { $ref: "#/components/schemas/SuccessEnvelope" } } },
           }
@@ -7246,7 +7247,12 @@ components:
                 deprecated: true,
                 description: Compatibility alias for the first item in results,
               }
-            blocked_reason: { type: string, nullable: true, description: "Persisted reason; source_circuit_open blocks immediately for an actually open provider circuit. Observe/reject allowed; blocked adoption forbidden." }
+            blocked_reason:
+              {
+                type: string,
+                nullable: true,
+                description: "Persisted reason; source_circuit_open blocks immediately for an actually open provider circuit. Observe/reject allowed; blocked adoption forbidden.",
+              }
             blocked_owner: { type: string, nullable: true }
             blocked_next_step: { type: string, nullable: true }
             timeline:
@@ -7817,8 +7823,17 @@ components:
       additionalProperties: false
       required: [shell, route, reason]
       properties:
-        shell: { type: string, enum: [member, organization_admin, platform_admin, select_context, account] }
-        route: { type: string, enum: [/home, /org-admin, /platform-admin, /platform-admin/security, /select-context, /me] }
+        shell:
+          {
+            type: string,
+            enum: [member, organization_admin, platform_admin, select_context, account],
+          }
+        route:
+          {
+            type: string,
+            enum:
+              [/home, /org-admin, /platform-admin, /platform-admin/security, /select-context, /me],
+          }
         reason:
           {
             type: string,
@@ -8689,10 +8704,26 @@ components:
         healthcheck_url: { type: string, format: uri, maxLength: 1000, nullable: true }
         owner_label: { type: string, minLength: 2, maxLength: 120 }
         terms_review_status: { type: string, enum: [pending, approved, rejected], default: pending }
-        terms_reference_url: { type: string, format: uri, maxLength: 1000, nullable: true, description: Optional HTTPS reference for audit convenience; not required for approval, enablement, scheduling, or execution. If supplied, it must be HTTPS. }
+        terms_reference_url:
+          {
+            type: string,
+            format: uri,
+            maxLength: 1000,
+            nullable: true,
+            description: Optional HTTPS reference for audit convenience; not required for approval,
+            enablement,
+            scheduling,
+            or execution. If supplied,
+            it must be HTTPS.,
+          }
         terms_version: { type: string, pattern: "^[A-Za-z0-9._:-]{1,80}$", nullable: true }
         terms_expires_at: { type: string, format: date-time, nullable: true }
-        terms_permanent: { type: boolean, default: false, description: "Explicit permanent validity; omitted means false. True requires null expiry and does not bypass review or version requirements." }
+        terms_permanent:
+          {
+            type: boolean,
+            default: false,
+            description: "Explicit permanent validity; omitted means false. True requires null expiry and does not bypass review or version requirements.",
+          }
         status: { type: string, enum: [draft, disabled, enabled], default: disabled }
     ProviderDefinitionUpdate:
       allOf:
@@ -9784,10 +9815,7 @@ components:
         task_id: { type: string, format: uuid }
         provider_id: { type: string, format: uuid }
         source_code:
-          {
-            type: string,
-            enum: [google_news_search, manual_product_supply_csv, 1688_search],
-          }
+          { type: string, enum: [google_news_search, manual_product_supply_csv, 1688_search] }
         status:
           {
             type: string,
@@ -11498,3 +11526,13 @@ components:
             observed_at: { type: string, format: date-time }
         request_id: { type: string }
         trace_id: { type: string }
+
+x-scoutops-lan-1688:
+  scope: backend-only supplier transport; not a browser endpoint
+  endpointRange: http://192.168.1.221-226:8880/1688/image-search
+  method: POST
+  requestFields: [image_url, begin_page, page_size, result_limit]
+  resultFields: [success, items, returned_count, total]
+  authorization: Bearer token injected using LAN_1688_TOKEN; never sent to frontend
+  timeoutEnvironment: LAN_1688_TIMEOUT_MS
+  runbook: docs/selection-core-rebuild.md

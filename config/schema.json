@@ -163,6 +163,8 @@
       "EVIDENCE_DOWNLOAD_SIGNING_KEY"
     ],
     "providerAdapters": [
+      "LAN_1688_TOKEN",
+      "LAN_1688_TIMEOUT_MS",
       "PROVIDER_ADAPTER_HEALTH_TIMEOUT_MS",
       "PROVIDER_ADAPTER_MAX_RESPONSE_BYTES",
       "PROVIDER_ADAPTER_MAX_ITEMS_PER_BATCH",
@@ -308,6 +310,7 @@
     ]
   },
   "secretKeys": [
+    "LAN_1688_TOKEN",
     "DB_PASSWORD",
     "REDIS_PASSWORD",
     "AI_API_KEY",

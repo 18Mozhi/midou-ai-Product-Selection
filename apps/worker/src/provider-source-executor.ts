@@ -24,6 +24,7 @@ import {
 } from "./collection-task-worker.js";
 import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-persistence.js";
 import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
+import type { Lan1688ImageSearch } from "./lan-1688-image-search.js";
 const sha = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const VERSIONED_PRODUCT_SOURCES = new Set([
   "1688_search",
@@ -96,6 +97,7 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
     private readonly workerId: string,
     private readonly browserJobs?: MySqlAuthenticatedBrowserJobClient,
     private readonly publicPolicyFetch?: typeof fetch,
+    private readonly lan1688?: Lan1688ImageSearch,
   ) {}
   async execute(task: ClaimedCollectionTask, heartbeat: () => Promise<void>, signal?: AbortSignal) {
     await this.pool.query(
@@ -304,8 +306,12 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
           workspaceId: task.workspaceId,
           provider,
         },
+        lanCollection =
+          provider.code === "1688_search" && this.lan1688 && query.target.image_url
+            ? await this.lan1688.collect(query.target.image_url, heartbeat, signal)
+            : null,
         browserCollection =
-          provider.accessMode === "authenticated_browser"
+          !lanCollection && provider.accessMode === "authenticated_browser"
             ? await this.browserJobs!.collect(
                 {
                   organizationId: task.organizationId,
@@ -321,9 +327,11 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
                 signal,
               )
             : null,
-        batch = browserCollection
-          ? { records: browserCollection.records, nextCursor: null }
-          : await this.registry.collect({ ...context, target: query.target, limit: 20 });
+        batch =
+          lanCollection ??
+          (browserCollection
+            ? { records: browserCollection.records, nextCursor: null }
+            : await this.registry.collect({ ...context, target: query.target, limit: 20 }));
       if (browserCollection)
         for (const artifact of browserCollection.artifacts)
           await this.evidence.persistBrowserArtifact({

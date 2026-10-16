@@ -165,7 +165,7 @@
 }
 
 .platform-governance :is(h1, h2, h3),
-html[data-design="glass-atlas"] body .platform-governance :is(h1, h2, h3) {
+html[data-design="commerce"] body .platform-governance :is(h1, h2, h3) {
   font-family: var(--so-font-ui);
 }
 

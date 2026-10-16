@@ -1480,7 +1480,7 @@ test("P48 provider source page colors resolve from its page-scoped palette", asy
 });
 
 test("page glass aliases resolve to the shared theme and never self-reference", async () => {
-  const shared = await readFile("apps/web/src/design/glass-atlas-tokens.css", "utf8");
+  const shared = await readFile("apps/web/src/design/commerce-tokens.css", "utf8");
   const defined = new Set([...shared.matchAll(/(--glass-[a-z-]+):/g)].map((match) => match[1]));
   assert.ok(defined.size > 20);
   for (const file of await readdir("apps/web/src/design")) {
