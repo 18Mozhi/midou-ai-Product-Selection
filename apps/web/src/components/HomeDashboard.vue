@@ -9,6 +9,7 @@ import {
   ref,
 } from "vue";
 import { ApiClientError, createApiClient, type ApiFailureKind } from "../api-client";
+import type { DailySelectionProduction } from "@scoutops/contracts";
 import HomeAutomationOverview from "./HomeAutomationOverview.vue";
 import UiStatePanel from "./UiStatePanel.vue";
 import "../home-dashboard.css";
@@ -40,6 +41,7 @@ interface Summary {
   follows: Item[];
   health: Item[];
   automatic_selection?: {
+    daily_production?: DailySelectionProduction | null;
     state: "not_configured" | "running" | "attention";
     enabled_rule_count: number;
     candidate_count: number;
@@ -124,6 +126,8 @@ const total = computed(() =>
       normal: "普通",
     })[value ?? "normal"],
   date = (value: string | null) => (value ? new Date(value).toLocaleString("zh-CN") : "未设置");
+const dailyTime = (value: string) =>
+  new Date(value).toLocaleString("zh-CN", { timeZone: "Asia/Shanghai", hour12: false });
 const score = (value: number) => (Number.isInteger(value) ? String(value) : value.toFixed(1));
 const failure = (kind: ApiFailureKind): State =>
   kind === "expired"
@@ -348,7 +352,7 @@ onBeforeUnmount(deactivate);
             <i></i>
             {{
               selection?.state === "running"
-                ? "自动选品运行中"
+                ? "采集调度已配置"
                 : selection?.state === "attention"
                   ? "自动选品需检查"
                   : selection?.state === "not_configured"
@@ -382,6 +386,42 @@ onBeforeUnmount(deactivate);
           >
         </nav>
       </header>
+      <section class="home-daily-production" aria-label="每日选品产出">
+        <header>
+          <h3>今日新增商品</h3>
+          <span
+            >{{ selection?.daily_production?.date ?? "日期未读取" }} · 北京时间 · 当前工作区</span
+          >
+        </header>
+        <template v-if="selection?.daily_production">
+          <dl>
+            <div>
+              <dt>新增主品 ASIN</dt>
+              <dd>{{ selection.daily_production.discovered_count }}</dd>
+            </div>
+            <div>
+              <dt>当前通过质量门</dt>
+              <dd>
+                {{ selection.daily_production.qualified_count }}
+                <small>/ {{ selection.daily_production.target_minimum }} 目标</small>
+              </dd>
+            </div>
+          </dl>
+          <progress
+            :value="selection.daily_production.qualified_count"
+            :max="selection.daily_production.target_minimum"
+            aria-label="今日新增合格商品目标进度"
+          ></progress>
+          <p>按主品 ASIN 去重，历史已有商品不算新增；缺数据或未通过质量门不计入目标。</p>
+          <small
+            >统计时间
+            {{
+              dailyTime(selection.daily_production.measured_at)
+            }}；当前快照不能证明全天不间断运行。</small
+          >
+        </template>
+        <p v-else>每日产出尚未读取，暂不显示数量或目标达成状态。</p>
+      </section>
 
       <section v-if="selection?.state === 'not_configured'" class="home-setup-callout">
         <div>

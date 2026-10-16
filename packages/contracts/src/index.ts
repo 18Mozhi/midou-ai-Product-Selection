@@ -336,12 +336,22 @@ export interface HomeDashboardItem {
   severity: "info" | "warning" | "critical";
   source_version: number;
 }
+export interface DailySelectionProduction {
+  date: string;
+  timezone: "Asia/Shanghai";
+  discovered_count: number;
+  qualified_count: number;
+  target_minimum: 100;
+  measured_at: string;
+}
+
 export interface HomeDashboardSummary {
   actions: HomeDashboardItem[];
   changes: HomeDashboardItem[];
   follows: HomeDashboardItem[];
   health: HomeDashboardItem[];
   automatic_selection: {
+    daily_production?: DailySelectionProduction | null;
     state: "not_configured" | "running" | "attention";
     enabled_rule_count: number;
     candidate_count: number;

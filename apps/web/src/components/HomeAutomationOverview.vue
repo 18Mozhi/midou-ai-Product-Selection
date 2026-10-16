@@ -39,58 +39,24 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
 
     <details class="home-runtime-details">
       <summary>
-        <span><b>运行详情</b><small>采集进度与时间</small></span>
+        <span><b>运行详情</b><small>调度记录与累计数量</small></span>
       </summary>
       <div class="home-runtime-panel">
         <header>
-          <span>自动流程</span>
-          <h3>系统正在做什么</h3>
+          <span>调度与数量</span>
+          <h3>采集记录</h3>
         </header>
-        <ol>
-          <li :data-done="selection.state === 'running'">
-            <i>1</i>
-            <div>
-              <b>采集情报</b
-              ><span>{{
-                selection.state === "running"
-                  ? "采集流程运行中"
-                  : selection.state === "attention"
-                    ? "采集流程需检查"
-                    : "等待采集来源"
-              }}</span>
-            </div>
-          </li>
-          <li :data-done="selection.candidate_count > 0">
-            <i>2</i>
-            <div>
-              <b>筛出候选</b><span>已发现 {{ selection.candidate_count }} 条</span>
-            </div>
-          </li>
-          <li :data-done="selection.recommended_count > 0">
-            <i>3</i>
-            <div>
-              <b>质量门校验</b
-              ><span>{{ selection.rule_candidate_count ?? 0 }} 条候选正在完成五项校验</span>
-            </div>
-          </li>
-          <li :data-done="selection.adopted_count > 0">
-            <i>4</i>
-            <div>
-              <b>人工采纳</b><span>已确认 {{ selection.adopted_count }} 条</span>
-            </div>
-          </li>
-        </ol>
         <dl>
           <div>
-            <dt>上次采集</dt>
+            <dt>上次调度</dt>
             <dd>{{ date(selection.last_collection_at) }}</dd>
           </div>
           <div>
-            <dt>下次采集</dt>
+            <dt>计划下次调度</dt>
             <dd>{{ date(selection.next_collection_at) }}</dd>
           </div>
           <div>
-            <dt>发现商品</dt>
+            <dt>待决策记录</dt>
             <dd>{{ selection.candidate_count }} 条</dd>
           </div>
           <div>
@@ -98,6 +64,7 @@ const date = (value: string | null) => (value ? new Date(value).toLocaleString("
             <dd>{{ selection.adopted_count }} 条</dd>
           </div>
         </dl>
+        <p>以上仅为调度记录和累计数据，不代表 Worker 实时运行状态。</p>
       </div>
     </details>
   </section>

@@ -44,6 +44,7 @@ export class HomeDashboardService {
         this.repository.list(input),
         this.repository.automaticSelection?.(input) ??
           Promise.resolve({
+            daily_production: null,
             state: "not_configured" as const,
             enabled_rule_count: 0,
             candidate_count: 0,

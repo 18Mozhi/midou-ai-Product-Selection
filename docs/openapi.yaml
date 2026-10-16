@@ -8068,7 +8068,23 @@ components:
               next_collection_at,
             ]
           properties:
-            state: { type: string, enum: [not_configured, running, attention] }
+            daily_production:
+              type: object
+              nullable: true
+              additionalProperties: false
+              description: Current snapshot for newly created workspace primary ASINs on the Beijing calendar date; deduplicated across records and excludes identities resolvable from earlier opportunities. Qualified count reuses all existing quality gates. Missing measurement is null or absent, never a measured zero. This is not a historical completion ledger or continuous-runtime acceptance.
+              required: [date, timezone, discovered_count, qualified_count, target_minimum, measured_at]
+              properties:
+                date: { type: string, format: date }
+                timezone: { type: string, enum: [Asia/Shanghai] }
+                discovered_count: { type: integer, minimum: 0 }
+                qualified_count: { type: integer, minimum: 0 }
+                target_minimum: { type: integer, enum: [100] }
+                measured_at: { type: string, format: date-time }
+            state:
+              type: string
+              enum: [not_configured, running, attention]
+              description: Legacy running denotes configured scheduling facts; it does not certify live Worker health or continuous execution.
             enabled_rule_count: { type: integer, minimum: 0 }
             candidate_count: { type: integer, minimum: 0 }
             rule_candidate_count:

@@ -151,7 +151,7 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   );
   await page.goto("/home");
   await expect(page.getByRole("heading", { name: "选品控制台" })).toBeVisible();
-  await expect(page.getByText("自动选品运行中")).toBeVisible();
+  await expect(page.locator(".home-system-state")).toHaveText("采集调度已配置");
   await expect(page.getByText("便携咖啡机候选")).toBeVisible();
   await expect(page.getByText("86.5 分")).toBeVisible();
   await expect(page.getByRole("link", { name: /便携咖啡机候选/ })).toHaveAttribute(
@@ -192,12 +192,13 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
     "href",
     "/trends?section=rules",
   );
-  await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeHidden();
+  await expect(page.getByRole("heading", { name: "采集记录" })).toBeHidden();
   await page.getByText("运行详情", { exact: true }).click();
-  await expect(page.getByRole("heading", { name: "系统正在做什么" })).toBeVisible();
-  await expect(page.locator(".home-runtime-panel")).toContainText("发现商品12 条");
+  await expect(page.getByRole("heading", { name: "采集记录" })).toBeVisible();
+  await expect(page.locator(".home-runtime-panel")).toContainText("待决策记录12 条");
   await expect(page.locator(".home-runtime-panel")).toContainText("人工已采纳2 条");
-  await expect(page.locator(".home-runtime-panel li").first()).toHaveAttribute("data-done", "true");
+  await expect(page.locator(".home-runtime-panel li")).toHaveCount(0);
+  await expect(page.locator(".home-runtime-panel")).toContainText("不代表 Worker 实时运行状态");
   await expect(page.getByText("推荐需人工采纳")).toBeHidden();
   await page.getByText("数据说明", { exact: true }).click();
   await expect(page.getByText("推荐需人工采纳")).toBeVisible();
@@ -281,9 +282,11 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
   await expect(
     page.getByText("尚未取得真实 Amazon 主品证据，或当前商品已结束决策，暂不能采纳。"),
   ).toBeVisible();
-  await expect(page.getByRole("navigation", { name: "机会详情返回路径" })).toContainText(
-    "机会详情",
-  );
+  await expect(
+    page
+      .getByRole("navigation", { name: "机会详情返回路径" })
+      .getByRole("link", { name: "← 返回来源列表" }),
+  ).toHaveAttribute("href", "/opportunities");
   await expect(page.getByText("暂无评分记录。")).toBeVisible();
 
   const finalEvidenceMessage = page.getByText("暂无评分记录。");
@@ -653,4 +656,70 @@ test("home polling keeps a closed setup and unsaved keyword draft without overla
   await expect(
     page.getByRole("textbox", { name: "想找的商品关键词 多个关键词用逗号分隔。", exact: true }),
   ).toHaveValue("保留未提交的关键词");
+});
+
+test.describe("daily snapshots retain Beijing time in overseas browsers", () => {
+  test.use({ timezoneId: "America/Los_Angeles" });
+  for (const qualified of [0, 87, 125, null]) {
+    test(`daily product production separates measured progress from missing data: ${qualified}`, async ({
+      page,
+    }) => {
+      await nav(page);
+      await page.route("**/api/v1/me/home-dashboard", (route) =>
+        route.fulfill({
+          json: envelope({
+            actions: [],
+            changes: [],
+            follows: [],
+            health: [],
+            scope: { organization_id: org, workspace_id: workspace },
+            generated_at: at,
+            automatic_selection: {
+              state: "running",
+              enabled_rule_count: 0,
+              candidate_count: 900,
+              rule_candidate_count: 500,
+              recommended_count: 300,
+              awaiting_evidence_count: 20,
+              adopted_count: 100,
+              recommended_items: [],
+              last_collection_at: at,
+              next_collection_at: at,
+              daily_production:
+                qualified === null
+                  ? null
+                  : {
+                      date: "2026-10-17",
+                      timezone: "Asia/Shanghai",
+                      discovered_count: 150,
+                      qualified_count: qualified,
+                      target_minimum: 100,
+                      measured_at: "2026-10-17T00:00:00Z",
+                    },
+            },
+          }),
+        }),
+      );
+      await page.goto("/home");
+      const daily = page.getByRole("region", { name: "每日选品产出" });
+      await expect(page.getByText("采集调度已配置", { exact: true }).first()).toBeVisible();
+      if (qualified === null) {
+        await expect(
+          daily.getByText("每日产出尚未读取，暂不显示数量或目标达成状态。", { exact: true }),
+        ).toBeVisible();
+        await expect(daily.locator("progress")).toHaveCount(0);
+      } else {
+        await expect(daily.getByText("150", { exact: true })).toBeVisible();
+        await expect(daily.locator("progress")).toHaveAttribute("value", String(qualified));
+        await expect(daily.locator("progress")).toHaveAttribute("max", "100");
+        await expect(daily.getByText(/当前快照不能证明全天不间断运行/)).toBeVisible();
+        await expect(daily).toContainText("统计时间 2026/10/17 08:00:00");
+        await expect(daily.locator("dd").nth(1)).toHaveText(`${qualified} / 100 目标`);
+      }
+      await expect
+        .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= innerWidth))
+        .toBe(true);
+      if (qualified === 87) await expect(daily).toHaveScreenshot("daily-product-production.png");
+    });
+  }
 });

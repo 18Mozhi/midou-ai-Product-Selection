@@ -52,6 +52,7 @@ test("M02-06.A01/A02/A04/A12 service groups and caps the truthful projection", a
   assert.equal(result.follows.length, 1);
   assert.equal(result.health.length, 1);
   assert.deepEqual(result.automatic_selection, {
+    daily_production: null,
     state: "not_configured",
     enabled_rule_count: 0,
     candidate_count: 0,
@@ -336,7 +337,7 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(openapi, /\/me\/home-dashboard:/);
   assert.match(home, /createApiClient/);
   assert.match(apiClient, /credentials\s*:\s*["']include["']/);
-  for (const fact of ["自动选品运行中", "选品控制台", "HomeAutomationOverview"])
+  for (const fact of ["采集调度已配置", "选品控制台", "HomeAutomationOverview"])
     assert.match(home, new RegExp(fact));
   for (const destination of ["/trends\\?section=rules", "/opportunities", "/opportunities/start"])
     assert.match(home, new RegExp(`to="${destination}"`));
@@ -369,8 +370,12 @@ test("M02-06.A03/A05/A06/A07/A08/A10/A13/A15/A16/A17 delivery contracts are expl
   assert.match(home, /等待采集来源就绪[\s\S]*关键词监控可按需设置/);
   assert.match(home, /五项质量门全部通过后自动加入/);
   assert.doesNotMatch(home, /按真实来源门槛推荐/);
-  assert.match(overview, /home-runtime-details[\s\S]*采集情报[\s\S]*质量门校验/);
-  assert.match(overview, /人工采纳[\s\S]*人工已采纳/);
+  assert.match(
+    overview,
+    /home-runtime-details[\s\S]*采集记录[\s\S]*上次调度[\s\S]*计划下次调度[\s\S]*待决策记录/,
+  );
+  assert.match(overview, /人工已采纳[\s\S]*不代表 Worker 实时运行状态/);
+  assert.doesNotMatch(overview, /<ol>|data-done/);
   assert.match(home, /<details v-if="selection" class="home-truth">[\s\S]*推荐需人工采纳/);
   assert.doesNotMatch(home, /全链路教学/);
   assert.match(opportunity, /机会暂无详情[\s\S]*等待真实数据/);

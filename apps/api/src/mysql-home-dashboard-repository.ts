@@ -1,3 +1,4 @@
+import { dailySelectionWindow, dailySelectionProductionSql } from "./home-daily-selection.js";
 import type { Pool, RowDataPacket } from "mysql2/promise";
 import type { HomeDashboardItem } from "@scoutops/contracts";
 import type { HomeDashboardRepository } from "./home-dashboard-service.js";
@@ -7,7 +8,10 @@ import {
   opportunityCandidateSql,
 } from "./opportunity-selection-policy.js";
 export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
-  constructor(private readonly pool: Pool) {}
+  constructor(
+    private readonly pool: Pool,
+    private readonly now: () => Date = () => new Date(),
+  ) {}
   async automaticSelection(input: { organizationId: string; workspaceId: string }) {
     const [rows] = await this.pool.query<RowDataPacket[]>(
       `SELECT
@@ -69,6 +73,18 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
         "WHERE s.organization_id=? AND s.workspace_id=? LIMIT 1",
       [input.organizationId, input.workspaceId],
     );
+    const measuredAt = this.now(),
+      window = dailySelectionWindow(measuredAt);
+    const [productionRows] = await this.pool.query<RowDataPacket[]>(dailySelectionProductionSql, [
+      input.organizationId,
+      input.workspaceId,
+      window.start,
+      window.end,
+      input.organizationId,
+      input.workspaceId,
+      window.start,
+    ]);
+    const production = productionRows[0] ?? ({} as RowDataPacket);
     const row = rows[0] ?? ({} as RowDataPacket),
       schedule = schedules[0],
       fullConfigured = Boolean(schedule?.last_task_id || Number(schedule?.source_available)),
@@ -90,6 +106,14 @@ export class MySqlHomeDashboardRepository implements HomeDashboardRepository {
       last = lastDates.length ? new Date(Math.max(...lastDates)).toISOString() : null,
       next = nextDates.length ? new Date(Math.min(...nextDates)).toISOString() : null;
     return {
+      daily_production: {
+        date: window.date,
+        timezone: "Asia/Shanghai" as const,
+        discovered_count: Number(production.discovered_count ?? 0),
+        qualified_count: Number(production.qualified_count ?? 0),
+        target_minimum: 100 as const,
+        measured_at: measuredAt.toISOString(),
+      },
       state:
         enabled === 0 && !fullConfigured
           ? ("not_configured" as const)

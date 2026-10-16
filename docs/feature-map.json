@@ -1,4 +1,27 @@
 {
+  "selectionDailyProduction20261017": {
+    "status": "implemented",
+    "statusDetail": "55_related_tests_24_browser_cases_and_display_retest_passed_not_deployed",
+    "requirements": "docs/selection-daily-production.md",
+    "sourceFiles": [
+      "apps/api/src/home-daily-selection.ts",
+      "apps/api/src/mysql-home-dashboard-repository.ts",
+      "apps/api/src/home-dashboard-service.ts",
+      "packages/contracts/src/index.ts",
+      "apps/web/src/components/HomeDashboard.vue",
+      "apps/web/src/components/HomeAutomationOverview.vue",
+      "apps/web/src/home-dashboard.css"
+    ],
+    "apiRoutes": ["/api/v1/me/home-dashboard"],
+    "routes": ["/home"],
+    "testFiles": [
+      "tests/unit/home-daily-selection.test.mjs",
+      "tests/m02-06/home-dashboard.test.mjs",
+      "tests/m02-06/home-discovery-health.test.mjs",
+      "tests/e2e/m02-06-home-mobile.spec.ts"
+    ],
+    "contract": "Beijing-day current-workspace distinct new Amazon primary ASINs, excluding currently resolvable earlier identities. Qualified count reuses all existing gates. Optional daily_production distinguishes unknown from zero; fixed user target 100. Snapshot is not historical completion or continuous-runtime proof. No production write or schema change."
+  },
   "selectionEvaluationWakeup20261017": {
     "status": "implemented",
     "statusDetail": "local_60_related_tests_and_mysql57_27_read_only_transitions_passed_not_deployed",

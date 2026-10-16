@@ -541,38 +541,6 @@
   font-size: 22px;
 }
 
-.home-runtime-panel ol {
-  margin: 0;
-  padding: 0;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 14px;
-  list-style: none;
-}
-
-.home-runtime-panel li {
-  display: grid;
-  grid-template-columns: 34px minmax(0, 1fr);
-  align-items: start;
-  gap: 10px;
-}
-
-.home-runtime-panel li i {
-  width: 34px;
-  height: 34px;
-  display: grid;
-  place-items: center;
-  border: 1px solid var(--home-hairline);
-  color: var(--so-text-muted);
-  font-style: normal;
-  font-weight: 800;
-}
-
-.home-runtime-panel li[data-done="true"] i {
-  border-color: var(--home-positive);
-  color: var(--home-positive);
-}
-
 .home-runtime-panel dl {
   margin: 0;
   display: grid;
@@ -720,7 +688,6 @@
   }
 
   .home-runtime-panel,
-  .home-runtime-panel ol,
   .home-runtime-panel dl {
     grid-template-columns: 1fr;
   }
@@ -732,5 +699,69 @@
   .home-truth > div {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+.home-daily-production {
+  margin: 16px 0;
+  padding: 18px 20px;
+  border: 1px solid var(--so-border);
+  background: var(--so-panel);
+}
+.home-daily-production > header {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+}
+.home-daily-production h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+.home-daily-production > header span,
+.home-daily-production > small {
+  color: var(--so-text-muted);
+  font-size: 12px;
+}
+.home-daily-production dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 36px;
+  margin: 16px 0;
+}
+.home-daily-production dt {
+  font-size: 13px;
+  color: var(--so-text-muted);
+}
+.home-daily-production dd {
+  margin: 6px 0 0;
+  font-size: 25px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.home-daily-production dd small {
+  font-size: 13px;
+  color: var(--so-text-muted);
+  font-weight: 400;
+}
+.home-daily-production progress {
+  display: block;
+  width: 100%;
+  height: 8px;
+  accent-color: var(--so-primary);
+}
+.home-daily-production > p {
+  margin: 12px 0 6px;
+  font-size: 13px;
+  color: var(--so-text);
+  font-weight: 400;
+  letter-spacing: normal;
+  line-height: 1.6;
+}
+@media (max-width: 760px) {
+  .home-daily-production {
+    padding: 16px;
   }
 }
