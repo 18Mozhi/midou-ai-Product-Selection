@@ -40,7 +40,7 @@ const emit = defineEmits<{ retry: [] }>();
         </span>
       </article>
       <article class="p11-panel">
-        <p class="p11-kicker">读取边界</p>
+        <p class="p11-kicker">访问范围</p>
         <h3>数据范围</h3>
         <span
           v-for="scope in props.resource.data.data_scopes"

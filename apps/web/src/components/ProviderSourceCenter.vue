@@ -401,7 +401,7 @@ async function refreshAfterConfigurationResult() {
   configurationReturnTitle.value = configurationReturnCopy(outcome, "failed");
   configurationReturnDescription.value =
     outcome === "conflict"
-      ? `${failedMessage || "来源目录暂时无法读取。"} 当前页面不会把旧内容当作最新配置。`
+      ? `${failedMessage || "来源目录暂时无法读取。"} 当前显示上次读取的配置。`
       : `刚才的写入不会撤销。${failedMessage || "下方继续显示上次成功读取的来源目录。"}`;
   configurationReturnRequestId.value = failedRequestId;
   await focusConfigurationReturn("failed");
@@ -696,7 +696,6 @@ onMounted(load);
       <div>
         <p>热点来源</p>
         <h2 tabindex="-1">多平台、多国家来源已自动登记</h2>
-        <span>公开信息源由系统自动采集；需要登录的平台完成网页登录配置后才能运行。</span>
       </div>
       <div class="source-guide-actions">
         <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>

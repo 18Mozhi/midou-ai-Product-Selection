@@ -929,7 +929,7 @@ test("P48 aborts an in-flight source directory read when its actual Vue view is 
       const { router } = await import("/src/router.ts");
       await router.push("/login");
     });
-    await expect(page.getByRole("heading", { name: "登录" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
     await expect.poll(() => readAborted).toBe(true);
   } finally {
     releaseRead();
@@ -979,7 +979,7 @@ test("P48 aborts an in-flight compatibility read when its actual Vue view is unm
       const { router } = await import("/src/router.ts");
       await router.push("/login");
     });
-    await expect(page.getByRole("heading", { name: "登录" })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "安全登录" })).toBeVisible();
     await expect.poll(() => readAborted).toBe(true);
   } finally {
     releaseRead();
@@ -1380,8 +1380,8 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
   const acceptanceForm = page.locator(".acceptance-1688__start");
   await expect(acceptanceForm.getByLabel("组织", { exact: true })).toHaveValue(org);
   await expect(acceptanceForm.getByLabel("工作区", { exact: true })).toHaveValue(ws);
-  await acceptanceForm.getByLabel("验收关键词").fill("桌面灯");
-  await acceptanceForm.getByRole("button", { name: "发起登录验收运行" }).click();
+  await acceptanceForm.getByLabel("检查关键词").fill("桌面灯");
+  await acceptanceForm.getByRole("button", { name: "开始检查" }).click();
   await expect
     .poll(() => acceptanceBody)
     .toEqual({
@@ -1398,7 +1398,7 @@ test("1688 acceptance shows the factual search detail and pagination coverage ma
   );
   await expect(runFeedback).toContainText("00000000-0000-4000-8000-000000001688");
   await expect(page.locator(".acceptance-1688__notice")).toContainText("acceptance-read-4");
-  await expect(acceptanceForm.getByLabel("验收关键词")).toHaveValue("桌面灯");
+  await expect(acceptanceForm.getByLabel("检查关键词")).toHaveValue("桌面灯");
   await page.locator(".acceptance-1688__refresh button").click();
   await expect(page.locator(".acceptance-1688__notice")).toContainText("启用条件已刷新");
   await expect(runFeedback).toContainText("登录验收运行已确认排队");
@@ -1497,17 +1497,17 @@ test("1688 acceptance does not retry or resubmit an unknown task creation outcom
   const form = page.locator(".acceptance-1688__start");
   await expect(form.getByLabel("组织", { exact: true })).toHaveValue(org);
   await expect(form.getByLabel("工作区", { exact: true })).toHaveValue(ws);
-  await form.getByLabel("验收关键词").fill("桌面灯");
-  await form.getByRole("button", { name: "发起登录验收运行" }).click();
+  await form.getByLabel("检查关键词").fill("桌面灯");
+  await form.getByRole("button", { name: "开始检查" }).click();
   const feedback = page.locator('.acceptance-1688__run-feedback[data-kind="unknown"]');
   await expect(feedback).toContainText("任务可能已创建");
   await expect(feedback).toContainText("系统不会自动重发");
-  await expect(form.getByRole("button", { name: "发起登录验收运行" })).toBeDisabled();
+  await expect(form.getByRole("button", { name: "开始检查" })).toBeDisabled();
   await page.locator(".acceptance-1688__refresh button").click();
   await expect(page.locator(".acceptance-1688__notice")).toContainText("启用条件已刷新");
   await expect(feedback).toBeVisible();
-  await expect(form.getByLabel("验收关键词")).toHaveValue("桌面灯");
-  await expect(form.getByRole("button", { name: "发起登录验收运行" })).toBeDisabled();
+  await expect(form.getByLabel("检查关键词")).toHaveValue("桌面灯");
+  await expect(form.getByRole("button", { name: "开始检查" })).toBeDisabled();
   expect(submissionCount).toBe(1);
 });
 

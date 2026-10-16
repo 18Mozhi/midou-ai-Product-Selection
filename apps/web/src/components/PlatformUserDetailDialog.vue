@@ -59,9 +59,6 @@ function scrollToSection(section: "memberships" | "roles" | "security") {
           <button type="button" @click="scrollToSection('roles')">平台权限</button>
           <button type="button" @click="scrollToSection('security')">登录安全</button>
         </nav>
-        <p class="user-detail-context">
-          资料与访问状态分区展示。所有管理操作仍由现有服务校验并记录原因。
-        </p>
       </aside>
       <div class="user-detail-main">
         <header class="user-detail-toolbar">

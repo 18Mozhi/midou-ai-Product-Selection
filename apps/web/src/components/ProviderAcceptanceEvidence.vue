@@ -20,7 +20,7 @@ const matrixState = {
   covered: "已覆盖",
   not_observed: "未观测",
   not_exercised: "未演练",
-  invalid: "合同异常",
+  invalid: "格式异常",
 } as const;
 const sourceState = { draft: "草稿", disabled: "已停用", enabled: "已启用" } as const;
 const time = (value: string | null) =>
@@ -34,7 +34,7 @@ const time = (value: string | null) =>
     aria-labelledby="acceptance-1688-verdict-title"
   >
     <div class="acceptance-1688__verdict-copy">
-      <span>当前结论（由服务端判定）</span>
+      <span>当前结论</span>
       <h3 id="acceptance-1688-verdict-title">{{ title }}</h3>
       <p>{{ conclusion }}</p>
     </div>

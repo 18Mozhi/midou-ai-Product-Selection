@@ -123,8 +123,8 @@ test("M08-06.A07/A08/A15 desktop and 390 measured single-host capacity truth", a
       "只展示惠州当前单机实测结论；规划 100 用户不等于并发承诺，不启用负载均衡、备用服务器或多节点。",
       { exact: true },
     ),
-  ).toBeVisible();
-  await expect(page.getByText(/不证明 100 人、多节点或高可用能力/)).toBeVisible();
+  ).toHaveCount(0);
+  await expect(page.getByText("单机有限实测", { exact: true })).toBeVisible();
 });
 
 test("M08-06.A08/A09/A16 warning blocked empty forbidden expired rate limited and unavailable", async ({

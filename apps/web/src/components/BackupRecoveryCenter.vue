@@ -177,9 +177,7 @@ onBeforeUnmount(() => {
   <section class="backup-center backup-center--c">
     <header class="backup-hero">
       <div>
-        <p class="eyebrow">P64 / 恢复证据</p>
         <h1>备份与恢复控制台</h1>
-        <span>核对结论、目标和证据；此页只读取事实。</span>
       </div>
       <button
         ref="refreshButton"
@@ -223,7 +221,6 @@ onBeforeUnmount(() => {
           :aria-busy="refreshing"
         >
           <h2 id="backup-read-title">正在读取备份事实</h2>
-          <span>校验数据库记录、恢复副本和最近演练。</span>
         </section>
         <section
           v-else-if="

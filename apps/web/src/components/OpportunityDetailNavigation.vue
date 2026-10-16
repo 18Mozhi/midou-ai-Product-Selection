@@ -20,9 +20,7 @@ const activeLabel = computed(
   <aside class="opportunity-detail-directory" aria-label="机会详情目录">
     <p class="opportunity-detail-directory__eyebrow">核对机会</p>
     <h2>先看依据，<br />再作判断</h2>
-    <p class="opportunity-detail-directory__note">
-      系统建议不代替人工决定；未取得的数据不会以零值补齐。
-    </p>
+
     <nav aria-label="机会详情分区">
       <button
         v-for="([tab, label], index) in items"

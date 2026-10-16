@@ -109,7 +109,7 @@ async function createGrant() {
     grants.value.unshift(result.data);
     selected.value = result.data;
     showCreate.value = false;
-    notice.value = "授权已创建并写入审计。";
+    notice.value = "授权已创建。";
     state.value = "ready";
     form.reason = "";
   } catch (error) {
@@ -135,7 +135,7 @@ async function extend() {
       },
     );
     replace(result.data);
-    notice.value = "到期时间已延长并写入审计。";
+    notice.value = "到期时间已延长。";
     mutation.reason = "";
   } catch (error) {
     state.value = (error instanceof Error ? error.message : "error") as State;
@@ -207,7 +207,7 @@ function setFilter(value: string) {
         <div>
           <p>资源访问</p>
           <h1>资源临时授权</h1>
-          <span>只向同组织活动成员开放一个指定资源；下载、导出、凭证与重放保持拒绝。</span>
+          <span>仅可授权同组织成员访问指定资源。</span>
         </div>
         <button v-if="canManage" type="button" @click="showCreate = !showCreate">
           {{ showCreate ? "取消" : "新建授权" }}
@@ -215,7 +215,6 @@ function setFilter(value: string) {
       </header>
       <div v-if="state === 'loading'" class="authz-state">
         <span class="spinner"></span><strong>正在核对成员与有效期</strong>
-        <p>状态由服务端计算，到期后无需人工关闭。</p>
       </div>
       <div
         v-else-if="['error', 'forbidden', 'expired', 'blocked'].includes(state)"
@@ -364,7 +363,6 @@ function setFilter(value: string) {
                 </button>
               </div>
             </form>
-            <small>延长、撤销和实际访问均记录关联编号与链路编号。</small>
           </article>
         </div></template
       >

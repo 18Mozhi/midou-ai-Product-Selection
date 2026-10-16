@@ -141,7 +141,7 @@ test("P47 initial loading state uses its approved copy and compact skeleton with
       background: "rgb(255, 255, 255)",
       borderRadius: "8px",
       minHeight: "0px",
-      eyebrow: "none",
+      eyebrow: null,
       skeletonAnimation: "none",
     });
 
@@ -404,7 +404,7 @@ test("M03-03.A07/A08/A15 adapter matrix and health state are responsive and visu
   );
   await page.goto("/platform-admin/providers/adapters");
   await expect(page.getByRole("heading", { name: "采集程序", level: 1 })).toBeVisible();
-  await expect(page.getByText("统一采集、标准化与健康检查合同")).toBeVisible();
+  await expect(page.locator(".adapter-heading h2")).toHaveText("采集诊断目录");
   const semanticText = await page.evaluate(() => {
     const probe = document.createElement("span");
     probe.style.color = "var(--p47-ink)";

@@ -65,18 +65,12 @@ watch(
       <div>
         <p>辅助判断 · 不替代事实</p>
         <h4>AI 辅助分析</h4>
-        <span
-          >仅提供摘要、分类与缺失项提示；评分、利润、风险和决定仍以持久化事实与人工判断为准。</span
-        >
+        <span>AI 内容仅供参考，请结合证据判断。</span>
       </div>
       <button v-if="canDecide" type="button" :disabled="busy" @click="$emit('queue')">
         生成新分析
       </button>
     </header>
-
-    <aside class="opportunity-ai-boundary">
-      每次分析保留独立输入快照、哈希与人工抽检；新分析不会覆盖旧输出。
-    </aside>
 
     <div class="opportunity-ai-workspace">
       <nav class="opportunity-ai-directory" aria-label="AI 分析记录">
@@ -263,7 +257,7 @@ watch(
                 </dd>
               </div>
               <div>
-                <dt>提示合同</dt>
+                <dt>提示版本</dt>
                 <dd>
                   <code>{{ selectedAnalysis.prompt_contract_version ?? "未提供" }}</code>
                 </dd>

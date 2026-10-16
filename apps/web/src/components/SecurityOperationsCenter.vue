@@ -379,12 +379,7 @@ onBeforeUnmount(() => {
   <section class="security-ops security-ops--c" aria-labelledby="security-operations-title">
     <header class="security-hero">
       <div>
-        <p>P59 / 调查工作区</p>
         <h1 id="security-operations-title">安全中心</h1>
-        <span
-          >核查登录风险、会话、访问令牌、凭证到期和平台审计。此页面只读，且不返回密码、密钥、Cookie、原始
-          IP 或原始浏览器标识。</span
-        >
       </div>
       <div class="security-hero-actions">
         <label

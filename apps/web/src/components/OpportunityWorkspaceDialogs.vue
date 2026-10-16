@@ -115,7 +115,7 @@ const decisionLabel = {
       <p v-else-if="createFeedback?.type === 'error'" class="opportunity-message" role="alert">
         {{ createFeedback.message }}
       </p>
-      <aside>创建后由宝塔 Node Worker 刷新真实证据覆盖；评分、利润与风险不会自动填充。</aside>
+      <aside>创建后可查看证据与分析状态。</aside>
       <footer>
         <button class="so-action-secondary" type="button" @click="createOpen = false">取消</button>
         <button

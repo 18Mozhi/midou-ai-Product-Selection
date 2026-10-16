@@ -211,7 +211,7 @@ export function useProviderSourceConfigurationVersions({
         versionWriteConfirmed.value ? "新版本已生成，来源目录尚未更新" : "最新来源目录暂时未能读取",
         versionWriteConfirmed.value
           ? "本窗仍显示操作前历史，不会把旧内容当作最新结果。"
-          : catalogFailure || "当前页面不会把旧内容当作最新配置。",
+          : catalogFailure || "当前显示上次读取的配置。",
         catalogRequestId,
       );
       return false;

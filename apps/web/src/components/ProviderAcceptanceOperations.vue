@@ -32,7 +32,7 @@ const time = (value: string | null) =>
     </section>
     <section class="acceptance-1688__run">
       <div>
-        <p>最近浏览器运行（服务端记录）</p>
+        <p>最近浏览器运行</p>
         <h3>{{ currentRunState }}</h3>
       </div>
       <dl v-if="data.latest_run">

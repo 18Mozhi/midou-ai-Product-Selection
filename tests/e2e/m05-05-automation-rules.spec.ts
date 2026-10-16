@@ -106,7 +106,7 @@ test("M05-05.A07/A08/A15 mobile create rule layout", async ({ page }) => {
   await page.goto("/automations");
   await page.getByRole("button", { name: "创建规则" }).click();
   await expect(page.getByRole("heading", { name: "创建自动化规则" })).toBeVisible();
-  await expect(page.getByText("规则只消费真实通知投影")).toBeVisible();
+  await expect(page.getByText("规则只消费真实通知投影")).toHaveCount(0);
   await page.getByRole("button", { name: /竞品告警复核/ }).click();
   await expect(page.getByLabel("规则名称")).toHaveValue("竞品告警复核");
 });

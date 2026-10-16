@@ -51,11 +51,7 @@ useNotificationInitialFocus(
           <small>{{ editor?.id ? "EDIT DRAFT" : "NEW DRAFT" }}</small>
           <h3>平台通知</h3>
           <p>
-            {{
-              editor?.id
-                ? `按 v${form.expected_version} 提交完整草稿值。`
-                : "保存后仍是草稿，不会自动发布。"
-            }}
+            {{ editor?.id ? "编辑消息草稿。" : "保存后仍是草稿，不会自动发布。" }}
           </p>
         </div>
         <button type="button" aria-label="关闭草稿编辑" @click="$emit('close')">×</button>

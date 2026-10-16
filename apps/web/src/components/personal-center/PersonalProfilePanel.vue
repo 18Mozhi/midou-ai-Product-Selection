@@ -28,7 +28,7 @@ function update(field: ProfileField, event: Event) {
     <header class="p11-panel-heading">
       <p>基本资料</p>
       <h3>可保存的账号资料</h3>
-      <span>邮箱只读，不会写入资料更新请求。</span>
+      <span>邮箱暂不支持修改。</span>
     </header>
 
     <div class="p11-field-group">
@@ -81,7 +81,7 @@ function update(field: ProfileField, event: Event) {
           :disabled="props.saving"
           @input="update('avatar_url', $event)"
         />
-        <small>头像地址由服务端校验，必须使用 HTTPS。</small>
+        <small>请输入 HTTPS 图片地址。</small>
       </div>
     </div>
 
@@ -96,9 +96,7 @@ function update(field: ProfileField, event: Event) {
           :disabled="props.saving"
           @input="update('phone', $event)"
         />
-        <small>{{
-          props.profile.phone_verified_at ? "已验证" : "未验证；系统不会伪造短信验证结果。"
-        }}</small>
+        <small>{{ props.profile.phone_verified_at ? "已验证" : "未验证" }}</small>
       </div>
     </div>
 

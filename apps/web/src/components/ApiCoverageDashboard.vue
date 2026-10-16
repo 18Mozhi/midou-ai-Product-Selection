@@ -29,16 +29,12 @@ const countRatio = (value: number, total: number) => `${value} / ${total}`;
 <template>
   <section class="api-coverage api-coverage--c" data-testid="api-coverage-dashboard">
     <header class="p63-hero">
-      <p>PLATFORM OPERATIONS / P63</p>
       <h1>接口覆盖核验</h1>
-      <span>核对当前接口目录、既有运行记录与逐项验证证据。</span>
     </header>
 
     <aside class="p63-boundary" aria-label="数据范围说明">
       <b>平台超级管理员 · 只读证据</b>
-      <span
-        >报告可关联只代表目录指纹相符，不代表构建版本一致或验证项均已通过；报告本身不等于全量生产验收。</span
-      >
+      <span>报告仅适用于其对应的构建版本，请核对下方验证结果。</span>
     </aside>
 
     <section class="p63-paper" aria-label="接口目录与运行证据">
@@ -57,9 +53,7 @@ const countRatio = (value: number, total: number) => `${value} / ${total}`;
             </template>
             <template v-else>报告与当前目录可关联，但没有可显示的生成时间。</template>
           </p>
-          <p v-else-if="data.report_status === 'missing'">
-            未发现可读取的生产验收报告；当前目录条目按未执行统计。
-          </p>
+          <p v-else-if="data.report_status === 'missing'">暂无验证报告，当前接口尚未验证。</p>
           <p v-else-if="data.report_status === 'invalid'">
             报告内容无法解析；当前目录条目按未执行统计。
           </p>

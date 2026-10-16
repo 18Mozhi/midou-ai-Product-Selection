@@ -56,7 +56,6 @@ const status = defineModel<string>("status", { required: true });
     <template v-else-if="section === 'deliveries'">
       <section class="notification-delivery-toolbar">
         <div>
-          <p>DELIVERY AUDIT</p>
           <h3>投递观测</h3>
           <span>搜索和类型筛选只影响投递记录与上方三项投递统计。</span>
         </div>

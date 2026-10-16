@@ -240,9 +240,7 @@ onBeforeUnmount(suspendRead);
   <section class="redis-resilience redis-resilience--c" :data-state="state">
     <header class="redis-resilience__hero">
       <div>
-        <p>P67 / 运行证据</p>
         <h1>Redis 运行核验</h1>
-        <span>当前惠州单机只运行一个宝塔 Redis；不启用 Sentinel、集群、副本或备用服务器。</span>
       </div>
       <button
         ref="refreshButton"
@@ -255,10 +253,7 @@ onBeforeUnmount(suspendRead);
         {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
       </button>
     </header>
-    <aside class="p67-boundary-strip" aria-label="运行边界">
-      <b>惠州单主机 / 宝塔管理</b
-      ><span>Redis 仅协调缓存、队列、限流与实时消息；MySQL 仍是业务事实源。</span>
-    </aside>
+
     <section
       v-if="data && refreshFailure"
       class="redis-resilience__refresh-notice"

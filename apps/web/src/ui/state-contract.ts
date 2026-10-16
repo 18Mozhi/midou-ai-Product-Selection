@@ -35,58 +35,50 @@ export function canConfirm(input: ConfirmationInput) {
 }
 export const DEFAULT_STATE_COPY: Record<
   UiStateKind,
-  { eyebrow: string; title: string; description: string; primary: string; secondary?: string }
+  { title: string; description: string; primary: string; secondary?: string }
 > = {
   loading: {
-    eyebrow: "LOADING",
-    title: "正在读取真实数据",
-    description: "请求完成前不显示旧数据或推测结果。",
+    title: "正在加载",
+    description: "请稍候。",
     primary: "请稍候",
   },
   empty: {
-    eyebrow: "EMPTY",
     title: "这里还没有内容",
-    description: "当前范围内没有结果；可调整条件或执行明确的首次操作。",
+    description: "当前范围内暂无结果。",
     primary: "开始创建",
     secondary: "调整筛选",
   },
   error: {
-    eyebrow: "ERROR",
     title: "操作未完成",
-    description: "请求失败且没有写入成功；请按提示重试。",
+    description: "请重试；结果不明确时，请先核对记录。",
     primary: "重新尝试",
     secondary: "返回上一页",
   },
   forbidden: {
-    eyebrow: "PERMISSION",
     title: "你没有此项权限",
-    description: "服务端已拒绝访问；页面不会展示受限数据。",
+    description: "请联系管理员申请访问权限。",
     primary: "返回工作台",
     secondary: "申请权限",
   },
   expired: {
-    eyebrow: "SESSION",
     title: "登录已失效",
-    description: "重新登录后再继续，未提交的敏感操作不会自动重放。",
+    description: "请重新登录后继续。",
     primary: "重新登录",
   },
   blocked: {
-    eyebrow: "BLOCKED",
     title: "依赖暂时受阻",
-    description: "请求因限流、超时或依赖不可用而停止；不会伪装为成功。",
+    description: "服务暂不可用，请稍后重试。",
     primary: "稍后重试",
     secondary: "查看影响",
   },
   recovery: {
-    eyebrow: "RECOVERED",
     title: "服务已恢复",
-    description: "最新检查已通过；后续数据仍以服务端时间和来源为准。",
+    description: "可以继续操作。",
     primary: "继续",
   },
   not_found: {
-    eyebrow: "404 / LOST IN SIGNAL",
     title: "没有找到这个页面",
-    description: "地址可能已变更，或该入口不属于当前角色。",
+    description: "地址可能有误，或页面已变更。",
     primary: "返回今日行动",
     secondary: "返回上一页",
   },

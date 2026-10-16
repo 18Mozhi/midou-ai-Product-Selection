@@ -989,9 +989,6 @@ onActivated(() => {
       <div>
         <p>平台安全资料库</p>
         <h2>凭证与浏览器档案</h2>
-        <span
-          >这里保存需要登录的网站资料。密码和登录状态加密后不会在页面回显，采集任务只能临时使用。</span
-        >
       </div>
       <div class="credential-header-actions">
         <div class="credential-refresh-meta">
@@ -1131,7 +1128,6 @@ onActivated(() => {
             <p>网页采集运行设置</p>
             <h3>已关联的浏览器档案</h3>
           </div>
-          <span>仅保存元数据和受控凭证引用</span>
         </header>
         <article v-for="profile in profiles" :key="profile.id">
           <strong>{{ profile.name }}</strong>
@@ -1142,7 +1138,7 @@ onActivated(() => {
           <span>语言：{{ profile.locale }} · 时区：{{ profile.timezone }}</span>
           <b>{{ statusText(profile.status) }} · v{{ profile.version }}</b>
         </article>
-        <p v-if="!profiles.length">暂无浏览器档案；不会创建模拟档案。</p>
+        <p v-if="!profiles.length">暂无浏览器档案。</p>
       </section>
       <section class="credential-compatibility">
         <header>
@@ -1150,7 +1146,6 @@ onActivated(() => {
             <p>登录采集准入</p>
             <h3>账号与来源兼容矩阵</h3>
           </div>
-          <span>仅按真实来源绑定、凭证有效期和运行档案状态判定</span>
         </header>
         <ResponsiveDataView
           v-if="compatibilityRows.length"
@@ -1233,7 +1228,7 @@ onActivated(() => {
             </details>
           </template>
         </ResponsiveDataView>
-        <p v-else>当前没有需要网页登录的来源，不创建虚构兼容关系。</p>
+        <p v-else>暂无需要网页登录的来源。</p>
       </section>
     </section>
     <Teleport to="body">
@@ -1350,8 +1345,7 @@ onActivated(() => {
                 "
                 :aria-invalid="nativeFieldErrors['asset.value'] ? 'true' : undefined"
                 @input="updateNativeFieldError('asset.value', $event)"
-              /><small :id="nativeFieldHelperId('asset.value')"
-                >仅本次写入；保存后立即从页面状态清除。</small
+              /><small :id="nativeFieldHelperId('asset.value')">保存后不再显示，请妥善保管。</small
               ><small
                 v-if="nativeFieldErrors['asset.value']"
                 :id="nativeFieldErrorId('asset.value')"

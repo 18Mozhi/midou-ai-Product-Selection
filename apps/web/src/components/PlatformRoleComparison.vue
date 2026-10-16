@@ -170,7 +170,6 @@ watch([compareLeft, compareRight, differencesOnly, capabilityQuery, capabilityGr
       <div>
         <p>平台权限</p>
         <h3>角色权限差异</h3>
-        <span>对比结果来自当前后端角色目录，不以页面按钮推测权限。</span>
       </div>
       <label class="role-comparison__toggle">
         <input v-model="differencesOnly" type="checkbox" />只看差异

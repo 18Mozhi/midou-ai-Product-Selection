@@ -1042,7 +1042,7 @@ test("UI2-PN56 an older write result cannot close a newer review", async ({ page
   dialog = page.getByRole("dialog", { name: "审核热点内容" });
   await expect(dialog).toContainText("庭院灯需求回落");
   release();
-  await expect(page.getByRole("status")).toContainText("内容状态已更新并写入审计记录");
+  await expect(page.getByRole("status")).toContainText("内容状态已更新");
   await expect(dialog).toBeVisible();
   await expect(dialog).toContainText("庭院灯需求回落");
   expect(patches).toBe(1);

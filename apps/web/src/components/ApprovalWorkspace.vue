@@ -525,7 +525,6 @@ watch(
       <div>
         <p>人工决策</p>
         <h1>审批中心</h1>
-        <span>先处理到达当前节点的事项；证据差异和历史记录按需展开。</span>
       </div>
       <div v-if="canManage" class="approval-header-actions">
         <button v-if="published.length" class="secondary" @click="showTemplate = true">

@@ -263,7 +263,7 @@ const list = (v: string) =>
       !form.target_url ||
       (!["import", "manual"].includes(form.access_mode) && !validHttpUrl(form.target_url))
     )
-      errors.target_url = "目标地址必须是有效的 HTTP(S) 技术合同。";
+      errors.target_url = "目标地址必须为有效的 HTTP(S) 网址。";
     if (form.owner_label.trim().length < 2 || form.owner_label.length > 120)
       errors.owner_label = "负责人需要 2–120 字符。";
     for (const field of ["markets", "languages", "fields", "failure_rules"] as const)
@@ -524,7 +524,7 @@ function applyTemplate() {
     form.fields = "title,external_id,observed_at";
     form.failure_rules = "validation_failed,empty_result";
   }
-  message.value = `已应用${accessModeText(form.access_mode)}技术模板，请按真实来源合同核对后发布。`;
+  message.value = `已应用${accessModeText(form.access_mode)}模板，请核对配置后保存。`;
 }
 function nextStep() {
   if (currentStepErrors.value.length) {
@@ -644,16 +644,14 @@ onActivated(() => {
   <section ref="registryRoot" class="provider-registry">
     <header class="provider-hero">
       <div class="provider-hero-copy">
-        <p>来源合同与执行门禁</p>
+        <p>来源设置</p>
         <h2>来源注册中心</h2>
-        <span>管理平台级技术合同；“定义已启用”不等于采集已经运行或成功。</span>
       </div>
       <button type="button" @click="edit(undefined, $event)">＋ 新建来源</button>
     </header>
     <section v-if="items.length" class="provider-overview" aria-label="来源定义概览">
       <article>
-        <span>来源定义</span><strong>{{ items.length }}</strong
-        ><small>平台全局技术合同</small>
+        <span>来源定义</span><strong>{{ items.length }}</strong>
       </article>
       <article>
         <span>已启用定义</span><strong>{{ enabledCount }}</strong

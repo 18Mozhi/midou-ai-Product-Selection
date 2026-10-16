@@ -56,7 +56,6 @@ const symbol = computed(
       <i></i><i></i><i></i>
     </div>
     <span v-else class="ui-state-symbol" aria-hidden="true">{{ symbol }}</span>
-    <p>{{ copy.eyebrow }}</p>
     <h2>{{ title || copy.title }}</h2>
     <div>{{ description || actionHint || copy.description }}</div>
     <dl v-if="safeRequest || safeTrace">

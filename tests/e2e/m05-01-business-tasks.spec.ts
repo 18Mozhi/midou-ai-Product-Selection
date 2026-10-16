@@ -52,7 +52,7 @@ test("M05-01.A07/A08/A09/A15 renders truthful task SLA detail and comments on de
 test("task detail hides every write entry for read-only roles", async ({ page }) => {
   await setup(page, false, ["task:read"]);
   await page.goto(`/tasks/${taskId}?from=%2Ftasks%3Fstatus%3Din_progress`);
-  await expect(page.getByText("当前角色仅可查看任务事实与活动记录")).toBeVisible();
+  await expect(page.locator(".task-dossier-readonly")).toHaveText("当前为只读权限。");
   await expect(page.getByRole("link", { name: "关闭任务详情" })).toHaveAttribute(
     "href",
     "/tasks?status=in_progress",
@@ -973,7 +973,7 @@ test("read-only task role does not receive write, batch, delete or export contro
 }) => {
   await setup(page, false, ["task:read"]);
   await page.goto("/tasks");
-  await expect(page.getByText("当前角色可查看工作区任务")).toBeVisible();
+  await expect(page.locator(".task-readonly-note")).toHaveText("当前为只读权限。");
   await expect(page.getByRole("button", { name: "＋ 新建任务" })).toHaveCount(0);
   await expect(page.getByRole("checkbox")).toHaveCount(0);
   await expect(page.getByRole("button", { name: "导出任务" })).toHaveCount(0);

@@ -38,7 +38,7 @@ function timestamp(value: string) {
     </div>
     <div>
       <dt>返回节点</dt>
-      <dd>{{ nodeCount }} 条；不代表完整历史</dd>
+      <dd>{{ nodeCount }}条近期记录</dd>
     </div>
   </dl>
 </template>

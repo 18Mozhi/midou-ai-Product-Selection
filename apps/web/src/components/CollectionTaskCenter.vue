@@ -217,7 +217,7 @@ const resultKindText = (value: Detail["subqueries"][number]["result_kind"]) =>
     : value === "no_new_content"
       ? "无新内容：本次结果均已存在，未重复写入"
       : value === "parse_failed"
-        ? "解析失败：来源载荷未通过当前解析合同"
+        ? "解析失败，请检查来源格式。"
         : "";
 const robotsDecisionText = (value: NonNullable<Detail["subqueries"][number]["robots_decision"]>) =>
   value.matched_rule
@@ -591,7 +591,6 @@ onActivated(() => {
       <div>
         <p>平台采集任务中心</p>
         <h1 id="collection-task-title">采集任务监控</h1>
-        <span>集中查看任务进度、来源覆盖、失败原因和重试记录；每个任务都可以展开详情。</span>
       </div>
       <div class="collection-task-title-actions">
         <button type="button" :disabled="listLoading" @click="load({ preserve: true })">
@@ -808,12 +807,12 @@ onActivated(() => {
         </ResponsiveDataView>
         <section v-else class="collection-task-empty" data-kind="empty" aria-live="polite">
           <div>
-            <small>当前服务端范围</small>
+            <small>当前范围</small>
             <h4>{{ status === "all" ? "尚无采集任务" : "当前状态下没有任务" }}</h4>
             <p>
               {{
                 status === "all"
-                  ? "任务队列当前为空。这里不会补造普通采集任务入口。"
+                  ? "暂无采集任务。"
                   : `没有状态为“${label(status)}”的任务，可保留当前条件等待刷新，或返回全部状态。`
               }}
             </p>

@@ -496,7 +496,7 @@ test("M05-03.A07/A08/A09/A15 renders recipient notification inbox and detail on 
   await expect(page.getByText(/已合并 3 条同根因通知/)).toBeVisible();
   await page.getByRole("button", { name: /审批状态更新/ }).click();
   await expect(page.getByRole("dialog", { name: "消息详情" })).toBeVisible();
-  await expect(page.getByText(/站内消息来自事务消息/)).toBeVisible();
+  await expect(page.getByText(/站内消息来自事务消息/)).toHaveCount(0);
   await expect(page.getByText("同一根因的 3 条通知已自动合并展示。")).toBeVisible();
   await expect(page.getByText("需关注", { exact: true })).toBeVisible();
   await expect(page.locator(".notification-detail article")).toHaveText(

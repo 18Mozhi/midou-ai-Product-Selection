@@ -28,8 +28,6 @@ defineProps<{ step: OnboardingStep }>();
       <ul class="p09-points" aria-label="要点">
         <li v-for="point in step.points" :key="point">{{ point }}</li>
       </ul>
-
-      <p class="p09-boundary">引导只改变当前页面步骤；不会创建业务数据、改变权限或保存完成状态。</p>
     </div>
   </section>
 </template>

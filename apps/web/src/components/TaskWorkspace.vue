@@ -813,10 +813,8 @@ watch(
         <h2>
           {{ taskId ? "查看事实，再决定下一项操作" : mode === "today" ? "今日工作" : "任务中心" }}
         </h2>
-        <span v-if="taskId"
-          >版本、负责人、期限与活动记录均来自当前任务响应；操作按现有权限显示。</span
-        >
-        <span v-else>查看负责人、期限和下一步；过程记录与审计按需展开。</span>
+        <span v-if="taskId"></span>
+        <span v-else></span>
       </div>
       <RouterLink v-if="taskId" :to="returnPath" class="task-detail-return">返回目录</RouterLink>
       <button v-else-if="canCreate" @click="showCreate = true">＋ 新建任务</button>
@@ -888,9 +886,7 @@ watch(
           </div>
         </dl>
       </section>
-      <p v-if="!canUpdate" class="task-readonly-note">
-        当前角色可查看工作区任务；新建、选择、批量操作和删除入口按权限隐藏。
-      </p>
+      <p v-if="!canUpdate" class="task-readonly-note">当前为只读权限。</p>
       <TaskBatchActions
         v-if="canUpdate"
         :open="showBatchImpact"
@@ -1084,7 +1080,7 @@ watch(
           </p>
         </div>
         <footer class="task-delete-footer">
-          <span v-if="mode === 'all' && !taskId">确认后按当前任务版本提交，历史审计记录保留。</span>
+          <span v-if="mode === 'all' && !taskId"></span>
           <div>
             <button type="button" :disabled="busy" @click="closeDeleteDialog">取消</button
             ><button class="danger" type="submit" :disabled="busy">

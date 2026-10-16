@@ -150,16 +150,12 @@ onBeforeUnmount(suspendRead);
       <div>
         <p>ScoutOps / 文件运行</p>
         <h1>文件存储核验</h1>
-        <span>证据、导出与临时目录，逐项观测、分别核对</span>
       </div>
       <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
         {{ refreshing ? "正在刷新…" : "刷新文件事实" }}
       </button>
     </header>
-    <aside class="p69-boundary" aria-label="运行边界">
-      <b>惠州同机 · 宝塔受管</b>
-      <span>证据、导出与临时文件均在当前主机；不使用共享存储或备用服务器。</span>
-    </aside>
+
     <section
       v-if="data && refreshFailure"
       class="file-resilience__refresh-notice"

@@ -158,7 +158,7 @@ test("P69 distinguishes unknown capacity, same-disk totals, sample bias, and sta
   const directories = page.locator(".p69-directories");
   const evidence = directories.locator('.p69-directory[data-root="evidence"]');
   await expect(evidence).toContainText("上限 / 容量未知");
-  await expect(evidence).toContainText("不是实测满额");
+  await expect(evidence).toContainText("使用率暂不可用");
   await expect(evidence.getByRole("progressbar")).toHaveCount(0);
   await expect(directories).toContainText(
     "同一文件系统的三个读数可能相同；不能相加当成总磁盘用量。",
@@ -187,7 +187,7 @@ test("M08-04.A07/A08/A15 desktop and 390 local-file truth", async ({ page }) => 
   await page.reload();
   await expect(
     page.getByText("证据、导出与临时文件均在当前主机；不使用共享存储或备用服务器。"),
-  ).toBeVisible();
+  ).toHaveCount(0);
 });
 test("file refresh is single-flight and preserves the last verified snapshot on failure", async ({
   page,

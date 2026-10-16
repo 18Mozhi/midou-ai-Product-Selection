@@ -85,7 +85,6 @@ onBeforeUnmount(() => {
       <div>
         <p>01 填写连接信息 / 02 核对后确认</p>
         <h2 id="p60-create-title">{{ title }}</h2>
-        <span>带必填语义的字段均需填写；所有写入沿用原有幂等与审计规则。</span>
       </div>
       <button type="button" @click="close" aria-label="关闭创建填写窗">关闭</button>
     </header>

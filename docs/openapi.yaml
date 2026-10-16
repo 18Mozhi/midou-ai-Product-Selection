@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: ScoutOps Internal API
   version: 0.1.0
-  description: Glass Atlas (2026-10-16) changes only client presentation and lazy-loading feedback; API payloads, theme IDs and authorization remain unchanged. P00 foundation, P01 identity/tenancy/RBAC, and P02 scoped UI preference contracts. Organization-visible endpoints require server-side authorization.
+  description: Production UI copy cleanup (2026-10-16) changes no endpoint, request, response or permission contract. Glass Atlas (2026-10-16) changes only client presentation and lazy-loading feedback; API payloads, theme IDs and authorization remain unchanged. P00 foundation, P01 identity/tenancy/RBAC, and P02 scoped UI preference contracts. Organization-visible endpoints require server-side authorization.
 servers:
   - url: /api/v1
 x-scoutops-verification:

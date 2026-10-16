@@ -387,8 +387,7 @@ function handleStateSecondary() {
     return;
   }
   if (state.value === "forbidden") {
-    message.value =
-      "请联系组织管理员核对 task:create 与 opportunity:decide 能力；当前页面不会展示或写入受限数据。";
+    message.value = "暂无创建选品任务或采纳机会的权限，请联系管理员。";
     return;
   }
   window.history.back();
@@ -442,14 +441,12 @@ onUnmounted(() => {
           ><b>{{ label }}</b>
         </li>
       </ol>
-      <small>阶段按任务返回显示，不以装饰进度或本地计时冒充完成。</small>
     </aside>
     <div class="selection-workspace">
       <header>
         <div>
           <p>创建选品 · 当前会话工作区</p>
           <h2>{{ journey ? "核对这次选品进展" : "开始一次选品" }}</h2>
-          <span>输入商品线索后可离开页面，系统会保存进度并在回来时继续显示。</span>
         </div>
         <RouterLink to="/opportunities">返回机会列表</RouterLink>
       </header>
@@ -659,7 +656,7 @@ onUnmounted(() => {
                     : "请选择候选后核对；未选择不代表五项质量门均不通过。"
                 }}
               </p>
-              <small>五门通过仍需满足当前采纳条件，保存时由服务端再次核对。</small>
+              <small>质量检查通过后仍需符合当前采纳条件。</small>
             </section>
             <div class="selection-actions" role="radiogroup" aria-label="决策方式">
               <label

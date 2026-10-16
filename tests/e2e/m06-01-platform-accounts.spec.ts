@@ -1015,7 +1015,7 @@ test("organization list uses organization-specific filters and a recoverable emp
     "正常使用",
     "已停用组织",
   ]);
-  await expect(filters.getByText("仅筛选组织状态，不代表成员账号状态。")).toBeVisible();
+  await expect(filters.getByText("仅筛选组织状态，不代表成员账号状态。")).toHaveCount(0);
   if (mobile) {
     await expect(page.locator(".p40-record-counts")).toContainText("成员");
     await expect(page.locator(".p40-record-counts")).toContainText("工作区");

@@ -180,7 +180,6 @@ onMounted(() => {
     </header>
     <div class="p08-layout">
       <aside class="p08-scope" aria-label="工作范围选择步骤">
-        <p class="p08-scope-kicker">WORK CONTEXT</p>
         <h1>选择本次工作范围</h1>
         <p class="p08-scope-copy">先确认组织，再选择可进入的工作区。</p>
         <ol class="p08-steps">
@@ -192,7 +191,6 @@ onMounted(() => {
           </li>
           <li :class="{ 'is-current': currentStep === 3 }"><span>3</span><b>范围就绪</b></li>
         </ol>
-        <p class="p08-scope-note">这里只显示当前会话可见的范围。选择组织本身不会写入工作区会话。</p>
       </aside>
       <section class="p08-workspace" aria-label="组织与工作区选择">
         <header class="p08-hero" aria-labelledby="tenancy-title">
@@ -210,7 +208,7 @@ onMounted(() => {
             {{
               state === "provisioning"
                 ? "创建完成后会按既有规则进入选品工作台。"
-                : "范围读取完成前，不显示可进入的组织或工作区。"
+                : "正在读取组织与工作区…"
             }}
           </p>
         </div>
@@ -229,7 +227,7 @@ onMounted(() => {
           <p>
             {{
               state === "forbidden"
-                ? "请返回组织目录；页面不会展示无权限的组织。"
+                ? "暂无此组织的访问权限，请返回目录。"
                 : state === "expired"
                   ? "重新登录后再选择组织和工作区。"
                   : "检查网络或登录状态后重新读取。"
@@ -366,9 +364,5 @@ onMounted(() => {
         </template>
       </section>
     </div>
-    <footer class="p08-boundary">
-      <span>C方向 · P08 · 工作范围</span>
-      <span>页面不会执行真实创建或会话写入</span>
-    </footer>
   </main>
 </template>

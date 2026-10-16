@@ -375,17 +375,8 @@ onUnmounted(() => {
       </button>
       <nav id="role-navigation" class="role-sidebar" :aria-label="`${shellTitle}导航`">
         <div class="role-sidebar-head">
-          <strong>{{ shellTitle }}</strong
-          ><small
-            >{{
-              shell === "member"
-                ? "当前组织业务范围"
-                : shell === "organization_admin"
-                  ? "仅当前组织"
-                  : "平台角色授权范围"
-            }}
-            · {{ roleSummary }}</small
-          >
+          <strong>{{ shellTitle }}</strong>
+          <small>{{ roleSummary }}</small>
         </div>
         <label v-if="items.length >= 8" class="role-menu-search">
           <span class="so-visually-hidden">搜索导航菜单</span>
@@ -506,7 +497,6 @@ onUnmounted(() => {
           class="role-page-title"
         >
           <div>
-            <p>{{ activeItem?.group || shellTitle }}</p>
             <h1>{{ pageTitle }}</h1>
           </div>
         </header>

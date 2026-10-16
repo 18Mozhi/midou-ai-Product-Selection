@@ -628,7 +628,7 @@ test("M04-02.A07/A08/A15 opportunity detail directory and reason-required decisi
     "10 决策历史",
   ]);
   await expect(page.locator(".opportunity-detail-directory-mobile nav button")).toHaveCount(10);
-  await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
+  await expect(page.getByText("暂无评分记录。")).toBeVisible();
   await expect(page.getByText("0/5 已通过", { exact: true })).toBeVisible();
   await expect(page.getByText("当前无需你处理", { exact: true })).toBeVisible();
   await expect(page.getByRole("button", { name: "采纳建议" })).toHaveCount(0);
@@ -1110,7 +1110,7 @@ test("P18 lineage preserves raw status and unknown age while feedback uses the s
   await page.getByRole("spinbutton", { name: "实际退货量 不能高于实际销量。" }).fill("1");
   await page.getByLabel("实际采购交期（天）").fill("14");
   await page.getByLabel("实际利润").fill("-3");
-  await page.getByRole("textbox", { name: "币种 提交时按接口合同转为大写。" }).fill("USD");
+  await page.getByRole("textbox", { name: "币种 使用大写货币代码。" }).fill("USD");
   await page.getByLabel("事实来源").fill("ERP-NEW-29");
   await page.getByRole("button", { name: "提交新的经营事实" }).click();
   await expect(page.getByRole("alert")).toContainText("提交结果暂未确认");
@@ -1254,9 +1254,7 @@ test("P18 insight reads fail and recover independently without hiding competitor
 
   await page.goto(`/opportunities/${opportunityId}`);
   await expect(page.getByText("1 个关联竞品", { exact: false })).toBeVisible();
-  await expect(
-    page.getByText("供应链读取未完成；已成功读取的竞品事实会继续单独显示。", { exact: true }),
-  ).toBeVisible();
+  await expect(page.getByText("供应链数据暂不可用。", { exact: true })).toBeVisible();
   const competitorReadsBeforeRetry = competitorReads;
   allowSourcingRecovery = true;
   await page.getByRole("button", { name: "重试读取供应候选" }).click();
@@ -1320,9 +1318,7 @@ test("P18 sourcing facts survive competitor read failure and competitor retry st
   });
 
   await page.goto(`/opportunities/${opportunityId}`);
-  await expect(
-    page.getByText("竞品事实暂不可用；不会把上次数据当成本次结果。", { exact: true }),
-  ).toBeVisible();
+  await expect(page.getByText("竞品数据暂不可用，请重试。", { exact: true })).toBeVisible();
   await expect(page.getByText("1 个关联搜索 · 2 个候选", { exact: true })).toBeVisible();
   const sourcingReadsBeforeRetry = sourcingReads;
 
@@ -1350,12 +1346,8 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
   });
 
   await page.goto(`/opportunities/${opportunityId}`);
-  await expect(
-    page.getByText("当前角色没有竞品读取权限；页面不请求或展示竞品明细。", { exact: true }),
-  ).toBeVisible();
-  await expect(
-    page.getByText("当前角色没有供应链读取权限；页面不请求或展示供应搜索数据。", { exact: true }),
-  ).toBeVisible();
+  await expect(page.getByText("暂无竞品查看权限。", { exact: true })).toBeVisible();
+  await expect(page.getByText("暂无供应链查看权限。", { exact: true })).toBeVisible();
   await expect(page.getByRole("link", { name: "竞品工作台", exact: true })).toHaveCount(0);
   await expect(page.getByRole("link", { name: "供应链工作台", exact: true })).toHaveCount(0);
   expect(competitorReads).toBe(0);
@@ -1363,20 +1355,14 @@ test("P18 insight sections distinguish unavailable permissions from empty facts"
 
   await page.goto(`/opportunities/${opportunityId}?tab=competition`);
   await expect(page.getByRole("link", { name: "竞品工作台 ↗", exact: true })).toHaveCount(0);
-  await expect(
-    page.getByText("当前角色没有竞品读取权限；页面未请求或展示竞品数据。", { exact: true }),
-  ).toBeVisible();
+  await expect(page.getByText("暂无竞品查看权限。", { exact: true })).toBeVisible();
 
   await page.goto(`/opportunities/${opportunityId}?tab=market`);
-  await expect(page.getByRole("heading", { name: "先看证据，再判断市场" })).toBeVisible();
-  await expect(
-    page.getByText("不能据此断定全部证据都是趋势信号，或需求已验证、市场规模/增长率已知。", {
-      exact: true,
-    }),
-  ).toBeVisible();
+  await expect(page.getByRole("heading", { name: "市场信息" })).toBeVisible();
+  await expect(page.getByText("机会关联证据总数", { exact: true })).toBeVisible();
   await page.goto(`/opportunities/${opportunityId}?tab=risk`);
   await expect(page.getByRole("heading", { name: "风险等级，不等于完整评估" })).toBeVisible();
-  await expect(page.getByText("当前响应没有提供逐项风险评估事实", { exact: true })).toBeVisible();
+  await expect(page.getByText("风险评估资料不完整", { exact: true })).toBeVisible();
 });
 
 test("P18 discovery actions require their matching manage capabilities", async ({ page }) => {
@@ -2621,7 +2607,7 @@ test("P18 operating feedback rejects repeated form submissions while the first P
   await page.getByRole("spinbutton", { name: "实际退货量 不能高于实际销量。" }).fill("1");
   await page.getByLabel("实际采购交期（天）").fill("14");
   await page.getByLabel("实际利润").fill("-3");
-  await page.getByRole("textbox", { name: "币种 提交时按接口合同转为大写。" }).fill("USD");
+  await page.getByRole("textbox", { name: "币种 使用大写货币代码。" }).fill("USD");
   await page.getByLabel("事实来源").fill("ERP-REENTRY-01");
   const form = page.locator(".opportunity-feedback-form");
   await form.evaluate((element) => {

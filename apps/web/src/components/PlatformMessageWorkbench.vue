@@ -56,7 +56,6 @@ function select(item: PlatformNotificationMessage) {
   <section class="message-workbench" aria-labelledby="message-workbench-title">
     <header>
       <div>
-        <p>MESSAGE DESK</p>
         <h3 id="message-workbench-title">人工消息</h3>
         <span>草稿和发布记录不受投递搜索或类型筛选影响。</span>
       </div>

@@ -1160,9 +1160,7 @@ watch(
             role="alert"
             aria-label="监控规则读取失败"
           >
-            <span
-              >当前无法确认适用于此竞品的监控规则。重新读取成功前，不显示为“无规则”或“生效规则”。</span
-            >
+            <span>监控规则暂不可用，请重新读取。</span>
             <code v-if="ruleRequestId">{{ ruleRequestId }}</code>
             <span>可使用页面上方的“重新读取监控规则”操作重试。</span>
           </section>
@@ -1222,9 +1220,7 @@ watch(
               <small>{{ snapshotWindowTruncated ? "窗口最早快照" : "基线快照" }}</small>
               <b>{{ snapshotPrice(baseline) }}</b>
               <time>{{ baseline ? timeText(baseline.captured_at) : "尚未建立" }}</time>
-              <span v-if="snapshotWindowTruncated"
-                >显示最近 100 条中的最早一条，不代表全部历史里的首个基线。</span
-              >
+              <span v-if="snapshotWindowTruncated">最近 100 条记录中的最早快照。</span>
             </article>
             <article>
               <small>当前快照</small>
@@ -1294,7 +1290,7 @@ watch(
               </button>
               <span v-else class="competitor-readonly-hint">只读：无创建任务权限</span>
             </article>
-            <p v-if="!activityTimeline.length">尚无变化；首个快照只建立基线，不制造告警或结论。</p>
+            <p v-if="!activityTimeline.length">暂无变化，后续快照将与首个快照比较。</p>
           </section>
           <section class="competitor-history snapshot-history" aria-label="价格与库存时间轴">
             <header>
@@ -1352,7 +1348,7 @@ watch(
           <label
             >商品网址<input v-model="form.product_url" required type="url" maxlength="2048"
           /></label>
-          <aside>填写要监控的公开 Amazon 商品链接。系统不会要求官方 API 密钥。</aside>
+          <aside>填写公开 Amazon 商品链接。</aside>
         </template>
         <template v-else-if="createStep === 2">
           <div class="form-grid">

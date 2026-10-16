@@ -31,9 +31,7 @@ const activeSection = computed(() => {
     </header>
 
     <section class="p11-hero" aria-labelledby="p11-title">
-      <p>PERSONAL CENTER</p>
-      <h1 id="p11-title">账号事实与个人操作</h1>
-      <span>资料、权限、安全、通知和本人资产按各自读取状态呈现。</span>
+      <h1 id="p11-title">个人中心</h1>
     </section>
 
     <nav class="account-sidebar p11-directory" aria-label="个人中心分区">

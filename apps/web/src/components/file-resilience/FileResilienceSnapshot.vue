@@ -17,7 +17,7 @@ defineProps<{
       <div>
         <small>S0 / {{ state }}</small>
         <h2>{{ verdict[0] }}</h2>
-        <p>返回 {{ data.findings.length }} 项发现；ready 不替代真实恢复或生产验收。</p>
+        <p>返回 {{ data.findings.length }}项发现</p>
       </div>
       <div class="p69-observed">
         <b>观测时间</b>
@@ -34,7 +34,6 @@ defineProps<{
         <code>{{ item.code }}</code>
         <p>{{ item.action_hint }}</p>
       </article>
-      <small>提示仅供人工通过宝塔核对；本页不会浏览、下载、删除、备份或恢复文件。</small>
     </section>
     <FileResilienceDirectoryLedger :directories="data.directories" />
     <FileResilienceIntegrityAndRecovery :integrity="data.integrity" :recovery="data.recovery" />

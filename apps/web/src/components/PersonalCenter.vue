@@ -48,7 +48,6 @@ const sectionItems = [
       <div>
         <p>当前账号</p>
         <h2>{{ center.profile.value?.display_name || "个人中心" }}</h2>
-        <span>资料与各分区按各自的读取结果呈现，不把尚未读取的内容当作已确认。</span>
       </div>
       <button
         type="button"
@@ -71,7 +70,7 @@ const sectionItems = [
       <strong>{{
         center.state.value === "loading" ? "正在读取个人资料" : "当前无法读取个人资料"
       }}</strong>
-      <span v-if="center.state.value === 'loading'">资料确认前，不显示其他分区的默认内容。</span>
+      <span v-if="center.state.value === 'loading'"></span>
       <span v-else>{{ center.profileMessage.value }} 请重试；如问题持续，请附上关联编号。</span>
       <small v-if="center.state.value === 'error' && center.profileReadFailureId.value">
         请求编号：<code>{{ center.profileReadFailureId.value }}</code>

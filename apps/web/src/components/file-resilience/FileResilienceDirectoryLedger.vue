@@ -57,7 +57,7 @@ const hasMeasuredUsage = (root: FileResilienceDto["directories"][number]) =>
             :value="root.usage_basis_points"
             max="10000"
           ></progress>
-          <small v-else>接口比例为失败或未知约定，不是实测满额；不会绘制有效水位条。</small>
+          <small v-else>使用率暂不可用。</small>
         </section>
         <section class="p69-index">
           <small>活动索引证据</small>

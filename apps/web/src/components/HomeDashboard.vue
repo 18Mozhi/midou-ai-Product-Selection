@@ -292,7 +292,6 @@ onBeforeUnmount(() => {
             }}
           </span>
           <h2>选品控制台</h2>
-          <p>系统持续发现和补证，你只负责最终采纳。</p>
         </div>
         <nav>
           <RouterLink class="home-secondary-action so-action-secondary" to="/trends?section=rules"
@@ -337,7 +336,7 @@ onBeforeUnmount(() => {
         <RouterLink v-else to="/trends?section=rules">查看规则 →</RouterLink>
       </section>
       <p v-if="rulesState === 'error'" class="home-rules-alert" role="alert">
-        首页或规则状态暂时未能完整读取，因此暂不显示首次创建或恢复操作。{{ rulesError }}
+        选品规则读取失败，请重试。{{ rulesError }}
         <button type="button" @click="load()">重新读取</button>
       </p>
       <p v-if="setupMessage && !mutationFeedback" class="home-setup-message" role="status">
@@ -354,7 +353,6 @@ onBeforeUnmount(() => {
             <span>首次设置</span>
             <h3>创建自动选品规则</h3>
           </div>
-          <small>推荐由真实商品证据触发，最终采纳始终由你决定。</small>
         </header>
         <div class="home-rule-fields">
           <label class="home-rule-keywords">
@@ -465,7 +463,7 @@ onBeforeUnmount(() => {
           </RouterLink>
           <div v-if="!selection" class="home-quiet-empty" role="status">
             <b>自动选品数据暂不可用</b>
-            <span>已保留本人待办；推荐和运行计数将在读取到明确数据后显示。</span>
+            <span>推荐与运行统计暂不可用，待办仍可查看。</span>
           </div>
           <div v-else-if="!decisionActions.length" class="home-quiet-empty">
             <b>当前没有待人工采纳的推荐</b
@@ -521,12 +519,12 @@ onBeforeUnmount(() => {
       <details v-if="selection" class="home-truth">
         <summary>数据说明</summary>
         <div>
-          <span>共 {{ total }} 条可见投影</span
+          <span>共 {{ total }}条记录</span
           ><span>生成时间 {{ date(data?.generated_at ?? null) }}</span
-          ><span>自动推荐不等于自动采纳</span>
+          ><span>推荐需人工采纳</span>
         </div>
       </details>
-      <p v-else class="home-truth-unknown">自动选品的计数与时间暂不可用，不以缺失值代替零。</p>
+      <p v-else class="home-truth-unknown">自动选品统计暂不可用。</p>
     </template>
   </section>
 </template>

@@ -104,7 +104,6 @@ const {
       <div>
         <p>供应商发现</p>
         <h1 id="sourcing-page-title" tabindex="-1">供应链找货</h1>
-        <span>采集事实先投影为候选；缺失规格、交期、地点、可信度与风险时禁止进入可靠对比。</span>
       </div>
       <button v-if="canManage" type="button" @click="openSearch">发起供应商找货</button>
     </header>
@@ -267,9 +266,7 @@ const {
         </section>
         <section v-if="!candidates.length" class="sourcing-pending">
           <strong>找货任务已经建立，尚未取得真实供应商报价</strong>
-          <p>
-            任务已经提交到公开供应商网页爬虫。系统不会虚构供应商、起订量或报价；可以点击“重新采集”，任务结束后真实候选会自动显示在这里。
-          </p>
+          <p>正在采集供应商信息，完成后将显示候选。也可点击“重新采集”重试。</p>
           <span v-if="selected.missing_fields.length">待补齐：{{ missingText }}</span>
         </section>
         <section class="supplier-cards">

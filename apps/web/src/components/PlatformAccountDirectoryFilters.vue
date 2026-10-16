@@ -74,20 +74,14 @@ const emit = defineEmits<{
           <option value="active">正常使用</option>
           <option value="disabled">已停用</option>
         </select>
-        <small>仅筛选账号状态，不代表角色权限范围。</small>
       </label>
       <label v-else-if="props.organizationListRoute" class="organization-filter-field">
         <span>组织状态</span>
-        <select
-          v-model="status"
-          :aria-label="props.statusLabel"
-          aria-describedby="organization-status-help"
-        >
+        <select v-model="status" :aria-label="props.statusLabel">
           <option value="">全部状态</option>
           <option value="active">正常使用</option>
           <option value="archived">已停用组织</option>
         </select>
-        <small id="organization-status-help">仅筛选组织状态，不代表成员账号状态。</small>
       </label>
       <label
         v-else-if="!props.organizationListRoute && props.tab === 'organizations'"

@@ -745,9 +745,7 @@ onBeforeUnmount(() => {
   <section class="quality-center" aria-labelledby="quality-title">
     <header class="quality-title">
       <div>
-        <p>数据中心 / EVIDENCE LEDGER</p>
         <h2 id="quality-title">从证据，核对每个结论</h2>
-        <span>查看来源与版本，确认问题范围，再记录受控处置。</span>
       </div>
       <b>中国境内 · 受控存储</b>
     </header>
@@ -806,7 +804,7 @@ onBeforeUnmount(() => {
             <header>
               <div>
                 <h3 id="quality-highlight-title">采集质量指标</h3>
-                <span>每项取最近一次已持久化核对，不合成无依据的总分。</span>
+                <span>最近一次核对结果。</span>
               </div>
             </header>
             <div class="quality-run-grid">
@@ -882,7 +880,7 @@ onBeforeUnmount(() => {
               <article v-if="readNotice" data-tone="warning" role="status">
                 <strong>读取状态</strong><span>{{ readNotice }}</span>
               </article>
-              <p v-if="!activeFeedback">原文下载需要短时授权，并分别记录签发与访问审计。</p>
+              <p v-if="!activeFeedback">下载链接限时有效。</p>
             </div>
             <div v-if="tab !== 'runs'" class="quality-search-row">
               <label>
@@ -962,7 +960,7 @@ onBeforeUnmount(() => {
                           "
                           @click="grantDownload(item)"
                         >
-                          {{ downloadInFlightId === item.id ? "申请中…" : "受控下载" }}
+                          {{ downloadInFlightId === item.id ? "申请中…" : "下载原文" }}
                         </button>
                       </td>
                     </tr>
@@ -1013,7 +1011,7 @@ onBeforeUnmount(() => {
                     "
                     @click="grantDownload(row)"
                   >
-                    {{ downloadInFlightId === row.id ? "申请中…" : "受控下载" }}
+                    {{ downloadInFlightId === row.id ? "申请中…" : "下载原文" }}
                   </button>
                 </div>
                 <details>
@@ -1378,7 +1376,6 @@ onBeforeUnmount(() => {
             <template v-else-if="detailState === 'ready' && detail">
               <section class="quality-lineage-intro">
                 <strong>原始证据 → 规范版本 → 字段来源 → 质量问题</strong>
-                <span>以下内容来自同一详情响应，不补造未保存的样本关系。</span>
               </section>
               <section class="quality-lineage-section">
                 <h4>01 · 原始证据</h4>
@@ -1464,7 +1461,7 @@ onBeforeUnmount(() => {
           >
             <header>
               <div>
-                <p>受控处置</p>
+                <p>处理问题</p>
                 <h3 id="quality-resolution-title">{{ metricLabel(resolving.metric_code) }}</h3>
                 <span>{{ resolving.provider_name }} · 版本 {{ resolving.version }}</span>
               </div>

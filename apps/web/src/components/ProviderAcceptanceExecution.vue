@@ -38,10 +38,10 @@ const outcomeTitle = (kind: AcceptanceRunOutcome["kind"]) =>
   <section class="acceptance-1688__start" aria-labelledby="acceptance-1688-start-title">
     <header>
       <div>
-        <p>真实登录验收</p>
-        <h3 id="acceptance-1688-start-title">发起一次受控浏览器运行</h3>
+        <p>登录检查</p>
+        <h3 id="acceptance-1688-start-title">检查登录状态</h3>
       </div>
-      <small>只创建本次人工验收；不会启用来源或加入自动调度。</small>
+      <small>本次仅检查登录状态，不会启用自动采集。</small>
     </header>
     <form class="acceptance-1688__execution-form" @submit.prevent="emit('submit')">
       <label
@@ -77,11 +77,11 @@ const outcomeTitle = (kind: AcceptanceRunOutcome["kind"]) =>
         </select></label
       >
       <label class="acceptance-1688__query"
-        ><span>验收关键词</span
+        ><span>检查关键词</span
         ><input
           :value="query"
           type="text"
-          aria-label="验收关键词"
+          aria-label="检查关键词"
           maxlength="200"
           autocomplete="off"
           placeholder="例如：桌面灯"
@@ -90,7 +90,7 @@ const outcomeTitle = (kind: AcceptanceRunOutcome["kind"]) =>
         /><small>最多 200 字；提交前会去除首尾空格。</small></label
       >
       <button class="acceptance-1688__start-button" type="submit" :disabled="!canSchedule">
-        {{ scheduling ? "提交中…" : "发起登录验收运行" }}
+        {{ scheduling ? "提交中…" : "开始检查" }}
       </button>
     </form>
     <div

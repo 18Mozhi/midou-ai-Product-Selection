@@ -238,9 +238,6 @@ onUnmounted(() => {
       <div>
         <p>管理员首页</p>
         <h2>平台运行概览</h2>
-        <span
-          >先看有没有需要处理的问题，再进入对应页面。系统会自动获取热点，不需要守着页面操作。</span
-        >
       </div>
       <label
         >查看范围<select v-model="windowCode" :disabled="pending" @change="changeWindow">

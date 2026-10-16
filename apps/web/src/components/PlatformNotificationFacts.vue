@@ -32,9 +32,7 @@ const actionName = (value: unknown) =>
   <section class="notification-facts" aria-labelledby="notification-facts-title">
     <header>
       <div>
-        <p>SYSTEM FACTS</p>
         <h3 id="notification-facts-title">系统配置事实</h3>
-        <span>这里仅展示系统实际返回的模板、渠道、订阅统计和前 6 条告警路由。</span>
       </div>
     </header>
     <div class="notification-facts__grid">

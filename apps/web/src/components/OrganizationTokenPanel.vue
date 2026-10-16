@@ -312,15 +312,9 @@ async function copySecret() {
   <section class="org-token-panel" aria-labelledby="org-token-title">
     <header class="org-token-overview">
       <div>
-        <p>ACCESS LEDGER · 当前组织</p>
         <h3 id="org-token-title">组织只读访问凭据</h3>
         <span>为受控系统创建最小只读权限，核对调用状态，并及时轮换或撤销不再使用的凭据。</span>
       </div>
-      <aside aria-label="令牌安全边界">
-        <b>安全边界</b>
-        <strong>固定只读 scope</strong>
-        <span>明文不进入数据库、审计、事件或日志</span>
-      </aside>
     </header>
 
     <div class="org-token-metrics" aria-label="组织令牌汇总">
@@ -349,7 +343,6 @@ async function copySecret() {
     <section v-if="secret" class="org-token-secret" aria-labelledby="org-token-secret-title">
       <header>
         <div>
-          <p>ONE-TIME SECRET</p>
           <h4 id="org-token-secret-title">仅本次响应可见的令牌明文</h4>
         </div>
         <span>离开本页即清除</span>
@@ -376,7 +369,6 @@ async function copySecret() {
       <section class="org-token-ledger" aria-labelledby="org-token-ledger-title">
         <header class="org-token-ledger-heading">
           <div>
-            <p>LIFECYCLE · 真实记录</p>
             <h4 id="org-token-ledger-title">令牌生命周期</h4>
           </div>
           <span>共 {{ filteredTokens.length }} 条匹配记录</span>
@@ -546,14 +538,6 @@ async function copySecret() {
         </footer>
       </section>
 
-      <aside class="org-token-truth" aria-label="组织令牌安全说明">
-        <span aria-hidden="true">只读</span>
-        <div>
-          <b>令牌不是成员账号，也不能绕过组织权限</b>
-          <p>当前能力只发放四种固定读取范围；页面不提供写入 scope、跨组织共享或明文找回。</p>
-        </div>
-      </aside>
-
       <form class="org-token-create" @submit.prevent="submitCreate">
         <header>
           <div>
@@ -656,7 +640,7 @@ async function copySecret() {
         </aside>
 
         <button type="submit" :disabled="busy">
-          {{ busy ? "正在创建并写入审计…" : "创建并显示一次明文" }}
+          {{ busy ? "正在创建…" : "创建并显示一次明文" }}
         </button>
       </form>
     </div>

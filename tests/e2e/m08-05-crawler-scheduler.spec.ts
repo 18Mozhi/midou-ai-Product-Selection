@@ -111,7 +111,7 @@ test("M08-05.A07/A08/A15 desktop and 390 single-host scheduler truth", async ({ 
   await page.reload();
   await expect(
     page.getByText("Worker 与 Python Crawler 各一个实例；来源有效并发固定为1。", { exact: true }),
-  ).toBeVisible();
+  ).toHaveCount(0);
 });
 test("SC70 health link reaches the registered adapter route without running a health check", async ({
   page,
@@ -161,7 +161,7 @@ test("SC70 health link reaches the registered adapter route without running a he
     /\/platform-admin\/providers\/adapters\?provider_id=00000000-0000-4000-8000-000000000851$/,
   );
   await expect(
-    page.getByText("健康检查只验证当前探针，不代表采集成功，也不会自动解除来源暂停。", {
+    page.getByText("健康检查不改变来源启停状态；采集结果请查看任务。", {
       exact: true,
     }),
   ).toBeVisible();

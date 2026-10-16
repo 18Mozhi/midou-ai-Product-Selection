@@ -183,7 +183,7 @@ test("M04-03.A07/A08/A09/A15 score rule versions support audited responsive work
     "not-yet-submitted",
   ]);
   await dialog.getByRole("button", { name: "确认提交审批" }).click();
-  await expect(page.getByText("提交审批已完成并写入审计记录。")).toBeVisible();
+  await expect(page.getByText("提交审批已完成。")).toBeVisible();
   await expect(page.getByText("待审批", { exact: true })).toBeVisible();
   await capturePhase2Evidence(page, testInfo, "P17", "pending-approval", [
     "fixture-action-response-reread",

@@ -406,14 +406,11 @@ async function copy(value: string, field: string) {
   <section class="org-audit-panel" aria-labelledby="org-audit-title">
     <header class="org-audit-overview">
       <div>
-        <p>AUDIT LEDGER · 当前组织</p>
         <h3 id="org-audit-title">组织审计账本</h3>
-        <span>统一查看组织治理写入与后台执行结果；记录只读，不提供编辑、删除或任务重放。</span>
       </div>
       <aside aria-label="审计数据边界">
         <b>数据边界</b>
         <strong>仅当前组织</strong>
-        <span>服务端权限校验 · 最新事件优先</span>
       </aside>
     </header>
 

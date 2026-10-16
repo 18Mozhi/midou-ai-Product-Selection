@@ -411,7 +411,6 @@ onActivated(() => {
       <div>
         <p>网页采集运行中心</p>
         <h1 id="crawler-title">采集运行监控</h1>
-        <span>查看哪些网页登录档案正在使用、哪些运行失败，以及失败发生的时间和原因。</span>
       </div>
       <div class="crawler-title-actions">
         <button type="button" class="secondary" :disabled="refreshing || saving" @click="load()">
@@ -440,7 +439,7 @@ onActivated(() => {
       ><div class="crawler-metrics">
         <article>
           <small>浏览器档案</small><strong>{{ profiles.length }}</strong
-          ><span>仅展示元数据</span>
+          ><span>运行记录</span>
         </article>
         <article>
           <small>活动租约</small><strong>{{ activeLeases.length }}</strong
@@ -526,7 +525,6 @@ onActivated(() => {
         <header>
           <div>
             <h3>最近运行</h3>
-            <span>每次运行、拦截和失败都保留可追查的关联编号</span>
           </div>
           <form class="crawler-run-filters" @submit.prevent="applyFilters">
             <label>

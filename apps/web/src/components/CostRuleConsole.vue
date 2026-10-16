@@ -560,7 +560,6 @@ onMounted(load);
       <div>
         <p>自动推荐 · 成本与利润</p>
         <h1 id="cost-rule-title" ref="pageHeading" tabindex="-1">成本质量门</h1>
-        <span>费用规则生效后，双人复核或高置信爬虫证据可触发利润计算与成本质量门。</span>
       </div>
       <div class="cost-head-actions">
         <RouterLink :to="returnPath">返回当前找货记录</RouterLink>
@@ -789,7 +788,7 @@ onMounted(load);
             <p>新建版本 / 显式成本依据</p>
             <h3 id="new-cost-rule">新建费用规则草稿</h3>
             <p id="cost-create-description" class="cost-dialog-intro">
-              四项必需费用需要逐项填写；明确填写 0 表示该项确认为零，不会沿用或推断其他版本费率。
+              请填写全部费用；确认为零时填 0。
             </p>
           </div>
           <button type="button" aria-label="关闭新建规则" :disabled="busy" @click="closeCreate">
@@ -818,7 +817,7 @@ onMounted(load);
             </fieldset>
             <fieldset class="cost-dialog-group">
               <legend>四项必需费用</legend>
-              <p class="cost-dialog-help">逐项填写规则依据；空值不会被当作 0，也不会继承旧版本。</p>
+              <p class="cost-dialog-help">请填写各项费用及依据，零费用请填 0。</p>
               <div class="cost-dialog-fields">
                 <label>
                   平台费 %<input
@@ -1004,9 +1003,7 @@ onMounted(load);
               {{ actionError }} <code v-if="requestId">{{ requestId }}</code>
             </p>
           </fieldset>
-          <aside id="cost-action-guidance" class="cost-dialog-notice">
-            原因会与操作者、角色、规则版本和请求链路一起保留；取消不会提交操作。
-          </aside>
+          <aside id="cost-action-guidance" class="cost-dialog-notice">请填写本次操作原因。</aside>
         </div>
         <footer class="cost-dialog-footer">
           <button type="button" :disabled="busy" @click="closeAction">取消</button

@@ -59,7 +59,7 @@ const passedGateCount = computed(
 const title = computed(() => (data.value ? overallState[data.value.overall] : "1688 启用检查"));
 const conclusion = computed(() => {
   if (data.value?.overall === "production_ready")
-    return "来源已经启用，仍应持续关注登录有效期、验证码和解析合同漂移。";
+    return "来源已启用，请关注登录有效期、验证码和解析状态。";
   if (data.value?.overall === "ready_for_enable")
     return "三道验收门均已通过；仍需由来源负责人显式启用，系统不会自动放行。";
   return "登录、验证码和字段解析必须全部通过；任一待验收或阻断都会保持来源停用。";
@@ -131,10 +131,8 @@ const currentRunState = computed(() => {
         </nav>
         <details class="acceptance-1688__rail-context">
           <summary>检查口径</summary>
-          <p>
-            登录态、验证码与字段解析是三项独立启用门；搜索、详情、翻页覆盖单独记录，不替代门禁。
-          </p>
-          <p>页面不会显示 Cookie 或账号秘密。</p>
+          <p>启用前请完成登录、验证码和字段解析检查。</p>
+          <p>登录凭证已加密保护。</p>
         </details>
       </aside>
 

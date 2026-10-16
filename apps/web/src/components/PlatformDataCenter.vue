@@ -459,7 +459,6 @@ onActivated(() => {
       <div>
         <p>平台管理 / 数据中心</p>
         <h2 id="platform-data-title">数据中心</h2>
-        <span>业务记录与证据核验分域连续工作，数据范围和处置动作始终分开。</span>
       </div>
       <nav aria-label="平台数据视图">
         <button
@@ -501,7 +500,6 @@ onActivated(() => {
           <div>
             <p>数据中心 / 近期记录</p>
             <h3>{{ current.label }}近期记录</h3>
-            <span>确认已应用范围，再查看事实、分页或发起受控导出。</span>
           </div>
           <button
             type="button"
@@ -581,7 +579,7 @@ onActivated(() => {
             id="data-export-unknown"
             class="platform-data-notice platform-data-notice--warning"
           >
-            当前快照的导出按钮已暂时停用；读取新范围成功后再发起新的导出。
+            请先读取新范围，再创建导出。
           </p>
         </div>
 

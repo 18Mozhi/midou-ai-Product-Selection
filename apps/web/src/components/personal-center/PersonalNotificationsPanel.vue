@@ -42,7 +42,6 @@ const options = [
       <header class="p11-panel-heading">
         <p>通知偏好</p>
         <h3>五项可保存开关</h3>
-        <span>此处保存通知偏好，不代表邮件已送达。</span>
       </header>
       <label v-for="option in options" :key="option.field" class="p11-toggle-row">
         <span>{{ option.label }}</span>

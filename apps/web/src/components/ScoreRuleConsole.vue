@@ -529,7 +529,7 @@ async function runAction() {
   if (result) {
     if (isCurrent()) closeAction();
     await load();
-    message.value = `${actionLabels[submittedAction]}已完成并写入审计记录。`;
+    message.value = `${actionLabels[submittedAction]}已完成。`;
   }
 }
 onMounted(() => void load());
@@ -548,7 +548,6 @@ onActivated(() => {
       <div>
         <p>自动推荐 · 评分与证据</p>
         <h2>评分与质量门</h2>
-        <span>只有已启用规则要求真实市场、竞争、成本和风险证据时，候选才可能进入“建议采纳”。</span>
       </div>
       <button v-if="canDecide && state !== 'ready'" type="button" @click="openCreate">
         新建规则版本
@@ -566,8 +565,7 @@ onActivated(() => {
       @primary="load"
     />
     <section v-else-if="state === 'empty'" class="score-empty">
-      <strong>尚无评分规则</strong
-      ><span>智能选品不提供虚构默认权重；请创建、审批并启用明确版本。</span
+      <strong>尚无评分规则</strong><span>请创建、审批并启用首个规则。</span
       ><button v-if="canDecide" type="button" @click="openCreate">创建首个草稿</button
       ><span v-else class="score-rule-readonly-note"
         >请联系具备规则提交权限的成员创建首个草稿。</span
@@ -829,7 +827,7 @@ onActivated(() => {
       <section>
         <header>
           <div>
-            <p>只读试算 · 不写入评分运行</p>
+            <p>试算预览</p>
             <h3 id="score-rule-preview-title">发布影响预览 · {{ previewRule.version_code }}</h3>
           </div>
           <button type="button" aria-label="关闭" @click="closePreview">×</button>

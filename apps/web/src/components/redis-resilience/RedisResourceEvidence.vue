@@ -45,7 +45,7 @@ defineProps<{
             <div v-if="data.memory.max_bytes > 0" class="p67-bar" aria-hidden="true">
               <span :style="{ width: percent(data.memory.usage_basis_points) }"></span>
             </div>
-            <small v-if="data.memory.max_bytes <= 0">比例是服务占位值，不作为实际使用率。</small>
+            <small v-if="data.memory.max_bytes <= 0">使用率暂不可用。</small>
             <small v-else-if="data.memory.used_bytes > data.memory.max_bytes"
               >用量超过上限；服务比例已封顶为 100%。</small
             >
@@ -72,7 +72,7 @@ defineProps<{
             <div v-if="data.connections.maximum > 0" class="p67-bar" aria-hidden="true">
               <span :style="{ width: percent(data.connections.usage_basis_points) }"></span>
             </div>
-            <small v-if="data.connections.maximum <= 0">比例是服务占位值，不作为实际使用率。</small>
+            <small v-if="data.connections.maximum <= 0">使用率暂不可用。</small>
             <small v-else-if="data.connections.connected > data.connections.maximum"
               >用量超过上限；服务比例已封顶为 100%。</small
             >
@@ -142,7 +142,7 @@ defineProps<{
     </section>
     <aside class="p67-policy p67-section" aria-labelledby="p67-policy-title">
       <h2 id="p67-policy-title">边界与未覆盖项</h2>
-      <p>这些是部署合同与接口边界，不是一轮新的在线验证。</p>
+
       <dl>
         <div>
           <dt>淘汰策略 / 实际返回</dt>

@@ -481,7 +481,7 @@ test("UI2-CL52 continues a frozen batch after an unknown result and prevents aut
   ).toBeVisible();
   await expect(page.getByText("查看失败或未知条目（1）")).toBeVisible();
   await expect(panel.getByRole("button", { name: "预览批量重放" })).toBeDisabled();
-  await expect(panel.getByText(/已有结果未知，请先到对应任务核查/)).toBeVisible();
+  await expect(panel.getByText(/结果待确认，请先查看对应任务，勿重复提交/)).toBeVisible();
 });
 
 test("UI2-CL52 separates partial replay settlement from a failed verification read", async ({

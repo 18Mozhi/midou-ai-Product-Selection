@@ -117,9 +117,7 @@ onUnmounted(stop);
     <div class="platform-notifications__surface">
       <header class="platform-notifications__hero">
         <div>
-          <p>P57 / NOTIFICATION OPERATIONS</p>
           <h1>通知管理</h1>
-          <span>编排人工消息，核对接收范围与真实送达记录。</span>
         </div>
         <div>
           <button type="button" class="is-primary" @click="editor.begin()">新建草稿</button>
@@ -150,7 +148,7 @@ onUnmounted(stop);
             >
           </button>
         </nav>
-        <p>邮件服务尚未接入；本页不提供开启入口，也不把草稿数量当成投递数量。</p>
+        <p>邮件通知暂不可用。</p>
       </aside>
 
       <section v-if="!hasSnapshot" class="platform-notifications__first-state">

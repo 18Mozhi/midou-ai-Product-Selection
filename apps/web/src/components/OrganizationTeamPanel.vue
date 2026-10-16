@@ -176,7 +176,6 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
       <div>
         <p>协作边界</p>
         <h3>团队治理台</h3>
-        <span>按当前组织维护团队、负责人和成员归属；所有写操作保留原因与审计。</span>
       </div>
       <button type="button" :disabled="busy" @click="openCreate">新建团队</button>
     </header>
@@ -189,7 +188,7 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
     >
       <div>
         <h4 id="org-team-refresh-warning-title">团队已创建，列表暂未更新</h4>
-        <p>创建操作已成功并写入审计；重新读取只会请求团队列表，不会再次提交创建。</p>
+        <p>创建操作已成功；重新读取只会请求团队列表，不会再次提交创建。</p>
         <details>
           <summary>查看本次请求编号</summary>
           <dl>
@@ -301,9 +300,8 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
         </label>
       </div>
       <footer>
-        <span>创建请求带幂等键，并在同一事务写入团队事实、审计与事件。</span>
         <button type="submit" :disabled="busy || createBusy">
-          {{ createBusy ? "正在创建…" : "创建并写入审计" }}
+          {{ createBusy ? "正在创建…" : "创建" }}
         </button>
       </footer>
     </form>
@@ -472,7 +470,7 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
                 </option>
               </select>
             </label>
-            <p>当前接口只返回团队成员数量，不返回成员明细；重复分配或移除不会创建重复关系。</p>
+
             <div class="org-team-member-actions">
               <button
                 type="button"
@@ -492,17 +490,10 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
             </div>
             <small v-if="memberFeedback" role="status">{{ memberFeedback }}</small>
           </section>
-          <section class="org-team-boundary-note">
-            <h4>当前可治理边界</h4>
-            <ul>
-              <li>可创建团队，并在创建时设置负责人和默认工作流程键。</li>
-              <li>可分配或移除当前组织的活动成员，操作原因进入审计。</li>
-              <li>当前服务端没有负责人变更、流程变更或团队归档接口，本页不提供虚假入口。</li>
-            </ul>
-          </section>
+
           <div class="org-team-links">
             <RouterLink to="/org-admin/members">查看组织成员</RouterLink>
-            <RouterLink to="/org-admin/workspaces">查看工作区边界</RouterLink>
+            <RouterLink to="/org-admin/workspaces">查看工作区</RouterLink>
           </div>
           <details class="org-admin-technical">
             <summary>技术详情</summary>
@@ -514,7 +505,7 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
         </template>
         <div v-else class="org-team-empty" role="status">
           <h4>选择一个团队查看治理详情</h4>
-          <p>详情区会显示负责人、流程、成员关系和接口能力边界。</p>
+          <p>选择团队查看详情。</p>
         </div>
       </article>
     </section>

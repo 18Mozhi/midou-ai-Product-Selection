@@ -58,7 +58,7 @@ test("P01 root shows the approved resolver while landing is pending", async ({ p
   await expect(surface).toHaveAttribute("data-state", "loading");
   await expect(page.getByRole("heading", { name: "正在确定可进入的工作区" })).toBeVisible();
   await expect(surface.getByRole("button")).toHaveCount(0);
-  await expect(page.getByText(/请求标识仅在失败时显示/)).toBeVisible();
+  await expect(surface.locator(".p01-boundary")).toHaveCount(0);
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);

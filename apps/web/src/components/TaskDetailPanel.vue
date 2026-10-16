@@ -128,7 +128,7 @@ const emit = defineEmits<{
         </details>
 
         <p v-if="!canUpdate && !canAssign" class="task-dossier-readonly" role="status">
-          当前角色仅可查看任务事实与活动记录，修改入口已按权限隐藏。
+          当前为只读权限。
         </p>
       </div>
 

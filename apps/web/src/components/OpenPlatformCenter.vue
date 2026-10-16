@@ -641,9 +641,7 @@ onMounted(() => window.addEventListener("popstate", handlePopState));
   <section class="open-platform open-platform--c">
     <header class="open-hero">
       <div>
-        <p>P60 / 连接工作区</p>
         <h1>开放平台</h1>
-        <span>管理可信连接，核对每次投递的已有结果。</span>
       </div>
       <form class="open-org-filter" @submit.prevent="applyFilters">
         <label
@@ -800,7 +798,7 @@ onMounted(() => window.addEventListener("popstate", handlePopState));
                 {{ activeView === "clients" ? "创建接口访问账号" : "创建事件回调地址" }}
               </h3>
             </div>
-            <span>组织编号、名称和变更原因必填；所有写入均使用幂等键并记录审计。</span>
+            <span>请填写组织、名称和变更原因。</span>
           </header>
           <div class="open-form-grid">
             <label class="wide"

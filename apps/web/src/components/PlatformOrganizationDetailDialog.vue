@@ -120,9 +120,7 @@ const { dialogElement, handleCancel } = useModalDialog(
               maxlength="64"
               @input="$emit('clearFeedback')"
             />
-            <small id="organization-timezone-help" class="field-help">
-              必填，最多 64 个字符；服务端按现有合同校验非空与长度。
-            </small>
+            <small id="organization-timezone-help" class="field-help">必填，最多 64 个字符。</small>
           </label>
           <label>
             数据保留天数

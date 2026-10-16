@@ -690,7 +690,6 @@ useOpportunityWorkspaceLifecycle({
                   : "全部机会"
           }}
         </h2>
-        <span>规则命中先进入候选；五项质量门全部通过后，才进入你的人工采纳清单。</span>
       </div>
       <div v-if="canDecide" class="opportunity-hero-actions">
         <RouterLink class="primary so-action-primary" to="/opportunities/start"
@@ -713,7 +712,7 @@ useOpportunityWorkspaceLifecycle({
           手工添加
         </button>
       </div>
-      <span v-else>当前角色可查看机会事实与历史，写入操作需要“机会决策”权限。</span>
+      <span v-else>当前为只读权限。</span>
     </header>
     <nav v-else class="opportunity-detail-return" aria-label="机会详情返回路径">
       <RouterLink :to="returnPath">← 返回来源列表</RouterLink>

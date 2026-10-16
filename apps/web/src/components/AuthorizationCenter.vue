@@ -66,20 +66,17 @@ onMounted(load);
         ><RouterLink to="/?view=authorization" class="active">角色与权限</RouterLink
         ><span>成员与邀请</span><span>工作区与团队</span><span>组织审计</span>
       </nav>
-      <small>权限来自服务端策略</small>
     </aside>
     <section class="authz-main">
       <header>
         <div>
           <p>组织安全</p>
           <h1>角色与权限</h1>
-          <span>动作决定能做什么，数据范围决定能看到哪些记录。</span>
         </div>
         <RouterLink to="/select-context">切换组织</RouterLink>
       </header>
       <div v-if="state === 'loading'" class="authz-state">
         <span class="spinner"></span><strong>正在读取服务端授权</strong>
-        <p>页面不会根据菜单或浏览器状态推断权限。</p>
       </div>
       <div
         v-else-if="state === 'error' || state === 'forbidden' || state === 'expired'"
@@ -108,7 +105,7 @@ onMounted(load);
       </div>
       <div v-else-if="state === 'empty'" class="authz-state">
         <b>○</b><strong>暂无活动角色</strong>
-        <p>角色目录未初始化，管理动作保持默认拒绝。</p>
+        <p>角色目录暂不可用，请联系管理员。</p>
         <button type="button" @click="load">重新加载</button>
       </div>
       <template v-else-if="current"
@@ -118,8 +115,7 @@ onMounted(load);
             ><small>{{ current.roles.join(" · ") }}</small>
           </div>
           <div>
-            <span>有效动作</span><strong>{{ current.capabilities.length }}</strong
-            ><small>由服务端聚合后返回</small>
+            <span>有效动作</span><strong>{{ current.capabilities.length }}</strong>
           </div>
           <div>
             <span>数据范围</span><strong>{{ current.data_scopes.length }}</strong
@@ -164,9 +160,6 @@ onMounted(load);
                 capability
               }}</code>
             </div>
-            <small
-              >前端仅展示；后端接口、任务处理器、导出、文件、事件与实时消息使用同一能力名称再次检查。</small
-            >
           </article>
         </div></template
       >

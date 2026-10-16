@@ -208,9 +208,7 @@ test("CP-G03 labels the oldest returned snapshot as a window start when history 
   await page.getByRole("button", { name: /Wallet Case for iPhone 16/ }).click();
   const comparison = page.getByLabel("基线、变动与阈值");
   await expect(comparison.getByText("窗口最早快照", { exact: true })).toBeVisible();
-  await expect(
-    comparison.getByText("显示最近 100 条中的最早一条，不代表全部历史里的首个基线。"),
-  ).toBeVisible();
+  await expect(comparison.getByText("最近 100 条记录中的最早快照。")).toBeVisible();
   await expect(comparison.getByText("基线快照", { exact: true })).toHaveCount(0);
 });
 
@@ -664,7 +662,7 @@ test("CP-G02 list mode keeps rule read failures distinct and retries only that r
   await expect(readiness.getByText("规则读取失败", { exact: true })).toBeVisible();
   await expect(ruleFact.getByText("暂不可用")).toBeVisible();
   await expect(ruleFact.getByText("0 条启用")).toHaveCount(0);
-  await expect(page.getByLabel("监控规则读取失败")).toContainText("当前无法确认适用于此竞品");
+  await expect(page.getByLabel("监控规则读取失败")).toContainText("监控规则暂不可用");
   await page.getByRole("button", { name: "重新读取监控规则" }).first().click();
   await expect(ruleFact.getByText("1 条启用")).toBeVisible();
   await expect(page.getByLabel("监控规则读取失败")).toHaveCount(0);

@@ -48,7 +48,6 @@ const sourceName = (source: string) =>
     >
       <header class="p62-events-heading">
         <h2 :id="`p62-title-${index}`">事件证据</h2>
-        <p>当前返回事件按发生时间排列，编号与关联对象以原始记录为准。</p>
       </header>
       <slot name="chain" :chain="chain" />
     </section>

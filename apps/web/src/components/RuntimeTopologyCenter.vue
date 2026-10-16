@@ -409,9 +409,7 @@ onBeforeUnmount(() => {
   <section class="topology-center topology-center--c" :data-state="state">
     <header class="topology-hero">
       <div>
-        <p>P66 / 运行证据</p>
         <h1>服务拓扑</h1>
-        <span>长期固定为一台惠州宝塔服务器，不启用负载均衡、备用服务器或多节点模式。</span>
       </div>
       <button
         ref="refreshButton"

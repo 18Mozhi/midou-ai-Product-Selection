@@ -130,7 +130,6 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
       <div>
         <p>工作区治理</p>
         <h3>工作区治理台</h3>
-        <span>维护当前组织的数据边界；归档只停止继续使用，不删除历史业务事实。</span>
       </div>
       <button type="button" :disabled="busy" @click="openCreate">新建工作区</button>
     </header>
@@ -215,9 +214,8 @@ const statusText = (status: string) => (status === "active" ? "正常使用" : "
         </label>
       </div>
       <footer>
-        <span>创建操作带幂等键，并同步写入组织审计与事件。</span>
         <button type="submit" :disabled="busy || createBusy">
-          {{ createBusy ? "正在创建…" : "创建并写入审计" }}
+          {{ createBusy ? "正在创建…" : "创建" }}
         </button>
       </footer>
     </form>

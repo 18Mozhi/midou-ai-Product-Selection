@@ -49,7 +49,6 @@ const nodeGroups = computed(() => {
       <div>
         <p>端到端事实链</p>
         <h4>业务血缘追踪</h4>
-        <span>按系统返回的业务类型分组；仅列出已有记录，不推断缺失节点或因果关系。</span>
       </div>
       <b :data-impact="lineage.failure_impact.level">
         {{ impactLabel(lineage.failure_impact.level) }}
@@ -72,9 +71,7 @@ const nodeGroups = computed(() => {
       </ul>
     </aside>
 
-    <p v-if="!lineage.nodes.length" class="opportunity-empty-copy">
-      当前机会尚无可追踪的业务节点；读取结果不代表源系统不存在历史记录。
-    </p>
+    <p v-if="!lineage.nodes.length" class="opportunity-empty-copy">暂无关联记录。</p>
     <ol v-else class="opportunity-lineage-groups">
       <li v-for="group in nodeGroups" :key="group.kind">
         <header>

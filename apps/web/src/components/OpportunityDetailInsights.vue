@@ -49,7 +49,6 @@ const emit = defineEmits<{
     <header class="opportunity-insights-heading">
       <p>分析概览</p>
       <h3>先看关联事实，再核对质量门</h3>
-      <span>各分区独立显示读取权限与状态；数据不足不会补成零，也不会由局部状态代替结论。</span>
     </header>
 
     <div class="opportunity-insight-grid">
@@ -66,14 +65,14 @@ const emit = defineEmits<{
             <h5>竞品关联</h5>
             <template v-if="!canReadCompetitors">
               <strong>按权限不可见</strong>
-              <span>当前角色没有竞品读取权限；页面不请求或展示竞品明细。</span>
+              <span>暂无竞品查看权限。</span>
             </template>
             <template v-else-if="downstreamState.competitors === 'loading'">
-              <strong>正在读取</strong><span>竞品数量尚未返回，暂不能判定为零。</span>
+              <strong>正在读取</strong><span>竞品数量暂不可用。</span>
             </template>
             <template v-else-if="downstreamState.competitors === 'error'">
               <strong>本次读取未完成</strong>
-              <span>竞品事实暂不可用；不会把上次数据当成本次结果。</span>
+              <span>竞品数据暂不可用，请重试。</span>
               <button
                 type="button"
                 class="opportunity-insight-button opportunity-insight-button--secondary"
@@ -85,7 +84,7 @@ const emit = defineEmits<{
             </template>
             <template v-else>
               <strong>{{ downstream.competitors }} 个关联竞品</strong>
-              <span>{{ downstream.snapshots }} 个快照；仅说明当前关联与采集数量，不代表趋势。</span>
+              <span>{{ downstream.snapshots }}个快照</span>
             </template>
             <div class="opportunity-insight-actions">
               <button
@@ -107,14 +106,14 @@ const emit = defineEmits<{
             <h5>供应候选</h5>
             <template v-if="!canReadSourcing">
               <strong>按权限不可见</strong>
-              <span>当前角色没有供应链读取权限；页面不请求或展示供应搜索数据。</span>
+              <span>暂无供应链查看权限。</span>
             </template>
             <template v-else-if="downstreamState.sourcing === 'loading'">
-              <strong>正在读取</strong><span>供应候选数量尚未返回，暂不能判定为零。</span>
+              <strong>正在读取</strong><span>供应候选数量暂不可用。</span>
             </template>
             <template v-else-if="downstreamState.sourcing === 'error'">
               <strong>本次读取未完成</strong>
-              <span>供应链读取未完成；已成功读取的竞品事实会继续单独显示。</span>
+              <span>供应链数据暂不可用。</span>
               <button
                 type="button"
                 class="opportunity-insight-button opportunity-insight-button--secondary"
@@ -128,10 +127,7 @@ const emit = defineEmits<{
               <strong
                 >{{ downstream.searches }} 个关联搜索 · {{ downstream.suppliers }} 个候选</strong
               >
-              <span
-                >候选数为已关联搜索的 candidate_count
-                合计，不代表去重供应商数或已核实供货能力。</span
-              >
+              <span>候选数量按关联搜索汇总，未去重。</span>
             </template>
             <div class="opportunity-insight-actions">
               <button
@@ -164,9 +160,7 @@ const emit = defineEmits<{
           覆盖 {{ detail.latest_score_run.coverage_percent }}% ·
           {{ formatOpportunityTime(detail.latest_score_run.scored_at) }}
         </span>
-        <span v-else class="opportunity-insight-support"
-          >尚无评分运行；缺失输入不会用默认值补齐。</span
-        >
+        <span v-else class="opportunity-insight-support">暂无评分记录。</span>
         <dl class="opportunity-score-breakdown">
           <div v-for="item in detail.score_components" :key="item.dimension_code">
             <dt>
@@ -218,9 +212,7 @@ const emit = defineEmits<{
             ><span>个来源</span>
           </div>
         </div>
-        <p class="opportunity-insight-support">
-          这些数量不说明所有证据均为趋势信号，也不能单独推出市场需求、规模或增长结论。
-        </p>
+
         <div class="opportunity-insight-actions">
           <button
             type="button"
@@ -255,7 +247,6 @@ const emit = defineEmits<{
             <dd>{{ opportunityStatusLabel(detail.section_status.risk) }}</dd>
           </div>
         </dl>
-        <p>风险等级与覆盖状态分别展示；任一字段都不替代逐项风险依据。</p>
       </article>
     </div>
   </section>
@@ -265,7 +256,7 @@ const emit = defineEmits<{
       <header class="opportunity-insight-card__heading">
         <div>
           <p>市场证据</p>
-          <h3>先看证据，再判断市场</h3>
+          <h3>市场信息</h3>
         </div>
         <span class="opportunity-insight-badge">{{
           opportunityStatusLabel(detail.section_status.market)
@@ -273,7 +264,6 @@ const emit = defineEmits<{
       </header>
       <div class="opportunity-insight-callout">
         <strong>市场覆盖：{{ opportunityStatusLabel(detail.section_status.market) }}</strong>
-        <span>这是已返回的覆盖状态，不是市场规模、销量或增长结论。</span>
       </div>
       <dl class="opportunity-market-facts">
         <div>
@@ -289,23 +279,7 @@ const emit = defineEmits<{
           <dd>{{ detail.market || "未提供" }}</dd>
         </div>
       </dl>
-      <div class="opportunity-fact-explainer">
-        <h4>这些数量能说明什么？</h4>
-        <dl>
-          <div>
-            <dt>可以确认</dt>
-            <dd>当前机会已关联的证据与来源数量。</dd>
-          </div>
-          <div>
-            <dt>不能推导</dt>
-            <dd>不能据此断定全部证据都是趋势信号，或需求已验证、市场规模/增长率已知。</dd>
-          </div>
-          <div>
-            <dt>继续核对</dt>
-            <dd>到证据分区查看每条来源、采集时间与原始内容。</dd>
-          </div>
-        </dl>
-      </div>
+
       <div class="opportunity-insight-actions">
         <button
           type="button"
@@ -330,7 +304,7 @@ const emit = defineEmits<{
       <template v-if="!canReadCompetitors">
         <div class="opportunity-insight-state" role="status">
           <strong>竞品内容当前不可查看</strong>
-          <span>当前角色没有竞品读取权限；页面未请求或展示竞品数据。</span>
+          <span>暂无竞品查看权限。</span>
         </div>
       </template>
       <template v-else-if="downstreamState.competitors === 'loading'">
@@ -341,7 +315,7 @@ const emit = defineEmits<{
       <template v-else-if="downstreamState.competitors === 'error'">
         <div class="opportunity-insight-state opportunity-insight-state--error" role="alert">
           <strong>本次竞品读取未完成</strong>
-          <span>当前不展示旧快照或推断为空结果；供应候选读取状态独立显示。</span>
+          <span>竞品数据暂不可用。</span>
           <button
             type="button"
             class="opportunity-insight-button"
@@ -354,8 +328,7 @@ const emit = defineEmits<{
       </template>
       <template v-else>
         <p class="opportunity-insight-support">
-          当前机会关联 {{ downstream.competitors }} 个竞品、累计
-          {{ downstream.snapshots }} 个快照；这里只展示最近快照，不构造趋势。
+          当前机会关联 {{ downstream.competitors }} 个竞品、累计 {{ downstream.snapshots }}个快照
         </p>
         <div v-if="competitorItems.length" class="opportunity-competitor-list">
           <article
@@ -405,7 +378,7 @@ const emit = defineEmits<{
         </div>
         <div v-else class="opportunity-insight-state">
           <strong>当前机会没有已关联竞品</strong>
-          <span>这是本次成功读取的空结果；不会从其他机会拼接竞品。</span>
+          <span>暂无关联竞品。</span>
         </div>
       </template>
       <div class="opportunity-insight-actions">
@@ -436,30 +409,17 @@ const emit = defineEmits<{
         <section>
           <span>已保存风险等级</span>
           <strong>{{ opportunityStatusLabel(detail.risk_level) }}</strong>
-          <p>只展示当前保存值，不据此补齐其他风险判断。</p>
         </section>
         <section>
           <span>风险评估覆盖</span>
           <strong>{{ opportunityStatusLabel(detail.section_status.risk) }}</strong>
-          <p>与风险等级独立呈现，不从覆盖状态推断逐项评估结果。</p>
         </section>
       </div>
       <div class="opportunity-insight-callout opportunity-insight-callout--caution">
-        <strong>当前响应没有提供逐项风险评估事实</strong>
-        <span>不能把合规、侵权、供应、趋势、利润或数据质量标记为已通过或无风险。</span>
+        <strong>风险评估资料不完整</strong>
+        <span>请核对相关证据后再作决定。</span>
       </div>
-      <div class="opportunity-fact-explainer">
-        <dl>
-          <div>
-            <dt>当前可以读取</dt>
-            <dd>已保存风险等级及风险评估覆盖状态。</dd>
-          </div>
-          <div>
-            <dt>仍需核对</dt>
-            <dd>逐项判断对应的证据、评估范围与时间；这里不生成虚构的逐项清单。</dd>
-          </div>
-        </dl>
-      </div>
+
       <div class="opportunity-insight-actions">
         <button
           type="button"

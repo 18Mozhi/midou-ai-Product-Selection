@@ -912,7 +912,7 @@ test("loading and blocked dependency remain explicit and retryable", async ({ pa
     });
   });
   await page.goto("/sourcing");
-  await expect(page.getByRole("heading", { name: "正在读取真实数据" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "正在加载" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "依赖暂时受阻" })).toBeVisible();
   await expect(page.getByText("检查服务状态后重新尝试。").first()).toBeVisible();
   await expect(page.getByRole("button", { name: "稍后重试" })).toBeVisible();

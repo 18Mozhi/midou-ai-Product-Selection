@@ -409,7 +409,6 @@ onBeforeUnmount(() => {
         <div>
           <p>版本清楚，操作有归属</p>
           <h1>规则、工作流与自动化</h1>
-          <span>在这里核对治理事实，在所属工作台处理。</span>
         </div>
         <div class="governance-header-actions">
           <button type="button" :disabled="refreshing" @click="load()">
@@ -430,7 +429,7 @@ onBeforeUnmount(() => {
           <label>
             <span>搜索{{ current.label }}</span>
             <input v-model="queryDraft" :placeholder="searchPlaceholder" maxlength="120" />
-            <small>搜索只作用于当前分类的服务端字段。</small>
+            <small>搜索当前分类。</small>
           </label>
           <label>
             <span>状态</span>
@@ -482,7 +481,7 @@ onBeforeUnmount(() => {
               ? "当前权限还不能读取这些内容。权限调整后，可以重新加载。"
               : state === "loading"
                 ? "正在核对版本、组织归属与当前状态。"
-                : "请根据上方提示重试；本页不会自动发起写操作。"
+                : "请根据提示重试。"
           }}
         </p>
         <button v-if="state !== 'loading'" type="button" @click="load()">重新加载</button>
@@ -515,7 +514,7 @@ onBeforeUnmount(() => {
           <div class="governance-table__heading">
             <div>
               <strong>{{ rangeLabel }}</strong>
-              <span>筛选后的服务端总量 · 每页 20 条</span>
+              <span>匹配结果 · 每页 20 条</span>
             </div>
           </div>
           <ResponsiveDataView
@@ -710,7 +709,6 @@ onBeforeUnmount(() => {
         </section>
 
         <footer class="governance-footnote">
-          <p>跨组织查看不会绕过业务权限；编辑、启停和发布仍使用所属工作台的权限和版本锁。</p>
           <span v-if="data.observed_at">
             事实时间 {{ new Date(data.observed_at).toLocaleString("zh-CN") }}
           </span>

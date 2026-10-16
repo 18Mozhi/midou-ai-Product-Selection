@@ -389,20 +389,14 @@ function turnPage(view: Section, direction: -1 | 1, event: MouseEvent) {
   <section class="org-approval-governance" aria-labelledby="org-approval-title">
     <header class="org-approval-overview">
       <div>
-        <p>APPROVAL GOVERNANCE · 只读治理</p>
         <h3 id="org-approval-title">跨工作区审批态势</h3>
-        <span>核对模板版本与审批流转，不在组织后台绕过业务工作区作出决策。</span>
       </div>
-      <aside aria-label="审批治理边界">
-        <b>只读边界</b>
-        <span>发布、回退和审批决定继续由原业务审批合同处理。</span>
-      </aside>
     </header>
 
     <div class="org-approval-metrics" aria-label="审批汇总">
       <article>
         <span>审批总量</span><b>{{ requestTotal }}</b
-        ><small>服务端全量状态汇总</small>
+        ><small>全部状态汇总</small>
       </article>
       <article data-tone="pending">
         <span>待处理</span><b>{{ summary.pending ?? 0 }}</b
@@ -563,7 +557,6 @@ function turnPage(view: Section, direction: -1 | 1, event: MouseEvent) {
           <p>审批模板</p>
           <h4>当前版本与最近持久化版本的真实差异</h4>
         </div>
-        <span>不按模板名称猜测节点身份；首版和无差异版本会明确说明。</span>
       </header>
       <div class="org-approval-template-summary">
         <span
@@ -797,11 +790,7 @@ function turnPage(view: Section, direction: -1 | 1, event: MouseEvent) {
         <div>
           <h5>{{ templates.length ? "没有符合条件的模板" : "暂无审批模板" }}</h5>
           <p>
-            {{
-              templates.length
-                ? "调整筛选条件或重置后再查看。"
-                : "审批模板由对应工作区的审批合同统一维护。"
-            }}
+            {{ templates.length ? "调整筛选条件或重置后再查看。" : "请到对应工作区维护审批模板。" }}
           </p>
           <button
             v-if="templates.length"

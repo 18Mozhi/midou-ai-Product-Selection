@@ -345,9 +345,7 @@ onBeforeUnmount(() => {
   <section class="platform-log-center platform-log-center--c" aria-live="polite">
     <header>
       <div>
-        <p>P62 / 事件检索</p>
         <h1>链路日志</h1>
-        <span>按请求编号、链路编号、任务、事件或错误码检索 API、Worker 与爬虫事件。</span>
       </div>
       <div class="platform-log-header-actions">
         <button

@@ -182,9 +182,7 @@ onBeforeUnmount(() => {
   <section class="release-center release-center--c">
     <header class="hero">
       <div>
-        <p>P65 / 只读核验</p>
         <h1>发布证据</h1>
-        <span>区分运行身份、部署捕获与历史观察记录。</span>
       </div>
       <button
         ref="refreshButton"
@@ -293,10 +291,10 @@ onBeforeUnmount(() => {
             <p>
               {{
                 state === "verified"
-                  ? "服务返回观察门通过结论；不代表独立来源核验或本页执行了发布。"
+                  ? "检查已通过，请核对构建版本与记录时间。"
                   : state === "rolled_back"
-                    ? "请结合下方回滚记录与证据标记核对；该结论不表示本页执行或独立核验了回滚。"
-                    : "结论由服务返回；请结合当前构建匹配记录、历史门指标和阻断说明核对。"
+                    ? "请核对下方回滚记录与构建版本。"
+                    : "请核对构建版本、历史指标和阻断原因。"
               }}
             </p>
           </section>
@@ -307,10 +305,7 @@ onBeforeUnmount(() => {
             aria-labelledby="p65-identities-title"
           >
             <h2 id="p65-identities-title">运行身份与部署捕获</h2>
-            <p class="p65-source-note">
-              来源字段可能由服务回退填充；返回文本一致不代表独立核验。部署捕获值不是刷新时实时查询
-              Git。
-            </p>
+            <p class="p65-source-note">当前展示部署时记录的版本信息。</p>
             <section class="p65-version p65-version-production" aria-label="生产运行身份">
               <h3>生产运行身份</h3>
               <dl>

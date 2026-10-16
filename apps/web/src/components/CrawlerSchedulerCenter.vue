@@ -430,10 +430,6 @@ onBeforeUnmount(suspendRead);
       <div>
         <p>ScoutOps / 采集调度</p>
         <h1>采集调度核验</h1>
-        <span
-          >惠州单机由 ai选品 Worker 领取采集任务，宝塔 Python 3.12 项目提供采集心跳与 Playwright
-          桥接；来源并发上限 1。</span
-        >
       </div>
       <div>
         <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="() => load()">
@@ -448,10 +444,7 @@ onBeforeUnmount(suspendRead);
         </button>
       </div>
     </header>
-    <aside class="p70-boundary" aria-label="运行边界">
-      <b>惠州单机 / 宝塔受管</b
-      ><span>Worker 与 Python Crawler 各一个实例；来源有效并发固定为1。</span>
-    </aside>
+
     <section
       v-if="data && refreshFailure"
       class="crawler-scheduler__refresh-notice"
@@ -495,7 +488,7 @@ onBeforeUnmount(suspendRead);
                     : "当前采集调度门阻断"
               }}
             </h2>
-            <p>返回 {{ data.findings.length }} 项发现；不以单张指标卡替代总体结论。</p>
+            <p>返回 {{ data.findings.length }}项发现</p>
           </div>
           <div>
             <b>观测时间</b><time :datetime="data.observed_at">{{ time(data.observed_at) }}</time>

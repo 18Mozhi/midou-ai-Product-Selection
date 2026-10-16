@@ -59,7 +59,7 @@ test("M08-03.A07/A08/A15 desktop and 390 single-primary truth", async ({ page })
     page.getByText("固定单主；不新增读副本、负载均衡或备用服务器。", {
       exact: true,
     }),
-  ).toBeVisible();
+  ).toHaveCount(0);
 });
 test("MySQL refresh is single-flight and preserves the last verified snapshot on failure", async ({
   page,

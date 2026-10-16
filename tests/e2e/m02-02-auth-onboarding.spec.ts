@@ -210,7 +210,7 @@ test("M02-02.A07/A08 registration and email confirmation preserve single-use tru
   );
   await page.goto("/register");
   await expect(page.getByTestId("registration")).toBeVisible();
-  await expect(page.getByRole("heading", { name: /从可信信息开始/ })).toBeVisible();
+  await expect(page.getByRole("heading", { name: /创建账号/ })).toBeVisible();
   const email = page.locator("#p03-registration-email");
   const password = page.locator("#p03-registration-password");
   const confirmPassword = page.locator("#p03-registration-confirm");
@@ -306,7 +306,7 @@ test("P05 verification uses one token-gated confirmation and explicit return", a
 
   await page.goto("/verify-email?state=expired");
   await expect(page.getByRole("heading", { name: "验证未完成" })).toBeVisible();
-  await expect(page.getByText(/当前页面标记为链接已过期/)).toBeVisible();
+  await expect(page.getByText(/验证链接已过期，请联系管理员/)).toBeVisible();
   expect(writes).toEqual([]);
 
   await page.goto("/verify-email?token=synthetic-single-use-token");
@@ -365,7 +365,9 @@ test("P04 recovery validates the email and submits one generic reset request", a
   await email.fill("member@example.test");
   const submit = page.getByRole("button", { name: "发送重置说明" });
   await submit.click();
-  await expect(page.getByRole("status")).toContainText("如账号存在，重置邮件会进入受控投递队列。");
+  await expect(page.getByRole("status")).toContainText(
+    "请求已受理。若该邮箱已注册，请留意重置说明。",
+  );
   expect(writes).toEqual([{ method: "POST", body: { email: "member@example.test" } }]);
   await page.mouse.move(8, 8);
   await expect(submit).toHaveCSS("background-color", "rgb(9, 108, 85)");
@@ -374,7 +376,7 @@ test("P04 recovery validates the email and submits one generic reset request", a
     true,
   );
   await expect(page).toHaveURL(/\/forgot-password$/);
-  await expect(page.getByText(/不表示邮件已经送达或账号存在/)).toBeVisible();
+  await expect(page.getByText(/若该邮箱已注册，请留意重置说明/)).toBeVisible();
 });
 test("P04 recovery renders rate-limit guidance and keeps local login navigation", async ({
   page,
@@ -416,7 +418,7 @@ test("M02-02.A08/A16 password recovery covers generic request reset and rate-lim
   await page.goto("/forgot-password");
   await page.getByLabel("邮箱").fill("unknown@example.test");
   await page.getByRole("button", { name: "发送重置说明" }).click();
-  await expect(page.getByText("如账号存在，重置邮件会进入受控投递队列。")).toBeVisible();
+  await expect(page.getByText("请求已受理。若该邮箱已注册，请留意重置说明。")).toBeVisible();
   await page.route("**/api/v1/auth/password-reset/confirm", (route) =>
     route.fulfill({ status: 204 }),
   );

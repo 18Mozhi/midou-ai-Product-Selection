@@ -311,8 +311,7 @@ watch(
         ><small>只读目录，不在浏览器自定义</small>
       </article>
       <article>
-        <span>业务能力</span><b>{{ capabilities.length }}</b
-        ><small>API、Worker 与导出重复校验</small>
+        <span>业务能力</span><b>{{ capabilities.length }}</b>
       </article>
       <article>
         <span>当前数据范围</span><b>{{ authorization?.data_scopes?.length ?? 0 }}</b
@@ -389,12 +388,12 @@ watch(
               capability
             }}</code>
           </details>
-          <small>角色分配在“成员与邀请”页完成；本页不创建自定义角色或绕过后端策略。</small>
+          <small>请在“成员与邀请”中分配角色。</small>
         </article>
       </section>
       <section v-if="!roles.length" class="org-admin-state">
         <h3>暂无活动角色</h3>
-        <p>角色目录未初始化，所有管理动作保持默认拒绝。</p>
+        <p>角色目录暂不可用，请联系管理员。</p>
       </section>
 
       <article v-if="roles.length" class="org-admin-card org-admin-role-matrix">
@@ -683,7 +682,7 @@ watch(
           </p>
         </div>
         <button :disabled="busy || !grantForm.actions.length">
-          {{ busy ? "正在创建…" : "创建并写入审计" }}
+          {{ busy ? "正在创建…" : "创建" }}
         </button>
       </form>
 

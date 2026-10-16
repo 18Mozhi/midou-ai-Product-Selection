@@ -90,7 +90,7 @@ test("M08-02.A07/A08/A15 desktop and 390 Redis resilience truth", async ({ page 
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
-  await expect(page.getByText("不启用 Sentinel、集群、副本或备用服务器")).toBeVisible();
+  await expect(page.getByText("不启用 Sentinel、集群、副本或备用服务器")).toHaveCount(0);
   await expect(page.getByText("采集就绪队列")).toBeVisible();
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth)).toBe(
     true,

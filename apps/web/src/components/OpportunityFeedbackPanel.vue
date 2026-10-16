@@ -60,9 +60,6 @@ watch(
       <div>
         <p>已提交的经营事实</p>
         <h4>决策后反馈</h4>
-        <span
-          >当前仅展示接口返回的记录与服务端校准；历史事实不可改写，校准不会自动更新规则或决定。</span
-        >
       </div>
       <strong>已返回 {{ feedback.facts.length }} 条</strong>
     </header>
@@ -74,7 +71,7 @@ watch(
     >
       <header>
         <div>
-          <p>当前服务端快照</p>
+          <p>当前记录</p>
           <h5>经营偏差参考</h5>
         </div>
         <span>需人工复核；不自动改规则或决策</span>
@@ -106,9 +103,7 @@ watch(
         {{ opportunityStatusLabel(feedback.calibration.decision_status_snapshot) }}
       </footer>
     </section>
-    <p v-else class="opportunity-feedback-no-calibration">
-      当前没有可比较的校准快照；页面不会用零值或其他周期补出基线。
-    </p>
+    <p v-else class="opportunity-feedback-no-calibration">暂无可比较的校准记录。</p>
 
     <div v-if="canWrite" class="opportunity-feedback-actions">
       <button v-if="!showForm" type="button" :disabled="busy" @click="showForm = true">
@@ -190,7 +185,7 @@ watch(
               max="3650"
               step="1"
               required
-            /><small>服务端允许范围为 0–3650 天。</small></label
+            /><small>0–3650 天。</small></label
           >
           <label
             >实际利润<input
@@ -206,7 +201,7 @@ watch(
               maxlength="3"
               pattern="[A-Za-z]{3}"
               required
-            /><small>提交时按接口合同转为大写。</small></label
+            /><small>使用大写货币代码。</small></label
           >
         </div>
       </fieldset>

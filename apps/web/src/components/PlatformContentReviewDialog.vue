@@ -73,9 +73,9 @@ function submit() {
           <option value="irrelevant">无关</option>
           <option value="stale">已过期</option>
         </select>
-        <small v-if="sameStatus" class="platform-content-review__same-status">
-          当前选择与原状态相同；提交后仍会按现有合同记录一次审核。
-        </small>
+        <small v-if="sameStatus" class="platform-content-review__same-status"
+          >状态未变，本次仍会记录审核原因。</small
+        >
       </label>
 
       <label :for="fieldId">

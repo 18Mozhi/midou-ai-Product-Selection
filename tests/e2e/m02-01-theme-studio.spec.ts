@@ -44,7 +44,7 @@ test("M02-01 theme studio previews and saves theme without changing semantics", 
   await expect(page.locator("html")).toHaveAttribute("data-theme", "aurora-purple");
   await page.getByRole("button", { name: "保存主题偏好" }).click();
   await expect(page.getByText("服务器已确认当前主题偏好。")).toBeVisible();
-  await expect(page.getByText("权限、数据范围或业务结论")).toBeVisible();
+  await expect(page.getByText("权限、数据范围或业务结论")).toHaveCount(0);
 });
 
 test("M02-01 blocked scope has an explicit recovery path and trace", async ({ page }) => {

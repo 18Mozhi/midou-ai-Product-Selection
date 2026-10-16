@@ -301,7 +301,7 @@ test("RSS subqueries label empty success, parse failure and no new content separ
   await page.goto(`/platform-admin/collection?task=${ids.task}`);
   await expect(page.getByText("空成功：来源响应有效，但没有可解析条目")).toBeVisible();
   await expect(page.getByText("无新内容：本次结果均已存在，未重复写入")).toBeVisible();
-  await expect(page.getByText("解析失败：来源载荷未通过当前解析合同")).toBeVisible();
+  await expect(page.getByText("解析失败，请检查来源格式。")).toBeVisible();
   await expect(page.getByText("robots 判定：允许 · Allow /feed/")).toBeVisible();
   await page.getByText("robots 判定：允许 · Allow /feed/").click();
   await expect(page.getByText(/判定版本 scoutops-robots-policy-v1/)).toBeVisible();

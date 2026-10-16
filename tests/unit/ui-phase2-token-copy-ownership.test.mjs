@@ -60,10 +60,16 @@ test("P36 functional screenshots are immutable synthetic observations, not C app
 });
 test("P36 historical proof allows only exact reviewed revisions and rejects unknown drift", () => {
   for (const [file, pair] of Object.entries(tokenCopyRevisions)) {
-    assert.equal(hash(read(file)), pair.after);
-    assert.equal(hash(historicalTokenCopySource(file, read(file))), pair.before);
+    const captured = readCaptureSourceRevision(file, pair.after);
+    assert.equal(hash(captured), pair.after);
+    assert.equal(hash(historicalTokenCopySource(file, captured)), pair.before);
+    if (hash(read(file)) !== pair.after)
+      assert.throws(
+        () => historicalTokenCopySource(file, read(file)),
+        /Unreviewed token copy source/,
+      );
     assert.throws(
-      () => historicalTokenCopySource(file, read(file) + "\n// unknown change"),
+      () => historicalTokenCopySource(file, captured + "\n// unknown change"),
       /Unreviewed token copy source/,
     );
   }

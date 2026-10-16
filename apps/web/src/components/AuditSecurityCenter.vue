@@ -106,7 +106,6 @@ onMounted(() => load());
         <div>
           <p>审计与安全</p>
           <h1>审计与种子管理员</h1>
-          <span>首次超级管理员只允许由宝塔受限任务创建；浏览器不接触种子密码。</span>
         </div>
         <div class="seed-badge"><i></i><span>单次种子</span><strong>仅限命令行</strong></div>
       </header>
@@ -131,7 +130,6 @@ onMounted(() => load());
       </form>
       <div v-if="state === 'loading'" class="state">
         <span class="spinner"></span><strong>正在读取不可变审计记录</strong>
-        <p>查询权限与数据范围由服务端再次校验。</p>
       </div>
       <div
         v-else-if="['error', 'forbidden', 'expired', 'blocked'].includes(state)"

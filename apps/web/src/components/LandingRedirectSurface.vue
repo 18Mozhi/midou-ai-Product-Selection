@@ -16,19 +16,12 @@ const emit = defineEmits<{ retry: [] }>();
     <div class="landing-frame">
       <header class="p01-top">
         <span class="p01-brand">ScoutOps</span>
-        <small>入口解析 · 不预设角色或工作区</small>
       </header>
 
       <section class="p01-hero" aria-labelledby="landing-title">
         <p>正在进入</p>
         <h1 id="landing-title">正在确定可进入的工作区</h1>
-        <span>先依据当前会话解析真实入口，再进入允许的工作范围。</span>
       </section>
-
-      <aside class="p01-boundary" aria-label="会话入口说明">
-        <b>会话入口 / 只读解析</b>
-        <span>加载时不展示可重复动作；失败时仅重新检查，不生成角色、数据或成功结论。</span>
-      </aside>
 
       <section
         class="p01-workspace"
@@ -47,20 +40,14 @@ const emit = defineEmits<{ retry: [] }>();
           :description="
             props.state === 'loading'
               ? '正在安全读取当前会话允许的入口。'
-              : '请求因限流、超时或依赖暂时不可用而停止；不会伪装为成功。'
+              : '暂时无法进入工作区，请稍后重试。'
           "
           :request-id="props.requestId"
           :primary-label="props.state === 'loading' ? '正在进入工作台' : '重新检查'"
           :hide-secondary="true"
           @primary="emit('retry')"
         />
-        <p class="p01-note">此页只处理入口解析；成功后由原路由替换进入目标页。</p>
       </section>
-
-      <footer class="p01-footer">
-        <span>无业务侧栏 · 无业务写入</span>
-        <span>请求标识仅在失败时显示</span>
-      </footer>
     </div>
   </main>
 </template>

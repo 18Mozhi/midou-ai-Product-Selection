@@ -85,7 +85,7 @@ const title = computed(
   () =>
     ({
       login: "欢迎回到智能选品",
-      register: "创建本地账号",
+      register: "注册账号",
       forgot: "找回密码",
       verify: "验证邮箱",
       reset: "设置新密码",
@@ -209,14 +209,14 @@ async function submit() {
     });
     if (result) {
       mode.value = "verify";
-      message.value = "验证邮件已进入受控投递队列。";
+      message.value = "注册申请已受理，请留意验证邮件。";
     }
   }
   if (mode.value === "forgot") {
     const result = await request("/auth/password-reset/request", {
       email: email.value,
     });
-    if (result) message.value = "如账号存在，重置邮件会进入受控投递队列。";
+    if (result) message.value = "请求已受理。若该邮箱已注册，请留意重置说明。";
   }
   if (mode.value === "reset") {
     const token = params.get("token") || "";
@@ -367,7 +367,6 @@ onBeforeUnmount(() => clearMfaMaterial());
       <small>认证器管理 · 受登录会话保护</small>
     </header>
     <section class="p07-mfa-hero">
-      <p>MULTI-FACTOR AUTHENTICATION</p>
       <h1>
         {{
           mfaStatus === "loading" || mfaStatus === "unknown"
@@ -399,7 +398,7 @@ onBeforeUnmount(() => clearMfaMaterial());
         aria-live="polite"
       >
         <strong>正在读取 MFA 状态</strong>
-        <span>请等待受保护读取完成，页面不会将未知状态标为“未启用”。</span>
+        <span>正在读取安全设置…</span>
       </div>
       <div
         v-else-if="
@@ -446,7 +445,7 @@ onBeforeUnmount(() => clearMfaMaterial());
         aria-live="polite"
       >
         <strong>认证器已停用</strong>
-        <span>服务端已完成停用并撤销全部会话。此页面不自动跳转；请使用下方入口重新登录。</span>
+        <span>认证器已停用，所有会话已退出。请重新登录。</span>
       </section>
       <template v-else-if="mfaStatus === 'ready' && !mfaEnabled">
         <section class="p07-mfa-disabled" aria-label="认证器状态">
@@ -456,7 +455,7 @@ onBeforeUnmount(() => clearMfaMaterial());
         <form v-if="!mfaSecret" class="p07-mfa-step" @submit.prevent="startMfa">
           <p>步骤 1 / 2</p>
           <h2>验证当前密码</h2>
-          <span>密码仅用于启动本次认证器绑定，不会在页面回显。</span>
+
           <label for="p07-enrollment-password">当前密码</label>
           <input
             id="p07-enrollment-password"
@@ -523,7 +522,7 @@ onBeforeUnmount(() => clearMfaMaterial());
         <section class="p07-mfa-danger" aria-labelledby="p07-disable-title">
           <p>高影响操作</p>
           <h2 id="p07-disable-title">停用认证器</h2>
-          <span>停用成功后，服务端会撤销此账号的全部会话；完成后请重新登录。</span>
+          <span>停用后将退出所有设备，请重新登录。</span>
           <form @submit.prevent="disableMfa">
             <label for="p07-disable-password">当前密码</label>
             <input
@@ -556,9 +555,6 @@ onBeforeUnmount(() => clearMfaMaterial());
         <RouterLink to="/login">返回登录</RouterLink>
       </footer>
     </section>
-    <footer class="p07-mfa-boundary">
-      不提供二维码、下载或复制入口 · 恢复码仅在服务端返回后显示 · 错误状态不会伪装成停用成功
-    </footer>
   </main>
   <main
     v-else-if="mode === 'login' || mode === 'mfa-challenge' || mode === 'security-setup'"
@@ -576,50 +572,9 @@ onBeforeUnmount(() => clearMfaMaterial());
   >
     <header class="p02-login-top">
       <RouterLink to="/" aria-label="ScoutOps 首页" class="p02-login-brand">ScoutOps</RouterLink>
-      <strong>安全身份入口</strong>
-      <small>本地账号 · 服务端验证</small>
+      <strong>账号登录</strong>
     </header>
     <div class="p02-login-shell">
-      <aside class="p02-login-context" aria-label="登录与安全步骤">
-        <p>SECURE ACCESS</p>
-        <h1>
-          {{
-            mode === "security-setup"
-              ? "先完成账号安全设置"
-              : mode === "mfa-challenge"
-                ? "完成第二步验证"
-                : "通过身份核验继续工作"
-          }}
-        </h1>
-        <span>
-          {{
-            mode === "security-setup"
-              ? "种子账号受限期间，只能完成密码更新与认证器绑定。"
-              : mode === "mfa-challenge"
-                ? "密码已由身份服务校验；此时仍未建立正式登录会话。"
-                : "使用已验证邮箱或唯一用户名登录，后续安全步骤由服务端状态决定。"
-          }}
-        </span>
-        <ol>
-          <li :class="{ 'is-complete': mode !== 'login', 'is-current': mode === 'login' }">
-            <b>01</b><span>身份核验</span>
-          </li>
-          <li
-            :class="{
-              'is-complete': mode === 'security-setup' && !securitySetup.must_change_password,
-              'is-current': mode === 'mfa-challenge' || mode === 'security-setup',
-            }"
-          >
-            <b>02</b><span>{{ mode === "security-setup" ? "安全设置" : "按需验证" }}</span>
-          </li>
-          <li><b>03</b><span>进入工作区</span></li>
-        </ol>
-        <footer>
-          <span>权限与会话由服务端决定</span>
-          <span>凭证不写入本地存储</span>
-        </footer>
-      </aside>
-
       <section
         class="p02-login-workspace"
         aria-live="polite"
@@ -633,29 +588,18 @@ onBeforeUnmount(() => clearMfaMaterial());
         "
       >
         <header>
-          <p>
+          <h1 v-if="mode === 'login'" id="p02-login-title">安全登录</h1>
+          <h1 v-else-if="mode === 'mfa-challenge'" id="p02-challenge-title">验证你的身份</h1>
+          <h1 v-else id="p02-setup-title">完成首次安全设置</h1>
+          <span v-if="mode !== 'login'">
             {{
-              mode === "login"
-                ? "ACCOUNT SIGN IN"
-                : mode === "mfa-challenge"
-                  ? "ADDITIONAL VERIFICATION"
-                  : "REQUIRED SECURITY SETUP"
-            }}
-          </p>
-          <h2 v-if="mode === 'login'" id="p02-login-title">安全登录</h2>
-          <h2 v-else-if="mode === 'mfa-challenge'" id="p02-challenge-title">验证你的身份</h2>
-          <h2 v-else id="p02-setup-title">完成首次安全设置</h2>
-          <span>
-            {{
-              mode === "login"
-                ? "输入邮箱或唯一用户名与密码。"
-                : mode === "mfa-challenge"
-                  ? "输入认证器验证码或一次性恢复码。"
-                  : securitySetup.must_change_password
-                    ? "先更新种子密码；旧会话会被撤销，之后需重新登录。"
-                    : securitySetup.must_enroll_mfa
-                      ? "先验证当前密码，再绑定认证器并离线保存恢复码。"
-                      : "安全设置已完成，可返回登录继续。"
+              mode === "mfa-challenge"
+                ? "输入认证器验证码或一次性恢复码。"
+                : securitySetup.must_change_password
+                  ? "先更新种子密码；旧会话会被撤销，之后需重新登录。"
+                  : securitySetup.must_enroll_mfa
+                    ? "先验证当前密码，再绑定认证器并离线保存恢复码。"
+                    : "安全设置已完成，可返回登录继续。"
             }}
           </span>
         </header>
@@ -719,7 +663,6 @@ onBeforeUnmount(() => clearMfaMaterial());
               placeholder="邮箱或用户名"
             />
             <label for="p02-login-password">密码</label>
-            <small id="p02-login-password-help">密码仅用于本次登录验证。</small>
             <input
               id="p02-login-password"
               v-model="password"
@@ -728,11 +671,10 @@ onBeforeUnmount(() => clearMfaMaterial());
               required
               minlength="12"
               maxlength="128"
-              aria-describedby="p02-login-password-help"
               placeholder="输入密码"
             />
             <div class="p02-login-form-row">
-              <span>登录状态最长保留 30 天；可访问范围由服务端校验。</span>
+              <span>登录状态最多保留 30 天。</span>
               <button type="button" @click="switchMode('forgot')">忘记密码？</button>
             </div>
             <button class="p02-login-primary" type="submit" :disabled="requestState === 'loading'">
@@ -741,7 +683,7 @@ onBeforeUnmount(() => clearMfaMaterial());
           </template>
           <template v-else>
             <label for="p02-login-mfa-code">认证器验证码或恢复码</label>
-            <small id="p02-login-mfa-help">恢复码为一次性凭证；成功后会消费当前挑战。</small>
+            <small id="p02-login-mfa-help">恢复码仅可使用一次。</small>
             <input
               id="p02-login-mfa-code"
               v-model="mfaCode"
@@ -859,7 +801,7 @@ onBeforeUnmount(() => clearMfaMaterial());
 
         <footer class="p02-login-actions">
           <template v-if="mode === 'login'">
-            <button type="button" @click="switchMode('register')">创建本地账号</button>
+            <button type="button" @click="switchMode('register')">注册账号</button>
             <RouterLink to="/me?section=security">查看安全会话</RouterLink>
             <RouterLink to="/security/mfa">了解 MFA</RouterLink>
           </template>
@@ -870,10 +812,6 @@ onBeforeUnmount(() => clearMfaMaterial());
         </footer>
       </section>
     </div>
-    <footer class="p02-login-boundary">
-      <span>不在 URL 或本地存储中保存密码、验证码、挑战令牌。</span>
-      <span>身份校验与会话授权由服务端完成。</span>
-    </footer>
   </main>
   <main
     v-else-if="mode === 'reset'"
@@ -885,10 +823,8 @@ onBeforeUnmount(() => clearMfaMaterial());
     <header class="p06-reset-top">
       <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
       <strong>设置新密码</strong>
-      <small>一次性链接 · 不展示 token</small>
     </header>
     <section class="p06-reset-hero" aria-labelledby="p06-reset-title">
-      <p>PASSWORD RESET</p>
       <h1 id="p06-reset-title">
         {{
           requestState === "success"
@@ -900,7 +836,7 @@ onBeforeUnmount(() => clearMfaMaterial());
                 : "设置新的登录密码"
         }}
       </h1>
-      <span>新密码仅在本次提交中发送；更新成功后不会自动登录。</span>
+      <span>重置后请使用新密码登录。</span>
     </section>
     <section
       class="p06-reset-workspace"
@@ -948,7 +884,7 @@ onBeforeUnmount(() => clearMfaMaterial());
       >
         <label for="p06-new-password">
           <span>新密码</span>
-          <small id="p06-password-help">至少 12 位；不在页面显示或保存链接 token。</small>
+          <small id="p06-password-help">12–128 位。</small>
           <input
             id="p06-new-password"
             v-model="password"
@@ -967,14 +903,14 @@ onBeforeUnmount(() => clearMfaMaterial());
       </form>
       <section v-else-if="requestState === 'success'" class="p06-reset-next">
         <strong>下一步：重新登录</strong>
-        <p>已更新的密码不会自动创建登录状态；请使用新密码重新登录。</p>
+        <p>密码已更新，请使用新密码登录。</p>
         <button class="p06-reset-primary" type="button" @click="switchMode('login')">
           返回登录
         </button>
       </section>
       <section v-else class="p06-reset-next">
         <strong>需要重新申请链接？</strong>
-        <p>请从找回密码入口发起新的受控请求。</p>
+        <p>请重新申请重置链接。</p>
         <button class="p06-reset-primary" type="button" @click="switchMode('forgot')">
           找回密码
         </button>
@@ -986,7 +922,6 @@ onBeforeUnmount(() => clearMfaMaterial());
         <RouterLink to="/security/mfa">了解 MFA 设置</RouterLink>
       </footer>
     </section>
-    <footer class="p06-reset-boundary">不显示 token · 不自动登录 · 不新增确认密码字段</footer>
   </main>
   <main
     v-else-if="mode === 'forgot'"
@@ -998,20 +933,12 @@ onBeforeUnmount(() => clearMfaMaterial());
     <header class="p04-recovery-top">
       <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
       <strong>账号恢复</strong>
-      <small>公开入口 · 不判断账号是否存在</small>
     </header>
     <section class="p04-recovery-shell">
-      <aside class="p04-recovery-boundary">
-        <p>PASSWORD RECOVERY</p>
-        <h1>请求恢复说明，<br />不暴露账号状态。</h1>
-        <span>邮箱存在与否都使用相同受理口径；请按实际错误提示处理。</span>
-        <footer>无短信 · 无人工核验 · 无倒计时</footer>
-      </aside>
       <section class="p04-recovery-workspace" aria-label="密码恢复请求" aria-live="polite">
         <header>
           <p>恢复请求</p>
           <h2>找回密码</h2>
-          <span>输入用于接收一次性验证链接的邮箱。</span>
         </header>
         <div
           v-if="['error', 'rate_limited', 'blocked'].includes(requestState)"
@@ -1042,7 +969,6 @@ onBeforeUnmount(() => clearMfaMaterial());
         <form class="p04-recovery-form" @submit.prevent="submit">
           <label for="p04-recovery-email">
             <span>邮箱</span>
-            <small id="p04-recovery-email-help">不论账号是否存在，反馈都保持一致。</small>
           </label>
           <input
             id="p04-recovery-email"
@@ -1051,7 +977,6 @@ onBeforeUnmount(() => clearMfaMaterial());
             autocomplete="email"
             required
             maxlength="254"
-            aria-describedby="p04-recovery-email-help"
             placeholder="name@company.com"
           />
           <button class="p04-recovery-primary" type="submit" :disabled="requestState === 'loading'">
@@ -1064,10 +989,6 @@ onBeforeUnmount(() => clearMfaMaterial());
         </footer>
       </section>
     </section>
-    <footer class="p04-recovery-disclosure">
-      <strong>反馈边界</strong>
-      <span>202 表示请求已受理，不表示邮件已经送达或账号存在。</span>
-    </footer>
   </main>
   <main
     v-else-if="mode === 'register'"
@@ -1078,13 +999,12 @@ onBeforeUnmount(() => clearMfaMaterial());
   >
     <header class="p03-registration-top">
       <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
-      <strong>创建本地账号</strong>
+      <strong>注册账号</strong>
       <small>邮箱验证后方可继续</small>
     </header>
     <section class="p03-registration-hero" aria-labelledby="p03-registration-title">
-      <p>ACCOUNT REGISTRATION</p>
-      <h1 id="p03-registration-title">创建账号，<br />从可信信息开始。</h1>
-      <span>使用邮箱建立本地账号。创建后请通过验证邮件确认邮箱；此步骤不会自动登录。</span>
+      <h1 id="p03-registration-title">创建账号<br /></h1>
+      <span>注册后请查收邮件并验证邮箱。</span>
     </section>
     <section
       class="p03-registration-workspace"
@@ -1095,7 +1015,6 @@ onBeforeUnmount(() => clearMfaMaterial());
       <header>
         <p>注册信息</p>
         <h2>填写账号资料</h2>
-        <span>密码仅在本次提交中发送，不会在页面回显。</span>
       </header>
       <div
         v-if="['error', 'rate_limited', 'blocked'].includes(requestState)"
@@ -1146,7 +1065,7 @@ onBeforeUnmount(() => clearMfaMaterial());
         </label>
         <label for="p03-registration-confirm">
           <span>确认密码</span>
-          <small id="p03-registration-confirm-help">再次输入密码；确认值仅在本地比较。</small>
+          <small id="p03-registration-confirm-help">请再次输入密码。</small>
           <input
             id="p03-registration-confirm"
             v-model="confirmPassword"
@@ -1172,10 +1091,6 @@ onBeforeUnmount(() => clearMfaMaterial());
         <RouterLink to="/security/mfa">账号安全说明</RouterLink>
       </footer>
     </section>
-    <footer class="p03-registration-boundary">
-      <strong>验证边界</strong>
-      <span>创建成功表示请求已受理，不代表邮箱已验证或账号已登录。</span>
-    </footer>
   </main>
   <main
     v-else-if="mode === 'verify'"
@@ -1187,10 +1102,8 @@ onBeforeUnmount(() => clearMfaMaterial());
     <header class="p05-verification-top">
       <RouterLink to="/" aria-label="ScoutOps 首页">ScoutOps</RouterLink>
       <strong>邮箱验证</strong>
-      <small>一次性链接 · 不展示 token</small>
     </header>
     <section class="p05-verification-hero">
-      <p>EMAIL VERIFICATION</p>
       <h1>
         {{
           params.get("token") && requestState === "success" && message
@@ -1202,7 +1115,7 @@ onBeforeUnmount(() => clearMfaMaterial());
                 : "检查验证邮件"
         }}
       </h1>
-      <span>一次性验证链接由身份服务核验；页面不会展示或记录链接令牌。</span>
+      <span>请使用注册邮件中的验证链接。</span>
     </section>
     <section class="p05-verification-workspace" aria-label="邮箱验证结果" aria-live="polite">
       <div
@@ -1232,7 +1145,7 @@ onBeforeUnmount(() => clearMfaMaterial());
       </div>
       <div v-else-if="requestState === 'expired'" class="p05-verification-notice" role="status">
         <strong>链接需要重新确认</strong>
-        <span>当前页面标记为链接已过期。本页不会重新发送邮件，也没有向身份服务提交验证请求。</span>
+        <span>验证链接已过期，请联系管理员。</span>
       </div>
       <div v-else class="p05-verification-notice" role="status">
         <strong>{{
@@ -1247,7 +1160,7 @@ onBeforeUnmount(() => clearMfaMaterial());
             ? "系统正在自动提交单次验证；无需重复操作。"
             : requestState === "success" && message
               ? message
-              : "请打开注册邮件中的一次性链接。未提供链接时不会发送确认请求。"
+              : "请打开注册邮件中的验证链接。"
         }}</span>
       </div>
 
@@ -1258,8 +1171,8 @@ onBeforeUnmount(() => clearMfaMaterial());
         <p>
           {{
             params.get("token") && requestState === "success"
-              ? "邮箱验证不会自动登录；请返回登录后继续。"
-              : "若链接失效或请求未完成，请按注册时的受控邮件流程处理。本页不提供未定义的重发操作。"
+              ? "邮箱已验证，请登录。"
+              : "链接失效或验证未完成时，请联系管理员。"
           }}
         </p>
         <button type="button" class="p05-verification-primary" @click="switchMode('login')">
@@ -1267,28 +1180,12 @@ onBeforeUnmount(() => clearMfaMaterial());
         </button>
       </section>
     </section>
-    <footer class="p05-verification-boundary">
-      不显示 token · 不推断邮箱或账号状态 · 验证完成后不自动进入业务
-    </footer>
   </main>
   <main v-else class="identity-page" :data-mode="mode" :data-state="requestState">
     <header class="identity-header">
       <RouterLink class="identity-brand" to="/"><span>S</span>SCOUTOPS / 智能选品</RouterLink>
-      <p>IDENTITY DESK / 账号登录</p>
     </header>
     <section class="identity-shell">
-      <aside class="identity-story" aria-label="智能选品产品说明">
-        <p class="identity-kicker">SIGNAL TO DECISION / 从信号到行动</p>
-        <h1><span>让增长，</span><em>更有确定性</em></h1>
-        <p>登录后，从真实趋势、机会和供应链证据开始今天的选品工作。</p>
-        <div class="identity-orbit" aria-hidden="true"><span>S</span><i></i><i></i><i></i></div>
-        <ul>
-          <li><strong>账号保护</strong><small>登录信息由后端校验</small></li>
-          <li><strong>找回密码</strong><small>验证链接单次有效</small></li>
-          <li><strong>双重验证</strong><small>可按账号要求启用</small></li>
-        </ul>
-      </aside>
-
       <section class="identity-card" aria-live="polite">
         <div class="identity-card__head">
           <p>账号中心</p>
@@ -1352,7 +1249,7 @@ onBeforeUnmount(() => clearMfaMaterial());
 
         <footer class="identity-card__foot">
           <button type="button" class="text-button" @click="switchMode('register')">
-            创建本地账号
+            注册账号
           </button>
           <button type="button" class="text-button" @click="switchMode('login')">返回登录</button>
           <RouterLink class="text-button" to="/me?section=security">查看安全会话</RouterLink>
@@ -1360,8 +1257,5 @@ onBeforeUnmount(() => clearMfaMaterial());
         </footer>
       </section>
     </section>
-    <footer class="identity-footer">
-      <span>安全状态均有文字说明</span><span>生产运行：仅宝塔管理</span>
-    </footer>
   </main>
 </template>

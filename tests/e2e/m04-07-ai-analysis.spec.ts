@@ -264,7 +264,7 @@ test("M04-07.A07/A08/A15 shows AI boundary evidence references and human samplin
   await expect(page.getByText("抽检 待复核")).toBeVisible();
   await expect(page.getByText(`opportunity:${opportunityId}`)).toHaveCount(2);
   await expect(page.getByRole("button", { name: "抽检通过" })).toBeVisible();
-  await expect(page.getByText(/评分、利润、风险和决定仍以持久化事实与人工判断为准/)).toBeVisible();
+  await expect(page.getByText(/AI 内容仅供参考，请结合证据判断/)).toBeVisible();
   await page.evaluate(() => window.scrollTo(0, 0));
 });
 

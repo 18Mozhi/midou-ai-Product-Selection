@@ -574,7 +574,7 @@ test("organization overview keeps facts visible during refresh and retains audit
   await expect(page.locator(".org-admin-center")).toHaveAttribute("aria-busy", "false");
 
   await page.getByLabel("变更原因").fill("验证成功反馈");
-  await page.getByRole("button", { name: "保存并审计" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
   const receipt = page.locator(".org-profile-receipt");
   await expect(receipt).toHaveAttribute("data-phase", "ready");
   await expect(receipt).toContainText("资料已保存，页面已更新");
@@ -620,7 +620,7 @@ test("organization profile reports accepted save and completed reread separately
   await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
   await page.getByLabel("名称").fill("保存后的组织");
   await page.getByLabel("变更原因").fill("验证写入与重读反馈分离");
-  await page.getByRole("button", { name: "保存并审计" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
 
   const receipt = page.locator(".org-profile-receipt");
   await expect(receipt).toHaveAttribute("data-phase", "pending");
@@ -707,7 +707,7 @@ test("organization profile keeps an accepted save distinct from a failed refresh
 
   await page.getByLabel("名称").fill("更新后的组织");
   await page.getByLabel("变更原因").fill("验证写后重读失败");
-  await page.getByRole("button", { name: "保存并审计" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
   await expect.poll(() => patchRequests).toBe(1);
   await expect.poll(() => failedPostWriteRead).toBe(true);
 
@@ -715,12 +715,12 @@ test("organization profile keeps an accepted save distinct from a failed refresh
   const receipt = page.locator(".org-profile-receipt");
   await expect(receipt).toHaveAttribute("data-phase", "failed");
   await expect(receipt).toContainText("资料已保存，页面暂未更新");
-  await expect(feedback).toContainText("组织资料已保存并写入审计");
+  await expect(feedback).toContainText("组织资料已保存");
   await expect(feedback).toContainText("当前资料显示可能是保存前快照");
   await expect(feedback).toContainText("m06-01-profile-write-accepted");
   await expect(feedback).toContainText("m06-01-profile-read-failed");
   await expect(page.getByLabel("名称")).toBeDisabled();
-  await expect(page.getByRole("button", { name: "保存并审计" })).toBeDisabled();
+  await expect(page.getByRole("button", { name: "保存" })).toBeDisabled();
   expect(patchRequests).toBe(1);
   expect(submittedBodies).toEqual([
     expect.objectContaining({
@@ -737,7 +737,7 @@ test("organization profile keeps an accepted save distinct from a failed refresh
   await expect(receipt).toHaveAttribute("data-phase", "ready");
   await expect(receipt).toContainText("m06-01-profile-read-recovered");
   await expect(page.getByRole("alert")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "保存并审计" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "保存" })).toBeEnabled();
   expect(postWriteReads).toBe(4);
   expect(patchRequests).toBe(1);
 });
@@ -759,7 +759,7 @@ test("organization overview keeps the form available for validation and version 
   });
   await page.getByLabel("Logo HTTPS 地址").fill("http://example.test/logo.png");
   await page.getByLabel("变更原因").fill("验证 HTTPS 校验");
-  await page.getByRole("button", { name: "保存并审计" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
   await expect(page.getByLabel("Logo HTTPS 地址")).toHaveJSProperty(
     "validationMessage",
     "Logo 地址必须以 https:// 开头，或保持为空。",
@@ -782,9 +782,9 @@ test("organization overview keeps the form available for validation and version 
       },
     });
   });
-  await page.getByRole("button", { name: "保存并审计" }).click();
+  await page.getByRole("button", { name: "保存" }).click();
   await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "ready");
-  await expect(page.getByRole("button", { name: "保存并审计" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "保存" })).toBeVisible();
   await expect(page.getByRole("alert")).toContainText("数据已被其他操作更新");
   await expect(page.getByRole("alert")).toContainText("m06-01-conflict");
 });
@@ -812,7 +812,7 @@ test("organization overview shows an explicit blocked state and recovers with re
   await expect(page.locator(".org-admin-center")).toHaveAttribute("data-state", "blocked");
   await expect(page.getByRole("heading", { name: "组织数据暂不可用" })).toBeVisible();
   await expect(page.locator(".org-admin-metrics article")).toHaveCount(0);
-  await expect(page.getByRole("button", { name: "保存并审计" })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "保存" })).toHaveCount(0);
   await expect(page.getByText("m06-01-blocked")).toBeVisible();
 
   await page.unroute("**/api/v1/org/admin/**", blockedHandler);
@@ -890,7 +890,7 @@ test("organization workspaces expose truthful governance controls and audited wr
   const archiveDialog = page.getByRole("dialog", { name: "归档工作区原因" });
   await archiveDialog.getByRole("textbox").fill("区域业务已经结束");
   await archiveDialog.getByRole("button", { name: "确认提交" }).click();
-  await expect(page.getByRole("status")).toContainText("工作区已归档并写入审计");
+  await expect(page.getByRole("status")).toContainText("工作区已归档");
 
   let createRequests = 0;
   page.on("request", (request) => {
@@ -904,7 +904,7 @@ test("organization workspaces expose truthful governance controls and audited wr
   await page.getByLabel("工作区名称").fill("亚太增长验证");
   await page.getByLabel("英文标识").fill("Invalid Slug");
   await page.getByLabel("创建原因").fill("建立亚太市场数据边界");
-  await page.getByRole("button", { name: "创建并写入审计" }).click();
+  await page.getByRole("button", { name: "创建", exact: true }).click();
   expect(
     await page
       .getByLabel("英文标识")
@@ -912,8 +912,8 @@ test("organization workspaces expose truthful governance controls and audited wr
   ).toBe(true);
   expect(createRequests).toBe(0);
   await page.getByLabel("英文标识").fill("apac-growth");
-  await page.getByRole("button", { name: "创建并写入审计" }).dblclick();
-  await expect(page.getByRole("status")).toContainText("工作区已创建并写入审计");
+  await page.getByRole("button", { name: "创建", exact: true }).dblclick();
+  await expect(page.getByRole("status")).toContainText("工作区已创建");
 
   expect(writes).toHaveLength(2);
   expect(writes[0]).toMatchObject({
@@ -1011,7 +1011,7 @@ test("organization teams expose searchable governance, bounded creation and audi
   const assignDialog = page.getByRole("dialog", { name: "分配团队成员原因" });
   await assignDialog.getByRole("textbox").fill("加入采购协作范围");
   await assignDialog.getByRole("button", { name: "确认提交" }).click();
-  await expect(page.locator(".org-admin-notice")).toContainText("成员已分配并写入审计");
+  await expect(page.locator(".org-admin-notice")).toContainText("成员已分配");
 
   let createRequests = 0;
   page.on("request", (request) => {
@@ -1028,8 +1028,8 @@ test("organization teams expose searchable governance, bounded creation and audi
   await page.getByLabel("负责人（可选）").selectOption(memberBuyer);
   await page.getByLabel("默认工作流程（可选）").fill("opportunity-review");
   await page.getByLabel("创建原因").fill("建立亚太新品采购协作边界");
-  await page.getByRole("button", { name: "创建并写入审计" }).dblclick();
-  await expect(page.locator(".org-admin-notice")).toContainText("团队已创建并写入审计");
+  await page.getByRole("button", { name: "创建", exact: true }).dblclick();
+  await expect(page.locator(".org-admin-notice")).toContainText("团队已创建");
 
   expect(createRequests).toBe(1);
   expect(writes).toHaveLength(2);
@@ -1132,7 +1132,7 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
   await page.getByRole("button", { name: "新建团队" }).click();
   await page.getByLabel("团队名称").fill("只创建一次的协作组");
   await page.getByLabel("创建原因").fill("建立协作边界并验证列表读取恢复");
-  await page.getByRole("button", { name: "创建并写入审计" }).click();
+  await page.getByRole("button", { name: "创建", exact: true }).click();
 
   const recovery = page.locator(".org-team-refresh-warning");
   await expect(recovery).toBeVisible();
@@ -1149,7 +1149,7 @@ test("team creation keeps its receipt when list refresh fails and retry only rer
   await expect(recovery.getByText("创建请求")).toBeVisible();
   await expect(recovery.getByText("读取失败请求")).toBeVisible();
   await expect(requestDetails.locator("dd").first()).toHaveText("team-create-write-201");
-  await expect(page.locator(".org-admin-notice")).toContainText("团队已创建并写入审计");
+  await expect(page.locator(".org-admin-notice")).toContainText("团队已创建");
   expect(createRequests).toBe(1);
   expect(teamReads).toBeGreaterThan(1);
 
@@ -1292,7 +1292,7 @@ test("organization pending invitation can be revoked with version and audited re
   const dialog = page.getByRole("dialog");
   await dialog.getByRole("textbox").fill("撤销误发邀请");
   await dialog.getByRole("button", { name: "确认提交" }).click();
-  await expect(page.getByRole("status")).toContainText("操作已完成并写入审计");
+  await expect(page.getByRole("status")).toContainText("操作已完成");
   expect(payload).toEqual({ action: "revoke", expected_version: 1, reason: "撤销误发邀请" });
 });
 
@@ -1712,12 +1712,12 @@ test("organization resource grants validate and send audited create, extend and 
     "resource-and-reason-entered",
     "not-yet-submitted",
   ]);
-  await createForm.getByRole("button", { name: "创建并写入审计" }).click();
-  await expect(page.getByText("指定资源授权已创建并写入审计。")).toBeVisible();
+  await createForm.getByRole("button", { name: "创建", exact: true }).click();
+  await expect(page.getByText("指定资源授权已创建。")).toBeVisible();
 
   await page.getByLabel("变更原因").fill("延长核价窗口");
   await page.getByRole("button", { name: "延长授权" }).click();
-  await expect(page.getByText("授权到期时间已更新并写入审计。")).toBeVisible();
+  await expect(page.getByText("授权到期时间已更新。")).toBeVisible();
 
   await page.getByRole("button", { name: "撤销授权" }).click();
   const dialog = page.getByRole("dialog", { name: "撤销指定资源授权原因" });
@@ -1727,7 +1727,7 @@ test("organization resource grants validate and send audited create, extend and 
     "not-yet-confirmed",
   ]);
   await dialog.getByRole("button", { name: "确认提交" }).click();
-  await expect(page.getByText("指定资源授权已撤销并写入审计。")).toBeVisible();
+  await expect(page.getByText("指定资源授权已撤销。")).toBeVisible();
 
   expect(writes).toHaveLength(3);
   expect(writes[0]).toMatchObject({
@@ -1770,7 +1770,7 @@ test("resource grant creation exposes inline field errors and keeps the existing
   await page.getByRole("button", { name: /指定资源授权 1/ }).click();
   await page.getByRole("button", { name: "创建授权" }).click();
   const form = page.locator("form.org-grant-form"),
-    submit = form.getByRole("button", { name: "创建并写入审计" });
+    submit = form.getByRole("button", { name: "创建", exact: true });
 
   await submit.click();
   for (const [field, error] of [
@@ -1805,7 +1805,7 @@ test("resource grant creation exposes inline field errors and keeps the existing
   await expect(page.locator("#org-grant-resource-id")).not.toHaveAttribute("aria-invalid");
   await expect(page.locator("#org-grant-expiry")).not.toHaveAttribute("aria-invalid");
   await submit.click();
-  await expect(page.getByRole("status")).toContainText("指定资源授权已创建并写入审计。");
+  await expect(page.getByRole("status")).toContainText("指定资源授权已创建。");
   expect(writes).toHaveLength(1);
   expect(writes[0]).toMatchObject({
     method: "POST",

@@ -331,7 +331,6 @@ watch(resourceType, () => {
               </form>
               <div v-else class="discovery-c-create-note">
                 <p><strong>先选择入口</strong><br />再完成目标表单</p>
-                <p>仅展示服务端返回的已授权入口；最近使用仅保留在当前弹窗内。</p>
               </div>
             </aside>
             <section class="discovery-c-results-pane" aria-label="结果区">

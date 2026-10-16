@@ -488,7 +488,6 @@ watch(
       <div>
         <p>团队自动化</p>
         <h1 ref="pageHeading" tabindex="-1">自动化规则</h1>
-        <span>配置“发生什么情况、通知谁或创建什么任务”，并查看每次执行结果。</span>
       </div>
       <button :disabled="busy" @click="openCreator">创建规则</button>
     </header>
@@ -701,7 +700,7 @@ watch(
               max="1440"
           /></label>
         </div>
-        <p>规则只消费真实通知投影；任务动作会标记 automation 来源并留存审计。</p>
+
         <section v-if="preview" class="automation-impact-preview" aria-live="polite">
           <header>
             <div><b>试运行影响预览</b><small>只读，不会创建通知或任务</small></div>
@@ -742,7 +741,7 @@ watch(
               >
             </li>
           </ul>
-          <p v-else>当前条件没有历史匹配样本；保存后仍只会处理未来真实事件。</p>
+          <p v-else>暂无匹配样本；保存后处理新事件。</p>
         </section>
         <footer>
           <button type="button" class="secondary" @click="closeEditor()">取消</button>

@@ -535,7 +535,6 @@ watch(
       <div>
         <p>协作中心</p>
         <h1>通知中心</h1>
-        <span>只显示当前组织、工作区和当前用户的事务事件投影。</span>
       </div>
       <div>
         <span class="realtime-badge" :data-state="realtimeState">{{
@@ -690,7 +689,7 @@ watch(
           <dd>{{ statusLabel(selected.workflow_status) }}</dd>
         </div>
       </dl>
-      <small>站内消息来自事务消息；页面不显示队列、浏览器凭证或邮件地址。</small>
+
       <section
         v-if="detailError"
         id="notification-detail-error"
@@ -767,7 +766,7 @@ watch(
         ><label><input v-model="preferences.task_enabled" type="checkbox" /> 任务事件</label
         ><label><input v-model="preferences.approval_enabled" type="checkbox" /> 审批事件</label
         ><label><input v-model="preferences.competitor_enabled" type="checkbox" /> 竞品事件</label>
-        <p>邮件渠道固定关闭；接入并验收真实 Provider 前不会产生外部发送。</p>
+        <p>邮件通知暂不可用。</p>
         <section
           v-if="preferencesError"
           id="notification-preferences-error"

@@ -83,7 +83,8 @@ test("M02-04.A01/A03/A05/A06/A09/A10/A13/A14 component contract adds no backend 
   assert.match(app, /VerificationFramework = import\.meta\.env\.DEV/);
   assert.match(app, /NotFoundPage v-else-if="isNotFoundRoute"/);
   assert.match(notFound, /candidate\.meta\.notFound === true/);
-  assert.match(notFound, /这里不会把不存在的页面解释为无权限/);
+  assert.match(notFound, /地址可能有误，或页面已变更/);
+  assert.doesNotMatch(notFound, /createApiClient|fetch\(|axios/);
   assert.doesNotMatch(notFound, /UiStateShowcase|ConfirmDialog|m02-04-request/);
   assert.match(showcase, /router\.push\(\{ query: \{ \.\.\.route\.query, state: kind \} \}\)/);
   assert.match(showcase, /展示页没有业务接口|展示页不会伪造申请成功/);

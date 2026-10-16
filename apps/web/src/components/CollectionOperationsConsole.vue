@@ -466,7 +466,7 @@ function previewBatchReplay() {
   batchReasonIssue.value = "";
   batchFailures.value = [];
   if (batchUnknown.value) {
-    batchNotice.value = "已有结果未知，请先到对应任务核查；当前页面不会自动重发。";
+    batchNotice.value = "结果待确认，请先查看对应任务，勿重复提交。";
     return;
   }
   if (!selectedDeadLetters.value.length) {
@@ -575,9 +575,6 @@ async function confirmBatchReplay() {
         <div>
           <p>采集运行管理</p>
           <h1>来源与采集控制台</h1>
-          <span
-            >来源配置、健康、任务尝试、死信和质量问题使用同一事实视图；敏感操作仍进入对应受控页面。</span
-          >
         </div>
         <button type="button" :disabled="refreshing || batchBusy" @click="load()">
           {{ refreshing ? "正在刷新" : "刷新数据" }}
@@ -1013,14 +1010,14 @@ async function confirmBatchReplay() {
             <button type="button" :disabled="batchBusy || batchUnknown" @click="previewBatchReplay">
               {{ batchBusy ? "正在重放" : "预览批量重放" }}
             </button>
-            <p v-if="batchUnknown">已有结果未知，请先到对应任务核查；当前页面不会自动重发。</p>
+            <p v-if="batchUnknown">结果待确认，请先查看对应任务，勿重复提交。</p>
           </details>
           <ul v-if="data.dead_letters.length">
             <li v-for="d in data.dead_letters" :key="d.id">
               <b>{{ errorLabel(d.error_code) }}</b
               ><span>{{ statusLabel(d.status) }} · {{ when(d.created_at) }}</span
               ><RouterLink :to="`/platform-admin/collection?task=${d.task_id}`"
-                >查看并受控重放</RouterLink
+                >查看并重放</RouterLink
               >
               <details>
                 <summary>技术详情</summary>

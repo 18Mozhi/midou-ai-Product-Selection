@@ -57,7 +57,6 @@ const props = defineProps<Props>();
                 : "当前容量门阻断"
           }}
         </h2>
-        <p>声明仅限当前返回的单机事实；不构成压测授权或扩容承诺。</p>
       </div>
       <div>
         <b>观测时间</b
@@ -102,7 +101,6 @@ const props = defineProps<Props>();
       <header>
         <div>
           <h2>性能参考与停止线</h2>
-          <p>这是返回值及参考线，不在浏览器重新判定服务状态。</p>
         </div>
       </header>
       <dl>
@@ -132,7 +130,7 @@ const props = defineProps<Props>();
         <header>
           <div>
             <h2>归档与恢复签认</h2>
-            <p>签认只记录已核验事实，不执行恢复。</p>
+            <p>签认仅保存核验记录。</p>
           </div>
         </header>
         <dl>
@@ -155,7 +153,6 @@ const props = defineProps<Props>();
         <header>
           <div>
             <h2>资源绝对值</h2>
-            <p>绝对值不是容量比例，故不绘制误导性水位条。</p>
           </div>
         </header>
         <dl>
@@ -193,9 +190,7 @@ const props = defineProps<Props>();
           <code>{{ item.code }} · {{ item.owner_role_code }}</code>
         </details>
       </article>
-      <p v-if="!props.data.findings.length" class="p71-note">
-        当前返回没有发现；这不证明 100 人、多节点或高可用能力。
-      </p>
+      <p v-if="!props.data.findings.length" class="p71-note">暂无发现。</p>
     </section>
   </section>
 </template>

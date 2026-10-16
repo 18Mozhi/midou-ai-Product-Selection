@@ -46,14 +46,11 @@ watch(() => route.fullPath, focusHeading);
       <RouterLink to="/home" aria-label="返回智能选品今日行动">
         <span aria-hidden="true">选</span><b>ScoutOps</b>
       </RouterLink>
-      <p>页面恢复边界</p>
     </header>
     <section class="p73-hero">
-      <p>404 / 页面未登记</p>
+      <p>404</p>
       <h1 id="not-found-title" ref="heading" tabindex="-1">没有找到这个页面</h1>
-      <span
-        >地址可能已变更、页面已下线，或链接输入有误。这里不会把不存在的页面解释为无权限，也不会展示任何受限数据。</span
-      >
+      <span>地址可能有误，或页面已变更。</span>
     </section>
     <section class="p73-workspace" aria-label="页面恢复信息">
       <div class="p73-route">
@@ -64,7 +61,6 @@ watch(() => route.fullPath, focusHeading);
         <div>
           <small>下一步</small>
           <h2>回到有效工作区</h2>
-          <p>恢复入口只使用现有安全路由；没有网络读取或业务数据访问。</p>
         </div>
         <nav aria-label="页面恢复操作">
           <RouterLink class="not-found-primary" :to="recentDestination.fullPath">
@@ -80,14 +76,6 @@ watch(() => route.fullPath, focusHeading);
         <template v-else>将从今日行动重新进入业务流程</template>
       </p>
     </section>
-    <aside class="p73-boundary">
-      <b>公开兜底 / 不读业务数据</b>
-      <span>未知地址与真实权限状态保持分离；路径仅作本地可读提示。</span>
-    </aside>
-    <footer class="not-found-footer">
-      <span>当前地址未匹配任何已登记页面</span>
-      <span>本页不发起业务读取请求</span>
-    </footer>
   </main>
 </template>
 

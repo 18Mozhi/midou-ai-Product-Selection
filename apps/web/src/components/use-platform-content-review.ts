@@ -69,7 +69,7 @@ export function usePlatformContentReview(options: {
       }
       const refreshed = await options.reload();
       options.message.value = refreshed
-        ? "内容状态已更新并写入审计记录。"
+        ? "内容状态已更新。"
         : "内容状态已更新，但列表未能刷新。请重新加载后核对最新状态。";
     } catch (failureError) {
       const failure = failureError instanceof Error ? failureError.message : "内容审核未完成";

@@ -85,7 +85,6 @@ const scopeChanged = computed(
     <div class="platform-content__surface">
       <header class="platform-content__hero">
         <div>
-          <p>P56 / CONTENT OPERATIONS</p>
           <h1>内容管理</h1>
           <span>核对热点事实，再决定如何展示。</span>
         </div>
@@ -133,7 +132,6 @@ const scopeChanged = computed(
         <section class="platform-content__ledger">
           <header>
             <div>
-              <p>FACT LEDGER</p>
               <h3>热点内容</h3>
               <span>搜索标题、分类、市场；按最近观测时间倒序。</span>
             </div>

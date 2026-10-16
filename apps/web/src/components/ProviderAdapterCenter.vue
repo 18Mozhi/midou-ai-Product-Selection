@@ -260,7 +260,7 @@ async function probe(item: AdapterSummary, event?: MouseEvent) {
   } catch (error) {
     const apiError = error instanceof ApiClientError ? error : null;
     requestId.value = apiError?.requestId ?? "";
-    message.value = apiError?.actionHint ?? "依赖不可用，未伪造健康结果";
+    message.value = apiError?.actionHint ?? "检查暂不可用，请稍后重试。";
   } finally {
     // Reads started during this probe cannot publish after it settles either.
     probeRevision += 1;
@@ -336,7 +336,7 @@ onMounted(load);
       <div>
         <p>来源适配器运行状态</p>
         <h2>采集诊断目录</h2>
-        <span>健康检查只验证当前探针，不代表采集成功，也不会自动解除来源暂停。</span>
+        <span>健康检查不改变来源启停状态；采集结果请查看任务。</span>
       </div>
       <div class="adapter-heading-actions">
         <small v-if="lastUpdatedAt">最近刷新 {{ lastUpdatedAt.slice(11, 19) }}</small>
@@ -385,8 +385,7 @@ onMounted(load);
     <section v-else>
       <div class="adapter-metrics">
         <article>
-          <small>来源总数</small><strong>{{ items.length }}</strong
-          ><span>平台全局技术合同</span>
+          <small>来源总数</small><strong>{{ items.length }}</strong>
         </article>
         <article>
           <small>已注册</small><strong>{{ registered }}</strong
@@ -486,11 +485,8 @@ onMounted(load);
           ><span class="adapter-empty-copy-mobile">还没有可查看的来源</span>
         </h3>
         <p>
-          <span class="adapter-empty-copy-wide"
-            >先在来源注册中心登记技术合同；不会创建模拟来源。</span
-          ><span class="adapter-empty-copy-mobile"
-            >登记来源技术合同后，可在这里查看适配器的运行状态。</span
-          >
+          <span class="adapter-empty-copy-wide">请先登记来源。</span
+          ><span class="adapter-empty-copy-mobile">登记来源后可查看运行状态。</span>
         </p>
         <RouterLink to="/platform-admin/providers">登记来源</RouterLink>
       </section>
@@ -613,9 +609,7 @@ onMounted(load);
         </template>
         <template #detail="{ row }">
           <div class="p47-diagnostic-detail">
-            <p class="p47-detail-boundary">
-              健康检查只验证当前探针，不代表采集成功，也不会自动解除来源暂停。
-            </p>
+            <p class="p47-detail-boundary">健康检查不改变来源启停状态；采集结果请查看任务。</p>
             <section class="p47-detail-section">
               <h3>来源身份</h3>
               <dl>
@@ -781,12 +775,6 @@ onMounted(load);
           <code>{{ requestId }}</code>
         </details>
       </div>
-      <aside class="adapter-boundary">
-        <strong>运行边界</strong>
-        <p>
-          API、RSS、公开页、授权页、导入与手工来源共用同一适配器合同；请求字段来自已注册来源定义，任务租约与凭证使用均由后端控制。统一采集、标准化与健康检查合同；真实实现按来源代码注册。
-        </p>
-      </aside>
     </section>
   </section>
 </template>

@@ -275,7 +275,7 @@ async function manageEmail(item: any, action: "retry" | "suppress") {
       body: JSON.stringify({ action, reason: reason.trim() }),
     });
     await load();
-    message.value = `${actionName}已完成并写入审计记录。`;
+    message.value = `${actionName}已完成。`;
   } catch (error) {
     message.value = error instanceof Error ? error.message : `${actionName}未完成`;
   } finally {
@@ -445,11 +445,8 @@ onUnmounted(() => {
       class="platform-management-hero"
     >
       <div>
-        <p v-if="domain === 'status'">P61 / 运行观测</p>
-        <p v-else>平台运营中心</p>
         <h1 v-if="domain === 'status'">系统状态</h1>
         <h2 v-else>{{ titles[domain][0] }}</h2>
-        <span>{{ titles[domain][1] }}</span>
       </div>
       <div class="hero-actions">
         <button v-if="domain === 'email'" type="button" @click="openMessage()">发送邮件</button>

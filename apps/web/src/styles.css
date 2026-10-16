@@ -448,11 +448,11 @@ a {
   color: var(--so-text);
 }
 .identity-shell {
-  max-width: 1400px;
-  min-height: 760px;
+  max-width: 760px;
+  min-height: 0;
   margin: 22px auto;
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(420px, 0.85fr);
+  grid-template-columns: minmax(0, 1fr);
   gap: clamp(24px, 5vw, 74px);
   align-items: center;
   padding: clamp(24px, 5vw, 72px);

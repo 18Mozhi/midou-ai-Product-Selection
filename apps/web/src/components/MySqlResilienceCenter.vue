@@ -176,16 +176,12 @@ onBeforeUnmount(suspendRead);
       <div>
         <p>ScoutOps / 数据库运行</p>
         <h1>MySQL 运行核验</h1>
-        <span>惠州单机只运行一个宝塔 MySQL 主实例；不启用读副本、负载均衡或备用服务器。</span>
       </div>
       <button type="button" :disabled="refreshing" :aria-busy="refreshing" @click="load">
         {{ refreshing ? "正在刷新…" : "刷新运行事实" }}
       </button>
     </header>
 
-    <aside class="p68-boundary" aria-label="运行边界">
-      <b>惠州同机 / 宝塔受管</b><span>固定单主；不新增读副本、负载均衡或备用服务器。</span>
-    </aside>
     <section
       v-if="data && refreshFailure"
       class="mysql-resilience__refresh-notice"
@@ -238,7 +234,7 @@ onBeforeUnmount(suspendRead);
                     : "当前单主韧性门阻断"
               }}
             </h2>
-            <p>返回 {{ data.findings.length }} 项发现；ready 不替代真实恢复或生产验收。</p>
+            <p>返回 {{ data.findings.length }}项发现</p>
           </div>
           <div>
             <b>观测时间</b><time :datetime="data.observed_at">{{ time(data.observed_at) }}</time>
@@ -253,7 +249,6 @@ onBeforeUnmount(suspendRead);
             ><code>{{ item.code }}</code>
             <p>{{ item.action_hint }}</p>
           </article>
-          <small>提示仅供人工核对，不会执行停任务、调优、迁移或恢复。</small>
         </section>
         <div class="p68-evidence">
           <div class="p68-runtime">
@@ -292,8 +287,7 @@ onBeforeUnmount(suspendRead);
                   >
                     <span :style="{ width: percent(data.connections.usage_basis_points) }"></span>
                   </div>
-                  <small v-if="data.connections.maximum <= 0"
-                    >接口比例为未知上限约定，不是实测满额。</small
+                  <small v-if="data.connections.maximum <= 0">连接上限未知。</small
                   ><small v-else>已连接为瞬时计数，不是查询吞吐量。</small>
                 </article>
                 <article
@@ -327,8 +321,7 @@ onBeforeUnmount(suspendRead);
                   >
                     <span :style="{ width: percent(data.storage.usage_basis_points) }"></span>
                   </div>
-                  <small v-if="data.storage.total_bytes <= 0"
-                    >接口比例为未知容量约定，不是实测满额。</small
+                  <small v-if="data.storage.total_bytes <= 0">容量上限未知。</small
                   ><small v-else>数据目录所在文件系统，不等于数据库表体积。</small>
                 </article>
               </div>
@@ -411,11 +404,11 @@ onBeforeUnmount(suspendRead);
         </div>
         <section class="p68-section p68-durability">
           <header>
-            <h2>持久化实际值与单主合同</h2>
+            <h2>持久化配置</h2>
             <p>目标用于对照，不是可编辑配置表。</p>
           </header>
           <div class="p68-contract p68-contract--head">
-            <span>核对项</span><span>当前返回</span><span>合同目标</span>
+            <span>核对项</span><span>当前返回</span><span>配置目标</span>
           </div>
           <div class="p68-contract">
             <code>二进制日志</code

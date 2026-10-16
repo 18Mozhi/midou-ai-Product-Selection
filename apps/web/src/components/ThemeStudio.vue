@@ -174,7 +174,6 @@ onMounted(load);
       <span class="theme-c-message__symbol" aria-hidden="true">…</span>
       <div>
         <strong>正在读取已保存偏好</strong>
-        <p>读取完成前不会把本地默认值描述为服务器确认。</p>
       </div>
     </section>
 
@@ -280,7 +279,6 @@ onMounted(load);
             <p class="theme-c-eyebrow">01 <span>·</span> COLOR</p>
             <h2>主题</h2>
           </div>
-          <p>主题预览立即应用于当前界面；保存操作仅写入主题偏好。</p>
         </div>
         <PreferenceRadioGroup
           label="界面主题"
@@ -330,7 +328,6 @@ onMounted(load);
           </div>
         </footer>
       </section>
-      <p class="theme-c-boundary">主题与密度只影响显示方式，不改变权限、数据范围或业务结论。</p>
     </template>
   </main>
 </template>

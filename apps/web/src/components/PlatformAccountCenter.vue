@@ -668,17 +668,6 @@ onMounted(load);
                     : "查看用户归属与登录状态"
           }}
         </h2>
-        <span>{{
-          accountOverviewRoute
-            ? "创建组织、启停账号、分配平台管理员。所有操作都会留审计记录。"
-            : permissionsRoute
-              ? "直接读取后端角色目录，比较每个固定平台角色实际拥有与缺少的能力。"
-              : organizationListRoute
-                ? "查找组织，核对成员与工作区，进入详情维护资料和状态。"
-                : adminListRoute
-                  ? "创建运营、安全或超级管理员，维护角色、会话与登录状态。所有操作都会留审计记录。"
-                  : "创建用户、核对组织归属并维护登录状态。所有操作都会留审计记录。"
-        }}</span>
       </div>
       <div class="hero-actions">
         <template v-if="permissionsRoute">

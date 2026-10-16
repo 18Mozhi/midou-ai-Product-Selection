@@ -77,7 +77,6 @@ const updateActionForm = (field: keyof TaskActionForm, value: string | number) =
         <section id="task-action-context" class="task-action-context" aria-label="提交说明">
           <span>任务对象</span>
           <strong>{{ taskTitle }}</strong>
-          <p>提交后会写入任务活动与审计记录，并使用当前任务版本进行冲突校验。</p>
         </section>
 
         <div v-if="actionFeedback" class="task-action-feedback" role="alert" aria-live="assertive">

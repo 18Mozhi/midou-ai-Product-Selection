@@ -23,7 +23,7 @@ defineProps<{
                 : "当前韧性门阻断"
           }}
         </h2>
-        <p>服务返回 {{ data.findings.length }} 项发现；不等于恢复演练、所有任务或高可用已验证。</p>
+        <p>服务返回 {{ data.findings.length }}项发现</p>
       </div>
       <div>
         <b>观测时间</b
@@ -42,7 +42,7 @@ defineProps<{
           <p>{{ item.action_hint }}</p>
         </article>
       </div>
-      <p v-else>当前返回未列出告警或阻断。不据此推定所有缓存、队列或实时消息功能均已实测可用。</p>
+      <p v-else>暂无告警或阻断。</p>
     </section>
   </div>
 </template>

@@ -84,7 +84,7 @@ test("M01-04.A08 empty catalog keeps management denied", async ({ page }) => {
   await page.route(`**/api/v1/org/${org}/roles`, (route) => route.fulfill({ json: envelope([]) }));
   await page.goto("/?view=authorization");
   await expect(page.getByText("暂无活动角色")).toBeVisible();
-  await expect(page.getByText("管理动作保持默认拒绝")).toBeVisible();
+  await expect(page.getByText("角色目录暂不可用，请联系管理员。")).toBeVisible();
   await ready(page);
   await page.getByRole("button", { name: "重新加载" }).click();
   await expect(page.getByRole("heading", { name: "组织管理员", exact: true })).toBeVisible();

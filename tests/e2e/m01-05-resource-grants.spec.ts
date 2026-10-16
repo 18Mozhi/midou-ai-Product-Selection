@@ -163,7 +163,7 @@ test("UI2.scope.grants create extend cancel and revoke preserve exact request co
     .getByLabel("到期时间", { exact: true })
     .evaluate((node) => new Date((node as HTMLInputElement).value).toISOString());
   await page.getByRole("button", { name: "创建并审计" }).click();
-  await expect(page.getByRole("status")).toHaveText("授权已创建并写入审计。");
+  await expect(page.getByRole("status")).toHaveText("授权已创建。");
   expect(writes).toEqual([
     {
       method: "POST",
@@ -185,7 +185,7 @@ test("UI2.scope.grants create extend cancel and revoke preserve exact request co
     .getByLabel("新到期时间")
     .evaluate((node) => new Date((node as HTMLInputElement).value).toISOString());
   await page.getByRole("button", { name: "延长授权" }).click();
-  await expect(page.getByRole("status")).toHaveText("到期时间已延长并写入审计。");
+  await expect(page.getByRole("status")).toHaveText("到期时间已延长。");
   expect(writes[1]).toEqual({
     method: "PATCH",
     path: `/api/v1/org/${org}/resource-grants/${grant.id}/expiry`,

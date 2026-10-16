@@ -123,7 +123,7 @@ html[data-design="glass-atlas"]
   background: transparent;
 }
 html[data-design="glass-atlas"] #app .p02-login-page {
-  width: min(1200px, calc(100% - 64px));
+  width: min(640px, calc(100% - 64px));
   padding-block: clamp(24px, 5vh, 64px);
   --p02-blue: var(--so-primary);
   --p02-ink: var(--so-text);
@@ -143,7 +143,7 @@ html[data-design="glass-atlas"] #app .p02-login-brand {
   letter-spacing: -0.04em;
 }
 html[data-design="glass-atlas"] #app .p02-login-shell {
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   border: 1px solid var(--glass-line);
   border-radius: 30px;
   background: var(--glass-surface);
@@ -204,7 +204,7 @@ html[data-design="glass-atlas"] #app .p02-login-workspace > header {
   border-bottom: 0;
   background: transparent;
 }
-html[data-design="glass-atlas"] #app .p02-login-workspace > header > h2 {
+html[data-design="glass-atlas"] #app .p02-login-workspace > header > :is(h1, h2) {
   font-size: 32px;
 }
 html[data-design="glass-atlas"] #app .p02-login-notice {

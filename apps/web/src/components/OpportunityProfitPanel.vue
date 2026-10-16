@@ -219,7 +219,7 @@ const inputLabel = (value: string) =>
           {{ reviewerErrorMessage || "暂时无法读取成本复核人名单。" }}
           <span v-if="reviewerRequestId">追踪编号：{{ reviewerRequestId }}</span>
         </p>
-        <p v-else role="status">当前没有可选成本复核人；这与名单读取失败不同。</p>
+        <p v-else role="status">暂无可选成本复核人，请联系管理员。</p>
         <button
           v-if="reviewerLoadState === 'error'"
           type="button"

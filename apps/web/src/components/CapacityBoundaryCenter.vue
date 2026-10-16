@@ -228,10 +228,6 @@ onMounted(() => void load());
       <div>
         <p>ScoutOps / 容量边界</p>
         <h1>容量边界核验</h1>
-        <span
-          >只展示惠州当前单机实测结论；规划 100
-          用户不等于并发承诺，不启用负载均衡、备用服务器或多节点。</span
-        >
       </div>
       <div>
         <button
@@ -253,10 +249,6 @@ onMounted(() => void load());
       </div>
     </header>
 
-    <aside class="p71-boundary" aria-label="运行边界">
-      <b>惠州单机 / 宝塔受管</b
-      ><span>不启用负载均衡、备用服务器或多节点；规划用户数不是并发承诺。</span>
-    </aside>
     <section
       v-if="data && refreshFailure"
       class="capacity-boundary__notice"

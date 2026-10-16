@@ -156,21 +156,6 @@ const view = computed(() =>
           audit: "组织审计",
         }) as any
       )[view.value] || "治理概览",
-  ),
-  subtitle = computed(() =>
-    view.value === "workspaces"
-      ? "创建和维护当前组织的数据边界，安全归档不再使用的工作区。"
-      : view.value === "teams"
-        ? "维护当前组织的团队、负责人、默认流程与成员协作关系。"
-        : view.value === "approvals"
-          ? "跨工作区核对审批进度和模板版本，不绕过原业务审批合同。"
-          : view.value === "data"
-            ? "跨工作区核对数据规模与导出历史，不以数量冒充数据质量。"
-            : view.value === "tokens"
-              ? "签发、轮换和撤销当前组织的固定只读令牌，明文仅在成功响应中显示一次。"
-              : view.value === "audit"
-                ? "只读核对当前组织的治理操作、后台执行结果与完整请求追踪。"
-                : "管理当前组织的成员、权限、工作区和审计记录。",
   );
 async function api(path: string, init: ApiRequestOptions = {}) {
   if (init.signal) return request<any>(path, init);
@@ -419,7 +404,7 @@ async function load(
         readRequestId: failure?.requestId ?? "",
       };
       noticeKind.value = "error";
-      notice.value = `组织资料已保存并写入审计，但最新资料仍未能读取；当前资料显示可能是保存前快照。${failure?.actionHint ?? "请稍后点击“刷新数据”重试。"}不要再次提交。`;
+      notice.value = `组织资料已保存，但最新资料仍未能读取；当前资料显示可能是保存前快照。${failure?.actionHint ?? "请稍后点击“刷新数据”重试。"}不要再次提交。`;
       if (profileSaveReceipt.value) {
         profileSaveReceipt.value = {
           ...profileSaveReceipt.value,
@@ -434,7 +419,7 @@ async function load(
         readRequestId: failure?.requestId ?? "",
       };
       noticeKind.value = "error";
-      notice.value = `操作已完成并写入审计，但最新数据仍未能读取。${failure?.actionHint ?? "请稍后点击“刷新数据”重试。"}不要再次提交。`;
+      notice.value = `操作已完成，但最新数据仍未能读取。${failure?.actionHint ?? "请稍后点击“刷新数据”重试。"}不要再次提交。`;
     }
     options.onReadFailure?.(error);
     rethrowUnexpectedError(error);
@@ -561,7 +546,7 @@ async function submit(
             };
           }
           noticeKind.value = "error";
-          notice.value = `组织资料已保存并写入审计，但最新资料仍未能读取；当前资料显示可能是保存前快照。${failure?.actionHint ?? "请点击“刷新数据”核对。"}不要再次提交。`;
+          notice.value = `组织资料已保存，但最新资料仍未能读取；当前资料显示可能是保存前快照。${failure?.actionHint ?? "请点击“刷新数据”核对。"}不要再次提交。`;
           return;
         }
         writeReadFailure.value = {
@@ -584,14 +569,12 @@ async function submit(
     if (readFailed) {
       if (!options.onRefreshFailure && !isProfileSave) {
         noticeKind.value = "error";
-        notice.value = `操作已完成并写入审计，但最新数据未能读取。请点击“刷新数据”核对${readRequestId ? "，不要再次提交" : "后重试且不要再次提交"}。`;
+        notice.value = `操作已完成，但最新数据未能读取。请点击“刷新数据”核对${readRequestId ? "，不要再次提交" : "后重试且不要再次提交"}。`;
       }
       return true;
     }
     noticeKind.value = "success";
-    notice.value = secret.value
-      ? "Token 明文仅显示这一次，请立即保存到受限位置。"
-      : "操作已完成并写入审计。";
+    notice.value = secret.value ? "Token 明文仅显示这一次，请立即保存到受限位置。" : "操作已完成。";
     requestId.value = writeRequestId;
     return true;
   } catch (error) {
@@ -780,7 +763,7 @@ async function createResourceGrant() {
     resourceGrantStatus.value = "all";
     await load({ background: true, preserveNotice: true });
     noticeKind.value = "success";
-    notice.value = "指定资源授权已创建并写入审计。";
+    notice.value = "指定资源授权已创建。";
     requestId.value = writeRequestId;
   } catch (error) {
     applyFailure(
@@ -819,7 +802,7 @@ async function extendResourceGrant(value: { grant: any; reason: string; expires_
       { preserveForm: true },
     )
   )
-    notice.value = "授权到期时间已更新并写入审计。";
+    notice.value = "授权到期时间已更新。";
 }
 async function revokeResourceGrant(grant: any) {
   const organizationId = props.organizationId,
@@ -836,7 +819,7 @@ async function revokeResourceGrant(grant: any) {
       { preserveForm: true },
     )
   )
-    notice.value = "指定资源授权已撤销并写入审计。";
+    notice.value = "指定资源授权已撤销。";
 }
 async function workspaceAction(item: any) {
   const action = item.status === "active" ? "archive" : "restore";
@@ -858,14 +841,14 @@ async function workspaceAction(item: any) {
     { preserveForm: true },
   );
   if (succeeded && !writeReadFailure.value)
-    notice.value = action === "archive" ? "工作区已归档并写入审计。" : "工作区已恢复并写入审计。";
+    notice.value = action === "archive" ? "工作区已归档。" : "工作区已恢复。";
   return Boolean(succeeded);
 }
 async function createWorkspace(value: { name: string; slug: string; reason: string }) {
   const succeeded = await submit("/org/admin/workspaces", value, "POST", {
     preserveForm: true,
   });
-  if (succeeded && !writeReadFailure.value) notice.value = "工作区已创建并写入审计。";
+  if (succeeded && !writeReadFailure.value) notice.value = "工作区已创建。";
   return Boolean(succeeded);
 }
 async function createTeam(value: {
@@ -887,10 +870,10 @@ async function createTeam(value: {
         readRequestId: error instanceof ApiClientError ? error.requestId : "",
       };
       noticeKind.value = "error";
-      notice.value = `团队已创建并写入审计，但团队列表暂不可用。${error instanceof ApiClientError ? error.actionHint : "请稍后重读列表。"}不要重复创建。`;
+      notice.value = `团队已创建，但团队列表暂不可用。${error instanceof ApiClientError ? error.actionHint : "请稍后重读列表。"}不要重复创建。`;
     },
   });
-  if (succeeded && !teamCreateReadFailure.value) notice.value = "团队已创建并写入审计。";
+  if (succeeded && !teamCreateReadFailure.value) notice.value = "团队已创建。";
   return Boolean(succeeded);
 }
 async function retryTeamListAfterCreate() {
@@ -959,7 +942,7 @@ async function teamMemberAction(item: any, action: "assign" | "remove", membersh
     { preserveForm: true },
   );
   if (succeeded && !writeReadFailure.value)
-    notice.value = action === "assign" ? "成员已分配并写入审计。" : "成员已移除并写入审计。";
+    notice.value = action === "assign" ? "成员已分配。" : "成员已移除。";
   return Boolean(succeeded);
 }
 async function tokenAction(item: any, action: "rotate" | "revoke") {
@@ -1242,7 +1225,6 @@ onMounted(() => void load());
           "
           >{{ title }}</component
         >
-        <span>{{ subtitle }}</span>
       </div>
       <div class="org-admin-refresh">
         <small v-if="summary?.observed_at">
@@ -1531,7 +1513,7 @@ onMounted(() => void load());
               </select></label
             ><label
               >变更原因<textarea v-model="form.reason" required maxlength="500"></textarea></label
-            ><button :disabled="busy">{{ busy ? "正在保存…" : "保存并审计" }}</button>
+            ><button :disabled="busy">{{ busy ? "正在保存…" : "保存" }}</button>
           </fieldset>
         </form>
       </section>

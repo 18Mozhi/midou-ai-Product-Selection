@@ -198,9 +198,9 @@ test("M02-06.A07/A08/A15 verified home dashboard is responsive and visual", asyn
   await expect(page.locator(".home-runtime-panel")).toContainText("规则候选12 条");
   await expect(page.locator(".home-runtime-panel")).toContainText("人工已采纳2 条");
   await expect(page.locator(".home-runtime-panel li").first()).toHaveAttribute("data-done", "true");
-  await expect(page.getByText("自动推荐不等于自动采纳")).toBeHidden();
+  await expect(page.getByText("推荐需人工采纳")).toBeHidden();
   await page.getByText("数据说明", { exact: true }).click();
-  await expect(page.getByText("自动推荐不等于自动采纳")).toBeVisible();
+  await expect(page.getByText("推荐需人工采纳")).toBeVisible();
   await expect
     .poll(() => page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth))
     .toBe(true);
@@ -284,9 +284,9 @@ test("M02-06.A07/A15 390 opportunity detail route consumes the completed P04 con
   await expect(page.getByRole("navigation", { name: "机会详情返回路径" })).toContainText(
     "机会详情",
   );
-  await expect(page.getByText("尚无评分运行；缺失输入不会用默认值补齐。")).toBeVisible();
+  await expect(page.getByText("暂无评分记录。")).toBeVisible();
 
-  const finalEvidenceMessage = page.getByText("尚无评分运行；缺失输入不会用默认值补齐。");
+  const finalEvidenceMessage = page.getByText("暂无评分记录。");
   await markOcclusionProbe(finalEvidenceMessage);
   await expectAboveMobileNavigation(page, finalEvidenceMessage);
 });
@@ -428,9 +428,7 @@ test("M02-06.A10/A12 missing selection and failed rule read remain unknown and n
   await page.goto("/home");
   await expect(page.getByText("自动选品状态暂不可用")).toBeVisible();
   await expect(page.getByText("自动选品数据暂不可用")).toBeVisible();
-  await expect(
-    page.getByText(/首页或规则状态暂时未能完整读取，因此暂不显示首次创建或恢复操作/),
-  ).toBeVisible();
+  await expect(page.getByText(/选品规则读取失败，请重试/)).toBeVisible();
   await expect(page.getByText("先告诉系统要找什么")).toBeHidden();
   await expect(page.getByRole("heading", { name: "创建自动选品规则" })).toBeHidden();
   await expect(page.locator(".home-status-facts")).toHaveCount(0);

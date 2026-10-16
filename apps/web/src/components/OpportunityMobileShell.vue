@@ -11,7 +11,7 @@ defineProps<{ opportunityId: string }>();
         <i>◇</i>
         <p>机会编号</p>
         <strong>{{ opportunityId }}</strong
-        ><small>当前机会没有可用详情；评分、利润、风险与证据不会被猜测或伪造。</small>
+        ><small>机会详情暂不可用。</small>
       </div>
       <nav aria-label="机会详情分区">
         <button type="button" aria-current="page">概览</button

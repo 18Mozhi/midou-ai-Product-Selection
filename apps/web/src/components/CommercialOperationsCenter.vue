@@ -601,9 +601,6 @@ onBeforeUnmount(() => {
       <div class="commercial-hero-copy">
         <p>配额管理</p>
         <h1>组织配额与用量</h1>
-        <span
-          >创建配额方案、设置使用额度、分配给组织并处理有效期、暂停和临时额度调整。当前不包含计费、价格或支付。</span
-        >
       </div>
       <div class="commercial-hero-actions">
         <button type="button" :disabled="refreshing" @click="load()">
@@ -631,7 +628,7 @@ onBeforeUnmount(() => {
     >
       <header class="p58-task-heading">
         <h3>读取组织配额</h3>
-        <p>使用组织内部编号读取分配和用量；不改变全局方案统计。</p>
+        <p>输入组织编号查看配额与用量。</p>
       </header>
       <form class="commercial-organization-lookup" @submit.prevent="readOrganization">
         <label
@@ -778,7 +775,7 @@ onBeforeUnmount(() => {
           ><button :disabled="mutating">{{ data.assignment ? "确认调整" : "确认分配" }}</button>
         </form>
         <p v-if="!selectablePlans.length" class="commercial-inline-help">
-          当前列表没有启用方案。请在“方案目录”按名称或内部标识搜索，并筛选“已启用”后再选择。
+          暂无启用方案，请先启用一个方案。
         </p>
         <template v-if="data.assignment"
           ><div class="usage">
@@ -872,7 +869,6 @@ onBeforeUnmount(() => {
       </section>
       <aside class="commercial-guide">
         <strong>操作顺序</strong>
-        <span>创建草稿并核对额度 → 启用方案 → 读取组织并分配 → 按实际需要调整额度。</span>
       </aside>
       <section v-show="reviewTask === 'plans'" class="commercial-catalog">
         <header>
@@ -978,7 +974,7 @@ onBeforeUnmount(() => {
           {{
             data.summary.total
               ? "当前筛选条件没有匹配的配额方案，请调整搜索或状态。"
-              : "暂无配额方案。系统不会自动编造默认额度，也不会展示价格或计费结论。"
+              : "暂无配额方案。"
           }}
         </p>
         <nav

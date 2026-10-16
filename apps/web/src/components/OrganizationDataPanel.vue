@@ -264,9 +264,7 @@ function resetExports() {
   >
     <header class="org-data-overview">
       <div>
-        <p>DATA LEDGER · 实时只读</p>
         <h3 id="org-data-title">跨工作区数据账本</h3>
-        <span>核对当前组织的数据规模与导出履历，所有数字均来自本次接口响应。</span>
       </div>
       <aside aria-label="数据观测时间">
         <b>观测时间</b>
@@ -306,9 +304,7 @@ function resetExports() {
       <span aria-hidden="true">≠</span>
       <div>
         <b>数量不等于数据质量</b>
-        <p>
-          当前接口仅返回规模和导出事实，未返回质量规则、缺失率或异常结论；本页不会用数量冒充质量。
-        </p>
+        <p>数据质量检查请前往数据中心。</p>
       </div>
       <RouterLink to="/reports">前往报表工作台</RouterLink>
     </aside>
