@@ -11528,6 +11528,7 @@ components:
         trace_id: { type: string }
 
 x-scoutops-lan-1688:
+  parserVersion: 1688-lan-image-v1
   scope: backend-only supplier transport; not a browser endpoint
   endpointRange: http://192.168.1.221-226:8880/1688/image-search
   method: POST

@@ -4,6 +4,7 @@ import { ProviderAdapterFailure, type ProviderRawRecord } from "@scoutops/provid
 export const LAN_1688_ENDPOINTS = Object.freeze(
   Array.from({ length: 6 }, (_, index) => `http://192.168.1.${221 + index}:8880/1688/image-search`),
 );
+export const LAN_1688_PARSER_VERSION = "1688-lan-image-v1";
 const object = (value: unknown): Record<string, unknown> => {
   if (!value || typeof value !== "object" || Array.isArray(value))
     throw new ProviderAdapterFailure("invalid_payload", false);

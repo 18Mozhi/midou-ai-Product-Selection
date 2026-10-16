@@ -7,6 +7,7 @@ import {
 } from "../../apps/worker/dist/lan-1688-image-search.js";
 import { MySqlSourcingProjectionWorker } from "../../apps/worker/dist/sourcing-projection-worker.js";
 import { MySqlSourcingRepository } from "../../apps/api/dist/mysql-sourcing-repository.js";
+import { ProviderSourceExecutor } from "../../apps/worker/dist/provider-source-executor.js";
 
 const image = "https://m.media-amazon.com/images/I/test.jpg";
 const result = {
@@ -163,6 +164,84 @@ test("1688 evidence projects to supplier candidates through the scoped current t
   const insert = calls.find((c) => c.sql.startsWith("INSERT IGNORE INTO sourcing_candidates"));
   assert.equal(insert.args[11], 3.8);
   assert.equal(insert.args[12], "CNY");
+});
+test("LAN JSON evidence is never labelled as a browser DOM capture", async () => {
+  const provider = {
+    id: "source",
+    code: "1688_search",
+    access_mode: "authenticated_browser",
+    target_url: "https://s.1688.com/selloffer/offer_search.htm",
+    parser_version: "1688-browser-contract-v3",
+    timeout_ms: 20000,
+    fields_json: ["title"],
+    status: "enabled",
+    runtime_circuit_state: "closed",
+    created_by: "actor",
+    circuit_failure_threshold: 5,
+  };
+  const query = async (sql) =>
+    sql.includes("FROM providers p")
+      ? [[provider]]
+      : sql.startsWith("SELECT")
+        ? [[]]
+        : [{ affectedRows: 1 }];
+  const pool = {
+    query,
+    getConnection: async () => ({
+      query,
+      beginTransaction: async () => {},
+      commit: async () => {},
+      rollback: async () => {},
+      release() {},
+    }),
+  };
+  const stored = [];
+  const registry = {
+    normalize: (_code, raw, context) => ({
+      external_id: raw.externalId,
+      observed_at: raw.observedAt,
+      canonical_url: raw.payload.canonical_url,
+      fields: raw.payload.fields,
+      evidence_ref: raw.evidenceRef,
+      provenance: {
+        adapter_version: "old-browser",
+        parser_version: context.provider.parserVersion,
+      },
+    }),
+  };
+  const client = new Lan1688ImageSearch("test-only", 1000, async () => Response.json(result));
+  const executor = new ProviderSourceExecutor(
+    pool,
+    registry,
+    {
+      persist: async (input) => {
+        stored.push(input);
+        return { deduplicated: false };
+      },
+    },
+    "worker",
+    undefined,
+    undefined,
+    client,
+  );
+  await executor.execute(
+    {
+      id: "task",
+      organizationId: "org",
+      workspaceId: "workspace",
+      requestId: "request",
+      traceId: "trace",
+      subqueries: [
+        { id: "query", providerId: "source", required: true, target: { image_url: image } },
+      ],
+    },
+    async () => {},
+  );
+  assert.equal(stored.length, 1);
+  assert.equal(stored[0].parserVersion, "1688-lan-image-v1");
+  assert.equal(stored[0].adapterVersion, "1688-lan-image-v1");
+  assert.equal(stored[0].contentType, "application/json");
+  assert.match(stored[0].content.toString(), /新人价/);
 });
 test("image searches dispatch only to enabled 1688 and never silently substitute another supplier", async () => {
   const calls = [];

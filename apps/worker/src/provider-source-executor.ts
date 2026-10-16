@@ -24,7 +24,7 @@ import {
 } from "./collection-task-worker.js";
 import { EvidencePersistenceError, MySqlEvidencePersistence } from "./evidence-persistence.js";
 import type { MySqlAuthenticatedBrowserJobClient } from "./authenticated-browser-job-client.js";
-import type { Lan1688ImageSearch } from "./lan-1688-image-search.js";
+import { LAN_1688_PARSER_VERSION, type Lan1688ImageSearch } from "./lan-1688-image-search.js";
 const sha = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const VERSIONED_PRODUCT_SOURCES = new Set([
   "1688_search",
@@ -272,6 +272,8 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
       timeoutMs: Number(row.timeout_ms),
       fields: typeof row.fields_json === "string" ? JSON.parse(row.fields_json) : row.fields_json,
     };
+    if (provider.code === "1688_search" && this.lan1688 && query.target.image_url)
+      provider.parserVersion = LAN_1688_PARSER_VERSION;
     if (row.runtime_circuit_state === "open" && !acceptanceRun)
       return {
         id: query.id,
@@ -383,7 +385,9 @@ export class ProviderSourceExecutor implements CollectionTaskExecutor {
               content: Buffer.from(source.raw_content),
               capturedAt: new Date(normalized.observed_at),
               parserVersion: provider.parserVersion,
-              adapterVersion: normalized.provenance.adapter_version,
+              adapterVersion: lanCollection
+                ? LAN_1688_PARSER_VERSION
+                : normalized.provenance.adapter_version,
               recordKey: normalized.external_id,
               recordSchemaVersion: "provider-source-v1",
               normalizedPayload: {

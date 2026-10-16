@@ -10,7 +10,7 @@
       "apps/worker/src/lan-1688-image-search.ts"
     ],
     "runtimeConfig": ["LAN_1688_TOKEN", "LAN_1688_TIMEOUT_MS"],
-    "completedScope": "Commerce shell and catalogue layout; LAN transport and current supplier projection integration. Not full pipeline acceptance.",
+    "completedScope": "Commerce shell and catalogue layout; LAN transport and current supplier projection integration, with JSON parser provenance 1688-lan-image-v1. Not full pipeline acceptance.",
     "pendingScope": [
       "intelligence-to-Amazon automatic association",
       "main product and 5-10 distinct competitors",
