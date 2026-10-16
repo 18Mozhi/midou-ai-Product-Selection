@@ -193,7 +193,7 @@ test("production QA expects organization members at the workbench and preserves 
     assert.equal(roles.find((item) => item.key === key).landingPath, "/platform-admin", key);
 });
 
-test("production logout traverses a cataloged account route and confirms server revocation", async () => {
+test("production logout stays in each role shell and confirms server revocation without tenant context", async () => {
   const source = await read("scripts/verify-production-product.mjs");
   const ast = ts.createSourceFile("production.mjs", source, ts.ScriptTarget.Latest, true);
   const declaration = ast.statements.find(
@@ -201,17 +201,17 @@ test("production logout traverses a cataloged account route and confirms server 
   );
   assert.ok(declaration);
   const catalog = JSON.parse(await read("config/route-catalog.json"));
-  const paths = new Set(catalog.routes.map((item) => item.path));
-  const events = [];
-  const sandbox = { baseUrl: "https://app.example", assert };
-  vm.runInNewContext(declaration.getText(ast) + "\nthis.verify = verifySessionLogout;", sandbox);
-  const result = await sandbox.verify(
-    { key: "member" },
-    {
+  for (const profile of catalog.productionAcceptance.roles) {
+    const events = [];
+    const sandbox = { baseUrl: "https://app.example", assert, routeManifest: catalog };
+    vm.runInNewContext(declaration.getText(ast) + "\nthis.verify = verifySessionLogout;", sandbox);
+    const result = await sandbox.verify(profile, {
       page: {
         goto: async (url) => {
-          assert.ok(paths.has(new URL(url).pathname), url);
-          events.push("account");
+          const route = catalog.routes.find((item) => item.path === new URL(url).pathname);
+          assert.ok(route, url);
+          assert.equal(route.path, profile.landingPath, profile.key);
+          events.push("shell");
         },
         waitForResponse: async (predicate) => {
           const response = {
@@ -242,9 +242,9 @@ test("production logout traverses a cataloged account route and confirms server 
           },
         },
       },
-    },
-  );
-  assert.deepEqual(events, ["account", "logout", "revocation"]);
-  assert.equal(result.logout_status, 204);
-  assert.equal(result.protected_read_status, 401);
+    });
+    assert.deepEqual(events, ["shell", "logout", "revocation"]);
+    assert.equal(result.logout_status, 204);
+    assert.equal(result.protected_read_status, 401);
+  }
 });

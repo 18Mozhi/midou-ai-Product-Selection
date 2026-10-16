@@ -152,7 +152,11 @@ async function createRoleSession(profile, loginPath = "/login") {
 }
 
 async function verifySessionLogout(profile, session) {
-  await session.page.goto(`${baseUrl}/me`, { waitUntil: "networkidle" });
+  const landing = routeManifest.productionAcceptance.roles.find(
+    (item) => item.key === profile.key,
+  )?.landingPath;
+  assert(landing, `${profile.key} has no cataloged logout entry`);
+  await session.page.goto(`${baseUrl}${landing}`, { waitUntil: "networkidle" });
   const logoutButton = session.page.getByRole("button", { name: "退出登录", exact: true });
   await logoutButton.waitFor();
   const response = session.page.waitForResponse(
@@ -294,7 +298,7 @@ try {
       const logout = await verifySessionLogout(profile, session);
       assert(
         session.consoleErrors.length === 0,
-        `${profile.key} console errors: ${JSON.stringify(session.consoleErrors)}`,
+        `${profile.key} console errors: ${JSON.stringify(session.consoleErrors)}; API failures: ${JSON.stringify(session.apiFailures)}`,
       );
       report.roles[profile.key] = {
         role: profile.role,
