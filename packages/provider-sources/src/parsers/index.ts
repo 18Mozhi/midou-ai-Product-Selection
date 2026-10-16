@@ -1,5 +1,12 @@
 import { createHash } from "node:crypto";
 import { ProviderAdapterFailure, type ProviderRawRecord } from "@scoutops/provider-adapters";
+import {
+  amazonDivContent,
+  amazonPrimaryColumn,
+  amazonPublicSignalFields,
+  amazonBestSellerRankFields,
+  amazonPublicSignalPaths,
+} from "./amazon-public-signals.js";
 
 export interface SourceEvidencePayload {
   raw_content: string;
@@ -599,28 +606,69 @@ export function parseAmazonProductPage(
 ): ProviderRawRecord[] {
   if (typeof html !== "string" || Buffer.byteLength(html) > 5_000_000 || !/<html\b/i.test(html))
     throw new ProviderAdapterFailure("invalid_payload", false);
-  const structuredRecords = amazonStructuredRecords(html, pageUrl, limit);
-  if (structuredRecords.length) return structuredRecords;
   const observedAt = new Date().toISOString(),
     resultBlockPattern = new RegExp(
       "<div\\b(?=[^>]*data-component-type=[\"']s-search-result[\"'])" +
-        "(?=[^>]*data-asin=[\"']([A-Z0-9]{10})[\"'])[^>]*>" +
-        "([\\s\\S]*?)(?=<div\\b(?=[^>]*data-component-type=[\"']s-search-result[\"'])|<\\/body>)",
+        "(?=[^>]*data-asin=[\"']([A-Z0-9]{10})[\"'])[^>]*>",
       "gi",
     ),
-    blocks = [...html.matchAll(resultBlockPattern)],
+    blocks = [...html.matchAll(resultBlockPattern)].flatMap((match) => {
+      const content = amazonDivContent(html, match.index! + match[0].length);
+      return content == null ? [] : [{ asin: match[1]!, html: content }];
+    }),
     directAsin = /\/(?:dp|gp\/product)\/([A-Z0-9]{10})(?:[/?]|$)/i
       .exec(pageUrl)?.[1]
       ?.toUpperCase(),
-    sourceBlocks = blocks.length
-      ? blocks.map((match) => ({ asin: match[1]!, html: match[2]! }))
-      : directAsin
-        ? [{ asin: directAsin, html }]
-        : [];
+    primaryColumn = directAsin ? amazonPrimaryColumn(html) : null,
+    rank = directAsin ? amazonBestSellerRankFields(html) : null,
+    sourceBlocks = directAsin ? [{ asin: directAsin, html: primaryColumn ?? html }] : blocks;
+  const structuredRecords = amazonStructuredRecords(html, pageUrl, limit).filter(
+    (record) => !directAsin || record.externalId === directAsin,
+  );
+  if (structuredRecords.length)
+    return structuredRecords.map((record) => {
+      const payload = sourceEvidencePayload(record),
+        asin = String(payload.fields.asin),
+        scope =
+          directAsin === asin ? primaryColumn : blocks.find((block) => block.asin === asin)?.html,
+        extra = {
+          ...amazonPublicSignalFields(scope ?? "", directAsin === asin),
+          ...(directAsin === asin && rank
+            ? {
+                best_seller_rank: rank.best_seller_rank,
+                best_seller_rank_text: rank.best_seller_rank_text,
+              }
+            : {}),
+        };
+      return {
+        ...record,
+        payload: {
+          ...payload,
+          raw_content:
+            scope != null || (directAsin === asin && rank?.rank_html)
+              ? JSON.stringify({
+                  structured_product: JSON.parse(payload.raw_content),
+                  product_html: scope ?? null,
+                  rank_html: directAsin === asin ? (rank?.rank_html ?? null) : null,
+                })
+              : payload.raw_content,
+          content_type:
+            scope != null || (directAsin === asin && rank?.rank_html)
+              ? "application/json"
+              : payload.content_type,
+          fields: { ...payload.fields, ...extra },
+          source_paths: {
+            ...payload.source_paths,
+            ...amazonPublicSignalPaths(directAsin === asin),
+          },
+        },
+      };
+    });
   const records: ProviderRawRecord[] = [];
   for (const [index, item] of sourceBlocks.entries()) {
     const title = stripHtml(
-        item.html.match(/<(?:h1|h2)\b[^>]*>[\s\S]*?<span\b[^>]*>([\s\S]*?)<\/span>/i)?.[1] ??
+        (directAsin ? item.html.match(/id=["']productTitle["'][^>]*>([\s\S]*?)<\//i)?.[1] : null) ??
+          item.html.match(/<(?:h1|h2)\b[^>]*>[\s\S]*?<span\b[^>]*>([\s\S]*?)<\/span>/i)?.[1] ??
           item.html.match(/id=["']productTitle["'][^>]*>([\s\S]*?)<\//i)?.[1] ??
           "",
       ),
@@ -636,6 +684,7 @@ export function parseAmazonProductPage(
         item.html.match(/([0-5](?:\.[0-9])?)\s+out of 5 stars/i)?.[1] ??
         item.html.match(/([0-5](?:\.[0-9])?)\s*\/\s*5/i)?.[1],
       reviewText =
+        item.html.match(/id=["']acrCustomerReviewText["'][^>]*>([^<]+)</i)?.[1] ??
         item.html.match(/aria-label=["']([0-9,.]+)\s+(?:ratings|reviews)["']/i)?.[1] ??
         item.html.match(/class=["'][^"']*s-underline-text[^"']*["'][^>]*>([0-9,.]+)</i)?.[1],
       imageUrl =
@@ -658,7 +707,7 @@ export function parseAmazonProductPage(
         title: title.slice(0, 1000),
         price,
         currency,
-        position: blocks.length ? index + 1 : null,
+        position: directAsin ? null : index + 1,
         review_count: reviews,
         rating_value:
           rating != null && Number.isFinite(rating) && rating >= 0 && rating <= 5 ? rating : null,
@@ -667,9 +716,19 @@ export function parseAmazonProductPage(
         source_url: sourceUrl,
         publisher: "Amazon",
         observed_at: observedAt,
+        ...amazonPublicSignalFields(
+          directAsin ? (primaryColumn ?? "") : item.html,
+          Boolean(directAsin),
+        ),
+        ...(directAsin && rank
+          ? {
+              best_seller_rank: rank.best_seller_rank,
+              best_seller_rank_text: rank.best_seller_rank_text,
+            }
+          : {}),
       },
       payload: SourceEvidencePayload = {
-        raw_content: item.html,
+        raw_content: item.html + (directAsin ? (rank?.rank_html ?? "") : ""),
         content_type: "text/html",
         canonical_url: sourceUrl,
         fields,
@@ -677,6 +736,7 @@ export function parseAmazonProductPage(
           Object.keys(fields).map((key) => [key, `amazon.html.${key}`]),
         ),
       };
+    Object.assign(payload.source_paths, amazonPublicSignalPaths(Boolean(directAsin)));
     records.push({
       externalId: item.asin,
       observedAt,

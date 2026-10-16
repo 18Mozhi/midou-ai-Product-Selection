@@ -1,4 +1,5 @@
 import { ALIBABA_1688_BROWSER_PARSER_VERSION } from "../1688-browser-contract.js";
+import { AMAZON_PUBLIC_PRODUCT_PARSER_VERSION } from "../parsers/amazon-public-signals.js";
 
 export type SourceCategory = "news" | "ecommerce" | "data" | "community" | "product_supply";
 export type SourceAvailability = "automatic" | "setup_required" | "manual";
@@ -682,6 +683,12 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
             "availability",
             "image_url",
             "source_url",
+            "sales_badge_text",
+            "sales_badge_quantity_lower_bound",
+            "sales_badge_period",
+            "sponsored",
+            "best_seller_rank",
+            "best_seller_rank_text",
           ]
         : ["title", "observed_at", "source_url"],
   schedule_minutes: 30,
@@ -696,7 +703,7 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
     code === "1688_search"
       ? ALIBABA_1688_BROWSER_PARSER_VERSION
       : code === "amazon_product"
-        ? "amazon-structured-product-v2"
+        ? AMAZON_PUBLIC_PRODUCT_PARSER_VERSION
         : "setup-required-v1",
   healthcheck_url: null,
   owner_label: "平台来源中心",
@@ -706,7 +713,7 @@ const setupSources: readonly BuiltinSourceDefinition[] = [
   production_policy: code === "amazon_product" ? "ready_for_owner_enablement" : "setup_required",
   policy_note:
     code === "amazon_product"
-      ? "用户发起竞品采集时抓取公开 Amazon 商品页，不需要官方 API；价格、评分和评论只保留页面真实披露值。"
+      ? "抓取公开 Amazon 商品页，不需要官方 API；价格、星级、评价数、购买提示、类目排名与广告标记仅保留公开值。购买提示为展示下限，缺失不补造，不推算精确销量或广告花费。"
       : code === "1688_search"
         ? "搜索、商品详情与供应商采集能力已登记；完成网页登录准备和来源检查后才能启用。"
         : access === "authenticated_browser"

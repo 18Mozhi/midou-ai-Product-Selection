@@ -342,6 +342,62 @@ test("forged intelligence lineage and no relevant matches cannot project product
   assert.equal(await empty.prepareIntelligence(job), false);
 });
 
+test("observed numeric advertising flags are excluded before selecting the primary", async () => {
+  let reads = 0;
+  const worker = new MySqlTrendProjectionWorker(
+    {
+      query: async () => [
+        reads++ === 0
+          ? [{ id: sourceId }]
+          : [
+              {
+                id: "ad",
+                provider_id: "amazon",
+                raw_evidence_id: "raw-ad",
+                payload_json: {
+                  asin: "B000000001",
+                  canonical_url: "https://www.amazon.com/dp/B000000001",
+                  title: "Portable Fan Ad",
+                  sponsored: 1,
+                },
+              },
+              {
+                id: "organic",
+                provider_id: "amazon",
+                raw_evidence_id: "raw-organic",
+                payload_json: {
+                  asin: "B000000002",
+                  canonical_url: "https://www.amazon.com/dp/B000000002",
+                  title: "Portable Fan",
+                },
+              },
+            ],
+      ],
+    },
+    "worker",
+    120,
+    () => now,
+    {
+      model: "local",
+      selectPrimary: async (_query, candidates) => {
+        assert.deepEqual(
+          candidates.map((c) => c.source_ref),
+          ["organic"],
+        );
+        return { source_ref: "organic", rationale: "Product title matches." };
+      },
+    },
+  );
+  const job = {
+    ...baseJob,
+    providerCode: "amazon_product",
+    intelligenceSourceRecordId: sourceId,
+    intelligenceQuery: "portable fan",
+  };
+  assert.equal(await worker.prepareIntelligence(job), true);
+  assert.equal(job.normalizedRecordId, "organic");
+});
+
 test("no-match and model failure preserve distinct terminal or retry queue receipts", async () => {
   for (const fails of [false, true]) {
     const receipts = [];

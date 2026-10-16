@@ -166,7 +166,8 @@ export class MySqlTrendProjectionWorker {
         return asin &&
           typeof payload.title === "string" &&
           payload.title.trim() &&
-          payload.sponsored !== true
+          payload.sponsored !== true &&
+          payload.sponsored !== 1
           ? [{ source_ref: String(row.id), asin, title: payload.title.slice(0, 500) }]
           : [];
       });

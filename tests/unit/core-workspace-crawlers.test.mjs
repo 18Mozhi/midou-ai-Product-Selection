@@ -30,7 +30,7 @@ test("core workspace public crawlers are enabled without official API credential
   assert.equal(amazon?.access_mode, "public_page");
   assert.equal(amazon?.status, "enabled");
   assert.equal(amazon?.availability, "manual");
-  assert.equal(amazon?.parser_version, "amazon-structured-product-v2");
+  assert.equal(amazon?.parser_version, "amazon-public-product-v3");
   assert.ok(amazon?.fields.includes("rating_value"));
   assert.equal(supplier?.access_mode, "public_page");
   assert.equal(supplier?.availability, "manual");
@@ -120,7 +120,11 @@ test("supplier adapters accept proxy responses whose native url field is empty",
   assert.equal(
     (
       await new Ec21SupplierSearchAdapter(async () => response(ec21Html)).collect(
-        { target: { query: "storage box" }, limit: 1 },
+        {
+          provider: { parserVersion: "amazon-public-product-v3" },
+          target: { query: "storage box" },
+          limit: 1,
+        },
         AbortSignal.timeout(1000),
       )
     ).records.length,
@@ -129,7 +133,11 @@ test("supplier adapters accept proxy responses whose native url field is empty",
   assert.equal(
     (
       await new MadeInChinaSearchAdapter(async () => response(micHtml)).collect(
-        { target: { query: "storage box" }, limit: 1 },
+        {
+          provider: { parserVersion: "amazon-public-product-v3" },
+          target: { query: "storage box" },
+          limit: 1,
+        },
         AbortSignal.timeout(1000),
       )
     ).records.length,
@@ -144,7 +152,14 @@ test("Made-in-China verification redirects are classified as captcha instead of 
     }),
   );
   await assert.rejects(
-    adapter.collect({ target: { query: "storage box" }, limit: 1 }, AbortSignal.timeout(1000)),
+    adapter.collect(
+      {
+        provider: { parserVersion: "amazon-public-product-v3" },
+        target: { query: "storage box" },
+        limit: 1,
+      },
+      AbortSignal.timeout(1000),
+    ),
     (error) => error?.code === "captcha" && error?.retryable === false,
   );
 });
@@ -178,7 +193,7 @@ test("Amazon product parser preserves the response currency instead of forcing U
   assert.equal(record.payload.fields.currency, "CNY");
 });
 
-test("Amazon adapter keeps injected transports for deterministic replay and reports v4", async () => {
+test("Amazon adapter keeps injected transports for deterministic replay and reports v5", async () => {
   let requestedUrl = "";
   const adapter = new AmazonProductSearchAdapter(async (url) => {
     requestedUrl = String(url);
@@ -191,10 +206,14 @@ test("Amazon adapter keeps injected transports for deterministic replay and repo
     );
   });
   const result = await adapter.collect(
-    { target: { query: "storage box" }, limit: 1 },
+    {
+      provider: { parserVersion: "amazon-public-product-v3" },
+      target: { query: "storage box" },
+      limit: 1,
+    },
     AbortSignal.timeout(1000),
   );
-  assert.equal(adapter.version, "amazon-structured-product-adapter-v4");
+  assert.equal(adapter.version, "amazon-public-product-adapter-v5");
   assert.match(requestedUrl, /^https:\/\/www\.amazon\.com\/s\?k=storage%20box$/);
   assert.equal(result.records.length, 1);
 });
@@ -214,7 +233,11 @@ test("Amazon adapter confirms a transient source change once before failing clos
       );
     }),
     recoveredResult = await recovered.collect(
-      { target: { query: "storage box" }, limit: 1 },
+      {
+        provider: { parserVersion: "amazon-public-product-v3" },
+        target: { query: "storage box" },
+        limit: 1,
+      },
       AbortSignal.timeout(1000),
     );
   assert.equal(recoveredCalls, 2);
@@ -226,7 +249,15 @@ test("Amazon adapter confirms a transient source change once before failing clos
     return new Response("<html><body><p>Still incomplete</p></body></html>", { status: 200 });
   });
   await assert.rejects(
-    () => failed.collect({ target: { query: "storage box" }, limit: 1 }, AbortSignal.timeout(1000)),
+    () =>
+      failed.collect(
+        {
+          provider: { parserVersion: "amazon-public-product-v3" },
+          target: { query: "storage box" },
+          limit: 1,
+        },
+        AbortSignal.timeout(1000),
+      ),
     (error) => error?.code === "source_changed" && error?.retryable === false,
   );
   assert.equal(failedCalls, 2);
@@ -239,7 +270,11 @@ test("Amazon product links that no longer exist close as empty results instead o
   await assert.rejects(
     () =>
       adapter.collect(
-        { target: { page_url: "https://www.amazon.com/dp/B000000000" }, limit: 1 },
+        {
+          provider: { parserVersion: "amazon-public-product-v3" },
+          target: { page_url: "https://www.amazon.com/dp/B000000000" },
+          limit: 1,
+        },
         AbortSignal.timeout(1000),
       ),
     (error) => error?.code === "empty_result" && error?.retryable === false,

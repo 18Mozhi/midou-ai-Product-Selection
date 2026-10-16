@@ -591,6 +591,28 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
         source_status: "healthy",
         detail_collected: detailCollected,
         source_enabled: sourceEnabled,
+        public_signals:
+          index === 0
+            ? {
+                sales_badge: {
+                  text: "10K+ bought in past month",
+                  quantity_lower_bound: 10000,
+                  period: "past_month",
+                },
+                best_seller_rank: { rank: 222, text: "#222 in Home & Kitchen" },
+                sponsored: null,
+              }
+            : index === 1
+              ? {
+                  sales_badge: {
+                    text: "400+ bought in past month",
+                    quantity_lower_bound: 400,
+                    period: "past_month",
+                  },
+                  best_seller_rank: null,
+                  sponsored: true,
+                }
+              : null,
       },
     });
     await page.route("**/api/v1/competitors", (route) =>
@@ -605,6 +627,31 @@ for (const [competitorCount, detailCollected, sourceEnabled] of [
     await page.goto(`/opportunities/${opportunityId}?tab=competition`);
     const comparison = page.getByRole("region", { name: "Amazon 主品与竞品" });
     await expect(comparison.getByRole("heading", { name: "主要商品示例" })).toBeVisible();
+    await expect(comparison.locator(".selection-comparison-primary")).toContainText(
+      "近月 ≥ 10,000",
+    );
+    await expect(comparison.locator(".selection-comparison-primary")).toContainText("#222");
+    await expect(comparison.locator("tbody tr").first()).toContainText("近月 ≥ 400");
+    await expect(comparison.locator("tbody tr").first()).toContainText("已观察到广告位");
+    if ((page.viewportSize()?.width ?? 0) <= 760) {
+      const advertisingCell = comparison
+        .locator("tbody tr")
+        .first()
+        .locator("td")
+        .filter({ hasText: "已观察到广告位" });
+      await advertisingCell.scrollIntoViewIfNeeded();
+      await expect
+        .poll(() =>
+          comparison
+            .locator(".selection-comparison-scroll")
+            .evaluate((element) => element.scrollLeft),
+        )
+        .toBeGreaterThan(0);
+      await expect(advertisingCell).toBeVisible();
+    }
+    await expect(
+      comparison.getByText("购买提示为页面展示的数量下限；精确销量、广告花费未采集。"),
+    ).toBeVisible();
     await expect(comparison.locator("tbody tr")).toHaveCount(competitorCount);
     await expect(
       comparison.getByText(

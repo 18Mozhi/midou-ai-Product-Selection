@@ -761,3 +761,4 @@ export function assertOrganizationScope(
   }
 }
 export * from "./selection-core.js";
+export * from "./amazon-public-signals.js";

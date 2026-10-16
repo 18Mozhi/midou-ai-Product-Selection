@@ -7534,6 +7534,33 @@ components:
             description: Must also be at least the confirmed quote MOQ.,
           }
         reason: { type: string, minLength: 1, maxLength: 1000 }
+    AmazonPublicSignals:
+      type: object
+      readOnly: true
+      required: [sales_badge, sponsored, best_seller_rank]
+      properties:
+        sales_badge:
+          type: object
+          nullable: true
+          required: [text, quantity_lower_bound, period]
+          description: Literal public purchase badge and its displayed lower bound; never exact units sold.
+          properties:
+            text: { type: string, maxLength: 160 }
+            quantity_lower_bound: { type: integer, minimum: 1 }
+            period: { type: string, enum: [past_month, past_week] }
+        sponsored:
+          type: boolean
+          enum: [true]
+          nullable: true
+          description: True only when a Sponsored badge was observed in this product card. Null is unknown, not proof that advertising is absent. No spend, impressions or clicks are inferred.
+        best_seller_rank:
+          type: object
+          nullable: true
+          required: [rank, text]
+          description: First disclosed category BSR row; independent of search result position.
+          properties:
+            rank: { type: integer, minimum: 1 }
+            text: { type: string, maxLength: 500 }
     CompetitorSnapshotInput:
       type: object
       required:
@@ -7623,6 +7650,11 @@ components:
                   type: boolean
                   readOnly: true
                   description: Current provider enabled state; preserved historical snapshot health alone does not make a disabled source eligible.
+                public_signals:
+                  allOf: [{ $ref: "#/components/schemas/AmazonPublicSignals" }]
+                  nullable: true
+                  readOnly: true
+                  description: Server-derived from the same scoped immutable normalized Amazon record and raw evidence as the snapshot. Older records without these signals return null.
           nullable: true
         latest_collection:
           allOf: [{ $ref: "#/components/schemas/CompetitorCollectionAttempt" }]

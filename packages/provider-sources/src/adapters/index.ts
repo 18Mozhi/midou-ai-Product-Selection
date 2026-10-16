@@ -11,6 +11,7 @@ import {
 } from "@scoutops/provider-adapters";
 import { request as httpsRequest } from "node:https";
 import { BUILTIN_PROVIDER_SOURCES } from "../catalog/index.js";
+import { AMAZON_PUBLIC_PRODUCT_PARSER_VERSION } from "../parsers/amazon-public-signals.js";
 import {
   parseAmazonProductPage,
   parseDhgateSupplierSearchPage,
@@ -423,9 +424,17 @@ export class FixedStructuredPublicPageAdapter extends SourceAdapter {
 export class AmazonProductSearchAdapter extends SourceAdapter {
   readonly key = "amazon_product";
   readonly accessMode = "public_page" as const;
-  readonly version = "amazon-structured-product-adapter-v4";
+  readonly version = "amazon-public-product-adapter-v5";
   constructor(private readonly fetcher?: typeof fetch) {
     super();
+  }
+  private requireParser(provider: { parserVersion: string } | undefined) {
+    if (provider?.parserVersion !== AMAZON_PUBLIC_PRODUCT_PARSER_VERSION)
+      throw new ProviderAdapterFailure("source_configuration_invalid", false);
+  }
+  normalize(record: ProviderRawRecord, context: AdapterInvocationContext) {
+    this.requireParser(context.provider);
+    return super.normalize(record, context);
   }
   private url(target: Record<string, unknown> | undefined) {
     const page = typeof target?.page_url === "string" ? target.page_url : null;
@@ -478,15 +487,17 @@ export class AmazonProductSearchAdapter extends SourceAdapter {
   }
   async collect(request: ProviderCollectRequest, signal: AbortSignal) {
     const url = this.url(request.target);
+    this.requireParser(request.provider);
     return {
       records: await this.records(url, signal, Math.min(request.limit, 20)),
       nextCursor: null,
     };
   }
-  async healthCheck(_: AdapterHealthContext, signal: AbortSignal) {
+  async healthCheck(context: AdapterHealthContext, signal: AbortSignal) {
     const started = Date.now(),
       url = "https://www.amazon.com/s?k=storage+box";
     try {
+      this.requireParser(context.provider);
       await this.records(url, signal, 1);
       return {
         status: "ready" as const,

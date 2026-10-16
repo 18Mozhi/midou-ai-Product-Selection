@@ -1,3 +1,5 @@
+import type { AmazonPublicSignals } from "@scoutops/contracts";
+
 export type OpportunityWorkspaceState =
   "loading" | "ready" | "empty" | "error" | "expired" | "forbidden" | "blocked";
 
@@ -49,6 +51,7 @@ export interface OpportunityCompetitorSummary {
     source_status?: string;
     detail_collected?: boolean;
     source_enabled?: boolean;
+    public_signals?: AmazonPublicSignals | null;
   };
 }
 

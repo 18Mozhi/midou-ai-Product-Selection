@@ -48,6 +48,16 @@ const price = (item: OpportunityCompetitorSummary) => {
     ? `${snapshot.currency} ${snapshot.current_price}`
     : "未采集";
 };
+const purchaseLabel = (item: OpportunityCompetitorSummary) => {
+  const badge = item.latest_snapshot?.public_signals?.sales_badge;
+  return badge
+    ? `${badge.period === "past_month" ? "近月" : "近周"} ≥ ${badge.quantity_lower_bound.toLocaleString("zh-CN")}`
+    : "未采集";
+};
+const rankLabel = (item: OpportunityCompetitorSummary) => {
+  const rank = item.latest_snapshot?.public_signals?.best_seller_rank;
+  return rank ? `#${rank.rank.toLocaleString("zh-CN")}` : "未采集";
+};
 </script>
 
 <template>
@@ -70,10 +80,22 @@ const price = (item: OpportunityCompetitorSummary) => {
           <dd>{{ price(main) }}</dd>
         </div>
         <div>
-          <dt>评分 / 评论</dt>
+          <dt>星级 / 评价数</dt>
           <dd>
             {{ main.latest_snapshot?.rating_value ?? "—" }} /
             {{ main.latest_snapshot?.review_count ?? "—" }}
+          </dd>
+        </div>
+        <div>
+          <dt>购买提示</dt>
+          <dd :title="main.latest_snapshot?.public_signals?.sales_badge?.text">
+            {{ purchaseLabel(main) }}
+          </dd>
+        </div>
+        <div>
+          <dt>类目排名</dt>
+          <dd :title="main.latest_snapshot?.public_signals?.best_seller_rank?.text">
+            {{ rankLabel(main) }}
           </dd>
         </div>
       </dl>
@@ -97,14 +119,17 @@ const price = (item: OpportunityCompetitorSummary) => {
     >
       <table>
         <caption class="so-visually-hidden">
-          独立竞品的当前价格、评价和采集时间
+          独立竞品的价格、评价、购买提示、类目排名、广告标记和采集时间
         </caption>
         <thead>
           <tr>
             <th scope="col">商品 / ASIN</th>
             <th scope="col">售价</th>
             <th scope="col">评分</th>
-            <th scope="col">评论数</th>
+            <th scope="col">评价数</th>
+            <th scope="col">购买提示</th>
+            <th scope="col">类目排名</th>
+            <th scope="col">广告标记</th>
             <th scope="col">采集时间</th>
           </tr>
         </thead>
@@ -122,6 +147,19 @@ const price = (item: OpportunityCompetitorSummary) => {
             <td>{{ price(item) }}</td>
             <td>{{ item.latest_snapshot?.rating_value ?? "未采集" }}</td>
             <td>{{ item.latest_snapshot?.review_count ?? "未采集" }}</td>
+            <td :title="item.latest_snapshot?.public_signals?.sales_badge?.text">
+              {{ purchaseLabel(item) }}
+            </td>
+            <td :title="item.latest_snapshot?.public_signals?.best_seller_rank?.text">
+              {{ rankLabel(item) }}
+            </td>
+            <td>
+              {{
+                item.latest_snapshot?.public_signals?.sponsored === true
+                  ? "已观察到广告位"
+                  : "未采集"
+              }}
+            </td>
             <td>
               {{
                 item.latest_snapshot
@@ -136,6 +174,7 @@ const price = (item: OpportunityCompetitorSummary) => {
       </table>
     </div>
     <p v-else>正在等待相关商品的采集结果。</p>
+    <p>购买提示为页面展示的数量下限；精确销量、广告花费未采集。</p>
   </section>
 </template>
 
@@ -173,8 +212,10 @@ const price = (item: OpportunityCompetitorSummary) => {
   text-decoration: none;
 }
 .selection-comparison-primary dl {
-  display: flex;
-  gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px 24px;
+  min-width: 220px;
   margin: 0;
   flex-shrink: 0;
 }
@@ -204,7 +245,7 @@ const price = (item: OpportunityCompetitorSummary) => {
 }
 .selection-comparison table {
   width: 100%;
-  min-width: 660px;
+  min-width: 960px;
   border-collapse: collapse;
   font-size: 13px;
   text-align: left;
